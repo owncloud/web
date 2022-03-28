@@ -2996,11 +2996,11 @@ __metadata:
   linkType: hard
 
 "acorn@npm:^8.2.4, acorn@npm:^8.4.1":
-  version: 8.4.1
-  resolution: "acorn@npm:8.4.1"
+  version: 8.7.0
+  resolution: "acorn@npm:8.7.0"
   bin:
     acorn: bin/acorn
-  checksum: 0a8fd264349285aa36194b26a5a9d70c3641e78ad459ec44b9a9a5738e0ce6d86ec120ca2c0f04477165cee912fdeb158f62d6582697185c82278bdbf71187f8
+  checksum: e0f79409d68923fbf1aa6d4166f3eedc47955320d25c89a20cc822e6ba7c48c5963d5bc657bc242d68f7a4ac9faf96eef033e8f73656da6c640d4219935fdfd0
   languageName: node
   linkType: hard
 
@@ -3382,12 +3382,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.25.0":
-  version: 0.25.0
-  resolution: "axios@npm:0.25.0"
+"axios@npm:^0.26.1":
+  version: 0.26.1
+  resolution: "axios@npm:0.26.1"
   dependencies:
-    follow-redirects: ^1.14.7
-  checksum: 2a8a3787c05f2a0c9c3878f49782357e2a9f38945b93018fb0c4fd788171c43dceefbb577988628e09fea53952744d1ecebde234b561f1e703aa43e0a598a3ad
+    follow-redirects: ^1.14.8
+  checksum: d9eb58ff4bc0b36a04783fc9ff760e9245c829a5a1052ee7ca6013410d427036b1d10d04e7380c02f3508c5eaf3485b1ae67bd2adbfec3683704745c8d7a6e1a
   languageName: node
   linkType: hard
 
@@ -5772,16 +5772,16 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-vue@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "eslint-plugin-vue@npm:7.13.0"
+  version: 7.20.0
+  resolution: "eslint-plugin-vue@npm:7.20.0"
   dependencies:
     eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
-    semver: ^7.3.2
-    vue-eslint-parser: ^7.8.0
+    semver: ^6.3.0
+    vue-eslint-parser: ^7.10.0
   peerDependencies:
-    eslint: ^6.2.0 || ^7.0.0
-  checksum: 2a42a0f04b27dbe189fcb5ebdd4a647c23e07cb18b118d173ed03bc301b3d0fa96f9b311ff5d6b8cddc31221047601ce2f4015a05183df6a4310cd36b457ef54
+    eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
+  checksum: 7b724ed8317ce3621cfd94235a68af20ec355fca93092cc09ee73fbffcefa69e3c5202b8035aae8e7457df6924dfe713834ae46dee08acdd9316188c47933956
   languageName: node
   linkType: hard
 
@@ -6384,7 +6384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.7":
+"follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.8":
   version: 1.14.9
   resolution: "follow-redirects@npm:1.14.9"
   peerDependenciesMeta:
@@ -9878,15 +9878,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "pino-pretty@npm:7.3.0"
+"pino-pretty@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "pino-pretty@npm:7.6.0"
   dependencies:
     args: ^5.0.1
     colorette: ^2.0.7
     dateformat: ^4.6.3
     fast-safe-stringify: ^2.0.7
     joycon: ^3.1.1
+    on-exit-leak-free: ^0.2.0
     pino-abstract-transport: ^0.5.0
     pump: ^3.0.0
     readable-stream: ^3.6.0
@@ -9896,7 +9897,7 @@ __metadata:
     strip-json-comments: ^3.1.1
   bin:
     pino-pretty: bin.js
-  checksum: 28320e4f7d037934ca6d6f8457d724fa5635dfb0cbf2fcc12e8ad01bca35da1e7afa6fcc8fd071b667d9bca963cf317e9d6bf1b940f1abe2be9119a573f023cd
+  checksum: 4ad640b6b08570d8b4b92b2370f886a28231cada6ed330fe5ea34392a40ccd8cdaca80f9e093bd3ff570512fd15f5571fd20b8e3780f0956f83e9264ab84ad28
   languageName: node
   linkType: hard
 
@@ -9907,9 +9908,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^7.6.3":
-  version: 7.6.3
-  resolution: "pino@npm:7.6.3"
+"pino@npm:^7.9.2":
+  version: 7.9.2
+  resolution: "pino@npm:7.9.2"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -9920,10 +9921,10 @@ __metadata:
     real-require: ^0.1.0
     safe-stable-stringify: ^2.1.0
     sonic-boom: ^2.2.1
-    thread-stream: ^0.13.0
+    thread-stream: ^0.15.0
   bin:
     pino: bin.js
-  checksum: d179e1178ebb5bf601745cf3870633f70f29ba14b512fa7949a4f4820eb27069477a2e4bbaf6cf5f9199e5b319d2f218865c74e7b8ace2711f1201e399771e56
+  checksum: 4f1c9867c0ed42d3567ca9ee5789fd9249056299a292d90f575e6a4912efd7f50df2d65fee8a2be60763bf21324133cbc36f867011fc4861d7d60b381c76f9c3
   languageName: node
   linkType: hard
 
@@ -11673,8 +11674,8 @@ __metadata:
     join-path: ^1.1.1
     lodash: ^4.17.21
     node-fetch: ^2.6.7
-    pino: ^7.6.3
-    pino-pretty: ^7.3.0
+    pino: ^7.9.2
+    pino-pretty: ^7.6.0
     playwright: ^1.19.2
     postcss: ^8.3.6
     prettier: ^2.3.2
@@ -12623,12 +12624,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thread-stream@npm:^0.13.0":
-  version: 0.13.0
-  resolution: "thread-stream@npm:0.13.0"
+"thread-stream@npm:^0.15.0":
+  version: 0.15.1
+  resolution: "thread-stream@npm:0.15.1"
   dependencies:
     real-require: ^0.1.0
-  checksum: d72a44f133917c0c54f820d25c507f8d09b4841c8fba83deae14110a1a097884f6674c8d2953655f44753a828dc1a625214b9addefcc79084e6bd9febca36796
+  checksum: defe210d026697d5f8967509c896a7c46776192d5b72fa19ace67fb5d21f5280974ff0bbc504134b473343872f045db20089c5d8f55e9878133d4c3d048c2077
   languageName: node
   linkType: hard
 
@@ -13296,9 +13297,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-eslint-parser@npm:^7.0.0, vue-eslint-parser@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "vue-eslint-parser@npm:7.8.0"
+"vue-eslint-parser@npm:^7.0.0, vue-eslint-parser@npm:^7.10.0":
+  version: 7.11.0
+  resolution: "vue-eslint-parser@npm:7.11.0"
   dependencies:
     debug: ^4.1.1
     eslint-scope: ^5.1.1
@@ -13309,7 +13310,7 @@ __metadata:
     semver: ^6.3.0
   peerDependencies:
     eslint: ">=5.0.0"
-  checksum: 70c92d67e14e58372857d980226617644fb762976a31e73bc8ee06162d46755b5a8a69d6c59d075282ba49b27725eaf68d5f3b13b5e45a308505c4e2c0d6fc88
+  checksum: 16d8bd31dacd9e5d3cd0fc82354c0cfdb42ee3d2e0c3aeda385b82aa48a59a440de3dc18521ea6535f4b00a54eb248d49a6ea2323fbae0d3c1afa0a00c63fe6c
   languageName: node
   linkType: hard
 
@@ -13539,7 +13540,7 @@ __metadata:
     "@types/luxon": ^2.0.8
     "@types/semver": ^7.3.8
     "@vue/composition-api": ^1.4.9
-    axios: ^0.25.0
+    axios: ^0.26.1
     cross-fetch: ^3.0.6
     easygettext: ^2.16.1
     filesize: ^8.0.7
