@@ -12,6 +12,7 @@ Summary
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
+* Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
@@ -52,6 +53,14 @@ Details
    We've added a lightweight PDF viewer app which allows the user to bookmark PDF files.
 
    https://github.com/owncloud/web/pull/6654
+
+* Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
+
+   We've removed links from the shared-with-others page as those belong in the `Shared via link`
+   page (and already exist there).
+
+   https://github.com/owncloud/web/issues/5976
+   https://github.com/owncloud/web/pull/6612
 
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 
