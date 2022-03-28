@@ -141,7 +141,6 @@ export default defineComponent({
     if (!this.areMultipleSelected) {
       await this.fetchFileInfo()
     }
-    this.$nextTick(this.$refs.sidebar.initVisibilityObserver())
   },
   methods: {
     async fetchFileInfo() {

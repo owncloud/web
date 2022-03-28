@@ -92,8 +92,8 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Panel } from './types'
 
-let visibilityObserver
-let hiddenObserver
+let visibilityObserver: VisibilityObserver
+let hiddenObserver: VisibilityObserver
 
 export default defineComponent({
   props: {
@@ -165,6 +165,23 @@ export default defineComponent({
         })
       },
       immediate: true
+    },
+    loading: {
+      handler() {
+        this.$nextTick(() => {
+          this.initVisibilityObserver()
+        })
+      },
+      immediate: true
+    },
+    availablePanels: {
+      handler() {
+        this.$nextTick(() => {
+          this.initVisibilityObserver()
+        })
+      },
+      immediate: true,
+      deep: true
     }
   },
 
@@ -205,6 +222,13 @@ export default defineComponent({
       const clearOldPanelName = () => {
         this.oldPanelName = null
       }
+
+      if (!this.$refs.panels) {
+        return
+      }
+
+      visibilityObserver.disconnect()
+      hiddenObserver.disconnect()
 
       this.$refs.panels.forEach((panel) => {
         visibilityObserver.observe(panel, {
