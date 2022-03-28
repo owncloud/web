@@ -80,18 +80,11 @@ Feature: deleting files and folders
     And user "Alice" has created folder "simple-folder" in the server
     And the user has browsed to the personal page
     When the user marks all files for batch action using the webUI
-    # Shares is a special folder that cannot be deleted on oCIS
-    # The user has to unmark it in order to "delete all" the rest of the items
-    # See discussion in web issue 6305.
-    And the user unmarks these files for batch action using the webUI
-      | name   |
-      | Shares |
     And the user batch deletes the marked files using the webUI
     Then as "Alice" file "data.zip" should not exist in the server
     And as "Alice" file "lorem.txt" should not exist in the server
     And as "Alice" folder "simple-folder" should not exist in the server
     And file "data.zip" should not be listed on the webUI
-    And the count of files and folders shown on the webUI should be 1
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
@@ -107,18 +100,16 @@ Feature: deleting files and folders
       | name          |
       | lorem.txt     |
       | simple-folder |
-      | Shares        |
     And the user batch deletes the marked files using the webUI
     Then as "Alice" file "lorem.txt" should exist in the server
     And as "Alice" folder "simple-folder" should exist in the server
     And folder "simple-folder" should be listed on the webUI
-    And folder "Shares" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
     But as "Alice" file "data.zip" should not exist in the server
     And as "Alice" file "fileToDelete.txt" should not exist in the server
     And as "Alice" folder "folderToDelete" should not exist in the server
     And file "data.zip" should not be listed on the webUI
-    And the count of files and folders shown on the webUI should be 3
+    And the count of files and folders shown on the webUI should be 2
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-106
