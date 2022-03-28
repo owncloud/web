@@ -2,6 +2,7 @@ import { mount, RouterLinkStub } from '@vue/test-utils'
 import { accentuatesTableRowTest } from './views.shared'
 import PublicFiles from '@files/src/views/PublicFiles.vue'
 import { localVue, getStore, createFile } from './views.setup'
+import { createLocationPublic } from '../../../src/router'
 
 const createFolder = ({ name = '1234', canCreate = false } = {}) => ({
   name: name,
@@ -19,15 +20,15 @@ const stubs = {
   'router-link': RouterLinkStub
 }
 
-const $route = {
-  name: 'files-public-list',
-  params: { page: 1 }
-}
-
-const $router = {
+const router = {
+  push: jest.fn(),
   afterEach: jest.fn(),
   currentRoute: {
+    ...createLocationPublic('files-public-files'),
     query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
   }
 }
 
@@ -205,8 +206,8 @@ describe('PublicFiles view', () => {
       store: store,
       stubs,
       mocks: {
-        $route,
-        $router
+        $route: router.currentRoute,
+        $router: router
       },
       setup: () => ({
         loadResourcesTask: {

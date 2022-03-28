@@ -9,8 +9,9 @@
   },
   "apps": [
     "files",
-    "search",
-    "media-viewer"
+    "media-viewer",
+    "pdf-viewer",
+    "search"
   ],
   "external_apps": [
     {

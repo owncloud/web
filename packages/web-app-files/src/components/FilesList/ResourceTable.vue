@@ -45,17 +45,27 @@
       />
     </template>
     <template #name="{ item }">
-      <oc-resource
-        :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
-        :resource="item"
-        :is-path-displayed="arePathsDisplayed"
-        :parent-folder-name-default="defaultParentFolderName"
-        :is-thumbnail-displayed="areThumbnailsDisplayed"
-        :is-resource-clickable="isResourceClickable(item.id)"
-        :folder-link="folderLink(item)"
-        :parent-folder-link="parentFolderLink(item)"
-        @click="emitFileClick(item)"
-      />
+      <div class="resource-table-resource-wrapper">
+        <oc-resource
+          :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
+          :resource="item"
+          :is-path-displayed="arePathsDisplayed"
+          :parent-folder-name-default="defaultParentFolderName"
+          :is-thumbnail-displayed="areThumbnailsDisplayed"
+          :is-resource-clickable="isResourceClickable(item.id)"
+          :folder-link="folderLink(item)"
+          :parent-folder-link="parentFolderLink(item)"
+          @click="emitFileClick(item)"
+        />
+        <oc-button
+          v-if="hasRenameAction(item)"
+          class="resource-table-edit-name"
+          appearance="raw"
+          @click="openRenameDialog(item)"
+        >
+          <oc-icon name="edit-2" fill-type="line" size="small" />
+        </oc-button>
+      </div>
     </template>
     <template #status="{ item }">
       <!-- @slot Status column -->
@@ -157,8 +167,10 @@ import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import Rename from '../../mixins/actions/rename'
 
 export default {
+  mixins: [Rename],
   model: {
     prop: 'selection',
     event: 'select'
@@ -482,6 +494,13 @@ export default {
     }
   },
   methods: {
+    hasRenameAction(item) {
+      return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
+        .length
+    },
+    openRenameDialog(item) {
+      this.$_rename_trigger({ resources: [item] })
+    },
     folderLink(file) {
       return this.createFolderLink(file.path, file.storageId)
     },
@@ -648,6 +667,16 @@ export default {
 </script>
 <style lang="scss">
 .resource-table {
+  &-resource-wrapper {
+    &:hover > .resource-table-edit-name {
+      opacity: 1;
+    }
+  }
+  &-edit-name {
+    display: inline-flex;
+    vertical-align: super;
+    opacity: 0;
+  }
   &-people {
     position: absolute;
     right: var(--oc-space-xsmall);

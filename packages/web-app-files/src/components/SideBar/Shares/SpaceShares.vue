@@ -9,7 +9,7 @@
           class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           :aria-label="$gettext('Share receivers')"
         >
-          <li v-for="collaborator in currentFileOutgoingCollaborators" :key="collaborator.key">
+          <li v-for="collaborator in members" :key="collaborator.key">
             <collaborator-list-item
               :share="collaborator"
               :modifiable="isModifiable(collaborator)"
@@ -28,7 +28,7 @@ import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceRoleManager } from '../../../helpers/share'
+import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { useTask } from 'vue-concurrency'
 
@@ -51,8 +51,10 @@ export default {
 
     const loadSharesTask = useTask(function* (signal, ref) {
       yield ref.loadCurrentFileOutgoingShares({
-        client: graphClient,
+        client: ref.$client,
+        graphClient,
         path: ref.space.id,
+        storageId: ref.space.id,
         resource: ref.space
       })
     })
@@ -70,17 +72,22 @@ export default {
     space() {
       return this.displayedItem.value
     },
+    members() {
+      return this.currentFileOutgoingCollaborators.filter(
+        (share) => share.shareType === ShareTypes.space.value
+      )
+    },
     sharesLoading() {
       return this.currentFileOutgoingSharesLoading
     },
     hasCollaborators() {
-      return this.currentFileOutgoingCollaborators.length > 0
+      return this.members.length > 0
     },
     currentUserCanShare() {
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      const currentUserCollaborator = this.currentFileOutgoingCollaborators.find(
+      const currentUserCollaborator = this.members.find(
         (collaborator) => collaborator.collaborator.name === this.user.id
       )
 
@@ -110,7 +117,7 @@ export default {
       }
 
       // forbid to remove last manager of a space
-      const managers = this.currentFileOutgoingCollaborators.filter(
+      const managers = this.members.filter(
         (collaborator) => collaborator.role.name === spaceRoleManager.name
       )
       return managers.length > 1

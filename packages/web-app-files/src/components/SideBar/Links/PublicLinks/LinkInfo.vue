@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import { basename, dirname } from 'path'
+import { basename } from 'path'
 import Mixins from '../../../../mixins'
-import { createLocationSpaces } from '../../../../router'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
 import CopyToClipboardButton from '../CopyToClipboardButton.vue'
 import { DateTime } from 'luxon'
 
@@ -118,9 +118,14 @@ export default {
 
     viaRouterParams() {
       const viaPath = this.link.path
-      return createLocationSpaces('files-spaces-personal-home', {
+      const locationName = isLocationSpacesActive(this.$router, 'files-spaces-project')
+        ? 'files-spaces-project'
+        : 'files-spaces-personal-home'
+
+      return createLocationSpaces(locationName, {
         params: {
-          item: dirname(viaPath) || '/'
+          item: viaPath || '/',
+          storageId: this.$route.params.storageId
         },
         query: {
           scrollTo: basename(viaPath)

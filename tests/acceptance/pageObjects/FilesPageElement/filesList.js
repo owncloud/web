@@ -353,26 +353,7 @@ module.exports = {
       await this.checkFileName(fileName, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
       await appSideBar.closeSidebarIfOpen()
-
-      let rowElementId = null
-      await this.waitForElementPresent(
-        { selector: rowSelector, locateStrategy: 'xpath' },
-        (result) => {
-          rowElementId = result.WebdriverElementId
-        }
-      )
-      let offset = 0
-      await this.api.elementIdLocation(rowElementId, (result) => {
-        offset = result.value.y
-      })
-      let firstRowElementId = null
-      await this.waitForElementPresent('@fileRow', (result) => {
-        firstRowElementId = result.WebdriverElementId
-      })
-      await this.api.elementIdLocation(firstRowElementId, (result) => {
-        offset -= result.value.y
-      })
-      this.api.execute('scrollTo(0,' + offset + ')')
+      await this.waitForElementVisible({ selector: rowSelector, locateStrategy: 'xpath' })
     },
     checkFileName: async function (fileName, elementType = 'any') {
       const fileSelector = this.getFileSelectorByFileName(fileName, elementType)

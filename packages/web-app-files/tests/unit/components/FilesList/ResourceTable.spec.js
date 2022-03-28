@@ -7,6 +7,18 @@ import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vu
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
 
+const router = {
+  push: jest.fn(),
+  afterEach: jest.fn(),
+  currentRoute: {
+    name: 'some-route-name',
+    query: {}
+  },
+  resolve: (r) => {
+    return { href: r.name }
+  }
+}
+
 const getCurrentDate = () => {
   return DateTime.fromJSDate(new Date()).minus({ days: 1 }).toFormat('EEE, dd MMM yyyy HH:mm:ss')
 }
@@ -77,7 +89,8 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     owner,
-    sharedWith
+    sharedWith,
+    canRename: jest.fn
   },
   {
     id: 'notes',
@@ -92,7 +105,8 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
-    owner
+    owner,
+    canRename: jest.fn
   },
   {
     id: 'documents',
@@ -106,7 +120,8 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
-    owner
+    owner,
+    canRename: jest.fn
   },
   {
     id: 'another-one==',
@@ -120,7 +135,8 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
-    owner
+    owner,
+    canRename: jest.fn
   }
 ]
 
@@ -268,6 +284,10 @@ function getMountedWrapper(options = {}) {
         },
         stubs: {
           'router-link': true
+        },
+        mocks: {
+          $route: router.currentRoute,
+          $router: router
         },
         localVue
       },

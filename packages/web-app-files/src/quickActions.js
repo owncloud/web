@@ -14,9 +14,18 @@ export function createPublicLink(ctx) {
       .toISO()
   }
 
+  if (ctx.storageId) {
+    params.spaceRef = `${ctx.storageId}${ctx.item.path}`
+  }
+
   return new Promise((resolve, reject) => {
     ctx.store
-      .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
+      .dispatch('Files/addLink', {
+        path: ctx.item.path,
+        client: ctx.client,
+        params,
+        storageId: ctx.storageId
+      })
       .then((link) => {
         ctx.store.dispatch('Files/sidebar/openWithPanel', 'links-item').then(() => {
           copyToClipboard(link.url)

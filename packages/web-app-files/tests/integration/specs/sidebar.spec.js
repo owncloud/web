@@ -47,6 +47,14 @@ const store = {
   ...Store,
   modules: {
     ...Store.modules,
+    config: {
+      getters: {
+        configuration: () => ({
+          server: 'https://example.com',
+          options: {}
+        })
+      }
+    },
     user: {
       ...Store.modules.user,
       state: {

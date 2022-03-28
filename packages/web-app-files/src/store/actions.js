@@ -156,36 +156,51 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadCurrentFileOutgoingShares(context, { client, path, resource, storageId }) {
+  loadCurrentFileOutgoingShares(context, { client, graphClient, path, resource, storageId }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
+    }
+
     if (resource?.type === 'space') {
       const promises = []
-      const spaceShares = []
+      const spaceMembers = []
+      const spaceLinks = []
 
       for (const role of Object.keys(resource.spaceRoles)) {
         for (const userId of resource.spaceRoles[role]) {
           promises.push(
-            client.users.getUser(userId).then((resolved) => {
-              spaceShares.push(
-                buildSpaceShare(
-                  {
-                    ...resolved.data,
-                    role
-                  },
-                  resource.id
-                )
-              )
+            graphClient.users.getUser(userId).then((resolved) => {
+              spaceMembers.push(buildSpaceShare({ ...resolved.data, role }, resource.id))
             })
           )
         }
       }
 
+      promises.push(
+        client.shares.getShares(path, { reshares: true, spaceRef }).then((data) => {
+          for (const element of data) {
+            spaceLinks.push(
+              buildShare(
+                element.shareInfo,
+                context.getters.highlightedFile,
+                !context.rootGetters.isOcis
+              )
+            )
+          }
+        })
+      )
+
       return Promise.all(promises)
         .then(() => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', sortSpaceMembers(spaceShares))
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [
+            ...sortSpaceMembers(spaceMembers),
+            ...spaceLinks
+          ])
           context.dispatch('updateCurrentFileShareTypes')
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
         })
@@ -193,11 +208,6 @@ export default {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
         })
-    }
-
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
     }
 
     // see https://owncloud.dev/owncloud-sdk/Shares.html
@@ -329,11 +339,17 @@ export default {
       displayName
     }
   ) {
+    let spaceRef
+    if (storageId) {
+      spaceRef = `${storageId}${path}`
+    }
+
     if (shareType === ShareTypes.group.value) {
       client.shares
         .shareFileWithGroup(path, shareWith, {
           permissions: permissions,
-          expirationDate: expirationDate
+          expirationDate: expirationDate,
+          spaceRef
         })
         .then((share) => {
           context.commit(
@@ -399,11 +415,6 @@ export default {
           )
         })
       return
-    }
-
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
     }
 
     const remoteShare = shareType === ShareTypes.remote.value
@@ -587,7 +598,7 @@ export default {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)
   },
 
-  addLink(context, { path, client, params }) {
+  addLink(context, { path, client, params, storageId }) {
     return new Promise((resolve, reject) => {
       client.shares
         .shareFileWithLink(path, params)
@@ -595,7 +606,7 @@ export default {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.dispatch('updateCurrentFileShareTypes')
-          context.dispatch('loadIndicators', { client, currentFolder: path })
+          context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
           resolve(link)
         })
         .catch((e) => {
@@ -617,13 +628,13 @@ export default {
         })
     })
   },
-  removeLink(context, { share, client, resource }) {
+  removeLink(context, { share, client, resource, storageId }) {
     client.shares
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: resource.path })
+        context.dispatch('loadIndicators', { client, currentFolder: resource.path, storageId })
       })
       .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },

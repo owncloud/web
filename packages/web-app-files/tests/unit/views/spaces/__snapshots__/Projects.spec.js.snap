@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Spaces component should list spaces 1`] = `
-<div class="oc-py-s oc-px-m"><button aria-label="Create a new space" type="button" class="oc-mb-l oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-space-menu-btn" data-testid="spaces-list-create-space-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-    <translate-stub tag="span">Create Space</translate-stub>
-  </button>
+exports[`Spaces projects view should list spaces 1`] = `
+<div class="oc-py-s oc-px-m">
   <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
   <div class="spaces-list oc-mt-l"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
     <!---->

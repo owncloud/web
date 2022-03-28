@@ -48,6 +48,15 @@ export default [
       return multipleSelection && !rootFolder
     }
   }),
+  ({ router, highlightedFile }) => ({
+    app: 'details-space-item',
+    icon: 'questionnaire-line',
+    component: SpaceDetails,
+    default: isLocationSpacesActive(router, 'files-spaces-projects'),
+    get enabled() {
+      return highlightedFile?.type === 'space'
+    }
+  }),
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
     component: FileActions,
@@ -58,6 +67,21 @@ export default [
       isLocationTrashActive(router, 'files-trash-spaces-project'),
     get enabled() {
       return !multipleSelection && !rootFolder
+    }
+  }),
+  ({ highlightedFile, user }) => ({
+    app: 'space-actions-item',
+    component: SpaceActions,
+    icon: 'slideshow-3',
+    iconFillType: 'line',
+    get enabled() {
+      if (highlightedFile?.type !== 'space') {
+        return false
+      }
+      return [
+        ...highlightedFile.spaceRoles[spaceRoleManager.name],
+        ...highlightedFile.spaceRoles[spaceRoleEditor.name]
+      ].includes(user.uuid)
     }
   }),
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
@@ -80,12 +104,21 @@ export default [
       return false
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder }) => ({
+  ({ highlightedFile }) => ({
+    app: 'space-share-item',
+    component: SpaceShares,
+    icon: 'group',
+    iconFillType: 'line',
+    get enabled() {
+      return highlightedFile?.type === 'space'
+    }
+  }),
+  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'links-item',
     icon: 'link',
     component: FileLinks,
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
       if (
         isLocationTrashActive(router, 'files-trash-personal') ||
         isLocationTrashActive(router, 'files-trash-spaces-project') ||
@@ -114,39 +147,6 @@ export default [
         return false
       }
       return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
-    }
-  }),
-  ({ router, highlightedFile }) => ({
-    app: 'details-space-item',
-    icon: 'questionnaire-line',
-    component: SpaceDetails,
-    default: isLocationSpacesActive(router, 'files-spaces-projects'),
-    get enabled() {
-      return highlightedFile?.type === 'space'
-    }
-  }),
-  ({ highlightedFile, user }) => ({
-    app: 'space-actions-item',
-    component: SpaceActions,
-    icon: 'slideshow-3',
-    iconFillType: 'line',
-    get enabled() {
-      if (highlightedFile?.type !== 'space') {
-        return false
-      }
-      return [
-        ...highlightedFile.spaceRoles[spaceRoleManager.name],
-        ...highlightedFile.spaceRoles[spaceRoleEditor.name]
-      ].includes(user.uuid)
-    }
-  }),
-  ({ highlightedFile }) => ({
-    app: 'space-share-item',
-    component: SpaceShares,
-    icon: 'group',
-    iconFillType: 'line',
-    get enabled() {
-      return highlightedFile?.type === 'space'
     }
   })
 ]

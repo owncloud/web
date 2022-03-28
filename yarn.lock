@@ -9559,9 +9559,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.0.0-rc.6":
-  version: 13.0.0-rc.6
-  resolution: "owncloud-design-system@npm:13.0.0-rc.6"
+"owncloud-design-system@npm:^13.0.1-rc.1":
+  version: 13.0.1-rc.1
+  resolution: "owncloud-design-system@npm:13.0.1-rc.1"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9578,13 +9578,13 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 5ea70e5b03b0ec8be6fb33fbc06cb74eda574d877f673961221a9d209ed741a0c85d41c0e3e2063159e048c8909a410a2ef2d6d3b4ebfc61b22361abf65c3448
+  checksum: 3a3be177b5026e13b9cb7547bdd37256e00eb0e5b0ade0fd4632c748092f2120f8316bd857dd76f514f90de1c25edea5af82bd8628c30195801f5c0daaf58b11
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~3.0.0-alpha.2":
-  version: 3.0.0-alpha.2
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.2"
+"owncloud-sdk@npm:~3.0.0-alpha.4":
+  version: 3.0.0-alpha.4
+  resolution: "owncloud-sdk@npm:3.0.0-alpha.4"
   peerDependencies:
     axios: ^0.26.0
     cross-fetch: ^3.0.6
@@ -9594,7 +9594,7 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.8.0
     xml-js: ^1.6.11
-  checksum: 46674a77d7a7c174be5876abee6f75365461f52da1ab8f2dc187602d28474a010aea06d810285a1f1b3becd7b38bd7e250019d56b607d3e3d7ac0fd6207818b3
+  checksum: de15ec2b3f5ed097eb73777192220f3e5df637d3aa2266d964c30d9fce904252ee9269f516e294fae8e8b41334508ef8e0212bda299c608d13a4e234536f9e27
   languageName: node
   linkType: hard
 
@@ -9826,6 +9826,12 @@ __metadata:
   checksum: 5b1e2daa247062061325b8fdbfd1fb56dde0a448fb1455453276ea18c60685bdad23a445dc148cf87bc216be1573357509b7d4060494a6fd768c7efad833ee45
   languageName: node
   linkType: hard
+
+"pdf-viewer@workspace:packages/web-app-pdf-viewer":
+  version: 0.0.0-use.local
+  resolution: "pdf-viewer@workspace:packages/web-app-pdf-viewer"
+  languageName: unknown
+  linkType: soft
 
 "pend@npm:~1.2.0":
   version: 1.2.0
@@ -13559,8 +13565,8 @@ __metadata:
     luxon: ^2.3.0
     marked: ^4.0.12
     oidc-client: 1.11.5
-    owncloud-design-system: ^13.0.0-rc.6
-    owncloud-sdk: ~3.0.0-alpha.2
+    owncloud-design-system: ^13.0.1-rc.1
+    owncloud-sdk: ~3.0.0-alpha.4
     p-queue: ^6.1.1
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7

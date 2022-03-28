@@ -12,6 +12,7 @@
   "apps": [
     "files",
     "media-viewer",
+    "pdf-viewer",
     "search",
     "external",
     "user-management"

@@ -16,5 +16,6 @@ export default {
   'oc-page-size': true,
   'router-link': true,
   'portal-target': true,
-  'oc-progress': true
+  'oc-progress': true,
+  'oc-status-indicators': true
 }

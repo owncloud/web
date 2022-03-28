@@ -17,7 +17,8 @@ export const createFile = ({ id, status = 1, type = 'folder' }) => ({
   share: {
     id: `file-share-id-${id}`
   },
-  indicators: []
+  indicators: [],
+  canRename: jest.fn
 })
 
 export const localVue = createLocalVue()

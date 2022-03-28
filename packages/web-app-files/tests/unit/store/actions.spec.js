@@ -7,7 +7,8 @@ const stateMock = {
   dispatch: jest.fn(),
   getters: {
     highlightedFile: { isFolder: false }
-  }
+  },
+  rootGetters: {}
 }
 
 const clientMock = {
@@ -39,6 +40,11 @@ const graphClientMock = {
   drives: {
     getDrive: () => {
       return Promise.resolve({ data: spaceMock })
+    }
+  },
+  users: {
+    getUser: () => {
+      return Promise.resolve({})
     }
   }
 }
@@ -81,6 +87,7 @@ describe('vuex store actions', () => {
 
       await actions.loadCurrentFileOutgoingShares(stateMock, {
         client: clientMock,
+        graphClient: graphClientMock,
         path: 'path',
         resource: dataSet.space
       })
