@@ -1,0 +1,6 @@
+Enhancement: Spaces overview topbar layout
+
+We've adjusted the topbar layout of the spaces overview to match the other pages.
+
+https://github.com/owncloud/web/pull/6642
+https://github.com/owncloud/web/issues/6641

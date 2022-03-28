@@ -1,17 +1,46 @@
 <template>
   <div class="oc-flex">
+    <template v-if="!hideViewOptions">
+      <oc-button
+        id="files-view-options-btn"
+        key="files-view-options-btn"
+        v-oc-tooltip="viewOptionsButtonLabel"
+        data-testid="files-view-options-btn"
+        :aria-label="viewOptionsButtonLabel"
+        appearance="raw"
+        class="oc-my-s oc-p-xs"
+      >
+        <oc-icon name="settings-3" fill-type="line" />
+      </oc-button>
+      <oc-drop
+        drop-id="files-view-options-drop"
+        toggle="#files-view-options-btn"
+        mode="click"
+        class="oc-width-auto"
+        padding-size="small"
+      >
+        <oc-list>
+          <li class="files-view-options-list-item">
+            <oc-switch
+              v-model="hiddenFilesShownModel"
+              data-testid="files-switch-hidden-files"
+              :label="$gettext('Show hidden files')"
+            />
+          </li>
+          <li class="files-view-options-list-item">
+            <oc-page-size
+              v-model="itemsPerPage"
+              data-testid="files-pagination-size"
+              :label="$gettext('Items per page')"
+              :options="[100, 500, 1000, $gettext('All')]"
+              class="files-pagination-size"
+            />
+          </li>
+        </oc-list>
+      </oc-drop>
+    </template>
     <oc-button
-      id="files-view-options-btn"
-      key="files-view-options-btn"
-      v-oc-tooltip="viewOptionsButtonLabel"
-      data-testid="files-view-options-btn"
-      :aria-label="viewOptionsButtonLabel"
-      appearance="raw"
-      class="oc-my-s oc-p-xs"
-    >
-      <oc-icon name="settings-3" fill-type="line" />
-    </oc-button>
-    <oc-button
+      v-if="!hideSidebarToggle"
       id="files-toggle-sidebar"
       v-oc-tooltip="toggleSidebarButtonLabel"
       :aria-label="toggleSidebarButtonLabel"
@@ -21,32 +50,6 @@
     >
       <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
     </oc-button>
-    <oc-drop
-      drop-id="files-view-options-drop"
-      toggle="#files-view-options-btn"
-      mode="click"
-      class="oc-width-auto"
-      padding-size="small"
-    >
-      <oc-list>
-        <li class="files-view-options-list-item">
-          <oc-switch
-            v-model="hiddenFilesShownModel"
-            data-testid="files-switch-hidden-files"
-            :label="$gettext('Show hidden files')"
-          />
-        </li>
-        <li class="files-view-options-list-item">
-          <oc-page-size
-            v-model="itemsPerPage"
-            data-testid="files-pagination-size"
-            :label="$gettext('Items per page')"
-            :options="[100, 500, 1000, $gettext('All')]"
-            class="files-pagination-size"
-          />
-        </li>
-      </oc-list>
-    </oc-drop>
   </div>
 </template>
 
@@ -91,6 +94,14 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
+    },
+
+    hideViewOptions() {
+      return this.$route.meta.hideViewOptions === true
+    },
+
+    hideSidebarToggle() {
+      return this.$route.meta.hideSidebarToggle === true
     }
   },
   methods: {

@@ -1,6 +1,7 @@
 <template>
   <div class="oc-flex-inline oc-width-1-1" style="gap: 15px">
-    <template v-if="createFileActionsAvailable">
+    <create-space v-if="createSpaceActionAvailable" />
+    <template v-else-if="createFileActionsAvailable">
       <oc-button
         id="new-file-menu-btn"
         key="new-file-menu-btn-enabled"
@@ -70,46 +71,48 @@
         <translate>New folder</translate>
       </oc-button>
     </template>
-    <oc-button
-      id="upload-menu-btn"
-      key="upload-menu-btn-enabled"
-      v-oc-tooltip="uploadButtonTooltip"
-      :aria-label="uploadButtonAriaLabel"
-      :disabled="uploadOrFileCreationBlocked"
-    >
-      <oc-icon name="upload" fill-type="line" />
-      <translate>Upload</translate>
-    </oc-button>
-    <oc-drop
-      drop-id="upload-menu-drop"
-      toggle="#upload-menu-btn"
-      mode="click"
-      class="oc-width-auto"
-      close-on-click
-      padding-size="small"
-    >
-      <oc-list id="upload-list">
-        <li>
-          <folder-upload
-            :root-path="currentPath"
-            :path="currentPath"
-            :headers="headers"
-            @success="uploadSuccess"
-            @error="uploadError"
-            @progress="uploadProgress"
-          />
-        </li>
-        <li>
-          <file-upload
-            :path="currentPath"
-            :headers="headers"
-            @success="uploadSuccess"
-            @error="uploadError"
-            @progress="uploadProgress"
-          />
-        </li>
-      </oc-list>
-    </oc-drop>
+    <template v-if="uploadFileActionsAvailable">
+      <oc-button
+        id="upload-menu-btn"
+        key="upload-menu-btn-enabled"
+        v-oc-tooltip="uploadButtonTooltip"
+        :aria-label="uploadButtonAriaLabel"
+        :disabled="uploadOrFileCreationBlocked"
+      >
+        <oc-icon name="upload" fill-type="line" />
+        <translate>Upload</translate>
+      </oc-button>
+      <oc-drop
+        drop-id="upload-menu-drop"
+        toggle="#upload-menu-btn"
+        mode="click"
+        class="oc-width-auto"
+        close-on-click
+        padding-size="small"
+      >
+        <oc-list id="upload-list">
+          <li>
+            <folder-upload
+              :root-path="currentPath"
+              :path="currentPath"
+              :headers="headers"
+              @success="uploadSuccess"
+              @error="uploadError"
+              @progress="uploadProgress"
+            />
+          </li>
+          <li>
+            <file-upload
+              :path="currentPath"
+              :headers="headers"
+              @success="uploadSuccess"
+              @error="uploadError"
+              @progress="uploadProgress"
+            />
+          </li>
+        </oc-list>
+      </oc-drop>
+    </template>
   </div>
 </template>
 
@@ -127,11 +130,13 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
+import CreateSpace from './CreateSpace.vue'
 
 export default {
   components: {
     FileUpload,
-    FolderUpload
+    FolderUpload,
+    CreateSpace
   },
   mixins: [Mixins, MixinFileActions],
   props: {
@@ -163,6 +168,12 @@ export default {
     },
     createFileActionsAvailable() {
       return this.newFileHandlers.length > 0 || this.mimetypesAllowedForCreation.length > 0
+    },
+    createSpaceActionAvailable() {
+      return this.isSpacesProjectsLocation && !this.$route.params.storageId
+    },
+    uploadFileActionsAvailable() {
+      return !this.isSpacesProjectsLocation || this.$route.params.storageId
     },
     newButtonTooltip() {
       if (!this.canUpload) {
