@@ -86,8 +86,8 @@
     </div>
   </div>
 </template>
-<script>
-import { ref } from '@vue/composition-api'
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
@@ -98,14 +98,11 @@ import SpaceQuota from '../../SpaceQuota.vue'
 import { loadPreview } from '../../../helpers/resource'
 import { ImageDimension } from '../../../constants'
 
-export default {
+export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
   mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
-  title: ($gettext) => {
-    return $gettext('Details')
-  },
   setup() {
     const spaceImage = ref('')
 
@@ -230,7 +227,7 @@ export default {
       this.setSidebarPanel('links-item')
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .oc-space-details-sidebar {

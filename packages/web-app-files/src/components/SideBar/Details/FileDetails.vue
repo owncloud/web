@@ -83,8 +83,8 @@
     <p v-else data-testid="noContentText" v-text="noContentText" />
   </div>
 </template>
-<script>
-import { computed, ref } from '@vue/composition-api'
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
@@ -97,7 +97,7 @@ import { ShareTypes } from '../../../helpers/share'
 import { useRoute, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 
-export default {
+export default defineComponent({
   name: 'FileDetails',
   mixins: [Mixins, MixinResources],
 
@@ -123,10 +123,6 @@ export default {
       sharedParentDir,
       sharedParentRoute
     }
-  },
-
-  title: ($gettext) => {
-    return $gettext('Details')
   },
 
   data: () => ({
@@ -355,7 +351,7 @@ export default {
       this.loading = false
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .details-table {

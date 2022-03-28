@@ -16,6 +16,10 @@ import { Resource } from './helpers/resource'
 import { User } from './helpers/user'
 import Router from 'vue-router'
 
+function $gettext(msg: string): string {
+  return msg
+}
+
 const panelGenerators: (({
   rootFolder,
   highlightedFile,
@@ -36,6 +40,7 @@ const panelGenerators: (({
   ({ rootFolder, highlightedFile }): Panel => ({
     app: 'no-selection-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: NoSelection,
     default: () => true,
     get enabled() {
@@ -45,6 +50,7 @@ const panelGenerators: (({
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'details-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: FileDetails,
     default:
       !isLocationTrashActive(router, 'files-trash-personal') &&
@@ -61,6 +67,7 @@ const panelGenerators: (({
   ({ multipleSelection, rootFolder }) => ({
     app: 'details-multiple-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: FileDetailsMultiple,
     default: () => true,
     get enabled() {
@@ -70,6 +77,7 @@ const panelGenerators: (({
   ({ router, highlightedFile }) => ({
     app: 'details-space-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: SpaceDetails,
     default: isLocationSpacesActive(router, 'files-spaces-projects'),
     get enabled() {
@@ -78,8 +86,9 @@ const panelGenerators: (({
   }),
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
-    component: FileActions,
     icon: 'slideshow-3',
+    title: $gettext('Actions'),
+    component: FileActions,
     default:
       isLocationTrashActive(router, 'files-trash-personal') ||
       isLocationTrashActive(router, 'files-trash-spaces-project'),
@@ -89,8 +98,9 @@ const panelGenerators: (({
   }),
   ({ highlightedFile, user }) => ({
     app: 'space-actions-item',
-    component: SpaceActions,
     icon: 'slideshow-3',
+    title: $gettext('Actions'),
+    component: SpaceActions,
     get enabled() {
       if (highlightedFile?.type !== 'space') {
         return false
@@ -104,6 +114,7 @@ const panelGenerators: (({
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'sharing-item',
     icon: 'group',
+    title: $gettext('People'),
     component: FileShares,
     get enabled() {
       if (multipleSelection || rootFolder) return false
@@ -123,8 +134,9 @@ const panelGenerators: (({
   }),
   ({ highlightedFile }) => ({
     app: 'space-share-item',
-    component: SpaceShares,
     icon: 'group',
+    title: $gettext('Members'),
+    component: SpaceShares,
     get enabled() {
       return highlightedFile?.type === 'space'
     }
@@ -132,6 +144,7 @@ const panelGenerators: (({
   ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'links-item',
     icon: 'link',
+    title: $gettext('Links'),
     component: FileLinks,
     get enabled() {
       if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
@@ -152,6 +165,7 @@ const panelGenerators: (({
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'versions-item',
     icon: 'git-branch',
+    title: $gettext('Versions'),
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false

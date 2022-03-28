@@ -47,7 +47,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
@@ -56,9 +56,6 @@ import { DavProperty } from 'web-pkg/src/constants'
 export default {
   name: 'FileVersions',
   mixins: [Mixins, MixinResources],
-  title: ($gettext) => {
-    return $gettext('Versions')
-  },
   data: () => ({
     loading: false,
     DavProperty

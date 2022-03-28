@@ -24,17 +24,15 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapGetters } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'FileDetailsMultiple',
   mixins: [Mixins, MixinResources],
-  title: ($gettext) => {
-    return $gettext('Details')
-  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     selectedFilesCount() {
@@ -79,7 +77,7 @@ export default {
       return this.$gettext('Overview of the information about the selected files')
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .files-preview {

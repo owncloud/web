@@ -14,7 +14,7 @@
         :key="`panel-${panel.app}`"
         ref="panels"
         :data-testid="`sidebar-panel-${panel.app}`"
-        :tabindex="activePanelName === panel.app ? -1 : false"
+        :tabindex="activePanelName === panel.app ? -1 : null"
         class="sidebar-panel"
         :class="{
           'is-active-sub-panel': activeAvailablePanelName === panel.app,
@@ -35,11 +35,11 @@
             @click="closePanel"
           >
             <oc-icon name="arrow-left-s" fill-type="line" />
-            {{ defaultPanel.component.title($gettext) }}
+            {{ defaultPanel.title }}
           </oc-button>
 
           <h2 class="header__title oc-my-rm">
-            {{ panel.component.title($gettext) }}
+            {{ panel.title }}
           </h2>
 
           <oc-button
@@ -75,7 +75,7 @@
                 @click="openPanel(panelSelect.app)"
               >
                 <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
-                {{ panelSelect.component.title($gettext) }}
+                {{ panelSelect.title }}
                 <oc-icon name="arrow-right-s" fill-type="line" />
               </oc-button>
             </div>
@@ -153,7 +153,7 @@ export default defineComponent({
     accessibleLabelBack() {
       const translated = this.$gettext('Back to %{panel} panel')
       return this.$gettextInterpolate(translated, {
-        panel: this.defaultPanel.component.title(this.$gettext)
+        panel: this.defaultPanel.title
       })
     }
   },

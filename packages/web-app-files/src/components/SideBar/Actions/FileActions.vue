@@ -10,17 +10,15 @@
   </oc-list>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'FileActions',
-  title: ($gettext) => {
-    return $gettext('Actions')
-  },
   components: { ActionMenuItem },
   mixins: [FileActions],
   computed: {
@@ -34,7 +32,7 @@ export default {
       return this.$_fileActions_getAllAvailableActions(this.resources)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
