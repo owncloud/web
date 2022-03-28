@@ -98,6 +98,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 export default {
   metaInfo() {
@@ -160,7 +161,8 @@ export default {
     }).restartable()
 
     return {
-      ...useResourcesViewDefaults({ loadResourcesTask })
+      ...useResourcesViewDefaults({ loadResourcesTask }),
+      hasSpaces: useCapabilitySpacesEnabled()
     }
   },
 
@@ -180,11 +182,17 @@ export default {
     ...mapState(['user']),
 
     title() {
+      const personalRouteTitle = this.hasSpaces
+        ? this.$gettext('Personal')
+        : this.$gettext('All files')
+      const target =
+        basename(this.target) || personalRouteTitle
+          ? this.$gettext('Personal')
+          : this.$gettext('All files')
       const translated =
         this.currentAction === batchActions.move
           ? this.$gettext('Move into »%{ target }«')
           : this.$gettext('Copy into »%{ target }«')
-      const target = basename(this.target) || this.$gettext('Personal')
       return this.$gettextInterpolate(translated, { target })
     },
 
@@ -227,7 +235,10 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Personal'), '/'))
+        const personalRouteTitle = this.hasSpaces
+          ? this.$gettext('Personal')
+          : this.$gettext('All files')
+        breadcrumbs.push(this.createBreadcrumbNode(0, personalRouteTitle, '/'))
         for (let i = 0; i < pathSegments.length; i++) {
           const itemPath = join.apply(null, pathSegments.slice(0, i + 1))
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))

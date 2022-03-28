@@ -18,27 +18,27 @@ exports[`LocationPicker files app bar should show location picker selection info
 
 exports[`LocationPicker files app bar should show location picker selection info according to route action and item 2`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 3`] = `<h1 class="location-picker-selection-info oc-mb">Move into »child«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 3`] = `<h1 class="location-picker-selection-info oc-mb">Move into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 4`] = `<h1 class="location-picker-selection-info oc-mb">Move into »parent«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 4`] = `<h1 class="location-picker-selection-info oc-mb">Move into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 5`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »child«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 5`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 6`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »parent«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 6`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 7`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »टेश्ट«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 7`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 8`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »child«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 8`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 9`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »child«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 9`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 10`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »child«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 10`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 11`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »टेश्ट फोल्डर«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 11`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 12`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »456«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 12`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
-exports[`LocationPicker files app bar should show location picker selection info according to route action and item 13`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »🔥«</h1>`;
+exports[`LocationPicker files app bar should show location picker selection info according to route action and item 13`] = `<h1 class="location-picker-selection-info oc-mb">Copy into »Personal«</h1>`;
 
 exports[`LocationPicker files view when the view is not loading anymore should show no content message if active files length is less than one 1`] = `<no-content-message-stub icon="folder" id="files-location-picker-empty" class="files-empty"></no-content-message-stub>`;
 
