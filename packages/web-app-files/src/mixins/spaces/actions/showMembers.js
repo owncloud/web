@@ -8,7 +8,6 @@ export default {
         {
           name: 'show-members',
           icon: 'group',
-          iconFillType: 'line',
           label: () => this.$gettext('Members'),
           handler: this.$_showMembers_trigger,
           isEnabled: ({ resources }) => resources.length === 1,
