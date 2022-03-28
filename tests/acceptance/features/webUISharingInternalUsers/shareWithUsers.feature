@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder" in the server
 
-  @smokeTest @issue-ocis-2260 @ocisSmokeTest @disablePreviews @skipOnXGAPortraitResolution
+  @smokeTest @issue-ocis-2260 @ocisSmokeTest @disablePreviews
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg" in the server
     And user "Brian" has created file "simple-folder/lorem.txt" in the server
