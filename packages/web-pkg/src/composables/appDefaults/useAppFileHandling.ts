@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { unref } from '@vue/composition-api'
 import qs from 'qs'
 
-import { Resource } from '../../../../web-app-files/src/helpers/resource'
+import { Resource } from 'files/src/helpers/resource'
 import { MaybeRef } from '../../utils'
 import { ClientService, clientService as defaultClientService } from '../../services'
 import { DavProperties } from '../../constants'
@@ -25,7 +25,6 @@ export interface AppFileHandlingResult {
 
 export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHandlingResult {
   const client = (options.clientService || defaultClientService).owncloudSdk
-  const store = options.store
   const isPublicLinkContext = options.isPublicLinkContext
   const publicLinkPassword = options.publicLinkPassword
 

@@ -26,17 +26,17 @@ Feature: restrict resharing
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
-    And user "Alice" has favorited element "/Shares/simple-folder" in the server
     When user "Alice" logs in using the webUI
+    And the user browses to the files page
     And the user opens folder "Shares" using the webUI
+    When the user marks file "simple-folder" as favorite using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
-    When the user browses to the shared-with-me page
-#    Then the user should not be able to share folder "simple-folder (2)" using the webUI
-    And the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
-    Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "Carol" folder "simple-folder" should not exist in the server
     When the user browses to the favorites page
     Then the user should not be able to share folder "Shares/simple-folder" using the webUI
+
+
+
 
   @smokeTest
   Scenario: disable resharing and check if the received resource from group share can be reshared

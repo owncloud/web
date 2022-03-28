@@ -20,6 +20,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
+        :fields-displayed="['name', 'sharedWith', 'sdate']"
         :are-thumbnails-displayed="displayThumbnails"
         :are-paths-displayed="true"
         :resources="paginatedResources"

@@ -19,6 +19,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
+        :fields-displayed="['name', 'ddate']"
         :are-paths-displayed="true"
         :are-thumbnails-displayed="false"
         :resources="paginatedResources"

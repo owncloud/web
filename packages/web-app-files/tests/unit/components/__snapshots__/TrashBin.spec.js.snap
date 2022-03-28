@@ -8,9 +8,6 @@ exports[`Trashbin component when the view is not loading anymore when length of 
         <!---->
       </th>
       <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-nowrap oc-table-header-cell oc-table-header-cell-name" aria-sort="none" style="top: 0px;"><span class="oc-table-thead-content header-text">Name</span> <button aria-label="Sort by name" type="button" class="oc-button-sort oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button></th>
-      <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-status" style="top: 0px;"><span class="oc-table-thead-content header-text">Status</span>
-        <!---->
-      </th>
       <th class="oc-th oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-header-cell oc-table-header-cell-actions oc-pr-m" style="top: 0px;"><span class="oc-table-thead-content header-text">Actions</span>
         <!---->
       </th>
@@ -31,7 +28,6 @@ exports[`Trashbin component when the view is not loading anymore when length of 
           </div> <button type="button" class="resource-table-edit-name oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button>
         </div>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-1234"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-1234" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
@@ -52,7 +48,6 @@ exports[`Trashbin component when the view is not loading anymore when length of 
           </div> <button type="button" class="resource-table-edit-name oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button>
         </div>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-5896"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-5896" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
@@ -73,7 +68,6 @@ exports[`Trashbin component when the view is not loading anymore when length of 
           </div> <button type="button" class="resource-table-edit-name oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></button>
         </div>
       </td>
-      <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-status"></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-table-data-cell oc-table-data-cell-actions oc-pr-m">
         <div class="resource-table-actions"> <button aria-label="Show context menu" type="button" class="resource-table-btn-action-dropdown oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="context-menu-trigger-file-id-9856"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
           <div id="context-menu-drop-file-id-9856" class="oc-drop oc-box-shadow-medium oc-rounded"></div>
@@ -83,7 +77,7 @@ exports[`Trashbin component when the view is not loading anymore when length of 
   </tbody>
   <tfoot class="oc-table-footer">
     <tr class="oc-table-footer-row">
-      <td colspan="4" class="oc-table-footer-cell">
+      <td colspan="3" class="oc-table-footer-cell">
         <pagination-stub pages="12" currentpage="21"></pagination-stub>
         <list-info-stub files="3" folders="0" class="oc-width-1-1 oc-my-s"></list-info-stub>
       </td>

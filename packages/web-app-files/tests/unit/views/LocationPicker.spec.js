@@ -2,6 +2,7 @@ import { createFile, getStore, localVue } from './views.setup.js'
 import LocationPicker from '@files/src/views/LocationPicker.vue'
 import { mount, RouterLinkStub, shallowMount } from '@vue/test-utils'
 import { createLocationOperations } from '../../../src/router'
+import omit from 'lodash-es/omit'
 
 const component = { ...LocationPicker, mounted: jest.fn() }
 
@@ -134,9 +135,8 @@ describe('LocationPicker', () => {
           const breadcrumbItems = wrapper.find(breadcrumbStub).props().items
 
           expect(breadcrumbItems.length).toBe(3)
-          expect(breadcrumbItems[0]).toMatchObject({
+          expect(omit(breadcrumbItems[0], ['text'])).toMatchObject({
             index: 0,
-            text: 'Personal',
             to: {
               name: route.name,
               params: { action: route.params.action, item: '/' },

@@ -8,7 +8,6 @@ const loginHelper = require('../helpers/loginHelper')
 const xpathHelper = require('../helpers/xpath')
 const path = require('../helpers/path')
 const util = require('util')
-const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_STATE } = require('../helpers/sharingHelper')
 const appSideBar = client.page.FilesPageElement.appSideBar()
 const appBarActions = client.page.appBarActions()
@@ -1382,18 +1381,6 @@ Then(
       true,
       `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but found '${visibleItems}' instead.`
     )
-  }
-)
-
-Then(
-  'the resource {string} should have the token of last link in the people column on the webUI',
-  async (resource) => {
-    const lastLink = await sharingHelper.fetchLastPublicLinkShare(client.globals.currentUser)
-    const collaboratorsArray = await client.page
-      .sharedWithOthersPage()
-      .getCollaboratorsForResource(resource)
-
-    assert.ok(collaboratorsArray.indexOf(lastLink.token) > -1)
   }
 )
 
