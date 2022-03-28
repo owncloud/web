@@ -15,6 +15,7 @@
           :data-test-share-status="ShareStatus.pending"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
+          :fields-displayed="getDisplayedFields(ShareStatus.pending)"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
           :are-resources-clickable="false"
@@ -106,6 +107,7 @@
         :data-test-share-status="viewMode"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
+        :fields-displayed="getDisplayedFields(viewMode)"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="sharesItems"
         :are-resources-clickable="showsAcceptedShares"
@@ -404,6 +406,13 @@ export default {
 
     isResourceInSharesSelection(resource) {
       return this.sharesSelected?.includes(resource)
+    },
+
+    getDisplayedFields(shareStatus) {
+      if (shareStatus === ShareStatus.accepted) {
+        return null
+      }
+      return ['name', 'status', 'owner', 'sdate']
     }
   }
 }

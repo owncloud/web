@@ -459,9 +459,9 @@ export default defineComponent({
           }
         ]
           .filter((field) => {
-            const hasProperty = Object.prototype.hasOwnProperty.call(firstResource, field.name)
-            if (!this.fieldsDisplayed) return hasProperty
-            return hasProperty && this.fieldsDisplayed.includes(field.name)
+            const hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+            if (!this.fieldsDisplayed) return hasField
+            return hasField && this.fieldsDisplayed.includes(field.name)
           })
           .map((field) => {
             const sortField = sortFields.find((f) => f.name === field.name)
