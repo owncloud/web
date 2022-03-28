@@ -167,11 +167,14 @@ export default defineComponent({
       const personalRouteName = this.hasSpaces
         ? this.$gettext('Personal')
         : this.$gettext('All files')
-
-      return [
+      const f = [
         { text: personalRouteName, to: '/' },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
       ]
+
+      console.log(f)
+
+      return f
     },
 
     folderNotFound() {
