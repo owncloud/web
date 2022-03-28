@@ -71,7 +71,7 @@ services:
       OCIS_INSECURE: "${INSECURE:-false}"
     volumes:
       - ./config/ocis/entrypoint-override.sh:/entrypoint-override.sh
-      - ./config/ocis/proxy.json:/etc/ocis/proxy.json
+      - ./config/ocis/proxy.yaml:/etc/ocis/proxy.yaml
       - ./config/ocis/mimetypes.json:/var/tmp/ocis/app-config/mimetypes.json
       - ocis-data:/var/lib/ocis
     labels:
