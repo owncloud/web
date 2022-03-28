@@ -10,11 +10,30 @@ import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
 import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
+import { Panel } from '../../web-pkg/src/components/sidebar'
 
-export default [
+import { Resource } from './helpers/resource'
+import { User } from './helpers/user'
+import Router from 'vue-router'
+
+const panelGenerators: (({
+  rootFolder,
+  highlightedFile,
+  router,
+  multipleSelection,
+  user,
+  capabilities
+}: {
+  rootFolder: boolean
+  highlightedFile: Resource
+  router: Router
+  multipleSelection: boolean
+  user: User
+  capabilities: any
+}) => Panel)[] = [
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
-  ({ rootFolder, highlightedFile }) => ({
+  ({ rootFolder, highlightedFile }): Panel => ({
     app: 'no-selection-item',
     icon: 'questionnaire-line',
     component: NoSelection,
@@ -147,3 +166,5 @@ export default [
     }
   })
 ]
+
+export default panelGenerators

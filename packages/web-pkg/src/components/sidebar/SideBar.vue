@@ -89,18 +89,20 @@
 
 <script lang="ts">
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Panel } from './types'
 
 let visibilityObserver
 let hiddenObserver
 
-export default {
+export default defineComponent({
   props: {
     loading: {
       type: Boolean,
       required: true
     },
     availablePanels: {
-      type: Array,
+      type: Array as PropType<Panel[]>,
       required: true
     },
     sidebarActivePanel: {
@@ -229,7 +231,7 @@ export default {
       this.resetSidebarPanel()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

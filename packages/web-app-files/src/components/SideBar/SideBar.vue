@@ -20,19 +20,20 @@
   </SideBar>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 import { DavProperties } from 'web-pkg/src/constants'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
+import { Panel } from 'web-pkg/src/components/sidebar/'
 
 import { buildResource } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSharesActive, isLocationTrashActive } from '../../router'
-import { computed } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
 
-export default {
+export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
 
   provide() {
@@ -55,7 +56,7 @@ export default {
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     ...mapState(['user']),
-    availablePanels() {
+    availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
         (result, panelGenerator) => {
           const panel = panelGenerator({
@@ -183,7 +184,7 @@ export default {
       this.loading = false
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
