@@ -7,7 +7,6 @@ export default {
         {
           name: 'show-details',
           icon: 'information',
-          iconFillType: 'line',
           label: () => this.$gettext('Details'),
           handler: this.$_showDetails_trigger,
           isEnabled: ({ resources }) => resources.length === 1,

@@ -1,26 +1,9 @@
 <template>
-  <div id="oc-files-context-menu">
-    <template v-for="(section, sectionIndex) in menuSections">
-      <oc-list
-        :id="`oc-files-context-actions-${section.name}`"
-        :key="`section-${section.name}-list`"
-        class="oc-files-context-actions"
-        :class="getSectionClasses(sectionIndex)"
-      >
-        <action-menu-item
-          v-for="(action, actionIndex) in section.items"
-          :key="`section-${section.name}-action-${actionIndex}`"
-          :action="action"
-          :items="items"
-          class="oc-files-context-action oc-px-s oc-rounded"
-        />
-      </oc-list>
-    </template>
-  </div>
+  <context-action-menu :menu-sections="menuSections" :items="items" />
 </template>
 
 <script>
-import ActionMenuItem from '../ActionMenuItem.vue'
+import ContextActionMenu from '../ContextActionMenu.vue'
 
 import FileActions from '../../mixins/fileActions'
 import AcceptShare from '../../mixins/actions/acceptShare'
@@ -45,7 +28,7 @@ import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 
 export default {
   name: 'ContextActions',
-  components: { ActionMenuItem },
+  components: { ContextActionMenu },
   mixins: [
     FileActions,
     AcceptShare,
@@ -183,60 +166,6 @@ export default {
         ...this.$_showDetails_items
       ].filter((item) => item.isEnabled(this.filterParams))
     }
-  },
-  methods: {
-    getSectionClasses(index) {
-      const classes = []
-      if (!this.menuSections.length) {
-        return classes
-      }
-      if (index < this.menuSections.length - 1) {
-        classes.push('oc-pb-s')
-      }
-      if (index > 0) {
-        classes.push('oc-pt-s')
-      }
-      if (index < this.menuSections.length - 1) {
-        classes.push('oc-files-context-actions-border')
-      }
-      return classes
-    }
   }
 }
 </script>
-
-<style lang="scss">
-.oc-files-context-actions {
-  text-align: left;
-  white-space: normal;
-
-  > li {
-    padding: 6px;
-    &:hover {
-      background-color: var(--oc-color-background-hover);
-    }
-
-    a,
-    button,
-    span {
-      color: var(--oc-color-swatch-passive-default) !important;
-      display: inline-flex;
-      font-weight: normal !important;
-      gap: 10px;
-      justify-content: flex-start;
-      vertical-align: top;
-      width: 100%;
-      text-align: left;
-
-      &:hover {
-        color: var(--oc-color-swatch-passive-default);
-        text-decoration: none !important;
-      }
-    }
-  }
-
-  &-border {
-    border-bottom: 1px solid var(--oc-color-border);
-  }
-}
-</style>

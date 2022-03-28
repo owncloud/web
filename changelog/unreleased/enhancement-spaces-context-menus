@@ -1,0 +1,7 @@
+Enhancement: Spaces context menus
+
+Spaces context menus have been adjusted visibly to match the other available context menus.
+Also, the corresponding component has been abstracted in the course of this. This cleans up a lot of (duplicated) code across the spaces views and makes future adjustments easier.
+
+https://github.com/owncloud/web/pull/6659
+https://github.com/owncloud/web/issues/6634

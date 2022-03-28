@@ -10,7 +10,7 @@ export default {
       return [
         {
           name: 'delete',
-          icon: 'delete-bin-5',
+          icon: 'close-circle',
           label: () => {
             return this.$gettext('Delete')
           },

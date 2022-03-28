@@ -3,8 +3,7 @@
 exports[`Spaces projects view should list spaces 1`] = `
 <div class="oc-py-s oc-px-m">
   <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
-  <div class="spaces-list oc-mt-l"><input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
-    <!---->
+  <div class="spaces-list oc-mt-l">
     <ul class="
           oc-grid
           oc-grid-match
@@ -28,14 +27,27 @@ exports[`Spaces projects view should list spaces 1`] = `
                 <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-1"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
                   <div id="space-context-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
                     <div class="oc-card oc-card-body oc-rounded oc-background-secondary oc-p-s">
-                      <ul class="oc-list oc-files-context-actions">
-                        <li class="oc-files-context-action oc-px-s"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                            Deleted files
-                          </button></li>
-                        <li class="oc-files-context-action oc-px-s"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-flex oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                            Details
-                          </button></li>
-                      </ul>
+                      <div>
+                        <div id="oc-files-context-menu">
+                          <ul id="oc-files-context-actions-members" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border">
+                            <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Members</span>
+                                <!---->
+                              </button></li>
+                          </ul>
+                          <ul id="oc-files-context-actions-trashBin" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-pt-s oc-files-context-actions-border">
+                            <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Deleted files</span>
+                                <!---->
+                              </button></li>
+                          </ul>
+                          <ul id="oc-files-context-actions-sidebar" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s">
+                            <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Details</span>
+                                <!---->
+                              </button></li>
+                          </ul>
+                        </div>
+                        <!---->
+                        <!----> <input id="space-image-upload-input" type="file" name="file" multiple="multiple" tabindex="-1" accept="image/*">
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -19,7 +19,7 @@ export default {
           icon: 'image-add',
           handler: this.$_uploadImage_trigger,
           label: () => {
-            return this.$gettext('Upload new space image')
+            return this.$gettext('Edit image')
           },
           isEnabled: ({ resources }) => {
             if (resources.length !== 1) {

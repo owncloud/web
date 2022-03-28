@@ -10,7 +10,7 @@ export default {
       return [
         {
           name: 'disable',
-          icon: 'forbid-2',
+          icon: 'stop-circle',
           label: () => {
             return this.$gettext('Disable')
           },

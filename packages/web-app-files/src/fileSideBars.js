@@ -61,7 +61,6 @@ export default [
     app: 'actions-item',
     component: FileActions,
     icon: 'slideshow-3',
-    iconFillType: 'line',
     default:
       isLocationTrashActive(router, 'files-trash-personal') ||
       isLocationTrashActive(router, 'files-trash-spaces-project'),
@@ -73,7 +72,6 @@ export default [
     app: 'space-actions-item',
     component: SpaceActions,
     icon: 'slideshow-3',
-    iconFillType: 'line',
     get enabled() {
       if (highlightedFile?.type !== 'space') {
         return false
@@ -108,7 +106,6 @@ export default [
     app: 'space-share-item',
     component: SpaceShares,
     icon: 'group',
-    iconFillType: 'line',
     get enabled() {
       return highlightedFile?.type === 'space'
     }

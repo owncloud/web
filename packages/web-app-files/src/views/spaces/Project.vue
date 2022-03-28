@@ -4,13 +4,7 @@
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
-        <readme-content-modal
-          v-if="readmeContentModalIsOpen"
-          :cancel="closeReadmeContentModal"
-          :space="space"
-        ></readme-content-modal>
-        <quota-modal v-if="quotaModalIsOpen" :cancel="closeQuotaModal" :space="space" />
-        <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': !imageExpanded }">
+        <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': imageContent && !imageExpanded }">
           <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
             <img
               :class="{ expanded: imageExpanded }"
@@ -20,7 +14,7 @@
               @click="toggleImageExpanded"
             />
           </div>
-          <div :class="{ 'oc-width-3-4': !imageExpanded }">
+          <div :class="{ 'oc-width-3-4': imageContent && !imageExpanded }">
             <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
               <div class="oc-flex oc-flex-middle">
                 <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
@@ -42,32 +36,7 @@
                   padding-size="small"
                   position="right-start"
                 >
-                  <input
-                    id="space-image-upload-input"
-                    ref="spaceImageInput"
-                    type="file"
-                    name="file"
-                    multiple
-                    tabindex="-1"
-                    :accept="supportedSpaceImageMimeTypes"
-                    @change="$_uploadImage_uploadImageSpace"
-                  />
-                  <ul class="oc-list oc-files-context-actions">
-                    <li
-                      v-for="(action, actionIndex) in getContextMenuActions(space)"
-                      :key="`action-${actionIndex}`"
-                      class="oc-spaces-context-action oc-py-xs oc-px-s"
-                    >
-                      <oc-button
-                        appearance="raw"
-                        justify-content="left"
-                        @click="action.handler({ resources: [space] })"
-                      >
-                        <oc-icon :name="action.icon" />
-                        {{ action.label() }}
-                      </oc-button>
-                    </li>
-                  </ul>
+                  <space-context-actions :items="[space]" />
                 </oc-drop>
               </div>
               <oc-button
@@ -161,19 +130,7 @@ import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import Mixins from '../../mixins'
-import Rename from '../../mixins/spaces/actions/rename'
-import Delete from '../../mixins/spaces/actions/delete'
-import DeletedFiles from '../../mixins/spaces/actions/deletedFiles'
-import Disable from '../../mixins/spaces/actions/disable'
-import Restore from '../../mixins/spaces/actions/restore'
-import EditDescription from '../../mixins/spaces/actions/editDescription'
-import ShowDetails from '../../mixins/spaces/actions/showDetails'
-import UploadImage from '../../mixins/spaces/actions/uploadImage'
-import EditQuota from '../../mixins/spaces/actions/editQuota'
-import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
-import QuotaModal from '../../components/Spaces/QuotaModal.vue'
-import ReadmeContentModal from '../../components/Spaces/ReadmeContentModal.vue'
-import { thumbnailService } from '../../services'
+import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useResourcesViewDefaults } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
@@ -187,24 +144,9 @@ export default {
     ListInfo,
     Pagination,
     ContextActions,
-    ReadmeContentModal,
-    QuotaModal
+    SpaceContextActions
   },
-  mixins: [
-    MixinAccessibleBreadcrumb,
-    MixinFileActions,
-    Mixins,
-    Rename,
-    Delete,
-    DeletedFiles,
-    EditDescription,
-    Disable,
-    ShowDetails,
-    Restore,
-    UploadImage,
-    EditReadmeContent,
-    EditQuota
-  ],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, Mixins],
   provide() {
     return {
       currentSpace: computed(() => this.space)
@@ -275,15 +217,6 @@ export default {
       return this.$gettextInterpolate(translated, {
         count: this.memberCount
       })
-    },
-    quotaModalIsOpen() {
-      return this.$data.$_editQuota_modalOpen
-    },
-    readmeContentModalIsOpen() {
-      return this.$data.$_editReadmeContent_modalOpen
-    },
-    supportedSpaceImageMimeTypes() {
-      return thumbnailService.getSupportedMimeTypes('image/').join(',')
     }
   },
   watch: {
@@ -392,20 +325,6 @@ export default {
       'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
-    getContextMenuActions(space) {
-      return [
-        ...this.$_rename_items,
-        ...this.$_editDescription_items,
-        ...this.$_editReadmeContent_items,
-        ...this.$_uploadImage_items,
-        ...this.$_editQuota_items,
-        ...this.$_deletedFiles_items,
-        ...this.$_restore_items,
-        ...this.$_delete_items,
-        ...this.$_disable_items,
-        ...this.$_showDetails_items
-      ].filter((item) => item.isEnabled({ resources: [space] }))
-    },
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -452,15 +371,9 @@ export default {
     isResourceInSelection(resource) {
       return this.selected?.includes(resource)
     },
-    closeQuotaModal() {
-      this.$_editQuota_closeModal()
-    },
     openSidebarSharePanel() {
       this.SET_FILE_SELECTION([this.space])
       this.openSidebarWithPanel('space-share-item')
-    },
-    closeReadmeContentModal() {
-      this.$_editReadmeContent_closeModal()
     }
   }
 }
@@ -492,15 +405,6 @@ export default {
     max-height: 150px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent);
-  }
-
-  #space-image-upload-button {
-    right: 0;
-  }
-
-  #space-image-upload-input {
-    position: absolute;
-    left: -99999px;
   }
 }
 </style>

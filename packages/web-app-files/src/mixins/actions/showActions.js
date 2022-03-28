@@ -10,7 +10,6 @@ export default {
         {
           name: 'show-actions',
           icon: 'slideshow-3',
-          iconFillType: 'line',
           label: () => this.$gettext('All Actions'),
           handler: this.$_showActions_trigger,
           isEnabled: ({ resources }) => {
