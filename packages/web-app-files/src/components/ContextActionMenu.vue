@@ -1,21 +1,20 @@
 <template>
   <div id="oc-files-context-menu">
-    <template v-for="(section, sectionIndex) in menuSections">
-      <oc-list
-        :id="`oc-files-context-actions-${section.name}`"
-        :key="`section-${section.name}-list`"
-        class="oc-files-context-actions"
-        :class="getSectionClasses(sectionIndex)"
-      >
-        <action-menu-item
-          v-for="(action, actionIndex) in section.items"
-          :key="`section-${section.name}-action-${actionIndex}`"
-          :action="action"
-          :items="items"
-          class="oc-files-context-action oc-px-s oc-rounded"
-        />
-      </oc-list>
-    </template>
+    <oc-list
+      v-for="(section, sectionIndex) in menuSections"
+      :id="`oc-files-context-actions-${section.name}`"
+      :key="`section-${section.name}-list`"
+      class="oc-files-context-actions"
+      :class="getSectionClasses(sectionIndex)"
+    >
+      <action-menu-item
+        v-for="(action, actionIndex) in section.items"
+        :key="`section-${section.name}-action-${actionIndex}`"
+        :action="action"
+        :items="items"
+        class="oc-files-context-action oc-px-s oc-rounded"
+      />
+    </oc-list>
   </div>
 </template>
 
@@ -30,6 +29,7 @@ export default {
       type: Array,
       required: true
     },
+    // items can e.g. be currentFolder (breadcrumbs) or selectedResources (resourceTable)
     items: {
       type: Array,
       required: true

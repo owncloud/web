@@ -10,7 +10,7 @@
       v-if="readmeContentModalIsOpen"
       :cancel="closeReadmeContentModal"
       :space="items[0]"
-    ></readme-content-modal>
+    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
