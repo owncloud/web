@@ -25,9 +25,8 @@ Feature: restrict resharing
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
+    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     When user "Alice" logs in using the webUI
-    And the user has browsed to the shared-with-me page
-    And the user accepts share "simple-folder" offered by user "Brian Murphy" using the webUI
     And the user browses to the files page
     And the user opens folder "Shares" using the webUI
     When the user marks file "simple-folder" as favorite using the webUI
@@ -35,6 +34,7 @@ Feature: restrict resharing
     And as "Carol" folder "simple-folder" should not exist in the server
     When the user browses to the favorites page
     Then the user should not be able to share folder "Shares/simple-folder" using the webUI
+
 
 
 
