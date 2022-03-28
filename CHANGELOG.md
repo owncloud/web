@@ -14,6 +14,7 @@ Summary
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
+* Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
 
 Details
 -------
@@ -66,6 +67,13 @@ Details
 
    https://github.com/owncloud/web/issues/6283
    https://github.com/owncloud/web/pull/6633
+
+* Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
+
+   We've adjusted the topbar layout of the spaces overview to match the other pages.
+
+   https://github.com/owncloud/web/issues/6641
+   https://github.com/owncloud/web/pull/6642
 
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
