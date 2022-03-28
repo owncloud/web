@@ -18,9 +18,9 @@ Feature: Upload into a folder Shares
     Then folder "Shares" should not be listed on the webUI
 
   @issue-ocis-2322 @notToImplementOnOC10
-  Scenario: the Shares folder should be listed even without any share
+  Scenario: the Shares folder should not be listed even without any share
     When user "Alice" logs in using the webUI
-    Then folder "Shares" should be listed on the webUI
+    Then folder "Shares" should not be listed on the webUI
 
 
   Scenario: the Shares folder exists after accepting the first shared file
