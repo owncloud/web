@@ -2,6 +2,7 @@
   <div>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <app-bar :has-shares-navigation="true" />
       <no-content-message
         v-if="isEmpty"
         id="files-shared-via-link-empty"
@@ -61,6 +62,7 @@ import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
@@ -71,6 +73,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    AppBar,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,

@@ -25,8 +25,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'list/:page?',
         component: components.SearchResults,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: true,
           title: $gettext('Search results'),
           contextQueryItems: ['term', 'provider']
         }
@@ -42,8 +40,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: '',
         component: components.Favorites,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: false,
           title: $gettext('Favorite files')
         }
       }

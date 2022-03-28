@@ -2,6 +2,12 @@
   <div>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <app-bar :has-bulk-actions="true" :breadcrumbs="breadcrumbs">
+        <template #actions>
+          <create-and-upload />
+        </template>
+      </app-bar>
+      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -68,16 +74,23 @@ import { bus } from 'web-pkg/src/instance'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import AppBar from '../components/AppBar/AppBar.vue'
+import ProgressBar from '../components/Upload/ProgressBar.vue'
+import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationOperations } from '../router'
+import { breadcrumbsFromPath } from '../helpers/breadcrumbs'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    AppBar,
+    ProgressBar,
+    CreateAndUpload,
     ResourceTable,
     ListInfo,
     Pagination,
@@ -101,12 +114,21 @@ export default {
       'selectedFiles',
       'currentFolder',
       'highlightedFile',
-      'currentFolder',
+      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+
+    $_uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
+
+    breadcrumbs() {
+      const publicFilesBreadcrumb = breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      return [{ text: this.$gettext('Public link') }, publicFilesBreadcrumb.splice()]
+    },
 
     isEmpty() {
       return this.paginatedResources.length < 1

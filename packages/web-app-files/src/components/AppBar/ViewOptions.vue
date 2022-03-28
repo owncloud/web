@@ -59,6 +59,10 @@ import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants } from '../../composables'
 
 export default {
+  props: {
+    hideSidebarToggle: { type: Boolean, default: false },
+    hideViewOptions: { type: Boolean, default: false }
+  },
   setup() {
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
@@ -94,14 +98,6 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
-    },
-
-    hideViewOptions() {
-      return this.$route.meta.hideViewOptions === true
-    },
-
-    hideSidebarToggle() {
-      return this.$route.meta.hideSidebarToggle === true
     }
   },
   methods: {

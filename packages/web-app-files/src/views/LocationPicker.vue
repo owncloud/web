@@ -1,7 +1,7 @@
 <template>
   <main id="files-location-picker" class="oc-flex oc-height-1-1">
     <div tabindex="-1" class="files-list-wrapper oc-width-expand">
-      <div id="files-app-bar" class="oc-p-s">
+      <div id="files-location-picker-app-bar" class="oc-p-s">
         <h1 class="location-picker-selection-info oc-mb" v-text="title" />
         <p
           class="oc-text-muted oc-text-meta"
@@ -530,6 +530,16 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow-y: hidden;
+
+  &-app-bar {
+    position: sticky;
+    top: 0;
+    height: auto;
+    z-index: 1;
+    grid-area: header;
+    background-color: var(--oc-color-background-default);
+    box-sizing: border-box;
+  }
 }
 
 .files-list-wrapper {
@@ -547,16 +557,6 @@ export default {
   &:focus {
     outline: none;
   }
-}
-
-#files-app-bar {
-  position: sticky;
-  top: 0;
-  height: auto;
-  z-index: 1;
-  grid-area: header;
-  background-color: var(--oc-color-background-default);
-  box-sizing: border-box;
 }
 
 #files-view {

@@ -28,8 +28,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'with-me',
         component: components.SharedWithMe,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: true,
           title: $gettext('Files shared with me')
         }
       },
@@ -38,8 +36,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'with-others',
         component: components.SharedWithOthers,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: false,
           title: $gettext('Files shared with others')
         }
       },
@@ -48,8 +44,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'via-link',
         component: components.SharedViaLink,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: false,
           title: $gettext('Files shared via link')
         }
       }

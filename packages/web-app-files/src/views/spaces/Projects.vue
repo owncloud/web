@@ -1,13 +1,15 @@
 <template>
-  <div class="oc-py-s oc-px-m">
-    <div class="oc-pb-xl oc-border-b">
-      <span
-        v-text="$gettext('Store your project related files in Spaces for seamless collaboration.')"
-      />
-      <!-- <a href="#" v-text="$gettext('Learn more about spaces.')" /> -->
-    </div>
+  <div class="oc-px-m">
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs">
+        <template #actions>
+          <create-space />
+        </template>
+        <template #static>
+          <p v-text="spacesHint" />
+        </template>
+      </app-bar>
       <no-content-message
         v-if="!spaces.length"
         id="files-spaces-empty"
@@ -117,6 +119,8 @@
 </template>
 
 <script>
+import AppBar from '../../components/AppBar/AppBar.vue'
+import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed } from '@vue/composition-api'
@@ -132,8 +136,10 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 
 export default {
   components: {
-    NoContentMessage,
+    AppBar,
     AppLoadingSpinner,
+    CreateSpace,
+    NoContentMessage,
     SpaceContextActions
   },
   setup() {
@@ -167,6 +173,12 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'getToken']),
+    breadcrumbs() {
+      return [{ text: this.$gettext('Spaces') }]
+    },
+    spacesHint() {
+      return this.$gettext('Store your project related files in Spaces for seamless collaboration.')
+    },
     hasCreatePermission() {
       // @TODO
       return true

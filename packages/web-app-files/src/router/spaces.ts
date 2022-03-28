@@ -35,8 +35,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesProjects.name,
         component: components.Spaces.Projects,
         meta: {
-          hasBulkActions: false,
-          hideViewOptions: true,
           title: $gettext('Spaces')
         }
       },
@@ -45,7 +43,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesProject.name,
         component: components.Spaces.Project,
         meta: {
-          hasBulkActions: true,
           patchCleanPath: true,
           title: $gettext('Space')
         }
@@ -56,7 +53,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesPersonalHome.name,
         component: components.Personal,
         meta: {
-          hasBulkActions: true,
           title: $gettext('Personal'),
           patchCleanPath: true
         }
