@@ -35,11 +35,11 @@
             @click="closePanel"
           >
             <oc-icon name="arrow-left-s" fill-type="line" />
-            {{ defaultPanel.title }}
+            {{ $gettext(defaultPanel.title) }}
           </oc-button>
 
           <h2 class="header__title oc-my-rm">
-            {{ panel.title }}
+            {{ $gettext(panel.title) }}
           </h2>
 
           <oc-button
@@ -75,7 +75,7 @@
                 @click="openPanel(panelSelect.app)"
               >
                 <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
-                {{ panelSelect.title }}
+                {{ $gettext(panelSelect.title) }}
                 <oc-icon name="arrow-right-s" fill-type="line" />
               </oc-button>
             </div>
