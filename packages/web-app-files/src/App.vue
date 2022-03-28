@@ -30,16 +30,6 @@ export default {
     SideBar
   },
   mixins: [Mixins],
-  data() {
-    return {
-      createFolder: false,
-      fileUploadName: '',
-      fileUploadProgress: 0,
-      upload: false,
-      fileName: '',
-      breadcrumbs: []
-    }
-  },
   computed: {
     ...mapGetters('Files', ['dropzone']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),

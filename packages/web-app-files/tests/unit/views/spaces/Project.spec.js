@@ -229,6 +229,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
   return shallowMount(SpaceProject, {
     localVue,
     stubs: {
+      'app-bar': true,
       RouterLink: RouterLinkStub
     },
     data: () => {
@@ -246,6 +247,9 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           list: jest.fn(() => spaceResources)
         }
       }
+    },
+    computed: {
+      breadcrumbs: () => []
     },
     store: createStore(Vuex.Store, {
       getters: {
@@ -279,6 +283,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           },
           getters: {
             activeFiles: () => spaceResources,
+            currentFolder: () => Files['/'][0],
             totalFilesCount: () => ({ files: spaceResources.length, folders: 0 }),
             selectedFiles: () => [],
             totalFilesSize: () => 10,

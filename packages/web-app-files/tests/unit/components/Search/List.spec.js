@@ -18,6 +18,7 @@ localVue.use(GetTextPlugin, {
 })
 
 const stubs = {
+  'app-bar': true,
   'no-content-message': false,
   'resource-table': false,
   pagination: true,

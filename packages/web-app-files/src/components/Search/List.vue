@@ -1,7 +1,6 @@
 <template>
   <div class="files-search-result">
     <app-bar :has-bulk-actions="true" />
-    <p>hi</p>
     <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
       <template #message>
         <p class="oc-text-muted">

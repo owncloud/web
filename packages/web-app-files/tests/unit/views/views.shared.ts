@@ -18,6 +18,7 @@ localVue.use(GetTextPlugin, {
 })
 
 const stubs = {
+  'create-and-upload': true,
   'list-loader': true,
   'not-found-message': true,
   'no-content-message': true,
@@ -49,7 +50,7 @@ export const accentuatesTableRowTest = async <V extends Vue>(
   jest.useFakeTimers()
 
   const store = getStore({
-    inProgress: 0,
+    inProgress: [],
     activeFiles: [forestJpg],
     totalFilesSize: 0,
     totalFilesCount: {

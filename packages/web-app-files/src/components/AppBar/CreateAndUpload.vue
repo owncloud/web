@@ -153,6 +153,11 @@ export default {
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
     }
   },
+  data: () => ({
+    newFileAction: null,
+    path: '',
+    fileFolderCreationLoading: false
+  }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),

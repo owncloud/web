@@ -22,8 +22,8 @@
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
           <slot v-if="selectedFiles.length === 0" name="actions" />
-          <size-info v-if="hasBulkActions && selectedFiles.length > 0" class="oc-visible@l" />
-          <batch-actions v-if="hasBulkActions && selectedFiles.length > 0" />
+          <size-info v-if="showBatchActions" class="oc-visible@l" />
+          <batch-actions v-if="showBatchActions" />
         </div>
       </div>
       <slot name="static" />
@@ -36,8 +36,6 @@ import { mapGetters, mapState, mapMutations } from 'vuex'
 
 import Mixins from '../../mixins'
 import MixinFileActions from '../../mixins/fileActions'
-import { isLocationSpacesActive } from '../../router'
-import { useActiveLocation } from '../../composables'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
@@ -61,23 +59,10 @@ export default {
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false }
   },
-  setup() {
-    return {
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
-      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
-    }
-  },
-  data: () => ({
-    newFileAction: null,
-    path: '',
-    fileFolderCreationLoading: false
-  }),
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'publicLinkPassword']),
+    ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown']),
 
-    // we should generalize the usage of pageTitle throughout the project next
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
@@ -85,7 +70,9 @@ export default {
     areDefaultActionsVisible() {
       return this.selectedFiles.length < 1
     },
-
+    showBatchActions() {
+      return this.hasBulkActions && this.selectedFiles.length > 0
+    },
     selectedResourcesAnnouncement() {
       if (this.selectedFiles.length === 0) {
         return this.$gettext('No items selected.')

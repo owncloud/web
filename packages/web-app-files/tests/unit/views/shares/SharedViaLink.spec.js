@@ -24,6 +24,7 @@ const resources = [
 ]
 
 const stubs = {
+  'app-bar': true,
   'resource-table': false,
   'context-actions': true,
   pagination: true,

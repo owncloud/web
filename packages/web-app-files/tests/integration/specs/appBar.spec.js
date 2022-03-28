@@ -37,12 +37,6 @@ describe('AppBar contains set of actions and informations', () => {
       render(
         AppBar,
         {
-          setup: () => {
-            return {
-              isPersonalLocation: true,
-              isSharesLocation: false
-            }
-          },
           store,
           routes: [{ name: 'files-personal', path: '/files/list/personal/:item?/:page?' }]
         },

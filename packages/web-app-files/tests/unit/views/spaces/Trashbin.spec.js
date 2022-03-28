@@ -47,6 +47,9 @@ function getWrapper() {
         title: ''
       }
     },
+    computed: {
+      breadcrumbs: () => []
+    },
     store: createStore(Vuex.Store, {
       actions: {
         showMessage: jest.fn()
@@ -64,6 +67,7 @@ function getWrapper() {
       }
     }),
     stubs: {
+      'app-bar': true,
       'trash-bin': true
     }
   })

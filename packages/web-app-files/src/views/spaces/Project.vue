@@ -2,7 +2,12 @@
   <div class="space-overview">
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar :has-bulk-actions="true" :breadcrumbs="breadcrumbs">
+      <app-bar
+        :has-bulk-actions="true"
+        :breadcrumbs="breadcrumbs"
+        :breadcrumbs-context-actions-displayed="true"
+        :breadcrumbs-context-actions-items="[currentFolder]"
+      >
         <template #actions>
           <create-and-upload />
         </template>

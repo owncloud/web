@@ -41,6 +41,9 @@ localVue.prototype.$client = {
 jest.unmock('axios')
 
 const stubs = {
+  'app-bar': true,
+  'progress-bar': true,
+  'create-and-upload': true,
   translate: true,
   'oc-pagination': true,
   'list-loader': true,

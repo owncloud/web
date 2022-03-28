@@ -2,7 +2,12 @@
   <div>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar :has-bulk-actions="true" :breadcrumbs="breadcrumbs">
+      <app-bar
+        :has-bulk-actions="true"
+        :breadcrumbs="breadcrumbs"
+        :breadcrumbs-context-actions-displayed="true"
+        :breadcrumbs-context-actions-items="[currentFolder]"
+      >
         <template #actions>
           <create-and-upload />
         </template>
@@ -167,14 +172,10 @@ export default defineComponent({
       const personalRouteName = this.hasSpaces
         ? this.$gettext('Personal')
         : this.$gettext('All files')
-      const f = [
+      return [
         { text: personalRouteName, to: '/' },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
       ]
-
-      console.log(f)
-
-      return f
     },
 
     folderNotFound() {

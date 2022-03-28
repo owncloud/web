@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces projects view should list spaces 1`] = `
-<div class="oc-py-s oc-px-m">
-  <div class="oc-pb-xl oc-border-b"><span>Store your project related files in Spaces for seamless collaboration.</span></div>
+<div class="oc-px-m">
+  <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" class="oc-border-b"></app-bar-stub>
   <div class="spaces-list oc-mt-l">
     <ul class="
           oc-grid

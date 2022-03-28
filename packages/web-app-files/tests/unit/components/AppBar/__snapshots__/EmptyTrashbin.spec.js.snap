@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmptyTrashbin component should render action-menu-item for multiple selected resources 1`] = `<action-menu-item-stub action="[object Object]" items="[object Object],[object Object]" appearance="outline"></action-menu-item-stub>`;
+
+exports[`EmptyTrashbin component should render action-menu-item if no resources are selected 1`] = `<action-menu-item-stub action="[object Object]" items="" appearance="outline"></action-menu-item-stub>`;

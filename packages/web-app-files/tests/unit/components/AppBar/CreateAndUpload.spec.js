@@ -79,10 +79,6 @@ describe('CreateAndUpload component', () => {
     name: personalHomeLocation.name,
     params: {
       item: ''
-    },
-    meta: {
-      hasBulkActions: true,
-      hideFilelistActions: false
     }
   }
 
@@ -230,6 +226,9 @@ function getShallowWrapper(route = {}, store = {}) {
 function createStore(state = { currentFolder: {} }, fileHandlers = []) {
   return new Vuex.Store({
     getters: {
+      user: function () {
+        return { id: 'alice' }
+      },
       getToken: jest.fn(),
       newFileHandlers: jest.fn(() => fileHandlers)
     },
@@ -243,7 +242,8 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
           ...state
         },
         getters: {
-          currentFolder: () => state.currentFolder
+          currentFolder: () => state.currentFolder,
+          dropzone: () => {}
         }
       }
     }
