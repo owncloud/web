@@ -1,15 +1,15 @@
 <template>
   <div class="oc-px-m">
+    <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs">
+      <template #actions>
+        <create-space />
+      </template>
+      <template #content>
+        <p v-text="spacesHint" />
+      </template>
+    </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs">
-        <template #actions>
-          <create-space />
-        </template>
-        <template #content>
-          <p v-text="spacesHint" />
-        </template>
-      </app-bar>
       <no-content-message
         v-if="!spaces.length"
         id="files-spaces-empty"

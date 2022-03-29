@@ -49,7 +49,7 @@ export default {
         },
         {
           allowContextActions: true,
-          text: this.space?.name || this.$route.params.storageId,
+          text: this.space?.name,
           onClick: () => bus.publish('app.files.list.load')
         }
       ]

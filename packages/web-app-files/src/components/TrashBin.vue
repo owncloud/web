@@ -1,8 +1,8 @@
 <template>
   <div>
+    <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
       <no-content-message
         v-if="isEmpty"
         id="files-trashbin-empty"

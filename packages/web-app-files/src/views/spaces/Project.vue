@@ -1,16 +1,16 @@
 <template>
   <div class="space-overview">
+    <app-bar
+      :has-bulk-actions="true"
+      :breadcrumbs="breadcrumbs"
+      :breadcrumbs-context-actions-items="[currentFolder]"
+    >
+      <template #actions>
+        <create-and-upload />
+      </template>
+    </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar
-        :has-bulk-actions="true"
-        :breadcrumbs="breadcrumbs"
-        :breadcrumbs-context-actions-items="[currentFolder]"
-      >
-        <template #actions>
-          <create-and-upload />
-        </template>
-      </app-bar>
       <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
@@ -216,7 +216,7 @@ export default {
           to: '/files/spaces/projects'
         },
         {
-          text: this.space?.name || this.$route.params.storageId,
+          text: this.space?.name,
           to: `/files/spaces/projects/${this.$route.params.storageId}`
         },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)

@@ -1,8 +1,8 @@
 <template>
   <div class="oc-flex oc-flex-column">
+    <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
       <!-- Pending shares -->
       <div v-if="hasPending">
         <h2 class="oc-px-m oc-py-s">

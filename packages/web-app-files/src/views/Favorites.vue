@@ -1,8 +1,8 @@
 <template>
   <div>
+    <app-bar />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar />
       <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
         <template #message>
           <span v-translate>There are no resources marked as favorite</span>

@@ -1,8 +1,8 @@
 <template>
   <div>
+    <app-bar :has-shares-navigation="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar :has-shares-navigation="true" />
       <no-content-message
         v-if="isEmpty"
         id="files-shared-with-others-empty"
