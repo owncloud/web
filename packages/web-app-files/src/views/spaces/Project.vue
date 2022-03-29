@@ -1,7 +1,17 @@
 <template>
   <div class="space-overview">
+    <app-bar
+      :has-bulk-actions="true"
+      :breadcrumbs="breadcrumbs"
+      :breadcrumbs-context-actions-items="[currentFolder]"
+    >
+      <template #actions>
+        <create-and-upload />
+      </template>
+    </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
         <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': imageContent && !imageExpanded }">
@@ -117,11 +127,15 @@ import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import { loadPreview } from '../../helpers/resource'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import AppBar from '../../components/AppBar/AppBar.vue'
+import ProgressBar from '../../components/Upload/ProgressBar.vue'
+import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
@@ -137,6 +151,9 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    AppBar,
+    ProgressBar,
+    CreateAndUpload,
     NoContentMessage,
     AppLoadingSpinner,
     NotFoundMessage,
@@ -177,6 +194,7 @@ export default {
       'highlightedFile',
       'selectedFiles',
       'currentFolder',
+      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
@@ -190,11 +208,30 @@ export default {
         this.SET_FILE_SELECTION(resources)
       }
     },
+
+    breadcrumbs() {
+      return concatBreadcrumbs(
+        {
+          text: this.$gettext('Spaces'),
+          to: '/files/spaces/projects'
+        },
+        {
+          text: this.space?.name,
+          to: `/files/spaces/projects/${this.$route.params.storageId}`
+        },
+        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      )
+    },
+
     isSpaceRoot() {
       return !this.$route.params.item
     },
     isEmpty() {
       return this.paginatedResources.length < 1
+    },
+
+    $_uploadProgressVisible() {
+      return this.inProgress.length > 0
     },
 
     markdownCollapseIcon() {

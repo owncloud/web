@@ -4,6 +4,7 @@ import SharedWithMe from '@files/src/views/shares/SharedWithMe.vue'
 import { ShareStatus, ShareTypes } from '@files/src/helpers/share'
 
 const stubs = {
+  'app-bar': true,
   'router-link': true,
   translate: true,
   'oc-pagination': true,

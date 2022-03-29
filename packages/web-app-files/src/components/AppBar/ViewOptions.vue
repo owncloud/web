@@ -1,60 +1,47 @@
 <template>
-  <div class="oc-flex">
-    <template v-if="!hideViewOptions">
-      <oc-button
-        id="files-view-options-btn"
-        key="files-view-options-btn"
-        v-oc-tooltip="viewOptionsButtonLabel"
-        data-testid="files-view-options-btn"
-        :aria-label="viewOptionsButtonLabel"
-        appearance="raw"
-        class="oc-my-s oc-p-xs"
-      >
-        <oc-icon name="settings-3" fill-type="line" />
-      </oc-button>
-      <oc-drop
-        drop-id="files-view-options-drop"
-        toggle="#files-view-options-btn"
-        mode="click"
-        class="oc-width-auto"
-        padding-size="small"
-      >
-        <oc-list>
-          <li class="files-view-options-list-item">
-            <oc-switch
-              v-model="hiddenFilesShownModel"
-              data-testid="files-switch-hidden-files"
-              :label="$gettext('Show hidden files')"
-            />
-          </li>
-          <li class="files-view-options-list-item">
-            <oc-page-size
-              v-model="itemsPerPage"
-              data-testid="files-pagination-size"
-              :label="$gettext('Items per page')"
-              :options="[100, 500, 1000, $gettext('All')]"
-              class="files-pagination-size"
-            />
-          </li>
-        </oc-list>
-      </oc-drop>
-    </template>
+  <div>
     <oc-button
-      v-if="!hideSidebarToggle"
-      id="files-toggle-sidebar"
-      v-oc-tooltip="toggleSidebarButtonLabel"
-      :aria-label="toggleSidebarButtonLabel"
+      id="files-view-options-btn"
+      key="files-view-options-btn"
+      v-oc-tooltip="viewOptionsButtonLabel"
+      data-testid="files-view-options-btn"
+      :aria-label="viewOptionsButtonLabel"
       appearance="raw"
       class="oc-my-s oc-p-xs"
-      @click.stop="toggleSidebar"
     >
-      <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
+      <oc-icon name="settings-3" fill-type="line" />
     </oc-button>
+    <oc-drop
+      drop-id="files-view-options-drop"
+      toggle="#files-view-options-btn"
+      mode="click"
+      class="oc-width-auto"
+      padding-size="small"
+    >
+      <oc-list>
+        <li class="files-view-options-list-item">
+          <oc-switch
+            v-model="hiddenFilesShownModel"
+            data-testid="files-switch-hidden-files"
+            :label="$gettext('Show hidden files')"
+          />
+        </li>
+        <li class="files-view-options-list-item">
+          <oc-page-size
+            v-model="itemsPerPage"
+            data-testid="files-pagination-size"
+            :label="$gettext('Items per page')"
+            :options="[100, 500, 1000, $gettext('All')]"
+            class="files-pagination-size"
+          />
+        </li>
+      </oc-list>
+    </oc-drop>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants } from '../../composables'
 
@@ -71,19 +58,9 @@ export default {
   },
   computed: {
     ...mapState('Files', ['areHiddenFilesShown']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
-    },
-
-    toggleSidebarButtonLabel() {
-      if (this.sidebarClosed) return this.$gettext('Open sidebar to view details')
-      return this.$gettext('Close sidebar to hide details')
-    },
-
-    toggleSidebarButtonIconFillType() {
-      return this.sidebarClosed ? 'line' : 'fill'
     },
 
     hiddenFilesShownModel: {
@@ -94,25 +71,15 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
-    },
-
-    hideViewOptions() {
-      return this.$route.meta.hideViewOptions === true
-    },
-
-    hideSidebarToggle() {
-      return this.$route.meta.hideSidebarToggle === true
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY']),
-    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' })
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-#files-toggle-sidebar,
 #files-view-options-btn {
   vertical-align: middle;
   border: 3px solid transparent;

@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppBar component renders breadcrumbs if given, by default without breadcrumbsContextActionsItems 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-between">
+      <oc-breadcrumb-stub items="[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders breadcrumbs if given, with breadcrumbsContextActionsItems if allowed on last breadcrumb item 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-between">
+      <oc-breadcrumb-stub items="[object Object],[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders breadcrumbs if given, with content in the contextMenu slot 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-between">
+      <oc-breadcrumb-stub items="[object Object],[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders bulkActions if enabled 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="2 items selected. Actions are available above the table."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <size-info-stub class="oc-visible@l"></size-info-stub>
+        <batch-actions-stub></batch-actions-stub>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders if given, with content in the actions slot 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;"><button class="action-slot">Click</button>
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders if given, with content in the content slot 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div class="content-slot">Foo</div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders sharesNavigation if enabled 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-between">
+      <!---->
+      <shares-navigation-stub></shares-navigation-stub>
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders viewoptions and sidebartoggle neither if both are disabled 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <!---->
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders viewoptions and sidebartoggle only sidebartoggle if viewoptions is disabled 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <!---->
+        <sidebar-toggle-stub></sidebar-toggle-stub>
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders viewoptions and sidebartoggle only viewoptions if sidebartoggle is disabled 1`] = `
+<div id="files-app-bar">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub></view-options-stub>
+        <!---->
+      </div>
+    </div>
+    <div class="files-app-bar-actions">
+      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;

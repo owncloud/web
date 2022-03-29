@@ -1,7 +1,13 @@
-<template><trash-bin :no-content-message="$gettext('Space has no deleted files')" /></template>
+<template>
+  <trash-bin
+    :breadcrumbs="breadcrumbs"
+    :no-content-message="$gettext('Space has no deleted files')"
+  />
+</template>
 
 <script>
 import TrashBin from '../../components/TrashBin.vue'
+import { bus } from 'web-pkg/src/instance'
 import { useStore } from 'web-pkg/src/composables'
 import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
@@ -33,7 +39,21 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+
+    breadcrumbs() {
+      return [
+        {
+          text: this.$gettext('Deleted files'),
+          to: '/files/trash'
+        },
+        {
+          allowContextActions: true,
+          text: this.space?.name,
+          onClick: () => bus.publish('app.files.list.load')
+        }
+      ]
+    }
   },
 
   async mounted() {

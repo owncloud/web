@@ -1,5 +1,6 @@
 <template>
   <div class="files-search-result">
+    <app-bar :has-bulk-actions="true" />
     <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
       <template #message>
         <p class="oc-text-muted">
@@ -51,6 +52,7 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { computed, ref } from '@vue/composition-api'
+import AppBar from '../AppBar/AppBar.vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
@@ -60,7 +62,7 @@ import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 const visibilityObserver = new VisibilityObserver()
 
 export default {
-  components: { ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
+  components: { AppBar, ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {

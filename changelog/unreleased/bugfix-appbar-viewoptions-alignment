@@ -1,0 +1,6 @@
+Bugfix: AppBar ViewOptions alignment
+
+We have fixed a visual glitch that rendered the ViewOptions in the AppBar on the left side instead of right-aligned if no Breadcrumbs or SharesNavigation is present.
+
+https://github.com/owncloud/web/pull/6662
+https://github.com/owncloud/web/issues/6685

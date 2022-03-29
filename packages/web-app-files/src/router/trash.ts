@@ -26,8 +26,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'personal',
         component: components.Trashbin,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: true,
           title: $gettext('Deleted files')
         }
       },
@@ -36,8 +34,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'spaces/projects/:storageId?',
         component: components.Spaces.Trashbin,
         meta: {
-          hideFilelistActions: true,
-          hasBulkActions: true,
           title: $gettext('Deleted files')
         }
       }

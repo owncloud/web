@@ -3,6 +3,7 @@ import TrashBin from '@files/src/components/TrashBin.vue'
 import { getStore, localVue, createFile } from '@files/tests/unit/components/components.setup.js'
 
 const stubs = {
+  'app-bar': true,
   'app-loading-spinner': true,
   'no-content-message': true,
   'resource-table': true,

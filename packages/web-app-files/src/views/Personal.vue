@@ -1,7 +1,17 @@
 <template>
   <div>
+    <app-bar
+      :has-bulk-actions="true"
+      :breadcrumbs="breadcrumbs"
+      :breadcrumbs-context-actions-items="[currentFolder]"
+    >
+      <template #actions>
+        <create-and-upload />
+      </template>
+    </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
+      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -75,7 +85,11 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import { bus } from 'web-pkg/src/instance'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 
+import AppBar from '../components/AppBar/AppBar.vue'
+import ProgressBar from '../components/Upload/ProgressBar.vue'
+import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -91,11 +105,15 @@ import { useResourcesViewDefaults } from '../composables'
 import { fetchResources } from '../services/folder/loaderPersonal'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../helpers/resource'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    AppBar,
+    ProgressBar,
+    CreateAndUpload,
     ResourceTable,
     QuickActions,
     AppLoadingSpinner,
@@ -116,7 +134,8 @@ export default defineComponent({
   setup() {
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
+      hasSpaces: useCapabilitySpacesEnabled()
     }
   },
 
@@ -128,11 +147,15 @@ export default defineComponent({
       'highlightedFile',
       'selectedFiles',
       'currentFolder',
+      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
+    $_uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },
@@ -144,6 +167,16 @@ export default defineComponent({
       set(resources) {
         this.SET_FILE_SELECTION(resources)
       }
+    },
+
+    breadcrumbs() {
+      const personalRouteName = this.hasSpaces
+        ? this.$gettext('Personal')
+        : this.$gettext('All files')
+      return concatBreadcrumbs(
+        { text: personalRouteName, to: '/' },
+        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      )
     },
 
     folderNotFound() {

@@ -1,7 +1,6 @@
 <template>
   <div class="oc-flex-inline oc-width-1-1" style="gap: 15px">
-    <create-space v-if="createSpaceActionAvailable" />
-    <template v-else-if="createFileActionsAvailable">
+    <template v-if="createFileActionsAvailable">
       <oc-button
         id="new-file-menu-btn"
         key="new-file-menu-btn-enabled"
@@ -71,48 +70,55 @@
         <translate>New folder</translate>
       </oc-button>
     </template>
-    <template v-if="uploadFileActionsAvailable">
-      <oc-button
-        id="upload-menu-btn"
-        key="upload-menu-btn-enabled"
-        v-oc-tooltip="uploadButtonTooltip"
-        :aria-label="uploadButtonAriaLabel"
-        :disabled="uploadOrFileCreationBlocked"
-      >
-        <oc-icon name="upload" fill-type="line" />
-        <translate>Upload</translate>
-      </oc-button>
-      <oc-drop
-        drop-id="upload-menu-drop"
-        toggle="#upload-menu-btn"
-        mode="click"
-        class="oc-width-auto"
-        close-on-click
-        padding-size="small"
-      >
-        <oc-list id="upload-list">
-          <li>
-            <folder-upload
-              :root-path="currentPath"
-              :path="currentPath"
-              :headers="headers"
-              @success="uploadSuccess"
-              @error="uploadError"
-              @progress="uploadProgress"
-            />
-          </li>
-          <li>
-            <file-upload
-              :path="currentPath"
-              :headers="headers"
-              @success="uploadSuccess"
-              @error="uploadError"
-              @progress="uploadProgress"
-            />
-          </li>
-        </oc-list>
-      </oc-drop>
-    </template>
+    <file-drop
+      v-if="!uploadOrFileCreationBlocked"
+      :root-path="currentPath"
+      :path="currentPath"
+      :headers="headers"
+      @success="onFileSuccess"
+      @error="onFileError"
+      @progress="onFileProgress"
+    />
+    <oc-button
+      id="upload-menu-btn"
+      key="upload-menu-btn-enabled"
+      v-oc-tooltip="uploadButtonTooltip"
+      :aria-label="uploadButtonAriaLabel"
+      :disabled="uploadOrFileCreationBlocked"
+    >
+      <oc-icon name="upload" fill-type="line" />
+      <translate>Upload</translate>
+    </oc-button>
+    <oc-drop
+      drop-id="upload-menu-drop"
+      toggle="#upload-menu-btn"
+      mode="click"
+      class="oc-width-auto"
+      close-on-click
+      padding-size="small"
+    >
+      <oc-list id="upload-list">
+        <li>
+          <folder-upload
+            :root-path="currentPath"
+            :path="currentPath"
+            :headers="headers"
+            @success="onFileSuccess"
+            @error="onFileError"
+            @progress="onFileProgress"
+          />
+        </li>
+        <li>
+          <file-upload
+            :path="currentPath"
+            :headers="headers"
+            @success="onFileSuccess"
+            @error="onFileError"
+            @progress="onFileProgress"
+          />
+        </li>
+      </oc-list>
+    </oc-drop>
   </div>
 </template>
 
@@ -128,23 +134,17 @@ import { useActiveLocation } from '../../composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
+import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
-import CreateSpace from './CreateSpace.vue'
 
 export default {
   components: {
+    FileDrop,
     FileUpload,
-    FolderUpload,
-    CreateSpace
+    FolderUpload
   },
   mixins: [Mixins, MixinFileActions],
-  props: {
-    canUpload: { type: Boolean, default: false },
-    currentPath: { type: String, required: true },
-    hasFreeSpace: { type: Boolean, default: false },
-    headers: { type: Object, default: null }
-  },
   setup() {
     return {
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
@@ -153,6 +153,11 @@ export default {
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
     }
   },
+  data: () => ({
+    newFileAction: null,
+    path: '',
+    fileFolderCreationLoading: false
+  }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
@@ -166,14 +171,32 @@ export default {
       }
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
     },
+
+    currentPath() {
+      const path = this.$route.params.item || ''
+      if (path.endsWith('/')) {
+        return path
+      }
+      return path + '/'
+    },
+
+    headers() {
+      if (this.publicPage()) {
+        const password = this.publicLinkPassword
+
+        if (password) {
+          return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
+        }
+
+        return {}
+      }
+      return {
+        Authorization: 'Bearer ' + this.getToken
+      }
+    },
+
     createFileActionsAvailable() {
       return this.newFileHandlers.length > 0 || this.mimetypesAllowedForCreation.length > 0
-    },
-    createSpaceActionAvailable() {
-      return this.isSpacesProjectsLocation && !this.$route.params.storageId
-    },
-    uploadFileActionsAvailable() {
-      return !this.isSpacesProjectsLocation || this.$route.params.storageId
     },
     newButtonTooltip() {
       if (!this.canUpload) {
@@ -213,21 +236,99 @@ export default {
 
     uploadOrFileCreationBlocked() {
       return !this.canUpload || !this.hasFreeSpace
+    },
+
+    canUpload() {
+      if (!this.currentFolder) {
+        return false
+      }
+      return this.currentFolder.canUpload({ user: this.user })
+    },
+
+    hasFreeSpace() {
+      return (
+        !this.quota ||
+        this.quota.free > 0 ||
+        (this.currentFolder &&
+          this.currentFolder.permissions &&
+          this.currentFolder.permissions.indexOf('M') >= 0) ||
+        this.publicPage()
+      )
     }
   },
   methods: {
-    ...mapActions('Files', ['loadIndicators']),
+    ...mapActions('Files', [
+      'loadPreview',
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadIndicators'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', [
+      'UPSERT_RESOURCE',
+      'SET_HIDDEN_FILES_VISIBILITY',
+      'REMOVE_FILE',
+      'REMOVE_FILE_FROM_SEARCHED',
+      'SET_FILE_SELECTION',
+      'REMOVE_FILE_SELECTION'
+    ]),
+    ...mapMutations(['SET_QUOTA']),
 
-    uploadSuccess(args, file) {
-      this.$emit('success', args, file)
+    async onFileSuccess(event, file) {
+      try {
+        if (file.name) {
+          file = file.name
+        }
+
+        await this.$nextTick()
+
+        let path = pathUtil.join(this.currentPath, file)
+        let resource
+
+        if (this.isPersonalLocation) {
+          path = buildWebDavFilesPath(this.user.id, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesProjectLocation) {
+          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else {
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            DavProperties.PublicLink
+          )
+        }
+
+        resource = buildResource(resource)
+
+        this.UPSERT_RESOURCE(resource)
+
+        if (this.isPersonalLocation) {
+          this.loadIndicators({
+            client: this.$client,
+            currentFolder: this.currentFolder.path,
+            encodePath: this.encodePath
+          })
+        }
+
+        const user = await this.$client.users.getUser(this.user.id)
+
+        this.SET_QUOTA(user.quota)
+      } catch (error) {
+        console.error(error)
+      }
     },
-    uploadError(error) {
-      this.$emit('error', error)
+
+    onFileError(error) {
+      console.error(error)
+      this.showMessage({
+        title: this.$gettext('Failed to upload'),
+        status: 'danger'
+      })
     },
-    uploadProgress(progress) {
-      this.$emit('progress', progress)
+
+    onFileProgress(progress) {
+      this.updateFileProgress(progress)
     },
 
     showCreateResourceModal(

@@ -1,5 +1,6 @@
 <template>
   <div class="oc-flex oc-flex-column">
+    <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <!-- Pending shares -->
@@ -177,6 +178,7 @@ import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'
@@ -187,6 +189,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    AppBar,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,

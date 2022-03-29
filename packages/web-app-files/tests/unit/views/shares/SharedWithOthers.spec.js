@@ -21,6 +21,7 @@ const router = {
 }
 
 const stubs = {
+  'app-bar': true,
   'app-loading-spinner': true,
   'no-content-message': true,
   'resource-table': true,

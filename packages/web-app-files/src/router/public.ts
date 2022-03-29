@@ -29,7 +29,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.PublicFiles,
         meta: {
           auth: false,
-          hasBulkActions: true,
           title: $gettext('Public files'),
           patchCleanPath: true
         }

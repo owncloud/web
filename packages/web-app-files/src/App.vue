@@ -6,8 +6,6 @@
       class="files-list-wrapper oc-width-expand"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar v-if="!hideAppBar" id="files-app-bar" />
-      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
     <side-bar
@@ -25,39 +23,19 @@
 <script>
 import Mixins from './mixins'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import AppBar from './components/AppBar/AppBar.vue'
-import ProgressBar from './components/Upload/ProgressBar.vue'
 import SideBar from './components/SideBar/SideBar.vue'
 
 export default {
   components: {
-    AppBar,
-    ProgressBar,
     SideBar
   },
   mixins: [Mixins],
-  data() {
-    return {
-      createFolder: false,
-      fileUploadName: '',
-      fileUploadProgress: 0,
-      upload: false,
-      fileName: '',
-      breadcrumbs: []
-    }
-  },
   computed: {
-    ...mapGetters('Files', ['dropzone', 'inProgress']),
+    ...mapGetters('Files', ['dropzone']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
     showSidebar() {
       return !this.sidebarClosed
-    },
-    hideAppBar() {
-      return this.$route.meta.hideAppBar === true
     }
   },
   watch: {
@@ -81,10 +59,6 @@ export default {
     ...mapActions('Files/sidebar', { closeSidebar: 'close' }),
     ...mapActions(['showMessage']),
 
-    trace() {
-      console.info('trace', arguments)
-    },
-
     focusSideBar(component, event) {
       this.focus({
         from: document.activeElement,
@@ -102,7 +76,6 @@ export default {
 
 <style lang="scss" scoped>
 main {
-  height: 100%;
   max-height: 100%;
 }
 
@@ -125,14 +98,6 @@ main {
 #files-sidebar {
   position: relative;
   overflow: hidden;
-}
-
-#files-app-bar {
-  position: sticky;
-  height: auto;
-  z-index: 1;
-  grid-area: header;
-  top: 0;
 }
 
 #files-view {

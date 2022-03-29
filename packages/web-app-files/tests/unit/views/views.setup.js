@@ -127,6 +127,7 @@ export const getStore = function ({
           selectedFiles: () => selectedFiles,
           activeFiles: (state) => state.activeFiles,
           inProgress: () => inProgress,
+          uploaded: () => [],
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,
           pages: () => pages,
@@ -140,6 +141,7 @@ export const getStore = function ({
           UPSERT_RESOURCE: (state, resource) => {
             state.activeFiles.push(resource)
           },
+          SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
           CLEAR_FILES_SEARCHED: () => {},
           CLEAR_CURRENT_FILES_LIST: () => {},
           LOAD_FILES: () => {},

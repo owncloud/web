@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
@@ -56,6 +57,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 
+import AppBar from '../components/AppBar/AppBar.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -69,6 +71,7 @@ const visibilityObserver = new VisibilityObserver()
 
 export default {
   components: {
+    AppBar,
     ResourceTable,
     QuickActions,
     AppLoadingSpinner,

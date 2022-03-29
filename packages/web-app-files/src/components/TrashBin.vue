@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -48,6 +49,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
+import AppBar from './AppBar/AppBar.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
 
 import MixinFilesListFilter from '../mixins/filesListFilter'
@@ -66,6 +68,7 @@ export default {
   name: 'TrashBin',
 
   components: {
+    AppBar,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,
@@ -76,6 +79,7 @@ export default {
 
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
   props: {
+    breadcrumbs: { type: Array, default: () => [] },
     noContentMessage: {
       type: String,
       required: false,

@@ -10,9 +10,12 @@ const createFolder = ({ name = '1234', canCreate = false } = {}) => ({
 })
 
 const stubs = {
+  'app-bar': true,
   'app-loading-spinner': true,
+  'create-and-upload': true,
   'not-found-message': true,
   'no-content-message': true,
+  'progress-bar': true,
   'resource-table': true,
   'context-actions': true,
   pagination: true,
@@ -208,6 +211,9 @@ describe('PublicFiles view', () => {
       mocks: {
         $route: router.currentRoute,
         $router: router
+      },
+      computed: {
+        breadcrumbs: () => []
       },
       setup: () => ({
         loadResourcesTask: {

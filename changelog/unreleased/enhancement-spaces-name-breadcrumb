@@ -1,0 +1,5 @@
+Enhancement: Space name in breadcrumb
+
+We have updated the breadcrumbs to show a space's name (if available).
+
+https://github.com/owncloud/web/pull/6662

@@ -2,7 +2,6 @@ import orderBy from 'lodash-es/orderBy'
 import path from 'path'
 import { DateTime } from 'luxon'
 import { getIndicators } from './statusIndicators'
-import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import {
   LinkShareRoles,
@@ -437,7 +436,7 @@ function _buildLink(link) {
 
   const role = LinkShareRoles.getByBitmask(parseInt(link.permissions), link.item_type === 'folder')
   if (role) {
-    description = $gettext(role.label)
+    description = role.label
   }
 
   return {

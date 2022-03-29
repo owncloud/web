@@ -18,7 +18,7 @@ import FilesApp from '@files/src'
 
 let store
 const routes = FilesApp.routes
-const stubs = { 'context-actions': true }
+const stubs = { 'app-bar': true, 'context-actions': true }
 const cases = [
   ['Personal', '/spaces/personal/home', Personal],
   ['Favorites', '/list/favorites/', Favorites],
@@ -51,22 +51,6 @@ describe('User can navigate in files list using pagination', () => {
         Files: StoreFiles
       }
     })
-    const appBar = document.createElement('div')
-    const breadcrumbs = document.createElement('div')
-    const breadcrumbItem = document.createElement('div')
-
-    appBar.id = 'files-app-bar'
-    breadcrumbs.id = 'files-breadcrumb'
-
-    breadcrumbItem.appendChild(document.createElement('div'))
-    breadcrumbs.appendChild(breadcrumbItem)
-    document.body.appendChild(appBar)
-    document.body.appendChild(breadcrumbs)
-  })
-
-  afterEach(() => {
-    document.body.removeChild(document.getElementById('files-app-bar'))
-    document.body.removeChild(document.getElementById('files-breadcrumb'))
   })
 
   test.each(cases)(
