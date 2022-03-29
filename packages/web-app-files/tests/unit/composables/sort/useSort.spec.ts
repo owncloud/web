@@ -1,4 +1,4 @@
-import { ref, readonly, Ref } from '@vue/composition-api'
+import { ref, readonly } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 import { Resource } from '../../../../src/helpers/resource'
@@ -39,7 +39,7 @@ describe('useSort', () => {
   })
 
   describe('sorting resources', () => {
-    const resources : Resource[] = [
+    const resources: Resource[] = [
       { id: '1', name: 'c.png', path: '', webDavPath: '', sdate: '2' },
       { id: '2', name: 'Dir4', path: '', webDavPath: '', sdate: '4', type: 'folder' },
       { id: '3', name: 'a.png', path: '', webDavPath: '', sdate: '3' },

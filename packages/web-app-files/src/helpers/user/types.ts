@@ -1,5 +1,3 @@
-import type { ShareType, ShareTypes } from "../share"
-
 export interface User {
   uuid?: string
   name?: string

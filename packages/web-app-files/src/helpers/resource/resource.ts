@@ -27,11 +27,11 @@ export interface Resource {
   privateLink?: string
 
   canCreate?(): boolean
-  canUpload?() : boolean
-  canDownload?() : boolean
-  canShare?() : boolean
-  canRename?() : boolean
-  canBeDeleted?() : boolean
+  canUpload?(): boolean
+  canDownload?(): boolean
+  canShare?(): boolean
+  canRename?(): boolean
+  canBeDeleted?(): boolean
   canBeRestored?(): boolean
 
   isReceivedShare?(): boolean
