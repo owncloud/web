@@ -7,6 +7,7 @@ import {
   LinkShareRoles,
   PeopleShareRoles,
   SharePermissions,
+  Share,
   ShareStatus,
   ShareTypes,
   SpacePeopleShareRoles,
@@ -15,6 +16,8 @@ import {
   spaceRoleViewer
 } from './share'
 import { extractStorageId } from './resource'
+import { User } from './user'
+import { Resource } from './resource'
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
@@ -116,10 +119,7 @@ export function buildResource(resource) {
 export function buildSpace(space) {
   let spaceImageData, spaceReadmeData
   let disabled = false
-  const spaceRoles = SpacePeopleShareRoles.list().reduce((obj, role) => {
-    obj[role.name] = []
-    return obj
-  }, {})
+  const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map(role => [role.name, []]))
 
   if (space.special) {
     spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
@@ -172,7 +172,7 @@ export function buildSpace(space) {
     spaceMemberIds: Object.values(spaceRoles).reduce((arr, ids) => arr.concat(ids), []),
     spaceImageData,
     spaceReadmeData,
-    canUpload: function ({ user } = {}) {
+    canUpload: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
@@ -182,45 +182,45 @@ export function buildSpace(space) {
     canDownload: function () {
       return true
     },
-    canBeDeleted: function ({ user } = {}) {
+    canBeDeleted: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canRename: function ({ user } = {}) {
+    canRename: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditDescription: function ({ user } = {}) {
+    canEditDescription: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canRestore: function ({ user } = {}) {
+    canRestore: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canDisable: function ({ user } = {}) {
+    canDisable: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return !this.disabled && user && allowedRoles.includes(user.uuid)
     },
-    canShare: function ({ user } = {}) {
+    canShare: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditImage: function ({ user } = {}) {
+    canEditImage: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditReadme: function ({ user } = {}) {
+    canEditReadme: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [
         ...this.spaceRoles[spaceRoleManager.name],
         ...this.spaceRoles[spaceRoleEditor.name]
       ]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditQuota: function ({ user } = {}) {
+    canEditQuota: function ({ user } : { user?: User } = {}) {
       const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
       return user && allowedRoles.includes(user.uuid)
     },
@@ -334,7 +334,7 @@ export function aggregateResourceShares(
 
 export function buildSharedResource(share, incomingShares = false, allowSharePermission) {
   const isFolder = share.item_type === 'folder'
-  const resource = {
+  const resource : Resource = {
     id: share.id,
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
@@ -342,18 +342,20 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     mimeType: share.state === 0 ? share.mimetype : '',
     isFolder,
     sdate: DateTime.fromSeconds(share.stime).toRFC2822(),
-    indicators: []
+    indicators: [],
+    path: undefined,
+    webDavPath: undefined
   }
 
   if (incomingShares) {
     resource.resourceOwner = {
-      username: share.uid_file_owner,
-      displayName: share.displayname_file_owner
+      username: share.uid_file_owner as string,
+      displayName: share.displayname_file_owner as string
     }
     resource.owner = [
       {
-        username: share.uid_owner,
-        displayName: share.displayname_owner,
+        username: share.uid_owner as string,
+        displayName: share.displayname_owner as string,
         avatar: undefined,
         shareType: ShareTypes.user.value
       }
@@ -389,7 +391,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   return resource
 }
 
-export function buildShare(s, file, allowSharePermission) {
+export function buildShare(s, file, allowSharePermission) : Share {
   if (parseInt(s.share_type) === ShareTypes.link.value) {
     return _buildLink(s)
   }
@@ -400,7 +402,7 @@ export function buildShare(s, file, allowSharePermission) {
   return buildCollaboratorShare(s, file, allowSharePermission)
 }
 
-export function buildSpaceShare(s, storageId) {
+export function buildSpaceShare(s, storageId) : Share {
   let permissions, role
 
   switch (s.role) {
@@ -431,7 +433,7 @@ export function buildSpaceShare(s, storageId) {
   }
 }
 
-function _buildLink(link) {
+function _buildLink(link) : Share {
   let description = ''
 
   const role = LinkShareRoles.getByBitmask(parseInt(link.permissions), link.item_type === 'folder')
@@ -442,7 +444,7 @@ function _buildLink(link) {
   return {
     shareType: parseInt(link.share_type),
     id: link.id,
-    token: link.token,
+    token: link.token as string,
     url: link.url,
     path: link.path,
     permissions: link.permissions,
@@ -470,8 +472,8 @@ function _fixAdditionalInfo(data) {
   return data
 }
 
-export function buildCollaboratorShare(s, file, allowSharePermission) {
-  const share = {
+export function buildCollaboratorShare(s, file, allowSharePermission) : Share {
+  const share : Share = {
     shareType: parseInt(s.share_type),
     id: s.id
   }
@@ -517,7 +519,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission) {
   return share
 }
 
-export function buildDeletedResource(resource) {
+export function buildDeletedResource(resource) : Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = isFolder ? '' : _getFileExtension(fullName)
