@@ -13,6 +13,7 @@
       :src="appUrl"
       class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
+      allowfullscreen
     />
     <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1">
       <form :action="appUrl" target="app-iframe" method="post">
@@ -21,7 +22,12 @@
           <input :name="key" :value="item" type="hidden" />
         </div>
       </form>
-      <iframe name="app-iframe" class="oc-width-1-1 oc-height-1-1" :title="iFrameTitle" />
+      <iframe
+        name="app-iframe"
+        class="oc-width-1-1 oc-height-1-1"
+        :title="iFrameTitle"
+        allowfullscreen
+      />
     </div>
   </main>
 </template>
