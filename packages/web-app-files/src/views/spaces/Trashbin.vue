@@ -1,7 +1,6 @@
 <template>
   <trash-bin
     :breadcrumbs="breadcrumbs"
-    :breadcrumbs-context-actions-displayed="true"
     :no-content-message="$gettext('Space has no deleted files')"
   />
 </template>
@@ -49,6 +48,7 @@ export default {
           to: '/files/trash'
         },
         {
+          allowContextActions: true,
           text: this.$route.params.storageId,
           onClick: () => bus.publish('app.files.list.load')
         }

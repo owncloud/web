@@ -6,7 +6,7 @@
         <template #actions>
           <create-space />
         </template>
-        <template #static>
+        <template #content>
           <p v-text="spacesHint" />
         </template>
       </app-bar>

@@ -5,7 +5,6 @@
       <app-bar
         :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
-        :breadcrumbs-context-actions-displayed="true"
         :breadcrumbs-context-actions-items="[currentFolder]"
       >
         <template #actions>
@@ -86,7 +85,7 @@ import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath } from '../helpers/breadcrumbs'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 
 import AppBar from '../components/AppBar/AppBar.vue'
 import ProgressBar from '../components/Upload/ProgressBar.vue'
@@ -172,10 +171,10 @@ export default defineComponent({
       const personalRouteName = this.hasSpaces
         ? this.$gettext('Personal')
         : this.$gettext('All files')
-      return [
+      return concatBreadcrumbs(
         { text: personalRouteName, to: '/' },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
-      ]
+      )
     },
 
     folderNotFound() {

@@ -12,7 +12,7 @@
           context-menu-padding="small"
           :items="breadcrumbs"
         >
-          <template v-if="breadcrumbsContextActionsDisplayed" #contextMenu>
+          <template v-if="showContextActions" #contextMenu>
             <context-actions :items="breadcrumbsContextActionsItems" />
           </template>
         </oc-breadcrumb>
@@ -26,13 +26,14 @@
           <batch-actions v-if="showBatchActions" />
         </div>
       </div>
-      <slot name="static" />
+      <slot name="content" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapMutations } from 'vuex'
+import last from 'lodash-es/last'
 
 import Mixins from '../../mixins'
 import MixinFileActions from '../../mixins/fileActions'
@@ -54,7 +55,6 @@ export default {
   mixins: [Mixins, MixinFileActions],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
-    breadcrumbsContextActionsDisplayed: { type: Boolean, default: false },
     breadcrumbsContextActionsItems: { type: Array, default: () => [] },
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false }
@@ -69,6 +69,9 @@ export default {
     },
     areDefaultActionsVisible() {
       return this.selectedFiles.length < 1
+    },
+    showContextActions() {
+      return last(this.breadcrumbs).allowContextActions
     },
     showBatchActions() {
       return this.hasBulkActions && this.selectedFiles.length > 0

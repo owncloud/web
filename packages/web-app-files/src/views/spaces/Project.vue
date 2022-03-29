@@ -5,7 +5,6 @@
       <app-bar
         :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
-        :breadcrumbs-context-actions-displayed="true"
         :breadcrumbs-context-actions-items="[currentFolder]"
       >
         <template #actions>
@@ -128,7 +127,7 @@ import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath } from '../../helpers/breadcrumbs'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import { loadPreview } from '../../helpers/resource'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
@@ -211,7 +210,7 @@ export default {
     },
 
     breadcrumbs() {
-      return [
+      return concatBreadcrumbs(
         {
           text: this.$gettext('Spaces'),
           to: '/files/spaces/projects'
@@ -221,7 +220,7 @@ export default {
           to: `/files/spaces/projects/${this.$route.params.storageId}`
         },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
-      ]
+      )
     },
 
     isSpaceRoot() {
