@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs">
+    <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs" :has-view-options="false">
       <template #actions>
         <create-space />
       </template>

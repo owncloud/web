@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces projects view should list spaces 1`] = `
-<div class="oc-px-m">
-  <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" class="oc-border-b"></app-bar-stub>
-  <div class="spaces-list oc-mt-l">
+<div>
+  <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hassidebartoggle="true" class="oc-border-b"></app-bar-stub>
+  <div class="spaces-list oc-px-m oc-mt-l">
     <ul class="
           oc-grid
           oc-grid-match

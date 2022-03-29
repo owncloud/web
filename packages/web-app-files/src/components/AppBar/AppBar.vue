@@ -23,7 +23,10 @@
           </template>
         </oc-breadcrumb>
         <shares-navigation v-if="hasSharesNavigation" />
-        <view-options />
+        <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
+          <view-options v-if="hasViewOptions" />
+          <sidebar-toggle v-if="hasSidebarToggle" />
+        </div>
       </div>
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
@@ -48,6 +51,7 @@ import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SizeInfo from './SelectedResources/SizeInfo.vue'
+import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
 
 export default {
@@ -55,6 +59,7 @@ export default {
     BatchActions,
     ContextActions,
     SharesNavigation,
+    SidebarToggle,
     SizeInfo,
     ViewOptions
   },
@@ -63,7 +68,9 @@ export default {
     breadcrumbs: { type: Array, default: () => [] },
     breadcrumbsContextActionsItems: { type: Array, default: () => [] },
     hasBulkActions: { type: Boolean, default: false },
-    hasSharesNavigation: { type: Boolean, default: false }
+    hasSharesNavigation: { type: Boolean, default: false },
+    hasSidebarToggle: { type: Boolean, default: true },
+    hasViewOptions: { type: Boolean, default: true }
   },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),

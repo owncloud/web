@@ -2,7 +2,7 @@
 
 exports[`Spaces project view space image should show if given 1`] = `
 <div class="space-overview">
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsdisplayed="true" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true"></app-bar-stub>
+  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
   <progress-bar-stub id="files-upload-progress" class="oc-p-s" style="display: none;"></progress-bar-stub>
   <div>
     <div class="oc-px-m oc-mt-m oc-flex">
@@ -38,7 +38,7 @@ exports[`Spaces project view space image should show if given 1`] = `
 
 exports[`Spaces project view space readme should show if given 1`] = `
 <div class="space-overview">
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsdisplayed="true" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true"></app-bar-stub>
+  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
   <progress-bar-stub id="files-upload-progress" class="oc-p-s" style="display: none;"></progress-bar-stub>
   <div>
     <div class="oc-px-m oc-mt-m oc-flex">
