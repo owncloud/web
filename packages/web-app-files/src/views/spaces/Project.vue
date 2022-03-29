@@ -216,7 +216,7 @@ export default {
           to: '/files/spaces/projects'
         },
         {
-          text: this.$route.params.storageId,
+          text: this.space?.name || this.$route.params.storageId,
           to: `/files/spaces/projects/${this.$route.params.storageId}`
         },
         ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
