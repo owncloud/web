@@ -87,7 +87,7 @@ import axios from 'axios'
 
 export default {
   components: { UsersList, AppLoadingSpinner, NoContentMessage, CreateUserModal, DeleteUserModal },
-  setup: function () {
+  setup() {
     const store = useStore()
     const users = ref([])
     const roles = ref([])
