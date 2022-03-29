@@ -31,6 +31,7 @@
     <template #avatar="rowData">
       <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
     </template>
+    <template #role="rowData"> {{ getUserRole(rowData.item.id) }} </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>
@@ -52,6 +53,14 @@ export default {
   name: 'UsersList',
   props: {
     users: {
+      type: Array,
+      required: true
+    },
+    roles: {
+      type: Array,
+      required: true
+    },
+    userAssignments: {
       type: Array,
       required: true
     },
@@ -107,6 +116,7 @@ export default {
         {
           name: 'role',
           title: this.$gettext('Role'),
+          type: 'slot',
           sortable: true
         },
         {
@@ -132,6 +142,23 @@ export default {
       const translated = this.$gettext('Select %{ user }')
 
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
+    },
+    getUserRole(user) {
+      const userAssignment = this.userAssignments.find(
+        (assignment) => assignment.accountUuid === user.id
+      )
+
+      if (!userAssignment || !userAssignment.length) {
+        return ''
+      }
+
+      const role = this.roles.find((role) => role.id === userAssignment[0].roleId)
+
+      if (!role) {
+        return ''
+      }
+
+      return role.displayName
     }
   }
 }

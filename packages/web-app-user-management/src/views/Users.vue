@@ -58,6 +58,8 @@
         <div v-else>
           <UsersList
             :users="users"
+            :roles="roles"
+            :user-assignments="userAssignments"
             :selected-users="selectedUsers"
             class="oc-mt-m"
             @toggleSelectUser="toggleSelectUser"
@@ -81,24 +83,63 @@ import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions } from 'vuex'
+import axios from 'axios'
 
 export default {
   components: { UsersList, AppLoadingSpinner, NoContentMessage, CreateUserModal, DeleteUserModal },
-  setup() {
+  setup: function () {
     const store = useStore()
     const users = ref([])
+    const roles = ref([])
+    const userAssignments = ref([])
     const graphClient = clientService.graphAuthenticated(
       store.getters.configuration.server,
       store.getters.getToken
     )
 
+    const loadRolesTask = useTask(function* (signal, ref) {
+      const rolesResponse = yield axios.post(
+        '/api/v0/settings/roles-list',
+        {},
+        {
+          headers: {
+            authorization: store.getters.getToken
+          }
+        }
+      )
+      roles.value = rolesResponse.data.bundles
+    })
+
+    const loadUserAssignmentTask = useTask(function* (signal, ref) {
+      const userAssignmentResponse = yield axios.post(
+        '/api/v0/settings/assignments-list',
+        {
+          account_uuid: ref.user?.id
+        },
+        {
+          headers: {
+            authorization: store.getters.getToken
+          }
+        }
+      )
+      userAssignments.value.push(userAssignmentResponse.data?.assignments)
+    })
+
     const loadResourcesTask = useTask(function* (signal, ref) {
-      const response = yield graphClient.users.listUsers('displayName')
-      users.value = response.data.value || []
+      const usersResponse = yield graphClient.users.listUsers('displayName')
+      users.value = usersResponse.data.value || []
+
+      yield loadRolesTask.perform()
+
+      for (const user of users.value) {
+        yield loadUserAssignmentTask.perform({ user })
+      }
     })
 
     return {
       users,
+      roles,
+      userAssignments,
       loadResourcesTask,
       graphClient
     }
