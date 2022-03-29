@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
@@ -16,10 +17,19 @@ Summary
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
+* Enhancement - Space name in breadcrumb: [#6662](https://github.com/owncloud/web/pull/6662)
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
 
 Details
 -------
+
+* Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
+
+   We have fixed a visual glitch that rendered the ViewOptions in the AppBar on the left side
+   instead of right-aligned if no Breadcrumbs or SharesNavigation is present.
+
+   https://github.com/owncloud/web/issues/6685
+   https://github.com/owncloud/web/pull/6662
 
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 
@@ -86,6 +96,12 @@ Details
 
    https://github.com/owncloud/web/issues/6283
    https://github.com/owncloud/web/pull/6633
+
+* Enhancement - Space name in breadcrumb: [#6662](https://github.com/owncloud/web/pull/6662)
+
+   We have updated the breadcrumbs to show a space's name (if available).
+
+   https://github.com/owncloud/web/pull/6662
 
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
 
