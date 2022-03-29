@@ -24,26 +24,6 @@ exports[`AppBar component with multiple selected files tbd 1`] = `
 </div>
 `;
 
-exports[`AppBar component with no selected files renders basic appBar with static slot 1`] = `
-<div id="files-app-bar" slots="[object Object]">
-  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
-  <div class="files-topbar oc-py-s">
-    <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-between">
-      <!---->
-      <!---->
-      <view-options-stub></view-options-stub>
-    </div>
-    <div class="files-app-bar-actions">
-      <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
-        <!---->
-        <!---->
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`AppBar component with one selected file tbd 1`] = `
 <div id="files-app-bar" slots="[object Object]">
   <oc-hidden-announcer-stub level="polite" announcement="amount items selected. Actions are available above the table."></oc-hidden-announcer-stub>

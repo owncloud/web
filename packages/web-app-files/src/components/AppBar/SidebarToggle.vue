@@ -1,6 +1,5 @@
 <template>
   <oc-button
-    v-if="!hideSidebarToggle"
     id="files-toggle-sidebar"
     v-oc-tooltip="toggleSidebarButtonLabel"
     :aria-label="toggleSidebarButtonLabel"

@@ -43,6 +43,9 @@ describe('AppBar component', () => {
       expect(wrapper).toMatchSnapshot()
     })
   })
+
+  it.todo('renders breadcrumbs')
+  it.todo('last breadcrumb item emits event upon click')
 })
 
 function getShallowWrapper(store = {}) {
