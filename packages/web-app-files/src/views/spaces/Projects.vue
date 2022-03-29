@@ -118,12 +118,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { computed } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
@@ -134,7 +134,7 @@ import { loadPreview } from '../../helpers/resource'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppBar,
     AppLoadingSpinner,
@@ -260,7 +260,7 @@ export default {
       this.openSidebarWithPanel('space-share-item')
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

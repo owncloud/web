@@ -127,8 +127,10 @@ function createStore(activeFiles) {
         namespaced: true,
         getters: {
           activeFiles: () => activeFiles,
+          selectedFiles: () => [],
           totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),
           totalFilesSize: () => getTotalSize(activeFiles),
+          inProgress: () => [],
           currentFolder: () => {
             return {
               path: '',

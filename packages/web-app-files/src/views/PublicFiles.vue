@@ -31,7 +31,7 @@
       <resource-table
         v-else
         id="files-public-files-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -45,7 +45,7 @@
         @sort="handleSort"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { useResourcesViewDefaults } from '../composables'
@@ -87,10 +87,12 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationOperations } from '../router'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
+import { defineComponent } from '@vue/composition-api'
+import { Resource } from '../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
     AppBar,
     ProgressBar,
@@ -108,14 +110,13 @@ export default {
 
   setup() {
     return {
-      ...useResourcesViewDefaults()
+      ...useResourcesViewDefaults<Resource, any, any[]>()
     }
   },
 
   computed: {
     ...mapGetters('Files', [
       'publicLinkPassword',
-      'selectedFiles',
       'currentFolder',
       'highlightedFile',
       'inProgress',
@@ -141,15 +142,6 @@ export default {
 
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
     },
 
     folderNotFound() {
@@ -191,12 +183,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapMutations('Files', [
-      'SET_FILE_SELECTION',
-      'SET_CURRENT_FOLDER',
-      'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST'
-    ]),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -222,11 +209,7 @@ export default {
           params: { token: this.$route.params.item }
         })
       )
-    },
-
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
     }
   }
-}
+})
 </script>

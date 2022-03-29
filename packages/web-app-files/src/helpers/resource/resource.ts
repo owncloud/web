@@ -9,6 +9,7 @@ export interface Resource {
   webDavPath: string
   downloadURL?: string
   type?: string
+  status?: number
 }
 
 export const extractStorageId = (id?: string): string => {

@@ -31,7 +31,7 @@
       <resource-table
         v-else
         id="files-personal-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -55,7 +55,7 @@
           />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -145,7 +145,6 @@ export default defineComponent({
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
-      'selectedFiles',
       'currentFolder',
       'inProgress',
       'totalFilesCount',
@@ -158,15 +157,6 @@ export default defineComponent({
     },
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
     },
 
     breadcrumbs() {
@@ -238,17 +228,12 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', [
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
-      'SET_FILE_SELECTION',
-      'REMOVE_FILE_SELECTION'
-    ]),
+    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
 
     fetchResources,
 
     async fileDropped(fileIdTarget) {
-      const selected = [...this.selectedFiles]
+      const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
@@ -347,16 +332,12 @@ export default defineComponent({
           const resource = this.paginatedResources.find((r) => r.name === resourceName)
 
           if (resource) {
-            this.selected = [resource]
+            this.selectedResources = [resource]
             this.$_mountSideBar_showDefaultPanel(resource)
             this.scrollToResource(resource)
           }
         })
       }
-    },
-
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
     }
   }
 })

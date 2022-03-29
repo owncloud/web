@@ -17,7 +17,7 @@
       <resource-table
         v-else
         id="files-trashbin-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :fields-displayed="['name', 'ddate']"
@@ -31,7 +31,7 @@
         @sort="handleSort"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './AppBar/AppBar.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
@@ -63,8 +63,10 @@ import Pagination from './FilesList/Pagination.vue'
 import ContextActions from './FilesList/ContextActions.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { bus } from 'web-pkg/src/instance'
+import { defineComponent } from '@vue/composition-api'
+import { Resource } from '../helpers/resource'
 
-export default {
+export default defineComponent({
   name: 'TrashBin',
 
   components: {
@@ -89,7 +91,7 @@ export default {
 
   setup() {
     return {
-      ...useResourcesViewDefaults()
+      ...useResourcesViewDefaults<Resource, any, any[]>()
     }
   },
 
@@ -97,15 +99,6 @@ export default {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
-    },
 
     isEmpty() {
       return this.paginatedResources.length < 1
@@ -125,11 +118,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
-
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
-    }
+    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST'])
   }
-}
+})
 </script>
