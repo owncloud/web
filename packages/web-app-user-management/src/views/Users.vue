@@ -226,7 +226,7 @@ export default {
         })
         this.users.push(response?.data)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.showMessage({
           title: this.$gettext('Failed to create user'),
           status: 'danger'
