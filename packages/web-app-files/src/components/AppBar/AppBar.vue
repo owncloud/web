@@ -3,7 +3,13 @@
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <div class="oc-flex oc-flex-between">
+      <div
+        class="oc-flex"
+        :class="{
+          'oc-flex-between': breadcrumbs.length || hasSharesNavigation,
+          'oc-flex-right': !breadcrumbs.length && !hasSharesNavigation
+        }"
+      >
         <oc-breadcrumb
           v-if="breadcrumbs.length"
           id="files-breadcrumb"
