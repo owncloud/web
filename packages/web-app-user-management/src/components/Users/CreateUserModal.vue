@@ -4,11 +4,13 @@
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Create')"
     :button-confirm-disabled="buttonConfirmDisabled"
+    focus-trap-initial="#input-user-name"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', user)"
   >
     <template #content>
       <oc-text-input
+        id="input-user-name"
         v-model="user.onPremisesSamAccountName"
         class="oc-mb-s"
         :label="$gettext('User name') + '*'"
@@ -17,6 +19,7 @@
         @input="validateUserName"
       />
       <oc-text-input
+        id="input-display-name"
         v-model="user.displayName"
         class="oc-mb-s"
         :label="$gettext('First and last name') + '*'"
@@ -25,6 +28,7 @@
         @input="validateDisplayName"
       />
       <oc-text-input
+        id="input-mail"
         v-model="user.mail"
         class="oc-mb-s"
         :label="$gettext('Email') + '*'"
@@ -34,6 +38,7 @@
         @change="validateEmail"
       />
       <oc-text-input
+        id="input-password"
         v-model="user.passwordProfile.password"
         class="oc-mb-s"
         :label="$gettext('Password') + '*'"
