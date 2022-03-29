@@ -22,7 +22,7 @@ describe('AppBar component', () => {
     const store = createStore({ selected: [] })
     const wrapper = getShallowWrapper(store)
 
-    it('renders basic appBar with static slot', () => {
+    it('renders basic appBar with content slot', () => {
       const slotEl = wrapper.find('ruby')
       expect(slotEl.exists()).toBeTruthy()
 
@@ -58,7 +58,7 @@ function getShallowWrapper(store = {}) {
     propsData: {
       slots: {
         actions: '<button>Click me</button>',
-        static: '<ruby>Static content</ruby>'
+        content: '<ruby>Static content</ruby>'
       }
     },
     store
