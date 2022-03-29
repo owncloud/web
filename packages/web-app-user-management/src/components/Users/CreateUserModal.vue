@@ -103,7 +103,7 @@ export default {
 
       if (this.user.onPremisesSamAccountName.trim() === '') {
         this.formData.userName.errorMessage = this.$gettext('User name cannot be empty')
-        return
+        return false
       }
 
       if (
@@ -116,11 +116,12 @@ export default {
           this.$gettext('User "%{userName}" already exists'),
           { userName: this.user.onPremisesSamAccountName }
         )
-        return
+        return false
       }
 
       this.formData.userName.errorMessage = ''
       this.formData.userName.valid = true
+      return true
     },
 
     validateDisplayName() {
@@ -128,11 +129,12 @@ export default {
 
       if (this.user.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext('Display name cannot be empty')
-        return
+        return false
       }
 
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
+      return true
     },
 
     validateEmail() {
@@ -140,22 +142,24 @@ export default {
 
       if (!EmailValidator.validate(this.user.mail)) {
         this.formData.email.errorMessage = this.$gettext('Please enter a valid email')
-        return
+        return false
       }
 
       this.formData.email.errorMessage = ''
       this.formData.email.valid = true
+      return true
     },
     validatePassword() {
       this.formData.password.valid = false
 
       if (this.user.passwordProfile.password.trim() === '') {
         this.formData.password.errorMessage = this.$gettext('Password cannot be empty')
-        return
+        return false
       }
 
       this.formData.password.errorMessage = ''
       this.formData.password.valid = true
+      return true
     }
   }
 }
