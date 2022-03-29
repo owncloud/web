@@ -18,8 +18,11 @@
           context-menu-padding="small"
           :items="breadcrumbs"
         >
-          <template v-if="showContextActions" #contextMenu>
-            <context-actions :items="breadcrumbsContextActionsItems" />
+          <template #contextMenu>
+            <context-actions
+              v-if="showContextActions"
+              :items="breadcrumbsContextActionsItems.filter(Boolean)"
+            />
           </template>
         </oc-breadcrumb>
         <shares-navigation v-if="hasSharesNavigation" />

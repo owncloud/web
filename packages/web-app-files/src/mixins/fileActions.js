@@ -211,7 +211,7 @@ export default {
       }
 
       // we don't support external apps as batch action as of now
-      if (resources.length > 1) {
+      if (resources.length !== 1) {
         return []
       }
 
