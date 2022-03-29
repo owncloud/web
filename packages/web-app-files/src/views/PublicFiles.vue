@@ -1,6 +1,10 @@
 <template>
   <div>
-    <app-bar :has-bulk-actions="true" :breadcrumbs="breadcrumbs">
+    <app-bar
+      :has-bulk-actions="true"
+      :breadcrumbs="breadcrumbs"
+      :breadcrumbs-context-actions-items="[currentFolder]"
+    >
       <template #actions>
         <create-and-upload />
       </template>
@@ -82,7 +86,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationOperations } from '../router'
-import { breadcrumbsFromPath } from '../helpers/breadcrumbs'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -126,8 +130,13 @@ export default {
     },
 
     breadcrumbs() {
-      const publicFilesBreadcrumb = breadcrumbsFromPath(this.$route.path, this.$route.params.item)
-      return [{ text: this.$gettext('Public link') }, publicFilesBreadcrumb.splice()]
+      const breadcrumbs = breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      const rootRoute = breadcrumbs.shift()
+
+      return concatBreadcrumbs(
+        { text: this.$gettext('Public link'), to: rootRoute.to },
+        ...breadcrumbs
+      )
     },
 
     isEmpty() {

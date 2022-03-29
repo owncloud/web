@@ -73,6 +73,7 @@ export const accentuatesTableRowTest = async <V extends Vue>(
       store,
       stubs: stubs,
       computed: {
+        breadcrumbs: () => [],
         displayThumbnails: () => false,
         folderNotFound: () => false,
         isEmpty: () => false

@@ -105,6 +105,7 @@ import { useResourcesViewDefaults } from '../composables'
 import { fetchResources } from '../services/folder/loaderPersonal'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../helpers/resource'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -133,7 +134,8 @@ export default defineComponent({
   setup() {
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
+      hasSpaces: useCapabilitySpacesEnabled()
     }
   },
 
