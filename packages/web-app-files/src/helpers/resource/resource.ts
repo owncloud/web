@@ -1,4 +1,3 @@
-import { ShareRole } from '../share'
 import { User } from '../user'
 
 // TODO: find a good location for the Resource interface. Needed in other repos as well, so it needs to be deployed to npm.
@@ -17,7 +16,15 @@ export interface Resource {
   mimeType?: string
   isFolder?: boolean
   sdate?: string
+  mdate?: string
   indicators?: any[]
+  size?: number
+  permissions?: number
+  starred?: boolean
+  etag?: string
+  sharePermissions?: number
+  shareTypes?: number[]
+  privateLink?: string
 
   canCreate?(): boolean
   canUpload?() : boolean
@@ -32,7 +39,8 @@ export interface Resource {
 
   resourceOwner?: User
   owner?: User[]
-
+  ownerDisplayName?: string
+  ownerId?: string
   sharedWith?: string
   shareOwner?: string
   shareOwnerDisplayname?: string

@@ -44,7 +44,7 @@ export function renameResource(resource, newName, newPath) {
   return resource
 }
 
-export function buildResource(resource) {
+export function buildResource(resource) : Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = _getFileExtension(resource.name)
   let resourcePath
@@ -270,7 +270,7 @@ export function aggregateResourceShares(
   allowSharePermission,
   server,
   token
-) {
+) : Resource[] {
   if (incomingShares) {
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
       buildSharedResource(share, incomingShares, allowSharePermission)
@@ -332,7 +332,7 @@ export function aggregateResourceShares(
   return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePermission))
 }
 
-export function buildSharedResource(share, incomingShares = false, allowSharePermission) {
+export function buildSharedResource(share, incomingShares = false, allowSharePermission) : Resource {
   const isFolder = share.item_type === 'folder'
   const resource : Resource = {
     id: share.id,
