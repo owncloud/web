@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-px-m">
+  <div>
     <app-bar class="oc-border-b" :breadcrumbs="breadcrumbs">
       <template #actions>
         <create-space />
@@ -20,7 +20,7 @@
           <span v-translate>You don't have access to any spaces</span>
         </template>
       </no-content-message>
-      <div v-else class="spaces-list oc-mt-l">
+      <div v-else class="spaces-list oc-px-m oc-mt-l">
         <ul
           class="
             oc-grid
