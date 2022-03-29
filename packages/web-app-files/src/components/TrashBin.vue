@@ -2,17 +2,7 @@
   <div>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <app-bar
-        :breadcrumbs="breadcrumbs"
-        :breadcrumbs-context-actions-displayed="breadcrumbsContextActionsDisplayed"
-        :has-bulk-actions="true"
-      >
-        <template #actions>
-          <oc-list>
-            <empty-trashbin />
-          </oc-list>
-        </template>
-      </app-bar>
+      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
       <no-content-message
         v-if="isEmpty"
         id="files-trashbin-empty"
@@ -60,7 +50,6 @@
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './AppBar/AppBar.vue'
-import EmptyTrashbin from './AppBar/EmptyTrashbin.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
 
 import MixinFilesListFilter from '../mixins/filesListFilter'
@@ -80,7 +69,6 @@ export default {
 
   components: {
     AppBar,
-    EmptyTrashbin,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,
@@ -92,7 +80,6 @@ export default {
   mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
-    breadcrumbsContextActionsDisplayed: { type: Boolean, default: false },
     noContentMessage: {
       type: String,
       required: false,

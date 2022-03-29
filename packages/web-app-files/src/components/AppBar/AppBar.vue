@@ -28,7 +28,7 @@
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
           <slot v-if="selectedFiles.length === 0" name="actions" />
-          <size-info v-if="showBatchActions" class="oc-visible@l" />
+          <size-info v-if="showSelectionInfo" class="oc-visible@l" />
           <batch-actions v-if="showBatchActions" />
         </div>
       </div>
@@ -79,8 +79,11 @@ export default {
     showContextActions() {
       return last(this.breadcrumbs).allowContextActions
     },
-    showBatchActions() {
+    showSelectionInfo() {
       return this.hasBulkActions && this.selectedFiles.length > 0
+    },
+    showBatchActions() {
+      return this.hasBulkActions
     },
     selectedResourcesAnnouncement() {
       if (this.selectedFiles.length === 0) {
