@@ -90,15 +90,6 @@ function getWrapper() {
       $gettext: jest.fn(),
       $gettextInterpolate: jest.fn()
     },
-    data: () => {
-      return {
-        selectedOption: {
-          displayValue: '10',
-          displayUnit: 'GB',
-          value: 10 * Math.pow(10, 9)
-        }
-      }
-    },
     propsData: {
       cancel: jest.fn(),
       confirm: jest.fn(),

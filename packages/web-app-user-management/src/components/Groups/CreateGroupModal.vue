@@ -58,7 +58,7 @@ export default {
 
       if (this.group.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext('Group name cannot be empty')
-        return
+        return false
       }
 
       if (
@@ -70,11 +70,12 @@ export default {
           this.$gettext('Group "%{groupName}" already exists'),
           { groupName: this.group.displayName }
         )
-        return
+        return false
       }
 
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
+      return true
     }
   }
 }
