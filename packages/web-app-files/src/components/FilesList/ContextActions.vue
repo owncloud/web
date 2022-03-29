@@ -2,7 +2,7 @@
   <context-action-menu :menu-sections="menuSections" :items="items" />
 </template>
 
-<script>
+<script lang="ts">
 import ContextActionMenu from '../ContextActionMenu.vue'
 
 import FileActions from '../../mixins/fileActions'
@@ -25,6 +25,8 @@ import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
+import { PropType } from '@vue/composition-api'
+import { Resource } from '../../helpers/resource'
 
 export default {
   name: 'ContextActions',
@@ -54,7 +56,7 @@ export default {
 
   props: {
     items: {
-      type: Array,
+      type: Array as PropType<Resource[]>,
       required: true
     }
   },

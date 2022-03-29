@@ -11,7 +11,7 @@
     </no-content-message>
     <resource-table
       v-else
-      v-model="selected"
+      v-model="selectedResources"
       class="files-table"
       :class="{ 'files-table-squashed': false }"
       :resources="paginatedResources"
@@ -24,7 +24,7 @@
       @rowMounted="rowMounted"
     >
       <template #contextMenu="{ resource }">
-        <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+        <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
       </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -40,9 +40,8 @@
   </div>
 </template>
 
-<script>
-import { usePagination } from '../../composables'
-import { useRouteQuery, useStore } from 'web-pkg/src/composables'
+<script lang="ts">
+import { useResourcesViewDefaults } from '../../composables'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'
@@ -51,17 +50,18 @@ import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
-import { computed, ref } from '@vue/composition-api'
 import AppBar from '../AppBar/AppBar.vue'
+import { defineComponent } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import { Resource } from '../../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: { AppBar, ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
@@ -73,20 +73,9 @@ export default {
     }
   },
   setup() {
-    const store = useStore()
-    const paginationPageQuery = useRouteQuery('page', '1')
-    const paginationPage = computed(() => parseInt(String(paginationPageQuery.value)))
-    const { items: paginatedResources, total: paginationPages } = usePagination({
-      page: paginationPage,
-      items: computed(() => store.getters['Files/activeFiles'])
-    })
-
-    const selected = ref([])
     return {
-      selected,
-      paginatedResources,
-      paginationPages,
-      paginationPage,
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
@@ -133,10 +122,7 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
     }
   }
-}
+})
 </script>

@@ -11,7 +11,7 @@
       <resource-table
         v-else
         id="files-favorites-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
@@ -29,7 +29,7 @@
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -46,8 +46,8 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+<script lang="ts">
+import { mapGetters, mapState, mapActions } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../mixins/fileActions'
@@ -66,10 +66,12 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
+import { defineComponent } from '@vue/composition-api'
+import { Resource } from '../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
     AppBar,
     ResourceTable,
@@ -85,7 +87,7 @@ export default {
 
   setup() {
     return {
-      ...useResourcesViewDefaults(),
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
@@ -93,23 +95,9 @@ export default {
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'selectedFiles',
-      'totalFilesCount',
-      'totalFilesSize'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount', 'totalFilesSize']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters(['user', 'configuration']),
-
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
-    },
 
     isEmpty() {
       return this.paginatedResources.length < 1
@@ -130,7 +118,6 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
@@ -148,11 +135,7 @@ export default {
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
     }
   }
-}
+})
 </script>

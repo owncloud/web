@@ -207,6 +207,7 @@ describe('SharedWithOthers view', () => {
       created: jest.fn(),
       mounted: jest.fn(),
       setup: () => ({
+        ...SharedWithOthers.setup(),
         loadResourcesTask: {
           isRunning: loading,
           perform: jest.fn()

@@ -5,17 +5,17 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import TrashBin from '../../components/TrashBin.vue'
 import { bus } from 'web-pkg/src/instance'
 import { useStore } from 'web-pkg/src/composables'
-import { ref } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace } from '../../helpers/resources'
 import { mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   components: { TrashBin },
 
   setup() {
@@ -60,5 +60,5 @@ export default {
     await this.loadResourcesTask.perform(this)
     document.title = `${this.$router.currentRoute.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
   }
-}
+})
 </script>

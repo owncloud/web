@@ -90,7 +90,7 @@
       <resource-table
         v-else
         id="files-spaces-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table oc-mt-xl"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
@@ -101,7 +101,7 @@
         @rowMounted="rowMounted"
       >
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -118,11 +118,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { computed, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
@@ -149,7 +149,7 @@ import { useResourcesViewDefaults } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
     AppBar,
     ProgressBar,
@@ -192,22 +192,12 @@ export default {
   computed: {
     ...mapGetters('Files', [
       'highlightedFile',
-      'selectedFiles',
       'currentFolder',
       'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'getToken', 'configuration']),
-
-    selected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources)
-      }
-    },
 
     breadcrumbs() {
       return concatBreadcrumbs(
@@ -359,7 +349,6 @@ export default {
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED',
-      'SET_FILE_SELECTION',
       'REMOVE_FILE_SELECTION'
     ]),
 
@@ -405,15 +394,12 @@ export default {
         this.$refs.markdownContainer.classList.add(this.markdownContainerCollapsedClass)
       }
     },
-    isResourceInSelection(resource) {
-      return this.selected?.includes(resource)
-    },
     openSidebarSharePanel() {
       this.SET_FILE_SELECTION([this.space])
       this.openSidebarWithPanel('space-share-item')
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

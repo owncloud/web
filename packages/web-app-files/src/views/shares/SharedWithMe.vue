@@ -162,7 +162,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import FileActions from '../../mixins/fileActions'
@@ -182,12 +182,13 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { ShareStatus } from '../../helpers/share'
-import { computed, unref } from '@vue/composition-api'
+import { computed, defineComponent, unref } from '@vue/composition-api'
 import { createLocationSpaces } from '../../router'
+import { Resource } from '../../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   components: {
     AppBar,
     ResourceTable,
@@ -206,7 +207,11 @@ export default {
   ],
 
   setup() {
-    const { fileListHeaderY, storeItems, fields, loadResourcesTask } = useResourcesViewDefaults()
+    const { fileListHeaderY, storeItems, fields, loadResourcesTask } = useResourcesViewDefaults<
+      Resource,
+      any,
+      any[]
+    >()
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -418,5 +423,5 @@ export default {
       return ['name', 'status', 'owner', 'sdate']
     }
   }
-}
+})
 </script>
