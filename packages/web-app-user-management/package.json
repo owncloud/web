@@ -1,0 +1,9 @@
+{
+  "name": "user-management",
+  "version": "0.0.0",
+  "description": "ownCloud user management",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "email-validator": "^2.0.4"
+  }
+}

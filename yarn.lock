@@ -5432,6 +5432,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"email-validator@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "email-validator@npm:2.0.4"
+  checksum: e702fee24e1b9efb7e6a84abb309bebdb4ddde137fdb99a61e24bd82ac0b605be34e191b1c4d04fbc855be7b94cad967f932a456c0def2240303881f4e388f2d
+  languageName: node
+  linkType: hard
+
 "emittery@npm:^0.8.1":
   version: 0.8.1
   resolution: "emittery@npm:0.8.1"
@@ -13184,6 +13191,14 @@ __metadata:
   checksum: c63169a8a70a256e73203c4404acf4fdbb38075f3f888ea38f92b09dc896190180cc9c072c927d7bb995c5a35e7729be8c4f7e876f83f8f8ab6fac263c971725
   languageName: node
   linkType: hard
+
+"user-management@workspace:packages/web-app-user-management":
+  version: 0.0.0-use.local
+  resolution: "user-management@workspace:packages/web-app-user-management"
+  dependencies:
+    email-validator: ^2.0.4
+  languageName: unknown
+  linkType: soft
 
 "utf8@npm:^3.0.0":
   version: 3.0.0

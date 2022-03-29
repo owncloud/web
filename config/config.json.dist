@@ -11,6 +11,7 @@
     "files",
     "draw-io",
     "media-viewer",
+    "user-management",
     "pdf-viewer", 
     "search"
   ],

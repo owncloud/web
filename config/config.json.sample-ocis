@@ -14,7 +14,8 @@
     "media-viewer",
     "pdf-viewer",
     "search",
-    "external"
+    "external",
+    "user-management"
   ],
   "external_apps": [
     {
