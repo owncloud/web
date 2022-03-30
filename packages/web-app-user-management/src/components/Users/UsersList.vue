@@ -144,15 +144,21 @@ export default {
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     },
     getUserRole(user) {
-      const userAssignment = this.userAssignments.find(
+      const userAssignmentList = this.userAssignments.find(
         (assignment) => assignment.accountUuid === user.id
       )
 
-      if (!userAssignment || !userAssignment.length) {
+      if (!userAssignmentList) {
         return ''
       }
 
-      const role = this.roles.find((role) => role.id === userAssignment[0].roleId)
+      const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
+
+      if (!userRoleAssignment) {
+        return ''
+      }
+
+      const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
 
       if (!role) {
         return ''
