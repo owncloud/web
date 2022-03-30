@@ -23,6 +23,7 @@ export abstract class DavProperty {
   static readonly ETag: string = '{DAV:}getetag'
   static readonly MimeType: string = '{DAV:}getcontenttype'
   static readonly ResourceType: string = '{DAV:}resourcetype'
+  static readonly LockDiscovery: any = '{DAV:}lockdiscovery'
   static readonly DownloadURL: string = '{http://owncloud.org/ns}downloadURL'
 
   static readonly ShareTypes: string = '{http://owncloud.org/ns}share-types'
@@ -59,7 +60,8 @@ export abstract class DavProperties {
     DavProperty.ETag,
     DavProperty.MimeType,
     DavProperty.ResourceType,
-    DavProperty.DownloadURL
+    DavProperty.DownloadURL,
+    DavProperty.LockDiscovery
   ]
 
   static readonly PublicLink: DavProperty[] = DavProperties.Default.concat([

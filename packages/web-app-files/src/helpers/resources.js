@@ -55,7 +55,6 @@ export function buildResource(resource) {
   if (!resourcePath.startsWith('/')) {
     resourcePath = `/${resourcePath}`
   }
-
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
@@ -75,6 +74,7 @@ export function buildResource(resource) {
     permissions: resource.fileInfo[DavProperty.Permissions] || '',
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
+    lock: resource.fileInfo[DavProperty.LockDiscovery],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
     shareTypes: (function () {
       if (resource.fileInfo[DavProperty.ShareTypes]) {
