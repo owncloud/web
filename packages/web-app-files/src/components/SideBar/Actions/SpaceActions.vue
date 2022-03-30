@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 import Rename from '../../../mixins/spaces/actions/rename'
@@ -42,12 +42,10 @@ import EditQuota from '../../../mixins/spaces/actions/editQuota'
 import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'SpaceActions',
-  title: ($gettext) => {
-    return $gettext('Actions')
-  },
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
   mixins: [
     Rename,
@@ -96,7 +94,7 @@ export default {
       this.$_editQuota_closeModal()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

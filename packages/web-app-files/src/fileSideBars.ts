@@ -10,13 +10,37 @@ import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import SpaceShares from './components/SideBar/Shares/SpaceShares.vue'
 import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
+import { Panel } from '../../web-pkg/src/components/sidebar'
 
-export default [
+import { Resource } from './helpers/resource'
+import { User } from './helpers/user'
+import Router from 'vue-router'
+
+function $gettext(msg: string): string {
+  return msg
+}
+
+const panelGenerators: (({
+  rootFolder,
+  highlightedFile,
+  router,
+  multipleSelection,
+  user,
+  capabilities
+}: {
+  rootFolder: boolean
+  highlightedFile: Resource
+  router: Router
+  multipleSelection: boolean
+  user: User
+  capabilities: any
+}) => Panel)[] = [
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
-  ({ rootFolder, highlightedFile }) => ({
+  ({ rootFolder, highlightedFile }): Panel => ({
     app: 'no-selection-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: NoSelection,
     default: () => true,
     get enabled() {
@@ -26,6 +50,7 @@ export default [
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'details-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: FileDetails,
     default:
       !isLocationTrashActive(router, 'files-trash-personal') &&
@@ -42,6 +67,7 @@ export default [
   ({ multipleSelection, rootFolder }) => ({
     app: 'details-multiple-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: FileDetailsMultiple,
     default: () => true,
     get enabled() {
@@ -51,6 +77,7 @@ export default [
   ({ router, highlightedFile }) => ({
     app: 'details-space-item',
     icon: 'questionnaire-line',
+    title: $gettext('Details'),
     component: SpaceDetails,
     default: isLocationSpacesActive(router, 'files-spaces-projects'),
     get enabled() {
@@ -59,8 +86,9 @@ export default [
   }),
   ({ router, multipleSelection, rootFolder }) => ({
     app: 'actions-item',
-    component: FileActions,
     icon: 'slideshow-3',
+    title: $gettext('Actions'),
+    component: FileActions,
     default:
       isLocationTrashActive(router, 'files-trash-personal') ||
       isLocationTrashActive(router, 'files-trash-spaces-project'),
@@ -70,8 +98,9 @@ export default [
   }),
   ({ highlightedFile, user }) => ({
     app: 'space-actions-item',
-    component: SpaceActions,
     icon: 'slideshow-3',
+    title: $gettext('Actions'),
+    component: SpaceActions,
     get enabled() {
       if (highlightedFile?.type !== 'space') {
         return false
@@ -85,6 +114,7 @@ export default [
   ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'sharing-item',
     icon: 'group',
+    title: $gettext('People'),
     component: FileShares,
     get enabled() {
       if (multipleSelection || rootFolder) return false
@@ -104,8 +134,9 @@ export default [
   }),
   ({ highlightedFile }) => ({
     app: 'space-share-item',
-    component: SpaceShares,
     icon: 'group',
+    title: $gettext('Members'),
+    component: SpaceShares,
     get enabled() {
       return highlightedFile?.type === 'space'
     }
@@ -113,6 +144,7 @@ export default [
   ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'links-item',
     icon: 'link',
+    title: $gettext('Links'),
     component: FileLinks,
     get enabled() {
       if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
@@ -133,6 +165,7 @@ export default [
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'versions-item',
     icon: 'git-branch',
+    title: $gettext('Versions'),
     component: FileVersions,
     get enabled() {
       if (multipleSelection || rootFolder) return false
@@ -147,3 +180,5 @@ export default [
     }
   })
 ]
+
+export default panelGenerators

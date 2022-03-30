@@ -4,20 +4,18 @@
     <p data-testid="selectedFilesText" v-text="selectedFilesString" />
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 
-export default {
+export default defineComponent({
   name: 'NoSelection',
   mixins: [Mixins, MixinResources],
-  title: ($gettext) => {
-    return $gettext('Details')
-  },
   computed: {
     selectedFilesString() {
       return this.$gettext('Select a file or folder to view details.')
     }
   }
-}
+})
 </script>

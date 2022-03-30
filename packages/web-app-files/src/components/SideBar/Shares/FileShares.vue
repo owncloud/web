@@ -61,7 +61,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { watch, computed } from '@vue/composition-api'
 import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
@@ -133,9 +133,6 @@ export default {
     })
 
     return { sharesLoading, loadSpaceTask, loadSpaceMembersTask }
-  },
-  title: ($gettext) => {
-    return $gettext('People')
   },
   data() {
     return {

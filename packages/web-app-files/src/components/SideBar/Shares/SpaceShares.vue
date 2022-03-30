@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -31,11 +31,9 @@ import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.
 import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { useTask } from 'vue-concurrency'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
-  title: ($gettext) => {
-    return $gettext('Members')
-  },
+export default defineComponent({
   name: 'SpaceShares',
   components: {
     CollaboratorListItem,
@@ -139,7 +137,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style>

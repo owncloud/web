@@ -39,30 +39,30 @@ describe('useSort', () => {
   })
 
   describe('sorting resources', () => {
-    const resources = [
-      { id: '1', name: 'c.png', path: '', webDavPath: '', time: 2 },
-      { id: '2', name: 'Dir4', path: '', webDavPath: '', time: 4, type: 'folder' },
-      { id: '3', name: 'a.png', path: '', webDavPath: '', time: 3 },
-      { id: '4', name: 'A.png', path: '', webDavPath: '', time: 6 },
-      { id: '5', name: 'dir2', path: '', webDavPath: '', time: 7, type: 'folder' },
-      { id: '6', name: 'b.png', path: '', webDavPath: '', time: 1 },
-      { id: '7', name: 'Dir1', path: '', webDavPath: '', time: 5, type: 'folder' },
-      { id: '8', name: 'dir11', path: '', webDavPath: '', time: 8, type: 'folder' },
-      { id: '9', name: 'dir3', path: '', webDavPath: '', time: 9, type: 'folder' }
+    const resources: Resource[] = [
+      { id: '1', name: 'c.png', path: '', webDavPath: '', sdate: '2' },
+      { id: '2', name: 'Dir4', path: '', webDavPath: '', sdate: '4', type: 'folder' },
+      { id: '3', name: 'a.png', path: '', webDavPath: '', sdate: '3' },
+      { id: '4', name: 'A.png', path: '', webDavPath: '', sdate: '6' },
+      { id: '5', name: 'dir2', path: '', webDavPath: '', sdate: '7', type: 'folder' },
+      { id: '6', name: 'b.png', path: '', webDavPath: '', sdate: '1' },
+      { id: '7', name: 'Dir1', path: '', webDavPath: '', sdate: '5', type: 'folder' },
+      { id: '8', name: 'dir11', path: '', webDavPath: '', sdate: '8', type: 'folder' },
+      { id: '9', name: 'dir3', path: '', webDavPath: '', sdate: '9', type: 'folder' }
     ]
 
     it('sorts resources by name', () => {
       createWrapper(() => {
         const sortDir = ref(SortDir.Asc)
         const input = {
-          items: readonly<Resource[]>(resources),
+          items: ref<Resource[]>(resources),
           fields: [
             {
               name: 'name',
               sortable: true
             },
             {
-              name: 'time',
+              name: 'sdate',
               sortable: true
             }
           ],

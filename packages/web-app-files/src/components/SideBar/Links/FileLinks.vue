@@ -53,7 +53,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../../mixins'
@@ -67,11 +67,12 @@ import { ShareTypes } from '../../../helpers/share'
 import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
+import { defineComponent } from '@vue/composition-api'
 
 const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
 
-export default {
+export default defineComponent({
   name: 'FileLinks',
   components: {
     LinkEdit,
@@ -79,9 +80,6 @@ export default {
     PrivateLinkItem
   },
   mixins: [mixins],
-  title: ($gettext) => {
-    return $gettext('Links')
-  },
   provide() {
     return {
       changeView: (view) => (this.$data.currentView = view)
@@ -260,5 +258,5 @@ export default {
       this.currentView = VIEW_EDIT
     }
   }
-}
+})
 </script>
