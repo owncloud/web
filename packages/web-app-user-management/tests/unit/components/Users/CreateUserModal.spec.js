@@ -29,6 +29,16 @@ describe('CreateUserModal', () => {
       wrapper.vm.user.onPremisesSamAccountName = ''
       expect(wrapper.vm.validateUserName()).toBeFalsy()
     })
+    it('should be false when userName contains white spaces', () => {
+      const wrapper = getWrapper()
+      wrapper.vm.user.onPremisesSamAccountName = 'jan owncCloud'
+      expect(wrapper.vm.validateUserName()).toBeFalsy()
+    })
+    it('should be false when userName starts with a numeric value', () => {
+      const wrapper = getWrapper()
+      wrapper.vm.user.onPremisesSamAccountName = '1moretry'
+      expect(wrapper.vm.validateUserName()).toBeFalsy()
+    })
     it('should be false when userName is already existing', () => {
       const wrapper = getWrapper()
       wrapper.vm.user.onPremisesSamAccountName = 'jan'
