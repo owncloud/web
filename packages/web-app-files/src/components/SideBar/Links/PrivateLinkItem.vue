@@ -1,19 +1,12 @@
 <template>
-  <div class="oc-files-private-link-item" data-testid="files-sidebar-private-link">
-    <h4 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Private Link</h4>
-    <p v-translate class="oc-text-muted oc-my-rm">Only invited people can use this link.</p>
-    <div class="oc-width-1-1 oc-flex oc-flex-middle">
-      <a :href="link" target="_blank" class="oc-text-truncate" v-text="link" />
-      <copy-to-clipboard-button
-        class="oc-files-private-link-copy-url oc-ml-xs"
-        :value="link"
-        :label="copyToClipboardLabel"
-        :success-msg-title="copyToClipboardSuccessMsgTitle"
-        :success-msg-text="copyToClipboardSuccessMsgText"
-      />
-    </div>
-    <hr />
-  </div>
+  <copy-to-clipboard-button
+    class="oc-files-private-link-copy-url"
+    :value="link"
+    :label="copyToClipboardLabel"
+    :text="copyToClipboardText"
+    :success-msg-title="copyToClipboardSuccessMsgTitle"
+    :success-msg-text="copyToClipboardSuccessMsgText"
+  />
 </template>
 
 <script>
@@ -22,24 +15,17 @@ import CopyToClipboardButton from './CopyToClipboardButton.vue'
 export default {
   name: 'PrivateLinkItem',
   components: { CopyToClipboardButton },
-
   inject: ['displayedItem'],
-
   computed: {
     link() {
-      const file = this.displayedItem.value
-
-      if (file.isMounted()) {
-        return window.location.href.split('?')[0] + `?scrollTo=${encodeURIComponent(file.name)}`
-      }
-
-      return file.privateLink
+      return this.displayedItem.value.privateLink
     },
-
+    copyToClipboardText() {
+      return this.$gettext('Private link')
+    },
     copyToClipboardLabel() {
       return this.$gettext('Copy private link to clipboard')
     },
-
     copyToClipboardSuccessMsgTitle() {
       return this.$gettext('Private link copied')
     },

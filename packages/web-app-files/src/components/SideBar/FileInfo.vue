@@ -22,27 +22,24 @@
         >
       </p>
     </div>
-    <oc-button
-      v-if="favoriteAction.isEnabled({ resources: [file] })"
-      :aria-label="favoriteAction.label({ resources: [file] })"
-      appearance="raw"
-      class="file_info__favorite"
-      @click="$_favorite_trigger({ resources: [file] })"
-    >
-      <oc-icon :class="file.starred ? 'oc-star-shining' : 'oc-star-dimm'" name="star" />
-    </oc-button>
+    <private-link-item v-if="privateLinkEnabled" />
   </div>
 </template>
 
 <script>
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import MixinFavorite from '../../mixins/actions/favorite'
-import { isLocationTrashActive } from '../../router'
+import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import { mapGetters } from 'vuex'
+import PrivateLinkItem from './Links/PrivateLinkItem.vue'
+import { useActiveLocation } from '../../composables'
 
 export default {
   name: 'FileInfo',
-  mixins: [Mixins, MixinResources, MixinFavorite],
+  components: {
+    PrivateLinkItem
+  },
+  mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   props: {
     isContentDisplayed: {
@@ -50,7 +47,13 @@ export default {
       default: false
     }
   },
+  setup() {
+    return {
+      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home')
+    }
+  },
   computed: {
+    ...mapGetters(['capabilities', 'user']),
     timeData() {
       const interpolate = (obj) => {
         obj.time = this.formDateFromRFC(obj.sourceTime)
@@ -88,8 +91,16 @@ export default {
       })
     },
 
-    favoriteAction() {
-      return this.$_favorite_items[0]
+    privateLinkEnabled() {
+      if (
+        this.isPersonalLocation &&
+        this.capabilities.files.privateLinks &&
+        this.user?.id &&
+        this.displayedItem.owner.username === this.user.username
+      ) {
+        return true
+      }
+      return false
     },
 
     file() {

@@ -5,6 +5,7 @@
     appearance="raw"
     @click="copyValueToClipboard"
   >
+    <span v-text="text" />
     <oc-icon
       v-if="copied"
       key="oc-copy-to-clipboard-copied"
@@ -21,6 +22,11 @@ import copyToClipboard from 'copy-to-clipboard'
 
 export default {
   props: {
+    text: {
+      type: String,
+      required: false,
+      default: ''
+    },
     /**
      * Content which is to be copied to the clipboard
      */

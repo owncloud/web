@@ -7,7 +7,6 @@
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
-        <private-link-item v-if="privateLinkEnabled" />
         <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h3>
         <div v-if="canCreatePublicLinks" class="oc-my-s">
           <p v-translate class="oc-text-muted">
@@ -62,7 +61,6 @@ import { textUtils } from '../../../helpers/textUtils'
 import { cloneStateObject } from '../../../helpers/store'
 import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
-import PrivateLinkItem from './PrivateLinkItem.vue'
 import { ShareTypes } from '../../../helpers/share'
 import { useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -76,8 +74,7 @@ export default defineComponent({
   name: 'FileLinks',
   components: {
     LinkEdit,
-    ListItem,
-    PrivateLinkItem
+    ListItem
   },
   mixins: [mixins],
   provide() {
@@ -180,9 +177,6 @@ export default defineComponent({
       return this.$gettext('Create new public link')
     },
 
-    privateLinkEnabled() {
-      return this.capabilities.files.privateLinks
-    },
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
     }
