@@ -23,14 +23,20 @@ export default {
   },
   computed: {
     spaceStorageDetailsLabel() {
-      return this.$gettextInterpolate(
-        this.$gettext('%{used} of %{total} used (%{percentage}% used)'),
-        {
-          used: this.quotaUsed,
-          total: this.quotaTotal,
-          percentage: this.quotaUsagePercent
-        }
-      )
+      if (this.spaceQuota.total) {
+        return this.$gettextInterpolate(
+          this.$gettext('%{used} of %{total} used (%{percentage}% used)'),
+          {
+            used: this.quotaUsed,
+            total: this.quotaTotal,
+            percentage: this.quotaUsagePercent
+          }
+        )
+      }
+
+      return this.$gettextInterpolate(this.$gettext('%{used} used (no restriction)'), {
+        used: this.quotaUsed
+      })
     },
     quotaTotal() {
       return filesize(this.spaceQuota.total)

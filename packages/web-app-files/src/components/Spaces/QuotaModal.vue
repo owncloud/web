@@ -63,8 +63,21 @@ export default {
   data: function () {
     return {
       selectedOption: {},
-      options: [],
-      DEFAULT_OPTIONS: [
+      options: []
+    }
+  },
+  computed: {
+    ...mapGetters(['getToken', 'configuration']),
+    confirmButtonDisabled() {
+      return this.space.spaceQuota.total === this.selectedOption.value
+    },
+    modalTitle() {
+      return this.$gettextInterpolate(this.$gettext('Change quota for space %{name}'), {
+        name: this.space.name
+      })
+    },
+    DEFAULT_OPTIONS() {
+      return [
         {
           displayValue: '1',
           displayUnit: 'GB',
@@ -98,20 +111,15 @@ export default {
         {
           displayValue: '1000',
           displayUnit: 'GB',
-          value: 10000 * Math.pow(10, 9)
+          value: 1000 * Math.pow(10, 9)
+        },
+        {
+          displayValue: this.$gettext('No restriction'),
+          displayUnit: '',
+          value: 0,
+          unlimited: true
         }
       ]
-    }
-  },
-  computed: {
-    ...mapGetters(['getToken', 'configuration']),
-    confirmButtonDisabled() {
-      return this.space.spaceQuota.total === this.selectedOption.value
-    },
-    modalTitle() {
-      return this.$gettextInterpolate(this.$gettext('Change quota for space %{name}'), {
-        name: this.space.name
-      })
     }
   },
   mounted() {
@@ -122,9 +130,9 @@ export default {
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
     editQuota() {
-      const newTotalQuota = this.selectedOption.value
+      const quotaOption = this.selectedOption
 
-      if (isNaN(newTotalQuota)) {
+      if (!quotaOption.unlimited && isNaN(quotaOption.value)) {
         return this.showMessage({
           title: this.$gettext('Changing space quota failed…'),
           status: 'danger'
@@ -155,6 +163,10 @@ export default {
         })
     },
     optionSelectable(option) {
+      if (option.unlimited) {
+        return true
+      }
+
       if (!option.value) {
         return false
       }
@@ -185,28 +197,35 @@ export default {
     setOptions() {
       this.options = [...this.DEFAULT_OPTIONS]
 
-      const selectedQuotaInOptions = this.options.find(
-        (option) => option.value === this.space.spaceQuota.total
-      )
+      let selectedQuotaInOptions = null
+
+      if ('total' in this.space.spaceQuota) {
+        selectedQuotaInOptions = this.options.find(
+          (option) => option.value === this.space.spaceQuota.total
+        )
+      } else {
+        selectedQuotaInOptions = this.options.find((option) => option.unlimited === true)
+      }
 
       if (selectedQuotaInOptions) {
         this.selectedOption = selectedQuotaInOptions
-      } else {
-        const newOption = {
-          displayValue: (this.space.spaceQuota.total * Math.pow(10, -9))
-            .toFixed(2)
-            .toString()
-            .replace('.00', ''),
-          displayUnit: 'GB',
-          value: this.space.spaceQuota.total
-        }
-        this.options.push(newOption)
-        this.options = [
-          ...this.options.filter((o) => o.value).sort((a, b) => a.value - b.value),
-          ...this.options.filter((o) => !o.value)
-        ]
-        this.selectedOption = newOption
+        return
       }
+
+      const newOption = {
+        displayValue: (this.space.spaceQuota.total * Math.pow(10, -9))
+          .toFixed(2)
+          .toString()
+          .replace('.00', ''),
+        displayUnit: 'GB',
+        value: this.space.spaceQuota.total
+      }
+      this.options.push(newOption)
+      this.options = [
+        ...this.options.filter((o) => o.value).sort((a, b) => a.value - b.value),
+        ...this.options.filter((o) => !o.value)
+      ]
+      this.selectedOption = newOption
     }
   }
 }

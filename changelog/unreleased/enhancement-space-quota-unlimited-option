@@ -1,0 +1,6 @@
+Enhancement: Spaces quota unlimited option
+
+Space quota can now be set to unlimited
+
+https://github.com/owncloud/web/pull/6693
+https://github.com/owncloud/web/issues/6470
