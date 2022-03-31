@@ -1,0 +1,6 @@
+Bugfix: TopBar on redirect
+
+We fixed a visual glitch that showed the topbar on redirect pages.
+
+https://github.com/owncloud/web/pull/6704
+https://github.com/owncloud/web/issues/6527
