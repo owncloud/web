@@ -420,7 +420,7 @@ export default defineComponent({
       if (shareStatus === ShareStatus.accepted) {
         return null
       }
-      return ['name', 'status', 'owner', 'sdate']
+      return ['name', 'status', 'owner', 'sdate', 'sharedWith']
     }
   }
 })
