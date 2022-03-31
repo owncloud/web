@@ -17,21 +17,21 @@
         @input="$emit('toggleSelectAllUsers')"
       />
     </template>
-    <template #select="rowData">
+    <template #select="{ item }">
       <oc-checkbox
         class="oc-ml-s"
         size="large"
         :value="selectedUsers"
-        :option="rowData.item"
-        :label="getSelectUserLabel(rowData.item)"
+        :option="item"
+        :label="getSelectUserLabel(item)"
         hide-label
-        @input="$emit('toggleSelectUser', rowData.item)"
+        @input="$emit('toggleSelectUser', item)"
       />
     </template>
-    <template #avatar="rowData">
-      <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+    <template #avatar="{ item }">
+      <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="rowData"> {{ getUserRole(rowData.item.id) }} </template>
+    <template #role="{ item }"> {{ getUserRole(item.id) }} </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>

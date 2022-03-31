@@ -82,7 +82,7 @@ import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
-import { mapActions } from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -152,6 +152,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration']),
+
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
