@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pathUtil from 'path'
 
 import Mixins from '../../mixins'
@@ -161,7 +161,6 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
-    ...mapState('Files', ['areHiddenFilesShown']),
 
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
@@ -257,21 +256,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadPreview',
-      'updateFileProgress',
-      'removeFilesFromTrashbin',
-      'loadIndicators'
-    ]),
-    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', [
-      'UPSERT_RESOURCE',
-      'SET_HIDDEN_FILES_VISIBILITY',
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
-      'SET_FILE_SELECTION',
-      'REMOVE_FILE_SELECTION'
-    ]),
+    ...mapActions('Files', ['updateFileProgress', 'loadIndicators']),
+    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
     async onFileSuccess(event, file) {
