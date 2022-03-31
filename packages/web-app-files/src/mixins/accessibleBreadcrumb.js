@@ -17,10 +17,14 @@ export default {
       }
 
       const itemCount = this.totalFilesCount.files + this.totalFilesCount.folders
-      const announcement = this.$ngettext(
-        'This folder contains %{ itemCount } item.',
-        'This folder contains %{ itemCount } items.',
-        itemCount
+
+      const announcement = this.$gettextInterpolate(
+        this.$ngettext(
+          'This folder contains %{ amount } item.',
+          'This folder contains %{ amount } items.',
+          itemCount
+        ),
+        { amount: itemCount }
       )
 
       const translatedHint =
