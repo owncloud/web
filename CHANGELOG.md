@@ -14,6 +14,7 @@ Summary
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
+* Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
@@ -71,6 +72,13 @@ Details
 
    https://github.com/owncloud/web/issues/5976
    https://github.com/owncloud/web/pull/6612
+
+* Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
+
+   Space quota can now be set to unlimited
+
+   https://github.com/owncloud/web/issues/6470
+   https://github.com/owncloud/web/pull/6693
 
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 
