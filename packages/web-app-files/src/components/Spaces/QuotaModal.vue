@@ -114,7 +114,7 @@ export default {
           value: 1000 * Math.pow(10, 9)
         },
         {
-          displayValue: this.$gettext('Unlimited'),
+          displayValue: this.$gettext('No restriction'),
           displayUnit: '',
           value: 0,
           unlimited: true
