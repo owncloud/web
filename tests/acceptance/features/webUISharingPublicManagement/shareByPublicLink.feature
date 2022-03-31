@@ -163,7 +163,7 @@ Feature: Public link share management
       | permissions | read        |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
-    And it should not be possible to create files using the webUI
+    And the create button should not be visible on the webUI
 
 
   Scenario: Shared via link page is displayed

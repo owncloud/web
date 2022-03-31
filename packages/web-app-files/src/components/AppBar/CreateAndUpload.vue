@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex-inline oc-width-1-1" style="gap: 15px">
+  <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
     <template v-if="createFileActionsAvailable">
       <oc-button
         id="new-file-menu-btn"
@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pathUtil from 'path'
 
 import Mixins from '../../mixins'
@@ -161,7 +161,6 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
-    ...mapState('Files', ['areHiddenFilesShown']),
 
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
@@ -181,7 +180,7 @@ export default {
     },
 
     headers() {
-      if (this.publicPage()) {
+      if (this.isPublicLocation) {
         const password = this.publicLinkPassword
 
         if (password) {
@@ -193,6 +192,10 @@ export default {
       return {
         Authorization: 'Bearer ' + this.getToken
       }
+    },
+
+    showActions() {
+      return !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
     },
 
     createFileActionsAvailable() {
@@ -252,26 +255,14 @@ export default {
         (this.currentFolder &&
           this.currentFolder.permissions &&
           this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.publicPage()
+        this.isPublicLocation
       )
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadPreview',
-      'updateFileProgress',
-      'removeFilesFromTrashbin',
-      'loadIndicators'
-    ]),
-    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-    ...mapMutations('Files', [
-      'UPSERT_RESOURCE',
-      'SET_HIDDEN_FILES_VISIBILITY',
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
-      'SET_FILE_SELECTION',
-      'REMOVE_FILE_SELECTION'
-    ]),
+    ...mapActions('Files', ['updateFileProgress', 'loadIndicators']),
+    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
     async onFileSuccess(event, file) {

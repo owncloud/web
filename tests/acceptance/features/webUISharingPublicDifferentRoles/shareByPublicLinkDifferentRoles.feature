@@ -221,7 +221,7 @@ Feature: Share by public link with different roles
   Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
-    Then it should not be possible to create files using the webUI
+    Then the create button should not be visible on the webUI
 
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page

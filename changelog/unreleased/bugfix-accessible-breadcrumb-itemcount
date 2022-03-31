@@ -1,0 +1,6 @@
+Bugfix: Accessible breadcrumb itemcount
+
+Our breadcrumbs announce the amount of resources inside a folder. Due to a bug the calculated number wasn't announced correctly, which we have resolved.
+
+https://github.com/owncloud/web/pull/6690
+https://github.com/owncloud/web/issues/6022

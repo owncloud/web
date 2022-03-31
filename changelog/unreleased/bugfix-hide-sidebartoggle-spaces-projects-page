@@ -1,0 +1,5 @@
+Bugfix: Hide sidebar toggle button on spaces projects page
+
+We have hidden the sidebar toggle button on the spaces projects page to avoid user confusion.
+
+https://github.com/owncloud/web/pull/6690

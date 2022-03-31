@@ -35,7 +35,7 @@ export default defineComponent({
   },
   mixins: [Mixins],
   computed: {
-    ...mapGetters('Files', ['dropzone', 'inProgress']),
+    ...mapGetters('Files', ['dropzone']),
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',
       sidebarActivePanel: 'activePanel'

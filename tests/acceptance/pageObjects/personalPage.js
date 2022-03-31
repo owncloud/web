@@ -60,6 +60,13 @@ module.exports = {
       }
       return null
     },
+    isCreateFolderVisible: async function () {
+      let isVisible = false
+      await this.api.element('@newFileMenuButtonAnyState', (result) => {
+        isVisible = result.value === 0
+      })
+      return isVisible
+    },
     /**
      * Create a folder with the given name
      *
