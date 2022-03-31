@@ -1,4 +1,4 @@
-import SpaceShares from '@files/src/components/SideBar/Shares/SpaceShares.vue'
+import SpaceMembers from '@files/src/components/SideBar/Shares/SpaceMembers.vue'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
@@ -64,7 +64,7 @@ const outgoingShares = [
   }
 ]
 
-describe('SpaceShares', () => {
+describe('SpaceMembers', () => {
   it('renders loading spinner while loading', () => {
     const wrapper = getShallowMountedWrapper(
       {
@@ -233,7 +233,7 @@ function createStore(data, loading) {
 
 function getComponent(loading) {
   return {
-    ...SpaceShares,
+    ...SpaceMembers,
     setup: () => ({
       graphClient: {},
       loadSharesTask: {

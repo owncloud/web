@@ -7,7 +7,7 @@
         <ul
           id="files-collaborators-list"
           class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
-          :aria-label="$gettext('Share receivers')"
+          :aria-label="$gettext('Space members')"
         >
           <li v-for="collaborator in members" :key="collaborator.key">
             <collaborator-list-item
@@ -34,7 +34,7 @@ import { useTask } from 'vue-concurrency'
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'SpaceShares',
+  name: 'SpaceMembers',
   components: {
     CollaboratorListItem,
     InviteCollaboratorForm
