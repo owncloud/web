@@ -12,6 +12,7 @@ Summary
 * Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
 * Bugfix - Hide sidebar toggle button on spaces projects page: [#6690](https://github.com/owncloud/web/pull/6690)
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
+* Bugfix - TopBar on redirect: [#6704](https://github.com/owncloud/web/pull/6704)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
@@ -59,6 +60,13 @@ Details
 
    https://github.com/owncloud/web/issues/6585
    https://github.com/owncloud/web/pull/6656
+
+* Bugfix - TopBar on redirect: [#6704](https://github.com/owncloud/web/pull/6704)
+
+   We fixed a visual glitch that showed the topbar on redirect pages.
+
+   https://github.com/owncloud/web/issues/6527
+   https://github.com/owncloud/web/pull/6704
 
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 
