@@ -59,6 +59,7 @@ export default defineComponent({
       }
 
       if (
+        !this.$route.name ||
         [
           'login',
           'oidcCallback',
