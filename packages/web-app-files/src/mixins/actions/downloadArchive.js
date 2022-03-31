@@ -1,13 +1,12 @@
 import {
-  isDownloadAsArchiveAvailable,
-  triggerDownloadAsArchive
-} from '../../helpers/download/downloadAsArchive'
-import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import path from 'path'
+import first from 'lodash-es/first'
+import { archiverService } from '../../services'
 
 export default {
   mixins: [isFilesAppActive],
@@ -37,7 +36,13 @@ export default {
             if (resources.length === 1 && !resources[0].isFolder) {
               return false
             }
-            if (!isDownloadAsArchiveAvailable()) {
+            if (!archiverService.available) {
+              return false
+            }
+            if (
+              !archiverService.fileIdsSupported &&
+              isLocationCommonActive(this.$router, 'files-common-favorites')
+            ) {
               return false
             }
             const downloadDisabled = resources.some((resource) => {
@@ -54,22 +59,32 @@ export default {
   },
   methods: {
     async $_downloadArchive_trigger({ resources }) {
-      await triggerDownloadAsArchive({
-        fileIds: resources.map((resource) => resource.fileId),
-        ...(isLocationPublicActive(this.$router, 'files-public-files') && {
-          publicToken: this.$route.params.item.split('/')[0]
+      const fileOptions = archiverService.fileIdsSupported
+        ? {
+            fileIds: resources.map((resource) => resource.fileId)
+          }
+        : {
+            dir: path.dirname(first(resources).path) || '/',
+            files: resources.map((resource) => resource.name)
+          }
+      await archiverService
+        .triggerDownload({
+          ...fileOptions,
+          ...(isLocationPublicActive(this.$router, 'files-public-files') && {
+            publicToken: this.$route.params.item.split('/')[0]
+          })
         })
-      }).catch((e) => {
-        console.error(e)
-        this.showMessage({
-          title: this.$ngettext(
-            'Failed to download the selected folder.', // on single selection only available for folders
-            'Failed to download the selected files.', // on multi selection available for files+folders
-            this.selectedFiles.length
-          ),
-          status: 'danger'
+        .catch((e) => {
+          console.error(e)
+          this.showMessage({
+            title: this.$ngettext(
+              'Failed to download the selected folder.', // on single selection only available for folders
+              'Failed to download the selected files.', // on multi selection available for files+folders
+              this.selectedFiles.length
+            ),
+            status: 'danger'
+          })
         })
-      })
     }
   }
 }

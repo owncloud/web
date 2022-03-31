@@ -1,0 +1,6 @@
+Enhancement: Archive download for oc10 backend
+
+We now offer archive downloads (multifile or folder) as archive with oc10 backends. Since oc10 archive downloads are path based this could only be made possible on pages that follow the folder hierarchy of the logged in user. In other words: on favorites pages the archive download is unavailable for oc10 backends as the selected files/folders don't necessarily share the same parent folder.
+
+https://github.com/owncloud/web/issues/6239
+https://github.com/owncloud/web/pull/6697

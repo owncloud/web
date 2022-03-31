@@ -127,7 +127,14 @@ export default {
   userReady({ store }) {
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
-      get(store, 'getters.capabilities.files.archivers', [])
+      get(store, 'getters.capabilities.files.archivers', [
+        {
+          enabled: true,
+          version: '1.0.0',
+          formats: ['tar', 'zip'],
+          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
+        }
+      ])
     )
     // FIXME: Remove mock data
     thumbnailService.initialize(

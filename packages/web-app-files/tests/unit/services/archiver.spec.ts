@@ -10,12 +10,19 @@ describe('archiver', () => {
       it('is announcing itself as unavailable', () => {
         expect(archiverService.available).toBe(false)
       })
-      it('does not return a url', () => {
-        expect(() => archiverService.url).toThrow(new RuntimeError('no archiver available'))
+      it('does not trigger downloads', async () => {
+        await expect(archiverService.triggerDownload({})).rejects.toThrow(
+          new RuntimeError('no archiver available')
+        )
       })
     })
     describe('when initialized', () => {
       const serverUrl = 'https://demo.owncloud.com'
+      const clientServiceMock = {
+        owncloudSdk: {
+          signUrl: (url) => url
+        }
+      }
       let service
       beforeEach(() => {
         service = new ArchiverService()
@@ -27,11 +34,13 @@ describe('archiver', () => {
         it('is announcing itself as unavailable', () => {
           expect(service.available).toBe(false)
         })
-        it('does not return a url', () => {
-          expect(() => service.url).toThrow(new RuntimeError('no archiver available'))
+        it('does not trigger downloads', async () => {
+          await expect(service.triggerDownload({})).rejects.toThrow(
+            new RuntimeError('no archiver available')
+          )
         })
       })
-      describe('with one archiver capability', () => {
+      describe('with one v2 archiver capability', () => {
         const archiverUrl = [serverUrl, 'archiver'].join('/')
         const capability = {
           enabled: true,
@@ -44,38 +53,57 @@ describe('archiver', () => {
         it('is announcing itself as available', () => {
           expect(service.available).toBe(true)
         })
-        it('returns the archiver_url as url', () => {
-          expect(service.url).toBe(archiverUrl)
+        it('is announcing itself as supporting fileIds', () => {
+          expect(service.fileIdsSupported).toBe(true)
         })
-        it.each([
-          {
-            server: serverUrl,
-            archiver: archiverUrl
-          },
-          {
-            server: serverUrl,
-            archiver: '/archiver'
-          },
-          {
-            server: serverUrl,
-            archiver: 'archiver'
-          },
-          {
-            server: serverUrl + '/',
-            archiver: '/archiver'
-          },
-          {
-            server: serverUrl + '/',
-            archiver: 'archiver'
-          }
-        ])('returns an absolute, cleaned url', ({ server, archiver }) => {
-          service.initialize(server, [
-            {
-              ...capability,
-              archiver_url: archiver
-            }
-          ])
-          expect(service.url).toBe(archiverUrl)
+        it('fails to trigger a download if no files were given', async () => {
+          await expect(service.triggerDownload({})).rejects.toThrow(
+            new RuntimeError('requested archive with empty list of resources')
+          )
+        })
+        it('returns a download url for a valid archive download trigger', async () => {
+          const fileId = 'asdf'
+          const url = await service.triggerDownload({
+            fileIds: [fileId],
+            clientService: clientServiceMock
+          })
+          expect(url.startsWith(archiverUrl)).toBeTruthy()
+          expect(url.indexOf(`id=${fileId}`)).toBeGreaterThan(-1)
+        })
+      })
+      describe('with one v1 archiver capability', () => {
+        const archiverUrl = [serverUrl, 'archiver'].join('/')
+        const capability = {
+          enabled: true,
+          version: 'v1.2.3',
+          archiver_url: archiverUrl
+        }
+        beforeEach(() => {
+          service.initialize(serverUrl, [capability])
+        })
+        it('is announcing itself as available', () => {
+          expect(service.available).toBe(true)
+        })
+        it('is announcing itself as not supporting fileIds', () => {
+          expect(service.fileIdsSupported).toBe(false)
+        })
+        it('fails to trigger a download if no files were given', async () => {
+          await expect(service.triggerDownload({})).rejects.toThrow(
+            new RuntimeError('requested archive with empty list of resources')
+          )
+        })
+        it('returns a download url for a valid archive download trigger', async () => {
+          const dir = '/some/path'
+          const fileName = 'qwer'
+          const url = await service.triggerDownload({
+            dir,
+            files: [fileName],
+            clientService: clientServiceMock
+          })
+          expect(url.startsWith(archiverUrl)).toBeTruthy()
+          expect(url.indexOf(`files[]=${fileName}`)).toBeGreaterThan(-1)
+          expect(url.indexOf(`dir=${encodeURIComponent(dir)}`)).toBeGreaterThan(-1)
+          expect(url.indexOf('downloadStartSecret=')).toBeGreaterThan(-1)
         })
       })
       describe('with multiple archiver capabilities of different versions', () => {
@@ -101,8 +129,12 @@ describe('archiver', () => {
         it('is announcing itself as available', () => {
           expect(service.available).toBe(true)
         })
-        it('uses the highest major version', () => {
-          expect(service.url).toBe(capabilityV2.archiver_url)
+        it('uses the highest major version', async () => {
+          const downloadUrl = await service.triggerDownload({
+            fileIds: ['any'],
+            clientService: clientServiceMock
+          })
+          expect(downloadUrl.startsWith(capabilityV2.archiver_url)).toBeTruthy()
         })
       })
     })
