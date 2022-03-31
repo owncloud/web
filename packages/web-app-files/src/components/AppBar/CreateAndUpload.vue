@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex-inline oc-width-1-1" style="gap: 15px">
+  <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
     <template v-if="createFileActionsAvailable">
       <oc-button
         id="new-file-menu-btn"
@@ -180,7 +180,7 @@ export default {
     },
 
     headers() {
-      if (this.publicPage()) {
+      if (this.isPublicLocation) {
         const password = this.publicLinkPassword
 
         if (password) {
@@ -192,6 +192,10 @@ export default {
       return {
         Authorization: 'Bearer ' + this.getToken
       }
+    },
+
+    showActions() {
+      return !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
     },
 
     createFileActionsAvailable() {
@@ -251,7 +255,7 @@ export default {
         (this.currentFolder &&
           this.currentFolder.permissions &&
           this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.publicPage()
+        this.isPublicLocation
       )
     }
   },

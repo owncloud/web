@@ -258,6 +258,11 @@ Then('it should not be possible to create files using the webUI', async function
   await assert.strictEqual(canCreate, true, 'Create action must not be enabled')
 })
 
+Then('the create button should not be visible on the webUI', async function () {
+  const canCreate = await client.page.personalPage().isCreateFolderVisible()
+  await assert.strictEqual(canCreate, false)
+})
+
 Then('it should be possible to create files using the webUI', async function () {
   const canCreate = await client.page.personalPage().canCreateFiles()
   await assert.strictEqual(canCreate, false, 'Create action must be enabled')

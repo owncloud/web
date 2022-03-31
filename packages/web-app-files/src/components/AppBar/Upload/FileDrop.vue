@@ -25,6 +25,8 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import Mixins from '../../../mixins'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { useActiveApp } from 'web-pkg/src/composables'
+import { useActiveLocation } from '../../../composables'
+import { isLocationPublicActive } from '../../../router'
 
 export default {
   components: {
@@ -44,6 +46,7 @@ export default {
   },
   setup() {
     return {
+      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       activeApp: useActiveApp()
     }
   },
@@ -61,7 +64,7 @@ export default {
     ...mapGetters(['getNavItemsByExtension']),
     ...mapGetters('Files', ['dropzone']),
     hasSidebarNavItems() {
-      if (this.publicPage()) {
+      if (this.isPublicLocation) {
         return false
       }
       return (this.getNavItemsByExtension(this.activeApp) || []).length

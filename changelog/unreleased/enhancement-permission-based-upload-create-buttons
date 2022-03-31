@@ -1,0 +1,6 @@
+Enhancement: Permission-based visibility of upload and create buttons
+
+Instead of showing disabled "Upload" and "New" buttons on public links with insufficient permissions, we now hide them for the page visitor.
+
+https://github.com/owncloud/web/pull/6690
+https://github.com/owncloud/web/issues/5618
