@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
+* Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
@@ -41,6 +42,17 @@ Details
 
    https://github.com/owncloud/web/issues/6585
    https://github.com/owncloud/web/pull/6656
+
+* Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
+
+   We now offer archive downloads (multifile or folder) as archive with oc10 backends. Since oc10
+   archive downloads are path based this could only be made possible on pages that follow the
+   folder hierarchy of the logged in user. In other words: on favorites pages the archive download
+   is unavailable for oc10 backends as the selected files/folders don't necessarily share the
+   same parent folder.
+
+   https://github.com/owncloud/web/issues/6239
+   https://github.com/owncloud/web/pull/6697
 
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 
