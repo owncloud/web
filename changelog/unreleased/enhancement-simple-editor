@@ -1,0 +1,13 @@
+Enhancement: Simple Editor
+
+Replace MarkdownEditor with SimpleEditor and add the following improvements:
+* Disable preview for non md files (configurable)
+* Data integrity checks (prevent exiting with unsaved changes)
+* Better error information to the user
+* Keyboard shortcut to save
+* Read-only mode
+* Fix to open on non-authenticated public links
+* Open other extensions (js, json, xml, py, php, yaml)
+* UI polish
+
+https://github.com/owncloud/web/pull/6667
