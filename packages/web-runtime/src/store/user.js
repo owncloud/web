@@ -42,6 +42,9 @@ const actions = {
       dispatch('hideModal')
       dispatch('loadSettingsValues')
 
+      // Reset store
+      this.reset()
+
       // Force redirect to login
       if (forceRedirect) {
         router.push({ name: 'login' })
