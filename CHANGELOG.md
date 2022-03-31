@@ -8,12 +8,15 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Accessible breadcrumb itemcount: [#6690](https://github.com/owncloud/web/pull/6690)
 * Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
+* Bugfix - Hide sidebar toggle button on spaces projects page: [#6690](https://github.com/owncloud/web/pull/6690)
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
+* Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
@@ -25,6 +28,14 @@ Summary
 Details
 -------
 
+* Bugfix - Accessible breadcrumb itemcount: [#6690](https://github.com/owncloud/web/pull/6690)
+
+   Our breadcrumbs announce the amount of resources inside a folder. Due to a bug the calculated
+   number wasn't announced correctly, which we have resolved.
+
+   https://github.com/owncloud/web/issues/6022
+   https://github.com/owncloud/web/pull/6690
+
 * Bugfix - AppBar ViewOptions alignment: [#6662](https://github.com/owncloud/web/pull/6662)
 
    We have fixed a visual glitch that rendered the ViewOptions in the AppBar on the left side
@@ -32,6 +43,12 @@ Details
 
    https://github.com/owncloud/web/issues/6685
    https://github.com/owncloud/web/pull/6662
+
+* Bugfix - Hide sidebar toggle button on spaces projects page: [#6690](https://github.com/owncloud/web/pull/6690)
+
+   We have hidden the sidebar toggle button on the spaces projects page to avoid user confusion.
+
+   https://github.com/owncloud/web/pull/6690
 
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 
@@ -77,6 +94,14 @@ Details
 
    https://github.com/owncloud/web/pull/6654
 
+* Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
+
+   Instead of showing disabled "Upload" and "New" buttons on public links with insufficient
+   permissions, we now hide them for the page visitor.
+
+   https://github.com/owncloud/web/issues/5618
+   https://github.com/owncloud/web/pull/6690
+
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 
    We've removed links from the shared-with-others page as those belong in the `Shared via link`
@@ -121,6 +146,7 @@ Details
 
    We have updated the breadcrumbs to show a space's name (if available).
 
+   https://github.com/owncloud/web/issues/6637
    https://github.com/owncloud/web/pull/6662
 
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
