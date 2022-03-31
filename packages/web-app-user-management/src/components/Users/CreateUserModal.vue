@@ -111,6 +111,19 @@ export default {
         return false
       }
 
+      if (this.user.onPremisesSamAccountName.includes(' ')) {
+        this.formData.userName.errorMessage = this.$gettext('User name cannot contain white spaces')
+        return false
+      }
+
+      if (
+        this.user.onPremisesSamAccountName.length &&
+        !isNaN(this.user.onPremisesSamAccountName[0])
+      ) {
+        this.formData.userName.errorMessage = this.$gettext('User name cannot start with a number')
+        return false
+      }
+
       if (
         this.existingUsers.find(
           (existingUser) =>
