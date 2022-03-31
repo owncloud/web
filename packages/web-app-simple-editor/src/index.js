@@ -7,6 +7,8 @@ const routes = [
     component: App,
     name: 'simple-editor',
     meta: {
+      title: 'SimpleEditor',
+      auth: false,
       patchCleanPath: true
     }
   }
@@ -41,6 +43,13 @@ const appInfo = {
       ...fileExtensionConfig
     }
   ]
+}
+
+for (const ext of ['js', 'json', 'xml', 'py', 'php', 'yaml']) {
+  appInfo.extensions.push({
+    extension: ext,
+    ...fileExtensionConfig
+  })
 }
 
 export default {
