@@ -1,6 +1,6 @@
 <template>
-  <main id="markdown-editor" class="oc-mx-l oc-my-m">
-    <markdown-editor-app-bar
+  <main id="simple-editor" class="oc-mx-l oc-my-m">
+    <simple-editor-app-bar
       :current-file-context="currentFileContext"
       :is-loading="isLoading"
       :is-dirty="isDirty"
@@ -19,7 +19,7 @@
     <div class="oc-flex">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'">
         <oc-textarea
-          id="markdown-editor-input"
+          id="simple-editor-input"
           v-model="currentContent"
           name="input"
           full-width
@@ -31,13 +31,13 @@
       </div>
       <div v-if="showPreview" class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div id="markdown-editor-preview" v-html="renderedMarkdown" />
+        <div id="simple-editor-preview" v-html="renderedMarkdown" />
       </div>
     </div>
   </main>
 </template>
 <script>
-import MarkdownEditorAppBar from './MarkdownEditorAppBar.vue'
+import SimpleEditorAppBar from './SimpleEditorAppBar.vue'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
@@ -47,9 +47,9 @@ import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 
 export default {
-  name: 'MarkdownEditor',
+  name: 'SimpleEditor',
   components: {
-    MarkdownEditorAppBar
+    SimpleEditorAppBar
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {
@@ -77,7 +77,7 @@ export default {
   },
   setup() {
     const defaults = useAppDefaults({
-      applicationName: 'markdown-editor'
+      applicationName: 'simple-editor'
     })
     const { applicationConfig, currentFileContext } = defaults
     const serverContent = ref()
@@ -231,11 +231,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#markdown-editor-preview {
+#simple-editor-preview {
   max-height: 80vh;
   overflow-y: scroll;
 }
-#markdown-editor-input {
+#simple-editor-input {
   resize: vertical;
 }
 </style>

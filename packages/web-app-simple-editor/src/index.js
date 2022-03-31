@@ -5,7 +5,7 @@ const routes = [
   {
     path: '/:filePath*',
     component: App,
-    name: 'markdown-editor',
+    name: 'simple-editor',
     meta: {
       patchCleanPath: true
     }
@@ -17,8 +17,8 @@ const fileExtensionConfig = {
 }
 
 const appInfo = {
-  name: 'MarkdownEditor',
-  id: 'markdown-editor',
+  name: 'SimpleEditor',
+  id: 'simple-editor',
   icon: 'file-text',
   isFileEditor: true,
   extensions: [

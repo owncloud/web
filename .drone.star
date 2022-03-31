@@ -78,7 +78,7 @@ config = {
                 "oC10Files1": [
                     "webUIFilesCopy",
                     "webUIFavorites",
-                    "webUIMarkdownEditor",
+                    "webUISimpleEditor",
                 ],
                 "oC10Files2": [
                     "webUIFilesList",
@@ -265,7 +265,7 @@ config = {
                 "oC10XGAPortrait2": [
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
-                    "webUIMarkdownEditor",
+                    "webUISimpleEditor",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
                     "webUIMoveFilesFolders",
@@ -358,7 +358,7 @@ config = {
                 "oC10iPhone2": [
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
-                    "webUIMarkdownEditor",
+                    "webUISimpleEditor",
                     "webUISharingInternalUsersBlacklisted",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
@@ -434,7 +434,7 @@ config = {
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
                     "webUIFilesCopy",
-                    "webUIMarkdownEditor",
+                    "webUISimpleEditor",
                 ],
                 "oCISFiles2": [
                     "webUIFilesList",
@@ -560,7 +560,7 @@ config = {
                     "webUIRestrictSharing",
                     "webUISharingAcceptShares",
                     "webUISharingAcceptSharesToRoot",
-                    "webUIMarkdownEditor",
+                    "webUISimpleEditor",
                     "webUISharingInternalUsersBlacklisted",
                     "webUIWebdavLockProtection",
                     "webUIWebdavLocks",
@@ -666,7 +666,7 @@ basicTestSuites = [
     "webUIFilesList",
     "webUIFilesSearch",
     "webUILogin",
-    "webUIMarkdownEditor",
+    "webUISimpleEditor",
     "webUIMoveFilesFolders",
     "webUIOperationsWithFolderShares",
     "webUIPreview",

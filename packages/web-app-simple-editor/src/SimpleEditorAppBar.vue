@@ -1,9 +1,9 @@
 <template>
-  <div id="markdown-editor-app-bar" class="oc-app-bar oc-width-1-1 oc-my-s">
+  <div id="simple-editor-app-bar" class="oc-app-bar oc-width-1-1 oc-my-s">
     <oc-grid flex gutter="small">
       <div class="oc-width-auto">
         <oc-button
-          id="markdown-editor-controls-save"
+          id="simple-editor-controls-save"
           :disabled="isReadOnly || !isDirty"
           @click="$emit('save')"
         >
@@ -12,10 +12,10 @@
         <oc-spinner v-if="isLoading" :aria-label="$gettext('Loading editor content')" />
       </div>
       <div class="oc-width-expand oc-text-center">
-        <span id="markdown-editor-file-path">{{ activeFilePath }}</span>
+        <span id="simple-editor-file-path">{{ activeFilePath }}</span>
       </div>
       <div class="oc-width-auto oc-text-right">
-        <oc-button id="markdown-editor-controls-close" @click="$emit('closeApp')">
+        <oc-button id="simple-editor-controls-close" @click="$emit('closeApp')">
           <oc-icon name="close" />
         </oc-button>
       </div>
