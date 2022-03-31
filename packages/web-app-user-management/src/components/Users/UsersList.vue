@@ -17,20 +17,21 @@
         @input="$emit('toggleSelectAllUsers')"
       />
     </template>
-    <template #select="rowData">
+    <template #select="{ item }">
       <oc-checkbox
         class="oc-ml-s"
         size="large"
         :value="selectedUsers"
-        :option="rowData.item"
-        :label="getSelectUserLabel(rowData.item)"
+        :option="item"
+        :label="getSelectUserLabel(item)"
         hide-label
-        @input="$emit('toggleSelectUser', rowData.item)"
+        @input="$emit('toggleSelectUser', item)"
       />
     </template>
-    <template #avatar="rowData">
-      <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
+    <template #avatar="{ item }">
+      <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
+    <template #role="{ item }"> {{ getUserRole(item.id) }} </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>
@@ -52,6 +53,14 @@ export default {
   name: 'UsersList',
   props: {
     users: {
+      type: Array,
+      required: true
+    },
+    roles: {
+      type: Array,
+      required: true
+    },
+    userAssignments: {
       type: Array,
       required: true
     },
@@ -107,6 +116,7 @@ export default {
         {
           name: 'role',
           title: this.$gettext('Role'),
+          type: 'slot',
           sortable: true
         },
         {
@@ -132,6 +142,29 @@ export default {
       const translated = this.$gettext('Select %{ user }')
 
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
+    },
+    getUserRole(user) {
+      const userAssignmentList = this.userAssignments.find(
+        (assignment) => assignment.accountUuid === user.id
+      )
+
+      if (!userAssignmentList) {
+        return ''
+      }
+
+      const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
+
+      if (!userRoleAssignment) {
+        return ''
+      }
+
+      const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
+
+      if (!role) {
+        return ''
+      }
+
+      return role.displayName
     }
   }
 }
