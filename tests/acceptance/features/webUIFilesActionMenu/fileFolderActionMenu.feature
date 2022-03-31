@@ -33,7 +33,7 @@ Feature: User can see the file or folder actions menu options
       | open in mediaviewer |
       | download            |
 
-  @skipOnOC10
+
   Scenario: observe different actions menu options on selecting a folder
     When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
     Then the app-sidebar for folder "simple-folder" should be visible on the webUI
@@ -41,11 +41,3 @@ Feature: User can see the file or folder actions menu options
       | items       |
       | open folder |
       | download    |
-
-  @skipOnOCIS
-  Scenario: observe different actions menu options on selecting a folder
-    When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
-    Then the app-sidebar for folder "simple-folder" should be visible on the webUI
-    And only the following items with default items should be visible in the actions menu on the webUI
-      | items       |
-      | open folder |
