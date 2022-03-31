@@ -58,7 +58,7 @@
           <template v-if="isContentDisplayed">
             <div class="sidebar-panel__body-content">
               <slot name="body">
-                <component :is="panel.component" />
+                <component :is="panel.component" v-bind="panel.componentAttrs" />
               </slot>
             </div>
 
