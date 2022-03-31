@@ -120,7 +120,7 @@ export default {
         this.user.onPremisesSamAccountName.length &&
         !isNaN(this.user.onPremisesSamAccountName[0])
       ) {
-        this.formData.userName.errorMessage = this.$gettext('User name cannot start white a number')
+        this.formData.userName.errorMessage = this.$gettext('User name cannot start with a number')
         return false
       }
 
