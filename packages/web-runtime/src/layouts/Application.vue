@@ -2,7 +2,7 @@
   <div id="web-content">
     <div id="web-content-header">
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
-        <p class="oc-m-rm" v-text="IEdeprecationWarning" />
+        <p class="oc-m-rm" v-text="ieDeprecationWarning" />
       </div>
       <top-bar :applications-list="applicationsList" :active-notifications="activeNotifications" />
     </div>
