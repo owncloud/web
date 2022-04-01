@@ -16,6 +16,7 @@ Summary
 * Bugfix - Unsticky appbar position: [#6708](https://github.com/owncloud/web/pull/6708)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
+* Enhancement - Full screen external apps: [#6688](https://github.com/owncloud/web/pull/6688)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
@@ -94,6 +95,12 @@ Details
    Allow creating a public link with editor role for a single file. Only available in oCIS.
 
    https://github.com/owncloud/web/pull/6618
+
+* Enhancement - Full screen external apps: [#6688](https://github.com/owncloud/web/pull/6688)
+
+   It allows, for example, presentation apps to enter full screen.
+
+   https://github.com/owncloud/web/pull/6688
 
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 
