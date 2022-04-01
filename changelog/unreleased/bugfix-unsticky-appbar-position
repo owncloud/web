@@ -1,0 +1,6 @@
+Bugfix: Unsticky appbar position
+
+After recent changes to the files appbar, it wouldn't be visible when scrolling inside the table. This has been resolved.
+
+https://github.com/owncloud/web/pull/6708
+https://github.com/owncloud/web/issues/6696

@@ -127,10 +127,12 @@ export default {
 <style lang="scss" scoped>
 #files-app-bar {
   background-color: var(--oc-color-background-default);
+  border-top-right-radius: 15px;
   box-sizing: border-box;
   z-index: 2;
+  position: sticky;
   padding: 0 var(--oc-space-medium);
-  border-top-right-radius: 15px;
+  top: 0;
 
   .files-app-bar-actions {
     align-items: center;

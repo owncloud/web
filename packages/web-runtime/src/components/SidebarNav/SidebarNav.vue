@@ -51,7 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['sidebar', 'navigation']),
+    ...mapState(['navigation']),
 
     toggleSidebarButtonClass() {
       return this.navigation.closed

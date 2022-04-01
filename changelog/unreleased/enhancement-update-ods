@@ -1,0 +1,11 @@
+Enhancement: Update ODS to v13.1.0-rc.1
+
+We updated the ownCloud Design System to version 13.1.0-rc.1. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Enhancement - Export package members: https://github.com/owncloud/owncloud-design-system/pull/2048
+- Enhancement - Make OcResource inline-flex: https://github.com/owncloud/owncloud-design-system/pull/2041
+- Bugfix - Disabled textarea color contrast in darkmode: https://github.com/owncloud/owncloud-design-system/pull/2055
+- Bugfix - OcTextInput: Fix event handlers in loops: https://github.com/owncloud/owncloud-design-system/pull/2054
+
+https://github.com/owncloud/web/pull/6708
+https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.1
