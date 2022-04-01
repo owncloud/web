@@ -16,7 +16,7 @@
           :data-test-share-status="ShareStatus.pending"
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
-          :fields-displayed="getDisplayedFields(ShareStatus.pending)"
+          :fields-displayed="displayedFields"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
           :are-resources-clickable="false"
@@ -108,7 +108,7 @@
         :data-test-share-status="viewMode"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
-        :fields-displayed="getDisplayedFields(viewMode)"
+        :fields-displayed="displayedFields"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="sharesItems"
         :are-resources-clickable="showsAcceptedShares"
@@ -187,6 +187,7 @@ import { createLocationSpaces } from '../../router'
 import { Resource } from '../../helpers/resource'
 
 const visibilityObserver = new VisibilityObserver()
+const displayedFields = ['name', 'status', 'owner', 'sdate', 'sharedWith']
 
 export default defineComponent({
   components: {
@@ -265,6 +266,7 @@ export default defineComponent({
       sharesSortDir,
       sharesItems,
 
+      displayedFields,
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
     }
   },
@@ -414,13 +416,6 @@ export default defineComponent({
 
     isResourceInSharesSelection(resource) {
       return this.sharesSelected?.includes(resource)
-    },
-
-    getDisplayedFields(shareStatus) {
-      if (shareStatus === ShareStatus.accepted) {
-        return null
-      }
-      return ['name', 'status', 'owner', 'sdate']
     }
   }
 })

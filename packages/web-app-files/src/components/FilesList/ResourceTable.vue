@@ -71,18 +71,6 @@
       <!-- @slot Status column -->
       <slot name="status" :resource="item" />
     </template>
-    <template #sharedWith="{ item }">
-      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
-        <oc-avatars
-          class="resource-table-people"
-          :items="item.sharedWith"
-          :stacked="true"
-          :max-displayed="3"
-          :is-tooltip-displayed="true"
-          :accessible-description="getSharedWithAvatarDescription(item)"
-        />
-      </oc-button>
-    </template>
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
@@ -121,6 +109,18 @@
           :items="item.owner"
           :is-tooltip-displayed="true"
           :accessible-description="getOwnerAvatarDescription(item)"
+        />
+      </oc-button>
+    </template>
+    <template #sharedWith="{ item }">
+      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+        <oc-avatars
+          class="resource-table-people"
+          :items="item.sharedWith"
+          :stacked="true"
+          :max-displayed="3"
+          :is-tooltip-displayed="true"
+          :accessible-description="getSharedWithAvatarDescription(item)"
         />
       </oc-button>
     </template>
@@ -410,13 +410,6 @@ export default defineComponent({
             wrap: 'nowrap'
           },
           {
-            name: 'sharedWith',
-            title: this.$gettext('Shared with'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
             name: 'status',
             title: this.$gettext('Status'),
             type: 'slot',
@@ -426,6 +419,13 @@ export default defineComponent({
           {
             name: 'owner',
             title: this.$gettext('Share owner'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
+          },
+          {
+            name: 'sharedWith',
+            title: this.$gettext('Shared with'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap'
