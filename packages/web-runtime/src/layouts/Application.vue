@@ -28,9 +28,6 @@ import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import { useActiveApp, useRoute } from 'web-pkg/src/composables'
 import { watch, defineComponent } from '@vue/composition-api'
-import { useActiveLocation } from 'files/src/composables'
-import { isLocationPublicActive } from 'files/src/router'
-
 
 export default defineComponent({
   components: {
@@ -59,7 +56,6 @@ export default defineComponent({
       { immediate: true }
     )
     return {
-      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       activeApp: useActiveApp()
     }
   },
@@ -90,7 +86,7 @@ export default defineComponent({
       return this.sidebarNavItems.length && this.windowWidth >= 640
     },
     sidebarNavItems() {
-      if (this.isPublicLocation) {
+      if (this.publicPage()) {
         return []
       }
 
