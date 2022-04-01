@@ -90,10 +90,10 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "toshare.txt" should not be listed on the webUI
-    # The Shares folder always exists on oCIS, check inside it to see that the
-    # received shared file is not listed, because the share is pending.
-    When the user opens folder "Shares" using the webUI
-    Then file "toshare.txt" should not be listed on the webUI
+    And folder "Shares" should not be listed on the webUI
+
+
+
 
 
   Scenario: receive shares with same name from different users
