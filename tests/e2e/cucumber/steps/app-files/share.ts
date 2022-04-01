@@ -11,7 +11,7 @@ When(
     actionType: string,
     stepTable: DataTable
   ) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { user, resource, role } = stepRow
@@ -20,7 +20,7 @@ When(
         acc[resource] = { users: [], role: '' }
       }
 
-      acc[resource].users.push(this.usersEnvironment.getUser({ id: user }))
+      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
       acc[resource].role = role
 
       return acc
@@ -40,7 +40,7 @@ When(
 When(
   '{string} accepts the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const info of stepTable.hashes()) {
@@ -52,7 +52,7 @@ When(
 When(
   '{string} updates following sharee role(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { user, resource, role } = stepRow
@@ -61,7 +61,7 @@ When(
         acc[resource] = { users: [], role: '' }
       }
 
-      acc[resource].users.push(this.usersEnvironment.getUser({ id: user }))
+      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
       acc[resource].role = role
 
       return acc
@@ -80,14 +80,14 @@ When(
 When(
   '{string} removes following sharee(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { user, resource } = stepRow
 
       acc[resource] = []
 
-      acc[resource].push(this.usersEnvironment.getUser({ id: user }))
+      acc[resource].push(this.usersEnvironment.getUser({ key: user }))
 
       return acc
     }, {})

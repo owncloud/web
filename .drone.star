@@ -1144,7 +1144,7 @@ def e2eTests(ctx):
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
         ],
     }]
 
@@ -1158,7 +1158,7 @@ def e2eTests(ctx):
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
         ],
     }]
 

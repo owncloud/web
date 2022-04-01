@@ -6,7 +6,7 @@ import { expect } from '@playwright/test'
 When(
   '{string} creates the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
@@ -22,7 +22,7 @@ When(
 When(
   '{string} uploads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
       await resourceObject.upload({
@@ -37,7 +37,7 @@ When(
 Given(
   '{string} downloads the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { resource, from } = stepRow
@@ -66,7 +66,7 @@ Given(
 When(
   '{string} renames the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const { resource, as } of stepTable.hashes()) {
@@ -84,7 +84,7 @@ When(
     _: string,
     stepTable: DataTable
   ): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const { resource, to } of stepTable.hashes()) {
@@ -99,7 +99,7 @@ When(
 When(
   '{string} restores following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
       const { to, resource, version } = stepRow
@@ -126,7 +126,7 @@ When(
 When(
   '{string} deletes the following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {

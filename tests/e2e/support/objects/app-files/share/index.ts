@@ -21,29 +21,29 @@ export class Share {
 
   async create(args: Omit<createShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await createShare({ page: this.#page, ...args })
+    await createShare({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     // why? o_O
     await this.#page.locator('body').click()
   }
 
   async accept(args: Omit<acceptShareArgs, 'page'>): Promise<void> {
-    await acceptShare({ page: this.#page, ...args })
+    await acceptShare({ ...args, page: this.#page })
   }
 
   async declineShare(args: Omit<declineShareArgs, 'page'>): Promise<void> {
-    await declineShare({ page: this.#page, ...args })
+    await declineShare({ ...args, page: this.#page })
   }
 
   async changeShareeRole(args: Omit<changeShareeRoleArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await changeShareeRole({ page: this.#page, ...args })
+    await changeShareeRole({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
   async removeSharee(args: Omit<removeShareeArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await removeSharee({ page: this.#page, ...args })
+    await removeSharee({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 }

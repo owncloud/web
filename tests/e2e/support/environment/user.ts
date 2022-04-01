@@ -2,20 +2,24 @@ import { User } from '../types'
 import { userStore } from '../store'
 
 export class UsersEnvironment {
-  getUser({ id }: { id: string }): User {
-    if (!userStore.has(id)) {
-      throw new Error(`user with id '${id}' not found`)
+  getUser({ key }: { key: string }): User {
+    const uniqueKey = key.toLowerCase()
+
+    if (!userStore.has(uniqueKey)) {
+      throw new Error(`user with key '${uniqueKey}' not found`)
     }
 
-    return userStore.get(id)
+    return userStore.get(uniqueKey)
   }
 
-  createUser(user: User): User {
-    if (userStore.has(user.id)) {
-      throw new Error(`user with id '${user.id}' already exists`)
+  createUser({ key, user }: { key: string; user: User }): User {
+    const uniqueKey = key.toLowerCase()
+
+    if (userStore.has(uniqueKey)) {
+      throw new Error(`user with key '${uniqueKey}' already exists`)
     }
 
-    userStore.set(user.id, user)
+    userStore.set(uniqueKey, user)
 
     return user
   }

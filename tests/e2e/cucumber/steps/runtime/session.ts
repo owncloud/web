@@ -6,9 +6,9 @@ import { kebabCase } from 'lodash'
 import { objects } from '../../../support'
 
 async function LogInUser(this: World, stepUser: string): Promise<void> {
-  const user = this.usersEnvironment.getUser({ id: stepUser })
+  const user = this.usersEnvironment.getUser({ key: stepUser })
   const { page } = await this.actorsEnvironment.createActor({
-    id: stepUser,
+    key: stepUser,
     namespace: kebabCase(
       [this.feature.name, stepUser, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-')
     )
@@ -24,7 +24,7 @@ Given('{string} has logged in', LogInUser)
 When('{string} logs in', LogInUser)
 
 async function LogOutUser(this: World, stepUser: string): Promise<void> {
-  const actor = await this.actorsEnvironment.getActor({ id: stepUser })
+  const actor = await this.actorsEnvironment.getActor({ key: stepUser })
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })

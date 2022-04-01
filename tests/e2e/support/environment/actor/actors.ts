@@ -17,27 +17,29 @@ export class ActorsEnvironment extends EventEmitter {
     this.options = options
   }
 
-  public getActor({ id }: { id: string }): Actor {
-    if (!actorStore.has(id)) {
-      throw new Error(`Actor '${id}' does not exist.`)
+  public getActor({ key }: { key: string }): Actor {
+    if (!actorStore.has(key)) {
+      throw new Error(`actor with key '${key}' not found`)
     }
 
-    return actorStore.get(id)
+    return actorStore.get(key)
   }
 
-  public async createActor({ id, namespace }: { id: string; namespace: string }): Promise<Actor> {
-    if (actorStore.has(id)) {
-      return this.getActor({ id })
+  public async createActor({ key, namespace }: { key: string; namespace: string }): Promise<Actor> {
+    if (actorStore.has(key)) {
+      return this.getActor({ key })
     }
 
-    const actor = new ActorEnvironment({ id, namespace, ...this.options })
+    const actor = new ActorEnvironment({ id: key, namespace, ...this.options })
     await actor.setup()
-    actor.on('closed', () => actorStore.delete(id))
+    actor.on('closed', () => actorStore.delete(key))
     actor.page.on('console', (message) => {
-      this.emit('console', id, message)
+      this.emit('console', key, message)
     })
 
-    return actorStore.set(id, actor).get(id)
+    actorStore.set(key, actor)
+
+    return actor
   }
 
   public async close(): Promise<void> {

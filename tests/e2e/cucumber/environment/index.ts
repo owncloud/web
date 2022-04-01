@@ -37,7 +37,7 @@ BeforeAll(async function (this: World) {
 
   await api.config.setLocking({
     value: false,
-    user: usersEnvironment.getUser({ id: 'admin' })
+    user: usersEnvironment.getUser({ key: 'Admin' })
   })
 })
 

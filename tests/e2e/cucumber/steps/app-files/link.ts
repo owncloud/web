@@ -11,7 +11,7 @@ When(
     actionType: string,
     stepTable: DataTable
   ) {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const shareInfo = stepTable.hashes()
     for (const linkShare of shareInfo) {

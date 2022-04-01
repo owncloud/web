@@ -5,13 +5,13 @@ Feature: Kindergarten can use web to organize a day
   So that i'm sure all parents are informed and have the latest information in a easy and secure way
 
   Background:
-    Given the following users have been created
+    Given "Admin" creates following users
       | id    |
       | Alice |
       | Brian |
       | Carol |
-    And the default folder for received shares has been set to "Shares"
-    And auto-accept shares has been disabled
+    And "admin" sets the default folder for received shares to "Shares"
+    And "Admin" disables share auto accepting
 
   Scenario: Alice can share this weeks meal plan with all parents
     When "Alice" logs in

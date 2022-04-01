@@ -8,22 +8,15 @@ export const request = async ({
   method,
   path,
   body,
-  user,
-  versionApi = 'v2.php'
+  user
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET'
   path: string
   body?: BodyInit
   user?: User
-  versionApi?: string
 }): Promise<Response> => {
   return await fetch(
-    join(
-      config.backendUrl,
-      'ocs',
-      versionApi,
-      path + (path.includes('?') ? '&' : '?') + 'format=json'
-    ),
+    join(config.backendUrl, path + (path.includes('?') ? '&' : '?') + 'format=json'),
     {
       method,
       body,

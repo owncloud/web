@@ -1,21 +1,21 @@
 import { Link } from '../types'
 import { linkStore } from '../store'
 
-export class LinkEnvironment {
-  getLink({ name }: { name: string }): Link {
-    if (!linkStore.has(name)) {
-      throw new Error(`link with name '${name}' not found`)
+export class LinksEnvironment {
+  getLink({ key }: { key: string }): Link {
+    if (!linkStore.has(key)) {
+      throw new Error(`link with key '${key}' not found`)
     }
 
-    return linkStore.get(name)
+    return linkStore.get(key)
   }
 
-  createLink(link: Link): Link {
-    if (linkStore.has(link.name)) {
-      throw new Error(`link with name '${link.name}' already exists`)
+  createLink({ key, link }: { key: string; link: Link }): Link {
+    if (linkStore.has(key)) {
+      throw new Error(`link with key '${key}' already exists`)
     }
 
-    linkStore.set(link.name, link)
+    linkStore.set(key, link)
 
     return link
   }
