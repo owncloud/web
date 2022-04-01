@@ -39,9 +39,9 @@ Feature: Shares in share-with pages
     And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
-      | fileName      | expectedCollaborators |
-      | lorem.txt     | Alice Hansen              |
-      | simple-folder | Alice Hansen, Carol King  |
+      | fileName      | expectedCollaborators    |
+      | lorem.txt     | Alice Hansen             |
+      | simple-folder | Alice Hansen, Carol King |
 
   @issue-2480
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
@@ -52,8 +52,8 @@ Feature: Shares in share-with pages
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-others page
     Then file "lorem.txt" should be listed on the webUI
-#    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
-#    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
+  #    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
+  #    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
 
   Scenario: send share shows up on shared-with-others page
@@ -87,7 +87,7 @@ Feature: Shares in share-with pages
     And the user opens folder "simple-folder" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
-  @issue-ocis-2266
+  @skipOnOC10
   Scenario: unsharing an entry on the shared-with-me page unshares from self
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
@@ -97,6 +97,18 @@ Feature: Shares in share-with pages
     And the user unshares folder "simple-folder" using the webUI
     And the user browses to the files page
     Then folder "Shares" should not be listed on the webUI
+
+  @skipOnOCIS
+  Scenario: unsharing an entry on the shared-with-me page unshares from self
+    Given user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
+    And user "Brian" has logged in using the webUI
+    When the user browses to the shared-with-me page
+    And the user unshares folder "simple-folder" using the webUI
+    And the user browses to the files page
+    And the user opens folder "Shares" using the webUI
+    Then folder "simple-folder" should not be listed on the webUI
 
   @issue-4582 @issue-ocis-2266
   Scenario: unsharing multiple entries on the shared-with-me page
@@ -115,33 +127,6 @@ Feature: Shares in share-with pages
     And the user browses to the shared-with-me page in declined shares view
     Then the unshared elements should be in declined state on the webUI
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @issue-ocis-1328
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>" in the server
@@ -152,7 +137,7 @@ Feature: Shares in share-with pages
     Then user "Brian Murphy" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
     Examples:
       | additional-info-field | additional-info-result |
-      | id                    | (Brian)                  |
+      | id                    | (Brian)                |
       | email                 | (brian@example.org)    |
 
   @issue-ocis-1328
@@ -163,36 +148,6 @@ Feature: Shares in share-with pages
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Brian Murphy" should be listed without additional info in the collaborators list on the webUI
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   Scenario: share a file with another internal user via collaborators quick action

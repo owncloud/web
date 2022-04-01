@@ -93,6 +93,9 @@ Feature: accept/decline shares coming from internal users
     And folder "Shares" should not be listed on the webUI
 
 
+
+
+
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created file "lorem.txt" in the server
