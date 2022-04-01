@@ -7,46 +7,59 @@
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <div
-      v-show="!loading && activeMediaFileCached"
-      class="
-        oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-        media-viewer-player
-      "
-    >
-      <img
-        v-if="medium.isImage"
-        :key="`media-image-${medium.id}`"
-        :src="medium.url"
-        :alt="medium.name"
-        :data-id="medium.id"
-      />
-      <video v-else-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
-        <source :src="medium.url" :type="medium.mimeType" />
-      </video>
-      <audio v-else-if="medium.isAudio" :key="`media-audio-${medium.id}`" controls preload>
-        <source :src="medium.url" :type="medium.mimeType" />
-      </audio>
-    </div>
     <div v-if="loading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
-      v-if="failed"
+      v-else-if="failed"
       name="file-damage"
       variation="danger"
       size="xlarge"
       class="oc-position-center"
       :accessible-label="$gettext('Failed to load media file')"
     />
+    <template v-else>
+      <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <div
+        v-show="activeMediaFileCached"
+        class="
+          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
+          media-viewer-player
+        "
+      >
+        <img
+          v-if="activeMediaFileCached.isImage"
+          :key="`media-image-${activeMediaFileCached.id}`"
+          :src="activeMediaFileCached.url"
+          :alt="activeMediaFileCached.name"
+          :data-id="activeMediaFileCached.id"
+        />
+        <video
+          v-else-if="activeMediaFileCached.isVideo"
+          :key="`media-video-${activeMediaFileCached.id}`"
+          controls
+          preload
+        >
+          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
+        </video>
+        <audio
+          v-else-if="activeMediaFileCached.isAudio"
+          :key="`media-audio-${activeMediaFileCached.id}`"
+          controls
+          preload
+        >
+          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
+        </audio>
+      </div>
+    </template>
 
     <div class="oc-position-medium oc-position-bottom-center media-viewer-details">
       <p
+        v-if="activeMediaFile"
         class="oc-text-lead oc-text-center oc-text-truncate oc-p-s media-viewer-file-name"
         aria-hidden="true"
       >
-        {{ medium.name }}
+        {{ activeMediaFile.name }}
       </p>
       <div
         class="
@@ -126,8 +139,7 @@ export default {
       activeIndex: null,
       direction: 'rtl',
 
-      medium: {},
-      media: []
+      cachedMediaFiles: []
     }
   },
 
@@ -137,7 +149,7 @@ export default {
     pageTitle() {
       const translated = this.$gettext('Mediaviewer for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
-        currentMediumName: this.medium.name
+        currentMediumName: this.activeMediaFile?.name
       })
     },
     ariaHiddenFileCount() {
@@ -167,7 +179,7 @@ export default {
       return this.mediaFiles[this.activeIndex]
     },
     activeMediaFileCached() {
-      const cached = this.media.find((i) => i.id === this.activeMediaFile.id)
+      const cached = this.cachedMediaFiles.find((i) => i.id === this.activeMediaFile.id)
       return cached !== undefined ? cached : false
     },
     thumbDimensions() {
@@ -238,7 +250,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
-    this.media.forEach((medium) => {
+    this.cachedMediaFiles.forEach((medium) => {
       window.URL.revokeObjectURL(medium.url)
     })
   },
@@ -272,7 +284,6 @@ export default {
       if (this.activeMediaFileCached) {
         setTimeout(
           () => {
-            this.medium = this.activeMediaFileCached
             this.loading = false
           },
           // Delay to animate
@@ -294,7 +305,7 @@ export default {
 
       promise
         .then((mediaUrl) => {
-          this.media.push({
+          this.cachedMediaFiles.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
             url: mediaUrl,
@@ -304,7 +315,6 @@ export default {
             isImage: this.isActiveMediaFileTypeImage,
             isAudio: this.isActiveMediaFileTypeAudio
           })
-          this.medium = this.activeMediaFileCached
           this.loading = false
           this.failed = false
         })
@@ -320,7 +330,7 @@ export default {
         return
       }
 
-      return this.downloadFile(this.mediaFiles[this.activeIndex], this.isPublicLinkContext)
+      return this.downloadFile(this.activeMediaFile, this.isPublicLinkContext)
     },
     next() {
       if (this.loading) {
