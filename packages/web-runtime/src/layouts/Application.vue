@@ -2,7 +2,7 @@
   <div id="web-content">
     <div id="web-content-header">
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
-        <p class="oc-m-rm" v-text="IEdeprecationWarning" />
+        <p class="oc-m-rm" v-text="ieDeprecationWarning" />
       </div>
       <top-bar :applications-list="applicationsList" :active-notifications="activeNotifications" />
     </div>
@@ -21,17 +21,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import { useActiveApp, useRoute } from 'web-pkg/src/composables'
-import { watch } from '@vue/composition-api'
-import { useActiveLocation } from 'files/src/composables'
-import { isLocationPublicActive } from 'files/src/router'
+import { watch, defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   components: {
     MessageBar,
     TopBar,
@@ -58,7 +56,6 @@ export default {
       { immediate: true }
     )
     return {
-      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       activeApp: useActiveApp()
     }
   },
@@ -78,7 +75,7 @@ export default {
       'getNavItemsByExtension'
     ]),
     isIE11() {
-      return !!window.MSInputMethodContext && !!document.documentMode
+      return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
     ieDeprecationWarning() {
       return this.$gettext(
@@ -89,7 +86,7 @@ export default {
       return this.sidebarNavItems.length && this.windowWidth >= 640
     },
     sidebarNavItems() {
-      if (this.isPublicLocation) {
+      if (this.publicPage()) {
         return []
       }
 
@@ -148,7 +145,7 @@ export default {
       this.windowWidth = window.innerWidth
     }
   }
-}
+})
 </script>
 <style lang="scss">
 #web-content {
