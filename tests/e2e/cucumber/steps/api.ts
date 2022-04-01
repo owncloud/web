@@ -56,7 +56,7 @@ Given(
 
     await api.config.disableShareAutoAccept({
       user,
-      action: actionType === 'disabled' ? 'disable' : 'enable'
+      action: actionType === 'disables' ? 'disable' : 'enable'
     })
   }
 )
