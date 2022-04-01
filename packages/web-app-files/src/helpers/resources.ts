@@ -363,7 +363,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
         shareType: ShareTypes.user.value
       }
     ]
-    resource.sharedWith = share.sharedWith
+    resource.sharedWith = share.sharedWith || []
     resource.status = share.state
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
@@ -373,7 +373,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
   } else {
-    resource.sharedWith = share.sharedWith
+    resource.sharedWith = share.sharedWith || []
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
