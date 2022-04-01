@@ -410,13 +410,6 @@ export default defineComponent({
             wrap: 'nowrap'
           },
           {
-            name: 'sharedWith',
-            title: this.$gettext('Shared with'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
-          {
             name: 'status',
             title: this.$gettext('Status'),
             type: 'slot',
@@ -426,6 +419,13 @@ export default defineComponent({
           {
             name: 'owner',
             title: this.$gettext('Share owner'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
+          },
+          {
+            name: 'sharedWith',
+            title: this.$gettext('Shared with'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap'
