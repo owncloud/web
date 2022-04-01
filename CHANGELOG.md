@@ -13,6 +13,7 @@ Summary
 * Bugfix - Hide sidebar toggle button on spaces projects page: [#6690](https://github.com/owncloud/web/pull/6690)
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Bugfix - TopBar on redirect: [#6704](https://github.com/owncloud/web/pull/6704)
+* Bugfix - Unsticky appbar position: [#6708](https://github.com/owncloud/web/pull/6708)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
@@ -25,6 +26,7 @@ Summary
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 * Enhancement - Space name in breadcrumb: [#6662](https://github.com/owncloud/web/pull/6662)
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
+* Enhancement - Update ODS to v13.1.0-rc.1: [#6708](https://github.com/owncloud/web/pull/6708)
 
 Details
 -------
@@ -67,6 +69,14 @@ Details
 
    https://github.com/owncloud/web/issues/6527
    https://github.com/owncloud/web/pull/6704
+
+* Bugfix - Unsticky appbar position: [#6708](https://github.com/owncloud/web/pull/6708)
+
+   After recent changes to the files appbar, it wouldn't be visible when scrolling inside the
+   table. This has been resolved.
+
+   https://github.com/owncloud/web/issues/6696
+   https://github.com/owncloud/web/pull/6708
 
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 
@@ -163,6 +173,23 @@ Details
 
    https://github.com/owncloud/web/issues/6641
    https://github.com/owncloud/web/pull/6642
+
+* Enhancement - Update ODS to v13.1.0-rc.1: [#6708](https://github.com/owncloud/web/pull/6708)
+
+   We updated the ownCloud Design System to version 13.1.0-rc.1. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Enhancement - Export package members:
+   https://github.com/owncloud/owncloud-design-system/pull/2048 - Enhancement - Make
+   OcResource inline-flex:
+   https://github.com/owncloud/owncloud-design-system/pull/2041 - Bugfix - Disabled
+   textarea color contrast in darkmode:
+   https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
+   Fix event handlers in loops:
+   https://github.com/owncloud/owncloud-design-system/pull/2054
+
+   https://github.com/owncloud/web/pull/6708
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.1
 
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
