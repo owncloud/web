@@ -21,17 +21,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import { useActiveApp, useRoute } from 'web-pkg/src/composables'
-import { watch } from '@vue/composition-api'
+import { watch, defineComponent } from '@vue/composition-api'
 import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 
-export default {
+
+export default defineComponent({
   components: {
     MessageBar,
     TopBar,
@@ -78,7 +79,7 @@ export default {
       'getNavItemsByExtension'
     ]),
     isIE11() {
-      return !!window.MSInputMethodContext && !!document.documentMode
+      return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
     ieDeprecationWarning() {
       return this.$gettext(
@@ -148,7 +149,7 @@ export default {
       this.windowWidth = window.innerWidth
     }
   }
-}
+})
 </script>
 <style lang="scss">
 #web-content {
