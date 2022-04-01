@@ -280,7 +280,7 @@ export default {
     loadMedium() {
       this.loading = true
 
-      // Don't bother loading if files are cached
+      // Don't bother loading if file is already loaded and cached
       if (this.activeMediaFileCached) {
         setTimeout(
           () => {
@@ -292,37 +292,37 @@ export default {
         return
       }
 
-      // Fetch media
-      const url = this.isActiveMediaFileTypeImage ? this.thumbUrl : this.rawMediaUrl
-      // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
-      // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
-      let promise
-      if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-        promise = this.mediaSource(url, 'url', null)
-      } else {
-        promise = this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
-      }
+      this.loadMediumIntoCache(this.isActiveMediaFileTypeImage)
+    },
 
-      promise
-        .then((mediaUrl) => {
-          this.cachedMediaFiles.push({
-            id: this.activeMediaFile.id,
-            name: this.activeMediaFile.name,
-            url: mediaUrl,
-            ext: this.activeMediaFile.extension,
-            mimeType: this.activeMediaFile.mimeType,
-            isVideo: this.isActiveMediaFileTypeVideo,
-            isImage: this.isActiveMediaFileTypeImage,
-            isAudio: this.isActiveMediaFileTypeAudio
-          })
-          this.loading = false
-          this.failed = false
+    async loadMediumIntoCache(loadAsPreview) {
+      const url = loadAsPreview ? this.thumbUrl : this.rawMediaUrl
+      try {
+        // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
+        // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
+        let mediaUrl
+        if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
+          mediaUrl = await this.mediaSource(url, 'url', null)
+        } else {
+          mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+        }
+        this.cachedMediaFiles.push({
+          id: this.activeMediaFile.id,
+          name: this.activeMediaFile.name,
+          url: mediaUrl,
+          ext: this.activeMediaFile.extension,
+          mimeType: this.activeMediaFile.mimeType,
+          isVideo: this.isActiveMediaFileTypeVideo,
+          isImage: this.isActiveMediaFileTypeImage,
+          isAudio: this.isActiveMediaFileTypeAudio
         })
-        .catch((e) => {
-          this.loading = false
-          this.failed = true
-          console.error(e)
-        })
+        this.loading = false
+        this.failed = false
+      } catch (e) {
+        this.loading = false
+        this.failed = true
+        console.error(e)
+      }
     },
 
     downloadMedium() {
@@ -368,6 +368,7 @@ export default {
   height: 70vh;
   margin: 10px auto;
   object-fit: contain;
+
   img,
   video {
     max-width: 85vw;
@@ -390,6 +391,7 @@ export default {
     max-width: 100%;
     transform: none !important;
     width: 100%;
+
     .media-viewer-controls-action-bar {
       width: 100%;
     }
