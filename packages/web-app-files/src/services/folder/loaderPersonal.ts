@@ -7,9 +7,9 @@ import { isLocationSpacesActive } from '../../router'
 
 export const fetchResources = async (client, path, properties) => {
   try {
-    const resp = await client.files.list(path, 1, properties)
+    const resp = await client.files.list(path, 'infinity', properties)
     console.log("= SDK Response =")
-    console.log(1, test)
+    console.log(resp)
     return resp
   } catch (error) {
     console.error(error)

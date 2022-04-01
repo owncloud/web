@@ -9552,9 +9552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "owncloud-design-system@npm:13.0.0"
+"owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A."
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9571,13 +9571,12 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 49b8ca3e469555a6dcb3ca814a46980e2fc9cc1814df01c284dc4eaab3deef922a8cea07e7bb9070468c2513132e063ff5e6f4cc10f03427bfa0b2772100677b
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"owncloud-sdk@npm:~3.0.0-alpha.2":
-  version: 3.0.0-alpha.2
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.2"
+"owncloud-sdk@portal:/Users/paul/repos/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "owncloud-sdk@portal:/Users/paul/repos/owncloud-sdk::locator=root-workspace-0b6124%40workspace%3A."
   peerDependencies:
     axios: ^0.26.0
     cross-fetch: ^3.0.6
@@ -9587,9 +9586,8 @@ __metadata:
     uuid: ^8.2.0
     webdav: 4.8.0
     xml-js: ^1.6.11
-  checksum: 46674a77d7a7c174be5876abee6f75365461f52da1ab8f2dc187602d28474a010aea06d810285a1f1b3becd7b38bd7e250019d56b607d3e3d7ac0fd6207818b3
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "p-cancelable@npm:^2.0":
   version: 2.1.1

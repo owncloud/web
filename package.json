@@ -145,5 +145,9 @@
     "vue-concurrency": {
       "built": true
     }
+  },
+  "resolutions": {
+    "owncloud-design-system": "portal:/Users/paul/repos/owncloud-design-system",
+    "owncloud-sdk": "portal:/Users/paul/repos/owncloud-sdk"
   }
 }
