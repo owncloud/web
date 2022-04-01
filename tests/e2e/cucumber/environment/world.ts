@@ -11,15 +11,17 @@ interface WorldOptions extends IWorldOptions {
 export class World extends CucumberWorld {
   feature: Pickle
   actorsEnvironment: environment.ActorsEnvironment
-  usersEnvironment: environment.UsersEnvironment
   filesEnvironment: environment.FilesEnvironment
-  linksEnvironment: environment.LinkEnvironment
+  linksEnvironment: environment.LinksEnvironment
+  spacesEnvironment: environment.SpacesEnvironment
+  usersEnvironment: environment.UsersEnvironment
 
   constructor(options: WorldOptions) {
     super(options)
     this.usersEnvironment = new environment.UsersEnvironment()
+    this.spacesEnvironment = new environment.SpacesEnvironment()
     this.filesEnvironment = new environment.FilesEnvironment()
-    this.linksEnvironment = new environment.LinkEnvironment()
+    this.linksEnvironment = new environment.LinksEnvironment()
     this.actorsEnvironment = new environment.ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,

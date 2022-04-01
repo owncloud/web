@@ -41,6 +41,7 @@
           <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
             <div
               class="spaces-list-card oc-card oc-card-default oc-rounded"
+              :data-space-id="space.id"
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">

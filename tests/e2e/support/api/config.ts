@@ -1,6 +1,7 @@
 import { checkResponseStatus, request } from './http'
 import { User } from '../types'
 import { URLSearchParams } from 'url'
+import join from 'join-path'
 
 const occ = async (user: User, command: string): Promise<void> => {
   const body = new URLSearchParams()
@@ -8,10 +9,9 @@ const occ = async (user: User, command: string): Promise<void> => {
 
   const response = await request({
     method: 'POST',
-    path: 'apps/testing/api/v1/occ',
+    path: join('ocs', 'v1.php', 'apps', 'testing', 'api', 'v1', 'occ'),
     body: body,
-    user,
-    versionApi: 'v1.php'
+    user
   })
 
   checkResponseStatus(response, `Command "${command}" failed.`)

@@ -5,7 +5,7 @@ import { objects } from '../../../../../support'
 When(
   '{string} navigates to the personal space page',
   async function (this: World, stepUser: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ id: stepUser })
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.spaces.Personal({ page })
     await pageObject.navigate()
   }

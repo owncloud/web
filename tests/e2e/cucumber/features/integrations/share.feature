@@ -1,11 +1,11 @@
 Feature: share
 
   Background:
-    Given the default folder for received shares has been set to "Shares"
-    And auto-accept shares has been disabled
+    And "admin" sets the default folder for received shares to "Shares"
+    And "Admin" disables share auto accepting
 
   Scenario: folder
-    Given the following users have been created
+    Given "Admin" creates following users
       | id    |
       | Alice |
       | Brian |
@@ -62,7 +62,7 @@ Feature: share
     And "Brian" logs out
 
   Scenario: file
-    Given the following users have been created
+    Given "Admin" creates following users
       | id    |
       | Alice |
       | Brian |

@@ -22,7 +22,7 @@ export const clickResource = async ({
 
 /**/
 
-export type createResourceArgs = {
+export interface createResourceArgs {
   page: Page
   name: string
   type: 'folder'
@@ -56,7 +56,7 @@ export const createResource = async (args: createResourceArgs): Promise<void> =>
 
 /**/
 
-export type uploadResourceArgs = {
+export interface uploadResourceArgs {
   page: Page
   resources: File[]
   to?: string
@@ -89,7 +89,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 
 /**/
 
-export type downloadResourcesArgs = {
+export interface downloadResourcesArgs {
   page: Page
   names: string[]
   folder: string
@@ -122,7 +122,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 
 /**/
 
-export type moveOrCopyResourceArgs = {
+export interface moveOrCopyResourceArgs {
   page: Page
   resource: string
   newLocation: string
@@ -163,7 +163,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
 /**/
 
-export type renameResourceArgs = {
+export interface renameResourceArgs {
   page: Page
   resource: string
   newName: string
@@ -198,7 +198,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
 
 /**/
 
-export type restoreResourceVersionArgs = {
+export interface restoreResourceVersionArgs {
   page: Page
   files: File[]
   folder?: string
@@ -222,7 +222,7 @@ export const restoreResourceVersion = async (args: restoreResourceVersionArgs) =
 
 /**/
 
-export type deleteResourceArgs = {
+export interface deleteResourceArgs {
   page: Page
   resource: string
 }

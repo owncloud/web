@@ -3,7 +3,7 @@ import { User } from '../../../types'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 
-export type createShareArgs = {
+export interface createShareArgs {
   page: Page
   folder: string
   users: User[]
@@ -62,7 +62,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 
 /**/
 
-export type acceptShareArgs = {
+export interface acceptShareArgs {
   name: string
   page: Page
 }
@@ -84,7 +84,7 @@ export const acceptShare = async (args: acceptShareArgs): Promise<void> => {
 
 /**/
 
-export type declineShareArgs = {
+export interface declineShareArgs {
   page: Page
   name: string
 }
@@ -101,7 +101,7 @@ export const declineShare = async (args: declineShareArgs): Promise<void> => {
 
 /**/
 
-export type changeShareeRoleArgs = {
+export interface changeShareeRoleArgs {
   page: Page
   folder: string
   users: User[]
@@ -140,7 +140,7 @@ export const changeShareeRole = async (args: changeShareeRoleArgs): Promise<void
 
 /**/
 
-export type removeShareeArgs = {
+export interface removeShareeArgs {
   page: Page
   folder: string
   users: User[]

@@ -1,7 +1,7 @@
 Feature: link
 
   Scenario: public link
-    Given the following users have been created
+    Given "Admin" creates following users
       | id    |
       | Alice |
     When "Alice" logs in

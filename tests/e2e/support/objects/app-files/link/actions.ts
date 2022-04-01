@@ -4,7 +4,7 @@ import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
 
-export type createLinkArgs = {
+export interface createLinkArgs {
   page: Page
   resource: string
   name: string
