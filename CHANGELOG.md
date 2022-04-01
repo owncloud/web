@@ -21,6 +21,7 @@ Summary
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
+* Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
@@ -134,6 +135,14 @@ Details
 
    https://github.com/owncloud/web/issues/5976
    https://github.com/owncloud/web/pull/6612
+
+* Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
+
+   We've added the "Shared with" column for incoming shares in the "Shared with me" page and
+   changed the order of the column to follow the "Share owner" column.
+
+   https://github.com/owncloud/web/issues/6140
+   https://github.com/owncloud/web/pull/6699
 
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 
