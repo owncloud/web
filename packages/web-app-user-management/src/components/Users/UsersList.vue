@@ -32,6 +32,14 @@
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
     <template #role="{ item }"> {{ getUserRole(item.id) }} </template>
+    <template #actions="{ item }">
+      <oc-button @click="$emit('clickDetails', item)">
+        <oc-icon size="small" name="information" />
+      </oc-button>
+      <oc-button class="oc-ml-s" @click="$emit('clickEdit', item)">
+        <oc-icon size="small" name="pencil" />
+      </oc-button>
+    </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>
@@ -123,6 +131,12 @@ export default {
           name: 'status',
           title: this.$gettext('Status'),
           sortable: true
+        },
+        {
+          name: 'actions',
+          title: '',
+          sortable: false,
+          type: 'slot'
         }
       ]
     },
