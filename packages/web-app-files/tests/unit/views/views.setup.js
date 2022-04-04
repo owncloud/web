@@ -44,6 +44,45 @@ localVue.directive('translate', {
   inserted: (el) => {}
 })
 
+export const routes = [
+  {
+    path: '/files/shares/with-me/',
+    name: 'files-shares-with-me'
+  },
+  {
+    path: '/files/shares/with-others/',
+    name: 'files-shares-with-others'
+  },
+  {
+    path: '/files/shares/via-link/',
+    name: 'files-shares-via-link'
+  },
+  {
+    path: '/files/trash/personal/',
+    name: 'files-trash-personal'
+  },
+  {
+    path: '/files/trash/spaces/project/',
+    name: 'files-trash-spaces-project'
+  },
+  {
+    path: '/files/spaces/personal/home/',
+    name: 'files-spaces-personal-home'
+  },
+  {
+    path: '/files/spaces/project/',
+    name: 'files-spaces-project'
+  },
+  {
+    path: '/files/public/files/',
+    name: 'files-public-files'
+  },
+  {
+    path: '/files/common/favorites/',
+    name: 'files-common-favorites'
+  }
+]
+
 export const getRouter = ({ query = {} }) => ({
   afterEach: jest.fn(),
   replace: jest.fn(),
