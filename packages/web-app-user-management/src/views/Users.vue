@@ -329,12 +329,14 @@ export default {
     },
 
     showDetailsSideBarPanel(user) {
+      this.selectedUsers = user ? [user] : []
       this.sideBarUsers = user ? [user] : []
       this.activePanel = 'DetailsPanel'
       this.sideBarOpen = true
     },
 
     showEditSideBarPanel(user) {
+      this.selectedUsers = user ? [user] : []
       this.sideBarUsers = user ? [user] : []
       this.activePanel = 'EditPanel'
       this.sideBarOpen = true
@@ -404,8 +406,10 @@ export default {
 
   watch: {
     selectedUsers() {
-      this.activePanel = 'DetailsPanel'
       this.sideBarUsers = this.selectedUsers
+      if (this.sideBarUsers.length > 1) {
+        this.activePanel = 'DetailsPanel'
+      }
     }
   }
 }
