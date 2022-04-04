@@ -8,6 +8,7 @@ import Collaborators from '@/__fixtures__/collaborators'
 import mockAxios from 'jest-mock-axios'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import * as reactivities from 'web-pkg/src/composables/reactivity'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -17,6 +18,8 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+
+jest.mock('web-pkg/src/composables/reactivity')
 
 const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
@@ -269,7 +272,6 @@ function getMountedWrapper(data, loading = false) {
     localVue,
     store: createStore(data),
     mocks: {
-      sharesLoading: loading,
       $route: {
         params: { storageId: 1 }
       },
@@ -292,6 +294,8 @@ function getMountedWrapper(data, loading = false) {
 }
 
 function getShallowMountedWrapper(data, loading = false) {
+  reactivities.useDebouncedRef.mockImplementationOnce(() => loading)
+
   return shallowMount(FileShares, {
     localVue,
     store: createStore(data),
@@ -301,7 +305,6 @@ function getShallowMountedWrapper(data, loading = false) {
       'oc-spinner': true
     },
     mocks: {
-      sharesLoading: loading,
       $route: {
         params: {
           storageId: 1
