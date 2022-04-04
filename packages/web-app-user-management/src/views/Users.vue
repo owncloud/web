@@ -88,10 +88,10 @@
           <template #body>
             <DetailsPanel
               v-if="activePanel === 'DetailsPanel'"
-              :users="sideBarUsers"
+              :users="selectedUsers"
               :user-roles="userRoles"
             ></DetailsPanel>
-            <EditPanel v-if="activePanel === 'EditPanel'" :user="sideBarUsers[0]"></EditPanel>
+            <EditPanel v-if="activePanel === 'EditPanel'" :user="selectedUsers[0]"></EditPanel>
           </template>
         </side-bar>
       </template>
@@ -188,7 +188,6 @@ export default {
   data: function () {
     return {
       selectedUsers: [],
-      sideBarUsers: [],
       createUserModalOpen: false,
       deleteUserModalOpen: false,
       sideBarOpen: false,
@@ -260,7 +259,7 @@ export default {
           title: $gettext('Edit'),
           component: EditPanel,
           default: false,
-          enabled: this.sideBarUsers.length === 1
+          enabled: this.selectedUsers.length === 1
         }
       ]
     },
@@ -322,22 +321,17 @@ export default {
     },
 
     closeSideBar() {
-      if (!this.selectedUsers.length) {
-        this.sideBarUsers = []
-      }
       this.sideBarOpen = false
     },
 
     showDetailsSideBarPanel(user) {
       this.selectedUsers = user ? [user] : []
-      this.sideBarUsers = user ? [user] : []
       this.activePanel = 'DetailsPanel'
       this.sideBarOpen = true
     },
 
     showEditSideBarPanel(user) {
       this.selectedUsers = user ? [user] : []
-      this.sideBarUsers = user ? [user] : []
       this.activePanel = 'EditPanel'
       this.sideBarOpen = true
     },
@@ -406,8 +400,7 @@ export default {
 
   watch: {
     selectedUsers() {
-      this.sideBarUsers = this.selectedUsers
-      if (this.sideBarUsers.length > 1) {
+      if (this.selectedUsers.length > 1) {
         this.activePanel = 'DetailsPanel'
       }
     }
