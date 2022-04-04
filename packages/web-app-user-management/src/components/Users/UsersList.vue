@@ -33,10 +33,10 @@
     </template>
     <template #role="{ item }"> {{ getUserRole(item) }} </template>
     <template #actions="{ item }">
-      <oc-button @click="$emit('clickDetails', item)">
+      <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
       </oc-button>
-      <oc-button class="oc-ml-s" @click="$emit('clickEdit', item)">
+      <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
         <oc-icon size="small" name="pencil" />
       </oc-button>
     </template>

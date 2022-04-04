@@ -20,11 +20,16 @@
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
-                <oc-icon
-                  name="side-bar-right"
-                  :fill-type="toggleSidebarButtonIconFillType"
-                  @click="toggleSideBar"
-                />
+                <oc-button
+                  id="files-toggle-sidebar"
+                  v-oc-tooltip="toggleSidebarButtonLabel"
+                  :aria-label="toggleSidebarButtonLabel"
+                  appearance="raw"
+                  class="oc-my-s oc-p-xs"
+                  @click.stop="toggleSideBar"
+                >
+                  <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
+                </oc-button>
               </div>
             </div>
             <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
@@ -262,6 +267,11 @@ export default {
           enabled: this.selectedUsers.length === 1
         }
       ]
+    },
+
+    toggleSidebarButtonLabel() {
+      if (this.sideBarOpen) return this.$gettext('Close sidebar to hide details')
+      return this.$gettext('Open sidebar to view details')
     },
 
     toggleSidebarButtonIconFillType() {
