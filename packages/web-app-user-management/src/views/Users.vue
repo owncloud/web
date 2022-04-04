@@ -66,8 +66,7 @@
           <div v-else>
             <UsersList
               :users="users"
-              :roles="roles"
-              :user-assignments="userAssignments"
+              :user-roles="userRoles"
               :selected-users="selectedUsers"
               class="oc-mt-m"
               @toggleSelectUser="toggleSelectUser"
@@ -90,6 +89,7 @@
             <DetailsPanel
               v-if="activePanel === 'DetailsPanel'"
               :users="sideBarUsers"
+              :user-roles="userRoles"
             ></DetailsPanel>
             <EditPanel v-if="activePanel === 'EditPanel'" :user="sideBarUsers[0]"></EditPanel>
           </template>
@@ -196,6 +196,35 @@ export default {
     }
   },
   computed: {
+    userRoles() {
+      const roles = {}
+
+      for (const user of this.users) {
+        const userAssignmentList = this.userAssignments.find((assignment) =>
+          assignment.some((subAssignment) => subAssignment.accountUuid === user.id)
+        )
+
+        if (!userAssignmentList) {
+          continue
+        }
+
+        const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
+
+        if (!userRoleAssignment) {
+          continue
+        }
+
+        const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
+
+        if (!role) {
+          continue
+        }
+
+        roles[user.id] = role.displayName
+      }
+
+      return roles
+    },
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 

@@ -32,6 +32,12 @@
             <span v-text="user.mail" />
           </td>
         </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
+          <td>
+            <span v-text="userRole" />
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -46,6 +52,10 @@ export default {
       default: () => {
         return []
       }
+    },
+    userRoles: {
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -62,6 +72,9 @@ export default {
       return this.$gettextInterpolate('%{count} users selected', {
         count: this.users.length
       })
+    },
+    userRole() {
+      return this.user.id in this.userRoles ? this.userRoles[this.user.id] : ''
     }
   }
 }

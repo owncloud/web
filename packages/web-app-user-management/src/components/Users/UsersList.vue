@@ -31,7 +31,7 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ getUserRole(item.id) }} </template>
+    <template #role="{ item }"> {{ getUserRole(item) }} </template>
     <template #actions="{ item }">
       <oc-button @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
@@ -64,12 +64,8 @@ export default {
       type: Array,
       required: true
     },
-    roles: {
-      type: Array,
-      required: true
-    },
-    userAssignments: {
-      type: Array,
+    userRoles: {
+      type: Object,
       required: true
     },
     selectedUsers: {
@@ -158,27 +154,7 @@ export default {
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     },
     getUserRole(user) {
-      const userAssignmentList = this.userAssignments.find(
-        (assignment) => assignment.accountUuid === user.id
-      )
-
-      if (!userAssignmentList) {
-        return ''
-      }
-
-      const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
-
-      if (!userRoleAssignment) {
-        return ''
-      }
-
-      const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
-
-      if (!role) {
-        return ''
-      }
-
-      return role.displayName
+      return user.id in this.userRoles ? this.userRoles[user.id] : ''
     }
   }
 }

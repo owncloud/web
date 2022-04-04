@@ -1,4 +1,4 @@
-<template><div>LOL</div></template>
+<template><div>Edit in progress</div></template>
 <script>
 export default {
   name: 'EditPanel',
