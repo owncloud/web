@@ -10,6 +10,6 @@
     "vue-async-computed": "^3.9.0"
   },
   "devDependencies": {
-    "ts-async-decorators": "^0.1.2"
+    "ts-async-decorators": "^0.3.0"
   }
 }
