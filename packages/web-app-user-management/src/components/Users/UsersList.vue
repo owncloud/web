@@ -132,7 +132,8 @@ export default {
           name: 'actions',
           title: '',
           sortable: false,
-          type: 'slot'
+          type: 'slot',
+          alignH: 'right'
         }
       ]
     },
