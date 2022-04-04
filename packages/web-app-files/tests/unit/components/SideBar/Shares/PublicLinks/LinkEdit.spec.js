@@ -5,7 +5,7 @@ import GetTextPlugin from 'vue-gettext'
 import stubs from '@/tests/unit/stubs/index.js'
 import DesignSystem from 'owncloud-design-system'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
-import LinkEdit from '@files/src/components/SideBar/Links/PublicLinks/LinkEdit.vue'
+import LinkEdit from '@files/src/components/SideBar/Shares/PublicLinks/LinkEdit.vue'
 import { LinkShareRoles } from '../../../../../../src/helpers/share'
 
 const selectors = {

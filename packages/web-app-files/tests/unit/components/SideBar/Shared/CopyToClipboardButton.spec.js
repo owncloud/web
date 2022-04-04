@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
-import CopyToClipboardButton from '@files/src/components/SideBar/Links/CopyToClipboardButton.vue'
+import CopyToClipboardButton from '@files/src/components/SideBar/Shared/CopyToClipboardButton.vue'
 
 jest.useFakeTimers()
 

@@ -23,7 +23,7 @@ import { getDateInFuture, navigateToDate } from '../helpers/date'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 import { DateTime } from 'luxon'
-import FileLinks from '@files/src/components/SideBar/Links/FileLinks.vue'
+import FileLinks from '@files/src/components/SideBar/Shares/FileLinks.vue'
 
 const routes = buildRoutes({
   App,

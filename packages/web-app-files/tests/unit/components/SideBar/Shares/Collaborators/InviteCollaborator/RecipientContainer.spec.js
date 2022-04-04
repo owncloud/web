@@ -7,7 +7,7 @@ import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
 import SharedFiles from '@/__fixtures__/sharedFiles'
 
-import RecipientContainer from '@files/src/components/SideBar/Shares/InviteCollaborator/RecipientContainer.vue'
+import RecipientContainer from '@files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
 import { ShareTypes } from '@files/src/helpers/share/type'
 import { buildSharedResource } from '@files/src/helpers/resources'
 

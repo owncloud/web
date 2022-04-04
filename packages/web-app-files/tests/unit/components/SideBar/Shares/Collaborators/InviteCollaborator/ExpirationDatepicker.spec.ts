@@ -1,11 +1,11 @@
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
 import VueCompositionAPI, { nextTick } from '@vue/composition-api'
-import ExpirationDatepicker from '../../../../../../src/components/SideBar/Shares/InviteCollaborator/ExpirationDatepicker.vue'
+import ExpirationDatepicker from '@files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
+import { ShareTypes } from '../../../../../../../src/helpers/share'
 import merge from 'lodash-es/merge'
 import Vuex, { GetterTree } from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import { DateTime } from 'luxon'
-import { ShareTypes } from '../../../../../../src/helpers/share'
 
 const bareCapabilities = {
   user: {

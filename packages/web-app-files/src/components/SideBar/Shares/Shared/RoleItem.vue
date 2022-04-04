@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { ShareRole } from '../../../helpers/share'
+import { ShareRole } from '../../../../helpers/share'
 
 export default {
   name: 'RoleItem',

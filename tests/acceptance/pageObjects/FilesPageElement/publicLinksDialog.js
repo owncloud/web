@@ -368,11 +368,6 @@ module.exports = {
       }
       return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
-    copyPrivateLink: function () {
-      return this.waitForElementVisible('@privateLinkURLCopyButton').click(
-        '@privateLinkURLCopyButton'
-      )
-    },
     /**
      * extracts set value in expiration date trigger button
      * @return {Promise<*>}
@@ -482,9 +477,6 @@ module.exports = {
     },
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
-    },
-    privateLinkURLCopyButton: {
-      selector: '.oc-files-private-link-copy-url'
     },
     publicLinkRoleSelectionDropdown: {
       selector: '//div[contains(@class, "files-file-link-role-button-wrapper")]//span[.="%s"]',

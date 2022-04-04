@@ -27,7 +27,7 @@ export function createPublicLink(ctx) {
         storageId: ctx.storageId
       })
       .then((link) => {
-        ctx.store.dispatch('Files/sidebar/openWithPanel', 'links-item').then(() => {
+        ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item').then(() => {
           copyToClipboard(link.url)
           ctx.store.dispatch('showMessage', {
             title: ctx.$gettext('Public link created'),

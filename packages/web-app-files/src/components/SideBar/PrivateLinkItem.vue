@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import CopyToClipboardButton from './CopyToClipboardButton.vue'
+import CopyToClipboardButton from './Shared/CopyToClipboardButton.vue'
 
 export default {
   name: 'PrivateLinkItem',

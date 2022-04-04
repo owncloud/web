@@ -1,4 +1,4 @@
-import LinkActions from '@files/src/components/SideBar/Links/PublicLinks/LinkActions.vue'
+import LinkActions from '@files/src/components/SideBar/Shares/PublicLinks/LinkActions.vue'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'

@@ -36,7 +36,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 
     case 'SIDEBAR_PANEL':
       await sidebar.open({ page: page, resource: resourceName })
-      await sidebar.openPanel({ page: page, name: 'links' })
+      await sidebar.openPanel({ page: page, name: 'sharing' })
       break
   }
   await page.locator('#files-file-link-add').click()

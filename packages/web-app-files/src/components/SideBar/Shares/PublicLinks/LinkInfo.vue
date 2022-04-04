@@ -67,7 +67,7 @@
 import { basename } from 'path'
 import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
-import CopyToClipboardButton from '../CopyToClipboardButton.vue'
+import CopyToClipboardButton from '../../Shared/CopyToClipboardButton.vue'
 import { DateTime } from 'luxon'
 
 export default {

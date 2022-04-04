@@ -11871,7 +11871,7 @@ __metadata:
   dependencies:
     p-cancelable: ^3.0.0
     portal-vue: ^2.1.7
-    ts-async-decorators: ^0.1.2
+    ts-async-decorators: ^0.3.0
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
   languageName: unknown
@@ -12795,13 +12795,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-async-decorators@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "ts-async-decorators@npm:0.1.2"
+"ts-async-decorators@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "ts-async-decorators@npm:0.3.0"
   dependencies:
     await-semaphore: ^0.1
     p-cancelable: ^2.0
-  checksum: 14559aca3b3737179d0ab965956e9a1d7d3f359c845ad4997abc971fb18184d2657c90be3214a709bb3a29a44cdd1b959018962bcb9ec8881f8b451bd2b88001
+  checksum: 456888cc9ab632c669da0b8236c64b0c6289b46ab802f6126eaad9b5272e489bdc63dfcf052f94841b69409d1c152ad6b570bccfd24dff7b72112942107bc60e
   languageName: node
   linkType: hard
 

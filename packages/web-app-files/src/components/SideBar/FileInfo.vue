@@ -31,7 +31,7 @@ import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 import { mapGetters } from 'vuex'
-import PrivateLinkItem from './Links/PrivateLinkItem.vue'
+import PrivateLinkItem from './PrivateLinkItem.vue'
 import { useActiveLocation } from '../../composables'
 
 export default {
@@ -96,7 +96,7 @@ export default {
         this.isPersonalLocation &&
         this.capabilities.files.privateLinks &&
         this.user?.id &&
-        this.displayedItem.owner.username === this.user.username
+        this.displayedItem?.owner?.username === this.user.username
       ) {
         return true
       }

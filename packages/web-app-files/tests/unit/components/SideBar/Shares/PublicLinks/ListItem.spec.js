@@ -1,4 +1,4 @@
-import ListItem from '@files/src/components/SideBar/Links/PublicLinks/ListItem.vue'
+import ListItem from '@files/src/components/SideBar/Shares/PublicLinks/ListItem.vue'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 const localVue = createLocalVue()

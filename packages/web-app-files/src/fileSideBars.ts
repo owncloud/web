@@ -2,12 +2,10 @@ import FileDetails from './components/SideBar/Details/FileDetails.vue'
 import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultiple.vue'
 import FileActions from './components/SideBar/Actions/FileActions.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
-import FileShares from './components/SideBar/Shares/FileShares.vue'
-import FileLinks from './components/SideBar/Links/FileLinks.vue'
+import Shares from './components/SideBar/Shares/Shares.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
-import SpaceMembers from './components/SideBar/Shares/SpaceMembers.vue'
 import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
 import { Panel } from '../../web-pkg/src/components/sidebar'
@@ -111,11 +109,30 @@ const panelGenerators: (({
       ].includes(user.uuid)
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'sharing-item',
-    icon: 'group',
-    title: $gettext('People'),
-    component: FileShares,
+    icon: 'user-add',
+    iconFillType: 'line',
+    title: $gettext('Shares'),
+    component: Shares,
+    componentAttrs: {
+      showSpaceMembers: false,
+      get showLinks() {
+        if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
+        if (
+          isLocationTrashActive(router, 'files-trash-personal') ||
+          isLocationTrashActive(router, 'files-trash-spaces-project') ||
+          isLocationPublicActive(router, 'files-public-files')
+        ) {
+          return false
+        }
+
+        if (capabilities.files_sharing) {
+          return capabilities.files_sharing.public.enabled
+        }
+        return false
+      }
+    },
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
@@ -132,34 +149,31 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ highlightedFile }) => ({
+  ({ highlightedFile, rootFolder, multipleSelection, router, capabilities }) => ({
     app: 'space-share-item',
     icon: 'group',
     title: $gettext('Members'),
-    component: SpaceMembers,
-    get enabled() {
-      return highlightedFile?.type === 'space'
-    }
-  }),
-  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
-    app: 'links-item',
-    icon: 'link',
-    title: $gettext('Links'),
-    component: FileLinks,
-    get enabled() {
-      if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
-      if (
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
-      ) {
+    component: Shares,
+    componentAttrs: {
+      showSpaceMembers: true,
+      get showLinks() {
+        if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
+        if (
+          isLocationTrashActive(router, 'files-trash-personal') ||
+          isLocationTrashActive(router, 'files-trash-spaces-project') ||
+          isLocationPublicActive(router, 'files-public-files')
+        ) {
+          return false
+        }
+
+        if (capabilities.files_sharing) {
+          return capabilities.files_sharing.public.enabled
+        }
         return false
       }
-
-      if (capabilities.files_sharing) {
-        return capabilities.files_sharing.public.enabled
-      }
-      return false
+    },
+    get enabled() {
+      return highlightedFile?.type === 'space'
     }
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({

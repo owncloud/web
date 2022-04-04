@@ -83,7 +83,7 @@ import {
   SharePermissions,
   ShareRole,
   SpacePeopleShareRoles
-} from '../../../helpers/share'
+} from '../../../../helpers/share'
 import * as uuid from 'uuid'
 
 export default {

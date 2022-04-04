@@ -86,7 +86,7 @@ import {
   SharePermissions,
   ShareTypes,
   SpacePeopleShareRoles
-} from '../../../../helpers/share'
+} from '../../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 

@@ -78,7 +78,7 @@ module.exports = {
       return util.format(this.elements.fileInfoResourceName.selector, name, path, type)
     },
     activatePanel: async function (item) {
-      const panelName = item === 'people' ? 'collaborators' : item
+      const panelName = item === 'people' || item === 'links' ? 'collaborators' : item
       const active = await this.isPanelActive(item, false)
       if (!active) {
         let backBtnVisible = false
@@ -194,23 +194,13 @@ module.exports = {
       )
       return isVisible
     },
-    isLinksPanelSelectable: async function (expectToBeSelectable = true) {
-      return await this.isPanelSelectable('links', expectToBeSelectable)
-    },
     isSharingPanelSelectable: async function (expectToBeSelectable = true) {
       return await this.isPanelSelectable('people', expectToBeSelectable)
     },
-    markFavoriteSidebar: function () {
-      return this.waitForElementVisible('@sidebar')
-        .waitForElementVisible('@fileInfoFavoriteDimm')
-        .click('@fileInfoFavorite')
-        .waitForElementVisible('@fileInfoFavoriteShining')
-    },
-    unmarkFavoriteSidebar: function () {
-      return this.waitForElementVisible('@sidebar')
-        .waitForElementVisible('@fileInfoFavoriteShining')
-        .click('@fileInfoFavorite')
-        .waitForElementVisible('@fileInfoFavoriteDimm')
+    copyPrivateLink: function () {
+      return this.waitForElementVisible('@privateLinkURLCopyButton').click(
+        '@privateLinkURLCopyButton'
+      )
     }
   },
   elements: {
@@ -220,15 +210,6 @@ module.exports = {
     },
     fileInfoIcon: {
       selector: '.file_info .oc-icon'
-    },
-    fileInfoFavorite: {
-      selector: '.file_info__favorite'
-    },
-    fileInfoFavoriteShining: {
-      selector: '.oc-star-shining'
-    },
-    fileInfoFavoriteDimm: {
-      selector: '.oc-star-dimm'
     },
     fileInfoResourceNameAnyType: {
       selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
@@ -268,9 +249,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     linksPanel: {
-      selector:
-        '//*[@id="sidebar-panel-links-item"]//*[contains(@class, "sidebar-panel__body-content")]',
-      locateStrategy: 'xpath'
+      selector: '#oc-files-file-link'
     },
     linksPanelMenuItem: {
       selector: '//button[@id="sidebar-panel-links-item-select"]',
@@ -293,6 +272,9 @@ module.exports = {
     detailsPanelMenuItem: {
       selector: '//button[@id="sidebar-panel-details-item-select"]',
       locateStrategy: 'xpath'
+    },
+    privateLinkURLCopyButton: {
+      selector: '.oc-files-private-link-copy-url'
     },
     versionsPanel: {
       selector:

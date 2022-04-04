@@ -2,6 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
     <template v-else>
+      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
       <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
       <p
         v-else
@@ -68,7 +69,7 @@ import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
 import { dirname } from 'path'
-import InviteCollaboratorForm from './InviteCollaborator/InviteCollaboratorForm.vue'
+import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'

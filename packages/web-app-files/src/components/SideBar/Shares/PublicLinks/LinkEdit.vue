@@ -161,7 +161,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
-import RoleItem from '../../Shared/RoleItem.vue'
+import RoleItem from '../Shared/RoleItem.vue'
 import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
 
 export default {

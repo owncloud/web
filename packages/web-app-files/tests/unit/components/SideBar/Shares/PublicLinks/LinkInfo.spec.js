@@ -3,7 +3,7 @@ import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
-import LinkInfo from '@files/src/components/SideBar/Links/PublicLinks/LinkInfo.vue'
+import LinkInfo from '@files/src/components/SideBar/Shares/PublicLinks/LinkInfo.vue'
 
 const selectors = {
   linkName: '.oc-files-file-link-name',

@@ -7,7 +7,7 @@
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
-        <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Public Links</h3>
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
         <div v-if="canCreatePublicLinks" class="oc-my-s">
           <p v-translate class="oc-text-muted">
             Any external person with the respective link can access this resource. No sign-in
@@ -62,7 +62,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import LinkEdit from './PublicLinks/LinkEdit.vue'
 import ListItem from './PublicLinks/ListItem.vue'
 import { ShareTypes } from '../../../helpers/share'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
 import { defineComponent } from '@vue/composition-api'
@@ -89,7 +89,7 @@ export default defineComponent({
       store.getters.getToken
     )
 
-    return { graphClient }
+    return { graphClient, hasSpaces: useCapabilitySpacesEnabled() }
   },
   data() {
     return {
@@ -121,6 +121,13 @@ export default defineComponent({
 
     linksLoading() {
       return this.currentFileOutgoingSharesLoading || this.sharesTreeLoading
+    },
+
+    linksHeading() {
+      if (this.hasSpaces) {
+        return this.$gettext('Share via link')
+      }
+      return this.$gettext('Share via public link')
     },
 
     links() {

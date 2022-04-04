@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { ShareTypes } from '../../../../helpers/share'
+import { ShareTypes } from '../../../../../helpers/share'
 
 export default {
   name: 'AutocompleteItem',
