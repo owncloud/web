@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import { mount, VueClass, createLocalVue } from '@vue/test-utils'
-import { getStore } from './views.setup'
+import { routes, getStore } from './views.setup'
 import VueCompositionAPI from '@vue/composition-api'
 import VueRouter from 'vue-router'
 import DesignSystem from 'owncloud-design-system'
@@ -58,6 +58,7 @@ export const accentuatesTableRowTest = async <V extends Vue>(
       folders: 0
     }
   })
+
   const wrapper = mount(
     {
       ...vueClass,
@@ -69,7 +70,7 @@ export const accentuatesTableRowTest = async <V extends Vue>(
     {
       attachTo: document.body,
       localVue,
-      router: new VueRouter(),
+      router: new VueRouter({ routes }),
       store,
       stubs: stubs,
       computed: {

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { createFile, localVue, getStore } from './views.setup'
+import { createFile, localVue, getStore, routes } from './views.setup'
 import Favorites from '../../../src/views/Favorites.vue'
 
 import VueRouter from 'vue-router'
@@ -256,7 +256,7 @@ function mountOptions({
     localVue,
     store,
     stubs,
-    router: new VueRouter(),
+    router: new VueRouter({ routes }),
     setup: () => ({
       loadResourcesTask: {
         isRunning: loading,
