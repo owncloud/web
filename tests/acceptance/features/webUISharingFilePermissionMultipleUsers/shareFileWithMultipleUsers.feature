@@ -10,29 +10,18 @@ Feature: Sharing files with multiple internal users with different permissions
       | username |
       | Alice    |
       | Brian    |
+      | Carol    |
 
   @issue-ocis-1743 @ocisSmokeTest
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given these users have been created with default attributes and without skeleton files in the server:
-      | username |
-      | user0    |
-      | Carol    |
-      | David    |
-    And user "Alice" has created file "lorem.txt" in the server
+    Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
-
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
-      | Regular User | user |
       | Brian Murphy | user |
       | Carol King   | user |
-      | David Lopez  | user |
-    And the user removes "David Lopez" as a collaborator from the share
-    And the user removes "Regular User" as a collaborator from the share
-    Then user "David Lopez" should not be visible in the collaborators selected options in the webUI
-    And user "Regular User" should not be visible in the collaborators selected options in the webUI
-    When the user shares with the selected collaborators
+    And the user shares with the selected collaborators
     And user "Brian" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
     Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for file "lorem.txt" on the webUI
@@ -53,15 +42,11 @@ Feature: Sharing files with multiple internal users with different permissions
       | file_target | /Shares/lorem.txt    |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
-    But user "Regular User" should not be listed in the collaborators list on the webUI
-    And as "user0" file "/Shares/lorem.txt" should not exist in the server
-    And user "David Lopez" should not be listed in the collaborators list on the webUI
-    And as "David" file "/Shares/lorem.txt" should not exist in the server
     Examples:
-      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer               | Viewer               | ,                 | ,                     | read, share         |
-      | Editor               | Editor               | ,                 | ,                     | read, update, share |
-      | Custom permissions   | Custom permissions   | ,                 | ,                     | read                |
-      | Custom permissions   | Viewer               | share             | ,                     | read, share         |
-      | Custom permissions   | Custom permissions   | update            | update                | read, update        |
-      | Custom permissions   | Editor               | share, update     | ,                     | read, update, share |
+      | role               | displayed-role     | extra-permissions | displayed-permissions | actual-permissions  |
+      | Viewer             | Viewer             | ,                 | read, share           | read, share         |
+      | Editor             | Editor             | ,                 | read, update, share   | read, update, share |
+      | Custom permissions | Custom permissions | ,                 | ,                     | read                |
+      | Custom permissions | Viewer             | share             | share                 | read, share         |
+      | Custom permissions | Custom permissions | update            | update                | read, update        |
+      | Custom permissions | Editor             | share, update     | read, update, share   | read, update, share |

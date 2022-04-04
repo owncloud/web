@@ -15,6 +15,7 @@ module.exports = {
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
+        .waitForAjaxCallsToStartAndFinish()
     },
     /**
      * Open the role selection dialog for a new share or for editing the given collaborator

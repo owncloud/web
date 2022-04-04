@@ -3,6 +3,7 @@ const _ = require('lodash')
 const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/sharingHelper')
 const { client } = require('nightwatch-api')
 const userSettings = require('../../helpers/userSettings')
+const timeoutHelper = require('../../helpers/timeoutHelper')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
 const SHARE_TYPE_STRING = {
   user: 'user',
@@ -66,8 +67,18 @@ module.exports = {
      * @param {string} userOrGroup
      * @param {string} userOrGroupName
      */
-    isGroupNotPresentInSelectedCollaboratorsOptions: function (userOrGroup, userOrGroupName) {
+    isUserOrGroupPresentInSelectedCollaboratorsOptions: async function (
+      userOrGroup,
+      userOrGroupName,
+      expectVisible = true
+    ) {
       let requiredSelector
+      let isVisible = false
+
+      const timeout = expectVisible
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+
       if (userOrGroup === 'group') {
         requiredSelector = util.format(
           this.elements.groupInSelectedCollaboratorsList.selector,
@@ -79,10 +90,19 @@ module.exports = {
           userOrGroupName
         )
       }
-      return this.waitForElementNotVisible({
-        selector: requiredSelector,
-        locateStrategy: 'xpath'
-      })
+
+      await this.isVisible(
+        {
+          selector: requiredSelector,
+          locateStrategy: 'xpath',
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectVisible
+        },
+        (result) => {
+          isVisible = result.value === true
+        }
+      )
+      return isVisible
     },
 
     /**
@@ -678,7 +698,7 @@ module.exports = {
     },
     groupInSelectedCollaboratorsList: {
       selector:
-        '//span[contains(@class, "files-share-invite-recipient")]//span[.="Group"]/following-sibling::p[.="%s"]',
+        '//span[contains(@class, "files-share-invite-recipient")]//span[@data-testid="recipient-icon"]/following-sibling::p[.="%s"]',
       locateStrategy: 'xpath'
     },
     userInSelectedCollaboratorsList: {
