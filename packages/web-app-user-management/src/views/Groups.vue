@@ -12,58 +12,86 @@
       @cancel="toggleDeleteGroupModal"
       @confirm="deleteGroups"
     />
-    <main class="oc-flex oc-flex-column oc-height-1-1 oc-p-m">
+    <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
-        <div class="oc-app-bar">
-          <div class="oc-flex oc-flex-between">
-            <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
+        <div class="files-list-wrapper oc-width-expand">
+          <div class="oc-app-bar oc-p-m">
+            <div class="oc-flex oc-flex-between">
+              <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
+              <div>
+                <oc-icon
+                  name="side-bar-right"
+                  :fill-type="toggleSidebarButtonIconFillType"
+                  @click="toggleSideBar"
+                />
+              </div>
+            </div>
+            <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
+              <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
+                <span v-text="selectedGroupsText" />
+                <oc-button
+                  id="files-clear-selection"
+                  v-oc-tooltip="$gettext('Clear selection')"
+                  :aria-label="$gettext('Clear selection')"
+                  class="oc-ml-m"
+                  appearance="outline"
+                  @click="unselectAllGroups"
+                >
+                  <oc-icon name="close" />
+                </oc-button>
+                <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
+                  <oc-icon name="delete-bin" />
+                  <translate>Delete</translate>
+                </oc-button>
+              </div>
+              <div v-else>
+                <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
+                  <oc-icon name="add" />
+                  <translate>New group</translate>
+                </oc-button>
+              </div>
+            </div>
           </div>
-          <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
-            <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
-              <span v-text="selectedGroupsText" />
-              <oc-button
-                id="files-clear-selection"
-                v-oc-tooltip="$gettext('Clear selection')"
-                :aria-label="$gettext('Clear selection')"
-                class="oc-ml-m"
-                appearance="outline"
-                @click="unselectAllGroups"
-              >
-                <oc-icon name="close" />
-              </oc-button>
-              <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
-                <oc-icon name="delete-bin" />
-                <translate>Delete</translate>
-              </oc-button>
-            </div>
-            <div v-else>
-              <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
-                <oc-icon name="add" />
-                <translate>New group</translate>
-              </oc-button>
-            </div>
+          <no-content-message
+            v-if="!groups.length"
+            id="user-management-groups-empty"
+            class="files-empty"
+            icon="group-2"
+          >
+            <template #message>
+              <span v-translate>No groups in here</span>
+            </template>
+          </no-content-message>
+          <div v-else>
+            <GroupsList
+              :groups="groups"
+              :selected-groups="selectedGroups"
+              class="oc-mt-m"
+              @toggleSelectGroup="toggleSelectGroup"
+              @toggleSelectAllGroups="toggleSelectAllGroups"
+              @clickDetails="showDetailsSideBarPanel"
+              @clickEdit="showEditSideBarPanel"
+            />
           </div>
         </div>
-        <no-content-message
-          v-if="!groups.length"
-          id="user-management-groups-empty"
-          class="files-empty"
-          icon="group-2"
+        <side-bar
+          v-if="sideBarOpen"
+          class="groups-sidebar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
+          :available-panels="availableSideBarPanels"
+          :sidebar-active-panel="activePanel"
+          :loading="false"
+          @selectPanel="selectPanel"
+          @close="closeSideBar"
         >
-          <template #message>
-            <span v-translate>No groups in here</span>
+          <template #body>
+            <DetailsPanel
+              v-if="activePanel === 'DetailsPanel'"
+              :groups="selectedGroups"
+            ></DetailsPanel>
+            <EditPanel v-if="activePanel === 'EditPanel'" :user="selectedGroups[0]"></EditPanel>
           </template>
-        </no-content-message>
-        <div v-else>
-          <GroupsList
-            :groups="groups"
-            :selected-groups="selectedGroups"
-            class="oc-mt-m"
-            @toggleSelectGroup="toggleSelectGroup"
-            @toggleSelectAllGroups="toggleSelectAllGroups"
-          />
-        </div>
+        </side-bar>
       </template>
     </main>
   </div>
@@ -75,15 +103,22 @@ import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { useStore } from 'web-pkg/src/composables'
 import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions } from 'vuex'
+import { $gettext } from 'files/src/router/utils'
+import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
+import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 
 export default {
   components: {
+    SideBar,
+    EditPanel,
+    DetailsPanel,
     GroupsList,
     AppLoadingSpinner,
     NoContentMessage,
@@ -113,7 +148,9 @@ export default {
     return {
       selectedGroups: [],
       createGroupModalOpen: false,
-      deleteGroupModalOpen: false
+      deleteGroupModalOpen: false,
+      sideBarOpen: false,
+      activePanel: 'DetailsPanel'
     }
   },
   computed: {
@@ -134,6 +171,39 @@ export default {
 
     allGroupsSelected() {
       return this.groups.length === this.selectedGroups.length
+    },
+
+    availableSideBarPanels() {
+      return [
+        {
+          app: 'DetailsPanel',
+          icon: 'group-2',
+          title: $gettext('Details'),
+          component: DetailsPanel,
+          default: true,
+          enabled: true
+        },
+        {
+          app: 'EditPanel',
+          icon: 'pencil',
+          title: $gettext('Edit'),
+          component: EditPanel,
+          default: false,
+          enabled: this.selectedGroups.length === 1
+        }
+      ]
+    },
+
+    toggleSidebarButtonIconFillType() {
+      return this.sideBarOpen ? 'fill' : 'line'
+    }
+  },
+
+  watch: {
+    selectedGroups() {
+      if (this.selectedGroups.length > 1) {
+        this.activePanel = 'DetailsPanel'
+      }
     }
   },
 
@@ -178,6 +248,30 @@ export default {
 
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
+    },
+
+    selectPanel(panel) {
+      this.activePanel = panel || 'DetailsPanel'
+    },
+
+    toggleSideBar() {
+      this.sideBarOpen = !this.sideBarOpen
+    },
+
+    closeSideBar() {
+      this.sideBarOpen = false
+    },
+
+    showDetailsSideBarPanel(group) {
+      this.selectedGroups = group ? [group] : []
+      this.activePanel = 'DetailsPanel'
+      this.sideBarOpen = true
+    },
+
+    showEditSideBarPanel(group) {
+      this.selectedGroups = group ? [group] : []
+      this.activePanel = 'EditPanel'
+      this.sideBarOpen = true
     },
 
     async deleteGroups(groups) {
@@ -243,3 +337,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.groups-sidebar {
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid var(--oc-color-border);
+}
+</style>

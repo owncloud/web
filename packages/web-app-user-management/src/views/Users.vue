@@ -79,7 +79,7 @@
         <side-bar
           v-if="sideBarOpen"
           class="users-sidebar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
-          :available-panels="availablePanelsUserDetails"
+          :available-panels="availableSideBarPanels"
           :sidebar-active-panel="activePanel"
           :loading="false"
           @selectPanel="selectPanel"
@@ -243,7 +243,7 @@ export default {
       return this.users.length === this.selectedUsers.length
     },
 
-    availablePanelsUserDetails() {
+    availableSideBarPanels() {
       return [
         {
           app: 'DetailsPanel',

@@ -1,18 +1,18 @@
 <template>
   <div class="oc-mt-xl">
-    <div v-if="noUsers" class="oc-flex user-info">
+    <div v-if="noUsers" class="oc-flex group-info">
       <oc-icon name="user" size="xxlarge" />
       <p v-translate>Select a user to view details</p>
     </div>
-    <div v-if="multipleUsers" class="oc-flex user-info">
+    <div v-if="multipleUsers" class="oc-flex group-info">
       <oc-icon name="group" size="xxlarge" />
       <p>{{ multipleUsersSelectedText }}</p>
     </div>
     <div v-if="user">
-      <div class="oc-flex user-info oc-mb-l">
+      <div class="oc-flex group-info oc-mb-l">
         <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
         <span v-text="user.onPremisesSamAccountName"></span>
-        <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
+        <span class="oc-text-muted group-info-display-name" v-text="user.displayName"></span>
       </div>
       <table
         class="details-table"
@@ -20,11 +20,11 @@
       >
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
-          <td v-text="user.displayName" />
+          <td v-text="user.onPremisesSamAccountName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Display name')" />
-          <td v-text="user.onPremisesSamAccountName" />
+          <td v-text="user.displayName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
@@ -80,11 +80,11 @@ export default {
 }
 </script>
 <style lang="scss">
-.user-info {
+.group-info {
   align-items: center;
   flex-direction: column;
 }
-.user-info-display-name {
+.group-info-display-name {
   font-size: 1.5rem;
 }
 .details-table {
