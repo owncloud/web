@@ -70,16 +70,11 @@
         <translate>New folder</translate>
       </oc-button>
     </template>
-    <file-drop
-      v-if="!uploadOrFileCreationBlocked"
-      :root-path="currentPath"
-      :path="currentPath"
-      :headers="headers"
-      @success="onFileSuccess"
-      @error="onFileError"
-      @progress="onFileProgress"
-    />
-    <oc-button
+    <!-- PoC since the components don't get recognized on 
+    initial page rendering as (hidden) OcDrop elements -->
+    <folder-upload />
+    <file-upload />
+    <!-- <oc-button
       id="upload-menu-btn"
       key="upload-menu-btn-enabled"
       v-oc-tooltip="uploadButtonTooltip"
@@ -99,34 +94,25 @@
     >
       <oc-list id="upload-list">
         <li>
-          <folder-upload
-            :root-path="currentPath"
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
+          <folder-upload />
         </li>
         <li>
-          <file-upload
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
+          <file-upload />
         </li>
       </oc-list>
-    </oc-drop>
+    </oc-drop> -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
+import Uppy from '@uppy/core'
+import Tus from '@uppy/tus'
+import XHRUpload from '@uppy/xhr-upload'
+import StatusBar from '@uppy/status-bar'
+import DropTarget from '@uppy/drop-target'
 
-import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -135,17 +121,16 @@ import { useAppDefaults } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
-import FileDrop from './Upload/FileDrop.vue'
+// TODO: Simplify to one UploadButton component and fill from here
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 
 export default {
   components: {
-    FileDrop,
     FileUpload,
     FolderUpload
   },
-  mixins: [Mixins, MixinFileActions],
+  mixins: [MixinFileActions],
   setup() {
     return {
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
@@ -264,13 +249,142 @@ export default {
       )
     }
   },
+  mounted() {
+    // TODO: Clarify why not to use this.headers
+    const client = this.$client
+    const uppyHeaders = client.helpers.buildHeaders()
+
+    const uploadPath = this.$client.files.getFileUrl(
+      buildWebDavFilesPath(this.user.id, this.currentPath)
+    )
+
+    // might make sense to initialize an Uppy instance in the runtime?
+    // TODO: set debug to false
+    const uppy = new Uppy({ debug: true, autoProceed: true })
+
+    // TODO: Build headers differently in public context?
+    // if (this.publicPage()) { ... maybe use this.headers to obtain token ... }
+
+    // TODO: What about flaky capability loading and its implications?
+    if (this.capabilities.files.tus_support?.max_chunk_size > 0) {
+      const chunkSize =
+        this.capabilities.files.tus_support.max_chunk_size > 0 &&
+        this.configuration.uploadChunkSize !== Infinity
+          ? Math.max(
+              this.capabilities.files.tus_support.max_chunk_size,
+              this.configuration.uploadChunkSize
+            )
+          : this.configuration.uploadChunkSize
+
+      delete uppyHeaders['OCS-APIREQUEST']
+
+      uppy.use(Tus, {
+        endpoint: uploadPath,
+        headers: uppyHeaders,
+        chunkSize: chunkSize,
+        removeFingerprintOnSuccess: true,
+        overridePatchMethod: !!this.capabilities.files.tus_support.http_method_override,
+        retryDelays: [0, 3000, 5000, 10000, 20000]
+      })
+    } else {
+      console.log('uppy on oc10')
+      // for loop on event for multiple endpoints
+      // https://github.com/transloadit/uppy/issues/1790#issuecomment-581402293
+      uppy.use(XHRUpload, {
+        endpoint: uploadPath,
+        method: 'put',
+        headers: uppyHeaders
+      })
+    }
+
+    // upload button handling (files & folders separately)
+    // doesn't recognize elements yet since they're tippy children, maybe use $refs?
+    const uploadInputTarget = document.querySelectorAll('.upload-input-target')
+
+    uploadInputTarget.forEach((item) => {
+      item.addEventListener('change', (event) => {
+        const files = Array.from(event.target.files)
+
+        files.forEach((file) => {
+          try {
+            console.log('beginning upload for file:', file)
+            uppy.addFile({
+              source: 'file input',
+              name: file.name,
+              type: file.type,
+              data: file
+            })
+          } catch (err) {
+            console.error('error upload file:', file)
+            if (err.isRestriction) {
+              // handle restrictions
+              console.log('Restriction error:', err)
+            } else {
+              // handle other errors
+              console.error(err)
+            }
+          }
+        })
+      })
+    })
+
+    // // upload via drag&drop handling
+    uppy.use(DropTarget, {
+      target: '#files-view'
+    })
+
+    uppy.use(StatusBar, {
+      id: 'StatusBar',
+      target: '#files-app-bar',
+      hideAfterFinish: true,
+      showProgressDetails: true,
+      hideUploadButton: false,
+      hideRetryButton: false,
+      hidePauseResumeButton: false,
+      hideCancelButton: false,
+      doneButtonHandler: null,
+      locale: {
+        // TODO: Uppy l10n research
+      }
+    })
+
+    uppy.on('upload-error', (file, error, response) => {
+      console.log('error with file:', file.id)
+      console.log('error message:', error)
+      this.onFileError(error.toString())
+    })
+
+    uppy.on('file-removed', () => {
+      uploadInputTarget.forEach((item) => {
+        item.value = null
+      })
+    })
+
+    uppy.on('complete', (result) => {
+      result.successful.forEach((file) => {
+        this.onFileSuccess(file)
+      })
+      uploadInputTarget.forEach((item) => {
+        item.value = null
+      })
+
+      console.log('successful files:', result.successful)
+      console.log('failed files:', result.failed)
+    })
+  },
+  beforeDestroy() {
+    // maybe bad that we close uppy this early, eventually on rerender even?
+    // currently very brittle, selecting a resource in the table
+    // results in a rerendering that logs an error since uppy is gone before it can close
+    // this.uppy.close()
+  },
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'loadIndicators']),
-    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage']),
+    ...mapActions('Files', ['loadPreview', 'loadIndicators']),
+    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
-    async onFileSuccess(event, file) {
+    async onFileSuccess(file) {
       try {
         if (file.name) {
           file = file.name
@@ -321,10 +435,6 @@ export default {
         title: this.$gettext('Failed to upload'),
         status: 'danger'
       })
-    },
-
-    onFileProgress(progress) {
-      this.updateFileProgress(progress)
     },
 
     showCreateResourceModal(

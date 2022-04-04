@@ -22,17 +22,6 @@ const allowSharePermissions = (getters) => {
 }
 
 export default {
-  updateFileProgress({ commit }, progress) {
-    commit('UPDATE_FILE_PROGRESS', progress)
-  },
-  addFileToProgress({ commit }, file) {
-    commit('ADD_FILE_TO_PROGRESS', file)
-  },
-
-  removeFileFromProgress({ commit }, file) {
-    commit('REMOVE_FILE_FROM_PROGRESS', file)
-  },
-
   loadFiles(context, { currentFolder, files }) {
     if (currentFolder) {
       currentFolder = buildResource(currentFolder)
@@ -590,9 +579,6 @@ export default {
       response = []
     }
     context.commit('SET_VERSIONS', response)
-  },
-  dragOver(context, value) {
-    context.commit('DRAG_OVER', value)
   },
   setPublicLinkPassword(context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)

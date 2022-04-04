@@ -7,41 +7,18 @@
     <input
       id="fileUploadInput"
       ref="input"
+      class="upload-input-target"
       type="file"
       aria-labelledby="files-file-upload-button"
       name="file"
       multiple
       tabindex="-1"
-      @change="$_ocUpload_addFileToQueue"
     />
   </div>
 </template>
 
 <script>
-import Mixins from '../../../mixins'
-import { mapState } from 'vuex'
-
 export default {
-  mixins: [Mixins],
-  props: {
-    path: { type: String, required: true },
-    headers: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    additionalData: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    requestType: { type: String, default: 'PUT' }
-  },
-  computed: {
-    ...mapState(['user'])
-  },
   methods: {
     triggerUpload() {
       this.$refs.input.click()

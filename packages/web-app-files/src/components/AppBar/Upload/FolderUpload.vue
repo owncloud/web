@@ -7,6 +7,7 @@
     <input
       id="folderUploadInput"
       ref="input"
+      class="upload-input-target"
       type="file"
       name="folder"
       aria-labelledby="files-folder-upload-button"
@@ -14,33 +15,12 @@
       mozdirectory
       allowdirs
       tabindex="-1"
-      @change="$_ocUpload_addDirectoryToQueue"
     />
   </div>
 </template>
 
 <script>
-import Mixins from '../../../mixins'
-
 export default {
-  mixins: [Mixins],
-  props: {
-    rootPath: { type: String, required: true },
-    path: { type: String, required: true },
-    headers: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    additionalData: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    requestType: { type: String, default: 'PUT' }
-  },
   methods: {
     triggerUpload() {
       this.$refs.input.click()

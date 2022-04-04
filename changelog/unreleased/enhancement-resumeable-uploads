@@ -1,0 +1,9 @@
+Enhancement: Resumeable uploads
+
+Draft:
+- Introduced resumeable (depending on backend capabilities)
+- Improved rendering of uploadProgress-visualization
+- Removed `vue2-dropzone` and `vue-drag-drop` libraries.
+
+https://github.com/owncloud/web/pull/6202
+https://github.com/owncloud/web/issues/6268

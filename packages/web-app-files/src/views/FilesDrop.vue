@@ -11,18 +11,11 @@
       <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
         <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
-          <vue-dropzone
-            id="oc-dropzone"
-            :options="dropzoneOptions"
-            :use-custom-slot="true"
-            :include-styling="false"
-            @vdropzone-file-added="dropZoneFileAdded"
-          >
-            <div class="oc-flex oc-flex-middle oc-flex-center oc-files-drop-drag-area">
-              <oc-icon name="file-upload" />
-              <translate>Drop files here to upload or click to select file</translate>
-            </div>
-          </vue-dropzone>
+          <!-- needs uppy dropzone -->
+          <div id="files-drop-zone" class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
+            <oc-icon name="file_upload" />
+            <translate>Drop files here to upload or click to select file</translate>
+          </div>
           <div id="previews" hidden />
         </div>
         <div
@@ -74,29 +67,29 @@
 </template>
 
 <script>
-import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
-import Mixins from '../mixins.js'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
+import Uppy from '@uppy/core'
+import Tus from '@uppy/tus'
+import XHRUpload from '@uppy/xhr-upload'
+import StatusBar from '@uppy/status-bar'
+import DropTarget from '@uppy/drop-target'
+
 export default {
-  components: {
-    vueDropzone: vue2DropZone
-  },
-  mixins: [Mixins],
   data() {
     return {
       loading: true,
       errorMessage: null,
-      uploadedFiles: new Map(),
+      uploadedFiles: [],
       uploadedFilesChangeTracker: 0
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['publicLinkPassword']),
+    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters('Files', ['currentFolder', 'publicLinkPassword']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },
@@ -120,19 +113,122 @@ export default {
     },
     getUploadedFiles() {
       return this.uploadedFilesChangeTracker && this.uploadedFiles.values()
-    },
-    dropzoneOptions() {
-      return {
-        url: this.url,
-        clickable: true,
-        createImageThumbnails: false,
-        autoQueue: false,
-        previewsContainer: '#previews'
-      }
     }
   },
   mounted() {
     this.resolvePublicLink()
+
+    const client = this.$client
+    const uppyHeaders = client.helpers.buildHeaders()
+
+    // might make sense to initialize an Uppy instance in the runtime?
+    // TODO: set debug to false
+    const uppy = new Uppy({ debug: true, autoProceed: true })
+
+    // TODO: Build headers differently in public context?
+    // if (this.publicPage()) { ... maybe use this.headers to obtain token ... }
+
+    // TODO: What about flaky capability loading and its implications?
+    // if (this.capabilities?.files.tus_support?.max_chunk_size > 0) {
+    //   const chunkSize =
+    //     this.capabilities.files.tus_support.max_chunk_size > 0 &&
+    //     this.configuration.uploadChunkSize !== Infinity
+    //       ? Math.max(
+    //           this.capabilities.files.tus_support.max_chunk_size,
+    //           this.configuration.uploadChunkSize
+    //         )
+    //       : this.configuration.uploadChunkSize
+
+    delete uppyHeaders['OCS-APIREQUEST']
+
+    uppy.use(Tus, {
+      endpoint: this.url,
+      headers: uppyHeaders,
+      chunkSize: this.configuration.uploadChunkSize,
+      removeFingerprintOnSuccess: true,
+      overridePatchMethod: '',
+      retryDelays: [0, 3000, 5000, 10000, 20000]
+    })
+    // } else {
+    // uppy.use(XHRUpload, {
+    //   endpoint: this.url,
+    //   method: 'put',
+    //   headers: uppyHeaders
+    // })
+    // }
+
+    // // upload via drag&drop handling
+    uppy.use(DropTarget, {
+      target: '#files-drop-zone'
+    })
+
+    // upload button handling (files & folders separately)
+    // doesn't recognize elements yet since they're tippy children, maybe use $refs?
+    const uploadInputTarget = document.getElementById('#files-drop-zone')
+
+    uploadInputTarget.addEventListener('change', (event) => {
+      const files = Array.from(event.target.files)
+
+      files.forEach((file) => {
+        try {
+          console.log('beginning upload for file:', file)
+          uppy.addFile({
+            source: 'file input',
+            name: file.name,
+            type: file.type,
+            data: file
+          })
+        } catch (err) {
+          console.error('error upload file:', file)
+          if (err.isRestriction) {
+            // handle restrictions
+            console.log('Restriction error:', err)
+          } else {
+            // handle other errors
+            console.error(err)
+          }
+        }
+      })
+    })
+
+    // uppy.use(StatusBar, {
+    //   id: 'StatusBar',
+    //   target: '#files-app-bar',
+    //   hideAfterFinish: true,
+    //   showProgressDetails: true,
+    //   hideUploadButton: false,
+    //   hideRetryButton: false,
+    //   hidePauseResumeButton: false,
+    //   hideCancelButton: false,
+    //   doneButtonHandler: null,
+    //   locale: {
+    //     // TODO: Uppy l10n research
+    //   }
+    // })
+
+    uppy.on('upload-error', (file, error, response) => {
+      console.log('error with file:', file.id)
+      console.log('error message:', error)
+      this.onFileError(error.toString())
+    })
+
+    uppy.on('file-removed', () => {
+      uploadInputTarget.forEach((item) => {
+        item.value = null
+      })
+    })
+
+    uppy.on('complete', (result) => {
+      result.successful.forEach((file) => {
+        this.uploadedFiles.push(file)
+      })
+      uploadInputTarget.forEach((item) => {
+        item.value = null
+      })
+
+      console.log('successful files:', result.successful)
+      console.log('failed files:', result.failed)
+    })
   },
   methods: {
     resolvePublicLink() {

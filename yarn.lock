@@ -2262,6 +2262,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@transloadit/prettier-bytes@npm:0.0.7":
+  version: 0.0.7
+  resolution: "@transloadit/prettier-bytes@npm:0.0.7"
+  checksum: af075e1b2b045cac55d5ab854b5c94273ef7f4bd825f05fe578559465f206d2a1535343b50170252a9efb31ffdc2d6420e64eb32d2faeabeeb8b7d81d5d46ef0
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.8
   resolution: "@tsconfig/node10@npm:1.0.8"
@@ -2736,6 +2743,100 @@ __metadata:
     "@typescript-eslint/types": 5.15.0
     eslint-visitor-keys: ^3.0.0
   checksum: a3f231bf55794547680284aa23ba495efa1e52f864583fe53e1ff8b2c011db070ca48633eb8a333bfc93be0bdbb76ffa98e81bf032fd2737a5e0f0b1b81bbc22
+  languageName: node
+  linkType: hard
+
+"@uppy/companion-client@npm:^2.0.4, @uppy/companion-client@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@uppy/companion-client@npm:2.0.5"
+  dependencies:
+    "@uppy/utils": ^4.0.5
+    namespace-emitter: ^2.0.1
+  checksum: a68bbd4d7bb65b9eb2901ad409e4704662029e7b5f5c4d350cbbfeaf6e4995a0ff66cedfdaa31b1c46806398f446a196f33bab2877222feed0b10627cb539158
+  languageName: node
+  linkType: hard
+
+"@uppy/core@npm:^2.1.7":
+  version: 2.1.7
+  resolution: "@uppy/core@npm:2.1.7"
+  dependencies:
+    "@transloadit/prettier-bytes": 0.0.7
+    "@uppy/store-default": ^2.0.3
+    "@uppy/utils": ^4.0.5
+    lodash.throttle: ^4.1.1
+    mime-match: ^1.0.2
+    namespace-emitter: ^2.0.1
+    nanoid: ^3.1.25
+    preact: ^10.5.13
+  checksum: 161ecf4315fb3ff2db3ad7beceac5b94ca42e766d98658b62da9d10645c1fc9324f8c1949ff00637aef74adaac88a51e1f06cf47fbd47888679a0cc87871fa89
+  languageName: node
+  linkType: hard
+
+"@uppy/drop-target@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@uppy/drop-target@npm:1.1.1"
+  dependencies:
+    "@uppy/utils": ^4.0.3
+  peerDependencies:
+    "@uppy/core": ^2.0.0
+  checksum: 33825bbe77ac780c939886f0a9be91c6ce5a5b8f93b239b27ed428d78ccd57906e934ffcf2b9524fc0d2df1f6e31e353612fe26a56ed82dad4a1a527eca7f664
+  languageName: node
+  linkType: hard
+
+"@uppy/status-bar@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@uppy/status-bar@npm:2.1.3"
+  dependencies:
+    "@transloadit/prettier-bytes": 0.0.7
+    "@uppy/utils": ^4.0.5
+    classnames: ^2.2.6
+    lodash.throttle: ^4.1.1
+    preact: ^10.5.13
+  peerDependencies:
+    "@uppy/core": ^2.1.6
+  checksum: 80df539fd4f8444ffdc824b102b248a039bd2519ce6940fa76d40723212dfd14642067410bce30f388ca64cd66152906fe5458d08e2d489ccb737e6d8c84e01a
+  languageName: node
+  linkType: hard
+
+"@uppy/store-default@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@uppy/store-default@npm:2.0.3"
+  checksum: aa6a3f80611ce6efed2963a197e3592cf00b1dedeb7e6c5aa7282e4ef857c8a7c1b747f8943cf969cc0fb12daf4907b62f1041a3df177bff01feb403f7dc777e
+  languageName: node
+  linkType: hard
+
+"@uppy/tus@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@uppy/tus@npm:2.2.2"
+  dependencies:
+    "@uppy/companion-client": ^2.0.5
+    "@uppy/utils": ^4.0.5
+    tus-js-client: ^2.1.1
+  peerDependencies:
+    "@uppy/core": ^2.1.7
+  checksum: 16073b4dfcd1a49d998ccaa37ff78707a80758dcebb92b5644042cb4601821e78690ed5e0ea3b829ed33129772c384bf8c9c60a69211e70447a956cef3225f57
+  languageName: node
+  linkType: hard
+
+"@uppy/utils@npm:^4.0.3, @uppy/utils@npm:^4.0.4, @uppy/utils@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "@uppy/utils@npm:4.0.5"
+  dependencies:
+    lodash.throttle: ^4.1.1
+  checksum: 55c2522ae1bad09b8bb706c90bdb754e3c74c48738f8cb88437e726d8fe7103380caea8daa7016ce7d4dc73e99862f60a585a052291393a2d76ef67b3d5b44d8
+  languageName: node
+  linkType: hard
+
+"@uppy/xhr-upload@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@uppy/xhr-upload@npm:2.0.7"
+  dependencies:
+    "@uppy/companion-client": ^2.0.4
+    "@uppy/utils": ^4.0.4
+    nanoid: ^3.1.25
+  peerDependencies:
+    "@uppy/core": ^2.1.4
+  checksum: 714bb27348816249feea9545da299b56e150830ecd2d5e7015a061f412b349287aa2db875465949b4c58836377dbb7634d8e176a87c0126cb92b0a54ab408049
   languageName: node
   linkType: hard
 
@@ -4221,6 +4322,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.2.6":
+  version: 2.3.1
+  resolution: "classnames@npm:2.3.1"
+  checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
+  languageName: node
+  linkType: hard
+
 "clean-css@npm:^4.1.11":
   version: 4.2.3
   resolution: "clean-css@npm:4.2.3"
@@ -4570,7 +4678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^2.4.0, core-js@npm:^2.5.3, core-js@npm:^2.6.5":
+"core-js@npm:^2.4.0, core-js@npm:^2.6.5":
   version: 2.6.12
   resolution: "core-js@npm:2.6.12"
   checksum: 44fa9934a85f8c78d61e0c8b7b22436330471ffe59ec5076fe7f324d6e8cf7f824b14b1c81ca73608b13bdb0fef035bd820989bf059767ad6fa13123bb8bd016
@@ -5359,13 +5467,6 @@ __metadata:
   resolution: "draw-io@workspace:packages/web-app-draw-io"
   languageName: unknown
   linkType: soft
-
-"dropzone@npm:^5.5.1":
-  version: 5.9.2
-  resolution: "dropzone@npm:5.9.2"
-  checksum: 4c906f1e08421bbbb14f5e41ad37e5694317b6761f0a7e95d22c3037f6a05fe01ba48b722392187cccef367f18fdbaa18b1ae172c0b5cdb9a39ecba04ebb4f0a
-  languageName: node
-  linkType: hard
 
 "duplexify@npm:^4.1.2":
   version: 4.1.2
@@ -6323,8 +6424,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "files@workspace:packages/web-app-files"
   dependencies:
+    "@uppy/core": ^2.1.7
+    "@uppy/drop-target": ^1.1.1
+    "@uppy/status-bar": ^2.1.3
+    "@uppy/tus": ^2.2.2
+    "@uppy/xhr-upload": ^2.0.7
     copy-to-clipboard: ^3.3.1
-    vue2-dropzone: ^3.6.0
   languageName: unknown
   linkType: soft
 
@@ -9022,6 +9127,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mime-match@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "mime-match@npm:1.0.2"
+  dependencies:
+    wildcard: ^1.1.0
+  checksum: 3e4afd6be98e20bfb421146a14147560941f471886e6d3534372b37d29bb7e35a7462e1f9cee98312f92e44969ae9deca2da7ad91ab5a738af55a7d5f03a6814
+  languageName: node
+  linkType: hard
+
 "mime-types@npm:^2.1.12":
   version: 2.1.31
   resolution: "mime-types@npm:2.1.31"
@@ -9257,12 +9371,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.32, nanoid@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "nanoid@npm:3.3.1"
+"namespace-emitter@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "namespace-emitter@npm:2.0.1"
+  checksum: 49ae49674d5b83e18ad91c549ed264df1fcba02d039617e0932dab618f79e3749de6d878d54962b5cbf2611c0eafc91203a376980399c33c30edf542f19cb034
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^3.1.25, nanoid@npm:^3.1.32, nanoid@npm:^3.3.1":
+  version: 3.3.2
+  resolution: "nanoid@npm:3.3.2"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 4ef0969e1bbe866fc223eb32276cbccb0961900bfe79104fa5abe34361979dead8d0e061410a5c03bc3d47455685adf32c09d6f27790f4a6898fb51f7df7ec86
+  checksum: 376717f0685251fad77850bd84c6b8d57837c71eeb1c05be7c742140cc1835a5a2953562add05166d6dbc8fb65f3fdffa356213037b967a470e1691dc3e7b9cc
   languageName: node
   linkType: hard
 
@@ -10736,6 +10857,13 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: a515ed36622edbee1d3ba153298d3b62ae9826dfa6de19204c2a6f975c8d3ad36808423b5119a9d82b78efd486de3ce35a1faf882a36ac8aa09492be4fbb7fe1
+  languageName: node
+  linkType: hard
+
+"preact@npm:^10.5.13":
+  version: 10.6.4
+  resolution: "preact@npm:10.6.4"
+  checksum: 09c496bb3cbe231fb6ef218b44d29af53a1f4bf1ae2e5929ef0faf70f9ecffaa475b4459ef72dd8f0f5396c255172c7c26de5c7d2eb6f6849e36e724c7aa86b7
   languageName: node
   linkType: hard
 
@@ -13151,7 +13279,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tus-js-client@npm:^2.3.1":
+"tus-js-client@npm:^2.1.1":
   version: 2.3.1
   resolution: "tus-js-client@npm:2.3.1"
   dependencies:
@@ -13567,15 +13695,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-drag-drop@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "vue-drag-drop@npm:1.1.4"
-  dependencies:
-    core-js: ^2.5.3
-  checksum: 8d4184ed35cb941745d42f9a925866f06fe9b7a71386792503efccc451fe6fed1c733d3f3d847a0eed2316ad861903b965fcb476153b233517609600dbb56695
-  languageName: node
-  linkType: hard
-
 "vue-eslint-parser@npm:^7.0.0, vue-eslint-parser@npm:^7.10.0":
   version: 7.11.0
   resolution: "vue-eslint-parser@npm:7.11.0"
@@ -13706,15 +13825,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue2-dropzone@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "vue2-dropzone@npm:3.6.0"
-  dependencies:
-    dropzone: ^5.5.1
-  checksum: 6aada15d09bc8d2a1a3d59b370927fade313726224048635aa896ed8e592b71d6b1eb22d74bb45062631adc63ddd19ebbcfa59d8eaaaea35cb1248fff3c80ca1
-  languageName: node
-  linkType: hard
-
 "vue@npm:^2.6.10":
   version: 2.6.14
   resolution: "vue@npm:2.6.14"
@@ -13842,14 +13952,12 @@ __metadata:
     sanitize-html: ^2.7.0
     semver: ^7.3.5
     tippy.js: ^6.3.7
-    tus-js-client: ^2.3.1
     utf8: ^3.0.0
     uuid: ^8.3.2
     v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
     vue-concurrency: ^2.2.1
-    vue-drag-drop: ^1.1.4
     vue-events: ^3.1.0
     vue-gettext: ^2.1.5
     vue-inline-svg: ^2.0.0
@@ -13984,6 +14092,13 @@ __metadata:
   dependencies:
     string-width: ^1.0.2 || 2
   checksum: d09c8012652a9e6cab3e82338d1874a4d7db2ad1bd19ab43eb744acf0b9b5632ec406bdbbbb970a8f4771a7d5ef49824d038ba70aa884e7723f5b090ab87134d
+  languageName: node
+  linkType: hard
+
+"wildcard@npm:^1.1.0":
+  version: 1.1.2
+  resolution: "wildcard@npm:1.1.2"
+  checksum: f93bf48a23b7b776f7960fa7f252af55da265b4ce8127852e420f04a907b78073bc0412f74fc662f561667f3277473974f6553a260ece67f53b1975d128320ab
   languageName: node
   linkType: hard
 
