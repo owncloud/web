@@ -52,9 +52,34 @@ describe('Groups view', () => {
       expect(toggleDeleteGroupModalStub).toHaveBeenCalledTimes(0)
     })
   })
+
+  describe('computed method "availableSideBarPanels"', () => {
+    it('should contain EditPanel with property enabled set true when one group is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeTruthy()
+    })
+    it('should contain EditPanel with property enabled set false when no group is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+    it('should contain EditPanel with property enabled set false when multiple groups are selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }, { id: '2' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+  })
 })
 
-function getMountedWrapper({ resolveCreateGroup = true, resolveDeleteGroup = true } = {}) {
+function getMountedWrapper({
+  data = {},
+  resolveCreateGroup = true,
+  resolveDeleteGroup = true
+} = {}) {
   return shallowMount(Groups, {
     localVue,
     store: createStore(Vuex.Store, {
@@ -90,7 +115,8 @@ function getMountedWrapper({ resolveCreateGroup = true, resolveDeleteGroup = tru
           {
             id: 1
           }
-        ]
+        ],
+        ...data
       }
     },
     stubs: {

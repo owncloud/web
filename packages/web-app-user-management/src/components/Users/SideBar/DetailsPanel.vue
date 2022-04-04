@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     user() {
-      return this.users.length > 1 ? null : this.users[0]
+      return !this.users.length || this.users.length > 1 ? null : this.users[0]
     },
     noUsers() {
       return !this.users.length
