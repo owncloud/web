@@ -13,19 +13,19 @@ const routes = [
     name: 'media',
     meta: {
       auth: false,
-      title: $gettext('Mediaviewer app'),
+      title: $gettext('Preview'),
       patchCleanPath: true
     }
   }
 ]
 
-const routeName = 'mediaviewer-media'
+const routeName = 'preview-media'
 const mimeTypes = ['image', 'video', 'audio']
 
 const appInfo = {
-  name: 'Mediaviewer',
-  id: 'mediaviewer',
-  icon: 'image',
+  name: 'Preview',
+  id: 'preview',
+  icon: 'eye',
   extensions: mimeTypes.map((mimeType) => ({
     canBeDefault: true,
     mimeType,

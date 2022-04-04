@@ -17,7 +17,7 @@
   "apps": [
     "files",
     "markdown-editor",
-    "media-viewer",
+    "preview",
     "pdf-viewer",
     "search",
     "external",

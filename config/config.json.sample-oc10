@@ -9,7 +9,7 @@
   },
   "apps": [
     "files",
-    "media-viewer",
+    "preview",
     "pdf-viewer",
     "search"
   ],

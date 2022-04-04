@@ -76,7 +76,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
   },
   "apps" : [
     "files",
-    "media-viewer",
+    "preview",
     "draw-io"
   ],
   "applications" : [

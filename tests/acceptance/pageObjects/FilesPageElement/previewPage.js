@@ -5,17 +5,17 @@ const filesActionsMenu = client.page.FilesPageElement.fileActionsMenu()
 
 module.exports = {
   commands: {
-    openMediaViewer: async function (fileName) {
+    openPreview: async function (fileName) {
       await filesList.openFileActionsMenu(fileName)
-      await filesActionsMenu.mediaViewer()
+      await filesActionsMenu.preview()
 
       return this
     },
-    waitForMediaViewerLoaded: function (fileName) {
+    waitForPreviewLoaded: function (fileName) {
       const image = util.format(this.elements.mediaImage.selector, fileName)
       return this.useXpath().waitForElementVisible(image).useCss()
     },
-    isMediaViewerPresent: async function () {
+    isPreviewPresent: async function () {
       let isPresent = false
       await this.useXpath().waitForElementVisible(
         {
@@ -66,27 +66,27 @@ module.exports = {
   },
   elements: {
     actionBar: {
-      selector: '//div[contains(@class, "media-viewer-controls-action-bar")]',
+      selector: '//div[contains(@class, "preview-controls-action-bar")]',
       locateStrategy: 'xpath'
     },
     nextButton: {
-      selector: `//button[contains(@class, "media-viewer-controls-next")]`,
+      selector: `//button[contains(@class, "preview-controls-next")]`,
       locateStrategy: 'xpath'
     },
     previousButton: {
-      selector: `//button[contains(@class, "media-viewer-controls-previous")]`,
+      selector: `//button[contains(@class, "preview-controls-previous")]`,
       locateStrategy: 'xpath'
     },
     downLoadButton: {
-      selector: `//button[contains(@class, "media-viewer-controls-download")]`,
+      selector: `//button[contains(@class, "preview-controls-download")]`,
       locateStrategy: 'xpath'
     },
     closeButton: {
-      selector: `//button[contains(@class, "media-viewer-controls-close")]`,
+      selector: `//button[contains(@class, "preview-controls-close")]`,
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//p[contains(@class, "media-viewer-file-name") and contains(text(),"%s")]',
+      selector: '//p[contains(@class, "preview-file-name") and contains(text(),"%s")]',
       locateStrategy: 'xpath'
     }
   }

@@ -4,9 +4,9 @@ const meta = {
     id: 'files',
     icon: 'folder'
   },
-  mediaviewer: {
-    name: 'Mediaviewer',
-    id: 'mediaviewer',
+  preview: {
+    name: 'Preview',
+    id: 'preview',
     icon: 'image'
   },
   'draw-io': {
@@ -40,12 +40,12 @@ const editors = [
     routes
   },
   {
-    app: 'mediaviewer',
+    app: 'preview',
     extension: 'png',
     handler: null,
     icon: null,
     newTab: false,
-    routeName: 'mediaviewer-media',
+    routeName: 'preview-media',
     routes
   },
   {
@@ -145,11 +145,11 @@ const fileActions = {
     selector: '.oc-files-actions-draw-io-trigger',
     opensInNewWindow: true
   },
-  mediaviewer: {
+  preview: {
     handler: jest.fn(),
-    label: () => 'Open in MediaViewer',
-    class: 'oc-files-actions-mediaviewer-trigger',
-    selector: '.oc-files-actions-mediaviewer-trigger'
+    label: () => 'Open in Preview',
+    class: 'oc-files-actions-preview-trigger',
+    selector: '.oc-files-actions-preview-trigger'
   },
   navigate: {
     name: 'navigate',
@@ -165,7 +165,7 @@ const fileActions = {
 exports.fileActions = fileActions
 
 exports.getActions = function (actions = []) {
-  const defaultActions = ['download', 'markdown-editor', 'draw-io', 'mediaviewer', 'navigate']
+  const defaultActions = ['download', 'markdown-editor', 'draw-io', 'preview', 'navigate']
 
   const res = []
   for (const key of actions) {

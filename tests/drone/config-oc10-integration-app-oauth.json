@@ -9,7 +9,7 @@
   "apps": [
     "files",
     "draw-io",
-    "media-viewer",
+    "preview",
     "pdf-viewer",
     "search"
   ],

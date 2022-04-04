@@ -7,7 +7,7 @@
   },
   "apps": [
     "files",
-    "media-viewer",
+    "preview",
     "markdown-editor",
     "pdf-viewer",
     "search"

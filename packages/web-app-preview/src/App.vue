@@ -1,7 +1,7 @@
 <template>
   <main
-    id="mediaviewer"
-    ref="mediaviewer"
+    id="preview"
+    ref="preview"
     tabindex="-1"
     @keydown.left="prev"
     @keydown.right="next"
@@ -24,7 +24,7 @@
         v-show="activeMediaFileCached"
         class="
           oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-          media-viewer-player
+          preview-player
         "
       >
         <img
@@ -53,10 +53,10 @@
       </div>
     </template>
 
-    <div class="oc-position-medium oc-position-bottom-center media-viewer-details">
+    <div class="oc-position-medium oc-position-bottom-center preview-details">
       <p
         v-if="activeMediaFile"
-        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s media-viewer-file-name"
+        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s preview-file-name"
         aria-hidden="true"
       >
         {{ activeMediaFile.name }}
@@ -70,11 +70,11 @@
           oc-flex-middle
           oc-flex-center
           oc-flex-around
-          media-viewer-controls-action-bar
+          preview-controls-action-bar
         "
       >
         <oc-button
-          class="media-viewer-controls-previous"
+          class="preview-controls-previous"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Show previous media file in folder')"
@@ -82,12 +82,12 @@
         >
           <oc-icon size="large" name="arrow-drop-left" />
         </oc-button>
-        <p v-if="!isFolderLoading" class="oc-m-rm media-viewer-controls-action-count">
+        <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
         <oc-button
-          class="media-viewer-controls-next"
+          class="preview-controls-next"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Show next media file in folder')"
@@ -96,7 +96,7 @@
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
         <oc-button
-          class="media-viewer-controls-download"
+          class="preview-controls-download"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Download currently viewed file')"
@@ -105,10 +105,10 @@
           <oc-icon size="large" name="file-download" fill-type="line" />
         </oc-button>
         <oc-button
-          class="media-viewer-controls-close"
+          class="preview-controls-close"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Close mediaviewer app')"
+          :aria-label="$gettext('Close preview')"
           @click="closeApp"
         >
           <oc-icon size="large" name="close" />
@@ -120,10 +120,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
-import MediaViewer from './index'
+import Preview from './index'
 
 export default {
-  name: 'Mediaviewer',
+  name: 'Preview',
   setup() {
     return {
       ...useAppDefaults({
@@ -147,7 +147,7 @@ export default {
     ...mapGetters(['getToken', 'capabilities']),
 
     pageTitle() {
-      const translated = this.$gettext('Mediaviewer for %{currentMediumName}')
+      const translated = this.$gettext('Preview for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
         currentMediumName: this.activeMediaFile?.name
       })
@@ -172,7 +172,7 @@ export default {
       }
 
       return this.activeFiles.filter((file) => {
-        return MediaViewer.mimeTypes.includes(file.mimeType.toLowerCase().split('/')[0])
+        return Preview.mimeTypes.includes(file.mimeType.toLowerCase().split('/')[0])
       })
     },
     activeMediaFile() {
@@ -244,7 +244,7 @@ export default {
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setCurrentFile(this.currentFileContext.path)
-    this.$refs.mediaviewer.focus()
+    this.$refs.preview.focus()
   },
 
   beforeDestroy() {
@@ -363,7 +363,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.media-viewer-player {
+.preview-player {
   max-width: 90vw;
   height: 70vh;
   margin: 10px auto;
@@ -376,23 +376,23 @@ export default {
   }
 }
 
-.media-viewer-controls-action-count {
+.preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
 }
 
 @media (max-width: 959px) {
-  .media-viewer-player {
+  .preview-player {
     max-width: 100vw;
   }
 
-  .media-viewer-details {
+  .preview-details {
     left: 0;
     margin: 0;
     max-width: 100%;
     transform: none !important;
     width: 100%;
 
-    .media-viewer-controls-action-bar {
+    .preview-controls-action-bar {
       width: 100%;
     }
   }

@@ -11,7 +11,7 @@ const validConfig = `{
   },
   "apps": [
     "files",
-    "media-viewer"
+    "preview"
   ],
   "external_apps": [
     {

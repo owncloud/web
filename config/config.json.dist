@@ -10,9 +10,9 @@
   "apps" : [
     "files",
     "draw-io",
-    "media-viewer",
+    "preview",
     "user-management",
-    "pdf-viewer", 
+    "pdf-viewer",
     "search"
   ],
   "applications" : []

@@ -14,7 +14,7 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 
-// TODO: this file/folder contains file/folder loading logic extracted from mediaviewer and drawio extensions
+// TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
 // https://github.com/owncloud/web/issues/3301
 
