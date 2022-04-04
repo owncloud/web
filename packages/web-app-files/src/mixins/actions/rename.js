@@ -165,7 +165,7 @@ export default {
           this.hideModal()
 
           if (sameResource) {
-            const newPath = resource.path.substr(1, resource.path.lastIndexOf('/'))
+            const newPath = resource.path.slice(1, resource.path.lastIndexOf('/') + 1)
             this.$router.push({
               params: {
                 item: '/' + newPath + newName || '/'

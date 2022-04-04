@@ -202,7 +202,7 @@ export default {
         y: this.thumbDimensions,
         // strip double quotes from etag
         // we have no etag, e.g. on shared with others page
-        c: this.activeFilteredFile.etag?.substr(1, this.activeFilteredFile.etag.length - 2),
+        c: this.activeFilteredFile.etag?.slice(1, -1),
         scalingup: 0,
         preview: 1,
         a: 1

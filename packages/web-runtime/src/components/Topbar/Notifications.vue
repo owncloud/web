@@ -76,7 +76,7 @@ export default {
       this.$client.requests
         .ocs({
           service: 'apps/' + app,
-          action: link.substr(link.lastIndexOf('api')),
+          action: link.slice(link.lastIndexOf('api')),
           method: type
         })
         .then((res) => {
@@ -86,7 +86,7 @@ export default {
           })
           res.json().then((json) => {
             json.ocs.data.forEach((item) => {
-              const path = item.path.substr(0, item.path.lastIndexOf('/') + 1)
+              const path = item.path.slice(0, item.path.lastIndexOf('/') + 1)
               const absolutePath = this.$route.params.item ? this.$route.params.item : '/'
               if (path === absolutePath) this.reloadFilesList(path)
             })

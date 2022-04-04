@@ -170,7 +170,8 @@ export default {
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
           const resourcePath = this.resourcesToDelete[0].path
-          parentFolderPath = resourcePath.substr(0, resourcePath.lastIndexOf('/'))
+          const lastSlash = resourcePath.lastIndexOf('/')
+          parentFolderPath = resourcePath.slice(0, lastSlash !== -1 ? lastSlash : 0)
         }
 
         if (parentFolderPath !== undefined) {
