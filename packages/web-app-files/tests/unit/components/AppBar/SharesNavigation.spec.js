@@ -19,7 +19,22 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const router = new VueRouter()
+const routes = [
+  {
+    path: '/files/shares/with-me/',
+    name: 'files-shares-with-me'
+  },
+  {
+    path: '/files/shares/with-others/',
+    name: 'files-shares-with-others'
+  },
+  {
+    path: '/files/shares/via-link/',
+    name: 'files-shares-via-link'
+  }
+]
+
+const router = new VueRouter({ routes })
 
 describe('SharesNavigation component', () => {
   it('renders a shares navigation for both mobile and a desktop viewports', () => {
