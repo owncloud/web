@@ -15,52 +15,45 @@ Feature: Sharing folders with internal groups with different roles and permissio
     And these groups have been created in the server:
       | groupname |
       | grp1      |
-    And user "Alice" has been added to group "grp1" in the server
+      | grp2      |
     And user "Brian" has been added to group "grp1" in the server
+    And user "Carol" has been added to group "grp2" in the server
 
-  @issue-1837
-  Scenario Outline: share a folder with multiple users with different roles and permissions
-    Given group "grp2" has been created in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Brian" has been added to group "grp2" in the server
+
+  Scenario Outline: share a folder with multiple groups with different roles and permissions
+    Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
-
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type  |
       | grp1         | group |
-      | Carol King   | user  |
       | grp2         | group |
-    And the user removes "grp1" as a collaborator from the share
-    Then group "grp1" should not be visible in the collaborators selected options in the webUI
-    When the user shares with the selected collaborators
+    And the user shares with the selected collaborators
     And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
-    Then custom permissions "<displayed-permissions>" should be set for user "grp2" for folder "simple-folder" on the webUI
-    And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
+    Then custom permissions "<displayed-permissions>" should be set for group "grp2" for folder "simple-folder" on the webUI
+    And custom permissions "<displayed-permissions>" should be set for group "grp1" for folder "simple-folder" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And group "grp1" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
-      | share_with  | grp2                  |
+      | share_with  | grp1                  |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
       | permissions | <actual-permissions>  |
     And user "Carol" should have received a share with these details in the server:
       | field       | value                 |
       | uid_owner   | Alice                 |
-      | share_with  | Carol                 |
+      | share_with  | grp2                  |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
       | permissions | <actual-permissions>  |
-    But group "grp1" should not be listed in the collaborators list on the webUI
-    And as "Alice" folder "/Shares/simple-folder" should not exist in the server
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
-      | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
-      | Editor               | Editor               | ,                             | ,                      | all                          |
-      | Custom permissions   | Custom permissions   | ,                             | ,                      | read                         |
-      | Custom permissions   | Viewer               | share                         | ,                      | read, share                  |
-      | Custom permissions   | Custom permissions   | delete, update, create        | delete, update, create | read, delete, update, create |
-      | Custom permissions   | Editor               | share, delete, update, create | ,                      | all                          |
+      | role               | displayed-role     | extra-permissions             | displayed-permissions         | actual-permissions           |
+      | Viewer             | Viewer             | ,                             | share                         | read, share                  |
+      | Editor             | Editor             | ,                             | delete, update, create, share | all                          |
+      | Custom permissions | Custom permissions | ,                             | ,                             | read                         |
+      | Custom permissions | Viewer             | share                         | share                         | read, share                  |
+      | Custom permissions | Custom permissions | delete, update, create        | delete, update, create        | read, delete, update, create |
+      | Custom permissions | Editor             | share, delete, update, create | delete, update, create, share | all                          |

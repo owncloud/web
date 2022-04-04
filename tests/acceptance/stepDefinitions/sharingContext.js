@@ -135,14 +135,10 @@ const assertCollaboratorslistDoesNotContain = async function (type, name) {
   }
   const collaboratorsDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
 
-  // check if fileslist is not present because it's empty
-  try {
-    await client.waitForElementNotPresent({
-      selector: '#files-collaborators-list',
-      locateStrategy: 'css'
-    })
+  // return if there is no collaboartor list
+  if (!(await collaboratorsDialog.hasCollaboratorsList(false))) {
     return
-  } catch (e) {}
+  }
 
   return collaboratorsDialog
     .getCollaboratorsList(
@@ -314,11 +310,11 @@ const assertSharePermissions = async function (currentSharePermissions, permissi
 }
 
 Then(
-  'custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI',
-  async function (permissions, user, resource) {
+  'custom permission/permissions {string} should be set for user/group {string} for file/folder {string} on the webUI',
+  async function (permissions, userOrGroup, resource) {
     await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     const currentSharePermissions =
-      await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(user)
+      await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(userOrGroup)
     return assertSharePermissions(currentSharePermissions, permissions)
   }
 )
@@ -388,9 +384,35 @@ When('the user removes {string} as a collaborator from the share', function (use
 Then(
   /^(user|group) "([^"]*)" should not be visible in the collaborators selected options in the webUI$/,
   async function (userOrGroup, userOrGroupName) {
-    await client.page.FilesPageElement.sharingDialog().isGroupNotPresentInSelectedCollaboratorsOptions(
-      userOrGroup,
-      userOrGroupName
+    const isUserOrGroupPresent =
+      await client.page.FilesPageElement.sharingDialog().isUserOrGroupPresentInSelectedCollaboratorsOptions(
+        userOrGroup,
+        userOrGroupName,
+        false
+      )
+
+    assert.strictEqual(
+      isUserOrGroupPresent,
+      false,
+      `${userOrGroup} "${userOrGroupName}" was present in the collaborators selected options.`
+    )
+  }
+)
+
+Then(
+  /^(user|group) "([^"]*)" should be visible in the collaborators selected options in the webUI$/,
+  async function (userOrGroup, userOrGroupName) {
+    const isUserOrGroupPresent =
+      await client.page.FilesPageElement.sharingDialog().isUserOrGroupPresentInSelectedCollaboratorsOptions(
+        userOrGroup,
+        userOrGroupName,
+        true
+      )
+
+    assert.strictEqual(
+      isUserOrGroupPresent,
+      true,
+      `${userOrGroup} "${userOrGroupName}" was not present in the collaborators selected options.`
     )
   }
 )

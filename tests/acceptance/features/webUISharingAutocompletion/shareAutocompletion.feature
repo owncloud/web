@@ -177,3 +177,24 @@ Feature: Autocompletion of share-with names
     Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI except group "finance1"
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
+
+
+  Scenario: add collaborators in the invite list and remove some of them
+    Given user "regularuser" has created folder "simple-folder" in the server
+    And user "regularuser" has logged in using the webUI
+    And the user has opened the share dialog for folder "simple-folder"
+    When the user selects the following collaborators for the share as "Viewer" with "," permissions:
+      | collaborator    | type  |
+      | Alice Hansen    | user  |
+      | Carol King      | user  |
+      | John Finn Smith | user  |
+      | finance1        | group |
+      | finance3        | group |
+    And the user removes "John Finn Smith" as a collaborator from the share
+    And the user removes "Carol King" as a collaborator from the share
+    And the user removes "finance3" as a collaborator from the share
+    Then user "John Finn Smith" should not be visible in the collaborators selected options in the webUI
+    And user "Carol King" should not be visible in the collaborators selected options in the webUI
+    And group "finance3" should not be visible in the collaborators selected options in the webUI
+    But user "Alice Hansen" should be visible in the collaborators selected options in the webUI
+    And group "finance1" should be visible in the collaborators selected options in the webUI
