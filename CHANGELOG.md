@@ -20,6 +20,7 @@ Summary
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
+* Enhancement - Audio handling in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
@@ -128,6 +129,12 @@ Details
 
    https://github.com/owncloud/web/issues/5618
    https://github.com/owncloud/web/pull/6690
+
+* Enhancement - Audio handling in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
+
+   We've built audio preview support for flac, mp3, ogg and wav files into the preview app.
+
+   https://github.com/owncloud/web/pull/6514
 
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 
