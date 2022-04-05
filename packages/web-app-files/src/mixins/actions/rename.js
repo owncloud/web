@@ -1,6 +1,5 @@
 import { mapActions, mapGetters } from 'vuex'
-
-import { isSameResource } from '../../helpers/resource'
+import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
 import { isLocationTrashActive, isLocationSharesActive } from '../../router'
@@ -81,16 +80,15 @@ export default {
           : this.$gettext('Rename file %{name}'),
         { name: resources[0].name }
       )
-      const resourceName = resources[0].name
-      const nameWithoutExtensionLength = resourceName ? resourceName.split('.')[0].length : -1
+      const nameWithoutExtension = extractNameWithoutExtension(resources[0])
       const modal = {
         variation: 'passive',
         title,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
-        inputValue: resourceName,
-        inputSelectionRange: resources[0].isFolder ? null : [0, nameWithoutExtensionLength],
+        inputValue: resources[0].name,
+        inputSelectionRange: resources[0].isFolder ? null : [0, nameWithoutExtension.length],
         inputLabel: resources[0].isFolder
           ? this.$gettext('Folder name')
           : this.$gettext('File name'),

@@ -57,3 +57,11 @@ export const extractStorageId = (id?: string): string => {
   }
   return id.indexOf('!') >= 0 ? id.split('!')[0] : ''
 }
+
+export const extractNameWithoutExtension = (resource?: Resource): string => {
+  const extension = resource.extension || ''
+  const name = resource.name || ''
+  if (!extension.length || !name.length) return name
+  const extensionIndexInName = name.indexOf(`.${extension}`)
+  return name.substring(0, extensionIndexInName)
+}
