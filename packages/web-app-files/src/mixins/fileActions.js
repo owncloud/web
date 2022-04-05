@@ -76,7 +76,6 @@ export default {
                 true
               )
             },
-            // we need to check if this icon exists in the ODS and if not render it differently?
             icon: this.apps.meta[editor.app].icon,
             img: this.apps.meta[editor.app].img,
             handler: ({ resources }) =>

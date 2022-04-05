@@ -1,0 +1,5 @@
+Enhancement: Audio handling in preview app
+
+We've built audio preview support for flac, mp3, ogg and wav files into the preview app.
+
+https://github.com/owncloud/web/pull/6514
