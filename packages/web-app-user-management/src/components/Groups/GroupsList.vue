@@ -107,7 +107,7 @@ export default {
         },
         {
           name: 'actions',
-          title: '',
+          title: this.$gettext('Actions'),
           sortable: false,
           type: 'slot',
           alignH: 'right'
