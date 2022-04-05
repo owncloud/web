@@ -28,7 +28,8 @@ Summary
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 * Enhancement - Space name in breadcrumb: [#6662](https://github.com/owncloud/web/pull/6662)
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
-* Enhancement - Update ODS to v13.1.0-rc.1: [#6708](https://github.com/owncloud/web/pull/6708)
+* Enhancement - Unified shares sidebar panel: [#6701](https://github.com/owncloud/web/pull/6701)
+* Enhancement - Update ODS to v13.1.0-rc.2: [#6701](https://github.com/owncloud/web/pull/6701)
 
 Details
 -------
@@ -190,22 +191,34 @@ Details
    https://github.com/owncloud/web/issues/6641
    https://github.com/owncloud/web/pull/6642
 
-* Enhancement - Update ODS to v13.1.0-rc.1: [#6708](https://github.com/owncloud/web/pull/6708)
+* Enhancement - Unified shares sidebar panel: [#6701](https://github.com/owncloud/web/pull/6701)
 
-   We updated the ownCloud Design System to version 13.1.0-rc.1. Please refer to the full
+   We've merged the "people" and "link" shares sidebar panels to give users a clearer idea of who
+   has access to a resource.
+
+   https://github.com/owncloud/web/issues/6621
+   https://github.com/owncloud/web/pull/6701
+
+* Enhancement - Update ODS to v13.1.0-rc.2: [#6701](https://github.com/owncloud/web/pull/6701)
+
+   We updated the ownCloud Design System to version 13.1.0-rc.2. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Enhancement - Export package members:
-   https://github.com/owncloud/owncloud-design-system/pull/2048 - Enhancement - Make
-   OcResource inline-flex:
+   - Enhancement - Replace deprecated String.prototype.substr():
+   https://github.com/owncloud/owncloud-design-system/pull/2059 - Enhancement -
+   Redesign OcGhostElement:
+   https://github.com/owncloud/owncloud-design-system/pull/2049 - Enhancement - Export
+   package members: https://github.com/owncloud/owncloud-design-system/pull/2048 -
+   Enhancement - Make OcResource inline-flex:
    https://github.com/owncloud/owncloud-design-system/pull/2041 - Bugfix - Disabled
    textarea color contrast in darkmode:
    https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
    Fix event handlers in loops:
    https://github.com/owncloud/owncloud-design-system/pull/2054
 
+   https://github.com/owncloud/web/pull/6701
    https://github.com/owncloud/web/pull/6708
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.2
 
 Changelog for ownCloud Web [5.3.0] (2022-03-23)
 =======================================
