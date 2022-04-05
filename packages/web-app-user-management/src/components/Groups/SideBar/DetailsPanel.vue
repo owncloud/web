@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     group() {
-      return !this.groups.length || this.groups.length > 1 ? null : this.groups[0]
+      return this.groups.length === 1 ? this.groups[0] : null
     },
     noGroups() {
       return !this.groups.length
