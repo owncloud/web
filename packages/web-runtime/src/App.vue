@@ -16,6 +16,7 @@
       :input-label="modal.inputLabel"
       :input-disabled="modal.inputDisabled"
       :input-value="modal.inputValue"
+      :input-selection-range="modal.inputSelectionRange"
       :input-description="modal.inputDescription"
       :input-error="modal.inputError"
       :button-cancel-text="modal.cancelText"

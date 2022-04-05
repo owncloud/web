@@ -1,0 +1,7 @@
+Enhancement: Add rename selection range
+
+We've added a selection range for the rename modal
+to intially select the resource name without extension.
+
+https://github.com/owncloud/web/issues/6729
+https://github.com/owncloud/web/pull/6736
