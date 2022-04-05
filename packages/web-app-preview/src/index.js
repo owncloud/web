@@ -34,13 +34,14 @@ const mimeTypes = [
 ]
 
 const appInfo = {
-  name: 'Preview',
+  name: $gettext('Preview'),
   id: 'preview',
   icon: 'eye',
   extensions: mimeTypes.map((mimeType) => ({
     canBeDefault: true,
     mimeType,
-    routeName
+    routeName,
+    label: $gettext('Preview')
   }))
 }
 

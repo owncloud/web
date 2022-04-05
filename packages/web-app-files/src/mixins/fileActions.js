@@ -69,6 +69,9 @@ export default {
         .map((editor) => {
           return {
             label: () => {
+              if (editor.label) {
+                return this.$gettext(editor.label)
+              }
               const translated = this.$gettext('Open in %{app}')
               return this.$gettextInterpolate(
                 translated,

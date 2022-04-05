@@ -54,7 +54,8 @@ const mutations = {
       mimeType: extension.mimeType,
       handler: extension.handler,
       canBeDefault: extension.canBeDefault !== false,
-      config: (state.fileEditorConfigs || {})[app]
+      config: (state.fileEditorConfigs || {})[app],
+      ...(extension.label && { label: extension.label })
     }
 
     state.fileEditors.push(editor)
