@@ -124,7 +124,7 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { marked } from 'marked'
-import sanitizeHtml from 'sanitize-html'
+import * as sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
@@ -307,7 +307,7 @@ export default defineComponent({
             }
             const parsedMarkdown = marked.parse(fileContents)
             // Sanitize markdown content to prevent XSS vulnerabilities
-            this.markdownContent = sanitizeHtml(parsedMarkdown)
+            this.markdownContent = sanitizeHtml.default(parsedMarkdown)
 
             if (this.markdownContent) {
               this.markdownResizeObserver.observe(this.$refs.markdownContainer)
