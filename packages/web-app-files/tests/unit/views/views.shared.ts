@@ -16,6 +16,11 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
+// mock `v-translate` directive
+localVue.directive('translate', {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  inserted: () => {}
+})
 
 const stubs = {
   'create-and-upload': true,
