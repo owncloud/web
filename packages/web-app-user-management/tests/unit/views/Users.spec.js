@@ -80,7 +80,9 @@ function getMountedWrapper({ resolveCreateUser = true, resolveDeleteUser = true 
         {
           id: '1'
         }
-      ]
+      ],
+      roles: [],
+      userAssignments: []
     },
     data: () => {
       return {
