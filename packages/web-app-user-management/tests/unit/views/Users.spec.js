@@ -73,9 +73,147 @@ describe('Users view', () => {
       ).toBeFalsy()
     })
   })
+
+  describe('computed method "allUsersSelected"', () => {
+    it('should be true if every user is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { users: [{ id: '1' }] },
+        data: { selectedUsers: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allUsersSelected).toBeTruthy()
+    })
+    it('should false if not every user is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { users: [{ id: '1' }, { id: '2' }] },
+        data: { selectedUsers: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allUsersSelected).toBeFalsy()
+    })
+  })
+
+  describe('computed method "userRoles"', () => {
+    it('should contain user role if record exists in userAssignments', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: [
+            [
+              {
+                accountUuid: '1',
+                roleId: '1'
+              }
+            ]
+          ],
+          roles: [
+            {
+              displayName: 'admin',
+              id: '1'
+            }
+          ]
+        }
+      })
+      expect(wrapper.vm.userRoles[user.id]).toEqual('admin')
+    })
+    it('should not contain user role if userAssignments is empty', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: { users: [user], userAssignments: [] }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if record does not exist in userAssignments', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: [
+            [
+              {
+                accountUuid: '2',
+                roleId: '1'
+              }
+            ]
+          ],
+          roles: [
+            {
+              displayName: 'admin',
+              id: '1'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if assigned role does not exist', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: [
+            [
+              {
+                accountUuid: '1',
+                roleId: '1'
+              }
+            ]
+          ],
+          roles: [
+            {
+              displayName: 'admin',
+              id: '2'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if userAssignment does not contain roleId', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: [
+            [
+              {
+                accountUuid: '1'
+              }
+            ]
+          ],
+          roles: [
+            {
+              displayName: 'admin',
+              id: '2'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+  })
+
+  describe('method toggleSideBar', () => {
+    it('should set sideBarOpen to true if current value is false', () => {
+      const wrapper = getMountedWrapper({})
+      wrapper.vm.sideBarOpen = false
+      wrapper.vm.toggleSideBar()
+      expect(wrapper.vm.sideBarOpen).toBeTruthy()
+    })
+    it('should set sideBarOpen to false if current value is true', () => {
+      const wrapper = getMountedWrapper({})
+      wrapper.vm.sideBarOpen = true
+      wrapper.vm.toggleSideBar()
+      expect(wrapper.vm.sideBarOpen).toBeFalsy()
+    })
+  })
 })
 
-function getMountedWrapper({ data = {}, resolveCreateUser = true, resolveDeleteUser = true } = {}) {
+function getMountedWrapper({
+  data = {},
+  mocks = {},
+  resolveCreateUser = true,
+  resolveDeleteUser = true
+} = {}) {
   return shallowMount(Users, {
     localVue,
     store: createStore(Vuex.Store, {
@@ -102,7 +240,9 @@ function getMountedWrapper({ data = {}, resolveCreateUser = true, resolveDeleteU
           id: '1'
         }
       ],
-      userAssignments: []
+      roles: [],
+      userAssignments: [],
+      ...mocks
     },
     data: () => {
       return {

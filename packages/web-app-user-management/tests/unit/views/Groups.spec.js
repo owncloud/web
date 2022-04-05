@@ -73,10 +73,28 @@ describe('Groups view', () => {
       ).toBeFalsy()
     })
   })
+
+  describe('computed method "allGroupsSelected"', () => {
+    it('should be true if every group is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { groups: [{ id: '1' }] },
+        data: { selectedGroups: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allGroupsSelected).toBeTruthy()
+    })
+    it('should false if not every group is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { groups: [{ id: '1' }, { id: '2' }] },
+        data: { selectedGroups: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allGroupsSelected).toBeFalsy()
+    })
+  })
 })
 
 function getMountedWrapper({
   data = {},
+  mocks = {},
   resolveCreateGroup = true,
   resolveDeleteGroup = true
 } = {}) {
@@ -107,7 +125,8 @@ function getMountedWrapper({
         {
           id: '1'
         }
-      ]
+      ],
+      ...mocks
     },
     data: () => {
       return {
