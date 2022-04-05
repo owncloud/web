@@ -17,7 +17,7 @@ import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 
 export default defineComponent({
-  name: 'Share',
+  name: 'SharesPanel',
   components: {
     FileLinks,
     FileShares,
@@ -26,9 +26,6 @@ export default defineComponent({
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
-  },
-  computed: {},
-  watch: {},
-  methods: {}
+  }
 })
 </script>

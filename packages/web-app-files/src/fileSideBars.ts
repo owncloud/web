@@ -2,7 +2,7 @@ import FileDetails from './components/SideBar/Details/FileDetails.vue'
 import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultiple.vue'
 import FileActions from './components/SideBar/Actions/FileActions.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
-import Shares from './components/SideBar/Shares/Shares.vue'
+import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
@@ -109,24 +109,15 @@ const panelGenerators: (({
       ].includes(user.uuid)
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder }) => ({
     app: 'sharing-item',
     icon: 'user-add',
     iconFillType: 'line',
     title: $gettext('Shares'),
-    component: Shares,
+    component: SharesPanel,
     componentAttrs: {
       showSpaceMembers: false,
       get showLinks() {
-        if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
-        if (
-          isLocationTrashActive(router, 'files-trash-personal') ||
-          isLocationTrashActive(router, 'files-trash-spaces-project') ||
-          isLocationPublicActive(router, 'files-public-files')
-        ) {
-          return false
-        }
-
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
         }
@@ -149,23 +140,14 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ highlightedFile, rootFolder, multipleSelection, router, capabilities }) => ({
+  ({ highlightedFile, capabilities }) => ({
     app: 'space-share-item',
     icon: 'group',
     title: $gettext('Members'),
-    component: Shares,
+    component: SharesPanel,
     componentAttrs: {
       showSpaceMembers: true,
       get showLinks() {
-        if (multipleSelection || (rootFolder && highlightedFile?.type !== 'space')) return false
-        if (
-          isLocationTrashActive(router, 'files-trash-personal') ||
-          isLocationTrashActive(router, 'files-trash-spaces-project') ||
-          isLocationPublicActive(router, 'files-public-files')
-        ) {
-          return false
-        }
-
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
         }

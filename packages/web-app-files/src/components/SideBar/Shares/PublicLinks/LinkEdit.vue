@@ -87,23 +87,6 @@
           v-text="$gettext('Remove password')"
         />
       </div>
-      <!-- @TODO: Enable Mail API to use the following
-                  ++++++++++++++++++++++++++++++++++++
-        <template v-if="$_sendMailEnabled">
-            <h4 class="oc-mt-top oc-heading-divider">
-                Send mail notification
-            </h4>
-            <div class="oc-mb">
-                <input type="text" class="oc-input" :placeholder="placeholder.mailTo" />
-            </div>
-            <div class="oc-mb">
-                <textarea class="oc-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
-            </div>
-            <div class="oc-mb">
-                <label><input type="checkbox" class="oc-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
-            </div>
-        </template>
-        -->
       <hr class="divider" />
       <div class="oc-mb">
         <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
@@ -390,7 +373,7 @@ export default {
         params,
         storageId
       })
-        .then((e) => {
+        .then(() => {
           this.saving = false
           this.errors = false
           this.$_closeForm()

@@ -92,15 +92,12 @@ export default {
     },
 
     privateLinkEnabled() {
-      if (
+      return (
         this.isPersonalLocation &&
         this.capabilities.files.privateLinks &&
         this.user?.id &&
         this.displayedItem?.owner?.username === this.user.username
-      ) {
-        return true
-      }
-      return false
+      )
     },
 
     file() {
