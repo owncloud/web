@@ -124,8 +124,9 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { marked } from 'marked'
-// import * as sanitizeHtml from 'sanitize-html'
+ // import * as sanitizeHtml from 'sanitize-html'
 import sanitizeHtmlDefault from 'sanitize-html'
+
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
@@ -148,10 +149,9 @@ import Mixins from '../../mixins'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useResourcesViewDefaults } from '../../composables'
 
-// console.log('sanitizeHtml: import *', sanitizeHtml)
-console.log('sanitizeHtml: import default', sanitizeHtmlDefault)
-
 const visibilityObserver = new VisibilityObserver()
+
+console.log('FOOOOOO', sanitizeHtmlDefault)
 
 export default defineComponent({
   components: {
