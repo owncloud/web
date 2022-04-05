@@ -113,7 +113,7 @@ export const announceApplications = async ({
   supportedLanguages: { [key: string]: string }
 }): Promise<void> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
-    runtimeConfiguration
+    rewriteDeprecatedAppNames(runtimeConfiguration)
 
   const applicationPaths = [
     ...internalApplications.map((application) => `web-app-${application}`),
@@ -145,6 +145,28 @@ export const announceApplications = async ({
 
   await Promise.all(applications.map((application) => application.initialize()))
   await Promise.all(applications.map((application) => application.ready()))
+}
+
+/**
+ * Rewrites old names of renamed apps to their new name and prints a warning to adjust configuration to the respective new app name.
+ *
+ * @param {RuntimeConfiguration} runtimeConfiguration
+ */
+const rewriteDeprecatedAppNames = (
+  runtimeConfiguration: RuntimeConfiguration
+): RuntimeConfiguration => {
+  const appAliases = [{ name: 'preview', oldName: 'media-viewer' }]
+  return {
+    ...runtimeConfiguration,
+    apps: runtimeConfiguration.apps.map((appName) => {
+      const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
+      if (appAlias) {
+        console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
+        return appAlias.name
+      }
+      return appName
+    })
+  }
 }
 
 /**
