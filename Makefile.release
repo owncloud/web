@@ -8,6 +8,7 @@ endif
 app_name=web
 cur_dir=$(CURDIR)
 dist_dir=$(CURDIR)/dist
+third_party_licenses_dir=$(CURDIR)/third-party-licenses
 
 occ=$(CURDIR)/../../occ
 private_key=$(HOME)/.owncloud/certificates/$(app_name).key
@@ -32,7 +33,7 @@ build: build-web copy-config
 
 .PHONY: build-web
 build-web:
-	$(YARN) install
+	$(YARN) install --immutable
 	$(YARN) build
 
 .PHONY: copy-config
@@ -48,7 +49,7 @@ create-release-folder:
 	mkdir $(CURDIR)/release
 
 .PHONY: create-packages
-create-packages: package-plain package-ocx
+create-packages: package-plain package-ocx package-licenses
 
 .PHONY: package-plain
 package-plain:
@@ -56,6 +57,12 @@ package-plain:
 
 .PHONY: package-ocx
 package-ocx: ocx-app-config sign ocx-app-bundle
+
+.PHONY: package-licenses
+package-licenses:
+	yarn licenses:csv
+	yarn licenses:save
+	cd $(third_party_licenses_dir) && tar -czf $(CURDIR)/release/third-party-licenses.tar.gz -C $(third_party_licenses_dir) *
 
 .PHONY: sign
 sign:

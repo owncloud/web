@@ -2932,25 +2932,30 @@ def licenseCheck(ctx):
             "os": "linux",
             "arch": "amd64",
         },
-        "steps": skipIfUnchanged(ctx, "go-mod") +
-                 [
-                     {
-                         "name": "node-check-licenses",
-                         "image": OC_CI_NODEJS,
-                         "commands": [
-                             "yarn install --immutable",
-                             "yarn licenses:check",
-                         ],
-                     },
-                     {
-                         "name": "node-save-licenses",
-                         "image": OC_CI_NODEJS,
-                         "commands": [
-                             "yarn licenses:csv",
-                             "yarn licenses:save",
-                         ],
-                     },
-                 ],
+        "steps": [
+            {
+                "name": "yarn-install",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn install --immutable",
+                ],
+            },
+            {
+                "name": "node-check-licenses",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn licenses:check",
+                ],
+            },
+            {
+                "name": "node-save-licenses",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn licenses:csv",
+                    "yarn licenses:save",
+                ],
+            },
+        ],
         "trigger": {
             "ref": [
                 "refs/heads/master",
