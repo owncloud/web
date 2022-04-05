@@ -77,6 +77,9 @@ export default {
               )
             },
             icon: this.apps.meta[editor.app].icon,
+            ...(this.apps.meta[editor.app].iconFillType && {
+              iconFillType: this.apps.meta[editor.app].iconFillType
+            }),
             img: this.apps.meta[editor.app].img,
             handler: ({ resources }) =>
               this.$_fileActions_openEditor(
