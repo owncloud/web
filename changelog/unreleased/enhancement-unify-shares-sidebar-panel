@@ -1,0 +1,6 @@
+Enhancement: Unified shares sidebar panel
+
+We've merged the "people" and "link" shares sidebar panels to give users a clearer idea of who has access to a resource.
+
+https://github.com/owncloud/web/pull/6701
+https://github.com/owncloud/web/issues/6621

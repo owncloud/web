@@ -31,7 +31,7 @@ module.exports = {
      */
     openPublicLinkDialog: async function (resource) {
       await this.openSideBar(resource)
-      return await appSideBar.activatePanel('links')
+      return await appSideBar.activatePanel('people')
     },
     /**
      * @param {string} resource

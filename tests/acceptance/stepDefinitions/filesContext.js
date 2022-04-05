@@ -305,23 +305,14 @@ When('the user unmarks the favorited file/folder {string} using the webUI', func
   return client.page.FilesPageElement.filesList().unmarkFavorite(path)
 })
 
-When(
-  'the user marks file/folder {string} as favorite using the webUI sidebar',
-  async function (path) {
-    const api = client.page.FilesPageElement
-    await api.filesList().openSideBar(path)
-    api.appSideBar().markFavoriteSidebar()
-    return client
-  }
-)
+When('the user marks file/folder {string} as favorite using the webUI sidebar', function (path) {
+  return client.page.FilesPageElement.filesList().markFavorite(path)
+})
 
 When(
   'the user unmarks the favorited file/folder {string} using the webUI sidebar',
-  async function (path) {
-    const api = client.page.FilesPageElement
-    await api.filesList().openSideBar(path)
-    api.appSideBar().unmarkFavoriteSidebar()
-    return client
+  function (path) {
+    return client.page.FilesPageElement.filesList().unmarkFavorite(path)
   }
 )
 
@@ -847,25 +838,35 @@ Then(
   }
 )
 
-Then('file/folder {string} should be marked as favorite on the webUI', async function (path) {
-  const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteShining
-  await client.page.FilesPageElement.filesList().openSideBar(path)
+Then(
+  'file/folder {string} should be marked as favorite on the webUI',
+  async function (resourceName) {
+    const selector =
+      client.page.FilesPageElement.fileActionsMenu().elements.unmarkFavoriteButtonInAccordion
+    await client.page.FilesPageElement.filesList().openSideBar(resourceName)
+    await client.page.FilesPageElement.appSideBar().activatePanel('actions')
 
-  await client.waitForElementPresent(selector)
-  await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
+    client.expect.element(selector).to.be.present
+    await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
-  return client
-})
+    return client
+  }
+)
 
-Then('file/folder {string} should not be marked as favorite on the webUI', async function (path) {
-  const selector = client.page.FilesPageElement.appSideBar().elements.fileInfoFavoriteDimm
-  await client.page.FilesPageElement.filesList().openSideBar(path)
+Then(
+  'file/folder {string} should not be marked as favorite on the webUI',
+  async function (resourceName) {
+    const selector =
+      client.page.FilesPageElement.fileActionsMenu().elements.favoriteButtonInAccordion
+    await client.page.FilesPageElement.filesList().openSideBar(resourceName)
+    await client.page.FilesPageElement.appSideBar().activatePanel('actions')
 
-  client.expect.element(selector).to.be.present
-  await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
+    client.expect.element(selector).to.be.present
+    await client.page.FilesPageElement.appSideBar().closeSidebarIfOpen()
 
-  return client
-})
+    return client
+  }
+)
 
 Then(
   /the count of files and folders shown on the webUI should be (\d+)/,

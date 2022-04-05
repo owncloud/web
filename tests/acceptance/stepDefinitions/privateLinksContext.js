@@ -5,8 +5,8 @@ const webdav = require('../helpers/webdavHelper')
 When(
   'the user copies the private link of the file/folder/resource {string} using the webUI',
   async function (resource) {
-    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    return client.page.FilesPageElement.publicLinksDialog().copyPrivateLink()
+    await client.page.FilesPageElement.filesList().openSideBar(resource)
+    return client.page.FilesPageElement.appSideBar().copyPrivateLink()
   }
 )
 
