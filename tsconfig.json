@@ -1,5 +1,3 @@
 {
-  "extends": "@ownclouders/tsconfig/tsconfig.json",
-  // vue-jest requires compilerOptions to be an object: https://github.com/vuejs/vue-jest/issues/386
-  "compilerOptions": {}
+  "extends": "@ownclouders/tsconfig/tsconfig.json"
 }
