@@ -2,7 +2,7 @@ import GetTextPlugin from 'vue-gettext'
 import { RouterLinkStub, shallowMount } from '@vue/test-utils'
 import { localVue } from '../views.setup'
 import { createStore } from 'vuex-extensions'
-import Files from '@/__fixtures__/files'
+import Files from '../../../../../../__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
@@ -96,11 +96,11 @@ const spaceShare = {
 
 describe('Spaces project view', () => {
   it('should not show anything if space can not be found', async () => {
-    mockAxios.request.mockImplementationOnce(() => {
+    mockAxios.request.mockImplementationOnce((() => {
       return Promise.resolve({
         data: spaceMocks.noSpace
       })
-    })
+    }) as any)
 
     const wrapper = getMountedWrapper()
     await wrapper.vm.loadResourcesTask.last
@@ -110,11 +110,11 @@ describe('Spaces project view', () => {
 
   describe('space image', () => {
     it('should show if given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper([], null, imageBlob)
       await wrapper.vm.loadResourcesTask.last
@@ -124,11 +124,11 @@ describe('Spaces project view', () => {
       expect(wrapper).toMatchSnapshot()
     })
     it('should not show if not given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithoutReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
@@ -138,11 +138,11 @@ describe('Spaces project view', () => {
     })
 
     it('should not show within a resource', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper([], { id: 1 })
       await wrapper.vm.loadResourcesTask.last
@@ -153,11 +153,11 @@ describe('Spaces project view', () => {
 
   describe('space readme', () => {
     it('should show if given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
@@ -167,11 +167,11 @@ describe('Spaces project view', () => {
       expect(wrapper).toMatchSnapshot()
     })
     it('should not show if not given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithoutReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
@@ -182,11 +182,11 @@ describe('Spaces project view', () => {
 
   describe('resources', () => {
     it('should show empty-message if no resources given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper()
       await wrapper.vm.loadResourcesTask.last
@@ -194,11 +194,11 @@ describe('Spaces project view', () => {
       expect(wrapper.find(selectors.emptySpace).exists()).toBeTruthy()
     })
     it('should show resources if given', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
+      mockAxios.request.mockImplementationOnce((() => {
         return Promise.resolve({
           data: spaceMocks.spaceWithReadmeAndImage
         })
-      })
+      }) as any)
 
       const wrapper = getMountedWrapper([Files['/'][0]])
       await wrapper.vm.loadResourcesTask.last
