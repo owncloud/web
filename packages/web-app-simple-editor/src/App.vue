@@ -51,7 +51,7 @@ export default {
   components: {
     SimpleEditorAppBar
   },
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(_to, _from, next) {
     if (this.isDirty) {
       const modal = {
         variation: 'danger',
@@ -85,7 +85,7 @@ export default {
     const currentETag = ref()
     const isReadOnly = ref(true)
 
-    const loadFileTask = useTask(function* (signal) {
+    const loadFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
 
       unref(defaults)
@@ -104,7 +104,7 @@ export default {
         })
     }).restartable()
 
-    const saveFileTask = useTask(function* (signal) {
+    const saveFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
