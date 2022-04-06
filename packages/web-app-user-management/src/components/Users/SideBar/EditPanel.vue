@@ -5,7 +5,7 @@
       <span v-text="user.onPremisesSamAccountName"></span>
       <span class="oc-text-muted group-info-display-name" v-text="user.displayName"></span>
     </div>
-    <div v-if="editUser">
+    <div v-if="editUser" class="oc-background-highlight oc-p-m">
       <oc-text-input
         v-model="editUser.displayName"
         class="oc-mb-s"
@@ -38,15 +38,26 @@
         :options="roles"
         :clearable="false"
       />
-      <oc-button @click="$emit('confirm', { editUser, editUserRole })">ok</oc-button>
     </div>
+    <compare-save-dialog
+      class="edit-compare-save-dialog"
+      :original-object="originalObjectUser"
+      :compare-object="compareObjectUser"
+      :confirm-button-disabled="invalidFormData"
+      @revert="revertChanges"
+      @confirm="$emit('confirm', { editUser, editUserRole })"
+    ></compare-save-dialog>
   </div>
 </template>
 <script>
 import * as EmailValidator from 'email-validator'
+import CompareSaveDialog from '../../CompareSaveDialog.vue'
 
 export default {
   name: 'EditPanel',
+  components: {
+    CompareSaveDialog
+  },
   props: {
     user: {
       type: Object,
@@ -68,13 +79,26 @@ export default {
       formData: {
         displayName: {
           errorMessage: '',
-          valid: false
+          valid: true
         },
         email: {
           errorMessage: '',
-          valid: false
+          valid: true
         }
       }
+    }
+  },
+  computed: {
+    originalObjectUser() {
+      return { user: { ...this.user, passwordProfile: { password: '' }, role: this.userRole } }
+    },
+    compareObjectUser() {
+      return { user: { ...this.editUser, role: this.editUserRole } }
+    },
+    invalidFormData() {
+      return Object.keys(this.formData)
+        .map((k) => !!this.formData[k].valid)
+        .includes(false)
     }
   },
   watch: {
@@ -112,11 +136,25 @@ export default {
       this.formData.email.errorMessage = ''
       this.formData.email.valid = true
       return true
+    },
+
+    revertChanges() {
+      this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
+      this.editUserRole = this.roles.find((role) => role.id === this.userRole.id)
+      Object.keys(this.formData).forEach((formDataKey) => {
+        this.formData[formDataKey].invalid = false
+        this.formData[formDataKey].errorMessage = ''
+      })
     }
   }
 }
 </script>
 <style lang="scss">
+.edit-compare-save-dialog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
 .user-info {
   align-items: center;
   flex-direction: column;

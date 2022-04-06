@@ -35,6 +35,7 @@ export interface Graph {
   groups: {
     listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
     createGroup: (group: Group) => AxiosPromise<Group>
+    editGroup: (groupId: string, group: Group) => AxiosPromise<void>
     deleteGroup: (groupId: string) => AxiosPromise<void>
   }
 }
@@ -76,6 +77,7 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     },
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
+      editGroup: (groupId: string, group: Group) => groupApiFactory.updateGroup(groupId, group),
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
         groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]))

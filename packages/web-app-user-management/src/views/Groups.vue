@@ -90,11 +90,12 @@
           @close="closeSideBar"
         >
           <template #body>
-            <DetailsPanel
-              v-if="activePanel === 'DetailsPanel'"
-              :groups="selectedGroups"
-            ></DetailsPanel>
-            <EditPanel v-if="activePanel === 'EditPanel'" :user="selectedGroups[0]"></EditPanel>
+            <DetailsPanel v-if="activePanel === 'DetailsPanel'" :groups="selectedGroups" />
+            <EditPanel
+              v-if="activePanel === 'EditPanel'"
+              :group="selectedGroups[0]"
+              @confirm="editGroup"
+            />
           </template>
         </side-bar>
       </template>
@@ -340,6 +341,24 @@ export default {
         console.error(error)
         this.showMessage({
           title: this.$gettext('Failed to create group'),
+          status: 'danger'
+        })
+      }
+    },
+
+    async editGroup(editGroup) {
+      try {
+        await this.graphClient.groups.editGroup(editGroup.id, editGroup)
+        const groupRecordIndex = this.groups.findIndex((group) => group.id === editGroup.id)
+        this.$set(this.groups, groupRecordIndex, editGroup)
+
+        this.showMessage({
+          title: this.$gettext('Group was edited successfully')
+        })
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to edit group'),
           status: 'danger'
         })
       }

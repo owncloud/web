@@ -95,14 +95,14 @@
               v-if="activePanel === 'DetailsPanel'"
               :users="selectedUsers"
               :user-roles="userRoles"
-            ></DetailsPanel>
+            />
             <EditPanel
               v-if="activePanel === 'EditPanel'"
               :user="selectedUsers[0]"
               :user-role="userRoles[selectedUsers[0].id]"
               :roles="roles"
               @confirm="editUser"
-            ></EditPanel>
+            />
           </template>
         </side-bar>
       </template>
@@ -435,8 +435,8 @@ export default {
           }
         )
 
-        const userRecord = this.users.find((user) => user.id === editUser.id)
-        Object.assign(userRecord, editUserResponse?.data)
+        const userRecordIndex = this.users.findIndex((user) => user.id === editUser.id)
+        this.$set(this.users, userRecordIndex, editUserResponse?.data)
 
         this.userAssignments = Object.assign({}, this.userAssignments, {
           [editUser.id]: [assignmentsAddResponse.data?.assignment]
