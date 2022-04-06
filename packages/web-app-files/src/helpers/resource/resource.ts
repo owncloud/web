@@ -1,4 +1,5 @@
 import { User } from '../user'
+import fileExtensions from '../extensions/fileExtensions'
 
 // TODO: find a good location for the Resource interface. Needed in other repos as well, so it needs to be deployed to npm.
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
@@ -62,6 +63,19 @@ export const extractNameWithoutExtension = (resource?: Resource): string => {
   const extension = resource.extension || ''
   const name = resource.name || ''
   if (!extension.length || !name.length) return name
-  const extensionIndexInName = name.indexOf(`.${extension}`)
+  const extensionIndexInName = name.lastIndexOf(`.${extension}`)
   return name.substring(0, extensionIndexInName)
+}
+
+export const extractExtensionFromFile = (file: string): string => {
+  const parts = file.split('.')
+  for (let i = 0; i < parts.length; i++) {
+    const possibleExtension = parts.slice(i, parts.length).join('.')
+    if (!fileExtensions.complex.includes(possibleExtension)) continue
+    return possibleExtension
+  }
+  // Fallback if file extension is unknown or no extension
+  const lastDot = file.lastIndexOf('.')
+  if (lastDot === -1) return ''
+  return file.substring(lastDot + 1, file.length)
 }
