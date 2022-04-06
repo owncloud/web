@@ -80,3 +80,6 @@ tests/report/cucumber_report.html
 .vscode/settings.json
 tests/acceptance/report/cucumber_report.json
 tests/acceptance/report/cucumber_report.html
+
+# third party licenses
+/third-party-licenses

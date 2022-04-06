@@ -786,6 +786,7 @@ def main(ctx):
 def beforePipelines(ctx):
     return cancelPreviousBuilds() + \
            checkStarlark() + \
+           licenseCheck(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
            yarnCache(ctx) + \
@@ -2930,6 +2931,48 @@ def checkStarlark():
         ],
         "trigger": {
             "ref": [
+                "refs/pull/**",
+            ],
+        },
+    }]
+
+def licenseCheck(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "license-check",
+        "platform": {
+            "os": "linux",
+            "arch": "amd64",
+        },
+        "steps": [
+            {
+                "name": "yarn-install",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn install --immutable",
+                ],
+            },
+            {
+                "name": "node-check-licenses",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn licenses:check",
+                ],
+            },
+            {
+                "name": "node-save-licenses",
+                "image": OC_CI_NODEJS,
+                "commands": [
+                    "yarn licenses:csv",
+                    "yarn licenses:save",
+                ],
+            },
+        ],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/v*",
                 "refs/pull/**",
             ],
         },
