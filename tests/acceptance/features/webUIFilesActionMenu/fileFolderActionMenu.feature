@@ -30,7 +30,7 @@ Feature: User can see the file or folder actions menu options
     Then the app-sidebar for file "testavatar.png" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items               |
-      | open in mediaviewer |
+      | preview |
       | download            |
 
 

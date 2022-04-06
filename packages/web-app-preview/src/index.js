@@ -30,7 +30,8 @@ const mimeTypes = [
   'image/gif',
   'image/jpeg',
   'image/png',
-  'video/mp4'
+  'video/mp4',
+  'video/webm'
 ]
 
 const appInfo = {

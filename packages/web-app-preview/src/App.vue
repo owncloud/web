@@ -100,7 +100,7 @@
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Download currently viewed file')"
-          @click="triggerDownload"
+          @click="triggerActiveFileDownload"
         >
           <oc-icon size="large" name="file-download" fill-type="line" />
         </oc-button>
@@ -325,7 +325,7 @@ export default {
       }
     },
 
-    triggerDownload() {
+    triggerActiveFileDownload() {
       if (this.isFileContentLoading) {
         return
       }

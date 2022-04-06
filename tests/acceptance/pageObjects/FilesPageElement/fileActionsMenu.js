@@ -233,7 +233,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     previewButtonInAccordion: {
-      selector: '//button[normalize-space()="Open in Preview"]',
+      selector: '//button[normalize-space()="Preview"]',
       locateStrategy: 'xpath'
     },
     markdownEditorButtonInAccordion: {
