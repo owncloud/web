@@ -13,13 +13,25 @@
         :fix-message-line="true"
         @input="validateDisplayName"
       />
-      <oc-button @click="$emit('confirm', editGroup)">ok</oc-button>
     </div>
+    <compare-save-dialog
+      class="edit-compare-save-dialog"
+      :original-object="group"
+      :compare-object="editGroup"
+      :confirm-button-disabled="invalidFormData"
+      @revert="revertChanges"
+      @confirm="$emit('confirm', editGroup)"
+    ></compare-save-dialog>
   </div>
 </template>
 <script>
+import CompareSaveDialog from '../../CompareSaveDialog.vue'
+
 export default {
   name: 'EditPanel',
+  components: {
+    CompareSaveDialog
+  },
   props: {
     group: {
       type: Object,
@@ -35,6 +47,13 @@ export default {
           valid: true
         }
       }
+    }
+  },
+  computed: {
+    invalidFormData() {
+      return Object.keys(this.formData)
+        .map((k) => !!this.formData[k].valid)
+        .includes(false)
     }
   },
   watch: {
@@ -58,11 +77,25 @@ export default {
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
       return true
+    },
+
+    revertChanges() {
+      this.editGroup = { ...this.group }
+      Object.keys(this.formData).forEach((formDataKey) => {
+        this.formData[formDataKey].invalid = false
+        this.formData[formDataKey].errorMessage = ''
+      })
     }
   }
 }
 </script>
 <style lang="scss">
+.edit-compare-save-dialog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 .group-info {
   align-items: center;
   flex-direction: column;
