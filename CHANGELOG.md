@@ -14,6 +14,7 @@ Summary
 * Bugfix - Use oC10 navigation entry names: [#6656](https://github.com/owncloud/web/pull/6656)
 * Bugfix - TopBar on redirect: [#6704](https://github.com/owncloud/web/pull/6704)
 * Bugfix - Unsticky appbar position: [#6708](https://github.com/owncloud/web/pull/6708)
+* Enhancement - Add rename selection range: [#6729](https://github.com/owncloud/web/issues/6729)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Full screen external apps: [#6688](https://github.com/owncloud/web/pull/6688)
@@ -81,6 +82,14 @@ Details
 
    https://github.com/owncloud/web/issues/6696
    https://github.com/owncloud/web/pull/6708
+
+* Enhancement - Add rename selection range: [#6729](https://github.com/owncloud/web/issues/6729)
+
+   We've added a selection range for the rename modal to intially select the resource name without
+   extension.
+
+   https://github.com/owncloud/web/issues/6729
+   https://github.com/owncloud/web/pull/6736
 
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
 
