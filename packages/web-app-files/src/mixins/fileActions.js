@@ -69,6 +69,9 @@ export default {
         .map((editor) => {
           return {
             label: () => {
+              if (editor.label) {
+                return this.$gettext(editor.label)
+              }
               const translated = this.$gettext('Open in %{app}')
               return this.$gettextInterpolate(
                 translated,
@@ -77,6 +80,9 @@ export default {
               )
             },
             icon: this.apps.meta[editor.app].icon,
+            ...(this.apps.meta[editor.app].iconFillType && {
+              iconFillType: this.apps.meta[editor.app].iconFillType
+            }),
             img: this.apps.meta[editor.app].img,
             handler: ({ resources }) =>
               this.$_fileActions_openEditor(
@@ -90,7 +96,19 @@ export default {
                 return false
               }
 
-              return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+              if (resources[0].extension && editor.extension) {
+                return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+              }
+
+              if (resources[0].mimeType && editor.mimeType) {
+                return (
+                  resources[0].mimeType.toLowerCase() === editor.mimeType.toLowerCase() ||
+                  resources[0].mimeType.split('/')[0].toLowerCase() ===
+                    editor.mimeType.toLowerCase()
+                )
+              }
+
+              return false
             },
             canBeDefault: editor.canBeDefault,
             componentType: 'oc-button',

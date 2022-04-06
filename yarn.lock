@@ -8991,12 +8991,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"media-viewer@workspace:packages/web-app-media-viewer":
-  version: 0.0.0-use.local
-  resolution: "media-viewer@workspace:packages/web-app-media-viewer"
-  languageName: unknown
-  linkType: soft
-
 "merge-source-map@npm:^1.1.0":
   version: 1.1.0
   resolution: "merge-source-map@npm:1.1.0"
@@ -10819,6 +10813,12 @@ __metadata:
   checksum: 9c41ae0559195af2fb2496d84c6f442843e045d269d4008a6dd336f8372d7481395ed5ab23e5711b6172682c27cb0542e1ab3ca11b38da48f1109c0b701d0ef9
   languageName: node
   linkType: hard
+
+"preview@workspace:packages/web-app-preview":
+  version: 0.0.0-use.local
+  resolution: "preview@workspace:packages/web-app-preview"
+  languageName: unknown
+  linkType: soft
 
 "process-nextick-args@npm:~2.0.0":
   version: 2.0.1

@@ -1,0 +1,7 @@
+Enhancement: Rename mediaviewer to preview
+
+We've renamed the media-viewer app to preview because that describes the purpose of the app better and doesn't mislead users into thinking that it's a full blown media viewer.
+
+For the time being we've added an app alias handling to ownCloud Web which prints a deprecation warning if the preview app is tried to be loaded as `media-viewer`.
+
+https://github.com/owncloud/web/pull/6514

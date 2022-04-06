@@ -15,7 +15,7 @@ module.exports = {
       rename: 'rename',
       move: 'move',
       copy: 'copy',
-      mediaViewer: 'mediaViewer',
+      preview: 'preview',
       markdownEditor: 'markdownEditor'
     }),
 
@@ -161,10 +161,10 @@ module.exports = {
       return this.performFileAction(this.FileAction.declineShare)
     },
     /**
-     * Open a resource in the media viewer via its file action
+     * Open a resource in the preview via its file action
      */
-    mediaViewer: function () {
-      return this.performFileAction(this.FileAction.mediaViewer)
+    preview: function () {
+      return this.performFileAction(this.FileAction.preview)
     },
     /**
      * Open a resource in the markdown editor via its file action
@@ -232,8 +232,8 @@ module.exports = {
       selector: '//button[contains(@class, "oc-files-actions-decline-share-trigger")]',
       locateStrategy: 'xpath'
     },
-    mediaViewerButtonInAccordion: {
-      selector: '//button[normalize-space()="Open in Mediaviewer"]',
+    previewButtonInAccordion: {
+      selector: '//button[normalize-space()="Preview"]',
       locateStrategy: 'xpath'
     },
     markdownEditorButtonInAccordion: {

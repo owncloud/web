@@ -1,49 +1,65 @@
 <template>
   <main
-    id="mediaviewer"
-    ref="mediaviewer"
+    id="preview"
+    ref="preview"
     tabindex="-1"
     @keydown.left="prev"
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <div
-      v-show="!loading && activeMediaFileCached"
-      class="
-        oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-        media-viewer-player
-      "
-    >
-      <video v-if="medium.isVideo" :key="`media-video-${medium.id}`" controls preload>
-        <source :src="medium.url" :type="`video/${medium.ext}`" />
-      </video>
-      <img
-        v-else
-        :key="`media-image-${medium.id}`"
-        :src="medium.url"
-        :alt="medium.name"
-        :data-id="medium.id"
-      />
-    </div>
-    <div v-if="loading" class="oc-position-center">
+    <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
-      v-if="failed"
-      name="review"
+      v-else-if="isFileContentError"
+      name="file-damage"
       variation="danger"
       size="xlarge"
       class="oc-position-center"
       :accessible-label="$gettext('Failed to load media file')"
     />
+    <template v-else>
+      <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <div
+        v-show="activeMediaFileCached"
+        class="
+          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
+          preview-player
+        "
+      >
+        <img
+          v-if="activeMediaFileCached.isImage"
+          :key="`media-image-${activeMediaFileCached.id}`"
+          :src="activeMediaFileCached.url"
+          :alt="activeMediaFileCached.name"
+          :data-id="activeMediaFileCached.id"
+        />
+        <video
+          v-else-if="activeMediaFileCached.isVideo"
+          :key="`media-video-${activeMediaFileCached.id}`"
+          controls
+          preload
+        >
+          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
+        </video>
+        <audio
+          v-else-if="activeMediaFileCached.isAudio"
+          :key="`media-audio-${activeMediaFileCached.id}`"
+          controls
+          preload
+        >
+          <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
+        </audio>
+      </div>
+    </template>
 
-    <div class="oc-position-medium oc-position-bottom-center media-viewer-details">
+    <div class="oc-position-medium oc-position-bottom-center preview-details">
       <p
-        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s media-viewer-file-name"
+        v-if="activeFilteredFile"
+        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s preview-file-name"
         aria-hidden="true"
       >
-        {{ medium.name }}
+        {{ activeFilteredFile.name }}
       </p>
       <div
         class="
@@ -54,11 +70,11 @@
           oc-flex-middle
           oc-flex-center
           oc-flex-around
-          media-viewer-controls-action-bar
+          preview-controls-action-bar
         "
       >
         <oc-button
-          class="media-viewer-controls-previous"
+          class="preview-controls-previous"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Show previous media file in folder')"
@@ -66,12 +82,12 @@
         >
           <oc-icon size="large" name="arrow-drop-left" />
         </oc-button>
-        <p v-if="!isFolderLoading" class="oc-m-rm media-viewer-controls-action-count">
+        <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
           <span aria-hidden="true" v-text="ariaHiddenFileCount" />
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
         <oc-button
-          class="media-viewer-controls-next"
+          class="preview-controls-next"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Show next media file in folder')"
@@ -80,19 +96,19 @@
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
         <oc-button
-          class="media-viewer-controls-download"
+          class="preview-controls-download"
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Download currently viewed file')"
-          @click="downloadMedium"
+          @click="triggerActiveFileDownload"
         >
           <oc-icon size="large" name="file-download" fill-type="line" />
         </oc-button>
         <oc-button
-          class="media-viewer-controls-close"
+          class="preview-controls-close"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Close mediaviewer app')"
+          :aria-label="$gettext('Close preview')"
           @click="closeApp"
         >
           <oc-icon size="large" name="close" />
@@ -104,9 +120,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import Preview from './index'
 
 export default {
-  name: 'Mediaviewer',
+  name: 'Preview',
   setup() {
     return {
       ...useAppDefaults({
@@ -116,14 +133,13 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      failed: false,
+      isFileContentLoading: true,
+      isFileContentError: false,
 
       activeIndex: null,
       direction: 'rtl',
 
-      medium: {},
-      media: []
+      cachedFiles: []
     }
   },
 
@@ -131,39 +147,39 @@ export default {
     ...mapGetters(['getToken', 'capabilities']),
 
     pageTitle() {
-      const translated = this.$gettext('Mediaviewer for %{currentMediumName}')
+      const translated = this.$gettext('Preview for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
-        currentMediumName: this.medium.name
+        currentMediumName: this.activeFilteredFile?.name
       })
     },
     ariaHiddenFileCount() {
       const translated = this.$gettext('%{ displayIndex } of %{ availableMediaFiles }')
       return this.$gettextInterpolate(translated, {
         displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.mediaFiles.length
+        availableMediaFiles: this.filteredFiles.length
       })
     },
     screenreaderFileCount() {
       const translated = this.$gettext('Media file %{ displayIndex } of %{ availableMediaFiles }')
       return this.$gettextInterpolate(translated, {
         displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.mediaFiles.length
+        availableMediaFiles: this.filteredFiles.length
       })
     },
-    mediaFiles() {
+    filteredFiles() {
       if (!this.activeFiles) {
         return []
       }
 
       return this.activeFiles.filter((file) => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
+        return Preview.mimeTypes.includes(file.mimeType?.toLowerCase())
       })
     },
-    activeMediaFile() {
-      return this.mediaFiles[this.activeIndex]
+    activeFilteredFile() {
+      return this.filteredFiles[this.activeIndex]
     },
     activeMediaFileCached() {
-      const cached = this.media.find((i) => i.id === this.activeMediaFile.id)
+      const cached = this.cachedFiles.find((i) => i.id === this.activeFilteredFile.id)
       return cached !== undefined ? cached : false
     },
     thumbDimensions() {
@@ -186,28 +202,28 @@ export default {
         y: this.thumbDimensions,
         // strip double quotes from etag
         // we have no etag, e.g. on shared with others page
-        c: this.activeMediaFile.etag?.substr(1, this.activeMediaFile.etag.length - 2),
+        c: this.activeFilteredFile.etag?.substr(1, this.activeFilteredFile.etag.length - 2),
         scalingup: 0,
         preview: 1,
         a: 1
       }
 
-      return this.getUrlForResource(this.activeMediaFile, query)
+      return this.getUrlForResource(this.activeFilteredFile, query)
     },
     rawMediaUrl() {
-      return this.getUrlForResource(this.activeMediaFile)
+      return this.getUrlForResource(this.activeFilteredFile)
     },
 
-    videoExtensions() {
-      return ['mp4', 'webm', 'ogg']
+    isActiveFileTypeVideo() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
     },
 
-    isActiveMediaFileTypeVideo() {
-      return this.videoExtensions.includes(this.activeMediaFile.extension.toLowerCase())
+    isActiveFileTypeImage() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('image')
     },
 
-    isActiveMediaFileTypeImage() {
-      return !this.isActiveMediaFileTypeVideo
+    isActiveFileTypeAudio() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('audio')
     },
 
     isUrlSigningEnabled() {
@@ -227,22 +243,22 @@ export default {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
-    this.setCurrentFile(this.currentFileContext.path)
-    this.$refs.mediaviewer.focus()
+    this.setActiveFile(this.currentFileContext.path)
+    this.$refs.preview.focus()
   },
 
   beforeDestroy() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
-    this.media.forEach((medium) => {
+    this.cachedFiles.forEach((medium) => {
       window.URL.revokeObjectURL(medium.url)
     })
   },
 
   methods: {
-    setCurrentFile(filePath) {
-      for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].webDavPath === filePath) {
+    setActiveFile(filePath) {
+      for (let i = 0; i < this.filteredFiles.length; i++) {
+        if (this.filteredFiles[i].webDavPath === filePath) {
           this.activeIndex = i
           break
         }
@@ -252,24 +268,23 @@ export default {
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
-      this.setCurrentFile(result.route.params.filePath)
+      this.setActiveFile(result.route.params.filePath)
     },
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeMediaFile.webDavPath
+      this.$route.params.filePath = this.activeFilteredFile.webDavPath
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 
     loadMedium() {
-      this.loading = true
+      this.isFileContentLoading = true
 
-      // Don't bother loading if files are cached
+      // Don't bother loading if file is already loaded and cached
       if (this.activeMediaFileCached) {
         setTimeout(
           () => {
-            this.medium = this.activeMediaFileCached
-            this.loading = false
+            this.isFileContentLoading = false
           },
           // Delay to animate
           50
@@ -277,52 +292,53 @@ export default {
         return
       }
 
-      // Fetch media
-      const url = this.isActiveMediaFileTypeImage ? this.thumbUrl : this.rawMediaUrl
-      // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
-      // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
-      let promise
-      if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-        promise = this.mediaSource(url, 'url', null)
-      } else {
-        promise = this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
-      }
-
-      promise
-        .then((mediaUrl) => {
-          this.media.push({
-            id: this.activeMediaFile.id,
-            name: this.activeMediaFile.name,
-            url: mediaUrl,
-            ext: this.activeMediaFile.extension,
-            isVideo: this.isActiveMediaFileTypeVideo,
-            isImage: this.isActiveMediaFileTypeImage
-          })
-          this.medium = this.activeMediaFileCached
-          this.loading = false
-          this.failed = false
-        })
-        .catch((e) => {
-          this.loading = false
-          this.failed = true
-          console.error(e)
-        })
+      this.loadActiveFileIntoCache(this.isActiveFileTypeImage)
     },
 
-    downloadMedium() {
-      if (this.loading) {
+    async loadActiveFileIntoCache(loadAsPreview) {
+      const url = loadAsPreview ? this.thumbUrl : this.rawMediaUrl
+      try {
+        // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
+        // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
+        let mediaUrl
+        if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
+          mediaUrl = await this.mediaSource(url, 'url', null)
+        } else {
+          mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+        }
+        this.cachedFiles.push({
+          id: this.activeFilteredFile.id,
+          name: this.activeFilteredFile.name,
+          url: mediaUrl,
+          ext: this.activeFilteredFile.extension,
+          mimeType: this.activeFilteredFile.mimeType,
+          isVideo: this.isActiveFileTypeVideo,
+          isImage: this.isActiveFileTypeImage,
+          isAudio: this.isActiveFileTypeAudio
+        })
+        this.isFileContentLoading = false
+        this.isFileContentError = false
+      } catch (e) {
+        this.isFileContentLoading = false
+        this.isFileContentError = true
+        console.error(e)
+      }
+    },
+
+    triggerActiveFileDownload() {
+      if (this.isFileContentLoading) {
         return
       }
 
-      return this.downloadFile(this.mediaFiles[this.activeIndex], this.isPublicLinkContext)
+      return this.downloadFile(this.activeFilteredFile, this.isPublicLinkContext)
     },
     next() {
-      if (this.loading) {
+      if (this.isFileContentLoading) {
         return
       }
-      this.failed = false
+      this.isFileContentError = false
       this.direction = 'rtl'
-      if (this.activeIndex + 1 >= this.mediaFiles.length) {
+      if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
         return
       }
@@ -330,13 +346,13 @@ export default {
       this.updateLocalHistory()
     },
     prev() {
-      if (this.loading) {
+      if (this.isFileContentLoading) {
         return
       }
-      this.failed = false
+      this.isFileContentError = false
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
-        this.activeIndex = this.mediaFiles.length - 1
+        this.activeIndex = this.filteredFiles.length - 1
         return
       }
       this.activeIndex--
@@ -347,11 +363,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.media-viewer-player {
+.preview-player {
   max-width: 90vw;
   height: 70vh;
   margin: 10px auto;
   object-fit: contain;
+
   img,
   video {
     max-width: 85vw;
@@ -359,22 +376,23 @@ export default {
   }
 }
 
-.media-viewer-controls-action-count {
+.preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
 }
 
 @media (max-width: 959px) {
-  .media-viewer-player {
+  .preview-player {
     max-width: 100vw;
   }
 
-  .media-viewer-details {
+  .preview-details {
     left: 0;
     margin: 0;
     max-width: 100%;
     transform: none !important;
     width: 100%;
-    .media-viewer-controls-action-bar {
+
+    .preview-controls-action-bar {
       width: 100%;
     }
   }

@@ -70,7 +70,7 @@ To be defined/documented (Bundling, CDN, app store, ...)
 ```
 To be defined/documented
 - Application (renderable), e.g. iFrame
-- Extension, e.g. media-viewer
+- Extension, e.g. preview
 - Quick action, e.g. based on WOPI/Appserver
 - ...
 ```

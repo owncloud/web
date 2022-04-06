@@ -51,9 +51,11 @@ const mutations = {
       routeName: extension.routeName,
       routes: extension.routes || [],
       extension: extension.extension,
+      mimeType: extension.mimeType,
       handler: extension.handler,
       canBeDefault: extension.canBeDefault !== false,
-      config: (state.fileEditorConfigs || {})[app]
+      config: (state.fileEditorConfigs || {})[app],
+      ...(extension.label && { label: extension.label })
     }
 
     state.fileEditors.push(editor)
@@ -99,6 +101,7 @@ const mutations = {
       name: appInfo.name || appInfo.id,
       id: appInfo.id,
       icon: appInfo.icon || 'check_box_outline_blank',
+      ...(appInfo.iconFillType && { iconFillType: appInfo.iconFillType }),
       img: appInfo.img || null,
       config: (state.fileEditorConfigs || {})[appInfo.id]
     }

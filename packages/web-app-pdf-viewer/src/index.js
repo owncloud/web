@@ -22,7 +22,8 @@ const routes = [
 const appInfo = {
   name: $gettext('PDF Viewer'),
   id: 'pdf-viewer',
-  icon: 'eye',
+  icon: 'resource-type-pdf',
+  iconFillType: 'fill',
   extensions: [
     {
       extension: 'pdf',
