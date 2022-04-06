@@ -21,8 +21,10 @@ Summary
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - PDF viewer: [#6654](https://github.com/owncloud/web/pull/6654)
 * Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
+* Enhancement - Audio support in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Audio handling in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
+* Enhancement - Rename mediaviewer to preview: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
@@ -139,6 +141,13 @@ Details
    https://github.com/owncloud/web/issues/5618
    https://github.com/owncloud/web/pull/6690
 
+* Enhancement - Audio support in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
+
+   We've added support for audio file playback into the preview app (namely flac, mp3, wav and
+   ogg).
+
+   https://github.com/owncloud/web/pull/6514
+
 * Enhancement - Audio handling in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
 
    We've built audio preview support for flac, mp3, ogg and wav files into the preview app.
@@ -152,6 +161,16 @@ Details
 
    https://github.com/owncloud/web/issues/5976
    https://github.com/owncloud/web/pull/6612
+
+* Enhancement - Rename mediaviewer to preview: [#6514](https://github.com/owncloud/web/pull/6514)
+
+   We've renamed the media-viewer app to preview because that describes the purpose of the app
+   better and doesn't mislead users into thinking that it's a full blown media viewer.
+
+   For the time being we've added an app alias handling to ownCloud Web which prints a deprecation
+   warning if the preview app is tried to be loaded as `media-viewer`.
+
+   https://github.com/owncloud/web/pull/6514
 
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
 
