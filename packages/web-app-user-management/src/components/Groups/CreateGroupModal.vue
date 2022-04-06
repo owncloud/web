@@ -10,7 +10,6 @@
   >
     <template #content>
       <oc-text-input
-        id="input-display-name"
         v-model="group.displayName"
         class="oc-mb-s"
         :label="$gettext('Group name') + '*'"

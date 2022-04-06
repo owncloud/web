@@ -1,6 +1,6 @@
 <template>
   <div class="oc-mt-xl">
-    <div v-if="noUsers" class="oc-flex group-info">
+    <div v-if="noUsers" class="oc-flex user-info">
       <oc-icon name="user" size="xxlarge" />
       <p v-translate>Select a user to view details</p>
     </div>
@@ -9,10 +9,10 @@
       <p>{{ multipleUsersSelectedText }}</p>
     </div>
     <div v-if="user">
-      <div class="oc-flex group-info oc-mb-l">
+      <div class="oc-flex user-info oc-mb-l">
         <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
         <span v-text="user.onPremisesSamAccountName"></span>
-        <span class="oc-text-muted group-info-display-name" v-text="user.displayName"></span>
+        <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
       </div>
       <table
         class="details-table"
@@ -74,17 +74,17 @@ export default {
       })
     },
     userRole() {
-      return this.user.id in this.userRoles ? this.userRoles[this.user.id] : ''
+      return this.user.id in this.userRoles ? this.userRoles[this.user.id].displayName : ''
     }
   }
 }
 </script>
 <style lang="scss">
-.group-info {
+.user-info {
   align-items: center;
   flex-direction: column;
 }
-.group-info-display-name {
+.user-info-display-name {
   font-size: 1.5rem;
 }
 .details-table {

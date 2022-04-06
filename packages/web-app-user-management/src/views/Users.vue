@@ -96,7 +96,13 @@
               :users="selectedUsers"
               :user-roles="userRoles"
             ></DetailsPanel>
-            <EditPanel v-if="activePanel === 'EditPanel'" :user="selectedUsers[0]"></EditPanel>
+            <EditPanel
+              v-if="activePanel === 'EditPanel'"
+              :user="selectedUsers[0]"
+              :user-role="userRoles[selectedUsers[0].id]"
+              :roles="roles"
+              @confirm="editUser"
+            ></EditPanel>
           </template>
         </side-bar>
       </template>
@@ -118,7 +124,7 @@ import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
 
@@ -137,7 +143,7 @@ export default {
     const store = useStore()
     const users = ref([])
     const roles = ref([])
-    const userAssignments = ref([])
+    const userAssignments = ref({})
     const graphClient = clientService.graphAuthenticated(
       store.getters.configuration.server,
       store.getters.getToken
@@ -149,7 +155,7 @@ export default {
         {},
         {
           headers: {
-            authorization: store.getters.getToken
+            authorization: `Bearer ${store.getters.getToken}`
           }
         }
       )
@@ -164,11 +170,11 @@ export default {
         },
         {
           headers: {
-            authorization: store.getters.getToken
+            authorization: `Bearer ${store.getters.getToken}`
           }
         }
       )
-      userAssignments.value.push(userAssignmentResponse.data?.assignments)
+      userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
@@ -200,17 +206,15 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getToken']),
     userRoles() {
       const roles = {}
-
       for (const user of this.users) {
-        const userAssignmentList = this.userAssignments.find((assignment) =>
-          assignment.some((subAssignment) => subAssignment.accountUuid === user.id)
-        )
-
-        if (!userAssignmentList) {
+        if (!(user.id in this.userAssignments)) {
           continue
         }
+
+        const userAssignmentList = this.userAssignments[user.id]
 
         const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
 
@@ -224,7 +228,7 @@ export default {
           continue
         }
 
-        roles[user.id] = role.displayName
+        roles[user.id] = role
       }
 
       return roles
@@ -276,6 +280,14 @@ export default {
 
     toggleSidebarButtonIconFillType() {
       return this.sideBarOpen ? 'fill' : 'line'
+    }
+  },
+
+  watch: {
+    selectedUsers() {
+      if (this.selectedUsers.length > 1) {
+        this.activePanel = 'DetailsPanel'
+      }
     }
   },
 
@@ -405,13 +417,39 @@ export default {
           status: 'danger'
         })
       }
-    }
-  },
+    },
 
-  watch: {
-    selectedUsers() {
-      if (this.selectedUsers.length > 1) {
-        this.activePanel = 'DetailsPanel'
+    async editUser({ editUser, editUserRole }) {
+      try {
+        const editUserResponse = await this.graphClient.users.editUser(editUser.id, editUser)
+        const assignmentsAddResponse = await axios.post(
+          '/api/v0/settings/assignments-add',
+          {
+            account_uuid: editUser.id,
+            role_id: editUserRole.id
+          },
+          {
+            headers: {
+              authorization: `Bearer ${this.getToken}`
+            }
+          }
+        )
+
+        const userRecord = this.users.find((user) => user.id === editUser.id)
+        Object.assign(userRecord, editUserResponse?.data)
+
+        this.userAssignments = Object.assign({}, this.userAssignments, {
+          [editUser.id]: [assignmentsAddResponse.data?.assignment]
+        })
+        this.showMessage({
+          title: this.$gettext('User was edited successfully')
+        })
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to edit user'),
+          status: 'danger'
+        })
       }
     }
   }

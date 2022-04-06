@@ -155,7 +155,7 @@ export default {
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     },
     getUserRole(user) {
-      return user.id in this.userRoles ? this.userRoles[user.id] : ''
+      return user.id in this.userRoles ? this.userRoles[user.id].displayName : ''
     }
   }
 }
