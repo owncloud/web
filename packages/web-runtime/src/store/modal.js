@@ -13,6 +13,7 @@ const state = {
   hasInput: false,
   inputDisabled: false,
   inputValue: '',
+  inputSelectionRange: null,
   inputPlaceholder: '',
   inputLabel: '',
   inputError: '',
@@ -54,6 +55,7 @@ const mutations = {
     state.onConfirm = modal.onConfirm
     state.hasInput = modal.hasInput || false
     state.inputValue = modal.inputValue || null
+    state.inputSelectionRange = modal.inputSelectionRange
     state.inputDescription = modal.inputDescription || null
     state.inputLabel = modal.inputLabel || null
     state.inputError = modal.inputError || null
