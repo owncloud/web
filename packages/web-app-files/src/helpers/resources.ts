@@ -19,9 +19,6 @@ import { extractExtensionFromFile, extractStorageId, Resource } from './resource
 import { User } from './user'
 
 export function renameResource(resource, newName, newPath) {
-  const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile(newName)
-
   let resourcePath = '/' + newPath + newName
   if (resourcePath.startsWith('/files') || resourcePath.startsWith('/space')) {
     resourcePath = resourcePath.split('/').splice(3).join('/')
@@ -30,14 +27,14 @@ export function renameResource(resource, newName, newPath) {
   resource.name = newName
   resource.path = resourcePath
   resource.webDavPath = '/' + newPath + newName
-  resource.extension = isFolder ? '' : extension
+  resource.extension = extractExtensionFromFile(resource)
 
   return resource
 }
 
 export function buildResource(resource): Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile(resource.name)
+  const extension = extractExtensionFromFile(resource)
   let resourcePath
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
@@ -377,7 +374,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.canBeDeleted = () => true
   }
 
-  resource.extension = isFolder ? '' : extractExtensionFromFile(resource.name)
+  resource.extension = extractExtensionFromFile(resource)
   resource.isReceivedShare = () => incomingShares
   resource.canUpload = () => true
   resource.isMounted = () => false
@@ -517,7 +514,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission): Share {
 export function buildDeletedResource(resource): Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
-  const extension = isFolder ? '' : extractExtensionFromFile(fullName)
+  const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
   return {
     type: isFolder ? 'folder' : resource.type,
     isFolder,

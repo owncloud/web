@@ -34,16 +34,23 @@ describe('filterResources', () => {
   })
   describe('extractExtensionFromFile', () => {
     it('should return simple file extension', () => {
-      expect(extractExtensionFromFile('test.png')).toEqual('png')
+      expect(extractExtensionFromFile({ name: 'test.png' } as Resource)).toEqual('png')
     })
     it('should return complex file extension', () => {
-      expect(extractExtensionFromFile('test.tar.gz')).toEqual('tar.gz')
+      expect(extractExtensionFromFile({ name: 'test.tar.gz' } as Resource)).toEqual('tar.gz')
     })
     it('should return unknown file extension', () => {
-      expect(extractExtensionFromFile('test.unknown')).toEqual('unknown')
+      expect(extractExtensionFromFile({ name: 'test.unknown' } as Resource)).toEqual('unknown')
     })
     it('should return no file extension', () => {
-      expect(extractExtensionFromFile('test')).toEqual('')
+      expect(extractExtensionFromFile({ name: 'test' } as Resource)).toEqual('')
+    })
+    it.each([
+      { name: 'afolder', isFolder: true },
+      { name: 'afolder', type: 'dir' },
+      { name: 'afolder', type: 'folder' }
+    ])('should return empty string if folder', (resource) => {
+      expect(extractExtensionFromFile(resource as Resource)).toEqual('')
     })
   })
 })

@@ -62,20 +62,25 @@ export const extractStorageId = (id?: string): string => {
 export const extractNameWithoutExtension = (resource?: Resource): string => {
   const extension = resource.extension || ''
   const name = resource.name || ''
-  if (!extension.length || !name.length) return name
+  if (!extension.length) return name
   const extensionIndexInName = name.lastIndexOf(`.${extension}`)
   return name.substring(0, extensionIndexInName)
 }
 
-export const extractExtensionFromFile = (file: string): string => {
-  const parts = file.split('.')
-  for (let i = 0; i < parts.length; i++) {
-    const possibleExtension = parts.slice(i, parts.length).join('.')
-    if (!fileExtensions.complex.includes(possibleExtension)) continue
-    return possibleExtension
+export const extractExtensionFromFile = (resource: Resource): string => {
+  const name = resource.name
+  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) return ''
+
+  const parts = name.split('.')
+  if (parts.length > 2) {
+    for (let i = 0; i < parts.length; i++) {
+      const possibleExtension = parts.slice(i, parts.length).join('.')
+      if (fileExtensions.complex.includes(possibleExtension)) {
+        return possibleExtension
+      }
+    }
   }
   // Fallback if file extension is unknown or no extension
-  const lastDot = file.lastIndexOf('.')
-  if (lastDot === -1) return ''
-  return file.substring(lastDot + 1, file.length)
+  if (parts.length < 2) return ''
+  return parts[parts.length - 1]
 }
