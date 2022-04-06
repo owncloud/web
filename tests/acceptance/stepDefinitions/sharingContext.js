@@ -352,8 +352,6 @@ Then(
     const state = await filesList.isSharingButtonPresent(resource)
     assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
     await filesList.openSideBar(resource)
-    const linkItemState = await appSideBar.isLinksPanelSelectable(false)
-    assert.ok(!linkItemState, `Error: Sidebar 'Links' panel for resource ${resource} is present`)
     const collaboratorsItemState = await appSideBar.isSharingPanelSelectable(false)
     assert.ok(
       !collaboratorsItemState,

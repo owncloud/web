@@ -84,14 +84,18 @@ describe('FileInfo', () => {
   })
 })
 
-function createWrapper(testResource, tooltipStub, routeName) {
+function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled = false) {
   return shallowMount(FileInfo, {
     store: new Vuex.Store({
       getters: {
         user: function () {
           return { id: 'marie' }
         },
-        capabilities: jest.fn(() => ({}))
+        capabilities: jest.fn(() => ({
+          files: {
+            privateLinks: privateLinksEnabled
+          }
+        }))
       },
       modules: {
         Files: {

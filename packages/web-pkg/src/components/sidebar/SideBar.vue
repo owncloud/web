@@ -29,13 +29,13 @@
         >
           <oc-button
             v-if="!panel.default"
+            v-oc-tooltip="accessibleLabelBack"
             class="header__back"
             appearance="raw"
             :aria-label="accessibleLabelBack"
             @click="closePanel"
           >
             <oc-icon name="arrow-left-s" fill-type="line" />
-            {{ $gettext(defaultPanel.title) }}
           </oc-button>
 
           <h2 class="header__title oc-my-rm">
@@ -58,7 +58,7 @@
           <template v-if="isContentDisplayed">
             <div class="sidebar-panel__body-content">
               <slot name="body">
-                <component :is="panel.component" />
+                <component :is="panel.component" v-bind="panel.componentAttrs" />
               </slot>
             </div>
 

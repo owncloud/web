@@ -103,7 +103,7 @@ import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
-import RoleDropdown from '../RoleDropdown.vue'
+import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
