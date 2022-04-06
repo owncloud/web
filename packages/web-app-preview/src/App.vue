@@ -7,11 +7,11 @@
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
-    <div v-if="loading" class="oc-position-center">
+    <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
     <oc-icon
-      v-else-if="failed"
+      v-else-if="isFileContentError"
       name="file-damage"
       variation="danger"
       size="xlarge"
@@ -55,11 +55,11 @@
 
     <div class="oc-position-medium oc-position-bottom-center preview-details">
       <p
-        v-if="activeMediaFile"
+        v-if="activeFilteredFile"
         class="oc-text-lead oc-text-center oc-text-truncate oc-p-s preview-file-name"
         aria-hidden="true"
       >
-        {{ activeMediaFile.name }}
+        {{ activeFilteredFile.name }}
       </p>
       <div
         class="
@@ -100,7 +100,7 @@
           appearance="raw"
           variation="inverse"
           :aria-label="$gettext('Download currently viewed file')"
-          @click="downloadMedium"
+          @click="triggerDownload"
         >
           <oc-icon size="large" name="file-download" fill-type="line" />
         </oc-button>
@@ -133,13 +133,13 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      failed: false,
+      isFileContentLoading: true,
+      isFileContentError: false,
 
       activeIndex: null,
       direction: 'rtl',
 
-      cachedMediaFiles: []
+      cachedFiles: []
     }
   },
 
@@ -149,24 +149,24 @@ export default {
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
-        currentMediumName: this.activeMediaFile?.name
+        currentMediumName: this.activeFilteredFile?.name
       })
     },
     ariaHiddenFileCount() {
       const translated = this.$gettext('%{ displayIndex } of %{ availableMediaFiles }')
       return this.$gettextInterpolate(translated, {
         displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.mediaFiles.length
+        availableMediaFiles: this.filteredFiles.length
       })
     },
     screenreaderFileCount() {
       const translated = this.$gettext('Media file %{ displayIndex } of %{ availableMediaFiles }')
       return this.$gettextInterpolate(translated, {
         displayIndex: this.activeIndex + 1,
-        availableMediaFiles: this.mediaFiles.length
+        availableMediaFiles: this.filteredFiles.length
       })
     },
-    mediaFiles() {
+    filteredFiles() {
       if (!this.activeFiles) {
         return []
       }
@@ -175,11 +175,11 @@ export default {
         return Preview.mimeTypes.includes(file.mimeType.toLowerCase())
       })
     },
-    activeMediaFile() {
-      return this.mediaFiles[this.activeIndex]
+    activeFilteredFile() {
+      return this.filteredFiles[this.activeIndex]
     },
     activeMediaFileCached() {
-      const cached = this.cachedMediaFiles.find((i) => i.id === this.activeMediaFile.id)
+      const cached = this.cachedFiles.find((i) => i.id === this.activeFilteredFile.id)
       return cached !== undefined ? cached : false
     },
     thumbDimensions() {
@@ -202,28 +202,28 @@ export default {
         y: this.thumbDimensions,
         // strip double quotes from etag
         // we have no etag, e.g. on shared with others page
-        c: this.activeMediaFile.etag?.substr(1, this.activeMediaFile.etag.length - 2),
+        c: this.activeFilteredFile.etag?.substr(1, this.activeFilteredFile.etag.length - 2),
         scalingup: 0,
         preview: 1,
         a: 1
       }
 
-      return this.getUrlForResource(this.activeMediaFile, query)
+      return this.getUrlForResource(this.activeFilteredFile, query)
     },
     rawMediaUrl() {
-      return this.getUrlForResource(this.activeMediaFile)
+      return this.getUrlForResource(this.activeFilteredFile)
     },
 
-    isActiveMediaFileTypeVideo() {
-      return this.activeMediaFile.mimeType.toLowerCase().startsWith('video')
+    isActiveFileTypeVideo() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
     },
 
-    isActiveMediaFileTypeImage() {
-      return this.activeMediaFile.mimeType.toLowerCase().startsWith('image')
+    isActiveFileTypeImage() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('image')
     },
 
-    isActiveMediaFileTypeAudio() {
-      return this.activeMediaFile.mimeType.toLowerCase().startsWith('audio')
+    isActiveFileTypeAudio() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('audio')
     },
 
     isUrlSigningEnabled() {
@@ -243,22 +243,22 @@ export default {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
-    this.setCurrentFile(this.currentFileContext.path)
+    this.setActiveFile(this.currentFileContext.path)
     this.$refs.preview.focus()
   },
 
   beforeDestroy() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
-    this.cachedMediaFiles.forEach((medium) => {
+    this.cachedFiles.forEach((medium) => {
       window.URL.revokeObjectURL(medium.url)
     })
   },
 
   methods: {
-    setCurrentFile(filePath) {
-      for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].webDavPath === filePath) {
+    setActiveFile(filePath) {
+      for (let i = 0; i < this.filteredFiles.length; i++) {
+        if (this.filteredFiles[i].webDavPath === filePath) {
           this.activeIndex = i
           break
         }
@@ -268,23 +268,23 @@ export default {
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
-      this.setCurrentFile(result.route.params.filePath)
+      this.setActiveFile(result.route.params.filePath)
     },
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeMediaFile.webDavPath
+      this.$route.params.filePath = this.activeFilteredFile.webDavPath
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 
     loadMedium() {
-      this.loading = true
+      this.isFileContentLoading = true
 
       // Don't bother loading if file is already loaded and cached
       if (this.activeMediaFileCached) {
         setTimeout(
           () => {
-            this.loading = false
+            this.isFileContentLoading = false
           },
           // Delay to animate
           50
@@ -292,10 +292,10 @@ export default {
         return
       }
 
-      this.loadMediumIntoCache(this.isActiveMediaFileTypeImage)
+      this.loadActiveFileIntoCache(this.isActiveFileTypeImage)
     },
 
-    async loadMediumIntoCache(loadAsPreview) {
+    async loadActiveFileIntoCache(loadAsPreview) {
       const url = loadAsPreview ? this.thumbUrl : this.rawMediaUrl
       try {
         // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
@@ -306,39 +306,39 @@ export default {
         } else {
           mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         }
-        this.cachedMediaFiles.push({
-          id: this.activeMediaFile.id,
-          name: this.activeMediaFile.name,
+        this.cachedFiles.push({
+          id: this.activeFilteredFile.id,
+          name: this.activeFilteredFile.name,
           url: mediaUrl,
-          ext: this.activeMediaFile.extension,
-          mimeType: this.activeMediaFile.mimeType,
-          isVideo: this.isActiveMediaFileTypeVideo,
-          isImage: this.isActiveMediaFileTypeImage,
-          isAudio: this.isActiveMediaFileTypeAudio
+          ext: this.activeFilteredFile.extension,
+          mimeType: this.activeFilteredFile.mimeType,
+          isVideo: this.isActiveFileTypeVideo,
+          isImage: this.isActiveFileTypeImage,
+          isAudio: this.isActiveFileTypeAudio
         })
-        this.loading = false
-        this.failed = false
+        this.isFileContentLoading = false
+        this.isFileContentError = false
       } catch (e) {
-        this.loading = false
-        this.failed = true
+        this.isFileContentLoading = false
+        this.isFileContentError = true
         console.error(e)
       }
     },
 
-    downloadMedium() {
-      if (this.loading) {
+    triggerDownload() {
+      if (this.isFileContentLoading) {
         return
       }
 
-      return this.downloadFile(this.activeMediaFile, this.isPublicLinkContext)
+      return this.downloadFile(this.activeFilteredFile, this.isPublicLinkContext)
     },
     next() {
-      if (this.loading) {
+      if (this.isFileContentLoading) {
         return
       }
-      this.failed = false
+      this.isFileContentError = false
       this.direction = 'rtl'
-      if (this.activeIndex + 1 >= this.mediaFiles.length) {
+      if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
         return
       }
@@ -346,13 +346,13 @@ export default {
       this.updateLocalHistory()
     },
     prev() {
-      if (this.loading) {
+      if (this.isFileContentLoading) {
         return
       }
-      this.failed = false
+      this.isFileContentError = false
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
-        this.activeIndex = this.mediaFiles.length - 1
+        this.activeIndex = this.filteredFiles.length - 1
         return
       }
       this.activeIndex--
