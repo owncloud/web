@@ -23,6 +23,7 @@ Summary
 * Enhancement - Permission-based visibility of upload and create buttons: [#6690](https://github.com/owncloud/web/pull/6690)
 * Enhancement - Audio support in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Audio handling in preview app: [#6514](https://github.com/owncloud/web/pull/6514)
+* Enhancement - Provide dependencies to applications: [#6746](https://github.com/owncloud/web/pull/6746)
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Rename mediaviewer to preview: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
@@ -153,6 +154,15 @@ Details
    We've built audio preview support for flac, mp3, ogg and wav files into the preview app.
 
    https://github.com/owncloud/web/pull/6514
+
+* Enhancement - Provide dependencies to applications: [#6746](https://github.com/owncloud/web/pull/6746)
+
+   We reduced the bundle size of externally built applications and the risk of clashing library
+   instances by passing certain dependencies into applications (namely
+   `@vue/composition-api`, `vuex` and `luxon`).
+
+   https://github.com/owncloud/web/issues/5716
+   https://github.com/owncloud/web/pull/6746
 
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 
