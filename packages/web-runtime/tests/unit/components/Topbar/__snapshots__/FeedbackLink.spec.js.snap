@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FeedbackLink component has no accessibility violations 1`] = `
-<div class="oc-flex"><a aria-label="ownCloud feedback survey" href="https://owncloud.com/web-design-feedback" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw" target="_blank" aria-describedby="oc-feedback-link-description"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></a>
+<div class="oc-flex"><a aria-label="ownCloud feedback survey" href="https://owncloud.com/web-design-feedback" target="_blank" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-inverse oc-button-inverse-raw" aria-describedby="oc-feedback-link-description"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></a>
   <p id="oc-feedback-link-description" class="oc-invisible-sr">Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.</p>
 </div>
 `;

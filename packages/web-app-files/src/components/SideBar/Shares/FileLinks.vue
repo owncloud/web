@@ -9,9 +9,12 @@
       <template v-else>
         <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
         <div v-if="canCreatePublicLinks" class="oc-my-s">
-          <p v-translate class="oc-text-muted">
-            Any external person with the respective link can access this resource. No sign-in
-            required. Assign a password to avoid unintended document exposure.
+          <p class="oc-text-muted">
+            <span v-translate
+              >Any external person with the respective link can access this resource. No sign-in
+              required. Assign a password to avoid unintended document exposure.</span
+            >
+            <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
           </p>
           <oc-button
             id="files-file-link-add"
@@ -66,6 +69,7 @@ import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
 import { defineComponent } from '@vue/composition-api'
+import { shareViaLinkHelp } from '../../../helpers/contextualHelpers'
 
 const VIEW_SHOW = 'showLinks'
 const VIEW_EDIT = 'editPublicLink'
@@ -105,9 +109,17 @@ export default defineComponent({
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapGetters(['capabilities']),
+    ...mapGetters(['capabilities', 'configuration']),
     ...mapState('Files', ['sharesTree']),
     ...mapState(['user']),
+
+    helpersEnabled() {
+      return this.configuration.options.contextHelpers
+    },
+
+    viaLinkHelp() {
+      return shareViaLinkHelp
+    },
 
     canCreatePublicLinks() {
       return this.highlightedFile.canShare({ user: this.user })

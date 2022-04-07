@@ -28,5 +28,8 @@
       "id": "accounts",
       "path": "https://localhost:9200/accounts.js"
     }
-  ]
+  ],
+  "options": {
+    "contextHelpers": true
+  },
 }

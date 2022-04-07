@@ -11,6 +11,7 @@
       >
         <template #message>
           <span v-translate>There are no resources with a public link at the moment</span>
+          <oc-contextual-helper v-if="helpersEnabled" v-bind="quickLinkHelp" />
         </template>
       </no-content-message>
       <resource-table
@@ -70,6 +71,7 @@ import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../../helpers/resource'
+import { shareQuickLinkHelp } from '../../helpers/contextualHelpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -100,6 +102,14 @@ export default defineComponent({
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+
+    helpersEnabled() {
+      return this.configuration.options.contextHelpers
+    },
+
+    quickLinkHelp() {
+      return shareQuickLinkHelp
+    },
 
     isEmpty() {
       return this.paginatedResources.length < 1
