@@ -16,7 +16,7 @@ module.exports = {
       move: 'move',
       copy: 'copy',
       preview: 'preview',
-      markdownEditor: 'markdownEditor'
+      simpleEditor: 'simpleEditor'
     }),
 
     /**
@@ -167,10 +167,10 @@ module.exports = {
       return this.performFileAction(this.FileAction.preview)
     },
     /**
-     * Open a resource in the markdown editor via its file action
+     * Open a resource in the simple editor via its file action
      */
-    markdownEditor: function () {
-      return this.performFileAction(this.FileAction.markdownEditor)
+    simpleEditor: function () {
+      return this.performFileAction(this.FileAction.simpleEditor)
     }
   },
   elements: {
@@ -236,8 +236,8 @@ module.exports = {
       selector: '//button[normalize-space()="Preview"]',
       locateStrategy: 'xpath'
     },
-    markdownEditorButtonInAccordion: {
-      selector: '//button[normalize-space()="Open in MarkdownEditor"]',
+    simpleEditorButtonInAccordion: {
+      selector: '//button[normalize-space()="Open in SimpleEditor"]',
       locateStrategy: 'xpath'
     }
   }

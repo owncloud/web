@@ -3,7 +3,7 @@
 exports[`ContextActions menu items renders a list of actions for a file 1`] = `
 <div id="oc-files-context-menu">
   <oc-list-stub id="oc-files-context-actions-context" class="oc-files-context-actions oc-pb-s oc-files-context-actions-border">
-    <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-markdown-editor-trigger action-menu-item" data-testid="action-handler">
+    <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-simple-editor-trigger action-menu-item" data-testid="action-handler">
         <oc-icon-stub name="file-text" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" data-testid="action-icon"></oc-icon-stub> <span data-testid="action-label" class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>
@@ -66,7 +66,7 @@ exports[`ContextActions menu items renders a list of actions for a file 1`] = `
 exports[`ContextActions menu items renders a list of actions for a folder 1`] = `
 <div id="oc-files-context-menu">
   <oc-list-stub id="oc-files-context-actions-context" class="oc-files-context-actions oc-pb-s oc-files-context-actions-border">
-    <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-markdown-editor-trigger action-menu-item" data-testid="action-handler">
+    <li class="oc-files-context-action oc-px-s oc-rounded"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-simple-editor-trigger action-menu-item" data-testid="action-handler">
         <oc-icon-stub name="file-text" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" data-testid="action-icon"></oc-icon-stub> <span data-testid="action-label" class="oc-files-context-action-label">Open in editor</span>
         <!---->
       </button></li>

@@ -13,7 +13,7 @@
   "apps": [
     "files",
     "draw-io",
-    "markdown-editor",
+    "simple-editor",
     "preview",
     "pdf-viewer",
     "search"
