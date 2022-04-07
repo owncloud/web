@@ -155,7 +155,10 @@ export const announceApplications = async ({
 const rewriteDeprecatedAppNames = (
   runtimeConfiguration: RuntimeConfiguration
 ): RuntimeConfiguration => {
-  const appAliases = [{ name: 'preview', oldName: 'media-viewer' }]
+  const appAliases = [
+    { name: 'preview', oldName: 'media-viewer' },
+    { name: 'simple-editor', oldName: 'markdown-editor' }
+  ]
   return {
     ...runtimeConfiguration,
     apps: runtimeConfiguration.apps.map((appName) => {
