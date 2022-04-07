@@ -53,6 +53,25 @@ describe('Groups view', () => {
     })
   })
 
+  describe('method "editGroup"', () => {
+    it('should show message on success', async () => {
+      const wrapper = getMountedWrapper()
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editGroup({ id: '1', displayName: 'Super group' })
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getMountedWrapper({ resolveEditGroup: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editGroup({})
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
   describe('computed method "availableSideBarPanels"', () => {
     it('should contain EditPanel with property enabled set true when one group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
@@ -96,6 +115,7 @@ function getMountedWrapper({
   data = {},
   mocks = {},
   resolveCreateGroup = true,
+  resolveEditGroup = true,
   resolveDeleteGroup = true
 } = {}) {
   return shallowMount(Groups, {
@@ -118,7 +138,8 @@ function getMountedWrapper({
           createGroup: () =>
             resolveCreateGroup ? Promise.resolve() : Promise.reject(new Error('')),
           deleteGroup: () =>
-            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error(''))
+            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error('')),
+          editGroup: () => (resolveEditGroup ? Promise.resolve() : Promise.reject(new Error('')))
         }
       },
       groups: [

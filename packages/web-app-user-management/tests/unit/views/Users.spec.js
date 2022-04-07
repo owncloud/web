@@ -2,6 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex-extensions'
 import Users from '../../../src/views/Users'
 import Vuex from 'vuex'
+import mockAxios from 'jest-mock-axios'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -27,6 +28,43 @@ describe('Users view', () => {
 
       expect(showMessageStub).toHaveBeenCalled()
       expect(toggleCreateUserModalStub).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe('method "editUser"', () => {
+    it('should show message on success', async () => {
+      mockAxios.post.mockImplementationOnce(() => {
+        return Promise.resolve({
+          data: {
+            accountUuid: '1',
+            id: '1',
+            roleId: '1'
+          }
+        })
+      })
+      const wrapper = getMountedWrapper()
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editUser({
+        editUser: { id: '1', displayName: 'jan' },
+        editUserRole: { id: '1', displayName: 'admin' }
+      })
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      mockAxios.post.mockImplementationOnce(() => {
+        return Promise.resolve({})
+      })
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getMountedWrapper({ resolveEditUser: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editUser({
+        editUser: {},
+        editUserRole: {}
+      })
+
+      expect(showMessageStub).toHaveBeenCalled()
     })
   })
 
@@ -215,6 +253,7 @@ function getMountedWrapper({
   data = {},
   mocks = {},
   resolveCreateUser = true,
+  resolveEditUser = true,
   resolveDeleteUser = true
 } = {}) {
   return shallowMount(Users, {
@@ -222,6 +261,9 @@ function getMountedWrapper({
     store: createStore(Vuex.Store, {
       actions: {
         showMessage: jest.fn()
+      },
+      getters: {
+        getToken: () => 'token'
       }
     }),
     mocks: {
@@ -235,6 +277,7 @@ function getMountedWrapper({
       graphClient: {
         users: {
           createUser: () => (resolveCreateUser ? Promise.resolve() : Promise.reject(new Error(''))),
+          editUser: () => (resolveEditUser ? Promise.resolve() : Promise.reject(new Error(''))),
           deleteUser: () => (resolveDeleteUser ? Promise.resolve() : Promise.reject(new Error('')))
         }
       },
