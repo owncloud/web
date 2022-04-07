@@ -27,6 +27,7 @@ Summary
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Rename mediaviewer to preview: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
+* Enhancement - Simple Editor: [#6667](https://github.com/owncloud/web/pull/6667)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
@@ -189,6 +190,16 @@ Details
 
    https://github.com/owncloud/web/issues/6140
    https://github.com/owncloud/web/pull/6699
+
+* Enhancement - Simple Editor: [#6667](https://github.com/owncloud/web/pull/6667)
+
+   Replace MarkdownEditor with SimpleEditor and add the following improvements: * Disable
+   preview for non md files (configurable) * Data integrity checks (prevent exiting with unsaved
+   changes) * Better error information to the user * Keyboard shortcut to save * Read-only mode *
+   Fix to open on non-authenticated public links * Open other extensions (js, json, xml, py, php,
+   yaml) * UI polish
+
+   https://github.com/owncloud/web/pull/6667
 
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 
