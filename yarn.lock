@@ -8951,12 +8951,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-editor@workspace:packages/web-app-markdown-editor":
-  version: 0.0.0-use.local
-  resolution: "markdown-editor@workspace:packages/web-app-markdown-editor"
-  languageName: unknown
-  linkType: soft
-
 "marked@npm:^4.0.12":
   version: 4.0.12
   resolution: "marked@npm:4.0.12"
@@ -12126,6 +12120,12 @@ __metadata:
   checksum: b819ac81ba757af559dad0804233ae31bf6f054591cd8a671e9cbcf09f21c72ec3076fe87d1e04861f5b33b47d63f0694b568de99c99cd733ee2060515beb6d5
   languageName: node
   linkType: hard
+
+"simple-editor@workspace:packages/web-app-simple-editor":
+  version: 0.0.0-use.local
+  resolution: "simple-editor@workspace:packages/web-app-simple-editor"
+  languageName: unknown
+  linkType: soft
 
 "simple-swizzle@npm:^0.2.2":
   version: 0.2.2

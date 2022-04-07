@@ -30,8 +30,8 @@ const mockMenuSections = [
         handler: jest.fn(),
         label: () => 'Open in editor',
         componentType: 'oc-button',
-        selector: '.oc-files-actions-markdown-editor-trigger',
-        class: 'oc-files-actions-markdown-editor-trigger'
+        selector: '.oc-files-actions-simple-editor-trigger',
+        class: 'oc-files-actions-simple-editor-trigger'
       },
       ...exampleApps.map((app) => {
         return {

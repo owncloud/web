@@ -36,7 +36,7 @@ const newFileHandlers = [
   {
     ext: 'txt',
     action: {
-      app: 'markdown-editor',
+      app: 'simple-editor',
       newTab: false,
       extension: 'txt'
     },
@@ -45,7 +45,7 @@ const newFileHandlers = [
   {
     ext: 'md',
     action: {
-      app: 'markdown-editor',
+      app: 'simple-editor',
       newTab: false,
       extension: 'md'
     },

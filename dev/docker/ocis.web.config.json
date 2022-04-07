@@ -16,7 +16,7 @@
   },
   "apps": [
     "files",
-    "markdown-editor",
+    "simple-editor",
     "preview",
     "pdf-viewer",
     "search",
