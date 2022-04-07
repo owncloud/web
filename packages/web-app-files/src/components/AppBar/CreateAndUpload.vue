@@ -122,7 +122,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pathUtil from 'path'
 
@@ -131,6 +131,8 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
+import { defineComponent } from '@vue/composition-api'
+import { extractNameWithoutExtension, Resource } from '../../helpers/resource'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -138,7 +140,7 @@ import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 
-export default {
+export default defineComponent({
   components: {
     FileDrop,
     FileUpload,
@@ -349,6 +351,7 @@ export default {
         confirmText: this.$gettext('Create'),
         hasInput: true,
         inputValue: defaultName,
+        inputSelectionRange: null,
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         inputError: isFolder
           ? this.checkNewFolderName(defaultName)
@@ -360,6 +363,13 @@ export default {
           ? this.addAppProviderFile
           : this.addNewFile,
         onInput: checkInputValue
+      }
+
+      if (!isFolder) {
+        const nameWithoutExtension = extractNameWithoutExtension({
+          name: defaultName
+        } as Resource)
+        modal.inputSelectionRange = [0, nameWithoutExtension.length]
       }
 
       this.createModal(modal)
@@ -629,7 +639,7 @@ export default {
       return null
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 #create-list {

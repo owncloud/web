@@ -1,4 +1,4 @@
-Enhancement: Add rename selection range
+Enhancement: Add filename selection range
 
 We've added a selection range for the rename modal
 to intially select the resource name without extension.

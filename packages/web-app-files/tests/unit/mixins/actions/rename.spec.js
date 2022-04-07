@@ -9,6 +9,7 @@ localVue.use(Vuex)
 
 const currentFolder = {
   id: 1,
+  name: 'folder',
   path: '/folder',
   webDavPath: '/files/admin/folder'
 }

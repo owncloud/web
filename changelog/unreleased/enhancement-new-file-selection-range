@@ -1,0 +1,7 @@
+Enhancement: Apply filename selection range for new files
+
+We've added a selection range for the new file modal
+to intially select the resource name without extension.
+
+https://github.com/owncloud/web/issues/6729
+https://github.com/owncloud/web/pull/6760
