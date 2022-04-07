@@ -82,7 +82,7 @@ export default {
     revertChanges() {
       this.editGroup = { ...this.group }
       Object.keys(this.formData).forEach((formDataKey) => {
-        this.formData[formDataKey].invalid = false
+        this.formData[formDataKey].valid = true
         this.formData[formDataKey].errorMessage = ''
       })
     }

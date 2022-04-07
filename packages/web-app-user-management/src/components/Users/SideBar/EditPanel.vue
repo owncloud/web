@@ -142,7 +142,7 @@ export default {
       this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
       this.editUserRole = this.roles.find((role) => role.id === this.userRole.id)
       Object.keys(this.formData).forEach((formDataKey) => {
-        this.formData[formDataKey].invalid = false
+        this.formData[formDataKey].valid = true
         this.formData[formDataKey].errorMessage = ''
       })
     }

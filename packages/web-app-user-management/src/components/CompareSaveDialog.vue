@@ -3,17 +3,17 @@
     <div class="oc-flex oc-flex-between oc-flex-middle oc-width-1-1">
       <span>{{ unsavedChangesText }}</span>
       <div>
-        <oc-button v-translate :disabled="!unsavedChanges" @click="$emit('revert')"
-          >Revert</oc-button
-        >
+        <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
+          <translate>Revert</translate>
+        </oc-button>
         <oc-button
-          v-translate
           appearance="filled"
           variation="primary"
           :disabled="!unsavedChanges || confirmButtonDisabled"
           @click="$emit('confirm')"
-          >Save</oc-button
         >
+          <translate>Save</translate>
+        </oc-button>
       </div>
     </div>
   </div>

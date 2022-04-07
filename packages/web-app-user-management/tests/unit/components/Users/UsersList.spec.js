@@ -33,7 +33,7 @@ describe('UsersList', () => {
     it('should return user role if record is set', () => {
       const wrapper = getWrapper({
         propsData: {
-          userRoles: { 1: 'admin' }
+          userRoles: { 1: { displayName: 'admin' } }
         }
       })
       expect(wrapper.vm.getUserRole({ id: 1 })).toEqual('admin')

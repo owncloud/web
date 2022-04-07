@@ -97,14 +97,14 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({
         mocks: {
           users: [user],
-          userAssignments: [
-            [
+          userAssignments: {
+            1: [
               {
                 accountUuid: '1',
                 roleId: '1'
               }
             ]
-          ],
+          },
           roles: [
             {
               displayName: 'admin',
@@ -113,7 +113,10 @@ describe('Users view', () => {
           ]
         }
       })
-      expect(wrapper.vm.userRoles[user.id]).toEqual('admin')
+      expect(wrapper.vm.userRoles[user.id]).toEqual({
+        displayName: 'admin',
+        id: '1'
+      })
     })
     it('should not contain user role if userAssignments is empty', () => {
       const user = { id: '1' }
@@ -127,14 +130,14 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({
         mocks: {
           users: [user],
-          userAssignments: [
-            [
+          userAssignments: {
+            2: [
               {
                 accountUuid: '2',
                 roleId: '1'
               }
             ]
-          ],
+          },
           roles: [
             {
               displayName: 'admin',
@@ -150,14 +153,14 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({
         mocks: {
           users: [user],
-          userAssignments: [
-            [
+          userAssignments: {
+            1: [
               {
                 accountUuid: '1',
                 roleId: '1'
               }
             ]
-          ],
+          },
           roles: [
             {
               displayName: 'admin',
@@ -173,13 +176,13 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({
         mocks: {
           users: [user],
-          userAssignments: [
-            [
+          userAssignments: {
+            1: [
               {
                 accountUuid: '1'
               }
             ]
-          ],
+          },
           roles: [
             {
               displayName: 'admin',

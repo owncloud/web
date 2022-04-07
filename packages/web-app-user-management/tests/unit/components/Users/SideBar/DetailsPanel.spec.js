@@ -66,7 +66,10 @@ describe('DetailsPanel', () => {
     })
     it('should be set if user role is assigned', () => {
       const wrapper = getWrapper({
-        propsData: { users: [{ id: '1', displayName: 'user' }], userRoles: { 1: 'admin' } }
+        propsData: {
+          users: [{ id: '1', displayName: 'user' }],
+          userRoles: { 1: { displayName: 'admin' } }
+        }
       })
       expect(wrapper.vm.userRole).toEqual('admin')
     })
