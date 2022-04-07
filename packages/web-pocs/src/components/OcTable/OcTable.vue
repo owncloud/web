@@ -106,7 +106,7 @@
 
       <oc-tbody
         v-for="(group, index) in groupedData"
-        v-else-if="groupingAllowed && selected !== 'None'"
+        v-else-if="groupingAllowed && selected !== 'None' && copyGroupedData.length"
         :key="`${group.name + index}`"
       >
         <oc-tr
@@ -117,26 +117,20 @@
             }
           "
           :class="['oc-tbody-tr', 'oc-tbody-tr-accordion']"
-          @click.native="toggleGroup(group, index)"
+          @click.native="toggleGroup(index)"
         >
           <oc-td :colspan="fields.length - 1" class="oc-pl-s"> {{ group.name }}</oc-td>
           <!-- Column with collapsible buttons -->
           <oc-td class="oc-table-cell-align-right">
-            <span
-              class="oc-ml-xs oc-icon-l"
-              :style="[copyArray[index].open ? { display: 'none' } : {}]"
-            >
+            <span class="oc-ml-xs oc-icon-l" :style="[itemOpen(index) ? { display: 'none' } : {}]">
               <oc-icon name="arrow-down-s" size="medium" />
             </span>
-            <span
-              class="oc-ml-xs oc-icon-l"
-              :style="[copyArray[index].open ? {} : { display: 'none' }]"
-            >
+            <span class="oc-ml-xs oc-icon-l" :style="[itemOpen(index) ? {} : { display: 'none' }]">
               <oc-icon name="arrow-up-s" size="medium" /> </span
           ></oc-td>
         </oc-tr>
         <!-- Data for the group -->
-        <template v-if="copyArray[index].open">
+        <template v-if="itemOpen(index)">
           <oc-tr
             v-for="(item, trIndex) in group['data']"
             :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
@@ -336,7 +330,7 @@ export default {
     return {
       selected: this.groupingSettings?.groupingBy ? this.groupingSettings.groupingBy : 'None',
       accordionClosed: [],
-      copyArray: [],
+      copyGroupedData: [],
       showMore: false,
       constants: {
         EVENT_THEAD_CLICKED,
@@ -393,17 +387,29 @@ export default {
     selected: function () {
       if (this.selected === 'None' && this.groupingSettings?.groupingFunctions?.None)
         this.groupingSettings.groupingFunctions.None()
+    },
+    // update the copy of grouped dataon data change
+    tableData: {
+      deep: true,
+      handler(newValue, oldValue) {
+        const tempData = [...this.groupedData]
+        tempData.forEach((e) => {
+          const group = this.copyGroupedData.find((el) => el.name === e.name)
+          if (group) e.open = group.open
+        })
+        this.copyGroupedData = [...tempData]
+      }
     }
   },
 
   mounted() {
-    // create copy of array to manipulate toggling
+    // create copy of grouped data to manipulate toggling
     if (
       this.groupingAllowed &&
       this.groupingSettings?.showGroupingOptions &&
       this.groupingSettings?.groupingFunctions
     )
-      this.copyArray = [...this.groupedData]
+      this.copyGroupedData = [...this.groupedData]
   },
 
   methods: {
@@ -610,11 +616,11 @@ export default {
         return resultArray
       }
     },
-    toggleGroup(item, index) {
-      this.copyArray[index].open = !this.copyArray[index].open
+    toggleGroup(index) {
+      this.copyGroupedData[index].open = !this.copyGroupedData[index].open
     },
-    itemOpen(item, index) {
-      return this.copyArray[index].open
+    itemOpen(index) {
+      return this.copyGroupedData[index].open
     },
     clickedField(field) {
       this.$emit(this.constants.EVENT_THEAD_CLICKED, field)
@@ -726,445 +732,3 @@ export default {
   }
 }
 </style>
-<docs>
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A simple table with plain field types
-    </h3>
-    <oc-table :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-              disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
-      <template #footer>
-        3 resources
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          alignH: "left",
-          lazy: {
-            delay: 1500
-          }
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          alignH: "right"
-        }]
-      },
-      data() {
-        return [{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          last_modified: 1599999999
-        }]
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A sortable table with plain field types
-    </h3>
-    <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data"
-              highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-              disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
-      <template #footer>
-        3 resources
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  const orderBy = (list, prop, desc) => {
-    return [...list].sort((a, b) => {
-      a = a[prop];
-      b = b[prop];
-
-      if (a == b) return 0;
-      return (desc ? a > b : a < b) ? -1 : 1;
-    });
-  };
-
-  export default {
-    data() {
-      return {
-        sortBy: 'resource',
-        sortDir: 'desc'
-      }
-    },
-    methods: {
-      handleSort(event) {
-        this.sortBy = event.sortBy
-        this.sortDir = event.sortDir
-
-      }
-    },
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          alignH: "left",
-          sortable: true,
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          alignH: "right",
-          sortable: true,
-        }]
-      },
-      data() {
-        return orderBy([{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          last_modified: 1599999999
-        }], this.sortBy, this.sortDir === 'desc')
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A sortable table with plain field types and grouping functions
-    </h3>
-    <oc-table @sort="handleSort" :grouping-settings="groupingSettings" :sort-by="sortBy" :sort-dir="sortDir"
-              :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-              disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
-      <template #footer>
-        3 resources
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  const orderBy = (list, prop, desc) => {
-    return [...list].sort((a, b) => {
-      a = a[prop];
-      b = b[prop];
-
-      if (a == b) return 0;
-      return (desc ? a > b : a < b) ? -1 : 1;
-    });
-  };
-
-  export default {
-    data() {
-      return {
-        sortBy: 'resource',
-        sortDir: 'desc'
-      }
-    },
-    methods: {
-      handleSort(event) {
-        this.sortBy = event.sortBy
-        this.sortDir = event.sortDir
-
-      }
-    },
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource name",
-          alignH: "left",
-          sortable: true,
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          alignH: "left",
-          sortable: true,
-        }]
-      },
-      data() {
-        return orderBy([{
-          id: "8468c9f0-5057-11eb-924b-934c6dffd2",
-          resource: "Something",
-          last_modified: 1608887760
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827ag2",
-          resource: "Another_example.txt",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "pic.png",
-          last_modified: 900000000
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa25",
-          resource: "secret_data",
-          last_modified: 1400000000
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5ferf9caa25",
-          resource: "secret_data_2",
-          last_modified: 800000000
-        }], this.sortBy, this.sortDir === 'desc')
-      },
-      groupingSettings() {
-        return {
-          groupingBy: 'Name alphabetically',
-          showGroupingOptions: true,
-          groupingFunctions: {
-            'Name alphabetically': function (row) {
-              if (!isNaN(row.resource.charAt(0))) return '#'
-              if (row.resource.charAt(0) === '.') return row.resource.charAt(1).toLowerCase()
-              return row.resource.charAt(0).toLowerCase()
-            },
-            'Last modified': function (row) {
-              if (row.last_modified >= 1600000000) return "Older"
-              if (row.last_modified < 1000000000) return "Recently"
-              else return "Last month"
-            },
-
-            "None": null
-          },
-          sortGroups: {
-            'Name alphabetically': function (groups) {
-              //sort in alphabetical order by group name
-              return groups.sort(function (a, b) {
-                if (a.name < b.name) {
-                  return -1;
-                }
-                if (a.name > b.name) {
-                  return 1;
-                }
-                return 0;
-              })
-            },
-            'Last modified': function (groups) {
-              //sort in order: 1-Recently, 2-Last month, 3-Older
-              let sortedGroups = []
-              const options = ["Recently", "Last month", "Older"]
-              for (const o of options) {
-                const found = groups.find(el => el.name.toLowerCase() === o.toLowerCase())
-                if (found) sortedGroups.push(found)
-              }
-              return sortedGroups
-            }
-          }
-        }
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A simple table with all existing field types
-    </h3>
-    <oc-table :fields="fields" :data="data">
-      <template v-slot:resourceHeader>
-        <div class="oc-flex oc-flex-middle">
-          <oc-icon name="folder" class="oc-mr-s"/>
-          Resource
-        </div>
-      </template>
-      <template v-slot:resource="rowData">
-        <oc-tag>
-          <oc-icon :name="rowData.item.icon"/>
-          {{ rowData.item.resource }}
-        </oc-tag>
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [{
-          name: "resource",
-          title: "Resource",
-          headerType: "slot",
-          type: "slot"
-        }, {
-          name: "last_modified",
-          title: "Last modified",
-          type: "callback",
-          callback: function (timestamp) {
-            const date = new Date(timestamp * 1000)
-            const hours = date.getHours()
-            const minutes = "0" + date.getMinutes()
-            const seconds = "0" + date.getSeconds()
-            return hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2)
-          }
-        }]
-      },
-      data() {
-        return [{
-          id: "4b136c0a-5057-11eb-ac70-eba264112003",
-          resource: "hello-world.txt",
-          icon: "file-list",
-          last_modified: 1609962211
-        }, {
-          id: "8468c9f0-5057-11eb-924b-934c6fd827a2",
-          resource: "I am a folder",
-          icon: "folder",
-          last_modified: 1608887766
-        }, {
-          id: "9c4cf97e-5057-11eb-8044-b3d5df9caa21",
-          resource: "this is fine.png",
-          icon: "image",
-          last_modified: 1599999999
-        }]
-      }
-    }
-  }
-</script>
-```
-
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      A table with long text showing the different text wrapping mechanisms
-    </h3>
-    <oc-table :fields="fields" :data="data" :has-header="true" :hover="true"/>
-  </section>
-</template>
-<script>
-  export default {
-    computed: {
-      fields() {
-        return [
-          {
-            name: "truncate",
-            title: "truncate",
-            wrap: "truncate"
-          },
-          {
-            name: "break",
-            title: "break",
-            wrap: "break"
-          },
-          {
-            name: "nowrap",
-            title: "nowrap",
-            wrap: "nowrap"
-          }
-        ]
-      },
-      data() {
-        return [
-          {
-            truncate: "This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually. This is very long text that will get truncated eventually.",
-            break: "This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long. This text is supposed to break to new lines if it becomes too long.",
-            nowrap: "This text stays on one line."
-          }
-        ]
-      }
-    }
-  }
-</script>
-```
-```js
-<template>
-  <section>
-    <h3 class="oc-heading-divider">
-      An interactive table showcasing different table features/properties
-    </h3>
-    <oc-table :fields="fields" :data="data" :has-header="hasHeader" :sticky="stickyHeader" :hover="hover">
-      <template v-slot:action="rowData">
-        <oc-button @click="toggle(rowData)" size="small">Toggle</oc-button>
-      </template>
-    </oc-table>
-  </section>
-</template>
-<script>
-  export default {
-    data() {
-      return {
-        hasHeader: true,
-        stickyHeader: false,
-        hover: true
-      }
-    },
-    computed: {
-      fields() {
-        return [
-          {
-            name: "property",
-            title: "Property",
-            sortable: true
-          },
-          {
-            name: "description",
-            title: "Description",
-            width: "expand",
-            sortable: true
-          },
-          {
-            name: "state",
-            title: "State",
-            width: "shrink",
-            sortable: true
-          },
-          {
-            name: "action",
-            title: "",
-            type: "slot",
-            width: "shrink"
-          }
-        ]
-      },
-      data() {
-        return [
-          {
-            property: "has-header",
-            description: "Whether or not the table header is visible",
-            state: this.hasHeader,
-            variable: "hasHeader"
-          },
-          {
-            property: "sticky",
-            description: "Whether or not the table header is sticky, causing it to float above the table content when scrolling",
-            state: this.stickyHeader,
-            variable: "stickyHeader"
-          },
-          {
-            property: "hover",
-            description: "Highlight table rows on mouseover",
-            state: this.hover,
-            variable: "hover"
-          }
-        ]
-      }
-    },
-    methods: {
-      toggle(rowData) {
-        this[rowData.item.variable] = !this[rowData.item.variable];
-      }
-    },
-  }
-</script>
-```
-</docs>
