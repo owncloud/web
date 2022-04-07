@@ -200,6 +200,7 @@ Details
    yaml) * UI polish
 
    https://github.com/owncloud/web/pull/6667
+   https://github.com/owncloud/web/pull/6754
 
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 
