@@ -267,10 +267,13 @@ export const announceDefaults = ({
     defaultExtensionId = appIds[0]
   }
 
-  router.addRoute({
-    path: '/',
-    redirect: () => store.getters.getNavItemsByExtension(defaultExtensionId)[0].route
-  })
+  const route = store.getters.getNavItemsByExtension(defaultExtensionId)[0]?.route
+  if (route) {
+    router.addRoute({
+      path: '/',
+      redirect: () => route
+    })
+  }
 
   routerSync(store, router)
 }

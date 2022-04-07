@@ -1,0 +1,9 @@
+Enhancement: Provide dependencies to applications
+
+We reduced the bundle size of externally built applications and
+the risk of clashing library instances by passing certain dependencies
+into applications (namely `@vue/composition-api`, `vuex` and `luxon`).
+
+
+https://github.com/owncloud/web/pull/6746
+https://github.com/owncloud/web/issues/5716

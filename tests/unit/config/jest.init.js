@@ -2,6 +2,8 @@ import { config } from '@vue/test-utils'
 import fetchMock from 'jest-fetch-mock'
 import 'regenerator-runtime/runtime'
 
+window.define = jest.fn()
+
 window.IntersectionObserver = jest.fn(() => ({
   observe: jest.fn(),
   unobserve: jest.fn()
