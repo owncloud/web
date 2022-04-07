@@ -1,0 +1,6 @@
+Enhancement: Add "Shared with" column for "Shared with me" page
+
+We've added the "Shared with" column for incoming shares in the "Shared with me" page and changed the order of the column to follow the "Share owner" column.
+
+https://github.com/owncloud/web/issues/6140
+https://github.com/owncloud/web/pull/6699
