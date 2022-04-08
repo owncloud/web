@@ -16,7 +16,7 @@ labels:
     color: "#ccf4ff"
   - name: feature:files
     color: "#d4c5f9"
-  - name: feature:simple-editor
+  - name: feature:text-editor
     color: "#d4c5f9"
   - name: feature:pdf-viewer
     color: "#d4c5f9"

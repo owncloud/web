@@ -16,7 +16,7 @@
   },
   "apps": [
     "files",
-    "simple-editor",
+    "text-editor",
     "preview",
     "pdf-viewer",
     "search",

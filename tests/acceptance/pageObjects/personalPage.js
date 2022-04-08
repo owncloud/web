@@ -308,9 +308,6 @@ module.exports = {
 
       return this
     },
-    closeTextEditor: function () {
-      return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
-    },
     isRootDirectory: async function () {
       return await this.assert.not.elementPresent('@breadcrumb')
     },
@@ -437,9 +434,6 @@ module.exports = {
     },
     copySelectedBtn: {
       selector: '.oc-files-actions-copy-trigger'
-    },
-    editorCloseBtn: {
-      selector: '#simple-editor-app-bar .oc-text-right .oc-button'
     },
     clearSelectionBtn: {
       selector: '#files-clear-selection'

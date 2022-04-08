@@ -12,59 +12,59 @@ Feature: create markdown files
   @disablePreviews
   Scenario: create a new markdown file in the root directory
     When the user creates a markdown file with the name "simple_new.md" using the webUI
-    Then the file "simple_new.md" should be displayed in the simple editor webUI
-    When the user closes the simple editor using the webUI
+    Then the file "simple_new.md" should be displayed in the text editor webUI
+    When the user closes the text editor using the webUI
     Then as "Alice" file "simple_new.md" should exist in the server
     And file "simple_new.md" should be listed on the webUI
 
   @disablePreviews
   Scenario: update a markdown file with new content
-    Given the user has opened file "simple.md" in the simple editor webUI
-    When the user inputs the content "updated content" in the simple editor webUI
-    And the user saves the file in the simple editor webUI
-    And the user closes the simple editor using the webUI
+    Given the user has opened file "simple.md" in the text editor webUI
+    When the user inputs the content "updated content" in the text editor webUI
+    And the user saves the file in the text editor webUI
+    And the user closes the text editor using the webUI
     Then as "Alice" the file "simple.md" should have the content "updated content" in the server
 
   @disablePreviews
   Scenario: append new content in a markdown file
-    Given the user has opened file "simple.md" in the simple editor webUI
-    When the user appends the content " new content added" in the simple editor webUI
-    And the user saves the file in the simple editor webUI
-    And the user closes the simple editor using the webUI
+    Given the user has opened file "simple.md" in the text editor webUI
+    When the user appends the content " new content added" in the text editor webUI
+    And the user saves the file in the text editor webUI
+    And the user closes the text editor using the webUI
     Then as "Alice" the file "simple.md" should have the content "simple markdown file new content added" in the server
 
   @disablePreviews
-  Scenario: close the simple editor without saving the updated content
-    Given the user has opened file "simple.md" in the simple editor webUI
-    When the user inputs the content "updated content" in the simple editor webUI
-    And the user closes the simple editor using the webUI
+  Scenario: close the text editor without saving the updated content
+    Given the user has opened file "simple.md" in the text editor webUI
+    When the user inputs the content "updated content" in the text editor webUI
+    And the user closes the text editor using the webUI
     And as "Alice" the file "simple.md" should have the content "simple markdown file" in the server
 
   @disablePreviews
   Scenario: preview content of the file
-    When the user opens file "simple.md" in the simple editor webUI
-    Then the file "simple.md" should be displayed in the simple editor webUI
+    When the user opens file "simple.md" in the text editor webUI
+    Then the file "simple.md" should be displayed in the text editor webUI
     And the preview panel should have the content "simple markdown file" on the webUI
 
   @disablePreviews
   Scenario: preview content of the file while editing
-    Given the user has opened file "simple.md" in the simple editor webUI
-    When the user inputs the content "updating the file with new content" in the simple editor webUI
+    Given the user has opened file "simple.md" in the text editor webUI
+    When the user inputs the content "updating the file with new content" in the text editor webUI
     Then the preview panel should have the content "updating the file with new content" on the webUI
 
   @disablePreviews
-  Scenario: open text file in simple editor
+  Scenario: open text file in text editor
     Given user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
-    When the user opens file "lorem.txt" in the simple editor webUI
-    Then the file "lorem.txt" should be displayed in the simple editor webUI
+    When the user opens file "lorem.txt" in the text editor webUI
+    Then the file "lorem.txt" should be displayed in the text editor webUI
 
   @disablePreviews
-  Scenario Outline: preview of files with simple editor by clicking the action menu option
+  Scenario Outline: preview of files with text editor by clicking the action menu option
     Given user "Alice" has uploaded file with content "test" to "lorem.txt" in the server
     And the user has reloaded the current page of the webUI
-    When the user opens file "<file>" in the simple editor using the action menu option on the webUI
-    Then the file "<file>" should be displayed in the simple editor webUI
+    When the user opens file "<file>" in the text editor using the action menu option on the webUI
+    Then the file "<file>" should be displayed in the text editor webUI
     Examples:
       | file      |
       | simple.md |
@@ -72,8 +72,8 @@ Feature: create markdown files
 
   @disablePreviews
   Scenario Outline: Previewing text writen in markdown format
-    Given the user has opened file "simple.md" in the simple editor webUI
-    When the user inputs the content "<content>" in the simple editor webUI
+    Given the user has opened file "simple.md" in the text editor webUI
+    When the user inputs the content "<content>" in the text editor webUI
     Then the preview panel should have "<tagname>" element with text "<innertext>"
     Examples:
       | content        | innertext | tagname  |

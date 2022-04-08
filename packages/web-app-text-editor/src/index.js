@@ -1,13 +1,18 @@
 import App from './App.vue'
 import translations from '../l10n/translations'
 
+// just a dummy function to trick gettext tools
+function $gettext(msg) {
+  return msg
+}
+
 const routes = [
   {
     path: '/:filePath*',
     component: App,
-    name: 'simple-editor',
+    name: 'text-editor',
     meta: {
-      title: 'SimpleEditor',
+      title: $gettext('Text Editor'),
       auth: false,
       patchCleanPath: true
     }
@@ -19,8 +24,8 @@ const fileExtensionConfig = {
 }
 
 const appInfo = {
-  name: 'SimpleEditor',
-  id: 'simple-editor',
+  name: $gettext('Text Editor'),
+  id: 'text-editor',
   icon: 'file-text',
   isFileEditor: true,
   extensions: [

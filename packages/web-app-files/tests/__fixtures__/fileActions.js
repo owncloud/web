@@ -14,9 +14,9 @@ const meta = {
     id: 'draw-io',
     icon: 'grid'
   },
-  'simple-editor': {
-    name: 'SimpleEditor',
-    id: 'simple-editor',
+  'text-editor': {
+    name: 'Text Editor',
+    id: 'text-editor',
     icon: 'file-text'
   }
 }
@@ -49,12 +49,12 @@ const editors = [
     routes
   },
   {
-    app: 'simple-editor',
+    app: 'text-editor',
     extension: 'md',
     handler: null,
     icon: null,
     newTab: false,
-    routeName: 'simple-editor',
+    routeName: 'text-editor',
     routes
   }
 ]
@@ -131,11 +131,11 @@ const fileActions = {
     selector: '.oc-files-actions-delete-trigger'
   },
 
-  'simple-editor': {
+  'text-editor': {
     handler: jest.fn(),
-    label: () => 'Open in Simple Editor',
-    class: 'oc-files-actions-simple-editor-trigger',
-    selector: '.oc-files-actions-simple-editor-trigger',
+    label: () => 'Open in Text Editor',
+    class: 'oc-files-actions-text-editor-trigger',
+    selector: '.oc-files-actions-text-editor-trigger',
     opensInNewWindow: true
   },
   'draw-io': {
@@ -165,7 +165,7 @@ const fileActions = {
 exports.fileActions = fileActions
 
 exports.getActions = function (actions = []) {
-  const defaultActions = ['download', 'simple-editor', 'draw-io', 'preview', 'navigate']
+  const defaultActions = ['download', 'text-editor', 'draw-io', 'preview', 'navigate']
 
   const res = []
   for (const key of actions) {

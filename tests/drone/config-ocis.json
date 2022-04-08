@@ -16,7 +16,7 @@
   "apps": [
     "files",
     "draw-io",
-    "simple-editor",
+    "text-editor",
     "preview",
     "pdf-viewer",
     "search"

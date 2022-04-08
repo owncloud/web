@@ -18,7 +18,7 @@ Feature: User can see the file or folder actions menu options
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And only the following items with default items should be visible in the actions menu on the webUI
       | items                  |
-      | open in simpleeditor |
+      | open in text editor |
       | download               |
     When the user opens the actions sidebar panel of file "lorem.pdf" on the webUI
     Then the app-sidebar for file "lorem.pdf" should be visible on the webUI

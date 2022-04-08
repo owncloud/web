@@ -1,6 +1,6 @@
-Enhancement: Simple Editor
+Enhancement: Text Editor
 
-Replace MarkdownEditor with SimpleEditor and add the following improvements:
+Replace MarkdownEditor with Text Editor and add the following improvements:
 * Disable preview for non md files (configurable)
 * Data integrity checks (prevent exiting with unsaved changes)
 * Better error information to the user
@@ -12,3 +12,4 @@ Replace MarkdownEditor with SimpleEditor and add the following improvements:
 
 https://github.com/owncloud/web/pull/6667
 https://github.com/owncloud/web/pull/6754
+https://github.com/owncloud/web/pull/6763

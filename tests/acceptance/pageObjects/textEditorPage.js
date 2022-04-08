@@ -44,7 +44,7 @@ module.exports = {
     saveFileEdit: function () {
       return this.waitForElementVisible('@saveButton').click('@saveButton')
     },
-    closeSimpleEditor: function () {
+    closeTextEditor: function () {
       return this.waitForElementVisible('@closeButton').click('@closeButton')
     },
     /**
@@ -72,25 +72,25 @@ module.exports = {
      */
     openMdEditorUsingActionMenu: async function (fileName) {
       await filesList.openFileActionsMenu(fileName)
-      await filesActionsMenu.simpleEditor()
+      await filesActionsMenu.textEditor()
       return this
     }
   },
   elements: {
     editorTextarea: {
-      selector: '#simple-editor-input'
+      selector: '#text-editor-input'
     },
     saveButton: {
-      selector: '#simple-editor-controls-save'
+      selector: '#text-editor-controls-save'
     },
     closeButton: {
-      selector: '#simple-editor-controls-close'
+      selector: '#text-editor-controls-close'
     },
     fileName: {
-      selector: '#simple-editor-file-path'
+      selector: '#text-editor-file-path'
     },
     previewPanel: {
-      selector: '#simple-editor-preview'
+      selector: '#text-editor-preview'
     }
   }
 }
