@@ -28,13 +28,13 @@ Summary
 * Enhancement - Remove public links from SharedWithOthers page: [#5976](https://github.com/owncloud/web/issues/5976)
 * Enhancement - Rename mediaviewer to preview: [#6514](https://github.com/owncloud/web/pull/6514)
 * Enhancement - Add "Shared with" column for "Shared with me" page: [#6140](https://github.com/owncloud/web/issues/6140)
-* Enhancement - Simple Editor: [#6667](https://github.com/owncloud/web/pull/6667)
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 * Enhancement - Spaces context menus: [#6659](https://github.com/owncloud/web/pull/6659)
 * Enhancement - Spaces group sharing: [#6639](https://github.com/owncloud/web/pull/6639)
 * Enhancement - Spaces link sharing: [#6633](https://github.com/owncloud/web/pull/6633)
 * Enhancement - Space name in breadcrumb: [#6662](https://github.com/owncloud/web/pull/6662)
 * Enhancement - Spaces overview topbar layout: [#6642](https://github.com/owncloud/web/pull/6642)
+* Enhancement - Text Editor: [#6667](https://github.com/owncloud/web/pull/6667)
 * Enhancement - Unified shares sidebar panel: [#6701](https://github.com/owncloud/web/pull/6701)
 * Enhancement - Update ODS to v13.1.0-rc.2: [#6701](https://github.com/owncloud/web/pull/6701)
 
@@ -202,17 +202,6 @@ Details
    https://github.com/owncloud/web/issues/6140
    https://github.com/owncloud/web/pull/6699
 
-* Enhancement - Simple Editor: [#6667](https://github.com/owncloud/web/pull/6667)
-
-   Replace MarkdownEditor with SimpleEditor and add the following improvements: * Disable
-   preview for non md files (configurable) * Data integrity checks (prevent exiting with unsaved
-   changes) * Better error information to the user * Keyboard shortcut to save * Read-only mode *
-   Fix to open on non-authenticated public links * Open other extensions (js, json, xml, py, php,
-   yaml) * UI polish
-
-   https://github.com/owncloud/web/pull/6667
-   https://github.com/owncloud/web/pull/6754
-
 * Enhancement - Spaces quota unlimited option: [#6693](https://github.com/owncloud/web/pull/6693)
 
    Space quota can now be set to unlimited
@@ -258,6 +247,18 @@ Details
 
    https://github.com/owncloud/web/issues/6641
    https://github.com/owncloud/web/pull/6642
+
+* Enhancement - Text Editor: [#6667](https://github.com/owncloud/web/pull/6667)
+
+   Replace MarkdownEditor with Text Editor and add the following improvements: * Disable
+   preview for non md files (configurable) * Data integrity checks (prevent exiting with unsaved
+   changes) * Better error information to the user * Keyboard shortcut to save * Read-only mode *
+   Fix to open on non-authenticated public links * Open other extensions (js, json, xml, py, php,
+   yaml) * UI polish
+
+   https://github.com/owncloud/web/pull/6667
+   https://github.com/owncloud/web/pull/6754
+   https://github.com/owncloud/web/pull/6763
 
 * Enhancement - Unified shares sidebar panel: [#6701](https://github.com/owncloud/web/pull/6701)
 
