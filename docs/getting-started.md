@@ -51,6 +51,10 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.previewFileExtensions` Specifies which filetypes will be previewed in the ui. For example to only preview jpg and txt files set this option to `["jpg", "txt"]`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
   allows ownCloud to get feedback from your user base through a dedicated survey website.
+- `options.feedbackLink` This accepts an object with the following optional fields to customize the feedback link in the topbar:
+  - `options.feedbackLink.href` Set a different target URL for the feedback link. Make sure to prepend it with `http(s)://`. Defaults to `https://owncloud.com/web-design-feedback`.
+  - `options.feedbackLink.ariaLabel` Since the link only has an icon, you can set an e.g. screen reader accessible label. Defaults to `ownCloud feedback survey`.
+  - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.` 
 - `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
 
 ## Setting up backend and running

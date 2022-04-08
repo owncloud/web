@@ -15,7 +15,7 @@
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
       <theme-switcher v-if="darkThemeAvailable" />
-      <feedback-link v-if="isFeedbackLinkEnabled" />
+      <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
     </div>
@@ -81,6 +81,19 @@ export default {
 
     isFeedbackLinkEnabled() {
       return !this.configuration.options.disableFeedbackLink
+    },
+
+    feedbackLinkOptions() {
+      const feedback = this.configuration.options.feedbackLink
+      if (!this.isFeedbackLinkEnabled || !feedback) {
+        return {}
+      }
+
+      return {
+        ...(feedback.href && { href: feedback.href }),
+        ...(feedback.ariaLabel && { ariaLabel: feedback.ariaLabel }),
+        ...(feedback.description && { description: feedback.description })
+      }
     },
 
     isNotificationBellEnabled() {

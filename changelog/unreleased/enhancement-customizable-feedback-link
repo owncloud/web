@@ -1,0 +1,7 @@
+Enhancement: Customizable feedback link
+
+We've added options and documentation for customization of the `href`, `ariaLabel` and `description` of the feedback link in the topbar. See https://owncloud.dev/clients/web/getting-started/ for documentation.
+
+https://github.com/owncloud/web/issues/6702
+https://github.com/owncloud/web/pull/6761
+https://owncloud.dev/clients/web/getting-started/
