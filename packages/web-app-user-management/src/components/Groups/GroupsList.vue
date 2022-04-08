@@ -50,8 +50,8 @@
 <script>
 const orderBy = (list, prop, desc) => {
   return [...list].sort((a, b) => {
-    a = a[prop]
-    b = b[prop]
+    a = a[prop] || ''
+    b = b[prop] || ''
     return desc ? b.localeCompare(a) : a.localeCompare(b)
   })
 }
@@ -122,7 +122,7 @@ export default {
       return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
     },
     data() {
-      return orderBy([...this.groups], this.sortBy, this.sortDir === 'desc')
+      return orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)

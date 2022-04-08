@@ -437,11 +437,9 @@ export default {
 
         const user = this.users.find((user) => user.id === editUser.id)
         Object.assign(user, editUser)
-        console.log(this.selectedUsers)
-        /* this.userAssignments[user.id] = [assignmentsAddResponse.data?.assignment]
         this.userAssignments = Object.assign({}, this.userAssignments, {
           [editUser.id]: [assignmentsAddResponse.data?.assignment]
-        }) */
+        })
         this.showMessage({
           title: this.$gettext('User was edited successfully')
         })

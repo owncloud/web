@@ -138,12 +138,16 @@ export default {
   },
   methods: {
     orderBy(list, prop, desc) {
-      const extendedList = [...list].map((listItem) => {
-        return { ...listItem, role: this.getUserRole(listItem) }
-      })
-      return extendedList.sort((a, b) => {
-        a = a[prop] || ''
-        b = b[prop] || ''
+      return [...list].sort((user1, user2) => {
+        if (prop === 'role') {
+          const role1 = this.getUserRole(user1)
+          const role2 = this.getUserRole(user2)
+          return desc ? role2.localeCompare(role1) : role1.localeCompare(role2)
+        }
+
+        const a = user1[prop] || ''
+        const b = user2[prop] || ''
+
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
     },
