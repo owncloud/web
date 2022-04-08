@@ -12121,12 +12121,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-editor@workspace:packages/web-app-simple-editor":
-  version: 0.0.0-use.local
-  resolution: "simple-editor@workspace:packages/web-app-simple-editor"
-  languageName: unknown
-  linkType: soft
-
 "simple-swizzle@npm:^0.2.2":
   version: 0.2.2
   resolution: "simple-swizzle@npm:0.2.2"
@@ -12845,6 +12839,12 @@ __metadata:
   checksum: 3b34a3d77165a2cb82b34014b3aba93b1c4637a5011807557dc2f3da826c59975a5ccad765721c4648b39817e3472789f9b0fa98fc854c5c1c7a1e632aacdc28
   languageName: node
   linkType: hard
+
+"text-editor@workspace:packages/web-app-text-editor":
+  version: 0.0.0-use.local
+  resolution: "text-editor@workspace:packages/web-app-text-editor"
+  languageName: unknown
+  linkType: soft
 
 "text-table@npm:^0.2.0":
   version: 0.2.0

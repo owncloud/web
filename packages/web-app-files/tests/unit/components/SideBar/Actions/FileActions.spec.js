@@ -21,8 +21,8 @@ const filesPersonalRoute = { name: 'files-personal' }
 const systemDefaultActions = [
   [['copy']],
   [['copy', 'move']],
-  [['copy', 'simple-editor']],
-  [['copy', 'move', 'download', 'simple-editor']]
+  [['copy', 'text-editor']],
+  [['copy', 'move', 'download', 'text-editor']]
 ]
 
 describe('FileActions', () => {
@@ -32,7 +32,7 @@ describe('FileActions', () => {
         jest.clearAllMocks()
       })
       it('renders action handlers as clickable elements', async () => {
-        const actions = ['copy', 'move', 'download', 'simple-editor']
+        const actions = ['copy', 'move', 'download', 'text-editor']
         const wrapper = getWrapper(filesPersonalRoute, actions)
 
         for (const button of actions) {

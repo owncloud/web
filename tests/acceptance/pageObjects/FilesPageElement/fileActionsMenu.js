@@ -16,7 +16,7 @@ module.exports = {
       move: 'move',
       copy: 'copy',
       preview: 'preview',
-      simpleEditor: 'simpleEditor'
+      textEditor: 'textEditor'
     }),
 
     /**
@@ -167,10 +167,10 @@ module.exports = {
       return this.performFileAction(this.FileAction.preview)
     },
     /**
-     * Open a resource in the simple editor via its file action
+     * Open a resource in the text editor via its file action
      */
-    simpleEditor: function () {
-      return this.performFileAction(this.FileAction.simpleEditor)
+    textEditor: function () {
+      return this.performFileAction(this.FileAction.textEditor)
     }
   },
   elements: {
@@ -236,8 +236,8 @@ module.exports = {
       selector: '//button[normalize-space()="Preview"]',
       locateStrategy: 'xpath'
     },
-    simpleEditorButtonInAccordion: {
-      selector: '//button[normalize-space()="Open in SimpleEditor"]',
+    textEditorButtonInAccordion: {
+      selector: '//button[normalize-space()="Open in Text Editor"]',
       locateStrategy: 'xpath'
     }
   }

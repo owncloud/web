@@ -8,7 +8,7 @@
   "apps": [
     "files",
     "preview",
-    "simple-editor",
+    "text-editor",
     "pdf-viewer",
     "search"
   ],

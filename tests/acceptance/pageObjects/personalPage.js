@@ -439,7 +439,7 @@ module.exports = {
       selector: '.oc-files-actions-copy-trigger'
     },
     editorCloseBtn: {
-      selector: '#simple-editor-app-bar .oc-text-right .oc-button'
+      selector: '#text-editor-app-bar .oc-text-right .oc-button'
     },
     clearSelectionBtn: {
       selector: '#files-clear-selection'

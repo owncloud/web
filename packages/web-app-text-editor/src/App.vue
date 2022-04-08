@@ -1,6 +1,6 @@
 <template>
-  <main id="simple-editor" class="oc-mx-l oc-my-m">
-    <simple-editor-app-bar
+  <main id="text-editor" class="oc-mx-l oc-my-m">
+    <app-bar
       :current-file-context="currentFileContext"
       :is-loading="isLoading"
       :is-dirty="isDirty"
@@ -19,7 +19,7 @@
     <div class="oc-flex">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'">
         <oc-textarea
-          id="simple-editor-input"
+          id="text-editor-input"
           v-model="currentContent"
           name="input"
           full-width
@@ -31,13 +31,13 @@
       </div>
       <div v-if="showPreview" class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div id="simple-editor-preview" v-html="renderedMarkdown" />
+        <div id="text-editor-preview" v-html="renderedMarkdown" />
       </div>
     </div>
   </main>
 </template>
 <script>
-import SimpleEditorAppBar from './SimpleEditorAppBar.vue'
+import AppBar from './AppBar.vue'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
@@ -47,9 +47,9 @@ import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 
 export default {
-  name: 'SimpleEditor',
+  name: 'TextEditor',
   components: {
-    SimpleEditorAppBar
+    AppBar
   },
   beforeRouteLeave(_to, _from, next) {
     if (this.isDirty) {
@@ -77,7 +77,7 @@ export default {
   },
   setup() {
     const defaults = useAppDefaults({
-      applicationName: 'simple-editor'
+      applicationName: 'text-editor'
     })
     const { applicationConfig, currentFileContext } = defaults
     const serverContent = ref()
@@ -231,11 +231,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#simple-editor-preview {
+#text-editor-preview {
   max-height: 80vh;
   overflow-y: scroll;
 }
-#simple-editor-input {
+#text-editor-input {
   resize: vertical;
 }
 </style>
