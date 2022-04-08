@@ -1,20 +1,12 @@
 <template>
   <div>
-    <div
-      v-if="
-        groupingSettings &&
-        groupingAllowed &&
-        groupingSettings.showGroupingOptions &&
-        groupingSettings.groupingFunctions
-      "
-      class="oc-pb-m"
-    >
+    <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
       <div class="oc-docs-width-small" style="display: inline">
         <label class="oc-mx-s">Group By:</label>
       </div>
       <div class="oc-docs-width-medium" style="display: inline-block; width: 250px">
         <oc-select
-          v-model="selected"
+          v-model="selectedGroupingOption"
           :options="[
             ...Object.keys(groupingSettings.groupingFunctions),
             !Object.keys(groupingSettings.groupingFunctions).includes('None') ? 'None' : ''
@@ -66,7 +58,7 @@
           </oc-th>
         </oc-tr>
       </oc-thead>
-      <oc-tbody v-if="selected === 'None' || !selected">
+      <oc-tbody v-if="selectedGroupingOption === 'None' || !selectedGroupingOption">
         <oc-tr
           v-for="(item, trIndex) in data"
           :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
@@ -106,7 +98,7 @@
 
       <oc-tbody
         v-for="(group, index) in groupedData"
-        v-else-if="groupingAllowed && selected !== 'None' && copyGroupedData.length"
+        v-else-if="groupingAllowed && selectedGroupingOption !== 'None' && copyGroupedData.length"
         :key="`${group.name + index}`"
       >
         <oc-tr
@@ -328,10 +320,8 @@ export default {
   },
   data() {
     return {
-      selected: this.groupingSettings?.groupingBy ? this.groupingSettings.groupingBy : 'None',
-      accordionClosed: [],
+      selectedGroupingOption: this.groupingSettings?.groupingBy || 'None',
       copyGroupedData: [],
-      showMore: false,
       constants: {
         EVENT_THEAD_CLICKED,
         EVENT_TROW_CLICKED,
@@ -343,9 +333,6 @@ export default {
   },
 
   computed: {
-    tableData() {
-      return this.data
-    },
     tableClasses() {
       const result = ['oc-table']
 
@@ -371,45 +358,37 @@ export default {
       )
     },
     groupedData() {
-      let result = this.createGroupedData(this.selected, this.tableData)
+      let result = this.createGroupedData(this.selectedGroupingOption, this.data)
       if (!result.length) return []
-
       // sort groups if there is a given sorting function in grouping settings
-      if (this.groupingSettings?.sortGroups?.[this.selected]) {
-        result = this.groupingSettings.sortGroups[this.selected](result)
+      if (this.groupingSettings?.sortGroups?.[this.selectedGroupingOption]) {
+        result = this.groupingSettings.sortGroups[this.selectedGroupingOption](result)
       }
 
       return result
     }
   },
-  watch: {
-    // callback for selection of None by enabled groupingSettings
-    selected: function () {
-      if (this.selected === 'None' && this.groupingSettings?.groupingFunctions?.None)
-        this.groupingSettings.groupingFunctions.None()
-    },
-    // update the copy of grouped dataon data change
-    tableData: {
-      deep: true,
-      handler(newValue, oldValue) {
-        const tempData = [...this.groupedData]
-        tempData.forEach((e) => {
-          const group = this.copyGroupedData.find((el) => el.name === e.name)
-          if (group) e.open = group.open
-        })
-        this.copyGroupedData = [...tempData]
-      }
-    }
-  },
 
-  mounted() {
+  created() {
     // create copy of grouped data to manipulate toggling
-    if (
-      this.groupingAllowed &&
-      this.groupingSettings?.showGroupingOptions &&
-      this.groupingSettings?.groupingFunctions
-    )
+    if (this.groupingAllowed) {
       this.copyGroupedData = [...this.groupedData]
+
+      // callback for selection of None by enabled groupingSettings
+      this.$watch('selectedGroupingOption', () => {
+        if (
+          this.selectedGroupingOption === 'None' &&
+          this.groupingSettings?.groupingFunctions?.None
+        )
+          this.groupingSettings.groupingFunctions.None()
+        else {
+          this.updateCopyGroupedData()
+        }
+      })
+
+      // update the copy of grouped data on data change
+      this.$watch('data', this.updateCopyGroupedData, { deep: true })
+    }
   },
 
   methods: {
@@ -597,6 +576,16 @@ export default {
 
       return this.$gettextInterpolate(label, { name })
     },
+    updateCopyGroupedData() {
+      const tempData = [...this.groupedData]
+      tempData.forEach((e) => {
+        const group = this.copyGroupedData.find((el) => el.name === e.name)
+        if (group && group.open) {
+          e.open = group.open
+        }
+        this.copyGroupedData = [...tempData]
+      })
+    },
     createGroupedData(col, data) {
       const groups = {}
       const resultArray = []
@@ -620,7 +609,7 @@ export default {
       this.copyGroupedData[index].open = !this.copyGroupedData[index].open
     },
     itemOpen(index) {
-      return this.copyGroupedData[index].open
+      return this.copyGroupedData[index]?.open
     },
     clickedField(field) {
       this.$emit(this.constants.EVENT_THEAD_CLICKED, field)
