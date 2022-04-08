@@ -16,6 +16,7 @@ Summary
 * Bugfix - Unsticky appbar position: [#6708](https://github.com/owncloud/web/pull/6708)
 * Enhancement - Add rename selection range: [#6729](https://github.com/owncloud/web/issues/6729)
 * Enhancement - Archive download for oc10 backend: [#6239](https://github.com/owncloud/web/issues/6239)
+* Enhancement - Customizable feedback link: [#6702](https://github.com/owncloud/web/issues/6702)
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 * Enhancement - Full screen external apps: [#6688](https://github.com/owncloud/web/pull/6688)
 * Enhancement - Make some UI elements/actions optional: [#6618](https://github.com/owncloud/web/pull/6618)
@@ -105,6 +106,16 @@ Details
 
    https://github.com/owncloud/web/issues/6239
    https://github.com/owncloud/web/pull/6697
+
+* Enhancement - Customizable feedback link: [#6702](https://github.com/owncloud/web/issues/6702)
+
+   We've added options and documentation for customization of the `href`, `ariaLabel` and
+   `description` of the feedback link in the topbar. See
+   https://owncloud.dev/clients/web/getting-started/ for documentation.
+
+   https://github.com/owncloud/web/issues/6702
+   https://github.com/owncloud/web/pull/6761
+   https://owncloud.dev/clients/web/getting-started/
 
 * Enhancement - Editor role for single file public links: [#6618](https://github.com/owncloud/web/pull/6618)
 
