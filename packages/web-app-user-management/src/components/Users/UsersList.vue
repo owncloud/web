@@ -49,14 +49,6 @@
 </template>
 
 <script>
-const orderBy = (list, prop, desc) => {
-  return [...list].sort((a, b) => {
-    a = a[prop]
-    b = b[prop]
-    return desc ? b.localeCompare(a) : a.localeCompare(b)
-  })
-}
-
 export default {
   name: 'UsersList',
   props: {
@@ -109,7 +101,7 @@ export default {
         },
         {
           name: 'displayName',
-          title: this.$gettext('Display name'),
+          title: this.$gettext('Fist and last name'),
           sortable: true
         },
         {
@@ -138,13 +130,23 @@ export default {
       ]
     },
     data() {
-      return orderBy([...this.users], this.sortBy, this.sortDir === 'desc')
+      return this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
   methods: {
+    orderBy(list, prop, desc) {
+      const extendedList = [...list].map((listItem) => {
+        return { ...listItem, role: this.getUserRole(listItem) }
+      })
+      return extendedList.sort((a, b) => {
+        a = a[prop] || ''
+        b = b[prop] || ''
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
