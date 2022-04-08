@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-mt-xl">
+  <div v-if="group" class="oc-mt-xl">
     <div class="oc-flex group-info oc-mb-l">
       <avatar-image class="oc-mb-m" :width="80" :userid="group.id" :user-name="group.displayName" />
       <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
@@ -33,8 +33,8 @@ export default {
     CompareSaveDialog
   },
   props: {
-    group: {
-      type: Object,
+    groups: {
+      type: Array,
       required: true
     }
   },
@@ -50,6 +50,10 @@ export default {
     }
   },
   computed: {
+    group() {
+      return this.groups.length === 1 ? this.groups[0] : null
+    },
+
     invalidFormData() {
       return Object.keys(this.formData)
         .map((k) => !!this.formData[k].valid)

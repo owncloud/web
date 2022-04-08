@@ -98,8 +98,8 @@
             />
             <EditPanel
               v-if="activePanel === 'EditPanel'"
-              :user="selectedUsers[0]"
-              :user-role="userRoles[selectedUsers[0].id]"
+              :users="selectedUsers"
+              :user-roles="userRoles"
               :roles="roles"
               @confirm="editUser"
             />
@@ -285,7 +285,7 @@ export default {
 
   watch: {
     selectedUsers() {
-      if (this.selectedUsers.length > 1) {
+      if (!this.selectedUsers.length || this.selectedUsers.length > 1) {
         this.activePanel = 'DetailsPanel'
       }
     }
@@ -421,7 +421,7 @@ export default {
 
     async editUser({ editUser, editUserRole }) {
       try {
-        const editUserResponse = await this.graphClient.users.editUser(editUser.id, editUser)
+        await this.graphClient.users.editUser(editUser.id, editUser)
         const assignmentsAddResponse = await axios.post(
           '/api/v0/settings/assignments-add',
           {
@@ -435,12 +435,13 @@ export default {
           }
         )
 
-        const userRecordIndex = this.users.findIndex((user) => user.id === editUser.id)
-        this.$set(this.users, userRecordIndex, editUserResponse?.data)
-
+        const user = this.users.find((user) => user.id === editUser.id)
+        Object.assign(user, editUser)
+        console.log(this.selectedUsers)
+        /* this.userAssignments[user.id] = [assignmentsAddResponse.data?.assignment]
         this.userAssignments = Object.assign({}, this.userAssignments, {
           [editUser.id]: [assignmentsAddResponse.data?.assignment]
-        })
+        }) */
         this.showMessage({
           title: this.$gettext('User was edited successfully')
         })

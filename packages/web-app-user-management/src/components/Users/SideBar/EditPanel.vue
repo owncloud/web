@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-mt-xl">
+  <div v-if="user" class="oc-mt-xl">
     <div class="oc-flex group-info oc-mb-l">
       <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
       <span v-text="user.onPremisesSamAccountName"></span>
@@ -59,11 +59,11 @@ export default {
     CompareSaveDialog
   },
   props: {
-    user: {
-      type: Object,
+    users: {
+      type: Array,
       required: true
     },
-    userRole: {
+    userRoles: {
       type: Object,
       required: true
     },
@@ -89,6 +89,14 @@ export default {
     }
   },
   computed: {
+    user() {
+      return this.users.length === 1 ? this.users[0] : null
+    },
+
+    userRole() {
+      return this.user ? this.userRoles[this.user.id] : null
+    },
+
     originalObjectUser() {
       return { user: { ...this.user, passwordProfile: { password: '' }, role: this.userRole } }
     },
@@ -105,7 +113,13 @@ export default {
     user: {
       handler: function () {
         this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
-        this.editUserRole = this.roles.find((role) => role.id === this.userRole.id)
+      },
+      deep: true,
+      immediate: true
+    },
+    roles: {
+      handler: function () {
+        this.editUserRole = { ...this.roles.find((role) => role.id === this.userRole.id) }
       },
       deep: true,
       immediate: true

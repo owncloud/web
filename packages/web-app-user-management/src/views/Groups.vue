@@ -93,7 +93,7 @@
             <DetailsPanel v-if="activePanel === 'DetailsPanel'" :groups="selectedGroups" />
             <EditPanel
               v-if="activePanel === 'EditPanel'"
-              :group="selectedGroups[0]"
+              :groups="selectedGroups"
               @confirm="editGroup"
             />
           </template>
@@ -212,7 +212,7 @@ export default {
 
   watch: {
     selectedGroups() {
-      if (this.selectedGroups.length > 1) {
+      if (!this.selectedGroups.length || this.selectedGroups.length > 1) {
         this.activePanel = 'DetailsPanel'
       }
     }
