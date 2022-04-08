@@ -56,9 +56,9 @@ export default {
       const modal = {
         variation: 'danger',
         icon: 'warning',
-        title: this.$gettext('Changes not saved'),
+        title: this.$gettext('Unsaved changes'),
         message: this.$gettext('Your changes were not saved. Do you want to save them?'),
-        cancelText: this.$gettext('Not Save'),
+        cancelText: this.$gettext("Don't Save"),
         confirmText: this.$gettext('Save'),
         onCancel: () => {
           this.hideModal()
