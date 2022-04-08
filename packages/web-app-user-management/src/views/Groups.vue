@@ -349,8 +349,8 @@ export default {
     async editGroup(editGroup) {
       try {
         await this.graphClient.groups.editGroup(editGroup.id, editGroup)
-        const groupRecordIndex = this.groups.findIndex((group) => group.id === editGroup.id)
-        this.$set(this.groups, groupRecordIndex, editGroup)
+        const group = this.groups.find((group) => group.id === editGroup.id)
+        Object.assign(group, editGroup)
 
         this.showMessage({
           title: this.$gettext('Group was edited successfully')
