@@ -10,11 +10,7 @@ afterEach(() => jest.clearAllMocks())
 describe('EditPanel', () => {
   describe('method "revertChanges"', () => {
     it('should revert changes on property editUser', () => {
-      const wrapper = getWrapper({
-        propsData: {
-          user: { displayName: 'jan', mail: 'jan@owncloud.com' }
-        }
-      })
+      const wrapper = getWrapper({})
       wrapper.vm.editUser.displayName = 'jana'
       wrapper.vm.editUser.mail = 'jana@owncloud.com'
       wrapper.vm.revertChanges()
@@ -22,11 +18,7 @@ describe('EditPanel', () => {
       expect(wrapper.vm.editUser.mail).toEqual('jan@owncloud.com')
     })
     it('should revert changes on property formData', () => {
-      const wrapper = getWrapper({
-        propsData: {
-          group: { displayName: 'jan' }
-        }
-      })
+      const wrapper = getWrapper({})
       wrapper.vm.formData.displayName.valid = false
       wrapper.vm.formData.displayName.errorMessage = 'error'
       wrapper.vm.revertChanges()
@@ -90,9 +82,9 @@ function getWrapper({ propsData = {} } = {}) {
       $gettextInterpolate: jest.fn()
     },
     propsData: {
-      user: { displayName: 'jan', mail: 'jan@owncloud.com' },
+      users: [{ id: '1', displayName: 'jan', mail: 'jan@owncloud.com' }],
       roles: [{ id: '1', displayName: 'admin' }],
-      userRole: { id: '1', displayName: 'admin' },
+      userRoles: { 1: { id: '1', displayName: 'admin' } },
       ...propsData
     },
     stubs: {

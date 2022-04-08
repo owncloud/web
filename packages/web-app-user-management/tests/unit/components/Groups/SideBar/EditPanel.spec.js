@@ -12,7 +12,7 @@ describe('EditPanel', () => {
     it('should revert changes on property editGroup', () => {
       const wrapper = getWrapper({
         propsData: {
-          group: { displayName: 'group' }
+          groups: [{ displayName: 'group' }]
         }
       })
       wrapper.vm.editGroup = { displayName: 'my group' }
@@ -22,7 +22,7 @@ describe('EditPanel', () => {
     it('should revert changes on property formData', () => {
       const wrapper = getWrapper({
         propsData: {
-          group: { displayName: 'group' }
+          groups: [{ displayName: 'group' }]
         }
       })
       wrapper.vm.formData.displayName.valid = false
@@ -73,7 +73,7 @@ function getWrapper({ propsData = {} } = {}) {
       $gettextInterpolate: jest.fn()
     },
     propsData: {
-      group: { displayName: 'group' },
+      groups: [{ displayName: 'group' }],
       ...propsData
     },
     stubs: {
