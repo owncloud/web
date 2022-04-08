@@ -395,7 +395,7 @@ export default defineComponent({
       }
     },
     openSidebarSharePanel() {
-      this.SET_FILE_SELECTION([this.space])
+      this.selectedResources = [this.space]
       this.openSidebarWithPanel('space-share-item')
     }
   }
