@@ -1336,10 +1336,6 @@ When(
   }
 )
 
-When('the user closes the text editor using the webUI', function () {
-  return client.page.personalPage().closeTextEditor()
-})
-
 Then('the user should be in the root directory on the webUI', async function () {
   const isUserInRootDirectory = await client.page.personalPage().isRootDirectory()
   assert.ok(!isUserInRootDirectory, 'Expected user in the root directory but found elsewhere')
