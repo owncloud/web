@@ -116,11 +116,6 @@ export default {
           sortable: true
         },
         {
-          name: 'status',
-          title: this.$gettext('Status'),
-          sortable: true
-        },
-        {
           name: 'actions',
           title: this.$gettext('Actions'),
           sortable: false,

@@ -195,7 +195,10 @@ export default {
           title: $gettext('Edit'),
           component: EditPanel,
           default: false,
-          enabled: this.selectedGroups.length === 1
+          enabled: false // this.selectedGroups.length === 1
+          /**
+           * Editing groups is currently not supported by backend
+           */
         }
       ]
     },

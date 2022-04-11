@@ -35,9 +35,11 @@
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
       </oc-button>
+      <!-- Editing groups is currently not supported by backend
       <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
         <oc-icon size="small" name="pencil" />
       </oc-button>
+      -->
     </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
@@ -93,16 +95,6 @@ export default {
         {
           name: 'displayName',
           title: this.$gettext('Group name'),
-          sortable: true
-        },
-        {
-          name: 'role',
-          title: this.$gettext('Your role'),
-          sortable: true
-        },
-        {
-          name: 'members',
-          title: this.$gettext('Members'),
           sortable: true
         },
         {
