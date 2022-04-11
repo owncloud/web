@@ -4,12 +4,13 @@
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Create')"
     :button-confirm-disabled="buttonConfirmDisabled"
-    focus-trap-initial="#input-display-name"
+    focus-trap-initial="#create-group-input-display-name"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', group)"
   >
     <template #content>
       <oc-text-input
+        id="create-group-input-display-name"
         v-model="group.displayName"
         class="oc-mb-s"
         :label="$gettext('Group name') + '*'"
