@@ -1,8 +1,8 @@
 <template>
   <div>
-    <oc-button class="oc-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
+    <oc-button :class="btnClass" justify-content="left" appearance="raw" @click="triggerUpload">
       <oc-resource-icon :resource="{ extension: '' }" />
-      <span id="files-file-upload-button" v-translate>Files</span>
+      <span id="files-file-upload-button">{{ btnLabel }}</span>
     </oc-button>
     <input
       id="fileUploadInput"
@@ -19,6 +19,20 @@
 
 <script>
 export default {
+  props: {
+    btnLabel: {
+      type: String,
+      required: false,
+      default: function () {
+        return this.$gettext('Files')
+      }
+    },
+    btnClass: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
   methods: {
     triggerUpload() {
       this.$refs.input.click()

@@ -11,11 +11,12 @@
       <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
         <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
-          <!-- needs uppy dropzone -->
-          <div id="files-drop-zone" class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
-            <oc-icon name="file_upload" />
-            <translate>Drop files here to upload or click to select file</translate>
-          </div>
+          <file-upload
+            id="files-drop-zone"
+            ref="fileUpload"
+            class="uk-flex uk-flex-middle uk-flex-center uk-placeholder"
+            :btn-label="$gettext('Drop files here to upload or click to select file')"
+          />
           <div id="previews" hidden />
         </div>
         <div
@@ -67,18 +68,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
-import Uppy from '@uppy/core'
-import Tus from '@uppy/tus'
-import XHRUpload from '@uppy/xhr-upload'
-import StatusBar from '@uppy/status-bar'
+import { uppyService } from 'web-pkg/src/services'
+import FileUpload from '../components/AppBar/Upload/FileUpload.vue'
+import CustomTus from 'web-pkg/src/uppy/customTus'
 import DropTarget from '@uppy/drop-target'
 
 export default {
+  components: {
+    FileUpload
+  },
   data() {
     return {
       loading: true,
@@ -115,122 +118,98 @@ export default {
       return this.uploadedFilesChangeTracker && this.uploadedFiles.values()
     }
   },
+  watch: {
+    loading: {
+      handler: async function (value) {
+        if (!value) {
+          await this.$nextTick()
+
+          const uppy = uppyService.getUppyInstance({
+            uploadPath: this.url,
+            capabilities: this.capabilities,
+            configuration: this.configuration,
+            headers: this.$client.helpers.buildHeaders(),
+            $gettext: this.$gettext,
+            customTus: CustomTus
+          })
+
+          this.$refs.fileUpload.$refs.input.addEventListener('change', (event) => {
+            const files = Array.from(event.target.files)
+
+            files.forEach((file) => {
+              try {
+                uppy.addFile({
+                  source: 'file input',
+                  name: file.name,
+                  type: file.type,
+                  data: file
+                })
+              } catch (err) {
+                console.error('error upload file:', file)
+                if (err.isRestriction) {
+                  // handle restrictions
+                  console.log('Restriction error:', err)
+                } else {
+                  // handle other errors
+                  console.error(err)
+                }
+              }
+            })
+          })
+
+          uppy.use(DropTarget, {
+            target: '#files-drop-container'
+          })
+
+          uppy.on('file-added', (file) => {
+            if (uppy.getPlugin('XHRUpload')) {
+              const filePath = file.name
+              uppy.setFileState(file.id, {
+                xhrUpload: {
+                  endpoint: `${this.url.replace(/\/+$/, '')}/${filePath.replace(/^\/+/, '')}`
+                }
+              })
+            }
+          })
+
+          uppy.on('upload-error', (file, error, response) => {
+            console.error(error)
+            this.showMessage({
+              title: this.$gettext('Failed to upload'),
+              status: 'danger'
+            })
+          })
+
+          uppy.on('upload', ({ id, fileIDs }) => {
+            if (fileIDs.length) {
+              this.$root.$emit('fileUploadStarted')
+            }
+          })
+
+          uppy.on('cancel-all', () => {
+            this.$root.$emit('fileUploadsCancelled')
+          })
+
+          uppy.on('complete', (result) => {
+            this.$root.$emit('fileUploadCompleted')
+
+            result.successful.forEach((file) => {
+              this.$root.$emit('fileUploadedSuccessfully', file)
+              this.uploadedFiles.push(file)
+              uppy.removeFile(file.id)
+            })
+          })
+        }
+      },
+      immediate: true
+    }
+  },
   mounted() {
     this.resolvePublicLink()
-
-    const client = this.$client
-    const uppyHeaders = client.helpers.buildHeaders()
-
-    // might make sense to initialize an Uppy instance in the runtime?
-    // TODO: set debug to false
-    const uppy = new Uppy({ debug: true, autoProceed: true })
-
-    // TODO: Build headers differently in public context?
-    // if (this.publicPage()) { ... maybe use this.headers to obtain token ... }
-
-    // TODO: What about flaky capability loading and its implications?
-    // if (this.capabilities?.files.tus_support?.max_chunk_size > 0) {
-    //   const chunkSize =
-    //     this.capabilities.files.tus_support.max_chunk_size > 0 &&
-    //     this.configuration.uploadChunkSize !== Infinity
-    //       ? Math.max(
-    //           this.capabilities.files.tus_support.max_chunk_size,
-    //           this.configuration.uploadChunkSize
-    //         )
-    //       : this.configuration.uploadChunkSize
-
-    delete uppyHeaders['OCS-APIREQUEST']
-
-    uppy.use(Tus, {
-      endpoint: this.url,
-      headers: uppyHeaders,
-      chunkSize: this.configuration.uploadChunkSize,
-      removeFingerprintOnSuccess: true,
-      overridePatchMethod: '',
-      retryDelays: [0, 3000, 5000, 10000, 20000]
-    })
-    // } else {
-    // uppy.use(XHRUpload, {
-    //   endpoint: this.url,
-    //   method: 'put',
-    //   headers: uppyHeaders
-    // })
-    // }
-
-    // // upload via drag&drop handling
-    uppy.use(DropTarget, {
-      target: '#files-drop-zone'
-    })
-
-    // upload button handling (files & folders separately)
-    // doesn't recognize elements yet since they're tippy children, maybe use $refs?
-    const uploadInputTarget = document.getElementById('#files-drop-zone')
-
-    uploadInputTarget.addEventListener('change', (event) => {
-      const files = Array.from(event.target.files)
-
-      files.forEach((file) => {
-        try {
-          console.log('beginning upload for file:', file)
-          uppy.addFile({
-            source: 'file input',
-            name: file.name,
-            type: file.type,
-            data: file
-          })
-        } catch (err) {
-          console.error('error upload file:', file)
-          if (err.isRestriction) {
-            // handle restrictions
-            console.log('Restriction error:', err)
-          } else {
-            // handle other errors
-            console.error(err)
-          }
-        }
-      })
-    })
-
-    // uppy.use(StatusBar, {
-    //   id: 'StatusBar',
-    //   target: '#files-app-bar',
-    //   hideAfterFinish: true,
-    //   showProgressDetails: true,
-    //   hideUploadButton: false,
-    //   hideRetryButton: false,
-    //   hidePauseResumeButton: false,
-    //   hideCancelButton: false,
-    //   doneButtonHandler: null,
-    //   locale: {
-    //     // TODO: Uppy l10n research
-    //   }
-    // })
-
-    uppy.on('upload-error', (file, error, response) => {
-      console.log('error with file:', file.id)
-      console.log('error message:', error)
-      this.onFileError(error.toString())
-    })
-
-    uppy.on('file-removed', () => {
-      uploadInputTarget.forEach((item) => {
-        item.value = null
-      })
-    })
-
-    uppy.on('complete', (result) => {
-      result.successful.forEach((file) => {
-        this.uploadedFiles.push(file)
-      })
-      uploadInputTarget.forEach((item) => {
-        item.value = null
-      })
-
-      console.log('successful files:', result.successful)
-      console.log('failed files:', result.failed)
-    })
   },
   methods: {
+    ...mapActions(['showMessage']),
+
     resolvePublicLink() {
       this.loading = true
 
@@ -267,46 +246,14 @@ export default {
           this.loading = false
         })
     },
-    dropZoneFileAdded(event) {
-      const uploadId = event.upload.uuid
-      this.uploadedFilesChangeTracker++
-      this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
-
-      this.uploadQueue
-        .add(() =>
-          this.$client.publicFiles.putFileContents(
-            this.publicLinkToken,
-            event.name,
-            this.publicLinkPassword,
-            event,
-            {
-              // automatically rename in case of duplicates
-              headers: { 'OC-Autorename': 1 },
-              onProgress: (progressEvent) => {
-                this.uploadedFilesChangeTracker++
-                this.uploadedFiles.set(uploadId, {
-                  name: event.name,
-                  size: event.size,
-                  status: 'uploading'
-                })
-              }
-            }
-          )
-        )
-        .then((e) => {
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
-        })
-        .catch((e) => {
-          console.error('Error uploading file ', event.name, ': ', e)
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
-        })
-    },
 
     $_ocUploadingFileMessage(fileName) {
       const translated = this.$gettext('Uploading file "%{fileName}"')
       return this.$gettextInterpolate(translated, { fileName }, true)
+    },
+
+    triggerUpload() {
+      this.$refs.fileInput.click()
     }
   }
 }
@@ -319,5 +266,9 @@ export default {
     border: 1px dashed var(--oc-color-input-border);
     padding: var(--oc-space-xlarge);
   }
+}
+#fileUploadInput {
+  position: absolute;
+  left: -99999px;
 }
 </style>
