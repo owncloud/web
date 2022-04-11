@@ -831,12 +831,15 @@ export default defineComponent({
   .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
-  .create-list-file button {
-    margin: 2px 0;
+  .create-list-folder button {
+    margin-bottom: 8px;
+  }
+  .create-list-file:nth-child(2) button {
+    margin-top: 6px;
   }
 }
 #upload-list,
 #new-file-menu-drop {
-  min-width: 200px;
+  min-width: 250px;
 }
 </style>
