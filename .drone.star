@@ -61,7 +61,7 @@ config = {
                 "",
             ],
             "suites": {
-                "debug": "debugSuite",
+                "debugSuite": "OCISdebug",
             },
             "extraEnvironment": {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
