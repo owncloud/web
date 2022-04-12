@@ -1,0 +1,7 @@
+Bugfix: Rename is clickable on mobile
+
+We've fixed a bug where the quick rename button was clickable,
+even so it wasn't visible.
+
+https://github.com/owncloud/web/issues/6767
+https://github.com/owncloud/web/pull/6775

@@ -699,13 +699,13 @@ export default defineComponent({
 .resource-table {
   &-resource-wrapper {
     &:hover > .resource-table-edit-name {
-      opacity: 1;
+      visibility: visible;
     }
   }
   &-edit-name {
     display: inline-flex;
     vertical-align: super;
-    opacity: 0;
+    visibility: hidden;
   }
   &-people {
     position: absolute;
