@@ -31,7 +31,7 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ getUserRole(item) }} </template>
+    <template #role="{ item }"> {{ getUserRole(item) }}</template>
     <template #actions="{ item }">
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
@@ -49,6 +49,10 @@
 </template>
 
 <script>
+import { onBeforeUnmount, ref } from '@vue/composition-api'
+import { Registry } from '../../services'
+import Fuse from 'fuse.js'
+
 export default {
   name: 'UsersList',
   props: {
@@ -63,6 +67,17 @@ export default {
     selectedUsers: {
       type: Array,
       required: true
+    }
+  },
+  setup() {
+    const searchTerm = ref('')
+
+    const tkn = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', tkn))
+
+    return {
+      searchTerm
     }
   },
   data() {
@@ -125,7 +140,20 @@ export default {
       ]
     },
     data() {
-      return this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
+      const orderedUsers = this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
+
+      if (!this.searchTerm) {
+        return orderedUsers
+      }
+
+      const usersSearchEngine = new Fuse(orderedUsers, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['displayName', 'mail', 'onPremisesSamAccountName']
+      })
+
+      return usersSearchEngine.search(this.searchTerm).map((r) => r.item)
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)

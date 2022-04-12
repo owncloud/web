@@ -50,6 +50,9 @@
 </template>
 
 <script>
+import { onBeforeUnmount } from '@vue/composition-api'
+import { Registry } from '../../services'
+
 const orderBy = (list, prop, desc) => {
   return [...list].sort((a, b) => {
     a = a[prop] || ''
@@ -69,6 +72,13 @@ export default {
       type: Array,
       required: true
     }
+  },
+  setup() {
+    const tkn = Registry.search.subscribe('updateTerm', ({ term, kind }) =>
+      console.log('updateTerm', kind, term)
+    )
+
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', tkn))
   },
   data() {
     return {
