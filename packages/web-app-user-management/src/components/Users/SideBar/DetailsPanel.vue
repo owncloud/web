@@ -1,0 +1,98 @@
+<template>
+  <div class="oc-mt-xl">
+    <div v-if="noUsers" class="oc-flex user-info">
+      <oc-icon name="user" size="xxlarge" />
+      <p v-translate>Select a user to view details</p>
+    </div>
+    <div v-if="multipleUsers" class="oc-flex group-info">
+      <oc-icon name="group" size="xxlarge" />
+      <p>{{ multipleUsersSelectedText }}</p>
+    </div>
+    <div v-if="user">
+      <div class="oc-flex user-info oc-mb-l">
+        <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
+        <span v-text="user.onPremisesSamAccountName"></span>
+        <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
+      </div>
+      <table
+        class="details-table"
+        :aria-label="$gettext('Overview of the information about the selected user')"
+      >
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
+          <td v-text="user.onPremisesSamAccountName" />
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Display name')" />
+          <td v-text="user.displayName" />
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
+          <td>
+            <span v-text="user.mail" />
+          </td>
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
+          <td>
+            <span v-text="userRole" />
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: 'DetailsPanel',
+  props: {
+    users: {
+      type: Array,
+      required: true
+    },
+    userRoles: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    user() {
+      return this.users.length === 1 ? this.users[0] : null
+    },
+    noUsers() {
+      return !this.users.length
+    },
+    multipleUsers() {
+      return this.users.length > 1
+    },
+    multipleUsersSelectedText() {
+      return this.$gettextInterpolate('%{count} users selected', {
+        count: this.users.length
+      })
+    },
+    userRole() {
+      return this.user.id in this.userRoles ? this.userRoles[this.user.id].displayName : ''
+    }
+  }
+}
+</script>
+<style lang="scss">
+.user-info {
+  align-items: center;
+  flex-direction: column;
+}
+.user-info-display-name {
+  font-size: 1.5rem;
+}
+.details-table {
+  text-align: left;
+
+  tr {
+    height: 1.5rem;
+  }
+
+  th {
+    font-weight: 600;
+  }
+}
+</style>

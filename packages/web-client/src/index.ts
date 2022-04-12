@@ -28,12 +28,14 @@ export interface Graph {
     getUser: (userId: string) => AxiosPromise<User>
     createUser: (user: User) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
     listUsers: (orderBy?: string) => AxiosPromise<CollectionOfUser>
   }
   groups: {
     listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
     createGroup: (group: Group) => AxiosPromise<Group>
+    editGroup: (groupId: string, group: Group) => AxiosPromise<void>
     deleteGroup: (groupId: string) => AxiosPromise<void>
   }
 }
@@ -68,12 +70,14 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       getUser: (userId: string) => userApiFactory.getUser(userId),
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () => meUserApiFactory.meGet(),
+      editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any) =>
         usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]))
     },
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
+      editGroup: (groupId: string, group: Group) => groupApiFactory.updateGroup(groupId, group),
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
         groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]))

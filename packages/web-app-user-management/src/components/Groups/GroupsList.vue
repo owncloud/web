@@ -31,6 +31,16 @@
     <template #avatar="rowData">
       <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
     </template>
+    <template #actions="{ item }">
+      <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
+        <oc-icon size="small" name="information" />
+      </oc-button>
+      <!-- Editing groups is currently not supported by backend
+      <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
+        <oc-icon size="small" name="pencil" />
+      </oc-button>
+      -->
+    </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>
@@ -42,8 +52,8 @@
 <script>
 const orderBy = (list, prop, desc) => {
   return [...list].sort((a, b) => {
-    a = a[prop]
-    b = b[prop]
+    a = a[prop] || ''
+    b = b[prop] || ''
     return desc ? b.localeCompare(a) : a.localeCompare(b)
   })
 }
@@ -88,14 +98,11 @@ export default {
           sortable: true
         },
         {
-          name: 'role',
-          title: this.$gettext('Your role'),
-          sortable: true
-        },
-        {
-          name: 'members',
-          title: this.$gettext('Members'),
-          sortable: true
+          name: 'actions',
+          title: this.$gettext('Actions'),
+          sortable: false,
+          type: 'slot',
+          alignH: 'right'
         }
       ]
     },
@@ -107,7 +114,7 @@ export default {
       return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
     },
     data() {
-      return orderBy([...this.groups], this.sortBy, this.sortDir === 'desc')
+      return orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)

@@ -52,9 +52,76 @@ describe('Groups view', () => {
       expect(toggleDeleteGroupModalStub).toHaveBeenCalledTimes(0)
     })
   })
+
+  describe('method "editGroup"', () => {
+    it('should show message on success', async () => {
+      const wrapper = getMountedWrapper()
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editGroup({ id: '1', displayName: 'Super group' })
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getMountedWrapper({ resolveEditGroup: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editGroup({})
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
+  describe('computed method "availableSideBarPanels"', () => {
+    /**
+     * As soon as edit panel will be available in group management, please un-skip it.
+     */
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should contain EditPanel with property enabled set true when one group is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeTruthy()
+    })
+    it('should contain EditPanel with property enabled set false when no group is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+    it('should contain EditPanel with property enabled set false when multiple groups are selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }, { id: '2' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+  })
+
+  describe('computed method "allGroupsSelected"', () => {
+    it('should be true if every group is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { groups: [{ id: '1' }] },
+        data: { selectedGroups: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allGroupsSelected).toBeTruthy()
+    })
+    it('should false if not every group is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { groups: [{ id: '1' }, { id: '2' }] },
+        data: { selectedGroups: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allGroupsSelected).toBeFalsy()
+    })
+  })
 })
 
-function getMountedWrapper({ resolveCreateGroup = true, resolveDeleteGroup = true } = {}) {
+function getMountedWrapper({
+  data = {},
+  mocks = {},
+  resolveCreateGroup = true,
+  resolveEditGroup = true,
+  resolveDeleteGroup = true
+} = {}) {
   return shallowMount(Groups, {
     localVue,
     store: createStore(Vuex.Store, {
@@ -75,14 +142,16 @@ function getMountedWrapper({ resolveCreateGroup = true, resolveDeleteGroup = tru
           createGroup: () =>
             resolveCreateGroup ? Promise.resolve() : Promise.reject(new Error('')),
           deleteGroup: () =>
-            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error(''))
+            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error('')),
+          editGroup: () => (resolveEditGroup ? Promise.resolve() : Promise.reject(new Error('')))
         }
       },
       groups: [
         {
           id: '1'
         }
-      ]
+      ],
+      ...mocks
     },
     data: () => {
       return {
@@ -90,7 +159,8 @@ function getMountedWrapper({ resolveCreateGroup = true, resolveDeleteGroup = tru
           {
             id: 1
           }
-        ]
+        ],
+        ...data
       }
     },
     stubs: {

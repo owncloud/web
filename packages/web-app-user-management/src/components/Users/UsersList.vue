@@ -31,7 +31,15 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ getUserRole(item.id) }} </template>
+    <template #role="{ item }"> {{ getUserRole(item) }} </template>
+    <template #actions="{ item }">
+      <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
+        <oc-icon size="small" name="information" />
+      </oc-button>
+      <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
+        <oc-icon size="small" name="pencil" />
+      </oc-button>
+    </template>
     <template #footer>
       <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
         <p class="oc-text-muted">{{ footerText }}</p>
@@ -41,14 +49,6 @@
 </template>
 
 <script>
-const orderBy = (list, prop, desc) => {
-  return [...list].sort((a, b) => {
-    a = a[prop]
-    b = b[prop]
-    return desc ? b.localeCompare(a) : a.localeCompare(b)
-  })
-}
-
 export default {
   name: 'UsersList',
   props: {
@@ -56,12 +56,8 @@ export default {
       type: Array,
       required: true
     },
-    roles: {
-      type: Array,
-      required: true
-    },
-    userAssignments: {
-      type: Array,
+    userRoles: {
+      type: Object,
       required: true
     },
     selectedUsers: {
@@ -105,7 +101,7 @@ export default {
         },
         {
           name: 'displayName',
-          title: this.$gettext('Display name'),
+          title: this.$gettext('Fist and last name'),
           sortable: true
         },
         {
@@ -120,20 +116,36 @@ export default {
           sortable: true
         },
         {
-          name: 'status',
-          title: this.$gettext('Status'),
-          sortable: true
+          name: 'actions',
+          title: this.$gettext('Actions'),
+          sortable: false,
+          type: 'slot',
+          alignH: 'right'
         }
       ]
     },
     data() {
-      return orderBy([...this.users], this.sortBy, this.sortDir === 'desc')
+      return this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
   methods: {
+    orderBy(list, prop, desc) {
+      return [...list].sort((user1, user2) => {
+        if (prop === 'role') {
+          const role1 = this.getUserRole(user1)
+          const role2 = this.getUserRole(user2)
+          return desc ? role2.localeCompare(role1) : role1.localeCompare(role2)
+        }
+
+        const a = user1[prop] || ''
+        const b = user2[prop] || ''
+
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
@@ -144,27 +156,7 @@ export default {
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
     },
     getUserRole(user) {
-      const userAssignmentList = this.userAssignments.find(
-        (assignment) => assignment.accountUuid === user.id
-      )
-
-      if (!userAssignmentList) {
-        return ''
-      }
-
-      const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
-
-      if (!userRoleAssignment) {
-        return ''
-      }
-
-      const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
-
-      if (!role) {
-        return ''
-      }
-
-      return role.displayName
+      return user.id in this.userRoles ? this.userRoles[user.id].displayName : ''
     }
   }
 }

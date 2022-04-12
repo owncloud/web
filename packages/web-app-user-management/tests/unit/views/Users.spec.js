@@ -2,6 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex-extensions'
 import Users from '../../../src/views/Users'
 import Vuex from 'vuex'
+import mockAxios from 'jest-mock-axios'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,6 +31,43 @@ describe('Users view', () => {
     })
   })
 
+  describe('method "editUser"', () => {
+    it('should show message on success', async () => {
+      mockAxios.post.mockImplementationOnce(() => {
+        return Promise.resolve({
+          data: {
+            accountUuid: '1',
+            id: '1',
+            roleId: '1'
+          }
+        })
+      })
+      const wrapper = getMountedWrapper()
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editUser({
+        editUser: { id: '1', displayName: 'jan' },
+        editUserRole: { id: '1', displayName: 'admin' }
+      })
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      mockAxios.post.mockImplementationOnce(() => {
+        return Promise.resolve({})
+      })
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getMountedWrapper({ resolveEditUser: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editUser({
+        editUser: {},
+        editUserRole: {}
+      })
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
   describe('method "deleteUsers"', () => {
     it('should hide the modal and show message on success', async () => {
       const wrapper = getMountedWrapper()
@@ -52,14 +90,180 @@ describe('Users view', () => {
       expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
     })
   })
+
+  describe('computed method "availableSideBarPanels"', () => {
+    it('should contain EditPanel with property enabled set true when one user is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeTruthy()
+    })
+    it('should contain EditPanel with property enabled set false when no user is selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedUsers: [] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+    it('should contain EditPanel with property enabled set false when multiple users are selected', () => {
+      const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
+      expect(
+        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+      ).toBeFalsy()
+    })
+  })
+
+  describe('computed method "allUsersSelected"', () => {
+    it('should be true if every user is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { users: [{ id: '1' }] },
+        data: { selectedUsers: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allUsersSelected).toBeTruthy()
+    })
+    it('should false if not every user is selected', () => {
+      const wrapper = getMountedWrapper({
+        mocks: { users: [{ id: '1' }, { id: '2' }] },
+        data: { selectedUsers: [{ id: '1' }] }
+      })
+      expect(wrapper.vm.allUsersSelected).toBeFalsy()
+    })
+  })
+
+  describe('computed method "userRoles"', () => {
+    it('should contain user role if record exists in userAssignments', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: {
+            1: [
+              {
+                accountUuid: '1',
+                roleId: '1'
+              }
+            ]
+          },
+          roles: [
+            {
+              displayName: 'admin',
+              id: '1'
+            }
+          ]
+        }
+      })
+      expect(wrapper.vm.userRoles[user.id]).toEqual({
+        displayName: 'admin',
+        id: '1'
+      })
+    })
+    it('should not contain user role if userAssignments is empty', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: { users: [user], userAssignments: [] }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if record does not exist in userAssignments', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: {
+            2: [
+              {
+                accountUuid: '2',
+                roleId: '1'
+              }
+            ]
+          },
+          roles: [
+            {
+              displayName: 'admin',
+              id: '1'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if assigned role does not exist', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: {
+            1: [
+              {
+                accountUuid: '1',
+                roleId: '1'
+              }
+            ]
+          },
+          roles: [
+            {
+              displayName: 'admin',
+              id: '2'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+    it('should not contain user role if userAssignment does not contain roleId', () => {
+      const user = { id: '1' }
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [user],
+          userAssignments: {
+            1: [
+              {
+                accountUuid: '1'
+              }
+            ]
+          },
+          roles: [
+            {
+              displayName: 'admin',
+              id: '2'
+            }
+          ]
+        }
+      })
+      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
+    })
+  })
+
+  describe('method toggleSideBar', () => {
+    it('should set sideBarOpen to true if current value is false', () => {
+      const wrapper = getMountedWrapper({})
+      wrapper.vm.sideBarOpen = false
+      wrapper.vm.toggleSideBar()
+      expect(wrapper.vm.sideBarOpen).toBeTruthy()
+    })
+    it('should set sideBarOpen to false if current value is true', () => {
+      const wrapper = getMountedWrapper({})
+      wrapper.vm.sideBarOpen = true
+      wrapper.vm.toggleSideBar()
+      expect(wrapper.vm.sideBarOpen).toBeFalsy()
+    })
+  })
 })
 
-function getMountedWrapper({ resolveCreateUser = true, resolveDeleteUser = true } = {}) {
+function getMountedWrapper({
+  data = {},
+  mocks = {},
+  resolveCreateUser = true,
+  resolveEditUser = true,
+  resolveDeleteUser = true
+} = {}) {
   return shallowMount(Users, {
     localVue,
     store: createStore(Vuex.Store, {
       actions: {
         showMessage: jest.fn()
+      },
+      getters: {
+        getToken: () => 'token'
       }
     }),
     mocks: {
@@ -73,6 +277,7 @@ function getMountedWrapper({ resolveCreateUser = true, resolveDeleteUser = true 
       graphClient: {
         users: {
           createUser: () => (resolveCreateUser ? Promise.resolve() : Promise.reject(new Error(''))),
+          editUser: () => (resolveEditUser ? Promise.resolve() : Promise.reject(new Error(''))),
           deleteUser: () => (resolveDeleteUser ? Promise.resolve() : Promise.reject(new Error('')))
         }
       },
@@ -82,7 +287,8 @@ function getMountedWrapper({ resolveCreateUser = true, resolveDeleteUser = true 
         }
       ],
       roles: [],
-      userAssignments: []
+      userAssignments: [],
+      ...mocks
     },
     data: () => {
       return {
@@ -90,7 +296,8 @@ function getMountedWrapper({ resolveCreateUser = true, resolveDeleteUser = true 
           {
             id: 1
           }
-        ]
+        ],
+        ...data
       }
     },
     stubs: {

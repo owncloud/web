@@ -67,7 +67,9 @@
               class="sidebar-panel__navigation"
             >
               <oc-button
-                v-for="panelSelect in availablePanels.filter((p) => !p.default)"
+                v-for="panelSelect in availablePanels.filter(
+                  (p) => !p.default && p.enabled !== false
+                )"
                 :id="`sidebar-panel-${panelSelect.app}-select`"
                 :key="`panel-select-${panelSelect.app}`"
                 :data-testid="`sidebar-panel-${panelSelect.app}-select`"
