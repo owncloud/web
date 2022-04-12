@@ -73,7 +73,11 @@ describe('Groups view', () => {
   })
 
   describe('computed method "availableSideBarPanels"', () => {
-    it('should contain EditPanel with property enabled set true when one group is selected', () => {
+    /**
+     * As soon as edit panel will be available in group management, please un-skip it.
+     */
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should contain EditPanel with property enabled set true when one group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
       expect(
         wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
