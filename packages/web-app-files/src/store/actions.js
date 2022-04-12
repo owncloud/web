@@ -128,7 +128,7 @@ export default {
   },
   renameFile(context, { file, newValue, client, publicPage, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      const newPath = file.webDavPath.substr(1, file.webDavPath.lastIndexOf('/'))
+      const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
       if (publicPage) {
         return client.publicFiles
           .move(file.webDavPath, newPath + newValue, context.getters.publicLinkPassword)
