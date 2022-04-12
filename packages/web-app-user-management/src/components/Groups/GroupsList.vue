@@ -50,16 +50,9 @@
 </template>
 
 <script>
-import { onBeforeUnmount } from '@vue/composition-api'
+import { onBeforeUnmount, ref } from '@vue/composition-api'
 import { Registry } from '../../services'
-
-const orderBy = (list, prop, desc) => {
-  return [...list].sort((a, b) => {
-    a = a[prop] || ''
-    b = b[prop] || ''
-    return desc ? b.localeCompare(a) : a.localeCompare(b)
-  })
-}
+import Fuse from 'fuse.js'
 
 export default {
   name: 'GroupsList',
@@ -74,11 +67,13 @@ export default {
     }
   },
   setup() {
-    const tkn = Registry.search.subscribe('updateTerm', ({ term, kind }) =>
-      console.log('updateTerm', kind, term)
-    )
+    const searchTerm = ref('')
+    const token = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', token))
 
-    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', tkn))
+    return {
+      searchTerm
+    }
   },
   data() {
     return {
@@ -124,13 +119,34 @@ export default {
       return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
     },
     data() {
-      return orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
+      const orderedGroups = this.orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
+      return this.filter(orderedGroups, this.searchTerm)
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
     }
   },
   methods: {
+    filter(groups, searchTerm) {
+      if (!searchTerm) {
+        return groups
+      }
+      const groupsSearchEngine = new Fuse(groups, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['displayName']
+      })
+
+      return groupsSearchEngine.search(searchTerm).map((r) => r.item)
+    },
+    orderBy(list, prop, desc) {
+      return [...list].sort((a, b) => {
+        a = a[prop] || ''
+        b = b[prop] || ''
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir

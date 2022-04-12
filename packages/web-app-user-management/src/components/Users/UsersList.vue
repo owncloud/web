@@ -71,10 +71,8 @@ export default {
   },
   setup() {
     const searchTerm = ref('')
-
-    const tkn = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
-
-    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', tkn))
+    const token = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', token))
 
     return {
       searchTerm
@@ -141,25 +139,26 @@ export default {
     },
     data() {
       const orderedUsers = this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
-
-      if (!this.searchTerm) {
-        return orderedUsers
-      }
-
-      const usersSearchEngine = new Fuse(orderedUsers, {
-        includeScore: true,
-        useExtendedSearch: true,
-        threshold: 0.3,
-        keys: ['displayName', 'mail', 'onPremisesSamAccountName']
-      })
-
-      return usersSearchEngine.search(this.searchTerm).map((r) => r.item)
+      return this.filter(orderedUsers, this.searchTerm)
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
   methods: {
+    filter(users, searchTerm) {
+      if (!searchTerm) {
+        return users
+      }
+      const usersSearchEngine = new Fuse(users, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['displayName', 'mail', 'onPremisesSamAccountName']
+      })
+
+      return usersSearchEngine.search(searchTerm).map((r) => r.item)
+    },
     orderBy(list, prop, desc) {
       return [...list].sort((user1, user2) => {
         if (prop === 'role') {
