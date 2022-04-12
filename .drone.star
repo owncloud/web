@@ -61,9 +61,7 @@ config = {
                 "",
             ],
             "suites": {
-                "debugSuite": [
-                    "debug",
-                ],
+                "debug": "debugSuite",
             },
             "extraEnvironment": {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
