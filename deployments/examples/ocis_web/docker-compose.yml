@@ -69,6 +69,9 @@ services:
       STORAGE_APP_REGISTRY_MIMETYPES_JSON: /var/tmp/ocis/app-config/mimetypes.json
       # INSECURE: needed if oCIS / Traefik is using self generated certificates
       OCIS_INSECURE: "${INSECURE:-false}"
+      # demo users
+      ACCOUNTS_DEMO_USERS_AND_GROUPS: "${DEMO_USERS:-false}"  # deprecated, remove after switching to LibreIDM
+      IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-false}"
     volumes:
       - ./config/ocis/entrypoint-override.sh:/entrypoint-override.sh
       - ./config/ocis/proxy.yaml:/etc/ocis/proxy.yaml
