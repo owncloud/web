@@ -61,8 +61,8 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISSharingInternal3": [
-                    "webUISharingInternalUsersSharingIndicator",
+                "debugSuite": [
+                    "debug",
                 ],
             },
             "extraEnvironment": {
