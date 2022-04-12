@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.4.0...master
+
+Summary
+-------
+
+* Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+
+Details
+-------
+
+* Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+
+   We've replaced all occurrences of the deprecated String.prototype.substr() function with
+   String.prototype.slice() which works similarly but isn't deprecated.
+
+   https://github.com/owncloud/web/pull/6718
+
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================
 The following sections list the changes in ownCloud web 5.4.0 relevant to
