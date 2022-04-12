@@ -184,7 +184,7 @@ export default {
         {
           app: 'DetailsPanel',
           icon: 'group-2',
-          title: $gettext('Details'),
+          title: $gettext('Group details'),
           component: DetailsPanel,
           default: true,
           enabled: true
@@ -192,7 +192,7 @@ export default {
         {
           app: 'EditPanel',
           icon: 'pencil',
-          title: $gettext('Edit'),
+          title: $gettext('Edit group'),
           component: EditPanel,
           default: false,
           enabled: false // this.selectedGroups.length === 1
@@ -204,8 +204,9 @@ export default {
     },
 
     toggleSidebarButtonLabel() {
-      if (this.sideBarOpen) return this.$gettext('Close sidebar to hide details')
-      return this.$gettext('Open sidebar to view details')
+      return this.$gettext(
+        this.sideBarOpen ? 'Close sidebar to hide details' : 'Open sidebar to view details'
+      )
     },
 
     toggleSidebarButtonIconFillType() {

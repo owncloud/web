@@ -36,10 +36,7 @@ export default {
   props: {
     groups: {
       type: Array,
-      required: false,
-      default: () => {
-        return []
-      }
+      required: true
     }
   },
   computed: {

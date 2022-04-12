@@ -35,7 +35,6 @@ export default {
     },
     confirmButtonDisabled: {
       type: Boolean,
-      required: false,
       default: () => {
         return false
       }
@@ -53,6 +52,6 @@ export default {
 </script>
 <style lang="scss">
 .compare-save-dialog {
-  background: var(--oc-color-background-highlight);
+  background: var(--oc-color-background-muted);
 }
 </style>

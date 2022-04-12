@@ -104,8 +104,8 @@ export default {
       return { user: { ...this.editUser, role: this.editUserRole } }
     },
     invalidFormData() {
-      return Object.keys(this.formData)
-        .map((k) => !!this.formData[k].valid)
+      return Object.values(this.formData)
+        .map((v) => !!v.valid)
         .includes(false)
     }
   },
@@ -155,9 +155,9 @@ export default {
     revertChanges() {
       this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
       this.editUserRole = this.roles.find((role) => role.id === this.userRole.id)
-      Object.keys(this.formData).forEach((formDataKey) => {
-        this.formData[formDataKey].valid = true
-        this.formData[formDataKey].errorMessage = ''
+      Object.values(this.formData).forEach((formDataValue) => {
+        formDataValue.valid = true
+        formDataValue.errorMessage = ''
       })
     }
   }

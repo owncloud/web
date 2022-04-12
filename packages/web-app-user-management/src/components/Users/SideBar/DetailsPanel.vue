@@ -48,10 +48,7 @@ export default {
   props: {
     users: {
       type: Array,
-      required: false,
-      default: () => {
-        return []
-      }
+      required: true
     },
     userRoles: {
       type: Object,

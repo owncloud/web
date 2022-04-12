@@ -149,6 +149,10 @@ export default {
       store.getters.getToken
     )
 
+    /**
+     * Setting api calls are just temporary and will be replaced with the graph api,
+     * as the backend supports it.
+     */
     const loadRolesTask = useTask(function* (signal, ref) {
       const rolesResponse = yield axios.post(
         '/api/v0/settings/roles-list',
@@ -162,6 +166,10 @@ export default {
       roles.value = rolesResponse.data.bundles
     })
 
+    /**
+     * Setting api calls are just temporary and will be replaced with the graph api,
+     * as the backend supports it.
+     */
     const loadUserAssignmentTask = useTask(function* (signal, ref) {
       const userAssignmentResponse = yield axios.post(
         '/api/v0/settings/assignments-list',
@@ -208,10 +216,9 @@ export default {
   computed: {
     ...mapGetters(['getToken']),
     userRoles() {
-      const roles = {}
-      for (const user of this.users) {
+      return this.users.reduce((acc, user) => {
         if (!(user.id in this.userAssignments)) {
-          continue
+          return acc
         }
 
         const userAssignmentList = this.userAssignments[user.id]
@@ -219,19 +226,19 @@ export default {
         const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
 
         if (!userRoleAssignment) {
-          continue
+          return acc
         }
 
         const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
 
         if (!role) {
-          continue
+          return acc
         }
 
-        roles[user.id] = role
-      }
+        acc[user.id] = role
 
-      return roles
+        return acc
+      }, {})
     },
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
@@ -257,7 +264,7 @@ export default {
         {
           app: 'DetailsPanel',
           icon: 'user',
-          title: $gettext('Details'),
+          title: $gettext('User details'),
           component: DetailsPanel,
           default: true,
           enabled: true
@@ -265,7 +272,7 @@ export default {
         {
           app: 'EditPanel',
           icon: 'pencil',
-          title: $gettext('Edit'),
+          title: $gettext('Edit user'),
           component: EditPanel,
           default: false,
           enabled: this.selectedUsers.length === 1
@@ -274,8 +281,9 @@ export default {
     },
 
     toggleSidebarButtonLabel() {
-      if (this.sideBarOpen) return this.$gettext('Close sidebar to hide details')
-      return this.$gettext('Open sidebar to view details')
+      return this.$gettext(
+        this.sideBarOpen ? 'Close sidebar to hide details' : 'Open sidebar to view details'
+      )
     },
 
     toggleSidebarButtonIconFillType() {
@@ -422,6 +430,11 @@ export default {
     async editUser({ editUser, editUserRole }) {
       try {
         await this.graphClient.users.editUser(editUser.id, editUser)
+
+        /**
+         * Setting api calls are just temporary and will be replaced with the graph api,
+         * as the backend supports it.
+         */
         const assignmentsAddResponse = await axios.post(
           '/api/v0/settings/assignments-add',
           {
