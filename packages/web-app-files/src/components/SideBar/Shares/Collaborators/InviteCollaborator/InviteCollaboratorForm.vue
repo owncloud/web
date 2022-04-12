@@ -56,7 +56,7 @@
       />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
-        <span v-translate :aria-hidden="true">Share</span>
+        <span v-translate :aria-hidden="true" v-text="savingButtonTitle" />
       </oc-button>
       <oc-button
         v-else
@@ -68,7 +68,7 @@
         appearance="filled"
         submit="submit"
         @click="share"
-        v-text="$gettext('Share')"
+        v-text="$gettext(savingButtonTitle)"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
@@ -106,11 +106,20 @@ export default {
     RecipientContainer,
     ExpirationDatepicker
   },
+  props: {
+    savingButtonTitle: {
+      type: String,
+      required: false,
+      default: 'Share'
+    }
+  },
+
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing()
     }
   },
+
   data() {
     return {
       autocompleteResults: [],
