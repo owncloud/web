@@ -1,12 +1,12 @@
 import FilesDrop from '@files/src/views/FilesDrop.vue'
 import { shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
-import vue2DropZone from 'vue2-dropzone'
 import { getStore, localVue } from './views.setup.js'
 import { DavProperty } from 'web-pkg/src/constants'
 import { linkRoleUploaderFolder } from '@files/src/helpers/share'
+import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
-localVue.use(vue2DropZone)
+localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -45,8 +45,6 @@ const selectors = {
 }
 
 const ocSpinnerStubSelector = 'oc-spinner-stub'
-const ocTableSimpleStubSelector = 'oc-table-simple-stub'
-const ocTableRowStubSelector = 'oc-tr-stub'
 
 describe('FilesDrop', () => {
   it('should call "resolvePublicLink" method on wrapper mount', () => {
@@ -71,8 +69,6 @@ describe('FilesDrop', () => {
   })
 
   describe('when "loading" is set to false', () => {
-    const spyDropZoneFileAdded = jest.spyOn(FilesDrop.methods, 'dropZoneFileAdded')
-
     const wrapper = getShallowWrapper()
 
     it('should not show spinner and loading header', () => {
@@ -85,25 +81,8 @@ describe('FilesDrop', () => {
     })
 
     it('should show vue drop zone with given options', () => {
-      const dropZone = wrapper.findComponent(vue2DropZone)
-
+      const dropZone = wrapper.find('#files-drop-zone')
       expect(dropZone.exists()).toBeTruthy()
-      expect(dropZone.props()).toMatchObject({
-        id: 'oc-dropzone',
-        options: {
-          // from the mocked function
-          url: 'http://some-url/abc123def456/',
-          clickable: true,
-          createImageThumbnails: false,
-          autoQueue: false,
-          previewsContainer: '#previews'
-        },
-        includeStyling: false,
-        awss3: null,
-        destroyDropzone: true,
-        duplicateCheck: false,
-        useCustomSlot: true
-      })
     })
 
     it('should show error message if only it has truthy value', () => {
@@ -111,92 +90,6 @@ describe('FilesDrop', () => {
         loading: false,
         errorMessage: 'This is a test error message'
       })
-
-      expect(wrapper).toMatchSnapshot()
-    })
-
-    it('should not show files table if uploaded files list is empty', () => {
-      expect(wrapper.find(selectors.filesEmpty).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.filesEmpty)).toMatchSnapshot()
-      expect(wrapper.find(ocTableSimpleStubSelector).exists()).toBeFalsy()
-    })
-
-    it('should show files list of uploaded files', async () => {
-      const uploadedFiles = new Map()
-      const files = [
-        { name: 'file1', size: 300, status: 'error' },
-        { name: 'file2', size: 600, status: 'done' },
-        { name: 'file3', size: 900, status: 'init' },
-        { name: 'file4', size: 1200, status: 'uploading' }
-      ]
-      uploadedFiles.set(1, files[0])
-      uploadedFiles.set(2, files[1])
-      uploadedFiles.set(3, files[2])
-      uploadedFiles.set(4, files[3])
-
-      const wrapper = shallowMount(FilesDrop, {
-        localVue,
-        store: createStore(),
-        mocks: {
-          $route
-        },
-        data() {
-          return {
-            uploadedFiles: uploadedFiles,
-            uploadedFilesChangeTracker: 1
-          }
-        }
-      })
-
-      // table is visible only after two next-ticks
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-
-      const tableElement = wrapper.find(ocTableSimpleStubSelector)
-      const rows = tableElement.findAll(ocTableRowStubSelector)
-
-      expect(rows.length).toBe(4)
-
-      expect(wrapper).toMatchSnapshot()
-    })
-
-    it('should call "dropZoneFileAdded" method if "vdropzone-file-added" event is emitted', async () => {
-      const event = {
-        upload: {
-          uuid: 'abc123'
-        },
-        name: 'file1.txt',
-        size: '300'
-      }
-      const expectedMap = new Map()
-      const expectedDoneMap = expectedMap.set(event.upload.uuid, {
-        name: event.name,
-        size: event.size,
-        status: 'done'
-      })
-
-      const dropZone = wrapper.findComponent(vue2DropZone)
-
-      expect(spyDropZoneFileAdded).not.toHaveBeenCalled()
-
-      // drag and drop cannot be performed in unit tests
-      // only checking how wrapper responds when dropzone emits the event specified below
-      await dropZone.vm.$emit('vdropzone-file-added', event)
-
-      expect(spyDropZoneFileAdded).toHaveBeenCalledTimes(1)
-      expect(wrapper.vm.uploadedFilesChangeTracker).toBe(1)
-
-      await wrapper.vm.$nextTick()
-
-      expect(wrapper.vm.uploadedFilesChangeTracker).toBe(2)
-      expect(wrapper.vm.uploadedFiles).toMatchObject(expectedDoneMap)
-
-      await wrapper.vm.$nextTick()
-
-      const tableElement = wrapper.find(ocTableSimpleStubSelector)
-      const rows = tableElement.findAll(ocTableRowStubSelector)
-
-      expect(rows.length).toBe(1)
 
       expect(wrapper).toMatchSnapshot()
     })
@@ -212,7 +105,22 @@ function getShallowWrapper({ store = createStore(), loading = false, errorMessag
     localVue,
     store,
     mocks: {
-      $route
+      $route,
+      $router: {
+        currentRoute: { name: 'some-route' },
+        resolve: (r) => {
+          return { href: r.name }
+        },
+        afterEach: jest.fn()
+      },
+      $uppyService: {
+        $on: jest.fn(),
+        useDropTarget: jest.fn(),
+        useXhr: jest.fn()
+      }
+    },
+    setup: () => {
+      return {}
     },
     data() {
       return {
