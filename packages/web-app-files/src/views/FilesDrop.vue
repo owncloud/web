@@ -57,7 +57,6 @@ export default {
 
     onMounted(() => {
       uppyService.$on('filesSelected', instance.onFilesSelected)
-      uppyService.$on('uploadSuccess', instance.onFileSuccess)
       uppyService.$on('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
@@ -68,7 +67,6 @@ export default {
 
     onUnmounted(() => {
       uppyService.$off('filesSelected', instance.onFilesSelected)
-      uppyService.$off('uploadSuccess', instance.onFileSuccess)
       uppyService.$off('uploadError', instance.onFileError)
     })
 
@@ -165,10 +163,6 @@ export default {
       }))
 
       this.$uppyService.uploadFiles(uppyResources)
-    },
-
-    onFileSuccess(file) {
-      this.$uppyService.$emit('fileUploadedSuccessfully', file)
     },
 
     onFileError(error) {

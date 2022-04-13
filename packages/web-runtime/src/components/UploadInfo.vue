@@ -110,8 +110,12 @@ export default {
       this.filesUploading = 0
       this.uploadCancelled = true
     })
-    this.$uppyService.$on('fileUploadedSuccessfully', (file, route) => {
-      this.successfulUploads.push({ ...file, targetRoute: route })
+    this.$uppyService.$on('uploadSuccess', (file) => {
+      this.successfulUploads.push({
+        ...file,
+        path: `${file.meta.relativeFolder}/${file.name}`,
+        targetRoute: file.meta.route
+      })
     })
   },
   methods: {

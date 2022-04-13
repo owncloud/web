@@ -158,7 +158,6 @@ export class UppyService extends Vue {
       this.$emit('uploadCompleted')
       result.successful.forEach((file) => {
         this.$emit('uploadSuccess', file)
-        console.log('SUCCESS FOR: ', file.name)
         this.uppy.removeFile(file.id)
       })
 
@@ -208,7 +207,6 @@ export class UppyService extends Vue {
   uploadFiles(files: UppyResource[]) {
     files.forEach((file) => {
       try {
-        console.log('START UPLOAD FOR: ', file.name)
         this.uppy.addFile(file)
       } catch (err) {
         console.error('error upload file:', file)

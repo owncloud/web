@@ -280,7 +280,6 @@ export default defineComponent({
         }
 
         resource = buildResource(resource)
-        this.$uppyService.$emit('fileUploadedSuccessfully', resource, fileRoute)
 
         // Update table only if the file was uploaded to the current directory
         if (fileIsInCurrentPath) {
