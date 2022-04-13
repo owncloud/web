@@ -1,0 +1,6 @@
+Enhancement: Introduce web-app-user-management app
+
+We've added the app web-app-user-management with the following features
+* Listing, creating, deleting and editing users
+* Listing, creating, deleting and editing group
+* Universal search in users and groups view
