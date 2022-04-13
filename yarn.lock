@@ -2747,39 +2747,39 @@ __metadata:
   linkType: hard
 
 "@uppy/companion-client@npm:^2.0.4, @uppy/companion-client@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "@uppy/companion-client@npm:2.0.5"
+  version: 2.0.6
+  resolution: "@uppy/companion-client@npm:2.0.6"
   dependencies:
-    "@uppy/utils": ^4.0.5
+    "@uppy/utils": ^4.0.6
     namespace-emitter: ^2.0.1
-  checksum: a68bbd4d7bb65b9eb2901ad409e4704662029e7b5f5c4d350cbbfeaf6e4995a0ff66cedfdaa31b1c46806398f446a196f33bab2877222feed0b10627cb539158
+  checksum: 2a60c70a280b4c7d898d5c0b4b58b0088dc4dc2937b7cf426c6a29a9a404a9db218fa6b909f892eb8a886106882943e2ccfc05b309fa760d90bef76039bc7b52
   languageName: node
   linkType: hard
 
 "@uppy/core@npm:^2.1.7":
-  version: 2.1.7
-  resolution: "@uppy/core@npm:2.1.7"
+  version: 2.1.8
+  resolution: "@uppy/core@npm:2.1.8"
   dependencies:
     "@transloadit/prettier-bytes": 0.0.7
     "@uppy/store-default": ^2.0.3
-    "@uppy/utils": ^4.0.5
+    "@uppy/utils": ^4.0.6
     lodash.throttle: ^4.1.1
     mime-match: ^1.0.2
     namespace-emitter: ^2.0.1
     nanoid: ^3.1.25
     preact: ^10.5.13
-  checksum: 161ecf4315fb3ff2db3ad7beceac5b94ca42e766d98658b62da9d10645c1fc9324f8c1949ff00637aef74adaac88a51e1f06cf47fbd47888679a0cc87871fa89
+  checksum: 2c4e1febef1cd7ef841aa9634773fa7eccc9737b34412152964ff384a0ced32b85cadc3532de7de7c74ae7da8887d2e8accd7e5b9f1df40cdec72e65441f3aff
   languageName: node
   linkType: hard
 
 "@uppy/drop-target@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@uppy/drop-target@npm:1.1.1"
+  version: 1.1.2
+  resolution: "@uppy/drop-target@npm:1.1.2"
   dependencies:
-    "@uppy/utils": ^4.0.3
+    "@uppy/utils": ^4.0.5
   peerDependencies:
-    "@uppy/core": ^2.0.0
-  checksum: 33825bbe77ac780c939886f0a9be91c6ce5a5b8f93b239b27ed428d78ccd57906e934ffcf2b9524fc0d2df1f6e31e353612fe26a56ed82dad4a1a527eca7f664
+    "@uppy/core": ^2.1.6
+  checksum: fc237303e0377182ec72288ade6fca9b3a6ee4344ff4930844efb460d3768b6273be3982c28726c8b134fc2966ea98d129e003ffaa96f1254d0f004d75726b2a
   languageName: node
   linkType: hard
 
@@ -2818,12 +2818,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/utils@npm:^4.0.3, @uppy/utils@npm:^4.0.4, @uppy/utils@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "@uppy/utils@npm:4.0.5"
+"@uppy/utils@npm:^4.0.4, @uppy/utils@npm:^4.0.5, @uppy/utils@npm:^4.0.6":
+  version: 4.0.6
+  resolution: "@uppy/utils@npm:4.0.6"
   dependencies:
     lodash.throttle: ^4.1.1
-  checksum: 55c2522ae1bad09b8bb706c90bdb754e3c74c48738f8cb88437e726d8fe7103380caea8daa7016ce7d4dc73e99862f60a585a052291393a2d76ef67b3d5b44d8
+  checksum: 8773c4b1d742d65237c48c0575f1a933a20ffdcd8da462141b19649c027b0b88e4aa5dcb26ead1e830c967b904e51315fb61ea72ee0273614b463122d2b63066
   languageName: node
   linkType: hard
 
@@ -6424,11 +6424,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "files@workspace:packages/web-app-files"
   dependencies:
-    "@uppy/core": ^2.1.7
-    "@uppy/drop-target": ^1.1.1
-    "@uppy/status-bar": ^2.1.3
-    "@uppy/tus": ^2.2.2
-    "@uppy/xhr-upload": ^2.0.7
     copy-to-clipboard: ^3.3.1
   languageName: unknown
   linkType: soft
@@ -10861,9 +10856,9 @@ __metadata:
   linkType: hard
 
 "preact@npm:^10.5.13":
-  version: 10.6.4
-  resolution: "preact@npm:10.6.4"
-  checksum: 09c496bb3cbe231fb6ef218b44d29af53a1f4bf1ae2e5929ef0faf70f9ecffaa475b4459ef72dd8f0f5396c255172c7c26de5c7d2eb6f6849e36e724c7aa86b7
+  version: 10.7.1
+  resolution: "preact@npm:10.7.1"
+  checksum: e99d08bd38372e78ce1c84e68685cad66adf076bd95069bc8bcd32c9903a4df09c01d5b04aad849527362b67cc2c09446b647f72de4e67d0578fdea0f904f28f
   languageName: node
   linkType: hard
 
@@ -13928,6 +13923,11 @@ __metadata:
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
+    "@uppy/core": ^2.1.7
+    "@uppy/drop-target": ^1.1.1
+    "@uppy/status-bar": ^2.1.3
+    "@uppy/tus": ^2.2.2
+    "@uppy/xhr-upload": ^2.0.7
     "@vue/composition-api": ^1.4.9
     axios: ^0.26.1
     cross-fetch: ^3.0.6

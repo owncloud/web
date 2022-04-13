@@ -4,11 +4,6 @@
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@uppy/core": "^2.1.7",
-    "@uppy/drop-target": "^1.1.1",
-    "@uppy/status-bar": "^2.1.3",
-    "@uppy/tus": "^2.2.2",
-    "@uppy/xhr-upload": "^2.0.7",
     "copy-to-clipboard": "^3.3.1"
   }
 }
