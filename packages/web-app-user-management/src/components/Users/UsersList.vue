@@ -1,5 +1,6 @@
 <template>
   <oc-table
+    ref="table"
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :fields="fields"
@@ -52,6 +53,7 @@
 import { onBeforeUnmount, ref } from '@vue/composition-api'
 import { Registry } from '../../services'
 import Fuse from 'fuse.js'
+import Mark from 'mark.js'
 
 export default {
   name: 'UsersList',
@@ -81,7 +83,8 @@ export default {
   data() {
     return {
       sortBy: 'onPremisesSamAccountName',
-      sortDir: 'asc'
+      sortDir: 'asc',
+      markInstance: null
     }
   },
   computed: {
@@ -145,6 +148,24 @@ export default {
       return this.selectedUsers.map((user) => user.id)
     }
   },
+  watch: {
+    searchTerm() {
+      if (!this.markInstance) {
+        return
+      }
+      this.markInstance.unmark()
+      this.markInstance.mark(this.searchTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.markInstance = new Mark(this.$refs.table.$el)
+    })
+  },
   methods: {
     filter(users, searchTerm) {
       if (!(searchTerm || '').trim()) {
@@ -188,3 +209,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.highlight-mark {
+  background: yellow;
+}
+</style>
