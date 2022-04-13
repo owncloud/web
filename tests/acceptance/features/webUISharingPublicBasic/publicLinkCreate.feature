@@ -186,7 +186,11 @@ Feature: Create public link shares
       Public link was created successfully and copied into your clipboard.
       """
 
-
+  # This test is skipped in OCIS as it's starting to fail frequently
+  # and it won't be that much relevant after sharing jail is implemented
+  # see issue https://github.com/owncloud/web/issues/6419 and
+  # https://github.com/owncloud/web/issues/6321#issuecomment-1057813530 for more context
+  @skipOnOCIS
   Scenario: Sharing the share_folder as public link is not possible
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
