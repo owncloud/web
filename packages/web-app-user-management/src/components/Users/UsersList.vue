@@ -32,7 +32,7 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ getUserRole(item) }}</template>
+    <template #role="{ item }"> {{ item.role.displayName }} </template>
     <template #actions="{ item }">
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
@@ -60,10 +60,6 @@ export default {
   props: {
     users: {
       type: Array,
-      required: true
-    },
-    userRoles: {
-      type: Object,
       required: true
     },
     selectedUsers: {
@@ -175,21 +171,22 @@ export default {
         includeScore: true,
         useExtendedSearch: true,
         threshold: 0.3,
-        keys: ['displayName', 'mail', 'onPremisesSamAccountName']
+        keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
       })
 
       return usersSearchEngine.search(searchTerm).map((r) => r.item)
     },
     orderBy(list, prop, desc) {
       return [...list].sort((user1, user2) => {
-        if (prop === 'role') {
-          const role1 = this.getUserRole(user1)
-          const role2 = this.getUserRole(user2)
-          return desc ? role2.localeCompare(role1) : role1.localeCompare(role2)
-        }
+        let a, b
 
-        const a = user1[prop] || ''
-        const b = user2[prop] || ''
+        if (prop === 'role') {
+          a = user1.role?.displayName || ''
+          b = user2.role?.displayName || ''
+        } else {
+          a = user1[prop] || ''
+          b = user2[prop] || ''
+        }
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
@@ -202,9 +199,6 @@ export default {
       const translated = this.$gettext('Select %{ user }')
 
       return this.$gettextInterpolate(translated, { user: user.displayName }, true)
-    },
-    getUserRole(user) {
-      return user.id in this.userRoles ? this.userRoles[user.id].displayName : ''
     }
   }
 }

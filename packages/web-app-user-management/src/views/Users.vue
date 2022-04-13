@@ -71,7 +71,6 @@
           <div v-else>
             <UsersList
               :users="users"
-              :user-roles="userRoles"
               :selected-users="selectedUsers"
               class="oc-mt-m"
               @toggleSelectUser="toggleSelectUser"
@@ -91,15 +90,10 @@
           @close="closeSideBar"
         >
           <template #body>
-            <DetailsPanel
-              v-if="activePanel === 'DetailsPanel'"
-              :users="selectedUsers"
-              :user-roles="userRoles"
-            />
+            <DetailsPanel v-if="activePanel === 'DetailsPanel'" :users="selectedUsers" />
             <EditPanel
               v-if="activePanel === 'EditPanel'"
               :users="selectedUsers"
-              :user-roles="userRoles"
               :roles="roles"
               @confirm="editUser"
             />
@@ -170,7 +164,7 @@ export default {
      * Setting api calls are just temporary and will be replaced with the graph api,
      * as the backend supports it.
      */
-    const loadUserAssignmentTask = useTask(function* (signal, ref) {
+    const loadUserRoleTask = useTask(function* (signal, ref) {
       const userAssignmentResponse = yield axios.post(
         '/api/v0/settings/assignments-list',
         {
@@ -182,6 +176,17 @@ export default {
           }
         }
       )
+      const assignments = userAssignmentResponse.data?.assignments
+      ref.user.role = {}
+      const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
+
+      if (roleAssignment) {
+        const role = roles.value.find((role) => role.id === roleAssignment.roleId)
+        if (role) {
+          ref.user.role = role
+        }
+      }
+
       userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
     })
 
@@ -192,14 +197,13 @@ export default {
       yield loadRolesTask.perform()
 
       for (const user of users.value) {
-        yield loadUserAssignmentTask.perform({ user })
+        yield loadUserRoleTask.perform({ user })
       }
     })
 
     return {
       users,
       roles,
-      userAssignments,
       loadResourcesTask,
       graphClient
     }
@@ -215,31 +219,6 @@ export default {
   },
   computed: {
     ...mapGetters(['getToken']),
-    userRoles() {
-      return this.users.reduce((acc, user) => {
-        if (!(user.id in this.userAssignments)) {
-          return acc
-        }
-
-        const userAssignmentList = this.userAssignments[user.id]
-
-        const userRoleAssignment = userAssignmentList.find((assignment) => 'roleId' in assignment)
-
-        if (!userRoleAssignment) {
-          return acc
-        }
-
-        const role = this.roles.find((role) => role.id === userRoleAssignment.roleId)
-
-        if (!role) {
-          return acc
-        }
-
-        acc[user.id] = role
-
-        return acc
-      }, {})
-    },
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
@@ -427,7 +406,7 @@ export default {
       }
     },
 
-    async editUser({ editUser, editUserRole }) {
+    async editUser(editUser) {
       try {
         await this.graphClient.users.editUser(editUser.id, editUser)
 
@@ -435,11 +414,11 @@ export default {
          * Setting api calls are just temporary and will be replaced with the graph api,
          * as the backend supports it.
          */
-        const assignmentsAddResponse = await axios.post(
+        await axios.post(
           '/api/v0/settings/assignments-add',
           {
             account_uuid: editUser.id,
-            role_id: editUserRole.id
+            role_id: editUser.role.id
           },
           {
             headers: {
@@ -448,11 +427,13 @@ export default {
           }
         )
 
-        const user = this.users.find((user) => user.id === editUser.id)
-        Object.assign(user, editUser)
-        this.userAssignments = Object.assign({}, this.userAssignments, {
-          [editUser.id]: [assignmentsAddResponse.data?.assignment]
-        })
+        const user = this.users.findIndex((user) => user.id === editUser.id)
+        this.$set(this.users, user, editUser)
+        /**
+         * The user object gets actually exchanged, therefore we update the selected users
+         */
+        this.selectedUsers = [editUser]
+
         this.showMessage({
           title: this.$gettext('User was edited successfully')
         })
