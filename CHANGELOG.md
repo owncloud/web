@@ -8,10 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
 Details
 -------
+
+* Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
+
+   We've added the app "user-management" with the following features: * Listing, creating,
+   deleting and editing users * Listing, creating, deleting and editing group * Universal search
+   in users and groups view
+
+   https://github.com/owncloud/web/issues/6673
+   https://github.com/owncloud/web/issues/6674
+   https://github.com/owncloud/web/issues/6675
+   https://github.com/owncloud/web/issues/6676
+   https://github.com/owncloud/web/issues/6677
 
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
