@@ -29,26 +29,6 @@ describe('UsersList', () => {
     })
   })
 
-  describe('method "getUserRole"', () => {
-    it('should return user role if record is set', () => {
-      const wrapper = getWrapper({
-        propsData: {
-          userRoles: { 1: { displayName: 'admin' } }
-        }
-      })
-      expect(wrapper.vm.getUserRole({ id: 1 })).toEqual('admin')
-    })
-    it('should return empty string if record is not set', () => {
-      const wrapper = getWrapper({
-        propsData: {
-          users: [{ id: '1', displayName: 'jan' }],
-          userRoles: {}
-        }
-      })
-      expect(wrapper.vm.getUserRole({ id: 1 })).toEqual('')
-    })
-  })
-
   describe('method "orderBy"', () => {
     it('should return an ascending ordered list while desc is set to false', () => {
       const wrapper = getWrapper()
@@ -61,12 +41,35 @@ describe('UsersList', () => {
         )
       ).toEqual([{ displayName: 'admin' }, { displayName: 'user' }])
     })
-    it('should return an descending ordered list while desc is set to true', () => {
+    it('should return an descending ordered list based on role while desc is set to true', () => {
       const wrapper = getWrapper()
 
       expect(
         wrapper.vm.orderBy([{ displayName: 'admin' }, { displayName: 'user' }], 'displayName', true)
       ).toEqual([{ displayName: 'user' }, { displayName: 'admin' }])
+    })
+
+    it('should return ascending ordered list based on role while desc is set to false', () => {
+      const wrapper = getWrapper()
+
+      expect(
+        wrapper.vm.orderBy(
+          [{ role: { displayName: 'user' } }, { role: { displayName: 'admin' } }],
+          'role',
+          false
+        )
+      ).toEqual([{ role: { displayName: 'admin' } }, { role: { displayName: 'user' } }])
+    })
+    it('should return an role based descending ordered list while desc is set to true', () => {
+      const wrapper = getWrapper()
+
+      expect(
+        wrapper.vm.orderBy(
+          [{ role: { displayName: 'admin' } }, { role: { displayName: 'user' } }],
+          'role',
+          true
+        )
+      ).toEqual([{ role: { displayName: 'user' } }, { role: { displayName: 'admin' } }])
     })
   })
 
@@ -97,7 +100,6 @@ function getWrapper({ propsData = {} } = {}) {
     },
     propsData: {
       users: [],
-      userRoles: {},
       selectedUsers: [],
       ...propsData
     },

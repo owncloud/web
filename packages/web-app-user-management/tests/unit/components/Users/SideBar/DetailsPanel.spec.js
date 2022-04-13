@@ -56,24 +56,6 @@ describe('DetailsPanel', () => {
       expect(wrapper.vm.multipleUsers).toBeTruthy()
     })
   })
-
-  describe('computed method "userRole"', () => {
-    it('should be empty if no role is assigned', () => {
-      const wrapper = getWrapper({
-        propsData: { users: [{ id: '1', displayName: 'user' }], userRoles: {} }
-      })
-      expect(wrapper.vm.userRole).toEqual('')
-    })
-    it('should be set if user role is assigned', () => {
-      const wrapper = getWrapper({
-        propsData: {
-          users: [{ id: '1', displayName: 'user' }],
-          userRoles: { 1: { displayName: 'admin' } }
-        }
-      })
-      expect(wrapper.vm.userRole).toEqual('admin')
-    })
-  })
 })
 
 function getWrapper({ propsData = {} } = {}) {
@@ -87,7 +69,6 @@ function getWrapper({ propsData = {} } = {}) {
       $gettextInterpolate: jest.fn()
     },
     propsData: {
-      userRoles: {},
       ...propsData
     },
     stubs: {

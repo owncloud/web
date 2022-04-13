@@ -84,7 +84,6 @@ function getWrapper({ propsData = {} } = {}) {
     propsData: {
       users: [{ id: '1', displayName: 'jan', mail: 'jan@owncloud.com' }],
       roles: [{ id: '1', displayName: 'admin' }],
-      userRoles: { 1: { id: '1', displayName: 'admin' } },
       ...propsData
     },
     stubs: {

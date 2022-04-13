@@ -32,7 +32,7 @@
         default-value="●●●●●●●●"
       />
       <oc-select
-        v-model="editUserRole"
+        v-model="editUser.role"
         :label="$gettext('Role')"
         option-label="displayName"
         :options="roles"
@@ -45,7 +45,7 @@
       :compare-object="compareObjectUser"
       :confirm-button-disabled="invalidFormData"
       @revert="revertChanges"
-      @confirm="$emit('confirm', { editUser, editUserRole })"
+      @confirm="$emit('confirm', editUser)"
     ></compare-save-dialog>
   </div>
 </template>
@@ -63,10 +63,6 @@ export default {
       type: Array,
       required: true
     },
-    userRoles: {
-      type: Object,
-      required: true
-    },
     roles: {
       type: Array,
       required: true
@@ -75,7 +71,6 @@ export default {
   data() {
     return {
       editUser: {},
-      editUserRole: {},
       formData: {
         displayName: {
           errorMessage: '',
@@ -98,10 +93,10 @@ export default {
     },
 
     originalObjectUser() {
-      return { user: { ...this.user, passwordProfile: { password: '' }, role: this.userRole } }
+      return { user: { ...this.user, passwordProfile: { password: '' } } }
     },
     compareObjectUser() {
-      return { user: { ...this.editUser, role: this.editUserRole } }
+      return { user: { ...this.editUser } }
     },
     invalidFormData() {
       return Object.values(this.formData)
@@ -113,13 +108,6 @@ export default {
     user: {
       handler: function () {
         this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
-      },
-      deep: true,
-      immediate: true
-    },
-    roles: {
-      handler: function () {
-        this.editUserRole = { ...this.roles.find((role) => role.id === this.userRole.id) }
       },
       deep: true,
       immediate: true
@@ -154,7 +142,6 @@ export default {
 
     revertChanges() {
       this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
-      this.editUserRole = this.roles.find((role) => role.id === this.userRole.id)
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''

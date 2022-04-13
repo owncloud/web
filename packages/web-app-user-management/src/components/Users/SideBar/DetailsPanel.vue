@@ -35,7 +35,7 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
           <td>
-            <span v-text="userRole" />
+            <span v-if="user.role" v-text="user.role.displayName" />
           </td>
         </tr>
       </table>
@@ -48,10 +48,6 @@ export default {
   props: {
     users: {
       type: Array,
-      required: true
-    },
-    userRoles: {
-      type: Object,
       required: true
     }
   },
@@ -69,9 +65,6 @@ export default {
       return this.$gettextInterpolate('%{count} users selected', {
         count: this.users.length
       })
-    },
-    userRole() {
-      return this.user.id in this.userRoles ? this.userRoles[this.user.id].displayName : ''
     }
   }
 }

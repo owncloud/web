@@ -42,14 +42,21 @@ describe('Users view', () => {
           }
         })
       })
-      const wrapper = getMountedWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.editUser({
-        editUser: { id: '1', displayName: 'jan' },
-        editUserRole: { id: '1', displayName: 'admin' }
-      })
+      const editUser = { id: '1', displayName: 'jan', role: { id: '1', displayName: 'admin' } }
 
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: []
+        }
+      })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const setStub = jest.spyOn(wrapper.vm, '$set')
+
+      await wrapper.vm.editUser(editUser)
+
+      expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
       expect(showMessageStub).toHaveBeenCalled()
+      expect(setStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
@@ -60,8 +67,7 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({ resolveEditUser: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editUser({
-        editUser: {},
-        editUserRole: {}
+        editUser: {}
       })
 
       expect(showMessageStub).toHaveBeenCalled()
@@ -126,110 +132,6 @@ describe('Users view', () => {
         data: { selectedUsers: [{ id: '1' }] }
       })
       expect(wrapper.vm.allUsersSelected).toBeFalsy()
-    })
-  })
-
-  describe('computed method "userRoles"', () => {
-    it('should contain user role if record exists in userAssignments', () => {
-      const user = { id: '1' }
-      const wrapper = getMountedWrapper({
-        mocks: {
-          users: [user],
-          userAssignments: {
-            1: [
-              {
-                accountUuid: '1',
-                roleId: '1'
-              }
-            ]
-          },
-          roles: [
-            {
-              displayName: 'admin',
-              id: '1'
-            }
-          ]
-        }
-      })
-      expect(wrapper.vm.userRoles[user.id]).toEqual({
-        displayName: 'admin',
-        id: '1'
-      })
-    })
-    it('should not contain user role if userAssignments is empty', () => {
-      const user = { id: '1' }
-      const wrapper = getMountedWrapper({
-        mocks: { users: [user], userAssignments: [] }
-      })
-      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
-    })
-    it('should not contain user role if record does not exist in userAssignments', () => {
-      const user = { id: '1' }
-      const wrapper = getMountedWrapper({
-        mocks: {
-          users: [user],
-          userAssignments: {
-            2: [
-              {
-                accountUuid: '2',
-                roleId: '1'
-              }
-            ]
-          },
-          roles: [
-            {
-              displayName: 'admin',
-              id: '1'
-            }
-          ]
-        }
-      })
-      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
-    })
-    it('should not contain user role if assigned role does not exist', () => {
-      const user = { id: '1' }
-      const wrapper = getMountedWrapper({
-        mocks: {
-          users: [user],
-          userAssignments: {
-            1: [
-              {
-                accountUuid: '1',
-                roleId: '1'
-              }
-            ]
-          },
-          roles: [
-            {
-              displayName: 'admin',
-              id: '2'
-            }
-          ]
-        }
-      })
-      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
-    })
-    it('should not contain user role if userAssignment does not contain roleId', () => {
-      const user = { id: '1' }
-      const wrapper = getMountedWrapper({
-        mocks: {
-          users: [user],
-          userAssignments: {
-            1: [
-              {
-                accountUuid: '1'
-              }
-            ]
-          },
-          roles: [
-            {
-              displayName: 'admin',
-              id: '2'
-            }
-          ]
-        }
-      })
-      expect(user.id in wrapper.vm.userRoles).toBeFalsy()
     })
   })
 
