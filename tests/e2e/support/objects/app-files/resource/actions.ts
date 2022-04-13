@@ -301,3 +301,4 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
   )
 }
+sfas
