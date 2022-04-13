@@ -19,10 +19,8 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    const resourceSelector = `[data-test-resource-name="${name}"]`
-    await page.waitForSelector(resourceSelector)
     await Promise.all([
-      page.locator(resourceSelector).click(),
+      page.locator(`[data-test-resource-name="${name}"]`).click(),
       page.waitForResponse((resp) => resp.url().endsWith(encodeURIComponent(name)))
     ])
   }
@@ -303,4 +301,3 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
   )
 }
-sfas
