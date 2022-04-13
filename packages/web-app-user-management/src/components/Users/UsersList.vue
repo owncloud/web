@@ -213,5 +213,6 @@ export default {
 <style lang="scss">
 .highlight-mark {
   background: yellow;
+  color: var(--oc-color-text-muted);
 }
 </style>
