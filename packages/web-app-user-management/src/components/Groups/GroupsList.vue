@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     filter(groups, searchTerm) {
-      if (!searchTerm) {
+      if (!(searchTerm || '').trim()) {
         return groups
       }
       const groupsSearchEngine = new Fuse(groups, {

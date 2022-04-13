@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     filter(users, searchTerm) {
-      if (!searchTerm) {
+      if (!(searchTerm || '').trim()) {
         return users
       }
       const usersSearchEngine = new Fuse(users, {

@@ -29,7 +29,12 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public get label(): string {
-    return $gettext(`Search ${kind(this.router.currentRoute)} ↵`)
+    switch (kind(this.router.currentRoute)) {
+      case 'users':
+        return $gettext('Search users ↵')
+      case 'groups':
+        return $gettext('Search groups ↵')
+    }
   }
 
   public activate(term: string): void {
