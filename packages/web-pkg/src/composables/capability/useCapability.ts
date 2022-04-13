@@ -30,3 +30,11 @@ export const useCapabilityFilesSharingResharing = createCapabilityComposable(
 )
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
+export const useCapabilityFilesTusSupportHttpMethodOverride = createCapabilityComposable<boolean>(
+  'files.tus_support.http_method_override',
+  false
+)
+export const useCapabilityFilesTusSupportMaxChunkSize = createCapabilityComposable<number>(
+  'files.tus_support.max_chunk_size',
+  0
+)

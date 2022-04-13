@@ -1,14 +1,18 @@
-const DropTarget = require('@uppy/drop-target')
+import DropTarget from '@uppy/drop-target'
 
 /**
  * Custom Drop Target plugin
  *
  * It adds the possibility to have a custom method for adding files to uppy.
  */
-module.exports = class CustomDropTarget extends DropTarget {
+export class CustomDropTarget extends DropTarget {
   addFiles = (files) => {
-    if (this.opts.addFilesToUppy) {
-      this.opts.addFilesToUppy(files)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (this.opts.uppyService) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.opts.uppyService.$emit('filesSelected', files)
       return
     }
 
@@ -25,6 +29,8 @@ module.exports = class CustomDropTarget extends DropTarget {
     })
 
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.uppy.addFiles(descriptors)
     } catch (err) {
       this.uppy.log(err)

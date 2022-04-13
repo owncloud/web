@@ -21,6 +21,12 @@
 
 <script>
 export default {
+  mounted() {
+    this.$uppyService.registerUploadInput(this.$refs.input)
+  },
+  beforeDestroy() {
+    this.$uppyService.removeUploadInput(this.$refs.input.id)
+  },
   methods: {
     triggerUpload() {
       this.$refs.input.click()

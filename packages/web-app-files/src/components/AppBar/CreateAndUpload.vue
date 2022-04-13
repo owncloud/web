@@ -100,7 +100,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
 
@@ -115,18 +115,42 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 // TODO: Simplify to one UploadButton component and fill from here
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
-import CustomDropTarget from 'web-pkg/src/uppy/customDropTarget'
-import CustomTus from 'web-pkg/src/uppy/customTus'
-import { uppyService } from 'web-pkg/src/services'
+import { defineComponent, getCurrentInstance, onMounted, onUnmounted } from '@vue/composition-api'
+import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
+import { useUploadHelpers } from '../../composables/upload/useUploadHelpers'
 
-export default {
+export default defineComponent({
   components: {
     FileUpload,
     FolderUpload
   },
   mixins: [MixinFileActions],
   setup() {
+    const instance = getCurrentInstance().proxy
+    const uppyService = instance.$uppyService
+
+    onMounted(() => {
+      uppyService.$on('filesSelected', instance.onFilesSelected)
+      uppyService.$on('uploadSuccess', instance.onFileSuccess)
+      uppyService.$on('uploadError', instance.onFileError)
+
+      uppyService.useDropTarget({
+        targetSelector: '#files-view',
+        uppyService
+      })
+    })
+
+    onUnmounted(() => {
+      uppyService.$off('filesSelected', instance.onFilesSelected)
+      uppyService.$off('uploadSuccess', instance.onFileSuccess)
+      uppyService.$off('uploadError', instance.onFileError)
+    })
+
     return {
+      ...useUpload({
+        uppyService
+      }),
+      ...useUploadHelpers(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
@@ -139,8 +163,7 @@ export default {
   data: () => ({
     newFileAction: null,
     path: '',
-    fileFolderCreationLoading: false,
-    uppy: null
+    fileFolderCreationLoading: false
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
@@ -154,29 +177,6 @@ export default {
         return []
       }
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
-    },
-
-    currentPath() {
-      const path = this.$route.params.item || ''
-      if (path.endsWith('/')) {
-        return path
-      }
-      return path + '/'
-    },
-
-    headers() {
-      if (this.isPublicLocation) {
-        const password = this.publicLinkPassword
-
-        if (password) {
-          return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
-        }
-
-        return {}
-      }
-      return {
-        Authorization: 'Bearer ' + this.getToken
-      }
     },
 
     showActions() {
@@ -242,53 +242,7 @@ export default {
           this.currentFolder.permissions.indexOf('M') >= 0) ||
         this.isPublicLocation
       )
-    },
-
-    uploadPath() {
-      if (this.isPublicLocation) {
-        return this.$client.publicFiles.getFileUrl(this.currentPath)
-      }
-
-      if (this.isSpacesProjectLocation) {
-        const path = buildWebDavSpacesPath(this.$route.params.storageId, this.currentPath)
-        return this.$client.files.getFileUrl(path)
-      }
-
-      return this.$client.files.getFileUrl(buildWebDavFilesPath(this.user.id, this.currentPath))
     }
-  },
-  watch: {
-    currentFolder: {
-      handler: async function (currentFolder) {
-        await this.$nextTick()
-        if (!currentFolder || !this.showActions) {
-          return
-        }
-
-        if (this.uppy) {
-          const uploadInputs = this.getUploadInputs()
-          uploadInputs.forEach((el) => {
-            const listenerRegistered = el.getAttribute('listener')
-            if (!listenerRegistered) {
-              this.addNewFileEventListener(el)
-            }
-          })
-        } else {
-          this.initializeUppy()
-        }
-      }
-    }
-  },
-  mounted() {
-    if (this.showActions && !this.uppy) {
-      this.initializeUppy()
-    }
-  },
-  beforeDestroy() {
-    // maybe bad that we close uppy this early, eventually on rerender even?
-    // currently very brittle, selecting a resource in the table
-    // results in a rerendering that logs an error since uppy is gone before it can close
-    // this.uppy.close()
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadIndicators']),
@@ -296,23 +250,19 @@ export default {
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
-    async onFileSuccess(file) {
+    async onFileSuccess(file: UppyResource) {
       try {
-        let pathFileWasUploadedTo = file.meta.currentPath
-        if (file.meta.relativePath) {
-          pathFileWasUploadedTo += file.meta.relativePath
+        let pathFileWasUploadedTo = file.meta.currentFolder
+        if (file.meta.relativeFolder) {
+          pathFileWasUploadedTo += file.meta.relativeFolder
         }
 
         const fileRoute = file.meta.route
         const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
 
-        if (file.name) {
-          file = file.name
-        }
-
         await this.$nextTick()
 
-        let path = pathUtil.join(pathFileWasUploadedTo, file)
+        let path = pathUtil.join(pathFileWasUploadedTo, file.name)
         let resource
 
         if (this.isPersonalLocation) {
@@ -330,7 +280,7 @@ export default {
         }
 
         resource = buildResource(resource)
-        this.$root.$emit('fileUploadedSuccessfully', resource, fileRoute)
+        this.$uppyService.$emit('fileUploadedSuccessfully', resource, fileRoute)
 
         // Update table only if the file was uploaded to the current directory
         if (fileIsInCurrentPath) {
@@ -659,10 +609,11 @@ export default {
       return null
     },
 
-    async addFilesToUppy(files) {
+    onFilesSelected(files: File[]) {
       const conflicts = []
-      for (const file of files) {
-        const relativeFilePath = file.webkitRelativePath || file.relativePath || ''
+      const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
+      for (const file of uppyResources) {
+        const relativeFilePath = file.meta.relativeFilePath
         if (relativeFilePath) {
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
@@ -688,190 +639,19 @@ export default {
       }
 
       if (conflicts.length) {
-        this.displayOverwriteDialog(files, conflicts)
+        this.displayOverwriteDialog(uppyResources, conflicts)
       } else {
-        await this.createDirectoryTree(files)
-        this.startUppyUpload(files)
+        this.handleUppyFileUpload(uppyResources)
       }
     },
 
-    async createDirectoryTree(files) {
-      const basePath = this.currentPath
-      const createdFolders = []
-      for (const file of files) {
-        const relativeFilePath = file.webkitRelativePath || file.relativePath || ''
-        const directory = relativeFilePath.substring(0, relativeFilePath.lastIndexOf('/'))
-        if (!directory || createdFolders.includes(directory)) {
-          continue
-        }
-
-        const relativeParts = directory.replace(/^\/+/, '').split('/')
-        // No need to load folder when it is either deep nested or the user changed paths in between
-        const buildFolderResource = relativeParts.length === 1 || basePath !== this.currentPath
-
-        if (this.publicPage()) {
-          await this.$client.publicFiles.createFolder(basePath, directory, this.publicLinkPassword)
-          if (buildFolderResource) {
-            let resource = await this.$client.publicFiles.getFileInfo(
-              `${basePath}${directory}`,
-              this.publicLinkPassword,
-              DavProperties.PublicLink
-            )
-            resource = buildResource(resource)
-            this.UPSERT_RESOURCE(resource)
-          }
-        } else {
-          const storageId = this.$route.params.storageId
-          const path = storageId
-            ? buildWebDavSpacesPath(storageId, `${basePath}${directory}`)
-            : buildWebDavFilesPath(this.user?.id, `${basePath}${directory}`)
-          await this.$client.files.createFolder(path)
-
-          if (buildFolderResource) {
-            let resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-            resource = buildResource(resource)
-            this.UPSERT_RESOURCE(resource)
-          }
-        }
-
-        createdFolders.push(directory)
-      }
+    async handleUppyFileUpload(files: UppyResource[]) {
+      await this.createDirectoryTree(files)
+      await this.updateStoreForCreatedFolders(files)
+      this.$uppyService.uploadFiles(files)
     },
 
-    startUppyUpload(files) {
-      files.forEach((file) => {
-        const relativeFilePath = file.webkitRelativePath || file.relativePath || null
-        const directory = relativeFilePath
-          ? relativeFilePath.substring(0, relativeFilePath.lastIndexOf('/'))
-          : ''
-
-        let tusEndpoint
-        if (directory) {
-          tusEndpoint = `${this.uploadPath.replace(/\/+$/, '')}/${directory.replace(/^\/+/, '')}`
-        } else {
-          tusEndpoint = this.uploadPath
-        }
-
-        const item = this.$route.params.item ? `${this.$route.params.item}/${directory}` : directory
-        const route = {
-          ...this.$route,
-          params: { ...this.$route.params, item }
-        }
-
-        try {
-          this.uppy.addFile({
-            source: 'file input',
-            name: file.name,
-            type: file.type,
-            data: file,
-            meta: {
-              currentPath: this.currentPath,
-              relativePath: directory,
-              route,
-              tusEndpoint
-            }
-          })
-        } catch (err) {
-          console.error('error upload file:', file)
-          if (err.isRestriction) {
-            // handle restrictions
-            console.error('Restriction error:', err)
-          } else {
-            // handle other errors
-            console.error(err)
-          }
-        }
-      })
-    },
-
-    addNewFileEventListener(el) {
-      el.setAttribute('listener', true)
-      el.addEventListener('change', (event) => {
-        const files = Array.from(event.target.files)
-        this.addFilesToUppy(files)
-      })
-    },
-
-    getUploadInputs() {
-      const uploadInputs = []
-
-      if (this.$refs['file-upload']) {
-        uploadInputs.push(this.$refs['file-upload'].$refs.input)
-      }
-      if (this.$refs['folder-upload']) {
-        uploadInputs.push(this.$refs['folder-upload'].$refs.input)
-      }
-
-      return uploadInputs
-    },
-
-    initializeUppy() {
-      const uploadInputs = this.getUploadInputs()
-
-      this.uppy = uppyService.getUppyInstance({
-        uploadPath: this.uploadPath,
-        capabilities: this.capabilities,
-        configuration: this.configuration,
-        headers: this.headers,
-        $gettext: this.$gettext,
-        customTus: CustomTus
-      })
-
-      uploadInputs.forEach((el) => {
-        this.addNewFileEventListener(el)
-      })
-
-      this.uppy.use(CustomDropTarget, {
-        target: '#files-view',
-        addFilesToUppy: this.addFilesToUppy
-      })
-
-      this.uppy.on('file-added', (file) => {
-        if (this.uppy.getPlugin('XHRUpload')) {
-          const relativeFilePath = file.data.webkitRelativePath || file.data.relativePath || null
-          const filePath = relativeFilePath || file.name
-          this.uppy.setFileState(file.id, {
-            xhrUpload: {
-              endpoint: `${this.uploadPath.replace(/\/+$/, '')}/${filePath.replace(/^\/+/, '')}`
-            }
-          })
-        }
-      })
-
-      this.uppy.on('upload', ({ id, fileIDs }) => {
-        if (fileIDs.length) {
-          this.$root.$emit('fileUploadStarted')
-        }
-      })
-
-      this.uppy.on('upload-error', (file, error, response) => {
-        this.onFileError(error.toString())
-      })
-
-      this.uppy.on('file-removed', () => {
-        uploadInputs.forEach((item) => {
-          item.value = null
-        })
-      })
-
-      this.uppy.on('cancel-all', () => {
-        this.$root.$emit('fileUploadsCancelled')
-      })
-
-      this.uppy.on('complete', (result) => {
-        this.$root.$emit('fileUploadCompleted')
-
-        result.successful.forEach((file) => {
-          this.onFileSuccess(file)
-          this.uppy.removeFile(file.id)
-        })
-        uploadInputs.forEach((item) => {
-          item.value = null
-        })
-      })
-    },
-
-    displayOverwriteDialog(files, conflicts) {
+    displayOverwriteDialog(files: UppyResource[], conflicts) {
       const title = this.$ngettext(
         'File already exists',
         'Some files already exist',
@@ -907,17 +687,16 @@ export default {
         cancelText: this.$gettext('Cancel'),
         confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
         onCancel: this.hideModal,
-        onConfirm: async () => {
+        onConfirm: () => {
           this.hideModal()
-          await this.createDirectoryTree(files)
-          this.startUppyUpload(files)
+          this.handleUppyFileUpload(files)
         }
       }
 
       this.createModal(modal)
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 #create-list {

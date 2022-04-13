@@ -19,40 +19,6 @@
           />
           <div id="previews" hidden />
         </div>
-        <div
-          class="oc-flex oc-flex-center oc-overflow-auto oc-width-1-1 oc-mt"
-          :class="{ 'files-empty': !getUploadedFiles }"
-        >
-          <oc-table-simple v-if="getUploadedFiles" class="oc-width-1-1 oc-width-xxlarge@m">
-            <oc-tbody>
-              <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
-                <oc-td class="oc-pl-rm" v-text="file.name" />
-                <oc-td width="shrink" class="oc-text-nowrap oc-text-muted">
-                  <oc-resource-size :size="file.size" />
-                </oc-td>
-                <oc-td width="shrink" class="oc-pr-rm">
-                  <oc-icon
-                    v-if="file.status === 'done'"
-                    name="checkbox-circle"
-                    size="small"
-                    variation="success"
-                  />
-                  <oc-icon
-                    v-if="file.status === 'error'"
-                    name="information"
-                    size="small"
-                    variation="danger"
-                  />
-                  <oc-spinner
-                    v-if="file.status === 'uploading' || file.status === 'init'"
-                    size="small"
-                    :aria-label="$_ocUploadingFileMessage(file.name)"
-                  />
-                </oc-td>
-              </oc-tr>
-            </oc-tbody>
-          </oc-table-simple>
-        </div>
         <div v-if="errorMessage" class="oc-text-center">
           <h2>
             <translate>An error occurred while loading the public link</translate>
@@ -73,21 +39,49 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
-import { uppyService } from 'web-pkg/src/services'
 import FileUpload from '../components/AppBar/Upload/FileUpload.vue'
-import CustomTus from 'web-pkg/src/uppy/customTus'
-import DropTarget from '@uppy/drop-target'
+import {
+  getCurrentInstance,
+  onMounted,
+  onUnmounted
+} from '@vue/composition-api/dist/vue-composition-api'
+import { useUpload } from 'web-runtime/src/composables/upload'
 
 export default {
   components: {
     FileUpload
   },
+  setup() {
+    const instance = getCurrentInstance().proxy
+    const uppyService = instance.$uppyService
+
+    onMounted(() => {
+      uppyService.$on('filesSelected', instance.onFilesSelected)
+      uppyService.$on('uploadSuccess', instance.onFileSuccess)
+      uppyService.$on('uploadError', instance.onFileError)
+
+      uppyService.useDropTarget({
+        targetSelector: '#files-drop-container',
+        uppyService
+      })
+    })
+
+    onUnmounted(() => {
+      uppyService.$off('filesSelected', instance.onFilesSelected)
+      uppyService.$off('uploadSuccess', instance.onFileSuccess)
+      uppyService.$off('uploadError', instance.onFileError)
+    })
+
+    return {
+      ...useUpload({
+        uppyService
+      })
+    }
+  },
   data() {
     return {
       loading: true,
-      errorMessage: null,
-      uploadedFiles: [],
-      uploadedFilesChangeTracker: 0
+      errorMessage: null
     }
   },
   computed: {
@@ -113,95 +107,6 @@ export default {
     },
     url() {
       return this.$client.publicFiles.getFileUrl(this.publicLinkToken) + '/'
-    },
-    getUploadedFiles() {
-      return this.uploadedFilesChangeTracker && this.uploadedFiles.values()
-    }
-  },
-  watch: {
-    loading: {
-      handler: async function (value) {
-        if (!value) {
-          await this.$nextTick()
-
-          const uppy = uppyService.getUppyInstance({
-            uploadPath: this.url,
-            capabilities: this.capabilities,
-            configuration: this.configuration,
-            headers: this.$client.helpers.buildHeaders(),
-            $gettext: this.$gettext,
-            customTus: CustomTus
-          })
-
-          this.$refs.fileUpload.$refs.input.addEventListener('change', (event) => {
-            const files = Array.from(event.target.files)
-
-            files.forEach((file) => {
-              try {
-                uppy.addFile({
-                  source: 'file input',
-                  name: file.name,
-                  type: file.type,
-                  data: file
-                })
-              } catch (err) {
-                console.error('error upload file:', file)
-                if (err.isRestriction) {
-                  // handle restrictions
-                  console.log('Restriction error:', err)
-                } else {
-                  // handle other errors
-                  console.error(err)
-                }
-              }
-            })
-          })
-
-          uppy.use(DropTarget, {
-            target: '#files-drop-container'
-          })
-
-          uppy.on('file-added', (file) => {
-            if (uppy.getPlugin('XHRUpload')) {
-              const filePath = file.name
-              uppy.setFileState(file.id, {
-                xhrUpload: {
-                  endpoint: `${this.url.replace(/\/+$/, '')}/${filePath.replace(/^\/+/, '')}`
-                }
-              })
-            }
-          })
-
-          uppy.on('upload-error', (file, error, response) => {
-            console.error(error)
-            this.showMessage({
-              title: this.$gettext('Failed to upload'),
-              status: 'danger'
-            })
-          })
-
-          uppy.on('upload', ({ id, fileIDs }) => {
-            if (fileIDs.length) {
-              this.$root.$emit('fileUploadStarted')
-            }
-          })
-
-          uppy.on('cancel-all', () => {
-            this.$root.$emit('fileUploadsCancelled')
-          })
-
-          uppy.on('complete', (result) => {
-            this.$root.$emit('fileUploadCompleted')
-
-            result.successful.forEach((file) => {
-              this.$root.$emit('fileUploadedSuccessfully', file)
-              this.uploadedFiles.push(file)
-              uppy.removeFile(file.id)
-            })
-          })
-        }
-      },
-      immediate: true
     }
   },
   mounted() {
@@ -247,13 +152,31 @@ export default {
         })
     },
 
-    $_ocUploadingFileMessage(fileName) {
-      const translated = this.$gettext('Uploading file "%{fileName}"')
-      return this.$gettextInterpolate(translated, { fileName }, true)
+    onFilesSelected(files) {
+      const uppyResources = files.map((file) => ({
+        source: 'FileDrop',
+        name: file.name,
+        type: file.type,
+        data: file,
+        meta: {
+          tusEndpoint: this.url,
+          relativePath: file.webkitRelativePath || file.relativePath || ''
+        }
+      }))
+
+      this.$uppyService.uploadFiles(uppyResources)
     },
 
-    triggerUpload() {
-      this.$refs.fileInput.click()
+    onFileSuccess(file) {
+      this.$uppyService.$emit('fileUploadedSuccessfully', file)
+    },
+
+    onFileError(error) {
+      console.error(error)
+      this.showMessage({
+        title: this.$gettext('Failed to upload'),
+        status: 'danger'
+      })
     }
   }
 }
@@ -261,14 +184,8 @@ export default {
 
 <style lang="scss">
 #files-drop-container {
-  .oc-files-drop-drag-area {
-    background: transparent;
-    border: 1px dashed var(--oc-color-input-border);
-    padding: var(--oc-space-xlarge);
-  }
-}
-#fileUploadInput {
-  position: absolute;
-  left: -99999px;
+  background: transparent;
+  border: 1px dashed var(--oc-color-input-border);
+  margin: var(--oc-space-xlarge);
 }
 </style>

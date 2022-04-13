@@ -91,20 +91,26 @@ export default {
       return this.$gettext('Upload completed')
     }
   },
+  mounted() {
+    this.$uppyService.useStatusBar({
+      targetSelector: '.upload-info-status-bar',
+      getText: this.$gettext
+    })
+  },
   created() {
-    this.$root.$on('fileUploadStarted', () => {
+    this.$uppyService.$on('uploadStarted', () => {
       this.showInfo = true
       this.filesUploading = this.filesUploading + 1
       this.uploadCancelled = false
     })
-    this.$root.$on('fileUploadCompleted', () => {
+    this.$uppyService.$on('uploadCompleted', () => {
       this.filesUploading = this.filesUploading - 1
     })
-    this.$root.$on('fileUploadsCancelled', () => {
+    this.$uppyService.$on('uploadCancelled', () => {
       this.filesUploading = 0
       this.uploadCancelled = true
     })
-    this.$root.$on('fileUploadedSuccessfully', (file, route) => {
+    this.$uppyService.$on('fileUploadedSuccessfully', (file, route) => {
       this.successfulUploads.push({ ...file, targetRoute: route })
     })
   },
@@ -136,15 +142,21 @@ export default {
         return {}
       }
 
-      return {
+      const strippedPath = path.replace(/^\//, '')
+      const route = {
         name: targetRoute.name,
         query: targetRoute.query,
         params: {
-          item: path.replace(/^\//, ''),
-          ...targetRoute.params,
-          ...(storageId && { storageId })
+          ...(storageId && path && { storageId })
         }
       }
+
+      if (strippedPath) {
+        route.params = { ...targetRoute.params }
+        route.params.item = strippedPath
+      }
+
+      return route
     }
   }
 }
