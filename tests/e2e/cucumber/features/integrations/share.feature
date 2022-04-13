@@ -87,7 +87,7 @@ Feature: share
     And "Brian" copies the following resource
       | resource               | to       |
       | Shares/testavatar.jpeg | Personal |
-    And "Brian" downloads the following file using the sidebar panel
+    And "Brian" downloads the following resource using the sidebar panel
       | resource        | from   |
       | testavatar.jpeg | Shares |
     And "Alice" updates following sharee role

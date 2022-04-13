@@ -47,7 +47,7 @@ Feature: Kindergarten can use web to organize a day
       | name      |
       | meal plan |
     And "Brian" navigates to the personal space page
-    And "Brian" downloads the following files using the sidebar panel
+    And "Brian" downloads the following resources using the sidebar panel
       | resource | from             |
       | data.zip | Shares/meal plan |
     # Then what do we check for to be confident that the above things done by Brian have worked?
@@ -59,7 +59,7 @@ Feature: Kindergarten can use web to organize a day
       | name      |
       | meal plan |
     And "Carol" navigates to the personal space page
-    And "Carol" downloads the following files using the sidebar panel
+    And "Carol" downloads the following resources using the sidebar panel
       | resource      | from             |
       | data.zip      | Shares/meal plan |
       | lorem.txt     | Shares/meal plan |
@@ -67,14 +67,14 @@ Feature: Kindergarten can use web to organize a day
     # Then what do we check for to be confident that the above things done by Carol have worked?
     # Then the downloaded files should have content "abc..."
     And "Carol" logs out
-    When "Brian" downloads the following files using the sidebar panel
+    When "Brian" downloads the following resources using the sidebar panel
       | resource      | from             |
       | lorem.txt     | Shares/meal plan |
       | lorem-big.txt | Shares/meal plan |
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded files should have content "abc..."
     And "Brian" logs out
-    And "Alice" downloads the following files using the sidebar panel
+    And "Alice" downloads the following resources using the sidebar panel
       | resource      | from                                 |
       | parent.txt    | groups/Kindergarten Koalas/meal plan |
       | lorem.txt     | groups/Kindergarten Koalas/meal plan |

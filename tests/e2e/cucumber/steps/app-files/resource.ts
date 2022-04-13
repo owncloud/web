@@ -35,7 +35,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following file(s)? using the (sidebar panel|batch action)$/,
+  /^"([^"]*)" downloads the following resource(s)? using the (sidebar panel|batch action)$/,
   async function (
     this: World,
     stepUser: string,
