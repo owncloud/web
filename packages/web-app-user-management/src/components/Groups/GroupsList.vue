@@ -1,5 +1,6 @@
 <template>
   <oc-table
+    ref="table"
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :fields="fields"
@@ -50,13 +51,10 @@
 </template>
 
 <script>
-const orderBy = (list, prop, desc) => {
-  return [...list].sort((a, b) => {
-    a = a[prop] || ''
-    b = b[prop] || ''
-    return desc ? b.localeCompare(a) : a.localeCompare(b)
-  })
-}
+import { onBeforeUnmount, ref } from '@vue/composition-api'
+import { Registry } from '../../services'
+import Fuse from 'fuse.js'
+import Mark from 'mark.js'
 
 export default {
   name: 'GroupsList',
@@ -70,10 +68,20 @@ export default {
       required: true
     }
   },
+  setup() {
+    const searchTerm = ref('')
+    const token = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', token))
+
+    return {
+      searchTerm
+    }
+  },
   data() {
     return {
       sortBy: 'displayName',
-      sortDir: 'asc'
+      sortDir: 'asc',
+      markInstance: null
     }
   },
   computed: {
@@ -114,13 +122,52 @@ export default {
       return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
     },
     data() {
-      return orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
+      const orderedGroups = this.orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
+      return this.filter(orderedGroups, this.searchTerm)
     },
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
     }
   },
+  watch: {
+    searchTerm() {
+      if (!this.markInstance) {
+        return
+      }
+      this.markInstance.unmark()
+      this.markInstance.mark(this.searchTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.markInstance = new Mark(this.$refs.table.$el)
+    })
+  },
   methods: {
+    filter(groups, searchTerm) {
+      if (!(searchTerm || '').trim()) {
+        return groups
+      }
+      const groupsSearchEngine = new Fuse(groups, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['displayName']
+      })
+
+      return groupsSearchEngine.search(searchTerm).map((r) => r.item)
+    },
+    orderBy(list, prop, desc) {
+      return [...list].sort((a, b) => {
+        a = a[prop] || ''
+        b = b[prop] || ''
+        return desc ? b.localeCompare(a) : a.localeCompare(b)
+      })
+    },
     handleSort(event) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
@@ -132,3 +179,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.highlight-mark {
+  background: yellow;
+  color: var(--oc-color-text-muted);
+}
+</style>

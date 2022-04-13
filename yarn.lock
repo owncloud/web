@@ -8941,6 +8941,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mark.js@npm:^8.11.1":
+  version: 8.11.1
+  resolution: "mark.js@npm:8.11.1"
+  checksum: aa6b9ae1c67245348d5b7abd253ef2acd6bb05c6be358d7d192416d964e42665fc10e0e865591c6f93ab9b57e8da1f23c23216e8ebddb580905ea7a0c0df15d4
+  languageName: node
+  linkType: hard
+
 "marked@npm:^4.0.12":
   version: 4.0.12
   resolution: "marked@npm:4.0.12"
@@ -13389,6 +13396,7 @@ __metadata:
   resolution: "user-management@workspace:packages/web-app-user-management"
   dependencies:
     email-validator: ^2.0.4
+    mark.js: ^8.11.1
   languageName: unknown
   linkType: soft
 

@@ -1,5 +1,6 @@
 <template>
   <oc-table
+    ref="table"
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :fields="fields"
@@ -31,7 +32,7 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ getUserRole(item) }} </template>
+    <template #role="{ item }"> {{ getUserRole(item) }}</template>
     <template #actions="{ item }">
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
@@ -49,6 +50,11 @@
 </template>
 
 <script>
+import { onBeforeUnmount, ref } from '@vue/composition-api'
+import { Registry } from '../../services'
+import Fuse from 'fuse.js'
+import Mark from 'mark.js'
+
 export default {
   name: 'UsersList',
   props: {
@@ -65,10 +71,20 @@ export default {
       required: true
     }
   },
+  setup() {
+    const searchTerm = ref('')
+    const token = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', token))
+
+    return {
+      searchTerm
+    }
+  },
   data() {
     return {
       sortBy: 'onPremisesSamAccountName',
-      sortDir: 'asc'
+      sortDir: 'asc',
+      markInstance: null
     }
   },
   computed: {
@@ -125,13 +141,45 @@ export default {
       ]
     },
     data() {
-      return this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
+      const orderedUsers = this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
+      return this.filter(orderedUsers, this.searchTerm)
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
+  watch: {
+    searchTerm() {
+      if (!this.markInstance) {
+        return
+      }
+      this.markInstance.unmark()
+      this.markInstance.mark(this.searchTerm, {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.markInstance = new Mark(this.$refs.table.$el)
+    })
+  },
   methods: {
+    filter(users, searchTerm) {
+      if (!(searchTerm || '').trim()) {
+        return users
+      }
+      const usersSearchEngine = new Fuse(users, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['displayName', 'mail', 'onPremisesSamAccountName']
+      })
+
+      return usersSearchEngine.search(searchTerm).map((r) => r.item)
+    },
     orderBy(list, prop, desc) {
       return [...list].sort((user1, user2) => {
         if (prop === 'role') {
@@ -161,3 +209,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.highlight-mark {
+  background: yellow;
+  color: var(--oc-color-text-muted);
+}
+</style>
