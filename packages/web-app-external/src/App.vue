@@ -82,8 +82,7 @@ export default {
     formParameters: {}
   }),
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
-    ...mapGetters('Files', ['publicLinkPassword']),
+    ...mapGetters(['capabilities', 'configuration']),
 
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
@@ -116,22 +115,6 @@ export default {
       const filePath = this.currentFileContext.path
       const fileId = this.fileId || (await this.getFileInfoResource(filePath)).fileId
 
-      // build headers with respect to the actual auth situation
-      const publicToken = (filePath || '').split('/')[1]
-      const publicLinkPassword = this.publicLinkPassword
-      const accessToken = this.getToken
-      const headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        ...(!accessToken && publicToken && { 'public-token': publicToken }),
-        ...(publicLinkPassword && {
-          Authorization:
-            'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
-        }),
-        ...(accessToken && {
-          Authorization: 'Bearer ' + accessToken
-        })
-      }
-
       // fetch iframe params for app and file
       const configUrl = this.configuration.server
       const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace(/^\/+/, '')
@@ -141,10 +124,7 @@ export default {
         `?file_id=${fileId}` +
         (this.appName ? `&app_name=${this.appName}` : '')
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers
-      })
+      const response = await this.makeRequest('POST', url)
 
       if (response.status !== 200) {
         this.errorMessage = response.message

@@ -46,6 +46,16 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     return store.getters['Files/publicLinkPassword']
   })
 
+  const accessToken = computed(() => {
+    return store.getters.getToken
+  })
+
+  const publicToken = computed(() => {
+    return (unref(currentRoute).params.item || unref(currentRoute).params.filePath || '').split(
+      '/'
+    )[0]
+  })
+
   const currentFileContext = computed((): FileContext => {
     const queryItemAsString = (queryItem: string | string[]) => {
       if (Array.isArray(queryItem)) {
@@ -71,7 +81,14 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
-    ...useAppFileHandling({ clientService, store, isPublicLinkContext, publicLinkPassword }),
+    ...useAppFileHandling({
+      clientService,
+      store,
+      isPublicLinkContext,
+      publicLinkPassword,
+      accessToken,
+      publicToken
+    }),
     ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
   }
 }
