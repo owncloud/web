@@ -8,12 +8,12 @@
     "authUrl": ""
   },
   "apps" : [
-    "files",
     "draw-io",
-    "preview",
-    "user-management",
+    "files",
     "pdf-viewer",
-    "search"
+    "preview",
+    "search",
+    "text-editor"
   ],
   "applications" : []
 }
