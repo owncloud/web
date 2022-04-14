@@ -91,8 +91,9 @@ export default {
       unref(defaults)
         .getFileInfo(filePath, [DavProperty.Permissions])
         .then((response) => {
-          isReadOnly.value =
-            response.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
+          isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].includes(
+            response.fileInfo[DavProperty.Permissions]
+          )
         })
 
       return yield unref(defaults)
