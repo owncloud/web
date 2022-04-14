@@ -16,7 +16,7 @@
         <span v-text="uploadInfoTitle" />
       </span>
 
-      <oc-button appearance="raw" @click="closeInfo">
+      <oc-button id="close-upload-info-btn" appearance="raw" @click="closeInfo">
         <oc-icon name="close" />
       </oc-button>
     </div>

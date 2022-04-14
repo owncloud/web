@@ -74,12 +74,11 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   await page.locator('#fileUploadInput').setInputFiles(resources.map((file) => file.path))
 
   if (createVersion) {
-    const fileName = resources.map((file) => path.basename(file.name))
-    await Promise.all([
-      page.waitForResponse((resp) => resp.url().endsWith(fileName[0]) && resp.status() === 204),
-      page.locator('.oc-modal-body-actions-confirm').click()
-    ])
+    await page.locator('.oc-modal-body-actions-confirm').click()
+    // @TODO check if upload was successful
   }
+
+  await page.locator('#close-upload-info-btn').click()
 
   await waitForResources({
     page: page,
