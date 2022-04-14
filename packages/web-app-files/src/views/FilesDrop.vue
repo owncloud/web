@@ -83,8 +83,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['currentFolder', 'publicLinkPassword']),
+    ...mapGetters(['configuration']),
+    ...mapGetters('Files', ['publicLinkPassword']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },

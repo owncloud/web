@@ -125,11 +125,15 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
     const currentFolder = unref(currentPath)
 
     for (const file of files) {
+      // Get the relative path of the file when the file was inside a directory on the client computer
       const relativeFilePath = file.webkitRelativePath || (file as any).relativePath || null
+      // Directory without filename
       const directory = relativeFilePath
         ? relativeFilePath.substring(0, relativeFilePath.lastIndexOf('/'))
         : ''
 
+      // Build tus endpoint to dynamically set it on file upload.
+      // Looks something like: https://localhost:9200/remote.php/dav/files/admin
       let tusEndpoint
       if (directory) {
         tusEndpoint = `${unref(uploadPath).replace(/\/+$/, '')}/${directory.replace(/^\/+/, '')}`
@@ -137,6 +141,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
         tusEndpoint = unref(uploadPath)
       }
 
+      // Build the route object for this file. This is used later by the upload-info-box
       const item = params.item ? `${params.item}/${directory}` : directory
       const fileRoute = {
         ...unref(route),
@@ -156,7 +161,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
         meta: {
           currentFolder,
           relativeFolder: directory,
-          relativeFilePath,
+          relativePath: relativeFilePath, // uppy needs this property to be named relativePath
           route: fileRoute,
           tusEndpoint,
           webDavPath

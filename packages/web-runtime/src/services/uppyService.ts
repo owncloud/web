@@ -147,7 +147,7 @@ export class UppyService extends Vue {
     })
   }
 
-  setUpEvents() {
+  private setUpEvents() {
     this.uppy.on('upload', () => {
       this.$emit('uploadStarted')
     })
@@ -200,8 +200,8 @@ export class UppyService extends Vue {
     }
   }
 
-  removeUploadInput(elementId: string) {
-    this.uploadInputs = this.uploadInputs.filter((el) => el.id !== elementId)
+  removeUploadInput(el: HTMLInputElement) {
+    this.uploadInputs = this.uploadInputs.filter((input) => input !== el)
   }
 
   uploadFiles(files: UppyResource[]) {

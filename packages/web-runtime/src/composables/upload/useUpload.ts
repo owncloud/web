@@ -11,7 +11,6 @@ import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
 
-// FIXME: properly extend type from AddFileOptions<TMeta extends IndexedObject<any> = Record<string, unknown>>
 export interface UppyResource {
   id?: string
   source: string
@@ -21,7 +20,7 @@ export interface UppyResource {
   meta: {
     currentFolder: string
     relativeFolder: string
-    relativeFilePath: string
+    relativePath: string
     route: Route
     tusEndpoint: string
     webDavPath: string
@@ -85,7 +84,7 @@ export function useUpload(options: UploadOptions): UploadResult {
         options.uppyService.useTus(unref(uppyOptions) as any)
         return
       }
-      options.uppyService.useXhr(unref(uppyOptions).headers as any)
+      options.uppyService.useXhr(unref(uppyOptions) as any)
     },
     { immediate: true }
   )

@@ -25,7 +25,7 @@ export default {
     this.$uppyService.registerUploadInput(this.$refs.input)
   },
   beforeDestroy() {
-    this.$uppyService.removeUploadInput(this.$refs.input.id)
+    this.$uppyService.removeUploadInput(this.$refs.input)
   },
   methods: {
     triggerUpload() {

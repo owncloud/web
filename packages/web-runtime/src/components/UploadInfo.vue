@@ -33,7 +33,7 @@
             :key="item.path"
             :resource="item"
             :is-path-displayed="true"
-            :is-thumbnail-displayed="true"
+            :is-thumbnail-displayed="displayThumbnails"
             :is-resource-clickable="false"
             :parent-folder-name-default="defaultParentFolderName(item)"
             :folder-link="folderLink(item)"
@@ -60,6 +60,7 @@ import '@uppy/core/dist/style.css'
 import '@uppy/status-bar/dist/style.css'
 import path from 'path'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { mapGetters } from 'vuex'
 
 export default {
   setup() {
@@ -74,6 +75,8 @@ export default {
     successfulUploads: []
   }),
   computed: {
+    ...mapGetters(['configuration']),
+
     uploadInfoTitle() {
       if (this.filesUploading) {
         return this.$gettextInterpolate(
@@ -89,6 +92,9 @@ export default {
         return this.$gettext('Upload cancelled')
       }
       return this.$gettext('Upload completed')
+    },
+    displayThumbnails() {
+      return !this.configuration.options.disablePreviews
     }
   },
   mounted() {
@@ -111,9 +117,17 @@ export default {
       this.uploadCancelled = true
     })
     this.$uppyService.$on('uploadSuccess', (file) => {
+      // @TODO we need the storage ID here... maybe fetch the file via DAV and call buildResources()?
+
+      let path = file.meta.currentFolder
+      if (file.meta.relativePath) {
+        path += file.meta.relativePath
+      }
+      path += file.name
+
       this.successfulUploads.push({
         ...file,
-        path: `${file.meta.relativeFolder}/${file.name}`,
+        path,
         targetRoute: file.meta.route
       })
     })
