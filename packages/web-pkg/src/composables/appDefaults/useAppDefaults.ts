@@ -2,6 +2,7 @@ import { computed, unref, Ref } from '@vue/composition-api'
 import { useRouter, useRoute } from '../router'
 import { useStore } from '../store'
 import { ClientService, clientService as defaultClientService } from '../../services'
+import { basename } from 'path'
 
 import { FileContext } from './types'
 import {
@@ -45,6 +46,16 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     return store.getters['Files/publicLinkPassword']
   })
 
+  const accessToken = computed(() => {
+    return store.getters.getToken
+  })
+
+  const publicToken = computed(() => {
+    return (unref(currentRoute).params.item || unref(currentRoute).params.filePath || '').split(
+      '/'
+    )[0]
+  })
+
   const currentFileContext = computed((): FileContext => {
     const queryItemAsString = (queryItem: string | string[]) => {
       if (Array.isArray(queryItem)) {
@@ -54,8 +65,11 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       return queryItem
     }
 
+    const path = `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`
+
     return {
-      path: `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`,
+      path,
+      fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)
     }
@@ -67,7 +81,14 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
-    ...useAppFileHandling({ clientService, store, isPublicLinkContext, publicLinkPassword }),
+    ...useAppFileHandling({
+      clientService,
+      store,
+      isPublicLinkContext,
+      publicLinkPassword,
+      accessToken,
+      publicToken
+    }),
     ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
   }
 }

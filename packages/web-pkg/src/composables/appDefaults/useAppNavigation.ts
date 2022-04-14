@@ -1,5 +1,4 @@
 import { unref } from '@vue/composition-api'
-import { basename } from 'path'
 import VueRouter, { Location } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
@@ -64,14 +63,14 @@ export function useAppNavigation(options: AppNavigationOptions): AppNavigationRe
   const navigateToContext = (context: MaybeRef<FileContext>) => {
     const router = options.router
 
-    const { path, routeName, routeParams, routeQuery } = unref(context)
+    const { fileName, routeName, routeParams, routeQuery } = unref(context)
 
     return router.push({
       name: unref(routeName),
       params: unref(routeParams),
       query: {
         ...unref(routeQuery),
-        scrollTo: basename(unref(path))
+        scrollTo: unref(fileName)
       }
     })
   }

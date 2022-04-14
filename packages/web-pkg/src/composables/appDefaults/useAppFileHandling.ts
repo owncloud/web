@@ -11,13 +11,16 @@ interface AppFileHandlingOptions {
   store: Store<any>
   clientService?: ClientService
   isPublicLinkContext: MaybeRef<boolean>
+  accessToken: MaybeRef<string>
   publicLinkPassword: MaybeRef<string>
+  publicToken: MaybeRef<string>
 }
 
 type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
   getUrlForResource(r: Resource, query?: QueryParameters): string
 
+  makeRequest(method: string, url: string, extraHeaders: Record<string, any>): Promise<any>
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileContents(filePath: string, options: Record<string, any>): Promise<any>
   putFileContents(filePath: string, content: string, options: Record<string, any>): Promise<any>
@@ -27,6 +30,8 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
   const client = (options.clientService || defaultClientService).owncloudSdk
   const isPublicLinkContext = options.isPublicLinkContext
   const publicLinkPassword = options.publicLinkPassword
+  const publicToken = options.publicToken
+  const accessToken = options.accessToken
 
   const getUrlForResource = (
     { webDavPath, downloadURL }: Resource,
@@ -53,6 +58,30 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
     }
 
     return [client.files.getFileUrl(webDavPath), queryStr].filter(Boolean).join('?')
+  }
+
+  const makeRequest = async (method: string, url: string, extraHeaders: Record<string, any>) => {
+    const plToken = unref(publicToken)
+    const plPassword = unref(publicLinkPassword)
+    const isPlCtx = unref(isPublicLinkContext)
+    const aToken = unref(accessToken)
+
+    const headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(isPlCtx &&
+        plPassword && {
+          Authorization: 'Basic ' + Buffer.from(['public', plPassword].join(':')).toString('base64')
+        }),
+      ...(isPlCtx && plToken && { 'public-token': plToken }),
+      ...(aToken && { Authorization: 'Bearer ' + aToken })
+    }
+    return fetch(url, {
+      method,
+      headers: {
+        ...headers,
+        ...extraHeaders
+      }
+    })
   }
 
   const getFileContents = async (filePath: string, options: Record<string, any>) => {
@@ -109,6 +138,7 @@ export function useAppFileHandling(options: AppFileHandlingOptions): AppFileHand
   }
 
   return {
+    makeRequest,
     getFileContents,
     getUrlForResource,
     getFileInfo,

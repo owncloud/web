@@ -155,10 +155,7 @@ export default {
     },
     importVisio() {
       const url = this.getFileUrl(this.filePath)
-      const headers = new Headers({
-        Authorization: 'Bearer ' + this.getToken,
-        'X-Requested-With': 'XMLHttpRequest'
-      })
+
       const getDescription = () =>
         this.$gettextInterpolate(
           this.$gettext('The diagram will open as a new .drawio file: %{file}'),
@@ -171,7 +168,7 @@ export default {
         title: this.$gettext('Diagram imported'),
         desc: getDescription()
       })
-      fetch(url, { headers })
+      this.makeRequest('GET', url)
         .then((resp) => {
           // Not setting `currentETag` on imports allows to create new files
           // otherwise the ETag comparison fails with a 412 during the autosave/save event

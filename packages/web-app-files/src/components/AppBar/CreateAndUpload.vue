@@ -131,6 +131,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -150,7 +151,10 @@ export default {
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
+      ...useAppDefaults({
+        applicationName: 'files'
+      })
     }
   },
   data: () => ({
@@ -524,8 +528,6 @@ export default {
       }
       try {
         const parent = this.currentFolder.fileId
-        const publicToken = (this.$router.currentRoute.params.item || '').split('/')[0]
-
         const configUrl = this.configuration.server
         const appNewUrl = this.capabilities.files.app_providers[0].new_url.replace(/^\/+/, '')
         const url =
@@ -533,27 +535,7 @@ export default {
           appNewUrl +
           `?parent_container_id=${parent}&filename=${encodeURIComponent(fileName)}`
 
-        const headers = {
-          'X-Requested-With': 'XMLHttpRequest',
-          ...(this.isPublicLocation &&
-            publicToken && {
-              'public-token': publicToken
-            }),
-          ...(this.isPublicLocation &&
-            this.publicLinkPassword && {
-              Authorization:
-                'Basic ' +
-                Buffer.from(['public', this.publicLinkPassword].join(':')).toString('base64')
-            }),
-          ...(this.getToken && {
-            Authorization: 'Bearer ' + this.getToken
-          })
-        }
-
-        const response = await fetch(url, {
-          method: 'POST',
-          headers
-        })
+        const response = await this.makeRequest('POST', url)
 
         if (response.status !== 200) {
           throw new Error(`An error has occurred: ${response.status}`)

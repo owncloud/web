@@ -18,19 +18,32 @@ const componentStubs = {
 
 const $route = {
   query: {
-    'public-token': 'a-token'
+    'public-token': 'a-token',
+    app: 'exampleApp',
+    fileId: '2147491323'
   },
   params: {
-    appName: 'exampleApp',
-    fileId: '2147491323'
+    filePath: 'someFile.md'
   }
 }
+
+const mockFileInfo = jest.fn(() => ({
+  name: $route.params.filePath,
+  fileInfo: {
+    '{http://owncloud.org/ns}fileid': '2147491323'
+  }
+}))
 
 const storeOptions = {
   getters: {
     getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
     configuration: jest.fn(() => ({
-      server: 'http://example.com/'
+      server: 'http://example.com/',
+      currentTheme: {
+        general: {
+          name: 'some-company'
+        }
+      }
     })),
     userReady: () => true,
     capabilities: jest.fn(() => ({
@@ -87,7 +100,7 @@ describe('The app provider extension', () => {
   })
 
   it('should show a loading spinner while loading', async () => {
-    global.fetch = jest.fn(() =>
+    const makeRequest = jest.fn(() =>
       setTimeout(() => {
         Promise.resolve({
           ok: true,
@@ -95,38 +108,38 @@ describe('The app provider extension', () => {
         })
       }, 500)
     )
-    const wrapper = createShallowMountWrapper()
+    const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should show a meaningful message if an error occurs during loading', async () => {
-    global.fetch = jest.fn(() =>
+    const makeRequest = jest.fn(() =>
       Promise.resolve({
         ok: false,
         status: 500,
         message: 'We encountered an internal error'
       })
     )
-    const wrapper = createShallowMountWrapper()
+    const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should fail for unauthenticated users', async () => {
-    global.fetch = jest.fn(() =>
+    const makeRequest = jest.fn(() =>
       Promise.resolve({
         ok: true,
         status: 401,
         message: 'Login Required'
       })
     )
-    const wrapper = createShallowMountWrapper()
+    const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should be able to load an iFrame via get', async () => {
-    global.fetch = jest.fn(() =>
+    const makeRequest = jest.fn(() =>
       Promise.resolve({
         ok: true,
         status: 200,
@@ -134,33 +147,42 @@ describe('The app provider extension', () => {
       })
     )
 
-    const wrapper = createShallowMountWrapper()
+    const wrapper = createShallowMountWrapper(makeRequest)
+    await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should be able to load an iFrame via post', async () => {
-    global.fetch = jest.fn(() =>
+    const makeRequest = jest.fn(() =>
       Promise.resolve({
         ok: true,
         status: 200,
         json: () => providerSuccessResponsePost
       })
     )
-    const wrapper = createShallowMountWrapper()
+    const wrapper = createShallowMountWrapper(makeRequest)
+    await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
 })
 
-function createShallowMountWrapper(options = {}) {
+function createShallowMountWrapper(makeRequest, options = {}) {
   return shallowMount(App, {
     localVue,
     store: createStore(),
     stubs: componentStubs,
     mocks: {
       $route
+    },
+    computed: {
+      currentFileContext: () => $route.params
+    },
+    methods: {
+      getFileInfo: mockFileInfo,
+      makeRequest
     },
     ...options
   })

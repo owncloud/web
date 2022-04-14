@@ -36,6 +36,9 @@
 import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
+import { DavProperties } from 'web-pkg/src/constants'
+import { buildResource } from '../../web-app-files/src/helpers/resources'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 // FIXME: hacky, get rid asap, just a workaround
 // same as packages/web-app-files/src/views/PublicFiles.vue
@@ -44,7 +47,7 @@ const unauthenticatedUserReady = async (router, store) => {
     return
   }
 
-  const publicToken = router.currentRoute.query['public-token']
+  const publicToken = (router.currentRoute.params.filePath || '').split('/')[0]
   const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
   await store.dispatch('loadCapabilities', {
@@ -62,6 +65,13 @@ export default {
     ErrorScreen,
     LoadingScreen
   },
+  setup() {
+    return {
+      ...useAppDefaults({
+        applicationName: 'external'
+      })
+    }
+  },
 
   data: () => ({
     loading: false,
@@ -72,8 +82,7 @@ export default {
     formParameters: {}
   }),
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration']),
-    ...mapGetters('Files', ['publicLinkPassword']),
+    ...mapGetters(['capabilities', 'configuration']),
 
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
@@ -88,73 +97,73 @@ export default {
       })
     },
     appName() {
-      return this.$route.params.appName
+      return this.$route.query.app
     },
     fileId() {
-      return this.$route.params.fileId
+      return this.$route.query.fileId
     }
+  },
+  mounted() {
+    const appNameTitle = this.appName ? `${this.appName} - ` : ''
+    document.title = `${this.currentFileContext.fileName} - ${appNameTitle}${this.configuration.currentTheme.general.name}`
   },
   async created() {
     await unauthenticatedUserReady(this.$router, this.$store)
 
     this.loading = true
+    try {
+      const filePath = this.currentFileContext.path
+      const fileId = this.fileId || (await this.getFileInfoResource(filePath)).fileId
 
-    // build headers with respect to the actual auth situation
-    const { 'public-token': publicToken } = this.$route.query
-    const publicLinkPassword = this.publicLinkPassword
-    const accessToken = this.getToken
-    const headers = {
-      'X-Requested-With': 'XMLHttpRequest',
-      ...(publicToken && { 'public-token': publicToken }),
-      ...(publicLinkPassword && {
-        Authorization:
-          'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
-      }),
-      ...(accessToken && {
-        Authorization: 'Bearer ' + accessToken
-      })
-    }
+      // fetch iframe params for app and file
+      const configUrl = this.configuration.server
+      const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace(/^\/+/, '')
+      const url =
+        configUrl +
+        appOpenUrl +
+        `?file_id=${fileId}` +
+        (this.appName ? `&app_name=${this.appName}` : '')
 
-    // fetch iframe params for app and file
-    const configUrl = this.configuration.server
-    const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace(/^\/+/, '')
-    const url =
-      configUrl +
-      appOpenUrl +
-      `?file_id=${this.fileId}` +
-      (this.appName ? `&app_name=${this.appName}` : '')
+      const response = await this.makeRequest('POST', url)
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers
-    })
+      if (response.status !== 200) {
+        this.errorMessage = response.message
+        this.loading = false
+        this.loadingError = true
+        console.error('Error fetching app information', response.status, this.errorMessage)
+        return
+      }
 
-    if (response.status !== 200) {
-      this.errorMessage = response.message
+      const data = await response.json()
+
+      if (!data.app_url || !data.method) {
+        this.errorMessage = this.$gettext('Error in app server response')
+        this.loading = false
+        this.loadingError = true
+        console.error('Error in app server response')
+        return
+      }
+
+      this.appUrl = data.app_url
+      this.method = data.method
+      if (data.form_parameters) this.formParameters = data.form_parameters
+
+      if (this.method === 'POST' && this.formParameters) {
+        this.$nextTick(() => this.$refs.subm.click())
+      }
+      this.loading = false
+    } catch (error) {
+      this.errorMessage = this.$gettext('Error retrieving file information')
+      console.error('Error retrieving file information', error)
       this.loading = false
       this.loadingError = true
-      console.error('Error fetching app information', response.status, this.errorMessage)
-      return
     }
-
-    const data = await response.json()
-
-    if (!data.app_url || !data.method) {
-      this.errorMessage = this.$gettext('Error in app server response')
-      this.loading = false
-      this.loadingError = true
-      console.error('Error in app server response')
-      return
+  },
+  methods: {
+    async getFileInfoResource(path) {
+      const file = await this.getFileInfo(path, DavProperties.Default)
+      return buildResource(file)
     }
-
-    this.appUrl = data.app_url
-    this.method = data.method
-    if (data.form_parameters) this.formParameters = data.form_parameters
-
-    if (this.method === 'POST' && this.formParameters) {
-      this.$nextTick(() => this.$refs.subm.click())
-    }
-    this.loading = false
   }
 }
 </script>
