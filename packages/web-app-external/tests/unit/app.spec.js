@@ -18,19 +18,32 @@ const componentStubs = {
 
 const $route = {
   query: {
-    'public-token': 'a-token'
+    'public-token': 'a-token',
+    app: 'exampleApp',
+    fileId: '2147491323'
   },
   params: {
-    appName: 'exampleApp',
-    fileId: '2147491323'
+    filePath: 'someFile.md'
   }
 }
+
+const mockFileInfo = jest.fn(() => ({
+  name: $route.params.filePath,
+  fileInfo: {
+    '{http://owncloud.org/ns}fileid': '2147491323'
+  }
+}))
 
 const storeOptions = {
   getters: {
     getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
     configuration: jest.fn(() => ({
-      server: 'http://example.com/'
+      server: 'http://example.com/',
+      currentTheme: {
+        general: {
+          name: 'some-company'
+        }
+      }
     })),
     userReady: () => true,
     capabilities: jest.fn(() => ({
@@ -137,6 +150,7 @@ describe('The app provider extension', () => {
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should be able to load an iFrame via post', async () => {
@@ -150,6 +164,7 @@ describe('The app provider extension', () => {
     const wrapper = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
 })
@@ -161,6 +176,12 @@ function createShallowMountWrapper(options = {}) {
     stubs: componentStubs,
     mocks: {
       $route
+    },
+    computed: {
+      currentFileContext: () => $route.params
+    },
+    methods: {
+      getFileInfo: mockFileInfo
     },
     ...options
   })

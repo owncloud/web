@@ -2,11 +2,6 @@ import translations from '../l10n/translations'
 import App from './App.vue'
 import store from './store'
 
-// just a dummy function to trick gettext tools
-function $gettext(msg) {
-  return msg
-}
-
 const appInfo = {
   name: 'External',
   id: 'external'
@@ -15,11 +10,11 @@ const appInfo = {
 const routes = [
   {
     name: 'apps',
-    path: '/:fileId/:appName?',
+    path: '/:filePath*',
     component: App,
     meta: {
       auth: false,
-      title: $gettext('External app')
+      patchCleanPath: true
     }
   }
 ]

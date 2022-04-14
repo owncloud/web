@@ -2,6 +2,7 @@ import { computed, unref, Ref } from '@vue/composition-api'
 import { useRouter, useRoute } from '../router'
 import { useStore } from '../store'
 import { ClientService, clientService as defaultClientService } from '../../services'
+import { basename } from 'path'
 
 import { FileContext } from './types'
 import {
@@ -54,8 +55,11 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       return queryItem
     }
 
+    const path = `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`
+
     return {
-      path: `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`,
+      path,
+      fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)
     }
