@@ -113,7 +113,7 @@ export default {
         },
         {
           name: 'displayName',
-          title: this.$gettext('Fist and last name'),
+          title: this.$gettext('First and last name'),
           sortable: true
         },
         {
