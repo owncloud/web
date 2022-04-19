@@ -14,6 +14,8 @@
     "preview",
     "pdf-viewer",
     "search",
+    "text-editor",
+    "draw-io",
     "external",
     "user-management"
   ],
@@ -25,15 +27,6 @@
     {
       "id": "accounts",
       "path": "https://localhost:9200/accounts.js"
-    },
-    {
-      "id": "draw-io",
-      "path": "web-app-draw-io",
-      "config": {
-        "url": "https://embed.diagrams.net",
-        "autosave": false,
-        "theme": "minimal"
-      }
     }
   ]
 }
