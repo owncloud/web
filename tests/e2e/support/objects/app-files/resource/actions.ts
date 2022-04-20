@@ -128,7 +128,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
     }
 
     case 'BATCH_ACTION': {
-      await selectResources({ page: page, names: names, folder: folder })
+      await selectOrDeselectResources({ page: page, names: names, folder: folder, select: true })
       let downloadSelector = downloadButtonBatchActionMultiple
       if (names.length === 1) {
         downloadSelector = downloadButtonBatchActionSingleFile
@@ -149,10 +149,11 @@ export type selectResourcesArgs = {
   page: Page
   names: string[]
   folder: string
+  select: boolean
 }
 
-export const selectResources = async (args: selectResourcesArgs): Promise<void> => {
-  const { page, folder, names } = args
+export const selectOrDeselectResources = async (args: selectResourcesArgs): Promise<void> => {
+  const { page, folder, names, select } = args
   if (folder) {
     await clickResource({ page: page, path: folder })
   }
@@ -164,9 +165,13 @@ export const selectResources = async (args: selectResourcesArgs): Promise<void> 
     })
     if (exists) {
       const resourceCheckbox = page.locator(util.format(checkBox, resource))
-      if (!(await resourceCheckbox.isChecked())) {
+      if (!(await resourceCheckbox.isChecked()) && select) {
         await resourceCheckbox.check()
+      } else if (await resourceCheckbox.isChecked()) {
+        await resourceCheckbox.uncheck()
       }
+    } else {
+      throw new Error(`The resource ${resource} you are trying to select does not exist`)
     }
   }
 }

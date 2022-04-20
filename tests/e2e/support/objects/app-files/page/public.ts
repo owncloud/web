@@ -25,7 +25,7 @@ export class Public {
 
   async upload({ resources }: { resources: File[] }): Promise<void> {
     const startUrl = this.#page.url()
-    const resourceSelector = `//tbody/tr/td[contains(@class, "oc-pl-rm") and contains(text(), "%s")]`
+    const resourceSelector = `[data-test-resource-name="%s"]`
     await this.#page
       .locator('//input[@id="fileUploadInput"]')
       .setInputFiles(resources.map((file) => file.path))
