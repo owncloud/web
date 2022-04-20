@@ -30,7 +30,7 @@
           <oc-switch
             v-model="fileExtensionsShownModel"
             data-testid="files-switch-files-extensions-files"
-            :label="$gettext('File extensions [on/off]')"
+            :label="$gettext('Show file extensions')"
           />
         </li>
         <li class="files-view-options-list-item">
