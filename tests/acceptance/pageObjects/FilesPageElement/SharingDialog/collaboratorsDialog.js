@@ -11,10 +11,16 @@ module.exports = {
     deleteShareWithUserGroup: function (collaborator) {
       this.expandShareEditDropdown(collaborator)
       const deleteSelector = this.elements.deleteShareButton.selector
+      const dialogSelector = this.elements.dialog.selector
+      const dialogConfirmSelector = this.elements.dialogConfirmBtn.selector
+
       return this.useXpath()
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish() // wait for animation of share sliding out
         .click(deleteSelector)
+        .waitForElementVisible(dialogSelector)
+        .waitForAnimationToFinish() // wait for transition on the modal to finish
+        .click(dialogConfirmSelector)
         .waitForAjaxCallsToStartAndFinish()
     },
     /**
@@ -205,6 +211,14 @@ module.exports = {
     deleteShareButton: {
       // within collaboratorInformationByCollaboratorName
       selector: '//button[contains(@class, "remove-share")]',
+      locateStrategy: 'xpath'
+    },
+    dialog: {
+      selector: '//div[contains(@class, "oc-modal")]',
+      locateStrategy: 'xpath'
+    },
+    dialogConfirmBtn: {
+      selector: '//button[contains(@class, "oc-modal-body-actions-confirm")]',
       locateStrategy: 'xpath'
     },
     createShareDialog: {

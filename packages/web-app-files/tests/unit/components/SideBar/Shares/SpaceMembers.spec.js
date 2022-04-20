@@ -118,12 +118,15 @@ describe('SpaceMembers', () => {
         outgoingCollaborators: outgoingShares
       })
 
-      const spyOnCollaboratorDelete = jest.spyOn(wrapper.vm, 'deleteShare')
+      const spyOnCollaboratorDeleteTrigger = jest.spyOn(
+        wrapper.vm,
+        '$_ocCollaborators_deleteShare_trigger'
+      )
       wrapper
         .find(`div[data-testid="collaborator-user-item-${outgoingShares[0].collaborator.name}"]`)
         .vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
-      expect(spyOnCollaboratorDelete).toHaveBeenCalledTimes(1)
+      expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
   })
 })
@@ -132,6 +135,11 @@ const storeOptions = (data, isInLoadingState) => {
   const { user, outgoingCollaborators = [] } = data
 
   return {
+    actions: {
+      createModal: jest.fn(),
+      hideModal: jest.fn(),
+      showMessage: jest.fn()
+    },
     state: {
       user
     },
