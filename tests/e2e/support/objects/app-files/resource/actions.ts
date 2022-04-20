@@ -170,7 +170,7 @@ export const selectResources = async (args: selectResourcesArgs): Promise<void> 
         await resourceCheckbox.check()
       }
     } else {
-      throw new Error('The resource you are trying to select does not exist')
+      throw new Error(`The resource ${resource} you are trying to select does not exist`)
     }
   }
 }
