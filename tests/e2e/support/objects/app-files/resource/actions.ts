@@ -154,6 +154,7 @@ export type selectResourcesArgs = {
 
 export const selectResources = async (args: selectResourcesArgs): Promise<void> => {
   const { page, folder, names } = args
+  // await page.waitForTimeout(2000)
   if (folder) {
     await clickResource({ page: page, path: folder })
   }
@@ -168,6 +169,8 @@ export const selectResources = async (args: selectResourcesArgs): Promise<void> 
       if (!(await resourceCheckbox.isChecked())) {
         await resourceCheckbox.check()
       }
+    } else {
+      throw new Error('The resource you are trying to select does not exist')
     }
   }
 }
