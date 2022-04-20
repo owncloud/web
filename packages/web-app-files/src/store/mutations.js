@@ -341,6 +341,12 @@ export default {
     state.areHiddenFilesShown = value
 
     window.localStorage.setItem('oc_hiddenFilesShown', value)
+  },
+
+  SET_FILE_EXTENSIONS_VISIBILITY(state, value) {
+    state.areFileExtensionsShown = value
+
+    window.localStorage.setItem('oc_fileExtensionsShown', value)
   }
 }
 

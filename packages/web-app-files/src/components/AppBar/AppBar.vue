@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
-    ...mapState('Files', ['areHiddenFilesShown']),
+    ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
     pageTitle() {
       const title = this.$route.meta.title
@@ -116,10 +116,18 @@ export default {
     if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {
       this.SET_HIDDEN_FILES_VISIBILITY(areHiddenFilesShownBoolean)
     }
+
+    // Storage returns a string so we need to convert it into a boolean
+    const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
+    const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
+
+    if (areFileExtensionsShownBoolean !== this.areFileExtensionsShown) {
+      this.SET_FILE_EXTENSIONS_VISIBILITY(areFileExtensionsShownBoolean)
+    }
   },
 
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY'])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
   }
 }
 </script>
