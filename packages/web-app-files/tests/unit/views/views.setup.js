@@ -181,6 +181,7 @@ export const getStore = function ({
             state.activeFiles.push(resource)
           },
           SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
+          SET_FILE_EXTENSIONS_VISIBILITY: jest.fn(),
           CLEAR_FILES_SEARCHED: () => {},
           CLEAR_CURRENT_FILES_LIST: () => {},
           LOAD_FILES: () => {},
