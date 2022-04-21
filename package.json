@@ -90,7 +90,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "eslint-plugin-vue": "^7.13.0",
+    "eslint-plugin-vue": "^8.6.0",
     "eslint-plugin-vuejs-accessibility": "^0.7.1",
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
