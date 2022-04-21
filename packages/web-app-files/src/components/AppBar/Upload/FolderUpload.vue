@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-button class="oc-width-1-1" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
+      <oc-resource-icon :resource="{ isFolder: true, extension: '' }" size="medium" />
       <span id="files-folder-upload-button" v-translate>Folder</span>
     </oc-button>
     <input

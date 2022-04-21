@@ -33,6 +33,9 @@ export default {
       span {
         text-decoration: none !important;
       }
+      .oc-icon-m > svg {
+        height: 24px;
+      }
     }
   }
 }
