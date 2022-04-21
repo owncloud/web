@@ -85,6 +85,15 @@ describe('vuex store mutations', () => {
     expect(state.areHiddenFilesShown).toEqual(false)
   })
 
+  it('SET_FILE_EXTENSIONS_VISIBILITY', () => {
+    const state = { areFileExtensionsShown: true }
+    const { SET_FILE_EXTENSIONS_VISIBILITY } = mutations
+
+    SET_FILE_EXTENSIONS_VISIBILITY(state, false)
+
+    expect(state.areFileExtensionsShown).toEqual(false)
+  })
+
   describe('CURRENT_FILE_OUTGOING_SHARES_REMOVE', () => {
     it('removes an outgoing user share', () => {
       const shareToRemove = { id: 1, shareType: ShareTypes.user.value }
