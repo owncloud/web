@@ -45,10 +45,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITags/createTags.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L61)
 -   [webUITags/createTags.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L79)
 
-### [When a user shares folder to a group, the sharer is shown as group in group member's sharing-sidebar](https://github.com/owncloud/web/issues/5216)
--   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L42)
--   [webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsToRootEdgeCases/shareWithGroupsEdgeCases.feature#L37)
-
 ### [File link in notifications seems to not work](https://github.com/owncloud/web/issues/5227)
 -   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
 -   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)

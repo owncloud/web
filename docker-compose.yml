@@ -103,6 +103,7 @@ services:
       RUN_ON_OCIS: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
       BACKEND_HOST: "https://host.docker.internal:9200"
+      REMOTE_UPLOAD_DIR: "/uploads"
 
   vnc:
     build:
