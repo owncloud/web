@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { isLocationTrashActive } from '../../router'
+import { isLocationTrashActive, isLocationCommonActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
@@ -24,6 +24,9 @@ export default {
               isLocationTrashActive(this.$router, 'files-trash-personal') ||
               isLocationTrashActive(this.$router, 'files-trash-spaces-project')
             ) {
+              return false
+            }
+            if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) {
               return false
             }
             return resources.length > 0

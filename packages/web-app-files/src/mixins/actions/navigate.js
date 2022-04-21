@@ -6,7 +6,8 @@ import {
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
-  isLocationTrashActive
+  isLocationTrashActive,
+  isLocationCommonActive
 } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 import merge from 'lodash-es/merge'
@@ -27,6 +28,9 @@ export default {
               isLocationTrashActive(this.$router, 'files-trash-personal') ||
               isLocationTrashActive(this.$router, 'files-trash-spaces-project')
             ) {
+              return false
+            }
+            if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) {
               return false
             }
             if (resources.length !== 1) {

@@ -1,6 +1,6 @@
 import quickActions, { canShare } from '../../quickActions'
 import { ShareStatus, createQuicklink } from '../../helpers/share'
-import { isLocationSharesActive } from '../../router'
+import { isLocationSharesActive, isLocationCommonActive } from '../../router'
 
 export default {
   computed: {
@@ -16,7 +16,10 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+            if (
+              isLocationSharesActive(this.$router, 'files-shares-with-me') ||
+              isLocationCommonActive(this.$router, 'files-common-projects')
+            ) {
               if (resources[0].status !== ShareStatus.accepted) {
                 return false
               }

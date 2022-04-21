@@ -1,5 +1,5 @@
 import { mapActions } from 'vuex'
-import { isLocationTrashActive } from '../../router'
+import { isLocationTrashActive, isLocationCommonActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
@@ -20,6 +20,7 @@ export default {
 
             // we don't have batch actions in the right sidebar, yet.
             // return hardcoded `true` in all cases once we have them.
+            if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) return false
             return resources.length === 1
           },
           componentType: 'oc-button',
@@ -36,7 +37,8 @@ export default {
       // return hardcoded `actions-item` in all cases once we have them.
       await this.openSidebarWithPanel(
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-          isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+          isLocationCommonActive(this.$router, 'files-common-projects-trash')
           ? null
           : 'actions-item'
       )
