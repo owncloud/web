@@ -8,12 +8,24 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
 Details
 -------
+
+* Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
+
+   We've added a toggle switch to the file list settings to turn off and on displaying file
+   extension.
+
+   If this setting is turned off, the file extension won't be shown anymore in: * The name column
+   displayed in the files list * The right sidebar * The rename modal * The new file modal
+
+   https://github.com/owncloud/web/issues/6730
+   https://github.com/owncloud/web/pull/6793
 
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 
