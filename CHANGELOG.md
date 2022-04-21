@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
 Details
 -------
+
+* Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
+
+   We have implemented a confirmation dialog which pops up if the user clicks the "remove share"
+   button
+
+   https://github.com/owncloud/web/issues/6728
+   https://github.com/owncloud/web/pull/6795
 
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
