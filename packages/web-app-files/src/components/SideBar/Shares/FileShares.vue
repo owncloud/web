@@ -41,7 +41,7 @@
               :share="collaborator"
               :modifiable="!collaborator.indirect"
               :shared-parent-route="getSharedParentRoute(collaborator)"
-              @onDelete="$_ocCollaborators_deleteShare"
+              @onDelete="$_ocCollaborators_deleteShare_trigger"
             />
           </li>
         </ul>
@@ -306,6 +306,7 @@ export default {
       'deleteShare',
       'loadIncomingShares'
     ]),
+    ...mapActions(['createModal', 'hideModal', 'showMessage']),
     $_isCollaboratorShare(collaborator) {
       return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
     },
@@ -337,6 +338,23 @@ export default {
     toggleShareeList() {
       this.showShareesList = !this.showShareesList
     },
+
+    $_ocCollaborators_deleteShare_trigger(share) {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Remove share'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Remove'),
+        icon: 'alarm-warning',
+        message: this.$gettext('Are you sure you want to remove this share?'),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.$_ocCollaborators_deleteShare(share)
+      }
+
+      this.createModal(modal)
+    },
+
     $_ocCollaborators_deleteShare(share) {
       this.deleteShare({
         client: this.$client,
@@ -344,6 +362,19 @@ export default {
         resource: this.highlightedFile,
         storageId: this.$route.params.storageId
       })
+        .then(() => {
+          this.hideModal()
+          this.showMessage({
+            title: this.$gettext('Share was removed successfully')
+          })
+        })
+        .catch((error) => {
+          console.error(error)
+          this.showMessage({
+            title: this.$gettext('Failed to remove share'),
+            status: 'danger'
+          })
+        })
     },
     $_reloadShares() {
       this.loadCurrentFileOutgoingShares({

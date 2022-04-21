@@ -176,7 +176,8 @@ export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
         .locator(
           `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
         )
-        .click()
+        .click(),
+      page.locator('.oc-modal-body-actions-confirm').click()
     ])
   }
 }

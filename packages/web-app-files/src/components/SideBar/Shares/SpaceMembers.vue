@@ -13,7 +13,7 @@
             <collaborator-list-item
               :share="collaborator"
               :modifiable="isModifiable(collaborator)"
-              @onDelete="$_ocCollaborators_deleteShare(collaborator)"
+              @onDelete="$_ocCollaborators_deleteShare_trigger(collaborator)"
             />
           </li>
         </ul>
@@ -104,6 +104,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'deleteShare']),
+    ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
     isModifiable(share) {
       if (!this.currentUserIsManager) {
@@ -120,21 +121,50 @@ export default defineComponent({
       )
       return managers.length > 1
     },
+
+    $_ocCollaborators_deleteShare_trigger(share) {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Remove share'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Remove'),
+        icon: 'alarm-warning',
+        message: this.$gettext('Are you sure you want to remove this share?'),
+        hasInput: false,
+        onCancel: this.hideModal,
+        onConfirm: () => this.$_ocCollaborators_deleteShare(share)
+      }
+
+      this.createModal(modal)
+    },
+
     $_ocCollaborators_deleteShare(share) {
       this.deleteShare({
         client: this.$client,
         graphClient: this.graphClient,
         share: share,
         resource: this.highlightedFile
-      }).then(() => {
-        // current user was removed from the share.
-        if (share.collaborator.name === this.user.id) {
-          if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go()
-          }
-          return this.$router.push(createLocationSpaces('files-spaces-projects'))
-        }
       })
+        .then(() => {
+          this.hideModal()
+          this.showMessage({
+            title: this.$gettext('Share was removed successfully')
+          })
+          // current user was removed from the share.
+          if (share.collaborator.name === this.user.id) {
+            if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+              return this.$router.go()
+            }
+            return this.$router.push(createLocationSpaces('files-spaces-projects'))
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          this.showMessage({
+            title: this.$gettext('Failed to remove share'),
+            status: 'danger'
+          })
+        })
     }
   }
 })

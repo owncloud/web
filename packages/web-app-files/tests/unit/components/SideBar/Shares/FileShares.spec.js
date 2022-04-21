@@ -91,8 +91,8 @@ describe('FileShares', () => {
     })
 
     it('reacts on delete events by collaborator list items', async () => {
-      const spyOnCollaboratorDelete = jest
-        .spyOn(FileShares.methods, '$_ocCollaborators_deleteShare')
+      const spyOnCollaboratorDeleteTrigger = jest
+        .spyOn(FileShares.methods, '$_ocCollaborators_deleteShare_trigger')
         .mockImplementation()
       const wrapper = getMountedWrapper({
         user,
@@ -100,7 +100,7 @@ describe('FileShares', () => {
       })
       wrapper.find(selectors.firstCollaboratorListItem).vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
-      expect(spyOnCollaboratorDelete).toHaveBeenCalledTimes(1)
+      expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
     it('reloads shares if highlighted file is changed', async () => {
       const spyOnReloadShares = jest
@@ -207,6 +207,11 @@ const storeOptions = (data) => {
   }
 
   return {
+    actions: {
+      createModal: jest.fn(),
+      hideModal: jest.fn(),
+      showMessage: jest.fn()
+    },
     state: {
       user
     },

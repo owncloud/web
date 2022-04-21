@@ -1,0 +1,6 @@
+Enhancement: Add un-share confirmation dialog
+
+We have implemented a confirmation dialog which pops up if the user clicks the "remove share" button
+
+https://github.com/owncloud/web/pull/6795
+https://github.com/owncloud/web/issues/6728
