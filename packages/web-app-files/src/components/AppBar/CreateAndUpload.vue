@@ -13,6 +13,7 @@
         <oc-icon name="add" />
         <translate>New</translate>
       </oc-button>
+
       <oc-drop
         drop-id="new-file-menu-drop"
         toggle="#new-file-menu-btn"
@@ -21,39 +22,47 @@
         class="oc-width-auto"
         padding-size="small"
       >
-        <oc-list id="create-list">
-          <li class="create-list-folder">
-            <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
-              <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
-              <translate>Folder</translate>
-            </oc-button>
-          </li>
-          <li v-for="(newFileHandler, key) in newFileHandlers" :key="key" class="create-list-file">
-            <oc-button
-              appearance="raw"
-              :class="['new-file-btn-' + newFileHandler.ext]"
-              @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
-            >
-              <oc-resource-icon :resource="{ type: 'file', extension: newFileHandler.ext }" />
-              <span>{{ newFileHandler.menuTitle($gettext) }}</span>
-            </oc-button>
-          </li>
-          <template v-if="mimetypesAllowedForCreation">
-            <li
-              v-for="(mimetype, key) in mimetypesAllowedForCreation"
-              :key="key"
-              class="create-list-file"
-            >
-              <oc-button
-                appearance="raw"
-                @click="showCreateResourceModal(false, mimetype.ext, false, true)"
+        <context-drop>
+          <template #drop-content>
+            <oc-list id="create-list">
+              <li class="create-list-folder">
+                <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
+                  <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
+                  <translate>Folder</translate>
+                </oc-button>
+              </li>
+              <li
+                v-for="(newFileHandler, key) in newFileHandlers"
+                :key="key"
+                class="create-list-file"
               >
-                <oc-resource-icon :resource="{ type: 'file', extension: mimetype.ext }" />
-                <translate :translate-params="{ name: mimetype.name }">%{name}</translate>
-              </oc-button>
-            </li>
+                <oc-button
+                  appearance="raw"
+                  :class="['new-file-btn-' + newFileHandler.ext]"
+                  @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
+                >
+                  <oc-resource-icon :resource="{ type: 'file', extension: newFileHandler.ext }" />
+                  <span>{{ newFileHandler.menuTitle($gettext) }}</span>
+                </oc-button>
+              </li>
+              <template v-if="mimetypesAllowedForCreation">
+                <li
+                  v-for="(mimetype, key) in mimetypesAllowedForCreation"
+                  :key="key"
+                  class="create-list-file"
+                >
+                  <oc-button
+                    appearance="raw"
+                    @click="showCreateResourceModal(false, mimetype.ext, false, true)"
+                  >
+                    <oc-resource-icon :resource="{ type: 'file', extension: mimetype.ext }" />
+                    <translate :translate-params="{ name: mimetype.name }">%{name}</translate>
+                  </oc-button>
+                </li>
+              </template>
+            </oc-list>
           </template>
-        </oc-list>
+        </context-drop>
       </oc-drop>
     </template>
     <template v-else>
@@ -89,6 +98,7 @@
       <oc-icon name="upload" fill-type="line" />
       <translate>Upload</translate>
     </oc-button>
+
     <oc-drop
       drop-id="upload-menu-drop"
       toggle="#upload-menu-btn"
@@ -97,27 +107,31 @@
       close-on-click
       padding-size="small"
     >
-      <oc-list id="upload-list">
-        <li>
-          <folder-upload
-            :root-path="currentPath"
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
-        </li>
-        <li>
-          <file-upload
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
-        </li>
-      </oc-list>
+      <context-drop>
+        <template #drop-content>
+          <oc-list id="upload-list">
+            <li>
+              <folder-upload
+                :root-path="currentPath"
+                :path="currentPath"
+                :headers="headers"
+                @success="onFileSuccess"
+                @error="onFileError"
+                @progress="onFileProgress"
+              />
+            </li>
+            <li>
+              <file-upload
+                :path="currentPath"
+                :headers="headers"
+                @success="onFileSuccess"
+                @error="onFileError"
+                @progress="onFileProgress"
+              />
+            </li>
+          </oc-list>
+        </template>
+      </context-drop>
     </oc-drop>
   </div>
 </template>
@@ -137,12 +151,14 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import FileDrop from './Upload/FileDrop.vue'
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
+import ContextDrop from '../ContextDrop.vue'
 
 export default {
   components: {
     FileDrop,
     FileUpload,
-    FolderUpload
+    FolderUpload,
+    ContextDrop
   },
   mixins: [Mixins, MixinFileActions],
   setup() {

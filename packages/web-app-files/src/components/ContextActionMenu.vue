@@ -1,29 +1,34 @@
 <template>
   <div id="oc-files-context-menu">
-    <oc-list
-      v-for="(section, sectionIndex) in menuSections"
-      :id="`oc-files-context-actions-${section.name}`"
-      :key="`section-${section.name}-list`"
-      class="oc-files-context-actions"
-      :class="getSectionClasses(sectionIndex)"
-    >
-      <action-menu-item
-        v-for="(action, actionIndex) in section.items"
-        :key="`section-${section.name}-action-${actionIndex}`"
-        :action="action"
-        :items="items"
-        class="oc-files-context-action oc-px-s oc-rounded"
-      />
-    </oc-list>
+    <context-drop>
+      <template #drop-content>
+        <oc-list
+          v-for="(section, sectionIndex) in menuSections"
+          :id="`oc-files-context-actions-${section.name}`"
+          :key="`section-${section.name}-list`"
+          class="oc-files-context-actions"
+          :class="getSectionClasses(sectionIndex)"
+        >
+          <action-menu-item
+            v-for="(action, actionIndex) in section.items"
+            :key="`section-${section.name}-action-${actionIndex}`"
+            :action="action"
+            :items="items"
+            class="oc-files-context-action oc-px-s oc-rounded"
+          />
+        </oc-list>
+      </template>
+    </context-drop>
   </div>
 </template>
 
 <script>
 import ActionMenuItem from './ActionMenuItem.vue'
+import ContextDrop from './ContextDrop.vue'
 
 export default {
   name: 'ContextActionMenu',
-  components: { ActionMenuItem },
+  components: { ActionMenuItem, ContextDrop },
   props: {
     menuSections: {
       type: Array,
