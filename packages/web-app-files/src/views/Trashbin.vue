@@ -17,7 +17,9 @@ export default {
   },
   computed: {
     breadcrumbs() {
-      const personalRouteName = this.hasShareJail
+      const personalRouteName = this.$route.query?.name
+        ? this.$route.query.name
+        : this.hasShareJail
         ? this.$gettext('Personal')
         : this.$gettext('All files')
 

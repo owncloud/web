@@ -27,7 +27,12 @@ import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { Panel } from 'web-pkg/src/components/sidebar/'
 
 import { buildResource } from '../../helpers/resources'
-import { isLocationPublicActive, isLocationSharesActive, isLocationTrashActive } from '../../router'
+import {
+  isLocationPublicActive,
+  isLocationSharesActive,
+  isLocationTrashActive,
+  isLocationCommonActive
+} from '../../router'
 import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
@@ -162,6 +167,7 @@ export default defineComponent({
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+        isLocationCommonActive(this.$router, 'files-common-projects-trash') ||
         this.highlightedFileIsSpace
       ) {
         this.selectedFile = this.highlightedFile

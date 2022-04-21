@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isLocationSharesActive, isLocationTrashActive } from '../router'
+import { isLocationSharesActive, isLocationTrashActive, isLocationCommonActive } from '../router'
 import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
@@ -96,6 +96,7 @@ export default {
               if (resources.length !== 1) {
                 return false
               }
+              if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) return false
 
               if (
                 isLocationSharesActive(this.$router, 'files-shares-with-me') &&

@@ -1,6 +1,9 @@
 <template>
   <div>
     <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
+    <h2 v-if="$route.query.project" class="oc-px-m oc-py-s">
+      Trashbin for project "{{ $route.query.name }}"
+    </h2>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message
@@ -16,7 +19,8 @@
       </no-content-message>
       <resource-table
         v-else
-        id="files-trashbin-table"
+        :id="$route.query.project ? 'files-project-trashbin-table' : 'files-trashbin-table'"
+        :key="$route.query.project ? `trashbin${$route.query.project}` : 'trashbin'"
         v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -105,20 +109,29 @@ export default defineComponent({
     }
   },
 
+  watch: {
+    $route(to, from) {
+      this.onCreated()
+    }
+  },
+
   created() {
-    this.loadResourcesTask.perform(this)
-
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
-    })
-
-    this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
-    })
+    this.onCreated()
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST'])
+    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    onCreated() {
+      this.loadResourcesTask.perform(this)
+
+      const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
+        this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+      })
+
+      this.$on('beforeDestroy', () => {
+        bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+      })
+    }
   }
 })
 </script>
