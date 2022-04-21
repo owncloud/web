@@ -114,6 +114,9 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
       getters: {
         getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
         configuration: jest.fn(() => ({
+          options: {
+            contextHelpers: true
+          },
           server: 'http://example.com/'
         }))
       }

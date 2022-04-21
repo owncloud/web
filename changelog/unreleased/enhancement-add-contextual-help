@@ -1,0 +1,7 @@
+Enhancement: Add OcContextualHelper
+
+We've added contextual helpers to provide more information
+based on the context
+
+https://github.com/owncloud/web/issues/6590
+https://github.com/owncloud/web/pull/6750

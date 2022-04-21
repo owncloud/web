@@ -247,6 +247,9 @@ const storeOptions = (data) => {
     getters: {
       getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
       configuration: jest.fn(() => ({
+        options: {
+          contextHelpers: true
+        },
         server: 'http://example.com/'
       })),
       user: () => user,
