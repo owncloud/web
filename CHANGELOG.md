@@ -8,13 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
+* Enhancement - Bump ODS to 13.1.0 RC.5: [#6750](https://github.com/owncloud/web/pull/6750)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
 Details
 -------
+
+* Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
+
+   We've added contextual helpers to provide more information based on the context
+
+   https://github.com/owncloud/web/issues/6590
+   https://github.com/owncloud/web/pull/6750
 
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 
@@ -34,6 +43,12 @@ Details
 
    https://github.com/owncloud/web/issues/6728
    https://github.com/owncloud/web/pull/6795
+
+* Enhancement - Bump ODS to 13.1.0 RC.5: [#6750](https://github.com/owncloud/web/pull/6750)
+
+   We've bumped the version of the design system to v13.1.0-rc.5
+
+   https://github.com/owncloud/web/pull/6750
 
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
