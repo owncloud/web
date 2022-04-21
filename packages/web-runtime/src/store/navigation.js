@@ -43,6 +43,10 @@ const mutations = {
     }
     state.dynamicNavItems = dynamicNavItems
   },
+  /* Sets dynamic nav items */
+  SET_DYNAMIC_NAV_ITEMS(state, navItems) {
+    state.dynamicNavItems = navItems
+  },
   SET_CLOSED(state, closed) {
     state.closed = closed
   }
@@ -89,6 +93,9 @@ const actions = {
   },
   closeNavigation({ commit }) {
     commit('SET_CLOSED', true)
+  },
+  clearDynamicNavItems({ commit }) {
+    commit('SET_DYNAMIC_NAV_ITEMS', {})
   }
 }
 export default {
