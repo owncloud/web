@@ -13,7 +13,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
         </oc-button-stub>
       </li>
       <li>
-        <oc-button-stub type="a" size="medium" href="http://some.org" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" target="_blank" class=""><span class="icon-box"><oc-icon-stub name="some-icon" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span> <span>External</span>
+        <oc-button-stub type="a" size="medium" href="http://some.org" target="_blank" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class=""><span class="icon-box"><oc-icon-stub name="some-icon" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span> <span>External</span>
           <!---->
         </oc-button-stub>
       </li>
