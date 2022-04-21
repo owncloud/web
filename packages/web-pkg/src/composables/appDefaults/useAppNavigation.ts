@@ -59,10 +59,11 @@ const queryItemAsString = (queryItem: string | string[]) => {
   return queryItem
 }
 
-export function useAppNavigation(options: AppNavigationOptions): AppNavigationResult {
+export function useAppNavigation({
+  router,
+  currentFileContext
+}: AppNavigationOptions): AppNavigationResult {
   const navigateToContext = (context: MaybeRef<FileContext>) => {
-    const router = options.router
-
     const { fileName, routeName, routeParams, routeQuery } = unref(context)
 
     return router.push({
@@ -76,7 +77,7 @@ export function useAppNavigation(options: AppNavigationOptions): AppNavigationRe
   }
 
   const closeApp = () => {
-    return navigateToContext(options.currentFileContext)
+    return navigateToContext(currentFileContext)
   }
 
   return {

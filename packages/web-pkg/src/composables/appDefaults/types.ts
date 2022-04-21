@@ -7,3 +7,5 @@ export interface FileContext {
   routeParams: MaybeRef<LocationParams>
   routeQuery: MaybeRef<LocationQuery>
 }
+
+export type AppConfigObject = Record<string, any>

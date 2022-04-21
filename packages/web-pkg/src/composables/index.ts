@@ -1,4 +1,5 @@
 export * from './appDefaults'
+export * from './authContext'
 export * from './capability'
 export * from './clientService'
 export * from './localStorage'
