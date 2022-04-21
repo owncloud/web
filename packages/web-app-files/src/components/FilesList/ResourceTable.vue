@@ -52,6 +52,7 @@
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name-default="defaultParentFolderName"
           :is-thumbnail-displayed="areThumbnailsDisplayed"
+          :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
@@ -165,7 +166,7 @@
 <script lang="ts">
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
@@ -352,6 +353,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
+    ...mapState('Files', ['areFileExtensionsShown']),
     popperOptions() {
       return {
         modifiers: [

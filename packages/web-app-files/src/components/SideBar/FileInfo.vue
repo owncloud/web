@@ -8,6 +8,7 @@
           :extension="file.extension"
           :type="file.type"
           :full-path="file.webDavPath"
+          :is-extension-displayed="areFileExtensionsShown"
           :is-path-displayed="false"
         />
       </h3>
@@ -30,7 +31,7 @@
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
 import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { useActiveLocation } from '../../composables'
 
@@ -54,6 +55,7 @@ export default {
   },
   computed: {
     ...mapGetters(['capabilities', 'user']),
+    ...mapState('Files', ['areFileExtensionsShown']),
     timeData() {
       const interpolate = (obj) => {
         obj.time = this.formDateFromRFC(obj.sourceTime)

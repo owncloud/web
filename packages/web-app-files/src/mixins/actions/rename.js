@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
@@ -8,6 +8,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'currentFolder']),
     ...mapGetters(['capabilities']),
+    ...mapState('Files', ['areFileExtensionsShown']),
 
     $_rename_items() {
       return [
@@ -68,27 +69,49 @@ export default {
       }
 
       const confirmAction = (newName) => {
+        if (!this.areFileExtensionsShown) {
+          newName = `${newName}.${resources[0].extension}`
+        }
+
         this.$_rename_renameResource(resources[0], newName)
       }
       const checkName = (newName) => {
+        if (!this.areFileExtensionsShown) {
+          newName = `${newName}.${resources[0].extension}`
+        }
         this.$_rename_checkNewName(resources[0].name, newName, parentResources)
       }
+      const nameWithoutExtension = extractNameWithoutExtension(resources[0])
+      const modalTitle =
+        !resources[0].isFolder && !this.areFileExtensionsShown
+          ? nameWithoutExtension
+          : resources[0].name
 
       const title = this.$gettextInterpolate(
         resources[0].isFolder
           ? this.$gettext('Rename folder %{name}')
           : this.$gettext('Rename file %{name}'),
-        { name: resources[0].name }
+        { name: modalTitle }
       )
-      const nameWithoutExtension = extractNameWithoutExtension(resources[0])
+
+      const inputValue =
+        !resources[0].isFolder && !this.areFileExtensionsShown
+          ? nameWithoutExtension
+          : resources[0].name
+
+      const inputSelectionRange =
+        resources[0].isFolder || !this.areFileExtensionsShown
+          ? null
+          : [0, nameWithoutExtension.length]
+
       const modal = {
         variation: 'passive',
         title,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Rename'),
         hasInput: true,
-        inputValue: resources[0].name,
-        inputSelectionRange: resources[0].isFolder ? null : [0, nameWithoutExtension.length],
+        inputValue,
+        inputSelectionRange,
         inputLabel: resources[0].isFolder
           ? this.$gettext('Folder name')
           : this.$gettext('File name'),

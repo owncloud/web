@@ -272,6 +272,11 @@ function getMountedWrapper(options = {}) {
         store: createStore(Vuex.Store, {
           getters: {
             configuration: () => {}
+          },
+          modules: {
+            Files: {
+              namespaced: true
+            }
           }
         }),
         propsData: {

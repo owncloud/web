@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
 
 import Mixins from '../../mixins'
@@ -165,6 +165,7 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
+    ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
@@ -334,10 +335,12 @@ export default {
     ) {
       const defaultName = isFolder
         ? this.$gettext('New folder')
-        : this.$gettext('New file') + '.' + ext
+        : this.$gettext('New file') + (this.areFileExtensionsShown ? `.${ext}` : '')
       const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
-          isFolder ? this.checkNewFolderName(value) : this.checkNewFileName(value)
+          isFolder
+            ? this.checkNewFolderName(value)
+            : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
         )
       }
 
@@ -356,13 +359,20 @@ export default {
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         inputError: isFolder
           ? this.checkNewFolderName(defaultName)
-          : this.checkNewFileName(defaultName),
+          : this.checkNewFileName(
+              this.areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`
+            ),
         onCancel: this.hideModal,
         onConfirm: isFolder
           ? this.addNewFolder
           : addAppProviderFile
           ? this.addAppProviderFile
-          : this.addNewFile,
+          : (fileName) => {
+              if (!this.areFileExtensionsShown) {
+                fileName = `${fileName}.${ext}`
+              }
+              this.addNewFile(fileName)
+            },
         onInput: checkInputValue
       }
 

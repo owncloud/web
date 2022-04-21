@@ -27,6 +27,13 @@
           />
         </li>
         <li class="files-view-options-list-item">
+          <oc-switch
+            v-model="fileExtensionsShownModel"
+            data-testid="files-switch-files-extensions-files"
+            :label="$gettext('Show file extensions')"
+          />
+        </li>
+        <li class="files-view-options-list-item">
           <oc-page-size
             v-model="itemsPerPage"
             data-testid="files-pagination-size"
@@ -57,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('Files', ['areHiddenFilesShown']),
+    ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
     viewOptionsButtonLabel() {
       return this.$gettext('Display customization options of the files list')
@@ -71,10 +78,19 @@ export default {
       set(value) {
         this.SET_HIDDEN_FILES_VISIBILITY(value)
       }
+    },
+    fileExtensionsShownModel: {
+      get() {
+        return this.areFileExtensionsShown
+      },
+
+      set(value) {
+        this.SET_FILE_EXTENSIONS_VISIBILITY(value)
+      }
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY'])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
   }
 }
 </script>

@@ -48,5 +48,6 @@ export default {
   /**
    * View settings
    */
-  areHiddenFilesShown: true
+  areHiddenFilesShown: true,
+  areFileExtensionsShown: true
 }

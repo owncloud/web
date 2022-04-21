@@ -29,7 +29,8 @@ describe('ViewOptions', () => {
         Files: {
           namespaced: true,
           mutations: {
-            SET_HIDDEN_FILES_VISIBILITY: jest.fn()
+            SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
+            SET_FILE_EXTENSIONS_VISIBILITY: jest.fn()
           },
           modules: {
             sidebar: {

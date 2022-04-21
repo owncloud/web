@@ -1,0 +1,12 @@
+Enhancement: Add show file extension toggle switch in file list settings
+
+We've added a toggle switch to the file list settings to turn off and on displaying file extension.
+
+If this setting is turned off, the file extension won't be shown anymore in:
+* The name column displayed in the files list
+* The right sidebar
+* The rename modal
+* The new file modal
+
+https://github.com/owncloud/web/pull/6793
+https://github.com/owncloud/web/issues/6730
