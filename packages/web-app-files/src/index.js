@@ -168,6 +168,18 @@ export default {
         navItem
       })
     })
+    if (store.getters.capabilities.group_based?.capabilities?.includes('cephfs-mount'))
+      store.commit('ADD_NAV_ITEM', {
+        extension: 'files',
+        navItem: {
+          name: $gettext('HPC Data'),
+          icon: 'folder',
+          route: {
+            path: '/files/spaces/cephfs'
+          },
+          separate: true
+        }
+      })
 
     // Load spaces to make them available across the application
     if (store.getters.capabilities?.spaces?.enabled) {

@@ -18,7 +18,31 @@
     <nav class="oc-sidebar-nav oc-my-m oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
       <oc-list>
         <sidebar-nav-item
-          v-for="(link, index) in navItems"
+          v-for="(link, index) in navItemsTop"
+          :key="link.route.path"
+          :index="index"
+          :target="link.route.path"
+          :active="link.active"
+          :icon="link.icon"
+          :fill-type="link.fillType"
+          :name="link.name"
+          :collapsed="navigation.closed"
+        />
+      </oc-list>
+      <p
+        v-if="navItemsBottom.length"
+        style="
+          padding-left: calc(var(--oc-space-small) + 8px);
+          margin-bottom: 0;
+          margin-top: 30px;
+          font-size: 0.8em;
+        "
+      >
+        <!--Shortcuts-->
+      </p>
+      <oc-list>
+        <sidebar-nav-item
+          v-for="(link, index) in navItemsBottom"
           :key="link.route.path"
           :index="index"
           :target="link.route.path"
@@ -28,6 +52,7 @@
           :name="link.name"
           :collapsed="navigation.closed"
           :tag="link.tag"
+          :class="'nav-item-separated'"
         />
       </oc-list>
     </nav>
@@ -61,6 +86,12 @@ export default {
 
     toggleSidebarButtonIcon() {
       return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
+    },
+    navItemsTop() {
+      return this.navItems.filter((item) => item.separate === false || !item.separate)
+    },
+    navItemsBottom() {
+      return this.navItems.filter((item) => item.separate === true)
     }
   },
   methods: {
@@ -103,5 +134,14 @@ export default {
 .oc-app-navigation-collapsed {
   min-width: 64px !important;
   max-width: 64px !important;
+}
+.nav-item-separated {
+  //color: var(--oc-color-swatch-passive-default) !important;
+  .oc-button-inverse-raw:not([disabled]) {
+    color: var(--oc-color-swatch-passive-default) !important;
+    svg {
+      fill: var(--oc-color-swatch-passive-default) !important;
+    }
+  }
 }
 </style>
