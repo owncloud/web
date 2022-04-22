@@ -84,6 +84,17 @@ const navItems = [
     enabled(capabilities) {
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
     }
+  },
+  {
+    name: $gettext('HPC Data'),
+    icon: 'folder',
+    route: {
+      path: `/${appInfo.id}/spaces/cephfs`
+    },
+    separate: true,
+    enabled(capabilities) {
+      return capabilities.group_based?.capabilities?.includes('cephfs-mount') || false
+    }
   }
 ]
 
