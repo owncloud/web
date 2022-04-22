@@ -25,7 +25,7 @@ export function renameResource(resource, newName, newPath) {
   }
 
   resource.name = newName
-  resource.path = resourcePath
+  resource.path = '/' + resourcePath
   resource.webDavPath = '/' + newPath + newName
   resource.extension = extractExtensionFromFile(resource)
 

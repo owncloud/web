@@ -1,0 +1,7 @@
+Bugfix: Rename a file in favorites list with same name but in different folder
+
+We've fixed a bug, where renaming a file in the favorites file list to a file with the same name but located
+in a different folder was not possible, as the message `The name "..." is already taken` appeared.
+
+https://github.com/owncloud/web/pull/6804
+https://github.com/owncloud/web/issues/1750

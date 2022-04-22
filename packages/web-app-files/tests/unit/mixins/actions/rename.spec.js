@@ -47,7 +47,17 @@ describe('rename', () => {
     it('should not show an error with a valid name', () => {
       const wrapper = getWrapper()
       const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.$_rename_checkNewName('currentName', 'newName')
+      wrapper.vm.$_rename_checkNewName({ name: 'currentName', path: '/currentName' }, 'newName')
+      expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
+    })
+
+    it('should not show an error if resource name already exists but in different folder', () => {
+      const wrapper = getWrapper()
+      const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      wrapper.vm.$_rename_checkNewName(
+        { name: 'currentName', path: '/favorites/currentName' },
+        'file1'
+      )
       expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
     })
 
@@ -69,14 +79,14 @@ describe('rename', () => {
       {
         currentName: 'currentName',
         newName: 'newname',
-        parentResources: [{ name: 'newname' }],
+        parentResources: [{ name: 'newname', path: '/newname' }],
         message: 'The name "%{name}" is already taken'
       }
     ])('should detect name errors and display error messages accordingly', (inputData) => {
       const wrapper = getWrapper()
       const spyGetTextStub = jest.spyOn(wrapper.vm, '$gettext')
       wrapper.vm.$_rename_checkNewName(
-        inputData.currentName,
+        { name: inputData.currentName, path: `/${inputData.currentName}` },
         inputData.newName,
         inputData.parentResources
       )
@@ -142,7 +152,9 @@ function getWrapper(renameFilePromise) {
           return { href: r.name }
         }
       },
-      $client: { files: { find: jest.fn(() => [{ name: 'file1' }]), list: jest.fn(() => []) } },
+      $client: {
+        files: { find: jest.fn(() => [{ name: 'file1', path: '/file1' }]), list: jest.fn(() => []) }
+      },
       $gettextInterpolate: jest.fn(),
       $gettext: jest.fn(),
       publicPage: () => false,
@@ -154,7 +166,7 @@ function getWrapper(renameFilePromise) {
           namespaced: true,
           getters: {
             currentFolder: () => currentFolder,
-            files: () => [{ name: 'file1' }]
+            files: () => [{ name: 'file1', path: '/file1' }]
           },
           actions: {
             renameFile: jest.fn(() => {

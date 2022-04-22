@@ -79,7 +79,7 @@ export default {
         if (!this.areFileExtensionsShown) {
           newName = `${newName}.${resources[0].extension}`
         }
-        this.$_rename_checkNewName(resources[0].name, newName, parentResources)
+        this.$_rename_checkNewName(resources[0], newName, parentResources)
       }
       const nameWithoutExtension = extractNameWithoutExtension(resources[0])
       const modalTitle =
@@ -123,7 +123,10 @@ export default {
       this.createModal(modal)
     },
 
-    $_rename_checkNewName(currentName, newName, parentResources) {
+    $_rename_checkNewName(resource, newName, parentResources) {
+      const newPath =
+        resource.path.substring(0, resource.path.length - resource.name.length) + newName
+
       if (!newName) {
         return this.setModalInputErrorMessage(this.$gettext('The name cannot be empty'))
       }
@@ -145,7 +148,7 @@ export default {
       }
 
       if (!this.flatFileList) {
-        const exists = this.files.find((file) => file.name === newName && currentName !== newName)
+        const exists = this.files.find((file) => file.path === newPath && resource.name !== newName)
 
         if (exists) {
           const translated = this.$gettext('The name "%{name}" is already taken')
@@ -158,7 +161,7 @@ export default {
 
       if (parentResources) {
         const exists = parentResources.find(
-          (file) => file.name === newName && currentName !== newName
+          (file) => file.path === newPath && resource.name !== newName
         )
 
         if (exists) {
