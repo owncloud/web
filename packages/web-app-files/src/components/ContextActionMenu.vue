@@ -62,6 +62,8 @@ export default {
   white-space: normal;
 
   > li {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     a,
     button,
     span {
