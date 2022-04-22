@@ -26,7 +26,7 @@
           class="oc-ml-s oc-background-primary-gradient"
         />
         <sidebar-nav-item
-          v-for="link in navItems"
+          v-for="link in navItemsTop"
           :key="link.route.path"
           :index="getUuid()"
           :target="link.route.path"
@@ -36,6 +36,31 @@
           :name="link.name"
           :collapsed="navigation.closed"
           :tag="link.tag"
+        />
+      </oc-list>
+      <p
+        v-if="navItemsBottom.length"
+        style="
+          padding-left: calc(var(--oc-space-small) + 8px);
+          margin-bottom: 0;
+          margin-top: 30px;
+          font-size: 0.8em;
+        "
+      />
+      <!--Shortcuts-->
+      <oc-list>
+        <sidebar-nav-item
+          v-for="link in navItemsBottom"
+          :key="link.route.path"
+          :index="getUuid()"
+          :target="link.route.path"
+          :active="link.active"
+          :icon="link.icon"
+          :fill-type="link.fillType"
+          :name="link.name"
+          :collapsed="navigation.closed"
+          :tag="link.tag"
+          :class="'nav-item-separated'"
         />
       </oc-list>
     </nav>
@@ -99,7 +124,12 @@ export default defineComponent({
     toggleSidebarButtonIcon() {
       return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
     },
-
+    navItemsTop() {
+      return this.navItems.filter((item) => item.separate === false || !item.separate)
+    },
+    navItemsBottom() {
+      return this.navItems.filter((item) => item.separate === true)
+    },
     isAnyNavItemActive() {
       return this.navItems.some((i) => i.active === true)
     }
@@ -172,5 +202,14 @@ export default defineComponent({
 .oc-app-navigation-collapsed {
   min-width: 62px !important;
   max-width: 62px !important;
+}
+.nav-item-separated {
+  //color: var(--oc-color-swatch-passive-default) !important;
+  .oc-button-inverse-raw:not([disabled]) {
+    color: var(--oc-color-swatch-passive-default) !important;
+    svg {
+      fill: var(--oc-color-swatch-passive-default) !important;
+    }
+  }
 }
 </style>
