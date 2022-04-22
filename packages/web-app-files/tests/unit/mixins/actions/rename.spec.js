@@ -51,6 +51,16 @@ describe('rename', () => {
       expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
     })
 
+    it('should not show an error if resource name already exists but in different folder', () => {
+      const wrapper = getWrapper()
+      const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      wrapper.vm.$_rename_checkNewName(
+        { name: 'currentName', path: '/favorites/currentName' },
+        'file1'
+      )
+      expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
+    })
+
     it.each([
       { currentName: 'currentName', newName: '', message: 'The name cannot be empty' },
       { currentName: 'currentName', newName: 'new/name', message: 'The name cannot contain "/"' },
