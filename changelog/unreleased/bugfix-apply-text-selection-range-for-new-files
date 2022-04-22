@@ -1,0 +1,8 @@
+Bugfix: Apply text selection range for new files
+
+We've fixed a bug, where the text selection range for a new file has not been applied only for the file name but also
+for the file extension.
+This is now working as in the rename modal and just selects the text for the file name.
+
+https://github.com/owncloud/web/issues/6756
+https://github.com/owncloud/web/pull/6803
