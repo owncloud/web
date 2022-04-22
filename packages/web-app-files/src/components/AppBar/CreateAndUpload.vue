@@ -349,6 +349,9 @@ export default {
         this.newFileAction = openAction
       }
 
+      const inputSelectionRange =
+        isFolder || !this.areFileExtensionsShown ? null : [0, defaultName.length - (ext.length + 1)]
+
       const modal = {
         variation: 'passive',
         title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
@@ -362,6 +365,7 @@ export default {
           : this.checkNewFileName(
               this.areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`
             ),
+        inputSelectionRange,
         onCancel: this.hideModal,
         onConfirm: isFolder
           ? this.addNewFolder
