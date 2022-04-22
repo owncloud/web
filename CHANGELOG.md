@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
+* Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
@@ -27,6 +28,15 @@ Details
 
    https://github.com/owncloud/web/issues/6756
    https://github.com/owncloud/web/pull/6803
+
+* Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
+
+   We've fixed a bug, where renaming a file in the favorites file list to a file with the same name but
+   located in a different folder was not possible, as the message `The name "..." is already taken`
+   appeared.
+
+   https://github.com/owncloud/web/issues/1750
+   https://github.com/owncloud/web/pull/6804
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
