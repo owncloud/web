@@ -5,49 +5,130 @@ policy_selector:
 policies:
   - name: ocis
     routes:
-      - endpoint: "/"
+      # serve oC Web assets from the Web container
+      - type: ""
+        endpoint: /
         backend: http://web:8080
-      - endpoint: "/config.json"
+        service: ""
+        apache-vhost: false
+      # servce oC Web config from oCIS
+      - type: ""
+        endpoint: /config.json
         backend: http://localhost:9100
-      - endpoint: "/.well-known/"
+        service: ""
+        apache-vhost: false
+
+      # begin of regular oCIS proxy configuration
+
+      # we don't need the root rule for oC Web, since we replaced it
+      # with the both rules above
+      #- type: ""
+      #  endpoint: /
+      #  backend: http://localhost:9100
+      #  service: ""
+      #  apache-vhost: false
+      - type: ""
+        endpoint: /.well-known/
         backend: http://localhost:9130
-      - endpoint: "/konnect/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /konnect/
         backend: http://localhost:9130
-      - endpoint: "/signin/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /signin/
         backend: http://localhost:9130
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /archiver
+        backend: http://localhost:9140
+        service: ""
+        apache-vhost: false
       - type: regex
-        endpoint: "/ocs/v[12].php/cloud/(users?|groups)"
+        endpoint: /ocs/v[12].php/cloud/(users?|groups)
         backend: http://localhost:9110
-      - endpoint: "/ocs/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /ocs/
         backend: http://localhost:9140
+        service: ""
+        apache-vhost: false
       - type: query
-        endpoint: "/remote.php/?preview=1"
+        endpoint: /remote.php/?preview=1
         backend: http://localhost:9115
-      - endpoint: "/remote.php/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /remote.php/
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /dav/
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /webdav/
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /status.php
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /index.php/
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /apps/
+        backend: ""
+        service: ocdav
+        apache-vhost: false
+      - type: ""
+        endpoint: /data
         backend: http://localhost:9140
-      - endpoint: "/dav/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /app/
         backend: http://localhost:9140
-      - endpoint: "/webdav/"
-        backend: http://localhost:9140
-      - endpoint: "/status.php"
-        backend: http://localhost:9140
-      - endpoint: "/index.php/"
-        backend: http://localhost:9140
-      - endpoint: "/data"
-        backend: http://localhost:9140
-      - endpoint: "/app/"
-        backend: http://localhost:9140
-      - endpoint: "/archiver"
-        backend: http://localhost:9140
-      - endpoint: "/graph/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /graph/
         backend: http://localhost:9120
-      - endpoint: "/graph-explorer/"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /graph-explorer
         backend: http://localhost:9135
-      - endpoint: "/api/v0/accounts"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /api/v0/accounts
         backend: http://localhost:9181
-      - endpoint: "/accounts.js"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /accounts.js
         backend: http://localhost:9181
-      - endpoint: "/api/v0/settings"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /api/v0/settings
         backend: http://localhost:9190
-      - endpoint: "/settings.js"
+        service: ""
+        apache-vhost: false
+      - type: ""
+        endpoint: /settings.js
         backend: http://localhost:9190
+        service: ""
+        apache-vhost: false
