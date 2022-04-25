@@ -60,9 +60,6 @@ const plugins = [
     css: false
   }),
   nodePolyfills(),
-  inject({
-    Buffer: ['buffer', 'Buffer']
-  }),
   resolve({
     include: 'node_modules/**',
     dedupe: ['@vue/composition-api'],
@@ -82,6 +79,9 @@ const plugins = [
   }),
   ts({
     browserslist: false
+  }),
+  inject({
+    Buffer: ['buffer', 'Buffer']
   }),
   json(),
   copy({
@@ -150,7 +150,9 @@ const plugins = [
                   const fp = path.parse(f.fileName)
                   const lastDash = fp.name.lastIndexOf('-')
                   acc[c][
-                    production ? fp.name.slice(0, lastDash !== -1 ? lastDash : 0) || fp.name : fp.name
+                    production
+                      ? fp.name.slice(0, lastDash !== -1 ? lastDash : 0) || fp.name
+                      : fp.name
                   ] = c === 'js' ? fp.name : f.fileName
                 })
 
