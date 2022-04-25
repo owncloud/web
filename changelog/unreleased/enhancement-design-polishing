@@ -1,6 +1,8 @@
 Enhancement: Design polishing
 
-We've fixed several issues regarding the new design
+We've fixed the following issues to enhance UI/UX:
+- wording for new space button
+- wording for invite space member submit button
 
 https://github.com/owncloud/web/pull/6781
 https://github.com/owncloud/web/issues/6555
