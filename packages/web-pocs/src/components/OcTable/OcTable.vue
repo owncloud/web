@@ -197,7 +197,8 @@ export default {
      */
     groupingSettings: {
       type: Object,
-      required: false
+      required: false,
+      default: null
     },
     /**
      * The data for the table. Each array item will be rendered as one table row. Each array item needs to have a
