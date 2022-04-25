@@ -849,3 +849,12 @@ export default defineComponent({
   min-width: 250px;
 }
 </style>
+<style lang="scss">
+#create-list,
+#upload-list,
+#new-file-menu-drop {
+  .oc-icon-m svg {
+    height: 100% !important;
+  }
+}
+</style>
