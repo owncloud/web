@@ -44,7 +44,7 @@ module.exports = {
       const files = []
       for (const { ELEMENT } of elements) {
         await this.api.elementIdText(ELEMENT, function (result) {
-          files.push(result.value)
+          files.push(result.value.replace('\n', ''))
         })
       }
       return files
@@ -56,11 +56,11 @@ module.exports = {
       locateStrategy: 'css selector'
     },
     uploadedFiles: {
-      selector: 'table tr > td:first-child',
+      selector: '.upload-info-successful-uploads span.oc-resource-name',
       locateStrategy: 'css selector'
     },
     fileDropzone: {
-      selector: '#oc-dropzone',
+      selector: '#files-drop-container',
       locateStrategy: 'css selector'
     }
   }

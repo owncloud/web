@@ -168,7 +168,7 @@ module.exports = {
           false
         )
         .waitForElementNotVisible('@fileUploadProgress')
-        .click('@newFileMenuButton')
+        .click('@uploadFilesButton')
     },
     /**
      * This uploads a folder that is inside the selenium host,
