@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
+* Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
@@ -28,6 +29,13 @@ Details
 
    https://github.com/owncloud/web/issues/6756
    https://github.com/owncloud/web/pull/6803
+
+* Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
+
+   We've fixed a bug where the quick rename button was clickable, even so it wasn't visible.
+
+   https://github.com/owncloud/web/issues/6767
+   https://github.com/owncloud/web/pull/6775
 
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 
