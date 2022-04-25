@@ -1,8 +1,11 @@
-import { DataTable, When } from '@cucumber/cucumber'
+import { DataTable, Then, When } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
 import { kebabCase } from 'lodash'
 import { DateTime } from 'luxon'
 import { World } from '../../../environment'
 import { objects } from '../../../../support'
+import { processDownload } from '../resource'
+import { linkStore } from '../../../../support/store'
 
 When(
   '{string} opens the public link {string}',
@@ -63,6 +66,63 @@ When(
     const resources = stepTable
       .hashes()
       .map((f) => this.filesEnvironment.getFile({ name: f.resource }))
-    await pageObject.upload({ resources })
+    await pageObject.dropUpload({ resources })
+  }
+)
+
+When(
+  '{string} refreshes the old link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    await pageObject.reload()
+  }
+)
+
+Then(
+  /^"([^"]*)" downloads the following public link resource(s)? using the (sidebar panel|batch action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    await processDownload(stepTable, pageObject, actionType)
+  }
+)
+
+When(
+  '{string} renames the following public link resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    for (const { resource, as } of stepTable.hashes()) {
+      await pageObject.rename({ resource, newName: as })
+    }
+  }
+)
+
+When(
+  '{string} uploads the following resource(s) in public link page',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    for (const info of stepTable.hashes()) {
+      await pageObject.upload({
+        to: info.to,
+        resources: [this.filesEnvironment.getFile({ name: info.resource })],
+        createVersion: info.create_version === 'true'
+      })
+    }
+  }
+)
+
+When(
+  '{string} should not be able to open the old link {string}',
+  function (this: World, stepUser: string, name: string): void {
+    expect(linkStore.has(name)).toBe(false)
   }
 )

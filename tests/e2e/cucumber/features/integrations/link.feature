@@ -27,13 +27,27 @@ Feature: link
       | textfile.txt |
     #Then the public should see the following files on the files-drop page
     #  | textfile.txt |
-    #When the public reloads the public link pages
     #Then the public should not see the following files on the files-drop page
     #  | textfile.txt |
-    And "Anonymous" logs out
     When "Alice" downloads the following resources using the batch action
       | resource     | from         |
       | lorem.txt    | folderPublic |
       | textfile.txt | folderPublic |
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "editor"
+    And "Anonymous" refreshes the old link
+    And "Anonymous" downloads the following public link resources using the sidebar panel
+      | resource     |
+      | lorem.txt    |
+      | textfile.txt |
+    And "Anonymous" uploads the following resources in public link page
+      | resource      |
+      | new-lorem.txt |
+    And "Anonymous" renames the following public link resources
+      | resource      | as               |
+      | lorem.txt     | lorem_new.txt    |
+      | textfile.txt  | textfile_new.txt |
+      | new-lorem.txt | test.txt         |
+    And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
+    And "Anonymous" should not be able to open the old link "myPublicLink"
+    And "Anonymous" logs out
     And "Alice" logs out

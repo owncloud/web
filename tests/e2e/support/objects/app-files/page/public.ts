@@ -1,7 +1,15 @@
-import { Page } from 'playwright'
+import { Download, Page } from 'playwright'
 import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
+import {
+  downloadResources,
+  downloadResourcesArgs,
+  renameResource,
+  renameResourceArgs,
+  uploadResource,
+  uploadResourceArgs
+} from '../resource/actions'
 
 export class Public {
   #page: Page
@@ -23,7 +31,7 @@ export class Public {
       .click()
   }
 
-  async upload({ resources }: { resources: File[] }): Promise<void> {
+  async dropUpload({ resources }: { resources: File[] }): Promise<void> {
     const startUrl = this.#page.url()
     const resourceSelector = `[data-test-resource-name="%s"]`
     await this.#page
@@ -34,5 +42,29 @@ export class Public {
       names.map((name) => this.#page.waitForSelector(util.format(resourceSelector, name)))
     )
     await this.#page.goto(startUrl)
+  }
+
+  async reload(): Promise<void> {
+    await this.#page.reload()
+  }
+
+  async download(args: Omit<downloadResourcesArgs, 'page'>): Promise<Download[]> {
+    const startUrl = this.#page.url()
+    const downloads = await downloadResources({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return downloads
+  }
+
+  async rename(args: Omit<renameResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await renameResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async upload(args: Omit<uploadResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await uploadResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    await this.#page.locator('body').click()
   }
 }

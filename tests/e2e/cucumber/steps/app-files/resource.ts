@@ -46,56 +46,7 @@ When(
   ) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    let downloads
-    let files, parentFolder
-    const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { resource, from } = stepRow
-
-      if (!acc[from]) {
-        acc[from] = []
-      }
-
-      acc[from].push(resource)
-
-      return acc
-    }, {})
-
-    for (const folder of Object.keys(downloadInfo)) {
-      files = downloadInfo[folder]
-      parentFolder = folder
-      downloads = await resourceObject.download({
-        folder,
-        names: files,
-        via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-      })
-      if (actionType === 'sidebar panel') {
-        expect(files.length).toBe(downloads.length)
-        downloads.forEach((download) => {
-          expect(files).toContain(download.suggestedFilename())
-        })
-      }
-    }
-    if (actionType === 'batch action') {
-      if (files.length === 1) {
-        expect(files.length).toBe(downloads.length)
-        downloads.forEach((download) => {
-          expect(files[0]).toBe(download.suggestedFilename())
-        })
-      } else {
-        expect(downloads.length).toBe(1)
-        downloads.forEach((download) => {
-          if (config.ocis) {
-            expect(download.suggestedFilename()).toBe('download.tar')
-          } else {
-            if (parentFolder) {
-              expect(download.suggestedFilename()).toBe(parentFolder + '.zip')
-            } else {
-              expect(download.suggestedFilename()).toBe('download.zip')
-            }
-          }
-        })
-      }
-    }
+    await processDownload(stepTable, resourceObject, actionType)
   }
 )
 
@@ -104,7 +55,6 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-
     for (const { resource, as } of stepTable.hashes()) {
       await resourceObject.rename({ resource, newName: as })
     }
@@ -193,3 +143,60 @@ When(
     }
   }
 )
+
+export const processDownload = async (
+  stepTable: DataTable,
+  pageObject: any,
+  actionType: string
+) => {
+  let downloads
+  let files, parentFolder
+  const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const { resource, from } = stepRow
+
+    if (!acc[from]) {
+      acc[from] = []
+    }
+
+    acc[from].push(resource)
+
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(downloadInfo)) {
+    files = downloadInfo[folder]
+    parentFolder = folder
+    downloads = await pageObject.download({
+      folder,
+      names: files,
+      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    })
+    if (actionType === 'sidebar panel') {
+      expect(files.length).toBe(downloads.length)
+      downloads.forEach((download) => {
+        expect(files).toContain(download.suggestedFilename())
+      })
+    }
+  }
+  if (actionType === 'batch action') {
+    if (files.length === 1) {
+      expect(files.length).toBe(downloads.length)
+      downloads.forEach((download) => {
+        expect(files[0]).toBe(download.suggestedFilename())
+      })
+    } else {
+      expect(downloads.length).toBe(1)
+      downloads.forEach((download) => {
+        if (config.ocis) {
+          expect(download.suggestedFilename()).toBe('download.tar')
+        } else {
+          if (parentFolder) {
+            expect(download.suggestedFilename()).toBe(parentFolder + '.zip')
+          } else {
+            expect(download.suggestedFilename()).toBe('download.zip')
+          }
+        }
+      })
+    }
+  }
+}
