@@ -86,33 +86,29 @@ const updateStoreForCreatedFolders = ({
     const { owncloudSdk: client } = clientService
     const fetchedFolders = []
     for (const file of files) {
-      const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
+      // Only care about the root folders, no need to fetch nested folders
+      const rootFolder = file.meta.relativeFolder.split('/').slice(0, 2).join('/')
+      const rootFolderPath = `${file.meta.webDavBasePath}${rootFolder}`
 
-      if (!directory || fetchedFolders.includes(directory)) {
+      if (!directory || fetchedFolders.includes(rootFolderPath)) {
         continue
       }
 
-      const relativeParts = directory.replace(/^\/+/, '').split('/')
-      // No need to load folder when it is either deep nested or the user changed paths in between
-      const buildFolderResource = relativeParts.length === 1
-
-      if (buildFolderResource) {
-        let resource
-
-        if (unref(isPublicLocation)) {
-          resource = await client.publicFiles.getFileInfo(
-            `${currentFolder}${directory}`,
-            unref(publicLinkPassword),
-            DavProperties.PublicLink
-          )
-        } else {
-          resource = await client.files.fileInfo(file.meta.webDavPath, DavProperties.Default)
-        }
-        resource = buildResource(resource)
-        store.commit('Files/UPSERT_RESOURCE', resource)
-        fetchedFolders.push(directory)
+      let resource
+      if (unref(isPublicLocation)) {
+        const rootFolder = directory.split('/').slice(0, 2).join('/')
+        resource = await client.publicFiles.getFileInfo(
+          `${file.meta.currentFolder}${rootFolder}`,
+          unref(publicLinkPassword),
+          DavProperties.PublicLink
+        )
+      } else {
+        resource = await client.files.fileInfo(rootFolderPath, DavProperties.Default)
       }
+      resource = buildResource(resource)
+      store.commit('Files/UPSERT_RESOURCE', resource)
+      fetchedFolders.push(rootFolderPath)
     }
   }
 }
@@ -149,9 +145,9 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
       }
 
       const storageId = params.storageId
-      const webDavPath = storageId
-        ? buildWebDavSpacesPath(storageId, `${currentFolder}${directory}`)
-        : buildWebDavFilesPath(unref(user)?.id, `${currentFolder}${directory}`)
+      const webDavBasePath = storageId
+        ? buildWebDavSpacesPath(storageId, currentFolder)
+        : buildWebDavFilesPath(unref(user)?.id, currentFolder)
 
       uppyFiles.push({
         source: 'file input',
@@ -164,7 +160,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
           route: fileRoute,
           tusEndpoint,
-          webDavPath
+          webDavBasePath // WebDAV base path where the files will be uploaded to
         }
       })
     }

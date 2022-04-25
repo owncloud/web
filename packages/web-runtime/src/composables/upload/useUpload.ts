@@ -23,7 +23,7 @@ export interface UppyResource {
     relativePath: string
     route: Route
     tusEndpoint: string
-    webDavPath: string
+    webDavBasePath: string
   }
 }
 
@@ -114,18 +114,37 @@ const createDirectoryTree = ({
       const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
 
-      // @TODO check common prefixes
       if (!directory || createdFolders.includes(directory)) {
         continue
       }
 
-      if (unref(isPublicLocation)) {
-        await client.publicFiles.createFolder(currentFolder, directory, unref(publicLinkPassword))
-      } else {
-        await client.files.createFolder(file.meta.webDavPath)
-      }
+      const folders = directory.split('/')
+      let createdSubFolders = ''
+      for (const subFolder of folders) {
+        if (!subFolder) {
+          continue
+        }
 
-      createdFolders.push(directory)
+        const folderToCreate = `${createdSubFolders}/${subFolder}`
+        if (createdFolders.includes(folderToCreate)) {
+          createdSubFolders += `/${subFolder}`
+          createdFolders.push(createdSubFolders)
+          continue
+        }
+
+        if (unref(isPublicLocation)) {
+          await client.publicFiles.createFolder(
+            currentFolder,
+            folderToCreate,
+            unref(publicLinkPassword)
+          )
+        } else {
+          await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+        }
+
+        createdSubFolders += `/${subFolder}`
+        createdFolders.push(createdSubFolders)
+      }
     }
   }
 }
