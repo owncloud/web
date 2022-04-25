@@ -176,9 +176,10 @@ export class UppyService extends Vue {
       this.$emit('fileAdded')
       const addedFile = file as unknown as UppyResource
       if (this.uppy.getPlugin('XHRUpload')) {
+        const escapedName = encodeURIComponent(addedFile.name)
         this.uppy.setFileState(addedFile.id, {
           xhrUpload: {
-            endpoint: `${addedFile.meta.tusEndpoint.replace(/\/+$/, '')}/${addedFile.name}`
+            endpoint: `${addedFile.meta.tusEndpoint.replace(/\/+$/, '')}/${escapedName}`
           }
         })
       }
