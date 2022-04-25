@@ -90,6 +90,13 @@ export class UppyService extends Vue {
     })
   }
 
+  removeDropTarget() {
+    const dropTargetPlugin = this.uppy.getPlugin('DropTarget')
+    if (dropTargetPlugin) {
+      this.uppy.removePlugin(dropTargetPlugin)
+    }
+  }
+
   useStatusBar({
     targetSelector,
     getText

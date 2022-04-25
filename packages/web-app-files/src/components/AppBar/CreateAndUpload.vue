@@ -117,7 +117,7 @@ import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
 import { defineComponent, getCurrentInstance, onMounted, onUnmounted } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
-import { useUploadHelpers } from '../../composables/upload/useUploadHelpers'
+import { useUploadHelpers } from '../../composables/upload'
 
 export default defineComponent({
   components: {
@@ -144,6 +144,7 @@ export default defineComponent({
       uppyService.$off('filesSelected', instance.onFilesSelected)
       uppyService.$off('uploadSuccess', instance.onFileSuccess)
       uppyService.$off('uploadError', instance.onFileError)
+      uppyService.removeDropTarget()
     })
 
     return {
