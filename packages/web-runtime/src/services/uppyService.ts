@@ -57,6 +57,7 @@ export class UppyService extends Vue {
       endpoint: '',
       method: 'put',
       headers,
+      formData: false,
       getResponseData() {
         return {}
       }
