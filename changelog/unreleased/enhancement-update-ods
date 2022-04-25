@@ -1,0 +1,19 @@
+Enhancement: Update ODS to v13.1.0-rc.5
+
+We updated the ownCloud Design System to version 13.1.0-rc.5. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Enhancement - Add isFileExtensionDisplayed property: https://github.com/owncloud/owncloud-design-system/pull/2087
+- Enhancement - OcModal input type: https://github.com/owncloud/owncloud-design-system/pull/2077
+- Enhancement - Add OcContextualHelper: https://github.com/owncloud/owncloud-design-system/pull/2064
+- Enhancement - Add selection range for OcModal and OcTextInput: https://github.com/owncloud/owncloud-design-system/pull/2061
+- Enhancement - Replace deprecated String.prototype.substr(): https://github.com/owncloud/owncloud-design-system/pull/2059
+- Enhancement - Redesign OcGhostElement: https://github.com/owncloud/owncloud-design-system/pull/2049
+- Enhancement - Export package members: https://github.com/owncloud/owncloud-design-system/pull/2048
+- Enhancement - Make OcResource inline-flex: https://github.com/owncloud/owncloud-design-system/pull/2041
+- Bugfix - Disabled textarea color contrast in darkmode: https://github.com/owncloud/owncloud-design-system/pull/2055
+- Bugfix - OcTextInput: Fix event handlers in loops: https://github.com/owncloud/owncloud-design-system/pull/2054
+
+https://github.com/owncloud/web/pull/6749
+https://github.com/owncloud/web/pull/6750
+https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.5
+
