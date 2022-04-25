@@ -5,7 +5,7 @@
       <invite-collaborator-form
         v-if="currentUserCanShare"
         key="new-collaborator"
-        saving-button-title="Add"
+        :saving-button-title="$gettext('Add')"
         class="oc-my-s"
       />
       <template v-if="hasCollaborators">
