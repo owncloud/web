@@ -182,7 +182,9 @@
   </div>
 </template>
 <script>
-import { mixins, utils, helpers } from 'owncloud-design-system'
+/* global Vue */
+
+import { mixins, utils, helpers, components } from 'owncloud-design-system'
 const { getSizeClass } = utils
 const {
   EVENT_THEAD_CLICKED,
@@ -192,6 +194,7 @@ const {
   EVENT_ITEM_DROPPED,
   EVENT_ITEM_DRAGGED
 } = helpers.constants
+const { OcGhostElement } = components
 
 /**
  * A table component with dynamic layout and data.
