@@ -15,6 +15,7 @@ localVue.use(GetTextPlugin, {
 
 const selectors = {
   userAvatarImage: 'avatar-image-stub.files-collaborators-collaborator-indicator',
+  guestAvatar: 'oc-avatar-guest-stub.files-collaborators-collaborator-indicator',
   notUserAvatar: 'oc-avatar-item-stub.files-collaborators-collaborator-indicator',
   collaboratorAdditionalInfo: '.files-collaborators-collaborator-additional-info',
   collaboratorName: '.files-collaborators-collaborator-name',
@@ -40,10 +41,22 @@ describe('Collaborator ListItem component', () => {
         )
       })
     })
+    describe('guest share type', () => {
+      it('should display a guest avatar', () => {
+        const wrapper = createWrapper({ shareType: ShareTypes.guest.value })
+        expect(wrapper.find(selectors.guestAvatar).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeFalsy()
+      })
+      it('sets guest info on the avatar', () => {
+        const wrapper = createWrapper({ shareType: ShareTypes.guest.value })
+        expect(wrapper.find(selectors.guestAvatar).attributes('name')).toEqual('Brian Murphy')
+      })
+    })
     describe('non-user share types', () => {
       it.each(
         ShareTypes.all.filter(
-          (shareType) => ![ShareTypes.user, ShareTypes.space].includes(shareType)
+          (shareType) => ![ShareTypes.user, ShareTypes.space, ShareTypes.guest].includes(shareType)
         )
       )('should display an oc-avatar-item for any non-user share types', (shareType) => {
         const wrapper = createWrapper({ shareType: shareType.value })
@@ -149,6 +162,7 @@ function createWrapper({
       'oc-tag': true,
       'oc-pagination': true,
       'oc-avatar-item': true,
+      'oc-avatar-guest': true,
       'role-dropdown': true,
       'edit-dropdown': true,
       translate: false

@@ -18,6 +18,7 @@
         :name="share.collaborator.displayName"
         :width="48"
         :accessible-label="$gettext('Guest')"
+        class="files-collaborators-collaborator-indicator"
       />
       <oc-avatar-item
         v-else

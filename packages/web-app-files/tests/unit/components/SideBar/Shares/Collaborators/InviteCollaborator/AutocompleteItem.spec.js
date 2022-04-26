@@ -25,7 +25,13 @@ describe('AutocompleteItem component', () => {
       expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('group')
       expect(wrapper.find('oc-icon-stub').rootNode.key).toEqual('avatar-group')
     })
-    it.each([3, 4, 6])(
+    it('should display a guest icon for guest shares', () => {
+      const wrapper = createWrapper({ shareType: 4 })
+      expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
+      expect(wrapper.find('oc-icon-stub').exists()).toBeFalsy()
+      expect(wrapper.find('oc-avatar-guest-stub').exists()).toBeTruthy()
+    })
+    it.each([3, 6])(
       'should display a generic-person icon for any other share types',
       (shareType) => {
         const wrapper = createWrapper({ shareType: shareType })
@@ -89,6 +95,6 @@ function createWrapper({
       }
     },
     localVue,
-    stubs: stubs
+    stubs: { 'oc-avatar-guest': true, ...stubs }
   })
 }
