@@ -36,7 +36,6 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
       })
 
       resources = resources.map((r) => r.shareInfo)
-
       if (resources.length) {
         const configuration = store.getters.configuration
         const getToken = store.getters.getToken
