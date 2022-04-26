@@ -387,6 +387,7 @@ function createStore(store) {
   )
 }
 
+// eslint-disable-next-line no-unused-vars
 function renderComponent({ store, mocks } = {}) {
   return render(
     FileShares,
@@ -409,6 +410,7 @@ async function getListItem(user, component) {
   return await findByTestId(selectors.listItem.containerPrefix + user)
 }
 
+// eslint-disable-next-line no-unused-vars
 async function searchUser(user, component) {
   const { findByTestId, baseElement } = component
   expect(await findByTestId(selectors.inviteForm.container)).toBeVisible()
@@ -417,6 +419,7 @@ async function searchUser(user, component) {
   await waitFor(() => expect(baseElement.querySelector(selectors.autocomplete.list)).toBeVisible())
 }
 
+// eslint-disable-next-line no-unused-vars
 async function selectUser(user, component) {
   const { findByTestId } = component
   const userInAutocomplete = await findByTestId(selectors.autocomplete.itemPrefix + user)
