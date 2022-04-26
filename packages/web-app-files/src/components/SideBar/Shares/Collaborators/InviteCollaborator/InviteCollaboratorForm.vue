@@ -186,13 +186,19 @@ export default {
           this.configuration.options.sharingRecipientsPerPage
         )
 
-        const shareType = this.resourceIsSpace ? ShareTypes.space.value : ShareTypes.user.value
         const users = recipients.exact.users
           .concat(recipients.users)
           .filter((user) => user.value.shareWith !== this.user.id)
           .map((result) => {
-            // Inject the correct share type here as the response has always type "user"
-            return { ...result, value: { ...result.value, shareType } }
+            // Inject the correct share type here if space
+            const shareType = this.resourceIsSpace ? ShareTypes.space.value : result.value.shareType
+            return {
+              ...result,
+              value: {
+                ...result.value,
+                shareType
+              }
+            }
           })
 
         let groups = []

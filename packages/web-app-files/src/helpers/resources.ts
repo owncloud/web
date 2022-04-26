@@ -279,41 +279,41 @@ function addSharedWithToShares(shares) {
       previousShare?.storage_id === share.storage_id &&
       previousShare?.file_source === share.file_source
     ) {
-      if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.share_type])) {
+      if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [parseInt(share.share_type)])) {
         previousShare.sharedWith.push({
           username: share.share_with,
           name: share.share_with_displayname,
           displayName: share.share_with_displayname,
           avatar: undefined,
-          shareType: share.share_type
+          shareType: parseInt(share.share_type)
         })
-      } else if (share.share_type === ShareTypes.link.value) {
+      } else if (parseInt(share.share_type) === ShareTypes.link.value) {
         previousShare.sharedWith.push({
           name: share.name || share.token,
           link: true,
-          shareType: share.share_type
+          shareType: parseInt(share.share_type)
         })
       }
 
       continue
     }
 
-    if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [share.share_type])) {
+    if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [parseInt(share.share_type)])) {
       share.sharedWith = [
         {
           username: share.share_with,
           displayName: share.share_with_displayname,
           name: share.share_with_displayname,
           avatar: undefined,
-          shareType: share.share_type
+          shareType: parseInt(share.share_type)
         }
       ]
-    } else if (share.share_type === ShareTypes.link.value) {
+    } else if (parseInt(share.share_type) === ShareTypes.link.value) {
       share.sharedWith = [
         {
           name: share.name || share.token,
           link: true,
-          shareType: share.share_type
+          shareType: parseInt(share.share_type)
         }
       ]
     }
@@ -331,9 +331,9 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
     type: share.item_type,
-    mimeType: share.state === 0 ? share.mimetype : '',
+    mimeType: parseInt(share.state) === 0 ? share.mimetype : '',
     isFolder,
-    sdate: DateTime.fromSeconds(share.stime).toRFC2822(),
+    sdate: DateTime.fromSeconds(parseInt(share.stime)).toRFC2822(),
     indicators: [],
     path: undefined,
     webDavPath: undefined
@@ -353,7 +353,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
       }
     ]
     resource.sharedWith = share.sharedWith || []
-    resource.status = share.state
+    resource.status = parseInt(share.state)
     resource.name = path.basename(share.file_target)
     resource.path = share.file_target
     resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
@@ -471,7 +471,7 @@ export function buildCollaboratorShare(s, file, allowSharePermission): Share {
   }
   if (
     ShareTypes.containsAnyValue(
-      [ShareTypes.user, ShareTypes.remote, ShareTypes.group],
+      [ShareTypes.user, ShareTypes.remote, ShareTypes.group, ShareTypes.guest],
       [share.shareType]
     )
   ) {

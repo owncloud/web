@@ -23,14 +23,13 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      let resources = yield client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
-        method: 'GET'
+      let resources = yield client.shares.getShares('', {
+        state: 'all',
+        include_tags: false,
+        shared_with_me: true
       })
 
-      resources = yield resources.json()
-      resources = resources.ocs.data
+      resources = resources.map((r) => r.shareInfo)
 
       if (resources.length) {
         const configuration = store.getters.configuration

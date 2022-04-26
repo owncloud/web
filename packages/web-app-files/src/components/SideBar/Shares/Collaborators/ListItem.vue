@@ -13,6 +13,12 @@
         :width="48"
         class="files-collaborators-collaborator-indicator"
       />
+      <oc-avatar-guest
+        v-else-if="isGuest"
+        :name="share.collaborator.displayName"
+        :width="48"
+        :accessible-label="$gettext('Guest')"
+      />
       <oc-avatar-item
         v-else
         :width="48"
@@ -157,6 +163,10 @@ export default {
 
     isSpace() {
       return this.shareType === ShareTypes.space
+    },
+
+    isGuest() {
+      return this.shareType === ShareTypes.guest
     },
 
     shareTypeText() {

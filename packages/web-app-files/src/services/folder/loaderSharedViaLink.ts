@@ -23,14 +23,12 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      let resources = yield client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&share_types=3&include_tags=false',
-        method: 'GET'
+      let resources = yield client.shares.getShares('', {
+        share_types: '3',
+        include_tags: false
       })
 
-      resources = yield resources.json()
-      resources = resources.ocs.data
+      resources = resources.map((r) => r.shareInfo)
 
       if (resources.length) {
         const configuration = store.getters.configuration
