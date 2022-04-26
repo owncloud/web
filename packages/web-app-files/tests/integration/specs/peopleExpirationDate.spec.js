@@ -441,12 +441,14 @@ async function selectUser(user, component) {
 //   await fireEvent.click(removeExpirationBtn)
 // }
 
+// eslint-disable-next-line no-unused-vars
 async function triggerDatePicker(component) {
   const { getByTestId } = component
   expect(getByTestId(selectors.datepicker.container)).toBeVisible()
   await fireEvent.click(getByTestId(selectors.datepicker.triggerBtn))
 }
 
+// eslint-disable-next-line no-unused-vars
 async function validateInviteExpiration(days, component) {
   const { findByTestId } = component
   const inviteForm = await findByTestId(selectors.inviteForm.container)
@@ -455,6 +457,7 @@ async function validateInviteExpiration(days, component) {
   ).toBeVisible()
 }
 
+// eslint-disable-next-line no-unused-vars
 async function submitInvite(component) {
   const { getByTestId, baseElement } = component
   const shareBtn = getByTestId(selectors.inviteForm.createBtn)
@@ -466,6 +469,7 @@ async function submitInvite(component) {
   })
 }
 
+// eslint-disable-next-line no-unused-vars
 async function validateExpiration(user, days, component) {
   const listItem = await getListItem(user, component)
   expect(listItem).toBeVisible()
