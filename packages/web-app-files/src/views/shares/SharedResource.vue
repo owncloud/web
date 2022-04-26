@@ -101,7 +101,7 @@ import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, unref } from '@vue/composition-api'
 import { fetchResources } from '../../services/folder'
 import { Resource } from '../../helpers/resource'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
@@ -132,12 +132,22 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
+    const shareId = useRouteQuery('resourceId')
+    const shareName = useRouteParam('shareName')
+    const relativePath = useRouteParam('item', '')
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-share'),
-      shareId: useRouteQuery('shareId'),
-      shareName: useRouteParam('shareName'),
-      relativePath: useRouteParam('item', '')
+      resourceTargetLocation: createLocationSpaces('files-spaces-share', {
+        params: {
+          shareName: unref(shareName)
+        },
+        query: {
+          resourceId: unref(shareId)
+        }
+      }),
+      shareId,
+      shareName,
+      relativePath
     }
   },
 
@@ -191,10 +201,6 @@ export default defineComponent({
 
   mounted() {
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
-      // path from breadcrumb is prefixed with the share name (for cosmetic reasons). Prefix needs to be removed for loader task.
-      if (path?.startsWith(this.shareName)) {
-        path = path.slice(this.shareName.length)
-      }
       this.loadResourcesTask.perform(this, this.shareId, path)
     })
 

@@ -221,9 +221,11 @@ export default defineComponent({
       createLocationSpaces(unref(hasSpaces) ? 'files-spaces-share' : 'files-spaces-personal-home')
     )
     const resourceTargetParamMapping = computed(() =>
-      unref(hasSpaces) ? { name: 'shareName' } : null
+      unref(hasSpaces) ? { name: 'shareName', path: 'item' } : null
     )
-    const resourceTargetQueryMapping = computed(() => (unref(hasSpaces) ? { id: 'shareId' } : null))
+    const resourceTargetQueryMapping = computed(() =>
+      unref(hasSpaces) ? { id: 'resourceId' } : null
+    )
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))

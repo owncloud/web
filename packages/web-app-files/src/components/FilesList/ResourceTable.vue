@@ -571,7 +571,7 @@ export default defineComponent({
     parentFolderLink(file) {
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(path, file) {
+    createFolderLink(path, resource) {
       if (this.targetRoute === null) {
         return {}
       }
@@ -579,11 +579,11 @@ export default defineComponent({
       const params = {
         item: path.replace(/^\//, ''),
         ...this.targetRoute.params,
-        ...mapResourceFields(file, this.targetRouteParamMapping)
+        ...mapResourceFields(resource, this.targetRouteParamMapping)
       }
       const query = {
         ...this.targetRoute.query,
-        ...mapResourceFields(file, this.targetRouteQueryMapping)
+        ...mapResourceFields(resource, this.targetRouteQueryMapping)
       }
 
       const matchingSpace = this.getMatchingSpace(file.storageId)

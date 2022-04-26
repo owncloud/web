@@ -65,8 +65,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       },
       {
         // FIXME: this is cheating. We rely on shares having a drive alias of `shares/<shareName>` and hardcode it here until we have dynamic routes with drive aliases.
-        path: 'shares/:shareName?',
-        // path: 'shares/:shareName?/:item*',
+        path: 'shares/:shareName?/:item*',
         name: locationSpacesShare.name,
         component: components.SharedResource,
         meta: {

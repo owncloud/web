@@ -7,6 +7,7 @@ import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
+import { SHARE_JAIL_ID } from './spaces/loaderShare'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,12 +48,12 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           getToken
         )
 
-        // FIXME, HACK 1: path needs to be empty because the share has it's own webdav endpoint (we access it's root and thus don't need any relative path). should ideally be removed backend side.
-        // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root.
+        // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
+        // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root. should ideally be changed backend side.
         if (get(store, 'getters.capabilities.spaces.enabled', false)) {
           resources.forEach((resource) => {
-            resource.path = ''
-            resource.webDavPath = buildWebDavSpacesPath(resource.storageId, '')
+            resource.path = '/'
+            resource.webDavPath = buildWebDavSpacesPath([SHARE_JAIL_ID, resource.id].join('!'), '')
           })
         }
       }
