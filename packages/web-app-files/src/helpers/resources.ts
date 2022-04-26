@@ -442,7 +442,7 @@ function _buildLink(link): Share {
     permissions: link.permissions,
     description,
     stime: link.stime,
-    name: typeof link.name === 'string' ? link.name : '',
+    name: typeof link.name === 'string' ? link.name : (link.token as string),
     password: !!(link.share_with && link.share_with_displayname),
     expiration:
       typeof link.expiration === 'string'

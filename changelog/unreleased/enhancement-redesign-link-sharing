@@ -1,0 +1,5 @@
+Enhancement: Redesign link sharing
+
+We have redesigned the public link list in the right sidebar. Links now can be edited in-line and have a similiar look-and-feel to people and group shares.
+
+https://github.com/owncloud/web/pull/6749

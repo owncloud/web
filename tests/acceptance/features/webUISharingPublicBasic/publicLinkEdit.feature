@@ -7,6 +7,7 @@ Feature: Edit public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
+
   @issue-ocis-1328
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
@@ -16,9 +17,8 @@ Feature: Edit public link shares
       | name        | Public-link           |
       | permissions | <initial-permissions> |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
-      | role | <role> |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "<role>"
+    Then the user should see an error message on the public link share dialog saying "Role requires password to be set for link"
     And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |
@@ -32,6 +32,8 @@ Feature: Edit public link shares
       | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
       | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
 
+
+
   @issue-ocis-1328
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
@@ -42,9 +44,8 @@ Feature: Edit public link shares
       | permissions | <initial-permissions> |
       | password    | 123                   |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
-      | password |  |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to ""
+    Then the user should see an error message on the public link edit modal dialog saying "Password can't be empty"
     And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |
@@ -58,45 +59,6 @@ Feature: Edit public link shares
       | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
       | create                       | shareapi_enforce_links_password_write_only        |
 
-  @issue-ocis-1328
-  Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path        | simple-folder         |
-      | name        | Public-link           |
-      | permissions | <initial-permissions> |
-      | password    | 123                   |
-    And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | role     | <role> |
-      | password |        |
-    Then user "Alice" should have a share with these details in the server:
-      | field       | value                  |
-      | share_type  | public_link            |
-      | uid_owner   | Alice                  |
-      | permissions | <expected-permissions> |
-      | path        | /simple-folder         |
-    Examples:
-      | initial-permissions          | role        | setting-name                                      | expected-permissions         |
-      | read                         | Contributor | shareapi_enforce_links_password_read_only         | read, create                 |
-      | read, create                 | Viewer      | shareapi_enforce_links_password_read_write        | read                         |
-      | read, update, create, delete | Uploader    | shareapi_enforce_links_password_read_write_delete | create                       |
-      | create                       | Editor      | shareapi_enforce_links_password_write_only        | read, update, create, delete |
-
-  @issue-ocis-1328
-  Scenario: user edits a public link and does not save the changes
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path     | simple-folder    |
-      | name     | test_public_link |
-      | password | pass123          |
-    And user "Alice" has logged in using the webUI
-    When the user edits the public link named "test_public_link" of folder "simple-folder" changing following but not saving
-      | password | qwertyui |
-    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
-    Then the public should not get access to the publicly shared file
 
   Scenario: user edits a name of an already existing public link
     Given user "Alice" has created folder "simple-folder" in the server
@@ -107,10 +69,10 @@ Feature: Edit public link shares
       | name        | Public-link   |
       | permissions | read          |
       | password    | pass123       |
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | name | simple-folder Share |
+    When the user renames the public link named "Public-link" of folder "simple-folder" to "simple-folder Share"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI
+
 
   Scenario: user edits the password of an already existing public link
     Given user "Alice" has created folder "simple-folder" in the server
@@ -121,8 +83,7 @@ Feature: Edit public link shares
       | permissions | read, update, create, delete |
       | password    | pass123                      |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | password | qwertyui |
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
     And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
@@ -136,8 +97,7 @@ Feature: Edit public link shares
       | permissions | read, update, create, delete |
       | password    | pass123                      |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing following
-      | password | qwertyui |
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then the public should not get access to the publicly shared file
 
@@ -150,8 +110,7 @@ Feature: Edit public link shares
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | role | Viewer |
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Viewer"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
@@ -166,8 +125,7 @@ Feature: Edit public link shares
       | name        | Public-link   |
       | permissions | read          |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | role | Editor |
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Editor"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user deletes the following elements using the webUI
       | name                |
@@ -196,8 +154,7 @@ Feature: Edit public link shares
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | role | Contributor |
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "Contributor"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user uploads file "lorem.txt" using the webUI
     Then file "simple.txt" should be listed on the webUI
@@ -207,10 +164,9 @@ Feature: Edit public link shares
   Scenario: assign password to already created public share
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created a public link with following settings in the server
-      | path        | lorem.txt             |
-      | name        | Public-link           |
+      | path | lorem.txt   |
+      | name | Public-link |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public-link" of file "lorem.txt" changing following
-      | password | pass123 |
+    When the user tries to edit the public link named "Public-link" of folder "lorem.txt" adding a password "pass123"
     And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
     Then file "lorem.txt" should be listed on the webUI

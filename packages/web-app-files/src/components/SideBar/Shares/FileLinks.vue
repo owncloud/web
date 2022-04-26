@@ -7,64 +7,77 @@
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
-        <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
-        <div v-if="canCreatePublicLinks" class="oc-my-s">
-          <p class="oc-text-muted">
-            <span v-translate
-              >Any external person with the respective link can access this resource. No sign-in
-              required. Assign a password to avoid unintended document exposure.</span
-            >
-            <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
-          </p>
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+          <span v-text="linksHeading" />
+          <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
+        </h3>
+        <div v-if="canCreatePublicLinks" class="oc-mt-m">
+          <!-- quicklink goes here -->
+          <!-- <hr class="oc-my-s"> -->
           <oc-button
             id="files-file-link-add"
-            icon="add"
             variation="primary"
+            appearance="raw"
             data-testid="files-link-add-btn"
-            :aria-label="$_addButtonAriaLabel"
             @click="addNewLink"
-          >
-            <oc-icon name="add" />
-            {{ $_addButtonLabel }}
-          </oc-button>
+            v-text="addButtonLabel"
+          />
         </div>
         <p
           v-else
           data-testid="files-links-no-reshare-permissions-message"
-          class="oc-mt-s"
+          class="oc-mt-m"
           v-text="noResharePermsMessage"
         />
-        <ul class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
-          <li v-for="link in links" :key="link.key">
-            <list-item :data-testid="`files-link-id-${link.id}`" :link="link" />
+        <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+          <li
+            v-for="link in links"
+            :key="link.key"
+            class="oc-py-s"
+            :data-testid="`files-link-id-${link.id}`"
+          >
+            <name-and-copy :link="link" />
+            <details-and-edit
+              :is-folder-share="highlightedFile.isFolder"
+              :link="link"
+              :modifiable="canEdit"
+              :password-enforced="passwordEnforced"
+              :expiration-date="globalExpirationDate"
+              :available-role-options="availableRoleOptions"
+              @updateLink="updatePublicLink"
+              @removePublicLink="deleteLinkConfirmation"
+            />
           </li>
-        </ul>
-        <p
-          v-if="$_noPublicLinks && canCreatePublicLinks"
-          id="oc-file-links-no-results"
-          key="oc-file-links-no-results"
-          v-translate
-          class="oc-my-rm"
-        >
-          No public links
-        </p>
+        </oc-list>
       </template>
     </div>
-    <div v-if="currentView === VIEW_EDIT" :key="VIEW_EDIT">
-      <link-edit />
+    <div
+      v-if="currentView === VIEW_CREATE"
+      :key="VIEW_CREATE"
+      :aria-hidden="currentView !== VIEW_CREATE"
+    >
+      <create-form
+        :default-link-name="defaultNewLinkName"
+        :password-enforced="passwordEnforced"
+        :expiration-date="globalExpirationDate"
+        :available-role-options="availableRoleOptions"
+        @createPublicLink="createLink"
+        @cancelLinkCreation="cancelCreation"
+      />
     </div>
   </div>
 </template>
 <script lang="ts">
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import mixins from '../../../mixins'
 import { getParentPaths } from '../../../helpers/path'
 import { textUtils } from '../../../helpers/textUtils'
 import { cloneStateObject } from '../../../helpers/store'
-import LinkEdit from './PublicLinks/LinkEdit.vue'
-import ListItem from './PublicLinks/ListItem.vue'
-import { ShareTypes } from '../../../helpers/share'
+import CreateForm from './Links/CreateForm.vue'
+import DetailsAndEdit from './Links/DetailsAndEdit.vue'
+import NameAndCopy from './Links/NameAndCopy.vue'
+import { ShareTypes, LinkShareRoles } from '../../../helpers/share'
 import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
@@ -72,20 +85,16 @@ import { defineComponent } from '@vue/composition-api'
 import { shareViaLinkHelp } from '../../../helpers/contextualHelpers'
 
 const VIEW_SHOW = 'showLinks'
-const VIEW_EDIT = 'editPublicLink'
+const VIEW_CREATE = 'addPublicLink'
 
 export default defineComponent({
   name: 'FileLinks',
   components: {
-    LinkEdit,
-    ListItem
+    CreateForm,
+    DetailsAndEdit,
+    NameAndCopy
   },
   mixins: [mixins],
-  provide() {
-    return {
-      changeView: (view) => (this.$data.currentView = view)
-    }
-  },
   setup() {
     const store = useStore()
     const graphClient = clientService.graphAuthenticated(
@@ -98,7 +107,7 @@ export default defineComponent({
   data() {
     return {
       VIEW_SHOW,
-      VIEW_EDIT,
+      VIEW_CREATE,
       currentView: VIEW_SHOW
     }
   },
@@ -110,8 +119,75 @@ export default defineComponent({
       'sharesTreeLoading'
     ]),
     ...mapGetters(['capabilities', 'configuration']),
-    ...mapState('Files', ['sharesTree']),
     ...mapState(['user']),
+    ...mapState('Files', ['sharesTree']),
+
+    addButtonLabel() {
+      return this.$gettext('Add link')
+    },
+
+    defaultNewLinkName() {
+      return this.capabilities?.files_sharing?.public?.defaultPublicLinkShareName || ''
+    },
+
+    globalExpirationDate() {
+      const expireDate = this.capabilities.files_sharing.public.expire_date
+
+      let defaultExpireDate = null
+      let maxExpireDateFromCaps = null
+
+      if (expireDate.days) {
+        const days = parseInt(expireDate.days)
+        defaultExpireDate = DateTime.now()
+          .setLocale(this.$language.current)
+          .plus({ days })
+          .toJSDate()
+      }
+
+      if (expireDate.enforced) {
+        const days = parseInt(expireDate.days)
+        maxExpireDateFromCaps = DateTime.now()
+          .setLocale(this.$language.current)
+          .plus({ days })
+          .toJSDate()
+      }
+
+      return {
+        enforced: expireDate.enforced,
+        default: defaultExpireDate,
+        min: DateTime.now().setLocale(this.$language.current).toJSDate(),
+        max: maxExpireDateFromCaps
+      }
+    },
+
+    availableRoleOptions() {
+      const roles = LinkShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.capabilities.files_sharing?.public?.can_edit
+      ).map((role) => {
+        return {
+          role,
+          name: role.name,
+          label: this.$gettext(role.label)
+        }
+      })
+
+      // add empty permission link if oCIS for alias link
+      return [
+        // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
+        ...roles
+      ]
+    },
+
+    passwordEnforced() {
+      return (
+        this.capabilities.files_sharing.public.password?.enforced_for || {
+          read_only: false,
+          upload_only: false,
+          read_write: false
+        }
+      )
+    },
 
     helpersEnabled() {
       return this.configuration.options.contextHelpers
@@ -123,6 +199,10 @@ export default defineComponent({
 
     canCreatePublicLinks() {
       return this.highlightedFile.canShare({ user: this.user })
+    },
+
+    canEdit() {
+      return this.canCreatePublicLinks
     },
 
     noResharePermsMessage() {
@@ -176,72 +256,55 @@ export default defineComponent({
       return allShares.sort(this.linksComparator)
     },
 
-    $_noPublicLinks() {
-      return this.links.length === 0
-    },
-
-    $_expirationDate() {
-      const expireDate = this.capabilities.files_sharing.public.expire_date
-
-      return {
-        enabled: !!expireDate.enabled,
-        days: expireDate.days ? expireDate.days : false,
-        enforced: expireDate.enforced === '1'
-      }
-    },
-    $_addButtonLabel() {
-      return this.$gettext('Public link')
-    },
-    $_addButtonAriaLabel() {
-      return this.$gettext('Create new public link')
-    },
-
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
+    },
+
+    currentStorageId() {
+      if (this.resourceIsSpace) {
+        return this.highlightedFile.id
+      }
+      return this.$route.params.storageId || null
     }
   },
   watch: {
     highlightedFile(newItem, oldItem) {
       if (oldItem !== newItem) {
-        this.$_reloadLinks()
+        this.reloadLinks()
       }
     }
   },
   mounted() {
-    this.$_reloadLinks()
+    this.reloadLinks()
   },
 
   methods: {
-    ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares']),
-    ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE']),
+    ...mapActions('Files', [
+      'addLink',
+      'updateLink',
+      'removeLink',
+      'loadSharesTree',
+      'loadCurrentFileOutgoingShares'
+    ]),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
-    $_showList() {
-      this.currentView = VIEW_SHOW
-    },
-    $_reloadLinks() {
-      let storageId
-      if (this.resourceIsSpace) {
-        storageId = this.highlightedFile.id
-      } else if (this.$route.params.storageId) {
-        storageId = this.$route.params.storageId
-      }
-
-      this.$_showList()
+    reloadLinks() {
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         graphClient: this.graphClient,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        storageId,
+        storageId: this.currentStorageId,
         resource: this.highlightedFile
       })
       this.loadSharesTree({
         client: this.$client,
         path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        storageId
+        storageId: this.currentStorageId
       })
     },
+
     linksComparator(l1, l2) {
       // sorting priority 1: display name (lower case, ascending), 2: creation time (descending)
       const name1 = l1.name.toLowerCase().trim()
@@ -261,14 +324,133 @@ export default defineComponent({
     },
 
     addNewLink() {
-      this.TRIGGER_PUBLIC_LINK_CREATE({
-        name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
-        expireDate: this.$_expirationDate.days
-          ? DateTime.now().plus({ days: this.$_expirationDate.days }).endOf('day').toISO()
-          : null
-      })
+      this.currentView = VIEW_CREATE
+    },
 
-      this.currentView = VIEW_EDIT
+    cancelCreation() {
+      this.currentView = VIEW_SHOW
+    },
+
+    getParamsForLink(link) {
+      let expireDate = ''
+
+      if (link.expiration) {
+        expireDate = DateTime.fromJSDate(link.expiration)
+          .setLocale(this.$language.current)
+          .endOf('day')
+          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
+      }
+
+      let password
+
+      switch (link.password) {
+        // no password
+        case false:
+          password = undefined
+          break
+        // delete password
+        case '':
+          password = ''
+          break
+        // existing password
+        case true:
+          password = undefined
+          break
+        // adding/editing password
+        default:
+          password = link.password
+          break
+      }
+
+      return {
+        expireDate,
+        password,
+        permissions: link.permissions,
+        name: link.name,
+        ...(this.currentStorageId && {
+          spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
+        })
+      }
+    },
+
+    async createLink({ link, showError }) {
+      const params = this.getParamsForLink(link)
+
+      await this.addLink({
+        path: this.highlightedFile.path,
+        client: this.$client,
+        $gettext: this.$gettext,
+        params,
+        storageId: this.currentStorageId
+      }).catch(showError)
+
+      this.currentView = VIEW_SHOW
+
+      this.showMessage({
+        title: this.$gettext('Link was created successfully')
+      })
+    },
+
+    async updatePublicLink({ link, onSuccess = () => {}, onError = (e) => {} }) {
+      const params = this.getParamsForLink(link)
+
+      await this.updateLink({
+        id: link.id,
+        client: this.$client,
+        params
+      })
+        .then(onSuccess)
+        .catch((e) => {
+          onError(e)
+          console.error(e)
+          this.showMessage({
+            title: this.$gettext('Failed to update link'),
+            status: 'danger'
+          })
+        })
+
+      this.showMessage({
+        title: this.$gettext('Link was updated successfully')
+      })
+    },
+
+    deleteLinkConfirmation({ link }) {
+      const modal = {
+        variation: 'danger',
+        title: this.$gettext('Delete link'),
+        message: this.$gettext(
+          'Are you sure you want to delete this link? Recreating the same link again is not possible.'
+        ),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Delete'),
+        onCancel: this.hideModal,
+        onConfirm: () =>
+          this.deleteLink({
+            client: this.$client,
+            share: link,
+            resource: this.highlightedFile
+          })
+      }
+      this.createModal(modal)
+    },
+
+    async deleteLink({ client, share, resource }) {
+      this.hideModal()
+      // removeLink currently fetches all shares from the backend in order to reload the shares indicators
+      // TODO: Check if to-removed link is last link share and only reload if it's the last link
+      await this.removeLink({ client, share, resource, storageId: this.currentStorageId })
+        .then(
+          this.showMessage({
+            title: this.$gettext('Link was deleted successfully')
+          })
+        )
+        .catch((e) => {
+          console.error(e)
+          this.showMessage({
+            title: this.$gettext('Failed to delete link'),
+            status: 'danger'
+          })
+        })
     }
   }
 })

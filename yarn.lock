@@ -2455,10 +2455,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^2.0.8":
-  version: 2.0.8
-  resolution: "@types/luxon@npm:2.0.8"
-  checksum: 630d069a5a719c7512cb8805bcec6bac7f9aa5d434edf2159ba6dfb22eb8de982232a6d3621acd66f6ca2d1d6b0e8b40f9c8dafbbad654eb8cc01229f528ae45
+"@types/luxon@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@types/luxon@npm:2.3.1"
+  checksum: e75928929aaf4e8796dcbdccd23a2dda029f637db01f5b06c7a72033ae106966df716e179ee41711280d782bd851228810643bce9bffc4ff62ae906e94ee1df2
   languageName: node
   linkType: hard
 
@@ -13816,7 +13816,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-free": ^6.1.1
     "@popperjs/core": ^2.4.0
-    "@types/luxon": ^2.0.8
+    "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
     "@vue/composition-api": ^1.4.9
     axios: ^0.26.1

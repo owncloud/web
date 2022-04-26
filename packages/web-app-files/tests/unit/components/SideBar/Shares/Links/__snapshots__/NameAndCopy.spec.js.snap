@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NameAndCopy should show link info component 1`] = `
+<div class="oc-mb-s oc-width-1-1">
+  <h4 class="oc-text-truncate oc-files-file-link-name oc-my-s">Example link</h4>
+  <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
+    <div class="oc-flex oc-flex-middle oc-text-truncate">
+      <oc-icon-stub name="link" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+      <p class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm">https://some-url.com/abc</p>
+    </div>
+    <copy-to-clipboard-button-stub text="" value="https://some-url.com/abc" label="Copy link to clipboard" successmsgtitle="Link copied" successmsgtext="The link &quot;Example link&quot; has been copied to your clipboard." class="oc-files-public-link-copy-url"></copy-to-clipboard-button-stub>
+  </div>
+</div>
+`;

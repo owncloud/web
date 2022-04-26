@@ -279,8 +279,8 @@ Feature: Share by public link with different roles
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares in the server
+
 
   @issue-ocis-1328
   Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
@@ -288,8 +288,8 @@ Feature: Share by public link with different roles
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Contributor |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares in the server
+
 
   @issue-ocis-1328
   Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
@@ -297,8 +297,8 @@ Feature: Share by public link with different roles
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares in the server
+
 
   @issue-ocis-1328
   Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
@@ -306,8 +306,8 @@ Feature: Share by public link with different roles
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "Alice" should not have created any shares in the server
+
 
   @issue-ocis-1328
   Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced

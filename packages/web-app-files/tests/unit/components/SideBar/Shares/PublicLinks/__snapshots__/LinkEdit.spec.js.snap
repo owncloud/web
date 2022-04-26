@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`LinkEdit password field should have required label if password is enforced 1`] = `<oc-text-input-stub id="oc-files-file-link-password" type="password" clearbuttonaccessiblelabel="" label="Password (required)"></oc-text-input-stub>`;
-
-exports[`LinkEdit password field should not have required label if password is not enforced 1`] = `<oc-text-input-stub id="oc-files-file-link-password" type="password" clearbuttonaccessiblelabel="" label="Password"></oc-text-input-stub>`;

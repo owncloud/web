@@ -51,7 +51,7 @@ const existingShares = [
       share_type: 3,
       uid_owner: 'alice',
       displayname_owner: 'alice',
-      permissions: 16,
+      permissions: '1',
       stime: new Date().getTime(),
       expiration: DateTime.fromJSDate(getDateInFuture(2)).toFormat('yyyy-MM-dd HH:mm:ss'),
       uid_file_owner: 'alice',
@@ -79,7 +79,7 @@ describe('Users can set expiration date when sharing via public link', () => {
   })
   test('user can set a new expiration date', async () => {
     const component = renderComponent()
-    const { findByTestId, baseElement, getByTestId, findByText, queryByTestId } = component
+    const { findByTestId, baseElement, getByTestId, queryByTestId } = component
     const addBtn = await findByTestId('files-link-add-btn')
 
     expect(addBtn).toBeVisible()
@@ -93,8 +93,6 @@ describe('Users can set expiration date when sharing via public link', () => {
     const newDate = getDateInFuture(2)
     await navigateToDate(newDate, component)
 
-    expect(await findByText('Expires in 2 days')).toBeVisible()
-
     const shareBtn = getByTestId('new-files-link-btn')
     expect(shareBtn).toBeVisible()
     await fireEvent.click(shareBtn)
@@ -106,7 +104,9 @@ describe('Users can set expiration date when sharing via public link', () => {
     expect(link).toBeVisible()
 
     expect(
-      within(getByTestId('files-link-id-1-expiration-date')).getByText('Expires in 2 days')
+      within(getByTestId('files-link-id-1')).getByLabelText('Expires in in 2 days', {
+        exact: false
+      })
     ).toBeVisible()
   })
 
@@ -122,7 +122,7 @@ describe('Users can set expiration date when sharing via public link', () => {
         }
       }
     })
-    const { findByTestId, getByTestId, findByText, queryByTestId } = component
+    const { findByTestId, getByTestId } = component
 
     const link = await findByTestId('files-link-id-1')
     expect(link).toBeVisible()
@@ -131,23 +131,17 @@ describe('Users can set expiration date when sharing via public link', () => {
     expect(editBtn).toBeVisible()
     await fireEvent.click(editBtn)
 
-    expect(getByTestId('recipient-datepicker')).toBeVisible()
-    await fireEvent.click(getByTestId('recipient-datepicker-btn'))
+    const editExpiryDateBtn = getByTestId('files-link-id-1-edit-edit-expiration')
+    expect(editExpiryDateBtn).toBeVisible()
+    await fireEvent.click(editExpiryDateBtn)
 
     const newDate = getDateInFuture(4)
     await navigateToDate(newDate, component)
 
-    expect(await findByText('Expires in 4 days')).toBeVisible()
-
-    const shareBtn = getByTestId('save-files-link-btn')
-    expect(shareBtn).toBeVisible()
-    await fireEvent.click(shareBtn)
-    await waitFor(() => {
-      return expect(queryByTestId('files-link-being-saved')).toBe(null)
-    })
-
     expect(
-      within(getByTestId('files-link-id-1-expiration-date')).getByText('Expires in 4 days')
+      within(getByTestId('files-link-id-1')).getByLabelText('Expires in in 4 days', {
+        exact: false
+      })
     ).toBeVisible()
   })
 
@@ -172,15 +166,11 @@ describe('Users can set expiration date when sharing via public link', () => {
     expect(editBtn).toBeVisible()
     await fireEvent.click(editBtn)
 
-    const removeExpiryDateBtn = getByTestId('files-link-remove-expiration-date')
+    const removeExpiryDateBtn = getByTestId('files-link-id-1-edit-remove-expiration')
     expect(removeExpiryDateBtn).toBeVisible()
     await fireEvent.click(removeExpiryDateBtn)
-
-    const shareBtn = getByTestId('save-files-link-btn')
-    expect(shareBtn).toBeVisible()
-    await fireEvent.click(shareBtn)
     await waitFor(() => {
-      return expect(queryByTestId('files-link-being-saved')).toBe(null)
+      return expect(queryByTestId('files-link-id-1-edit-remove-expiration')).toBe(null)
     })
 
     expect(within(link).queryByTestId('files-link-id-1-expiration-date')).toBe(null)
