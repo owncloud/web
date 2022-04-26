@@ -86,6 +86,10 @@ const updateStoreForCreatedFolders = ({
     const { owncloudSdk: client } = clientService
     const fetchedFolders = []
     for (const file of files) {
+      if (!file.meta.relativeFolder) {
+        continue
+      }
+
       const relativeFolder = `/${file.meta.relativeFolder.replace(/^\/+/, '')}`
       // Only care about the root folders, no need to fetch nested folders
       const rootFolder = relativeFolder.split('/').slice(0, 2).join('/')
