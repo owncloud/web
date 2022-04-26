@@ -105,7 +105,7 @@ import { defineComponent } from '@vue/composition-api'
 import { fetchResources } from '../../services/folder'
 import { Resource } from '../../helpers/resource'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
-import { useRouteQuery } from 'web-pkg/src/composables'
+import { useRouteParam, useRouteQuery } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -135,7 +135,9 @@ export default defineComponent({
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation: createLocationSpaces('files-spaces-share'),
-      shareId: useRouteQuery('shareId')
+      shareId: useRouteQuery('shareId'),
+      shareName: useRouteParam('shareName'),
+      relativePath: useRouteParam('item', '')
     }
   },
 
@@ -165,7 +167,7 @@ export default defineComponent({
           text: this.$gettext('Shared with me'),
           to: '/files/shares/with-me'
         },
-        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+        ...breadcrumbsFromPath(this.$route.path, [this.shareName, this.relativePath].join('/'))
       )
     },
 
