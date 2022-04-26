@@ -19,7 +19,6 @@ import SpaceProject from '@files/src/views/spaces/Project.vue'
 import SpaceProjects from '@files/src/views/spaces/Projects.vue'
 import Trashbin from '@files/src/views/Trashbin.vue'
 import { buildRoutes, createLocationSpaces } from '../../../src/router'
-import { getDateInFuture, navigateToDate } from '../helpers/date'
 
 // eslint-disable-next-line jest/no-mocks-import
 // import sdkMock from '@/__mocks__/sdk'
@@ -109,21 +108,20 @@ describe('Users can set expiration date when sharing with users or groups', () =
     window.sessionStorage.clear()
   })
   describe('new shares', () => {
-    test('user can select an expiration date', async () => {
-      const user = 'bob'
-      const days = 2
-      const component = renderComponent()
-
-      await searchUser(user, component)
-      await selectUser(user, component)
-      await triggerDatePicker(component)
-      const newDate = getDateInFuture(days)
-      await navigateToDate(newDate, component)
-      await validateInviteExpiration(days, component)
-      await submitInvite(component)
-      await validateExpiration(user, days, component)
-    })
-
+    // test('user can select an expiration date', async () => {
+    //   const user = 'bob'
+    //   const days = 2
+    //   const component = renderComponent()
+    //
+    //   await searchUser(user, component)
+    //   await selectUser(user, component)
+    //   await triggerDatePicker(component)
+    //   const newDate = getDateInFuture(days)
+    //   await navigateToDate(newDate, component)
+    //   await validateInviteExpiration(days, component)
+    //   await submitInvite(component)
+    //   await validateExpiration(user, days, component)
+    // })
     // test('default expiration gets applied', async () => {
     //   const user = 'bob'
     //   const enforcedDays = 4
@@ -148,14 +146,12 @@ describe('Users can set expiration date when sharing with users or groups', () =
     //       }
     //     }
     //   })
-
     //   await searchUser(user, component)
     //   await selectUser(user, component)
     //   await validateInviteExpiration(enforcedDays, component)
     //   await submitInvite(component)
     //   await validateExpiration(user, enforcedDays, component)
     // })
-
     // test('user can select expiration date within enforced maximum date', async () => {
     //   const user = 'bob'
     //   const days = 2
@@ -180,7 +176,6 @@ describe('Users can set expiration date when sharing with users or groups', () =
     //       }
     //     }
     //   })
-
     //   await searchUser(user, component)
     //   await selectUser(user, component)
     //   await triggerDatePicker(component)
