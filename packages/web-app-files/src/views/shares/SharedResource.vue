@@ -31,7 +31,7 @@
       <resource-table
         v-else
         id="files-shared-resource-table"
-        v-model="selected"
+        v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -55,7 +55,7 @@
           />
         </template>
         <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selected" />
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
         <template #footer>
           <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -183,15 +183,18 @@ export default defineComponent({
   watch: {
     $route: {
       handler: function () {
-        // TODO: we also need to extract the share path from the URL. for now let's get loading a "share root" working at all...
-        this.loadResourcesTask.perform(this, this.shareId)
+        this.loadResourcesTask.perform(this, this.shareId, this.relativePath)
       },
       immediate: true
     }
   },
 
   mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
+      // path from breadcrumb is prefixed with the share name (for cosmetic reasons). Prefix needs to be removed for loader task.
+      if (path?.startsWith(this.shareName)) {
+        path = path.slice(this.shareName.length)
+      }
       this.loadResourcesTask.perform(this, this.shareId, path)
     })
 
@@ -210,7 +213,7 @@ export default defineComponent({
     fetchResources,
 
     async fileDropped(fileIdTarget) {
-      const selected = [...this.selectedFiles]
+      const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
