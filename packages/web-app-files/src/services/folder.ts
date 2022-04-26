@@ -19,6 +19,7 @@ import {
 } from './folder/'
 
 export * from './folder/util'
+export { SHARE_JAIL_ID } from './folder/spaces/loaderShare'
 
 export type FolderLoaderTask = any
 

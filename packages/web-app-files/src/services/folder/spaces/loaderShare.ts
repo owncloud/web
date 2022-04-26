@@ -30,7 +30,6 @@ export class FolderLoaderSpacesShare implements FolderLoader {
         )
       )
 
-      // TODO: this probably needs some path rewriting... let's see
       const resources = webDavResponse.map(buildResource)
       const currentFolder = resources.shift()
 
