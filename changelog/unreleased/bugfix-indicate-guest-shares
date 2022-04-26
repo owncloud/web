@@ -1,0 +1,6 @@
+Bugfix: Indicate guest shares
+
+We've fixed a bug, where guest shares were not correctly indicated and shown as users shares
+at the share panel in the right sidebar.
+
+https://github.com/owncloud/web/pull/6813
