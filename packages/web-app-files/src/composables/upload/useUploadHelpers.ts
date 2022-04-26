@@ -86,18 +86,17 @@ const updateStoreForCreatedFolders = ({
     const { owncloudSdk: client } = clientService
     const fetchedFolders = []
     for (const file of files) {
-      const directory = file.meta.relativeFolder
+      const relativeFolder = `/${file.meta.relativeFolder.replace(/^\/+/, '')}`
       // Only care about the root folders, no need to fetch nested folders
-      const rootFolder = file.meta.relativeFolder.split('/').slice(0, 2).join('/')
-      const rootFolderPath = `${file.meta.webDavBasePath}${rootFolder}`
+      const rootFolder = relativeFolder.split('/').slice(0, 2).join('/')
+      const rootFolderPath = `${file.meta.webDavBasePath}/${rootFolder}`
 
-      if (!directory || fetchedFolders.includes(rootFolderPath)) {
+      if (fetchedFolders.includes(rootFolderPath)) {
         continue
       }
 
       let resource
       if (unref(isPublicLocation)) {
-        const rootFolder = directory.split('/').slice(0, 2).join('/')
         resource = await client.publicFiles.getFileInfo(
           `${file.meta.currentFolder}${rootFolder}`,
           unref(publicLinkPassword),
@@ -106,6 +105,7 @@ const updateStoreForCreatedFolders = ({
       } else {
         resource = await client.files.fileInfo(rootFolderPath, DavProperties.Default)
       }
+
       resource = buildResource(resource)
       store.commit('Files/UPSERT_RESOURCE', resource)
       fetchedFolders.push(rootFolderPath)
