@@ -43,6 +43,11 @@ export class UppyService extends Vue {
       retryDelays: [0, 3000, 5000, 10000, 20000]
     }
 
+    const xhrPlugin = this.uppy.getPlugin('XHRUpload')
+    if (xhrPlugin) {
+      this.uppy.removePlugin(xhrPlugin)
+    }
+
     const tusPlugin = this.uppy.getPlugin('Tus')
     if (tusPlugin) {
       tusPlugin.setOptions(tusPluginOptions)
@@ -63,9 +68,14 @@ export class UppyService extends Vue {
       }
     }
 
-    const tusPlugin = this.uppy.getPlugin('XHRUpload')
+    const tusPlugin = this.uppy.getPlugin('Tus')
     if (tusPlugin) {
-      tusPlugin.setOptions(xhrPluginOptions)
+      this.uppy.removePlugin(tusPlugin)
+    }
+
+    const xhrPlugin = this.uppy.getPlugin('XHRUpload')
+    if (xhrPlugin) {
+      xhrPlugin.setOptions(xhrPluginOptions)
       return
     }
 
