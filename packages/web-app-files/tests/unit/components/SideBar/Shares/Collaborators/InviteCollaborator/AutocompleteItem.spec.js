@@ -14,24 +14,24 @@ describe('AutocompleteItem component', () => {
   })
   describe('displays the correct image/icon according to the shareType', () => {
     it('should display users avatar for user shares', () => {
-      const wrapper = createWrapper({ shareType: 0 })
+      const wrapper = createWrapper({ shareType: ShareTypes.user.value })
       expect(wrapper.find('avatar-image-stub').exists()).toBeTruthy()
       expect(wrapper.find('oc-icon-stub').exists()).toBeFalsy()
     })
     it('should display a group icon for group shares', () => {
-      const wrapper = createWrapper({ shareType: 1 })
+      const wrapper = createWrapper({ shareType: ShareTypes.group.value })
       expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
       expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
       expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('group')
       expect(wrapper.find('oc-icon-stub').rootNode.key).toEqual('avatar-group')
     })
     it('should display a guest icon for guest shares', () => {
-      const wrapper = createWrapper({ shareType: 4 })
+      const wrapper = createWrapper({ shareType: ShareTypes.guest.value })
       expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
       expect(wrapper.find('oc-icon-stub').exists()).toBeFalsy()
       expect(wrapper.find('oc-avatar-guest-stub').exists()).toBeTruthy()
     })
-    it.each([3, 6])(
+    it.each([ShareTypes.link.value, ShareTypes.remote.value])(
       'should display a generic-person icon for any other share types',
       (shareType) => {
         const wrapper = createWrapper({ shareType: shareType })
@@ -44,11 +44,11 @@ describe('AutocompleteItem component', () => {
   })
   describe('avatar image', () => {
     it('sets the userId', () => {
-      const wrapper = createWrapper({ shareType: 0, shareWith: 'the-user-id' })
+      const wrapper = createWrapper({ shareType: ShareTypes.user.value, shareWith: 'the-user-id' })
       expect(wrapper.find('avatar-image-stub').attributes('userid')).toEqual('the-user-id')
     })
     it('sets the user-name', () => {
-      const wrapper = createWrapper({ shareType: 0, label: 'the-user-name' })
+      const wrapper = createWrapper({ shareType: ShareTypes.user.value, label: 'the-user-name' })
       expect(wrapper.find('avatar-image-stub').attributes('user-name')).toEqual('the-user-name')
     })
   })
@@ -70,7 +70,7 @@ describe('AutocompleteItem component', () => {
       expect(wrapper.find('.files-collaborators-autocomplete-additional-info').exists()).toBeFalsy()
     })
     it('shows the share type', () => {
-      const wrapper = createWrapper({ shareType: 0 })
+      const wrapper = createWrapper({ shareType: ShareTypes.user.value })
       expect(wrapper.find('.files-collaborators-autocomplete-share-type').text()).toEqual('User')
     })
   })

@@ -2,6 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
+import { ShareTypes } from '../../helpers/share'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
@@ -24,7 +25,7 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       let resources = yield client.shares.getShares('', {
-        share_types: '3',
+        share_types: ShareTypes.link.value.toString(),
         include_tags: false
       })
 
