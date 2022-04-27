@@ -80,25 +80,25 @@ export default {
       switch (this.recipient.value.shareType) {
         case ShareTypes.group.value:
           return {
-            name: 'group',
+            name: ShareTypes.group.icon,
             label: this.$gettext('Group')
           }
 
         case ShareTypes.guest.value:
           return {
-            name: 'global',
+            name: ShareTypes.guest.icon,
             label: this.$gettext('Guest user')
           }
 
         case ShareTypes.remote.value:
           return {
-            name: 'user_remote',
+            name: ShareTypes.remote.icon,
             label: this.$gettext('Remote user')
           }
 
         default:
           return {
-            name: 'person',
+            name: ShareTypes.user.icon,
             label: this.$gettext('User')
           }
       }
