@@ -2,17 +2,19 @@ import { DateTime } from 'luxon'
 import copyToClipboard from 'copy-to-clipboard'
 
 export function createPublicLink(ctx) {
-  // FIXME: Translate name
   const params = { name: ctx.$gettext('Quick action link'), permissions: 1 }
   const capabilities = ctx.store.state.user.capabilities
   const expirationDate = capabilities.files_sharing.public.expire_date
 
-  if (expirationDate.enabled) {
+  if (expirationDate.enforced) {
     params.expireDate = DateTime.now()
       .plus({ days: parseInt(expirationDate.days, 10) })
       .endOf('day')
       .toISO()
   }
+
+  // needs check for enforced password for default role (viewer?)
+  // and concept to what happens if it is enforced
 
   if (ctx.storageId) {
     params.spaceRef = `${ctx.storageId}${ctx.item.path}`

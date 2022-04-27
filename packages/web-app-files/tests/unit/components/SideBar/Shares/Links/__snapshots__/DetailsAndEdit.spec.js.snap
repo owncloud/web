@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+  <div>
+    <oc-button-stub id="edit-public-link-role-dropdown-toggl-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggl oc-text-left"><span class="oc-invisible-sr">Viewer</span> <span>Recipients can view and download contents.</span>
+      <oc-icon-stub name="arrow-down-s"></oc-icon-stub>
+    </oc-button-stub>
+    <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggl-undefined" padding-size="remove" mode="click">
+      <oc-list-stub class="roleDropdownList">
+        <li>
+          <oc-button-stub id="files-role-viewer" appearance="raw" justify-content="space-between" class="oc-py-xs oc-px-s selected"><span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span>Recipients can view and download contents.</span></span>
+            <oc-icon-stub name="check"></oc-icon-stub>
+          </oc-button-stub>
+        </li>
+        <li>
+          <oc-button-stub id="files-role-editor" appearance="raw" justify-content="space-between" class="oc-py-xs oc-px-s"><span><span class="oc-text-bold oc-display-block oc-width-1-1">Editor</span> <span>Recipients can view, download and edit contents.</span></span>
+            <!---->
+          </oc-button-stub>
+        </li>
+      </oc-list-stub>
+    </oc-drop-stub>
+  </div>
+  <div class="details-buttons">
+    <!---->
+    <!---->
+    <!---->
+    <div>
+      <oc-button-stub id="edit-public-link-dropdown-toggl-undefined" appearance="raw" data-testid="files-link-id-undefined-btn-edit" class="edit-drop-trigger">
+        <oc-icon-stub name="more-2"></oc-icon-stub>
+      </oc-button-stub>
+      <oc-drop-stub drop-id="edit-public-link-dropdown" toggle="#edit-public-link-dropdown-toggl-undefined" mode="click">
+        <oc-list-stub>
+          <li>
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-rename">Rename</oc-button-stub>
+          </li>
+          <li>
+            <oc-datepicker-stub min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en"></oc-datepicker-stub>
+          </li>
+          <li>
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-add-password">Add password</oc-button-stub>
+          </li>
+          <li>
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-delete" variation="danger">Delete link</oc-button-stub>
+          </li>
+        </oc-list-stub>
+      </oc-drop-stub>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+  <p class="oc-my-rm"><span class="oc-invisible-sr">Viewer</span> <span>Recipients can view and download contents.</span></p>
+  <div class="details-buttons oc-pr-s">
+    <!---->
+    <!---->
+    <!---->
+    <!---->
+  </div>
+</div>
+`;

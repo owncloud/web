@@ -35,13 +35,70 @@ module.exports = {
         .click(linkRowEditButton)
         .waitForOutstandingAjaxCalls()
     },
+
+    clickLinkAddPasswordBtn: function (linkName) {
+      const linkRowAddPasswordSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkAddPasswordButton.selector, linkName)
+      const publicLinkAddPasswordButton = {
+        locateStrategy: this.elements.publicLinkAddPasswordButton.locateStrategy,
+        selector: linkRowAddPasswordSelector
+      }
+      return this.waitForElementVisible(publicLinkAddPasswordButton)
+        .initAjaxCounters()
+        .click(publicLinkAddPasswordButton)
+        .waitForOutstandingAjaxCalls()
+    },
+
+    clickLinkEditPasswordBtn: function (linkName) {
+      const linkRowEditPasswordSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkRenamePasswordButton.selector, linkName)
+      const publicLinkRenamePasswordButton = {
+        locateStrategy: this.elements.publicLinkRenamePasswordButton.locateStrategy,
+        selector: linkRowEditPasswordSelector
+      }
+      return this.waitForElementVisible(publicLinkRenamePasswordButton)
+        .initAjaxCounters()
+        .click(publicLinkRenamePasswordButton)
+        .waitForOutstandingAjaxCalls()
+    },
+
+    clickLinkEditNameBtn: function (linkName) {
+      const linkRowEditNameSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkRenameButton.selector, linkName)
+      const publicLinkRenameButton = {
+        locateStrategy: this.elements.publicLinkRenameButton.locateStrategy,
+        selector: linkRowEditNameSelector
+      }
+      return this.waitForElementVisible(publicLinkRenameButton)
+        .initAjaxCounters()
+        .click(publicLinkRenameButton)
+        .waitForOutstandingAjaxCalls()
+    },
+
+    clickLinkEditExpirationBtn: function (linkName) {
+      const linkRowEditExpirationDateSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkExpirationDateEditButton.selector, linkName)
+      const publicLinkExpirationDateEditButton = {
+        locateStrategy: this.elements.publicLinkExpirationDateEditButton.locateStrategy,
+        selector: linkRowEditExpirationDateSelector
+      }
+      return this.waitForElementVisible(publicLinkExpirationDateEditButton)
+        .initAjaxCounters()
+        .click(publicLinkExpirationDateEditButton)
+        .waitForOutstandingAjaxCalls()
+    },
+
     /**
      * sets role or permissions for public link on webUI
      *
      * @param {string} role - e.g. Viewer, Contributor, Editor, Uploader
      * @returns {Promise<void>}
      */
-    setPublicLinkRole: function (role) {
+    setPublicLinkInitialRole: function (role) {
       role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       const selectedRoleDropdown = util.format(
         this.elements.publicLinkRoleSelectionDropdown.selector,
@@ -89,7 +146,7 @@ module.exports = {
      */
     setPublicLinkForm: async function (key, value) {
       if (key === 'role') {
-        return this.setPublicLinkRole(value)
+        return this.setPublicLinkInitialRole(value)
       } else if (key === 'name') {
         return this.setPublicLinkName(value)
       } else if (key === 'password') {
@@ -115,11 +172,48 @@ module.exports = {
      * @param {string} editData.expireDate - Expire date for a public link share
      * @returns {exports}
      */
-    editPublicLink: async function (linkName, editData) {
+    editPublicLink: async function (linkName) {
       await this.clickLinkEditBtn(linkName)
-      for (const [key, value] of Object.entries(editData)) {
-        await this.setPublicLinkForm(key, value)
+      return this
+    },
+
+    editPublicLinkExpiration: async function (linkName) {
+      await this.clickLinkEditExpirationBtn(linkName)
+      return this
+    },
+
+    changeExpirationDate: async function (linkName, expiry) {
+      const value = sharingHelper.calculateDate(expiry)
+      await this.editPublicLink(linkName)
+      await this.editPublicLinkExpiration(linkName)
+      return this.api.page.FilesPageElement.expirationDatePicker().setExpirationDate(value, 'link')
+    },
+
+    openRolesDrop: function (linkName) {
+      const linkRowEditRoleButtonSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkEditRoleButton.selector, linkName)
+      const linkRowEditRoleButton = {
+        locateStrategy: this.elements.publicLinkEditRoleButton.locateStrategy,
+        selector: linkRowEditRoleButtonSelector
       }
+      return this.waitForElementVisible(linkRowEditRoleButton)
+        .initAjaxCounters()
+        .click(linkRowEditRoleButton)
+        .waitForOutstandingAjaxCalls()
+    },
+
+    setPublicLinkRole: function (role) {
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
+      return this.waitForElementVisible(`@role${role}`)
+        .initAjaxCounters()
+        .click(`@role${role}`)
+        .waitForOutstandingAjaxCalls()
+    },
+
+    changeRole: async function (linkName, role) {
+      await this.openRolesDrop(linkName)
+      await this.setPublicLinkRole(role)
       return this
     },
     /**
@@ -146,7 +240,7 @@ module.exports = {
      * @param {string} linkName Name of the public link share of a resource to be deleted
      * @returns {exports}
      */
-    removePublicLink: function (linkName) {
+    removePublicLink: async function (linkName) {
       const linkRowDeleteButtonSelector =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkDeleteButton.selector, linkName)
@@ -154,6 +248,7 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
+      await this.editPublicLink(linkName)
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
@@ -168,7 +263,7 @@ module.exports = {
      * @param {string} linkName Name of the public link share of a resource to be deleted
      * @returns {exports}
      */
-    cancelRemovePublicLink: function (linkName) {
+    cancelRemovePublicLink: async function (linkName) {
       const linkRowDeleteButtonSelector =
         this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkDeleteButton.selector, linkName)
@@ -176,6 +271,7 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
+      await this.editPublicLink(linkName)
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
@@ -225,7 +321,6 @@ module.exports = {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
-        .waitForElementNotPresent('@publicLinkCreateButton')
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -296,7 +391,11 @@ module.exports = {
             }
           )
 
-          if (attrElementId) {
+          // hack to check for presence of via-button
+          // since the redesign removed the visual via-text
+          if (attrElementId && attrName === 'viaLabel') {
+            linkResult.viaLabel = true
+          } else if (attrElementId) {
             await this.api.elementIdText(attrElementId, (text) => {
               linkResult[attrName] = text.value
             })
@@ -345,14 +444,82 @@ module.exports = {
      */
     getErrorMessage: async function () {
       let message
-      const errorMessageXpath =
-        this.elements.publicLinkContainer.selector +
-        this.elements.errorMessageInsidePublicLinkContainer.selector
-      await this.getText('xpath', errorMessageXpath, function (result) {
+      await this.getText(
+        'xpath',
+        this.elements.errorMessageInsidePublicLinkContainer.selector,
+        function (result) {
+          message = result.value
+        }
+      )
+      console.log('\n\n', message, '\n\n')
+      return message
+    },
+
+    getErrorMessageFromModal: async function () {
+      let message
+      await this.getText('.oc-modal-body-input .oc-text-input-message', function (result) {
         message = result.value
       })
       return message
     },
+
+    editPublicLinkName: async function (linkName) {
+      await this.clickLinkEditNameBtn(linkName)
+      return this
+    },
+
+    changeName: async function (linkName, newName) {
+      await this.editPublicLink(linkName)
+      await this.editPublicLinkName(linkName)
+
+      await this.useXpath()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .clearValue('@dialogInput')
+        .setValue('@dialogInput', newName)
+        .useCss()
+
+      await this.click('@dialogConfirmBtnEnabled')
+    },
+
+    editPublicLinkPassword: async function (linkName) {
+      await this.clickLinkEditPasswordBtn(linkName)
+      return this
+    },
+
+    addPublicLinkPassword: async function (linkName) {
+      await this.clickLinkAddPasswordBtn(linkName)
+      return this
+    },
+
+    addPassword: async function (linkName, password) {
+      await this.editPublicLink(linkName)
+      await this.addPublicLinkPassword(linkName)
+
+      await this.useXpath()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .clearValue('@dialogInput')
+        .setValue('@dialogInput', password)
+        .useCss()
+
+      await this.click('@dialogConfirmBtnEnabled')
+    },
+
+    changePassword: async function (linkName, password) {
+      await this.editPublicLink(linkName)
+      await this.editPublicLinkPassword(linkName)
+
+      await this.useXpath()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .clearValue('@dialogInput')
+        .setValue('@dialogInput', password)
+        .useCss()
+
+      await this.click('@dialogConfirmBtnEnabled')
+    },
+
     /**
      * clicks the 'copy-public-link-uri' button of a public link
      *
@@ -416,7 +583,7 @@ module.exports = {
       selector: '.oc-files-file-link-name'
     },
     publicLinkSubRole: {
-      selector: '.oc-files-file-link-role'
+      selector: '.link-details .oc-invisible-sr'
     },
     publicLinkSubVia: {
       selector: '.oc-files-file-link-via'
@@ -443,26 +610,51 @@ module.exports = {
       selector: '#files-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
-      selector: '//div[contains(@class, "oc-alert-danger")]',
+      selector: '//div[contains(@class, "oc-notification-message-warning")]',
       locateStrategy: 'xpath'
     },
     publicLinkNameInputField: {
       selector: '//input[@id="oc-files-file-link-name"]',
       locateStrategy: 'xpath'
     },
+    publicLinkEditRoleButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/div/button[contains(@class, "edit-public-link-role-dropdown-toggl")]',
+      locateStrategy: 'xpath'
+    },
     publicLinkEditButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[contains(@class, "edit-drop-trigger")]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkRenameButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Rename"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkAddPasswordButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Add password"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkRenamePasswordButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Edit password"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkExpirationDateEditButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Edit expiration date"]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Delete link"]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {
       selector:
-        '//h5[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-public-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
@@ -485,8 +677,11 @@ module.exports = {
     dialog: {
       selector: '.oc-modal'
     },
+    dialogInput: {
+      selector: '.oc-modal-body-input .oc-text-input'
+    },
     dialogConfirmBtnEnabled: {
-      selector: '.oc-modal-body-actions-confirm:enabled'
+      selector: '.oc-modal-body-actions-confirm'
     },
     dialogCancelBtn: {
       selector: '.oc-modal-body-actions-cancel'

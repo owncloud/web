@@ -99,11 +99,9 @@ const loadPublicLinkWithPassword = async function (linkCreator, password, newSes
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 }
 
-const editPublicLink = async function (linkName, resource, dataTable) {
-  const editData = dataTable.rowsHash()
+const editPublicLink = async function (linkName, resource) {
   await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-  await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName, editData)
-  return client.page.FilesPageElement.publicLinksDialog().savePublicLink()
+  await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName)
 }
 
 Then('the public should not get access to the publicly shared file', async function () {
@@ -120,11 +118,10 @@ Then('the public should not get access to the publicly shared file', async funct
 })
 
 When(
-  'the user edits the public link named {string} of file/folder/resource {string} changing following but not saving',
-  async function (linkName, resource, dataTable) {
-    const editData = dataTable.rowsHash()
+  'the user renames the public link named {string} of file/folder/resource {string} to {string}',
+  async function (linkName, resource, newName) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    return client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName, editData)
+    await client.page.FilesPageElement.publicLinksDialog().changeName(linkName, newName)
   }
 )
 
@@ -136,10 +133,42 @@ When(
 )
 
 When(
+  'the user edits the public link named {string} of file/folder/resource {string} changing expireDate to {string}',
+  async function (linkName, resource, expiry) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().changeExpirationDate(linkName, expiry)
+  }
+)
+
+When(
+  'the user tries to edit the public link named {string} of file/folder/resource {string} changing the role to {string}',
+  async function (linkName, resource, role) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().changeRole(linkName, role)
+  }
+)
+
+When(
+  'the user tries to edit the public link named {string} of file/folder/resource {string} changing the password to {string}',
+  async function (linkName, resource, password) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().changePassword(linkName, password)
+  }
+)
+
+When(
+  'the user tries to edit the public link named {string} of file/folder/resource {string} adding a password {string}',
+  async function (linkName, resource, password) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().addPassword(linkName, password)
+  }
+)
+
+When(
   'the user tries to edit the public link named {string} of file/folder/resource {string} changing following',
-  function (linkName, resource, dataTable) {
+  function (linkName, resource) {
     return (
-      editPublicLink(linkName, resource, dataTable)
+      editPublicLink(linkName, resource)
         // while editing public link, after clicking the "Save" button, the button should disappear but if it doesn't
         // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
         // Also, when no error is thrown, the button seems to disappear, so an error should be thrown in such case as well.
@@ -163,7 +192,7 @@ When(
     await api.publicLinksDialog().clickLinkEditBtn(linkName)
     const value = sharingHelper.calculateDate(pastDate)
     const dateToSet = new Date(Date.parse(value))
-    await api.publicLinksDialog().openExpirationDatePicker()
+    await api.publicLinksDialog().clickLinkEditExpirationBtn(linkName)
     const isDisabled = await api.expirationDatePicker().isExpiryDateDisabled(dateToSet)
     return assert.ok(isDisabled, 'Expected expiration date to be disabled but found not disabled')
   }
@@ -214,7 +243,7 @@ async function findMatchingPublicLinkByName(name, role, resource, via = null) {
 
   assert.strictEqual(role, share.role)
   if (via !== null) {
-    assert.strictEqual('Via ' + via, share.viaLabel)
+    assert.ok(share.viaLabel, 'Expected "shared via" icon to be displayed but was not visible')
   }
 }
 
@@ -236,6 +265,15 @@ Then(
   'the user should see an error message on the public link share dialog saying {string}',
   async function (expectedMessage) {
     const actualMessage = await client.page.FilesPageElement.publicLinksDialog().getErrorMessage()
+    return client.assert.strictEqual(actualMessage, expectedMessage)
+  }
+)
+
+Then(
+  'the user should see an error message on the public link edit modal dialog saying {string}',
+  async function (expectedMessage) {
+    const actualMessage =
+      await client.page.FilesPageElement.publicLinksDialog().getErrorMessageFromModal()
     return client.assert.strictEqual(actualMessage, expectedMessage)
   }
 )

@@ -13,7 +13,7 @@
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
-      class="oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
+      class="oc-width-1-1 oc-width-2-5@m oc-width-1-4@xl"
       :sidebar-active-panel="sidebarActivePanel"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"

@@ -1657,10 +1657,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-free@npm:^5.15.4":
-  version: 5.15.4
-  resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
-  checksum: 32281c3df4075290d9a96dfc22f72fadb3da7055d4117e48d34046b8c98032a55fa260ae351b0af5d6f6fb57a2f5d79a4abe52af456da35195f7cb7dda27b4a2
+"@fortawesome/fontawesome-free@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@fortawesome/fontawesome-free@npm:6.1.1"
+  checksum: adb3c71e0d9e60488401a193cfd1925ad100935ae41c88d3969937b59c182289ecc6f8c0835f0a3fb9cc215348a047a39536e918247381774baf7dcebef94b64
   languageName: node
   linkType: hard
 
@@ -2455,10 +2455,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^2.0.8":
-  version: 2.0.8
-  resolution: "@types/luxon@npm:2.0.8"
-  checksum: 630d069a5a719c7512cb8805bcec6bac7f9aa5d434edf2159ba6dfb22eb8de982232a6d3621acd66f6ca2d1d6b0e8b40f9c8dafbbad654eb8cc01229f528ae45
+"@types/luxon@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@types/luxon@npm:2.3.1"
+  checksum: e75928929aaf4e8796dcbdccd23a2dda029f637db01f5b06c7a72033ae106966df716e179ee41711280d782bd851228810643bce9bffc4ff62ae906e94ee1df2
   languageName: node
   linkType: hard
 
@@ -3417,15 +3417,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.24.0":
-  version: 0.24.0
-  resolution: "axios@npm:0.24.0"
-  dependencies:
-    follow-redirects: ^1.14.4
-  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
-  languageName: node
-  linkType: hard
-
 "axios@npm:^0.26.1":
   version: 0.26.1
   resolution: "axios@npm:0.26.1"
@@ -3813,6 +3804,15 @@ __metadata:
     balanced-match: ^1.0.0
     concat-map: 0.0.1
   checksum: faf34a7bb0c3fcf4b59c7808bc5d2a96a40988addf2e7e09dfbb67a2251800e0d14cd2bfc1aa79174f2f5095c54ff27f46fb1289fe2d77dac755b5eb3434cc07
+  languageName: node
+  linkType: hard
+
+"brace-expansion@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "brace-expansion@npm:2.0.1"
+  dependencies:
+    balanced-match: ^1.0.0
+  checksum: a61e7cd2e8a8505e9f0036b3b6108ba5e926b4b55089eeb5550cd04a471fe216c96d4fe7e4c7f995c728c554ae20ddfc4244cad10aef255e72b62930afd233d1
   languageName: node
   linkType: hard
 
@@ -6459,7 +6459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.8":
+"follow-redirects@npm:^1.14.8":
   version: 1.14.9
   resolution: "follow-redirects@npm:1.14.9"
   peerDependenciesMeta:
@@ -9078,6 +9078,15 @@ __metadata:
   dependencies:
     brace-expansion: ^1.1.7
   checksum: 66ac295f8a7b59788000ea3749938b0970344c841750abd96694f80269b926ebcafad3deeb3f1da2522978b119e6ae3a5869b63b13a7859a456b3408bd18a078
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "minimatch@npm:5.0.1"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: b34b98463da4754bc526b244d680c69d4d6089451ebe512edaf6dd9eeed0279399cfa3edb19233513b8f830bf4bfcad911dddcdf125e75074100d52f724774f0
   languageName: node
   linkType: hard
 
@@ -13374,7 +13383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.5.3, url-parse@npm:^1.5.7":
+"url-parse@npm:^1.5.10, url-parse@npm:^1.5.7":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:
@@ -13805,9 +13814,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
-    "@fortawesome/fontawesome-free": ^5.15.4
+    "@fortawesome/fontawesome-free": ^6.1.1
     "@popperjs/core": ^2.4.0
-    "@types/luxon": ^2.0.8
+    "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
     "@vue/composition-api": ^1.4.9
     axios: ^0.26.1
@@ -13854,29 +13863,29 @@ __metadata:
     vuex-persist: 3.1.3
     vuex-router-sync: ^5.0.0
     web-pkg: "*"
-    webdav: 4.8.0
+    webdav: 4.9.0
     webfontloader: ^1.6.28
     xml-js: ^1.6.11
   languageName: unknown
   linkType: soft
 
-"webdav@npm:4.8.0":
-  version: 4.8.0
-  resolution: "webdav@npm:4.8.0"
+"webdav@npm:4.9.0":
+  version: 4.9.0
+  resolution: "webdav@npm:4.9.0"
   dependencies:
-    axios: ^0.24.0
+    axios: ^0.26.1
     base-64: ^1.0.0
     fast-xml-parser: ^3.19.0
     he: ^1.2.0
     hot-patcher: ^0.5.0
     layerr: ^0.1.2
     md5: ^2.3.0
-    minimatch: ^3.0.4
+    minimatch: ^5.0.1
     nested-property: ^4.0.0
     path-posix: ^1.0.0
     url-join: ^4.0.1
-    url-parse: ^1.5.3
-  checksum: be3f04c359b8f8800febfd18ca5e05258503180f3da7f804630a09bb19b69c0a558182f9bc427daee23785ddd0066a916f740c775de1ca3762981b09f2f1478a
+    url-parse: ^1.5.10
+  checksum: eb2c65bdc7d3a2037d3c27b2f5624421c2312ecccd1bf9edbfa9b99a7704973da9f046e5395b370cadea6502ad39da9cd2d15c85b425d0a92af8a24015e0fb5b
   languageName: node
   linkType: hard
 

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
-import { DateTime } from 'luxon'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
@@ -241,30 +240,6 @@ export default {
 
   SET_VERSIONS(state, versions) {
     state.versions = versions
-  },
-
-  TRIGGER_PUBLIC_LINK_EDIT(state, link) {
-    // Adjust link for the edit
-    link = {
-      id: link.id,
-      name: link.name,
-      permissions: parseInt(link.permissions, 10),
-      hasPassword: link.password,
-      expireDate:
-        link.expiration !== null ? DateTime.fromISO(link.expiration).endOf('day').toISO() : null
-    }
-
-    state.publicLinkInEdit = link
-  },
-
-  TRIGGER_PUBLIC_LINK_CREATE(state, { name, expireDate }) {
-    state.publicLinkInEdit = {
-      id: null,
-      name,
-      permissions: 1,
-      hasPassword: false,
-      expireDate
-    }
   },
 
   LOAD_INDICATORS(state) {

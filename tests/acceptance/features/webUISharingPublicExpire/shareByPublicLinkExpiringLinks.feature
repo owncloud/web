@@ -15,10 +15,10 @@ Feature: Share by public link
       | name       | Public link |
       | expireDate | 2038-10-14  |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public link" of file "lorem.txt" changing following
-      | expireDate | 2038 July 21 |
+    When the user edits the public link named "Public link" of file "lorem.txt" changing expireDate to "2038 July 21"
     Then the last public link share response of user "Alice" should include the following fields in the server
       | expireDate | 2038-07-21 |
+
 
 
 
@@ -114,9 +114,7 @@ Feature: Share by public link
       | expireDate | +16         |
     And user "Alice" has logged in using the webUI
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7" in the server
-    When the user edits the public link named "Public link" of file "lorem.txt" changing following
-      | expireDate | +15 |
-    Then the user should see an error message on the public link share dialog saying "Cannot set expiration date more than 7 days in the future"
+    When the user edits the public link named "Public link" of file "lorem.txt" changing expireDate to "+15"
     And user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |
@@ -125,6 +123,8 @@ Feature: Share by public link
       | path        | /lorem.txt  |
       | name        | Public link |
       | expiration  | +16         |
+
+
 
   @issue-ocis-1328
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
@@ -153,8 +153,7 @@ Feature: Share by public link
       | name       | Public link |
       | expireDate | +5          |
     And user "Alice" has logged in using the webUI
-    When the user edits the public link named "Public link" of file "lorem.txt" changing following
-      | expireDate | +7 |
+    When the user edits the public link named "Public link" of file "lorem.txt" changing expireDate to "+7"
     Then user "Alice" should have a share with these details in the server:
       | field       | value       |
       | share_type  | public_link |

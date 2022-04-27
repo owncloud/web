@@ -70,6 +70,6 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 
   await page.locator('#oc-files-file-link-create').click()
   return await page
-    .locator(`//ul/li//h5[contains(text(),'${name}')]/following-sibling::div/a`)
+    .locator(`//ul/li/div/h4[contains(text(),'${name}')]/following-sibling::div//p`)
     .textContent()
 }

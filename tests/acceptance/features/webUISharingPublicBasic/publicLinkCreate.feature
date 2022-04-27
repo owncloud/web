@@ -14,12 +14,12 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details in the server:
-      | field       | value              |
-      | share_type  | public_link        |
-      | uid_owner   | Alice              |
-      | permissions | read               |
-      | path        | /simple-folder     |
-      | name        | Public link        |
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | Alice          |
+      | permissions | read           |
+      | path        | /simple-folder |
+      | name        | Public link    |
     And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
@@ -30,12 +30,12 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
     Then user "Alice" should have a share with these details in the server:
-      | field       | value              |
-      | share_type  | public_link        |
-      | uid_owner   | Alice              |
-      | permissions | read               |
-      | path        | /lorem.txt         |
-      | name        | Public link        |
+      | field       | value       |
+      | share_type  | public_link |
+      | uid_owner   | Alice       |
+      | permissions | read        |
+      | path        | /lorem.txt  |
+      | name        | Public link |
     And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
@@ -48,11 +48,11 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details in the server:
-      | field       | value              |
-      | share_type  | public_link        |
-      | uid_owner   | Alice              |
-      | permissions | read               |
-      | path        | /simple-folder     |
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | Alice          |
+      | permissions | read           |
+      | path        | /simple-folder |
     And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
@@ -64,11 +64,11 @@ Feature: Create public link shares
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "lorem.txt" using the webUI
     Then user "Alice" should have a share with these details in the server:
-      | field       | value              |
-      | share_type  | public_link        |
-      | uid_owner   | Alice              |
-      | permissions | read               |
-      | path        | /lorem.txt         |
+      | field       | value       |
+      | share_type  | public_link |
+      | uid_owner   | Alice       |
+      | permissions | read        |
+      | path        | /lorem.txt  |
     And a public link with the last created link share token as name should be listed for resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
@@ -93,10 +93,10 @@ Feature: Create public link shares
     When the user creates a new public link for file "lorem.txt" using the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user creates a new public link for file "lorem.txt" using the webUI
-    And the user browses to the shared-via-link page using the webUI
+    # using the webui to navigate creates a problem because "successfully created link" notifications block the nav
+    And the user has browsed to the shared-via-link page
     Then file with path "lorem.txt" should be listed on the webUI
     And file with path "simple-folder/lorem.txt" should be listed on the webUI
-
 
 
 

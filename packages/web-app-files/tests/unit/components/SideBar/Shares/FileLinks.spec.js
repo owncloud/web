@@ -29,14 +29,16 @@ const defaultLinksList = [
     indirect: false,
     name: 'public link 1',
     url: 'some-link-1',
-    path: '/file-1.txt'
+    path: '/file-1.txt',
+    permissions: '1'
   },
   {
     id: '2',
     indirect: true,
     name: 'public link 2',
     url: 'some-link-2',
-    path: '/file-2.txt'
+    path: '/file-2.txt',
+    permissions: '1'
   }
 ]
 
@@ -47,8 +49,8 @@ const selectors = {
   linkPrivate: '.oc-files-private-link-item'
 }
 
-const listItemStubSelector = 'list-item-stub'
-const linkEditStubSelector = 'link-edit-stub'
+const linkListItemNameAndCopy = 'name-and-copy-stub'
+const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 const ocLoaderStubSelector = 'oc-loader-stub'
 
 describe('FileLinks', () => {
@@ -58,9 +60,12 @@ describe('FileLinks', () => {
       const wrapper = getShallowWrapper(store)
 
       it('should render a list of links', () => {
-        const linkListItems = wrapper.findAll(listItemStubSelector)
+        const linkListItems = wrapper.findAll(linkListItemNameAndCopy)
+        const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
 
         expect(linkListItems.length).toBe(2)
+        expect(linkListItemsDetails.length).toBe(2)
+
         expect(linkListItems.at(0).props().link).toMatchObject({
           id: '1',
           indirect: false,
@@ -80,11 +85,9 @@ describe('FileLinks', () => {
       })
     })
 
-    it('should show the "no results" message if no links are provided', () => {
+    it('should not render link list if no links are provided', () => {
       const wrapper = getShallowWrapper(createStore({ links: [] }))
-
-      expect(wrapper.find(selectors.linkNoResults).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.linkNoResults).text()).toBe('No public links')
+      expect(wrapper.find('oc-list-stub').exists()).toBeFalsy()
     })
   })
   describe('when linksLoading is set to true', () => {
@@ -117,31 +120,18 @@ describe('FileLinks', () => {
       describe('when the add-new-link button is clicked', () => {
         let wrapper
         const spyAddNewLink = jest.spyOn(FileLinks.methods, 'addNewLink')
-        const spyLinkCreateTrigger = jest.spyOn(mapMutations, 'TRIGGER_PUBLIC_LINK_CREATE')
 
         beforeEach(() => {
-          const store = createStore()
+          const store = createStore({ links: [] })
           wrapper = getMountedWrapper(store)
         })
 
         it('should call addNewLink', async () => {
           expect(spyAddNewLink).toHaveBeenCalledTimes(0)
-          expect(spyLinkCreateTrigger).toHaveBeenCalledTimes(0)
 
           await wrapper.find(selectors.linkAddButton).trigger('click')
 
           expect(spyAddNewLink).toHaveBeenCalledTimes(1)
-          expect(spyLinkCreateTrigger).toHaveBeenCalledTimes(1)
-        })
-
-        it('should show link edit component', async () => {
-          expect(wrapper.find(linkEditStubSelector).exists()).toBeFalsy()
-          expect(wrapper.vm.currentView).toBe('showLinks')
-
-          await wrapper.find(selectors.linkAddButton).trigger('click')
-
-          expect(wrapper.vm.currentView).toBe('editPublicLink')
-          expect(wrapper.find(linkEditStubSelector).exists()).toBeTruthy()
         })
       })
     })
@@ -161,16 +151,6 @@ describe('FileLinks', () => {
         expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
       })
     })
-
-    describe('when the private link functionality is disabled', () => {
-      it('private link should not be visible', () => {
-        const store = createStore()
-        store.getters.capabilities.files.privateLinks = false
-        const wrapper = getShallowWrapper(store)
-
-        expect(wrapper.find(selectors.linkPrivate).exists()).toBeFalsy()
-      })
-    })
   })
 
   function createStore({
@@ -185,9 +165,8 @@ describe('FileLinks', () => {
     expireDate = {
       enabled: true,
       days: 1,
-      enforced: '1'
-    },
-    privateLinks = false
+      enforced: false
+    }
   } = {}) {
     return new Vuex.Store({
       getters: {
@@ -204,13 +183,17 @@ describe('FileLinks', () => {
         })),
         capabilities: jest.fn(() => {
           return {
-            files: {
-              privateLinks: privateLinks
-            },
             files_sharing: {
               public: {
                 defaultPublicLinkShareName: 'public link name default',
-                expire_date: expireDate
+                expire_date: expireDate,
+                password: {
+                  enforced_for: {
+                    read_only: false,
+                    upload_only: false,
+                    read_write: false
+                  }
+                }
               }
             }
           }
@@ -244,9 +227,6 @@ describe('FileLinks', () => {
       localVue,
       store: store,
       stubs: stubs,
-      provide: {
-        changeView: jest.fn()
-      },
       mocks: {
         $route: {
           params: {}
@@ -259,13 +239,7 @@ describe('FileLinks', () => {
     return mount(FileLinks, {
       localVue,
       store: store,
-      stubs: {
-        'link-edit': true,
-        'list-item': true
-      },
-      provide: {
-        changeView: jest.fn()
-      },
+      stubs: {},
       mocks: {
         $route: {
           params: {}

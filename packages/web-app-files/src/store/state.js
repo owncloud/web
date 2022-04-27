@@ -35,17 +35,6 @@ export default {
   actionsInProgress: [],
 
   /**
-   * Public links
-   */
-  publicLinkInEdit: {
-    id: null,
-    name: '',
-    permissions: 1,
-    hasPassword: false,
-    expireDate: null
-  },
-
-  /**
    * View settings
    */
   areHiddenFilesShown: true,

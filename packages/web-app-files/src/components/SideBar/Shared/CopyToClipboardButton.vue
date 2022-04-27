@@ -3,6 +3,7 @@
     v-oc-tooltip="label"
     :aria-label="label"
     appearance="raw"
+    :variation="copied ? 'success' : 'passive'"
     @click="copyValueToClipboard"
   >
     <span v-text="text" />
@@ -84,7 +85,7 @@ export default {
 <style scoped>
 ._clipboard-success-animation {
   animation-name: _clipboard-success-animation;
-  animation-duration: 0.5s;
+  animation-duration: 0.8s;
   animation-timing-function: ease-out;
   animation-fill-mode: both;
 }
