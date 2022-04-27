@@ -10,14 +10,16 @@ Summary
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
+* Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
-* Enhancement - Bump ODS to 13.1.0 RC.5: [#6750](https://github.com/owncloud/web/pull/6750)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
+* Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 
 Details
 -------
@@ -37,6 +39,16 @@ Details
    the share panel in the right sidebar.
 
    https://github.com/owncloud/web/pull/6813
+
+* Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
+
+   Password enforcement for public links, which can be adjusted on a per-role basis, wasn't
+   properly reflected in the UI. We have made the necessary adjustments to only enforce passwords
+   for public links with the permissions that require a password according to the backend
+   settings.
+
+   https://github.com/owncloud/web/issues/6323
+   https://github.com/owncloud/web/pull/6749
 
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 
@@ -80,12 +92,6 @@ Details
    https://github.com/owncloud/web/issues/6728
    https://github.com/owncloud/web/pull/6795
 
-* Enhancement - Bump ODS to 13.1.0 RC.5: [#6750](https://github.com/owncloud/web/pull/6750)
-
-   We've bumped the version of the design system to v13.1.0-rc.5
-
-   https://github.com/owncloud/web/pull/6750
-
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
    We've added the app "user-management" with the following features: * Listing, creating,
@@ -98,12 +104,47 @@ Details
    https://github.com/owncloud/web/issues/6676
    https://github.com/owncloud/web/issues/6677
 
+* Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
+
+   We have redesigned the public link list in the right sidebar. Links now can be edited in-line and
+   have a similiar look-and-feel to people and group shares.
+
+   https://github.com/owncloud/web/pull/6749
+
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
    We've replaced all occurrences of the deprecated String.prototype.substr() function with
    String.prototype.slice() which works similarly but isn't deprecated.
 
    https://github.com/owncloud/web/pull/6718
+
+* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+
+   We updated the ownCloud Design System to version 13.1.0-rc.5. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Enhancement - Add isFileExtensionDisplayed property:
+   https://github.com/owncloud/owncloud-design-system/pull/2087 - Enhancement - OcModal
+   input type: https://github.com/owncloud/owncloud-design-system/pull/2077 -
+   Enhancement - Add OcContextualHelper:
+   https://github.com/owncloud/owncloud-design-system/pull/2064 - Enhancement - Add
+   selection range for OcModal and OcTextInput:
+   https://github.com/owncloud/owncloud-design-system/pull/2061 - Enhancement - Replace
+   deprecated String.prototype.substr():
+   https://github.com/owncloud/owncloud-design-system/pull/2059 - Enhancement -
+   Redesign OcGhostElement:
+   https://github.com/owncloud/owncloud-design-system/pull/2049 - Enhancement - Export
+   package members: https://github.com/owncloud/owncloud-design-system/pull/2048 -
+   Enhancement - Make OcResource inline-flex:
+   https://github.com/owncloud/owncloud-design-system/pull/2041 - Bugfix - Disabled
+   textarea color contrast in darkmode:
+   https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
+   Fix event handlers in loops:
+   https://github.com/owncloud/owncloud-design-system/pull/2054
+
+   https://github.com/owncloud/web/pull/6749
+   https://github.com/owncloud/web/pull/6750
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.5
 
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================
