@@ -242,8 +242,7 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
           ...state
         },
         getters: {
-          currentFolder: () => state.currentFolder,
-          dropzone: () => {}
+          currentFolder: () => state.currentFolder
         }
       }
     }

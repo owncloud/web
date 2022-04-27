@@ -1,10 +1,6 @@
 <template>
-  <div
-    id="upload-info"
-    class="oc-p-m oc-rounded oc-box-shadow-medium"
-    :class="{ 'oc-hidden': !showInfo }"
-  >
-    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-mb-m">
+  <div id="upload-info" class="oc-rounded oc-box-shadow-medium" :class="{ 'oc-hidden': !showInfo }">
+    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-pt-m">
       <span class="oc-flex oc-flex-middle">
         <oc-icon
           v-if="!filesUploading && !uploadCancelled"
@@ -16,12 +12,17 @@
         <span v-text="uploadInfoTitle" />
       </span>
 
-      <oc-button id="close-upload-info-btn" appearance="raw" @click="closeInfo">
+      <oc-button
+        id="close-upload-info-btn"
+        v-oc-tooltip="$gettext('Close')"
+        appearance="raw"
+        @click="closeInfo"
+      >
         <oc-icon name="close" />
       </oc-button>
     </div>
-    <div class="upload-info-status-bar" />
-    <div class="upload-info-successful-uploads">
+    <div class="upload-info-status-bar oc-px-m" />
+    <div class="upload-info-successful-uploads oc-p-m">
       <ul id="files-collaborators-list" class="oc-list">
         <li
           v-for="(item, idx) in successfulUploads"
@@ -184,8 +185,12 @@ export default {
 #upload-info {
   position: absolute;
   right: 20px;
-  background: #fff;
+  background-color: var(--oc-color-background-secondary);
   bottom: 20px;
   width: 300px;
+}
+.upload-info-successful-uploads {
+  max-height: 50vh;
+  overflow-y: auto;
 }
 </style>

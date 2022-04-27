@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -30,7 +30,6 @@ export default defineComponent({
   },
   mixins: [Mixins],
   computed: {
-    ...mapGetters('Files', ['dropzone']),
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',
       sidebarActivePanel: 'activePanel'
