@@ -127,12 +127,12 @@ describe('vuex store mutations', () => {
     })
   })
 
-  describe('CURRENT_FILE_OUTGOING_SHARES_UPDATE', () => {
+  describe('CURRENT_FILE_OUTGOING_SHARES_UPSERT', () => {
     it('updates an outgoing user share', () => {
       const share = { id: 1, shareType: ShareTypes.user.value, permissions: 1 }
       const state = { currentFileOutgoingShares: [share] }
       const updatedShare = { ...share, permissions: 31 }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, updatedShare)
+      mutations.CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, updatedShare)
 
       expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
     })
@@ -145,7 +145,7 @@ describe('vuex store mutations', () => {
       }
       const state = { currentFileOutgoingShares: [share] }
       const updatedShare = { ...share, permissions: 31 }
-      mutations.CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, updatedShare)
+      mutations.CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, updatedShare)
 
       expect(state.currentFileOutgoingShares[0]).toEqual(updatedShare)
     })

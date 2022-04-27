@@ -1,3 +1,4 @@
+export * from './link'
 export * from './permission'
 export * from './role'
 export * from './share'

@@ -182,8 +182,7 @@ Feature: Create public link shares
       | name        | Quick action link |
     And the following success message should be displayed on the webUI
       """
-      Public link created
-      Public link was created successfully and copied into your clipboard.
+      Quicklink copied into your clipboard
       """
 
   # This test is skipped in OCIS as it's starting to fail frequently

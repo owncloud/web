@@ -107,9 +107,6 @@ export default {
   CURRENT_FILE_OUTGOING_SHARES_SET(state, shares) {
     state.currentFileOutgoingShares = shares
   },
-  CURRENT_FILE_OUTGOING_SHARES_ADD(state, share) {
-    state.currentFileOutgoingShares.push(share)
-  },
   CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
     if (share.shareType === ShareTypes.space.value) {
       state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
@@ -121,7 +118,7 @@ export default {
       (s) => share.id !== s.id
     )
   },
-  CURRENT_FILE_OUTGOING_SHARES_UPDATE(state, share) {
+  CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, share) {
     let fileIndex
     if (share.shareType === ShareTypes.space.value) {
       fileIndex = state.currentFileOutgoingShares.findIndex((s) => {

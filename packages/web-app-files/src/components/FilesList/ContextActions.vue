@@ -8,7 +8,7 @@ import ContextActionMenu from '../ContextActionMenu.vue'
 import FileActions from '../../mixins/fileActions'
 import AcceptShare from '../../mixins/actions/acceptShare'
 import Copy from '../../mixins/actions/copy'
-import CreatePublicLink from '../../mixins/actions/createPublicLink'
+import CreateQuicklink from '../../mixins/actions/createQuicklink'
 import DeclineShare from '../../mixins/actions/declineShare'
 import Delete from '../../mixins/actions/delete'
 import DownloadArchive from '../../mixins/actions/downloadArchive'
@@ -35,7 +35,7 @@ export default {
     FileActions,
     AcceptShare,
     Copy,
-    CreatePublicLink,
+    CreateQuicklink,
     DeclineShare,
     Delete,
     DownloadArchive,
@@ -134,7 +134,7 @@ export default {
     },
 
     menuItemsShare() {
-      return [...this.$_showShares_items, ...this.$_createPublicLink_items].filter((item) =>
+      return [...this.$_showShares_items, ...this.$_createQuicklink_items].filter((item) =>
         item.isEnabled(this.filterParams)
       )
     },

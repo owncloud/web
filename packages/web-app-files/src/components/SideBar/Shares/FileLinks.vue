@@ -12,8 +12,7 @@
           <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
         </h3>
         <div v-if="canCreatePublicLinks" class="oc-mt-m">
-          <!-- quicklink goes here -->
-          <!-- <hr class="oc-my-s"> -->
+          <hr class="oc-my-s" />
           <oc-button
             id="files-file-link-add"
             variation="primary"
@@ -77,6 +76,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import CreateForm from './Links/CreateForm.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
+import QuickLink from './Links/QuickLink.vue'
 import { ShareTypes, LinkShareRoles } from '../../../helpers/share'
 import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -92,6 +92,7 @@ export default defineComponent({
   components: {
     CreateForm,
     DetailsAndEdit,
+    QuickLink,
     NameAndCopy
   },
   mixins: [mixins],
@@ -128,6 +129,11 @@ export default defineComponent({
 
     defaultNewLinkName() {
       return this.capabilities?.files_sharing?.public?.defaultPublicLinkShareName || ''
+    },
+
+    quickLink() {
+      // TODO: filter for quicklink
+      return this.links[0]
     },
 
     globalExpirationDate() {
