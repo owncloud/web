@@ -302,8 +302,7 @@ export default defineComponent({
       }
     },
 
-    onFileError(error) {
-      console.error(error)
+    onFileError(file) {
       this.showMessage({
         title: this.$gettext('Failed to upload'),
         status: 'danger'

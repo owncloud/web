@@ -39,7 +39,7 @@ export class UppyService extends Vue {
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: [0, 3000, 5000, 10000, 20000]
+      retryDelays: [0]
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
@@ -177,7 +177,9 @@ export class UppyService extends Vue {
         this.$emit('uploadSuccess', file)
         this.uppy.removeFile(file.id)
       })
-
+      result.failed.forEach((file) => {
+        this.$emit('uploadError', file)
+      })
       this.uploadInputs.forEach((item) => {
         item.value = null
       })
@@ -199,9 +201,6 @@ export class UppyService extends Vue {
           }
         })
       }
-    })
-    this.uppy.on('upload-error', () => {
-      this.$emit('uploadError')
     })
   }
 

@@ -1,6 +1,6 @@
 <template>
   <div id="upload-info" class="oc-rounded oc-box-shadow-medium" :class="{ 'oc-hidden': !showInfo }">
-    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-pt-m">
+    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-p-m">
       <span class="oc-flex oc-flex-middle">
         <oc-icon
           v-if="!filesUploading && !uploadCancelled"
@@ -21,8 +21,11 @@
         <oc-icon name="close" />
       </oc-button>
     </div>
-    <div class="upload-info-status-bar oc-px-m" />
-    <div class="upload-info-successful-uploads oc-p-m">
+    <div
+      class="upload-info-status-bar oc-px-m"
+      :class="{ 'oc-mb-m': successfulUploads.length && filesUploading.length }"
+    />
+    <div class="upload-info-successful-uploads oc-px-m oc-pb-m">
       <ul id="files-collaborators-list" class="oc-list">
         <li
           v-for="(item, idx) in successfulUploads"
@@ -181,7 +184,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #upload-info {
   position: absolute;
   right: 20px;
@@ -192,5 +195,29 @@ export default {
 .upload-info-successful-uploads {
   max-height: 50vh;
   overflow-y: auto;
+}
+.upload-info-status-bar .uppy-StatusBar,
+.upload-info-status-bar .uppy-StatusBar-actionBtn--retry:hover {
+  background-color: unset !important;
+}
+.upload-info-status-bar .uppy-StatusBar-content {
+  padding-left: 0.25rem !important;
+  color: var(--oc-color-text-default);
+}
+.upload-info-status-bar .uppy-StatusBar-actions {
+  right: 0.25rem !important;
+}
+.upload-info-status-bar .uppy-c-btn {
+  color: var(--oc-color-text-default);
+}
+.upload-info-status-bar .uppy-StatusBar-statusSecondary {
+  color: var(--oc-color-swatch-passive-default);
+}
+.upload-info-status-bar .uppy-StatusBar-details,
+.upload-info-status-bar .uppy-StatusBar-actionBtn--retry svg {
+  display: none;
+}
+.upload-info-status-bar .uppy-StatusBar-statusPrimary {
+  font-size: 0.9rem;
 }
 </style>

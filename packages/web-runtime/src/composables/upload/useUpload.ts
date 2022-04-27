@@ -39,6 +39,7 @@ export function useUpload(options: UploadOptions): UploadResult {
   const store = useStore()
   const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
+  const isPublicDropLocation = useActiveLocation(isLocationPublicActive, 'files-public-drop')
   const clientService = useClientService()
   const getToken = computed((): string => store.getters.getToken)
 
@@ -47,9 +48,8 @@ export function useUpload(options: UploadOptions): UploadResult {
   const uploadChunkSize = computed((): number => store.getters.configuration.uploadChunkSize)
 
   const headers = computed((): { [key: string]: string } => {
-    if (unref(isPublicLocation)) {
+    if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
       const password = unref(publicLinkPassword)
-
       if (password) {
         return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
       }
