@@ -20,6 +20,7 @@ Summary
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+* Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 
 Details
@@ -137,6 +138,19 @@ Details
    String.prototype.slice() which works similarly but isn't deprecated.
 
    https://github.com/owncloud/web/pull/6718
+
+* Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
+
+   We've implemented Uppy as a library for handling uploads. This concludes the following
+   features and changes:
+
+   - Resumable uploads when the backend supports the Tus-protocol - A nice looking overview for
+   all files that have been uploaded successfully or failed to upload - Navigation across Web
+   while uploads are in progress - Improved rendering of uploadProgress-visualization -
+   Removed `vue2-dropzone` and `vue-drag-drop` libraries
+
+   https://github.com/owncloud/web/issues/6268
+   https://github.com/owncloud/web/pull/6202
 
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 
