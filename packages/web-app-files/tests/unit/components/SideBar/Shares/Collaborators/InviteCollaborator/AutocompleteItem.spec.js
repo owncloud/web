@@ -28,8 +28,8 @@ describe('AutocompleteItem component', () => {
     it('should display a guest icon for guest shares', () => {
       const wrapper = createWrapper({ shareType: ShareTypes.guest.value })
       expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
-      expect(wrapper.find('oc-icon-stub').exists()).toBeFalsy()
-      expect(wrapper.find('oc-avatar-guest-stub').exists()).toBeTruthy()
+      expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
+      expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('global')
     })
     it.each([ShareTypes.link.value, ShareTypes.remote.value])(
       'should display a generic-person icon for any other share types',
