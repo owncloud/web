@@ -1,0 +1,21 @@
+Bugfix: Do not load files from cache
+
+When apps (i.e Drawio) tried to load a file, the browser caches the request.
+If the file was modified somewhere else and the browser reads the file and its
+version from the cache, the content shown to the user is outdated and saving any
+changes is impossible until the cache is properly cleared.
+Thus we now ask the browser to never load files from its cache in apps.
+
+In order to achieve that we send a `Cache-Control` header along with requests.
+Unfortunately currently released ownCloud 10 versions do not accept that header
+in cross site origin setups. If you run ownCloud Web on a different domain than
+your ownCloud 10 instance, then you might need to add `Cache-Control` to the list
+of allowed CORS headers:
+
+`occ config:system:set cors.allowed-headers --type json --value '["cache-control"]'`
+
+Please make sure you don't override previous values!
+
+
+https://github.com/owncloud/web/pull/6447
+https://github.com/owncloud/core/pull/40024
