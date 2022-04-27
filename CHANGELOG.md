@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
+* Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
@@ -32,6 +33,25 @@ Details
 
    https://github.com/owncloud/web/issues/6756
    https://github.com/owncloud/web/pull/6803
+
+* Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
+
+   When apps (i.e Drawio) tried to load a file, the browser caches the request. If the file was
+   modified somewhere else and the browser reads the file and its version from the cache, the
+   content shown to the user is outdated and saving any changes is impossible until the cache is
+   properly cleared. Thus we now ask the browser to never load files from its cache in apps.
+
+   In order to achieve that we send a `Cache-Control` header along with requests. Unfortunately
+   currently released ownCloud 10 versions do not accept that header in cross site origin setups.
+   If you run ownCloud Web on a different domain than your ownCloud 10 instance, then you might need
+   to add `Cache-Control` to the list of allowed CORS headers:
+
+   `occ config:system:set cors.allowed-headers --type json --value '["cache-control"]'`
+
+   Please make sure you don't override previous values!
+
+   https://github.com/owncloud/web/pull/6447
+   https://github.com/owncloud/core/pull/40024
 
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 
