@@ -66,7 +66,8 @@ const navItems = [
     icon: 'share-forward',
     route: {
       path: `/${appInfo.id}/shares`
-    }
+    },
+    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }]
   },
   {
     name: $gettext('Spaces'),

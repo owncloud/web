@@ -100,14 +100,26 @@ export default defineComponent({
 
       const { href: currentHref } = this.$router.resolve(this.$route)
       return items.map((item) => {
-        const { href: comparativeHref } = this.$router.resolve(item.route)
-
+        const active = [item.route, ...(item.activeFor || [])]
+          .filter(Boolean)
+          .reduce((result, currentItem) => {
+            if (result) {
+              return true
+            }
+            try {
+              const comparativeHref = this.$router.resolve(currentItem).href
+              return currentHref.startsWith(comparativeHref)
+            } catch (e) {
+              console.error(e)
+              return false
+            }
+          }, false)
         const name = typeof item.name === 'function' ? item.name(this.capabilities) : item.name
 
         return {
           ...item,
           name: this.$gettext(name),
-          active: currentHref.startsWith(comparativeHref)
+          active
         }
       })
     },
