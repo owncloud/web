@@ -159,8 +159,7 @@ function createStore(inProgress = []) {
       Files: {
         namespaced: true,
         getters: {
-          inProgress: jest.fn(() => inProgress),
-          uploaded: jest.fn(() => [])
+          inProgress: jest.fn(() => inProgress)
         }
       }
     }

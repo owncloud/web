@@ -1,11 +1,6 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
-    <div
-      ref="filesListWrapper"
-      tabindex="-1"
-      class="files-list-wrapper oc-width-expand"
-      @dragover="$_ocApp_dragOver"
-    >
+    <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" />
     </div>
     <side-bar
@@ -25,7 +20,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -35,7 +30,6 @@ export default defineComponent({
   },
   mixins: [Mixins],
   computed: {
-    ...mapGetters('Files', ['dropzone']),
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',
       sidebarActivePanel: 'activePanel'
@@ -62,7 +56,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['dragOver', 'resetFileSelection']),
+    ...mapActions('Files', ['resetFileSelection']),
     ...mapActions('Files/sidebar', {
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
@@ -75,10 +69,6 @@ export default defineComponent({
         to: this.$refs.filesSidebar?.$el,
         revert: event === 'beforeDestroy'
       })
-    },
-    $_ocApp_dragOver(event) {
-      const hasfileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      this.dragOver(hasfileInEvent)
     }
   }
 })

@@ -71,7 +71,7 @@ Feature: Share by public link with different roles
       | name        | Public link    |
     And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then there should be no resources listed on the webUI
+    Then the user should be redirected to the files-drop page
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -87,7 +87,7 @@ Feature: Share by public link with different roles
       | path        | /simple-folder |
     And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    Then there should be no resources listed on the webUI
+    Then the user should be redirected to the files-drop page
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link

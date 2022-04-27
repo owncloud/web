@@ -94,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['inProgress', 'uploaded']),
+    ...mapGetters('Files', ['inProgress']),
 
     count() {
       return this.inProgress.length
@@ -107,11 +107,6 @@ export default {
       for (const item of this.inProgress) {
         totalSizeSum += item.size
         progressSizeSum += (item.size * item.progress) / 100
-      }
-
-      for (const item of this.uploaded) {
-        totalSizeSum += item.size
-        progressSizeSum += item.size
       }
 
       if (this.inProgress.length > 0 && totalSizeSum > 0) {

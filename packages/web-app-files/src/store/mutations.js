@@ -6,51 +6,6 @@ import { renameResource } from '../helpers/resources'
 import { ShareTypes } from '../helpers/share'
 
 export default {
-  UPDATE_FILE_PROGRESS(state, file) {
-    const inProgress = [...state.inProgress]
-
-    const fileIndex = inProgress.findIndex((f) => {
-      return f.id === file.id
-    })
-    if (fileIndex === -1) return
-
-    inProgress[fileIndex].progress = file.progress
-    state.inProgress = inProgress
-  },
-
-  ADD_FILE_TO_PROGRESS(state, file) {
-    const inProgress = [...state.inProgress]
-    inProgress.push({
-      id: file.id,
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      progress: 0,
-      action: 'upload'
-    })
-    state.inProgress = inProgress
-  },
-
-  REMOVE_FILE_FROM_PROGRESS(state, file) {
-    const inProgress = [...state.inProgress]
-    const fileIndex = inProgress.findIndex((f) => {
-      return f.id === file.id
-    })
-
-    inProgress.splice(fileIndex, 1)
-    if (inProgress.length < 1) {
-      state.inProgress = []
-      state.uploaded = []
-      return
-    }
-    state.inProgress = inProgress
-
-    const uploaded = [...state.uploaded]
-    file.progress = 100
-    uploaded.push(file)
-    state.uploaded = uploaded
-  },
-
   LOAD_FILES(state, { currentFolder, files }) {
     state.currentFolder = currentFolder
     state.files = files
@@ -110,9 +65,6 @@ export default {
     renameResource(resources[fileIndex], newValue, newPath)
 
     state.files = resources
-  },
-  DRAG_OVER(state, value) {
-    state.dropzone = value
   },
   CURRENT_FILE_OUTGOING_SHARES_SET(state, shares) {
     state.currentFileOutgoingShares = shares

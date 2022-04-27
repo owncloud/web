@@ -1,4 +1,4 @@
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import FileUpload from '../../../../../src/components/AppBar/Upload/FileUpload.vue'
 import DesignSystem from 'owncloud-design-system'
 
@@ -32,28 +32,6 @@ describe('File Upload Component', () => {
       expect(spyTriggerUpload).toHaveBeenCalledTimes(1)
       expect(fileUploadInput.element.click).toHaveBeenCalledTimes(1)
     })
-
-    describe('when file is selected for upload', () => {
-      const event = new Event('change')
-
-      it('should call "$_ocUpload_addFileToQueue"', async () => {
-        const wrapper = shallowMount(FileUpload, {
-          ...getOptions(),
-          stubs: {
-            'oc-button': true,
-            'oc-icon': true
-          }
-        })
-        wrapper.vm.$_ocUpload_addFileToQueue = jest.fn()
-        await wrapper.vm.$forceUpdate()
-
-        const fileUploadInput = wrapper.find('#fileUploadInput')
-        await fileUploadInput.trigger('change')
-
-        expect(wrapper.vm.$_ocUpload_addFileToQueue).toHaveBeenCalledTimes(1)
-        expect(wrapper.vm.$_ocUpload_addFileToQueue).toHaveBeenCalledWith(event)
-      })
-    })
   })
 })
 
@@ -65,6 +43,12 @@ function getOptions() {
       path: ''
     },
     localVue,
-    directives: { Translate }
+    directives: { Translate },
+    mocks: {
+      $uppyService: {
+        registerUploadInput: jest.fn(),
+        removeUploadInput: jest.fn()
+      }
+    }
   }
 }

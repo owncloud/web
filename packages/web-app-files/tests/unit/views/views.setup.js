@@ -166,7 +166,6 @@ export const getStore = function ({
           selectedFiles: () => selectedFiles,
           activeFiles: (state) => state.activeFiles,
           inProgress: () => inProgress,
-          uploaded: () => [],
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,
           pages: () => pages,

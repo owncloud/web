@@ -23,7 +23,7 @@ export class Public {
 
   async upload({ resources }: { resources: File[] }): Promise<void> {
     await this.#page
-      .locator('//input[@id="file_upload_start" or @class="dz-hidden-input"]')
+      .locator('//input[@id="fileUploadInput"]')
       .setInputFiles(resources.map((file) => file.path))
   }
 }

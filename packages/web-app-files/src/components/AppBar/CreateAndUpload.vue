@@ -70,15 +70,6 @@
         <translate>New folder</translate>
       </oc-button>
     </template>
-    <file-drop
-      v-if="!uploadOrFileCreationBlocked"
-      :root-path="currentPath"
-      :path="currentPath"
-      :headers="headers"
-      @success="onFileSuccess"
-      @error="onFileError"
-      @progress="onFileProgress"
-    />
     <oc-button
       id="upload-menu-btn"
       key="upload-menu-btn-enabled"
@@ -99,34 +90,20 @@
     >
       <oc-list id="upload-list">
         <li>
-          <folder-upload
-            :root-path="currentPath"
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
+          <folder-upload ref="folder-upload" />
         </li>
         <li>
-          <file-upload
-            :path="currentPath"
-            :headers="headers"
-            @success="onFileSuccess"
-            @error="onFileError"
-            @progress="onFileProgress"
-          />
+          <file-upload ref="file-upload" btn-class="oc-width-1-1" />
         </li>
       </oc-list>
     </oc-drop>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
 
-import Mixins from '../../mixins'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -135,19 +112,46 @@ import { useAppDefaults } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
-import FileDrop from './Upload/FileDrop.vue'
+// TODO: Simplify to one UploadButton component and fill from here
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
+import { defineComponent, getCurrentInstance, onMounted, onUnmounted } from '@vue/composition-api'
+import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
+import { useUploadHelpers } from '../../composables/upload'
 
-export default {
+export default defineComponent({
   components: {
-    FileDrop,
     FileUpload,
     FolderUpload
   },
-  mixins: [Mixins, MixinFileActions],
+  mixins: [MixinFileActions],
   setup() {
+    const instance = getCurrentInstance().proxy
+    const uppyService = instance.$uppyService
+
+    onMounted(() => {
+      uppyService.$on('filesSelected', instance.onFilesSelected)
+      uppyService.$on('uploadSuccess', instance.onFileSuccess)
+      uppyService.$on('uploadError', instance.onFileError)
+
+      uppyService.useDropTarget({
+        targetSelector: '#files-view',
+        uppyService
+      })
+    })
+
+    onUnmounted(() => {
+      uppyService.$off('filesSelected', instance.onFilesSelected)
+      uppyService.$off('uploadSuccess', instance.onFileSuccess)
+      uppyService.$off('uploadError', instance.onFileError)
+      uppyService.removeDropTarget()
+    })
+
     return {
+      ...useUpload({
+        uppyService
+      }),
+      ...useUploadHelpers(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
@@ -174,29 +178,6 @@ export default {
         return []
       }
       return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
-    },
-
-    currentPath() {
-      const path = this.$route.params.item || ''
-      if (path.endsWith('/')) {
-        return path
-      }
-      return path + '/'
-    },
-
-    headers() {
-      if (this.isPublicLocation) {
-        const password = this.publicLinkPassword
-
-        if (password) {
-          return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
-        }
-
-        return {}
-      }
-      return {
-        Authorization: 'Bearer ' + this.getToken
-      }
     },
 
     showActions() {
@@ -265,20 +246,23 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'loadIndicators']),
-    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage']),
+    ...mapActions('Files', ['loadPreview', 'loadIndicators']),
+    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
-    async onFileSuccess(event, file) {
+    async onFileSuccess(file: UppyResource) {
       try {
-        if (file.name) {
-          file = file.name
+        let pathFileWasUploadedTo = file.meta.currentFolder
+        if (file.meta.relativeFolder) {
+          pathFileWasUploadedTo += file.meta.relativeFolder
         }
+
+        const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
 
         await this.$nextTick()
 
-        let path = pathUtil.join(this.currentPath, file)
+        let path = pathUtil.join(pathFileWasUploadedTo, file.name)
         let resource
 
         if (this.isPersonalLocation) {
@@ -297,14 +281,17 @@ export default {
 
         resource = buildResource(resource)
 
-        this.UPSERT_RESOURCE(resource)
+        // Update table only if the file was uploaded to the current directory
+        if (fileIsInCurrentPath) {
+          this.UPSERT_RESOURCE(resource)
 
-        if (this.isPersonalLocation) {
-          this.loadIndicators({
-            client: this.$client,
-            currentFolder: this.currentFolder.path,
-            encodePath: this.encodePath
-          })
+          if (this.isPersonalLocation) {
+            this.loadIndicators({
+              client: this.$client,
+              currentFolder: this.currentFolder.path,
+              encodePath: this.encodePath
+            })
+          }
         }
 
         const user = await this.$client.users.getUser(this.user.id)
@@ -315,16 +302,11 @@ export default {
       }
     },
 
-    onFileError(error) {
-      console.error(error)
+    onFileError(file) {
       this.showMessage({
         title: this.$gettext('Failed to upload'),
         status: 'danger'
       })
-    },
-
-    onFileProgress(progress) {
-      this.updateFileProgress(progress)
     },
 
     showCreateResourceModal(
@@ -623,9 +605,96 @@ export default {
       }
 
       return null
+    },
+
+    onFilesSelected(files: File[]) {
+      const conflicts = []
+      const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
+      for (const file of uppyResources) {
+        const relativeFilePath = file.meta.relativePath
+        if (relativeFilePath) {
+          const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
+          const exists = this.files.find((f) => f.name === rootFolder)
+          if (exists) {
+            this.showMessage({
+              title: this.$gettextInterpolate(
+                this.$gettext('Folder "%{folder}" already exists.'),
+                { folder: rootFolder },
+                true
+              ),
+              status: 'danger'
+            })
+            return
+          }
+
+          // Folder does not exist, no need to care about files inside -> continue
+          continue
+        }
+        const exists = this.files.find((f) => f.name === file.name)
+        if (exists) {
+          conflicts.push(file)
+        }
+      }
+
+      if (conflicts.length) {
+        this.displayOverwriteDialog(uppyResources, conflicts)
+      } else {
+        this.handleUppyFileUpload(uppyResources)
+      }
+    },
+
+    async handleUppyFileUpload(files: UppyResource[]) {
+      await this.createDirectoryTree(files)
+      await this.updateStoreForCreatedFolders(files)
+      this.$uppyService.uploadFiles(files)
+    },
+
+    displayOverwriteDialog(files: UppyResource[], conflicts) {
+      const title = this.$ngettext(
+        'File already exists',
+        'Some files already exist',
+        conflicts.length
+      )
+
+      const isVersioningEnabled =
+        !this.publicPage() && this.capabilities.files && this.capabilities.files.versioning
+
+      let translatedMsg
+      if (isVersioningEnabled) {
+        translatedMsg = this.$ngettext(
+          'The following resource already exists: %{resources}. Do you want to create a new version for it?',
+          'The following resources already exist: %{resources}. Do you want to create a new version for them?',
+          conflicts.length
+        )
+      } else {
+        translatedMsg = this.$ngettext(
+          'The following resource already exists: %{resources}. Do you want to overwrite it?',
+          'The following resources already exist: %{resources}. Do you want to overwrite them?',
+          conflicts.length
+        )
+      }
+      const message = this.$gettextInterpolate(translatedMsg, {
+        resources: conflicts.map((f) => `${f.name}`).join(', ')
+      })
+
+      const modal = {
+        variation: isVersioningEnabled ? 'passive' : 'danger',
+        icon: 'upload-cloud',
+        title,
+        message,
+        cancelText: this.$gettext('Cancel'),
+        confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
+        onCancel: this.hideModal,
+        onConfirm: () => {
+          this.hideModal()
+          this.handleUppyFileUpload(files)
+        }
+      }
+
+      this.createModal(modal)
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 #create-list {

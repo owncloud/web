@@ -18,6 +18,7 @@
         />
       </div>
     </div>
+    <upload-info />
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import { mapActions, mapGetters } from 'vuex'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
+import UploadInfo from '../components/UploadInfo.vue'
 import { useActiveApp, useRoute } from 'web-pkg/src/composables'
 import { watch, defineComponent } from '@vue/composition-api'
 
@@ -33,7 +35,8 @@ export default defineComponent({
   components: {
     MessageBar,
     TopBar,
-    SidebarNav
+    SidebarNav,
+    UploadInfo
   },
   setup() {
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0

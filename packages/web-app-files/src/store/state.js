@@ -4,7 +4,6 @@ export default {
   filesSearched: null,
   selectedIds: [],
   inProgress: [],
-  dropzone: false,
   shareOpen: null,
   versions: [],
 
@@ -31,7 +30,6 @@ export default {
 
   loadingFolder: false,
   publicLinkPassword: null,
-  uploaded: [],
   actionsInProgress: [],
 
   /**

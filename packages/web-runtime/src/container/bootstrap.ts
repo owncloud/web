@@ -14,6 +14,7 @@ import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { useDefaultThemeName } from '../composables'
 import { clientService } from 'web-pkg/src/services'
+import { UppyService } from '../services/uppyService'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -247,6 +248,15 @@ export const announceClientService = ({
   vue.prototype.$client = sdk
   vue.prototype.$clientService = clientService
   vue.prototype.$clientService.owncloudSdk = sdk
+}
+
+/**
+ * announce uppyService and owncloud SDK and inject it into vue
+ *
+ * @param vue
+ */
+export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
+  vue.prototype.$uppyService = new UppyService()
 }
 
 /**
