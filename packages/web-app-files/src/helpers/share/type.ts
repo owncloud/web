@@ -9,11 +9,13 @@ export class ShareType {
   private readonly _key: string
   private readonly _value: number
   private readonly _label: string
+  private readonly _icon: string
 
-  constructor(key: string, value: number, label: string) {
+  constructor(key: string, value: number, label: string, icon: string) {
     this._key = key
     this._value = value
     this._label = label
+    this._icon = icon
   }
 
   get key(): string {
@@ -27,15 +29,19 @@ export class ShareType {
   get label(): string {
     return this._label
   }
+
+  get icon(): string {
+    return this._icon
+  }
 }
 
 export abstract class ShareTypes {
-  static readonly user = new ShareType('user', 0, $gettext('User'))
-  static readonly group = new ShareType('group', 1, $gettext('Group'))
-  static readonly link = new ShareType('link', 3, $gettext('Link'))
-  static readonly guest = new ShareType('guest', 4, $gettext('Guest'))
-  static readonly remote = new ShareType('remote', 6, $gettext('Federated'))
-  static readonly space = new ShareType('space', 7, $gettext('User'))
+  static readonly user = new ShareType('user', 0, $gettext('User'), 'user')
+  static readonly group = new ShareType('group', 1, $gettext('Group'), 'group')
+  static readonly link = new ShareType('link', 3, $gettext('Link'), 'link')
+  static readonly guest = new ShareType('guest', 4, $gettext('Guest'), 'global')
+  static readonly remote = new ShareType('remote', 6, $gettext('Federated'), 'earth')
+  static readonly space = new ShareType('space', 7, $gettext('User'), 'user')
 
   static readonly individuals = [this.user, this.guest, this.remote, this.space]
   static readonly collectives = [this.group]

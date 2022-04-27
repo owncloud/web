@@ -11,13 +11,15 @@
       :userid="item.value.shareWith"
       :user-name="item.label"
     />
-    <oc-avatar-guest
+    <oc-icon
       v-else-if="isGuest"
-      class="oc-mr-s"
-      :width="48"
-      :name="item.value.shareWith"
+      key="avatar-guest"
+      class="oc-mr-s files-recipient-suggestion-avatar"
+      name="global"
+      size="xlarge"
       :accessible-label="$gettext('Guest')"
-    />
+    >
+    </oc-icon>
     <oc-icon
       v-else-if="isGroup"
       key="avatar-group"

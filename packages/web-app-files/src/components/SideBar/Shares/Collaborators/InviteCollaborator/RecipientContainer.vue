@@ -86,7 +86,7 @@ export default {
 
         case ShareTypes.guest.value:
           return {
-            name: 'user_remote',
+            name: 'global',
             label: this.$gettext('Guest user')
           }
 
