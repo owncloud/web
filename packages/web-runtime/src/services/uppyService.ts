@@ -13,7 +13,6 @@ export class UppyService extends Vue {
   constructor() {
     super()
     this.uppy = new Uppy({
-      debug: true, // @TODO
       autoProceed: true
     })
     this.setUpEvents()
