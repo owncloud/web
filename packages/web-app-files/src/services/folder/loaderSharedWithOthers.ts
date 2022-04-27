@@ -29,15 +29,13 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
         .map((share) => share.value)
         .join(',')
 
-      let resources = yield client.requests.ocs({
-        service: 'apps/files_sharing',
-        action: `/api/v1/shares?format=json&reshares=true&include_tags=false&share_types=${shareTypes}`,
-        method: 'GET'
+      let resources = yield client.shares.getShares('', {
+        share_types: shareTypes,
+        reshares: true,
+        include_tags: false
       })
 
-      resources = yield resources.json()
-      resources = resources.ocs.data
-
+      resources = resources.map((r) => r.shareInfo)
       if (resources.length) {
         const configuration = store.getters.configuration
         const getToken = store.getters.getToken
@@ -50,6 +48,14 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
           getToken
         )
       }
+
+      /*
+       * FIXME: After the issue https://github.com/owncloud/ocis/issues/3592 has been solved,
+       * it shouldn't be necessary to filter the shares by shareOwner.
+       * therefore the code down below can be removed.
+       */
+      const user = store.state.user
+      resources = resources.filter((r) => r.shareOwner === user.id)
 
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: resources })
     })

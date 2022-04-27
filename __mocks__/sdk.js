@@ -29,19 +29,6 @@ export default {
   users: {
     getUser: (id) => fixtureUsers[id]
   },
-  requests: {
-    ocs: ({ service, action, method }) => {
-      if (action.includes('share_types=3')) {
-        return fixtureSharedViaLinksFiles
-      }
-
-      if (action.includes('shared_with_me=true')) {
-        return fixtureSharedWithMeFiles
-      }
-
-      return fixtureSharedFiles
-    }
-  },
   fileTrash: {
     list: () => fixtureDeletedFiles
   },
@@ -54,7 +41,17 @@ export default {
     list: (path) => fixturePublicFiles[path]
   },
   shares: {
-    getShares: () => Promise.resolve(),
+    getShares: (path, options) => {
+      if (options?.share_types === '3') {
+        return Promise.resolve(fixtureSharedViaLinksFiles)
+      }
+
+      if (options?.shared_with_me === true) {
+        return Promise.resolve(fixtureSharedWithMeFiles)
+      }
+
+      return Promise.resolve(fixtureSharedFiles)
+    },
     getRecipients,
     shareFileWithUser: (path, id, params) =>
       Promise.resolve({

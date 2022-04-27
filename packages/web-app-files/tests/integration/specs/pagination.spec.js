@@ -45,7 +45,7 @@ describe('User can navigate in files list using pagination', () => {
         },
         user: {
           state: {
-            id: 'alice'
+            id: 'admin'
           }
         },
         Files: StoreFiles

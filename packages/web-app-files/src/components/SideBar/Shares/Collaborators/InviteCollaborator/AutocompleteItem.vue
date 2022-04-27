@@ -12,6 +12,15 @@
       :user-name="item.label"
     />
     <oc-icon
+      v-else-if="isGuest"
+      key="avatar-guest"
+      class="oc-mr-s files-recipient-suggestion-avatar"
+      name="global"
+      size="xlarge"
+      :accessible-label="$gettext('Guest')"
+    >
+    </oc-icon>
+    <oc-icon
       v-else-if="isGroup"
       key="avatar-group"
       class="oc-mr-s files-recipient-suggestion-avatar"
@@ -69,6 +78,10 @@ export default {
 
     isSpace() {
       return this.shareType === ShareTypes.space
+    },
+
+    isGuest() {
+      return this.shareType === ShareTypes.guest
     },
 
     isGroup() {

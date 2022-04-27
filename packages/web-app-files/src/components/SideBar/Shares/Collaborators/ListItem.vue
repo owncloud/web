@@ -17,7 +17,7 @@
         v-else
         :width="48"
         icon-size="medium"
-        :icon="shareTypeKey"
+        :icon="shareTypeIcon"
         :name="shareTypeKey"
         class="files-collaborators-collaborator-indicator"
       />
@@ -141,6 +141,10 @@ export default {
 
     shareType() {
       return ShareTypes.getByValue(this.share.shareType)
+    },
+
+    shareTypeIcon() {
+      return this.shareType.icon
     },
 
     shareTypeKey() {
