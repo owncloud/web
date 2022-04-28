@@ -37,6 +37,7 @@ module.exports = {
      */
     getUploadedFiles: async function () {
       let elements = []
+      await this.waitForElementVisible('@uploadedFiles')
       await this.api.elements('@uploadedFiles', (result) => {
         elements = result.value
       })
