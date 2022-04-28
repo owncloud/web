@@ -98,6 +98,11 @@ import {
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
 
+// just a dummy function to trick gettext tools
+const $gettext = (str) => {
+  return str
+}
+
 export default {
   name: 'InviteCollaboratorForm',
   components: {
@@ -110,7 +115,7 @@ export default {
     saveButtonLabel: {
       type: String,
       required: false,
-      default: () => this.$gettext('Share')
+      default: () => $gettext('Share')
     }
   },
 
