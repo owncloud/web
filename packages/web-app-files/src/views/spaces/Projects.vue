@@ -285,8 +285,7 @@ export default defineComponent({
   }
 
   .oc-card-media-top {
-    width: 100%;
-    height: 150px;
+    aspect-ratio: 16/9;
   }
 
   .oc-card-media-top a {
@@ -302,7 +301,7 @@ export default defineComponent({
 
   .space-image {
     width: 100%;
-    height: 150px;
+    aspect-ratio: 16/9;
     object-fit: cover;
   }
 
@@ -316,6 +315,10 @@ export default defineComponent({
 
   .space-disabled-indicator {
     z-index: 999;
+  }
+
+  li {
+    aspect-ratio: 16/9;
   }
 }
 </style>
