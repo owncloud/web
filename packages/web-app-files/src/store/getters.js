@@ -1,9 +1,6 @@
 import { ShareTypes } from '../helpers/share'
 
 export default {
-  inProgress: (state) => {
-    return state.inProgress
-  },
   selectedFiles: (state, getters) => {
     return getters.filesAll.filter((f) => state.selectedIds.includes(f.id))
   },

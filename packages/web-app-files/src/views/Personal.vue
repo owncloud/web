@@ -11,7 +11,6 @@
     </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -88,7 +87,6 @@ import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 
 import AppBar from '../components/AppBar/AppBar.vue'
-import ProgressBar from '../components/Upload/ProgressBar.vue'
 import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -112,7 +110,6 @@ const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
-    ProgressBar,
     CreateAndUpload,
     ResourceTable,
     QuickActions,
@@ -146,15 +143,11 @@ export default defineComponent({
     ...mapGetters('Files', [
       'highlightedFile',
       'currentFolder',
-      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },

@@ -1,8 +1,6 @@
-import { ref, nextTick, onMounted, Ref, watch } from '@vue/composition-api'
-import { useStore } from 'web-pkg/src/composables/store'
+import { ref, nextTick, onMounted, Ref } from '@vue/composition-api'
 
 export const useFileListHeaderPosition = (): { y: Ref; refresh: () => void } => {
-  const store = useStore()
   const y = ref(0)
   const refresh = async (): Promise<void> => {
     await nextTick()
@@ -18,7 +16,6 @@ export const useFileListHeaderPosition = (): { y: Ref; refresh: () => void } => 
 
   window.onresize = refresh
   onMounted(refresh)
-  watch(() => store.getters['Files/inProgress'].length > 0, refresh)
 
   return { y, refresh }
 }

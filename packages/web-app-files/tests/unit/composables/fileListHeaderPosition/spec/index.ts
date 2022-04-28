@@ -21,26 +21,6 @@ export const createWrapper = (): Wrapper<Vue> =>
     }),
     {
       localVue,
-      store: new Vuex.Store({
-        modules: {
-          Files: {
-            state: {
-              inProgress: []
-            },
-            mutations: {
-              UPDATE(state, value) {
-                state.inProgress = value
-              }
-            },
-            getters: {
-              inProgress(state) {
-                return state.inProgress
-              }
-            },
-            namespaced: true
-          }
-        }
-      }),
       attachTo: document.body
     }
   )

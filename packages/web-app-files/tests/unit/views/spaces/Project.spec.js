@@ -288,8 +288,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             selectedFiles: () => [],
             totalFilesSize: () => 10,
             pages: () => 1,
-            currentFileOutgoingCollaborators: () => [spaceShare],
-            inProgress: jest.fn(() => [])
+            currentFileOutgoingCollaborators: () => [spaceShare]
           }
         }
       }

@@ -11,7 +11,6 @@
     </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -79,7 +78,6 @@ import { bus } from 'web-pkg/src/instance'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppBar from '../components/AppBar/AppBar.vue'
-import ProgressBar from '../components/Upload/ProgressBar.vue'
 import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
 import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
@@ -95,7 +93,6 @@ const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
-    ProgressBar,
     CreateAndUpload,
     ResourceTable,
     ListInfo,
@@ -119,16 +116,11 @@ export default defineComponent({
       'publicLinkPassword',
       'currentFolder',
       'highlightedFile',
-      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
 
     breadcrumbs() {
       const breadcrumbs = breadcrumbsFromPath(this.$route.path, this.$route.params.item)
