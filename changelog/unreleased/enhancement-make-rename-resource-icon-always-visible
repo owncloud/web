@@ -1,0 +1,4 @@
+Enhancement: Make rename resource icon always visible instead just on hover
+
+https://github.com/owncloud/web/pull/6817
+https://github.com/owncloud/web/issues/6755

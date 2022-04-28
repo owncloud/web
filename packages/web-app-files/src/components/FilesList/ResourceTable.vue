@@ -701,13 +701,17 @@ export default defineComponent({
 .resource-table {
   &-resource-wrapper {
     &:hover > .resource-table-edit-name {
-      visibility: visible;
+      svg {
+        fill: var(--oc-color-text-default);
+      }
     }
   }
   &-edit-name {
     display: inline-flex;
     vertical-align: super;
-    visibility: hidden;
+    svg {
+      fill: var(--oc-color-text-muted);
+    }
   }
   &-people {
     position: absolute;
