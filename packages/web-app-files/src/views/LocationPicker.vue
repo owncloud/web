@@ -99,6 +99,8 @@ import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { unref } from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   metaInfo() {
@@ -118,6 +120,7 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
+    const hasSpaces = useCapabilitySpacesEnabled()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -145,11 +148,28 @@ export default {
           )
           break
         default:
-          resources = yield ref.$client.files.list(
-            buildWebDavFilesPath(ref.user.id, target),
-            1,
-            DavProperties.Default
-          )
+          if (unref(hasSpaces)) {
+            const graphClient = clientService.graphAuthenticated(
+              ref.$store.getters.configuration.server,
+              ref.$store.getters.getToken
+            )
+            const userResponse = yield graphClient.users.getMe()
+            if (!userResponse.data) {
+              throw new Error('graph.user.getMe() has no data')
+            }
+
+            resources = yield ref.$client.files.list(
+              buildWebDavSpacesPath(userResponse.data.id, target),
+              1,
+              DavProperties.Default
+            )
+          } else {
+            resources = yield ref.$client.files.list(
+              buildWebDavFilesPath(ref.user.id, target),
+              1,
+              DavProperties.Default
+            )
+          }
       }
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
