@@ -10,8 +10,13 @@ Given(
 
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
-      await api.user.deleteUser({ user, admin })
-      await api.user.createUser({ user, admin })
+      if (config.ocis) {
+        await api.graph.deleteUser({ user, admin })
+        await api.graph.createUser({ user, admin })
+      } else {
+        await api.user.deleteUser({ user, admin })
+        await api.user.createUser({ user, admin })
+      }
     }
   }
 )

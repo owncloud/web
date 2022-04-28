@@ -2986,6 +2986,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "REMOTE_UPLOAD_DIR": "/uploads",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
+        "TEST_WITH_GRAPH_API": "true",
     }
 
     if (federatedServer):
