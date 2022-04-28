@@ -18,6 +18,7 @@ Summary
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
+* Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
@@ -124,6 +125,11 @@ Details
    https://github.com/owncloud/web/issues/6675
    https://github.com/owncloud/web/issues/6676
    https://github.com/owncloud/web/issues/6677
+
+* Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
+
+   https://github.com/owncloud/web/issues/6755
+   https://github.com/owncloud/web/pull/6817
 
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 
