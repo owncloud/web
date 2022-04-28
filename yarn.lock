@@ -4037,13 +4037,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buntis@npm:0.2.1":
-  version: 0.2.1
-  resolution: "buntis@npm:0.2.1"
-  checksum: 9942c9797ec5776cc4c4bc5fe2f90c08feca2e9eb84aa1e909e07362c3857c694f8db2c9483fbbe665f7e020ca27476bd888e628d2b563830886b5f328058fad
-  languageName: node
-  linkType: hard
-
 "cacache@npm:^15.0.5":
   version: 15.3.0
   resolution: "cacache@npm:15.3.0"
@@ -5497,16 +5490,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easygettext@npm:^2.16.1":
-  version: 2.17.0
-  resolution: "easygettext@npm:2.17.0"
+"easygettext@github:dschmidt/easygettext#da6f3d7ac03345ecec44a2694957533bc56c0f15":
+  version: 2.16.0
+  resolution: "easygettext@https://github.com/dschmidt/easygettext.git#commit=da6f3d7ac03345ecec44a2694957533bc56c0f15"
   dependencies:
     "@babel/core": ^7.11.6
     "@vue/compiler-sfc": ^3.0.0
     acorn: ^7.4.0
     acorn-stage3: ^4.0.0
     acorn-walk: ^8.0.0
-    buntis: 0.2.1
     cheerio: ^1.0.0-rc.3
     estree-walker: ^2.0.1
     flow-remove-types: ^2.135.0
@@ -5519,9 +5511,9 @@ __metadata:
     pug:
       optional: true
   bin:
-    gettext-compile: src/compile-cli.js
-    gettext-extract: src/extract-cli.js
-  checksum: 0ec5d0716f4b68103467ee527d369ae4d5c7741841b88697e6acc755fdb6c73a0b5e3dcbe596d0460adf3e0e3b1c3fbdba6bc3218bcb0a94fa68aab28cc06be3
+    gettext-compile: ./src/compile-cli.js
+    gettext-extract: ./src/extract-cli.js
+  checksum: 328c7be2f4709b19d8afbfa07928e5f6d7a74ec165e8dd765341bdb281ff89eec1c26e8c09f3153e81b1fa81cc4ebb6086034679ecc9626a339901fa80df52fe
   languageName: node
   linkType: hard
 
@@ -13931,7 +13923,7 @@ __metadata:
     "@vue/composition-api": ^1.4.9
     axios: ^0.26.1
     cross-fetch: ^3.0.6
-    easygettext: ^2.16.1
+    easygettext: "github:dschmidt/easygettext#da6f3d7ac03345ecec44a2694957533bc56c0f15"
     filesize: ^8.0.7
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
