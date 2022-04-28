@@ -1,0 +1,7 @@
+Enhancement: Fixed aspect ratio for spaces images
+
+We've set the spaces images to a fixed aspect ratio to make
+sure that the same part of the image is always displayed.
+
+https://github.com/owncloud/web/pull/6829
+https://github.com/owncloud/web/issues/6555
