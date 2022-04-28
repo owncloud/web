@@ -60,18 +60,16 @@ Feature: files and folders exist in the trashbin after being deleted
       | &and#hash       |
       | sämple,1.txt    |
 
-  @skipOnOCIS @issue-product-186 @skipOnOC10 @issue-4582
+  @skipOnOCIS @issue-product-186 @skipOnOC10 @issue-4582 @issue-ocis-3612
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name              |
       | Folder,With,Comma |
       | simple-folder     |
-      | data.zip          |
       | lorem.txt         |
       | sample,1.txt      |
     And the user browses to the trashbin page
-    Then as "Alice" file "data.zip" should exist in the trashbin in the server
-    And as "Alice" file "lorem.txt" should exist in the trashbin in the server
+    Then as "Alice" file "lorem.txt" should exist in the trashbin in the server
     And as "Alice" file "sample,1.txt" should exist in the trashbin in the server
     And as "Alice" folder "simple-folder" should exist in the trashbin in the server
     And as "Alice" folder "Folder,With,Comma" should exist in the trashbin in the server

@@ -12,7 +12,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Brian    |
       | Carol    |
 
-  @issue-ocis-1922
+  @issue-ocis-1922 @skipOnOCIS @issue-ocis-3613
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given user "Alice" has created folder "/simple-folder" in the server
     And user "Alice" has logged in using the webUI

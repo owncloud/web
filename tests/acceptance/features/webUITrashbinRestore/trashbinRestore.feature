@@ -42,7 +42,7 @@ Feature: Restore deleted files/folders
     Then folder "folder with space" should be listed on the webUI
     And folder "Folder,With,Comma" should be listed on the webUI
 
-  @smokeTest @issue-1502
+  @smokeTest @issue-1502 @skipOnOCIS @issue-ocis-3614
   Scenario: Select some trashbin files and restore them in a batch
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
@@ -80,7 +80,7 @@ Feature: Restore deleted files/folders
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @issue-1502
+  @issue-1502 @skipOnOCIS @issue-ocis-3614
   Scenario: Select all except for some trashbin files and restore them in a batch
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
@@ -111,7 +111,7 @@ Feature: Restore deleted files/folders
     But file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
-  @skipOnOC10 @issue-core-38039
+  @skipOnOC10 @issue-core-38039 @skipOnOCIS @issue-ocis-3614
   Scenario: Select all trashbin files and restore them in a batch
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
@@ -275,7 +275,7 @@ Feature: Restore deleted files/folders
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
     And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist in the server
 
-  @issue-1502
+  @issue-1502 @skipOnOCIS @issue-ocis-3614
   Scenario: Delete and restore folders with dot in the name
     Given user "Alice" has created the following folders in the server
       | folders  |

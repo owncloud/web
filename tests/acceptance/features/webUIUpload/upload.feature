@@ -18,7 +18,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "Alice" the content of "new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest @skipOnOCIS @issue-ocis-3616
   Scenario: simple upload of a folder that does not exist before
     Given a folder "CUSTOM" has been created with the following files in separate sub-folders in the middleware
       | subFolder | file          |

@@ -1,4 +1,3 @@
-@issue-ocis-1922
 Feature: Sharing folders with internal groups with role as advanced permissions
   As a user
   I want to set different permissions on shared folders with groups
@@ -19,7 +18,7 @@ Feature: Sharing folders with internal groups with role as advanced permissions
     And user "Brian" has been added to group "grp1" in the server
     And user "Carol" has been added to group "grp2" in the server
 
-
+  @skipOnOCIS @issue-ocis-3613
   Scenario Outline: share a folder with multiple groups with role as advanced permissions and different extra permissions
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI

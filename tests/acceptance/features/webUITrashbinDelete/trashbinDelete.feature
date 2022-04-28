@@ -52,7 +52,7 @@ Feature: files and folders can be deleted from the trashbin
     When the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "Folder,With,Comma" should not be listed on the webUI
 
-  @ocisSmokeTest @skipOnOC10 @issue-4582
+  @ocisSmokeTest @skipOnOC10 @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Select some files and delete from trashbin in a batch
     When the user batch deletes these files using the webUI
       | name          |
@@ -101,7 +101,7 @@ Feature: files and folders can be deleted from the trashbin
     Then the success message with header "All deleted files were removed" should be displayed on the webUI
     And there should be no resources listed on the webUI
 
-
+  @skipOnOCIS @issue-ocis-3612
   Scenario: Delete folders with dot in the name from trashbin
     Given user "Alice" has created the following folders in the server
       | folders  |
@@ -126,7 +126,7 @@ Feature: files and folders can be deleted from the trashbin
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @issue-product-188 @issue-4582
+  @issue-product-188 @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Select all except for some files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -139,7 +139,7 @@ Feature: files and folders can be deleted from the trashbin
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @issue-product-188 @issue-4582
+  @issue-product-188 @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI

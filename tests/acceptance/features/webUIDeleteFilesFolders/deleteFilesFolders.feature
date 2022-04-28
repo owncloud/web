@@ -55,7 +55,7 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest @issue-4582 @disablePreviews @skipOnOC10 @issue-core-38221
+  @smokeTest @issue-4582 @disablePreviews @skipOnOC10 @issue-core-38221 @skipOnOCIS @issue-ocis-3612
   Scenario: Delete multiple files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
@@ -73,7 +73,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
 
-  @skipOnOC10 @issue-4582
+  @skipOnOC10 @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Delete all files at once at the root level
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
@@ -87,7 +87,7 @@ Feature: deleting files and folders
     And file "data.zip" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
+  @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Delete all except for a few files at once
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
@@ -203,7 +203,7 @@ Feature: deleting files and folders
       | question?       |
       | &and#hash       |
 
-  @issue-4582
+  @issue-4582 @skipOnOCIS @issue-ocis-3612
   Scenario: Delete multiple files at once on a public share
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/data.zip" in the server
@@ -260,7 +260,7 @@ Feature: deleting files and folders
     And as "Alice" file "lorem.txt" should not exist in the server
     And as "Alice" folder "simple-folder" should not exist in the server
 
-
+  @skipOnOCIS @issue-ocis-3612
   Scenario: Delete folder with dot in the name
     Given user "Alice" has created the following folders in the server
       | folders  |
