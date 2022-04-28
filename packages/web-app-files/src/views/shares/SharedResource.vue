@@ -175,9 +175,9 @@ export default defineComponent({
       return concatBreadcrumbs(
         {
           text: this.$gettext('Shared with me'),
-          to: '/files/shares/with-me'
+          to: { path: '/files/shares/with-me' }
         },
-        ...breadcrumbsFromPath(this.$route.path, [this.shareName, this.relativePath].join('/'))
+        ...breadcrumbsFromPath(this.$route, [this.shareName, this.relativePath].join('/'))
       )
     },
 

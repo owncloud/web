@@ -157,8 +157,8 @@ export default defineComponent({
         ? this.$gettext('Personal')
         : this.$gettext('All files')
       return concatBreadcrumbs(
-        { text: personalRouteName, to: '/' },
-        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+        { text: personalRouteName, to: { path: '/' } },
+        ...breadcrumbsFromPath(this.$route, this.$route.params.item)
       )
     },
 

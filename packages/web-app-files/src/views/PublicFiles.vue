@@ -123,7 +123,7 @@ export default defineComponent({
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     breadcrumbs() {
-      const breadcrumbs = breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+      const breadcrumbs = breadcrumbsFromPath(this.$route, this.$route.params.item)
       const rootRoute = breadcrumbs.shift()
 
       return concatBreadcrumbs(
