@@ -452,6 +452,8 @@ function _buildLink(link): Share {
     path: link.path,
     permissions: link.permissions,
     description,
+    // TODO: May need OC10 differentiation
+    quicklink: link.quicklink === 'true',
     stime: link.stime,
     name: typeof link.name === 'string' ? link.name : (link.token as string),
     password: !!(link.share_with && link.share_with_displayname),

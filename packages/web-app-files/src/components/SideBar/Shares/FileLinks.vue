@@ -12,6 +12,24 @@
           <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
         </h3>
         <div v-if="canCreatePublicLinks" class="oc-mt-m">
+          <name-and-copy v-if="quicklink" :link="quicklink" />
+          <create-quick-link
+            v-else
+            :password-enforced="passwordEnforced"
+            :expiration-date="globalExpirationDate"
+            @createPublicLink="createLink"
+          />
+          <details-and-edit
+            v-if="quicklink"
+            :is-folder-share="highlightedFile.isFolder"
+            :link="quicklink"
+            :modifiable="canEdit"
+            :password-enforced="passwordEnforced"
+            :expiration-date="globalExpirationDate"
+            :available-role-options="availableRoleOptions"
+            @updateLink="updatePublicLink"
+            @removePublicLink="deleteLinkConfirmation"
+          />
           <hr class="oc-my-s" />
           <oc-button
             id="files-file-link-add"
@@ -76,7 +94,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import CreateForm from './Links/CreateForm.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
-import QuickLink from './Links/QuickLink.vue'
+import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { ShareTypes, LinkShareRoles } from '../../../helpers/share'
 import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -91,8 +109,8 @@ export default defineComponent({
   name: 'FileLinks',
   components: {
     CreateForm,
+    CreateQuickLink,
     DetailsAndEdit,
-    QuickLink,
     NameAndCopy
   },
   mixins: [mixins],
@@ -131,9 +149,8 @@ export default defineComponent({
       return this.capabilities?.files_sharing?.public?.defaultPublicLinkShareName || ''
     },
 
-    quickLink() {
-      // TODO: filter for quicklink
-      return this.links[0]
+    quicklink() {
+      return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
     globalExpirationDate() {
@@ -229,7 +246,14 @@ export default defineComponent({
     },
 
     links() {
-      return [...this.currentFileOutgoingLinks, ...this.indirectLinks]
+      // exclude quicklink here
+      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks.filter(
+        (link) => !link.quicklink
+      )
+
+      console.log(nonQuickLinkOutgoingLinks, this.currentFileOutgoingLinks)
+
+      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
         .sort(this.linksComparator)
         .map((share) => {
           share.key = 'direct-link-' + share.id
@@ -376,6 +400,7 @@ export default defineComponent({
         expireDate,
         password,
         permissions: link.permissions,
+        quicklink: link.quicklink,
         name: link.name,
         ...(this.currentStorageId && {
           spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
