@@ -5490,9 +5490,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easygettext@github:dschmidt/easygettext#e6ce5e59e6fb7d4683d4c1cb2f10f4e199be0b7c":
+"easygettext@https://github.com/dschmidt/easygettext/archive/refs/tags/v2.17.1.tar.gz":
   version: 2.16.0
-  resolution: "easygettext@https://github.com/dschmidt/easygettext.git#commit=e6ce5e59e6fb7d4683d4c1cb2f10f4e199be0b7c"
+  resolution: "easygettext@https://github.com/dschmidt/easygettext/archive/refs/tags/v2.17.1.tar.gz"
   dependencies:
     "@babel/core": ^7.11.6
     "@vue/compiler-sfc": ^3.0.0
@@ -5513,7 +5513,7 @@ __metadata:
   bin:
     gettext-compile: ./src/compile-cli.js
     gettext-extract: ./src/extract-cli.js
-  checksum: 5e2d1984f04f149674b0d8c84f1b720ccb0f277bf549951bef27558da9f7cc043b4c4e3fc46e6d8bf74993c3255efd094557c867e2b123aaa4ae644859706e71
+  checksum: cc69c55df3190ed20ea1b4c0d9b8b81a7b9baf4e4a1df7664ed951a4b8357a7a36c98b57c5b61cc083463c94308fc2c51bb09577951ee4f48a5c61e10e545e38
   languageName: node
   linkType: hard
 
@@ -13923,7 +13923,7 @@ __metadata:
     "@vue/composition-api": ^1.4.9
     axios: ^0.26.1
     cross-fetch: ^3.0.6
-    easygettext: "github:dschmidt/easygettext#e6ce5e59e6fb7d4683d4c1cb2f10f4e199be0b7c"
+    easygettext: "https://github.com/dschmidt/easygettext/archive/refs/tags/v2.17.1.tar.gz"
     filesize: ^8.0.7
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
