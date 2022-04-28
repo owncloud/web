@@ -251,7 +251,7 @@ export const announceClientService = ({
 }
 
 /**
- * announce uppyService and owncloud SDK and inject it into vue
+ * announce uppyService and inject it into vue
  *
  * @param vue
  */

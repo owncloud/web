@@ -3,7 +3,6 @@ export default {
   files: [],
   filesSearched: null,
   selectedIds: [],
-  shareOpen: null,
   versions: [],
 
   /**
