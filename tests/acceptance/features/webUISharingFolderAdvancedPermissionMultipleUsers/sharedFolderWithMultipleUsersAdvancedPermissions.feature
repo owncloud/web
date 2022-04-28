@@ -11,11 +11,11 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Alice    |
       | Brian    |
       | Carol    |
-
-  @issue-ocis-1922 @skipOnOCIS @issue-ocis-3613
-  Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
-    Given user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder" in the server
     And user "Alice" has logged in using the webUI
+
+  @skipOnOCIS @issue-ocis-3613
+  Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
@@ -50,6 +50,37 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Custom permissions | Custom permissions | delete, update        | delete, update        | read, delete, update        |
       | Custom permissions | Custom permissions | update, create        | update, create        | read, update, create        |
       | Custom permissions | Custom permissions | delete, create        | delete, create        | read, delete, create        |
+
+  @issue-ocis-1277
+  Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions (share)
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
+      | collaborator | type |
+      | Brian Murphy | user |
+      | Carol King   | user |
+    And the user shares with the selected collaborators
+    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
+    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
+    Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for folder "simple-folder" on the webUI
+    And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
+    And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Brian" should have received a share with these details in the server:
+      | field       | value                 |
+      | uid_owner   | Alice                 |
+      | share_with  | Brian                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
+    And user "Carol" should have received a share with these details in the server:
+      | field       | value                 |
+      | uid_owner   | Alice                 |
+      | share_with  | Carol                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
+    Examples:
+      | role               | displayed-role     | extra-permissions     | displayed-permissions | actual-permissions          |
       | Custom permissions | Custom permissions | share, delete         | share, delete         | read, share, delete         |
       | Custom permissions | Custom permissions | share, update         | share, update         | read, update, share         |
       | Custom permissions | Custom permissions | share, create         | share, create         | read, share, create         |
