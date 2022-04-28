@@ -14,7 +14,7 @@ exports[`Spaces projects view should list spaces 1`] = `
           oc-child-width-1-4@l
           oc-child-width-1-5@xl
         ">
-      <li class="oc-mb-m">
+      <li class="oc-mb-m spaces-list-projects">
         <div data-space-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded">
           <div class="oc-card-media-top oc-border-b"><a href="#/" aria-current="page" class="router-link-exact-active router-link-active">
               <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>

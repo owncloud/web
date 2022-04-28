@@ -317,7 +317,7 @@ export default defineComponent({
     z-index: 999;
   }
 
-  li {
+  .spaces-list-projects {
     aspect-ratio: 16/9;
   }
 }
