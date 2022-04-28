@@ -110,7 +110,7 @@ export default {
     saveButtonLabel: {
       type: String,
       required: false,
-      default: 'Share'
+      default: () => this.$gettext('Share')
     }
   },
 
