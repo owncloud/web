@@ -223,9 +223,7 @@ export default defineComponent({
     const resourceTargetParamMapping = computed(() =>
       unref(hasSpaces) ? { name: 'shareName', path: 'item' } : null
     )
-    const resourceTargetQueryMapping = computed(() =>
-      unref(hasSpaces) ? { id: 'resourceId' } : null
-    )
+    const resourceTargetQueryMapping = computed(() => (unref(hasSpaces) ? { id: 'shareId' } : null))
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))

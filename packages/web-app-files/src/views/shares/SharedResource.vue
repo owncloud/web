@@ -132,7 +132,7 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
-    const shareId = useRouteQuery('resourceId')
+    const shareId = useRouteQuery('shareId')
     const shareName = useRouteParam('shareName')
     const relativePath = useRouteParam('item', '')
     return {
@@ -142,7 +142,7 @@ export default defineComponent({
           shareName: unref(shareName)
         },
         query: {
-          resourceId: unref(shareId)
+          shareId: unref(shareId)
         }
       }),
       shareId,

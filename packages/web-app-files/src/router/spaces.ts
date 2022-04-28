@@ -71,7 +71,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         meta: {
           patchCleanPath: true,
           title: $gettext('Files shared with me'),
-          contextQueryItems: ['resourceId']
+          contextQueryItems: ['shareId']
         }
       }
     ]
