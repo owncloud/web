@@ -19,6 +19,7 @@
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
     "fuse.js": "^6.5.3",
+    "gettext-extract": "^2.0.1",
     "lodash-es": "^4.17.21",
     "luxon": "^2.3.0",
     "marked": "^4.0.12",

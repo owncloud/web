@@ -1,0 +1,31 @@
+{
+  "js": {
+    "parsers": [
+      {
+        "expression": "$gettext",
+        "arguments": {
+          "text": 0
+        }
+      },
+      {
+        "expression": "$ngettext",
+        "arguments": {
+          "text": 0,
+          "textPlural": 1
+        }
+      },
+      {
+        "expression": "$pgettext",
+        "arguments": {
+          "context": 0,
+          "text": 1
+        }
+      }
+    ],
+    "glob": {
+      "pattern": "{../../web-app-external/src/**/*.ts,../../../web-app-external/src/**/*.js}"
+    }
+  },
+  "output": "../../web-app-external/l10n/template.script.pot"
+
+}

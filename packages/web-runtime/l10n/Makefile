@@ -48,9 +48,11 @@ $(TEMPLATE_FILE):
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		mkdir -p $$OUT_DIR; \
-		#FIXME: we need to find out why share.ts fails to get parsed and fix it
-		export GETTEXT_APP_SOURCES=`find $$app/src -name '*.vue' -o -name '*.js' -o -name '*.ts' ! -path '*/web-app-files/src/helpers/share/share.ts'`; \
-		node $(NODE_MODULES)/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
+		yarn gettext-extract -c $$OUT_DIR/.gettext.json; \
+		export GETTEXT_APP_SOURCES=`find $$app/src -name '*.vue'`; \
+		node $(NODE_MODULES)/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.vue.pot $$GETTEXT_APP_SOURCES; \
+		( cat $$OUT_DIR/template.vue.pot ; echo ""; cat $$OUT_DIR/template.script.pot; echo ) > $$OUT_DIR/template.pot; \
+		rm $$OUT_DIR/template.vue.pot  $$OUT_DIR/template.script.pot; \
 	done;
 
 .PHONY: translations
