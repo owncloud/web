@@ -39,7 +39,7 @@ export class UppyService extends Vue {
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: [0]
+      retryDelays: [0, 500, 1000]
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
