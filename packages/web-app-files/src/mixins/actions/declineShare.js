@@ -1,15 +1,17 @@
 import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 import { isLocationSharesActive } from '../../router'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '../../helpers/share'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import get from 'lodash-es/get'
 
 export default {
-  setup() {
-    return {
-      hasResharing: useCapabilityFilesSharingResharing()
-    }
+  ...mapGetters(['capabilities']),
+  hasResharing() {
+    return get(this.capabilities, 'files_sharing.resharing', true)
+  },
+  hasShareJail() {
+    return get(this.capabilities, 'spaces.share_jail', false)
   },
   computed: {
     $_declineShare_items() {
@@ -55,6 +57,7 @@ export default {
                 resource,
                 ShareStatus.declined,
                 this.hasResharing,
+                this.hasShareJail,
                 this.$client
               )
               if (share) {

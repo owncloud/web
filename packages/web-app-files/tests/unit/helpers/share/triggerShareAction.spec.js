@@ -17,7 +17,7 @@ describe('method triggerShareAction', () => {
 
   it('throws error if invalid share status given', async () => {
     const statusText = 'invalid new share status'
-    await expect(triggerShareAction(null, ShareStatus.pending, true, null)).rejects.toThrow(
+    await expect(triggerShareAction(null, ShareStatus.pending, true, false, null)).rejects.toThrow(
       statusText
     )
   })
@@ -26,7 +26,7 @@ describe('method triggerShareAction', () => {
     const statusText = 'status is not 200'
     fetch.mockResponse(new Error(), { status: 404, statusText })
     await expect(
-      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, $client)
+      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).rejects.toThrow(statusText)
   })
 
@@ -35,7 +35,7 @@ describe('method triggerShareAction', () => {
       headers: { 'content-length': 0 }
     })
     await expect(
-      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, $client)
+      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).resolves.toBeNull()
   })
 
@@ -44,7 +44,7 @@ describe('method triggerShareAction', () => {
       headers: { 'content-length': 1 }
     })
     await expect(
-      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, $client)
+      triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).resolves.toMatchObject({ id: 1 })
   })
 })
