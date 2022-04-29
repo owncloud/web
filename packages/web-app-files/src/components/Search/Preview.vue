@@ -1,11 +1,12 @@
 <template>
-  <div class="files-search-preview" @click="$_fileActions_triggerDefaultAction(resource)">
+  <div class="files-search-preview">
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
       :folder-link="folderLink(resource)"
       :parent-folder-link="parentFolderLink(resource)"
       :parent-folder-name-default="defaultParentFolderName"
+      @click="$_fileActions_triggerDefaultAction(resource)"
     />
   </div>
 </template>
@@ -17,7 +18,7 @@ import { ImageDimension } from '../../constants'
 import { loadPreview } from '../../helpers/resource'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
@@ -43,7 +44,8 @@ export default {
   setup() {
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
+      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project')
     }
   },
   data() {
@@ -53,9 +55,21 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration', 'user', 'getToken']),
+    ...mapState('Files', ['spaces']),
 
+    matchingSpace() {
+      return this.spaces.find((space) => space.id === this.resource.storageId)
+    },
     defaultParentFolderName() {
-      return this.hasSpaces ? this.$gettext('Personal') : this.$gettext('All files and folders')
+      if (!this.hasSpaces) {
+        return this.$gettext('All files and folders')
+      }
+
+      if (this.matchingSpace?.driveType === 'project') {
+        return this.matchingSpace.name
+      }
+
+      return this.$gettext('Personal')
     }
   },
   beforeMount() {
@@ -91,14 +105,20 @@ export default {
       return this.createFolderLink(path.dirname(file.path), file.storageId)
     },
     createFolderLink(path, storageId) {
-      if (this.resourceTargetLocation === null) {
+      if (this.resourceTargetLocation === null || this.resourceTargetLocationSpace === null) {
         return {}
       }
+
+      if (this.matchingSpace?.driveType === 'project') {
+        return createLocationSpaces('files-spaces-project', {
+          params: { storageId, item: path.replace(/^\//, '') || undefined }
+        })
+      }
+
       return {
         name: this.resourceTargetLocation.name,
-        query: this.resourceTargetLocation.query,
         params: {
-          item: path.replace(/^\//, ''),
+          item: path.replace(/^\//, '') || undefined,
           ...this.resourceTargetLocation.params,
           ...(storageId && { storageId })
         }

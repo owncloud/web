@@ -1,0 +1,7 @@
+Enhancement: Enable search all files for ocis backend
+
+We've enabled the search all files feature for ocis backend:
+* Find files in sub directories
+* Find files in other places like project spaces
+
+https://github.com/owncloud/web/pull/6841

@@ -113,6 +113,7 @@ export const getStore = function ({
           resource: null,
           filesPageLimit: 100,
           files: [],
+          spaces: [],
           activeFiles: activeFiles,
           currentFolder: currentFolder,
           currentPage: currentPage,

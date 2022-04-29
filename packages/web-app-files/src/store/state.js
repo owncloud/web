@@ -6,6 +6,7 @@ export default {
   inProgress: [],
   shareOpen: null,
   versions: [],
+  spaces: [],
 
   /**
    * Outgoing shares and links from currently highlighted element

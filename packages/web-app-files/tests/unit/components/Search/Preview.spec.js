@@ -3,14 +3,13 @@ import DesignSystem from 'owncloud-design-system'
 
 import Preview from '@files/src/components/Search/Preview.vue'
 import VueCompositionAPI from '@vue/composition-api'
+import { createStore } from 'vuex-extensions'
+import Vuex from 'vuex'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(VueCompositionAPI)
-
-const selectors = {
-  searchPreview: '.files-search-preview'
-}
+localVue.use(Vuex)
 
 const searchResult = {
   id: 1234,
@@ -21,10 +20,6 @@ const searchResult = {
   }
 }
 
-const spyTriggerDefaultAction = jest
-  .spyOn(Preview.mixins[0].methods, '$_fileActions_triggerDefaultAction')
-  .mockImplementation()
-
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const wrapper = getWrapper()
@@ -32,16 +27,6 @@ describe('Preview component', () => {
 
     expect(ocResource.exists()).toBeTruthy()
     expect(ocResource.props().resource).toMatchObject(searchResult.data)
-  })
-  it('should trigger the default action when search preview button is clicked', async () => {
-    const wrapper = getWrapper()
-    const searchPreview = wrapper.find(selectors.searchPreview)
-
-    expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(0)
-
-    await searchPreview.trigger('click')
-
-    expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
   })
   describe('folder and parent folder link', () => {
     it('should be empty if no resource target location given', () => {
@@ -55,6 +40,41 @@ describe('Preview component', () => {
       expect(wrapper.vm.parentFolderLink(searchResult.data).params.storageId).toEqual(1)
     })
   })
+
+  describe('computed method "defaultParentFolderName"', () => {
+    it('should equal "All files and folders" if spaces capability is not present', () => {
+      const wrapper = getWrapper({
+        resourceTargetLocation: null,
+        hasSpaces: false
+      })
+      expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
+    })
+    it('should equal the space name if resource storage is representing a project space', () => {
+      const wrapper = getWrapper({
+        resourceTargetLocation: null,
+        spaces: [
+          {
+            id: 1,
+            driveType: 'project',
+            name: 'New space'
+          }
+        ]
+      })
+      expect(wrapper.vm.defaultParentFolderName).toEqual('New space')
+    })
+    it('should equal "Personal" if resource storage is not representing a project space', () => {
+      const wrapper = getWrapper({
+        resourceTargetLocation: null,
+        spaces: [
+          {
+            id: 1,
+            driveType: 'personal'
+          }
+        ]
+      })
+      expect(wrapper.vm.defaultParentFolderName).toEqual('Personal')
+    })
+  })
 })
 
 function getWrapper({
@@ -62,10 +82,25 @@ function getWrapper({
   route = {
     query: {},
     params: {}
-  }
+  },
+  spaces = [],
+  hasSpaces = true
 } = {}) {
   return shallowMount(Preview, {
     localVue,
+    store: createStore(Vuex.Store, {
+      getters: {
+        configuration: () => {}
+      },
+      modules: {
+        Files: {
+          namespaced: true,
+          state: {
+            spaces
+          }
+        }
+      }
+    }),
     mocks: {
       $route: route
     },
@@ -78,7 +113,8 @@ function getWrapper({
     },
     setup: () => {
       return {
-        resourceTargetLocation
+        resourceTargetLocation,
+        hasSpaces
       }
     }
   })
