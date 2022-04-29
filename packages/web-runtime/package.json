@@ -14,7 +14,7 @@
     "@vue/composition-api": "^1.4.9",
     "axios": "^0.26.1",
     "cross-fetch": "^3.0.6",
-    "easygettext": "https://github.com/dschmidt/easygettext/archive/refs/tags/v2.17.1.tar.gz",
+    "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.0-oc.tar.gz",
     "filesize": "^8.0.7",
     "focus-trap": "^6.4.0",
     "focus-trap-vue": "^1.1.1",
