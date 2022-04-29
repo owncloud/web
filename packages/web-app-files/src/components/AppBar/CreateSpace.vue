@@ -10,7 +10,7 @@
     @click="showCreateSpaceModal"
   >
     <oc-icon name="add" />
-    <translate>Create Space</translate>
+    <translate>New Space</translate>
   </oc-button>
 </template>
 

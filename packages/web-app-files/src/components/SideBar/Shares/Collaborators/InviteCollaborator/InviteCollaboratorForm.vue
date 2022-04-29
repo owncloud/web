@@ -56,7 +56,7 @@
       />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
-        <span v-translate :aria-hidden="true">Share</span>
+        <span v-translate :aria-hidden="true" v-text="saveButtonLabel" />
       </oc-button>
       <oc-button
         v-else
@@ -68,7 +68,7 @@
         appearance="filled"
         submit="submit"
         @click="share"
-        v-text="$gettext('Share')"
+        v-text="$gettext(saveButtonLabel)"
       />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
@@ -98,6 +98,11 @@ import {
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
 
+// just a dummy function to trick gettext tools
+const $gettext = (str) => {
+  return str
+}
+
 export default {
   name: 'InviteCollaboratorForm',
   components: {
@@ -106,11 +111,20 @@ export default {
     RecipientContainer,
     ExpirationDatepicker
   },
+  props: {
+    saveButtonLabel: {
+      type: String,
+      required: false,
+      default: () => $gettext('Share')
+    }
+  },
+
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing()
     }
   },
+
   data() {
     return {
       autocompleteResults: [],
