@@ -1,0 +1,7 @@
+Bugfix: Spaces Contextmenu trigger id isn't valid
+
+We've fixed a bug which resulted in spaces having an
+invalid trigger id for the contextmenu.
+
+https://github.com/owncloud/web/issues/6845
+https://github.com/owncloud/web/pull/6848

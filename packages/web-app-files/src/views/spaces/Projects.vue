@@ -251,7 +251,7 @@ export default defineComponent({
     },
 
     sanitizeStorageId(id) {
-      return id.replace('!', '\\!').split('.')[0]
+      return id.replace(/[^a-zA-Z0-9]/g, '')
     },
 
     getSpaceCardAdditionalClass(space) {
