@@ -53,6 +53,7 @@ export default {
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
+      const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
       const uploadErrorSub = uppyService.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
@@ -62,6 +63,7 @@ export default {
 
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
+        uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
         uppyService.unsubscribe('uploadError', uploadErrorSub)
         uppyService.removeDropTarget()
       })
@@ -160,6 +162,10 @@ export default {
       }))
 
       this.$uppyService.uploadFiles(uppyResources)
+    },
+
+    onFileSuccess(uppyResource) {
+      this.$uppyService.$emit('uploadedFileFetched', uppyResource, { name: uppyResource.name })
     },
 
     onFileError(error) {
