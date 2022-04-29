@@ -108,6 +108,9 @@ export default defineComponent({
         // root path `/` like for personal home doesn't exist for public links
         return pathSegments.length === 1
       }
+      if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+        return !this.highlightedFile
+      }
       return !pathSegments.length
     },
     highlightedFileThumbnail() {
