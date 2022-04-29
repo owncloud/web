@@ -1,0 +1,6 @@
+Enhancement: Introduce quicklinks
+
+We have added quicklinks to the link share section in the right sidebar. Clicking the link quickaction and the link menu item in the files table contextmenu now always copy the quick link instead of creating a new link (and create it first, if it didn't exist before).
+
+https://github.com/owncloud/web/pull/6820
+https://github.com/owncloud/web/issues/6605

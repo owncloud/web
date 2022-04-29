@@ -1,13 +1,13 @@
 <template>
   <oc-button
-    v-oc-tooltip="copyToClipboardLabel"
-    class="oc-files-private-link-copy-url"
-    :aria-label="copyToClipboardLabel"
+    v-oc-tooltip="buttonLabel"
     appearance="raw"
+    :aria-label="buttonLabel"
+    class="oc-files-private-link-copy-url"
     :variation="copied ? 'success' : 'passive'"
-    @click="copyValueToClipboard"
+    @click="copyPrivateLinkToClipboard"
   >
-    <span v-text="copyToClipboardText" />
+    <span v-text="buttonText" />
     <oc-icon
       v-if="copied"
       key="oc-copy-to-clipboard-copied"
@@ -30,20 +30,17 @@ export default {
     timeout: null
   }),
   computed: {
-    link() {
-      return this.displayedItem.value.privateLink
-    },
-    copyToClipboardText() {
+    buttonText() {
       return this.$gettext('Private link')
     },
-    copyToClipboardLabel() {
+    buttonLabel() {
       return this.$gettext('Copy private link to clipboard')
     }
   },
   methods: {
     ...mapActions(['showMessage']),
-    copyValueToClipboard() {
-      copyToClipboard(this.displayedItem.value)
+    copyPrivateLinkToClipboard() {
+      copyToClipboard(this.displayedItem.value.privateLink)
       this.clipboardSuccessHandler()
       this.showMessage({
         title: this.$gettext('Private link copied'),
@@ -60,24 +57,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-}
-
-@keyframes _clipboard-success-animation {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-</style>

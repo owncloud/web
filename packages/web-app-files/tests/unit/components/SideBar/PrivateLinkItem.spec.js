@@ -1,8 +1,10 @@
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import PrivateLinkItem from '@files/src/components/SideBar/PrivateLinkItem.vue'
+
+jest.useFakeTimers()
 
 const localVue = createLocalVue()
 
@@ -13,19 +15,43 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-describe('PrivateLinkItem', () => {
-  it('should render the copy-to-clipboard button and a success message upon clicking it', () => {
-    const store = createStore()
-    const wrapper = getShallowWrapper(store)
-    const copyToClipboardButtonElement = wrapper.find('.oc-files-private-link-copy-url')
+const mapActions = {
+  showMessage: jest.fn()
+}
 
-    expect(copyToClipboardButtonElement.exists()).toBeTruthy()
-    expect(copyToClipboardButtonElement.attributes().text).toBe('Private link')
-    expect(copyToClipboardButtonElement.attributes().label).toBe('Copy private link to clipboard')
-    expect(copyToClipboardButtonElement.attributes().successmsgtitle).toBe('Private link copied')
-    expect(copyToClipboardButtonElement.attributes().successmsgtext).toBe(
-      'The private link has been copied to your clipboard.'
+describe('PrivateLinkItem', () => {
+  it('should render a button', () => {
+    const store = createStore()
+    const wrapper = getWrapper(store)
+
+    expect(wrapper).toMatchSnapshot()
+  })
+  it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
+    const spyShowMessage = jest.spyOn(mapActions, 'showMessage')
+    const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
+
+    const store = createStore()
+    const wrapper = getWrapper(store)
+
+    expect(spyShowMessage).not.toHaveBeenCalled()
+    expect(windowSpy).not.toHaveBeenCalled()
+
+    await wrapper.trigger('click')
+
+    expect(wrapper).toMatchSnapshot()
+
+    expect(spyShowMessage).toHaveBeenCalledTimes(1)
+    expect(windowSpy).toHaveBeenCalledTimes(1)
+    expect(windowSpy).toHaveBeenCalledWith(
+      'Copy to clipboard: Ctrl+C, Enter',
+      'https://example.com/fake-private-link'
     )
+
+    jest.advanceTimersByTime(550)
+
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 })
 
@@ -36,11 +62,14 @@ const getTestFolder = () => ({
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   name: 'lorem.txt',
-  privateLink: 'some-link'
+  privateLink: 'https://example.com/fake-private-link'
 })
 
 function createStore() {
   return new Vuex.Store({
+    actions: mapActions,
+    commit: jest.fn(),
+    dispatch: jest.fn(),
     getters: {
       capabilities: function () {
         return {
@@ -61,13 +90,10 @@ function createStore() {
   })
 }
 
-function getShallowWrapper(store) {
-  return shallowMount(PrivateLinkItem, {
+function getWrapper(store) {
+  return mount(PrivateLinkItem, {
     localVue,
     store,
-    stubs: {
-      'copy-to-clipboard-button': true
-    },
     provide: {
       displayedItem: {
         value: getTestFolder()

@@ -24,13 +24,14 @@
             :is-folder-share="highlightedFile.isFolder"
             :link="quicklink"
             :modifiable="canEdit"
+            :can-rename="false"
             :password-enforced="passwordEnforced"
             :expiration-date="globalExpirationDate"
             :available-role-options="availableRoleOptions"
             @updateLink="updatePublicLink"
             @removePublicLink="deleteLinkConfirmation"
           />
-          <hr class="oc-my-s" />
+          <hr class="oc-my-m" />
           <oc-button
             id="files-file-link-add"
             variation="primary"
@@ -58,6 +59,7 @@
               :is-folder-share="highlightedFile.isFolder"
               :link="link"
               :modifiable="canEdit"
+              :can-rename="true"
               :password-enforced="passwordEnforced"
               :expiration-date="globalExpirationDate"
               :available-role-options="availableRoleOptions"
@@ -246,12 +248,9 @@ export default defineComponent({
     },
 
     links() {
-      // exclude quicklink here
       const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks.filter(
         (link) => !link.quicklink
       )
-
-      console.log(nonQuickLinkOutgoingLinks, this.currentFileOutgoingLinks)
 
       return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
         .sort(this.linksComparator)
@@ -490,3 +489,9 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.link-name-container {
+  background-color: var(--oc-color-input-bg);
+  border: 1px solid var(--oc-color-input-border);
+}
+</style>

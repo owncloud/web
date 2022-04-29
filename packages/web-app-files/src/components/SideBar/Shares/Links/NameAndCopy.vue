@@ -11,12 +11,12 @@
         <p class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm" v-text="link.url" />
       </div>
       <oc-button
-        v-oc-tooltip="copyToClipboardLabel"
+        v-oc-tooltip="copyBtnHint"
         appearance="raw"
-        :aria-label="copyToClipboardLabel"
+        :aria-label="copyBtnHint"
         class="oc-files-public-link-copy-url"
-        @click="copyToClipBoardMethod"
-        v-text="copyLabel"
+        @click="copyLinkToClipboard"
+        v-text="copyBtnLabel"
       />
     </div>
   </div>
@@ -42,32 +42,31 @@ export default {
     linkName() {
       return this.link.name
     },
-    copyLabel() {
+    copyBtnLabel() {
       return this.$gettext('Copy')
+    },
+    copyBtnHint() {
+      return this.$gettext('Copy link to clipboard')
     },
     copiedLabel() {
       return this.$gettext('Copied')
-    },
-    getCopyToClipboardSuccessMsgText() {
-      return this.$gettextInterpolate(
-        this.$gettext('The link "%{linkName}" has been copied to your clipboard.'),
-        {
-          linkName: this.linkName
-        },
-        true
-      )
-    },
-    copyToClipboardLabel() {
-      return this.$gettext('Copy link to clipboard')
     }
   },
   methods: {
     ...mapActions(['showMessage']),
-    copyToClipBoardMethod() {
+    copyLinkToClipboard() {
       copyToClipboard(this.link.url)
       this.clipboardSuccessHandler()
       this.showMessage({
-        title: this.$gettext('Link copied')
+        title: this.link.quicklink
+          ? this.$gettext('The quicklink has been copied to your clipboard.')
+          : this.$gettextInterpolate(
+              this.$gettext('The link "%{linkName}" has been copied to your clipboard.'),
+              {
+                linkName: this.linkName
+              },
+              true
+            )
       })
     },
     clipboardSuccessHandler() {
@@ -81,28 +80,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.link-name-container {
-  background-color: var(--oc-color-input-bg);
-  border: 1px solid var(--oc-color-input-border);
-}
-
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-}
-
-@keyframes _clipboard-success-animation {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0;
-  }
+<style lang="scss" scoped>
+.url-copied {
+  color: var(--oc-color-swatch-success-default);
 }
 </style>

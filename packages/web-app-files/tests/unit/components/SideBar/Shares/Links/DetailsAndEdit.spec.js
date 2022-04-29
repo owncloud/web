@@ -50,6 +50,7 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, modifiable =
   return shallowMount(DetailsAndEdit, {
     propsData: {
       availableRoleOptions,
+      canRename: true,
       expirationDate: {
         enforced: expireDateEnforced,
         default: null,
