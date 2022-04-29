@@ -1,8 +1,14 @@
 import { Download, Page } from 'playwright'
+import util from 'util'
 import { resourceExists, waitForResources } from './utils'
 import path from 'path'
 import { File } from '../../../types'
 import { sidebar } from '../utils'
+
+const downloadButtonSideBar = '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
+const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-trigger'
+const downloadButtonBatchActionMultiple = '.oc-files-actions-download-archive-trigger'
+const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 
 export const clickResource = async ({
   page,
@@ -92,31 +98,82 @@ export interface downloadResourcesArgs {
   page: Page
   names: string[]
   folder: string
+  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
-  const { page, names, folder } = args
+  const { page, names, folder, via } = args
   const downloads = []
 
-  if (folder) {
-    await clickResource({ page, path: folder })
-  }
+  switch (via) {
+    case 'SIDEBAR_PANEL': {
+      if (folder) {
+        await clickResource({ page, path: folder })
+      }
 
-  for (const name of names) {
-    await sidebar.open({ page: page, resource: name })
-    await sidebar.openPanel({ page: page, name: 'actions' })
+      for (const name of names) {
+        await sidebar.open({ page: page, resource: name })
+        await sidebar.openPanel({ page: page, name: 'actions' })
 
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('#oc-files-actions-sidebar .oc-files-actions-download-file-trigger').click()
-    ])
+        const [download] = await Promise.all([
+          page.waitForEvent('download'),
+          page.locator(downloadButtonSideBar).click()
+        ])
 
-    await sidebar.close({ page: page })
+        await sidebar.close({ page: page })
 
-    downloads.push(download)
+        downloads.push(download)
+      }
+      break
+    }
+
+    case 'BATCH_ACTION': {
+      await selectOrDeselectResources({ page: page, names: names, folder: folder, select: true })
+      let downloadSelector = downloadButtonBatchActionMultiple
+      if (names.length === 1) {
+        downloadSelector = downloadButtonBatchActionSingleFile
+      }
+      const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        page.locator(downloadSelector).click()
+      ])
+      downloads.push(download)
+      break
+    }
   }
 
   return downloads
+}
+
+export type selectResourcesArgs = {
+  page: Page
+  names: string[]
+  folder: string
+  select: boolean
+}
+
+export const selectOrDeselectResources = async (args: selectResourcesArgs): Promise<void> => {
+  const { page, folder, names, select } = args
+  if (folder) {
+    await clickResource({ page: page, path: folder })
+  }
+
+  for (const resource of names) {
+    const exists = await resourceExists({
+      page: page,
+      name: resource
+    })
+    if (exists) {
+      const resourceCheckbox = page.locator(util.format(checkBox, resource))
+      if (!(await resourceCheckbox.isChecked()) && select) {
+        await resourceCheckbox.check()
+      } else if (await resourceCheckbox.isChecked()) {
+        await resourceCheckbox.uncheck()
+      }
+    } else {
+      throw new Error(`The resource ${resource} you are trying to select does not exist`)
+    }
+  }
 }
 
 /**/

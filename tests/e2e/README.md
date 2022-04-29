@@ -21,7 +21,7 @@ Please make sure to point http://host.docker.internal/ to 127.0.0.1 by adding it
 ```shell
 $ yarn && yarn build:w
 $ docker-compose up oc10 ocis
-$ yarn test:e2e:cucumber tests/e2e/cucumber/
+$ yarn test:e2e:cucumber tests/e2e/cucumber/features
 ```
 
 ## Available options
