@@ -7,10 +7,10 @@ import get from 'lodash-es/get'
 
 export default {
   ...mapGetters(['capabilities']),
-  hasResharing() {
+  $_declineShare_hasResharing() {
     return get(this.capabilities, 'files_sharing.resharing', true)
   },
-  hasShareJail() {
+  $_declineShare_hasShareJail() {
     return get(this.capabilities, 'spaces.share_jail', false)
   },
   computed: {
@@ -56,8 +56,8 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.declined,
-                this.hasResharing,
-                this.hasShareJail,
+                this.$_declineShare_hasResharing,
+                this.$_declineShare_hasShareJail,
                 this.$client
               )
               if (share) {

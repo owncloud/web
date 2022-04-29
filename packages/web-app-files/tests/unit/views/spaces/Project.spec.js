@@ -264,6 +264,11 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             }
           }
         }),
+        capabilities: () => ({
+          spaces: {
+            projects: true
+          }
+        }),
         user: () => ({
           id: 'marie'
         }),

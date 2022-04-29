@@ -10,7 +10,7 @@ export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
 export class FolderLoaderSpacesShare implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
-    return get(store, 'getters.capabilities.spaces', false)
+    return get(store, 'getters.capabilities.spaces.share_jail', false)
   }
 
   public isActive(router: Router): boolean {

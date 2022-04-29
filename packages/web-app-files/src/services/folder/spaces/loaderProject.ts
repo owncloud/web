@@ -10,7 +10,7 @@ import get from 'lodash-es/get'
 
 export class FolderLoaderSpacesProject implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
-    return get(store, 'getters.capabilities.spaces', false)
+    return get(store, 'getters.capabilities.spaces.projects', false)
   }
 
   public isActive(router: Router): boolean {
