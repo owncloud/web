@@ -171,7 +171,7 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
@@ -376,7 +376,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   data() {
@@ -586,7 +586,7 @@ export default defineComponent({
         ...mapResourceFields(resource, this.targetRouteQueryMapping)
       }
 
-      const matchingSpace = this.getMatchingSpace(file.storageId)
+      const matchingSpace = this.getMatchingSpace(resource.storageId)
       if (matchingSpace && matchingSpace?.driveType === 'project') {
         return createLocationSpaces('files-spaces-project', {
           params,
@@ -745,11 +745,11 @@ export default defineComponent({
       return this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {
-      if (!this.hasSpaces) {
+      if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
       }
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
 
+      const matchingSpace = this.getMatchingSpace(resource.storageId)
       if (matchingSpace && matchingSpace?.driveType === 'project') {
         return matchingSpace.name
       }

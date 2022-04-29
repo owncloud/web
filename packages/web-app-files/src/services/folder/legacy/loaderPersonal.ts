@@ -10,7 +10,7 @@ import get from 'lodash-es/get'
 
 export class FolderLoaderLegacyPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
-    return !get(store, 'getters.capabilities.spaces.enabled', false)
+    return !get(store, 'getters.capabilities.spaces.share_jail', false)
   }
 
   public isActive(router: Router): boolean {

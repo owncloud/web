@@ -77,7 +77,7 @@ const navItems = [
       path: `/${appInfo.id}/spaces/projects`
     },
     enabled(capabilities) {
-      return capabilities.spaces && capabilities.spaces.enabled === true
+      return capabilities.spaces && capabilities.spaces.projects === true
     }
   },
   {

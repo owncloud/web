@@ -103,7 +103,7 @@ import { useResourcesViewDefaults } from '../composables'
 import { fetchResources } from '../services/folder'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../helpers/resource'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -132,7 +132,7 @@ export default defineComponent({
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
 
@@ -153,7 +153,7 @@ export default defineComponent({
     },
 
     breadcrumbs() {
-      const personalRouteName = this.hasSpaces
+      const personalRouteName = this.hasShareJail
         ? this.$gettext('Personal')
         : this.$gettext('All files')
       return concatBreadcrumbs(

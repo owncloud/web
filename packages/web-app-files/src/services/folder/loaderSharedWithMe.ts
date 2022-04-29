@@ -50,7 +50,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
 
         // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
         // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root. should ideally be changed backend side.
-        if (get(store, 'getters.capabilities.spaces.enabled', false)) {
+        if (get(store, 'getters.capabilities.spaces.share_jail', false)) {
           resources.forEach((resource) => {
             resource.path = '/'
             resource.webDavPath = buildWebDavSpacesPath([SHARE_JAIL_ID, resource.id].join('!'), '')
