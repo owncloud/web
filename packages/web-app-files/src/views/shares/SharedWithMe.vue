@@ -223,10 +223,10 @@ export default defineComponent({
       )
     )
     const resourceTargetParamMapping = computed(() =>
-      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : null
+      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined
     )
     const resourceTargetQueryMapping = computed(() =>
-      unref(hasShareJail) ? { id: 'shareId' } : null
+      unref(hasShareJail) ? { id: 'shareId' } : undefined
     )
 
     const viewMode = computed(() =>
