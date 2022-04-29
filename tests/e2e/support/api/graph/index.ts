@@ -1,3 +1,1 @@
-export { me } from './me'
-export { createUser } from './user'
-export { deleteUser } from './user'
+export { me, createUser, deleteUser } from './user'
