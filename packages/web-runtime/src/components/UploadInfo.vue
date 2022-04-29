@@ -248,8 +248,8 @@ export default {
     }
     .uppy-StatusBar.is-error .uppy-StatusBar-statusIndicator {
       color: var(--oc-color-swatch-danger-default);
-      width: 8px;
-      height: 8px;
+      width: var(--oc-space-small);
+      height: var(--oc-space-small);
     }
     .uppy-StatusBar-details,
     .uppy-StatusBar-actionBtn--retry svg {
