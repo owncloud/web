@@ -17,6 +17,7 @@ Summary
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
+* Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
@@ -113,6 +114,14 @@ Details
 
    https://github.com/owncloud/web/issues/6728
    https://github.com/owncloud/web/pull/6795
+
+* Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
+
+   We've fixed the following issues to enhance UI/UX: - wording for new space button - wording for
+   invite space member submit button
+
+   https://github.com/owncloud/web/issues/6555
+   https://github.com/owncloud/web/pull/6781
 
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
