@@ -4,6 +4,8 @@ import initVueAuthenticate from '../services/auth'
 import { router } from '../router'
 import { clientService } from 'web-pkg/src/services'
 
+import { setUser as sentrySetUser } from '@sentry/browser'
+
 let vueAuthInstance
 
 const state = {
@@ -249,6 +251,7 @@ const mutations = {
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
     state.groups = user.groups
+    sentrySetUser({ username: user.id })
   },
   SET_CAPABILITIES(state, data) {
     state.capabilities = data.capabilities

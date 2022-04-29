@@ -3,7 +3,7 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-import { VueConstructor } from 'vue'
+import Vue from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { sync as routerSync } from 'vuex-router-sync'
@@ -15,6 +15,9 @@ import { unref } from '@vue/composition-api'
 import { useDefaultThemeName } from '../composables'
 import { clientService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
+
+import { init as SentryInit } from '@sentry/browser'
+import { Vue as SentryVueIntegration } from '@sentry/integrations'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -48,7 +51,7 @@ export const announceStore = async ({
   runtimeConfiguration,
   store
 }: {
-  vue: VueConstructor
+  vue: Vue.VueConstructor
   runtimeConfiguration: RuntimeConfiguration
   store: Store<any>
 }): Promise<void> => {
@@ -189,7 +192,7 @@ export const announceTheme = async ({
   runtimeConfiguration
 }: {
   store: Store<unknown>
-  vue: VueConstructor
+  vue: Vue.VueConstructor
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
@@ -218,7 +221,7 @@ export const announceTranslations = ({
   supportedLanguages,
   translations
 }: {
-  vue: VueConstructor
+  vue: Vue.VueConstructor
   supportedLanguages: unknown
   translations: unknown
 }): void => {
@@ -240,7 +243,7 @@ export const announceClientService = ({
   vue,
   runtimeConfiguration
 }: {
-  vue: VueConstructor
+  vue: Vue.VueConstructor
   runtimeConfiguration: RuntimeConfiguration
 }): void => {
   const sdk = new OwnCloud()
@@ -255,7 +258,7 @@ export const announceClientService = ({
  *
  * @param vue
  */
-export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
+export const announceUppyService = ({ vue }: { vue: Vue.VueConstructor }): void => {
   vue.prototype.$uppyService = new UppyService()
 }
 
@@ -304,4 +307,23 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
       'background-color: #041E42; color: #FFFFFF; font-weight: bold; border: 1px solid #FFFFFF; padding: 5px;'
     )
   })
+}
+
+/**
+ * starts the sentry monitor
+ *
+ * @remarks
+ * if runtimeConfiguration does not contain dsn sentry will not be started
+ *
+ * @param runtimeConfiguration
+ */
+export const startSentry = (runtimeConfiguration: RuntimeConfiguration): void => {
+  if (runtimeConfiguration.sentry?.dsn) {
+    SentryInit({
+      dsn: runtimeConfiguration.sentry.dsn,
+      integrations: [new SentryVueIntegration({ Vue, attachProps: true, logErrors: true })],
+      environment: runtimeConfiguration.sentry.environment || 'production',
+      autoSessionTracking: false
+    })
+  }
 }
