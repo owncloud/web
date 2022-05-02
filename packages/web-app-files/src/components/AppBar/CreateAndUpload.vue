@@ -22,13 +22,17 @@
         padding-size="small"
       >
         <oc-list id="create-list">
-          <li class="create-list-folder">
+          <li class="create-list-folder action-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
               <oc-resource-icon :resource="{ isFolder: true, extension: '' }" size="medium" />
               <translate>Folder</translate>
             </oc-button>
           </li>
-          <li v-for="(newFileHandler, key) in newFileHandlers" :key="key" class="create-list-file">
+          <li
+            v-for="(newFileHandler, key) in newFileHandlers"
+            :key="key"
+            class="create-list-file action-menu-item-hover"
+          >
             <oc-button
               appearance="raw"
               :class="['new-file-btn-' + newFileHandler.ext]"
@@ -45,7 +49,7 @@
             <li
               v-for="(mimetype, key) in mimetypesAllowedForCreation"
               :key="key"
-              class="create-list-file"
+              class="create-list-file action-menu-item-hover"
             >
               <oc-button
                 appearance="raw"
@@ -95,10 +99,10 @@
       padding-size="small"
     >
       <oc-list id="upload-list">
-        <li>
+        <li class="action-menu-item-hover">
           <resource-upload ref="folder-upload" btn-class="oc-width-1-1" />
         </li>
-        <li>
+        <li class="action-menu-item-hover">
           <resource-upload ref="file-upload" btn-class="oc-width-1-1" :is-folder="true" />
         </li>
       </oc-list>

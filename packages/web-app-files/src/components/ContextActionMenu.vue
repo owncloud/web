@@ -12,7 +12,7 @@
         :key="`section-${section.name}-action-${actionIndex}`"
         :action="action"
         :items="items"
-        class="oc-files-context-action oc-px-s oc-rounded"
+        class="oc-files-context-action oc-px-s oc-rounded action-menu-item-hover"
       />
     </oc-list>
   </div>
