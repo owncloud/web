@@ -3,7 +3,6 @@ import resolve from 'rollup-plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from 'rollup-plugin-babel'
-import copy from 'rollup-plugin-copy-watch'
 import modify from 'rollup-plugin-modify'
 import { terser } from 'rollup-plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
@@ -21,6 +20,7 @@ import ts from 'rollup-plugin-ts'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import alias from '@rollup/plugin-alias'
 import inject from '@rollup/plugin-inject'
+import copy from '@rollup-extras/plugin-copy'
 
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
@@ -85,23 +85,21 @@ const plugins = [
   }),
   json(),
   copy({
-    watch: !production && ['./config', './packages/web-runtime/themes'],
     targets: [
-      { src: './packages/web-container/img', dest: 'dist' },
-      { src: './packages/web-container/oidc-callback.html', dest: 'dist' },
+      { src: 'node_modules/requirejs/require.js', dest: 'js' },
       {
-        src: './packages/web-container/oidc-silent-redirect.html',
-        dest: 'dist'
-      },
-      { src: './packages/web-container/manifest.json', dest: 'dist' },
-      { src: './packages/web-container/robots.txt', dest: 'dist' },
-      { src: './packages/web-runtime/themes', dest: 'dist' },
-      {
-        src: `./config/${production ? 'config.dist.json' : 'config.json'}`,
-        dest: 'dist'
-      },
-      { src: 'node_modules/requirejs/require.js', dest: 'dist/js' },
-      { src: 'node_modules/owncloud-design-system/dist/system/icons', dest: 'dist/' }
+        src: 'node_modules/owncloud-design-system/dist/system/icons/*',
+        dest: 'icons'
+      }
+    ],
+    watch: false
+  }),
+  copy({
+    targets: [
+      { src: './packages/web-container/img/*', dest: 'img' },
+      { src: './packages/web-container/*.{html,json,txt}' },
+      { src: './packages/web-runtime/themes/**/*', dest: 'themes' },
+      { src: `./config/${production ? 'config.json.dist' : 'config.json'}` }
     ]
   }),
   html({
