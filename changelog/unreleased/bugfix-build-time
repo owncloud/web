@@ -1,4 +1,4 @@
-Bugfix: Decrease build time and fix faulty oc10 docker dev env.
+Bugfix: Decrease build time and fix faulty oc10 docker dev env
 
 We've fixed a bug where build times increased on every file change in dev mode,
 it also fixes the faulty file sync during docker development for oc10.
