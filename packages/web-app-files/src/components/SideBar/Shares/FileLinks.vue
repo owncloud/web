@@ -49,7 +49,7 @@
         />
         <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
           <li
-            v-for="link in links"
+            v-for="link in displayLinks"
             :key="link.key"
             class="oc-py-s"
             :data-testid="`files-link-id-${link.id}`"
@@ -68,6 +68,13 @@
             />
           </li>
         </oc-list>
+        <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+          <oc-button
+            appearance="raw"
+            @click="toggleLinkListCollapsed"
+            v-text="collapseButtonTitle"
+          />
+        </div>
       </template>
     </div>
     <div
@@ -123,7 +130,9 @@ export default defineComponent({
       store.getters.getToken
     )
 
-    return { graphClient, hasSpaces: useCapabilitySpacesEnabled() }
+    const linkListCollapsed = !store.getters.configuration.sidebar.shares.showAllOnLoad
+
+    return { graphClient, hasSpaces: useCapabilitySpacesEnabled(), linkListCollapsed }
   },
   data() {
     return {
@@ -145,6 +154,10 @@ export default defineComponent({
 
     addButtonLabel() {
       return this.$gettext('Add link')
+    },
+
+    collapseButtonTitle() {
+      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
     },
 
     defaultNewLinkName() {
@@ -260,6 +273,13 @@ export default defineComponent({
         })
     },
 
+    displayLinks() {
+      if (this.links.length > 3 && this.linkListCollapsed) {
+        return this.links.slice(0, 3)
+      }
+      return this.links
+    },
+
     indirectLinks() {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, false)
@@ -316,6 +336,10 @@ export default defineComponent({
       'loadCurrentFileOutgoingShares'
     ]),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
+
+    toggleLinkListCollapsed() {
+      this.linkListCollapsed = !this.linkListCollapsed
+    },
 
     reloadLinks() {
       this.loadCurrentFileOutgoingShares({
