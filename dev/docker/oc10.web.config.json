@@ -14,7 +14,12 @@
   ],
   "options": {
     "disablePreviews": true,
-    "displayResourcesLazy": false
+    "displayResourcesLazy": false,
+    "sidebar": {
+      "shares": {
+        "showAllOnLoad": true
+      }
+    }
   },
   "applications": [
     {

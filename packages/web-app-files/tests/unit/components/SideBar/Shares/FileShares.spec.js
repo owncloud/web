@@ -26,7 +26,6 @@ const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
 
 const selectors = {
-  showCollaboratorButton: 'button[data-testid="collaborators-show-people"]',
   firstCollaboratorListItem: `div[data-testid="collaborator-user-item-${Collaborators[0].collaborator.name}"]`
 }
 
@@ -76,19 +75,6 @@ describe('FileShares', () => {
         outgoingCollaborators: collaborators
       })
       expect(wrapper).toMatchSnapshot()
-    })
-
-    it('can toggle the collaborators list by clicking the avatar wrapper button', async () => {
-      const wrapper = getMountedWrapper({
-        user,
-        outgoingCollaborators: collaborators
-      })
-      const button = wrapper.find(selectors.showCollaboratorButton)
-      expect(wrapper.vm.showShareesList).toBe(true)
-      await button.trigger('click')
-      expect(wrapper.vm.showShareesList).toBe(false)
-      await button.trigger('click')
-      expect(wrapper.vm.showShareesList).toBe(true)
     })
 
     it('reacts on delete events by collaborator list items', async () => {

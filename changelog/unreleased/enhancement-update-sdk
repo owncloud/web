@@ -1,0 +1,15 @@
+Enhancement: Update SDK
+
+We've updated the ownCloud SDK to version 3.0.0-alpha.7.
+
+- Change - Pass full trash bin path to methods of FilesTrash class: https://github.com/owncloud/owncloud-sdk/pull/1021
+- Enhancement - Enforce share_type guest if applies: https://github.com/owncloud/owncloud-sdk/pull/1046
+- Enhancement - Create quicklink: https://github.com/owncloud/owncloud-sdk/pull/1041
+- Enhancement - Replace deprecated String.prototype.substr(): https://github.com/owncloud/owncloud-sdk/pull/1035
+- Enhancement - Add blob resolveType: https://github.com/owncloud/owncloud-sdk/pull/1028
+- Enhancement - Adjust share management to properly work with spaces: https://github.com/owncloud/owncloud-sdk/pull/1013
+- Bugfix - Always add X-Request-ID: https://github.com/owncloud/owncloud-sdk/pull/1016
+- Bugfix - Always add X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
+
+https://github.com/owncloud/web/pull/6820
+https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.7

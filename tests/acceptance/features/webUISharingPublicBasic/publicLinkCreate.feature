@@ -179,7 +179,7 @@ Feature: Create public link shares
       | uid_owner   | Alice             |
       | permissions | read              |
       | path        | /simple-folder    |
-      | name        | Quick action link |
+      | name        | Quicklink |
     And the following success message should be displayed on the webUI
       """
       Quicklink copied into your clipboard

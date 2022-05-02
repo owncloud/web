@@ -130,7 +130,7 @@ export default defineComponent({
       store.getters.getToken
     )
 
-    const linkListCollapsed = !store.getters.configuration.sidebar.shares.showAllOnLoad
+    const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return { graphClient, hasSpaces: useCapabilitySpacesEnabled(), linkListCollapsed }
   },

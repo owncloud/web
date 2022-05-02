@@ -444,13 +444,18 @@ function _buildLink(link): Share {
     description = role.label
   }
 
-  let oc10QuickLink = false
-  if (link.attributes) {
-    const attributes = JSON.parse(link.attributes) || []
-    oc10QuickLink = attributes.find((attr) => attr.key === 'isQuickLink')?.enabled
-  }
-  const ocisQuickLink = link.quicklink === 'true'
-  const quicklink = oc10QuickLink || ocisQuickLink
+  const quicklinkOc10 = ((): boolean => {
+    if (typeof link.attributes !== 'string') {
+      return false
+    }
+
+    return (
+      JSON.parse(link.attributes || '[]').find((attr) => attr.key === 'isQuickLink')?.enabled ===
+      'true'
+    )
+  })()
+  const quicklinkOcis = link.quicklink === 'true'
+  const quicklink = quicklinkOc10 || quicklinkOcis
 
   return {
     shareType: parseInt(link.share_type),

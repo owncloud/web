@@ -131,7 +131,7 @@ export default {
       })
     })
 
-    const sharesListCollapsed = !store.getters.configuration.sidebar.shares.showAllOnLoad
+    const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
       loadSpaceTask,
