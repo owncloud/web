@@ -10,7 +10,6 @@
     "scope": "openid profile email"
   },
   "options": {
-    "hideSearchBar": true,
     "disablePreviews": true,
     "displayResourcesLazy": false
   },

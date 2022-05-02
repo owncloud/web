@@ -41,7 +41,6 @@ Please refer to the [build documentation for Web]({{< ref "./building.md" >}}).
 Depending on the backend you are using, there are sample config files provided in the [config folder](https://github.com/owncloud/web/tree/master/config) of the ownCloud Web git repository. See below for available backends. Also, find some of the configuration details below.
 
 #### Options
-- `options.hideSearchBar` Lets you hide the search bar at the top of the screen for all users.
 - `options.homeFolder` You can specify a folder that is used when the user navigates `home`. Navigating home gets triggered by clicking on the `All files`
 menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
 variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
