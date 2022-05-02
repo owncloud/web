@@ -38,6 +38,8 @@ export interface Resource {
   isReceivedShare?(): boolean
   isMounted?(): boolean
 
+  getDomSelector?(): string
+
   resourceOwner?: User
   owner?: User[]
   ownerDisplayName?: string
@@ -57,6 +59,10 @@ export const extractStorageId = (id?: string): string => {
     return ''
   }
   return id.indexOf('!') >= 0 ? id.split('!')[0] : ''
+}
+
+export const extractDomSelector = (str: string): string => {
+  return str.replace(/[^A-Za-z0-9\-_]/g, '')
 }
 
 export const extractNameWithoutExtension = (resource?: Resource): string => {

@@ -53,7 +53,8 @@ const sharedFile = {
   thumbnail: 'example.com/image',
   mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
-  shareTypes: [ShareTypes.user.value]
+  shareTypes: [ShareTypes.user.value],
+  getDomSelector: () => '4'
 }
 
 const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')

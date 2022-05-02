@@ -38,7 +38,7 @@
             oc-child-width-1-5@xl
           "
         >
-          <li v-for="space in spaces" :key="space.id" class="oc-mb-m">
+          <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m">
             <div
               class="spaces-list-card oc-card oc-card-default oc-rounded"
               :data-space-id="space.id"
@@ -88,7 +88,7 @@
                     </div>
                     <div>
                       <oc-button
-                        :id="`space-context-btn-${sanitizeStorageId(space.id)}`"
+                        :id="`space-context-btn-${space.getDomSelector()}`"
                         v-oc-tooltip="$gettext('Show context menu')"
                         :aria-label="$gettext('Show context menu')"
                         appearance="raw"
@@ -96,8 +96,8 @@
                         <oc-icon name="more-2" />
                       </oc-button>
                       <oc-drop
-                        :drop-id="`space-context-drop-${space.id}`"
-                        :toggle="`#space-context-btn-${sanitizeStorageId(space.id)}`"
+                        :drop-id="`space-context-drop-${space.getDomSelector()}`"
+                        :toggle="`#space-context-btn-${space.getDomSelector()}`"
                         mode="click"
                         close-on-click
                         :options="{ delayHide: 0 }"
@@ -248,10 +248,6 @@ export default defineComponent({
       return createLocationSpaces('files-spaces-project', {
         params: { storageId: id, name }
       })
-    },
-
-    sanitizeStorageId(id) {
-      return id.replace(/[^a-zA-Z0-9]/g, '')
     },
 
     getSpaceCardAdditionalClass(space) {

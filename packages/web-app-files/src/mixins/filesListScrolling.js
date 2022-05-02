@@ -7,7 +7,7 @@ export default {
       const tableHeader = document.querySelector('.files-table thead')
       offset += tableHeader.getBoundingClientRect().height
 
-      this.$scrollTo(`.oc-tbody-tr-${resource.id}`, 300, { offset: -offset })
+      this.$scrollTo(`.oc-tbody-tr-${resource.getDomSelector()}`, 300, { offset: -offset })
     }
   }
 }

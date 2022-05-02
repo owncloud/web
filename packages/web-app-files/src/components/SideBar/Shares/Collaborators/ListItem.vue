@@ -75,7 +75,7 @@
     >
       <role-dropdown
         :resource="highlightedFile"
-        :share-id="share.id"
+        :dom-selector="shareDomSelector"
         :existing-permissions="share.customPermissions"
         :existing-role="share.role"
         :allow-share-permission="hasResharing || isSpace"
@@ -107,6 +107,7 @@ import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import { extractDomSelector } from '../../../../helpers/resource'
 
 export default {
   name: 'ListItem',
@@ -149,6 +150,13 @@ export default {
 
     shareTypeKey() {
       return this.shareType.key
+    },
+
+    shareDomSelector() {
+      if (!this.share.id) {
+        return undefined
+      }
+      return extractDomSelector(this.share.id)
     },
 
     isGroup() {

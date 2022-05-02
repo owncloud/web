@@ -6,6 +6,7 @@ import VueCompositionAPI from '@vue/composition-api'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
+import { extractDomSelector } from '../../../../src/helpers/resource'
 
 const router = {
   push: jest.fn(),
@@ -90,7 +91,8 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     owner,
     sharedWith,
-    canRename: jest.fn
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('forest')
   },
   {
     id: 'notes',
@@ -106,7 +108,8 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('notes')
   },
   {
     id: 'documents',
@@ -121,7 +124,8 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('documents')
   },
   {
     id: 'another-one==',
@@ -136,7 +140,8 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('another-one==')
   }
 ]
 
@@ -164,13 +169,13 @@ describe('ResourceTable', () => {
   it('accepts resourceDomId closure', () => {
     const wrapper = getMountedWrapper({
       propsData: {
-        resourceDomSelector: (resource) => ['custom', resource.id.replace(/=+/, '')].join('-')
+        resourceDomSelector: (resource) => ['custom', resource.getDomSelector()].join('-')
       }
     })
     resourcesWithAllFields.forEach((resource) => {
       ;['.oc-tbody-tr', '#resource-table-select', '#context-menu-drop'].forEach((baseSelector) => {
         expect(
-          wrapper.find([baseSelector, 'custom', resource.id.replace(/=+/, '')].join('-')).exists()
+          wrapper.find([baseSelector, 'custom', resource.getDomSelector()].join('-')).exists()
         ).toBeTruthy()
       })
     })
