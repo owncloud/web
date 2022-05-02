@@ -40,13 +40,8 @@ import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
 import FileUpload from '../components/AppBar/Upload/FileUpload.vue'
-import {
-  getCurrentInstance,
-  onMounted,
-  onUnmounted
-} from '@vue/composition-api/dist/vue-composition-api'
+import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
-import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -57,18 +52,19 @@ export default {
     const uppyService = instance.$uppyService
 
     onMounted(() => {
-      bus.subscribe('filesSelected', instance.onFilesSelected)
-      bus.subscribe('uploadError', instance.onFileError)
+      const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
+      const uploadErrorSub = uppyService.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
         targetSelector: '#files-drop-container',
         uppyService
       })
-    })
 
-    onUnmounted(() => {
-      bus.unsubscribe('filesSelected', instance.onFilesSelected)
-      bus.unsubscribe('uploadError', instance.onFileError)
+      instance.$on('beforeDestroy', () => {
+        uppyService.unsubscribe('filesSelected', filesSelectedSub)
+        uppyService.unsubscribe('uploadError', uploadErrorSub)
+        uppyService.removeDropTarget()
+      })
     })
 
     return {

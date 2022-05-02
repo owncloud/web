@@ -6,6 +6,16 @@ import StatusBar from '@uppy/status-bar'
 import { UppyResource } from '../composables/upload'
 import { bus } from 'web-pkg/src/instance'
 
+type UppyServiceTopics =
+  | 'uploadStarted'
+  | 'uploadCancelled'
+  | 'uploadCompleted'
+  | 'uploadRemoved'
+  | 'uploadSuccess'
+  | 'uploadError'
+  | 'fileAdded'
+  | 'filesSelected'
+
 export class UppyService {
   uppy: Uppy
   uploadInputs: HTMLInputElement[] = []
@@ -163,34 +173,46 @@ export class UppyService {
     })
   }
 
+  subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): void {
+    bus.subscribe(topic, callback)
+  }
+
+  unsubscribe(topic: UppyServiceTopics, token: string): void {
+    bus.unsubscribe(topic, token)
+  }
+
+  publish(topic: UppyServiceTopics, data?: unknown): void {
+    bus.publish(topic, data)
+  }
+
   private setUpEvents() {
     this.uppy.on('upload', () => {
-      bus.publish('uploadStarted')
+      this.publish('uploadStarted')
     })
     this.uppy.on('cancel-all', () => {
-      bus.publish('uploadCancelled')
+      this.publish('uploadCancelled')
     })
     this.uppy.on('complete', (result) => {
-      bus.publish('uploadCompleted')
+      this.publish('uploadCompleted')
       result.successful.forEach((file) => {
-        bus.publish('uploadSuccess', file)
+        this.publish('uploadSuccess', file)
         this.uppy.removeFile(file.id)
       })
       result.failed.forEach((file) => {
-        bus.publish('uploadError', file)
+        this.publish('uploadError', file)
       })
       this.uploadInputs.forEach((item) => {
         item.value = null
       })
     })
     this.uppy.on('file-removed', () => {
-      bus.publish('uploadRemoved')
+      this.publish('uploadRemoved')
       this.uploadInputs.forEach((item) => {
         item.value = null
       })
     })
     this.uppy.on('file-added', (file) => {
-      bus.publish('fileAdded')
+      this.publish('fileAdded')
       const addedFile = file as unknown as UppyResource
       if (this.uppy.getPlugin('XHRUpload')) {
         const escapedName = encodeURIComponent(addedFile.name)
@@ -210,7 +232,7 @@ export class UppyService {
       el.addEventListener('change', (event) => {
         const target = event.target as HTMLInputElement
         const files = Array.from(target.files)
-        bus.publish('filesSelected', files)
+        this.publish('filesSelected', files)
       })
       this.uploadInputs.push(el)
     }

@@ -115,10 +115,9 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 // TODO: Simplify to one UploadButton component and fill from here
 import FileUpload from './Upload/FileUpload.vue'
 import FolderUpload from './Upload/FolderUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted, onUnmounted } from '@vue/composition-api'
+import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
-import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: {
@@ -131,21 +130,21 @@ export default defineComponent({
     const uppyService = instance.$uppyService
 
     onMounted(() => {
-      bus.subscribe('filesSelected', instance.onFilesSelected)
-      bus.subscribe('uploadSuccess', instance.onFileSuccess)
-      bus.subscribe('uploadError', instance.onFileError)
+      const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
+      const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
+      const uploadErrorSub = uppyService.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
         targetSelector: '#files-view',
         uppyService
       })
-    })
 
-    onUnmounted(() => {
-      bus.unsubscribe('filesSelected', instance.onFilesSelected)
-      bus.unsubscribe('uploadSuccess', instance.onFileSuccess)
-      bus.unsubscribe('uploadError', instance.onFileError)
-      uppyService.removeDropTarget()
+      instance.$on('beforeDestroy', () => {
+        uppyService.unsubscribe('filesSelected', filesSelectedSub)
+        uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
+        uppyService.unsubscribe('uploadError', uploadErrorSub)
+        uppyService.removeDropTarget()
+      })
     })
 
     return {

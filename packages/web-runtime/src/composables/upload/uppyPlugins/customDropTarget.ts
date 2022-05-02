@@ -1,5 +1,4 @@
 import DropTarget from '@uppy/drop-target'
-import { bus } from 'web-pkg/src/instance'
 
 /**
  * Custom Drop Target plugin
@@ -13,7 +12,7 @@ export class CustomDropTarget extends DropTarget {
     if (this.opts.uppyService) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      bus.publish('filesSelected', files)
+      this.opts.uppyService.publish('filesSelected', files)
       return
     }
 
