@@ -15,6 +15,7 @@ Summary
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
+* Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
@@ -101,6 +102,13 @@ Details
 
    https://github.com/owncloud/web/issues/6549
    https://github.com/owncloud/web/pull/6694
+
+* Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
+
+   We've fixed a bug which resulted in spaces having an invalid trigger id for the contextmenu.
+
+   https://github.com/owncloud/web/issues/6845
+   https://github.com/owncloud/web/pull/6848
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
