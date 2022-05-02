@@ -1,0 +1,9 @@
+Enhancement: Polish the upload overlay
+
+We polished the overlay that pops up on the bottom right corner when uploading files:
+
+* The header now shows the amount of successful uploads
+* Polished the overall design of the overlay
+
+https://github.com/owncloud/web/pull/6837
+https://github.com/owncloud/web/issues/6819

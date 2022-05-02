@@ -1,17 +1,7 @@
 <template>
   <div id="upload-info" class="oc-rounded oc-box-shadow-medium" :class="{ 'oc-hidden': !showInfo }">
-    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-p-m">
-      <span class="oc-flex oc-flex-middle">
-        <oc-icon
-          v-if="!filesUploading && !uploadCancelled"
-          variation="success"
-          name="check"
-          class="oc-mr-s"
-        />
-        <oc-icon v-else-if="uploadCancelled" variation="danger" name="close" class="oc-mr-s" />
-        <span v-text="uploadInfoTitle" />
-      </span>
-
+    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-pt-m">
+      <span class="oc-flex oc-flex-middle" v-text="uploadInfoTitle" />
       <oc-button
         id="close-upload-info-btn"
         v-oc-tooltip="$gettext('Close')"
@@ -21,17 +11,19 @@
         <oc-icon name="close" />
       </oc-button>
     </div>
+    <div class="upload-info-status-bar oc-px-m" />
     <div
-      class="upload-info-status-bar oc-px-m"
-      :class="{ 'oc-mb-m': successfulUploads.length && filesUploading.length }"
-    />
-    <div class="upload-info-successful-uploads oc-px-m oc-pb-m">
-      <ul id="files-collaborators-list" class="oc-list">
+      class="upload-info-successful-uploads oc-px-m oc-pb-m"
+      :class="{ 'oc-pt-m': successfulUploads.length }"
+    >
+      <ul class="oc-list">
         <li
           v-for="(item, idx) in successfulUploads"
           :key="idx"
+          class="oc-flex oc-flex-middle"
           :class="{ 'oc-mb-s': idx !== successfulUploads.length - 1 }"
         >
+          <oc-icon name="check" variation="success" size="small" />
           <oc-resource
             v-if="displayFileAsResource(item)"
             :key="item.path"
@@ -92,10 +84,15 @@ export default {
           { filesUploading: this.filesUploading }
         )
       }
-      if (this.uploadCancelled) {
-        return this.$gettext('Upload cancelled')
-      }
-      return this.$gettext('Upload completed')
+
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          '%{ successfulUploads } upload completed',
+          '%{ successfulUploads } uploads completed',
+          this.successfulUploads.length
+        ),
+        { successfulUploads: this.successfulUploads.length }
+      )
     },
     displayThumbnails() {
       return !this.configuration.options.disablePreviews
@@ -119,6 +116,9 @@ export default {
     this.$uppyService.$on('uploadCancelled', () => {
       this.filesUploading = 0
       this.uploadCancelled = true
+      if (!this.successfulUploads.length) {
+        this.closeInfo()
+      }
     })
     this.$uppyService.$on('uploadSuccess', (file) => {
       // @TODO we need the storage ID here... maybe fetch the file via DAV and call buildResources()?
@@ -191,33 +191,70 @@ export default {
   background-color: var(--oc-color-background-secondary);
   bottom: 20px;
   width: 300px;
-}
-.upload-info-successful-uploads {
-  max-height: 50vh;
-  overflow-y: auto;
-}
-.upload-info-status-bar .uppy-StatusBar,
-.upload-info-status-bar .uppy-StatusBar-actionBtn--retry:hover {
-  background-color: unset !important;
-}
-.upload-info-status-bar .uppy-StatusBar-content {
-  padding-left: 0.25rem !important;
-  color: var(--oc-color-text-default);
-}
-.upload-info-status-bar .uppy-StatusBar-actions {
-  right: 0.25rem !important;
-}
-.upload-info-status-bar .uppy-c-btn {
-  color: var(--oc-color-text-default);
-}
-.upload-info-status-bar .uppy-StatusBar-statusSecondary {
-  color: var(--oc-color-swatch-passive-default);
-}
-.upload-info-status-bar .uppy-StatusBar-details,
-.upload-info-status-bar .uppy-StatusBar-actionBtn--retry svg {
-  display: none;
-}
-.upload-info-status-bar .uppy-StatusBar-statusPrimary {
-  font-size: 0.9rem;
+
+  .oc-resource-details {
+    padding-left: var(--oc-space-xsmall);
+  }
+
+  .oc-resource-indicators .parent-folder .text {
+    color: var(--oc-color-text-default);
+  }
+
+  .upload-info-successful-uploads {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  .upload-info-status-bar {
+    .uppy-StatusBar {
+      height: unset;
+      background-color: unset !important;
+    }
+    .uppy-StatusBar-actionBtn--retry:hover {
+      background-color: unset !important;
+      text-decoration: underline;
+    }
+    .uppy-StatusBar-content {
+      padding-left: var(--oc-space-xsmall) !important;
+      color: var(--oc-color-text-default);
+      margin-top: 0.75rem;
+    }
+    .uppy-StatusBar-actions {
+      right: var(--oc-space-xsmall) !important;
+    }
+    .uppy-c-btn {
+      color: var(--oc-color-text-default);
+    }
+    .uppy-StatusBar-statusPrimary {
+      font-size: var(--oc-font-size-default);
+    }
+    .uppy-StatusBar-statusSecondary {
+      color: var(--oc-color-swatch-passive-default);
+    }
+    .uppy-StatusBar-statusIndicator {
+      margin-right: var(--oc-space-medium) !important;
+    }
+    .uppy-StatusBar-actionBtn--retry {
+      background-color: unset;
+      font-size: var(--oc-font-size-small);
+      padding: 0;
+    }
+    .uppy-StatusBar.is-error,
+    .uppy-StatusBar.is-uploading {
+      margin-top: var(--oc-space-medium);
+    }
+    .uppy-StatusBar.is-error .uppy-StatusBar-progress {
+      background-color: var(--oc-color-swatch-danger-default);
+    }
+    .uppy-StatusBar.is-error .uppy-StatusBar-statusIndicator {
+      color: var(--oc-color-swatch-danger-default);
+      width: var(--oc-space-small);
+      height: var(--oc-space-small);
+    }
+    .uppy-StatusBar-details,
+    .uppy-StatusBar-actionBtn--retry svg {
+      display: none;
+    }
+  }
 }
 </style>
