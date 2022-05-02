@@ -46,6 +46,7 @@ import {
   onUnmounted
 } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   components: {
@@ -56,8 +57,8 @@ export default {
     const uppyService = instance.$uppyService
 
     onMounted(() => {
-      uppyService.$on('filesSelected', instance.onFilesSelected)
-      uppyService.$on('uploadError', instance.onFileError)
+      bus.subscribe('filesSelected', instance.onFilesSelected)
+      bus.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
         targetSelector: '#files-drop-container',
@@ -66,8 +67,8 @@ export default {
     })
 
     onUnmounted(() => {
-      uppyService.$off('filesSelected', instance.onFilesSelected)
-      uppyService.$off('uploadError', instance.onFileError)
+      bus.unsubscribe('filesSelected', instance.onFilesSelected)
+      bus.unsubscribe('uploadError', instance.onFileError)
     })
 
     return {

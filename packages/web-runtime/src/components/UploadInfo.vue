@@ -57,6 +57,7 @@ import '@uppy/status-bar/dist/style.css'
 import path from 'path'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   setup() {
@@ -105,22 +106,22 @@ export default {
     })
   },
   created() {
-    this.$uppyService.$on('uploadStarted', () => {
+    bus.subscribe('uploadStarted', () => {
       this.showInfo = true
       this.filesUploading = this.filesUploading + 1
       this.uploadCancelled = false
     })
-    this.$uppyService.$on('uploadCompleted', () => {
+    bus.subscribe('uploadCompleted', () => {
       this.filesUploading = this.filesUploading - 1
     })
-    this.$uppyService.$on('uploadCancelled', () => {
+    bus.subscribe('uploadCancelled', () => {
       this.filesUploading = 0
       this.uploadCancelled = true
       if (!this.successfulUploads.length) {
         this.closeInfo()
       }
     })
-    this.$uppyService.$on('uploadSuccess', (file) => {
+    bus.subscribe('uploadSuccess', (file) => {
       // @TODO we need the storage ID here... maybe fetch the file via DAV and call buildResources()?
 
       let path = file.meta.currentFolder

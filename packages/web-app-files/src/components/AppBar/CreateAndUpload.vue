@@ -118,6 +118,7 @@ import FolderUpload from './Upload/FolderUpload.vue'
 import { defineComponent, getCurrentInstance, onMounted, onUnmounted } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: {
@@ -130,9 +131,9 @@ export default defineComponent({
     const uppyService = instance.$uppyService
 
     onMounted(() => {
-      uppyService.$on('filesSelected', instance.onFilesSelected)
-      uppyService.$on('uploadSuccess', instance.onFileSuccess)
-      uppyService.$on('uploadError', instance.onFileError)
+      bus.subscribe('filesSelected', instance.onFilesSelected)
+      bus.subscribe('uploadSuccess', instance.onFileSuccess)
+      bus.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
         targetSelector: '#files-view',
@@ -141,9 +142,9 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      uppyService.$off('filesSelected', instance.onFilesSelected)
-      uppyService.$off('uploadSuccess', instance.onFileSuccess)
-      uppyService.$off('uploadError', instance.onFileError)
+      bus.unsubscribe('filesSelected', instance.onFilesSelected)
+      bus.unsubscribe('uploadSuccess', instance.onFileSuccess)
+      bus.unsubscribe('uploadError', instance.onFileError)
       uppyService.removeDropTarget()
     })
 
