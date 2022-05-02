@@ -1,1 +1,1 @@
-export { me } from './me'
+export { me, createUser, deleteUser } from './user'

@@ -20,7 +20,7 @@ OC_CI_HUGO = "owncloudci/hugo:0.89.4"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.5.0"
+OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.6.0"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:18.09"
 PLUGINS_DOWNSTREAM = "plugins/downstream"
@@ -2986,6 +2986,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "REMOTE_UPLOAD_DIR": "/uploads",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "MIDDLEWARE_HOST": "middleware",
+        "TEST_WITH_GRAPH_API": "true" if ocis else "false",
     }
 
     if (federatedServer):

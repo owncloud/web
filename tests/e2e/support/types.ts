@@ -28,3 +28,7 @@ export interface File {
   name: string
   path: string
 }
+
+export interface Me {
+  id: string
+}
