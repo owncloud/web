@@ -14,6 +14,7 @@ Summary
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
+* Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
@@ -89,6 +90,17 @@ Details
 
    https://github.com/owncloud/web/issues/1750
    https://github.com/owncloud/web/pull/6804
+
+* Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
+
+   When logging out, only some parts of vuex store were reset to default. This caused bugs by
+   switching to another account that has some other/missing settings. For example, if the
+   account has no quota, the quota of the previously logged in account was shown. We have fixed this
+   by resetting the user store module on logout with reset function (vuex extensions library) and
+   creating an action to reset dynamic nav items.
+
+   https://github.com/owncloud/web/issues/6549
+   https://github.com/owncloud/web/pull/6694
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
