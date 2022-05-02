@@ -27,7 +27,7 @@
         >
           <template #status="{ resource }">
             <div
-              :key="resource.id + resource.status"
+              :key="resource.getDomSelector() + resource.status"
               class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
               <oc-button
@@ -122,7 +122,7 @@
       >
         <template #status="{ resource }">
           <div
-            :key="resource.id + resource.status"
+            :key="resource.getDomSelector() + resource.status"
             class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
           >
             <oc-button

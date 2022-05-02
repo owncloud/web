@@ -91,7 +91,7 @@ const shareTypesIndirect = (path, sharesTree) => {
 export const getIndicators = (resource, sharesTree) => {
   const indicators = [
     {
-      id: `files-sharing-${resource.id.replaceAll('=', '')}`,
+      id: `files-sharing-${resource.getDomSelector()}`,
       accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
       label: $gettext('Show invited people'),
       visible: isUserShare(resource, sharesTree),
@@ -101,7 +101,7 @@ export const getIndicators = (resource, sharesTree) => {
       handler: indicatorHandler
     },
     {
-      id: `file-link-${resource.id.replaceAll('=', '')}`,
+      id: `file-link-${resource.getDomSelector()}`,
       accessibleDescription: shareLinkDescribedBy(resource, sharesTree),
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),

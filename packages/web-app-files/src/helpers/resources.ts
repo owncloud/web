@@ -15,7 +15,12 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from './share'
-import { extractExtensionFromFile, extractStorageId, Resource } from './resource'
+import {
+  extractDomSelector,
+  extractExtensionFromFile,
+  extractStorageId,
+  Resource
+} from './resource'
 import { User } from './user'
 
 export function renameResource(resource, newName, newPath) {
@@ -47,8 +52,10 @@ export function buildResource(resource): Resource {
     resourcePath = `/${resourcePath}`
   }
 
+  const id = resource.fileInfo[DavProperty.FileId]
+
   return {
-    id: resource.fileInfo[DavProperty.FileId],
+    id,
     fileId: resource.fileInfo[DavProperty.FileId],
     storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
     mimeType: resource.fileInfo[DavProperty.MimeType],
@@ -100,7 +107,8 @@ export function buildResource(resource): Resource {
     },
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
-    }
+    },
+    getDomSelector: () => extractDomSelector(id)
   }
 }
 
@@ -220,7 +228,8 @@ export function buildSpace(space) {
     },
     isReceivedShare: function () {
       return false
-    }
+    },
+    getDomSelector: () => extractDomSelector(space.id)
   }
 }
 
@@ -379,6 +388,7 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   resource.canUpload = () => true
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
+  resource.getDomSelector = () => extractDomSelector(share.id)
 
   return resource
 }
@@ -515,6 +525,7 @@ export function buildDeletedResource(resource): Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
+  const id = path.basename(resource.name)
   return {
     type: isFolder ? 'folder' : resource.type,
     isFolder,
@@ -522,7 +533,7 @@ export function buildDeletedResource(resource): Resource {
     name: path.basename(fullName),
     extension,
     path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
-    id: path.basename(resource.name),
+    id,
     indicators: [],
     canUpload: () => false,
     canDownload: () => false,
@@ -546,6 +557,7 @@ export function buildDeletedResource(resource): Resource {
     canShare: () => false,
     canCreate: () => false,
     isMounted: () => false,
-    isReceivedShare: () => false
+    isReceivedShare: () => false,
+    getDomSelector: () => extractDomSelector(id)
   }
 }

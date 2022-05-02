@@ -174,7 +174,7 @@ import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { Resource } from '../../helpers/resource'
+import { extractDomSelector, Resource } from '../../helpers/resource'
 import { ShareTypes } from '../../helpers/share'
 
 export default defineComponent({
@@ -209,7 +209,7 @@ export default defineComponent({
     resourceDomSelector: {
       type: Function,
       required: false,
-      default: (resource) => resource.id.replace(/[^A-Za-z0-9\-_]/g, '')
+      default: (resource) => extractDomSelector(resource.id)
     },
     /**
      * Asserts whether resources path should be shown in the resource name

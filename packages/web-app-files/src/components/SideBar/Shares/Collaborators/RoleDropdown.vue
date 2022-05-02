@@ -104,7 +104,7 @@ export default {
       required: false,
       default: () => []
     },
-    shareId: {
+    domSelector: {
       type: String,
       required: false,
       default: undefined
@@ -124,8 +124,8 @@ export default {
     ...mapGetters(['capabilities']),
 
     roleButtonId() {
-      if (this.shareId) {
-        return `files-collaborators-role-button-${this.shareId}-${uuid.v4()}`
+      if (this.domSelector) {
+        return `files-collaborators-role-button-${this.domSelector}-${uuid.v4()}`
       }
       return 'files-collaborators-role-button-new'
     },

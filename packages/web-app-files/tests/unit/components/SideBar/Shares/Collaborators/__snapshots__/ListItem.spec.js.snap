@@ -16,7 +16,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
     </div>
   </div>
   <div class="oc-width-1-3 oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle">
-    <role-dropdown-stub resource="[object Object]" existingrole="[object Object]" existingpermissions="" class="files-collaborators-collaborator-role"></role-dropdown-stub>
+    <role-dropdown-stub resource="[object Object]" existingrole="[object Object]" existingpermissions="" domselector="asdf" class="files-collaborators-collaborator-role"></role-dropdown-stub>
     <edit-dropdown-stub sharecategory="user" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
   </div>
 </div>

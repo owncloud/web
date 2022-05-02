@@ -133,6 +133,7 @@ function createWrapper({
     }),
     propsData: {
       share: {
+        id: 'asdf',
         collaborator,
         shareType,
         role
