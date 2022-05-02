@@ -20,6 +20,7 @@ Summary
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
+* Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
@@ -139,6 +140,16 @@ Details
 
    https://github.com/owncloud/web/issues/6755
    https://github.com/owncloud/web/pull/6817
+
+* Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
+
+   We polished the overlay that pops up on the bottom right corner when uploading files:
+
+   * The header now shows the amount of successful uploads * Polished the overall design of the
+   overlay
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6837
 
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 
