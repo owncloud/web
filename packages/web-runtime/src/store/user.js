@@ -25,12 +25,11 @@ const actions = {
     if (context.state.id === '') {
       return
     }
-    // reset user to default state
-    context.commit('SET_USER', state)
-    // reset capabilities to default state
-    context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
-    // set userReady to false
-    context.commit('SET_USER_READY', false)
+    // reset user
+    this.reset({ self: false, nested: false, modules: { user: { self: true } } })
+
+    // clear dynamic navItems
+    context.dispatch('clearDynamicNavItems')
 
     // clear oidc client state
     vueAuthInstance.clearLoginState()

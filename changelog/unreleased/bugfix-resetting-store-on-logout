@@ -1,0 +1,6 @@
+Bugfix: Resetting store on logout
+
+When logging out, only some parts of vuex store were reset to default. This caused bugs by switching to another account that has some other/missing settings. For example, if the account has no quota, the quota of the previously logged in account was shown. We have fixed this by resetting the user store module on logout with reset function (vuex extensions library) and creating an action to reset dynamic nav items.
+
+https://github.com/owncloud/web/pull/6694
+https://github.com/owncloud/web/issues/6549
