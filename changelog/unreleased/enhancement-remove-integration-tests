@@ -1,0 +1,6 @@
+Enhancement: Get rid of the integration tests
+
+We've decided to get rid of our integration test suite.
+Our unit and e2e tests get better and better with each release and have now reached the point where they can replace the integration tests.
+
+https://github.com/owncloud/web/pull/6863

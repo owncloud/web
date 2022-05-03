@@ -3,7 +3,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Trashbin from '@files/src/views/spaces/Trashbin.vue'
 import { createStore } from 'vuex-extensions'
 import { createLocationTrash } from '../../../../src/router'
-import { waitFor } from '@testing-library/dom'
+import waitFor from 'wait-for-expect'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

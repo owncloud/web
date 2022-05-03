@@ -1066,7 +1066,7 @@ def unitTests(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "unit-and-integration-tests",
+        "name": "unit-tests",
         "workspace": {
             "base": dir["base"],
             "path": config["app"],
@@ -1099,13 +1099,6 @@ def unitTests(ctx):
                          "image": OC_CI_NODEJS,
                          "commands": [
                              "yarn test:unit",
-                         ],
-                     },
-                     {
-                         "name": "integration-tests",
-                         "image": OC_CI_NODEJS,
-                         "commands": [
-                             "yarn test:integration",
                          ],
                      },
                      {
@@ -3078,7 +3071,6 @@ def skipIfUnchanged(ctx, type):
             "^__fixtures__/.*",
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
-            "^tests/integration/.*",
             "^tests/e2e/.*",
             "^tests/unit/.*",
         ]
@@ -3093,7 +3085,6 @@ def skipIfUnchanged(ctx, type):
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
             "^tests/acceptance/.*",
-            "^tests/integration/.*",
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {
