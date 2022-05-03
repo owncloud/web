@@ -19,6 +19,7 @@ Summary
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
+* Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
@@ -138,6 +139,14 @@ Details
 
    https://github.com/owncloud/web/issues/6728
    https://github.com/owncloud/web/pull/6795
+
+* Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
+
+   We have removed the `hideSearchBar` configuration option and now always render a searchbar if
+   the backend announces the availability of search functionality using its capabilities.
+
+   https://github.com/owncloud/web/issues/6806
+   https://github.com/owncloud/web/pull/6856
 
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
