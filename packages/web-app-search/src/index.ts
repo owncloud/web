@@ -1,6 +1,5 @@
 import SearchBar from './portals/SearchBar.vue'
 import App from './App.vue'
-import store from './store'
 import List from './views/List.vue'
 import { providerStore } from './service'
 import { bus } from 'web-pkg/src/instance'
@@ -25,7 +24,6 @@ export default {
     id: 'search',
     icon: 'folder'
   },
-  store,
   routes: [
     {
       name: 'search',

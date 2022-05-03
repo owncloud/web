@@ -19,25 +19,18 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const store = new Vuex.Store({
-  modules: {
-    Search: {
-      state: {
-        options: {
-          hideSearchBar: false
-        }
-      },
-      getters: {
-        options: (state) => {
-          return state.options
-        }
-      },
-      mutations: {
-        updateOptions(state, v) {
-          state.options = { ...state.options, hideSearchBar: v }
-        }
-      },
-      namespaced: true
-    }
+  getters: {
+    capabilities: jest.fn(() => ({
+      dav: {
+        reports: ['search-files']
+      }
+    }))
+  }
+})
+
+const storeWithoutFileSearch = new Vuex.Store({
+  getters: {
+    capabilities: jest.fn(() => ({ dav: { reports: [] } }))
   }
 })
 
@@ -72,12 +65,9 @@ describe('SDKProvider', () => {
     expect('not-implemented').toBe('not-implemented')
   })
 
-  it('is only available if enabled in options', () => {
-    const search = new SDKSearch(store, {} as unknown as VueRouter)
-    ;[false, true, false].forEach((v) => {
-      store.commit('Search/updateOptions', v)
-      expect(search.available).toBe(!v)
-    })
+  it('is only available if announced via capabilities', () => {
+    const search = new SDKSearch(storeWithoutFileSearch, {} as unknown as VueRouter)
+    expect(search.available).toBe(false)
   })
 
   describe('SDKProvider previewSearch', () => {

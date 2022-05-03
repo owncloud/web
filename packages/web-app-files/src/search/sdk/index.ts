@@ -4,7 +4,6 @@ import List from './list'
 import { EventBus } from 'web-pkg/src/event'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-import get from 'lodash-es/get'
 
 function $gettext(msg) {
   return msg
@@ -54,8 +53,6 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public get available(): boolean {
-    const { hideSearchBar } = this.store.getters['Search/options']
-
-    return !get(this.store, 'state.config.options.hideSearchBar', hideSearchBar)
+    return this.store.getters.capabilities.dav.reports.includes('search-files')
   }
 }
