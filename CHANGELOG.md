@@ -25,6 +25,7 @@ Summary
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
@@ -187,6 +188,14 @@ Details
    have a similiar look-and-feel to people and group shares.
 
    https://github.com/owncloud/web/pull/6749
+
+* Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
+
+   We've decided to get rid of our integration test suite. Our unit and e2e tests get better and
+   better with each release and have now reached the point where they can replace the integration
+   tests.
+
+   https://github.com/owncloud/web/pull/6863
 
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
