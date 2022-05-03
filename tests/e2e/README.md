@@ -10,11 +10,6 @@ forget some test steps. The main problem we faced, was that it's never a good th
 
 To get closer to the point where we are able to release faster and more often, we started to develop the end to end test suite.
 
-## Structure
-
-Currently, we only have cucumber tests in place (wrapping the playwright library), but maybe in the future we will also adopt playwright
-and its own test suite to replace our integration tests. 
-
 ## Run end to end cucumber tests
 Please make sure to point http://host.docker.internal/ to 127.0.0.1 by adding it to your hosts.
 

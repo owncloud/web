@@ -21,13 +21,12 @@ $ cd web
 $ yarn
 ```
 
-### Unit & Integration Tests
+### Unit Tests
 
-We have a steadily growing coverage of both unit and integration tests. You can run them locally via
+We have a steadily growing coverage of unit tests. You can run them locally via
 
 ```shell
 $ yarn test:unit
-$ yarn test:integration
 ```
 
 You can also specify which tests to run by giving a path param, like so: `yarn test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.

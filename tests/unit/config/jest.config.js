@@ -27,6 +27,5 @@ module.exports = {
     '<rootDir>/packages/**/src/**/*.{js,ts,vue}',
     '!<rootDir>/**/node_modules/**'
   ],
-  testMatch: ['**/*.spec.{js,ts}'],
-  modulePathIgnorePatterns: ['integration']
+  testMatch: ['**/*.spec.{js,ts}']
 }
