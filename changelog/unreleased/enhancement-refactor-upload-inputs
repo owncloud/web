@@ -1,0 +1,6 @@
+Enhancement: Refactor upload input components
+
+We've refactored the upload input components for files and folders into one component.
+
+https://github.com/owncloud/web/pull/6859
+https://github.com/owncloud/web/issues/6819
