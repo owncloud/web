@@ -3,8 +3,8 @@ function $gettext(msg) {
   return msg
 }
 export const empty = {
-  text: $gettext(''),
-  list: [$gettext(''), $gettext(''), $gettext('')]
+  text: '',
+  list: ['', '', '']
 }
 export const shareInviteCollaboratorHelp = {
   text: $gettext('Invite persons or groups to access this file or folder.'),

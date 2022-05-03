@@ -23,7 +23,7 @@ export class SharePermission {
   }
 
   get label(): string {
-    return $gettext(this._label)
+    return this._label
   }
 
   public enabled(bitmask: number): boolean {

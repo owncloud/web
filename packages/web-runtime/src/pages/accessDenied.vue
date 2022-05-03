@@ -28,9 +28,10 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from '@vue/runtime-core'
 import { mapGetters, mapActions } from 'vuex'
-export default {
+export default defineComponent({
   name: 'AccessDeniedPage',
   computed: {
     ...mapGetters(['configuration']),
@@ -81,5 +82,5 @@ export default {
       }
     }
   }
-}
+})
 </script>

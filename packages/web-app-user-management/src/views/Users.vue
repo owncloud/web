@@ -260,9 +260,9 @@ export default {
     },
 
     toggleSidebarButtonLabel() {
-      return this.$gettext(
-        this.sideBarOpen ? 'Close sidebar to hide details' : 'Open sidebar to view details'
-      )
+      return this.sideBarOpen
+        ? this.$gettext('Close sidebar to hide details')
+        : this.$gettext('Open sidebar to view details')
     },
 
     toggleSidebarButtonIconFillType() {
