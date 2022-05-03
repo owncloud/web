@@ -406,10 +406,10 @@ module.exports = {
       selector: '#files-file-upload-button'
     },
     fileUploadInput: {
-      selector: '#fileUploadInput'
+      selector: '#files-file-upload-input'
     },
     folderUploadInput: {
-      selector: '#folderUploadInput'
+      selector: '#files-folder-upload-input'
     },
     fileUploadProgress: {
       selector: '#files-upload-progress'

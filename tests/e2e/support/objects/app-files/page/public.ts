@@ -27,7 +27,7 @@ export class Public {
     const startUrl = this.#page.url()
     const resourceSelector = `[data-test-resource-name="%s"]`
     await this.#page
-      .locator('//input[@id="fileUploadInput"]')
+      .locator('//input[@id="files-file-upload-input"]')
       .setInputFiles(resources.map((file) => file.path))
     const names = resources.map((file) => path.basename(file.name))
     await Promise.all(

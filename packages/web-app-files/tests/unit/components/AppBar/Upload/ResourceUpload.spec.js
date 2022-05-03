@@ -1,19 +1,29 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import FileUpload from '../../../../../src/components/AppBar/Upload/FileUpload.vue'
+import ResourceUpload from '../../../../../src/components/AppBar/Upload/ResourceUpload.vue'
 import DesignSystem from 'owncloud-design-system'
 
 const Translate = jest.fn()
 
-describe('File Upload Component', () => {
-  it('should render component', () => {
-    const wrapper = mount(FileUpload, getOptions())
+describe('Resource Upload Component', () => {
+  describe('file upload', () => {
+    it('should render component', () => {
+      const wrapper = mount(ResourceUpload, getOptions())
+      expect(wrapper.exists()).toBeTruthy()
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
 
-    expect(wrapper.exists()).toBeTruthy()
+  describe('folder upload', () => {
+    it('should render component', () => {
+      const wrapper = mount(ResourceUpload, getOptions({ isFolder: true }))
+      expect(wrapper.exists()).toBeTruthy()
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 
   describe('when upload file button is clicked', () => {
     it('should call "triggerUpload"', async () => {
-      const wrapper = mount(FileUpload, {
+      const wrapper = mount(ResourceUpload, {
         ...getOptions(),
         stubs: {
           'oc-icon': true,
@@ -23,7 +33,7 @@ describe('File Upload Component', () => {
 
       const spyTriggerUpload = jest.spyOn(wrapper.vm, 'triggerUpload')
       const uploadButton = wrapper.find('button')
-      const fileUploadInput = wrapper.find('#fileUploadInput')
+      const fileUploadInput = wrapper.find('#files-file-upload-input')
       fileUploadInput.element.click = jest.fn()
       await wrapper.vm.$forceUpdate()
 
@@ -35,13 +45,11 @@ describe('File Upload Component', () => {
   })
 })
 
-function getOptions() {
+function getOptions(propsData = {}) {
   const localVue = createLocalVue()
   localVue.use(DesignSystem)
   return {
-    propsData: {
-      path: ''
-    },
+    propsData,
     localVue,
     directives: { Translate },
     mocks: {

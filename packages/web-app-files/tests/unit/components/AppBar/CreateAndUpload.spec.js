@@ -22,8 +22,8 @@ const elSelector = {
   uploadButton: '#upload-menu-btn',
   uploadDrop: 'oc-drop-stub #upload-menu-drop',
   uploadMenuList: '#upload-list > li',
-  fileUpload: 'file-upload-stub',
-  folderUpload: 'folder-upload-stub',
+  fileUpload: 'resource-upload-stub',
+  folderUpload: 'resource-upload-stub',
   newFolderBtn: '#new-folder-btn',
   newTextFileBtn: '.new-file-btn-txt',
   newMdFileBtn: '.new-file-btn-md',
@@ -196,8 +196,7 @@ function getWrapper(route = {}, store = {}) {
     stubs: {
       ...stubs,
       'oc-button': false,
-      'file-upload': true,
-      'folder-upload': true
+      'resource-upload': true
     },
     store
   })

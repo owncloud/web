@@ -11,7 +11,7 @@
       <div v-else key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
         <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
-          <file-upload
+          <resource-upload
             id="files-drop-zone"
             ref="fileUpload"
             class="uk-flex uk-flex-middle uk-flex-center uk-placeholder"
@@ -39,13 +39,16 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
-import FileUpload from '../components/AppBar/Upload/FileUpload.vue'
-import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
+import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
+import {
+  getCurrentInstance,
+  onMounted
+} from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
 
 export default {
   components: {
-    FileUpload
+    ResourceUpload
   },
   setup() {
     const instance = getCurrentInstance().proxy
