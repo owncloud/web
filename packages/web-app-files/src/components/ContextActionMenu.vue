@@ -67,7 +67,6 @@ export default {
     a,
     button,
     span {
-      color: var(--oc-color-swatch-passive-default) !important;
       display: inline-flex;
       font-weight: normal !important;
       gap: 10px;
