@@ -4,6 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from '@files/src/components/SideBar/Shares/FileLinks.vue'
+import CreateForm from '@files/src/components/SideBar/Shares/Links/CreateForm.vue'
 
 const localVue = createLocalVue()
 
@@ -226,7 +227,10 @@ describe('FileLinks', () => {
     return shallowMount(FileLinks, {
       localVue,
       store: store,
-      stubs: stubs,
+      stubs: {
+        ...stubs,
+        'create-form': true
+      },
       mocks: {
         $route: {
           params: {}
@@ -236,10 +240,16 @@ describe('FileLinks', () => {
   }
 
   function getMountedWrapper(store) {
+    const createFormComponent = {
+      ...CreateForm,
+      mounted: jest.fn()
+    }
     return mount(FileLinks, {
       localVue,
       store: store,
-      stubs: {},
+      stubs: {
+        'create-form': createFormComponent
+      },
       mocks: {
         $route: {
           params: {}

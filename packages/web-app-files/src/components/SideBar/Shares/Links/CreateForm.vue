@@ -181,6 +181,8 @@ export default {
     },
 
     passwordEnforcedForRole() {
+      if (!this.availableRoleOptions.length) return false
+
       const currentRole = this.availableRoleOptions.find(({ role }) => {
         return this.link.role.name === role.name
       })
