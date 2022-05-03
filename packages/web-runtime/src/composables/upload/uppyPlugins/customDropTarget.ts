@@ -12,7 +12,7 @@ export class CustomDropTarget extends DropTarget {
     if (this.opts.uppyService) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.opts.uppyService.$emit('filesSelected', files)
+      this.opts.uppyService.publish('filesSelected', files)
       return
     }
 

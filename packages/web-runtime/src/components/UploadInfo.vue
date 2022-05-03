@@ -105,22 +105,22 @@ export default {
     })
   },
   created() {
-    this.$uppyService.$on('uploadStarted', () => {
+    this.$uppyService.subscribe('uploadStarted', () => {
       this.showInfo = true
       this.filesUploading = this.filesUploading + 1
       this.uploadCancelled = false
     })
-    this.$uppyService.$on('uploadCompleted', () => {
+    this.$uppyService.subscribe('uploadCompleted', () => {
       this.filesUploading = this.filesUploading - 1
     })
-    this.$uppyService.$on('uploadCancelled', () => {
+    this.$uppyService.subscribe('uploadCancelled', () => {
       this.filesUploading = 0
       this.uploadCancelled = true
       if (!this.successfulUploads.length) {
         this.closeInfo()
       }
     })
-    this.$uppyService.$on('uploadSuccess', (file) => {
+    this.$uppyService.subscribe('uploadSuccess', (file) => {
       // @TODO we need the storage ID here... maybe fetch the file via DAV and call buildResources()?
 
       let path = file.meta.currentFolder

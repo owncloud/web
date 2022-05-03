@@ -116,7 +116,8 @@ function getShallowWrapper({ store = createStore(), loading = false, errorMessag
       $uppyService: {
         $on: jest.fn(),
         useDropTarget: jest.fn(),
-        useXhr: jest.fn()
+        useXhr: jest.fn(),
+        subscribe: jest.fn()
       }
     },
     setup: () => {

@@ -4,14 +4,23 @@ import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import StatusBar from '@uppy/status-bar'
 import { UppyResource } from '../composables/upload'
-import Vue from 'vue'
+import { bus } from 'web-pkg/src/instance'
 
-export class UppyService extends Vue {
+type UppyServiceTopics =
+  | 'uploadStarted'
+  | 'uploadCancelled'
+  | 'uploadCompleted'
+  | 'uploadRemoved'
+  | 'uploadSuccess'
+  | 'uploadError'
+  | 'fileAdded'
+  | 'filesSelected'
+
+export class UppyService {
   uppy: Uppy
   uploadInputs: HTMLInputElement[] = []
 
   constructor() {
-    super()
     this.uppy = new Uppy({
       autoProceed: true
     })
@@ -164,34 +173,46 @@ export class UppyService extends Vue {
     })
   }
 
+  subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): void {
+    bus.subscribe(topic, callback)
+  }
+
+  unsubscribe(topic: UppyServiceTopics, token: string): void {
+    bus.unsubscribe(topic, token)
+  }
+
+  publish(topic: UppyServiceTopics, data?: unknown): void {
+    bus.publish(topic, data)
+  }
+
   private setUpEvents() {
     this.uppy.on('upload', () => {
-      this.$emit('uploadStarted')
+      this.publish('uploadStarted')
     })
     this.uppy.on('cancel-all', () => {
-      this.$emit('uploadCancelled')
+      this.publish('uploadCancelled')
     })
     this.uppy.on('complete', (result) => {
-      this.$emit('uploadCompleted')
+      this.publish('uploadCompleted')
       result.successful.forEach((file) => {
-        this.$emit('uploadSuccess', file)
         this.uppy.removeFile(file.id)
+        this.publish('uploadSuccess', file)
       })
       result.failed.forEach((file) => {
-        this.$emit('uploadError', file)
+        this.publish('uploadError', file)
       })
       this.uploadInputs.forEach((item) => {
         item.value = null
       })
     })
     this.uppy.on('file-removed', () => {
-      this.$emit('uploadRemoved')
+      this.publish('uploadRemoved')
       this.uploadInputs.forEach((item) => {
         item.value = null
       })
     })
     this.uppy.on('file-added', (file) => {
-      this.$emit('fileAdded')
+      this.publish('fileAdded')
       const addedFile = file as unknown as UppyResource
       if (this.uppy.getPlugin('XHRUpload')) {
         const escapedName = encodeURIComponent(addedFile.name)
@@ -211,7 +232,7 @@ export class UppyService extends Vue {
       el.addEventListener('change', (event) => {
         const target = event.target as HTMLInputElement
         const files = Array.from(target.files)
-        this.$emit('filesSelected', files)
+        this.publish('filesSelected', files)
       })
       this.uploadInputs.push(el)
     }
