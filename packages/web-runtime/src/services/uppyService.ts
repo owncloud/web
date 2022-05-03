@@ -173,8 +173,8 @@ export class UppyService {
     })
   }
 
-  subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): void {
-    bus.subscribe(topic, callback)
+  subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): string {
+    return bus.subscribe(topic, callback)
   }
 
   unsubscribe(topic: UppyServiceTopics, token: string): void {

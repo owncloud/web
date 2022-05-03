@@ -3,4 +3,5 @@ Enhancement: Use event bus for upload related actions
 Instead of extending Vue, the uppy service now uses our custom `EventBus`.
 
 https://github.com/owncloud/web/pull/6853
+https://github.com/owncloud/web/pull/6864
 https://github.com/owncloud/web/issues/6819
