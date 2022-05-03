@@ -20,6 +20,7 @@ Summary
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
+* Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
@@ -143,6 +144,14 @@ Details
 
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6781
+
+* Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
+
+   We've set the spaces images to a fixed aspect ratio to make sure that the same part of the image is
+   always displayed.
+
+   https://github.com/owncloud/web/issues/6555
+   https://github.com/owncloud/web/pull/6829
 
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
