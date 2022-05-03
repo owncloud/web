@@ -195,8 +195,8 @@ export class UppyService {
     this.uppy.on('complete', (result) => {
       this.publish('uploadCompleted')
       result.successful.forEach((file) => {
-        this.publish('uploadSuccess', file)
         this.uppy.removeFile(file.id)
+        this.publish('uploadSuccess', file)
       })
       result.failed.forEach((file) => {
         this.publish('uploadError', file)
