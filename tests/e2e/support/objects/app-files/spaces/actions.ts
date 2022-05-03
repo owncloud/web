@@ -56,7 +56,9 @@ export const changeSpaceName = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(id) && resp.status() === 200 && resp.request().method() === 'PATCH'
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
     ),
     page.locator('.oc-modal-body-actions-confirm').click()
   ])
@@ -80,7 +82,9 @@ export const changeSpaceSubtitle = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(id) && resp.status() === 200 && resp.request().method() === 'PATCH'
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
     ),
     page.locator('.oc-modal-body-actions-confirm').click()
   ])
@@ -132,7 +136,9 @@ export const changeQuota = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(id) && resp.status() === 200 && resp.request().method() === 'PATCH'
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
     ),
     page.locator('.oc-modal-body-actions-confirm').click()
   ])
