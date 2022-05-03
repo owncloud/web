@@ -40,10 +40,7 @@ import { linkRoleUploaderFolder } from '../helpers/share'
 import { createLocationOperations, createLocationPublic } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import {
-  getCurrentInstance,
-  onMounted
-} from '@vue/composition-api/dist/vue-composition-api'
+import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
 
 export default {
