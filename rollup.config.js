@@ -36,11 +36,6 @@ if (process.env.REQUIRE_TIMEOUT) {
 }
 
 const plugins = [
-  del({
-    runOnce: true,
-    targets: path.join('dist', '*'),
-    dot: true
-  }),
   postcss({
     extract: path.join('css', 'web.css'),
     minimize: production,
@@ -181,6 +176,13 @@ const plugins = [
 
 if (production) {
   plugins.push(terser())
+  plugins.push(
+    del({
+      runOnce: true,
+      targets: path.join('dist', '*'),
+      dot: true
+    })
+  )
 }
 
 if (process.env.SERVER === 'true') {
