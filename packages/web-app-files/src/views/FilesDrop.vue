@@ -14,7 +14,7 @@
           <resource-upload
             id="files-drop-zone"
             ref="fileUpload"
-            class="uk-flex uk-flex-middle uk-flex-center uk-placeholder"
+            class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
             :btn-label="$gettext('Drop files here to upload or click to select file')"
           />
           <div id="previews" hidden />
