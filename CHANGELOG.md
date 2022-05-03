@@ -242,6 +242,7 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6853
+   https://github.com/owncloud/web/pull/6864
 
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================
