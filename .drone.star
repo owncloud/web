@@ -2194,11 +2194,13 @@ def ocisService():
                 "ACCOUNTS_DATA_PATH": "/srv/app/tmp/ocis-accounts/",
                 "PROXY_ENABLE_BASIC_AUTH": True,
                 "OCIS_LOG_LEVEL": "error",
+                "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
             },
             "commands": [
                 "cd %s/ocis-build" % dir["base"],
                 "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
+                "./ocis init",
                 "./ocis server",
             ],
             "volumes": [{
