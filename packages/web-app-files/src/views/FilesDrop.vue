@@ -165,7 +165,12 @@ export default {
     },
 
     onFileSuccess(uppyResource) {
-      this.$uppyService.$emit('uploadedFileFetched', uppyResource, { name: uppyResource.name })
+      this.$uppyService.publish('uploadedFileFetched', {
+        uppyResource,
+        fetchedFile: {
+          name: uppyResource.name
+        }
+      })
     },
 
     onFileError(error) {

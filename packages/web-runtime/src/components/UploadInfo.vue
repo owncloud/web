@@ -120,7 +120,7 @@ export default {
         this.closeInfo()
       }
     })
-    this.$uppyService.subscribe('uploadedFileFetched', (uppyResource, fetchedFile) => {
+    this.$uppyService.subscribe('uploadedFileFetched', ({ uppyResource, fetchedFile }) => {
       this.successfulUploads.push({
         ...fetchedFile,
         targetRoute: uppyResource.meta.route
@@ -161,7 +161,7 @@ export default {
         query: targetRoute.query,
         params: {
           ...(storageId && path && { storageId }),
-          storage: targetRoute.params?.storage
+          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage })
         }
       }
 

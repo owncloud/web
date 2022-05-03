@@ -281,7 +281,10 @@ export default defineComponent({
 
         resource = buildResource(resource)
 
-        this.$uppyService.$emit('uploadedFileFetched', file, resource)
+        this.$uppyService.publish('uploadedFileFetched', {
+          uppyResource: file,
+          fetchedFile: resource
+        })
 
         // Update table only if the file was uploaded to the current directory
         if (fileIsInCurrentPath) {
