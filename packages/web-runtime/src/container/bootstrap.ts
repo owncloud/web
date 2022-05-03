@@ -319,11 +319,17 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
  */
 export const startSentry = (runtimeConfiguration: RuntimeConfiguration): void => {
   if (runtimeConfiguration.sentry?.dsn) {
+    const {
+      dsn,
+      environment = 'production',
+      ...moreSentryOptions
+    } = runtimeConfiguration.sentry;
+
     SentryInit({
-      dsn: runtimeConfiguration.sentry.dsn,
+      dsn,
+      environment,
       integrations: [new SentryVueIntegration({ Vue, attachProps: true, logErrors: true })],
-      environment: runtimeConfiguration.sentry.environment || 'production',
-      autoSessionTracking: false
+      ...moreSentryOptions,
     })
   }
 }
