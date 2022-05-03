@@ -28,6 +28,7 @@ Summary
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
 Details
 -------
@@ -234,6 +235,13 @@ Details
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.5
+
+* Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
+
+   Instead of extending Vue, the uppy service now uses our custom `EventBus`.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6853
 
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================
