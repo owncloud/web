@@ -182,7 +182,7 @@ Then(
     return assert.strictEqual(
       isVisible,
       false,
-      `Expected Remove password button to be not visible but found visible`
+      `Expected "Remove password" button to be invisible but found visible`
     )
   }
 )
