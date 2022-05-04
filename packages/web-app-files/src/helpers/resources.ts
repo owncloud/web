@@ -444,6 +444,19 @@ function _buildLink(link): Share {
     description = role.label
   }
 
+  const quicklinkOc10 = ((): boolean => {
+    if (typeof link.attributes !== 'string') {
+      return false
+    }
+
+    return (
+      JSON.parse(link.attributes || '[]').find((attr) => attr.key === 'isQuickLink')?.enabled ===
+      'true'
+    )
+  })()
+  const quicklinkOcis = link.quicklink === 'true'
+  const quicklink = quicklinkOc10 || quicklinkOcis
+
   return {
     shareType: parseInt(link.share_type),
     id: link.id,
@@ -452,6 +465,7 @@ function _buildLink(link): Share {
     path: link.path,
     permissions: link.permissions,
     description,
+    quicklink,
     stime: link.stime,
     name: typeof link.name === 'string' ? link.name : (link.token as string),
     password: !!(link.share_with && link.share_with_displayname),

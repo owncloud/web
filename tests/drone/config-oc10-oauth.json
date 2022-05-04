@@ -8,7 +8,12 @@
     "authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
   },
   "options": {
-    "displayResourcesLazy": false
+    "displayResourcesLazy": false,
+    "sidebar": {
+      "shares": {
+        "showAllOnLoad": true
+      }
+    }
   },
   "apps": [
     "files",

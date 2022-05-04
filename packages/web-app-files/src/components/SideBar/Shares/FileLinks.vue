@@ -12,8 +12,26 @@
           <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
         </h3>
         <div v-if="canCreatePublicLinks" class="oc-mt-m">
-          <!-- quicklink goes here -->
-          <!-- <hr class="oc-my-s"> -->
+          <name-and-copy v-if="quicklink" :link="quicklink" />
+          <create-quick-link
+            v-else
+            :password-enforced="passwordEnforced"
+            :expiration-date="globalExpirationDate"
+            @createPublicLink="createLink"
+          />
+          <details-and-edit
+            v-if="quicklink"
+            :is-folder-share="highlightedFile.isFolder"
+            :link="quicklink"
+            :modifiable="canEdit"
+            :can-rename="false"
+            :password-enforced="passwordEnforced"
+            :expiration-date="globalExpirationDate"
+            :available-role-options="availableRoleOptions"
+            @updateLink="updatePublicLink"
+            @removePublicLink="deleteLinkConfirmation"
+          />
+          <hr class="oc-my-m" />
           <oc-button
             id="files-file-link-add"
             variation="primary"
@@ -31,7 +49,7 @@
         />
         <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
           <li
-            v-for="link in links"
+            v-for="link in displayLinks"
             :key="link.key"
             class="oc-py-s"
             :data-testid="`files-link-id-${link.id}`"
@@ -41,6 +59,7 @@
               :is-folder-share="highlightedFile.isFolder"
               :link="link"
               :modifiable="canEdit"
+              :can-rename="true"
               :password-enforced="passwordEnforced"
               :expiration-date="globalExpirationDate"
               :available-role-options="availableRoleOptions"
@@ -49,6 +68,13 @@
             />
           </li>
         </oc-list>
+        <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+          <oc-button
+            appearance="raw"
+            @click="toggleLinkListCollapsed"
+            v-text="collapseButtonTitle"
+          />
+        </div>
       </template>
     </div>
     <div
@@ -77,6 +103,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import CreateForm from './Links/CreateForm.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
+import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { ShareTypes, LinkShareRoles } from '../../../helpers/share'
 import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -91,6 +118,7 @@ export default defineComponent({
   name: 'FileLinks',
   components: {
     CreateForm,
+    CreateQuickLink,
     DetailsAndEdit,
     NameAndCopy
   },
@@ -102,7 +130,9 @@ export default defineComponent({
       store.getters.getToken
     )
 
-    return { graphClient, hasSpaces: useCapabilitySpacesEnabled() }
+    const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+
+    return { graphClient, hasSpaces: useCapabilitySpacesEnabled(), linkListCollapsed }
   },
   data() {
     return {
@@ -126,8 +156,16 @@ export default defineComponent({
       return this.$gettext('Add link')
     },
 
+    collapseButtonTitle() {
+      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+    },
+
     defaultNewLinkName() {
       return this.capabilities?.files_sharing?.public?.defaultPublicLinkShareName || ''
+    },
+
+    quicklink() {
+      return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
     globalExpirationDate() {
@@ -223,12 +261,23 @@ export default defineComponent({
     },
 
     links() {
-      return [...this.currentFileOutgoingLinks, ...this.indirectLinks]
+      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks.filter(
+        (link) => !link.quicklink
+      )
+
+      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
         .sort(this.linksComparator)
         .map((share) => {
           share.key = 'direct-link-' + share.id
           return share
         })
+    },
+
+    displayLinks() {
+      if (this.links.length > 3 && this.linkListCollapsed) {
+        return this.links.slice(0, 3)
+      }
+      return this.links
     },
 
     indirectLinks() {
@@ -287,6 +336,10 @@ export default defineComponent({
       'loadCurrentFileOutgoingShares'
     ]),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
+
+    toggleLinkListCollapsed() {
+      this.linkListCollapsed = !this.linkListCollapsed
+    },
 
     reloadLinks() {
       this.loadCurrentFileOutgoingShares({
@@ -370,6 +423,7 @@ export default defineComponent({
         expireDate,
         password,
         permissions: link.permissions,
+        quicklink: link.quicklink,
         name: link.name,
         ...(this.currentStorageId && {
           spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
@@ -459,3 +513,9 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.link-name-container {
+  background-color: var(--oc-color-input-bg);
+  border: 1px solid var(--oc-color-input-border);
+}
+</style>

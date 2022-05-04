@@ -25,9 +25,9 @@ Feature: User can view files inside a folder
     Then there should be no resources listed on the webUI
 
 
-  Scenario: All files list displays public link quick action
+  Scenario: All files list displays quicklink quick action
     When the user browses to the files page
-    Then quick action "public link" should be displayed on the webUI
+    Then quick action "quicklink" should be displayed on the webUI
     And the sidebar should match the default baseline
 
   Scenario: files are not selected when the user logs in

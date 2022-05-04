@@ -11,12 +11,12 @@ const collaboratorAction = {
   label: () => 'Add people'
 }
 
-const publicLinkAction = {
+const quicklinkAction = {
   displayed: jest.fn(() => false),
   handler: jest.fn(),
   icon: 'link-add',
-  id: 'public-link',
-  label: () => 'Create and copy public link'
+  id: 'quicklink',
+  label: () => 'Create and copy quicklink'
 }
 
 const testItem = {
@@ -79,7 +79,7 @@ function getShallowMountedWrapper() {
     propsData: {
       actions: {
         collaborators: collaboratorAction,
-        publicLink: publicLinkAction
+        publicLink: quicklinkAction
       },
       item: testItem
     },
@@ -101,7 +101,7 @@ function getMountedWrapper() {
     propsData: {
       actions: {
         collaborators: collaboratorAction,
-        publicLink: publicLinkAction
+        publicLink: quicklinkAction
       },
       item: testItem
     },

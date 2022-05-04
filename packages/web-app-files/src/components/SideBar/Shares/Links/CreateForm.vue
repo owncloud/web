@@ -182,7 +182,7 @@ export default {
 
     passwordEnforcedForRole() {
       const currentRole = this.availableRoleOptions.find(({ role }) => {
-        return this.link.role.label === role.label
+        return this.link.role.name === role.name
       })
 
       const canRead = currentRole.role.hasPermission(SharePermissions.read)

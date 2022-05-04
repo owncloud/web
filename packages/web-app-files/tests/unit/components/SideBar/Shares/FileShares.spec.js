@@ -1,14 +1,15 @@
-import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
+import mockAxios from 'jest-mock-axios'
+import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
+import stubs from '@/tests/unit/stubs'
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
-import mockAxios from 'jest-mock-axios'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 import * as reactivities from 'web-pkg/src/composables/reactivity'
+import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -25,7 +26,6 @@ const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
 
 const selectors = {
-  showCollaboratorButton: 'button[data-testid="collaborators-show-people"]',
   firstCollaboratorListItem: `div[data-testid="collaborator-user-item-${Collaborators[0].collaborator.name}"]`
 }
 
@@ -75,19 +75,6 @@ describe('FileShares', () => {
         outgoingCollaborators: collaborators
       })
       expect(wrapper).toMatchSnapshot()
-    })
-
-    it('can toggle the collaborators list by clicking the avatar wrapper button', async () => {
-      const wrapper = getMountedWrapper({
-        user,
-        outgoingCollaborators: collaborators
-      })
-      const button = wrapper.find(selectors.showCollaboratorButton)
-      expect(wrapper.vm.showShareesList).toBe(true)
-      await button.trigger('click')
-      expect(wrapper.vm.showShareesList).toBe(false)
-      await button.trigger('click')
-      expect(wrapper.vm.showShareesList).toBe(true)
     })
 
     it('reacts on delete events by collaborator list items', async () => {
@@ -248,7 +235,12 @@ const storeOptions = (data) => {
       getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
       configuration: jest.fn(() => ({
         options: {
-          contextHelpers: true
+          contextHelpers: true,
+          sidebar: {
+            shares: {
+              showAllOnLoad: false
+            }
+          }
         },
         server: 'http://example.com/'
       })),
@@ -275,10 +267,17 @@ const storeOptions = (data) => {
   }
 }
 
-function getMountedWrapper(data, loading = false) {
+function getMountedWrapper(data) {
   return mount(FileShares, {
     localVue,
+    setup: () => ({
+      spaceMembers: []
+    }),
     store: createStore(data),
+    stubs: {
+      ...stubs,
+      'oc-button': false
+    },
     mocks: {
       $route: {
         params: { storageId: 1 }
@@ -291,12 +290,6 @@ function getMountedWrapper(data, loading = false) {
           }
         }
       }
-    },
-    stubs: {
-      'oc-button': false,
-      'oc-icon': true,
-      'oc-spinner': true,
-      'avatar-image': true
     }
   })
 }
@@ -308,9 +301,8 @@ function getShallowMountedWrapper(data, loading = false) {
     localVue,
     store: createStore(data),
     stubs: {
-      'oc-button': true,
-      'oc-icon': true,
-      'oc-spinner': true
+      ...stubs,
+      'oc-button': true
     },
     mocks: {
       $route: {

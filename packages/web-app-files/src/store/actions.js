@@ -278,7 +278,7 @@ export default {
               displayName: share.collaborator.displayName
             }
             const updatedShare = buildSpaceShare(shareObj, share.id)
-            commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', updatedShare)
+            commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', updatedShare)
 
             graphClient.drives.getDrive(share.id).then((response) => {
               const space = buildSpace(response.data)
@@ -306,7 +306,7 @@ export default {
             getters.highlightedFile,
             allowSharePermissions(rootGetters)
           )
-          commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
+          commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', share)
           resolve(share)
         })
         .catch((e) => {
@@ -342,7 +342,7 @@ export default {
         })
         .then((share) => {
           context.commit(
-            'CURRENT_FILE_OUTGOING_SHARES_ADD',
+            'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
             buildCollaboratorShare(
               share.shareInfo,
               context.getters.highlightedFile,
@@ -379,7 +379,10 @@ export default {
             displayName
           }
 
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', buildSpaceShare(shareObj, storageId))
+          context.commit(
+            'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
+            buildSpaceShare(shareObj, storageId)
+          )
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
           return graphClient.drives.getDrive(storageId).then((response) => {
@@ -416,7 +419,7 @@ export default {
       })
       .then((share) => {
         context.commit(
-          'CURRENT_FILE_OUTGOING_SHARES_ADD',
+          'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
           buildCollaboratorShare(
             share.shareInfo,
             context.getters.highlightedFile,
@@ -590,7 +593,7 @@ export default {
         .shareFileWithLink(path, params)
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
           resolve(link)
@@ -606,7 +609,7 @@ export default {
         .updateShare(id, params)
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
           resolve(link)
         })
         .catch((e) => {

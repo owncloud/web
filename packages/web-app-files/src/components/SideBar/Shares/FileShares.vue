@@ -12,31 +12,15 @@
       />
       <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
-        <oc-button
-          v-oc-tooltip="sharedWithTooltip"
-          data-testid="collaborators-show-people"
-          appearance="raw"
-          :aria-label="sharedWithTooltip"
-          @click="toggleShareeList"
-        >
-          <oc-avatars
-            v-if="!showShareesList"
-            :items="collaboratorsAvatar"
-            :stacked="true"
-            :is-tooltip-displayed="false"
-            class="sharee-avatars"
-          />
-          <oc-icon v-else name="arrow-up-s" />
-        </oc-button>
       </div>
-      <template v-if="showShareesList && hasSharees">
+      <template v-if="hasSharees">
         <ul
           id="files-collaborators-list"
           class="oc-list oc-list-divider oc-overflow-hidden"
           :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
           :aria-label="$gettext('Share receivers')"
         >
-          <li v-for="collaborator in collaborators" :key="collaborator.key">
+          <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
             <collaborator-list-item
               :share="collaborator"
               :modifiable="!collaborator.indirect"
@@ -45,6 +29,13 @@
             />
           </li>
         </ul>
+        <div v-if="showShareToggle" class="oc-flex oc-flex-center">
+          <oc-button
+            appearance="raw"
+            @click="toggleShareesListCollapsed"
+            v-text="collapseButtonTitle"
+          />
+        </div>
       </template>
       <template v-if="showSpaceMembers">
         <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
@@ -53,30 +44,37 @@
           class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
           :aria-label="spaceMemberLabel"
         >
-          <li v-for="collaborator in spaceMembers" :key="collaborator.key">
+          <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
             <collaborator-list-item :share="collaborator" :modifiable="false" />
           </li>
         </ul>
+        <div v-if="showShareToggle" class="oc-flex oc-flex-center">
+          <oc-button
+            appearance="raw"
+            @click="toggleShareesListCollapsed"
+            v-text="collapseButtonTitle"
+          />
+        </div>
       </template>
     </template>
   </div>
 </template>
 
 <script lang="ts">
+import { dirname } from 'path'
+import { useTask } from 'vue-concurrency'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { watch, computed } from '@vue/composition-api'
 import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import { dirname } from 'path'
+import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
+import { ShareTypes } from '../../../helpers/share'
+import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
-import { ShareTypes } from '../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
-import { useTask } from 'vue-concurrency'
-import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
-import { sortSpaceMembers } from '../../../helpers/space'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 
 export default {
   name: 'FileShares',
@@ -133,12 +131,17 @@ export default {
       })
     })
 
-    return { sharesLoading, loadSpaceTask, loadSpaceMembersTask }
+    const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+
+    return {
+      loadSpaceTask,
+      loadSpaceMembersTask,
+      sharesListCollapsed,
+      sharesLoading
+    }
   },
   data() {
     return {
-      currentShare: null,
-      showShareesList: true,
       currentSpace: null,
       spaceMembers: []
     }
@@ -155,23 +158,12 @@ export default {
       return this.$gettext('Space members')
     },
 
+    collapseButtonTitle() {
+      return this.sharesListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+    },
+
     hasSharees() {
-      return this.collaboratorsAvatar.length > 0
-    },
-
-    sharedWithTooltip() {
-      return this.showShareesList
-        ? this.$gettext('Collapse list of invited people')
-        : this.$gettext('Show all invited people')
-    },
-
-    collaboratorsAvatar() {
-      return this.collaborators.map((c) => {
-        return {
-          ...c.collaborator,
-          shareType: c.shareType
-        }
-      })
+      return this.collaborators.length > 0
     },
 
     /**
@@ -219,6 +211,24 @@ export default {
           }
           return collaborator
         })
+    },
+
+    displayCollaborators() {
+      if (this.collaborators.length > 3 && this.sharesListCollapsed) {
+        return this.collaborators.slice(0, 3)
+      }
+      return this.collaborators
+    },
+
+    displaySpaceMembers() {
+      if (this.spaceMembers.length > 3 && this.sharesListCollapsed) {
+        return this.spaceMembers.slice(0, 3)
+      }
+      return this.spaceMembers
+    },
+
+    showShareToggle() {
+      return this.spaceMembers.length > 3 || this.collaborators.length > 3
     },
 
     indirectOutgoingShares() {
@@ -284,7 +294,6 @@ export default {
       handler: function (newItem, oldItem) {
         if (oldItem !== newItem) {
           this.$_reloadShares()
-          this.showShareesList = true
         }
       },
       immediate: true
@@ -307,6 +316,9 @@ export default {
       'loadIncomingShares'
     ]),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
+    toggleShareesListCollapsed() {
+      this.sharesListCollapsed = !this.sharesListCollapsed
+    },
     $_isCollaboratorShare(collaborator) {
       return ShareTypes.containsAnyValue(ShareTypes.authenticated, [collaborator.shareType])
     },
@@ -334,9 +346,6 @@ export default {
       }
 
       return c1UserShare ? -1 : 1
-    },
-    toggleShareeList() {
-      this.showShareesList = !this.showShareesList
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {

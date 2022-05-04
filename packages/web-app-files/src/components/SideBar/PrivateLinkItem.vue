@@ -1,36 +1,58 @@
 <template>
-  <copy-to-clipboard-button
+  <oc-button
+    v-oc-tooltip="buttonLabel"
+    appearance="raw"
+    :aria-label="buttonLabel"
     class="oc-files-private-link-copy-url"
-    :value="link"
-    :label="copyToClipboardLabel"
-    :text="copyToClipboardText"
-    :success-msg-title="copyToClipboardSuccessMsgTitle"
-    :success-msg-text="copyToClipboardSuccessMsgText"
-  />
+    :variation="copied ? 'success' : 'passive'"
+    @click="copyPrivateLinkToClipboard"
+  >
+    <span v-text="buttonText" />
+    <oc-icon
+      v-if="copied"
+      key="oc-copy-to-clipboard-copied"
+      name="checkbox-circle"
+      class="_clipboard-success-animation"
+    />
+    <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+  </oc-button>
 </template>
 
 <script>
-import CopyToClipboardButton from './Shared/CopyToClipboardButton.vue'
+import { mapActions } from 'vuex'
+import copyToClipboard from 'copy-to-clipboard'
 
 export default {
   name: 'PrivateLinkItem',
-  components: { CopyToClipboardButton },
   inject: ['displayedItem'],
+  data: () => ({
+    copied: false,
+    timeout: null
+  }),
   computed: {
-    link() {
-      return this.displayedItem.value.privateLink
-    },
-    copyToClipboardText() {
+    buttonText() {
       return this.$gettext('Private link')
     },
-    copyToClipboardLabel() {
+    buttonLabel() {
       return this.$gettext('Copy private link to clipboard')
+    }
+  },
+  methods: {
+    ...mapActions(['showMessage']),
+    copyPrivateLinkToClipboard() {
+      copyToClipboard(this.displayedItem.value.privateLink)
+      this.clipboardSuccessHandler()
+      this.showMessage({
+        title: this.$gettext('Private link copied'),
+        desc: this.$gettext('The private link has been copied to your clipboard.')
+      })
     },
-    copyToClipboardSuccessMsgTitle() {
-      return this.$gettext('Private link copied')
-    },
-    copyToClipboardSuccessMsgText() {
-      return this.$gettext('The private link has been copied to your clipboard.')
+    clipboardSuccessHandler() {
+      this.copied = true
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        this.copied = false
+      }, 550)
     }
   }
 }

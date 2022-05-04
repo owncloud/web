@@ -39,9 +39,14 @@ const state = {
   },
   options: {
     defaultExtension: 'files',
-    homeFolder: '',
     disablePreviews: false,
     displayResourcesLazy: true,
+    homeFolder: '',
+    sidebar: {
+      shares: {
+        showAllOnLoad: false
+      }
+    },
     previewFileExtensions: [],
     sharingRecipientsPerPage: 200
   }

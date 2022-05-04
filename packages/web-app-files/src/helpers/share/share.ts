@@ -22,4 +22,5 @@ export interface Share {
   fileOwner?: User
   customPermissions?: SharePermission[]
   expires?: Date
+  quicklink?: boolean
 }

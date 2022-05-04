@@ -154,6 +154,10 @@ export default {
       type: Array,
       required: true
     },
+    canRename: {
+      type: Boolean,
+      default: false
+    },
     expirationDate: {
       type: Object,
       default: () => ({}),
@@ -209,8 +213,7 @@ export default {
     editOptions() {
       const result = []
 
-      // renaming not allowed for (future) quick links
-      if (this.link) {
+      if (this.canRename) {
         result.push({
           id: 'rename',
           title: this.$gettext('Rename'),

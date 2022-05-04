@@ -179,11 +179,10 @@ Feature: Create public link shares
       | uid_owner   | Alice             |
       | permissions | read              |
       | path        | /simple-folder    |
-      | name        | Quick action link |
+      | name        | Quicklink |
     And the following success message should be displayed on the webUI
       """
-      Public link created
-      Public link was created successfully and copied into your clipboard.
+      Quicklink copied into your clipboard
       """
 
   # This test is skipped in OCIS as it's starting to fail frequently
