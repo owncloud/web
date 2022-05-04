@@ -1,0 +1,6 @@
+Bugfix: Edit public links with expiration
+
+We've fixed an issue with public links with expiration date that were failing in update requests.
+
+https://github.com/owncloud/web/issues/6858
+https://github.com/owncloud/web/pull/6867
