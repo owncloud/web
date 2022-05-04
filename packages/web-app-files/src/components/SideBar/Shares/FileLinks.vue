@@ -335,7 +335,11 @@ export default defineComponent({
       let expireDate = ''
 
       if (link.expiration) {
-        expireDate = DateTime.fromJSDate(link.expiration)
+        expireDate = (
+          typeof link.expiration === 'string'
+            ? DateTime.fromISO(link.expiration)
+            : DateTime.fromJSDate(link.expiration)
+        )
           .setLocale(this.$language.current)
           .endOf('day')
           .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")

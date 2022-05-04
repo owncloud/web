@@ -111,6 +111,7 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
       BACKEND_HOST: "https://host.docker.internal:9200"
       REMOTE_UPLOAD_DIR: "/uploads"
+      TEST_WITH_GRAPH_API: "true"
 
   vnc:
     build:
