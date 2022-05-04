@@ -12,6 +12,7 @@ Summary
 * Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
+* Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
@@ -79,6 +80,14 @@ Details
    the share panel in the right sidebar.
 
    https://github.com/owncloud/web/pull/6813
+
+* Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
+
+   We've fixed an issue with public links with expiration date that were failing in update
+   requests.
+
+   https://github.com/owncloud/web/issues/6858
+   https://github.com/owncloud/web/pull/6867
 
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 
