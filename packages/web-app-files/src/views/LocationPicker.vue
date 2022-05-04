@@ -98,7 +98,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 
@@ -120,7 +120,7 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
-    const hasSpaces = useCapabilitySpacesEnabled()
+    const hasShareJail = useCapabilityShareJailEnabled()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -148,7 +148,7 @@ export default {
           )
           break
         default:
-          if (unref(hasSpaces)) {
+          if (unref(hasShareJail)) {
             const graphClient = clientService.graphAuthenticated(
               ref.$store.getters.configuration.server,
               ref.$store.getters.getToken
@@ -182,7 +182,7 @@ export default {
 
     return {
       ...useResourcesViewDefaults({ loadResourcesTask }),
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail
     }
   },
 
@@ -202,7 +202,7 @@ export default {
     ...mapState(['user']),
 
     title() {
-      const personalRouteTitle = this.hasSpaces
+      const personalRouteTitle = this.hasShareJail
         ? this.$gettext('Personal')
         : this.$gettext('All files')
       const target =
@@ -255,7 +255,7 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        const personalRouteTitle = this.hasSpaces
+        const personalRouteTitle = this.hasShareJail
           ? this.$gettext('Personal')
           : this.$gettext('All files')
         breadcrumbs.push(this.createBreadcrumbNode(0, personalRouteTitle, '/'))

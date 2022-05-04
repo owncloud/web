@@ -55,13 +55,13 @@
 import '@uppy/core/dist/style.css'
 import '@uppy/status-bar/dist/style.css'
 import path from 'path'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
 
 export default {
   setup() {
     return {
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   data: () => ({
@@ -148,7 +148,7 @@ export default {
       if (file.targetRoute?.name === 'files-spaces-project') {
         return file.targetRoute.params.name
       }
-      return this.hasSpaces ? this.$gettext('Personal') : this.$gettext('All files and folders')
+      return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
     },
     createFolderLink(path, storageId, targetRoute) {
       if (!targetRoute) {

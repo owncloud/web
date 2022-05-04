@@ -4,7 +4,7 @@
 
 <script>
 import { bus } from 'web-pkg/src/instance'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 import TrashBin from '../components/TrashBin.vue'
 
@@ -12,12 +12,12 @@ export default {
   components: { TrashBin },
   setup() {
     return {
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   computed: {
     breadcrumbs() {
-      const personalRouteName = this.hasSpaces
+      const personalRouteName = this.hasShareJail
         ? this.$gettext('Personal')
         : this.$gettext('All files')
 

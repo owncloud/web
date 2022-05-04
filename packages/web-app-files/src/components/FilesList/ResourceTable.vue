@@ -750,7 +750,7 @@ export default defineComponent({
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (matchingSpace && matchingSpace?.driveType === 'project') {
+      if (matchingSpace?.driveType === 'project') {
         return matchingSpace.name
       }
 
