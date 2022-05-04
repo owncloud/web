@@ -130,7 +130,9 @@ export default {
         ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources)
       ]
 
-      return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
+      return [...fileHandlers]
+        .filter((item) => item.isEnabled(this.filterParams))
+        .sort((x, y) => Number(y.canBeDefault) - Number(x.canBeDefault))
     },
 
     menuItemsShare() {
