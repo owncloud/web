@@ -1,0 +1,6 @@
+Enhancement: Space store improvements
+
+We've improved the space's store, this allows us to keep the search reactive to space changes,
+for example, as a project space gets added or renamed.
+
+https://github.com/owncloud/web/pull/6868

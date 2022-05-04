@@ -10,7 +10,7 @@ export default {
     state.spaces = spaces
   },
   /**
-   * Updates a single resource field. If the resource with given id doesn't exist nothing will happen.
+   * Updates a single space field. If the space with given id doesn't exist nothing will happen.
    *
    * @param state Current state of this store module
    * @param params
