@@ -104,8 +104,4 @@ main {
   grid-area: main;
   z-index: 0;
 }
-
-#files-upload-progress {
-  grid-area: upload;
-}
 </style>

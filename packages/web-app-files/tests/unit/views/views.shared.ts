@@ -55,7 +55,6 @@ export const accentuatesTableRowTest = async <V extends Vue>(
   jest.useFakeTimers()
 
   const store = getStore({
-    inProgress: [],
     activeFiles: [forestJpg],
     totalFilesSize: 0,
     totalFilesCount: {

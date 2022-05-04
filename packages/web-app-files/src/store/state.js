@@ -3,8 +3,6 @@ export default {
   files: [],
   filesSearched: null,
   selectedIds: [],
-  inProgress: [],
-  shareOpen: null,
   versions: [],
   spaces: [],
 

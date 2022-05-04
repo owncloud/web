@@ -132,9 +132,9 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Federated shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)
 -   [webUISharingExternalToRoot/federationSharing.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L32)
--   [webUISharingExternalToRoot/federationSharing.feature:169](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L169)
+-   [webUISharingExternalToRoot/federationSharing.feature:170](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternalToRoot/federationSharing.feature#L170)
 -   [webUISharingExternal/federationSharing.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L38)
--   [webUISharingExternal/federationSharing.feature:165](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L165)
+-   [webUISharingExternal/federationSharing.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L166)
 
 ### [browsing directly to a details 'tab' is not possible](https://github.com/owncloud/web/issues/5464)
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L21)

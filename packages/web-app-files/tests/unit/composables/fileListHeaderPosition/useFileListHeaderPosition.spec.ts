@@ -44,20 +44,4 @@ describe('useFileListHeaderPosition', () => {
 
     wrapper.destroy()
   })
-
-  it('should calculate y on upload', async () => {
-    const wrapper = createWrapper()
-    const appBar = createAppBar()
-
-    appBar.createElement()
-
-    for (const height of [2, 3, 4, 5, 6]) {
-      appBar.resize(height)
-      wrapper.vm.store.commit('Files/UPDATE', height % 2 === 0 ? [undefined] : [])
-      await nextTick()
-      expect(wrapper.vm.y).toBe(height)
-    }
-
-    wrapper.destroy()
-  })
 })

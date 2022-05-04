@@ -11,7 +11,6 @@
     </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
         <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': imageContent && !imageExpanded }">
@@ -134,7 +133,6 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AppBar from '../../components/AppBar/AppBar.vue'
-import ProgressBar from '../../components/Upload/ProgressBar.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
@@ -152,7 +150,6 @@ const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
-    ProgressBar,
     CreateAndUpload,
     NoContentMessage,
     AppLoadingSpinner,
@@ -193,7 +190,6 @@ export default defineComponent({
     ...mapGetters('Files', [
       'highlightedFile',
       'currentFolder',
-      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
@@ -218,10 +214,6 @@ export default defineComponent({
     },
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
     },
 
     markdownCollapseIcon() {

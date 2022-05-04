@@ -167,7 +167,6 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .waitForElementNotVisible('@fileUploadProgress')
         .click('@uploadFilesButton')
     },
     /**
@@ -217,7 +216,6 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .waitForElementNotVisible('@fileUploadProgress')
         .click('@uploadFilesButton')
     },
     /**
@@ -412,7 +410,7 @@ module.exports = {
       selector: '#folderUploadInput'
     },
     fileUploadProgress: {
-      selector: '#files-upload-progress'
+      selector: '#upload-info'
     },
     dialog: {
       selector: '.oc-modal'

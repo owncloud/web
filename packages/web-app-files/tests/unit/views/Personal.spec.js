@@ -179,8 +179,7 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     store: getStore({
       selectedFiles: [...selectedFiles],
       highlightedFile: resourceForestJpg,
-      pages: 4,
-      inProgress: [null]
+      pages: 4
     }),
     localVue,
     stubs,

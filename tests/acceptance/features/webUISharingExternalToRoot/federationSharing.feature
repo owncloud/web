@@ -127,7 +127,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user reloads the current page of the webUI
     And the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
-    Then as "Alice" file "simple-folder/new-lorem.txt" should exist on remote server
+    Then file "new-lorem.txt" should be listed on the webUI
+    And as "Alice" file "simple-folder/new-lorem.txt" should exist on remote server
 
   @issue-3309
   Scenario: rename a file in a received share - remote server shares - local server receives

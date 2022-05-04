@@ -1,0 +1,6 @@
+Enhancement: Remove the upload progress component
+
+We've removed the upload progress component because the implementation of Uppy made it obsolete.
+
+https://github.com/owncloud/web/pull/6825
+https://github.com/owncloud/web/issues/6819
