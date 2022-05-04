@@ -42,7 +42,8 @@ export default {
       'CLEAR_CURRENT_FILES_LIST',
       'SET_FILE_SELECTION',
       'UPSERT_RESOURCE',
-      'UPDATE_RESOURCE_FIELD'
+      'UPDATE_RESOURCE_FIELD',
+      'UPSERT_SPACE'
     ]),
 
     showCreateSpaceModal() {
@@ -77,6 +78,7 @@ export default {
           this.hideModal()
           const resource = buildSpace(space)
           this.UPSERT_RESOURCE(resource)
+          this.UPSERT_SPACE(resource)
 
           this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
             this.$client.files
