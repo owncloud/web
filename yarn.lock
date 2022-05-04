@@ -1915,6 +1915,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@niceties/logger@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@niceties/logger@npm:1.1.3"
+  dependencies:
+    kleur: ^4.1.4
+  checksum: a5a9033d9339dfb4d9dd41ebb579a197fdd4cab0a080792bed6d989b26ca25f07ca6eca17d0a6b8b2fda85beb0df44d9ef97df06fd3f0b7c3cc64bc8cb4f817e
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:^1.0.0":
   version: 1.0.0
   resolution: "@noble/hashes@npm:1.0.0"
@@ -2017,6 +2026,34 @@ __metadata:
   version: 2.10.2
   resolution: "@popperjs/core@npm:2.10.2"
   checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
+  languageName: node
+  linkType: hard
+
+"@rollup-extras/plugin-copy@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@rollup-extras/plugin-copy@npm:1.2.3"
+  dependencies:
+    "@niceties/logger": ^1.1.3
+    "@rollup-extras/utils": ^1.2.1
+    "@types/glob": ^7.2.0
+    "@types/glob-parent": ^5.1.1
+    glob: ^7.2.0
+    glob-parent: ^6.0.2
+    glob-promise: ^4.2.2
+  peerDependencies:
+    rollup: ^2.60.1
+  checksum: abb3814763d90d7bb0b3040750a49732d2c7a2c22fa8229cc2fb4efefb81be00a8d45f117694db91f7f341e45b6a48360b41478956bd192bfe22c70543289c58
+  languageName: node
+  linkType: hard
+
+"@rollup-extras/utils@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@rollup-extras/utils@npm:1.2.1"
+  dependencies:
+    "@niceties/logger": ^1.1.3
+  peerDependencies:
+    rollup: ^2.60.1
+  checksum: ab3bd148e1f8d7da7ffa059e49cc3f63ee091ee31e658f05b4a28e438779d3ed9f3e1a632ad9b2dc4c6a009406bef18d66ae9087566136b0fe7d0fc5b05c39bc
   languageName: node
   linkType: hard
 
@@ -2235,12 +2272,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^8.0.1":
-  version: 8.1.1
-  resolution: "@types/fs-extra@npm:8.1.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: d7d564b84b86e51241984c9bec16f683056d45510e2c63e1bfe9282026685bd14e5ca406ee809453f1e2fd8c9aa76c5712a3019492eb946dd46de327ccb0e1b1
+"@types/glob-parent@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@types/glob-parent@npm:5.1.1"
+  checksum: bb23a9048276e896acfe7babb3a78bd16b65c774fdc7ad456ae532dd0200e92e708a7d9170f1147cbd322e6ece10ba52b77429c45fa33f007fa3de8732385982
   languageName: node
   linkType: hard
 
@@ -2251,6 +2286,16 @@ __metadata:
     "@types/minimatch": "*"
     "@types/node": "*"
   checksum: e0eef12285f548f15d887145590594a04ccce7f7e645fb047cbac18cb093f25d507ffbcc725312294c224bb78cf980fce33e5807de8d6f8a868b4186253499d4
+  languageName: node
+  linkType: hard
+
+"@types/glob@npm:^7.1.3, @types/glob@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@types/glob@npm:7.2.0"
+  dependencies:
+    "@types/minimatch": "*"
+    "@types/node": "*"
+  checksum: 6ae717fedfdfdad25f3d5a568323926c64f52ef35897bcac8aca8e19bc50c0bd84630bbd063e5d52078b2137d8e7d3c26eabebd1a2f03ff350fff8a91e79fc19
   languageName: node
   linkType: hard
 
@@ -4096,7 +4141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.0, chokidar@npm:^3.5.0":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.5.0":
   version: 3.5.2
   resolution: "chokidar@npm:3.5.2"
   dependencies:
@@ -4293,7 +4338,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^1.1.0, colorette@npm:^1.2.2":
+"colorette@npm:^1.2.2":
   version: 1.2.2
   resolution: "colorette@npm:1.2.2"
   checksum: 69fec14ddaedd0f5b00e4bae40dc4bc61f7050ebdc82983a595d6fd64e650b9dc3c033fff378775683138e992e0ddd8717ac7c7cec4d089679dcfbe3cd921b04
@@ -6575,6 +6620,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob-parent@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "glob-parent@npm:6.0.2"
+  dependencies:
+    is-glob: ^4.0.3
+  checksum: c13ee97978bef4f55106b71e66428eb1512e71a7466ba49025fc2aec59a5bfb0954d5abd58fc5ee6c9b076eef4e1f6d3375c2e964b88466ca390da4419a786a8
+  languageName: node
+  linkType: hard
+
+"glob-promise@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "glob-promise@npm:4.2.2"
+  dependencies:
+    "@types/glob": ^7.1.3
+  peerDependencies:
+    glob: ^7.1.6
+  checksum: c1a3d95f7c8393e4151d4899ec4e42bb2e8237160f840ad1eccbe9247407da8b6c13e28f463022e011708bc40862db87b9b77236d35afa3feb8aa86d518f2dfe
+  languageName: node
+  linkType: hard
+
 "glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
   version: 7.1.7
   resolution: "glob@npm:7.1.7"
@@ -6586,6 +6651,20 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: b61f48973bbdcf5159997b0874a2165db572b368b931135832599875919c237fc05c12984e38fe828e69aa8a921eb0e8a4997266211c517c9cfaae8a93988bb8
+  languageName: node
+  linkType: hard
+
+"glob@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "glob@npm:7.2.0"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^3.0.4
+    once: ^1.3.0
+    path-is-absolute: ^1.0.0
+  checksum: 78a8ea942331f08ed2e055cb5b9e40fe6f46f579d7fd3d694f3412fe5db23223d29b7fee1575440202e9a7ff9a72ab106a39fee39934c7bedafe5e5f8ae20134
   languageName: node
   linkType: hard
 
@@ -6609,22 +6688,6 @@ __metadata:
   version: 9.18.0
   resolution: "globals@npm:9.18.0"
   checksum: e9c066aecfdc5ea6f727344a4246ecc243aaf66ede3bffee10ddc0c73351794c25e727dd046090dcecd821199a63b9de6af299a6e3ba292c8b22f0a80ea32073
-  languageName: node
-  linkType: hard
-
-"globby@npm:10.0.1":
-  version: 10.0.1
-  resolution: "globby@npm:10.0.1"
-  dependencies:
-    "@types/glob": ^7.1.1
-    array-union: ^2.1.0
-    dir-glob: ^3.0.1
-    fast-glob: ^3.0.3
-    glob: ^7.1.3
-    ignore: ^5.1.1
-    merge2: ^1.2.3
-    slash: ^3.0.0
-  checksum: a16754b93eff58c1070ca9b0a92c69d9d97a184870fbc7dcb1b99a3ff202311ae66dd5662cbec874deaa888d0172024332e14d04d038c23949d5f8e29341dad2
   languageName: node
   linkType: hard
 
@@ -7320,13 +7383,6 @@ __metadata:
   dependencies:
     isobject: ^3.0.1
   checksum: 2a401140cfd86cabe25214956ae2cfee6fbd8186809555cd0e84574f88de7b17abacb2e477a6a658fa54c6083ecbda1e6ae404c7720244cd198903848fca70ca
-  languageName: node
-  linkType: hard
-
-"is-plain-object@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "is-plain-object@npm:3.0.1"
-  checksum: d13fe75db350d4ac669595cdfe0242ae87fcecddf2bca858d2dd443a6ed6eb1f69951fac8c2fa85b16106c6b0d7738fea86c2aca2ecee7fd61de15c1574f2cc5
   languageName: node
   linkType: hard
 
@@ -8370,6 +8426,13 @@ __metadata:
   version: 3.0.3
   resolution: "kleur@npm:3.0.3"
   checksum: df82cd1e172f957bae9c536286265a5cdbd5eeca487cb0a3b2a7b41ef959fc61f8e7c0e9aeea9c114ccf2c166b6a8dd45a46fd619c1c569d210ecd2765ad5169
+  languageName: node
+  linkType: hard
+
+"kleur@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "kleur@npm:4.1.4"
+  checksum: 7f6db36e378045dec14acd3cbf0b1e59130c09e984ee8b8ce56dd2d2257cfff90389c1e8f8b19bd09dd5d241080566a814b4ccd99fdcef91f59ef93ec33c8a44
   languageName: node
   linkType: hard
 
@@ -11428,20 +11491,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-copy-watch@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "rollup-plugin-copy-watch@npm:0.0.1"
-  dependencies:
-    "@types/fs-extra": ^8.0.1
-    chokidar: ^3.4.0
-    colorette: ^1.1.0
-    fs-extra: ^8.1.0
-    globby: 10.0.1
-    is-plain-object: ^3.0.0
-  checksum: 0ec2c929a056117e0ab21963989c4b3c6b887df2156ab11eb5877d34e5baa5ce2c6ab8fe9dee0ed8895c8e849e9577eab8a29c815aac33417fa5a0a71f2acf9b
-  languageName: node
-  linkType: hard
-
 "rollup-plugin-delete@npm:^2.0.0":
   version: 2.0.0
   resolution: "rollup-plugin-delete@npm:2.0.0"
@@ -11665,6 +11714,7 @@ __metadata:
     "@cucumber/pretty-formatter": ^1.0.0-alpha.1
     "@noble/hashes": ^1.0.0
     "@playwright/test": ^1.21.1
+    "@rollup-extras/plugin-copy": ^1.2.3
     "@rollup/plugin-alias": ^3.1.9
     "@rollup/plugin-commonjs": ^17.0.0
     "@rollup/plugin-html": ^0.2.4
@@ -11721,7 +11771,6 @@ __metadata:
     requirejs: ^2.3.6
     rollup: ^2.52.7
     rollup-plugin-babel: ^4.4.0
-    rollup-plugin-copy-watch: ^0.0.1
     rollup-plugin-delete: ^2.0.0
     rollup-plugin-gzip: ^2.5.0
     rollup-plugin-livereload: ^2.0.5
