@@ -31,6 +31,7 @@ Summary
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
+* Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
@@ -240,6 +241,14 @@ Details
    tests.
 
    https://github.com/owncloud/web/pull/6863
+
+* Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
+
+   We've removed the upload progress component because the implementation of Uppy made it
+   obsolete.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6825
 
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 
