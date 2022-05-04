@@ -14,7 +14,7 @@
 <script>
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension } from '../../constants'
+import { ImageDimension, ImageType } from '../../constants'
 import { loadPreview } from '../../helpers/resource'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
@@ -82,14 +82,14 @@ export default {
         {
           resource: this.resource,
           isPublic: false,
-          dimensions: ImageDimension.ThumbNail,
+          dimensions: ImageDimension.Thumbnail,
           server: this.configuration.server,
           userId: this.user.id,
           token: this.getToken
         },
         true
       )
-      preview && Vue.set(this.resource, 'preview', preview)
+      preview && Vue.set(this.resource, ImageType.Thumbnail, preview)
     }, 250)
 
     visibilityObserver.observe(this.$el, { onEnter: debounced, onExit: debounced.cancel })
