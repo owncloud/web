@@ -44,8 +44,8 @@ Feature: Edit public link shares
       | permissions | <initial-permissions> |
       | password    | 123                   |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to ""
-    Then the user should see an error message on the public link edit modal dialog saying "Password can't be empty"
+    When the user opens the link edit dialog of folder "simple-folder" with name "Public-link" using the webUI
+    Then it should not be possible to remove password for the link with name "Public-link"
     And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |

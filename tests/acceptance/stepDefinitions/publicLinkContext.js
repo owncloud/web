@@ -163,6 +163,29 @@ When(
     await client.page.FilesPageElement.publicLinksDialog().addPassword(linkName, password)
   }
 )
+When(
+  'the user opens the link edit dialog of file/folder/resource {string} with name {string} using the webUI',
+  async function (resource, linkName) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName)
+  }
+)
+
+Then(
+  'it should not be possible to remove password for the link with name {string}',
+  async function (linkName) {
+    const isVisible =
+      await client.page.FilesPageElement.publicLinksDialog().isRemovePasswordBtnVisible(
+        linkName,
+        false
+      )
+    return assert.strictEqual(
+      isVisible,
+      false,
+      `Expected Remove password button to be not visible but found visible`
+    )
+  }
+)
 
 When(
   'the user tries to edit the public link named {string} of file/folder/resource {string} changing following',
