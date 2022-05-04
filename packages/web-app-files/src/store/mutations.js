@@ -6,6 +6,12 @@ import { renameResource } from '../helpers/resources'
 import { ShareTypes } from '../helpers/share'
 
 export default {
+  LOAD_SPACES(state, spaces) {
+    state.spaces = spaces
+  },
+  CLEAR_SPACES(state) {
+    state.spaces = []
+  },
   LOAD_FILES(state, { currentFolder, files }) {
     state.currentFolder = currentFolder
     state.files = files

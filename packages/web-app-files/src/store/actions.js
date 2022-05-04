@@ -678,6 +678,21 @@ export default {
     })
   },
 
+  async loadSpaces(context, { clientService }) {
+    const graphClient = clientService.graphAuthenticated(
+      context.rootGetters.configuration.server,
+      context.rootGetters.getToken
+    )
+    const graphResponse = await graphClient.drives.listMyDrives()
+
+    if (!graphResponse.data) {
+      return
+    }
+
+    const spaces = graphResponse.data.value.map((space) => buildSpace(space))
+    context.commit('LOAD_SPACES', spaces)
+  },
+
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
     if (
       rootGetters.previewFileExtensions.length &&

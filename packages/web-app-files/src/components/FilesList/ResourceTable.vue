@@ -50,7 +50,7 @@
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
-          :parent-folder-name-default="defaultParentFolderName"
+          :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="areThumbnailsDisplayed"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
@@ -176,6 +176,7 @@ import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
 import { ShareTypes } from '../../helpers/share'
+import { createLocationSpaces } from '../../router'
 
 export default defineComponent({
   mixins: [Rename],
@@ -353,7 +354,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown']),
+    ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
     popperOptions() {
       return {
         modifiers: [
@@ -512,9 +513,6 @@ export default defineComponent({
     },
     currentLanguage() {
       return (this.$language?.current || '').split('_')[0]
-    },
-    defaultParentFolderName() {
-      return this.hasSpaces ? this.$gettext('Personal') : this.$gettext('All files and folders')
     }
   },
   methods: {
@@ -543,11 +541,20 @@ export default defineComponent({
       if (this.targetRoute === null) {
         return {}
       }
+
+      const matchingSpace = this.getMatchingSpace(storageId)
+
+      if (matchingSpace && matchingSpace?.driveType === 'project') {
+        return createLocationSpaces('files-spaces-project', {
+          params: { storageId, item: path.replace(/^\//, '') || undefined }
+        })
+      }
+
       return {
         name: this.targetRoute.name,
         query: this.targetRoute.query,
         params: {
-          item: path.replace(/^\//, ''),
+          item: path.replace(/^\//, '') || undefined,
           ...this.targetRoute.params,
           ...(storageId && { storageId })
         }
@@ -693,6 +700,21 @@ export default defineComponent({
         resourceType,
         ownerName: resource.owner[0].displayName
       })
+    },
+    getMatchingSpace(storageId) {
+      return this.spaces.find((space) => space.id === storageId)
+    },
+    getDefaultParentFolderName(resource) {
+      if (!this.hasSpaces) {
+        return this.$gettext('All files and folders')
+      }
+      const matchingSpace = this.getMatchingSpace(resource.storageId)
+
+      if (matchingSpace && matchingSpace?.driveType === 'project') {
+        return matchingSpace.name
+      }
+
+      return this.$gettext('Personal')
     }
   }
 })

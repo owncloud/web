@@ -280,7 +280,10 @@ function getMountedWrapper(options = {}) {
           },
           modules: {
             Files: {
-              namespaced: true
+              namespaced: true,
+              state: {
+                spaces: []
+              }
             }
           }
         }),

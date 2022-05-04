@@ -24,7 +24,12 @@ export default class List implements SearchList {
     )
 
     return plainResources.map((plainResource) => {
-      const resource = buildResource(plainResource)
+      let resourceName = decodeURIComponent(plainResource.name)
+      if (resourceName.startsWith('/dav')) {
+        resourceName = resourceName.slice(4)
+      }
+
+      const resource = buildResource({ ...plainResource, name: resourceName })
       return { id: resource.id, data: resource }
     })
   }

@@ -22,6 +22,7 @@ import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
+import { clientService } from 'web-pkg/src/services'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -125,6 +126,9 @@ export default {
     bus.publish('app.search.register.provider', Registry.sdkSearch)
   },
   userReady({ store }) {
+    // Load spaces to make them available across the application
+    store.dispatch('Files/loadSpaces', { clientService })
+
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
       get(store, 'getters.capabilities.files.archivers', [

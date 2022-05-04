@@ -122,7 +122,7 @@ export function buildSpace(space) {
     spaceReadmeData = space.special.find((el) => el.specialFolder.name === 'readme')
   }
 
-  if (space.root) {
+  if (space.root?.permissions) {
     for (const permission of space.root.permissions) {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
@@ -146,6 +146,7 @@ export function buildSpace(space) {
     extension: '',
     path: '',
     webDavPath: '',
+    driveType: space.driveType,
     type: 'space',
     isFolder: true,
     mdate: space.lastModifiedDateTime,
@@ -161,7 +162,7 @@ export function buildSpace(space) {
     privateLink: '',
     downloadURL: '',
     ownerDisplayName: '',
-    ownerId: '',
+    ownerId: space.owner?.user?.id,
     disabled,
     spaceQuota: space.quota,
     spaceRoles,
