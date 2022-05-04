@@ -26,6 +26,7 @@ Summary
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
+* Enhancement - Introduce quicklinks: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
@@ -36,6 +37,7 @@ Summary
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
 Details
@@ -200,6 +202,15 @@ Details
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6829
 
+* Enhancement - Introduce quicklinks: [#6820](https://github.com/owncloud/web/pull/6820)
+
+   We have added quicklinks to the link share section in the right sidebar. Clicking the link
+   quickaction and the link menu item in the files table contextmenu now always copy the quick link
+   instead of creating a new link (and create it first, if it didn't exist before).
+
+   https://github.com/owncloud/web/issues/6605
+   https://github.com/owncloud/web/pull/6820
+
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
    We've added the app "user-management" with the following features: * Listing, creating,
@@ -304,6 +315,25 @@ Details
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.5
+
+* Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
+
+   We've updated the ownCloud SDK to version 3.0.0-alpha.7.
+
+   - Change - Pass full trash bin path to methods of FilesTrash class:
+   https://github.com/owncloud/owncloud-sdk/pull/1021 - Enhancement - Enforce share_type
+   guest if applies: https://github.com/owncloud/owncloud-sdk/pull/1046 - Enhancement -
+   Create quicklink: https://github.com/owncloud/owncloud-sdk/pull/1041 - Enhancement -
+   Replace deprecated String.prototype.substr():
+   https://github.com/owncloud/owncloud-sdk/pull/1035 - Enhancement - Add blob
+   resolveType: https://github.com/owncloud/owncloud-sdk/pull/1028 - Enhancement -
+   Adjust share management to properly work with spaces:
+   https://github.com/owncloud/owncloud-sdk/pull/1013 - Bugfix - Always add X-Request-ID:
+   https://github.com/owncloud/owncloud-sdk/pull/1016 - Bugfix - Always add
+   X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
+
+   https://github.com/owncloud/web/pull/6820
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.7
 
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
