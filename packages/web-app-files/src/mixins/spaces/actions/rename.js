@@ -35,7 +35,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD', 'UPDATE_SPACE_FIELD']),
 
     $_rename_trigger({ resources }) {
       if (resources.length !== 1) {
@@ -72,6 +72,11 @@ export default {
         .then(() => {
           this.hideModal()
           this.UPDATE_RESOURCE_FIELD({
+            id,
+            field: 'name',
+            value: name
+          })
+          this.UPDATE_SPACE_FIELD({
             id,
             field: 'name',
             value: name

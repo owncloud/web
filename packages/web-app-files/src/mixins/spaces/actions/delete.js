@@ -36,7 +36,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['REMOVE_FILE']),
+    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_SPACE']),
 
     $_delete_trigger({ resources }) {
       if (resources.length !== 1) {
@@ -69,6 +69,7 @@ export default {
         .then(() => {
           this.hideModal()
           this.REMOVE_FILE({ id })
+          this.REMOVE_SPACE({ id })
           this.showMessage({
             title: this.$gettext('Space was deleted successfully')
           })
