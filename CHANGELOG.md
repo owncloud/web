@@ -193,6 +193,7 @@ Details
    Find files in other places like project spaces
 
    https://github.com/owncloud/web/pull/6841
+   https://github.com/owncloud/web/pull/6873
 
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 
