@@ -17,6 +17,7 @@ Summary
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
+* Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
@@ -121,6 +122,14 @@ Details
 
    https://github.com/owncloud/web/issues/6845
    https://github.com/owncloud/web/pull/6848
+
+* Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
+
+   We've fixed a bug where the folder links in the upload overlay were broken when navigating into
+   another app or file list.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6846
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
