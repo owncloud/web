@@ -89,7 +89,7 @@ export default {
         },
         true
       )
-      preview && Vue.set(this.resource, 'preview', preview)
+      preview && Vue.set(this.resource, 'thumbnail', preview)
     }, 250)
 
     visibilityObserver.observe(this.$el, { onEnter: debounced, onExit: debounced.cancel })
