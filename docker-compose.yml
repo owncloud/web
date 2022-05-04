@@ -1,10 +1,6 @@
 services:
   ocis:
-    build:
-      dockerfile: ocis.Dockerfile
-      context: ./dev/docker
-      args:
-        OCIS_IMAGE: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     container_name: web_ocis
     ports:
       - 9200:9200
