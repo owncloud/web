@@ -33,6 +33,7 @@ Summary
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
+* Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
@@ -259,6 +260,13 @@ Details
 
    https://github.com/owncloud/web/issues/6268
    https://github.com/owncloud/web/pull/6202
+
+* Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
+
+   We've improved the space's store, this allows us to keep the search reactive to space changes,
+   for example, as a project space gets added or renamed.
+
+   https://github.com/owncloud/web/pull/6868
 
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 
