@@ -23,6 +23,7 @@ Summary
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
+* Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
@@ -172,6 +173,13 @@ Details
 
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6781
+
+* Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
+
+   We've enabled the search all files feature for ocis backend: * Find files in sub directories *
+   Find files in other places like project spaces
+
+   https://github.com/owncloud/web/pull/6841
 
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 
