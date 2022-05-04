@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
+* Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
@@ -43,6 +44,13 @@ Details
 
    https://github.com/owncloud/web/issues/6756
    https://github.com/owncloud/web/pull/6803
+
+* Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
+
+   We've fixed a bug where build times increased on every file change in dev mode, it also fixes the
+   faulty file sync during docker development for oc10.
+
+   https://github.com/owncloud/web/pull/6855
 
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 
