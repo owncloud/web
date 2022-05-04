@@ -1,6 +1,7 @@
 const util = require('util')
 const _ = require('lodash')
 const sharingHelper = require('../../helpers/sharingHelper')
+const timeoutHelper = require('../../helpers/timeoutHelper')
 
 module.exports = {
   commands: {
@@ -90,6 +91,32 @@ module.exports = {
         .initAjaxCounters()
         .click(publicLinkExpirationDateEditButton)
         .waitForOutstandingAjaxCalls()
+    },
+    isRemovePasswordBtnVisible: async function (linkName, expectedVisible = true) {
+      let isVisible = false
+      const publicLinkRemovePasswordSelector =
+        this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkRemovePasswordButton.selector, linkName)
+      const publicLinkRemovePasswordButton = {
+        locateStrategy: this.elements.publicLinkRemovePasswordButton.locateStrategy,
+        selector: publicLinkRemovePasswordSelector
+      }
+
+      const timeout = expectedVisible
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
+
+      await this.isVisible(
+        {
+          ...publicLinkRemovePasswordButton,
+          timeout: timeoutHelper.parseTimeout(timeout),
+          suppressNotFoundErrors: !expectedVisible
+        },
+        (result) => {
+          isVisible = result.value === true
+        }
+      )
+      return isVisible
     },
 
     /**
@@ -635,6 +662,11 @@ module.exports = {
     publicLinkAddPasswordButton: {
       selector:
         '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Add password"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkRemovePasswordButton: {
+      selector:
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Remove password"]',
       locateStrategy: 'xpath'
     },
     publicLinkRenamePasswordButton: {
