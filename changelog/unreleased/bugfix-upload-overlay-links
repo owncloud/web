@@ -1,0 +1,6 @@
+Bugfix: Upload overlay links
+
+We've fixed a bug where the folder links in the upload overlay were broken when navigating into another app or file list.
+
+https://github.com/owncloud/web/pull/6846
+https://github.com/owncloud/web/issues/6819

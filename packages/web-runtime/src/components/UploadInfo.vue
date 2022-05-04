@@ -120,19 +120,10 @@ export default {
         this.closeInfo()
       }
     })
-    this.$uppyService.subscribe('uploadSuccess', (file) => {
-      // @TODO we need the storage ID here... maybe fetch the file via DAV and call buildResources()?
-
-      let path = file.meta.currentFolder
-      if (file.meta.relativePath) {
-        path += file.meta.relativePath
-      }
-      path += file.name
-
+    this.$uppyService.subscribe('uploadedFileFetched', ({ uppyResource, fetchedFile }) => {
       this.successfulUploads.push({
-        ...file,
-        path,
-        targetRoute: file.meta.route
+        ...fetchedFile,
+        targetRoute: uppyResource.meta.route
       })
     })
   },
@@ -169,7 +160,8 @@ export default {
         name: targetRoute.name,
         query: targetRoute.query,
         params: {
-          ...(storageId && path && { storageId })
+          ...(storageId && path && { storageId }),
+          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage })
         }
       }
 
