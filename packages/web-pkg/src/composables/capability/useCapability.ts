@@ -30,6 +30,10 @@ export const useCapabilityFilesSharingResharing = createCapabilityComposable(
 )
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
+export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(
+  'spaces.projects',
+  false
+)
 export const useCapabilityShareJailEnabled = createCapabilityComposable('spaces.share_jail', false)
 export const useCapabilityFilesTusSupportHttpMethodOverride = createCapabilityComposable<boolean>(
   'files.tus_support.http_method_override',

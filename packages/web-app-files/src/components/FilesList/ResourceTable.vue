@@ -171,7 +171,10 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityProjectSpacesEnabled,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
@@ -376,7 +379,8 @@ export default defineComponent({
   },
   setup() {
     return {
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
   data() {
@@ -566,18 +570,18 @@ export default defineComponent({
       this.openWithPanel('sharing-item')
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file)
+      return this.createFolderLink(file.path, file, false)
     },
     parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file)
+      return this.createFolderLink(path.dirname(file.path), file, true)
     },
-    createFolderLink(path, resource) {
+    createFolderLink(path, resource, parentFolder) {
       if (this.targetRoute === null) {
         return {}
       }
 
       const params = {
-        item: path.replace(/^\//, ''),
+        item: path.replace(/^\//, '') || '/',
         ...this.targetRoute.params,
         ...mapResourceFields(resource, this.targetRouteParamMapping)
       }
@@ -586,12 +590,14 @@ export default defineComponent({
         ...mapResourceFields(resource, this.targetRouteQueryMapping)
       }
 
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (matchingSpace && matchingSpace?.driveType === 'project') {
-        return createLocationSpaces('files-spaces-project', {
-          params,
-          query
-        })
+      if (this.hasProjectSpaces) {
+        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        if (matchingSpace?.driveType === 'project') {
+          return createLocationSpaces('files-spaces-project', {
+            params,
+            query
+          })
+        }
       }
 
       return {
@@ -745,13 +751,15 @@ export default defineComponent({
       return this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {
-      if (!this.hasShareJail) {
-        return this.$gettext('All files and folders')
+      if (this.hasProjectSpaces) {
+        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        if (matchingSpace?.driveType === 'project') {
+          return matchingSpace.name
+        }
       }
 
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (matchingSpace?.driveType === 'project') {
-        return matchingSpace.name
+      if (!this.hasShareJail) {
+        return this.$gettext('All files and folders')
       }
 
       return this.$gettext('Personal')
