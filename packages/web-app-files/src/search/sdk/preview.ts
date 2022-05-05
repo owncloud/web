@@ -7,15 +7,18 @@ import { debounce } from 'web-pkg/src/decorator'
 import { Component } from 'vue'
 import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
+import { Store } from 'vuex'
 
 export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly cache: Cache<string, SearchResult[]>
   private readonly router: VueRouter
+  private readonly store: Store<any>
 
-  constructor(router: VueRouter) {
+  constructor(store: Store<any>, router: VueRouter) {
     this.component = PreviewComponent
     this.router = router
+    this.store = store
     // define how long the cache should be valid, maybe conf option?
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
   }
@@ -33,24 +36,29 @@ export default class Preview implements SearchPreview {
       return this.cache.get(term)
     }
 
+    const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const plainResources = await clientService.owncloudSdk.files.search(
       term,
       5, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
 
-    return this.cache.set(
-      term,
-      plainResources.map((plainResource) => {
-        let resourceName = decodeURIComponent(plainResource.name)
-        if (resourceName.startsWith('/dav')) {
-          resourceName = resourceName.slice(4)
-        }
+    const resources = plainResources.reduce((acc, plainResource) => {
+      let resourceName = decodeURIComponent(plainResource.name)
+      if (resourceName.startsWith('/dav')) {
+        resourceName = resourceName.slice(4)
+      }
+      const resource = buildResource({ ...plainResource, name: resourceName })
 
-        const resource = buildResource({ ...plainResource, name: resourceName })
-        return { id: resource.id, data: resource }
-      })
-    )
+      // filter results if hidden files shouldn't be shown due to settings
+      if (!resource.name.startsWith('.') || areHiddenFilesShown) {
+        acc.push({ id: resource.id, data: { ...resource } })
+      }
+
+      return acc
+    }, [])
+
+    return this.cache.set(term, resources)
   }
 
   public get available(): boolean {
