@@ -628,20 +628,8 @@ export default {
       .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
 
-  addActionToProgress({ commit }, item) {
-    commit('ADD_ACTION_TO_PROGRESS', item)
-  },
-
-  removeActionFromProgress({ commit }, item) {
-    commit('REMOVE_ACTION_FROM_PROGRESS', item)
-  },
-
   pushResourcesToDeleteList({ commit }, resources) {
     commit('PUSH_RESOURCES_TO_DELETE_LIST', resources)
-  },
-
-  clearResourcesToDeleteList({ commit }) {
-    commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   },
 
   async loadIndicators({ dispatch, commit }, { client, currentFolder, storageId }) {

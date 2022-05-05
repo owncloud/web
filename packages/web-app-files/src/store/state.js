@@ -27,9 +27,7 @@ export default {
   sharesTreeError: null,
   sharesTreeLoading: false,
 
-  loadingFolder: false,
   publicLinkPassword: null,
-  actionsInProgress: [],
 
   /**
    * View settings
