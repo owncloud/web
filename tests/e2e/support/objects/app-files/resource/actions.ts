@@ -77,7 +77,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   }
 
   await page.locator('#upload-menu-btn').click()
-  await page.locator('#fileUploadInput').setInputFiles(resources.map((file) => file.path))
+  await page.locator('#files-file-upload-input').setInputFiles(resources.map((file) => file.path))
 
   if (createVersion) {
     await page.locator('.oc-modal-body-actions-confirm').click()

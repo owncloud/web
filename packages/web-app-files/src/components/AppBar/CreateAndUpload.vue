@@ -90,10 +90,10 @@
     >
       <oc-list id="upload-list">
         <li>
-          <folder-upload ref="folder-upload" />
+          <resource-upload ref="folder-upload" btn-class="oc-width-1-1" />
         </li>
         <li>
-          <file-upload ref="file-upload" btn-class="oc-width-1-1" />
+          <resource-upload ref="file-upload" btn-class="oc-width-1-1" :is-folder="true" />
         </li>
       </oc-list>
     </oc-drop>
@@ -112,17 +112,14 @@ import { useAppDefaults } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
-// TODO: Simplify to one UploadButton component and fill from here
-import FileUpload from './Upload/FileUpload.vue'
-import FolderUpload from './Upload/FolderUpload.vue'
+import ResourceUpload from './Upload/ResourceUpload.vue'
 import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 
 export default defineComponent({
   components: {
-    FileUpload,
-    FolderUpload
+    ResourceUpload
   },
   mixins: [MixinFileActions],
   setup() {
