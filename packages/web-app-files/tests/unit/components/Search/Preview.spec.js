@@ -90,7 +90,11 @@ function getWrapper({
     localVue,
     store: createStore(Vuex.Store, {
       getters: {
-        configuration: () => {}
+        configuration: () => ({
+          options: {
+            disablePreviews: true
+          }
+        })
       },
       modules: {
         Files: {
