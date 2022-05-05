@@ -23,10 +23,7 @@ export default class Preview implements SearchPreview {
 
     const searchResult = resources.reduce((acc, resource) => {
       // filter results if hidden files shouldn't be shown due to settings
-      if (
-        !resource.name.startsWith('.') ||
-        (resource.name.startsWith('.') && areHiddenFilesShown)
-      ) {
+      if (!resource.name.startsWith('.') || areHiddenFilesShown) {
         acc.push({ id: resource.id, data: { ...resource } })
       }
 

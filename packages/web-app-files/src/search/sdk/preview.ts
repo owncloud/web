@@ -51,10 +51,7 @@ export default class Preview implements SearchPreview {
       const resource = buildResource({ ...plainResource, name: resourceName })
 
       // filter results if hidden files shouldn't be shown due to settings
-      if (
-        !resource.name.startsWith('.') ||
-        (resource.name.startsWith('.') && areHiddenFilesShown)
-      ) {
+      if (!resource.name.startsWith('.') || areHiddenFilesShown) {
         acc.push({ id: resource.id, data: { ...resource } })
       }
 
