@@ -102,7 +102,8 @@ function getWrapper() {
         Files: {
           namespaced: true,
           mutations: {
-            UPDATE_RESOURCE_FIELD: jest.fn()
+            UPDATE_RESOURCE_FIELD: jest.fn(),
+            UPDATE_SPACE_FIELD: jest.fn()
           }
         }
       }
