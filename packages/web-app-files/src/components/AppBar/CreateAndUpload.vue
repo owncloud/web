@@ -270,6 +270,9 @@ export default defineComponent({
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
             path,

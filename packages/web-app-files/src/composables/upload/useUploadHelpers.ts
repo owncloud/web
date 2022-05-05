@@ -9,6 +9,7 @@ import { useClientService, useRoute, useStore } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, Ref, unref } from '@vue/composition-api'
+import { SHARE_JAIL_ID } from '../../services/folder'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -30,6 +31,7 @@ export function useUploadHelpers(): UploadHelpersResult {
   const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+  const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
 
@@ -43,7 +45,7 @@ export function useUploadHelpers(): UploadHelpersResult {
   })
 
   const uploadPath = computed((): string => {
-    const { params } = unref(route)
+    const { params, query } = unref(route)
     const { owncloudSdk: client } = clientService
 
     if (unref(isPublicLocation)) {
@@ -52,6 +54,14 @@ export function useUploadHelpers(): UploadHelpersResult {
 
     if (unref(isSpacesProjectLocation)) {
       const path = buildWebDavSpacesPath(params.storageId, unref(currentPath))
+      return client.files.getFileUrl(path)
+    }
+
+    if (unref(isSpacesShareLocation)) {
+      const path = buildWebDavSpacesPath(
+        [SHARE_JAIL_ID, query.shareId].join('!'),
+        unref(currentPath)
+      )
       return client.files.getFileUrl(path)
     }
 
