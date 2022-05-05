@@ -22,22 +22,30 @@ export type changeRoleArgs = {
   role: string
 }
 
+const publicLinkSetNameInputField = '#oc-files-file-link-name'
+const publicLinkSelectRolesButton = '#files-file-link-role-button'
+const publicLinkSetRoleButton = `#files-role-%s`
+const publicLinkExpiryDate = '#oc-files-file-link-expire-date'
+const publicLinkSetPasswordInputField = '#oc-files-file-link-password'
 const publicLinkEditRoleButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
   `div/button[contains(@class, "edit-public-link-role-dropdown-toggl")]`
-const publicLinkChangeRoleButton = `#files-role-%s`
-const publicLinkRole =
+const publicLinkQuickActionButton = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+const addPublicLinkButton = '#files-file-link-add'
+const savePublicLinkButton = '#oc-files-file-link-create'
+const publicLink = `//ul/li/div/h4[contains(text(),'%s')]/following-sibling::div//p`
+const publicLinkCurrentRole =
   '//button[contains(@class,"edit-public-link-role-dropdown-toggl")]//span[contains(@class,"oc-invisible-sr")]'
 const linkUpdateSuccessfulDialog = '//div[contains(@class,"oc-notification-message-title")]'
 
 const fillPublicLink = async (page, name, role, dateOfExpiration, password): Promise<void> => {
   if (name) {
-    await page.locator('#oc-files-file-link-name').fill(name)
+    await page.locator(publicLinkSetNameInputField).fill(name)
   }
 
   if (role) {
-    await page.locator('#files-file-link-role-button').click()
-    await page.locator(util.format(`//span[@id="files-role-%s"]`, role)).click()
+    await page.locator(publicLinkSelectRolesButton).click()
+    await page.locator(util.format(publicLinkSetRoleButton, role)).click()
   }
 
   if (dateOfExpiration) {
@@ -46,7 +54,7 @@ const fillPublicLink = async (page, name, role, dateOfExpiration, password): Pro
       dateOfExpiration
     )
 
-    await page.locator('#oc-files-file-link-expire-date').evaluate(
+    await page.locator(publicLinkExpiryDate).evaluate(
       (datePicker: any, { newExpiryDate }): any => {
         datePicker.__vue__.updateValue(newExpiryDate)
       },
@@ -55,7 +63,7 @@ const fillPublicLink = async (page, name, role, dateOfExpiration, password): Pro
   }
 
   if (password) {
-    await page.locator('#oc-files-file-link-password').fill(password)
+    await page.locator(publicLinkSetPasswordInputField).fill(password)
   }
 }
 
@@ -69,14 +77,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 
   switch (via) {
     case 'QUICK_ACTION':
-      await page
-        .locator(
-          util.format(
-            `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`,
-            resourceName
-          )
-        )
-        .click()
+      await page.locator(util.format(publicLinkQuickActionButton, resourceName)).click()
       break
 
     case 'SIDEBAR_PANEL':
@@ -84,12 +85,10 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
       await sidebar.openPanel({ page: page, name: 'sharing' })
       break
   }
-  await page.locator('#files-file-link-add').click()
+  await page.locator(addPublicLinkButton).click()
   await fillPublicLink(page, name, role, dateOfExpiration, password)
-  await page.locator('#oc-files-file-link-create').click()
-  return await page
-    .locator(`//ul/li/div/h4[contains(text(),'${name}')]/following-sibling::div//p`)
-    .textContent()
+  await page.locator(savePublicLinkButton).click()
+  return await page.locator(util.format(publicLink, name)).textContent()
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
@@ -102,8 +101,8 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(publicLinkEditRoleButton, name)).click()
-  await page.locator(util.format(publicLinkChangeRoleButton, role.toLowerCase())).click()
+  await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateSuccessfulDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
-  return await page.locator(publicLinkRole).textContent()
+  return await page.locator(publicLinkCurrentRole).textContent()
 }
