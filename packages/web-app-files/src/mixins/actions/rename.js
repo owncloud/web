@@ -2,7 +2,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
-import { isLocationTrashActive, isLocationSharesActive } from '../../router'
+import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
 
 export default {
   computed: {
@@ -33,6 +33,15 @@ export default {
               return false
             }
             if (resources.length !== 1) {
+              return false
+            }
+            // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again
+            if (
+              this.capabilities?.spaces?.share_jail === true &&
+              (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
+                (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+                  resources[0].path === '/'))
+            ) {
               return false
             }
 
@@ -195,7 +204,8 @@ export default {
             this.$router.push({
               params: {
                 item: '/' + newPath + newName || '/'
-              }
+              },
+              query: this.$route.query
             })
           }
         })
