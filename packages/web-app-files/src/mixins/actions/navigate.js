@@ -1,4 +1,4 @@
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
 import {
   createLocationPublic,
@@ -13,6 +13,7 @@ import merge from 'lodash-es/merge'
 
 export default {
   computed: {
+    ...mapGetters(['capabilities']),
     ...mapState('Files', ['currentFolder']),
     $_navigate_items() {
       return [
@@ -52,9 +53,15 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: ({ resources }) => {
+            const shareId = this.getShareId(resources[0])
+            const shareName = this.getShareName(resources[0])
             return merge({}, this.routeName, {
               params: {
-                item: resources[0].path
+                item: resources[0].path,
+                ...(shareName && { shareName })
+              },
+              query: {
+                ...(shareId && { shareId })
               }
             })
           },
@@ -71,7 +78,40 @@ export default {
         return createLocationPublic('files-spaces-project')
       }
 
+      if (
+        isLocationSpacesActive(this.$router, 'files-spaces-share') ||
+        isLocationSharesActive(this.$router, 'files-shares-with-me')
+      ) {
+        return createLocationSpaces('files-spaces-share')
+      }
+
       return createLocationSpaces('files-spaces-personal-home')
+    }
+  },
+  methods: {
+    getShareId(resource) {
+      if (this.$route.query?.shareId) {
+        return this.$route.query.shareId
+      }
+      if (
+        this.capabilities?.spaces?.share_jail &&
+        isLocationSharesActive(this.$router, 'files-shares-with-me')
+      ) {
+        return resource.id
+      }
+      return undefined
+    },
+    getShareName(resource) {
+      if (this.$route.params?.shareName) {
+        return this.$route.params.shareName
+      }
+      if (
+        this.capabilities?.spaces?.share_jail &&
+        isLocationSharesActive(this.$router, 'files-shares-with-me')
+      ) {
+        return resource.name
+      }
+      return undefined
     }
   }
 }
