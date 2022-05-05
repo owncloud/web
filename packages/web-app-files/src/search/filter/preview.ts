@@ -19,7 +19,13 @@ export default class Preview implements SearchPreview {
     // no cache required, the filtering is client only and fast enough to recalculate the set
     // of results every time on the fly
     const resources: any[] = filterResources(this.store.getters['Files/files'], term, 5)
-    const searchResult = resources.map((resource) => ({ id: resource.id, data: { ...resource } }))
+    let searchResult = resources.map((resource) => ({ id: resource.id, data: { ...resource } }))
+
+    // filter results if hidden files shouldn't be shown due to settings
+    const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
+    if (areHiddenFilesShown !== true) {
+      searchResult = searchResult.filter(({ data }) => !data.name.startsWith('.'))
+    }
 
     return Promise.resolve(searchResult)
   }
