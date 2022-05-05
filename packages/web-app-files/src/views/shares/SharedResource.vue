@@ -11,7 +11,6 @@
     </app-bar>
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
-      <progress-bar v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
@@ -73,15 +72,18 @@
 </template>
 
 <script lang="ts">
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import debounce from 'lodash-es/debounce'
+
 // mixins
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
+
 // components
 import AppBar from '../../components/AppBar/AppBar.vue'
-import ProgressBar from '../../components/Upload/ProgressBar.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
@@ -91,12 +93,11 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
+
 // misc
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { bus } from 'web-pkg/src/instance'
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import debounce from 'lodash-es/debounce'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
 import { createLocationSpaces } from '../../router'
@@ -112,7 +113,6 @@ const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
-    ProgressBar,
     CreateAndUpload,
     ResourceTable,
     QuickActions,
@@ -158,15 +158,11 @@ export default defineComponent({
     ...mapGetters('Files', [
       'highlightedFile',
       'currentFolder',
-      'inProgress',
       'totalFilesCount',
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
-    $_uploadProgressVisible() {
-      return this.inProgress.length > 0
-    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },
@@ -318,7 +314,7 @@ export default defineComponent({
           const resource = this.paginatedResources.find((r) => r.name === resourceName)
 
           if (resource) {
-            this.selected = [resource]
+            this.selectedResources = [resource]
             this.$_mountSideBar_showDefaultPanel(resource)
             this.scrollToResource(resource)
           }
