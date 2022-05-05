@@ -131,7 +131,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
-    const { params } = unref(route)
+    const { params, query } = unref(route)
     const currentFolder = unref(currentPath)
 
     for (const file of files) {
@@ -159,9 +159,15 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
       }
 
       const storageId = params.storageId
-      const webDavBasePath = storageId
-        ? buildWebDavSpacesPath(storageId, currentFolder)
-        : buildWebDavFilesPath(unref(user)?.id, currentFolder)
+      const shareId = query.shareId
+      let webDavBasePath
+      if (shareId) {
+        webDavBasePath = buildWebDavSpacesPath([SHARE_JAIL_ID, shareId].join('!'), currentFolder)
+      } else if (storageId) {
+        webDavBasePath = buildWebDavSpacesPath(storageId, currentFolder)
+      } else {
+        webDavBasePath = buildWebDavFilesPath(unref(user)?.id, currentFolder)
+      }
 
       uppyFiles.push({
         source: 'file input',
