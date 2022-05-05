@@ -717,7 +717,7 @@ def checkTestSuites():
             if (type(items) == "list"):
                 suites += items
             elif (type(items) == "string"):
-                suites += [key]
+                suites.append(key)
             else:
                 print("Error: invalid value for suite, it must be a list or string")
                 return False
@@ -795,10 +795,10 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
-    e2e_pipelines = e2eTests(ctx)
+    # unit_test_pipelines = unitTests(ctx)
+    # e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
