@@ -23,10 +23,6 @@
     {
       "id": "settings",
       "path": "https://localhost:9200/settings.js"
-    },
-    {
-      "id": "accounts",
-      "path": "https://localhost:9200/accounts.js"
     }
   ],
   "options": {
