@@ -1,0 +1,4 @@
+Bugfix: Space image not shown if file name contains blanks
+
+https://github.com/owncloud/web/pull/6881
+https://github.com/owncloud/web/issues/6874
