@@ -159,7 +159,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
       }
 
       const storageId = params.storageId
-      const shareId = query.shareId
+      const shareId = query?.shareId
       let webDavBasePath
       if (shareId) {
         webDavBasePath = buildWebDavSpacesPath([SHARE_JAIL_ID, shareId].join('!'), currentFolder)

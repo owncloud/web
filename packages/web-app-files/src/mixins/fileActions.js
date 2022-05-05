@@ -1,7 +1,7 @@
 import get from 'lodash-es/get'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
-import { isLocationTrashActive } from '../router'
+import { isLocationSharesActive, isLocationTrashActive } from '../router'
 import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
 import AcceptShare from './actions/acceptShare'
 import Copy from './actions/copy'
@@ -15,6 +15,7 @@ import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
+import { ShareStatus } from '../helpers/share'
 
 const actionsMixins = [
   'navigate',
@@ -93,6 +94,13 @@ export default {
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
+                return false
+              }
+
+              if (
+                isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+                resources[0].status !== ShareStatus.accepted
+              ) {
                 return false
               }
 
