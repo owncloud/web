@@ -6,6 +6,7 @@
       :folder-link="folderLink(resource)"
       :parent-folder-link="parentFolderLink(resource)"
       :parent-folder-name-default="defaultParentFolderName"
+      :is-thumbnail-displayed="displayThumbnails"
       @click="$_fileActions_triggerDefaultAction(resource)"
     />
   </div>
@@ -70,12 +71,19 @@ export default {
       }
 
       return this.$gettext('Personal')
+    },
+    displayThumbnails() {
+      return !this.configuration.options.disablePreviews
     }
   },
   beforeMount() {
     this.resource = this.searchResult.data
   },
   mounted() {
+    if (!this.displayThumbnails) {
+      return
+    }
+
     const debounced = debounce(async ({ unobserve }) => {
       unobserve()
       const preview = await loadPreview(
