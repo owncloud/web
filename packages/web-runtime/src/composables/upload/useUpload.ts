@@ -1,4 +1,3 @@
-import { Route } from 'vue-router'
 import { ClientService } from 'web-pkg/src/services'
 import {
   useCapabilityFilesTusSupportHttpMethodOverride,
@@ -10,6 +9,7 @@ import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
+import { Location } from 'vue-router/types/router'
 
 export interface UppyResource {
   id?: string
@@ -21,7 +21,7 @@ export interface UppyResource {
     currentFolder: string
     relativeFolder: string
     relativePath: string
-    route: Route
+    route: Location
     tusEndpoint: string
     webDavBasePath: string
   }

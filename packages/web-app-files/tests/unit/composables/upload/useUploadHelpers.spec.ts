@@ -1,0 +1,94 @@
+import { useUploadHelpers } from '../../../../src/composables/upload'
+import { createWrapper } from './spec'
+
+describe('useUploadHelpers', () => {
+  const currentPathMock = 'path'
+  const uploadPathMock = 'path'
+
+  it('should be valid', () => {
+    expect(useUploadHelpers).toBeDefined()
+  })
+
+  it('returns the correct current path', () => {
+    createWrapper(
+      () => {
+        const { currentPath } = useUploadHelpers()
+        expect(currentPath.value).toBe(`${currentPathMock}/`)
+      },
+      { currentItem: currentPathMock, fileUrl: uploadPathMock }
+    )
+  })
+
+  it('returns the correct uploadPath', () => {
+    createWrapper(
+      () => {
+        const { uploadPath } = useUploadHelpers()
+        expect(uploadPath.value).toBe(uploadPathMock)
+      },
+      { currentItem: currentPathMock, fileUrl: uploadPathMock }
+    )
+  })
+
+  it('converts normal files to uppy resources', () => {
+    createWrapper(
+      () => {
+        const fileName = 'filename'
+        const { inputFilesToUppyFiles } = useUploadHelpers()
+        const uppyResources = inputFilesToUppyFiles([{ name: fileName }])
+        expect(uppyResources.length).toBe(1)
+
+        for (const uppyResource of uppyResources) {
+          expect(uppyResource.name).toBe(fileName)
+          expect(uppyResource.meta).not.toBeUndefined()
+        }
+      },
+      { currentItem: currentPathMock, fileUrl: uploadPathMock }
+    )
+  })
+
+  it('should update the store for newly created folders', async () => {
+    const wrapper = createWrapper(
+      () => {
+        const { updateStoreForCreatedFolders } = useUploadHelpers()
+        return { updateStoreForCreatedFolders }
+      },
+      { currentItem: currentPathMock, fileUrl: uploadPathMock }
+    )
+
+    const spyStoreCommit = jest.spyOn(wrapper.vm.$store, 'commit')
+
+    const uppyResources = [
+      {
+        source: 'source',
+        name: 'file1',
+        type: 'type',
+        data: new Blob(),
+        meta: {
+          currentFolder: 'currentFolder',
+          relativeFolder: 'l1/l2/l3',
+          relativePath: 'relativePath',
+          route: { name: 'files-personal' },
+          tusEndpoint: 'tusEndpoint',
+          webDavBasePath: 'webDavBasePath'
+        }
+      },
+      {
+        source: 'source',
+        name: 'file2',
+        type: 'type',
+        data: new Blob(),
+        meta: {
+          currentFolder: 'currentFolder',
+          relativeFolder: 'l1/l2/l3',
+          relativePath: 'relativePath',
+          route: { name: 'files-personal' },
+          tusEndpoint: 'tusEndpoint',
+          webDavBasePath: 'webDavBasePath'
+        }
+      }
+    ]
+
+    await wrapper.vm.updateStoreForCreatedFolders(uppyResources)
+    expect(spyStoreCommit).toHaveBeenCalledTimes(1)
+  })
+})
