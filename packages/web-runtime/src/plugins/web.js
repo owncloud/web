@@ -15,7 +15,6 @@ export default {
         }
       },
       methods: {
-        ...mapActions('Files', ['addActionToProgress', 'removeActionFromProgress']),
         ...mapActions(['showMessage']),
 
         publicPage() {
