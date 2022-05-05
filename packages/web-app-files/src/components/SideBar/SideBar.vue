@@ -32,6 +32,7 @@ import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -39,6 +40,12 @@ export default defineComponent({
   provide() {
     return {
       displayedItem: computed(() => this.selectedFile)
+    }
+  },
+
+  setup() {
+    return {
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
 
@@ -175,6 +182,9 @@ export default defineComponent({
             this.highlightedFile.webDavPath,
             DavProperties.Default
           )
+          if (this.hasShareJail && isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+            item.name = this.highlightedFile.name
+          }
         }
 
         this.selectedFile = buildResource(item)
