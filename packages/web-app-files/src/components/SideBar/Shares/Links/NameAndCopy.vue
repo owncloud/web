@@ -8,7 +8,11 @@
       </div>
       <div v-else class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon name="link" fill-type="line" />
-        <p class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm" v-text="link.url" />
+        <p
+          v-oc-tooltip="link.url"
+          class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm"
+          v-text="link.url"
+        />
       </div>
       <oc-button
         v-oc-tooltip="copyBtnHint"
