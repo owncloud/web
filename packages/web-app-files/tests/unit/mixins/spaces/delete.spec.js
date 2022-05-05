@@ -141,7 +141,8 @@ function getWrapper() {
         Files: {
           namespaced: true,
           mutations: {
-            REMOVE_FILE: jest.fn()
+            REMOVE_FILE: jest.fn(),
+            REMOVE_SPACE: jest.fn()
           }
         }
       }
