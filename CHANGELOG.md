@@ -31,6 +31,7 @@ Summary
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 * Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
@@ -245,6 +246,13 @@ Details
    have a similiar look-and-feel to people and group shares.
 
    https://github.com/owncloud/web/pull/6749
+
+* Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
+
+   We've refactored the upload input components for files and folders into one component.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6859
 
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 
