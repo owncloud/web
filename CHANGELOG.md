@@ -201,6 +201,7 @@ Details
 
    https://github.com/owncloud/web/pull/6841
    https://github.com/owncloud/web/pull/6873
+   https://github.com/owncloud/web/pull/6887
    https://github.com/owncloud/web/pull/6884
 
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
