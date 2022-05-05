@@ -36,27 +36,30 @@ export default class Preview implements SearchPreview {
       return this.cache.get(term)
     }
 
+    const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const plainResources = await clientService.owncloudSdk.files.search(
       term,
       5, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
 
-    let resources = plainResources.map((plainResource) => {
+    const resources = plainResources.reduce((acc, plainResource) => {
       let resourceName = decodeURIComponent(plainResource.name)
       if (resourceName.startsWith('/dav')) {
         resourceName = resourceName.slice(4)
       }
-
       const resource = buildResource({ ...plainResource, name: resourceName })
-      return { id: resource.id, data: resource }
-    })
 
-    // filter results if hidden files shouldn't be shown due to settings
-    const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
-    if (areHiddenFilesShown !== true) {
-      resources = resources.filter(({ data }) => !data.name.startsWith('.'))
-    }
+      // filter results if hidden files shouldn't be shown due to settings
+      if (
+        !resource.name.startsWith('.') ||
+        (resource.name.startsWith('.') && areHiddenFilesShown)
+      ) {
+        acc.push({ id: resource.id, data: { ...resource } })
+      }
+
+      return acc
+    }, [])
 
     return this.cache.set(term, resources)
   }
