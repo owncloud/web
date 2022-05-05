@@ -252,6 +252,7 @@ Details
    have a similiar look-and-feel to people and group shares.
 
    https://github.com/owncloud/web/pull/6749
+   https://github.com/owncloud/web/pull/6885
 
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 
