@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-button :class="btnClass" justify-content="left" appearance="raw" @click="triggerUpload">
-      <oc-resource-icon :resource="{ extension: '', isFolder }" />
+      <oc-resource-icon :resource="{ extension: '', isFolder }" size="medium" />
       <span :id="uploadLabelId">{{ buttonLabel }}</span>
     </oc-button>
     <input
