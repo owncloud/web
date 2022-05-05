@@ -11,7 +11,7 @@ export default {
     $_downloadFile_items() {
       return [
         {
-          name: 'delete-file',
+          name: 'download-file',
           icon: 'file-download',
           handler: this.$_downloadFile_trigger,
           label: () => {

@@ -131,7 +131,7 @@ export default {
       const { context } = ref.$route.params
 
       let resources
-
+      let webDavPath
       switch (context) {
         case 'public':
           resources = yield ref.$client.publicFiles.list(
@@ -158,18 +158,11 @@ export default {
               throw new Error('graph.user.getMe() has no data')
             }
 
-            resources = yield ref.$client.files.list(
-              buildWebDavSpacesPath(userResponse.data.id, target),
-              1,
-              DavProperties.Default
-            )
+            webDavPath = buildWebDavSpacesPath(userResponse.data.id, target)
           } else {
-            resources = yield ref.$client.files.list(
-              buildWebDavFilesPath(ref.user.id, target),
-              1,
-              DavProperties.Default
-            )
+            webDavPath = buildWebDavFilesPath(ref.user.id, target)
           }
+          resources = yield ref.$client.files.list(webDavPath, 1, DavProperties.Default)
       }
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })

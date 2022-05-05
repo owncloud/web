@@ -433,9 +433,7 @@ export default defineComponent({
 
     isResourceInSharesSelection(resource) {
       return this.sharesSelected?.includes(resource)
-    },
-
-    createRouteTarget() {}
+    }
   }
 })
 </script>
