@@ -33,10 +33,6 @@
       "path": "https://host.docker.internal:9200/settings.js"
     },
     {
-      "id": "accounts",
-      "path": "https://host.docker.internal:9200/accounts.js"
-    },
-    {
       "id": "draw-io",
       "path": "web-app-draw-io",
       "config": {
