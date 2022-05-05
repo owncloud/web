@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { createLink, createLinkArgs } from './actions'
+import { createLink, createLinkArgs, changeRole, changeRoleArgs } from './actions'
 import { LinksEnvironment } from '../../../environment'
 
 export class Link {
@@ -21,5 +21,12 @@ export class Link {
     })
 
     await this.#page.goto(startUrl)
+  }
+
+  async changeRole(args: Omit<changeRoleArgs, 'page'>): Promise<string> {
+    const startUrl = this.#page.url()
+    const role = await changeRole({ page: this.#page, ...args })
+    await this.#page.goto(startUrl)
+    return role
   }
 }
