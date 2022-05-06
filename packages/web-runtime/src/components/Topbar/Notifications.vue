@@ -100,9 +100,9 @@ export default {
         $gettext: this.$gettext,
         routeName: this.$route.name
       }).catch((error) => {
+        console.error(error)
         this.showMessage({
           title: this.$gettext('Loading folder failed…'),
-          desc: error.message,
           status: 'danger'
         })
       })

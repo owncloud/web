@@ -122,10 +122,10 @@ export default {
             return
           }
 
+          console.error(error)
           const translated = this.$gettext('Failed to delete "%{file}"')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: resource.name }, true),
-            desc: error.message,
             status: 'danger'
           })
         })
