@@ -7,6 +7,9 @@ export default {
   files: (state) => {
     return state.files
   },
+  spaces: (state) => {
+    return state.spaces
+  },
   filesAll: (state) => state.filesSearched || state.files,
   currentFolder: (state) => {
     return state.currentFolder

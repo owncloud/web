@@ -280,6 +280,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           mutations: {
             CLEAR_CURRENT_FILES_LIST: jest.fn(),
             CLEAR_FILES_SEARCHED: jest.fn(),
+            UPSERT_SPACE: jest.fn(),
             LOAD_FILES: jest.fn()
           },
           actions: {

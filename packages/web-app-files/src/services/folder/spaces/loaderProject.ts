@@ -74,6 +74,7 @@ export class FolderLoaderSpacesProject implements FolderLoader {
       })
 
       if (!sameRoute) {
+        ref.UPSERT_SPACE(space)
         ref.space = space
       }
     })

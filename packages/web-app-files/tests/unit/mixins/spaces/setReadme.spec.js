@@ -5,7 +5,6 @@ import setReadme from '@files/src/mixins/spaces/actions/setReadme.js'
 import { createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
-import { bus } from 'web-pkg/src/instance'
 import { buildSpace } from '../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
@@ -35,6 +34,9 @@ describe('setReadme', () => {
               .fn()
               .mockImplementation(() => Promise.resolve({ ETag: '60c7243c2e7f1' }))
           }
+        },
+        $route: {
+          params: { storageId: 1 }
         },
         $router: {
           currentRoute: createLocationSpaces('files-spaces-projects'),
@@ -72,12 +74,13 @@ describe('setReadme', () => {
           Files: {
             namespaced: true,
             mutations: {
-              UPDATE_RESOURCE_FIELD: jest.fn()
+              UPDATE_SPACE_FIELD: jest.fn()
             },
             state: {
               currentFolder: {
                 id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
-              }
+              },
+              spaces: [{ id: 1 }]
             }
           }
         }
@@ -136,7 +139,6 @@ describe('setReadme', () => {
     it('should show message on success', async () => {
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      bus.publish = jest.fn((path) => path)
       await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
           {
@@ -147,7 +149,6 @@ describe('setReadme', () => {
       })
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
-      expect(bus.publish).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
