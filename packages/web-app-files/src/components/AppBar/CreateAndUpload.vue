@@ -108,7 +108,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { useAppDefaults, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -117,6 +117,7 @@ import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
+import { clientService } from 'web-pkg/src/services'
 
 export default defineComponent({
   components: {
@@ -157,7 +158,8 @@ export default defineComponent({
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       ...useAppDefaults({
         applicationName: 'files'
-      })
+      }),
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   data: () => ({
@@ -265,7 +267,20 @@ export default defineComponent({
         let resource
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
