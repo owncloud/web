@@ -98,7 +98,9 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { unref } from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   metaInfo() {
@@ -118,6 +120,7 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
+    const hasShareJail = useCapabilityShareJailEnabled()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -128,7 +131,7 @@ export default {
       const { context } = ref.$route.params
 
       let resources
-
+      let webDavPath
       switch (context) {
         case 'public':
           resources = yield ref.$client.publicFiles.list(
@@ -145,11 +148,21 @@ export default {
           )
           break
         default:
-          resources = yield ref.$client.files.list(
-            buildWebDavFilesPath(ref.user.id, target),
-            1,
-            DavProperties.Default
-          )
+          if (unref(hasShareJail)) {
+            const graphClient = clientService.graphAuthenticated(
+              ref.$store.getters.configuration.server,
+              ref.$store.getters.getToken
+            )
+            const userResponse = yield graphClient.users.getMe()
+            if (!userResponse.data) {
+              throw new Error('graph.user.getMe() has no data')
+            }
+
+            webDavPath = buildWebDavSpacesPath(userResponse.data.id, target)
+          } else {
+            webDavPath = buildWebDavFilesPath(ref.user.id, target)
+          }
+          resources = yield ref.$client.files.list(webDavPath, 1, DavProperties.Default)
       }
 
       ref.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
@@ -162,7 +175,7 @@ export default {
 
     return {
       ...useResourcesViewDefaults({ loadResourcesTask }),
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail
     }
   },
 
@@ -182,7 +195,7 @@ export default {
     ...mapState(['user']),
 
     title() {
-      const personalRouteTitle = this.hasSpaces
+      const personalRouteTitle = this.hasShareJail
         ? this.$gettext('Personal')
         : this.$gettext('All files')
       const target =
@@ -235,7 +248,7 @@ export default {
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       } else {
-        const personalRouteTitle = this.hasSpaces
+        const personalRouteTitle = this.hasShareJail
           ? this.$gettext('Personal')
           : this.$gettext('All files')
         breadcrumbs.push(this.createBreadcrumbNode(0, personalRouteTitle, '/'))

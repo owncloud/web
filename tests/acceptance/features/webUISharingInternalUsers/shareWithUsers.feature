@@ -73,7 +73,7 @@ Feature: Sharing files and folders with internal users
     # check that the original file owner can still see the file
     And as "Brian" the content of "new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
-  @disablePreviews
+  @disablePreviews @skipOnOCIS
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
     Given user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has created file "simple-folder/data.zip" in the server
@@ -104,7 +104,7 @@ Feature: Sharing files and folders with internal users
     And as "Brian" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
-  @issue-product-270 @disablePreviews
+  @issue-product-270 @disablePreviews @skipOnOCIS
   Scenario: share a folder with another internal user who unshares the folder
     Given user "Brian" has uploaded file with content "text file" to "simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
@@ -122,7 +122,7 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And the content of file "new-simple-folder/lorem.txt" for user "Brian" should be "text file" in the server
 
-  @issue-product-270 @disablePreviews
+  @issue-product-270 @disablePreviews @skipOnOCIS
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "Brian" has created file "simple-folder/lorem.txt" in the server
     And user "Brian" has logged in using the webUI
@@ -191,7 +191,7 @@ Feature: Sharing files and folders with internal users
     Then the shared-via path in the details dialog should be "/simple-folder"
 
   # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Custom permissions" there
-  @issue-2897 @issue-ocis-2260 @disablePreviews
+  @issue-2897 @issue-ocis-2260 @disablePreviews @skipOnOCIS
   Scenario: sharing details of items inside a re-shared folder ("via" info)
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
@@ -276,43 +276,43 @@ Feature: Sharing files and folders with internal users
       | Editor             | Editor             | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
 
-  @skipOnOC10 @ocisSmokeTest @disablePreviews
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario Outline: Share files/folders with special characters in their name
-    Given user "Brian" has created folder "Sample,Folder,With,Comma" in the server
-    And user "Brian" has created file "sample,1.txt" in the server
-    And user "Brian" has logged in using the webUI
-    When the user shares folder "Sample,Folder,With,Comma" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "Shares/Sample,Folder,With,Comma" offered by user "Brian" using the sharing API in the server
-    And the user shares file "sample,1.txt" with user "Alice Hansen" as "<set-role>" using the webUI
-    And user "Alice" accepts the share "Shares/sample,1.txt" offered by user "Brian" using the sharing API in the server
-    Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
-    And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
-    And user "Alice" should have received a share with these details in the server:
-      | field       | value                            |
-      | uid_owner   | Brian                            |
-      | share_with  | Alice                            |
-      | file_target | /Shares/Sample,Folder,With,Comma |
-      | item_type   | folder                           |
-      | permissions | <permissions-folder>             |
-    And user "Alice" should have received a share with these details in the server:
-      | field       | value                |
-      | uid_owner   | Brian                |
-      | share_with  | Alice                |
-      | file_target | /Shares/sample,1.txt |
-      | item_type   | file                 |
-      | permissions | <permissions-file>   |
-    When the user re-logs in as "Alice" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then these files should be listed on the webUI
-      | files                    |
-      | Sample,Folder,With,Comma |
-      | sample,1.txt             |
-    Examples:
-      | set-role           | expected-role | permissions-folder        | permissions-file |
-      | Viewer             | Viewer        | read                      | read             |
-      | Editor             | Editor        | read,update,create,delete | read,update      |
-      | Custom permissions | Viewer        | read                      | read             |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   @issue-4192 @disablePreviews

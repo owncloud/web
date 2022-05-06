@@ -113,6 +113,8 @@
         :resources="sharesItems"
         :are-resources-clickable="showsAcceptedShares"
         :target-route="resourceTargetLocation"
+        :target-route-param-mapping="resourceTargetParamMapping"
+        :target-route-query-mapping="resourceTargetQueryMapping"
         :header-position="fileListHeaderY"
         :sort-by="sharesSortBy"
         :sort-dir="sharesSortDir"
@@ -173,7 +175,7 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useRouteQuery } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteQuery } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -213,6 +215,19 @@ export default defineComponent({
       any,
       any[]
     >()
+
+    const hasShareJail = useCapabilityShareJailEnabled()
+    const resourceTargetLocation = computed(() =>
+      createLocationSpaces(
+        unref(hasShareJail) ? 'files-spaces-share' : 'files-spaces-personal-home'
+      )
+    )
+    const resourceTargetParamMapping = computed(() =>
+      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined
+    )
+    const resourceTargetQueryMapping = computed(() =>
+      unref(hasShareJail) ? { id: 'shareId' } : undefined
+    )
 
     const viewMode = computed(() =>
       parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
@@ -267,7 +282,9 @@ export default defineComponent({
       sharesItems,
 
       displayedFields,
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation,
+      resourceTargetParamMapping,
+      resourceTargetQueryMapping
     }
   },
 

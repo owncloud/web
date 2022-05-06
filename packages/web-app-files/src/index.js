@@ -6,6 +6,7 @@ import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import PublicLink from './views/PublicLink.vue'
 import Personal from './views/Personal.vue'
+import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
@@ -65,7 +66,8 @@ const navItems = [
     icon: 'share-forward',
     route: {
       path: `/${appInfo.id}/shares`
-    }
+    },
+    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }]
   },
   {
     name: $gettext('Spaces'),
@@ -75,7 +77,7 @@ const navItems = [
       path: `/${appInfo.id}/spaces/projects`
     },
     enabled(capabilities) {
-      return capabilities.spaces && capabilities.spaces.enabled === true
+      return capabilities.spaces && capabilities.spaces.projects === true
     }
   },
   {
@@ -103,6 +105,7 @@ export default {
     PublicFiles,
     PublicLink,
     SearchResults,
+    SharedResource,
     SharedViaLink,
     SharedWithMe,
     SharedWithOthers,

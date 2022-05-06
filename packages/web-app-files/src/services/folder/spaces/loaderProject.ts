@@ -1,13 +1,19 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSpacesActive } from '../../router'
+import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
-import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../../helpers/resources'
 import { DavProperties } from 'web-pkg/src/constants'
+import { Store } from 'vuex'
+import get from 'lodash-es/get'
 
-export class FolderLoaderProject implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+export class FolderLoaderSpacesProject implements FolderLoader {
+  public isEnabled(store: Store<any>): boolean {
+    return get(store, 'getters.capabilities.spaces.projects', false)
+  }
+
+  public isActive(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-project')
   }
 

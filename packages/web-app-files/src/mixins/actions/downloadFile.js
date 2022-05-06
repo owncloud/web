@@ -11,7 +11,7 @@ export default {
     $_downloadFile_items() {
       return [
         {
-          name: 'delete-file',
+          name: 'download-file',
           icon: 'file-download',
           handler: this.$_downloadFile_trigger,
           label: () => {
@@ -22,6 +22,7 @@ export default {
               this.$_isFilesAppActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {

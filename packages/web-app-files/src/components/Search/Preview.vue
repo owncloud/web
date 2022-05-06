@@ -22,7 +22,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -44,7 +44,7 @@ export default {
   },
   setup() {
     return {
-      hasSpaces: useCapabilitySpacesEnabled(),
+      hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
       resourceTargetLocationSpace: createLocationSpaces('files-spaces-project')
     }
@@ -62,7 +62,7 @@ export default {
       return this.spaces.find((space) => space.id === this.resource.storageId)
     },
     defaultParentFolderName() {
-      if (!this.hasSpaces) {
+      if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
       }
 

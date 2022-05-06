@@ -9,6 +9,7 @@ import { useClientService, useRoute, useStore } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, Ref, unref } from '@vue/composition-api'
+import { SHARE_JAIL_ID } from '../../services/folder'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -30,6 +31,7 @@ export function useUploadHelpers(): UploadHelpersResult {
   const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+  const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
 
@@ -43,7 +45,7 @@ export function useUploadHelpers(): UploadHelpersResult {
   })
 
   const uploadPath = computed((): string => {
-    const { params } = unref(route)
+    const { params, query } = unref(route)
     const { owncloudSdk: client } = clientService
 
     if (unref(isPublicLocation)) {
@@ -52,6 +54,14 @@ export function useUploadHelpers(): UploadHelpersResult {
 
     if (unref(isSpacesProjectLocation)) {
       const path = buildWebDavSpacesPath(params.storageId, unref(currentPath))
+      return client.files.getFileUrl(path)
+    }
+
+    if (unref(isSpacesShareLocation)) {
+      const path = buildWebDavSpacesPath(
+        [SHARE_JAIL_ID, query.shareId].join('!'),
+        unref(currentPath)
+      )
       return client.files.getFileUrl(path)
     }
 
@@ -121,7 +131,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
-    const { params } = unref(route)
+    const { params, query } = unref(route)
     const currentFolder = unref(currentPath)
 
     for (const file of files) {
@@ -149,9 +159,15 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
       }
 
       const storageId = params.storageId
-      const webDavBasePath = storageId
-        ? buildWebDavSpacesPath(storageId, currentFolder)
-        : buildWebDavFilesPath(unref(user)?.id, currentFolder)
+      const shareId = query?.shareId
+      let webDavBasePath
+      if (shareId) {
+        webDavBasePath = buildWebDavSpacesPath([SHARE_JAIL_ID, shareId].join('!'), currentFolder)
+      } else if (storageId) {
+        webDavBasePath = buildWebDavSpacesPath(storageId, currentFolder)
+      } else {
+        webDavBasePath = buildWebDavFilesPath(unref(user)?.id, currentFolder)
+      }
 
       uppyFiles.push({
         source: 'file input',

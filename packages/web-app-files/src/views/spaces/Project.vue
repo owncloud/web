@@ -199,13 +199,13 @@ export default defineComponent({
       return concatBreadcrumbs(
         {
           text: this.$gettext('Spaces'),
-          to: '/files/spaces/projects'
+          to: { path: '/files/spaces/projects' }
         },
         {
           text: this.space?.name,
-          to: `/files/spaces/projects/${this.$route.params.storageId}`
+          to: { path: `/files/spaces/projects/${this.$route.params.storageId}` }
         },
-        ...breadcrumbsFromPath(this.$route.path, this.$route.params.item)
+        ...breadcrumbsFromPath(this.$route, this.$route.params.item)
       )
     },
 

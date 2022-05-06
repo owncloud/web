@@ -76,7 +76,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-4167
+  @issue-4167 @issue-6894
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server

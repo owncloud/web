@@ -45,7 +45,7 @@ describe('Preview component', () => {
     it('should equal "All files and folders" if spaces capability is not present', () => {
       const wrapper = getWrapper({
         resourceTargetLocation: null,
-        hasSpaces: false
+        hasShareJail: false
       })
       expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
     })
@@ -84,7 +84,7 @@ function getWrapper({
     params: {}
   },
   spaces = [],
-  hasSpaces = true
+  hasShareJail = true
 } = {}) {
   return shallowMount(Preview, {
     localVue,
@@ -118,7 +118,7 @@ function getWrapper({
     setup: () => {
       return {
         resourceTargetLocation,
-        hasSpaces
+        hasShareJail
       }
     }
   })

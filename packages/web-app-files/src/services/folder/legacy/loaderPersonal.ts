@@ -1,20 +1,19 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
-import { isLocationSpacesActive } from '../../router'
+import { buildResource, buildWebDavFilesPath } from '../../../helpers/resources'
+import { isLocationSpacesActive } from '../../../router'
+import { Store } from 'vuex'
+import { fetchResources } from '../util'
+import get from 'lodash-es/get'
 
-export const fetchResources = async (client, path, properties) => {
-  try {
-    return await client.files.list(path, 1, properties)
-  } catch (error) {
-    console.error(error)
+export class FolderLoaderLegacyPersonal implements FolderLoader {
+  public isEnabled(store: Store<any>): boolean {
+    return !get(store, 'getters.capabilities.spaces.share_jail', false)
   }
-}
 
-export class FolderLoaderPersonal implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  public isActive(router: Router): boolean {
     return isLocationSpacesActive(router, 'files-spaces-personal-home')
   }
 
@@ -30,7 +29,7 @@ export class FolderLoaderPersonal implements FolderLoader {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
         let resources = yield fetchResources(
-          ref.$client,
+          client,
           buildWebDavFilesPath(ref.user.id, path || router.currentRoute.params.item || ''),
           DavProperties.Default
         )
@@ -43,16 +42,17 @@ export class FolderLoaderPersonal implements FolderLoader {
           files: resources
         })
 
-        store.dispatch('Files/loadIndicators', {
-          client: client,
-          currentFolder: currentFolder.path
-        })
+        // load indicators
+        ;(() => {
+          store.dispatch('Files/loadIndicators', {
+            client: client,
+            currentFolder: currentFolder.path
+          })
+        })()
 
-        // Load quota
-        const promiseUser = client.users.getUser(ref.user.id)
-        // The semicolon is important to separate from the previous statement
+        // fetch user quota
         ;(async () => {
-          const user = await promiseUser
+          const user = await client.users.getUser(ref.user.id)
           store.commit('SET_QUOTA', user.quota)
         })()
       } catch (error) {

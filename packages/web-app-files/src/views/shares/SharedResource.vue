@@ -14,7 +14,7 @@
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
-        id="files-personal-empty"
+        id="files-shared-resource-empty"
         class="files-empty"
         icon="folder"
       >
@@ -29,7 +29,7 @@
       </no-content-message>
       <resource-table
         v-else
-        id="files-personal-table"
+        id="files-shared-resource-table"
         v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -73,37 +73,40 @@
 
 <script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
-import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
-import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinFilesListScrolling from '../mixins/filesListScrolling'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
-import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
+// mixins
+import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../../mixins/fileActions'
+import MixinFilesListFilter from '../../mixins/filesListFilter'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 
-import AppBar from '../components/AppBar/AppBar.vue'
-import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
-import QuickActions from '../components/FilesList/QuickActions.vue'
+// components
+import AppBar from '../../components/AppBar/AppBar.vue'
+import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
-import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
-import ContextActions from '../components/FilesList/ContextActions.vue'
+import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+
+// misc
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../../constants'
+import { bus } from 'web-pkg/src/instance'
 import { basename, join } from 'path'
 import PQueue from 'p-queue'
-import { createLocationSpaces } from '../router'
-import { useResourcesViewDefaults } from '../composables'
-import { fetchResources } from '../services/folder'
-import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { createLocationSpaces } from '../../router'
+import { useResourcesViewDefaults } from '../../composables'
+import { defineComponent, unref } from '@vue/composition-api'
+import { fetchResources } from '../../services/folder'
+import { Resource } from '../../helpers/resource'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { useRouteParam, useRouteQuery } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -129,10 +132,22 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
+    const shareId = useRouteQuery('shareId')
+    const shareName = useRouteParam('shareName')
+    const relativePath = useRouteParam('item', '')
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      hasShareJail: useCapabilityShareJailEnabled()
+      resourceTargetLocation: createLocationSpaces('files-spaces-share', {
+        params: {
+          shareName: unref(shareName)
+        },
+        query: {
+          shareId: unref(shareId)
+        }
+      }),
+      shareId,
+      shareName,
+      relativePath
     }
   },
 
@@ -153,12 +168,12 @@ export default defineComponent({
     },
 
     breadcrumbs() {
-      const personalRouteName = this.hasShareJail
-        ? this.$gettext('Personal')
-        : this.$gettext('All files')
       return concatBreadcrumbs(
-        { text: personalRouteName, to: { path: '/' } },
-        ...breadcrumbsFromPath(this.$route, this.$route.params.item)
+        {
+          text: this.$gettext('Shared with me'),
+          to: { path: '/files/shares/with-me' }
+        },
+        ...breadcrumbsFromPath(this.$route, [this.shareName, this.relativePath].join('/'))
       )
     },
 
@@ -167,48 +182,22 @@ export default defineComponent({
     },
 
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configuration.options.disablePreviews
     }
   },
 
   watch: {
     $route: {
-      handler: function (to, from) {
-        const needsRedirectToHome =
-          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
-
-        if (needsRedirectToHome) {
-          this.$router.replace(
-            {
-              name: to.name,
-              params: {
-                ...to.params,
-                item: this.homeFolder
-              },
-              query: to.query
-            },
-            () => {},
-            (e) => {
-              console.error(e)
-            }
-          )
-
-          return
-        }
-
-        const sameRoute = to.name === from?.name
-        const sameItem = to.params?.item === from?.params?.item
-        if (!sameRoute || !sameItem) {
-          this.loadResourcesTask.perform(this, sameRoute)
-        }
+      handler: function () {
+        this.loadResourcesTask.perform(this, this.shareId, this.relativePath)
       },
       immediate: true
     }
   },
 
   mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
+      this.loadResourcesTask.perform(this, this.shareId, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))

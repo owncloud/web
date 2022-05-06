@@ -74,6 +74,10 @@ export const routes = [
     name: 'files-spaces-project'
   },
   {
+    path: '/files/spaces/share/',
+    name: 'files-spaces-share'
+  },
+  {
     path: '/files/public/files/',
     name: 'files-public-files'
   },

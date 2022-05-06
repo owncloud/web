@@ -14,7 +14,7 @@ Feature: Sharing files and folders with internal groups
       | Carol    |
 
   @issue-5216
-  Scenario Outline: sharing  files and folder with an internal problematic group name
+  Scenario Outline: sharing files and folder with an internal problematic group name
     Given these groups have been created in the server:
       | groupname |
       | <group>   |
@@ -28,9 +28,9 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" accepts the share "Shares/testimage.jpg" offered by user "Carol" using the sharing API in the server
     Then group "<group>" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And group "<group>" should be listed as "Viewer" in the collaborators list for file "testimage.jpg" on the webUI
-    When the user re-logs in as "Alice" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
+    # When the user re-logs in as "Alice" using the webUI
+    # And the user opens folder "Shares" using the webUI
+    # Then folder "simple-folder" should be listed on the webUI
     # When the user opens the share dialog for file "simple-folder" using the webUI
     # Then user "Carol King" should be listed as "Owner" in the collaborators list on the webUI
     # And file "testimage.jpg" should be listed on the webUI

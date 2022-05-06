@@ -22,6 +22,7 @@ import {
   Resource
 } from './resource'
 import { User } from './user'
+import { SHARE_JAIL_ID } from '../services/folder'
 
 export function renameResource(resource, newName, newPath) {
   let resourcePath = '/' + newPath + newName
@@ -267,26 +268,26 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Array} shares Shares to be transformed into unique resources
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
  * @param {Boolean} allowSharePermission Asserts whether the reshare permission is available
- * @param {String} server The url of the backend
- * @param {String} token The access token of the authenticated user
+ * @param {Boolean} hasShareJail Asserts whether the share jail is available backend side
  */
 export function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePermission,
-  server,
-  token
+  hasShareJail
 ): Resource[] {
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
-      buildSharedResource(share, incomingShares, allowSharePermission)
+      buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
     )
   }
 
   shares.sort((a, b) => a.path.localeCompare(b.path))
   const resources = addSharedWithToShares(shares)
-  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePermission))
+  return resources.map((share) =>
+    buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
+  )
 }
 
 function addSharedWithToShares(shares) {
@@ -342,7 +343,12 @@ function addSharedWithToShares(shares) {
   return resources
 }
 
-export function buildSharedResource(share, incomingShares = false, allowSharePermission): Resource {
+export function buildSharedResource(
+  share,
+  incomingShares = false,
+  allowSharePermission = true,
+  hasShareJail = false
+): Resource {
   const isFolder = share.item_type === 'folder'
   const resource: Resource = {
     id: share.id,
@@ -373,8 +379,15 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
     resource.sharedWith = share.sharedWith || []
     resource.status = parseInt(share.state)
     resource.name = path.basename(share.file_target)
-    resource.path = share.file_target
-    resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
+    if (hasShareJail) {
+      // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
+      // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root. should ideally be changed backend side.
+      resource.path = '/'
+      resource.webDavPath = buildWebDavSpacesPath([SHARE_JAIL_ID, resource.id].join('!'), '/')
+    } else {
+      resource.path = share.file_target
+      resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
+    }
     resource.canDownload = () => share.state === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)

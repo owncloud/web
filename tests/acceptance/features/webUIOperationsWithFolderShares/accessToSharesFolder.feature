@@ -17,12 +17,12 @@ Feature: Upload into a folder Shares
     When user "Alice" logs in using the webUI
     Then folder "Shares" should not be listed on the webUI
 
-  @issue-ocis-2322 @notToImplementOnOC10
-  Scenario: the Shares folder should not be listed even without any share
-    When user "Alice" logs in using the webUI
-    Then folder "Shares" should not be listed on the webUI
 
 
+
+
+
+  @notToImplementOnOCIS
   Scenario: the Shares folder exists after accepting the first shared file
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions in the server
@@ -30,23 +30,23 @@ Feature: Upload into a folder Shares
     When user "Alice" logs in using the webUI
     Then folder "Shares" should be listed on the webUI
 
-  @issue-ocis-2322 @notToImplementOnOC10
-  Scenario: try to upload a file or a folder into a folder Shares with all permissions in oCIS
-    Given user "Brian" has created file "lorem.txt" in the server
-    And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions in the server
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian" in the server
-    And user "Alice" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    Then it should not be possible to create files using the webUI
 
-  @issue-ocis-2322 @notToImplementOnOC10
-  Scenario: try to upload a file or a folder into a folder Shares with read permissions in oCIS
-    Given user "Brian" has created file "lorem.txt" in the server
-    And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions in the server
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian" in the server
-    And user "Alice" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    Then it should not be possible to create files using the webUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: upload of a file into a folder Shares in oc10
@@ -90,15 +90,15 @@ Feature: Upload into a folder Shares
     When the user moves folder "NewFolder" into folder "Shares" using the webUI
     Then folder "NewFolder" should be listed on the webUI
 
-  @issue-ocis-2322 @notToImplementOnOC10
-  Scenario: try to move a file or a folder into a folder Shares in oCIS
-    Given user "Brian" has created file "lorem.txt" in the server
-    And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions in the server
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian" in the server
-    And user "Alice" has created folder "NewFolder" in the server
-    And user "Alice" has logged in using the webUI
-    When the user tries to move folder "NewFolder" into folder "Shares" using the webUI
-    Then the move here folder button should be disabled
+
+
+
+
+
+
+
+
+
 
   @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: the user can delete files that they wrote into the folder Shares

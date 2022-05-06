@@ -96,7 +96,8 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
-  # these are invalid file names on all implementations
+  # these are invalid file names on oc10
+  @notToImplementOnOCIS
   Scenario Outline: Rename a folder using forbidden characters
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
@@ -105,13 +106,12 @@ Feature: rename folders
       | from_name       | to_name           | alert_message                                         |
       | "simple-folder" | "simple\folder"   | Failed to rename "simple-folder" to "simple\folder"   |
       | "simple-folder" | "\\simple-folder" | Failed to rename "simple-folder" to "\\simple-folder" |
+      | "simple-folder" | ".htaccess"       | Failed to rename "simple-folder" to ".htaccess"       |
 
-  @notToImplementOnOCIS
-  # .htaccess is an invalid folder name on oC10
-  Scenario: Try to rename a folder to .htaccess on oC10
-    When the user tries to rename folder "simple-folder" to ".htaccess" using the webUI
-    Then the error message with header 'Failed to rename "simple-folder" to ".htaccess"' should be displayed on the webUI
-    And folder "simple-folder" should be listed on the webUI
+
+
+
+
 
 
   Scenario: Rename a folder putting a name of a file which already exists

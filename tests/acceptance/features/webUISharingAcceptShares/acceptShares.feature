@@ -123,7 +123,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
 
-  @ocisSmokeTest
+  @ocisSmokeTest @skipOnOCIS
   Scenario: accept an offered (pending) share
     Given user "Alice" has created file "toshare.txt" in the server
     And user "Alice" has created file "anotherfile.txt" in the server
@@ -141,7 +141,7 @@ Feature: accept/decline shares coming from internal users
     And file "anotherfile.txt" should not be listed on the webUI
 
 
-
+  @skipOnOCIS
   Scenario: accept a previously declined share
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
@@ -208,7 +208,7 @@ Feature: accept/decline shares coming from internal users
     And the user browses to the shared-with-me page in declined shares view
     Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @ocis-issue-714 @issue-5532
+  @ocis-issue-714 @issue-5532 @skipOnOCIS
   Scenario: the deleted shared file is restored back to the personal file list when accepted from the shared with me file list
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
@@ -241,7 +241,7 @@ Feature: accept/decline shares coming from internal users
     And as "Brian" folder "from_Alice" should exist inside folder "/Shares/simple-folder" in the server
     And as "Brian" folder "from_Carol" should exist inside folder "/Shares/simple-folder (2)" in the server
 
-  @issue-ocis-1950
+  @issue-ocis-1950 @skipOnOCIS
   Scenario: accept a share that you received as user and as group member
     Given these groups have been created in the server:
       | groupname |

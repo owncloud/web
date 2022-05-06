@@ -1,18 +1,19 @@
 import { bus } from 'web-pkg/src/instance'
+import { Location } from 'vue-router'
 
 export interface BreadcrumbItem {
   text: string
-  to?: string
+  to?: Location
   allowContextActions?: boolean
   onClick?: () => void
 }
 
 export const breadcrumbsFromPath = (
-  currentPath: string,
+  currentRoute: Location,
   resourcePath: string
 ): BreadcrumbItem[] => {
   const pathSplit = (p = '') => p.split('/').filter(Boolean)
-  const current = pathSplit(currentPath)
+  const current = pathSplit(currentRoute.path)
   const resource = pathSplit(resourcePath)
 
   return resource.map(
@@ -20,7 +21,10 @@ export const breadcrumbsFromPath = (
       ({
         allowContextActions: true,
         text,
-        to: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/')
+        to: {
+          path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
+          query: currentRoute.query
+        }
       } as BreadcrumbItem)
   )
 }

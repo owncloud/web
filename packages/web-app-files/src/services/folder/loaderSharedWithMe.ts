@@ -3,27 +3,34 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { isLocationSharesActive } from '../../router'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import { Store } from 'vuex'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
+    return true
+  }
+
+  public isActive(router: Router): boolean {
     return isLocationSharesActive(router, 'files-shares-with-me')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const {
-      store,
-      clientService: { owncloudSdk: client }
-    } = context
+    const { store, clientService } = context
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
+    const hasShareJail = useCapabilityShareJailEnabled(store)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      let resources = yield client.shares.getShares('', {
+      let resources = yield clientService.owncloudSdk.shares.getShares('', {
         state: 'all',
         include_tags: false,
         shared_with_me: true
@@ -32,15 +39,11 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       resources = resources.map((r) => r.shareInfo)
 
       if (resources.length) {
-        const configuration = store.getters.configuration
-        const getToken = store.getters.getToken
-
         resources = aggregateResourceShares(
           resources,
           true,
           unref(hasResharing),
-          configuration.server,
-          getToken
+          unref(hasShareJail)
         )
       }
 

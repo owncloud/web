@@ -108,7 +108,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { useAppDefaults, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -116,6 +116,8 @@ import ResourceUpload from './Upload/ResourceUpload.vue'
 import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
+import { SHARE_JAIL_ID } from '../../services/folder'
+import { clientService } from 'web-pkg/src/services'
 
 export default defineComponent({
   components: {
@@ -153,9 +155,11 @@ export default defineComponent({
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
+      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       ...useAppDefaults({
         applicationName: 'files'
-      })
+      }),
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
   data: () => ({
@@ -263,10 +267,26 @@ export default defineComponent({
         let resource
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
@@ -379,11 +399,28 @@ export default defineComponent({
         let resource
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+          await this.$client.files.createFolder(path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -468,11 +505,28 @@ export default defineComponent({
         let path = pathUtil.join(this.currentPath, fileName)
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+          await this.$client.files.putFileContents(path, '')
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -542,10 +596,26 @@ export default defineComponent({
         let resource
         let path = pathUtil.join(this.currentPath, fileName)
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(

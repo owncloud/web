@@ -1,21 +1,25 @@
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { useRouter, useClientService } from 'web-pkg/src/composables'
+import { useRouter, useClientService, useStore } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
-import { useStore } from '../../../web-pkg/src/composables'
 import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services/client'
 
 import {
+  FolderLoaderSpacesProject,
+  FolderLoaderSpacesShare,
   FolderLoaderFavorites,
-  FolderLoaderPersonal,
-  FolderLoaderProject,
+  FolderLoaderLegacyPersonal,
   FolderLoaderPublicFiles,
   FolderLoaderSharedViaLink,
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
-  FolderLoaderTrashbin
+  FolderLoaderTrashbin,
+  FolderLoaderSpacesPersonal
 } from './folder/'
+
+export * from './folder/util'
+export { SHARE_JAIL_ID } from './folder/spaces/loaderShare'
 
 export type FolderLoaderTask = any
 
@@ -26,18 +30,24 @@ export type TaskContext = {
 }
 
 export interface FolderLoader {
-  isEnabled(router: Router): boolean
+  isEnabled(store: Store<any>): boolean
+  isActive(router: Router): boolean
   getTask(options: TaskContext): FolderLoaderTask
 }
 
 export class FolderService {
-  private loaders: FolderLoader[]
+  private readonly loaders: FolderLoader[]
 
   constructor() {
     this.loaders = [
+      // legacy loaders
+      new FolderLoaderLegacyPersonal(),
+      // spaces loaders
+      new FolderLoaderSpacesPersonal(),
+      new FolderLoaderSpacesProject(),
+      new FolderLoaderSpacesShare(),
+      // generic loaders
       new FolderLoaderFavorites(),
-      new FolderLoaderPersonal(),
-      new FolderLoaderProject(),
       new FolderLoaderPublicFiles(),
       new FolderLoaderSharedViaLink(),
       new FolderLoaderSharedWithMe(),
@@ -53,16 +63,21 @@ export class FolderService {
     const loaders = this.loaders
 
     return useTask(function* (...args) {
-      const loader = loaders.find((l) => l.isEnabled(unref(router)))
+      const loader = loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
       if (!loader) {
-        throw new Error('No folder loader found for route')
+        console.error('No folder loader found for route')
+        return
       }
       const context = {
         clientService,
         store,
         router
       }
-      yield loader.getTask(context).perform(...args)
+      try {
+        yield loader.getTask(context).perform(...args)
+      } catch (e) {
+        console.error(e)
+      }
     })
   }
 }

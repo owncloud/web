@@ -9,11 +9,14 @@ export async function openSpaceMembersPanel(ctx) {
 }
 
 export function canShare(item, store) {
-  return (
-    store.state.user.capabilities.files_sharing &&
-    store.state.user.capabilities.files_sharing.api_enabled &&
-    item.canShare()
-  )
+  const { capabilities } = store.state.user
+  if (!capabilities.files_sharing || !capabilities.files_sharing.api_enabled) {
+    return false
+  }
+  if (item.isReceivedShare() && !capabilities.files_sharing.resharing) {
+    return false
+  }
+  return item.canShare()
 }
 
 export default {

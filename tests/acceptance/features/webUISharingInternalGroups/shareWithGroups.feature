@@ -96,7 +96,7 @@ Feature: Sharing files and folders with internal groups
     # check that the original file owner can still see the file
     And as "Carol" the content of "new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
-  @issue-ocis-1943
+  @issue-ocis-1943 @skipOnOCIS
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
     Given user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has created file "simple-folder/lorem.txt" in the server
@@ -134,7 +134,7 @@ Feature: Sharing files and folders with internal groups
     And as "Carol" the content of "new-simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
     And file "data.zip" should not be listed on the webUI
 
-  @issue-4102
+  @issue-4102 @skipOnOCIS
   Scenario: share a folder with an internal group and a member unshares the folder
     Given user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has uploaded file with content "lorem content" to "simple-folder/lorem.txt" in the server

@@ -717,7 +717,7 @@ def checkTestSuites():
             if (type(items) == "list"):
                 suites += items
             elif (type(items) == "string"):
-                suites += [key]
+                suites.append(key)
             else:
                 print("Error: invalid value for suite, it must be a list or string")
                 return False

@@ -171,12 +171,22 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
-import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityProjectSpacesEnabled,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
 import { ShareTypes } from '../../helpers/share'
 import { createLocationSpaces } from '../../router'
+
+const mapResourceFields = (resource: Resource, mapping = {}) => {
+  return Object.keys(mapping).reduce((result, resourceKey) => {
+    result[mapping[resourceKey]] = resource[resourceKey]
+    return result
+  }, {})
+}
 
 export default defineComponent({
   mixins: [Rename],
@@ -250,6 +260,33 @@ export default defineComponent({
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * Maps resource values to route params. Use `{ resourceFieldName: 'routeParamName' }` as format.
+     *
+     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
+     * to the `fileId` param of the target route.
+     *
+     * Defaults to `{ storageId: 'storageId' } to map the value of the `storageId` field of a resource
+     * to the `storageId` param of the target route.
+     */
+    targetRouteParamMapping: {
+      type: Object,
+      required: false,
+      default: () => ({ storageId: 'storageId' })
+    },
+    /**
+     * Maps resource values to route query options. Use `{ resourceFieldName: 'routeQueryName' }` as format.
+     *
+     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
+     * to the `fileId` query option of the target route.
+     *
+     * Defaults to an empty object because no query options are expected as default.
+     */
+    targetRouteQueryMapping: {
+      type: Object,
+      required: false,
+      default: () => ({})
     },
     /**
      * Asserts whether clicking on the resource name triggers any action
@@ -342,7 +379,8 @@ export default defineComponent({
   },
   setup() {
     return {
-      hasSpaces: useCapabilitySpacesEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
   data() {
@@ -532,32 +570,40 @@ export default defineComponent({
       this.openWithPanel('sharing-item')
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file.storageId)
+      return this.createFolderLink(file.path, file, false)
     },
     parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.storageId)
+      return this.createFolderLink(path.dirname(file.path), file, true)
     },
-    createFolderLink(path, storageId) {
+    createFolderLink(path, resource, parentFolder) {
       if (this.targetRoute === null) {
         return {}
       }
 
-      const matchingSpace = this.getMatchingSpace(storageId)
+      const params = {
+        item: path.replace(/^\//, '') || '/',
+        ...this.targetRoute.params,
+        ...mapResourceFields(resource, this.targetRouteParamMapping)
+      }
+      const query = {
+        ...this.targetRoute.query,
+        ...mapResourceFields(resource, this.targetRouteQueryMapping)
+      }
 
-      if (matchingSpace && matchingSpace?.driveType === 'project') {
-        return createLocationSpaces('files-spaces-project', {
-          params: { storageId, item: path.replace(/^\//, '') || undefined }
-        })
+      if (this.hasProjectSpaces) {
+        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        if (matchingSpace?.driveType === 'project') {
+          return createLocationSpaces('files-spaces-project', {
+            params,
+            query
+          })
+        }
       }
 
       return {
         name: this.targetRoute.name,
-        query: this.targetRoute.query,
-        params: {
-          item: path.replace(/^\//, '') || undefined,
-          ...this.targetRoute.params,
-          ...(storageId && { storageId })
-        }
+        params,
+        query
       }
     },
     fileDragged(file) {
@@ -705,13 +751,15 @@ export default defineComponent({
       return this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {
-      if (!this.hasSpaces) {
-        return this.$gettext('All files and folders')
+      if (this.hasProjectSpaces) {
+        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        if (matchingSpace?.driveType === 'project') {
+          return matchingSpace.name
+        }
       }
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
 
-      if (matchingSpace && matchingSpace?.driveType === 'project') {
-        return matchingSpace.name
+      if (!this.hasShareJail) {
+        return this.$gettext('All files and folders')
       }
 
       return this.$gettext('Personal')

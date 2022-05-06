@@ -3,12 +3,21 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'
+import { Store } from 'vuex'
 import { ShareTypes } from '../../helpers/share'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {
-  public isEnabled(router: Router): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(store: Store<any>): boolean {
+    return true
+  }
+
+  public isActive(router: Router): boolean {
     return isLocationSharesActive(router, 'files-shares-with-others')
   }
 
@@ -19,6 +28,7 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
     } = context
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
+    const hasShareJail = useCapabilityShareJailEnabled(store)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
@@ -37,15 +47,11 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
 
       resources = resources.map((r) => r.shareInfo)
       if (resources.length) {
-        const configuration = store.getters.configuration
-        const getToken = store.getters.getToken
-
         resources = aggregateResourceShares(
           resources,
           false,
           unref(hasResharing),
-          configuration.server,
-          getToken
+          unref(hasShareJail)
         )
       }
 

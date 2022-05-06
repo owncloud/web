@@ -90,16 +90,12 @@ Feature: spaces.personal
     And "Brian" accepts the following share
       | name             |
       | folder_to_shared |
-    And "Brian" navigates to the personal space page
     And "Brian" renames the following resource
       | resource                          | as            |
-      | Shares/folder_to_shared/lorem.txt | lorem_new.txt |
+      | folder_to_shared/lorem.txt | lorem_new.txt |
     And "Brian" uploads the following resource
       | resource   | to                      |
-      | simple.pdf | Shares/folder_to_shared |
-    And "Brian" copies the following resource
-      | resource                | to       |
-      | Shares/folder_to_shared | Personal |
+      | simple.pdf | folder_to_shared |
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" uploads the following resource
@@ -107,7 +103,7 @@ Feature: spaces.personal
       | PARENT/simple.pdf | folder_to_shared | true           |
     When "Brian" restores following resources
       | resource   | to                      | version |
-      | simple.pdf | Shares/folder_to_shared | 1       |
+      | simple.pdf | folder_to_shared | 1       |
     When "Alice" deletes the following resources
       | resource                       |
       | folder_to_shared/lorem_new.txt |
