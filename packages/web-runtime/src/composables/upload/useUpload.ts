@@ -80,8 +80,7 @@ export function useUpload(options: UploadOptions): UploadResult {
   watch(
     uppyOptions,
     () => {
-      // @TODO use Tus once the backend supports it on password protected links
-      if (unref(uppyOptions).isTusSupported && !unref(publicLinkPassword)) {
+      if (unref(uppyOptions).isTusSupported) {
         options.uppyService.useTus(unref(uppyOptions) as any)
         return
       }
