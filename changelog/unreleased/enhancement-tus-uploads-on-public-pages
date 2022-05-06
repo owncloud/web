@@ -1,0 +1,6 @@
+Enhancement: Enable tus upload for password protected public links
+
+Uploading files on password protected public links now features tus uploads if the backend supports it.
+
+https://github.com/owncloud/web/issues/6819
+https://github.com/owncloud/web/pull/6890
