@@ -157,7 +157,6 @@ export default {
           console.error(error)
           this.showMessage({
             title: this.$gettext('Failed to change space quota'),
-            desc: error,
             status: 'danger'
           })
         })

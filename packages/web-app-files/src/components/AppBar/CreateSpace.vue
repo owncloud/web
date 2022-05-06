@@ -117,9 +117,9 @@ export default {
           })
         })
         .catch((error) => {
+          console.error(error)
           this.showMessage({
             title: this.$gettext('Creating space failed…'),
-            desc: error,
             status: 'danger'
           })
         })
