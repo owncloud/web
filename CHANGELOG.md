@@ -38,6 +38,7 @@ Summary
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
+* Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
@@ -305,6 +306,14 @@ Details
    for example, as a project space gets added or renamed.
 
    https://github.com/owncloud/web/pull/6868
+
+* Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
+
+   Uploading files on password protected public links now features tus uploads if the backend
+   supports it.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6890
 
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 
