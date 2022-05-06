@@ -795,10 +795,11 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    # unit_test_pipelines = unitTests(ctx)
-    # e2e_pipelines = e2eTests(ctx)
+    unit_test_pipelines = unitTests(ctx)
+    e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return acceptance_pipelines
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+
 
 def afterPipelines(ctx):
     return build(ctx) + notify()

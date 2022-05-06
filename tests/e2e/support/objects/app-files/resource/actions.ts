@@ -19,7 +19,15 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    await page.locator(`[data-test-resource-name="${name}"]`).click()
+    const resource = await page.locator(`[data-test-resource-name="${name}"]`)
+    const itemId = await resource.locator('//ancestor::tr').getAttribute('data-item-id')
+
+    await Promise.all([
+      resource.click(),
+      page.waitForResponse(
+        (resp) => resp.url().endsWith(encodeURIComponent(name)) || resp.url().endsWith(itemId)
+      )
+    ])
   }
 }
 
