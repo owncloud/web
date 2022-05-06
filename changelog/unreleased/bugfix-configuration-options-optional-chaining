@@ -1,0 +1,6 @@
+Bugfix: Enable optional chaining on configuration options access
+
+We've optional chaining on configuration options access to prevent unwanted access on
+undefined properties which might cause errors.
+
+https://github.com/owncloud/web/pull/6891
