@@ -228,7 +228,7 @@ export default defineComponent({
     },
 
     helpersEnabled() {
-      return this.configuration.options.contextHelpers
+      return this.configuration?.options?.contextHelpers
     },
 
     viaLinkHelp() {

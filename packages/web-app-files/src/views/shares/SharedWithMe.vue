@@ -366,7 +366,7 @@ export default defineComponent({
       }
     },
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews && this.viewMode === ShareStatus.accepted
+      return !this.configuration?.options?.disablePreviews && this.viewMode === ShareStatus.accepted
     }
   },
 

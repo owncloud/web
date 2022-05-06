@@ -80,11 +80,11 @@ export default {
     },
 
     isFeedbackLinkEnabled() {
-      return !this.configuration.options.disableFeedbackLink
+      return !this.configuration?.options?.disableFeedbackLink
     },
 
     feedbackLinkOptions() {
-      const feedback = this.configuration.options.feedbackLink
+      const feedback = this.configuration?.options?.feedbackLink
       if (!this.isFeedbackLinkEnabled || !feedback) {
         return {}
       }

@@ -95,7 +95,7 @@ export default {
       )
     },
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     }
   },
   mounted() {

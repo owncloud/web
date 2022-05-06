@@ -143,7 +143,7 @@ export default {
     ...mapGetters(['configuration', 'getToken', 'user']),
 
     helpersEnabled() {
-      return this.configuration.options.contextHelpers
+      return this.configuration?.options?.contextHelpers
     },
 
     inviteCollaboratorHelp() {
@@ -197,7 +197,7 @@ export default {
           query,
           'folder',
           1,
-          this.configuration.options.sharingRecipientsPerPage
+          this.configuration?.options?.sharingRecipientsPerPage
         )
 
         const users = recipients.exact.users

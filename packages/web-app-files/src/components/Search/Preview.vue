@@ -73,7 +73,7 @@ export default {
       return this.$gettext('Personal')
     },
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     }
   },
   beforeMount() {

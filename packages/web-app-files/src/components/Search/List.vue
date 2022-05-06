@@ -83,7 +83,7 @@ export default defineComponent({
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     }
   },
   watch: {
