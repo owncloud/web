@@ -145,7 +145,7 @@ export default defineComponent({
     },
 
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     }
   },
 

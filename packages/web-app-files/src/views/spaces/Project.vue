@@ -225,7 +225,7 @@ export default defineComponent({
         : this.$gettext('Show less')
     },
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     },
     memberCount() {
       return this.space.spaceMemberIds.length

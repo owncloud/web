@@ -104,7 +104,7 @@ export default defineComponent({
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     helpersEnabled() {
-      return this.configuration.options.contextHelpers
+      return this.configuration?.options?.contextHelpers
     },
 
     quickLinkHelp() {
@@ -116,7 +116,7 @@ export default defineComponent({
     },
 
     displayThumbnails() {
-      return !this.configuration.options.disablePreviews
+      return !this.configuration?.options?.disablePreviews
     }
   },
 
