@@ -84,7 +84,7 @@ Feature: copy files and folders
     And file "data.zip" should be listed on the webUI
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     And as "Alice" file "simple-folder/data.zip" should exist in the server
-w
+
   @issue-6892
   Scenario: copy a file into another folder with no change permission
     Given user "Alice" has created file "lorem.txt" in the server

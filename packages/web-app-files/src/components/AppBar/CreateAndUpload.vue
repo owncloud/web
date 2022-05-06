@@ -399,7 +399,20 @@ export default defineComponent({
         let resource
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
@@ -492,7 +505,20 @@ export default defineComponent({
         let path = pathUtil.join(this.currentPath, fileName)
 
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
@@ -570,7 +596,20 @@ export default defineComponent({
         let resource
         let path = pathUtil.join(this.currentPath, fileName)
         if (this.isPersonalLocation) {
-          path = buildWebDavFilesPath(this.user.id, path)
+          if (this.hasShareJail) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.getToken
+            )
+            const userResponse = await graphClient.users.getMe()
+            if (!userResponse.data) {
+              console.error('graph.user.getMe() has no data')
+              return
+            }
+            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+          } else {
+            path = buildWebDavFilesPath(this.user.id, path)
+          }
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
           path = buildWebDavSpacesPath(this.$route.params.storageId, path)
