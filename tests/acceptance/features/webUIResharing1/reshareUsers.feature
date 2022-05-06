@@ -86,24 +86,24 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read, share           |
 
-  @skipOnOC10
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for the receiver ( ocis bug demonstration)
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian" in the server
-    And user "Alice" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Viewer" with permissions "," using the webUI
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API in the server
-    And user "Carol" should have received a share with these details in the server:
-      | field       | value                 |
-      | uid_owner   | Alice                 |
-      | share_with  | Carol                 |
-      | file_target | /Shares/simple-folder |
-      | item_type   | folder                |
-      | permissions | read                  |
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @skipOnOCIS
   Scenario: share a folder without share permissions and check if another user can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -111,7 +111,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "simple-folder" using the webUI
 
-
+  @skipOnOCIS
   Scenario: share a file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions in the server
@@ -120,7 +120,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 
-
+  @skipOnOCIS
   Scenario: share a received folder without share permissions and check if another user can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -130,7 +130,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "simple-folder" using the webUI
 
-
+  @skipOnOCIS
   Scenario: share a received file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions in the server

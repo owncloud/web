@@ -73,7 +73,7 @@ Feature: Versions of a file
     And the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
 
-  @issue-ocis-2319
+  @issue-ocis-2319 @skipOnOCIS
   Scenario: change the file content of a received shared file
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
     And the administrator has set the default folder for received shares to "Shares" in the server
