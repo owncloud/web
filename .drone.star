@@ -800,7 +800,6 @@ def stagePipelines(ctx):
     acceptance_pipelines = acceptance(ctx)
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
-
 def afterPipelines(ctx):
     return build(ctx) + notify()
 
