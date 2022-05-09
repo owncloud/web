@@ -75,6 +75,7 @@ import { ShareTypes } from '../../../helpers/share'
 import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'FileShares',
@@ -376,6 +377,7 @@ export default {
           this.showMessage({
             title: this.$gettext('Share was removed successfully')
           })
+          bus.publish('app.files.list.load')
         })
         .catch((error) => {
           console.error(error)

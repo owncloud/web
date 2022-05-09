@@ -72,6 +72,7 @@ import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../../helpers/resource'
+import { bus } from 'web-pkg/src/instance'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -113,6 +114,12 @@ export default defineComponent({
 
   created() {
     this.loadResourcesTask.perform()
+
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', () => {
+      this.loadResourcesTask.perform()
+    })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
   },
 
   beforeDestroy() {
