@@ -9,4 +9,5 @@ We've implemented Uppy as a library for handling uploads. This concludes the fol
 - Removed `vue2-dropzone` and `vue-drag-drop` libraries
 
 https://github.com/owncloud/web/pull/6202
+https://github.com/owncloud/web/issues/5031
 https://github.com/owncloud/web/issues/6268

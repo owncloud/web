@@ -1,0 +1,9 @@
+Enhancement: Introduce sharing jail
+
+We've added the sharing jail to oCIS which means that navigating and 
+working with shares now happens inside the `Shares` navigation item.
+
+https://github.com/owncloud/web/pull/6593
+https://github.com/owncloud/web/pull/6909
+https://github.com/owncloud/web/issues/5152
+https://github.com/owncloud/web/issues/6448

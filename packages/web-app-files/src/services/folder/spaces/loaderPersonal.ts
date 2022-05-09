@@ -29,15 +29,15 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        const userResponse = yield graphClient.users.getMe()
-        if (!userResponse.data) {
-          throw new Error('graph.user.getMe() has no data')
+        const drivesResponse = yield graphClient.drives.listMyDrives('', 'driveType eq personal')
+        if (!drivesResponse.data) {
+          throw new Error('No personal space found')
         }
 
         let resources = yield fetchResources(
           clientService.owncloudSdk,
           buildWebDavSpacesPath(
-            userResponse.data.id,
+            drivesResponse.data.value[0].id,
             path || router.currentRoute.params.item || ''
           ),
           DavProperties.Default
