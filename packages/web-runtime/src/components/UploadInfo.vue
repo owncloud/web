@@ -144,9 +144,14 @@ export default {
       return this.createFolderLink(path.dirname(file.path), file.storageId, file.targetRoute)
     },
     defaultParentFolderName(file) {
+      const { targetRoute } = file
       // FIXME: use isLocationSpacesActive(), but it currently lies in the files app
-      if (file.targetRoute?.name === 'files-spaces-project') {
-        return file.targetRoute.params.name
+      if (targetRoute?.name === 'files-spaces-project') {
+        return targetRoute.params.name
+      }
+      // Root of a share -> use share name
+      if (this.hasShareJail && targetRoute?.name === 'files-spaces-share') {
+        return targetRoute.params.shareName
       }
       return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
     },
@@ -161,7 +166,8 @@ export default {
         query: targetRoute.query,
         params: {
           ...(storageId && path && { storageId }),
-          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage })
+          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage }),
+          ...(targetRoute.params?.shareName && { shareName: targetRoute.params?.shareName })
         }
       }
 
