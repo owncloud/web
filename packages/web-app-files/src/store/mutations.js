@@ -36,7 +36,16 @@ export default {
     Vue.set(spaceSource, index, newResource)
   },
   UPSERT_SPACE(state, space) {
-    state.spaces.push(space)
+    const spaces = [...state.spaces]
+    const index = spaces.findIndex((r) => r.id === space.id)
+    const found = index > -1
+
+    if (found) {
+      spaces.splice(index, 1, space)
+    } else {
+      spaces.push(space)
+    }
+    state.spaces = spaces
   },
   REMOVE_SPACE(state, space) {
     state.spaces = state.spaces.filter((s) => s.id !== space.id)
@@ -50,6 +59,9 @@ export default {
   },
   SET_CURRENT_FOLDER(state, currentFolder) {
     state.currentFolder = currentFolder
+  },
+  SET_CURRENT_SPACE(state, currentSpace) {
+    state.currentSpace = currentSpace
   },
   CLEAR_FILES(state) {
     state.files = []

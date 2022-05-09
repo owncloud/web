@@ -1,0 +1,8 @@
+Bugfix: Setting image and readme for spaces
+
+* An issue where setting a space-image or -readme would corrupt the file list has been fixed.
+* Setting images from within the `.space` folder has been fixed.
+* Setting images and readme files with specials characters in their names has been fixed.
+
+https://github.com/owncloud/web/pull/6898
+https://github.com/owncloud/web/issues/6875

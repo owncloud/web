@@ -1,6 +1,5 @@
 import { isLocationSpacesActive } from '../../../router'
 import { mapMutations, mapState, mapActions } from 'vuex'
-import { bus } from 'web-pkg/src/instance'
 
 export default {
   inject: {
@@ -9,7 +8,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('Files', ['currentFolder']),
+    ...mapState('Files', ['currentFolder', 'spaces']),
     ...mapState(['user']),
     $_setSpaceReadme_items() {
       return [
@@ -48,26 +47,23 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     async $_setSpaceReadme_trigger({ resources }) {
-      const space = this.currentFolder
-
       try {
         const fileContent = await this.$client.files.getFileContents(resources[0].webDavPath)
         const fileMetaData = await this.$client.files.putFileContents(
-          `/spaces/${space.id}/.space/readme.md`,
+          `/spaces/${this.space.id}/.space/readme.md`,
           fileContent
         )
-        this.UPDATE_RESOURCE_FIELD({
-          id: space.id,
+        this.UPDATE_SPACE_FIELD({
+          id: this.space.id,
           field: 'spaceReadmeData',
-          value: { ...space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
+          value: { ...this.space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
         })
         this.showMessage({
           title: this.$gettext('Space description was set successfully')
         })
-        bus.publish('app.files.list.load')
       } catch (error) {
         console.error(error)
         this.showMessage({

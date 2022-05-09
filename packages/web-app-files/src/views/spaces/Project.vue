@@ -265,19 +265,21 @@ export default defineComponent({
           .slice(webDavPathComponents.indexOf(this.space.id) + 1)
           .join('/')
 
-        this.$client.files.fileInfo(buildWebDavSpacesPath(this.space.id, path)).then((data) => {
-          const resource = buildResource(data)
-          loadPreview({
-            resource,
-            isPublic: false,
-            dimensions: ImageDimension.Preview,
-            server: this.configuration.server,
-            userId: this.user.id,
-            token: this.getToken
-          }).then((imageBlob) => {
-            this.imageContent = imageBlob
+        this.$client.files
+          .fileInfo(buildWebDavSpacesPath(this.space.id, decodeURIComponent(path)))
+          .then((data) => {
+            const resource = buildResource(data)
+            loadPreview({
+              resource,
+              isPublic: false,
+              dimensions: ImageDimension.Preview,
+              server: this.configuration.server,
+              userId: this.user.id,
+              token: this.getToken
+            }).then((imageBlob) => {
+              this.imageContent = imageBlob
+            })
           })
-        })
       },
       deep: true
     },
@@ -292,7 +294,7 @@ export default defineComponent({
           .join('/')
 
         this.$client.files
-          .getFileContents(buildWebDavSpacesPath(this.space.id, path))
+          .getFileContents(buildWebDavSpacesPath(this.space.id, decodeURIComponent(path)))
           .then((fileContents) => {
             if (this.markdownResizeObserver && this.$refs.markdownContainer) {
               this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
@@ -338,6 +340,7 @@ export default defineComponent({
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
+      'UPSERT_SPACE',
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILE',
       'REMOVE_FILE_FROM_SEARCHED',

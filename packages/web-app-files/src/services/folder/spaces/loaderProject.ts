@@ -72,6 +72,7 @@ export class FolderLoaderSpacesProject implements FolderLoader {
         currentFolder: currentFolder?.path,
         storageId: space.id
       })
+      ref.UPSERT_SPACE(space)
 
       if (!sameRoute) {
         ref.space = space

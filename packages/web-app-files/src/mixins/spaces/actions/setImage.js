@@ -2,7 +2,6 @@ import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { buildResource } from '../../../helpers/resources'
-import { bus } from 'web-pkg/src/instance'
 import { thumbnailService } from '../../../services'
 
 export default {
@@ -54,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     async $_setSpaceImage_trigger({ resources }) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
@@ -62,11 +61,10 @@ export default {
       const sourcePath = resources[0].webDavPath
       const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`
 
-      if (sourcePath === destinationPath) {
-        return
-      }
       try {
-        await this.$client.files.copy(sourcePath, destinationPath)
+        if (sourcePath !== destinationPath) {
+          await this.$client.files.copy(sourcePath, destinationPath)
+        }
         const fileInfo = await this.$client.files.fileInfo(destinationPath)
         const file = buildResource(fileInfo)
         const { data } = await graphClient.drives.updateDrive(
@@ -83,7 +81,8 @@ export default {
           },
           {}
         )
-        this.UPDATE_RESOURCE_FIELD({
+
+        this.UPDATE_SPACE_FIELD({
           id: storageId,
           field: 'spaceImageData',
           value: data.special.find((special) => special.specialFolder.name === 'image')
@@ -92,7 +91,6 @@ export default {
         this.showMessage({
           title: this.$gettext('Space image was set successfully')
         })
-        bus.publish('app.files.list.load')
       } catch (error) {
         console.error(error)
         this.showMessage({

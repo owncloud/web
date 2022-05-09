@@ -7,7 +7,6 @@ import mockAxios from 'jest-mock-axios'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 import fileFixtures from '__fixtures__/files'
-import { bus } from 'web-pkg/src/instance'
 import { thumbnailService } from '../../../../src/services'
 import { buildSpace } from '../../../../src/helpers/resources'
 
@@ -73,7 +72,7 @@ describe('setImage', () => {
           Files: {
             namespaced: true,
             mutations: {
-              UPDATE_RESOURCE_FIELD: jest.fn()
+              UPDATE_SPACE_FIELD: jest.fn()
             }
           }
         }
@@ -162,7 +161,6 @@ describe('setImage', () => {
 
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      bus.publish = jest.fn((path) => path)
       await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
           {
@@ -173,7 +171,6 @@ describe('setImage', () => {
       })
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
-      expect(bus.publish).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
@@ -196,7 +193,10 @@ describe('setImage', () => {
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
 
-    it('should not set the image if source and destination path are the same', async () => {
+    it('should not copy the image if source and destination path are the same', async () => {
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
+      })
       const wrapper = getWrapper()
       await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
