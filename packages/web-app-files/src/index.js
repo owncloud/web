@@ -67,7 +67,10 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/shares`
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }]
+    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }],
+    enabled(capabilities) {
+      return capabilities.files_sharing?.api_enabled !== false
+    }
   },
   {
     name: $gettext('Spaces'),
