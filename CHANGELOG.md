@@ -30,6 +30,7 @@ Summary
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 * Enhancement - Introduce quicklinks: [#6820](https://github.com/owncloud/web/pull/6820)
+* Enhancement - Introduce sharing jail: [#6593](https://github.com/owncloud/web/pull/6593)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
@@ -240,6 +241,16 @@ Details
    https://github.com/owncloud/web/issues/6605
    https://github.com/owncloud/web/pull/6820
 
+* Enhancement - Introduce sharing jail: [#6593](https://github.com/owncloud/web/pull/6593)
+
+   We've added the sharing jail to oCIS which means that navigating and working with shares now
+   happens inside the `Shares` navigation item.
+
+   https://github.com/owncloud/web/issues/5152
+   https://github.com/owncloud/web/issues/6448
+   https://github.com/owncloud/web/pull/6593
+   https://github.com/owncloud/web/pull/6909
+
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
    We've added the app "user-management" with the following features: * Listing, creating,
@@ -315,6 +326,7 @@ Details
    while uploads are in progress - Improved rendering of uploadProgress-visualization -
    Removed `vue2-dropzone` and `vue-drag-drop` libraries
 
+   https://github.com/owncloud/web/issues/5031
    https://github.com/owncloud/web/issues/6268
    https://github.com/owncloud/web/pull/6202
 
