@@ -58,15 +58,12 @@
           <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
           <div class="storage-wrapper-text">
             <p class="oc-my-rm">
-              <template v-if="!isNaN(quota.relative) && quota.definition !== 'none'">
-                <span v-text="personalStorageLabel" />
-                <br />
-              </template>
+              <span v-text="personalStorageLabel" />
+              <br />
               <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
             </p>
             <oc-progress
-              v-if="!isNaN(quota.relative) && quota.definition !== 'none'"
-              :value="quota.relative"
+              :value="parseInt(quotaUsagePercent)"
               :max="100"
               size="small"
               :variation="quotaProgressVariant"
@@ -98,26 +95,30 @@ export default {
     },
     personalStorageLabel() {
       return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
-        percentage: this.quota.relative || 0
+        percentage: this.quotaUsagePercent
       })
     },
     personalStorageDetailsLabel() {
-      const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
-      const used = this.quota.used
-      return this.$gettextInterpolate(
-        total ? this.$gettext('%{used} of %{total} used') : this.$gettext('%{used} used'),
-        {
-          used: filesize(used),
-          total: filesize(total)
-        }
-      )
+      return this.$gettextInterpolate(this.$gettext('%{used} of %{total} used'), {
+        used: this.quotaUsed,
+        total: this.quotaTotal
+      })
     },
     quotaEnabled() {
       return !!this.quota
     },
+    quotaTotal() {
+      return filesize(this.quota.total)
+    },
+    quotaUsed() {
+      return filesize(this.quota.used)
+    },
+    quotaUsagePercent() {
+      return ((this.quota.used / this.quota.total) * 100).toFixed(1)
+    },
     quotaProgressVariant() {
-      if (this.quotaUsagePercent < this.quota.relative || 0) return 'primary'
-      if (this.quotaUsagePercent < this.quota.relative || 0) return 'warning'
+      if (this.quotaUsagePercent < 80) return 'primary'
+      if (this.quotaUsagePercent < 90) return 'warning'
       return 'danger'
     }
   },
