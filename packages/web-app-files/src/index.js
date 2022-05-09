@@ -132,7 +132,9 @@ export default {
   },
   userReady({ store }) {
     // Load spaces to make them available across the application
-    store.dispatch('Files/loadSpaces', { clientService })
+    if (store.getters.capabilities.spaces?.enabled) {
+      store.dispatch('Files/loadSpaces', { clientService })
+    }
 
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
