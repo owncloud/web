@@ -2,7 +2,22 @@ import { Page } from 'playwright'
 import { User } from '../../../types'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
+import util from 'util'
 
+const invitationInputField = '#files-share-invite-input'
+const filesCollaboratorRolesSelector = '//*[@id="files-collaborators-role-button-new"]'
+const collaboratorRoleItemSelector = `//*[@id="files-role-%s"]`
+const shareInvitationButton = '#new-collaborators-form-create-button'
+const filesSharedWithMe = `#files-shared-with-me-shares-table [data-test-resource-name="%s"]`
+const collaboratorUserItem = `//*[@data-testid="collaborator-user-item-%s"]`
+const shareAcceptDeclineButton = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "file-row-share-%s")]`
+const quickShareButton = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
+const recipientRoleDropdownButton = `%s//button[contains(@class,"files-recipient-role-select-btn")]`
+const recipientRoleItemSelector = `%s//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-%s"]`
+const collaboratorEditDropdownButton = `%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`
+const collaboratorUserSelector = `//*[@data-testid="collaborator-user-item-%s"]`
+const removeShareButton = `%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
+const removeShareConfirmationButton = '.oc-modal-body-actions-confirm'
 export interface createShareArgs {
   page: Page
   folder: string
@@ -22,11 +37,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 
   switch (via) {
     case 'QUICK_ACTION':
-      await page
-        .locator(
-          `//*[@data-test-resource-name="${folderName}"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
-        )
-        .click()
+      await page.locator(util.format(quickShareButton, folderName)).click()
       break
 
     case 'SIDEBAR_PANEL':
@@ -36,17 +47,17 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
 
   for (const user of users) {
-    const shareInputLocator = page.locator('#files-share-invite-input')
+    const shareInputLocator = page.locator(invitationInputField)
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
       shareInputLocator.fill(user.id)
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
-    await page.locator('#files-share-invite-input').press('Enter')
+    await page.locator(invitationInputField).press('Enter')
 
-    await page.locator('//*[@id="files-collaborators-role-button-new"]').click()
-    await page.locator(`//*[@id="files-role-${role}"]`).click()
+    await page.locator(filesCollaboratorRolesSelector).click()
+    await page.locator(util.format(collaboratorRoleItemSelector, role)).click()
   }
 
   await Promise.all([
@@ -54,7 +65,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       (resp) =>
         resp.url().endsWith('shares') && resp.status() === 200 && resp.request().method() === 'POST'
     ),
-    page.locator('#new-collaborators-form-create-button').click()
+    page.locator(shareInvitationButton).click()
   ])
 
   await sidebar.close({ page: page })
@@ -70,15 +81,9 @@ export interface acceptShareArgs {
 export const acceptShare = async (args: acceptShareArgs): Promise<void> => {
   const { name, page } = args
   await Promise.all([
-    page
-      .locator(
-        `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-status-accept")]`
-      )
-      .click(),
+    page.locator(util.format(shareAcceptDeclineButton, name, 'status-accept')).click(),
     page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
-    page
-      .locator(`#files-shared-with-me-shares-table [data-test-resource-name="${args.name}"]`)
-      .waitFor()
+    page.locator(util.format(filesSharedWithMe, args.name)).waitFor()
   ])
 }
 
@@ -91,11 +96,7 @@ export interface declineShareArgs {
 
 export const declineShare = async (args: declineShareArgs): Promise<void> => {
   const { page, name } = args
-  await page
-    .locator(
-      `//*[@data-test-resource-name="${name}"]/ancestor::tr//button[contains(@class, "file-row-share-decline")]`
-    )
-    .click()
+  await page.locator(util.format(shareAcceptDeclineButton, name, 'decline')).click()
   await page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200)
 }
 
@@ -121,13 +122,10 @@ export const changeShareeRole = async (args: changeShareeRoleArgs): Promise<void
   await sidebar.openPanel({ page, name: 'sharing' })
 
   for (const user of users) {
-    const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
-
+    const userColumn = util.format(collaboratorUserItem, user.id)
     await Promise.all([
-      page.click(`${userColumn}//button[contains(@class,"files-recipient-role-select-btn")]`),
-      page.click(
-        `${userColumn}//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-${role}"]`
-      ),
+      page.click(util.format(recipientRoleDropdownButton, userColumn)),
+      page.click(util.format(recipientRoleItemSelector, userColumn, role)),
       page.waitForResponse(
         (resp) =>
           resp.url().includes('shares') &&
@@ -159,7 +157,7 @@ export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
   await sidebar.openPanel({ page: page, name: 'sharing' })
 
   for (const user of users) {
-    const userColumn = `//*[@data-testid="collaborator-user-item-${user.id}"]`
+    const userColumn = util.format(collaboratorUserSelector, user.id)
 
     await Promise.all([
       page.waitForResponse(
@@ -168,16 +166,9 @@ export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
           resp.status() === 200 &&
           resp.request().method() === 'DELETE'
       ),
-      page
-        .locator(`${userColumn}//button[contains(@class,"collaborator-edit-dropdown-options-btn")]`)
-        .first()
-        .click(),
-      page
-        .locator(
-          `${userColumn}//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-share")]`
-        )
-        .click(),
-      page.locator('.oc-modal-body-actions-confirm').click()
+      page.locator(util.format(collaboratorEditDropdownButton, userColumn)).first().click(),
+      page.locator(util.format(removeShareButton, userColumn)).click(),
+      page.locator(removeShareConfirmationButton).click()
     ])
   }
 }

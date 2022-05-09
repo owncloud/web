@@ -9,6 +9,21 @@ const downloadButtonSideBar = '#oc-files-actions-sidebar .oc-files-actions-downl
 const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-trigger'
 const downloadButtonBatchActionMultiple = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
+const fileRow = '//ancestor::tr'
+const resourceNameSelector = `[data-test-resource-name="%s"]`
+const addNewResourceButton = `#new-file-menu-btn`
+const createNewFolderButton = '#new-folder-btn'
+const folderNameInputField = '.oc-modal input'
+const resourceUploadButton = '#upload-menu-btn'
+const fileUploadInput = '#files-file-upload-input'
+const closeUploadInfoDialog = '#close-upload-info-btn'
+const filesAction = `.oc-files-actions-%s-trigger`
+const locationConfirmButton = '#location-picker-btn-confirm'
+const routerLinkActive = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
+const fileRenameTextField = '.oc-text-input'
+const deleteButton = 'button.oc-files-actions-delete-trigger'
+const actionConfirmationButton = '.oc-modal-body-actions-confirm'
+const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 
 export const clickResource = async ({
   page,
@@ -19,8 +34,8 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    const resource = await page.locator(`[data-test-resource-name="${name}"]`)
-    const itemId = await resource.locator('//ancestor::tr').getAttribute('data-item-id')
+    const resource = await page.locator(util.format(resourceNameSelector, name))
+    const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
 
     await Promise.all([
       resource.click(),
@@ -50,14 +65,14 @@ export const createResource = async (args: createResourceArgs): Promise<void> =>
     })
 
     if (!folderExists) {
-      await page.locator('#new-file-menu-btn').click()
-      await page.locator('#new-folder-btn').click()
-      await page.locator('.oc-modal input').fill(resource)
+      await page.locator(addNewResourceButton).click()
+      await page.locator(createNewFolderButton).click()
+      await page.locator(folderNameInputField).fill(resource)
       await Promise.all([
         page.waitForResponse(
           (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
         ),
-        page.locator('.oc-modal-body-actions-confirm').click()
+        page.locator(actionConfirmationButton).click()
       ])
     }
 
@@ -81,15 +96,15 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
     await clickResource({ page: page, path: to })
   }
 
-  await page.locator('#upload-menu-btn').click()
-  await page.locator('#files-file-upload-input').setInputFiles(resources.map((file) => file.path))
+  await page.locator(resourceUploadButton).click()
+  await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
 
   if (createVersion) {
-    await page.locator('.oc-modal-body-actions-confirm').click()
+    await page.locator(actionConfirmationButton).click()
     // @TODO check if upload was successful
   }
 
-  await page.locator('#close-upload-info-btn').click()
+  await page.locator(closeUploadInfoDialog).click()
 
   await waitForResources({
     page: page,
@@ -198,9 +213,9 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     await clickResource({ page: page, path: resourceDir })
   }
 
-  await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
-  await page.locator(`.oc-files-actions-${action}-trigger`).first().click()
-  await page.locator('//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a').click()
+  await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+  await page.locator(util.format(filesAction, action)).first().click()
+  await page.locator(routerLinkActive).click()
 
   if (newLocation !== 'Personal') {
     await clickResource({ page: page, path: newLocation })
@@ -213,7 +228,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
         resp.status() === 201 &&
         resp.request().method() === action.toUpperCase()
     ),
-    page.locator('#location-picker-btn-confirm').click()
+    page.locator(locationConfirmButton).click()
   ])
 
   await waitForResources({
@@ -238,9 +253,9 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
     await clickResource({ page, path: resourceDir })
   }
 
-  await page.locator(`//*[@data-test-resource-name="${resourceBase}"]`).click({ button: 'right' })
-  await page.locator('.oc-files-actions-rename-trigger').click()
-  await page.locator('.oc-text-input').fill(newName)
+  await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+  await page.locator(util.format(filesAction, 'rename')).click()
+  await page.locator(fileRenameTextField).fill(newName)
   await Promise.all([
     page.waitForResponse(
       (resp) =>
@@ -248,7 +263,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
         resp.status() === 201 &&
         resp.request().method() === 'MOVE'
     ),
-    page.locator('.oc-modal-body-actions-confirm').click()
+    page.locator(actionConfirmationButton).click()
   ])
 
   await waitForResources({
@@ -277,7 +292,7 @@ export const restoreResourceVersion = async (args: restoreResourceVersionArgs) =
       (resp) =>
         resp.url().includes('/v/') && resp.status() === 204 && resp.request().method() === 'COPY'
     ),
-    await page.locator('//*[@data-testid="file-versions-revert-button"]').click()
+    await page.locator(versionRevertButton).click()
   ])
 }
 
@@ -297,15 +312,13 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     await clickResource({ page, path: folderPaths.join('/') })
   }
 
-  const resourceCheckbox = page.locator(
-    `//*[@data-test-resource-name="${resourceName}"]//ancestor::tr//input`
-  )
+  const resourceCheckbox = page.locator(util.format(checkBox, resourceName))
 
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
-  await page.locator('button.oc-files-actions-delete-trigger').first().click()
-  await page.locator('.oc-modal-body-actions-confirm').click()
+  await page.locator(deleteButton).first().click()
+  await page.locator(actionConfirmationButton).click()
   await page.waitForResponse(
     (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
   )
