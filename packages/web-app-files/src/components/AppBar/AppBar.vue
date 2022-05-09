@@ -33,7 +33,7 @@
       </div>
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
-          <slot v-if="selectedFiles.length === 0" name="actions" />
+          <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
           <size-info v-if="showSelectionInfo" class="oc-visible@l" />
           <batch-actions v-if="showBatchActions" />
         </div>
@@ -73,7 +73,8 @@ export default {
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
-    hasViewOptions: { type: Boolean, default: true }
+    hasViewOptions: { type: Boolean, default: true },
+    showActionsOnSelection: { type: Boolean, default: false }
   },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),

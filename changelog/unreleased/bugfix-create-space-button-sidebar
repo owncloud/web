@@ -1,0 +1,6 @@
+Bugfix: "Create Space"-button with open sidebar
+
+We've fixed a bug where the "Create Space"-button would disappear when opening the sidebar for a space.
+
+https://github.com/owncloud/web/pull/6919
+https://github.com/owncloud/web/issues/6918
