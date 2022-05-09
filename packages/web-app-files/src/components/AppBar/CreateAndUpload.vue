@@ -167,6 +167,22 @@ export default defineComponent({
     path: '',
     fileFolderCreationLoading: false
   }),
+  asyncComputed: {
+    personalDriveId: {
+      async get() {
+        const graphClient = clientService.graphAuthenticated(
+          this.configuration.server,
+          this.getToken
+        )
+
+        const drivesResponse = await graphClient.drives.listMyDrives('', 'driveType eq personal')
+        if (!drivesResponse.data) {
+          throw new Error('No personal space found')
+        }
+        return drivesResponse.data.value[0].id
+      }
+    }
+  },
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
@@ -268,16 +284,7 @@ export default defineComponent({
 
         if (this.isPersonalLocation) {
           if (this.hasShareJail) {
-            const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              this.getToken
-            )
-            const userResponse = await graphClient.users.getMe()
-            if (!userResponse.data) {
-              console.error('graph.user.getMe() has no data')
-              return
-            }
-            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
@@ -400,16 +407,7 @@ export default defineComponent({
 
         if (this.isPersonalLocation) {
           if (this.hasShareJail) {
-            const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              this.getToken
-            )
-            const userResponse = await graphClient.users.getMe()
-            if (!userResponse.data) {
-              console.error('graph.user.getMe() has no data')
-              return
-            }
-            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
@@ -506,16 +504,7 @@ export default defineComponent({
 
         if (this.isPersonalLocation) {
           if (this.hasShareJail) {
-            const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              this.getToken
-            )
-            const userResponse = await graphClient.users.getMe()
-            if (!userResponse.data) {
-              console.error('graph.user.getMe() has no data')
-              return
-            }
-            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
@@ -597,16 +586,7 @@ export default defineComponent({
         let path = pathUtil.join(this.currentPath, fileName)
         if (this.isPersonalLocation) {
           if (this.hasShareJail) {
-            const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              this.getToken
-            )
-            const userResponse = await graphClient.users.getMe()
-            if (!userResponse.data) {
-              console.error('graph.user.getMe() has no data')
-              return
-            }
-            path = buildWebDavSpacesPath(userResponse.data.id, path || '')
+            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
