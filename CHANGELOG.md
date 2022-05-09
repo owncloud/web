@@ -18,6 +18,7 @@ Summary
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
+* Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
@@ -140,6 +141,15 @@ Details
 
    https://github.com/owncloud/web/issues/6549
    https://github.com/owncloud/web/pull/6694
+
+* Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
+
+   * An issue where setting a space-image or -readme would corrupt the file list has been fixed. *
+   Setting images from within the `.space` folder has been fixed. * Setting images and readme
+   files with specials characters in their names has been fixed.
+
+   https://github.com/owncloud/web/issues/6875
+   https://github.com/owncloud/web/pull/6898
 
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 
