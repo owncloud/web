@@ -29,8 +29,10 @@ exports[`User Menu component when basic quota is set renders a danger quota prog
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm"><span>Personal storage (91.0% used)</span> <br> <span class="oc-text-small">910 B of 1 kB used</span></p>
-          <oc-progress-stub value="91" max="100" size="small" variation="danger"></oc-progress-stub>
+          <p class="oc-my-rm">
+            <!----> <span class="oc-text-small">910 B of 1 kB used</span>
+          </p>
+          <!---->
         </div>
       </li>
     </oc-list-stub>
@@ -131,8 +133,10 @@ exports[`User Menu component when quota and no email is set renders a navigation
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm"><span>Personal storage (30.0% used)</span> <br> <span class="oc-text-small">300 B of 1 kB used</span></p>
-          <oc-progress-stub value="30" max="100" size="small" variation="primary"></oc-progress-stub>
+          <p class="oc-my-rm">
+            <!----> <span class="oc-text-small">300 B of 1 kB used</span>
+          </p>
+          <!---->
         </div>
       </li>
     </oc-list-stub>
@@ -169,8 +173,10 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm"><span>Personal storage (81.0% used)</span> <br> <span class="oc-text-small">810 B of 1 kB used</span></p>
-          <oc-progress-stub value="81" max="100" size="small" variation="warning"></oc-progress-stub>
+          <p class="oc-my-rm">
+            <!----> <span class="oc-text-small">810 B of 1 kB used</span>
+          </p>
+          <!---->
         </div>
       </li>
     </oc-list-stub>
@@ -207,8 +213,10 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm"><span>Personal storage (30.0% used)</span> <br> <span class="oc-text-small">300 B of 1 kB used</span></p>
-          <oc-progress-stub value="30" max="100" size="small" variation="primary"></oc-progress-stub>
+          <p class="oc-my-rm">
+            <!----> <span class="oc-text-small">300 B of 1 kB used</span>
+          </p>
+          <!---->
         </div>
       </li>
     </oc-list-stub>
