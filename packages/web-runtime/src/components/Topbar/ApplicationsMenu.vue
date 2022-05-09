@@ -103,5 +103,13 @@ export default {
       right: 1rem;
     }
   }
+
+  a.router-link-active,
+  button.router-link-active {
+    &:focus,
+    &:hover {
+      color: var(--oc-color-swatch-inverse-default);
+    }
+  }
 }
 </style>
