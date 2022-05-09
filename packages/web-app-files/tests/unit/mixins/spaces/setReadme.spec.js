@@ -6,7 +6,6 @@ import { createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
 import { buildSpace } from '../../../../src/helpers/resources'
-
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -79,8 +78,7 @@ describe('setReadme', () => {
             state: {
               currentFolder: {
                 id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
-              },
-              spaces: [{ id: 1 }]
+              }
             }
           }
         }
@@ -137,7 +135,7 @@ describe('setReadme', () => {
   })
   describe('method "$_setSpaceReadme_trigger"', () => {
     it('should show message on success', async () => {
-      const wrapper = getWrapper()
+      const wrapper = getWrapper(true, { id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
@@ -153,7 +151,7 @@ describe('setReadme', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getWrapper(false)
+      const wrapper = getWrapper(false, { id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [

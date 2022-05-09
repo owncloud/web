@@ -51,18 +51,15 @@ export default {
     ...mapActions(['showMessage']),
     async $_setSpaceReadme_trigger({ resources }) {
       try {
-        const storageId = this.$route.params.storageId
-        const space = this.spaces.find((s) => s.id === storageId)
-
         const fileContent = await this.$client.files.getFileContents(resources[0].webDavPath)
         const fileMetaData = await this.$client.files.putFileContents(
-          `/spaces/${space.id}/.space/readme.md`,
+          `/spaces/${this.space.id}/.space/readme.md`,
           fileContent
         )
         this.UPDATE_SPACE_FIELD({
-          id: space.id,
+          id: this.space.id,
           field: 'spaceReadmeData',
-          value: { ...space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
+          value: { ...this.space.spaceReadmeData, ...{ etag: fileMetaData?.ETag } }
         })
         this.showMessage({
           title: this.$gettext('Space description was set successfully')
