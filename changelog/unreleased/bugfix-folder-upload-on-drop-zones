@@ -1,0 +1,6 @@
+Bugfix: Create folders that have been uploaded to public drop pages
+
+Folders that have been uploaded to public drop pages will now get created.
+
+https://github.com/owncloud/web/issues/2443
+https://github.com/owncloud/web/pull/6935
