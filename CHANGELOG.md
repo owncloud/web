@@ -11,6 +11,7 @@ Summary
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
 * Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 * Bugfix - Enable optional chaining on configuration options access: [#6891](https://github.com/owncloud/web/pull/6891)
+* Bugfix - "Create Space"-button with open sidebar: [#6919](https://github.com/owncloud/web/pull/6919)
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
@@ -71,6 +72,14 @@ Details
    undefined properties which might cause errors.
 
    https://github.com/owncloud/web/pull/6891
+
+* Bugfix - "Create Space"-button with open sidebar: [#6919](https://github.com/owncloud/web/pull/6919)
+
+   We've fixed a bug where the "Create Space"-button would disappear when opening the sidebar for
+   a space.
+
+   https://github.com/owncloud/web/issues/6918
+   https://github.com/owncloud/web/pull/6919
 
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 
