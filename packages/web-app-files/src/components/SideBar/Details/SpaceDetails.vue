@@ -108,6 +108,7 @@ export default defineComponent({
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.space?.spaceImageData) {
+        spaceImage.value = undefined
         return
       }
 
@@ -116,7 +117,9 @@ export default defineComponent({
         .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
         .join('/')
 
-      const fileInfo = yield ref.$client.files.fileInfo(buildWebDavSpacesPath(ref.space.id, path))
+      const fileInfo = yield ref.$client.files.fileInfo(
+        buildWebDavSpacesPath(ref.space.id, decodeURIComponent(path))
+      )
       const resource = buildResource(fileInfo)
 
       spaceImage.value = yield loadPreview({
@@ -201,10 +204,7 @@ export default defineComponent({
   },
   watch: {
     'space.spaceImageData': {
-      handler(val) {
-        if (!val) {
-          return
-        }
+      handler() {
         this.loadImageTask.perform(this)
       },
       deep: true

@@ -1,0 +1,6 @@
+Bugfix: Space image showing without setting it
+
+We've fixed a bug where an image would show for a space even though no image has been set.
+
+https://github.com/owncloud/web/issues/6920
+https://github.com/owncloud/web/pull/6928
