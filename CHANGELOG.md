@@ -21,6 +21,7 @@ Summary
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
+* Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
@@ -165,6 +166,13 @@ Details
 
    https://github.com/owncloud/web/issues/6874
    https://github.com/owncloud/web/pull/6881
+
+* Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
+
+   We've fixed a bug where an image would show for a space even though no image has been set.
+
+   https://github.com/owncloud/web/issues/6920
+   https://github.com/owncloud/web/pull/6928
 
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 
