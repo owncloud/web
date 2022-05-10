@@ -267,6 +267,7 @@ Details
    https://github.com/owncloud/web/issues/6448
    https://github.com/owncloud/web/pull/6593
    https://github.com/owncloud/web/pull/6909
+   https://github.com/owncloud/web/pull/6916
 
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 
