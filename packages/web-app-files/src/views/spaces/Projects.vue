@@ -5,6 +5,7 @@
       :breadcrumbs="breadcrumbs"
       :has-view-options="false"
       :has-sidebar-toggle="false"
+      :show-actions-on-selection="true"
     >
       <template #actions>
         <create-space />
