@@ -47,7 +47,7 @@ exports[`UploadInfo component should show uploaded files with parent folder link
 </div>
 `;
 
-exports[`UploadInfo component should show uploaded files without parent folder link 1`] = `
+exports[`UploadInfo component should show uploaded files without parent folder link on public drop pages 1`] = `
 <div id="upload-info" class="oc-rounded oc-box-shadow-medium">
   <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-pt-m"><span class="oc-flex oc-flex-middle"></span>
     <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="close-upload-info-btn">

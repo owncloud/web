@@ -42,6 +42,7 @@ import { createLocationOperations, createLocationPublic } from '../router'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
+import { useUploadHelpers } from '../composables/upload'
 
 export default {
   components: {
@@ -72,7 +73,8 @@ export default {
     return {
       ...useUpload({
         uppyService
-      })
+      }),
+      ...useUploadHelpers()
     }
   },
   data() {
@@ -101,9 +103,6 @@ export default {
         )
       }
       return ''
-    },
-    url() {
-      return this.$client.publicFiles.getFileUrl(this.publicLinkToken) + '/'
     }
   },
   mounted() {
@@ -149,18 +148,9 @@ export default {
         })
     },
 
-    onFilesSelected(files) {
-      const uppyResources = files.map((file) => ({
-        source: 'FileDrop',
-        name: file.name,
-        type: file.type,
-        data: file,
-        meta: {
-          tusEndpoint: this.url,
-          relativePath: file.webkitRelativePath || file.relativePath || ''
-        }
-      }))
-
+    async onFilesSelected(files) {
+      const uppyResources = this.inputFilesToUppyFiles(files)
+      await this.createDirectoryTree(uppyResources)
       this.$uppyService.uploadFiles(uppyResources)
     },
 
@@ -168,7 +158,9 @@ export default {
       this.$uppyService.publish('uploadedFileFetched', {
         uppyResource,
         fetchedFile: {
-          name: uppyResource.name
+          name: uppyResource.name,
+          type: uppyResource.type,
+          extension: uppyResource.extension
         }
       })
     },

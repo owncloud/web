@@ -93,6 +93,7 @@ export function useUpload(options: UploadOptions): UploadResult {
     createDirectoryTree: createDirectoryTree({
       clientService,
       isPublicLocation,
+      isPublicDropLocation,
       publicLinkPassword
     })
   }
@@ -101,10 +102,12 @@ export function useUpload(options: UploadOptions): UploadResult {
 const createDirectoryTree = ({
   clientService,
   isPublicLocation,
+  isPublicDropLocation,
   publicLinkPassword
 }: {
   clientService: ClientService
   isPublicLocation: Ref<boolean>
+  isPublicDropLocation: Ref<boolean>
   publicLinkPassword?: Ref<string>
 }) => {
   return async (files: UppyResource[]) => {
@@ -132,7 +135,7 @@ const createDirectoryTree = ({
           continue
         }
 
-        if (unref(isPublicLocation)) {
+        if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
           await client.publicFiles.createFolder(
             currentFolder,
             folderToCreate,

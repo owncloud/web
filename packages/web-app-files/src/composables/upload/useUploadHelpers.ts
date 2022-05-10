@@ -30,6 +30,7 @@ export function useUploadHelpers(): UploadHelpersResult {
   const route = useRoute()
   const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
+  const isPublicDropLocation = useActiveLocation(isLocationPublicActive, 'files-public-drop')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
   const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
@@ -37,6 +38,10 @@ export function useUploadHelpers(): UploadHelpersResult {
 
   const currentPath = computed((): string => {
     const { params } = unref(route)
+    if (unref(isPublicDropLocation)) {
+      return params.token + '/'
+    }
+
     const path = params.item || ''
     if (path.endsWith('/')) {
       return path
@@ -48,7 +53,7 @@ export function useUploadHelpers(): UploadHelpersResult {
     const { params, query } = unref(route)
     const { owncloudSdk: client } = clientService
 
-    if (unref(isPublicLocation)) {
+    if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
       return client.publicFiles.getFileUrl(unref(currentPath))
     }
 

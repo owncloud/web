@@ -16,8 +16,10 @@ describe('UploadInfo component', () => {
     const wrapper = getShallowWrapper(true)
     expect(wrapper).toMatchSnapshot()
   })
-  it('should show uploaded files without parent folder link', () => {
-    const wrapper = getShallowWrapper(true, [{ name: 'file', type: 'file' }])
+  it('should show uploaded files without parent folder link on public drop pages', () => {
+    const wrapper = getShallowWrapper(true, [
+      { name: 'file', type: 'file', targetRoute: { name: 'files-public-drop' } }
+    ])
     expect(wrapper).toMatchSnapshot()
   })
   it('should show uploaded files with parent folder link', () => {

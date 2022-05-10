@@ -135,7 +135,7 @@ export default {
       this.uploadCancelled = false
     },
     displayFileAsResource(file) {
-      return !!file.targetRoute
+      return file.targetRoute?.name !== 'files-public-drop'
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file.storageId, file.targetRoute)
