@@ -155,7 +155,7 @@ When(
   'the user opens the link edit dialog of file/folder/resource {string} with name {string} using the webUI',
   async function (resource, linkName) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    await client.page.FilesPageElement.filesList().clickLinkEditBtn(linkName)
+    await client.page.FilesPageElement.publicLinksDialog().clickLinkEditBtn(linkName)
   }
 )
 
