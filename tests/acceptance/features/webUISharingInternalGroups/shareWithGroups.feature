@@ -1,7 +1,7 @@
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
-  So that those groups can access the files and folders
+  So that those groups can access the files and folders test
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
