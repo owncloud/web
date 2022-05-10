@@ -176,7 +176,7 @@ else
 	echo "Failing tests will not be retried"
 fi
 
-RUN_ACCEPTANCE_TESTS="cucumber-js ${RETRY_OPTION} --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
+RUN_ACCEPTANCE_TESTS="cucumber-js --retry 0 --require-module @babel/register --require-module @babel/polyfill --require setup.js --require stepDefinitions --format @cucumber/pretty-formatter"
 
 if [ -z "${TEST_TAGS}" ]
 then
