@@ -149,11 +149,13 @@ module.exports = {
 
       return this
     },
-    selectFileForUpload: function (filePath) {
-      return this.waitForElementVisible('@uploadFilesButton')
+    selectFileForUpload: async function (filePath) {
+      await this.waitForElementVisible('@uploadFilesButton')
         .click('@uploadFilesButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@fileUploadInput', filePath)
+      await this.pause(1000)
+      return this
     },
     /**
      *
@@ -253,7 +255,7 @@ module.exports = {
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
-      await this.pause(2000)
+      await this.pause(1000)
       return this
     },
     checkForButtonDisabled: function () {
