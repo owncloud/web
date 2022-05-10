@@ -687,13 +687,7 @@ const assertBreadcrumbIsDisplayedFor = async function (resource, clickable, nonC
     breadcrumbElement.selector,
     xpathHelper.buildXpathLiteral(resource)
   )
-  let isBreadcrumbVisible = false
-
-  // lets hope that the breadcrumbs would not take longer than the "NEW" button
-  await client.waitForElementVisible({
-    selector: client.page.personalPage().elements.newFileMenuButtonAnyState.selector,
-    abortOnFailure: false
-  })
+  let isBreadcrumbVisible
 
   try {
     await client.waitForElementVisible({
