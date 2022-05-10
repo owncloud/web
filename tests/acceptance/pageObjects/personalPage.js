@@ -253,7 +253,7 @@ module.exports = {
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
-      this.pause(1000)
+      await this.pause(2000)
       return this
     },
     checkForButtonDisabled: function () {
