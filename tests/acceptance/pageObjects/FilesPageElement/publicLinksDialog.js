@@ -189,15 +189,10 @@ module.exports = {
       return this
     },
 
-    editPublicLinkExpiration: async function (linkName) {
-      await this.clickLinkEditExpirationBtn(linkName)
-      return this
-    },
-
     changeExpirationDate: async function (linkName, expiry) {
       const value = sharingHelper.calculateDate(expiry)
       await this.clickLinkEditBtn(linkName)
-      await this.editPublicLinkExpiration(linkName)
+      await this.clickLinkEditExpirationBtn(linkName)
       return this.api.page.FilesPageElement.expirationDatePicker().setExpirationDate(value, 'link')
     },
 
@@ -475,14 +470,9 @@ module.exports = {
       return message
     },
 
-    editPublicLinkName: async function (linkName) {
-      await this.clickLinkEditNameBtn(linkName)
-      return this
-    },
-
     changeName: async function (linkName, newName) {
       await this.clickLinkEditBtn(linkName)
-      await this.editPublicLinkName(linkName)
+      await this.clickLinkEditNameBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')
@@ -494,19 +484,9 @@ module.exports = {
       await this.click('@dialogConfirmBtnEnabled')
     },
 
-    editPublicLinkPassword: async function (linkName) {
-      await this.clickLinkEditPasswordBtn(linkName)
-      return this
-    },
-
-    addPublicLinkPassword: async function (linkName) {
-      await this.clickLinkAddPasswordBtn(linkName)
-      return this
-    },
-
     addPassword: async function (linkName, password) {
       await this.clickLinkEditBtn(linkName)
-      await this.addPublicLinkPassword(linkName)
+      await this.clickLinkAddPasswordBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')
@@ -520,7 +500,7 @@ module.exports = {
 
     changePassword: async function (linkName, password) {
       await this.clickLinkEditBtn(linkName)
-      await this.editPublicLinkPassword(linkName)
+      await this.clickLinkEditPasswordBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')
