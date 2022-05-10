@@ -209,22 +209,24 @@ export default defineComponent({
             .slice(webDavPathComponents.indexOf(space.id) + 1)
             .join('/')
 
-          this.$client.files.fileInfo(buildWebDavSpacesPath(space.id, path)).then((fileInfo) => {
-            const resource = buildResource(fileInfo)
-            loadPreview({
-              resource,
-              isPublic: false,
-              dimensions: ImageDimension.Preview,
-              server: this.configuration.server,
-              userId: this.user.id,
-              token: this.getToken
-            }).then((imageBlob) => {
-              this.$set(this.imageContentObject, space.id, {
-                fileId: space.spaceImageData.id,
-                data: imageBlob
+          this.$client.files
+            .fileInfo(buildWebDavSpacesPath(space.id, decodeURIComponent(path)))
+            .then((fileInfo) => {
+              const resource = buildResource(fileInfo)
+              loadPreview({
+                resource,
+                isPublic: false,
+                dimensions: ImageDimension.Preview,
+                server: this.configuration.server,
+                userId: this.user.id,
+                token: this.getToken
+              }).then((imageBlob) => {
+                this.$set(this.imageContentObject, space.id, {
+                  fileId: space.spaceImageData.id,
+                  data: imageBlob
+                })
               })
             })
-          })
         }
       },
       deep: true
