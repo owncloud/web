@@ -388,7 +388,7 @@ export function buildSharedResource(
       resource.path = share.file_target
       resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     }
-    resource.canDownload = () => share.state === ShareStatus.accepted
+    resource.canDownload = () => parseInt(share.state) === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
