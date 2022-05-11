@@ -21,7 +21,7 @@ const state = {
 }
 
 const actions = {
-  cleanUpLoginState(context) {
+  cleanUpLoginState(context, options = { clearOIDCLoginState: true }) {
     if (context.state.id === '') {
       return
     }
@@ -31,11 +31,18 @@ const actions = {
     // clear dynamic navItems
     context.dispatch('clearDynamicNavItems')
 
-    // clear oidc client state
-    vueAuthInstance.clearLoginState()
+    if (options.clearOIDCLoginState) {
+      // clear oidc client state
+      vueAuthInstance.clearLoginState()
+    }
   },
   async logout(context) {
     const logoutFinalizer = (isOauth2 = false) => {
+      // Remove signed in user
+      context.dispatch('cleanUpLoginState', { clearOIDCLoginState: !isOauth2 })
+      context.dispatch('hideModal')
+      context.dispatch('loadSettingsValues')
+
       // Force redirect
       if (isOauth2) {
         if (context.getters?.configuration?.auth?.logoutUrl) {
@@ -46,11 +53,6 @@ const actions = {
 
         router.push({ name: 'login' })
       }
-
-      // Remove signed in user
-      context.dispatch('cleanUpLoginState')
-      context.dispatch('hideModal')
-      context.dispatch('loadSettingsValues')
     }
     const u = await vueAuthInstance.getStoredUserObject()
 
