@@ -96,6 +96,7 @@ export const getStore = function ({
           disablePreviews: disablePreviews
         }
       }),
+      capabilities: () => {},
       getToken: () => '',
       homeFolder: () => '/',
       user: () => user

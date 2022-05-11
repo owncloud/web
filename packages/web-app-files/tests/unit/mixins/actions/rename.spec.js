@@ -161,6 +161,11 @@ function getWrapper(renameFilePromise) {
       flatFileList: false
     },
     store: createStore(Vuex.Store, {
+      getters: {
+        capabilities: () => {
+          return {}
+        }
+      },
       modules: {
         Files: {
           namespaced: true,
