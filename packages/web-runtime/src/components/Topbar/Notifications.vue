@@ -59,10 +59,18 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 export default {
+  setup() {
+    return {
+      ...useAppDefaults({
+        applicationName: 'runtime'
+      })
+    }
+  },
   computed: {
-    ...mapGetters(['activeNotifications', 'configuration']),
+    ...mapGetters(['activeNotifications', 'configuration', 'user']),
 
     notificationsLabel() {
       return this.$gettext('Notifications')
@@ -70,7 +78,6 @@ export default {
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),
-    ...mapActions('Files', ['loadFolder']),
 
     executeRequest(app, link, type, notificationId) {
       this.$client.requests
@@ -86,26 +93,29 @@ export default {
           })
           res.json().then((json) => {
             json.ocs.data.forEach((item) => {
-              const path = item.path.slice(0, item.path.lastIndexOf('/') + 1)
-              const absolutePath = this.$route.params.item ? this.$route.params.item : '/'
-              if (path === absolutePath) this.reloadFilesList(path)
+              const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
+              const { state, path, file_target: fileTarget } = item
+              // accepted federated share
+              if (state === 0 && fileTarget) {
+                let shareRoot = fileTarget.substring(0, fileTarget.lastIndexOf('/') + 1)
+                if (shareRoot !== '/') {
+                  // remove trailing slash
+                  shareRoot = shareRoot.replace(/\/+$/, '')
+                }
+
+                if (shareRoot === currentPath) {
+                  this.loadFolder(`files/${this.user.id}/${currentPath}`)
+                  return
+                }
+              }
+
+              if (path) {
+                const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
+                if (itemPath === currentPath) this.loadFolder(`files/${this.user.id}/${itemPath}`)
+              }
             })
           })
         })
-    },
-    reloadFilesList(path) {
-      this.loadFolder({
-        client: this.$client,
-        absolutePath: path,
-        $gettext: this.$gettext,
-        routeName: this.$route.name
-      }).catch((error) => {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Loading folder failed…'),
-          status: 'danger'
-        })
-      })
     },
     shouldDisplayLink(notification) {
       return notification.link && notification.object_type !== 'local_share'
