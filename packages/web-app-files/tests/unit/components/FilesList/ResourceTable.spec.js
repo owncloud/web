@@ -276,7 +276,8 @@ function getMountedWrapper(options = {}) {
       {
         store: createStore(Vuex.Store, {
           getters: {
-            configuration: () => {}
+            configuration: () => {},
+            capabilities: () => {}
           },
           modules: {
             Files: {
