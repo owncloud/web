@@ -58,17 +58,14 @@ export default {
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              //INSERT HERE CREATE FOLDER IF RESTORE
-              const len = path.split("/").length
-              const foldersToRestore = restorePath.split("/")
-              const preTest = foldersToRestore.splice(0, len)
+              const len = path.split('/').length
+              const foldersToRestore = restorePath.split('/')
+              foldersToRestore.splice(0, len)
               foldersToRestore.pop()
-              console.log(foldersToRestore)
-              console.log(preTest.join("/"))
-              for(var folder of foldersToRestore) {
-                await this.$client.files.createFolder(preTest.join("/") + "/" + folder)
+              for (const folder of foldersToRestore) {
+                await this.$client.files.createFolder(buildWebDavFilesPath(this.user.id, folder))
               }
-              await this.$client.fileTrash.restore(path, resource.id, restorePath)
+              await this.$client.fileTrash.restore(path, resource.id, restorePath, true)
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)
