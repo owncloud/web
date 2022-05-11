@@ -23,7 +23,6 @@ export interface AppFolderHandlingResult {
   activeFiles: Ref<Array<Resource>>
 
   loadFolderForFileContext(context: MaybeRef<FileContext>): Promise<any>
-  loadFolder(absoluteDirPath: string): void
 }
 
 export function useAppFolderHandling(options: AppFolderHandlingOptions): AppFolderHandlingResult {
@@ -76,7 +75,6 @@ export function useAppFolderHandling(options: AppFolderHandlingOptions): AppFold
   return {
     isFolderLoading,
     loadFolderForFileContext,
-    loadFolder,
     activeFiles
   }
 }

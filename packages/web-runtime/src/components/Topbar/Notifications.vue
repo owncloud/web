@@ -59,18 +59,11 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
-  setup() {
-    return {
-      ...useAppDefaults({
-        applicationName: 'runtime'
-      })
-    }
-  },
   computed: {
-    ...mapGetters(['activeNotifications', 'configuration', 'user']),
+    ...mapGetters(['activeNotifications', 'configuration']),
 
     notificationsLabel() {
       return this.$gettext('Notifications')
@@ -95,23 +88,15 @@ export default {
             json.ocs.data.forEach((item) => {
               const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
               const { state, path, file_target: fileTarget } = item
+
               // accepted federated share
               if (state === 0 && fileTarget) {
-                let shareRoot = fileTarget.substring(0, fileTarget.lastIndexOf('/') + 1)
-                if (shareRoot !== '/') {
-                  // remove trailing slash
-                  shareRoot = shareRoot.replace(/\/+$/, '')
-                }
-
-                if (shareRoot === currentPath) {
-                  this.loadFolder(`files/${this.user.id}/${currentPath}`)
-                  return
-                }
+                bus.publish('app.files.list.load')
               }
 
               if (path) {
                 const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
-                if (itemPath === currentPath) this.loadFolder(`files/${this.user.id}/${itemPath}`)
+                if (itemPath === currentPath) bus.publish('app.files.list.load')
               }
             })
           })
