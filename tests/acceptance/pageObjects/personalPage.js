@@ -149,13 +149,12 @@ module.exports = {
 
       return this
     },
-    selectFileForUpload: async function (filePath) {
-      await this.waitForElementVisible('@uploadFilesButton')
+    selectFileForUpload: function (filePath) {
+      return this.waitForElementVisible('@uploadFilesButton')
         .click('@uploadFilesButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@fileUploadInput', filePath)
-      await this.pause(1000)
-      return this
+        .pause(2000)
     },
     /**
      *
