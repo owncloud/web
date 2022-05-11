@@ -38,7 +38,13 @@ const actions = {
     const logoutFinalizer = (isOauth2 = false) => {
       // Force redirect
       if (isOauth2) {
-        const logoutUrl = context.getters?.configuration?.auth?.logoutUrl
+        let logoutUrl
+
+        if (context.getters?.configuration?.auth?.logoutUrl) {
+          logoutUrl = context.getters?.configuration?.auth?.logoutUrl
+        } else if (context.getters?.configuration?.server) {
+          logoutUrl = `${context.getters?.configuration?.server}/index.php/logout`
+        }
 
         if (logoutUrl) {
           return (window.location = logoutUrl)
