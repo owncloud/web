@@ -5,7 +5,8 @@
   "auth": {
     "clientId": "UmCVsEIxdWmssxa6uVRRPC3txYBVN4qqxooJbsPhuuoPmHk9Pt9Oy68N4ZaKXUYy",
     "url": "http://localhost:8080/index.php/apps/oauth2/api/v1/token",
-    "authUrl": "http://localhost:8080/index.php/apps/oauth2/authorize"
+    "authUrl": "http://localhost:8080/index.php/apps/oauth2/authorize",
+    "logoutUrl": "http://localhost:8080/index.php/logout"
   },
   "apps": [
     "files",

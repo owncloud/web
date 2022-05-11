@@ -34,17 +34,23 @@ const actions = {
     // clear oidc client state
     vueAuthInstance.clearLoginState()
   },
-  async logout({ dispatch }) {
-    const logoutFinalizer = (forceRedirect = false) => {
-      // Remove signed in user
-      dispatch('cleanUpLoginState')
-      dispatch('hideModal')
-      dispatch('loadSettingsValues')
+  async logout(context) {
+    const logoutFinalizer = (isOauth2 = false) => {
+      // Force redirect
+      if (isOauth2) {
+        const logoutUrl = context.getters?.configuration?.auth?.logoutUrl
 
-      // Force redirect to login
-      if (forceRedirect) {
+        if (logoutUrl) {
+          return (window.location = logoutUrl)
+        }
+
         router.push({ name: 'login' })
       }
+
+      // Remove signed in user
+      context.dispatch('cleanUpLoginState')
+      context.dispatch('hideModal')
+      context.dispatch('loadSettingsValues')
     }
     const u = await vueAuthInstance.getStoredUserObject()
 
