@@ -2086,6 +2086,8 @@ def buildGlauth():
         "image": OC_CI_GOLANG,
         "commands": [
             "cd /srv/app/src/github.com/owncloud/ocis/glauth || exit",
+            # Fixme: Relies on an old ocis commit to provide oc10 tests with oidc
+            "git checkout 761d72d901cce2c03b524d11cf0b169293e2c8cd",
             "make build",
             "cp bin/glauth %s" % dir["base"],
         ],
