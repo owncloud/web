@@ -250,6 +250,7 @@ module.exports = {
         .waitForElementNotPresent('@dialog')
     },
     confirmFileOverwrite: async function () {
+      await this.pause(3000)
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
         .waitForElementVisible('@dialogConfirmBtnEnabled')
         .click('@dialogConfirmBtnEnabled')
