@@ -100,7 +100,7 @@ export default {
         .getFileContents(filePath)
         .then((response) => {
           serverContent.value = currentContent.value = response.body
-          currentETag.value = response.headers.ETag
+          currentETag.value = response.headers['OC-ETag']
           return response
         })
     }).restartable()
@@ -116,8 +116,7 @@ export default {
         .then(
           (response) => {
             serverContent.value = newContent
-            // FIXME: above we need response.headers.ETag, here we need response ETag - feels inconsistent
-            currentETag.value = response.ETag
+            currentETag.value = response['OC-ETag']
           },
           (error) => {
             switch (error.statusCode) {
