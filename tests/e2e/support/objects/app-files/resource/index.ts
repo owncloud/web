@@ -6,6 +6,8 @@ import {
   deleteResourceArgs,
   downloadResources,
   downloadResourcesArgs,
+  downloadResourceVersion,
+  downloadResourceVersionArgs,
   moveOrCopyResource,
   moveOrCopyResourceArgs,
   renameResource,
@@ -80,5 +82,12 @@ export class Resource {
     // This is the issue: https://github.com/owncloud/web/issues/6361
     await this.#page.reload()
     await this.#page.goto(startUrl)
+  }
+
+  async downloadVersion(args: Omit<downloadResourceVersionArgs, 'page'>): Promise<Download[]> {
+    const startUrl = this.#page.url()
+    const downloads = await downloadResourceVersion({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return downloads
   }
 }
