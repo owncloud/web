@@ -20,6 +20,7 @@ Summary
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
+* Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
@@ -161,6 +162,14 @@ Details
 
    https://github.com/owncloud/web/issues/6875
    https://github.com/owncloud/web/pull/6898
+
+* Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
+
+   We've removed any occurrences of federated sharing in the hint below the sharing input field if
+   federated sharing is disabled.
+
+   https://github.com/owncloud/web/issues/5261
+   https://github.com/owncloud/web/pull/6951
 
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 
