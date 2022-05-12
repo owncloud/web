@@ -12,18 +12,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
+        <th scope="col" class="oc-pr-s">Shared via</th>
         <td>
           <router-link-stub><span></span></router-link-stub>
         </td>
       </tr>
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -33,10 +33,24 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -54,21 +68,21 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
+        <th scope="col" class="oc-pr-s">Shared via</th>
         <td>
           <router-link-stub><span>/Shares/123.png</span></router-link-stub>
         </td>
       </tr>
       <tr data-testid="shared-by">
-        <th scope="col" class="oc-pr-s">Shared by:</th>
+        <th scope="col" class="oc-pr-s">Shared by</th>
         <td><span>Marie Curie</span></td>
       </tr>
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -78,10 +92,24 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -94,13 +122,13 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Marie
@@ -110,10 +138,24 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -128,18 +170,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <tr data-testid="shared-via">
-        <th scope="col" class="oc-pr-s">Shared via:</th>
+        <th scope="col" class="oc-pr-s">Shared via</th>
         <td>
           <router-link-stub><span></span></router-link-stub>
         </td>
       </tr>
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -149,10 +191,24 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -167,13 +223,13 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -183,10 +239,24 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -201,13 +271,13 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -217,10 +287,24 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -233,13 +317,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Marie
@@ -249,10 +333,24 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -265,13 +363,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -281,10 +379,24 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
@@ -297,13 +409,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
-        <th scope="col" class="oc-pr-s">Last modified:</th>
+        <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
       <!---->
       <!---->
       <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner:</th>
+        <th scope="col" class="oc-pr-s">Owner</th>
         <td>
           <p class="oc-m-rm">
             Einstein
@@ -313,10 +425,24 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         </td>
       </tr>
       <tr data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s">Size:</th>
+        <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
       <!---->
+      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">Direct link</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <div class="oc-flex oc-flex-middle">
+              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            </div>
+            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
     </table>
   </div>
 </div>

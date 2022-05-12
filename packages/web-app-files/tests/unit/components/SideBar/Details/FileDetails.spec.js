@@ -146,6 +146,13 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
       getters: {
         user: function () {
           return { id: 'marie' }
+        },
+        configuration: function () {
+          return {
+            options: {
+              isEos: true
+            }
+          }
         }
       },
       modules: {
