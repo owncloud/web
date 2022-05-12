@@ -422,7 +422,7 @@ Details
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
-   We've updated the ownCloud SDK to version 3.0.0-alpha.7.
+   We've updated the ownCloud SDK to version 3.0.0-alpha.9.
 
    - Change - Pass full trash bin path to methods of FilesTrash class:
    https://github.com/owncloud/owncloud-sdk/pull/1021 - Enhancement - Enforce share_type
@@ -432,12 +432,16 @@ Details
    https://github.com/owncloud/owncloud-sdk/pull/1035 - Enhancement - Add blob
    resolveType: https://github.com/owncloud/owncloud-sdk/pull/1028 - Enhancement -
    Adjust share management to properly work with spaces:
-   https://github.com/owncloud/owncloud-sdk/pull/1013 - Bugfix - Always add X-Request-ID:
-   https://github.com/owncloud/owncloud-sdk/pull/1016 - Bugfix - Always add
-   X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
+   https://github.com/owncloud/owncloud-sdk/pull/1013 - Enhancement - Send oc-etag on
+   putFileContents and getFileContents methods:
+   https://github.com/owncloud/owncloud-sdk/pull/1067 - Enhancement - Enable search
+   results for ocis: https://github.com/owncloud/owncloud-sdk/pull/1057 - Bugfix - Always
+   add X-Request-ID: https://github.com/owncloud/owncloud-sdk/pull/1016 - Bugfix - Always
+   add X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
 
    https://github.com/owncloud/web/pull/6820
-   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.7
+   https://github.com/owncloud/web/pull/6952
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.9
 
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
