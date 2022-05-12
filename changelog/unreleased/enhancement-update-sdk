@@ -14,4 +14,5 @@ We've updated the ownCloud SDK to version 3.0.0-alpha.9.
 - Bugfix - Always add X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
 
 https://github.com/owncloud/web/pull/6820
+https://github.com/owncloud/web/pull/6952
 https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.9
