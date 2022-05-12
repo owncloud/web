@@ -18,14 +18,6 @@ module.exports = {
         .initAjaxCounters()
         .click('@restorePreviousVersion')
         .waitForOutstandingAjaxCalls()
-    },
-    /**
-     * @returns {*}
-     */
-    downloadFilePreviousVersion: function () {
-      return this.waitForElementVisible('@downloadPreviousVersion').click(
-        '@downloadPreviousVersion'
-      )
     }
   },
   elements: {
@@ -36,10 +28,6 @@ module.exports = {
     restorePreviousVersion: {
       selector:
         '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
-      locateStrategy: 'xpath'
-    },
-    downloadPreviousVersion: {
-      selector: '//button[contains(@aria-label, "Download older version")]',
       locateStrategy: 'xpath'
     }
   }

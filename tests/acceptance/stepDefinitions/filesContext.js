@@ -632,10 +632,6 @@ Then(
   }
 )
 
-When('the user downloads a previous version of the file using the webUI', function () {
-  return client.page.FilesPageElement.versionsDialog().downloadFilePreviousVersion()
-})
-
 When(
   'the user renames file {string} to {string} through context-menu using the webUI',
   function (fromName, toName) {

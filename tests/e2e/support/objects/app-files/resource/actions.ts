@@ -335,6 +335,7 @@ export const downloadResourceVersion = async (
     page.waitForEvent('download'),
     await page.locator('//*[@data-testid="file-versions-download-button"]').first().click()
   ])
+  await sidebar.close({ page: page })
   downloads.push(download)
   return downloads
 }
