@@ -140,7 +140,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['configuration', 'getToken', 'user']),
+    ...mapGetters(['configuration', 'getToken', 'user', 'capabilities']),
 
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -155,7 +155,10 @@ export default {
     },
 
     inviteDescriptionMessage() {
-      return this.$gettext('Add new person by name, email or federation IDs')
+      if (this.capabilities.files_sharing.federation?.outgoing === true) {
+        return this.$gettext('Add new person by name, email or federation IDs')
+      }
+      return this.$gettext('Add new person by name or email')
     },
 
     $_announcementWhenCollaboratorAdded() {

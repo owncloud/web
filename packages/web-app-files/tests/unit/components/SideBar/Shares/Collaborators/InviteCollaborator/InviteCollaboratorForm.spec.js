@@ -113,6 +113,9 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
       },
       getters: {
         getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
+        capabilities: () => ({
+          files_sharing: { federation: { incoming: true, outgoing: true } }
+        }),
         configuration: jest.fn(() => ({
           options: {
             contextHelpers: true
