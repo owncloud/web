@@ -16,6 +16,7 @@ Summary
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
+* Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
@@ -127,6 +128,14 @@ Details
 
    https://github.com/owncloud/web/issues/6323
    https://github.com/owncloud/web/pull/6749
+
+* Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
+
+   We've removed private links from share notifications because those were not working and also
+   not needed.
+
+   https://github.com/owncloud/web/issues/5227
+   https://github.com/owncloud/web/pull/6955
 
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 
