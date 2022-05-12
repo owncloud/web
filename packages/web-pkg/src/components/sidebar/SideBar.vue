@@ -338,6 +338,7 @@ export default defineComponent({
 
   &__body {
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 10px;
   }
 
