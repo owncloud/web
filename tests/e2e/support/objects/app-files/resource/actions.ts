@@ -310,3 +310,32 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
   )
 }
+
+export interface downloadResourceVersionArgs {
+  page: Page
+  files: File[]
+  folder?: string
+}
+
+export const downloadResourceVersion = async (
+  args: downloadResourceVersionArgs
+): Promise<Download[]> => {
+  const { page, files, folder } = args
+  const fileName = files.map((file) => path.basename(file.name))
+  const downloads = []
+  await clickResource({ page, path: folder })
+  await sidebar.open({ page, resource: fileName[0] })
+  await sidebar.openPanel({ page, name: 'versions' })
+
+  const [download] = await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/v/') && resp.status() === 200 && resp.request().method() === 'HEAD'
+    ),
+    page.waitForEvent('download'),
+    await page.locator('//*[@data-testid="file-versions-download-button"]').first().click()
+  ])
+  await sidebar.close({ page: page })
+  downloads.push(download)
+  return downloads
+}

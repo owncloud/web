@@ -100,12 +100,3 @@ Feature: Versions of a file
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content" in the server
     And the versions list should contain 2 entries
-
-
-  Scenario: user downloads a previous version of the file
-    Given user "Alice" has uploaded file with content "lorem" to "lorem.txt" in the server
-    And user "Alice" has uploaded file with content "lorem content" to "lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    And the user browses to display the "versions" details of file "lorem.txt"
-    When the user downloads a previous version of the file using the webUI
-    Then no message should be displayed on the webUI

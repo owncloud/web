@@ -42,6 +42,9 @@ Feature: share
       | resource          | to               | create_version |
       | PARENT/simple.pdf | folder_to_shared | true           |
     #Then "Alice" should see that the resource "folder_to_shared/simple.pdf" has 1 version
+    And "Brian" downloads old version of the following resource
+      | resource   | to               |
+      | simple.pdf | folder_to_shared |
     When "Brian" restores following resources
       | resource   | to               | version |
       | simple.pdf | folder_to_shared | 1       |
