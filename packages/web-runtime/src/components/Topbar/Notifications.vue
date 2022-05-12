@@ -26,7 +26,7 @@
         <h4 v-text="el.subject" />
         <p v-if="el.message" class="oc-text-small">{{ el.message }}</p>
         <p>
-          <a v-if="el.link" :href="el.link" target="_blank">{{ el.link }}</a>
+          <a v-if="shouldDisplayLink(el)" :href="el.link" target="_blank">{{ el.link }}</a>
         </p>
         <div class="oc-width-1-1 oc-flex-right">
           <template v-if="el.actions.length !== 0">
@@ -106,6 +106,9 @@ export default {
           status: 'danger'
         })
       })
+    },
+    shouldDisplayLink(notification) {
+      return notification.link && notification.object_type !== 'local_share'
     }
   }
 }

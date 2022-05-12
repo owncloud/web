@@ -1,0 +1,6 @@
+Bugfix: Remove private links from share notifications
+
+We've removed private links from share notifications because those were not working and also not needed.
+
+https://github.com/owncloud/web/pull/6955
+https://github.com/owncloud/web/issues/5227
