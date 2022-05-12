@@ -5,15 +5,48 @@
 [![web docker image](https://img.shields.io/docker/v/owncloud/web?label=web%20docker%20image&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web)
 
 # ownCloud Web
-**User interface for ownCloud**
+ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
 
-![image](https://raw.githubusercontent.com/owncloud/screenshots/master/web/oc_web.png)
+As the successor to the classic ownCloud frontend, it is compatible with both the classic [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
 
-ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. As the successor to the classic ownCloud frontend, it is compatible with both the classic [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. Similarly ownCloud Web comes with an item in the application switcher that allows users to switch back to the "Classic Design".
+While the `web` frontend provides a performant, elegant, accessible and themeable base, it also aims to be extendable with custom extensions provided by external developers.
 
-[See this online Demo](https://web.owncloud.com) (user: demo, password: demo)
+## Live Demos
+You can use the most recent release of `web` with a [classic ownCloud Server backend](https://web.owncloud.com/) (user: demo, password: demo) and the latest commit on the master branch with an [ownCloud Infinite Scale backend](https://ocis.ocis-web.latest.owncloud.works) (user: einstein, password: relativity).
+
+## Repository structure
+
+The backbone of this project is built by the following parts of the `packages`:
+- **client:** Generated TypeScript client for communications with the ownCloud Infinite Scale graph API
+- **container:** Static assets and rarely changing base files
+- **integration-oc10:** Small PHP building blocks to make `web` work as an app with the classic ownCloud Server
+- **pkg:** Shared logic for various places inside the codebase
+- **runtime:** Central place of (user) authentication, provisioning of the user interface layout, client side storage, routing, theming, dependencies and (sub)application handling
+
+The repository's `packages` also contains the following apps, which can be en-/disabled via the `config.json`:
+- **draw-io:** An extension for creating, opening and editing `.draw` files
+- **external:** An extension for creating, opening and editing files using the WOPI server
+- **files:** The default extension and core part of the project, responsible for file sync-and-share - up- and downloading, sharing with other users/groups or via links, version management and more
+- **pdf-viewer:** An extension for opening PDF files without leaving the UI
+- **preview:** An extension for opening audio, video and image files
+- **search:** An extension for registering search providers, which then get rendered into the layout in the **runtime** using a portal
+- **skeletion:** Bare extension serving as a playground for prototyping new custom extensions
+- **text-editor:** An extension for creating, opening and editing `.md` and `.txt` files
+- **user-management:** An extension for basic user and group management by the admin
+
+Notable dependencies are the [ownCloud web design system](github.com/owncloud/owncloud-design-system/), providing UI components and style rules, and the [ownCloud web sdk](github.com/owncloud/owncloud-sdk/), which abstracts away interactions with both backends. Both are actively improved by the same maintainers that also work on the `web` frontend.
+
+## Releases
+We currently publish a new release every couple of weeks, strictly following [semver](https://semver.org/). Releases and their corresponding changelogs can be found on [the release page](https://github.com/owncloud/web/releases) on GitHub.
 
 ## Documentation
+The documentation is an important part of this project and can be found in the [docs]() folder, or in its deployed [live version](https://owncloud.dev/clients/web).
 
-Please refer to the [documentation](https://owncloud.dev/clients/web/getting-started/) for setting up, building and running Web.
+## Contribution
+Contribution in the form of bug reports, user feedback or actual code is always welcome! We do have a [contribution guide](https://github.com/owncloud/web/blob/master/.github/CONTRIBUTING.md), actively use the [good-first-issue](https://github.com/owncloud/web/issues?q=is%3Aopen+is%3Aissue+label%3ATopic%3Agood-first-issue) label and tr to feedback on issues and pull requests in a timely manner. There is also a [setup guide](https://owncloud.dev/clients/web/getting-started/) for building and running `web` locally.
 
+## Tests
+We assert the quality of this project by running an [automated CI](https://drone.owncloud.com/owncloud/web), while a guide on running the tests locally can be found in the [testing documentation](https://owncloud.dev/clients/web/testing/testing/).
+
+## License
+GNU Affero General Public License - [Details](https://github.com/owncloud/web/blob/master/LICENSE)
