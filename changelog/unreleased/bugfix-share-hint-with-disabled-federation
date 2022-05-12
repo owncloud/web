@@ -3,4 +3,4 @@ Bugfix: Share hint with disabled federated sharing
 We've removed any occurrences of federated sharing in the hint below the sharing input field if federated sharing is disabled.
 
 https://github.com/owncloud/web/issues/5261
-https://github.com/owncloud/web/pull/6950
+https://github.com/owncloud/web/pull/6951
