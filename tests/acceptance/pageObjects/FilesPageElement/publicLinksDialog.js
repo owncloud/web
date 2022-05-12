@@ -188,31 +188,11 @@ module.exports = {
       }
       return this
     },
-    /**
-     * sets up public link share edit form
-     *
-     * @param {string} linkName
-     * @param {object} editData -  key: value pair of public link edit data
-     * @param {string} editData.role - Role of the viewer of the public link
-     * @param {string} editData.name - Name of the public link share
-     * @param {string} editData.password - Password for a public link share
-     * @param {string} editData.expireDate - Expire date for a public link share
-     * @returns {exports}
-     */
-    editPublicLink: async function (linkName) {
-      await this.clickLinkEditBtn(linkName)
-      return this
-    },
-
-    editPublicLinkExpiration: async function (linkName) {
-      await this.clickLinkEditExpirationBtn(linkName)
-      return this
-    },
 
     changeExpirationDate: async function (linkName, expiry) {
       const value = sharingHelper.calculateDate(expiry)
-      await this.editPublicLink(linkName)
-      await this.editPublicLinkExpiration(linkName)
+      await this.clickLinkEditBtn(linkName)
+      await this.clickLinkEditExpirationBtn(linkName)
       return this.api.page.FilesPageElement.expirationDatePicker().setExpirationDate(value, 'link')
     },
 
@@ -275,7 +255,7 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
-      await this.editPublicLink(linkName)
+      await this.clickLinkEditBtn(linkName)
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
@@ -298,7 +278,7 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
-      await this.editPublicLink(linkName)
+      await this.clickLinkEditBtn(linkName)
       return this.waitForElementVisible(linkRowDeleteButton)
         .initAjaxCounters()
         .click(linkRowDeleteButton)
@@ -490,14 +470,9 @@ module.exports = {
       return message
     },
 
-    editPublicLinkName: async function (linkName) {
-      await this.clickLinkEditNameBtn(linkName)
-      return this
-    },
-
     changeName: async function (linkName, newName) {
-      await this.editPublicLink(linkName)
-      await this.editPublicLinkName(linkName)
+      await this.clickLinkEditBtn(linkName)
+      await this.clickLinkEditNameBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')
@@ -509,19 +484,9 @@ module.exports = {
       await this.click('@dialogConfirmBtnEnabled')
     },
 
-    editPublicLinkPassword: async function (linkName) {
-      await this.clickLinkEditPasswordBtn(linkName)
-      return this
-    },
-
-    addPublicLinkPassword: async function (linkName) {
-      await this.clickLinkAddPasswordBtn(linkName)
-      return this
-    },
-
     addPassword: async function (linkName, password) {
-      await this.editPublicLink(linkName)
-      await this.addPublicLinkPassword(linkName)
+      await this.clickLinkEditBtn(linkName)
+      await this.clickLinkAddPasswordBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')
@@ -534,8 +499,8 @@ module.exports = {
     },
 
     changePassword: async function (linkName, password) {
-      await this.editPublicLink(linkName)
-      await this.editPublicLinkPassword(linkName)
+      await this.clickLinkEditBtn(linkName)
+      await this.clickLinkEditPasswordBtn(linkName)
 
       await this.useXpath()
         .waitForElementVisible('@dialog')

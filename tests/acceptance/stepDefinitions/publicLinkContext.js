@@ -99,11 +99,6 @@ const loadPublicLinkWithPassword = async function (linkCreator, password, newSes
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 }
 
-const editPublicLink = async function (linkName, resource) {
-  await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-  await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName)
-}
-
 Then('the public should not get access to the publicly shared file', async function () {
   const message = await client.page
     .publicLinkPasswordPage()
@@ -122,13 +117,6 @@ When(
   async function (linkName, resource, newName) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
     await client.page.FilesPageElement.publicLinksDialog().changeName(linkName, newName)
-  }
-)
-
-When(
-  'the user edits the public link named {string} of file/folder/resource {string} changing following',
-  async function (linkName, resource, dataTable) {
-    await editPublicLink(linkName, resource, dataTable)
   }
 )
 
@@ -167,7 +155,7 @@ When(
   'the user opens the link edit dialog of file/folder/resource {string} with name {string} using the webUI',
   async function (resource, linkName) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    await client.page.FilesPageElement.publicLinksDialog().editPublicLink(linkName)
+    await client.page.FilesPageElement.publicLinksDialog().clickLinkEditBtn(linkName)
   }
 )
 
@@ -183,26 +171,6 @@ Then(
       isVisible,
       false,
       `Expected "Remove password" button to be invisible but found visible`
-    )
-  }
-)
-
-When(
-  'the user tries to edit the public link named {string} of file/folder/resource {string} changing following',
-  function (linkName, resource) {
-    return (
-      editPublicLink(linkName, resource)
-        // while editing public link, after clicking the "Save" button, the button should disappear but if it doesn't
-        // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
-        // Also, when no error is thrown, the button seems to disappear, so an error should be thrown in such case as well.
-        .then(() => {
-          throw new Error('ElementPresentError')
-        })
-        .catch((err) => {
-          if (err.message !== 'ElementPresentError') {
-            throw new Error(err)
-          }
-        })
     )
   }
 )
