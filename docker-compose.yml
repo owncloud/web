@@ -13,7 +13,6 @@ services:
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
       IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
       PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
-      ACCOUNTS_DEMO_USERS_AND_GROUPS: "${DEMO_USERS:-true}"  # deprecated, remove after switching to LibreIDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
       IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
       OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
