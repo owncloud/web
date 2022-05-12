@@ -1,5 +1,5 @@
 <template>
-  <main id="text-editor" class="oc-mx-l oc-my-m">
+  <main id="text-editor" class="oc-px-l oc-py-m oc-height-1-1">
     <app-bar
       :current-file-context="currentFileContext"
       :is-loading="isLoading"
@@ -16,8 +16,8 @@
         @close="clearLastError"
       />
     </oc-notifications>
-    <div class="oc-flex">
-      <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'">
+    <div class="oc-flex editor-wrapper-height">
+      <div :class="showPreview ? 'oc-width-1-2 oc-height-1-1' : 'oc-width-1-1 oc-height-1-1'">
         <oc-textarea
           id="text-editor-input"
           v-model="currentContent"
@@ -231,12 +231,19 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #text-editor-preview {
   max-height: 80vh;
   overflow-y: scroll;
 }
 #text-editor-input {
   resize: vertical;
+}
+.editor-wrapper-height {
+  height: calc(100% - 42px);
+}
+
+#text-editor-input {
+  height: 100%;
 }
 </style>
