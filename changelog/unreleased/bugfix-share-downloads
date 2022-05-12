@@ -1,0 +1,6 @@
+Bugfix: Share downloads
+
+Both single file and folder shares didn't have the download action available on the `Shared with me` page. We've fixed this by allowing the shared with me route for download actions and by fixing a download permission check on shares.
+
+https://github.com/owncloud/ocis/issues/3760
+https://github.com/owncloud/web/pull/6936

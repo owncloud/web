@@ -1,6 +1,7 @@
 import {
   isLocationCommonActive,
   isLocationPublicActive,
+  isLocationSharesActive,
   isLocationSpacesActive
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
@@ -24,7 +25,8 @@ export default {
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
-              !isLocationCommonActive(this.$router, 'files-common-favorites')
+              !isLocationCommonActive(this.$router, 'files-common-favorites') &&
+              !isLocationSharesActive(this.$router, 'files-shares-with-me')
             ) {
               return false
             }
