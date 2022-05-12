@@ -25,6 +25,7 @@ Summary
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
+* Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
@@ -197,6 +198,16 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6846
+
+* Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
+
+   We've fixed a bug, where the ETag instead of OC-ETag in the text editor app was used, due to server
+   encoding, the ETag might be manipulated and contain the gzip suffix on a large text file. Saving
+   the respective file, might cause an error, as the sent ETag doesn't match the server's ETag.
+
+   https://github.com/owncloud/web/issues/6947
+   https://github.com/owncloud/web/issues/4605
+   https://github.com/owncloud/web/pull/6952
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
