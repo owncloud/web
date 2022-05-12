@@ -1,0 +1,9 @@
+Bugfix: Use OC-ETag instead of ETag in text editor app
+
+We've fixed a bug, where the ETag instead of OC-ETag in the text editor app was used,
+due to server encoding, the ETag might be manipulated and contain the gzip suffix on a large text file.
+Saving the respective file, might cause an error, as the sent ETag doesn't match the server's ETag.
+
+https://github.com/owncloud/web/pull/6952
+https://github.com/owncloud/web/issues/6947
+https://github.com/owncloud/web/issues/4605
