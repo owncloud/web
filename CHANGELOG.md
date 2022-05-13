@@ -20,6 +20,7 @@ Summary
 * Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
+* Bugfix - Require quick link password if enforced in ownCloud 10: [#6967](https://github.com/owncloud/web/pull/6967)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Bugfix - Respect quota definition of none/unlimited: [#6923](https://github.com/owncloud/web/pull/6923)
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
@@ -160,6 +161,14 @@ Details
 
    https://github.com/owncloud/web/issues/1750
    https://github.com/owncloud/web/pull/6804
+
+* Bugfix - Require quick link password if enforced in ownCloud 10: [#6967](https://github.com/owncloud/web/pull/6967)
+
+   We've fixed a bug, where no password was requested while creating a quick link, this led to a
+   silent error where no quick link was created. We now prompt for a quick link password if enforced
+
+   https://github.com/owncloud/web/issues/6963
+   https://github.com/owncloud/web/pull/6967
 
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 
