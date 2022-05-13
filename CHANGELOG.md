@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - We added the shares item to the breadcrumbs at the shared with me page: [#6965](https://github.com/owncloud/web/pull/6965)
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
 * Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 * Bugfix - Enable optional chaining on configuration options access: [#6891](https://github.com/owncloud/web/pull/6891)
@@ -54,6 +55,11 @@ Summary
 
 Details
 -------
+
+* Bugfix - We added the shares item to the breadcrumbs at the shared with me page: [#6965](https://github.com/owncloud/web/pull/6965)
+
+   https://github.com/owncloud/web/issues/6937
+   https://github.com/owncloud/web/pull/6965
 
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
 
