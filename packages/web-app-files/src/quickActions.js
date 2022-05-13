@@ -23,12 +23,13 @@ export function canShare(item, store) {
 export function showQuickLinkPasswordModal(ctx, onConfirm) {
   const modal = {
     variation: 'passive',
-    title: $gettext('Add password'),
+    title: $gettext('Set password'),
     cancelText: $gettext('Cancel'),
     confirmText: $gettext('Set'),
     hasInput: true,
     inputLabel: $gettext('Password'),
     onCancel: ctx.store.dispatch('hideModal'),
+    inputDescription: $gettext('Passwords for links are required.'),
     onConfirm: (password) => onConfirm(password),
     onInput: (password) => {
       if (password.trim() === '') {
@@ -38,8 +39,7 @@ export function showQuickLinkPasswordModal(ctx, onConfirm) {
     }
   }
 
-  ctx.store.dispatch('createModal', modal)
-  return ctx.store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
+  return ctx.store.dispatch('createModal', modal)
 }
 
 export default {
@@ -61,6 +61,12 @@ export default {
 
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
+          if (!password || password.trim() === '') {
+            return ctx.store.dispatch('showMessage', {
+              title: $gettext('Password cannot be empty'),
+              status: 'danger'
+            })
+          }
           ctx.store.dispatch('hideModal')
           await createQuicklink({ ...ctx, resource: ctx.item, password })
           await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
