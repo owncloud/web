@@ -28,7 +28,7 @@ export function showQuickLinkPasswordModal(ctx, onConfirm) {
     confirmText: $gettext('Set'),
     hasInput: true,
     inputLabel: $gettext('Password'),
-    onCancel: ctx.store.dispatch('hideModal'),
+    onCancel: () => ctx.store.dispatch('hideModal'),
     inputDescription: $gettext('Passwords for links are required.'),
     onConfirm: (password) => onConfirm(password),
     onInput: (password) => {
