@@ -21,6 +21,7 @@ Summary
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
+* Bugfix - Respect quota definition of none/unlimited: [#6923](https://github.com/owncloud/web/pull/6923)
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Share downloads: [#3760](https://github.com/owncloud/ocis/issues/3760)
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
@@ -170,6 +171,14 @@ Details
 
    https://github.com/owncloud/web/issues/6549
    https://github.com/owncloud/web/pull/6694
+
+* Bugfix - Respect quota definition of none/unlimited: [#6923](https://github.com/owncloud/web/pull/6923)
+
+   We have fixed an UI glitch where the UI stopped working if the backend reports a unlimited
+   storage quota.
+
+   https://github.com/owncloud/web/issues/6913
+   https://github.com/owncloud/web/pull/6923
 
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 
