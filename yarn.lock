@@ -85,9 +85,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:^7.16.5":
-  version: 7.16.5
-  resolution: "@babel/eslint-parser@npm:7.16.5"
+"@babel/eslint-parser@npm:^7.17.0":
+  version: 7.17.0
+  resolution: "@babel/eslint-parser@npm:7.17.0"
   dependencies:
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
@@ -95,7 +95,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 7d4fe169b371bdce3caab64d6434f251c661cef86e01e320f4e2f81bed159d1f366138e18abb7386d40032cd4972fce723ec9af8b9895d5559fa7caff52efbab
+  checksum: 1cedd9998dd89f779bbc5496531e3ef1b43d6f4fb7209ed5088938292b81287302cb47c0923ce074e84e83aa41b236b09bfecacdf20770f4cbfade2de9519c10
   languageName: node
   linkType: hard
 
@@ -2649,19 +2649,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/core@npm:^2.1.7":
-  version: 2.1.8
-  resolution: "@uppy/core@npm:2.1.8"
+"@uppy/core@npm:^2.1.10":
+  version: 2.1.10
+  resolution: "@uppy/core@npm:2.1.10"
   dependencies:
     "@transloadit/prettier-bytes": 0.0.7
     "@uppy/store-default": ^2.0.3
-    "@uppy/utils": ^4.0.6
+    "@uppy/utils": ^4.0.7
     lodash.throttle: ^4.1.1
     mime-match: ^1.0.2
     namespace-emitter: ^2.0.1
     nanoid: ^3.1.25
     preact: ^10.5.13
-  checksum: 2c4e1febef1cd7ef841aa9634773fa7eccc9737b34412152964ff384a0ced32b85cadc3532de7de7c74ae7da8887d2e8accd7e5b9f1df40cdec72e65441f3aff
+  checksum: 8578863d50b3a6cbc45ee51726ff6d69ddfaf62d9e6e95f6709f2f419fb39ae4c4349bb99bcbe8fbe4fef24f5d1e923c22d33910f296da8df5d16d291108725a
   languageName: node
   linkType: hard
 
@@ -2711,12 +2711,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/utils@npm:^4.0.4, @uppy/utils@npm:^4.0.5, @uppy/utils@npm:^4.0.6":
-  version: 4.0.6
-  resolution: "@uppy/utils@npm:4.0.6"
+"@uppy/utils@npm:^4.0.4, @uppy/utils@npm:^4.0.5, @uppy/utils@npm:^4.0.6, @uppy/utils@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "@uppy/utils@npm:4.0.7"
   dependencies:
     lodash.throttle: ^4.1.1
-  checksum: 8773c4b1d742d65237c48c0575f1a933a20ffdcd8da462141b19649c027b0b88e4aa5dcb26ead1e830c967b904e51315fb61ea72ee0273614b463122d2b63066
+  checksum: bc82d7714ee6e012159c5c0df4182eacf0bcaa14b1fea829f8734dbe2e1929598dc382d58a589c40e6e0019e94f00b787e9d9cf52739bfca7c796a163f9d6fd8
   languageName: node
   linkType: hard
 
@@ -5659,14 +5659,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-module-utils@npm:^2.7.0":
-  version: 2.7.1
-  resolution: "eslint-module-utils@npm:2.7.1"
+"eslint-module-utils@npm:^2.7.3":
+  version: 2.7.3
+  resolution: "eslint-module-utils@npm:2.7.3"
   dependencies:
     debug: ^3.2.7
     find-up: ^2.1.0
-    pkg-dir: ^2.0.0
-  checksum: c30dfa125aafe65e5f6a30a31c26932106fcf09934a2f47d7f8a393ed9106da7b07416f2337b55c85f9db0175c873ee0827be5429a24ec381b49940f342b9ac3
+  checksum: 77048263f309167a1e6a1e1b896bfb5ddd1d3859b2e2abbd9c32c432aee13d610d46e6820b1ca81b37fba437cf423a404bc6649be64ace9148a3062d1886a678
   languageName: node
   linkType: hard
 
@@ -5682,26 +5681,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.25.2":
-  version: 2.25.2
-  resolution: "eslint-plugin-import@npm:2.25.2"
+"eslint-plugin-import@npm:^2.26.0":
+  version: 2.26.0
+  resolution: "eslint-plugin-import@npm:2.26.0"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flat: ^1.2.5
     debug: ^2.6.9
     doctrine: ^2.1.0
     eslint-import-resolver-node: ^0.3.6
-    eslint-module-utils: ^2.7.0
+    eslint-module-utils: ^2.7.3
     has: ^1.0.3
-    is-core-module: ^2.7.0
+    is-core-module: ^2.8.1
     is-glob: ^4.0.3
-    minimatch: ^3.0.4
+    minimatch: ^3.1.2
     object.values: ^1.1.5
-    resolve: ^1.20.0
-    tsconfig-paths: ^3.11.0
+    resolve: ^1.22.0
+    tsconfig-paths: ^3.14.1
   peerDependencies:
     eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-  checksum: 4ca36e37faf72fb1ed25361ea8a6abbcc9daa65f3a9ac1dc0a660029000456e8c8b98a87b8cc2316541b13c6e5915df41d2dc4a1d7fe0729d9b72b9a3bd5b909
+  checksum: 0bf77ad80339554481eafa2b1967449e1f816b94c7a6f9614ce33fb4083c4e6c050f10d241dd50b4975d47922880a34de1e42ea9d8e6fd663ebb768baa67e655
   languageName: node
   linkType: hard
 
@@ -7195,7 +7194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.4.0, is-core-module@npm:^2.5.0, is-core-module@npm:^2.7.0, is-core-module@npm:^2.8.1":
+"is-core-module@npm:^2.4.0, is-core-module@npm:^2.5.0, is-core-module@npm:^2.8.1":
   version: 2.8.1
   resolution: "is-core-module@npm:2.8.1"
   dependencies:
@@ -8781,10 +8780,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "luxon@npm:2.3.2"
-  checksum: ba4f9daa56d03771c2ddf00e3bf996ec7937badfdc2f85f5b58d63c75bb511369b3316f54ab9ce5ab42bfc9118513971f6599128529b68620b876a4b7c16570b
+"luxon@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "luxon@npm:2.4.0"
+  checksum: 6071028d65cc3d3bdab5e6a3995dd97411c92bb3b3163a02deb7b7014318ad3a6fd750ae77131c42141b717c14aef8880d3130f265281d500ef2365f7265b3f3
   languageName: node
   linkType: hard
 
@@ -8997,12 +8996,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:3.0.4, minimatch@npm:^3.0.4":
+"minimatch@npm:3.0.4":
   version: 3.0.4
   resolution: "minimatch@npm:3.0.4"
   dependencies:
     brace-expansion: ^1.1.7
   checksum: 66ac295f8a7b59788000ea3749938b0970344c841750abd96694f80269b926ebcafad3deeb3f1da2522978b119e6ae3a5869b63b13a7859a456b3408bd18a078
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^3.0.4, minimatch@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "minimatch@npm:3.1.2"
+  dependencies:
+    brace-expansion: ^1.1.7
+  checksum: c154e566406683e7bcb746e000b84d74465b3a832c45d59912b9b55cd50dee66e5c4b1e5566dba26154040e51672f9aa450a9aef0c97cfc7336b78b7afb9540a
   languageName: node
   linkType: hard
 
@@ -9022,10 +9030,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "minimist@npm:1.2.5"
-  checksum: 86706ce5b36c16bfc35c5fe3dbb01d5acdc9a22f2b6cc810b6680656a1d2c0e44a0159c9a3ba51fb072bb5c203e49e10b51dcd0eec39c481f4c42086719bae52
+"minimist@npm:^1.2.0, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "minimist@npm:1.2.6"
+  checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb
   languageName: node
   linkType: hard
 
@@ -9612,9 +9620,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.1.0-rc.5":
-  version: 13.1.0-rc.5
-  resolution: "owncloud-design-system@npm:13.1.0-rc.5"
+"owncloud-design-system@npm:^13.1.0-rc.6":
+  version: 13.1.0-rc.6
+  resolution: "owncloud-design-system@npm:13.1.0-rc.6"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9631,7 +9639,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 452d75d01bf0793cc9f4a1f611607fd2e71566c75413cc62dba4196d9d0a69a929c6b36a368f520de96a914c32853167bbdaf1dfeec8529f0b3846abe59963f9
+  checksum: c88e6c33c4883d4a6a7a423afff34f69bd18b8ba57484d4f0643afd475d72192ece8ee26f2b298b509477d07e5027f04391d8c51d5127bf19c6c7cae60f2ef6a
   languageName: node
   linkType: hard
 
@@ -9738,7 +9746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-queue@npm:^6.1.1, p-queue@npm:^6.6.2":
+"p-queue@npm:^6.6.2":
   version: 6.6.2
   resolution: "p-queue@npm:6.6.2"
   dependencies:
@@ -10022,15 +10030,6 @@ __metadata:
   bin:
     pixelmatch: bin/pixelmatch
   checksum: 0ec7a87168e51b80812d1c39fe1a278e2266dc1e9c426418c2a9d7f0c6465de3c03c51dbf7e6b97c5ba72a043ec3fb576571cdde1f88b12ef0851bf9bfd16da0
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "pkg-dir@npm:2.0.0"
-  dependencies:
-    find-up: ^2.1.0
-  checksum: 8c72b712305b51e1108f0ffda5ec1525a8307e54a5855db8fb1dcf77561a5ae98e2ba3b4814c9806a679f76b2f7e5dd98bde18d07e594ddd9fdd25e9cf242ea1
   languageName: node
   linkType: hard
 
@@ -11378,7 +11377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@^1.1.7, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0":
+"resolve@^1.1.7, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.14.2, resolve@^1.15.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.19.0, resolve@^1.20.0, resolve@npm:^1.22.0":
   version: 1.22.0
   resolution: "resolve@npm:1.22.0"
   dependencies:
@@ -11391,7 +11390,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.15.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.15.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
   version: 1.22.0
   resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"
   dependencies:
@@ -11684,7 +11683,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@babel/core": ^7.17.5
-    "@babel/eslint-parser": ^7.16.5
+    "@babel/eslint-parser": ^7.17.0
     "@babel/polyfill": ^7.12.1
     "@babel/preset-env": ^7.16.11
     "@babel/register": ^7.17.7
@@ -11720,7 +11719,7 @@ __metadata:
     eslint: ^7.32.0
     eslint-config-prettier: ^6.10.0
     eslint-config-standard: ^16.0.3
-    eslint-plugin-import: ^2.25.2
+    eslint-plugin-import: ^2.26.0
     eslint-plugin-jest: ^26.1.5
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
@@ -12972,15 +12971,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsconfig-paths@npm:^3.11.0":
-  version: 3.11.0
-  resolution: "tsconfig-paths@npm:3.11.0"
+"tsconfig-paths@npm:^3.14.1":
+  version: 3.14.1
+  resolution: "tsconfig-paths@npm:3.14.1"
   dependencies:
     "@types/json5": ^0.0.29
     json5: ^1.0.1
-    minimist: ^1.2.0
+    minimist: ^1.2.6
     strip-bom: ^3.0.0
-  checksum: e14aaa6883f316d611db41cbb0fc8779b59c66b31d1e045565ad4540c77ccd3d2bb66f7c261b74ff535d3cc6b4a1ce21dc84774bf2a2a603ed6b0fb96f7e0cc7
+  checksum: 8afa01c673ebb4782ba53d3a12df97fa837ce524f8ad38ee4e2b2fd57f5ac79abc21c574e9e9eb014d93efe7fe8214001b96233b5c6ea75bd1ea82afe17a4c6d
   languageName: node
   linkType: hard
 
@@ -13677,7 +13676,7 @@ __metadata:
     "@popperjs/core": ^2.4.0
     "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
-    "@uppy/core": ^2.1.7
+    "@uppy/core": ^2.1.10
     "@uppy/drop-target": ^1.1.1
     "@uppy/status-bar": ^2.1.3
     "@uppy/tus": ^2.2.2
@@ -13691,12 +13690,12 @@ __metadata:
     focus-trap-vue: ^1.1.1
     fuse.js: ^6.5.3
     lodash-es: ^4.17.21
-    luxon: ^2.3.2
+    luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client: 1.11.5
-    owncloud-design-system: ^13.1.0-rc.5
+    owncloud-design-system: ^13.1.0-rc.6
     owncloud-sdk: ~3.0.0-alpha.9
-    p-queue: ^6.1.1
+    p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
     postcss-import: ^12.0.1
