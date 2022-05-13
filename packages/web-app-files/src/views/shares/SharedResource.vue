@@ -170,6 +170,10 @@ export default defineComponent({
     breadcrumbs() {
       return concatBreadcrumbs(
         {
+          text: this.$gettext('Shares'),
+          to: { path: '/files/shares' }
+        },
+        {
           text: this.$gettext('Shared with me'),
           to: { path: '/files/shares/with-me' }
         },
