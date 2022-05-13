@@ -13,9 +13,14 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
+const totalQuota = 1000
 const basicQuota = 300
 const warningQuota = 810
 const dangerQuota = 910
+
+const basicRelativeQuota = (basicQuota / totalQuota) * 100
+const warningRelativeQuota = (warningQuota / totalQuota) * 100
+const dangerRelativeQuota = (dangerQuota / totalQuota) * 100
 
 const noEmail = ''
 const email = 'test@test.de'
@@ -23,7 +28,10 @@ const email = 'test@test.de'
 describe('User Menu component', () => {
   describe('when quota and no email is set', () => {
     it('renders a navigation without email', () => {
-      const wrapper = getMountedWrapper({ used: basicQuota, total: 1000 }, noEmail)
+      const wrapper = getMountedWrapper(
+        { used: basicQuota, total: totalQuota, relative: basicRelativeQuota },
+        noEmail
+      )
       expect(wrapper).toMatchSnapshot()
     })
   })
@@ -41,19 +49,55 @@ describe('User Menu component', () => {
   })
   describe('when quota is below 80%', () => {
     it('renders a primary quota progress bar', () => {
-      const wrapper = getMountedWrapper({ used: basicQuota, total: 1000 }, email)
+      const wrapper = getMountedWrapper(
+        {
+          used: basicQuota,
+          total: totalQuota,
+          relative: basicRelativeQuota,
+          definition: 'default'
+        },
+        email
+      )
       expect(wrapper).toMatchSnapshot()
     })
   })
   describe('when quota is above 80% and below 90%', () => {
     it('renders a warning quota progress bar', () => {
-      const wrapper = getMountedWrapper({ used: warningQuota, total: 1000 }, email)
+      const wrapper = getMountedWrapper(
+        {
+          used: warningQuota,
+          total: totalQuota,
+          relative: warningRelativeQuota,
+          definition: 'default'
+        },
+        email
+      )
       expect(wrapper).toMatchSnapshot()
     })
   })
-  describe('when basic quota is set', () => {
+  describe('when quota is above 90%', () => {
     it('renders a danger quota progress bar', () => {
-      const wrapper = getMountedWrapper({ used: dangerQuota, total: 1000 }, email)
+      const wrapper = getMountedWrapper(
+        {
+          used: dangerQuota,
+          total: totalQuota,
+          relative: dangerRelativeQuota,
+          definition: 'default'
+        },
+        email
+      )
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+  describe('when quota is unlimited', () => {
+    it('renders no percentag of total and no progress bar', () => {
+      const wrapper = getMountedWrapper(
+        {
+          used: basicQuota,
+          definition: 'none'
+        },
+        email
+      )
       expect(wrapper).toMatchSnapshot()
     })
   })

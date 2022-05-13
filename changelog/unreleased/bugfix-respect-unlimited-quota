@@ -1,0 +1,6 @@
+Bugfix: Respect quota definition of none/unlimited
+
+We have fixed an UI glitch where the UI stopped working if the backend reports a unlimited storage quota.
+
+https://github.com/owncloud/web/pull/6923
+https://github.com/owncloud/web/issues/6913
