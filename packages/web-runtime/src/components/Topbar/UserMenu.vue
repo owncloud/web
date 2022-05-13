@@ -58,14 +58,14 @@
           <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
           <div class="storage-wrapper-text">
             <p class="oc-my-rm">
-              <template v-if="!isNaN(quota.relative) && quota.definition !== 'none'">
+              <template v-if="limitedPersonalStorage">
                 <span v-text="personalStorageLabel" />
                 <br />
               </template>
               <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
             </p>
             <oc-progress
-              v-if="!isNaN(quota.relative) && quota.definition !== 'none'"
+              v-if="limitedPersonalStorage"
               :value="quota.relative"
               :max="100"
               size="small"
@@ -111,6 +111,9 @@ export default {
           total: filesize(total)
         }
       )
+    },
+    limitedPersonalStorage() {
+      return !isNaN(this.quota.relative) && this.quota.definition !== 'none'
     },
     quotaEnabled() {
       return !!this.quota

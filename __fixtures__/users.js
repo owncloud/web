@@ -4,7 +4,7 @@ export default {
       free: 37883293696,
       used: 7546347,
       total: 37890840043,
-      relative: 0,
+      relative: 0.02,
       definition: 'default'
     },
     email: {},
@@ -21,7 +21,7 @@ export default {
       free: 37883293696,
       used: 7546347,
       total: 37890840043,
-      relative: 0,
+      relative: 0.02,
       definition: 'default'
     },
     email: {},

@@ -263,7 +263,7 @@ const mutations = {
   SET_QUOTA(state, quota) {
     // Turn strings into ints
     quota.free = parseInt(quota.free)
-    quota.relative = parseInt(quota.relative)
+    quota.relative = parseFloat(quota.relative)
     quota.used = parseInt(quota.used)
     quota.total = parseInt(quota.total)
 
