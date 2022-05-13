@@ -94,6 +94,20 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
+          definition: 'default'
+        },
+        email
+      )
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+  describe('when quota is not defined', () => {
+    it('renders no percentag of total and no progress bar', () => {
+      const wrapper = getMountedWrapper(
+        {
+          used: dangerQuota,
+          total: totalQuota,
+          relative: dangerRelativeQuota,
           definition: 'none'
         },
         email
