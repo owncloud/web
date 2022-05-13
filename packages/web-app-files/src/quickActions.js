@@ -1,3 +1,4 @@
+import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 
 export async function openNewCollaboratorsPanel(ctx) {
@@ -19,6 +20,28 @@ export function canShare(item, store) {
   return item.canShare()
 }
 
+export function showQuickLinkPasswordModal(ctx, onConfirm) {
+  const modal = {
+    variation: 'passive',
+    title: $gettext('Set password'),
+    cancelText: $gettext('Cancel'),
+    confirmText: $gettext('Set'),
+    hasInput: true,
+    inputLabel: $gettext('Password'),
+    onCancel: () => ctx.store.dispatch('hideModal'),
+    inputDescription: $gettext('Passwords for links are required.'),
+    onConfirm: (password) => onConfirm(password),
+    onInput: (password) => {
+      if (password.trim() === '') {
+        return ctx.store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
+      }
+      return ctx.store.dispatch('setModalInputErrorMessage', null)
+    }
+  }
+
+  return ctx.store.dispatch('createModal', modal)
+}
+
 export default {
   collaborators: {
     id: 'collaborators',
@@ -32,6 +55,24 @@ export default {
     label: ($gettext) => $gettext('Copy quicklink'),
     icon: 'link',
     handler: async (ctx) => {
+      const passwordEnforced =
+        ctx.store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
+        true
+
+      if (passwordEnforced) {
+        return showQuickLinkPasswordModal(ctx, async (password) => {
+          if (!password || password.trim() === '') {
+            return ctx.store.dispatch('showMessage', {
+              title: $gettext('Password cannot be empty'),
+              status: 'danger'
+            })
+          }
+          ctx.store.dispatch('hideModal')
+          await createQuicklink({ ...ctx, resource: ctx.item, password })
+          await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
+        })
+      }
+
       await createQuicklink({ ...ctx, resource: ctx.item })
       await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
     },
