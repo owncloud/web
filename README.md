@@ -5,6 +5,24 @@
 [![web docker image](https://img.shields.io/docker/v/owncloud/web?label=web%20docker%20image&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web)
 
 # ownCloud Web
+With ownCloud Web you can manage your ownCloud in your browser.
+Here are some examples of what you can do with ownCloud Web:
+- 🗂 **Files**: Upload, download and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
+- 🌈 **Share** files or whole folders directly with other users or groups on your ownCloud.
+- 🌍 **Links**: Create links and share them with anyone on the world - no login required.
+- 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
+- 🤝 **Collaborate** in real-time on your documents.
+- 🛟 **Versioning** Saved a wrong version? We have the timemaschine you where looking for! Easyily go back in time and restore older versions of your files.
+- 📥 **Drop-folders** tbd
+- 🔒 **100% Privacy** by design tbd
+- 🛡 **Secure** tbd
+- 🩼 **Inclusive** tbd
+- 🧩 **Extensible** tbd
+- 🚀 **Spaces** oCIS only tbd
+- 🔎 **Search** tbd
+- 🌗 **Darkmode** tbd
+- 🪪 **Libre IDM** tbd
+
 ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
 
 As the successor to the classic ownCloud frontend, it is compatible with both the classic [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
