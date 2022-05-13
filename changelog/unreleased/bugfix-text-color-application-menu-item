@@ -1,0 +1,6 @@
+Bugfix: The selected app item has a bad text color contrast in light mode
+
+We've fixed the contrast of the text color for hovered and active application menus items.
+
+https://github.com/owncloud/web/pull/6954
+https://github.com/owncloud/web/issues/6958
