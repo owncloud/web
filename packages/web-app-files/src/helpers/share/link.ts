@@ -12,6 +12,7 @@ interface CreateQuicklink {
   store: Store<any>
   storageId?: any
   resource: any
+  password?: string
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
@@ -20,6 +21,11 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     permissions: 1,
     quicklink: true
   }
+
+  if (args.password) {
+    params.password = args.password
+  }
+
   const { storageId, resource, store } = args
   const expirationDate = store.state.user.capabilities.files_sharing.public.expire_date
 
