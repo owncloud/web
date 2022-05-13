@@ -1,0 +1,4 @@
+Bugfix: We added the shares item to the breadcrumbs at the shared with me page
+
+https://github.com/owncloud/web/pull/6965
+https://github.com/owncloud/web/issues/6937
