@@ -8,20 +8,20 @@
 With ownCloud Web you can manage your ownCloud in your browser.
 Here are some examples of what you can do with ownCloud Web:
 - 🗂 **Files**: Upload, download and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
-- 🌈 **Share** files or whole folders directly with other users or groups on your ownCloud.
+- 🌈 **Share** files or whole folders directly with other users on your ownCloud.
 - 🌍 **Links**: Create links and share them with anyone on the world - no login required.
 - 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
-- 🤝 **Collaborate** in real-time on your documents.
+- 🤝 **Collaborate** in real-time on documents.
 - 🛟 **Versioning** Saved a wrong version? We have the timemaschine you where looking for! Easyily go back in time and restore older versions of your files.
-- 📥 **Drop-folders** tbd
-- 🔒 **100% Privacy** by design tbd
-- 🛡 **Secure** tbd
-- 🩼 **Inclusive** tbd
-- 🧩 **Extensible** tbd
-- 🚀 **Spaces** oCIS only tbd
-- 🔎 **Search** tbd
-- 🌗 **Darkmode** tbd
-- 🪪 **Libre IDM** tbd
+- 📥 **Drop-folders** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - no login required.
+- 🔒 **100% Privacy**: ownCloud Web is GDPR compliant and can be used only internally or toghether with external people.
+- 🛡 **Secure** ownCloud Web is an open source project which means that you can track every action of the software - no blackbox, no "phone home".
+- 🩼 **Inclusive**: Our goal is to be accessible for kids to seniors and newbies to experts as we are all affected by physical and cognitive limitations depending on our personal situations.
+- 🧩 **Extensible** ownCloud Web is build as a plattform that can be extended by-design in the most developer friendly way.
+- 🚀 **Spaces**: You have to manage important projects? Let Spaces, the new special folders, keep order. 
+- 🔎 **Search**: Search and find within the blink of an eye. 
+- 🌗 **Darkmode** <-- all said.
+- 🪪 **Libre IDM:** Manage your users and groups if you don't want an external Identity Management. 
 
 ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
 
