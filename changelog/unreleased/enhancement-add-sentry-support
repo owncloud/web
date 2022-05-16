@@ -1,0 +1,5 @@
+Enhancement: Add Sentry support
+
+We've added Sentry support to enable monitoring and error tracking (see docs "getting started").
+
+https://github.com/owncloud/web/pull/6759

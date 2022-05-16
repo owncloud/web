@@ -16,6 +16,9 @@ import { useDefaultThemeName } from '../composables'
 import { clientService } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 
+import { init as SentryInit } from '@sentry/browser'
+import { Vue as SentryVueIntegration } from '@sentry/integrations'
+
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
  * configuration object as well
@@ -304,4 +307,28 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
       'background-color: #041E42; color: #FFFFFF; font-weight: bold; border: 1px solid #FFFFFF; padding: 5px;'
     )
   })
+}
+
+/**
+ * starts the sentry monitor
+ *
+ * @remarks
+ * if runtimeConfiguration does not contain dsn sentry will not be started
+ *
+ * @param runtimeConfiguration
+ */
+export const startSentry = (
+  runtimeConfiguration: RuntimeConfiguration,
+  Vue: VueConstructor
+): void => {
+  if (runtimeConfiguration.sentry?.dsn) {
+    const { dsn, environment = 'production', ...moreSentryOptions } = runtimeConfiguration.sentry
+
+    SentryInit({
+      dsn,
+      environment,
+      integrations: [new SentryVueIntegration({ Vue, attachProps: true, logErrors: true })],
+      ...moreSentryOptions
+    })
+  }
 }
