@@ -1,0 +1,6 @@
+Enhancement: Show default action at the first place in context menu
+
+We've added the sorting of actions in the way that default file handler shows first in the context menu
+
+https://github.com/owncloud/web/issues/6971
+https://github.com/owncloud/web/pull/6954
