@@ -50,7 +50,7 @@
     "@babel/register": "^7.17.7",
     "@cucumber/cucumber": "^7.3.1",
     "@cucumber/messages": "^17.1.1",
-    "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.2",
     "@noble/hashes": "^1.0.0",
     "@playwright/test": "^1.21.1",
     "@rollup-extras/plugin-copy": "^1.2.3",
