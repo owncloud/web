@@ -9,10 +9,10 @@ With ownCloud Web you can manage your ownCloud in your browser.
 Here are some examples of what you can do with ownCloud Web:
 - 🗂 **Files**: Upload, download and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
 - 🌈 **Share** files or whole folders directly with other users on your ownCloud.
-- 🌍 **Links**: Create links and share them with anyone on the world - no login required.
+- 🌍 **Links**: Create links and share them with anyone in the world - no login required.
 - 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
 - 🤝 **Collaborate** in real-time on documents.
-- 🛟 **Versioning** Saved a wrong version? We have the timemaschine you where looking for! Easyily go back in time and restore older versions of your files.
+- 🛟 **Versioning** Saved a wrong version? We have the timemachine you where looking for! Easyily go back in time and restore older versions of your files.
 - 📥 **Drop-folders** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - no login required.
 - 🔒 **100% Privacy**: ownCloud Web is GDPR compliant and can be used only internally or toghether with external people.
 - 🛡 **Secure** ownCloud Web is an open source project which means that you can track every action of the software - no blackbox, no "phone home".
@@ -48,9 +48,9 @@ The repository's `packages` also contains the following apps, which can be en-/d
 - **pdf-viewer:** An extension for opening PDF files without leaving the UI
 - **preview:** An extension for opening audio, video and image files
 - **search:** An extension for registering search providers, which then get rendered into the layout in the **runtime** using a portal
-- **skeletion:** Bare extension serving as a playground for prototyping new custom extensions
-- **text-editor:** An extension for creating, opening and editing `.md` and `.txt` files
-- **user-management:** An extension for basic user and group management by the admin
+- **skeleton:** Bare extension serving as a playground for prototyping new custom extensions
+- **text-editor:** An extension for creating, opening and editing plain text files, like e.g. `.md` or `.txt`
+- **user-management:** An extension for basic user and group management by the admin. Only works with the Infinite Scale platform, as it uses the graph API.
 
 Notable dependencies are the [ownCloud web design system](github.com/owncloud/owncloud-design-system/), providing UI components and style rules, and the [ownCloud web sdk](github.com/owncloud/owncloud-sdk/), which abstracts away interactions with both backends. Both are actively improved by the same maintainers that also work on the `web` frontend.
 
@@ -61,7 +61,7 @@ We currently publish a new release every couple of weeks, strictly following [se
 The documentation is an important part of this project and can be found in the [docs]() folder, or in its deployed [live version](https://owncloud.dev/clients/web).
 
 ## Contribution
-Contribution in the form of bug reports, user feedback or actual code is always welcome! We do have a [contribution guide](https://github.com/owncloud/web/blob/master/.github/CONTRIBUTING.md), actively use the [good-first-issue](https://github.com/owncloud/web/issues?q=is%3Aopen+is%3Aissue+label%3ATopic%3Agood-first-issue) label and tr to feedback on issues and pull requests in a timely manner. There is also a [setup guide](https://owncloud.dev/clients/web/getting-started/) for building and running `web` locally.
+Contribution in the form of bug reports, user feedback or actual code is always welcome! We do have a [contribution guide](https://github.com/owncloud/web/blob/master/.github/CONTRIBUTING.md), actively use the [good-first-issue](https://github.com/owncloud/web/issues?q=is%3Aopen+is%3Aissue+label%3ATopic%3Agood-first-issue) label and try to feedback on issues and pull requests in a timely manner. There is also a [setup guide](https://owncloud.dev/clients/web/getting-started/) for building and running `web` locally.
 
 ## Tests
 We assert the quality of this project by running an [automated CI](https://drone.owncloud.com/owncloud/web), while a guide on running the tests locally can be found in the [testing documentation](https://owncloud.dev/clients/web/testing/testing/).
