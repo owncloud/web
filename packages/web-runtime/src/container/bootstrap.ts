@@ -3,7 +3,7 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-import Vue from 'vue'
+import { VueConstructor } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { sync as routerSync } from 'vuex-router-sync'
@@ -51,7 +51,7 @@ export const announceStore = async ({
   runtimeConfiguration,
   store
 }: {
-  vue: Vue.VueConstructor
+  vue: VueConstructor
   runtimeConfiguration: RuntimeConfiguration
   store: Store<any>
 }): Promise<void> => {
@@ -192,7 +192,7 @@ export const announceTheme = async ({
   runtimeConfiguration
 }: {
   store: Store<unknown>
-  vue: Vue.VueConstructor
+  vue: VueConstructor
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
@@ -221,7 +221,7 @@ export const announceTranslations = ({
   supportedLanguages,
   translations
 }: {
-  vue: Vue.VueConstructor
+  vue: VueConstructor
   supportedLanguages: unknown
   translations: unknown
 }): void => {
@@ -243,7 +243,7 @@ export const announceClientService = ({
   vue,
   runtimeConfiguration
 }: {
-  vue: Vue.VueConstructor
+  vue: VueConstructor
   runtimeConfiguration: RuntimeConfiguration
 }): void => {
   const sdk = new OwnCloud()
@@ -258,7 +258,7 @@ export const announceClientService = ({
  *
  * @param vue
  */
-export const announceUppyService = ({ vue }: { vue: Vue.VueConstructor }): void => {
+export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
   vue.prototype.$uppyService = new UppyService()
 }
 
@@ -317,19 +317,18 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
  *
  * @param runtimeConfiguration
  */
-export const startSentry = (runtimeConfiguration: RuntimeConfiguration): void => {
+export const startSentry = (
+  runtimeConfiguration: RuntimeConfiguration,
+  Vue: VueConstructor
+): void => {
   if (runtimeConfiguration.sentry?.dsn) {
-    const {
-      dsn,
-      environment = 'production',
-      ...moreSentryOptions
-    } = runtimeConfiguration.sentry;
+    const { dsn, environment = 'production', ...moreSentryOptions } = runtimeConfiguration.sentry
 
     SentryInit({
       dsn,
       environment,
       integrations: [new SentryVueIntegration({ Vue, attachProps: true, logErrors: true })],
-      ...moreSentryOptions,
+      ...moreSentryOptions
     })
   }
 }

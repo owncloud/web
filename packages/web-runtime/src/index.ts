@@ -26,7 +26,7 @@ import {
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await requestConfiguration(configurationPath)
-  startSentry(runtimeConfiguration)
+  startSentry(runtimeConfiguration, Vue)
   announceClientService({ vue: Vue, runtimeConfiguration })
   announceUppyService({ vue: Vue })
   await announceClient(runtimeConfiguration)
