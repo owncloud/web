@@ -1,36 +1,53 @@
+<div align=center>
+  
+  
 [![Rocket chat](https://img.shields.io/badge/Chat%20on%20Rocket.Chat-blue?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSItDnaQIpKhOlkQFemoVShChVArtOpgcv2EJg1Jiouj4Fpw8GOx6uDirKuDqyAIfoA4OTopukiJ/0sKLWI8OO7Hu3uPu3eA0Kwy1eyZAFTNMtLJhJjNrYqBVwQxghDiiMjM1OckKQXP8XUPH1/vYjzL+9yfI5QvmAzwicSzTDcs4g3imU1L57xPHGZlOU98Tjxu0AWJH7muuPzGueSwwDPDRiY9TxwmFktdrHQxKxsq8TRxNK9qlC9kXc5z3uKsVuusfU/+wmBBW1nmOs1hJLGIJUgQoaCOCqqwEKNVI8VEmvYTHv6I45fIpZCrAkaOBdSgQnb84H/wu1uzODXpJgUTQO+LbX+MAoFdoNWw7e9j226dAP5n4Err+GtNIP5JeqOjRY+AgW3g4rqjKXvA5Q4w9KTLhuxIfppCsQi8n9E35YDBW6B/ze2tvY/TByBDXaVugINDYKxE2ese7+7r7u3fM+3+fgDAvHLGj7r9AwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+QMHg05Mvq8cfAAAAAGYktHRAD/AP8A/6C9p5MAAAcbSURBVGje7VlpTFRXGLU0NmmNpuma9IciCCKCQDTuxqQWkrrTNJAal6Y2ECyoURONRBPXuBujVpsYiys1qUH7w8QVjQnVP9Zqq3Y2FgcQmIEBBpgZmPl6vvveLG94D2ZAFhNvcsIwb5nv3G87994hQ970oY+OjgaygR3AWmAyMPRNIjAV+A8gGQ3AKX1U1Nf60aNTgVn4nIDvPgLeGYwE3gd+ATwBJBhuQ2xshyEuzmWIiWnQRUY+0o0adRBkUvQxMRGDicAHwLkg4xUwTJtG5RkZVDZnDunHjKmCV3JB4r3BQyIq6jgM83RFQhCZNIlMqamkj41txzO/47tcYBWwApgHJAGfABH96YGxMMbMxnVHoAsweRdgBf4GfgW+A77AxPRt3ugjIzONycmO+qIiMqal9YxAVBThPYQcIYSX9H90dDvwFNjIRPqWQFKSo+3RI7Jev84xHjaBMuRHdX4+mVesoNJZs0gfFyeRkIiwd2qAQmA1sBhIAT4F3n0dIRSLH9LVbd9OzpqaHnvBMGMG6ZOSQrmXPVMve+cikANwme55UYDb1xri413VO3aQITm5N7nQ0/x5BXBR+Bb4sEdeQJ2vN0ycKNxuGDeuV3kggM96GbqA78V3UmipwQHcAzK4vIdTRvNQ16UyGhtLtbt2hRZKsnGGsWOpFL3iZXo6Va9aRbVbt5LlwAGyHj0qwJ9rt2yhqpwcqli8mExTp4pnfCQ7v7tVzpmEUGZ/GmD2GmReupScZjOV4ce0ZloYDS9VLFpEdbt3k/3GDXKZTORuaiLq6CCt4cE1vsdpNJIdBaNu506qWLBAvEun7hmWON902VdwMQoo8j5ku3CB2hsbqSw7W3XGjRMmUHVuLtlv3aKOhgbq1fB4qKO+XpBh7xgTE9U8wr0lq8uKhYs/i9hPSKCWBw+kchpYUXhmUF7Ny5ZRy7175HE66XUPj8NB9uJiMi9Z4v9NPwkb8H1IBCznz5ORNY/3YTQmnhnr4cO9n/EQBnvEsn+/sCWIRCUwW4vAJu+NprlzFTNvTEmhxkuXRPz21/C0t4tQNnIUKEkUs9ZSI/AlYFfczB6JjyfbuXMiVvt9uN3UcPo0GbxdXbKrA/hJjcAIoESRPAidmk2b+iTeQ/ZEWxu9Wr9e0ld+2x7w4kqNxInA2S+dPp0cz5/TQA/H06dkmjIl0AstQGqw8RFy4xA3cU1+tWGDcKNWorF7azZuJFtBQefkxnMt9++LhlaHpuh48qTTO9orK8l67JjwctPly+RubdXMh+o1a6Q+4fdCfjCB4bJrfDc1FhaqvxAhVbN5s9TQWBrgLxvqcbl897TcvUsmrC+88oFXcs4XL/z8bDaqWrnSJzGwdKX6Eyc0vWA7cyY4mQuMgesMfPEZ8MynLJE4bITacBoMZJo82R+X+MsywlVW5ruHPaMbOZICPVp/8qTvemtJiSgQXqP4esX8+Zpl2n7zpiAZQOAPxc6JrM3/DYUASwY2WEFg5kxyVVT4CcBDgQS4uzacOuUn8PAhGcaPVxKALHFDAagSgFTpjgCH0F+KELp4UTMmWf9A/EkhhBdb9u1TaCA2kEl5VSnrHSbuCyG7XcS1NwyZjO3s2V6FEC/EyxVJjPKlJczczc3UdOWKMLzp6lVhULDGaXv8mKxHjojQYfHWqRBYLGTDJHHXtd++rVmuRRKvXh2cxJsDjR8GHFfsC3EZRZg4nj0b+DKKCiZyTllGvwre2MqQ48qlaGRIRhZZA9rI1q0LbmQlWo1sKHBSISWg0zn+tPpBn0sJJL6KlMjpSpXGKfZJWcxhjcw9gWOx32YePYWTWkXM3QI+7m6FthxoVshpLGLsd+70i/Gc3JY9exRlVsZLYGYoS0wOpW3y9odUlVDqeD3Q1/HOqzxzZqbagoa3YZaGs0sxCigNJMD7Rq/fao+Y8eZr16gqK0taxHReUtYBP2BFGBEOgZEKAnip5dAhTZdz13bq9aKTdpUrfI11EN/LRtdu20bl8+aJRNVY1LO8WRiW8TKB2Yo8wHq4qaios/G1tVSdlycMYMnLcqAqO5tq8vPJsnevCDsGxzTLC57lioULJXmMDi6MVpbIwFrPW/7jerrduDewEvE+jlOnU2qi8nJhkG8PVGVjS4HQNrbagNtAOvennho/Pjh8uJV75TKHAYcMz7bG7IULt7xgL5Q3fkf09ripQNEHEhOlPSCrlVqKi8VCh3uDivFtgZWrC7jkxGTxeAb4Ue4/vTtYNEDdydvfjuBGVrl8OZWnpUkaXj0E/gQWyDOYB2wHDssa6xhwENgqn4bOBxLFoWG4ydnN7LMesmhtJWqEC8/mb3xUO9AHfXy+VR1m3D6X9/aHD4aTSj4xOQr8I/aHOh+5eoVUrVwl1nCzG2znxbwz8bncA7JkOcGxu0/eucuUY3fYkLfj7Xg7Bs34HwoINZEQp4aVAAAAAElFTkSuQmCC)](https://talk.owncloud.com/channel/web)
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud/web/status.svg)](https://drone.owncloud.com/owncloud/web)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_web)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_web)
 [![web docker image](https://img.shields.io/docker/v/owncloud/web?label=web%20docker%20image&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web)
 
+
+  
 # ownCloud Web
 With ownCloud Web you can manage your ownCloud in your browser.
+
+</div>
+<img width="100%" alt="Screenshot of ownCloud Web" src="https://user-images.githubusercontent.com/26610733/168603602-5ba37b4d-2ee1-413c-9a55-03380c79cd3d.png">
+
+ownCloud Web is a single page, standalone frontend, based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
+## Examples
 Here are some examples of what you can do with ownCloud Web:
-- 🗂 **Files**: Upload, download and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
+- 🗂 **Files**: Upload, download, search and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
 - 🌈 **Share** files or whole folders directly with other users on your ownCloud.
 - 🌍 **Links**: Create links and share them with anyone in the world - no login required.
 - 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
 - 🤝 **Collaborate** in real-time on documents.
+- 🚀 **Spaces**: You have to manage important projects? Let Spaces, the new special folders, keep order. 
 - 🛟 **Versioning** Saved a wrong version? We have the timemachine you where looking for! Easyily go back in time and restore older versions of your files.
 - 📥 **Drop-folders** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - no login required.
-- 🔒 **100% Privacy**: ownCloud Web is GDPR compliant and can be used only internally or toghether with external people.
+- 🔒 **100% privacy**: ownCloud Web is GDPR compliant and can be used only internally or toghether with external people.
 - 🛡 **Secure** ownCloud Web is an open source project which means that you can track every action of the software - no blackbox, no "phone home".
 - 🩼 **Inclusive**: Our goal is to be accessible for kids to seniors and newbies to experts as we are all affected by physical and cognitive limitations depending on our personal situations.
 - 🧩 **Extensible** ownCloud Web is build as a plattform that can be extended by-design in the most developer friendly way.
-- 🚀 **Spaces**: You have to manage important projects? Let Spaces, the new special folders, keep order. 
-- 🔎 **Search**: Search and find within the blink of an eye. 
 - 🌗 **Darkmode** <-- all said.
-- 🪪 **Libre IDM:** Manage your users and groups if you don't want an external Identity Management. 
-
-ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. 
+- 🎭 **Themes**: Easily cumstomizable to your branding or personal taste.
+- 👉 and many more...
 
 As the successor to the classic ownCloud frontend, it is compatible with both the classic [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
 
 While the `web` frontend provides a performant, elegant, accessible and themeable base, it also aims to be extendable with custom extensions provided by external developers.
 
 ## Live Demos
-You can use the most recent release of `web` with a [classic ownCloud Server backend](https://web.owncloud.com/) (user: demo, password: demo) and the latest commit on the master branch with an [ownCloud Infinite Scale backend](https://ocis.ocis-web.latest.owncloud.works) (user: einstein, password: relativity).
+- **Classic** ownCloud 10 backend. You can use the most recent release of `web` with a classic ownCloud Server backend: 
+  - Demo: [https://web.owncloud.com/](https://web.owncloud.com/)
+  - User: `demo`
+  - Password: `demo`
+
+- **Infinitescale** - Try the latest commit on the master branch with an ownCloud Infinite Scale backend:
+  - Demo: [https://ocis.ocis-web.latest.owncloud.works](https://ocis.ocis-web.latest.owncloud.works)
+  - User: `einstein`
+  - Password: `relativity`
 
 ## Repository structure
 
@@ -65,6 +82,9 @@ Contribution in the form of bug reports, user feedback or actual code is always 
 
 ## Tests
 We assert the quality of this project by running an [automated CI](https://drone.owncloud.com/owncloud/web), while a guide on running the tests locally can be found in the [testing documentation](https://owncloud.dev/clients/web/testing/testing/).
+
+## Jobs
+At ownCloud, we are always looking for new additions to our team. You are welcome to take a look at [our open positions](https://owncloud.com/career/). 
 
 ## License
 GNU Affero General Public License - [Details](https://github.com/owncloud/web/blob/master/LICENSE)
