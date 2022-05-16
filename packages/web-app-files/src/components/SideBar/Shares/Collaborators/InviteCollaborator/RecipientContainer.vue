@@ -107,9 +107,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .files-share-invite-recipient {
   margin: 4px 2px 0;
   padding: 0 0.25em;
+  overflow-wrap: anywhere;
+
+  .oc-recipient-avatar {
+    min-width: 16.8px;
+  }
 }
 </style>
