@@ -167,7 +167,11 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .click('@uploadFilesButton')
+        .closeFileFolderUploadProgress()
+    },
+
+    closeFileFolderUploadProgress: function () {
+      return this.click('@filesFoldersUploadProgressClose')
     },
     /**
      * This uploads a folder that is inside the selenium host,
@@ -216,7 +220,7 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .click('@uploadFilesButton')
+        .closeFileFolderUploadProgress()
     },
     /**
      * Returns whether files or folders can be created in the current page.
@@ -411,6 +415,9 @@ module.exports = {
     },
     fileUploadProgress: {
       selector: '#upload-info'
+    },
+    filesFoldersUploadProgressClose: {
+      selector: '#upload-info #close-upload-info-btn'
     },
     dialog: {
       selector: '.oc-modal'
