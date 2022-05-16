@@ -30,6 +30,7 @@ Summary
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
+* Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
@@ -51,6 +52,7 @@ Summary
 * Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
+* Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
@@ -244,6 +246,13 @@ Details
    https://github.com/owncloud/web/issues/6845
    https://github.com/owncloud/web/pull/6848
 
+* Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
+
+   We've fixed the contrast of the text color for hovered and active application menus items.
+
+   https://github.com/owncloud/web/issues/6958
+   https://github.com/owncloud/web/pull/6954
+
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 
    We've fixed a bug where the folder links in the upload overlay were broken when navigating into
@@ -427,6 +436,14 @@ Details
    https://github.com/owncloud/web/issues/5031
    https://github.com/owncloud/web/issues/6268
    https://github.com/owncloud/web/pull/6202
+
+* Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
+
+   We've added the sorting of actions in the way that default file handler shows first in the
+   context menu
+
+   https://github.com/owncloud/web/issues/6971
+   https://github.com/owncloud/web/pull/6954
 
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 
