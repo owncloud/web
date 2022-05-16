@@ -15,6 +15,7 @@ Summary
 * Bugfix - "Create Space"-button with open sidebar: [#6919](https://github.com/owncloud/web/pull/6919)
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
+* Bugfix - Indirect links should not be editable: [#6964](https://github.com/owncloud/web/issues/6964)
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
@@ -119,6 +120,13 @@ Details
    the share panel in the right sidebar.
 
    https://github.com/owncloud/web/pull/6813
+
+* Bugfix - Indirect links should not be editable: [#6964](https://github.com/owncloud/web/issues/6964)
+
+   We've fixed a bug where it was possible to edit an indirect link.
+
+   https://github.com/owncloud/web/issues/6964
+   https://github.com/owncloud/web/pull/6980
 
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 
