@@ -3,7 +3,7 @@ import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
 
-const passwordField = 'input[type="password"]'
+const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
 const resourceNameSelector = '[data-test-resource-name="%s"]'
 const publicLinkAuthorizeButton =
@@ -20,17 +20,16 @@ export class Public {
   }
 
   async authenticate({ password }: { password: string }): Promise<void> {
-    await this.#page.locator(passwordField).fill(password)
+    await this.#page.locator(passwordInput).fill(password)
     await this.#page.locator(publicLinkAuthorizeButton).click()
   }
 
   async upload({ resources }: { resources: File[] }): Promise<void> {
     const startUrl = this.#page.url()
-    const resourceSelector = resourceNameSelector
     await this.#page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
     const names = resources.map((file) => path.basename(file.name))
     await Promise.all(
-      names.map((name) => this.#page.waitForSelector(util.format(resourceSelector, name)))
+      names.map((name) => this.#page.waitForSelector(util.format(resourceNameSelector, name)))
     )
     await this.#page.goto(startUrl)
   }

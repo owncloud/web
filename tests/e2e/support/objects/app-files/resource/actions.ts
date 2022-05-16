@@ -13,14 +13,14 @@ const fileRow = '//ancestor::tr'
 const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
-const folderNameInputField = '.oc-modal input'
+const folderNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
-const closeUploadInfoDialog = '#close-upload-info-btn'
+const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
 const locationConfirmButton = '#location-picker-btn-confirm'
-const routerLinkActive = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
-const fileRenameTextField = '.oc-text-input'
+const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
+const fileRenameInput = '.oc-text-input'
 const deleteButton = 'button.oc-files-actions-delete-trigger'
 const actionConfirmationButton = '.oc-modal-body-actions-confirm'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
@@ -67,7 +67,7 @@ export const createResource = async (args: createResourceArgs): Promise<void> =>
     if (!folderExists) {
       await page.locator(addNewResourceButton).click()
       await page.locator(createNewFolderButton).click()
-      await page.locator(folderNameInputField).fill(resource)
+      await page.locator(folderNameInput).fill(resource)
       await Promise.all([
         page.waitForResponse(
           (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
@@ -104,7 +104,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
     // @TODO check if upload was successful
   }
 
-  await page.locator(closeUploadInfoDialog).click()
+  await page.locator(uploadInfoCloseButton).click()
 
   await waitForResources({
     page: page,
@@ -215,7 +215,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
   await page.locator(util.format(filesAction, action)).first().click()
-  await page.locator(routerLinkActive).click()
+  await page.locator(breadcrumbRoot).click()
 
   if (newLocation !== 'Personal') {
     await clickResource({ page: page, path: newLocation })
@@ -255,7 +255,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
   await page.locator(util.format(filesAction, 'rename')).click()
-  await page.locator(fileRenameTextField).fill(newName)
+  await page.locator(fileRenameInput).fill(newName)
   await Promise.all([
     page.waitForResponse(
       (resp) =>

@@ -4,7 +4,7 @@ import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import util from 'util'
 
-const invitationInputField = '#files-share-invite-input'
+const invitationInput = '#files-share-invite-input'
 const filesCollaboratorRolesSelector = '//*[@id="files-collaborators-role-button-new"]'
 const collaboratorRoleItemSelector = `//*[@id="files-role-%s"]`
 const shareInvitationButton = '#new-collaborators-form-create-button'
@@ -47,14 +47,14 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
 
   for (const user of users) {
-    const shareInputLocator = page.locator(invitationInputField)
+    const shareInputLocator = page.locator(invitationInput)
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
       shareInputLocator.fill(user.id)
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
-    await page.locator(invitationInputField).press('Enter')
+    await page.locator(invitationInput).press('Enter')
 
     await page.locator(filesCollaboratorRolesSelector).click()
     await page.locator(util.format(collaboratorRoleItemSelector, role)).click()

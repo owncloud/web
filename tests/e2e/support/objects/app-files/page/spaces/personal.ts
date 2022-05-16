@@ -1,6 +1,6 @@
 import { Page } from 'playwright'
 
-const allFilesSelector = '//a[@data-nav-name="files-spaces-personal-home"]'
+const personalSpaceNavSelector = '//a[@data-nav-name="files-spaces-personal-home"]'
 
 export class Personal {
   #page: Page
@@ -10,6 +10,6 @@ export class Personal {
   }
 
   async navigate(): Promise<void> {
-    await this.#page.locator(allFilesSelector).click()
+    await this.#page.locator(personalSpaceNavSelector).click()
   }
 }

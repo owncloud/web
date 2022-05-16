@@ -1,6 +1,6 @@
 import { Page } from 'playwright'
 
-const sharesOptionSelector = '//a[@data-nav-name="files-shares-with-me"]'
+const sharesNavSelector = '//a[@data-nav-name="files-shares-with-me"]'
 
 export class WithMe {
   #page: Page
@@ -10,6 +10,6 @@ export class WithMe {
   }
 
   async navigate(): Promise<void> {
-    await this.#page.locator(sharesOptionSelector).click()
+    await this.#page.locator(sharesNavSelector).click()
   }
 }
