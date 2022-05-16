@@ -58,7 +58,7 @@
             <details-and-edit
               :is-folder-share="highlightedFile.isFolder"
               :link="link"
-              :modifiable="canEdit"
+              :modifiable="canEdit && !isLinkIndirect(link)"
               :can-rename="true"
               :password-enforced="passwordEnforced"
               :expiration-date="globalExpirationDate"
@@ -301,7 +301,6 @@ export default defineComponent({
           })
         }
       })
-
       return allShares.sort(this.linksComparator)
     },
 
@@ -339,6 +338,10 @@ export default defineComponent({
 
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
+    },
+
+    isLinkIndirect(link) {
+      return this.indirectLinks.some((i) => i.token === link.token)
     },
 
     reloadLinks() {
