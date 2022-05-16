@@ -241,11 +241,13 @@ Feature: deleting files and folders
   Scenario: Try to delete file and folder that used to exist but does not anymore
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "lorem.txt" in the server
+    # user logs in first and deletes the files/folders using the API requests (demanded by the scenario)
+    # so that the steps are organized as follows
+    And user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |
       | simple-folder |
-    And user "Alice" has logged in using the webUI
     When the user deletes file "lorem.txt" using the webUI
     Then the error message with header 'Failed to delete "lorem.txt"' should be displayed on the webUI
     When the user clears all error message from the webUI

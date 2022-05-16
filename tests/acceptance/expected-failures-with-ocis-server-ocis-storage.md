@@ -331,7 +331,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITrashbinDelete/trashbinDelete.feature:48](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L48)
 
 ### [Tags page not implemented yet](https://github.com/owncloud/web/issues/5017)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:136](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L136)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:135](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L135)
 -   [webUIFilesSearch/search.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L63)
 -   [webUIFilesSearch/search.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L71)
 -   [webUIFilesSearch/search.feature:84](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L84)
