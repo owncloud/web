@@ -78,7 +78,7 @@
             />
           </td>
         </tr>
-        <tr v-if="isEos">
+        <tr v-if="runningOnEos">
           <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
@@ -219,8 +219,8 @@ export default defineComponent({
       return this.displayedItem.value
     },
 
-    isEos() {
-      return !!this.configuration.options?.eos
+    runningOnEos() {
+      return !!this.configuration?.options?.runningOnEos
     },
 
     hasSharees() {

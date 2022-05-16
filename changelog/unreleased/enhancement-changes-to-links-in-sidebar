@@ -1,8 +1,8 @@
-Changes to links in sidebar, fix tooltips
+Enhancement: Changes in sidebar, fix tooltips
 
-We've added an `isEos` setting which, if on, displays two entries in the sidebar: the EOS path and a
-direct link to the file. These paths along with the sidebar tooltips can now handle very long text
-without overflowing.
+We've added a `runningOnEos` setting which, if on, displays two entries in the sidebar: the EOS
+path and a direct link to the file. These paths along with the sidebar tooltips can now handle very
+long text without overflowing.
 
 https://github.com/owncloud/web/issues/6849
 https://github.com/owncloud/web/pull/6959
