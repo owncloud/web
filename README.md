@@ -19,27 +19,27 @@ ownCloud Web is a single page, standalone frontend, based on modern web technolo
 ## Examples
 Here are some examples of what you can do with ownCloud Web:
 - 🗂 **Files**: Upload, download, search and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
-- 🌈 **Share** files or whole folders directly with other users on your ownCloud.
-- 🌍 **Links**: Create links and share them with anyone in the world - no login required.
+- 👥 **Share:** Allow fine-grained access to files and whole folders directly with other users on your ownCloud.
+- 🔗 **Links**: Create links and share them with anyone in the world - optional password-protection available.
 - 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
 - 🤝 **Collaborate** in real-time on documents.
 - 🚀 **Spaces**: You have to manage important projects? Let Spaces, the new special folders, keep order. 
-- 🛟 **Versioning** Saved a wrong version? We have the timemachine you where looking for! Easyily go back in time and restore older versions of your files.
-- 📥 **Drop-folders** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - no login required.
-- 🔒 **100% privacy**: ownCloud Web is GDPR compliant and can be used only internally or toghether with external people.
-- 🛡 **Secure** ownCloud Web is an open source project which means that you can track every action of the software - no blackbox, no "phone home".
-- 🩼 **Inclusive**: Our goal is to be accessible for kids to seniors and newbies to experts as we are all affected by physical and cognitive limitations depending on our personal situations.
-- 🧩 **Extensible** ownCloud Web is build as a plattform that can be extended by-design in the most developer friendly way.
-- 🌗 **Darkmode** <-- all said.
-- 🎭 **Themes**: Easily cumstomizable to your branding or personal taste.
+- ◀️ **Versioning** Saved the wrong version? We have the time machine you were looking for! Easily go back in time and restore older versions of your files.
+- 📥 **Drop-folders:** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - optional password-protection available.
+- 🔒 **Privacy first:** ownCloud Web is GDPR compliant and can both be used completely internally or together with external people. It also will never "phone home".
+- 🛡 **Secure:** ownCloud Web is an open source project which means that you can track every action, update and dependency of the software.
+- ♿ **Inclusive:** Our goal is to be accessible for kids as well as seniors and for newbies as well as experts - since we are all affected by physical and cognitive limitations, depending on our personal situation.
+- 🧩 **Extensible:** ownCloud Web is build as a plattform that can be extended in the most developer friendly way.
+- 🌗 **Darkmode:** Initialized with your browser settings, and easily switched to please your eyes better.
+- 🎭 **Themes**: Customize to your branding needs or personal taste in no time.
 - 👉 and many more...
 
-As the successor to the classic ownCloud frontend, it is compatible with both the classic [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
+As the successor to the classic ownCloud frontend, it is compatible with both the [ownCloud Server](https://github.com/owncloud/core) and [ownCloud Infinite Scale](https://github.com/owncloud/ocis). When used with the ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. 
 
 While the `web` frontend provides a performant, elegant, accessible and themeable base, it also aims to be extendable with custom extensions provided by external developers.
 
 ## Live Demos
-- **Classic** ownCloud 10 backend. You can use the most recent release of `web` with a classic ownCloud Server backend: 
+- **Server** - Try the most recent release of `web` with an ownCloud Server backend: 
   - Demo: [https://web.owncloud.com/](https://web.owncloud.com/)
   - User: `demo`
   - Password: `demo`
@@ -54,7 +54,7 @@ While the `web` frontend provides a performant, elegant, accessible and themeabl
 The backbone of this project is built by the following parts of the `packages`:
 - **client:** Generated TypeScript client for communications with the ownCloud Infinite Scale graph API
 - **container:** Static assets and rarely changing base files
-- **integration-oc10:** Small PHP building blocks to make `web` work as an app with the classic ownCloud Server
+- **integration-oc10:** Small PHP building blocks to make `web` work as an app with the ownCloud Server
 - **pkg:** Shared logic for various places inside the codebase
 - **runtime:** Central place of (user) authentication, provisioning of the user interface layout, client side storage, routing, theming, dependencies and (sub)application handling
 
