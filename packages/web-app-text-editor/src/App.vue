@@ -17,7 +17,7 @@
       />
     </oc-notifications>
     <div class="oc-flex editor-wrapper-height">
-      <div :class="showPreview ? 'oc-width-1-2 oc-height-1-1' : 'oc-width-1-1 oc-height-1-1'">
+      <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
           v-model="currentContent"
@@ -238,12 +238,9 @@ export default {
 }
 #text-editor-input {
   resize: vertical;
+  height: 100%;
 }
 .editor-wrapper-height {
   height: calc(100% - 42px);
-}
-
-#text-editor-input {
-  height: 100%;
 }
 </style>
