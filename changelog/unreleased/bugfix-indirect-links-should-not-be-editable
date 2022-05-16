@@ -1,0 +1,7 @@
+Bugfix: Indirect links should not be editable
+
+We've fixed a bug where it was possible to edit an
+indirect link.
+
+https://github.com/owncloud/web/issues/6964
+https://github.com/owncloud/web/pull/6980
