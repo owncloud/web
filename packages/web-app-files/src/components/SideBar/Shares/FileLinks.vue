@@ -58,7 +58,7 @@
             <details-and-edit
               :is-folder-share="highlightedFile.isFolder"
               :link="link"
-              :modifiable="canEdit && !isLinkIndirect(link)"
+              :modifiable="canEdit && !link.indirect"
               :can-rename="true"
               :password-enforced="passwordEnforced"
               :expiration-date="globalExpirationDate"
@@ -338,10 +338,6 @@ export default defineComponent({
 
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
-    },
-
-    isLinkIndirect(link) {
-      return this.indirectLinks.some((i) => i.token === link.token)
     },
 
     reloadLinks() {
