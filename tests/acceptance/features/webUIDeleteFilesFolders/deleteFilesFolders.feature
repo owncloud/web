@@ -5,8 +5,6 @@ Feature: deleting files and folders
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has logged in using the webUI
-    And the user reloads the current page of the webUI
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
@@ -18,7 +16,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
     And user "Alice" has created file "sample,1.txt" in the server
     And user "Alice" has created folder "Sample,Folder,With,Comma" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user deletes the following elements using the webUI
       | name                                  |
       | simple-folder                         |
@@ -43,8 +41,8 @@ Feature: deleting files and folders
 
   Scenario Outline: Delete a file with problematic characters
     Given user "Alice" has created file <file_name> in the server
-    When the user reloads the current page of the webUI
-    And the user deletes file <file_name> using the webUI
+    And user "Alice" has logged in using the webUI
+    When the user deletes file <file_name> using the webUI
     Then file <file_name> should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <file_name> should not be listed on the webUI
@@ -60,7 +58,7 @@ Feature: deleting files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
@@ -78,7 +76,7 @@ Feature: deleting files and folders
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has browsed to the personal page
+    And user "Alice" has logged in using the webUI
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
     Then as "Alice" file "data.zip" should not exist in the server
@@ -94,7 +92,7 @@ Feature: deleting files and folders
     And user "Alice" has created file "fileToDelete.txt" in the server
     And user "Alice" has created folder "folderToDelete" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
       | name          |
@@ -114,6 +112,7 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-106
   Scenario: Delete an empty folder
+    Given user "Alice" has logged in using the webUI
     When the user creates a folder with the name "my-empty-folder" using the webUI
     And the user creates a folder with the name "my-other-empty-folder" using the webUI
     And the user deletes folder "my-empty-folder" using the webUI
@@ -126,7 +125,7 @@ Feature: deleting files and folders
 
   Scenario: Delete the last file in a folder
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist in the server
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
@@ -135,9 +134,9 @@ Feature: deleting files and folders
   @issue-5017 @systemtags-app-required
   Scenario: delete files from tags page
     Given user "Alice" has created file "lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has created a "normal" tag with name "lorem" in the server
     And user "Alice" has added tag "lorem" to file "/lorem.txt" in the server
+    And user "Alice" has logged in using the webUI
     When the user browses to the tags page
     And the user searches for tag "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -153,7 +152,6 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user deletes the following elements using the webUI
@@ -172,7 +170,6 @@ Feature: deleting files and folders
   Scenario: delete a file on a public share with problematic characters
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has renamed the following file in the server
       | from-name-parts | to-name-parts   |
       | lorem.txt       | simple-folder/  |
@@ -209,7 +206,6 @@ Feature: deleting files and folders
     And user "Alice" has created file "simple-folder/data.zip" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has created file "simple-folder/simple-empty-folder" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user batch deletes these files using the webUI
@@ -231,6 +227,7 @@ Feature: deleting files and folders
     And user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
     And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the shared-with-me page
     When the user accepts share "simple-folder" offered by user "Brian Murphy" using the webUI
     When the user accepts share "lorem.txt" offered by user "Brian Murphy" using the webUI
@@ -244,11 +241,11 @@ Feature: deleting files and folders
   Scenario: Try to delete file and folder that used to exist but does not anymore
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "lorem.txt" in the server
-    And the user has browsed to the personal page
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |
       | simple-folder |
+    And user "Alice" has logged in using the webUI
     When the user deletes file "lorem.txt" using the webUI
     Then the error message with header 'Failed to delete "lorem.txt"' should be displayed on the webUI
     When the user clears all error message from the webUI
@@ -268,7 +265,7 @@ Feature: deleting files and folders
       | fo.1     |
       | fo...1.. |
       | fo.xyz   |
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user batch deletes these files using the webUI
       | folders  |
       | fo.      |
