@@ -46,7 +46,7 @@
     "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-env": "^7.17.10",
     "@babel/register": "^7.17.7",
     "@cucumber/cucumber": "^7.3.1",
     "@cucumber/messages": "^17.1.1",
