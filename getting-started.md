@@ -53,9 +53,25 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.feedbackLink` This accepts an object with the following optional fields to customize the feedback link in the topbar:
   - `options.feedbackLink.href` Set a different target URL for the feedback link. Make sure to prepend it with `http(s)://`. Defaults to `https://owncloud.com/web-design-feedback`.
   - `options.feedbackLink.ariaLabel` Since the link only has an icon, you can set an e.g. screen reader accessible label. Defaults to `ownCloud feedback survey`.
-  - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.` 
+  - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.`
 - `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
 - `options.sidebar.shares.showAllOnLoad` Sets the list of (link) shares list in the sidebar to be initially expanded (default is a collapsed state, only showing the first three shares).
+
+### Sentry
+
+Web supports [Sentry](https://sentry.io/welcome/) to provide monitoring and error tracking.
+To enable sending data to a Sentry instance, you can use the following configuration keys:
+
+- `sentry.dsn` Should contain the DSN for your sentry project.
+- `sentry.environment`: Lets you specify the enviroment to use in Sentry. Defaults to `production`.
+
+Any other key under `sentry` will be forwarded to the Sentry initialization. You can find out more
+settings in the [Sentry docs](https://docs.sentry.io/platforms/javascript/configuration/).
+
+{{< hint info >}}
+If you are using an old version of Sentry (9 and before), you might want to add the setting `sentry.autoSessionTracking: false` to avoid errors related to breaking changes introduced in the
+integration libraries.
+{{< /hint >}}
 
 ## Setting up backend and running
 
