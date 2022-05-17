@@ -1,0 +1,6 @@
+Enhancement: Use new WebDAV endpoints for uploads
+
+We now use the new WebDAV endpoints for uploads when spaces are enabled.
+
+https://github.com/owncloud/web/issues/6970
+https://github.com/owncloud/web/pull/6991
