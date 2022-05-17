@@ -1,0 +1,9 @@
+Enhancement: EOS links insidebar, fix tooltips
+
+We've added a `runningOnEos` setting which, if set to true, displays two entries in the sidebar: 
+The EOS path and a direct link to the file. Along with adding the two links, we have also resolved 
+an issue with overflowing text/tooltips in the sidebar for very long text.
+
+https://github.com/owncloud/web/issues/6849
+https://github.com/owncloud/web/pull/6959
+https://github.com/owncloud/web/pull/6997

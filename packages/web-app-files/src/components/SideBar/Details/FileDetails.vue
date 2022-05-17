@@ -106,7 +106,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr v-if="runningOnEos">
           <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
