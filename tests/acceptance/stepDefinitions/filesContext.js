@@ -369,7 +369,7 @@ Then('the last uploaded folder should be listed on the webUI', async function ()
 
 Then('file {string} should not be listed on the webUI', function (file) {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
+    .isElementListed(file, 'file', false)
     .then((state) => {
       const message = state
         ? `Error: File '${file}' is listed on the filesList`
@@ -380,7 +380,7 @@ Then('file {string} should not be listed on the webUI', function (file) {
 
 Then('folder {string} should not be listed on the webUI', (folder) => {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
+    .isElementListed(folder, 'folder', false)
     .then((state) => {
       const message = state
         ? `Error: Folder '${folder}' is listed on the filesList`
@@ -565,7 +565,7 @@ const theseResourcesShouldNotBeListed = async function (table) {
     const state = await client.page.FilesPageElement.filesList().isElementListed(
       entry[0],
       'file',
-      client.globals.waitForNegativeConditionTimeout
+      false
     )
     assert.ok(!state, `Expected resource '${entry[0]}' to be 'not present' but found 'present'`)
   }
@@ -609,7 +609,7 @@ Then(
   async function (file, target) {
     await client.page.personalPage().navigateAndWaitTillLoaded(target)
     return client.page.FilesPageElement.filesList()
-      .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
+      .isElementListed(file, 'file', false)
       .then((state) => {
         return client.assert.ok(!state, `Error: Folder '${file}' is listed on the '${target}'`)
       })
@@ -924,7 +924,7 @@ const assertElementsAreNotListed = async function (elements) {
     const state = await client.page.FilesPageElement.filesList().isElementListed(
       element,
       'any',
-      client.globals.waitForNegativeConditionTimeout
+      false
     )
     assert.ok(!state, `Expected resource '${element}' to be 'not present' but found 'present'`)
   }
@@ -971,7 +971,11 @@ Then(
   'file/folder {string} should not be listed in shared-with-others page on the webUI',
   async function (filename) {
     await client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
-    const state = await client.page.FilesPageElement.filesList().isElementListed(filename)
+    const state = await client.page.FilesPageElement.filesList().isElementListed(
+      filename,
+      'any',
+      false
+    )
     assert.ok(
       !state,
       `Error: Resource ${filename} is present on the shared-with-others page on the webUI`
@@ -1100,7 +1104,7 @@ Then('the following file should not be listed on the webUI', async function (tab
     .hashes()
     .map((data) => data['name-parts'])
     .join('')
-  const state = await client.page.FilesPageElement.filesList().isElementListed(name)
+  const state = await client.page.FilesPageElement.filesList().isElementListed(name, 'any', false)
   return assert.ok(!state, `Element ${name} is present on the filesList!`)
 })
 

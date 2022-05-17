@@ -171,7 +171,9 @@ module.exports = {
     },
 
     closeFileFolderUploadProgress: function () {
-      return this.click('@filesFoldersUploadProgressClose')
+      return this.waitForElementVisible('@filesFoldersUploadProgressClose').click(
+        '@filesFoldersUploadProgressClose'
+      )
     },
     /**
      * This uploads a folder that is inside the selenium host,
