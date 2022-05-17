@@ -432,13 +432,24 @@ module.exports = {
      * @param {string} elementType
      * @returns {boolean}
      */
-    isElementListed: async function (name, elementType = 'any') {
+    isElementListed: async function (name, elementType = 'any', expectToBeListed = true) {
       const selector = this.getFileRowSelectorByFileName(name, elementType)
       let isVisible = false
+      const timeout = expectToBeListed
+        ? this.api.globals.waitForConditionTimeout
+        : this.api.globals.waitForNegativeConditionTimeout
 
-      await this.api.element('xpath', selector, function (result) {
-        isVisible = !!(result.value && result.value.ELEMENT)
-      })
+      await this.isVisible(
+        {
+          selector,
+          locateStrategy: 'xpath',
+          timeout,
+          suppressNotFoundErrors: expectToBeListed !== true
+        },
+        (result) => {
+          isVisible = result.value === true
+        }
+      )
 
       return isVisible
     },
