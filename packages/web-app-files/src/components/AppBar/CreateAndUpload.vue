@@ -117,7 +117,6 @@ import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
-import { clientService } from 'web-pkg/src/services'
 
 export default defineComponent({
   components: {
@@ -167,22 +166,6 @@ export default defineComponent({
     path: '',
     fileFolderCreationLoading: false
   }),
-  asyncComputed: {
-    personalDriveId: {
-      async get() {
-        const graphClient = clientService.graphAuthenticated(
-          this.configuration.server,
-          this.getToken
-        )
-
-        const drivesResponse = await graphClient.drives.listMyDrives('', 'driveType eq personal')
-        if (!drivesResponse.data) {
-          throw new Error('No personal space found')
-        }
-        return drivesResponse.data.value[0].id
-      }
-    }
-  },
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
