@@ -1,7 +1,6 @@
 ## Scenarios from web tests run on Iphone that are expected to fail on oC10
 
 ### [renaming a resource does not work](https://github.com/owncloud/ocis-reva/issues/14)
--   [webUISharingNotificationsToRoot/shareWithUsers.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L40)
 -   [webUISharingAcceptSharesToRoot/acceptShares.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptSharesToRoot/acceptShares.feature#L50)
 
 ### [File link in notifications seems to not work](https://github.com/owncloud/web/issues/5227)
