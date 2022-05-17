@@ -23,7 +23,7 @@
       </div>
       <table class="details-table" :aria-label="detailsTableLabel">
         <tr v-if="hasTimestamp" data-testid="timestamp">
-          <th scope="col" class="oc-pr-s" v-text="timestampTitle" />
+          <th scope="col" class="oc-pr-s" v-text="timestampLabel" />
           <td>
             <oc-button
               v-if="showVersions"
@@ -51,7 +51,7 @@
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
-          <th scope="col" class="oc-pr-s" v-text="ownerTitle" />
+          <th scope="col" class="oc-pr-s" v-text="ownerLabel" />
           <td>
             <p class="oc-m-rm">
               {{ ownerDisplayName }}
@@ -63,11 +63,11 @@
           </td>
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
-          <th scope="col" class="oc-pr-s" v-text="sizeTitle" />
+          <th scope="col" class="oc-pr-s" v-text="sizeLabel" />
           <td v-text="getResourceSize(file.size)" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
-          <th scope="col" class="oc-pr-s" v-text="versionsTitle" />
+          <th scope="col" class="oc-pr-s" v-text="versionsLabel" />
           <td>
             <oc-button
               v-oc-tooltip="seeVersionsLabel"
@@ -76,6 +76,62 @@
               @click="expandVersionsPanel"
               v-text="versions.length"
             />
+          </td>
+        </tr>
+        <tr v-if="runningOnEos">
+          <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
+          <td>
+            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+              <p
+                ref="filePath"
+                v-oc-tooltip="file.path"
+                class="oc-my-rm oc-text-truncate"
+                v-text="file.path"
+              />
+              <oc-button
+                v-oc-tooltip="copyEosPathLabel"
+                :aria-label="copyEosPathLabel"
+                appearance="raw"
+                :variation="copiedEos ? 'success' : 'passive'"
+                @click="copyEosPathToClipboard"
+              >
+                <oc-icon
+                  v-if="copiedEos"
+                  key="oc-copy-to-clipboard-copied"
+                  name="checkbox-circle"
+                  class="_clipboard-success-animation"
+                />
+                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+              </oc-button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
+          <td>
+            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+              <p
+                ref="directLink"
+                v-oc-tooltip="directLink"
+                class="oc-my-rm oc-text-truncate"
+                v-text="directLink"
+              />
+              <oc-button
+                v-oc-tooltip="copyDirectLinkLabel"
+                :aria-label="copyDirectLinkLabel"
+                appearance="raw"
+                :variation="copiedDirect ? 'success' : 'passive'"
+                @click="copyDirectLinkToClipboard"
+              >
+                <oc-icon
+                  v-if="copiedDirect"
+                  key="oc-copy-to-clipboard-copied"
+                  name="checkbox-circle"
+                  class="_clipboard-success-animation"
+                />
+                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+              </oc-button>
+            </div>
           </td>
         </tr>
       </table>
@@ -96,6 +152,8 @@ import { createLocationSpaces, isAuthenticatedRoute, isLocationSpacesActive } fr
 import { ShareTypes } from '../../../helpers/share'
 import { useRoute, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
+import copyToClipboard from 'copy-to-clipboard'
+import { encodePath } from 'web-pkg/src/utils'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -131,7 +189,10 @@ export default defineComponent({
     sharedByDisplayName: '',
     sharedTime: 0,
     sharedItem: null,
-    shareIndicators: []
+    shareIndicators: [],
+    copiedDirect: false,
+    copiedEos: false,
+    timeout: null
   }),
   computed: {
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
@@ -140,7 +201,9 @@ export default defineComponent({
     file() {
       return this.displayedItem.value
     },
-
+    runningOnEos() {
+      return !!this.configuration?.options?.runningOnEos
+    },
     hasContent() {
       return (
         this.hasTimestamp ||
@@ -157,10 +220,10 @@ export default defineComponent({
       return this.$gettext('Overview of the information about the selected file')
     },
     shareDateLabel() {
-      return this.$gettext('Shared:')
+      return this.$gettext('Shared')
     },
     sharedViaLabel() {
-      return this.$gettext('Shared via:')
+      return this.$gettext('Shared via')
     },
     sharedViaTooltip() {
       return this.$gettextInterpolate(
@@ -197,16 +260,16 @@ export default defineComponent({
       return this.$gettext('This file has been shared.')
     },
     sharedByLabel() {
-      return this.$gettext('Shared by:')
+      return this.$gettext('Shared by')
     },
     hasTimestamp() {
       return this.file.mdate?.length > 0
     },
-    timestampTitle() {
-      return this.$gettext('Last modified:')
+    timestampLabel() {
+      return this.$gettext('Last modified')
     },
-    ownerTitle() {
-      return this.$gettext('Owner:')
+    ownerLabel() {
+      return this.$gettext('Owner')
     },
     ownerDisplayName() {
       return (
@@ -218,11 +281,26 @@ export default defineComponent({
     ownerAdditionalInfo() {
       return this.file.owner?.[0].additionalInfo
     },
+    directLink() {
+      return `${this.configuration.server}files/spaces/personal/home${encodePath(this.file.path)}`
+    },
+    directLinkLabel() {
+      return this.$gettext('Direct link')
+    },
+    copyDirectLinkLabel() {
+      return this.$gettext('Copy direct link')
+    },
+    eosPathLabel() {
+      return this.$gettext('EOS Path')
+    },
+    copyEosPathLabel() {
+      return this.$gettext('Copy EOS path')
+    },
     showSize() {
       return this.getResourceSize(this.file.size) !== '?'
     },
-    sizeTitle() {
-      return this.$gettext('Size:')
+    sizeLabel() {
+      return this.$gettext('Size')
     },
     showVersions() {
       if (this.file.type === 'folder') {
@@ -230,8 +308,8 @@ export default defineComponent({
       }
       return this.versions.length > 0 && isAuthenticatedRoute(this.$route)
     },
-    versionsTitle() {
-      return this.$gettext('Versions:')
+    versionsLabel() {
+      return this.$gettext('Versions')
     },
     seeVersionsLabel() {
       return this.$gettext('See all versions')
@@ -349,6 +427,31 @@ export default defineComponent({
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))
       this.loading = false
+    },
+    copyEosPathToClipboard() {
+      copyToClipboard(this.file.path)
+      this.copiedEos = true
+      this.clipboardSuccessHandler()
+      this.showMessage({
+        title: this.$gettext('EOS path copied'),
+        desc: this.$gettext('The EOS path has been copied to your clipboard.')
+      })
+    },
+    copyDirectLinkToClipboard() {
+      copyToClipboard(this.directLink)
+      this.copiedDirect = true
+      this.clipboardSuccessHandler()
+      this.showMessage({
+        title: this.$gettext('Direct link copied'),
+        desc: this.$gettext('The direct link has been copied to your clipboard.')
+      })
+    },
+    clipboardSuccessHandler() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        this.copiedDirect = false
+        this.copiedEos = false
+      }, 550)
     }
   }
 })
@@ -359,10 +462,20 @@ export default defineComponent({
 
   tr {
     height: 1.5rem;
+
+    td {
+      max-width: 0;
+      width: 100%;
+
+      div {
+        min-width: 0;
+      }
+    }
   }
 
   th {
     font-weight: 600;
+    white-space: nowrap;
   }
 }
 
