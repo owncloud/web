@@ -7,14 +7,13 @@ Feature: Unmark file/folder as favorite
 
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has logged in using the webUI
 
   @smokeTest
   Scenario: unmark files as favorite from files page
     Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created file "lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     And user "Alice" has favorited element "data.zip" in the server
     And user "Alice" has favorited element "data.tar.gz" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
@@ -35,11 +34,10 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has created folder "0" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has favorited element "simple-empty-folder" in the server
     And user "Alice" has favorited element "0" in the server
-    And the user has browsed to the personal page
+    And user "Alice" has logged in using the webUI
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then as user "Alice" folder "simple-folder" should not be marked as favorite in the server
     And folder "simple-folder" should not be marked as favorite on the webUI
@@ -56,10 +54,10 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz" in the server
     And user "Alice" has created file "lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip" in the server
     And user "Alice" has favorited element "data.tar.gz" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the favorites page
     When the user unmarks the favorited file "data.zip" using the webUI
     Then file "data.zip" should be listed on the webUI
@@ -73,10 +71,10 @@ Feature: Unmark file/folder as favorite
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has created folder "0" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has favorited element "simple-empty-folder" in the server
     And user "Alice" has favorited element "0" in the server
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then folder "simple-folder" should be listed on the webUI
@@ -89,9 +87,9 @@ Feature: Unmark file/folder as favorite
   Scenario: unmark files/folders as favorites using the sidebar
     Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip" in the server
     And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI sidebar
     And the user unmarks the favorited file "data.zip" using the webUI sidebar
@@ -104,10 +102,9 @@ Feature: Unmark file/folder as favorite
   Scenario: Try to unfavorite file and folder that used to exist but does not anymore
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has created folder "simple-folder" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "simple-folder" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
-    And the user has browsed to the personal page
+    And user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | lorem.txt     |

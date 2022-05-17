@@ -8,11 +8,10 @@ Feature: rename files
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt" in the server
-    And user "Alice" has logged in using the webUI
-    And the user reloads the current page of the webUI
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario Outline: Rename a file
+    Given user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
     Then file <to_file_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -28,7 +27,7 @@ Feature: rename files
 
   Scenario Outline: Rename a file that has special characters in its name
     Given user "Alice" has created file <from_name> in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -42,6 +41,7 @@ Feature: rename files
   @smokeTest
   Scenario: Rename a file using special characters and check its existence after page reload
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
+    And user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
     Then file "लोरेम।तयक्स्त $%&" should be listed on the webUI
@@ -60,6 +60,7 @@ Feature: rename files
 
   @issue-964
   Scenario: Rename a file using spaces at front and/or back of file name and type
+    Given user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to " space at start" using the webUI
     And the user reloads the current page of the webUI
     Then file " space at start" should be listed on the webUI
@@ -75,6 +76,7 @@ Feature: rename files
 
 
   Scenario: Rename a file using spaces at end is prohibited
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "lorem.txt" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     When the user reloads the current page of the webUI
@@ -88,6 +90,7 @@ Feature: rename files
 
   @issue-4859 @disablePreviews
   Scenario: Rename a file using both double and single quotes
+    Given user "Alice" has logged in using the webUI
     When the user renames the following file using the webUI
       | fromName      | toName                         |
       | lorem.txt     | '"First 'single" quotes" '.txt |
@@ -108,6 +111,7 @@ Feature: rename files
   # these are invalid file names on oc10
   @notToImplementOnOCIS
   Scenario Outline: Try to rename a file using forbidden characters
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Failed to rename "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -127,6 +131,7 @@ Feature: rename files
 
 
   Scenario Outline: Rename a file/folder using forward slash in its name
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "<from_file_name>" should be listed on the webUI
@@ -139,31 +144,35 @@ Feature: rename files
 
   Scenario: Rename the last file in a folder
     Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt" in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
 
 
   Scenario: Rename a file to become the last file in a folder
+    Given user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
 
   Scenario: Rename a file putting a name of a file which already exists
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
 
   Scenario: Rename a file to ..
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
 
   Scenario: Rename a file to .
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
@@ -171,11 +180,13 @@ Feature: rename files
   @notToImplementOnOCIS
   # This is valid file name for ocis
   Scenario: Rename a file to .part (on oc10)
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Failed to rename "data.zip" to "data.part"' should be displayed on the webUI
 
   @skipOnOC10
   Scenario: Rename a file to .part
+    Given user "Alice" has logged in using the webUI
     When the user renames file "data.zip" to "data.part" using the webUI
     Then file 'data.part' should be listed on the webUI
 
@@ -183,7 +194,6 @@ Feature: rename files
   Scenario: rename a file on a public share (on ocis)
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
@@ -201,9 +211,9 @@ Feature: rename files
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
+    And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user renames file "lorem (2).txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -226,6 +236,7 @@ Feature: rename files
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
+    And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -247,6 +258,7 @@ Feature: rename files
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has favorited element "lorem.txt" in the server
     And user "Alice" has favorited element "simple-folder" in the server
+    And user "Alice" has logged in using the webUI
     When the user browses to the favorites page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -255,7 +267,7 @@ Feature: rename files
 
 
   Scenario: User tries to rename a file that used to exist but does not anymore
-    Given the user has browsed to the personal page
+    Given user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice" in the server
       | name      |
       | lorem.txt |
@@ -269,6 +281,7 @@ Feature: rename files
 
 
   Scenario: Rename file extension through context-menu without reload
+    Given user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to "lorem.md" through context-menu using the webUI
     Then file "lorem.md" should be listed on the webUI
     And file "lorem.md" should be listed on the sidebar
