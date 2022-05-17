@@ -7,7 +7,6 @@ Feature: Edit public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-
   @issue-ocis-1328
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
@@ -18,7 +17,8 @@ Feature: Edit public link shares
       | permissions | <initial-permissions> |
     And user "Alice" has logged in using the webUI
     When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "<role>"
-    Then the user should see an error message on the public link share dialog saying "Role requires password to be set for link"
+    Then the user should see a password modal dialog with message "Passwords for links are required." on the webUI
+    # Doesn't check settings the password
     And user "Alice" should have a share with these details in the server:
       | field       | value                 |
       | share_type  | public_link           |

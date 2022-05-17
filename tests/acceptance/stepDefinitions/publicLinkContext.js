@@ -128,6 +128,15 @@ When(
   }
 )
 
+Then(
+  'the user should see a password modal dialog with message {string} on the webUI',
+  async function (expectedMessage) {
+    const actualMessage =
+      await client.page.FilesPageElement.publicLinksDialog().getErrorMessageFromModal()
+    return client.assert.strictEqual(actualMessage, expectedMessage)
+  }
+)
+
 When(
   'the user tries to edit the public link named {string} of file/folder/resource {string} changing the role to {string}',
   async function (linkName, resource, role) {
