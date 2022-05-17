@@ -91,7 +91,6 @@ export interface uploadResourceArgs {
 
 export const uploadResource = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources, to, createVersion } = args
-
   if (to) {
     await clickResource({ page: page, path: to })
   }
@@ -117,7 +116,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 export interface downloadResourcesArgs {
   page: Page
   names: string[]
-  folder: string
+  folder?: string
   via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }
 
@@ -130,7 +129,6 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       if (folder) {
         await clickResource({ page, path: folder })
       }
-
       for (const name of names) {
         await sidebar.open({ page: page, resource: name })
         await sidebar.openPanel({ page: page, name: 'actions' })

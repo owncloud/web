@@ -44,3 +44,12 @@ When(
     expect(role).toBe(actualRole.toLowerCase())
   }
 )
+
+When(
+  '{string} removes the public link named {string} of resource {string}',
+  async function (this: World, stepUser: string, name: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.delete({ resourceName: resource, name })
+  }
+)

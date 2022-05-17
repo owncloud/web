@@ -22,6 +22,12 @@ export type changeRoleArgs = {
   role: string
 }
 
+export type deleteLinkArgs = {
+  page: Page
+  resourceName: string
+  name: string
+}
+
 const publicLinkSetNameInputField = '#oc-files-file-link-name'
 const publicLinkSelectRolesButton = '#files-file-link-role-button'
 const publicLinkSetRoleButton = `#files-role-%s`
@@ -36,7 +42,14 @@ const savePublicLinkButton = '#oc-files-file-link-create'
 const publicLink = `//ul/li/div/h4[contains(text(),'%s')]/following-sibling::div//p`
 const publicLinkCurrentRole =
   '//button[contains(@class,"edit-public-link-role-dropdown-toggl")]//span[contains(@class,"oc-invisible-sr")]'
-const linkUpdateSuccessfulDialog = '//div[contains(@class,"oc-notification-message-title")]'
+const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
+const editPublicLinkButton =
+  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
+  `//ancestor::li//div[contains(@class, "details-buttons")]//button[contains(@class, "edit-drop-trigger")]`
+const deleteLinkButton =
+  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
+  `//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Delete link"]`
+const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 
 const fillPublicLink = async (page, name, role, dateOfExpiration, password): Promise<void> => {
   if (name) {
@@ -61,7 +74,6 @@ const fillPublicLink = async (page, name, role, dateOfExpiration, password): Pro
       { newExpiryDate }
     )
   }
-
   if (password) {
     await page.locator(publicLinkSetPasswordInputField).fill(password)
   }
@@ -102,7 +114,18 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(publicLinkEditRoleButton, name)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
-  const message = await page.locator(linkUpdateSuccessfulDialog).textContent()
+  const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
   return await page.locator(publicLinkCurrentRole).textContent()
+}
+
+export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
+  const { page, resourceName, name } = args
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'sharing' })
+  await page.locator(util.format(editPublicLinkButton, name)).click()
+  await page.locator(util.format(deleteLinkButton, name)).click()
+  await page.locator(confirmDeleteButton).click()
+  const message = await page.locator(linkUpdateDialog).textContent()
+  expect(message.trim()).toBe('Link was deleted successfully')
 }

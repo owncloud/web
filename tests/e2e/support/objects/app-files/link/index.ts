@@ -1,5 +1,12 @@
 import { Page } from 'playwright'
-import { createLink, createLinkArgs, changeRole, changeRoleArgs } from './actions'
+import {
+  createLink,
+  createLinkArgs,
+  changeRole,
+  changeRoleArgs,
+  deleteLinkArgs,
+  deleteLink
+} from './actions'
 import { LinksEnvironment } from '../../../environment'
 
 export class Link {
@@ -28,5 +35,14 @@ export class Link {
     const role = await changeRole({ page: this.#page, ...args })
     await this.#page.goto(startUrl)
     return role
+  }
+
+  async delete(args: Omit<deleteLinkArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await deleteLink({ ...args, page: this.#page })
+    this.#linksEnvironment.deleteLink({
+      key: args.name
+    })
+    await this.#page.goto(startUrl)
   }
 }

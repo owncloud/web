@@ -19,4 +19,11 @@ export class LinksEnvironment {
 
     return link
   }
+
+  deleteLink({ key }: { key: string }): boolean {
+    if (linkStore.has(key)) {
+      return linkStore.delete(key)
+    }
+    throw new Error(`link with key '${key}' doesn't exist`)
+  }
 }
