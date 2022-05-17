@@ -44,7 +44,10 @@ export class FolderLoaderSpacesProject implements FolderLoader {
       }
 
       const webDavResponse = yield ref.$client.files.list(
-        buildWebDavSpacesPath(ref.$route.params.storageId, path || ''),
+        buildWebDavSpacesPath(
+          ref.$route.params.storageId,
+          path || router.currentRoute.params.item || ''
+        ),
         1,
         DavProperties.Default
       )
