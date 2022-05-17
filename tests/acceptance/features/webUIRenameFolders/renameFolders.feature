@@ -8,11 +8,10 @@ Feature: rename folders
     And user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    And the user has browsed to the personal page
 
   @ocisSmokeTest
   Scenario Outline: Rename a folder
+    Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to <to_folder_name> using the webUI
     Then folder <to_folder_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -28,7 +27,7 @@ Feature: rename folders
 
   Scenario Outline: Rename a folder that has special characters in its name
     Given user "Alice" has created folder <from_name> in the server
-    And the user has reloaded the current page of the webUI
+    And user "Alice" has logged in using the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -41,6 +40,7 @@ Feature: rename folders
 
 
   Scenario: Rename a folder using special characters and check its existence after page reload
+    Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
     Then folder "लोरेम।तयक्स्त $%&" should be listed on the webUI
@@ -56,6 +56,7 @@ Feature: rename folders
 
   @issue-964
   Scenario: Rename a folder using spaces at front and/or back of the name
+    Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to " space at start" using the webUI
     And the user reloads the current page of the webUI
     Then folder " space at start" should be listed on the webUI
@@ -65,6 +66,7 @@ Feature: rename folders
 
 
   Scenario: Rename a file using spaces at end is prohibited
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     When the user reloads the current page of the webUI
@@ -77,6 +79,7 @@ Feature: rename folders
 
 
   Scenario: Rename a folder using both double and single quotes
+    Given user "Alice" has logged in using the webUI
     When the user renames the following folder using the webUI
       | fromName            | toName                     |
       | simple-folder       | '"First 'single" quotes" ' |
@@ -99,6 +102,7 @@ Feature: rename folders
   # these are invalid file names on oc10
   @notToImplementOnOCIS
   Scenario Outline: Rename a folder using forbidden characters
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
@@ -115,32 +119,37 @@ Feature: rename folders
 
 
   Scenario: Rename a folder putting a name of a file which already exists
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
 
 
   Scenario: Rename a folder to ..
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
 
 
   Scenario: Rename a folder to .
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
   @notToImplementOnOCIS
   # This is valid file name for ocis
   Scenario: Rename a folder to .part (on oc10)
+    Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Failed to rename "simple-folder" to "simple.part"' should be displayed on the webUI
 
   @skipOnOC10
   Scenario: Rename a folder to .part (on ocis)
+    Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then folder "simple.part" should be listed on the webUI
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
-    Given the user has browsed to the personal page
+    Given user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice" in the server
       | name          |
       | simple-folder |
@@ -154,6 +163,7 @@ Feature: rename folders
 
 
   Scenario Outline: Rename a folder to a name with dot
+    Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "<to_name>" using the webUI
     Then folder "<to_name>" should be listed on the webUI
     Examples:
