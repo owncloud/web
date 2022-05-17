@@ -37,15 +37,23 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -96,15 +104,23 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -142,15 +158,23 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate"></p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -195,15 +219,23 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -243,15 +275,23 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -291,15 +331,23 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -337,15 +385,23 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate"></p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -383,15 +439,23 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate"></p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -429,15 +493,23 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <td>740 B</td>
       </tr>
       <!---->
-      <!---->
+      <tr>
+        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <td>
+          <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+            <p class="oc-my-rm oc-text-truncate"></p>
+            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            </oc-button-stub>
+          </div>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">Direct link</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-            <div class="oc-flex oc-flex-middle">
-              <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            </div>
-            <oc-button-stub oc-tooltip="Copy direct link" appearance="raw" aria-label="Copy direct link" variation="passive" class="oc-files-private-link-copy-url"><span text="EOS Path"></span>
+            <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
+            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>

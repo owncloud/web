@@ -82,23 +82,19 @@
           <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <div class="oc-flex oc-flex-middle">
-                <p
-                  ref="filePath"
-                  v-oc-tooltip="file.path"
-                  class="oc-my-rm oc-text-truncate"
-                  v-text="file.path"
-                />
-              </div>
+              <p
+                ref="filePath"
+                v-oc-tooltip="file.path"
+                class="oc-my-rm oc-text-truncate"
+                v-text="file.path"
+              />
               <oc-button
-                oc-tooltip="Copy EOS path"
+                v-oc-tooltip="copyEosPathLabel"
+                :aria-label="copyEosPathLabel"
                 appearance="raw"
-                aria-label="Copy EOS path"
-                class="oc-files-private-link-copy-url"
                 :variation="copiedEos ? 'success' : 'passive'"
                 @click="copyEosPathToClipboard"
               >
-                <span text="EOS Path" />
                 <oc-icon
                   v-if="copiedEos"
                   key="oc-copy-to-clipboard-copied"
@@ -114,23 +110,19 @@
           <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <div class="oc-flex oc-flex-middle">
-                <p
-                  ref="directLink"
-                  v-oc-tooltip="directLink"
-                  class="oc-my-rm oc-text-truncate"
-                  v-text="directLink"
-                />
-              </div>
+              <p
+                ref="directLink"
+                v-oc-tooltip="directLink"
+                class="oc-my-rm oc-text-truncate"
+                v-text="directLink"
+              />
               <oc-button
-                oc-tooltip="Copy direct link"
+                v-oc-tooltip="copyDirectLinkLabel"
+                :aria-label="copyDirectLinkLabel"
                 appearance="raw"
-                aria-label="Copy direct link"
-                class="oc-files-private-link-copy-url"
                 :variation="copiedDirect ? 'success' : 'passive'"
                 @click="copyDirectLinkToClipboard"
               >
-                <span text="EOS Path" />
                 <oc-icon
                   v-if="copiedDirect"
                   key="oc-copy-to-clipboard-copied"
@@ -152,7 +144,6 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
-import { getParentPaths } from '../../../helpers/path'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import upperFirst from 'lodash-es/upperFirst'
@@ -161,8 +152,8 @@ import { createLocationSpaces, isAuthenticatedRoute, isLocationSpacesActive } fr
 import { ShareTypes } from '../../../helpers/share'
 import { useRoute, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
-import copyToClipboard from 'copy-to-clipboard' // CERN
-import { encodePath } from 'web-pkg/src/utils' // CERN
+import copyToClipboard from 'copy-to-clipboard'
+import { encodePath } from 'web-pkg/src/utils'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -204,79 +195,15 @@ export default defineComponent({
     timeout: null
   }),
   computed: {
-    ...mapGetters('Files', [
-      'versions',
-      'sharesTree',
-      'sharesTreeLoading',
-      'currentFileOutgoingCollaborators'
-    ]),
+    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
     ...mapGetters(['user', 'getToken', 'configuration']),
 
-    sharedWithLabel() {
-      return this.$gettext('Shared with')
-    },
     file() {
       return this.displayedItem.value
     },
-
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
     },
-
-    hasSharees() {
-      return this.collaboratorsAvatar.length > 0
-    },
-
-    collaboratorsAvatar() {
-      return this.collaborators.map((c) => {
-        return {
-          ...c.collaborator,
-          shareType: c.shareType
-        }
-      })
-    },
-
-    collaborators() {
-      return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
-        .filter((c) => c.displayName || c.collaborator.displayName)
-        .sort(this.collaboratorsComparator)
-        .map((collaborator) => {
-          collaborator.key = 'collaborator-' + collaborator.id
-          if (
-            collaborator.owner.name !== collaborator.fileOwner.name &&
-            collaborator.owner.name !== this.user.id
-          ) {
-            collaborator.resharers = [collaborator.owner]
-          }
-          return collaborator
-        })
-    },
-
-    indirectOutgoingShares() {
-      const allShares = []
-      const parentPaths = getParentPaths(this.highlightedFile.path, false)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      // remove root entry
-      parentPaths.pop()
-
-      parentPaths.forEach((parentPath) => {
-        const shares = this.sharesTree[parentPath]
-        if (shares) {
-          shares.forEach((share) => {
-            if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              share.key = 'indirect-collaborator-' + share.id
-              allShares.push(share)
-            }
-          })
-        }
-      })
-
-      return allShares
-    },
-
     hasContent() {
       return (
         this.hasTimestamp ||
@@ -360,8 +287,14 @@ export default defineComponent({
     directLinkLabel() {
       return this.$gettext('Direct link')
     },
+    copyDirectLinkLabel() {
+      return this.$gettext('Copy direct link')
+    },
     eosPathLabel() {
       return this.$gettext('EOS Path')
+    },
+    copyEosPathLabel() {
+      return this.$gettext('Copy EOS path')
     },
     showSize() {
       return this.getResourceSize(this.file.size) !== '?'

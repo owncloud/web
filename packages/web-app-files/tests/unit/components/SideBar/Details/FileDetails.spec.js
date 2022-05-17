@@ -150,7 +150,7 @@ function createWrapper(testResource, testVersions = [], testPreview, publicRoute
         configuration: function () {
           return {
             options: {
-              isEos: true
+              runningOnEos: true
             }
           }
         }
