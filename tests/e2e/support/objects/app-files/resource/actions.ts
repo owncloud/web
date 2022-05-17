@@ -76,7 +76,7 @@ export interface uploadResourceArgs {
 
 export const uploadResource = async (args: uploadResourceArgs): Promise<void> => {
   const { page, resources, to, createVersion } = args
-  if (to && to !== 'undefined') {
+  if (to) {
     await clickResource({ page: page, path: to })
   }
 
@@ -111,7 +111,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 
   switch (via) {
     case 'SIDEBAR_PANEL': {
-      if (folder && folder !== 'undefined') {
+      if (folder) {
         await clickResource({ page, path: folder })
       }
       for (const name of names) {

@@ -27,7 +27,7 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
       await resourceObject.upload({
-        to: info.to,
+        to: info.to !== 'undefined' ? info.to : null,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         createVersion: info.create_version === 'true'
       })
@@ -149,8 +149,7 @@ export const processDownload = async (
   pageObject: any,
   actionType: string
 ) => {
-  let downloads
-  let files, parentFolder
+  let downloads, files, parentFolder
   const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
     const { resource, from } = stepRow
 
@@ -165,9 +164,9 @@ export const processDownload = async (
 
   for (const folder of Object.keys(downloadInfo)) {
     files = downloadInfo[folder]
-    parentFolder = folder
+    parentFolder = folder !== 'undefined' ? folder : null
     downloads = await pageObject.download({
-      folder,
+      folder: parentFolder,
       names: files,
       via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
     })
