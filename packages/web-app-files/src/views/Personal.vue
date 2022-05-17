@@ -103,7 +103,7 @@ import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { fetchResources } from '../services/folder'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
+import { Resource, move } from '../helpers/resource'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
@@ -224,7 +224,13 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
 
-    fetchResources,
+    async fetchResources(path, properties) {
+      try {
+        return await this.$client.files.list(path, 1, properties)
+      } catch (error) {
+        console.error(error)
+      }
+    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
@@ -232,9 +238,11 @@ export default defineComponent({
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const itemsInTarget = await this.fetchResources(this.$client, targetInfo.webDavPath)
+      const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
 
-      // try to move all selected files
+      move(selected, targetInfo, this.$client)
+      /*
+^      // try to move all selected files
       const errors = []
       const movePromises = []
       const moveQueue = new PQueue({ concurrency: 4 })
@@ -298,7 +306,7 @@ export default defineComponent({
       this.showMessage({
         title: this.$gettextInterpolate(title, { count: errors.length }),
         status: 'danger'
-      })
+      })*/
     },
 
     rowMounted(resource, component) {
