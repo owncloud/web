@@ -1,0 +1,8 @@
+Bugfix: Spaces breadcrumbs not working correctly
+
+We've fixed a bug where clicking on the last breadcrumb navigation item not resulted
+in a reload of the current path but forwarded to the upper path.
+
+
+https://github.com/owncloud/web/pull/6993
+https://github.com/owncloud/web/issues/6866
