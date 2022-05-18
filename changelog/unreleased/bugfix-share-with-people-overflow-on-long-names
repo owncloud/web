@@ -1,0 +1,8 @@
+Bugfix: Share with people items overflows on long names
+
+We've fixed a bug where:
+* Search suggestion overflows the view port, while name is too long
+* Selected user overflows the select box item, while name is too long
+
+https://github.com/owncloud/web/pull/6984
+https://github.com/owncloud/web/issues/6004
