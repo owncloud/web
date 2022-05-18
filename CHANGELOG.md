@@ -16,6 +16,7 @@ Summary
 * Bugfix - Do not load files from cache: [#6447](https://github.com/owncloud/web/pull/6447)
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Indirect links should not be editable: [#6964](https://github.com/owncloud/web/issues/6964)
+* Bugfix - Changing link permissions to role requiring password: [#6989](https://github.com/owncloud/web/pull/6989)
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
@@ -131,6 +132,14 @@ Details
    https://github.com/owncloud/web/issues/6964
    https://github.com/owncloud/web/pull/6980
    https://github.com/owncloud/web/pull/6985
+
+* Bugfix - Changing link permissions to role requiring password: [#6989](https://github.com/owncloud/web/pull/6989)
+
+   We have added a dialogue option for updates of a link's permissions to a new role that would
+   require a password. It now prompts the user to add a password instead of failing directly.
+
+   https://github.com/owncloud/web/issues/6974
+   https://github.com/owncloud/web/pull/6989
 
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 
