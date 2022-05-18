@@ -144,6 +144,7 @@ import { DateTime } from 'luxon'
 import { mapActions } from 'vuex'
 import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
+import { showQuickLinkPasswordModal } from '../../../../quickActions'
 import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
 
 export default {
@@ -392,9 +393,16 @@ export default {
       onSuccess = () => {}
     }) {
       if (this.checkPasswordEnforcedFor(link) && link.password === false) {
-        this.showMessage({
-          title: this.$gettext('Role requires password to be set for link'),
-          status: 'warning'
+        showQuickLinkPasswordModal({ store: this.$store }, (password) => {
+          if (!password || password.trim() === '') {
+            return this.showMessage({
+              title: this.$gettext('Password cannot be empty'),
+              status: 'danger'
+            })
+          }
+          link.password = password
+          this.$emit('updateLink', { link, onSuccess })
+          this.hideModal()
         })
       } else {
         this.$emit('updateLink', { link, onSuccess })
