@@ -28,6 +28,7 @@ Summary
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Share downloads: [#3760](https://github.com/owncloud/ocis/issues/3760)
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
+* Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
@@ -236,6 +237,14 @@ Details
 
    https://github.com/owncloud/web/issues/5261
    https://github.com/owncloud/web/pull/6951
+
+* Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
+
+   We've fixed a bug where: * Search suggestion overflows the view port, while name is too long *
+   Selected user overflows the select box item, while name is too long
+
+   https://github.com/owncloud/web/issues/6004
+   https://github.com/owncloud/web/pull/6984
 
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 
