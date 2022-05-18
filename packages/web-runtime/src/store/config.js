@@ -48,6 +48,7 @@ const state = {
       }
     },
     previewFileExtensions: [],
+    runningOnEos: false,
     sharingRecipientsPerPage: 200
   }
 }

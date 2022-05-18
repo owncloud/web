@@ -78,10 +78,18 @@ describe('Details SideBar Panel', () => {
         const wrapper = createWrapper(sharedFolder)
         expect(wrapper).toMatchSnapshot()
       })
+      it('with timestamp, size info, share info and share date running on eos', () => {
+        const wrapper = createWrapper(sharedFolder, [], null, false, true)
+        expect(wrapper).toMatchSnapshot()
+      })
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info and no share info', () => {
         const wrapper = createWrapper(sharedFolder, [], null, true)
+        expect(wrapper).toMatchSnapshot()
+      })
+      it('with owner, timestamp, size info and no share info running on eos', () => {
+        const wrapper = createWrapper(sharedFolder, [], null, true, true)
         expect(wrapper).toMatchSnapshot()
       })
     })
@@ -94,6 +102,10 @@ describe('Details SideBar Panel', () => {
       })
       it('with timestamp, size info, share info, share date and preview', () => {
         const wrapper = createWrapper(sharedFile)
+        expect(wrapper).toMatchSnapshot()
+      })
+      it('with timestamp, size info, share info, share date and preview running on eos', () => {
+        const wrapper = createWrapper(sharedFile, [], null, false, true)
         expect(wrapper).toMatchSnapshot()
       })
 
@@ -128,24 +140,37 @@ describe('Details SideBar Panel', () => {
       })
     })
     describe('on a public page', () => {
-      it('with owner, timestap, size info, no share info and preview', () => {
+      it('with owner, timestamp, size info, no share info and preview', () => {
         const wrapper = createWrapper(sharedFile, [], null, true)
         expect(wrapper).toMatchSnapshot()
       })
-      it('with owner, timestamp, size info, no share info and preview', () => {
-        const wrapper = createWrapper(sharedFile, [], null, true)
+      it('with owner, timestamp, size info, no share info and preview running on eos', () => {
+        const wrapper = createWrapper(sharedFile, [], null, true, true)
         expect(wrapper).toMatchSnapshot()
       })
     })
   })
 })
 
-function createWrapper(testResource, testVersions = [], testPreview, publicRoute = false) {
+function createWrapper(
+  testResource,
+  testVersions = [],
+  testPreview,
+  publicRoute = false,
+  runningOnEos = false
+) {
   return shallowMount(FileDetails, {
     store: new Vuex.Store({
       getters: {
         user: function () {
           return { id: 'marie' }
+        },
+        configuration: function () {
+          return {
+            options: {
+              runningOnEos
+            }
+          }
         }
       },
       modules: {
