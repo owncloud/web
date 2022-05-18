@@ -41,6 +41,7 @@ Summary
 * Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
+* Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 * Enhancement - Introduce quicklinks: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Introduce sharing jail: [#6593](https://github.com/owncloud/web/pull/6593)
@@ -338,6 +339,16 @@ Details
    https://github.com/owncloud/web/pull/6873
    https://github.com/owncloud/web/pull/6887
    https://github.com/owncloud/web/pull/6884
+
+* Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
+
+   We've added a `runningOnEos` setting which, if set to true, displays two entries in the
+   sidebar: The EOS path and a direct link to the file. Along with adding the two links, we have also
+   resolved an issue with overflowing text/tooltips in the sidebar for very long text.
+
+   https://github.com/owncloud/web/issues/6849
+   https://github.com/owncloud/web/pull/6959
+   https://github.com/owncloud/web/pull/6997
 
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
 
