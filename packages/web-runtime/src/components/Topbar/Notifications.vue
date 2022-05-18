@@ -92,6 +92,7 @@ export default {
               // accepted federated share
               if (state === 0 && fileTarget) {
                 bus.publish('app.files.list.load')
+                return
               }
 
               if (path) {
