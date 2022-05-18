@@ -1,0 +1,5 @@
+Bugfix: Breadcrumb auto focus
+
+We've fixed a bug where the auto focus couldn't be set on the current breadcrumb item when navigating.
+
+https://github.com/owncloud/web/pull/6846
