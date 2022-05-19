@@ -1,11 +1,13 @@
 <template>
-  <oc-table
+  <component
+    :is="table"
     :class="hoverableQuickActions && 'hoverable-quick-actions'"
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
     :disabled="disabled"
     :sticky="true"
+    :grouping-settings="groupingSettings"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
     :hover="hover"
@@ -164,7 +166,7 @@
       <!-- @slot Footer of the files table -->
       <slot name="footer" />
     </template>
-  </oc-table>
+  </component>
 </template>
 
 <script lang="ts">
@@ -184,6 +186,8 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
 import { ShareTypes } from '../../helpers/share'
 import { createLocationSpaces } from '../../router'
+import AdvancedTable from 'web-pocs/src/components/OcTable/OcTable.vue'
+import { components } from 'owncloud-design-system'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {
@@ -193,6 +197,9 @@ const mapResourceFields = (resource: Resource, mapping = {}) => {
 }
 
 export default defineComponent({
+  components: {
+    AdvancedTable
+  },
   mixins: [Rename],
   model: {
     prop: 'selection',
@@ -217,6 +224,18 @@ export default defineComponent({
     resources: {
       type: Array as PropType<Resource[]>,
       required: true
+    },
+    /**
+     * Grouping settings for the table. Following settings are possible:<br />
+     * -**groupingFunctions**: Object with keys as grouping options names and functions that get a table data row and return a group name for that row. The names of the functions are used as grouping options.
+     * -**groupingBy**: must be either one of the keys in groupingFunctions or 'None'. If not set, default grouping will be 'None'.<br />
+     * -**ShowGroupingOptions**:  boolean value for showing or hinding the select element with grouping options above the table. <br />
+     * -**PreviewAmount**: Integer value that is used to show only the first n data rows of the table.
+     */
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
     },
     /**
      * Closure function to mutate the resource id into a valid DOM selector.
@@ -397,6 +416,10 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
+    table() {
+      const { OcTable } = components
+      return this.configuration?.options?.enableAdvancedTable ? AdvancedTable : OcTable
+    },
     popperOptions() {
       return {
         modifiers: [

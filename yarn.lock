@@ -13793,6 +13793,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"web-pocs@workspace:packages/web-pocs":
+  version: 0.0.0-use.local
+  resolution: "web-pocs@workspace:packages/web-pocs"
+  languageName: unknown
+  linkType: soft
+
 "web-runtime@workspace:packages/web-runtime":
   version: 0.0.0-use.local
   resolution: "web-runtime@workspace:packages/web-runtime"

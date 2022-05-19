@@ -21,6 +21,7 @@
         v-model="selectedResources"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
+        :grouping-settings="groupingSettings"
         :fields-displayed="['name', 'sharedWith', 'sdate']"
         :are-thumbnails-displayed="displayThumbnails"
         :are-paths-displayed="true"
@@ -106,6 +107,62 @@ export default defineComponent({
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
     ...mapGetters(['configuration', 'getToken', 'user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+
+    groupingSettings() {
+      const that = this
+      return {
+        groupingBy: localStorage.getItem('grouping-shared-with-others') || 'Shared on',
+        showGroupingOptions: true,
+        groupingFunctions: {
+          'Name alphabetically': function (row) {
+            localStorage.setItem('grouping-shared-with-others', 'Name alphabetically')
+            if (!isNaN(row.name.charAt(0))) return '#'
+            if (row.name.charAt(0) === '.') return row.name.charAt(1).toLowerCase()
+            return row.name.charAt(0).toLowerCase()
+          },
+          'Shared on': function (row) {
+            localStorage.setItem('grouping-shared-with-others', 'Shared on')
+            const recently = Date.now() - 604800000
+            const lastMonth = Date.now() - 2592000000
+            if (Date.parse(row.sdate) < lastMonth) return 'Older'
+            if (Date.parse(row.sdate) >= recently) return 'Recently'
+            else return 'Last month'
+          },
+          None: function () {
+            localStorage.setItem('grouping-shared-with-others', 'None')
+          }
+        },
+        sortGroups: {
+          'Name alphabetically': function (groups) {
+            // sort in alphabetical order by group name
+            const sortedGroups = groups.sort(function (a, b) {
+              if (a.name < b.name) {
+                return -1
+              }
+              if (a.name > b.name) {
+                return 1
+              }
+              return 0
+            })
+            // if sorting is done by name, reverse groups depending on asc/desc
+            if (that.sortBy === 'name' && that.sortDir === 'desc') sortedGroups.reverse()
+            return sortedGroups
+          },
+          'Shared on': function (groups) {
+            // sort in order: 1-Recently, 2-Last month, 3-Older
+            const sortedGroups = []
+            const options = ['Recently', 'Last month', 'Older']
+            for (const o of options) {
+              const found = groups.find((el) => el.name.toLowerCase() === o.toLowerCase())
+              if (found) sortedGroups.push(found)
+            }
+            // if sorting is done by sdate, reverse groups depending on asc/desc
+            if (that.sortBy === 'sdate' && that.sortDir === 'asc') sortedGroups.reverse()
+            return sortedGroups
+          }
+        }
+      }
+    },
 
     isEmpty() {
       return this.paginatedResources.length < 1
