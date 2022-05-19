@@ -147,6 +147,7 @@ describe('RoleDropdown', () => {
       ])("inherits the parents share's permissions: %s", (sharePermissions) => {
         const wrapper = getShallowMountedWrapper({
           existingRole: PeopleShareRoles.list(true)[0],
+          isReceivedShare: true,
           sharesTree: {
             '/testfolder': [
               {
@@ -172,6 +173,7 @@ describe('RoleDropdown', () => {
       it('does not render a button if only one role is available', () => {
         const wrapper = getShallowMountedWrapper({
           existingRole: PeopleShareRoles.list(true)[0],
+          isReceivedShare: true,
           sharesTree: {
             '/testfolder': [
               {
@@ -252,13 +254,20 @@ function getShallowMountedWrapper(data) {
   return shallowMount(RoleDropdown, getMountOptions(data))
 }
 
-function getMountOptions({ existingRole, shareId, resourceType = 'folder', sharesTree = {} }) {
+function getMountOptions({
+  existingRole,
+  shareId,
+  resourceType = 'folder',
+  sharesTree = {},
+  isReceivedShare = false
+}) {
   return {
     propsData: {
       resource: getResource({
         filename: resourceType === 'folder' ? 'testfolder' : 'testfile',
         extension: resourceType === 'folder' ? '' : 'jpg',
-        type: resourceType
+        type: resourceType,
+        isReceivedShare
       }),
       existingRole,
       shareId,
@@ -270,7 +279,12 @@ function getMountOptions({ existingRole, shareId, resourceType = 'folder', share
   }
 }
 
-function getResource({ filename = 'testFile', extension = 'txt', type = 'file' }) {
+function getResource({
+  filename = 'testFile',
+  extension = 'txt',
+  type = 'file',
+  isReceivedShare = false
+}) {
   return {
     id: '4',
     fileId: '4',
@@ -287,6 +301,7 @@ function getResource({ filename = 'testFile', extension = 'txt', type = 'file' }
     starred: false,
     etag: '"89128c0e8122002db57bd19c9ec33004"',
     shareTypes: [],
-    downloadURL: ''
+    downloadURL: '',
+    isReceivedShare: () => isReceivedShare
   }
 }

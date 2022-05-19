@@ -174,7 +174,7 @@ export default {
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.resourceIsSharable && this.share) {
+      if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
         return PeopleShareRoles.listByBitmask(
           parseInt(this.share.permissions),
           this.resource.isFolder,
@@ -186,7 +186,7 @@ export default {
       return PeopleShareRoles.list(this.resource.isFolder, this.allowCustomSharing !== false)
     },
     availablePermissions() {
-      if (this.resourceIsSharable && this.share) {
+      if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
         return this.customPermissionsRole.permissionsByBitmask(
           parseInt(this.share.permissions),
           this.allowSharePermission
