@@ -32,8 +32,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFavorites/unfavoriteFile.feature:87](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L87)
 -   [webUIFavorites/unfavoriteFile.feature:102](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L102)
 -   [webUIFilesSearch/search.feature:103](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L103)
--   [webUIFilesSearch/search.feature:153](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L153)
--   [webUIFilesSearch/search.feature:165](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L165)
 -   [webUIFilesSearch/search.feature:175](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L175)
 -   [webUIResharing1/reshareUsers.feature:230](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L230)
 
