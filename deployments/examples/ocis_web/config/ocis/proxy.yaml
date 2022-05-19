@@ -16,8 +16,8 @@ policies:
 
       # we don't need the root rule for oC Web, since we replaced it
       # with the both rules above
-      #- endpoint: /
-      #  backend: http://localhost:9100
+      # - endpoint: /
+      #   backend: http://localhost:9100
       - endpoint: /.well-known/
         backend: http://localhost:9130
       - endpoint: /konnect/
@@ -27,7 +27,7 @@ policies:
       - endpoint: /archiver
         backend: http://localhost:9140
       - type: regex
-        endpoint: /ocs/v[12].php/cloud/(users?|groups)
+        endpoint: /ocs/v[12].php/cloud/user/signing-key
         backend: http://localhost:9110
       - endpoint: /ocs/
         backend: http://localhost:9140
