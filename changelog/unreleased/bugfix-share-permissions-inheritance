@@ -1,0 +1,6 @@
+Bugfix: Inheritance of share permissions
+
+We've fixed a bug where the permissions of a share were not inherited when trying to reshare a resource. We've also disabled the role-select-dropdown if only one role is available for sharing.
+
+https://github.com/owncloud/web/pull/7015
+https://github.com/owncloud/web/issues/2963

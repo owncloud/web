@@ -59,6 +59,10 @@ export abstract class ShareRole {
     })
   }
 
+  public permissionsByBitmask(bitmask: number, allowSharing: boolean): SharePermission[] {
+    return this.permissions(allowSharing).filter((p: SharePermission) => bitmask & p.bit)
+  }
+
   public abstract description(allowSharing: boolean): string
 
   /**
@@ -277,6 +281,24 @@ export abstract class PeopleShareRoles {
       .filter((r) => !r.hasCustomPermissions)
       .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
     return role || this.custom(isFolder)
+  }
+
+  static listByBitmask(
+    bitmask: number,
+    isFolder: boolean,
+    allowSharing: boolean,
+    allowCustom: boolean
+  ): ShareRole[] {
+    const roles = this.all.filter((r) => {
+      return r.folder === isFolder && bitmask === (bitmask | r.bitmask(allowSharing))
+    })
+
+    if (allowCustom) {
+      const customRoles = [peopleRoleCustomFile, peopleRoleCustomFolder]
+      return [...roles, ...customRoles.filter((c) => c.folder === isFolder)]
+    }
+
+    return roles
   }
 }
 

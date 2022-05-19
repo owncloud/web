@@ -4,6 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import { PeopleShareRoles } from '@files/src/helpers/share'
+import { SharePermissions, ShareTypes } from '../../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -25,13 +26,23 @@ const stubs = {
   'oc-icon': true
 }
 
-const store = new Vuex.Store({
-  getters: {
-    capabilities: () => {
-      return {}
+const getStore = (sharesTree) => {
+  return new Vuex.Store({
+    getters: {
+      capabilities: () => {
+        return {}
+      }
+    },
+    modules: {
+      Files: {
+        namespaced: true,
+        state: {
+          sharesTree
+        }
+      }
     }
-  }
-})
+  })
+}
 
 // needs differentiation between file and folder type?
 
@@ -125,6 +136,29 @@ describe('RoleDropdown', () => {
       //   })
       it.todo('emits an event upon role selection')
     })
+    describe('custom permissions', () => {
+      it.each([
+        SharePermissions.read.bit + SharePermissions.share.bit,
+        SharePermissions.read.bit +
+          SharePermissions.share.bit +
+          SharePermissions.update.bit +
+          SharePermissions.create.bit,
+        SharePermissions.read.bit + SharePermissions.share.bit + SharePermissions.delete.bit
+      ])("inherits the parents share's permissions: %s", (sharePermissions) => {
+        const wrapper = getShallowMountedWrapper({
+          existingRole: PeopleShareRoles.list(true)[0],
+          sharesTree: {
+            '/testfolder': [
+              {
+                permissions: sharePermissions,
+                shareType: ShareTypes.user.value
+              }
+            ]
+          }
+        })
+        expect(wrapper).toMatchSnapshot()
+      })
+    })
     describe('when an existing role is present', () => {
       it.each(['folder', 'file'])(
         'renders a button with existing role if given for resource type %s',
@@ -135,6 +169,20 @@ describe('RoleDropdown', () => {
           expect(wrapper).toMatchSnapshot()
         }
       )
+      it('does not render a button if only one role is available', () => {
+        const wrapper = getShallowMountedWrapper({
+          existingRole: PeopleShareRoles.list(true)[0],
+          sharesTree: {
+            '/testfolder': [
+              {
+                permissions: SharePermissions.read.bit,
+                shareType: ShareTypes.user.value
+              }
+            ]
+          }
+        })
+        expect(wrapper).toMatchSnapshot()
+      })
       it.todo(
         'displays a dropdown with viewer, editor and custom permissions if no custom permissions had been selected'
       )
@@ -204,7 +252,7 @@ function getShallowMountedWrapper(data) {
   return shallowMount(RoleDropdown, getMountOptions(data))
 }
 
-function getMountOptions({ existingRole, shareId, resourceType = 'folder' }) {
+function getMountOptions({ existingRole, shareId, resourceType = 'folder', sharesTree = {} }) {
   return {
     propsData: {
       resource: getResource({
@@ -216,7 +264,7 @@ function getMountOptions({ existingRole, shareId, resourceType = 'folder' }) {
       shareId,
       allowSharePermission: true
     },
-    store,
+    store: getStore(sharesTree),
     localVue,
     stubs
   }
