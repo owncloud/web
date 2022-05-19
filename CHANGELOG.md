@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - We added the shares item to the breadcrumbs at the shared with me page: [#6965](https://github.com/owncloud/web/pull/6965)
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
+* Bugfix - Breadcrumb auto focus: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 * Bugfix - Enable optional chaining on configuration options access: [#6891](https://github.com/owncloud/web/pull/6891)
 * Bugfix - "Create Space"-button with open sidebar: [#6919](https://github.com/owncloud/web/pull/6919)
@@ -79,6 +80,13 @@ Details
 
    https://github.com/owncloud/web/issues/6756
    https://github.com/owncloud/web/pull/6803
+
+* Bugfix - Breadcrumb auto focus: [#6846](https://github.com/owncloud/web/pull/6846)
+
+   We've fixed a bug where the auto focus couldn't be set on the current breadcrumb item when
+   navigating.
+
+   https://github.com/owncloud/web/pull/6846
 
 * Bugfix - Decrease build time and fix faulty oc10 docker dev env: [#6855](https://github.com/owncloud/web/pull/6855)
 
