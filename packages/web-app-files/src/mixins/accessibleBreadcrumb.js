@@ -10,7 +10,7 @@ export default {
       const activeBreadcrumb = last(
         document.getElementById('files-breadcrumb').children[0].children
       )
-      const activeBreadcrumbItem = activeBreadcrumb.lastChild
+      const activeBreadcrumbItem = activeBreadcrumb.getElementsByTagName('button')[0]
 
       if (!activeBreadcrumbItem) {
         return
