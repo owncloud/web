@@ -26,6 +26,7 @@ Summary
 * Bugfix - Require quick link password if enforced in ownCloud 10: [#6967](https://github.com/owncloud/web/pull/6967)
 * Bugfix - Resetting store on logout: [#6694](https://github.com/owncloud/web/pull/6694)
 * Bugfix - Respect quota definition of none/unlimited: [#6923](https://github.com/owncloud/web/pull/6923)
+* Bugfix - Search mess up spaces overview: [#7014](https://github.com/owncloud/web/pull/7014)
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Share downloads: [#3760](https://github.com/owncloud/ocis/issues/3760)
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
@@ -220,6 +221,14 @@ Details
 
    https://github.com/owncloud/web/issues/6913
    https://github.com/owncloud/web/pull/6923
+
+* Bugfix - Search mess up spaces overview: [#7014](https://github.com/owncloud/web/pull/7014)
+
+   We've fixed a bug where searching for a file in the search bar messes up the spaces overview and
+   instead of listing the spaces, and found files according to the search term were shown.
+
+   https://github.com/owncloud/web/issues/6995
+   https://github.com/owncloud/web/pull/7014
 
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 
