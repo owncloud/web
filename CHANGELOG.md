@@ -30,6 +30,7 @@ Summary
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
 * Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
+* Bugfix - Spaces breadcrumbs not working correctly: [#6993](https://github.com/owncloud/web/pull/6993)
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
@@ -250,6 +251,14 @@ Details
 
    https://github.com/owncloud/web/issues/6874
    https://github.com/owncloud/web/pull/6881
+
+* Bugfix - Spaces breadcrumbs not working correctly: [#6993](https://github.com/owncloud/web/pull/6993)
+
+   We've fixed a bug where clicking on the last breadcrumb navigation item not resulted in a reload
+   of the current path but forwarded to the upper path.
+
+   https://github.com/owncloud/web/issues/6866
+   https://github.com/owncloud/web/pull/6993
 
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 
