@@ -35,7 +35,7 @@ SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:latest"
 THEGEEKLAB_DRONE_GITHUB_COMMENT = "thegeeklab/drone-github-comment:1"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
-OC10_VERSION = "latest"
+OC10_VERSION = "10.09.1"
 
 dir = {
     "base": "/var/www/owncloud",
