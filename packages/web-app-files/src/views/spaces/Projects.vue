@@ -158,6 +158,7 @@ export default defineComponent({
     )
 
     const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_FILES_SEARCHED()
       ref.CLEAR_CURRENT_FILES_LIST()
 
       const response = yield graphClient.drives.listMyDrives('name asc', 'driveType eq project')
@@ -244,6 +245,7 @@ export default defineComponent({
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
+      'CLEAR_FILES_SEARCHED',
       'SET_FILE_SELECTION'
     ]),
 

@@ -1,0 +1,7 @@
+Bugfix: Search mess up spaces overview
+
+We've fixed a bug where searching for a file in the search bar messes up the spaces overview and instead of listing
+the spaces, and found files according to the search term were shown.
+
+https://github.com/owncloud/web/pull/7014
+https://github.com/owncloud/web/issues/6995
