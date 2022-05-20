@@ -64,12 +64,12 @@ const spaceMocks = {
     special: [
       {
         specialFolder: { name: 'readme' },
-        webDavUrl: '/',
+        webDavUrl: 'https://owncloud.test/dav/spaces/1/readme.md',
         file: { mimeType: 'text/plain' }
       },
       {
         specialFolder: { name: 'image' },
-        webDavUrl: '/',
+        webDavUrl: 'https://owncloud.test/dav/spaces/1/image.png',
         file: { mimeType: 'image/png' }
       }
     ]

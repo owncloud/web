@@ -259,14 +259,20 @@ export default defineComponent({
     },
     'space.spaceImageData': {
       handler: function (val) {
-        if (!val) return
+        if (!val) {
+          return
+        }
         const webDavPathComponents = this.space.spaceImageData.webDavUrl.split('/')
+        const idComponent = webDavPathComponents.find((c) => c.startsWith(this.space.id))
+        if (!idComponent) {
+          return
+        }
         const path = webDavPathComponents
-          .slice(webDavPathComponents.indexOf(this.space.id) + 1)
+          .slice(webDavPathComponents.indexOf(idComponent) + 1)
           .join('/')
 
         this.$client.files
-          .fileInfo(buildWebDavSpacesPath(this.space.id, decodeURIComponent(path)))
+          .fileInfo(buildWebDavSpacesPath(idComponent, decodeURIComponent(path)))
           .then((data) => {
             const resource = buildResource(data)
             loadPreview({
@@ -289,12 +295,16 @@ export default defineComponent({
           return
         }
         const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
+        const idComponent = webDavPathComponents.find((c) => c.startsWith(this.space.id))
+        if (!idComponent) {
+          return
+        }
         const path = webDavPathComponents
-          .slice(webDavPathComponents.indexOf(this.space.id) + 1)
+          .slice(webDavPathComponents.indexOf(idComponent) + 1)
           .join('/')
 
         this.$client.files
-          .getFileContents(buildWebDavSpacesPath(this.space.id, decodeURIComponent(path)))
+          .getFileContents(buildWebDavSpacesPath(idComponent, decodeURIComponent(path)))
           .then((fileContents) => {
             if (this.markdownResizeObserver && this.$refs.markdownContainer) {
               this.markdownResizeObserver.unobserve(this.$refs.markdownContainer)
