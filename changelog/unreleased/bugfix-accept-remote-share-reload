@@ -1,0 +1,8 @@
+Bugfix: Reload file list after accepting a remote share
+
+We've fixed a bug where the file list would not reload after accepting a remote share.
+
+https://github.com/owncloud/web/pull/6942
+https://github.com/owncloud/web/issues/1774
+https://github.com/owncloud/web/issues/4247
+https://github.com/owncloud/web/issues/4839

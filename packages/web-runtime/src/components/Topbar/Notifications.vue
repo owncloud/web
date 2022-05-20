@@ -59,6 +59,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
+import { ShareStatus } from 'files/src/helpers/share'
 
 export default {
   computed: {
@@ -70,7 +72,6 @@ export default {
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),
-    ...mapActions('Files', ['loadFolder']),
 
     executeRequest(app, link, type, notificationId) {
       this.$client.requests
@@ -86,26 +87,22 @@ export default {
           })
           res.json().then((json) => {
             json.ocs.data.forEach((item) => {
-              const path = item.path.slice(0, item.path.lastIndexOf('/') + 1)
-              const absolutePath = this.$route.params.item ? this.$route.params.item : '/'
-              if (path === absolutePath) this.reloadFilesList(path)
+              const currentPath = this.$route.params.item ? `/${this.$route.params.item}` : '/'
+              const { state, path, file_target: fileTarget } = item
+
+              // accepted federated share
+              if (state === ShareStatus.accepted && fileTarget) {
+                bus.publish('app.files.list.load')
+                return
+              }
+
+              if (path) {
+                const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
+                if (itemPath === currentPath) bus.publish('app.files.list.load')
+              }
             })
           })
         })
-    },
-    reloadFilesList(path) {
-      this.loadFolder({
-        client: this.$client,
-        absolutePath: path,
-        $gettext: this.$gettext,
-        routeName: this.$route.name
-      }).catch((error) => {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Loading folder failed…'),
-          status: 'danger'
-        })
-      })
     },
     shouldDisplayLink(notification) {
       return notification.link && notification.object_type !== 'local_share'
