@@ -1,5 +1,6 @@
 <template>
   <oc-table
+    :class="hoverableQuickActions && 'hoverable-quick-actions'"
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
@@ -551,6 +552,9 @@ export default defineComponent({
     },
     currentLanguage() {
       return (this.$language?.current || '').split('_')[0]
+    },
+    hoverableQuickActions() {
+      return this.configuration?.options?.hoverableQuickActions
     }
   },
   methods: {
@@ -802,6 +806,21 @@ export default defineComponent({
     align-items: center;
     display: flex;
     justify-content: center;
+  }
+}
+
+.hoverable-quick-actions.files-table {
+  tr {
+    .resource-table-edit-name,
+    .resource-table-actions div:first-child {
+      visibility: hidden;
+    }
+  }
+  tr:hover {
+    .resource-table-edit-name,
+    .resource-table-actions div:first-child {
+      visibility: visible;
+    }
   }
 }
 
