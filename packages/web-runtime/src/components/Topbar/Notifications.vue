@@ -60,6 +60,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
+import { ShareStatus } from 'files/src/helpers/share'
 
 export default {
   computed: {
@@ -90,7 +91,7 @@ export default {
               const { state, path, file_target: fileTarget } = item
 
               // accepted federated share
-              if (state === 0 && fileTarget) {
+              if (state === ShareStatus.accepted && fileTarget) {
                 bus.publish('app.files.list.load')
                 return
               }
