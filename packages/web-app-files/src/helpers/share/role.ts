@@ -59,10 +59,6 @@ export abstract class ShareRole {
     })
   }
 
-  public permissionsByBitmask(bitmask: number, allowSharing: boolean): SharePermission[] {
-    return this.permissions(allowSharing).filter((p: SharePermission) => bitmask & p.bit)
-  }
-
   public abstract description(allowSharing: boolean): string
 
   /**

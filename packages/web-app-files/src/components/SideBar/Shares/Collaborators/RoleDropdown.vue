@@ -184,10 +184,7 @@ export default {
     },
     availablePermissions() {
       if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
-        return this.customPermissionsRole.permissionsByBitmask(
-          parseInt(this.share.permissions),
-          this.allowSharePermission
-        )
+        return SharePermissions.bitmaskToPermissions(parseInt(this.share.permissions))
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },
