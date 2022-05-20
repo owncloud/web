@@ -192,8 +192,8 @@ Feature: Resharing shared files with different permissions
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user has browsed to the shared-with-me page
-    When the user shares folder "simple-folder" with user "Carol King" as "Viewer" using the webUI
-    And the user shares file "lorem.txt" with user "Carol King" as "Viewer" using the webUI
+    When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
+    And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
     Then as "Carol" folder "/Shares/simple-folder" should exist in the server

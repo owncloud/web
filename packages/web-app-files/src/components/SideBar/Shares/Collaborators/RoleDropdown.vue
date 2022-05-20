@@ -93,7 +93,6 @@ import {
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
 import * as uuid from 'uuid'
-import { DavPermission } from 'web-pkg/src/constants'
 
 export default {
   name: 'RoleDropdown',
@@ -155,9 +154,7 @@ export default {
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
     resourceIsSharable() {
-      return (
-        this.allowSharePermission && this.resource.permissions.includes(DavPermission.Shareable)
-      )
+      return this.allowSharePermission && this.resource.canShare()
     },
     share() {
       const userShares = this.sharesTree[this.resource.path]?.filter((s) =>

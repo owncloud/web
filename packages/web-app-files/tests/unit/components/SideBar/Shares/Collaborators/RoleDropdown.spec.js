@@ -302,6 +302,7 @@ function getResource({
     etag: '"89128c0e8122002db57bd19c9ec33004"',
     shareTypes: [],
     downloadURL: '',
-    isReceivedShare: () => isReceivedShare
+    isReceivedShare: () => isReceivedShare,
+    canShare: () => true
   }
 }
