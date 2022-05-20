@@ -1,0 +1,5 @@
+Bugfix: Cover image and readme in spaces
+
+The URL construction for cover image and readme of a space was wrong and led to both not being shown. This has been fixed by making the URL construction more reliable regarding different ID formats.
+
+https://github.com/owncloud/web/pull/7017
