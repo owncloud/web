@@ -207,12 +207,16 @@ export default defineComponent({
           }
 
           const webDavPathComponents = space.spaceImageData.webDavUrl.split('/')
+          const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id))
+          if (!idComponent) {
+            return
+          }
           const path = webDavPathComponents
-            .slice(webDavPathComponents.indexOf(space.id) + 1)
+            .slice(webDavPathComponents.indexOf(idComponent) + 1)
             .join('/')
 
           this.$client.files
-            .fileInfo(buildWebDavSpacesPath(space.id, decodeURIComponent(path)))
+            .fileInfo(buildWebDavSpacesPath(idComponent, decodeURIComponent(path)))
             .then((fileInfo) => {
               const resource = buildResource(fileInfo)
               loadPreview({
