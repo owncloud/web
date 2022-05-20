@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Reload file list after accepting a remote share: [#6942](https://github.com/owncloud/web/pull/6942)
 * Bugfix - We added the shares item to the breadcrumbs at the shared with me page: [#6965](https://github.com/owncloud/web/pull/6965)
 * Bugfix - Apply text selection range for new files: [#6756](https://github.com/owncloud/web/issues/6756)
 * Bugfix - Breadcrumb auto focus: [#6846](https://github.com/owncloud/web/pull/6846)
@@ -67,6 +68,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Reload file list after accepting a remote share: [#6942](https://github.com/owncloud/web/pull/6942)
+
+   We've fixed a bug where the file list would not reload after accepting a remote share.
+
+   https://github.com/owncloud/web/issues/1774
+   https://github.com/owncloud/web/issues/4247
+   https://github.com/owncloud/web/issues/4839
+   https://github.com/owncloud/web/pull/6942
 
 * Bugfix - We added the shares item to the breadcrumbs at the shared with me page: [#6965](https://github.com/owncloud/web/pull/6965)
 
