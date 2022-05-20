@@ -80,11 +80,13 @@ export default defineComponent({
     },
 
     selectedLanguage() {
-      return this.getSettingsValue({
-        extension: 'ocis-accounts',
-        bundle: 'profile',
-        setting: 'language'
-      })
+      return (
+        this.getSettingsValue({
+          extension: 'ocis-accounts',
+          bundle: 'profile',
+          setting: 'language'
+        }) || this.user.language
+      )
     }
   },
   watch: {
@@ -115,8 +117,12 @@ export default defineComponent({
       immediate: true,
       handler(language) {
         let languageCode = this.$language.defaultLanguage
-        if (language !== null && language.listValue.values.length > 0) {
-          languageCode = language.listValue.values[0].stringValue
+        if (language) {
+          if (typeof language === 'object' && language.listValue.values.length > 0) {
+            languageCode = language.listValue.values[0].stringValue
+          } else {
+            languageCode = language
+          }
         }
         if (languageCode) {
           this.$language.current = languageCode
