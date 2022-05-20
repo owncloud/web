@@ -33,6 +33,7 @@ Summary
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
 * Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
+* Bugfix - Cover image and readme in spaces: [#7017](https://github.com/owncloud/web/pull/7017)
 * Bugfix - Spaces breadcrumbs not working correctly: [#6993](https://github.com/owncloud/web/pull/6993)
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
@@ -278,6 +279,14 @@ Details
 
    https://github.com/owncloud/web/issues/6874
    https://github.com/owncloud/web/pull/6881
+
+* Bugfix - Cover image and readme in spaces: [#7017](https://github.com/owncloud/web/pull/7017)
+
+   The URL construction for cover image and readme of a space was wrong and led to both not being
+   shown. This has been fixed by making the URL construction more reliable regarding different ID
+   formats.
+
+   https://github.com/owncloud/web/pull/7017
 
 * Bugfix - Spaces breadcrumbs not working correctly: [#6993](https://github.com/owncloud/web/pull/6993)
 
