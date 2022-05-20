@@ -302,7 +302,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [no checkbox for share while using advanced permissions as role](https://github.com/owncloud/web/issues/5461)
 -   [webUIResharing1/reshareUsers.feature:145](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L145)
 -   [webUIResharing1/reshareUsers.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L166)
--   [webUIResharing1/reshareUsers.feature:187](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L187)
 
 ### [share permissions not enforced](https://github.com/owncloud/product/issues/270)
 -   [webUIResharing1/reshareUsers.feature:248](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L248)
