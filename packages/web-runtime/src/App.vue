@@ -22,9 +22,12 @@
       :button-cancel-text="modal.cancelText"
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+      :checkbox="modal.checkbox"
+      :checkbox-label="modal.checkboxLabel"
       @cancel="modal.onCancel"
       @confirm="modal.onConfirm"
       @input="modal.onInput"
+      @checkbox-changed="modal.onCheckboxValueChanged"
       @mounted="focusModal"
       @beforeDestroy="focusModal"
     />

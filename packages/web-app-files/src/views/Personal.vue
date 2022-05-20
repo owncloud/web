@@ -97,11 +97,8 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { basename, join } from 'path'
-import PQueue from 'p-queue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
-import { fetchResources } from '../services/folder'
 import { defineComponent } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
@@ -221,7 +218,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
 
     async fetchResources(path, properties) {
@@ -238,75 +235,19 @@ export default defineComponent({
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetInfo.type !== 'folder') return
-      const itemsInTarget = await this.fetchResources(targetInfo.webDavPath)
-
-      move(selected, targetInfo, this.$client)
-      /*
-^      // try to move all selected files
-      const errors = []
-      const movePromises = []
-      const moveQueue = new PQueue({ concurrency: 4 })
-      selected.forEach((resource) => {
-        movePromises.push(
-          moveQueue.add(async () => {
-            const exists = itemsInTarget.some((e) => basename(e.name) === resource.name)
-            if (exists) {
-              const message = this.$gettext('Resource with name %{name} already exists')
-              errors.push({
-                resourceName: resource.name,
-                message: this.$gettextInterpolate(message, { name: resource.name }, true)
-              })
-              return
-            }
-
-            try {
-              await this.$client.files.move(
-                resource.webDavPath,
-                join(targetInfo.webDavPath, resource.name)
-              )
-              this.REMOVE_FILE(resource)
-              this.REMOVE_FILE_FROM_SEARCHED(resource)
-              this.REMOVE_FILE_SELECTION(resource)
-            } catch (error) {
-              console.error(error)
-              error.resourceName = resource.name
-              errors.push(error)
-            }
-          })
-        )
-      })
-      await Promise.all(movePromises)
-
-      // show error / success messages
-      let title
-      if (errors.length === 0) {
-        const count = selected.length
-        title = this.$ngettext(
-          '%{count} item was moved successfully',
-          '%{count} items were moved successfully',
-          count
-        )
-        this.showMessage({
-          title: this.$gettextInterpolate(title, { count }),
-          status: 'success'
-        })
-        return
+      const movedResources = await move(
+        selected,
+        targetInfo,
+        this.$client,
+        this.createModal,
+        this.hideModal,
+        this.showMessage
+      )
+      for (const resource of movedResources) {
+        this.REMOVE_FILE(resource)
+        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILE_SELECTION(resource)
       }
-
-      if (errors.length === 1) {
-        title = this.$gettext('Failed to move "%{resourceName}"')
-        this.showMessage({
-          title: this.$gettextInterpolate(title, { resourceName: errors[0]?.resourceName }, true),
-          status: 'danger'
-        })
-        return
-      }
-
-      title = this.$gettext('Failed to move %{count} resources')
-      this.showMessage({
-        title: this.$gettextInterpolate(title, { count: errors.length }),
-        status: 'danger'
-      })*/
     },
 
     rowMounted(resource, component) {

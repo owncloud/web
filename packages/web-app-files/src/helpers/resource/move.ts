@@ -1,41 +1,166 @@
-import PQueue from 'p-queue'
-import { basename, join } from 'path'
+import { Resource } from './index'
+import { join } from 'path'
 
-export const move = async (resourcesToMove, target, client) => {
-    console.log("move")
-    const errors = []
-    const movePromises = []
-    const moveQueue = new PQueue({ concurrency: 4 })
-    const itemsInTarget = await client.files.list(target.webDavPath, 1)
+export enum ResolveStrategy {
+  CANCEL,
+  REPLACE,
+  MERGE,
+  KEEP_BOTH
+}
+export interface ResolveConflict {
+  strategy: ResolveStrategy
+  doForAllConflicts: boolean
+}
+export interface FileConflict {
+  resource: Resource
+  strategy?: ResolveStrategy
+}
 
-    resourcesToMove.forEach((resource: any) => {
-        movePromises.push(
-            moveQueue.add(async () => {
-            const exists = itemsInTarget.some((e) => basename(e.name) === resource.name)
-            if (exists) {
-                const message = `Resource with name ${resource.name} already exists`
-                errors.push({
-                    resourceName: resource.name,
-                    message: message
-                })
-                return
-            }
+const resolveFileExists = (createModal, hideModal, resourceName, conflictCount) => {
+  return new Promise<ResolveConflict>((resolve) => {
+    let doForAllConflicts = false
+    const modal = {
+      variation: 'danger',
+      title: 'File already exists',
+      message: `Resource with name ${resourceName} already exists.`,
+      cancelText: 'Cancel',
+      confirmText: 'Replace',
+      checkbox: true,
+      checkboxLabel: `Do this for all ${conflictCount} conflicts`,
+      onCheckboxValueChanged: (value) => {
+        doForAllConflicts = value
+      },
+      onCancel: () => {
+        hideModal()
+        resolve({ strategy: ResolveStrategy.CANCEL, doForAllConflicts } as ResolveConflict)
+      },
+      onConfirm: () => {
+        hideModal()
+        resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts } as ResolveConflict)
+      }
+    }
+    createModal(modal)
+  })
+}
+const resolveAllConflicts = async (
+  resourcesToMove,
+  targetFolder,
+  client,
+  createModal,
+  hideModal
+) => {
+  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 50)
+  const targetPath = targetFolder.path
+  const index = targetFolder.webDavPath.lastIndexOf(targetPath)
+  const webDavPrefix = targetFolder.webDavPath.substring(0, index)
 
-            try {
-                await client.files.move(
-                    resource.webDavPath,
-                    join(target.webDavPath, resource.name)
-                )
-                /*this.REMOVE_FILE(resource)
-                this.REMOVE_FILE_FROM_SEARCHED(resource)
-                this.REMOVE_FILE_SELECTION(resource)*/
-            } catch (error) {
-                console.error(error)
-                error.resourceName = resource.name
-                errors.push(error)
-            }
-        }))
-        console.log(errors)
+  // Collect all conflicting resources
+  const allConflicts = []
+  for (const resource of resourcesToMove) {
+    const potentialTargetWebDavPath = join(webDavPrefix, targetFolder.path, resource.path)
+    const exists = targetFolderItems.some((e) => e.name === potentialTargetWebDavPath)
+    if (exists) {
+      allConflicts.push({
+        resource,
+        strategy: null
+      } as FileConflict)
+    }
+  }
+  let count = 0
+  let doForAllConflicts = false
+  let doForAllConflictsStrategy = null
+  const resolvedConflicts = []
+  for (const conflict of allConflicts) {
+    // Resolve conflicts accordingly
+    if (doForAllConflicts) {
+      conflict.strategy = doForAllConflictsStrategy
+      resolvedConflicts.push(conflict)
+      continue
+    }
+
+    // Resolve next conflict
+    const conflictsLeft = allConflicts.length - count
+    const result: ResolveConflict = await resolveFileExists(
+      createModal,
+      hideModal,
+      conflict.resource.name,
+      conflictsLeft
+    )
+    conflict.strategy = result.strategy
+    resolvedConflicts.push(conflict)
+    count += 1
+
+    // User checked 'do for all x conflicts'
+    if (!result.doForAllConflicts) continue
+    doForAllConflicts = true
+    doForAllConflictsStrategy = result.strategy
+  }
+  return resolvedConflicts
+}
+const showResultMessage = async(errors, movedResources, showMessage) => {
+  if (errors.length === 0) {
+    const count = movedResources.length
+    const title = `${count} item was moved successfully`
+    showMessage({
+      title,
+      status: 'success'
     })
-    await Promise.all(movePromises)
+    return 
+  }
+
+  if (errors.length === 1) {
+    const title = `Failed to move "${errors[0]?.resourceName}`
+    showMessage({
+      title,
+      status: 'danger'
+    })
+    return
+  }
+
+  const title = `Failed to move ${errors.length} resources`
+  showMessage({
+    title,
+    status: 'danger'
+  })
+}
+export const move = async (
+  resourcesToMove,
+  targetFolder,
+  client,
+  createModal,
+  hideModal,
+  showMessage
+) => {
+  const errors = []
+  const resolvedConflicts = await resolveAllConflicts(
+    resourcesToMove,
+    targetFolder,
+    client,
+    createModal,
+    hideModal
+  )
+  const movedResources = []
+
+  for (const resource of resourcesToMove) {
+    const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
+    if (hasConflict) {
+      const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)?.strategy
+      if (resolveStrategy === ResolveStrategy.CANCEL) {
+        continue
+      }
+      if (resolveStrategy === ResolveStrategy.REPLACE) {
+        await client.files.delete(join(targetFolder.webDavPath, resource.name))
+      }
+    }
+    try {
+      await client.files.move(resource.webDavPath, join(targetFolder.webDavPath, resource.name))
+      movedResources.push(resource)
+    } catch (error) {
+      console.error(error)
+      error.resourceName = resource.name
+      errors.push(error)
+    }
+  }
+  showResultMessage(errors, movedResources, showMessage)
+  return movedResources
 }
