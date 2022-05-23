@@ -224,7 +224,7 @@ Feature: accept/decline shares coming from internal users
     And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @ocis-issue-713
+  @skipOnOCIS
   Scenario: receive shares with same name from different users, accept one by one
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "/simple-folder" in the server
@@ -240,6 +240,23 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder (2)" shared by "Carol King" should be in "Accepted" state on the webUI
     And as "Brian" folder "from_Alice" should exist inside folder "/Shares/simple-folder" in the server
     And as "Brian" folder "from_Carol" should exist inside folder "/Shares/simple-folder (2)" in the server
+
+  @skipOnOC10
+  Scenario: receive shares with same name from different users, accept one by one
+    Given user "Carol" has been created with default attributes and without skeleton files in the server
+    And user "Carol" has created folder "/simple-folder" in the server
+    And user "Carol" has created folder "/simple-folder/from_Carol" in the server
+    And user "Carol" has shared folder "/simple-folder" with user "Brian" in the server
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Alice" has created folder "/simple-folder/from_Alice" in the server
+    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
+    And the user has browsed to the shared-with-me page
+    When the user accepts share "simple-folder" offered by user "Alice Hansen" using the webUI
+    Then folder "simple-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
+    When the user accepts share "simple-folder" offered by user "Carol King" using the webUI
+    Then folder "simple-folder" shared by "Carol King" should be in "Accepted" state on the webUI
+    And as "Brian" folder "from_Alice" should exist inside folder "/Shares/simple-folder" in the server
+    And as "Brian" folder "from_Carol" should exist inside folder "/Shares/simple-folder" in the server
 
   @issue-ocis-1950 @skipOnOCIS
   Scenario: accept a share that you received as user and as group member

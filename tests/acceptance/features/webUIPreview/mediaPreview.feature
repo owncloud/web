@@ -139,18 +139,21 @@ Scenario Outline: preview of image files with preview app is possible
       | testavatar.png  | testavatar.PNG  |
       | testavatar.jpeg | testavatar.JPEG |
 
-  @issue-5324
+
   Scenario: Open jpeg file with preview app in shared-with-others page
-    Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
+    And user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions in the server
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-others page
     When the user views the file "testavatar.jpeg" in the preview app by clicking on the file name using the webUI
     Then the file "testavatar.jpeg" should be displayed in the preview app webUI
 
-  @issue-5324
+
   Scenario: Open jpeg file with preview app in shared-with-me page
-    Given user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
+    And user "Brian" has been created with default attributes and without skeleton files in the server
+    And user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions in the server
     And user "Alice" has accepted the share "testavatar.jpeg" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
