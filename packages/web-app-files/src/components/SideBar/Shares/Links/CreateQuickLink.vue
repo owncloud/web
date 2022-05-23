@@ -48,15 +48,13 @@ export default {
   },
   methods: {
     createQuickLink() {
-      // handle expiredate && passwordenforcement
+      // TODO: Set default expiration date (if enforced)
       this.$emit('createPublicLink', {
         link: {
           name: this.$gettext('Quicklink'),
           permissions: 1,
-          quicklink: true
-        },
-        showError: (e) => {
-          this.error = e
+          quicklink: true,
+          password: false
         }
       })
     }

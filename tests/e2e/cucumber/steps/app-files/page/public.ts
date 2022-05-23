@@ -42,7 +42,7 @@ When(
     }
 
     const { page } = actor
-    const { url } = this.linksEnvironment.getLink({ key: name })
+    const { url } = this.linksEnvironment.getLink({ name })
     const pageObject = new objects.applicationFiles.page.Public({ page })
     await pageObject.open({ url })
   }

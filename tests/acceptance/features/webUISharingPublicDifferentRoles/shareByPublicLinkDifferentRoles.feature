@@ -16,16 +16,16 @@ Feature: Share by public link with different roles
   Scenario Outline: simple sharing by public link with different roles
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | <role> |
+    When the user creates a new public link for folder "simple-folder" using the webUI
+    And the user sets the role of the most recently created public link of resource "simple-folder" to "<role>"
     Then user "Alice" should have a share with these details in the server:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | <permissions>  |
       | path        | /simple-folder |
-      | name        | Public link    |
-    And a link named "Public link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
+      | name        | Link           |
+    And a link named "Link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
@@ -39,15 +39,14 @@ Feature: Share by public link with different roles
   Scenario Outline: simple sharing by public link with different roles (ocis bug demonstration)
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | <role> |
+    When the user creates a new public link for folder "simple-folder" using the webUI
+    And the user sets the role of the most recently created public link of resource "simple-folder" to "<role>"
     Then user "Alice" should have a share with these details in the server:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | <permissions>  |
       | path        | /simple-folder |
-    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
@@ -56,20 +55,21 @@ Feature: Share by public link with different roles
       | Editor      | read, update, create, delete |
       | Contributor | read, create                 |
 
+
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
     Given user "Alice" has created file "simple-folder/fileInside" in the server
     And user "Alice" has logged in using the webUI
-    And the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Uploader |
+    And the user creates a new public link for folder "simple-folder" using the webUI
+    And the user sets the role of the most recently created public link of resource "simple-folder" to "Uploader"
     Then user "Alice" should have a share with these details in the server:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | create         |
       | path        | /simple-folder |
-      | name        | Public link    |
-    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
+      | name        | Link           |
+    And a link named "Link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
 
@@ -77,17 +77,17 @@ Feature: Share by public link with different roles
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: sharing by public link with "Uploader" role (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
-    And the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Uploader |
+    And the user creates a new public link for folder "simple-folder" using the webUI
+    And the user sets the role of the most recently created public link of resource "simple-folder" to "Uploader"
     Then user "Alice" should have a share with these details in the server:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | create         |
       | path        | /simple-folder |
-    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
+
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
@@ -277,46 +277,12 @@ Feature: Share by public link with different roles
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI
-    And user "Alice" should not have created any shares in the server
-
-
-  @issue-ocis-1328
-  Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
-    Given the setting "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Contributor |
-    And user "Alice" should not have created any shares in the server
-
-
-  @issue-ocis-1328
-  Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
-    Given the setting "shareapi_enforce_links_password_read_write_delete" of app "core" has been set to "yes" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Editor |
-    And user "Alice" should not have created any shares in the server
-
-
-  @issue-ocis-1328
-  Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
-    Given the setting "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Uploader |
-    And user "Alice" should not have created any shares in the server
-
-
-  @issue-ocis-1328
-  Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced
-    Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Contributor |
+    Then user "Alice" should not have created any shares in the server
+    When the user sets a password "123123" for the public link in the modal
     Then user "Alice" should have a share with these details in the server:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
-      | permissions | read, create   |
+      | permissions | read           |
       | path        | /simple-folder |
-      | name        | Public link    |
+      | name        | Link           |

@@ -1,6 +1,8 @@
 Enhancement: Redesign link sharing
 
 We have redesigned the public link list in the right sidebar. Links now can be edited in-line and have a similiar look-and-feel to people and group shares.
+Additionally, creating new links now is less cumbersome and the default name, while not configurable from the backend anymore, is now translated.
 
 https://github.com/owncloud/web/pull/6749
 https://github.com/owncloud/web/pull/6885
+https://github.com/owncloud/web/pull/6961

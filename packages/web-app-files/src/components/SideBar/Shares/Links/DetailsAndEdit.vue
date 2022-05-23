@@ -107,6 +107,7 @@
               <oc-datepicker
                 v-if="option.showDatepicker"
                 v-model="newExpiration"
+                class="link-expiry-picker"
                 :min-date="expirationDate.min"
                 :max-date="expirationDate.max"
                 :locale="$language.current"
@@ -144,7 +145,6 @@ import { DateTime } from 'luxon'
 import { mapActions } from 'vuex'
 import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
-import { showQuickLinkPasswordModal } from '../../../../quickActions'
 import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
 
 export default {
@@ -361,7 +361,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 
     checkPasswordEnforcedFor(link) {
       const currentRole = this.availableRoleOptions.find(({ role }) => {
@@ -392,21 +392,7 @@ export default {
       dropRef = this.$refs.editPublicLinkDropdown,
       onSuccess = () => {}
     }) {
-      if (this.checkPasswordEnforcedFor(link) && link.password === false) {
-        showQuickLinkPasswordModal({ store: this.$store }, (password) => {
-          if (!password || password.trim() === '') {
-            return this.showMessage({
-              title: this.$gettext('Password cannot be empty'),
-              status: 'danger'
-            })
-          }
-          link.password = password
-          this.$emit('updateLink', { link, onSuccess })
-          this.hideModal()
-        })
-      } else {
-        this.$emit('updateLink', { link, onSuccess })
-      }
+      this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
     },
     deleteLink() {

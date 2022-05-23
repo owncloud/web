@@ -4,7 +4,6 @@ import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from '@files/src/components/SideBar/Shares/FileLinks.vue'
-import CreateForm from '@files/src/components/SideBar/Shares/Links/CreateForm.vue'
 
 const localVue = createLocalVue()
 
@@ -16,6 +15,7 @@ localVue.use(GetTextPlugin, {
 })
 
 const mapActions = {
+  addLink: jest.fn(),
   loadSharesTree: jest.fn(),
   loadCurrentFileOutgoingShares: jest.fn()
 }
@@ -46,8 +46,7 @@ const defaultLinksList = [
 const selectors = {
   linkAddButton: '#files-file-link-add',
   noResharePermissions: '[data-testid="files-links-no-reshare-permissions-message"]',
-  linkNoResults: '#oc-file-links-no-results',
-  linkPrivate: '.oc-files-private-link-item'
+  linkNoResults: '#oc-file-links-no-results'
 }
 
 const linkListItemNameAndCopy = 'name-and-copy-stub'
@@ -171,6 +170,9 @@ describe('FileLinks', () => {
     }
   } = {}) {
     return new Vuex.Store({
+      actions: {
+        showMessage: jest.fn()
+      },
       getters: {
         configuration: jest.fn(() => ({
           server: 'http://example.com/',
@@ -226,8 +228,7 @@ describe('FileLinks', () => {
       localVue,
       store: store,
       stubs: {
-        ...stubs,
-        'create-form': true
+        ...stubs
       },
       mocks: {
         $route: {
@@ -238,16 +239,9 @@ describe('FileLinks', () => {
   }
 
   function getMountedWrapper(store) {
-    const createFormComponent = {
-      ...CreateForm,
-      mounted: jest.fn()
-    }
     return mount(FileLinks, {
       localVue,
       store: store,
-      stubs: {
-        'create-form': createFormComponent
-      },
       mocks: {
         $route: {
           params: {}

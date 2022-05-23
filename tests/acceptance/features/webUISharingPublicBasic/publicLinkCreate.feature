@@ -19,8 +19,8 @@ Feature: Create public link shares
       | uid_owner   | Alice          |
       | permissions | read           |
       | path        | /simple-folder |
-      | name        | Public link    |
-    And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "simple-folder" on the webUI
+      | name        | Link           |
+    And a link named "Link" should be listed with role "Viewer" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
@@ -35,8 +35,8 @@ Feature: Create public link shares
       | uid_owner   | Alice       |
       | permissions | read        |
       | path        | /lorem.txt  |
-      | name        | Public link |
-    And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "lorem.txt" on the webUI
+      | name        | Link        |
+    And a link named "Link" should be listed with role "Viewer" in the public link list of resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
@@ -53,9 +53,9 @@ Feature: Create public link shares
       | uid_owner   | Alice          |
       | permissions | read           |
       | path        | /simple-folder |
-    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
+
 
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
@@ -69,9 +69,9 @@ Feature: Create public link shares
       | uid_owner   | Alice       |
       | permissions | read        |
       | path        | /lorem.txt  |
-    And a public link with the last created link share token as name should be listed for resource "lorem.txt" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
+
 
   @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
@@ -79,10 +79,10 @@ Feature: Create public link shares
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" in the server
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI with
-      | name | short_linkname |
+    When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
+
 
 
   Scenario: share two files with same name but different paths by public link
@@ -158,10 +158,8 @@ Feature: Create public link shares
   Scenario Outline: user creates multiple public links with same name for the same file/folder
     Given user "Alice" has created <element> "<name>" in the server
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for <element> "<name>" using the webUI with
-      | name | same_link_name |
-    And the user creates a new public link for <element> "<name>" using the webUI with
-      | name | same_link_name |
+    When the user creates a new public link for <element> "<name>" using the webUI
+    And the user creates a new public link for <element> "<name>" using the webUI
     Then the tokens should be unique for each public links on the webUI
     Examples:
       | element | name          |
@@ -169,17 +167,19 @@ Feature: Create public link shares
       | file    | lorem.txt     |
 
 
+
+
   Scenario: User can create a public link via quick action
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details in the server:
-      | field       | value             |
-      | share_type  | public_link       |
-      | uid_owner   | Alice             |
-      | permissions | read              |
-      | path        | /simple-folder    |
-      | name        | Quicklink |
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | Alice          |
+      | permissions | read           |
+      | path        | /simple-folder |
+      | name        | Quicklink      |
     And the following success message should be displayed on the webUI
       """
       Quicklink copied into your clipboard

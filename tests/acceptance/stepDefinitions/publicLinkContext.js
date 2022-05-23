@@ -15,19 +15,10 @@ When(
 )
 
 When(
-  'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI with',
-  async function (resource, settingsTable) {
-    const settings = settingsTable.rowsHash()
+  'the user sets the role of the most recently created public link of resource {string} to {string}',
+  async function (resource, newRole) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    return client.page.FilesPageElement.publicLinksDialog().addNewLink(settings)
-  }
-)
-
-When(
-  'the user (tries to) create a new public link for file/folder/resource {string} which expires in {string} day/days using the webUI',
-  async function (resource, days) {
-    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    return client.page.FilesPageElement.publicLinksDialog().setPublicLinkDate(days)
+    await client.page.FilesPageElement.publicLinksDialog().changeLatestLinkRole(newRole)
   }
 )
 
@@ -113,6 +104,14 @@ Then('the public should not get access to the publicly shared file', async funct
 })
 
 When(
+  'the user renames the most recently created public link of file/folder/resource {string} to {string}',
+  async function (resource, newName) {
+    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().changeLatestLinkName(newName)
+  }
+)
+
+When(
   'the user renames the public link named {string} of file/folder/resource {string} to {string}',
   async function (linkName, resource, newName) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
@@ -150,6 +149,13 @@ When(
   async function (linkName, resource, password) {
     await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
     await client.page.FilesPageElement.publicLinksDialog().changePassword(linkName, password)
+  }
+)
+
+When(
+  'the user sets a password {string} for the public link in the modal',
+  async function (password) {
+    await client.page.FilesPageElement.publicLinksDialog().setRequiredPassword(password)
   }
 )
 
@@ -291,17 +297,6 @@ Then('the tokens should be unique for each public links on the webUI', async fun
   const isUnique = publicLinkUrls.length === new Set(publicLinkUrls).size
   return assert.ok(isUnique)
 })
-
-Then(
-  'a public link with the last created link share token as name should be listed for resource {string} on the webUI',
-  async function (resource) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(client.globals.currentUser)
-    await client.page.FilesPageElement.filesList().openPublicLinkDialog(resource)
-    const shares = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkList()
-    const share = shares.find((link) => link.name === lastShare.token)
-    return assert.ok(share.name.length > 0)
-  }
-)
 
 When(
   'the user creates a public link via quick action for resource {string} using the webUI',

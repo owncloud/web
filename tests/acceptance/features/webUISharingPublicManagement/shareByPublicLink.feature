@@ -86,12 +86,12 @@ Feature: Public link share management
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-
   Scenario: access details dialog of public share and check the tabs displayed
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | role | Editor |
+    When the user creates a new public link for folder "simple-folder" using the webUI
+    And the user renames the most recently created public link of folder "simple-folder" to "link1"
+    And the user tries to edit the public link named "link1" of folder "simple-folder" changing the role to "Editor"
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user opens the sidebar for file "lorem.txt" on the webUI
     Then the following panels should be visible in the details dialog on the webUI
@@ -146,13 +146,6 @@ Feature: Public link share management
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
-
-  @issue-ocis-reva-243
-  Scenario: token is shown for links without a name
-    When user "Alice" has created a public link with following settings in the server
-      | path | /simple-folder |
-    And user "Alice" logs in using the webUI
-    Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
 
   @issue-product-130
   Scenario: User can attempt to upload a file in public link
