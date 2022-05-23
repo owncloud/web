@@ -311,7 +311,8 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
                 remaining: 1000
               }
             }
-          ]
+          ],
+          selectedFiles: () => []
         }
       }
     }

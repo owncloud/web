@@ -169,7 +169,13 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword', 'spaces']),
+    ...mapGetters('Files', [
+      'files',
+      'currentFolder',
+      'publicLinkPassword',
+      'spaces',
+      'selectedFiles'
+    ]),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {
@@ -182,7 +188,9 @@ export default defineComponent({
     },
 
     showActions() {
-      return !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
+      return (
+        !this.selectedFiles.length && !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
+      )
     },
 
     createFileActionsAvailable() {
