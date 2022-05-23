@@ -245,9 +245,7 @@ exports[`User Menu component when quota is not defined renders no percentag of t
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <!----> <span class="oc-text-small">910 B used</span>
-          </p>
+          <p class="oc-my-rm"><span>Personal storage</span> <br> <span class="oc-text-small">910 B used</span></p>
           <!---->
         </div>
       </li>
@@ -285,9 +283,7 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub name="cloud" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-p-xs"></oc-icon-stub>
         <div class="storage-wrapper-text">
-          <p class="oc-my-rm">
-            <!----> <span class="oc-text-small">300 B used</span>
-          </p>
+          <p class="oc-my-rm"><span>Personal storage</span> <br> <span class="oc-text-small">300 B used</span></p>
           <!---->
         </div>
       </li>

@@ -58,10 +58,8 @@
           <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
           <div class="storage-wrapper-text">
             <p class="oc-my-rm">
-              <template v-if="limitedPersonalStorage">
-                <span v-text="personalStorageLabel" />
-                <br />
-              </template>
+              <span v-text="personalStorageLabel" />
+              <br />
               <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
             </p>
             <oc-progress
@@ -81,6 +79,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import filesize from 'filesize'
+import isNil from 'lodash-es/isNil'
 
 export default {
   props: {
@@ -97,13 +96,16 @@ export default {
       return this.user.username || this.user.id
     },
     personalStorageLabel() {
+      if (!this.limitedPersonalStorage) {
+        return this.$gettext('Personal storage')
+      }
       return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
         percentage: this.quota.relative || 0
       })
     },
     personalStorageDetailsLabel() {
       const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
-      const used = this.quota.used
+      const used = this.quota.used || 0
       return this.$gettextInterpolate(
         total ? this.$gettext('%{used} of %{total} used') : this.$gettext('%{used} used'),
         {
@@ -113,7 +115,7 @@ export default {
       )
     },
     limitedPersonalStorage() {
-      return !isNaN(this.quota.relative) && this.quota.definition !== 'none'
+      return !isNil(this.quota.relative) && this.quota.definition !== 'none'
     },
     quotaEnabled() {
       return !!this.quota

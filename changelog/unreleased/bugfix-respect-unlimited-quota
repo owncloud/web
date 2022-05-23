@@ -4,3 +4,4 @@ We have fixed an UI glitch where the UI stopped working if the backend reports a
 
 https://github.com/owncloud/web/pull/6923
 https://github.com/owncloud/web/issues/6913
+https://github.com/owncloud/web/pull/7044
