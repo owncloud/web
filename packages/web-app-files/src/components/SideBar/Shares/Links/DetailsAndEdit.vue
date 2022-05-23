@@ -195,10 +195,7 @@ export default {
     },
 
     currentLinkRoleLabel() {
-      return LinkShareRoles.getByBitmask(
-        parseInt(this.link.permissions),
-        this.isFolderShare
-      ).label()
+      return LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).label
     },
 
     editButtonLabel() {

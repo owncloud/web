@@ -22,7 +22,7 @@
           :is-modifiable="canEdit"
           :is-password-enforced="isPasswordEnforcedFor(quicklink)"
           :link="quicklink"
-          @updateLink="checkLinkToCreate"
+          @updateLink="checkLinkToUpdate"
           @removePublicLink="deleteLinkConfirmation"
         />
         <hr class="link-separator oc-my-m" />
@@ -80,7 +80,6 @@ import { shareViaLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
 import { cloneStateObject } from '../../../helpers/store'
-import { textUtils } from '../../../helpers/textUtils'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
@@ -218,27 +217,24 @@ export default defineComponent({
     },
 
     links() {
-      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks.filter(
-        (link) => !link.quicklink
-      )
-
-      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
-        .sort(this.linksComparator)
+      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks
+        .filter((link) => !link.quicklink)
         .map((share) => {
           share.key = 'direct-link-' + share.id
           return share
         })
+        .sort((a, b) => {
+          return b.stime - a.stime
+        })
+
+      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
     },
 
     displayLinks() {
-      const linkShares = this.links
-      const sortedLinkShares = linkShares.sort((a, b) => {
-        return b.stime - a.stime
-      })
       if (this.links.length > 3 && this.linkListCollapsed) {
-        return sortedLinkShares.slice(0, 3)
+        return this.links.slice(0, 3)
       }
-      return sortedLinkShares
+      return this.links
     },
 
     indirectLinks() {
@@ -262,7 +258,9 @@ export default defineComponent({
           })
         }
       })
-      return allShares.sort(this.linksComparator)
+      return allShares.sort((a, b) => {
+        return b.stime - a.stime
+      })
     },
 
     resourceIsSpace() {
@@ -316,24 +314,6 @@ export default defineComponent({
         $gettext: this.$gettext,
         ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
-    },
-
-    linksComparator(l1, l2) {
-      // sorting priority 1: display name (lower case, ascending), 2: creation time (descending)
-      const name1 = l1.name.toLowerCase().trim()
-      const name2 = l2.name.toLowerCase().trim()
-      const l1Direct = !l1.indirect
-      const l2Direct = !l2.indirect
-
-      if (l1Direct === l2Direct) {
-        if (name1 === name2) {
-          return l1.stime - l2.stime
-        }
-
-        return textUtils.naturalSortCompare(name1, name2)
-      }
-
-      return l1Direct ? -1 : 1
     },
 
     isPasswordEnforcedFor(link) {

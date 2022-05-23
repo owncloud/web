@@ -141,7 +141,8 @@ describe('FileLinks', () => {
         highlightedFile: {
           path: '/lorem.txt',
           type: 'file',
-          canShare: jest.fn(() => false)
+          canShare: jest.fn(() => false),
+          isFolder: false
         }
       })
 
