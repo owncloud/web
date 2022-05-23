@@ -46,6 +46,8 @@ Summary
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
 * Enhancement - Add un-share confirmation dialog: [#6795](https://github.com/owncloud/web/pull/6795)
 * Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
+* Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
+* Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
@@ -387,6 +389,18 @@ Details
 
    https://github.com/owncloud/web/issues/6806
    https://github.com/owncloud/web/pull/6856
+
+* Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
+
+   We've added a flag to enable CERN-specific features
+
+   https://github.com/owncloud/web/pull/7034
+
+* Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
+
+   We've added some CERN-related help strings to the share tooltip.
+
+   https://github.com/owncloud/web/pull/7034
 
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
