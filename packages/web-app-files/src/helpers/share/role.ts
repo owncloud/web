@@ -279,7 +279,14 @@ export abstract class PeopleShareRoles {
     return role || this.custom(isFolder)
   }
 
-  static listByBitmask(
+  /**
+   * Filter all roles that have either exactly the permissions from the bitmask or a subset of them.
+   * @param bitmask
+   * @param isFolder
+   * @param allowSharing
+   * @param allowCustom
+   */
+  static filterByBitmask(
     bitmask: number,
     isFolder: boolean,
     allowSharing: boolean,

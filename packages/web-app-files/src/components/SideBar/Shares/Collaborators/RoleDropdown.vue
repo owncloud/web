@@ -172,7 +172,7 @@ export default {
       }
 
       if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
-        return PeopleShareRoles.listByBitmask(
+        return PeopleShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
