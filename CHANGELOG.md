@@ -237,6 +237,7 @@ Details
 
    https://github.com/owncloud/web/issues/6913
    https://github.com/owncloud/web/pull/6923
+   https://github.com/owncloud/web/pull/7044
 
 * Bugfix - Search mess up spaces overview: [#7014](https://github.com/owncloud/web/pull/7014)
 
