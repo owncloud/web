@@ -53,6 +53,7 @@ Summary
 * Enhancement - Introduce sharing jail: [#6593](https://github.com/owncloud/web/pull/6593)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
+* Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
@@ -448,6 +449,13 @@ Details
 
    https://github.com/owncloud/web/issues/6755
    https://github.com/owncloud/web/pull/6817
+
+* Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
+
+   We now use the new WebDAV endpoints for uploads when spaces are enabled.
+
+   https://github.com/owncloud/web/issues/6970
+   https://github.com/owncloud/web/pull/6991
 
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 
