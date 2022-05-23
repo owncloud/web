@@ -61,7 +61,6 @@
 </template>
 
 <script lang="ts">
-import { dirname } from 'path'
 import { useTask } from 'vue-concurrency'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { watch, computed, ref, unref } from '@vue/composition-api'
@@ -69,7 +68,9 @@ import {
   useStore,
   useDebouncedRef,
   useRouteParam,
-  useCapabilityProjectSpacesEnabled
+  useCapabilityProjectSpacesEnabled,
+  useCapabilityShareJailEnabled,
+  useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
@@ -148,7 +149,9 @@ export default {
       loadSpaceMembersTask,
       sharesListCollapsed,
       sharesLoading,
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
+      hasShareJail: useCapabilityShareJailEnabled(),
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   computed: {
@@ -262,6 +265,14 @@ export default {
     },
 
     currentUserCanShare() {
+      if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
+        return false
+      }
+      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      if (isShareJail && !this.hasResharing) {
+        return false
+      }
+
       return this.highlightedFile.canShare({ user: this.user })
     },
     noResharePermsMessage() {
@@ -295,28 +306,13 @@ export default {
       )
     }
   },
-  watch: {
-    highlightedFile: {
-      handler: function (newItem, oldItem) {
-        if (oldItem !== newItem) {
-          this.$_reloadShares()
-        }
-      },
-      immediate: true
-    }
-  },
-  mounted() {
+  async mounted() {
     if (this.showSpaceMembers) {
       this.loadSpaceMembersTask.perform()
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadCurrentFileOutgoingShares',
-      'loadSharesTree',
-      'deleteShare',
-      'loadIncomingShares'
-    ]),
+    ...mapActions('Files', ['deleteShare']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
     toggleShareesListCollapsed() {
       this.sharesListCollapsed = !this.sharesListCollapsed
@@ -367,10 +363,15 @@ export default {
     },
 
     $_ocCollaborators_deleteShare(share) {
+      let path = this.highlightedFile.path
+      // sharing a share root from the share jail -> use resource name as path
+      if (this.hasShareJail && path === '/') {
+        path = `/${this.highlightedFile.name}`
+      }
       this.deleteShare({
         client: this.$client,
         share: share,
-        resource: this.highlightedFile,
+        path,
         ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
         .then(() => {
@@ -386,25 +387,6 @@ export default {
             status: 'danger'
           })
         })
-    },
-    $_reloadShares() {
-      const requestParams = {
-        client: this.$client,
-        $gettext: this.$gettext,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
-      }
-      this.loadCurrentFileOutgoingShares({
-        ...requestParams,
-        path: this.highlightedFile.path
-      })
-      this.loadIncomingShares({
-        ...requestParams,
-        path: this.highlightedFile.path
-      })
-      this.loadSharesTree({
-        ...requestParams,
-        path: dirname(this.highlightedFile.path)
-      })
     },
     getSharedParentRoute(parentShare) {
       if (!parentShare.indirect) {

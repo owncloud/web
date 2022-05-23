@@ -110,7 +110,12 @@ import { dirname } from 'path'
 import { defineComponent } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import {
+  useStore,
+  useCapabilitySpacesEnabled,
+  useCapabilityShareJailEnabled,
+  useCapabilityFilesSharingResharing
+} from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
@@ -118,9 +123,10 @@ import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
 import { cloneStateObject } from '../../../helpers/store'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
-import CreateQuickLink from './Links/CreateQuickLink.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
+import CreateQuickLink from './Links/CreateQuickLink.vue'
+import { isLocationSpacesActive } from '../../../router'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -144,6 +150,8 @@ export default defineComponent({
     return {
       graphClient,
       hasSpaces: useCapabilitySpacesEnabled(),
+      hasShareJail: useCapabilityShareJailEnabled(),
+      hasResharing: useCapabilityFilesSharingResharing(),
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -180,6 +188,11 @@ export default defineComponent({
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
+    share() {
+      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
+      return this.sharesTree['']?.find((s) => s.incoming)
+    },
+
     expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
@@ -211,6 +224,14 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
+      if (this.highlightedFile.isReceivedShare() && this.canCreatePublicLinks && this.share) {
+        return LinkShareRoles.filterByBitmask(
+          parseInt(this.share.permissions),
+          this.highlightedFile.isFolder,
+          this.capabilities.files_sharing?.public?.can_edit
+        )
+      }
+
       const roles = LinkShareRoles.list(
         this.highlightedFile.isFolder,
         this.capabilities.files_sharing?.public?.can_edit
@@ -244,6 +265,15 @@ export default defineComponent({
     },
 
     canCreatePublicLinks() {
+      if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
+        return false
+      }
+
+      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      if (isShareJail && !this.hasResharing) {
+        return false
+      }
+
       return this.highlightedFile.canShare({ user: this.user })
     },
 
@@ -333,28 +363,12 @@ export default defineComponent({
       if (this.resourceIsSpace) {
         return this.highlightedFile.id
       }
+
       return this.$route.params.storageId || null
     }
   },
-  watch: {
-    highlightedFile(newItem, oldItem) {
-      if (oldItem !== newItem) {
-        this.reloadLinks()
-      }
-    }
-  },
-  mounted() {
-    this.reloadLinks()
-  },
-
   methods: {
-    ...mapActions('Files', [
-      'addLink',
-      'updateLink',
-      'removeLink',
-      'loadSharesTree',
-      'loadCurrentFileOutgoingShares'
-    ]),
+    ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
     toggleLinkListCollapsed() {
@@ -485,18 +499,24 @@ export default defineComponent({
         permissions: link.permissions,
         quicklink: link.quicklink,
         name: link.name,
+        spaceRef: this.highlightedFile.fileId,
         ...(this.currentStorageId && {
-          storageId: this.currentStorageId,
-          spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
+          storageId: this.currentStorageId
         })
       }
     },
 
     async createLink({ params, onError = (e) => {} }) {
+      let path = this.highlightedFile.path
+      // sharing a share root from the share jail -> use resource name as path
+      if (this.hasShareJail && path === '/') {
+        path = `/${this.highlightedFile.name}`
+      }
       await this.addLink({
-        path: this.highlightedFile.path,
+        path,
         client: this.$client,
         $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId || this.highlightedFile.id,
         params
       }).catch((e) => {
         onError(e)
@@ -555,12 +575,17 @@ export default defineComponent({
 
     async deleteLink({ client, share, resource }) {
       this.hideModal()
+      let path = resource.path
+      // sharing a share root from the share jail -> use resource name as path
+      if (this.hasShareJail && path === '/') {
+        path = `/${resource.name}`
+      }
       // removeLink currently fetches all shares from the backend in order to reload the shares indicators
       // TODO: Check if to-removed link is last link share and only reload if it's the last link
       await this.removeLink({
         client,
         share,
-        resource,
+        path,
         ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
         .then(

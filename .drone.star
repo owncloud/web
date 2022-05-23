@@ -2154,6 +2154,7 @@ def ocisService():
                 "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "FRONTEND_ENABLE_RESHARING": "true",
             },
             "commands": [
                 "cd %s/ocis-build" % dir["base"],

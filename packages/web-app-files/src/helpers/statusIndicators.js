@@ -18,9 +18,9 @@ const isDirectUserShare = (resource) => {
   return ShareTypes.containsAnyValue(ShareTypes.authenticated, $shareTypes(resource))
 }
 
-const isIndirectUserShare = (resource, sharesTree) => {
+const isIndirectUserShare = (resource, sharesTree, hasShareJail) => {
   return (
-    resource.isReceivedShare() ||
+    (resource.isReceivedShare() && !hasShareJail) ||
     ShareTypes.containsAnyValue(
       ShareTypes.authenticated,
       shareTypesIndirect(resource.path, sharesTree)
@@ -39,8 +39,8 @@ const isIndirectLinkShare = (resource, sharesTree) => {
   )
 }
 
-const isUserShare = (resource, sharesTree) => {
-  return isDirectUserShare(resource) || isIndirectUserShare(resource, sharesTree)
+const isUserShare = (resource, sharesTree, hasShareJail) => {
+  return isDirectUserShare(resource) || isIndirectUserShare(resource, sharesTree, hasShareJail)
 }
 
 const isLinkShare = (resource, sharesTree) => {
@@ -88,13 +88,13 @@ const shareTypesIndirect = (path, sharesTree) => {
 }
 
 // TODO: Think of a different way how to access sharesTree
-export const getIndicators = (resource, sharesTree) => {
+export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
   const indicators = [
     {
       id: `files-sharing-${resource.getDomSelector()}`,
       accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
       label: $gettext('Show invited people'),
-      visible: isUserShare(resource, sharesTree),
+      visible: isUserShare(resource, sharesTree, hasShareJail),
       icon: 'group',
       target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',

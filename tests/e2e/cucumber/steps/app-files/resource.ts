@@ -1,4 +1,5 @@
 import { DataTable, When, Then } from '@cucumber/cucumber'
+import path from 'path'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
@@ -249,13 +250,14 @@ export const processDownload = async (
     } else {
       expect(downloads.length).toBe(1)
       downloads.forEach((download) => {
+        const { name } = path.parse(download.suggestedFilename())
         if (config.ocis) {
-          expect(download.suggestedFilename()).toBe('download.tar')
+          expect(name).toBe('download')
         } else {
           if (parentFolder) {
-            expect(download.suggestedFilename()).toBe(parentFolder + '.zip')
+            expect(name).toBe(parentFolder)
           } else {
-            expect(download.suggestedFilename()).toBe('download.zip')
+            expect(name).toBe('download')
           }
         }
       })

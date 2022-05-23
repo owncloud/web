@@ -148,7 +148,7 @@ export default defineComponent({
         client: this.$client,
         graphClient: this.graphClient,
         share: share,
-        resource: this.highlightedFile
+        path: this.highlightedFile.path
       })
         .then(() => {
           this.hideModal()
