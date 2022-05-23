@@ -4,6 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import { PeopleShareRoles } from '@files/src/helpers/share'
+import { SharePermissions, ShareTypes } from '../../../../../../src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -25,13 +26,23 @@ const stubs = {
   'oc-icon': true
 }
 
-const store = new Vuex.Store({
-  getters: {
-    capabilities: () => {
-      return {}
+const getStore = (sharesTree) => {
+  return new Vuex.Store({
+    getters: {
+      capabilities: () => {
+        return {}
+      }
+    },
+    modules: {
+      Files: {
+        namespaced: true,
+        state: {
+          sharesTree
+        }
+      }
     }
-  }
-})
+  })
+}
 
 // needs differentiation between file and folder type?
 
@@ -125,6 +136,30 @@ describe('RoleDropdown', () => {
       //   })
       it.todo('emits an event upon role selection')
     })
+    describe('custom permissions', () => {
+      it.each([
+        SharePermissions.read.bit + SharePermissions.share.bit,
+        SharePermissions.read.bit +
+          SharePermissions.share.bit +
+          SharePermissions.update.bit +
+          SharePermissions.create.bit,
+        SharePermissions.read.bit + SharePermissions.share.bit + SharePermissions.delete.bit
+      ])("inherits the parents share's permissions: %s", (sharePermissions) => {
+        const wrapper = getShallowMountedWrapper({
+          existingRole: PeopleShareRoles.list(true)[0],
+          isReceivedShare: true,
+          sharesTree: {
+            '/testfolder': [
+              {
+                permissions: sharePermissions,
+                shareType: ShareTypes.user.value
+              }
+            ]
+          }
+        })
+        expect(wrapper).toMatchSnapshot()
+      })
+    })
     describe('when an existing role is present', () => {
       it.each(['folder', 'file'])(
         'renders a button with existing role if given for resource type %s',
@@ -135,6 +170,21 @@ describe('RoleDropdown', () => {
           expect(wrapper).toMatchSnapshot()
         }
       )
+      it('does not render a button if only one role is available', () => {
+        const wrapper = getShallowMountedWrapper({
+          existingRole: PeopleShareRoles.list(true)[0],
+          isReceivedShare: true,
+          sharesTree: {
+            '/testfolder': [
+              {
+                permissions: SharePermissions.read.bit,
+                shareType: ShareTypes.user.value
+              }
+            ]
+          }
+        })
+        expect(wrapper).toMatchSnapshot()
+      })
       it.todo(
         'displays a dropdown with viewer, editor and custom permissions if no custom permissions had been selected'
       )
@@ -204,25 +254,37 @@ function getShallowMountedWrapper(data) {
   return shallowMount(RoleDropdown, getMountOptions(data))
 }
 
-function getMountOptions({ existingRole, shareId, resourceType = 'folder' }) {
+function getMountOptions({
+  existingRole,
+  shareId,
+  resourceType = 'folder',
+  sharesTree = {},
+  isReceivedShare = false
+}) {
   return {
     propsData: {
       resource: getResource({
         filename: resourceType === 'folder' ? 'testfolder' : 'testfile',
         extension: resourceType === 'folder' ? '' : 'jpg',
-        type: resourceType
+        type: resourceType,
+        isReceivedShare
       }),
       existingRole,
       shareId,
       allowSharePermission: true
     },
-    store,
+    store: getStore(sharesTree),
     localVue,
     stubs
   }
 }
 
-function getResource({ filename = 'testFile', extension = 'txt', type = 'file' }) {
+function getResource({
+  filename = 'testFile',
+  extension = 'txt',
+  type = 'file',
+  isReceivedShare = false
+}) {
   return {
     id: '4',
     fileId: '4',
@@ -239,6 +301,8 @@ function getResource({ filename = 'testFile', extension = 'txt', type = 'file' }
     starred: false,
     etag: '"89128c0e8122002db57bd19c9ec33004"',
     shareTypes: [],
-    downloadURL: ''
+    downloadURL: '',
+    isReceivedShare: () => isReceivedShare,
+    canShare: () => true
   }
 }

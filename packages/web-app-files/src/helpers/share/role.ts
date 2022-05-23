@@ -278,6 +278,31 @@ export abstract class PeopleShareRoles {
       .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
     return role || this.custom(isFolder)
   }
+
+  /**
+   * Filter all roles that have either exactly the permissions from the bitmask or a subset of them.
+   * @param bitmask
+   * @param isFolder
+   * @param allowSharing
+   * @param allowCustom
+   */
+  static filterByBitmask(
+    bitmask: number,
+    isFolder: boolean,
+    allowSharing: boolean,
+    allowCustom: boolean
+  ): ShareRole[] {
+    const roles = this.all.filter((r) => {
+      return r.folder === isFolder && bitmask === (bitmask | r.bitmask(allowSharing))
+    })
+
+    if (allowCustom) {
+      const customRoles = [peopleRoleCustomFile, peopleRoleCustomFolder]
+      return [...roles, ...customRoles.filter((c) => c.folder === isFolder)]
+    }
+
+    return roles
+  }
 }
 
 export abstract class LinkShareRoles {

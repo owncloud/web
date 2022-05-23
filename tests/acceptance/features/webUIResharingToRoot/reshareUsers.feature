@@ -192,15 +192,6 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | delete, read       |
 
-
-  Scenario: User is not allowed to reshare a file/folder with the higher permissions
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, update" using the webUI
-    Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-folder" should not exist in the server
-
-
   Scenario: Reshare a file and folder from shared with me page
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server

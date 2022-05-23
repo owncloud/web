@@ -1,6 +1,11 @@
 <template>
   <span v-if="selectedRole" class="oc-flex oc-flex-middle">
+    <span v-if="availableRoles.length === 1">
+      <span v-if="!existingRole" v-text="inviteLabel" />
+      <span v-else>{{ $gettext(selectedRole.label) }}</span>
+    </span>
     <oc-button
+      v-else
       :id="roleButtonId"
       class="files-recipient-role-select-btn"
       appearance="raw"
@@ -11,6 +16,7 @@
       <oc-icon name="arrow-down-s" />
     </oc-button>
     <oc-drop
+      v-if="availableRoles.length > 1"
       ref="rolesDrop"
       :toggle="'#' + roleButtonId"
       mode="click"
@@ -35,6 +41,7 @@
       </oc-list>
     </oc-drop>
     <oc-drop
+      v-if="availableRoles.length > 1"
       ref="customPermissionsDrop"
       class="files-recipient-custom-permissions-drop"
       mode="manual"
@@ -75,13 +82,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
   PeopleShareRoles,
   SharePermissions,
   ShareRole,
+  ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
 import * as uuid from 'uuid'
@@ -121,6 +129,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('Files', ['sharesTree']),
     ...mapGetters(['capabilities']),
 
     roleButtonId() {
@@ -144,16 +153,39 @@ export default {
     customPermissionsRole() {
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
+    resourceIsSharable() {
+      return this.allowSharePermission && this.resource.canShare()
+    },
+    share() {
+      const userShares = this.sharesTree[this.resource.path]?.filter((s) =>
+        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
+      )
+
+      return userShares?.length ? userShares[0] : undefined
+    },
+    allowCustomSharing() {
+      return this.capabilities?.files_sharing?.allow_custom
+    },
     availableRoles() {
       if (this.resourceIsSpace) {
         return SpacePeopleShareRoles.list()
       }
-      return PeopleShareRoles.list(
-        this.resource.isFolder,
-        this.capabilities?.files_sharing?.allow_custom !== false
-      )
+
+      if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
+        return PeopleShareRoles.filterByBitmask(
+          parseInt(this.share.permissions),
+          this.resource.isFolder,
+          this.allowSharePermission,
+          this.allowCustomSharing !== false
+        )
+      }
+
+      return PeopleShareRoles.list(this.resource.isFolder, this.allowCustomSharing !== false)
     },
     availablePermissions() {
+      if (this.resource.isReceivedShare() && this.resourceIsSharable && this.share) {
+        return SharePermissions.bitmaskToPermissions(parseInt(this.share.permissions))
+      }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },
     resourceIsSpace() {
