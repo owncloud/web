@@ -30,7 +30,17 @@ export function showQuickLinkPasswordModal(ctx, onConfirm) {
     inputLabel: $gettext('Password'),
     onCancel: () => ctx.store.dispatch('hideModal'),
     inputDescription: $gettext('Passwords for links are required.'),
-    onConfirm: (password) => onConfirm(password),
+    onConfirm: async (password) => {
+      if (!password || password.trim() === '') {
+        ctx.store.dispatch('showMessage', {
+          title: $gettext('Password cannot be empty'),
+          status: 'danger'
+        })
+      } else {
+        await ctx.store.dispatch('hideModal')
+        onConfirm(password)
+      }
+    },
     onInput: (password) => {
       if (password.trim() === '') {
         return ctx.store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
@@ -61,13 +71,6 @@ export default {
 
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
-          if (!password || password.trim() === '') {
-            return ctx.store.dispatch('showMessage', {
-              title: $gettext('Password cannot be empty'),
-              status: 'danger'
-            })
-          }
-          ctx.store.dispatch('hideModal')
           await createQuicklink({ ...ctx, resource: ctx.item, password })
           await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
         })
