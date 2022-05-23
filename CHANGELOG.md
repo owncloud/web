@@ -31,6 +31,7 @@ Summary
 * Bugfix - Setting image and readme for spaces: [#6898](https://github.com/owncloud/web/pull/6898)
 * Bugfix - Share downloads: [#3760](https://github.com/owncloud/ocis/issues/3760)
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
+* Bugfix - Inheritance of share permissions: [#7015](https://github.com/owncloud/web/pull/7015)
 * Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Cover image and readme in spaces: [#7017](https://github.com/owncloud/web/pull/7017)
@@ -267,6 +268,15 @@ Details
 
    https://github.com/owncloud/web/issues/5261
    https://github.com/owncloud/web/pull/6951
+
+* Bugfix - Inheritance of share permissions: [#7015](https://github.com/owncloud/web/pull/7015)
+
+   We've fixed a bug where the permissions of a share were not inherited when trying to reshare a
+   resource. We've also disabled the role-select-dropdown if only one role is available for
+   sharing.
+
+   https://github.com/owncloud/web/issues/2963
+   https://github.com/owncloud/web/pull/7015
 
 * Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
 
