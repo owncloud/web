@@ -5,10 +5,15 @@ import { User } from '../../helpers/user'
 import { DavProperties } from 'web-pkg/src/constants'
 import { ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
-import { useClientService, useRoute, useStore } from 'web-pkg/src/composables'
+import {
+  useCapabilityShareJailEnabled,
+  useClientService,
+  useRoute,
+  useStore
+} from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { computed, Ref, unref } from '@vue/composition-api'
+import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
 
 interface UploadHelpersResult {
@@ -16,24 +21,39 @@ interface UploadHelpersResult {
   updateStoreForCreatedFolders(files: UppyResource[]): void
   currentPath: Ref<string>
   uploadPath: Ref<string>
+  personalDriveId: Ref<string>
 }
 
 interface inputFileOptions {
   route: Ref<Route>
   uploadPath: Ref<string>
   currentPath: Ref<string>
-  user: Ref<User>
+  webDavBasePath: Ref<string>
 }
 
 export function useUploadHelpers(): UploadHelpersResult {
   const store = useStore()
   const route = useRoute()
+  const getToken = computed((): string => store.getters.getToken)
+  const server = computed((): string => store.getters.configuration.server)
+  const hasShareJail = useCapabilityShareJailEnabled()
   const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
   const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
+  const personalDriveId = ref('')
+
+  onMounted(async () => {
+    if (unref(hasShareJail) && !unref(isPublicLocation)) {
+      personalDriveId.value = await getPersonalDriveId(
+        clientService,
+        unref(server),
+        unref(getToken)
+      )
+    }
+  })
 
   const currentPath = computed((): string => {
     const { params } = unref(route)
@@ -44,32 +64,44 @@ export function useUploadHelpers(): UploadHelpersResult {
     return path + '/'
   })
 
-  const uploadPath = computed((): string => {
+  const webDavBasePath = computed((): string => {
     const { params, query } = unref(route)
-    const { owncloudSdk: client } = clientService
 
     if (unref(isPublicLocation)) {
-      return client.publicFiles.getFileUrl(unref(currentPath))
-    }
-
-    if (unref(isSpacesProjectLocation)) {
-      const path = buildWebDavSpacesPath(params.storageId, unref(currentPath))
-      return client.files.getFileUrl(path)
+      return unref(currentPath)
     }
 
     if (unref(isSpacesShareLocation)) {
-      const path = buildWebDavSpacesPath(
-        [SHARE_JAIL_ID, query.shareId].join('!'),
-        unref(currentPath)
-      )
-      return client.files.getFileUrl(path)
+      return buildWebDavSpacesPath([SHARE_JAIL_ID, query?.shareId].join('!'), unref(currentPath))
     }
 
-    return client.files.getFileUrl(buildWebDavFilesPath(unref(user).id, unref(currentPath)))
+    if (unref(isSpacesProjectLocation)) {
+      return buildWebDavSpacesPath(params.storageId, unref(currentPath))
+    }
+
+    if (unref(hasShareJail)) {
+      return buildWebDavSpacesPath(unref(personalDriveId), unref(currentPath))
+    }
+
+    return buildWebDavFilesPath(unref(user)?.id, unref(currentPath))
+  })
+
+  const uploadPath = computed((): string => {
+    const { owncloudSdk: client } = clientService
+    if (unref(isPublicLocation)) {
+      return client.publicFiles.getFileUrl(unref(webDavBasePath))
+    }
+
+    return client.files.getFileUrl(unref(webDavBasePath))
   })
 
   return {
-    inputFilesToUppyFiles: inputFilesToUppyFiles({ route, uploadPath, currentPath, user }),
+    inputFilesToUppyFiles: inputFilesToUppyFiles({
+      route,
+      uploadPath,
+      currentPath,
+      webDavBasePath
+    }),
     updateStoreForCreatedFolders: updateStoreForCreatedFolders({
       clientService,
       store,
@@ -77,8 +109,19 @@ export function useUploadHelpers(): UploadHelpersResult {
       publicLinkPassword
     }),
     currentPath,
-    uploadPath
+    uploadPath,
+    personalDriveId
   }
+}
+
+const getPersonalDriveId = async (clientService, server: string, getToken: string) => {
+  const graphClient = clientService.graphAuthenticated(server, getToken)
+
+  const drivesResponse = await graphClient.drives.listMyDrives('', 'driveType eq personal')
+  if (!drivesResponse.data) {
+    throw new Error('No personal space found')
+  }
+  return drivesResponse.data.value[0].id
 }
 
 const updateStoreForCreatedFolders = ({
@@ -127,11 +170,16 @@ const updateStoreForCreatedFolders = ({
   }
 }
 
-const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFileOptions) => {
+const inputFilesToUppyFiles = ({
+  route,
+  uploadPath,
+  currentPath,
+  webDavBasePath
+}: inputFileOptions) => {
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
-    const { params, query } = unref(route)
+    const { params } = unref(route)
     const currentFolder = unref(currentPath)
 
     for (const file of files) {
@@ -158,17 +206,6 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
         params: { ...params, item }
       }
 
-      const storageId = params.storageId
-      const shareId = query?.shareId
-      let webDavBasePath
-      if (shareId) {
-        webDavBasePath = buildWebDavSpacesPath([SHARE_JAIL_ID, shareId].join('!'), currentFolder)
-      } else if (storageId) {
-        webDavBasePath = buildWebDavSpacesPath(storageId, currentFolder)
-      } else {
-        webDavBasePath = buildWebDavFilesPath(unref(user)?.id, currentFolder)
-      }
-
       uppyFiles.push({
         source: 'file input',
         name: file.name,
@@ -180,7 +217,7 @@ const inputFilesToUppyFiles = ({ route, uploadPath, currentPath, user }: inputFi
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
           route: fileRoute,
           tusEndpoint,
-          webDavBasePath // WebDAV base path where the files will be uploaded to
+          webDavBasePath: unref(webDavBasePath) // WebDAV base path where the files will be uploaded to
         }
       })
     }
