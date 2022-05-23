@@ -10,19 +10,18 @@
         <name-and-copy v-if="quicklink" :link="quicklink" />
         <create-quick-link
           v-else
-          :password-enforced="passwordEnforced"
           :expiration-date="expirationDate"
           @createPublicLink="checkLinkToCreate"
         />
         <details-and-edit
           v-if="quicklink"
-          :is-folder-share="highlightedFile.isFolder"
-          :link="quicklink"
-          :modifiable="canEdit"
-          :can-rename="false"
-          :password-enforced="passwordEnforced"
-          :expiration-date="expirationDate"
           :available-role-options="availableRoleOptions"
+          :can-rename="false"
+          :expiration-date="expirationDate"
+          :is-folder-share="highlightedFile.isFolder"
+          :is-modifiable="canEdit"
+          :is-password-enforced="isPasswordEnforcedFor(quicklink)"
+          :link="quicklink"
           @updateLink="checkLinkToCreate"
           @removePublicLink="deleteLinkConfirmation"
         />
@@ -51,13 +50,13 @@
         >
           <name-and-copy :link="link" />
           <details-and-edit
-            :is-folder-share="highlightedFile.isFolder"
-            :link="link"
-            :modifiable="canEdit && !link.indirect"
-            :can-rename="true"
-            :password-enforced="passwordEnforced"
-            :expiration-date="expirationDate"
             :available-role-options="availableRoleOptions"
+            :can-rename="true"
+            :expiration-date="expirationDate"
+            :is-folder-share="highlightedFile.isFolder"
+            :is-modifiable="canEdit && !link.indirect"
+            :is-password-enforced="isPasswordEnforcedFor(link)"
+            :link="link"
             @updateLink="checkLinkToUpdate"
             @removePublicLink="deleteLinkConfirmation"
           />
@@ -167,13 +166,7 @@ export default defineComponent({
       const roles = LinkShareRoles.list(
         this.highlightedFile.isFolder,
         this.capabilities.files_sharing?.public?.can_edit
-      ).map((role) => {
-        return {
-          role,
-          name: role.name,
-          label: this.$gettext(role.label)
-        }
-      })
+      )
       // add empty permission link if oCIS for alias link
       return [
         // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
@@ -343,26 +336,28 @@ export default defineComponent({
       return l1Direct ? -1 : 1
     },
 
-    checkPasswordEnforcedFor(link) {
-      const currentRole = this.availableRoleOptions.find(({ role }) => {
-        return parseInt(link.permissions) === role.bitmask(false)
-      })
+    isPasswordEnforcedFor(link) {
+      const currentRole = LinkShareRoles.getByBitmask(
+        parseInt(link.permissions),
+        this.highlightedFile.isFolder
+      )
 
-      const canRead = currentRole.role.hasPermission(SharePermissions.read)
-      const canCreate = currentRole.role.hasPermission(SharePermissions.create)
-      const canDelete = currentRole.role.hasPermission(SharePermissions.delete)
+      const canRead = currentRole.hasPermission(SharePermissions.read)
+      const canUpdate = currentRole.hasPermission(SharePermissions.update)
+      const canCreate = currentRole.hasPermission(SharePermissions.create)
+      const canDelete = currentRole.hasPermission(SharePermissions.delete)
 
       if (this.passwordEnforced.read_only === true) {
-        return canRead && !canCreate && !canDelete
+        return canRead && !canUpdate && !canCreate && !canDelete
       }
       if (this.passwordEnforced.upload_only === true) {
-        return !canRead && canCreate && !canDelete
+        return !canRead && !canUpdate && canCreate && !canDelete
       }
       if (this.passwordEnforced.read_write === true) {
-        return canRead && canCreate && !canDelete
+        return canRead && canUpdate && canCreate && !canDelete
       }
       if (this.passwordEnforced.read_write_delete === true) {
-        return canRead && canCreate && canDelete
+        return canRead && canUpdate && canCreate && canDelete
       }
       return false
     },
@@ -371,7 +366,6 @@ export default defineComponent({
       this.checkLinkToCreate({
         link: {
           name: this.$gettext('Link'),
-          role: this.availableRoleOptions[0],
           permissions: 1,
           expiration: this.expirationDate.default,
           password: false
@@ -382,7 +376,7 @@ export default defineComponent({
     checkLinkToCreate({ link, onError = () => {} }) {
       const paramsToCreate = this.getParamsForLink(link)
 
-      if (!link.password && this.checkPasswordEnforcedFor(link)) {
+      if (this.isPasswordEnforcedFor(link)) {
         showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
           this.hideModal()
           this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
@@ -395,7 +389,7 @@ export default defineComponent({
     checkLinkToUpdate({ link, onSuccess = () => {} }) {
       const params = this.getParamsForLink(link)
 
-      if (!link.password && this.checkPasswordEnforcedFor(link)) {
+      if (!link.password && this.isPasswordEnforcedFor(link)) {
         showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
           this.hideModal()
           this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })

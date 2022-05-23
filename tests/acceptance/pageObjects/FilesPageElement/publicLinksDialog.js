@@ -311,7 +311,7 @@ module.exports = {
      *
      * @returns {*}
      */
-    addNewLink: async function () {
+    addNewLink: function () {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
