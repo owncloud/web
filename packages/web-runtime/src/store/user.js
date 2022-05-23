@@ -19,7 +19,8 @@ const state = {
   version: {},
   groups: [],
   userReady: false,
-  quota: null
+  quota: null,
+  language: null
 }
 
 const actions = {
@@ -116,6 +117,8 @@ const actions = {
           userEmail = user.email
         }
 
+        const language = user?.language
+
         context.commit('SET_USER', {
           id: login.id,
           uuid: graphUser?.data?.id || '',
@@ -124,7 +127,8 @@ const actions = {
           email: userEmail,
           token,
           isAuthenticated: true,
-          groups: userGroups
+          groups: userGroups,
+          language
         })
 
         if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
@@ -251,6 +255,7 @@ const mutations = {
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
     state.groups = user.groups
+    state.language = user.language
     sentrySetUser({ username: user.id })
   },
   SET_CAPABILITIES(state, data) {

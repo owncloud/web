@@ -1,0 +1,7 @@
+Enhancement: Load language from user object if given
+
+We've added the possibility to load the user's language from the use object if given,
+this allows us to take the configured language if oC10 is running as backend.
+
+https://github.com/owncloud/web/pull/7023
+https://github.com/owncloud/web/issues/6243
