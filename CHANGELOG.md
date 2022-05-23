@@ -53,6 +53,7 @@ Summary
 * Enhancement - Introduce quicklinks: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Introduce sharing jail: [#6593](https://github.com/owncloud/web/pull/6593)
 * Enhancement - Introduce user-management app: [#6673](https://github.com/owncloud/web/issues/6673)
+* Enhancement - Load language from user object if given: [#7023](https://github.com/owncloud/web/pull/7023)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
@@ -454,6 +455,14 @@ Details
    https://github.com/owncloud/web/issues/6675
    https://github.com/owncloud/web/issues/6676
    https://github.com/owncloud/web/issues/6677
+
+* Enhancement - Load language from user object if given: [#7023](https://github.com/owncloud/web/pull/7023)
+
+   We've added the possibility to load the user's language from the use object if given, this
+   allows us to take the configured language if oC10 is running as backend.
+
+   https://github.com/owncloud/web/issues/6243
+   https://github.com/owncloud/web/pull/7023
 
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 
