@@ -1,0 +1,5 @@
+Enhancement: CERN-specific help in shares tooltip
+
+We've added some CERN-related help strings to the share tooltip.
+
+https://github.com/owncloud/web/pull/7034

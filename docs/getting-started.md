@@ -57,6 +57,7 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
 - `options.sidebar.shares.showAllOnLoad` Sets the list of (link) shares list in the sidebar to be initially expanded (default is a collapsed state, only showing the first three shares).
 - `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`.
+- `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
 
 ### Sentry
 

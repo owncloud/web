@@ -17,6 +17,13 @@ export const shareInviteCollaboratorHelp = {
     $gettext('Invited persons can not see who else has access')
   ]
 }
+export const shareInviteCollaboratorHelpCern = {
+  list: [
+    $gettext(
+      'To search for service or secondary accounts prefix the username with "a:" (like "a:doe") and for guest accounts prefix the username with "l:" (like "l:doe")'
+    )
+  ]
+}
 export const shareSpaceAddMemberHelp = {
   text: $gettext('Add persons or groups as members to this Space. Members are allowed to:'),
   list: [
