@@ -101,7 +101,8 @@ import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -127,10 +128,16 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
+    const store = useStore()
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      graphClient
     }
   },
 
@@ -171,9 +178,28 @@ export default defineComponent({
 
   watch: {
     $route: {
-      handler: function (to, from) {
+      handler: async function (to, from) {
+        let storageId = this.user.id
+        console.log(this.user)
         const needsRedirectToHome =
           this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
+        const redirectWithStorageId = to.params.storageId === 'home'
+
+        if (redirectWithStorageId) {
+          if (this.hasShareJail) {
+            const drivesResponse = await this.graphClient.drives.listMyDrives(
+              '',
+              'driveType eq personal'
+            )
+
+            storageId = drivesResponse.data.value[0].id
+          }
+
+          await this.$router.replace({
+            to,
+            params: { ...to.params, storageId }
+          })
+        }
 
         if (needsRedirectToHome) {
           this.$router.replace(

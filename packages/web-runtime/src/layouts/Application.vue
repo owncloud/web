@@ -98,7 +98,7 @@ export default defineComponent({
         return []
       }
 
-      const { href: currentHref } = this.$router.resolve(this.$route)
+      const { route: currentRoute } = this.$router.resolve(this.$route)
       return items.map((item) => {
         const active = [item.route, ...(item.activeFor || [])]
           .filter(Boolean)
@@ -107,8 +107,8 @@ export default defineComponent({
               return true
             }
             try {
-              const comparativeHref = this.$router.resolve(currentItem).href
-              return currentHref.startsWith(comparativeHref)
+              const { route: comparativeRoute } = this.$router.resolve(currentItem)
+              return currentRoute.name === comparativeRoute.name
             } catch (e) {
               console.error(e)
               return false

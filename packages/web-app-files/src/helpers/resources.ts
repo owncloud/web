@@ -58,7 +58,9 @@ export function buildResource(resource): Resource {
   return {
     id,
     fileId: resource.fileInfo[DavProperty.FileId],
-    storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
+    storageId:
+      extractStorageId(resource.fileInfo[DavProperty.FileId]) ||
+      resource.fileInfo[DavProperty.OwnerId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,

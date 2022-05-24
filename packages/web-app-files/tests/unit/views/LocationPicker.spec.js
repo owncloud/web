@@ -188,7 +188,7 @@ describe('LocationPicker', () => {
           name: 'files-spaces-personal-home',
           params: {
             item: '/some/item',
-            storage: 'home'
+            storageId: 'home'
           }
         })
       })

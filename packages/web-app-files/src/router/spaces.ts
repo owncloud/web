@@ -9,15 +9,7 @@ type spaceTypes =
   | 'files-spaces-share'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
-  createLocation(
-    name,
-    {
-      params: {
-        ...(name === 'files-spaces-personal-home' && { storage: 'home' })
-      }
-    },
-    location
-  )
+  createLocation(name, location)
 
 export const locationSpacesProject = createLocationSpaces('files-spaces-project')
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
@@ -54,8 +46,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        // intentionally not `storageId`, yet, because we use an alphanumeric alias here instead of an id
-        path: 'personal/:storage/:item*',
+        path: 'personal/:storageId?/:item*',
         name: locationSpacesPersonalHome.name,
         component: components.Personal,
         meta: {

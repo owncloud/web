@@ -30,7 +30,10 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
 
         let resources = yield fetchResources(
           client,
-          buildWebDavFilesPath(ref.user.id, path || router.currentRoute.params.item || ''),
+          buildWebDavFilesPath(
+            router.currentRoute.params.storageId,
+            path || router.currentRoute.params.item || ''
+          ),
           DavProperties.Default
         )
         resources = resources.map(buildResource)
@@ -52,7 +55,7 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
 
         // fetch user quota
         ;(async () => {
-          const user = await client.users.getUser(ref.user.id)
+          const user = await client.users.getUser(router.currentRoute.params.storageId)
           store.commit('SET_QUOTA', user.quota)
         })()
       } catch (error) {
