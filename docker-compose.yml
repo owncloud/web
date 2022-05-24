@@ -16,6 +16,14 @@ services:
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
       IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
       OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
+      OCIS_LOG_PRETTY: "true"
+      OCIS_LOG_COLOR: "true"
+      OCIS_SYSTEM_USER_ID: "some-system-user-id-000-000000000000"
+      OCIS_ADMIN_USER_ID: "some-admin-user-id-0000-000000000000"
+      OCIS_SYSTEM_USER_API_KEY: "some-system-user-machine-auth-api-key"
+      GROUPS_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
+      USERS_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
+      AUTH_BASIC_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dist:/web/dist:ro
