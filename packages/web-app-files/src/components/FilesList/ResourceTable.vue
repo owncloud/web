@@ -60,6 +60,7 @@
         />
         <oc-button
           v-if="hasRenameAction(item)"
+          v-once
           class="resource-table-edit-name"
           appearance="raw"
           @click="openRenameDialog(item)"
@@ -73,7 +74,7 @@
       <slot name="status" :resource="item" />
     </template>
     <template #size="{ item }">
-      <oc-resource-size :size="item.size || Number.NaN" />
+      <oc-resource-size v-once :size="item.size || Number.NaN" />
     </template>
     <template #mdate="{ item }">
       <span
@@ -104,7 +105,7 @@
       />
     </template>
     <template #owner="{ item }">
-      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+      <oc-button v-once appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
           :items="item.owner"
@@ -114,7 +115,7 @@
       </oc-button>
     </template>
     <template #sharedWith="{ item }">
-      <oc-button appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
+      <oc-button v-once appearance="raw" variation="inverse" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
           :items="item.sharedWith"
@@ -126,7 +127,7 @@
       </oc-button>
     </template>
     <template #actions="{ item }">
-      <div class="resource-table-actions">
+      <div v-once class="resource-table-actions">
         <!-- @slot Add quick actions before the `context-menu / three dot` button in the actions column -->
         <slot name="quickActions" :resource="item" />
         <oc-button
