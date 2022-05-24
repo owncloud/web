@@ -10,6 +10,7 @@
           :full-path="file.webDavPath"
           :is-extension-displayed="areFileExtensionsShown"
           :is-path-displayed="false"
+          :truncate-name="false"
         />
       </h3>
       <p class="oc-my-rm">
