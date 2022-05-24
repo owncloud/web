@@ -33,6 +33,7 @@ Summary
 * Bugfix - Share hint with disabled federated sharing: [#5261](https://github.com/owncloud/web/issues/5261)
 * Bugfix - Inheritance of share permissions: [#7015](https://github.com/owncloud/web/pull/7015)
 * Bugfix - Share with people items overflows on long names: [#6984](https://github.com/owncloud/web/pull/6984)
+* Bugfix - Show message while upload size exceeds quota: [#7032](https://github.com/owncloud/web/pull/7032)
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 * Bugfix - Cover image and readme in spaces: [#7017](https://github.com/owncloud/web/pull/7017)
 * Bugfix - Spaces breadcrumbs not working correctly: [#6993](https://github.com/owncloud/web/pull/6993)
@@ -290,6 +291,14 @@ Details
 
    https://github.com/owncloud/web/issues/6004
    https://github.com/owncloud/web/pull/6984
+
+* Bugfix - Show message while upload size exceeds quota: [#7032](https://github.com/owncloud/web/pull/7032)
+
+   We fixed a bug where an upload silently failed if the upload size exceeds the space quota. It now
+   displays a detailed message instead
+
+   https://github.com/owncloud/web/issues/7025
+   https://github.com/owncloud/web/pull/7032
 
 * Bugfix - Space image not shown if file name contains blanks: [#6881](https://github.com/owncloud/web/pull/6881)
 
