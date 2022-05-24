@@ -59,6 +59,7 @@ Summary
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
+* Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
@@ -500,6 +501,16 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6837
+
+* Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
+
+   OCIS has introduced a new `productversion` field to announce it's correct version while
+   maintaining a fake 10.x.x version in the `versionstring` field to keep clients compatible.
+   We're using the new productversion field when it exists and use versionstring as a fallback.
+   Thus the backend product information prints the correct oCIS version now.
+
+   https://github.com/owncloud/ocis/pull/3805
+   https://github.com/owncloud/web/pull/7045
 
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 
