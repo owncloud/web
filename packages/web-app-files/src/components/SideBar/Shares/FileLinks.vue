@@ -334,7 +334,7 @@ export default defineComponent({
         return !canRead && !canUpdate && canCreate && !canDelete
       }
       if (this.passwordEnforced.read_write === true) {
-        return canRead && canUpdate && canCreate && !canDelete
+        return canRead && !canUpdate && canCreate && !canDelete
       }
       if (this.passwordEnforced.read_write_delete === true) {
         return canRead && canUpdate && canCreate && canDelete
