@@ -8,7 +8,6 @@ const state = {
   message: '',
   cancelText: '',
   confirmText: '',
-  buttonSecondary: false,
   buttonSecondaryText: '',
   // Input values
   confirmDisabled: false,
@@ -19,7 +18,6 @@ const state = {
   inputPlaceholder: '',
   inputLabel: '',
   inputError: '',
-  checkbox: false,
   checkboxLabel: '',
   // Events
   onCancel: emptyReturn,
@@ -54,9 +52,7 @@ const mutations = {
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
-    state.buttonSecondary = modal.buttonSecondary
     state.buttonSecondaryText = modal.buttonSecondaryText
-    state.checkbox = modal.checkbox || false
     state.checkboxLabel = modal.checkboxLabel || ''
     state.cancelText = modal.cancelText || 'Cancel'
     state.confirmText = modal.confirmText || 'Confirm'

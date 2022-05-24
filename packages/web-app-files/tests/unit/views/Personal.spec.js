@@ -5,6 +5,7 @@ import Personal from '@files/src/views/Personal.vue'
 import MixinAccessibleBreadcrumb from '@files/src/mixins/accessibleBreadcrumb'
 import { accentuatesTableRowTest } from './views.shared'
 import { createLocationSpaces } from '../../../src/router'
+import { move } from '@files/src/helpers/resource'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -39,6 +40,8 @@ localVue.prototype.$client = {
 }
 
 jest.unmock('axios')
+
+const copyMove = { move }
 
 const stubs = {
   'app-bar': true,
@@ -101,41 +104,21 @@ const resources = [...resourcesFiles, ...resourcesFolders]
 describe('Personal view', () => {
   describe('file move with drag & drop', () => {
     it('should exit if target is also selected', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
+      const spyOnGetFolderItems = jest.spyOn(copyMove, 'move')
       const wrapper = createWrapper([resourceForestJpg, resourcePdfsFolder])
       await wrapper.vm.fileDropped(resourcePdfsFolder.id)
       expect(spyOnGetFolderItems).not.toBeCalled()
       spyOnGetFolderItems.mockReset()
     })
     it('should exit if target is not a folder', async () => {
-      const spyOnGetFolderItems = jest.spyOn(Personal.methods, 'fetchResources')
+      const spyOnGetFolderItems = jest.spyOn(copyMove, 'move')
       const wrapper = createWrapper([resourceDocumentsFolder])
       await wrapper.vm.fileDropped(resourceForestJpg.id)
       expect(spyOnGetFolderItems).not.toBeCalled()
       spyOnGetFolderItems.mockReset()
     })
-    it('should not move file if resource is already in target', async () => {
-      const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'fetchResources')
-        .mockResolvedValueOnce([resourceDocumentsFolder])
-      const spyOnMoveFiles = jest.spyOn(localVue.prototype.$client.files, 'move')
-
-      const wrapper = createWrapper([resourceDocumentsFolder])
-      const spyOnshowMessage = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.fileDropped(resourcePdfsFolder.id)
-      expect(spyOnMoveFiles).not.toBeCalled()
-      expect(spyOnshowMessage).toBeCalledWith({
-        status: 'danger',
-        title: 'Failed to move "Documents"'
-      })
-
-      spyOnMoveFiles.mockReset()
-      spyOnGetFolderItems.mockReset()
-    })
     it('should move a file', async () => {
-      const spyOnGetFolderItems = jest
-        .spyOn(Personal.methods, 'fetchResources')
-        .mockResolvedValueOnce([])
+      const spyOnGetFolderItems = jest.spyOn(copyMove, 'move').mockResolvedValueOnce([])
       const spyOnMoveFilesMove = jest
         .spyOn(localVue.prototype.$client.files, 'move')
         .mockImplementation()

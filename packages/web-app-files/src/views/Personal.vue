@@ -221,14 +221,6 @@ export default defineComponent({
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
 
-    async fetchResources(path, properties) {
-      try {
-        return await this.$client.files.list(path, 1, properties)
-      } catch (error) {
-        console.error(error)
-      }
-    },
-
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
@@ -241,7 +233,9 @@ export default defineComponent({
         this.$client,
         this.createModal,
         this.hideModal,
-        this.showMessage
+        this.showMessage,
+        this.$gettext,
+        this.$gettextInterpolate
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)

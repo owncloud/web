@@ -4,7 +4,6 @@ import { join } from 'path'
 export enum ResolveStrategy {
   SKIP,
   REPLACE,
-  MERGE,
   KEEP_BOTH
 }
 export interface ResolveConflict {
@@ -16,19 +15,35 @@ export interface FileConflict {
   strategy?: ResolveStrategy
 }
 
-const resolveFileExists = (createModal, hideModal, resource, conflictCount) => {
+export const resolveFileExists = (
+  createModal,
+  hideModal,
+  resource,
+  conflictCount,
+  $gettext,
+  $gettextInterpolate,
+  isSingleConflict
+) => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
     const modal = {
       variation: 'danger',
-      title: 'File already exists',
-      message: `Resource with name ${resource.name} already exists.`,
-      cancelText: 'Skip',
-      confirmText: 'Replace',
-      buttonSecondary: true,
-      buttonSecondaryText: resource.isFolder ? 'Merge' : 'Replace',
-      checkbox: true,
-      checkboxLabel: `Do this for all ${conflictCount} conflicts`,
+      title: $gettext('File already exists'),
+      message: $gettextInterpolate(
+        $gettext('Resource with name %{name} already exists.'),
+        { name: resource.name },
+        true
+      ),
+      cancelText: $gettext('Skip'),
+      confirmText: $gettext('Keep both'),
+      buttonSecondaryText: $gettext('Replace'),
+      checkboxLabel: isSingleConflict
+        ? ''
+        : $gettextInterpolate(
+            $gettext('Do this for all %{count} conflicts'),
+            { count: conflictCount },
+            true
+          ),
       onCheckboxValueChanged: (value) => {
         doForAllConflicts = value
       },
@@ -38,25 +53,29 @@ const resolveFileExists = (createModal, hideModal, resource, conflictCount) => {
       },
       onConfirmSecondary: () => {
         hideModal()
-        const strategy = resource.isFolder ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
+        const strategy = ResolveStrategy.REPLACE
         resolve({ strategy, doForAllConflicts } as ResolveConflict)
       },
       onConfirm: () => {
         hideModal()
-        resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts } as ResolveConflict)
+        resolve({ strategy: ResolveStrategy.KEEP_BOTH, doForAllConflicts } as ResolveConflict)
       }
     }
     createModal(modal)
   })
 }
-const resolveAllConflicts = async (
+export const resolveAllConflicts = async (
   resourcesToMove,
   targetFolder,
   client,
   createModal,
-  hideModal
+  hideModal,
+  $gettext,
+  $gettextInterpolate,
+  resolveFileExistsMethod
 ) => {
-  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 50)
+  // if we implement MERGE, we need to use 'infinity' instead of 1
+  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
   const targetPath = targetFolder.path
   const index = targetFolder.webDavPath.lastIndexOf(targetPath)
   const webDavPrefix = targetFolder.webDavPath.substring(0, index)
@@ -87,11 +106,14 @@ const resolveAllConflicts = async (
 
     // Resolve next conflict
     const conflictsLeft = allConflicts.length - count
-    const result: ResolveConflict = await resolveFileExists(
+    const result: ResolveConflict = await resolveFileExistsMethod(
       createModal,
       hideModal,
       conflict.resource,
-      conflictsLeft
+      conflictsLeft,
+      $gettext,
+      $gettextInterpolate,
+      allConflicts.length === 1
     )
     conflict.strategy = result.strategy
     resolvedConflicts.push(conflict)
@@ -104,20 +126,38 @@ const resolveAllConflicts = async (
   }
   return resolvedConflicts
 }
-const showResultMessage = async (errors, movedResources, showMessage) => {
+export const showResultMessage = async (
+  errors,
+  movedResources,
+  showMessage,
+  $gettext,
+  $gettextInterpolate
+) => {
   if (errors.length === 0) {
     const count = movedResources.length
-    const title = `${count} item was moved successfully`
+    const title = $gettextInterpolate(
+      $gettext('%{count} item was moved successfully'),
+      { count },
+      true
+    )
     showMessage({
       title,
       status: 'success'
     })
     return
   }
-  const title =
-    errors.length === 1
-      ? `Failed to move "${errors[0]?.resourceName}`
-      : `Failed to move ${errors.length} resources`
+  let title = $gettextInterpolate(
+    $gettext('Failed to move %{count} resources'),
+    { count: errors.length },
+    true
+  )
+  if (errors.length === 1) {
+    title = $gettextInterpolate(
+      $gettext('Failed to move "%{name}"'),
+      { name: errors[0]?.resourceName },
+      true
+    )
+  }
   showMessage({
     title,
     status: 'danger'
@@ -129,7 +169,9 @@ export const move = async (
   client,
   createModal,
   hideModal,
-  showMessage
+  showMessage,
+  $gettext,
+  $gettextInterpolate
 ) => {
   const errors = []
   const resolvedConflicts = await resolveAllConflicts(
@@ -137,23 +179,35 @@ export const move = async (
     targetFolder,
     client,
     createModal,
-    hideModal
+    hideModal,
+    $gettext,
+    $gettextInterpolate,
+    resolveFileExists
   )
   const movedResources = []
 
   for (const resource of resourcesToMove) {
     const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
+    let targetName = resource.name
+    let overwriteTarget = false
     if (hasConflict) {
       const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)?.strategy
       if (resolveStrategy === ResolveStrategy.SKIP) {
         continue
       }
       if (resolveStrategy === ResolveStrategy.REPLACE) {
-        await client.files.delete(join(targetFolder.webDavPath, resource.name))
+        overwriteTarget = true
+      }
+      if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
+        targetName = $gettextInterpolate($gettext('%{name} copy'), { name: resource.name }, true)
       }
     }
     try {
-      await client.files.move(resource.webDavPath, join(targetFolder.webDavPath, resource.name))
+      await client.files.move(
+        resource.webDavPath,
+        join(targetFolder.webDavPath, targetName),
+        overwriteTarget
+      )
       movedResources.push(resource)
     } catch (error) {
       console.error(error)
@@ -161,6 +215,6 @@ export const move = async (
       errors.push(error)
     }
   }
-  showResultMessage(errors, movedResources, showMessage)
+  showResultMessage(errors, movedResources, showMessage, $gettext, $gettextInterpolate)
   return movedResources
 }
