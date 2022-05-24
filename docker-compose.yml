@@ -5,25 +5,45 @@ services:
     ports:
       - 9200:9200
     environment:
+      # OCIS
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
-      STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
-      STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
       OCIS_INSECURE: "${OCIS_INSECURE:-true}"
+      OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
+      OCIS_LOG_PRETTY: "${OCIS_LOG_PRETTY:-true}"
+      OCIS_LOG_COLOR: "${OCIS_LOG_COLOR:-true}"
+      OCIS_SYSTEM_USER_ID: "${OCIS_SYSTEM_USER_ID:-some-system-user-id-000-000000000000}"
+      OCIS_ADMIN_USER_ID: "${OCIS_ADMIN_USER_ID:-some-admin-user-id-0000-000000000000}"
+      OCIS_SYSTEM_USER_API_KEY: "${OCIS_SYSTEM_USER_API_KEY:-some-system-user-machine-auth-api-key}"
+      OCIS_JWT_SECRET: "${OCIS_JWT_SECRET:-some-ocis-jwt-secret}"
+      OCIS_MACHINE_AUTH_API_KEY: "${OCIS_MACHINE_AUTH_API_KEY:-some-ocis-machine-auth-api-key}"
+
+      # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
-      IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
-      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
+
+      # IDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
       IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
-      OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
-      OCIS_LOG_PRETTY: "true"
-      OCIS_LOG_COLOR: "true"
-      OCIS_SYSTEM_USER_ID: "some-system-user-id-000-000000000000"
-      OCIS_ADMIN_USER_ID: "some-admin-user-id-0000-000000000000"
-      OCIS_SYSTEM_USER_API_KEY: "some-system-user-machine-auth-api-key"
-      GROUPS_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
-      USERS_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
-      AUTH_BASIC_LDAP_BIND_PASSWORD: "some-ldap-reva-password"
+      IDM_SVC_PASSWORD: "${IDM_SVC_PASSWORD:-some-ldap-idm-password}"
+      IDM_REVASVC_PASSWORD: "${IDM_REVASVC_PASSWORD:-some-ldap-reva-password}"
+      IDM_IDPSVC_PASSWORD: "${IDM_IDPSVC_PASSWORD:-some-ldap-idp-password}"
+
+      # IDP
+      IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
+      IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
+
+      # Storage
+      STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
+      STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
+      STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
+
+      # LDAP
+      GROUPS_LDAP_BIND_PASSWORD: "${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      USERS_LDAP_BIND_PASSWORD: "${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      AUTH_BASIC_LDAP_BIND_PASSWORD: "${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
+      GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}"
+
+      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
       - ./dist:/web/dist:ro
