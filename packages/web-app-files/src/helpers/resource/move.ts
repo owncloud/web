@@ -2,7 +2,7 @@ import { Resource } from './index'
 import { join } from 'path'
 
 export enum ResolveStrategy {
-  CANCEL,
+  SKIP,
   REPLACE,
   MERGE,
   KEEP_BOTH
@@ -16,15 +16,17 @@ export interface FileConflict {
   strategy?: ResolveStrategy
 }
 
-const resolveFileExists = (createModal, hideModal, resourceName, conflictCount) => {
+const resolveFileExists = (createModal, hideModal, resource, conflictCount) => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
     const modal = {
       variation: 'danger',
       title: 'File already exists',
-      message: `Resource with name ${resourceName} already exists.`,
-      cancelText: 'Cancel',
+      message: `Resource with name ${resource.name} already exists.`,
+      cancelText: 'Skip',
       confirmText: 'Replace',
+      buttonSecondary: true,
+      buttonSecondaryText: resource.isFolder ? 'Merge' : 'Replace',
       checkbox: true,
       checkboxLabel: `Do this for all ${conflictCount} conflicts`,
       onCheckboxValueChanged: (value) => {
@@ -32,7 +34,12 @@ const resolveFileExists = (createModal, hideModal, resourceName, conflictCount) 
       },
       onCancel: () => {
         hideModal()
-        resolve({ strategy: ResolveStrategy.CANCEL, doForAllConflicts } as ResolveConflict)
+        resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts } as ResolveConflict)
+      },
+      onConfirmSecondary: () => {
+        hideModal()
+        const strategy = resource.isFolder ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
+        resolve({ strategy, doForAllConflicts } as ResolveConflict)
       },
       onConfirm: () => {
         hideModal()
@@ -83,7 +90,7 @@ const resolveAllConflicts = async (
     const result: ResolveConflict = await resolveFileExists(
       createModal,
       hideModal,
-      conflict.resource.name,
+      conflict.resource,
       conflictsLeft
     )
     conflict.strategy = result.strategy
@@ -97,7 +104,7 @@ const resolveAllConflicts = async (
   }
   return resolvedConflicts
 }
-const showResultMessage = async(errors, movedResources, showMessage) => {
+const showResultMessage = async (errors, movedResources, showMessage) => {
   if (errors.length === 0) {
     const count = movedResources.length
     const title = `${count} item was moved successfully`
@@ -105,19 +112,12 @@ const showResultMessage = async(errors, movedResources, showMessage) => {
       title,
       status: 'success'
     })
-    return 
-  }
-
-  if (errors.length === 1) {
-    const title = `Failed to move "${errors[0]?.resourceName}`
-    showMessage({
-      title,
-      status: 'danger'
-    })
     return
   }
-
-  const title = `Failed to move ${errors.length} resources`
+  const title =
+    errors.length === 1
+      ? `Failed to move "${errors[0]?.resourceName}`
+      : `Failed to move ${errors.length} resources`
   showMessage({
     title,
     status: 'danger'
@@ -145,7 +145,7 @@ export const move = async (
     const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
     if (hasConflict) {
       const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)?.strategy
-      if (resolveStrategy === ResolveStrategy.CANCEL) {
+      if (resolveStrategy === ResolveStrategy.SKIP) {
         continue
       }
       if (resolveStrategy === ResolveStrategy.REPLACE) {

@@ -19,6 +19,8 @@
       :input-selection-range="modal.inputSelectionRange"
       :input-description="modal.inputDescription"
       :input-error="modal.inputError"
+      :button-secondary="modal.buttonSecondary"
+      :button-secondary-text="modal.buttonSecondaryText"
       :button-cancel-text="modal.cancelText"
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
@@ -28,6 +30,7 @@
       @confirm="modal.onConfirm"
       @input="modal.onInput"
       @checkbox-changed="modal.onCheckboxValueChanged"
+      @confirm-secondary="modal.onConfirmSecondary"
       @mounted="focusModal"
       @beforeDestroy="focusModal"
     />
