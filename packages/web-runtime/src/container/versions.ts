@@ -6,12 +6,12 @@ export const getWebVersion = (): string => {
 }
 
 export const getBackendVersion = ({ store }: { store: Store<unknown> }): string => {
-  const backendVersion = store.getters.user.version
-  if (!backendVersion || !backendVersion.string) {
+  const backendStatus = store.getters.capabilities?.core?.status
+  if (!backendStatus || !backendStatus.versionstring) {
     return undefined
   }
-  const product = backendVersion.product || 'ownCloud'
-  const version = backendVersion.string
-  const edition = backendVersion.edition
+  const product = backendStatus.product || 'ownCloud'
+  const version = backendStatus.productversion || backendStatus.versionstring
+  const edition = backendStatus.edition
   return `${product} ${version} ${edition}`
 }

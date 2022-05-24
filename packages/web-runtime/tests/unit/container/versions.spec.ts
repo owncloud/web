@@ -21,13 +21,13 @@ describe('collect version information', () => {
     it('returns undefined when the backend version object has no "string" field', () => {
       const store = versionStore({
         product: 'ownCloud',
-        string: undefined
+        versionstring: undefined
       })
       expect(getBackendVersion({ store })).toBeUndefined()
     })
     it('falls back to "ownCloud" as a product when none is defined', () => {
       const store = versionStore({
-        string: '10.8.0',
+        versionstring: '10.8.0',
         edition: 'Community'
       })
       expect(getBackendVersion({ store })).toBe('ownCloud 10.8.0 Community')
@@ -35,10 +35,19 @@ describe('collect version information', () => {
     it('provides the backend version as concatenation of product, version and edition', () => {
       const store = versionStore({
         product: 'oCIS',
-        string: '1.16.0',
+        versionstring: '1.16.0',
         edition: 'Reva'
       })
       expect(getBackendVersion({ store })).toBe('oCIS 1.16.0 Reva')
+    })
+    it('prefers the productversion over versionstring field if both are provided', () => {
+      const store = versionStore({
+        product: 'oCIS',
+        versionstring: '10.8.0',
+        productversion: '2.0.0',
+        edition: 'Community'
+      })
+      expect(getBackendVersion({ store })).toBe('oCIS 2.0.0 Community')
     })
   })
 })
@@ -46,7 +55,13 @@ describe('collect version information', () => {
 const versionStore = (version: any): Store<any> => {
   return new Vuex.Store({
     getters: {
-      user: jest.fn(() => ({ version }))
+      capabilities: jest.fn(() => ({
+        core: {
+          status: {
+            ...version
+          }
+        }
+      }))
     }
   })
 }
