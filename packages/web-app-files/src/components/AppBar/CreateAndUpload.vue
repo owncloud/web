@@ -103,6 +103,7 @@
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
+import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
@@ -168,7 +169,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'publicLinkPassword', 'spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {
@@ -247,7 +248,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadIndicators']),
-    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
+    ...mapActions([
+      'openFile',
+      'showMessage',
+      'createModal',
+      'setModalInputErrorMessage',
+      'hideModal'
+    ]),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
@@ -645,6 +652,12 @@ export default defineComponent({
     onFilesSelected(files: File[]) {
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
+      const quotaExceeded = this.checkQuotaExceeded(uppyResources)
+
+      if (quotaExceeded) {
+        return this.$uppyService.clearInputs()
+      }
+
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
@@ -676,6 +689,69 @@ export default defineComponent({
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
+    },
+
+    checkQuotaExceeded(uppyResources: UppyResource[]) {
+      let quotaExceeded = false
+
+      const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
+        let targetUploadSpace
+
+        if (uppyResource.meta.route.params?.storage === 'home') {
+          targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
+        } else {
+          targetUploadSpace = this.spaces.find(
+            (space) => space.id === uppyResource.meta.route?.params?.storageId
+          )
+        }
+
+        if (!targetUploadSpace) {
+          return acc
+        }
+
+        const matchingMappingRecord = acc.find(
+          (mappingRecord) => mappingRecord.space.id === targetUploadSpace.id
+        )
+
+        if (!matchingMappingRecord) {
+          acc.push({
+            space: targetUploadSpace,
+            uploadSize: uppyResource.data.size
+          })
+          return acc
+        }
+
+        matchingMappingRecord.uploadSize += uppyResource.data.size
+
+        return acc
+      }, [])
+
+      uploadSizeSpaceMapping.forEach(({ space, uploadSize }) => {
+        if (space.spaceQuota.remaining && space.spaceQuota.remaining < uploadSize) {
+          let spaceName = space.name
+
+          if (space.driveType === 'personal') {
+            spaceName = this.$gettext('Personal')
+          }
+
+          const translated = this.$gettext(
+            'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files'
+          )
+
+          this.showMessage({
+            title: this.$gettext('Not enough quota'),
+            desc: this.$gettextInterpolate(translated, {
+              spaceName,
+              missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
+            }),
+            status: 'danger'
+          })
+
+          quotaExceeded = true
+        }
+      })
+
+      return quotaExceeded
     },
 
     async handleUppyFileUpload(files: UppyResource[]) {
@@ -719,7 +795,10 @@ export default defineComponent({
         message,
         cancelText: this.$gettext('Cancel'),
         confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
-        onCancel: this.hideModal,
+        onCancel: () => {
+          this.$uppyService.clearInputs()
+          this.hideModal()
+        },
         onConfirm: () => {
           this.hideModal()
           this.handleUppyFileUpload(files)

@@ -163,6 +163,54 @@ describe('CreateAndUpload component', () => {
       }
     )
   })
+
+  describe('method "checkQuotaExceeded"', () => {
+    it('should be true if space quota exceeded', () => {
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      expect(
+        wrapper.vm.checkQuotaExceeded([
+          {
+            data: {
+              size: 1001
+            },
+            meta: {
+              route: {
+                params: {
+                  storage: 'home'
+                }
+              }
+            }
+          }
+        ])
+      ).toBeTruthy()
+      expect(showMessageStub).toHaveBeenCalledTimes(1)
+    })
+
+    it('should be false if space quota not exceeded', () => {
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      expect(
+        wrapper.vm.checkQuotaExceeded([
+          {
+            data: {
+              size: 999
+            },
+            meta: {
+              route: {
+                params: {
+                  storage: 'home'
+                }
+              }
+            }
+          }
+        ])
+      ).toBeFalsy()
+      expect(showMessageStub).toHaveBeenCalledTimes(0)
+    })
+  })
 })
 
 function getFileHandlerSelector(extension) {
@@ -224,6 +272,11 @@ function getShallowWrapper(route = {}, store = {}) {
 
 function createStore(state = { currentFolder: {} }, fileHandlers = []) {
   return new Vuex.Store({
+    actions: {
+      createModal: jest.fn(),
+      hideModal: jest.fn(),
+      showMessage: jest.fn()
+    },
     getters: {
       user: function () {
         return { id: 'alice' }
@@ -238,10 +291,27 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
           currentFolder: {
             path: '/'
           },
+          spaces: [
+            {
+              id: '1',
+              name: 'admin',
+              driveType: 'personal'
+            }
+          ],
           ...state
         },
         getters: {
-          currentFolder: () => state.currentFolder
+          currentFolder: () => state.currentFolder,
+          spaces: () => [
+            {
+              id: '1',
+              name: 'admin',
+              driveType: 'personal',
+              spaceQuota: {
+                remaining: 1000
+              }
+            }
+          ]
         }
       }
     }

@@ -1,0 +1,6 @@
+Bugfix: Show message while upload size exceeds quota
+
+We fixed a bug where an upload silently failed if the upload size exceeds the space quota. It now displays a detailed message instead
+
+https://github.com/owncloud/web/pull/7032
+https://github.com/owncloud/web/issues/7025

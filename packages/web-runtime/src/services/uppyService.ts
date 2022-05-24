@@ -201,15 +201,11 @@ export class UppyService {
       result.failed.forEach((file) => {
         this.publish('uploadError', file)
       })
-      this.uploadInputs.forEach((item) => {
-        item.value = null
-      })
+      this.clearInputs()
     })
     this.uppy.on('file-removed', () => {
       this.publish('uploadRemoved')
-      this.uploadInputs.forEach((item) => {
-        item.value = null
-      })
+      this.clearInputs()
     })
     this.uppy.on('file-added', (file) => {
       this.publish('fileAdded')
@@ -256,6 +252,12 @@ export class UppyService {
           console.error(err)
         }
       }
+    })
+  }
+
+  clearInputs() {
+    this.uploadInputs.forEach((item) => {
+      item.value = null
     })
   }
 }
