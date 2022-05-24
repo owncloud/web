@@ -810,16 +810,18 @@ export default defineComponent({
 }
 
 .hoverable-quick-actions.files-table {
-  tr {
-    .resource-table-edit-name,
-    .resource-table-actions div:first-child {
-      visibility: hidden;
+  @media (pointer: fine) {
+    tr {
+      .resource-table-edit-name,
+      .resource-table-actions div:first-child {
+        visibility: hidden;
+      }
     }
-  }
-  tr:hover {
-    .resource-table-edit-name,
-    .resource-table-actions div:first-child {
-      visibility: visible;
+    tr:hover {
+      .resource-table-edit-name,
+      .resource-table-actions div:first-child {
+        visibility: visible;
+      }
     }
   }
 }

@@ -42,6 +42,7 @@ const state = {
     disablePreviews: false,
     displayResourcesLazy: true,
     homeFolder: '',
+    hoverableQuickActions: false,
     sidebar: {
       shares: {
         showAllOnLoad: false
