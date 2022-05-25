@@ -1,4 +1,4 @@
-import { Log, User, UserManager, WebStorageStateStore } from 'oidc-client'
+import { Log, User, UserManager, WebStorageStateStore } from 'oidc-client-ts'
 import { buildUrl } from '../router'
 
 export function initVueAuthenticate(config) {
