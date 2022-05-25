@@ -67,6 +67,7 @@ Summary
 * Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
+* Enhancement - Prevent the resource name in the sidebar from being truncated: [#6776](https://github.com/owncloud/web/issues/6776)
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
@@ -572,6 +573,14 @@ Details
    https://github.com/owncloud/web/issues/5031
    https://github.com/owncloud/web/issues/6268
    https://github.com/owncloud/web/pull/6202
+
+* Enhancement - Prevent the resource name in the sidebar from being truncated: [#6776](https://github.com/owncloud/web/issues/6776)
+
+   We now prevent the resource name in the right sidebar from being truncated to ensure that the
+   full name can be read at any time.
+
+   https://github.com/owncloud/web/issues/6776
+   https://github.com/owncloud/web/pull/7052
 
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 
