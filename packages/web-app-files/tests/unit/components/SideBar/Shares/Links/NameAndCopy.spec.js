@@ -78,6 +78,9 @@ function getWrapper(store) {
     store,
     propsData: {
       link: exampleLink
+    },
+    directives: {
+      'oc-tooltip': jest.fn()
     }
   })
 }
