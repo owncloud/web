@@ -77,10 +77,10 @@ const actions = {
     }
   },
   async initAuth(context, payload = { autoRedirect: false }) {
-    const init = async (client, token, doLogin = true) => {
-      const instance = context.rootState.config.server || window.location.origin
+    const init = async (sdkClient, token, fetchUserInfo = true) => {
+      const serverUrl = context.rootState.config.server || window.location.origin
       const options = {
-        baseUrl: instance,
+        baseUrl: serverUrl,
         auth: {
           bearer: token
         },
@@ -96,11 +96,11 @@ const actions = {
         }
       }
 
-      client.init(options)
-      if (doLogin) {
+      sdkClient.init(options)
+      if (fetchUserInfo) {
         let login
         try {
-          login = await client.login()
+          login = await sdkClient.login()
         } catch (e) {
           console.warn('Seems that your token is invalid. Error:', e)
           context.dispatch('cleanUpLoginState')
@@ -108,13 +108,13 @@ const actions = {
           return
         }
 
-        const userGroups = await client.users.getUserGroups(login.id)
-        const user = await client.users.getUser(login.id)
+        const userGroups = await sdkClient.users.getUserGroups(login.id)
+        const user = await sdkClient.users.getUser(login.id)
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
         let graphUser
         if (context.state.capabilities.spaces?.enabled) {
-          const graphClient = clientService.graphAuthenticated(instance, token)
+          const graphClient = clientService.graphAuthenticated(serverUrl, token)
           graphUser = await graphClient.users.getMe()
         }
 
@@ -156,7 +156,6 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) {
       vueAuthInstance = initVueAuthenticate(context.rootState.config)
-      const client = this._vm.$client
       vueAuthInstance.events().addAccessTokenExpired(function () {
         console.log('AccessToken Expired：', arguments)
       })
@@ -167,7 +166,7 @@ const actions = {
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
-        init(client, user.access_token, false)
+        init(this._vm.$client, user.access_token, false)
       })
       vueAuthInstance.events().addUserUnloaded(() => {
         console.log('user unloaded…')
