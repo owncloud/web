@@ -774,7 +774,7 @@ export default defineComponent({
 .resource-table {
   &-resource-wrapper {
     &-limit-max-width {
-      max-width: 90%;
+      max-width: calc(100% - var(--oc-space-medium));
     }
 
     &:hover > .resource-table-edit-name {
