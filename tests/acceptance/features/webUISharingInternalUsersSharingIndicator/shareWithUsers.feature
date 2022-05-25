@@ -104,8 +104,8 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
     And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has shared folder "Shares/simple-folder/simple-empty-folder" with user "Carol" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
+    And user "Brian" has logged in using the webUI
+    When the user opens folder "Shares" using the webUI
     And the user opens the sharing sidebar for folder "simple-folder"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |

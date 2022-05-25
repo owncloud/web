@@ -101,10 +101,13 @@ Feature: Search
 
 
   Scenario: Search for a re-shared file
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
+    And the administrator has set the default folder for received shares to "Shares" in the server
+    And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Brian" has shared file "/lorem.txt" with user "user0" in the server
-    And user "user0" has shared file "/lorem.txt" with user "Alice" in the server
+    And user "user0" has accepted the share "Shares//lorem.txt" offered by user "Brian" in the server
+    And user "user0" has shared file "/Shares/lorem.txt" with user "Alice" in the server
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -161,7 +164,7 @@ Feature: Search
     Then folder "not deleted folder" should be listed on the webUI
     And folder "deleted folder" should not be listed on the webUI
 
-  
+
   Scenario: Search for favorited folder in favorites page
     Given user "Alice" has created folder "favorite folder" in the server
     And user "Alice" has created folder "not favorite folder" in the server

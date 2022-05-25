@@ -8,10 +8,6 @@ Level-3 headings should be used for the references to the relevant issues. Inclu
 
 Other free text and markdown formatting can be used elsewhere in the document if needed. But if you want to explain something about the issue, then please post that in the issue itself.
 
-### [File link in notifications seems to not work](https://github.com/owncloud/web/issues/5227)
--   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
--   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
-
 ### [impossible to navigate into a folder in the trashbin](https://github.com/owncloud/web/issues/1725)
 -   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L29)
 

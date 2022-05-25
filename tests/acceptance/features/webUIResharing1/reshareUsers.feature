@@ -141,7 +141,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 
-  @issue-5461
+  @skipOnOCIS
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -162,7 +162,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | share, delete, read   |
 
-  @issue-5461
+  @skipOnOCIS
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server

@@ -8,11 +8,10 @@ Level-3 headings should be used for the references to the relevant issues. Inclu
 
 Other free text and markdown formatting can be used elsewhere in the document if needed. But if you want to explain something about the issue, then please post that in the issue itself.
 
-### [Endless loading when opening a file in section "Shared with me" or "Shared with other"](https://github.com/owncloud/web/issues/5324)
--   [webUIPreview/mediaPreview.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L143)
--   [webUIPreview/mediaPreview.feature:152](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L152)
+### [Preview from share-with-others page doesn't work in oc10](https://github.com/owncloud/web/issues/7049)
+- [webUIPreview/mediaPreview.feature:143](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L143)
 
-### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI](https://github.com/owncloud/web/issues/4743)
+### [user session of a blocked user is not cleared properly](https://github.com/owncloud/web/issues/4795)
 -   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L20)
 
 ### [Comments in sidebar](https://github.com/owncloud/web/issues/1158)
@@ -41,10 +40,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUITags/createTags.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L51)
 -   [webUITags/createTags.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L61)
 -   [webUITags/createTags.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITags/createTags.feature#L79)
-
-### [File link in notifications seems to not work](https://github.com/owncloud/web/issues/5227)
--   [webUISharingNotifications/notificationLink.feature:18](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotifications/notificationLink.feature#L18)
--   [webUISharingNotificationsToRoot/notificationLink.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/notificationLink.feature#L17)
 
 ### [impossible to navigate into a folder in the trashbin](https://github.com/owncloud/web/issues/1725)
 -   [webUITrashbinDelete/trashbinDelete.feature:29](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L29)
@@ -121,7 +116,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIWebdavLockProtection/upload.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L90)
 -   [webUIWebdavLockProtection/upload.feature:91](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/upload.feature#L91)
 
-### [Uploading a file with a name that already exists is confusing](https://github.com/owncloud/web/issues/5106)
+### [Upload of folder with same name shows error](https://github.com/owncloud/web/issues/6996)
 -   [webUIUpload/upload.feature:129](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L129)
 -   [webUIUpload/upload.feature:142](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L142)
 -   [webUIUpload/upload.feature:159](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L159)
