@@ -1,0 +1,6 @@
+Bugfix: Prevent rename button from getting covered
+
+We've fixed a bug where the rename button next to the file name would get covered if there is not enough space available.
+
+https://github.com/owncloud/web/pull/7061
+https://github.com/owncloud/web/issues/7007
