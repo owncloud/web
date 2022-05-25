@@ -1,12 +1,12 @@
 import get from 'lodash-es/get'
 import isEmpty from 'lodash-es/isEmpty'
-import initVueAuthenticate from '../services/auth'
+import { UserManager } from '../services/auth'
 import { router } from '../router'
 import { clientService } from 'web-pkg/src/services'
 
 import { setUser as sentrySetUser } from '@sentry/browser'
 
-let vueAuthInstance
+let userManager
 
 const state = {
   token: '',
@@ -35,8 +35,7 @@ const actions = {
     context.dispatch('clearDynamicNavItems')
 
     if (options.clearOIDCLoginState) {
-      // clear oidc client state
-      vueAuthInstance.clearLoginState()
+      return userManager.removeUser()
     }
   },
   async logout(context) {
@@ -57,10 +56,10 @@ const actions = {
         router.push({ name: 'login' })
       }
     }
-    const u = await vueAuthInstance.getStoredUserObject()
+    const u = await userManager.getStoredUserObject()
 
     if (u && u.id_token) {
-      vueAuthInstance
+      userManager
         .createSignoutRequest({ id_token_hint: u.id_token })
         .then((signoutRequestUrl) => {
           logoutFinalizer()
@@ -154,48 +153,47 @@ const actions = {
       context.commit('SET_USER_READY', true)
     }
     // if called from login, use available vue-authenticate instance; else re-init
-    if (!vueAuthInstance) {
-      vueAuthInstance = initVueAuthenticate(context.rootState.config)
-      vueAuthInstance.events().addAccessTokenExpired(function () {
+    if (!userManager) {
+      userManager = new UserManager(context.rootState.config)
+      userManager.events().addAccessTokenExpired(function () {
         console.log('AccessToken Expired：', arguments)
       })
-      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
+      userManager.mgr.events.addAccessTokenExpiring(function () {
         console.log('AccessToken Expiring：', arguments)
       })
-      vueAuthInstance.events().addUserLoaded((user) => {
+      userManager.events().addUserLoaded((user) => {
+        console.log(user)
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
         init(this._vm.$client, user.access_token, false)
       })
-      vueAuthInstance.events().addUserUnloaded(() => {
+      userManager.events().addUserSignedIn(() => {
+        console.log('user signed in')
+      })
+      userManager.events().addUserUnloaded(() => {
         console.log('user unloaded…')
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'login' })
       })
-      vueAuthInstance.events().addSilentRenewError((error) => {
+      userManager.events().addSilentRenewError((error) => {
         console.error('Silent Renew Error：', error)
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
       })
     }
-    const token = vueAuthInstance.getToken()
+    const token = userManager.getToken()
     if (token) {
       await init(this._vm.$client, token)
     }
   },
-  login(context, payload = { provider: 'oauth2' }) {
-    // reset vue-authenticate
-    vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
-      if (vueAuthInstance.isAuthenticated) {
-        context.dispatch('initAuth')
-      }
-    })
+  login(context) {
+    userManager = new UserManager(context.rootState.config)
+    return userManager.signinRedirect()
   },
   callback(context) {
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    vueAuthInstance.mgr
+    if (!userManager) userManager = new UserManager(context.rootState.config)
+    userManager.mgr
       .signinRedirectCallback()
       .then(() => {
         context.dispatch('initAuth', { autoRedirect: true })
@@ -207,8 +205,8 @@ const actions = {
       })
   },
   signinSilentCallback(context) {
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    vueAuthInstance.mgr.signinSilentCallback().then(() => {
+    if (!userManager) userManager = new UserManager(context.rootState.config)
+    userManager.mgr.signinSilentCallback().then(() => {
       context.dispatch('initAuth')
     })
   },
