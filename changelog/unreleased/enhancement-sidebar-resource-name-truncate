@@ -1,0 +1,6 @@
+Enhancement: Prevent the resource name in the sidebar from being truncated
+
+We now prevent the resource name in the right sidebar from being truncated to ensure that the full name can be read at any time.
+
+https://github.com/owncloud/web/issues/6776
+https://github.com/owncloud/web/pull/7052
