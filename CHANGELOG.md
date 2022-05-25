@@ -40,6 +40,7 @@ Summary
 * Bugfix - Space image showing without setting it: [#6920](https://github.com/owncloud/web/issues/6920)
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
+* Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
@@ -342,6 +343,14 @@ Details
 
    https://github.com/owncloud/web/issues/6958
    https://github.com/owncloud/web/pull/6954
+
+* Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
+
+   We've fixed a bug where uploading via drag and drop wouldn't work if one or more files were
+   selected.
+
+   https://github.com/owncloud/web/issues/7006
+   https://github.com/owncloud/web/pull/7036
 
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 
