@@ -1,0 +1,6 @@
+Bugfix: Drag and drop upload when a file is selected
+
+We've fixed a bug where uploading via drag and drop wouldn't work if one or more files were selected.
+
+https://github.com/owncloud/web/pull/7036
+https://github.com/owncloud/web/issues/7006

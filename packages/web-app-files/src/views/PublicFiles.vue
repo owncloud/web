@@ -4,6 +4,7 @@
       :has-bulk-actions="true"
       :breadcrumbs="breadcrumbs"
       :breadcrumbs-context-actions-items="[currentFolder]"
+      :show-actions-on-selection="true"
     >
       <template #actions>
         <create-and-upload />
