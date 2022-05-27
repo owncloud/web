@@ -118,7 +118,7 @@ module.exports = {
       if (subSelectors === null) {
         subSelectors = {
           displayName: this.elements.collaboratorInformationSubName,
-          role: this.elements.collaboratorInformationSubRole,
+          role: this.elements.collaboratorInformationSubRoleBtn,
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
           shareType: this.elements.collaboratorShareType
         }
@@ -142,16 +142,15 @@ module.exports = {
         const collaboratorResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
-          await this.api.elementIdElement(
-            collaboratorElementId,
-            'css selector',
-            subSelectors[attrName],
-            (result) => {
-              if (result.status !== -1) {
-                attrElementId = result.value.ELEMENT
-              }
-            }
-          )
+
+          if (attrName === 'role') {
+            attrElementId = await this.getCollaboratorRoleElemId(collaboratorElementId)
+          } else {
+            attrElementId = await this.getElementIdElement(
+              collaboratorElementId,
+              subSelectors[attrName]
+            )
+          }
 
           if (attrElementId) {
             await this.api.elementIdText(attrElementId, (text) => {
@@ -167,6 +166,38 @@ module.exports = {
 
       results = await Promise.all(results)
       return results
+    },
+    getCollaboratorRoleElemId: async function (parentElemId) {
+      let elementId = null
+
+      elementId = await this.getElementIdElement(
+        parentElemId,
+        this.elements.collaboratorInformationSubRoleBtn
+      )
+
+      if (!elementId) {
+        elementId = await this.getElementIdElement(
+          parentElemId,
+          this.elements.collaboratorInformationSubRole
+        )
+      }
+      return elementId
+    },
+    /**
+     *
+     * @param {string} parentElemId Web Element ID
+     * @param {string} selector valid css selector
+     *
+     * @returns {Promise.<string>} Web Element ID
+     */
+    getElementIdElement: async function (parentElemId, selector) {
+      let elementId = null
+      await this.api.elementIdElement(parentElemId, 'css selector', selector, (result) => {
+        if (result.status !== -1) {
+          elementId = result.value.ELEMENT
+        }
+      })
+      return elementId
     },
     /**
      *
@@ -254,9 +285,13 @@ module.exports = {
       // within collaboratorsListItem
       selector: '.files-collaborators-collaborator-name'
     },
-    collaboratorInformationSubRole: {
+    collaboratorInformationSubRoleBtn: {
       // within collaboratorsListItem
       selector: '.files-recipient-role-select-btn:first-child'
+    },
+    collaboratorInformationSubRole: {
+      // within collaboratorsListItem
+      selector: '.files-collaborators-collaborator-role'
     },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsListItem

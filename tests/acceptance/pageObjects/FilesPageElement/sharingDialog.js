@@ -324,15 +324,20 @@ module.exports = {
      * @param {string} collaborator
      */
     getDisplayedPermission: async function (collaborator) {
-      await collaboratorDialog.expandShareRoleDropdown(collaborator)
-      await this.selectRole('Custom permissions')
-      // read the permissions from the checkboxes
-      const currentSharePermissions = await this.getSharePermissions()
+      let currentSharePermissions = {}
+      try {
+        await collaboratorDialog.expandShareRoleDropdown(collaborator)
+        await this.selectRole('Custom permissions')
+        // read the permissions from the checkboxes
+        currentSharePermissions = await this.getSharePermissions()
 
-      // Hide role select dropdown
-      this.moveToElement('@customPermissionsDrop', -9, 0)
-      this.api.mouseButtonClick()
-      this.waitForElementNotPresent('@customPermissionsDrop', 1000)
+        // Hide role select dropdown
+        await this.moveToElement('@customPermissionsDrop', -9, 0)
+        await this.api.mouseButtonClick()
+        await this.waitForElementNotPresent('@customPermissionsDrop', 1000)
+      } catch (e) {
+        console.info('Collaborator Role is not editable!')
+      }
       return currentSharePermissions
     },
     /**
