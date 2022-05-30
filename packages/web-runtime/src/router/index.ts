@@ -16,7 +16,7 @@ Vue.use(Router)
 // should immediately go away and be removed after finalizing the update
 // to apply the patch to a route add meta.patchCleanPath = true to it
 // to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
-const patchRouter = (router) => {
+const patchRouter = (router: Router) => {
   const bindMatcher = router.match.bind(router)
   const cleanPath = (route) =>
     [
@@ -139,7 +139,7 @@ export const buildUrl = (pathname) => {
 }
 
 router.beforeEach(function (to, from, next) {
-  const store = Vue.$store
+  const store = (Vue as any).$store
   const isAuthenticated = store.getters.isAuthenticated
   if (isAuthRequired(router, to)) {
     if (isAuthenticated) {
