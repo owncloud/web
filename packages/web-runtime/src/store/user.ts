@@ -90,6 +90,7 @@ const actions = {
         const user = await sdkClient.users.getUser(login.id)
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
+        // see https://github.com/owncloud/ocis/issues/3271
         let graphUser
         if (context.state.capabilities.spaces?.enabled) {
           const graphClient = clientService.graphAuthenticated(serverUrl, token)
