@@ -6,7 +6,7 @@ import { clientService } from 'web-pkg/src/services'
 
 import { setUser as sentrySetUser } from '@sentry/browser'
 
-let userManager
+let userManager: UserManager
 
 const state = {
   token: '',
@@ -32,7 +32,7 @@ const actions = {
     this.reset({ self: false, nested: false, modules: { user: { self: true } } })
 
     // clear dynamic navItems
-    context.dispatch('clearDynamicNavItems')
+    return context.dispatch('clearDynamicNavItems')
   },
   async logout({ dispatch, getters }) {
     await Promise.all([
@@ -67,7 +67,7 @@ const actions = {
         }
       }
       if (context.state.id) {
-        options.userInfo = {
+        ;(options as any).userInfo = {
           id: context.state.id,
           'display-name': context.state.displayname,
           email: context.state.email
@@ -81,8 +81,8 @@ const actions = {
           login = await sdkClient.login()
         } catch (e) {
           console.warn('Seems that your token is invalid. Error:', e)
-          context.dispatch('cleanUpLoginState')
-          router.push({ name: 'accessDenied' })
+          await context.dispatch('cleanUpLoginState')
+          await router.replace({ name: 'accessDenied' })
           return
         }
 
@@ -134,14 +134,13 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!userManager) {
       userManager = new UserManager(context.rootState.config)
-      userManager.events.addAccessTokenExpired(function () {
-        console.log('AccessToken Expired：', arguments)
+      userManager.events.addAccessTokenExpired((...args) => {
+        console.log('AccessToken Expired：', ...args)
       })
-      userManager.events.addAccessTokenExpiring(function () {
-        console.log('AccessToken Expiring：', arguments)
+      userManager.events.addAccessTokenExpiring((...args) => {
+        console.log('AccessToken Expiring：', ...args)
       })
       userManager.events.addUserLoaded((user) => {
-        console.log(user)
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
@@ -174,6 +173,14 @@ const actions = {
     if (!userManager) {
       userManager = new UserManager(context.rootState.config)
     }
+
+    // craft a url that the parser in oidc-client-ts can handle …
+    // oidc-client-ts > 2.0.4 should accept relative urls as well. Until we have that we prepend our current origin
+    const url =
+      window.location.origin +
+      '/?' +
+      new URLSearchParams(router.currentRoute.query as Record<string, string>).toString()
+
     userManager
       .signinRedirectCallback()
       .then(() => {

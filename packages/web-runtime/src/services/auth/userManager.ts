@@ -38,8 +38,10 @@ export class UserManager extends OidcUserManager {
       Object.assign(openIdConfig, {
         authority: config.auth.url,
         client_id: config.auth.clientId,
-        response_type: 'token', // token is implicit flow - to be killed
-        scope: 'openid profile',
+        client_authentication: 'client_secret_basic',
+        client_secret: config.auth.clientSecret,
+
+        scope: 'profile',
         loadUserInfo: false,
         metadata: {
           issuer: config.auth.url,
@@ -83,18 +85,4 @@ export class UserManager extends OidcUserManager {
     }
     return null
   }
-
-  /**
-   * old code that can potentially be removed entirely
-
-  createSignoutRequest(idToken) {
-    return new Promise((resolve, reject) => {
-      this.manager
-        .createSignoutRequest(idToken)
-        .then((signoutRequest) => resolve(signoutRequest.url))
-        .catch((error) => reject(error))
-    })
-  }
-
-   */
 }
