@@ -9,6 +9,10 @@ const state = {
 }
 
 const actions = {
+  clearSettingsValues({ commit }) {
+    commit('SET_SETTINGS_VALUES', null)
+  },
+
   async loadSettingsValues({ commit, state, dispatch }) {
     const oldSettingsValues = state.settingsValues
     commit('SET_SETTINGS_VALUES', null)

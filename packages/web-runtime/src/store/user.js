@@ -24,7 +24,7 @@ const state = {
 }
 
 const actions = {
-  cleanUpLoginState(context, options = { clearOIDCLoginState: true }) {
+  cleanUpLoginState(context) {
     if (context.state.id === '') {
       return
     }
@@ -33,46 +33,25 @@ const actions = {
 
     // clear dynamic navItems
     context.dispatch('clearDynamicNavItems')
-
-    if (options.clearOIDCLoginState) {
-      return userManager.removeUser()
-    }
   },
-  async logout(context) {
-    const logoutFinalizer = (isOauth2 = false) => {
-      // Remove signed in user
-      context.dispatch('cleanUpLoginState', { clearOIDCLoginState: !isOauth2 })
-      context.dispatch('hideModal')
-      context.dispatch('loadSettingsValues')
+  async logout({ dispatch, getters }) {
+    await Promise.all([
+      dispatch('cleanUpLoginState'),
+      dispatch('hideModal'),
+      dispatch('clearSettingsValues')
+    ])
 
-      // Force redirect
-      if (isOauth2) {
-        if (context.getters?.configuration?.auth?.logoutUrl) {
-          return (window.location = context.getters?.configuration?.auth?.logoutUrl)
-        } else if (context.getters?.configuration?.server) {
-          return (window.location = `${context.getters?.configuration?.server}/index.php/logout`)
-        }
-
-        router.push({ name: 'login' })
-      }
-    }
-    const u = await userManager.getStoredUserObject()
-
+    const u = userManager.getStoredUserObject()
     if (u && u.id_token) {
-      userManager
-        .createSignoutRequest({ id_token_hint: u.id_token })
-        .then((signoutRequestUrl) => {
-          logoutFinalizer()
-
-          // Navigate to signout URL
-          window.open(signoutRequestUrl, '_self')
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+      return userManager.signoutRedirect({ id_token_hint: u.id_token })
     } else {
-      // Oauth2 logout
-      logoutFinalizer(true)
+      if (getters.configuration?.auth?.logoutUrl) {
+        return (window.location = getters.configuration?.auth?.logoutUrl)
+      } else if (getters.configuration?.server) {
+        return (window.location = `${getters.configuration?.server}/index.php/logout`)
+      }
+
+      return router.push({ name: 'login' })
     }
   },
   async initAuth(context, payload = { autoRedirect: false }) {
@@ -155,36 +134,36 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!userManager) {
       userManager = new UserManager(context.rootState.config)
-      userManager.events().addAccessTokenExpired(function () {
+      userManager.events.addAccessTokenExpired(function () {
         console.log('AccessToken Expired：', arguments)
       })
-      userManager.mgr.events.addAccessTokenExpiring(function () {
+      userManager.events.addAccessTokenExpiring(function () {
         console.log('AccessToken Expiring：', arguments)
       })
-      userManager.events().addUserLoaded((user) => {
+      userManager.events.addUserLoaded((user) => {
         console.log(user)
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
         init(this._vm.$client, user.access_token, false)
       })
-      userManager.events().addUserSignedIn(() => {
+      userManager.events.addUserSignedIn(() => {
         console.log('user signed in')
       })
-      userManager.events().addUserUnloaded(() => {
+      userManager.events.addUserUnloaded(() => {
         console.log('user unloaded…')
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'login' })
       })
-      userManager.events().addSilentRenewError((error) => {
+      userManager.events.addSilentRenewError((error) => {
         console.error('Silent Renew Error：', error)
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
       })
     }
-    const token = userManager.getToken()
-    if (token) {
-      await init(this._vm.$client, token)
+    const accessToken = userManager.getAccessToken()
+    if (accessToken) {
+      await init(this._vm.$client, accessToken)
     }
   },
   login(context) {
@@ -192,8 +171,10 @@ const actions = {
     return userManager.signinRedirect()
   },
   callback(context) {
-    if (!userManager) userManager = new UserManager(context.rootState.config)
-    userManager.mgr
+    if (!userManager) {
+      userManager = new UserManager(context.rootState.config)
+    }
+    userManager
       .signinRedirectCallback()
       .then(() => {
         context.dispatch('initAuth', { autoRedirect: true })
@@ -205,8 +186,10 @@ const actions = {
       })
   },
   signinSilentCallback(context) {
-    if (!userManager) userManager = new UserManager(context.rootState.config)
-    userManager.mgr.signinSilentCallback().then(() => {
+    if (!userManager) {
+      userManager = new UserManager(context.rootState.config)
+    }
+    userManager.signinSilentCallback().then(() => {
       context.dispatch('initAuth')
     })
   },

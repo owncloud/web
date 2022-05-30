@@ -2,15 +2,18 @@ import {
   Log,
   WebStorageStateStore,
   UserManager as OidcUserManager,
-  UserManagerSettings
+  UserManagerSettings,
+  User
 } from 'oidc-client-ts'
 import { buildUrl } from '../../router'
-import * as Console from 'console'
 
 export class UserManager extends OidcUserManager {
+  private readonly storePrefix
+
   constructor(config) {
+    const storePrefix = 'oc_oAuth' // FIXME: we want this unique and reproducible
     const userStore = new WebStorageStateStore({
-      prefix: 'oc_oAuth',
+      prefix: storePrefix,
       store: sessionStorage
     })
     const openIdConfig: UserManagerSettings = {
@@ -48,43 +51,45 @@ export class UserManager extends OidcUserManager {
     }
 
     Log.setLevel(Log.INFO)
-    Log.setLogger(Console)
 
     super(openIdConfig)
+    this.storePrefix = storePrefix
   }
 
   /**
-   * old code that can potentially be removed entirely
-
-  getToken() {
-    const storageString = sessionStorage.getItem('oc_oAuth' + this.manager._userStoreKey)
-    if (storageString) {
-      const user = User.fromStorageString(storageString)
-      if (user) {
-        this.manager.events.load(user, false)
-        return user.access_token
-      }
-    }
-    return null
+   * Looks up the access token of an already loaded user without enforcing a signin if no user exists.
+   *
+   * @return (string|null)
+   */
+  getAccessToken(): string | null {
+    const user = this.getStoredUserObject()
+    return user?.access_token
   }
 
-  getStoredUserObject() {
-    this.userStore.get()
-    const storageString = sessionStorage.getItem('oc_oAuth' + this.manager._userStoreKey)
+  /**
+   * Looks up the current user without enforcing a signin if no user exists.
+   * Returns null otherwise.
+   *
+   * @return (User|null)
+   */
+  getStoredUserObject(): User | null {
+    const storageString = sessionStorage.getItem(this.storePrefix + this._userStoreKey)
     if (storageString) {
       const user = User.fromStorageString(storageString)
       if (user) {
-        this.manager.events.load(user, false)
+        this.events.load(user, false)
         return user
       }
     }
     return null
   }
 
+  /**
+   * old code that can potentially be removed entirely
+
   createSignoutRequest(idToken) {
     return new Promise((resolve, reject) => {
       this.manager
-        .signoutRedirect()
         .createSignoutRequest(idToken)
         .then((signoutRequest) => resolve(signoutRequest.url))
         .catch((error) => reject(error))
