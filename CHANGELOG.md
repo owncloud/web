@@ -19,6 +19,7 @@ Summary
 * Bugfix - Indicate guest shares: [#6813](https://github.com/owncloud/web/pull/6813)
 * Bugfix - Indirect links should not be editable: [#6964](https://github.com/owncloud/web/issues/6964)
 * Bugfix - Changing link permissions to role requiring password: [#6989](https://github.com/owncloud/web/pull/6989)
+* Bugfix - Not logged out if backend is ownCloud 10: [#6939](https://github.com/owncloud/web/pull/6939)
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
@@ -174,6 +175,13 @@ Details
 
    https://github.com/owncloud/web/issues/6974
    https://github.com/owncloud/web/pull/6989
+
+* Bugfix - Not logged out if backend is ownCloud 10: [#6939](https://github.com/owncloud/web/pull/6939)
+
+   We've fixed an issue, where the user won't be logged out if the backend is ownCloud 10
+
+   https://github.com/owncloud/web/issues/5886
+   https://github.com/owncloud/web/pull/6939
 
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 
