@@ -22,6 +22,7 @@ Summary
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 * Bugfix - Password enforcement for public links: [#6323](https://github.com/owncloud/web/issues/6323)
 * Bugfix - Remove private links from share notifications: [#6955](https://github.com/owncloud/web/pull/6955)
+* Bugfix - Prevent rename button from getting covered: [#7061](https://github.com/owncloud/web/pull/7061)
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 * Bugfix - Rename a file in favorites list with same name but in different folder: [#6804](https://github.com/owncloud/web/pull/6804)
 * Bugfix - Require quick link password if enforced in ownCloud 10: [#6967](https://github.com/owncloud/web/pull/6967)
@@ -198,6 +199,14 @@ Details
 
    https://github.com/owncloud/web/issues/5227
    https://github.com/owncloud/web/pull/6955
+
+* Bugfix - Prevent rename button from getting covered: [#7061](https://github.com/owncloud/web/pull/7061)
+
+   We've fixed a bug where the rename button next to the file name would get covered if there is not
+   enough space available.
+
+   https://github.com/owncloud/web/issues/7007
+   https://github.com/owncloud/web/pull/7061
 
 * Bugfix - Rename is clickable on mobile: [#6767](https://github.com/owncloud/web/issues/6767)
 
