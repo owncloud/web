@@ -20,7 +20,10 @@ export class UserManager extends OidcUserManager {
       userStore,
       redirect_uri: buildUrl('/oidc-callback.html'),
       silent_redirect_uri: buildUrl('/oidc-silent-redirect.html'),
+
       response_mode: 'query',
+      response_type: 'code', // "code" triggers auth code grant flow
+
       post_logout_redirect_uri: buildUrl('/'),
       accessTokenExpiringNotificationTimeInSeconds: 10,
       authority: '',
@@ -29,7 +32,6 @@ export class UserManager extends OidcUserManager {
 
     if (config.openIdConnect) {
       Object.assign(openIdConfig, {
-        response_type: 'code', // "code" triggers auth code grant flow
         scope: 'openid profile offline_access',
         loadUserInfo: true,
         ...config.openIdConnect

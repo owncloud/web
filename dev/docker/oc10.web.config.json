@@ -2,6 +2,7 @@
   "server": "http://host.docker.internal:8080",
   "auth": {
     "clientId": "M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5",
+    "clientSecret": "sqvPYXK94tMsEEVOYORxg8Ufesi2kC4WpJJSYb0Kj1DSAYl6u2XvJZjc3VcitjDv",
     "url": "http://host.docker.internal:8080/index.php/apps/oauth2/api/v1/token",
     "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize",
     "logoutUrl": "http://host.docker.internal:8080/index.php/logout"

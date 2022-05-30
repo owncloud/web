@@ -122,6 +122,7 @@ const actions = {
         }
         await context.dispatch('loadSettingsValues')
         if (payload.autoRedirect) {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           router.push({ path: '/' }).catch(() => {})
         }
       } else {
@@ -182,7 +183,7 @@ const actions = {
       new URLSearchParams(router.currentRoute.query as Record<string, string>).toString()
 
     userManager
-      .signinRedirectCallback()
+      .signinRedirectCallback(url)
       .then(() => {
         context.dispatch('initAuth', { autoRedirect: true })
       })
