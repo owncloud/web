@@ -45,7 +45,10 @@
       />
     </template>
     <template #name="{ item }">
-      <div class="resource-table-resource-wrapper">
+      <div
+        class="resource-table-resource-wrapper"
+        :class="[{ 'resource-table-resource-wrapper-limit-max-width': hasRenameAction(item) }]"
+      >
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
@@ -770,6 +773,10 @@ export default defineComponent({
 <style lang="scss">
 .resource-table {
   &-resource-wrapper {
+    &-limit-max-width {
+      max-width: calc(100% - var(--oc-space-medium));
+    }
+
     &:hover > .resource-table-edit-name {
       svg {
         fill: var(--oc-color-text-default);
