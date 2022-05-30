@@ -34,7 +34,7 @@ const actions = {
     // clear dynamic navItems
     return context.dispatch('clearDynamicNavItems')
   },
-  async logout({ dispatch, getters }) {
+  async logout({ dispatch }) {
     await Promise.all([
       dispatch('cleanUpLoginState'),
       dispatch('hideModal'),
@@ -45,13 +45,7 @@ const actions = {
     if (u && u.id_token) {
       return userManager.signoutRedirect({ id_token_hint: u.id_token })
     } else {
-      if (getters.configuration?.auth?.logoutUrl) {
-        return (window.location = getters.configuration?.auth?.logoutUrl)
-      } else if (getters.configuration?.server) {
-        return (window.location = `${getters.configuration?.server}/index.php/logout`)
-      }
-
-      return router.push({ name: 'login' })
+      await userManager.removeUser()
     }
   },
   async initAuth(context, payload = { autoRedirect: false }) {
@@ -154,7 +148,17 @@ const actions = {
       userManager.events.addUserUnloaded(() => {
         console.log('user unloaded…')
         context.dispatch('cleanUpLoginState')
-        router.push({ name: 'login' })
+
+        // handle redirect after logout
+        const configuration = context.getters.configuration
+        if (configuration.auth) {
+          if (configuration.auth.logoutUrl) {
+            return (window.location = configuration.auth?.logoutUrl)
+          } else if (configuration.server) {
+            return (window.location = <any>`${configuration.server}/index.php/logout`)
+          }
+        }
+        return router.push({ name: 'login' })
       })
       userManager.events.addSilentRenewError((error) => {
         console.error('Silent Renew Error：', error)
