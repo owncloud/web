@@ -1,0 +1,6 @@
+Enhancement: Rendering of share-indicators in ResourceTable
+
+We have improved the rendering speed of the ResourceTable by fixing some underlying logic that caused unnecessary re-renderings.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7070
