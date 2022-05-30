@@ -230,7 +230,7 @@ export default {
     for (const resource of state.files) {
       const indicators = getIndicators(resource, state.sharesTree)
 
-      if (!indicators && !resource.indicators.length) {
+      if (!indicators.length && !resource.indicators.length) {
         continue
       }
 
