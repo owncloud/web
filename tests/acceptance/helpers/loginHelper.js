@@ -25,6 +25,8 @@ module.exports = {
     await client.page
       .webPage()
       .waitForElementVisible('@appContainer')
+      .api.page.FilesPageElement.filesList()
+      .waitForLoadingFinished()
       .then(() => {
         client.globals.currentUser = userId
       })
