@@ -58,6 +58,8 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 - `options.sidebar.shares.showAllOnLoad` Sets the list of (link) shares list in the sidebar to be initially expanded (default is a collapsed state, only showing the first three shares).
 - `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`.
 - `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
+- `options.hoverableQuickActions` Set this option to `true` to hide the quick actions (buttons appearing on file rows), and only show them when the user
+hovers the row with his mouse. Defaults to `false`.
 
 ### Sentry
 
