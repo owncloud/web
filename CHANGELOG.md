@@ -45,6 +45,7 @@ Summary
 * Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
+* Enhancement - Add config option for hoverable quick actions: [#7022](https://github.com/owncloud/web/pull/7022)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 * Enhancement - Add Sentry support: [#6759](https://github.com/owncloud/web/pull/6759)
 * Enhancement - Add show file extension toggle switch in file list settings: [#6793](https://github.com/owncloud/web/pull/6793)
@@ -387,6 +388,15 @@ Details
    https://github.com/owncloud/web/issues/6947
    https://github.com/owncloud/web/issues/4605
    https://github.com/owncloud/web/pull/6952
+
+* Enhancement - Add config option for hoverable quick actions: [#7022](https://github.com/owncloud/web/pull/7022)
+
+   We've added the possibility to add hover effect for quick actions with the option
+   "hoverableQuickActions" in config.json. The hover effect applies to "edit name", "add
+   people" and "copy quicklink" actions in the corresponding hovered row.
+
+   https://github.com/owncloud/web/issues/7021
+   https://github.com/owncloud/web/pull/7022
 
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
 
