@@ -52,7 +52,6 @@ function getShallowWrapper(showInfo = false, successfulUploads = []) {
     },
     mocks: {
       $uppyService: {
-        useStatusBar: jest.fn(),
         subscribe: jest.fn()
       },
       $gettextInterpolate: jest.fn(),
