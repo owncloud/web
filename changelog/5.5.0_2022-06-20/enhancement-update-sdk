@@ -1,6 +1,6 @@
 Enhancement: Update SDK
 
-We've updated the ownCloud SDK to version 3.0.0-alpha.10.
+We've updated the ownCloud SDK to version 3.0.0-alpha.11.
 
 - Change - Pass full trash bin path to methods of FilesTrash class: https://github.com/owncloud/owncloud-sdk/pull/1021
 - Enhancement - Enforce share_type guest if applies: https://github.com/owncloud/owncloud-sdk/pull/1046
@@ -13,8 +13,9 @@ We've updated the ownCloud SDK to version 3.0.0-alpha.10.
 - Enhancement - Add overwrite flag for file move: https://github.com/owncloud/owncloud-sdk/pull/1073
 - Bugfix - Always add X-Request-ID: https://github.com/owncloud/owncloud-sdk/pull/1016
 - Bugfix - Always add X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
+- Bugfix - Do not load files from cache in public links: https://github.com/owncloud/owncloud-sdk/pull/1079
 
 https://github.com/owncloud/web/pull/6820
 https://github.com/owncloud/web/pull/6952
-https://github.com/owncloud/web/pull/6994
-https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.10
+https://github.com/owncloud/web/pull/7075
+https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.11
