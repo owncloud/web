@@ -128,6 +128,7 @@ import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: {
@@ -141,7 +142,7 @@ export default defineComponent({
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
-      const uploadErrorSub = uppyService.subscribe('uploadError', instance.onFileError)
+      const uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
 
       uppyService.useDropTarget({
         targetSelector: '#files-view',
@@ -151,7 +152,7 @@ export default defineComponent({
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
         uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
-        uppyService.unsubscribe('uploadError', uploadErrorSub)
+        uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
         uppyService.removeDropTarget()
       })
     })
@@ -276,8 +277,19 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
-    async onFileSuccess(file: UppyResource) {
-      try {
+    onFileSuccess(file: UppyResource) {
+      this.$uppyService.publish('fileSuccessfullyUploaded', file)
+      this.SET_QUOTA(this.user.quota)
+    },
+
+    onUploadComplete(result) {
+      if (result.successful) {
+        const file = result.successful[0]
+
+        if (!file) {
+          return
+        }
+
         let pathFileWasUploadedTo = file.meta.currentFolder
         if (file.meta.relativeFolder) {
           pathFileWasUploadedTo += file.meta.relativeFolder
@@ -285,65 +297,10 @@ export default defineComponent({
 
         const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
 
-        await this.$nextTick()
-
-        let path = pathUtil.join(pathFileWasUploadedTo, file.name)
-        let resource
-
-        if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-
-        resource = buildResource(resource)
-
-        this.$uppyService.publish('uploadedFileFetched', {
-          uppyResource: file,
-          fetchedFile: resource
-        })
-
-        // Update table only if the file was uploaded to the current directory
         if (fileIsInCurrentPath) {
-          this.UPSERT_RESOURCE(resource)
-
-          if (this.isPersonalLocation) {
-            this.loadIndicators({
-              client: this.$client,
-              currentFolder: this.currentFolder.path,
-              encodePath: this.encodePath
-            })
-          }
+          bus.publish('app.files.list.load')
         }
-
-        const user = await this.$client.users.getUser(this.user.id)
-
-        this.SET_QUOTA(user.quota)
-      } catch (error) {
-        console.error(error)
       }
-    },
-
-    onFileError(file) {
-      this.showMessage({
-        title: this.$gettext('Failed to upload'),
-        status: 'danger'
-      })
     },
 
     showCreateResourceModal(
@@ -773,9 +730,15 @@ export default defineComponent({
     },
 
     async handleUppyFileUpload(files: UppyResource[]) {
+      this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
-      await this.updateStoreForCreatedFolders(files)
+      this.$uppyService.publish('addedForUpload', files)
       this.$uppyService.uploadFiles(files)
+      // await this.updateStoreForCreatedFolders(files)
+      // setTimeout(() => {
+      //   console.log('UPLOADING FILES')
+      //   this.$uppyService.uploadFiles(files)
+      // }, 3000)
     },
 
     displayOverwriteDialog(files: UppyResource[], conflicts) {

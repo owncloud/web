@@ -15,6 +15,7 @@ import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
+import * as uuid from 'uuid'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -181,6 +182,7 @@ const inputFilesToUppyFiles = ({
 
     const { params } = unref(route)
     const currentFolder = unref(currentPath)
+    const topLevelFolderIds = {}
 
     for (const file of files) {
       // Get the relative path of the file when the file was inside a directory on the client computer
@@ -206,6 +208,15 @@ const inputFilesToUppyFiles = ({
         params: { ...params, item }
       }
 
+      let topLevelFolderId
+      if (relativeFilePath) {
+        const topLevelDirectory = relativeFilePath.replace(/^\/+/, '').split('/')[0]
+        if (!topLevelFolderIds[topLevelDirectory]) {
+          topLevelFolderIds[topLevelDirectory] = uuid.v4()
+        }
+        topLevelFolderId = topLevelFolderIds[topLevelDirectory]
+      }
+
       uppyFiles.push({
         source: 'file input',
         name: file.name,
@@ -217,7 +228,9 @@ const inputFilesToUppyFiles = ({
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
           route: fileRoute,
           tusEndpoint,
-          webDavBasePath: unref(webDavBasePath) // WebDAV base path where the files will be uploaded to
+          webDavBasePath: unref(webDavBasePath), // WebDAV base path where the files will be uploaded to
+          uploadId: uuid.v4(),
+          topLevelFolderId
         }
       })
     }

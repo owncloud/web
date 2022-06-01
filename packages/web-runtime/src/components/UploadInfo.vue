@@ -1,32 +1,103 @@
 <template>
-  <div id="upload-info" class="oc-rounded oc-box-shadow-medium" :class="{ 'oc-hidden': !showInfo }">
-    <div class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-pt-m">
-      <span class="oc-flex oc-flex-middle" v-text="uploadInfoTitle" />
+  <div v-if="showInfo" id="upload-info" class="oc-rounded oc-box-shadow-medium">
+    <div
+      class="
+        upload-info-title
+        oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top
+      "
+    >
+      <span class="oc-flex oc-flex-middle oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button
+        v-if="!filesInProgressCount"
         id="close-upload-info-btn"
         v-oc-tooltip="$gettext('Close')"
         appearance="raw"
         @click="closeInfo"
       >
-        <oc-icon name="close" />
+        <oc-icon variation="inverse" name="close" />
       </oc-button>
     </div>
-    <div class="upload-info-status-bar oc-px-m" />
-    <div
-      class="upload-info-successful-uploads oc-px-m oc-pb-m"
-      :class="{ 'oc-pt-m': successfulUploads.length }"
-    >
+    <div class="upload-info-status oc-p-m oc-flex oc-flex-between oc-flex-middle">
+      <oc-progress
+        v-if="runningUploads"
+        :value="totalProgress"
+        :max="100"
+        size="small"
+        class="upload-info-progress"
+      />
+      <div
+        v-else
+        :class="{
+          'upload-info-danger': errors.length && !uploadsCancelled,
+          'upload-info-success': !errors.length && !uploadsCancelled
+        }"
+      >
+        {{ uploadingLabel }}
+      </div>
+      <div class="oc-flex">
+        <oc-button
+          appearance="raw"
+          class="oc-text-muted oc-text-small"
+          @click="toggleInfo"
+          v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
+        ></oc-button>
+        <oc-button
+          v-if="!runningUploads && errors.length"
+          v-oc-tooltip="$gettext('Retry all failed uploads')"
+          class="oc-ml-s"
+          appearance="raw"
+          :aria-label="$gettext('Retry all failed uploads')"
+          @click="retryUploads"
+        >
+          <oc-icon name="restart" fill-type="line" />
+        </oc-button>
+        <oc-button
+          v-if="runningUploads"
+          id="pause-upload-info-btn"
+          v-oc-tooltip="uploadsPaused ? $gettext('Resume uploads') : $gettext('Pause uploads')"
+          class="oc-ml-s"
+          appearance="raw"
+          @click="togglePauseUploads"
+        >
+          <oc-icon :name="uploadsPaused ? 'play' : 'pause'" fill-type="line" />
+        </oc-button>
+        <oc-button
+          v-if="runningUploads"
+          id="cancel-upload-info-btn"
+          v-oc-tooltip="$gettext('Cancel')"
+          class="oc-ml-s"
+          appearance="raw"
+          @click="cancelAllUploads"
+        >
+          <oc-icon name="close" fill-type="line" />
+        </oc-button>
+      </div>
+    </div>
+    <div v-if="infoExpanded" class="upload-info-items oc-px-m oc-pb-m">
       <ul class="oc-list">
         <li
-          v-for="(item, idx) in successfulUploads"
+          v-for="(item, idx) in uploads"
           :key="idx"
           class="oc-flex oc-flex-middle"
-          :class="{ 'oc-mb-s': idx !== successfulUploads.length - 1 }"
+          :class="{
+            'oc-mb-s': idx !== Object.keys(uploads).length - 1
+          }"
         >
-          <oc-icon name="check" variation="success" size="small" />
+          <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
+          <oc-icon
+            v-else-if="item.status === 'success'"
+            name="check"
+            variation="success"
+            size="small"
+          />
+          <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
+          <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
+          <oc-spinner v-else size="small" />
+
           <oc-resource
             v-if="displayFileAsResource(item)"
             :key="item.path"
+            class="oc-ml-s"
             :resource="item"
             :is-path-displayed="true"
             :is-thumbnail-displayed="displayThumbnails"
@@ -58,6 +129,11 @@ import path from 'path'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
 
+const UPLOAD_STATUSES = Object.freeze({
+  success: 1,
+  error: 2
+})
+
 export default {
   setup() {
     return {
@@ -65,74 +141,194 @@ export default {
     }
   },
   data: () => ({
-    showInfo: false,
-    filesUploading: 0,
-    uploadCancelled: false,
-    successfulUploads: []
+    showInfo: false, // show the overlay?
+    infoExpanded: false, // show the info including all uploads?
+    uploads: {}, // uploads that are being displayed via "infoExpanded"
+    errors: [], // all failed files
+    successful: [], // all successful files
+    filesInProgressCount: 0, // files (not folders!) that are being processed currently
+    totalProgress: 0, // current uploads progress (0-100)
+    uploadsPaused: false, // all uploads paused?
+    uploadsCancelled: false, // all uploads cancelled?
+    runningUploads: 0 // all uploads (not files!) that are in progress currently
   }),
   computed: {
     ...mapGetters(['configuration']),
 
     uploadInfoTitle() {
-      if (this.filesUploading) {
+      if (this.filesInProgressCount) {
         return this.$gettextInterpolate(
           this.$ngettext(
-            '%{ filesUploading } file uploading...',
-            '%{ filesUploading } files uploading...',
-            this.filesUploading
+            '%{ filesInProgressCount } item uploading...',
+            '%{ filesInProgressCount } items uploading...',
+            this.filesInProgressCount
           ),
-          { filesUploading: this.filesUploading }
+          { filesInProgressCount: this.filesInProgressCount }
         )
       }
-
+      if (this.uploadsCancelled) {
+        return this.$gettext('Upload cancelled')
+      }
+      if (this.errors.length) {
+        return this.$gettext('Upload failed')
+      }
+      return this.$gettext('Upload complete')
+    },
+    uploadingLabel() {
+      if (this.errors.length) {
+        const count = this.successful.length + this.errors.length
+        return this.$gettextInterpolate(
+          this.$ngettext(
+            '%{ errors } of %{ uploads } item failed',
+            '%{ errors } of %{ uploads } items failed',
+            count
+          ),
+          { uploads: count, errors: this.errors.length }
+        )
+      }
       return this.$gettextInterpolate(
         this.$ngettext(
-          '%{ successfulUploads } upload completed',
-          '%{ successfulUploads } uploads completed',
-          this.successfulUploads.length
+          '%{ successfulUploads } item uploaded',
+          '%{ successfulUploads } items uploaded',
+          this.successful.length
         ),
-        { successfulUploads: this.successfulUploads.length }
+        { successfulUploads: this.successful.length }
       )
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
     }
   },
-  mounted() {
-    this.$uppyService.useStatusBar({
-      targetSelector: '.upload-info-status-bar',
-      getText: this.$gettext
-    })
-  },
   created() {
     this.$uppyService.subscribe('uploadStarted', () => {
+      // No upload in progress -> clean overlay
+      if (!this.runningUploads && this.showInfo) {
+        this.cleanOverlay()
+      }
+
       this.showInfo = true
-      this.filesUploading = this.filesUploading + 1
-      this.uploadCancelled = false
+      this.runningUploads += 1
     })
-    this.$uppyService.subscribe('uploadCompleted', () => {
-      this.filesUploading = this.filesUploading - 1
-    })
-    this.$uppyService.subscribe('uploadCancelled', () => {
-      this.filesUploading = 0
-      this.uploadCancelled = true
-      if (!this.successfulUploads.length) {
-        this.closeInfo()
+    this.$uppyService.subscribe('addedForUpload', (files) => {
+      this.filesInProgressCount += files.filter((f) => !f.isFolder).length
+
+      for (const file of files) {
+        const { relativeFolder, uploadId, topLevelFolderId } = file.meta
+        const isTopLevelItem = !relativeFolder
+        // only add top level items to this.uploads because we only show those
+        if (isTopLevelItem) {
+          this.uploads[uploadId] = file
+          // top level folders get initialized with file counts about their files inside
+          if (file.isFolder && this.uploads[uploadId].filesCount === undefined) {
+            this.uploads[uploadId].filesCount = 0
+            this.uploads[uploadId].errorCount = 0
+            this.uploads[uploadId].successCount = 0
+          }
+        }
+
+        // count all files inside top level folders to mark them as successful or failed later
+        if (!file.isFolder && !isTopLevelItem) {
+          this.uploads[topLevelFolderId].filesCount += 1
+        }
       }
     })
-    this.$uppyService.subscribe('uploadedFileFetched', ({ uppyResource, fetchedFile }) => {
-      this.successfulUploads.push({
-        ...fetchedFile,
-        targetRoute: uppyResource.meta.route
-      })
+    this.$uppyService.subscribe('uploadCompleted', () => {
+      this.runningUploads -= 1
+    })
+    this.$uppyService.subscribe('progress', (value) => {
+      this.totalProgress = value
+    })
+    this.$uppyService.subscribe('uploadError', (file) => {
+      if (this.errors.includes(file.meta.uploadId)) {
+        return
+      }
+
+      // file inside folder -> was not added to this.uploads, but must be now because of error
+      if (!this.uploads[file.meta.uploadId]) {
+        this.uploads[file.meta.uploadId] = file
+      }
+
+      if (file.meta.relativePath) {
+        this.uploads[file.meta.uploadId].path = file.meta.relativePath
+      } else {
+        this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
+      }
+
+      this.uploads[file.meta.uploadId].targetRoute = file.meta.route
+      this.uploads[file.meta.uploadId].status = 'error'
+      this.errors.push(file.meta.uploadId)
+      this.filesInProgressCount -= 1
+
+      if (file.meta.topLevelFolderId) {
+        this.handleTopLevelFolderUpdate(file, 'error')
+      }
+    })
+    this.$uppyService.subscribe('fileSuccessfullyUploaded', (file) => {
+      // item inside folder
+      if (!this.uploads[file.meta.uploadId]) {
+        if (!file.isFolder) {
+          this.successful.push(file.meta.uploadId)
+          this.filesInProgressCount -= 1
+
+          if (file.meta.topLevelFolderId) {
+            this.handleTopLevelFolderUpdate(file, 'success')
+          }
+        }
+
+        return
+      }
+
+      // file inside folder that succeeded via retry can now be removed again from this.uploads
+      if (file.meta.relativeFolder) {
+        if (!file.isFolder) {
+          this.successful.push(file.meta.uploadId)
+          this.filesInProgressCount -= 1
+          if (file.meta.topLevelFolderId) {
+            this.handleTopLevelFolderUpdate(file, 'success')
+          }
+        }
+
+        delete this.uploads[file.meta.uploadId]
+        return
+      }
+
+      this.uploads[file.meta.uploadId] = file
+      this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
+      this.uploads[file.meta.uploadId].targetRoute = file.meta.route
+
+      if (!file.isFolder) {
+        this.uploads[file.meta.uploadId].status = 'success'
+        this.successful.push(file.meta.uploadId)
+        this.filesInProgressCount -= 1
+      }
     })
   },
   methods: {
+    handleTopLevelFolderUpdate(file, status) {
+      const topLevelFolder = this.uploads[file.meta.topLevelFolderId]
+      if (status === 'success') {
+        topLevelFolder.successCount += 1
+      } else {
+        topLevelFolder.errorCount += 1
+      }
+
+      // all files for this top level folder are finished
+      if (topLevelFolder.successCount + topLevelFolder.errorCount === topLevelFolder.filesCount) {
+        topLevelFolder.status = topLevelFolder.errorCount ? 'error' : 'success'
+      }
+    },
     closeInfo() {
       this.showInfo = false
-      this.filesUploading = 0
-      this.successfulUploads = []
-      this.uploadCancelled = false
+      this.infoExpanded = false
+      this.cleanOverlay()
+    },
+    cleanOverlay() {
+      this.uploadsCancelled = false
+      this.uploads = {}
+      this.errors = []
+      this.successful = []
+      this.filesInProgressCount = 0
+      this.runningUploads = 0
     },
     displayFileAsResource(file) {
       return !!file.targetRoute
@@ -177,6 +373,45 @@ export default {
       }
 
       return route
+    },
+    toggleInfo() {
+      this.infoExpanded = !this.infoExpanded
+    },
+    retryUploads() {
+      this.filesInProgressCount += this.errors.length
+      this.runningUploads += 1
+      for (const fileID of this.errors) {
+        this.uploads[fileID].status = undefined
+
+        const topLevelFolderId = this.uploads[fileID].meta.topLevelFolderId
+        if (topLevelFolderId) {
+          this.uploads[topLevelFolderId].status = undefined
+          this.uploads[topLevelFolderId].errorCount = 0
+        }
+      }
+      this.errors = []
+      this.$uppyService.retryAllUploads()
+    },
+    togglePauseUploads() {
+      if (this.uploadsPaused) {
+        this.$uppyService.resumeAllUploads()
+      } else {
+        this.$uppyService.pauseAllUploads()
+      }
+
+      this.uploadsPaused = !this.uploadsPaused
+    },
+    cancelAllUploads() {
+      this.uploadsCancelled = true
+      this.filesInProgressCount = 0
+      this.$uppyService.cancelAllUploads()
+      const runningUploads = Object.values(this.uploads).filter(
+        (u) => u.status !== 'success' && u.status !== 'error'
+      )
+
+      for (const item of runningUploads) {
+        this.uploads[item.meta.uploadId].status = 'cancelled'
+      }
     }
   }
 }
@@ -188,71 +423,34 @@ export default {
   right: 20px;
   background-color: var(--oc-color-background-secondary);
   bottom: 20px;
-  width: 300px;
+  width: 400px;
 
   .oc-resource-details {
     padding-left: var(--oc-space-xsmall);
+  }
+
+  .upload-info-title {
+    background-color: var(--oc-color-swatch-brand-default);
+    color: var(--oc-color-swatch-inverse-default);
   }
 
   .oc-resource-indicators .parent-folder .text {
     color: var(--oc-color-text-default);
   }
 
-  .upload-info-successful-uploads {
+  .upload-info-items {
     max-height: 50vh;
     overflow-y: auto;
   }
 
-  .upload-info-status-bar {
-    .uppy-StatusBar {
-      height: unset;
-      background-color: unset !important;
-    }
-    .uppy-StatusBar-actionBtn--retry:hover {
-      background-color: unset !important;
-      text-decoration: underline;
-    }
-    .uppy-StatusBar-content {
-      padding-left: var(--oc-space-xsmall) !important;
-      color: var(--oc-color-text-default);
-      margin-top: 0.75rem;
-    }
-    .uppy-StatusBar-actions {
-      right: var(--oc-space-xsmall) !important;
-    }
-    .uppy-c-btn {
-      color: var(--oc-color-text-default);
-    }
-    .uppy-StatusBar-statusPrimary {
-      font-size: var(--oc-font-size-default);
-    }
-    .uppy-StatusBar-statusSecondary {
-      color: var(--oc-color-swatch-passive-default);
-    }
-    .uppy-StatusBar-statusIndicator {
-      margin-right: var(--oc-space-medium) !important;
-    }
-    .uppy-StatusBar-actionBtn--retry {
-      background-color: unset;
-      font-size: var(--oc-font-size-small);
-      padding: 0;
-    }
-    .uppy-StatusBar.is-error,
-    .uppy-StatusBar.is-uploading {
-      margin-top: var(--oc-space-medium);
-    }
-    .uppy-StatusBar.is-error .uppy-StatusBar-progress {
-      background-color: var(--oc-color-swatch-danger-default);
-    }
-    .uppy-StatusBar.is-error .uppy-StatusBar-statusIndicator {
-      color: var(--oc-color-swatch-danger-default);
-      width: var(--oc-space-small);
-      height: var(--oc-space-small);
-    }
-    .uppy-StatusBar-details,
-    .uppy-StatusBar-actionBtn--retry svg {
-      display: none;
-    }
+  .upload-info-progress {
+    width: 50%;
+  }
+  .upload-info-danger {
+    color: var(--oc-color-swatch-danger-default);
+  }
+  .upload-info-success {
+    color: var(--oc-color-swatch-success-default);
   }
 }
 </style>

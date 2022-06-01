@@ -10,6 +10,7 @@ import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
 import { Location } from 'vue-router/types/router'
+import * as uuid from 'uuid'
 
 export interface UppyResource {
   id?: string
@@ -24,6 +25,8 @@ export interface UppyResource {
     route: Location
     tusEndpoint: string
     webDavBasePath: string
+    uploadId: string
+    topLevelFolderId?: string
   }
 }
 
@@ -93,7 +96,8 @@ export function useUpload(options: UploadOptions): UploadResult {
     createDirectoryTree: createDirectoryTree({
       clientService,
       isPublicLocation,
-      publicLinkPassword
+      publicLinkPassword,
+      uppyService: options.uppyService
     })
   }
 }
@@ -101,11 +105,13 @@ export function useUpload(options: UploadOptions): UploadResult {
 const createDirectoryTree = ({
   clientService,
   isPublicLocation,
-  publicLinkPassword
+  publicLinkPassword,
+  uppyService
 }: {
   clientService: ClientService
   isPublicLocation: Ref<boolean>
   publicLinkPassword?: Ref<string>
+  uppyService: UppyService
 }) => {
   return async (files: UppyResource[]) => {
     const { owncloudSdk: client } = clientService
@@ -132,6 +138,28 @@ const createDirectoryTree = ({
           continue
         }
 
+        let uploadId
+        if (!createdSubFolders) {
+          uploadId = file.meta.topLevelFolderId
+        } else {
+          uploadId = uuid.v4()
+        }
+
+        const uppyResource = {
+          id: uuid.v4(),
+          name: subFolder,
+          isFolder: true,
+          type: 'folder',
+          meta: {
+            relativeFolder: createdSubFolders,
+            route: file.meta.route,
+            currentFolder: file.meta.currentFolder,
+            uploadId
+          }
+        }
+
+        uppyService.publish('addedForUpload', [uppyResource])
+
         if (unref(isPublicLocation)) {
           await client.publicFiles.createFolder(
             currentFolder,
@@ -141,6 +169,8 @@ const createDirectoryTree = ({
         } else {
           await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
         }
+
+        uppyService.publish('fileSuccessfullyUploaded', uppyResource)
 
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)
