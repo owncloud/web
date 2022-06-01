@@ -59,7 +59,7 @@
           appearance="raw"
           @click="togglePauseUploads"
         >
-          <oc-icon :name="uploadsPaused ? 'play' : 'pause'" fill-type="line" />
+          <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
         </oc-button>
         <oc-button
           v-if="runningUploads"
@@ -69,7 +69,7 @@
           appearance="raw"
           @click="cancelAllUploads"
         >
-          <oc-icon name="close" fill-type="line" />
+          <oc-icon name="close-circle" fill-type="line" />
         </oc-button>
       </div>
     </div>
