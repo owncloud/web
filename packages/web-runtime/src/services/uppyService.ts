@@ -93,6 +93,10 @@ export class UppyService {
     this.uppy.use(XHRUpload, xhrPluginOptions)
   }
 
+  tusActive() {
+    return !!this.uppy.getPlugin('Tus')
+  }
+
   useDropTarget({
     targetSelector,
     uppyService

@@ -733,12 +733,8 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
+      await this.updateStoreForCreatedFolders(files)
       this.$uppyService.uploadFiles(files)
-      // await this.updateStoreForCreatedFolders(files)
-      // setTimeout(() => {
-      //   console.log('UPLOADING FILES')
-      //   this.$uppyService.uploadFiles(files)
-      // }, 3000)
     },
 
     displayOverwriteDialog(files: UppyResource[], conflicts) {

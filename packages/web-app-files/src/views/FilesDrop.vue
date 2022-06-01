@@ -42,6 +42,7 @@ import { createLocationOperations, createLocationPublic } from '../router'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
+import * as uuid from 'uuid'
 
 export default {
   components: {
@@ -54,7 +55,6 @@ export default {
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
       const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
-      const uploadErrorSub = uppyService.subscribe('uploadError', instance.onFileError)
 
       uppyService.useDropTarget({
         targetSelector: '#files-drop-container',
@@ -64,7 +64,6 @@ export default {
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
         uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
-        uppyService.unsubscribe('uploadError', uploadErrorSub)
         uppyService.removeDropTarget()
       })
     })
@@ -150,6 +149,8 @@ export default {
     },
 
     onFilesSelected(files) {
+      this.$uppyService.publish('uploadStarted')
+
       const uppyResources = files.map((file) => ({
         source: 'FileDrop',
         name: file.name,
@@ -157,23 +158,17 @@ export default {
         data: file,
         meta: {
           tusEndpoint: this.url,
-          relativePath: file.webkitRelativePath || file.relativePath || ''
+          relativePath: file.webkitRelativePath || file.relativePath || '',
+          uploadId: uuid.v4()
         }
       }))
 
+      this.$uppyService.publish('addedForUpload', uppyResources)
       this.$uppyService.uploadFiles(uppyResources)
     },
 
     onFileSuccess(uppyResource) {
       this.$uppyService.publish('fileSuccessfullyUploaded', uppyResource)
-    },
-
-    onFileError(error) {
-      console.error(error)
-      this.showMessage({
-        title: this.$gettext('Failed to upload'),
-        status: 'danger'
-      })
     }
   }
 }

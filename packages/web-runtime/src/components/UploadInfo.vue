@@ -52,7 +52,7 @@
           <oc-icon name="restart" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads"
+          v-if="runningUploads && uploadsPausable"
           id="pause-upload-info-btn"
           v-oc-tooltip="uploadsPaused ? $gettext('Resume uploads') : $gettext('Pause uploads')"
           class="oc-ml-s"
@@ -107,7 +107,7 @@
             :parent-folder-link="parentFolderLink(item)"
           />
           <span v-else class="oc-flex oc-flex-middle">
-            <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mr-s" />
+            <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
             <oc-resource-name
               :name="item.name"
               :extension="item.extension"
@@ -123,16 +123,9 @@
 </template>
 
 <script>
-import '@uppy/core/dist/style.css'
-import '@uppy/status-bar/dist/style.css'
 import path from 'path'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
-
-const UPLOAD_STATUSES = Object.freeze({
-  success: 1,
-  error: 2
-})
 
 export default {
   setup() {
@@ -197,6 +190,9 @@ export default {
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    uploadsPausable() {
+      return this.$uppyService.tusActive()
     }
   },
   created() {
@@ -227,7 +223,7 @@ export default {
         }
 
         // count all files inside top level folders to mark them as successful or failed later
-        if (!file.isFolder && !isTopLevelItem) {
+        if (!file.isFolder && !isTopLevelItem && this.uploads[topLevelFolderId]) {
           this.uploads[topLevelFolderId].filesCount += 1
         }
       }
@@ -404,6 +400,7 @@ export default {
     cancelAllUploads() {
       this.uploadsCancelled = true
       this.filesInProgressCount = 0
+      this.runningUploads = 0
       this.$uppyService.cancelAllUploads()
       const runningUploads = Object.values(this.uploads).filter(
         (u) => u.status !== 'success' && u.status !== 'error'
