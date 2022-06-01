@@ -1,0 +1,7 @@
+Bugfix: Do not load files from cache in public links
+
+When apps (i.e Drawio) try to load a file, the browser caches the request.
+If the file was modified somewhere else, this causes inconsistent results which prevent saving any changes until the cache is properly cleared.
+This had previously been fixed for normal files, but not yet for public links - which we took care of now.
+
+https://github.com/owncloud/web/pull/7075

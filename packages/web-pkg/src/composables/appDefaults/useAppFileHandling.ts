@@ -53,7 +53,9 @@ export function useAppFileHandling({
 
   const getFileContents = async (filePath: string, options: Record<string, any>) => {
     if (unref(isPublicLinkContext)) {
-      const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
+      const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword), {
+        noCache: true
+      })
       res.statusCode = res.status
 
       const responseType = ['arrayBuffer', 'blob', 'text'].includes(options?.responseType)
