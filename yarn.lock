@@ -3472,7 +3472,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.27.1, axios@npm:^0.27.2":
+"axios@npm:^0.27.2":
   version: 0.27.2
   resolution: "axios@npm:0.27.2"
   dependencies:
@@ -10928,7 +10928,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:^8.0.3":
+"promise@npm:^8.1.0":
   version: 8.1.0
   resolution: "promise@npm:8.1.0"
   dependencies:
@@ -13780,7 +13780,7 @@ __metadata:
     "@uppy/tus": ^3.0.1
     "@uppy/xhr-upload": ^3.0.1
     "@vue/composition-api": ^1.6.2
-    axios: ^0.27.1
+    axios: ^0.27.2
     cross-fetch: ^3.0.6
     easygettext: "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz"
     filesize: ^9.0.11
@@ -13798,7 +13798,7 @@ __metadata:
     portal-vue: ^2.1.7
     postcss-import: ^12.0.1
     postcss-url: ^9.0.0
-    promise: ^8.0.3
+    promise: ^8.1.0
     qs: ^6.10.3
     sanitize-html: ^2.7.0
     semver: ^7.3.7
@@ -13821,13 +13821,13 @@ __metadata:
     vuex-extensions: ^1.1.5
     vuex-router-sync: ^5.0.0
     web-pkg: "*"
-    webdav: 4.10.0
+    webdav: ^4.10.0
     webfontloader: ^1.6.28
     xml-js: ^1.6.11
   languageName: unknown
   linkType: soft
 
-"webdav@npm:4.10.0":
+"webdav@npm:^4.10.0":
   version: 4.10.0
   resolution: "webdav@npm:4.10.0"
   dependencies:
