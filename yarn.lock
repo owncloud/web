@@ -11855,6 +11855,7 @@ __metadata:
     tslib: ^2.4.0
     typescript: ^4.6.4
     url-search-params-polyfill: ^8.0.0
+    v-hotkey: ^0.9.0
     vue: ^2.6.10
     vue-jest: ^3.0.7
     vue-template-compiler: ^2.6.12
@@ -13428,6 +13429,17 @@ __metadata:
     "@popperjs/core": ^2.4.0
     vue: ^2.5.18
   checksum: bcb508084c02ea477ab623bef8957a12daa15b621ce236dd4c58d8ccd037c7acdd8e5f0b224627ca70452b7871d39dd787f9c112ec78bd2cf808c6a06f4dcb27
+  languageName: node
+  linkType: hard
+
+"v-hotkey@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "v-hotkey@npm:0.9.0"
+  dependencies:
+    core-js: ^2.6.5
+  peerDependencies:
+    vue: ^2.x
+  checksum: 67312f1a6105563fe3b3dfd3d6f4c81d1168e204d7010ff3eb192d9db89b8e9ccf5b5cf4f61125186cd2ffbf8af646559632ca2634782736aa6e3c0a2d65a52a
   languageName: node
   linkType: hard
 

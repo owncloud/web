@@ -15,7 +15,9 @@ import AsyncComputed from 'vue-async-computed'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueCompositionAPI from '@vue/composition-api'
+import VueHotkey from 'v-hotkey'
 
+Vue.use(VueHotkey)
 Vue.use(VueCompositionAPI)
 Vue.use(Vuex)
 Vue.use(VueRouter)

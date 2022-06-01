@@ -40,6 +40,7 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
+    "v-hotkey": "^0.9.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {

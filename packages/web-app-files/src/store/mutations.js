@@ -79,6 +79,18 @@ export default {
   CLEAR_FILES_SEARCHED(state) {
     state.filesSearched = null
   },
+  CLEAR_CLIPBOARD(state) {
+    state.clipboardResources = []
+    state.clipboardAction = null
+  },
+  CLIPBOARD_SELECTED(state) {
+    state.clipboardResources = state.files.filter((f) => {
+      return state.selectedIds.some((id) => f.id === id)
+    })
+  },
+  SET_CLIPBOARD_ACTION(state, action) {
+    state.clipboardAction = action
+  },
   SET_FILE_SELECTION(state, files) {
     state.selectedIds = files.map((f) => f.id)
   },
