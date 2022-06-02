@@ -38,6 +38,7 @@ const state = {
     }
   },
   options: {
+    contextHelpers: true,
     defaultExtension: 'files',
     disablePreviews: false,
     displayResourcesLazy: true,

@@ -117,9 +117,6 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
           files_sharing: { federation: { incoming: true, outgoing: true } }
         }),
         configuration: jest.fn(() => ({
-          options: {
-            contextHelpers: true
-          },
           server: 'http://example.com/'
         }))
       }

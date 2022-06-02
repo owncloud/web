@@ -165,9 +165,6 @@ const storeOptions = (data, isInLoadingState) => {
     },
     getters: {
       configuration: jest.fn(() => ({
-        options: {
-          contextHelpers: true
-        },
         server: 'http://example.com/',
         currentTheme: {
           general: {

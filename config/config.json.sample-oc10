@@ -15,8 +15,5 @@
     "search",
     "text-editor",
     "draw-io"
-  ],
-  "options": {
-    "contextHelpers": true
-  }
+  ]
 }
