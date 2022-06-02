@@ -22,19 +22,26 @@
         padding-size="small"
       >
         <oc-list id="create-list">
-          <li class="create-list-folder">
+          <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="showCreateResourceModal">
-              <oc-resource-icon :resource="{ isFolder: true, extension: '' }" />
+              <oc-resource-icon :resource="{ isFolder: true, extension: '' }" size="medium" />
               <translate>Folder</translate>
             </oc-button>
           </li>
-          <li v-for="(newFileHandler, key) in newFileHandlers" :key="key" class="create-list-file">
+          <li
+            v-for="(newFileHandler, key) in newFileHandlers"
+            :key="key"
+            class="create-list-file oc-menu-item-hover"
+          >
             <oc-button
               appearance="raw"
               :class="['new-file-btn-' + newFileHandler.ext]"
               @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
             >
-              <oc-resource-icon :resource="{ type: 'file', extension: newFileHandler.ext }" />
+              <oc-resource-icon
+                :resource="{ type: 'file', extension: newFileHandler.ext }"
+                size="medium"
+              />
               <span>{{ newFileHandler.menuTitle($gettext) }}</span>
             </oc-button>
           </li>
@@ -42,13 +49,16 @@
             <li
               v-for="(mimetype, key) in mimetypesAllowedForCreation"
               :key="key"
-              class="create-list-file"
+              class="create-list-file oc-menu-item-hover"
             >
               <oc-button
                 appearance="raw"
                 @click="showCreateResourceModal(false, mimetype.ext, false, true)"
               >
-                <oc-resource-icon :resource="{ type: 'file', extension: mimetype.ext }" />
+                <oc-resource-icon
+                  :resource="{ type: 'file', extension: mimetype.ext }"
+                  size="medium"
+                />
                 <translate :translate-params="{ name: mimetype.name }">%{name}</translate>
               </oc-button>
             </li>
@@ -89,10 +99,10 @@
       padding-size="small"
     >
       <oc-list id="upload-list">
-        <li>
+        <li class="oc-menu-item-hover">
           <resource-upload ref="folder-upload" btn-class="oc-width-1-1" />
         </li>
-        <li>
+        <li class="oc-menu-item-hover">
           <resource-upload ref="file-upload" btn-class="oc-width-1-1" :is-folder="true" />
         </li>
       </oc-list>
@@ -831,12 +841,24 @@ export default defineComponent({
   .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
-  .create-list-file button {
-    margin: 2px 0;
+  .create-list-folder button {
+    margin-bottom: 8px;
+  }
+  .create-list-file:nth-child(2) button {
+    margin-top: 6px;
   }
 }
 #upload-list,
 #new-file-menu-drop {
-  min-width: 200px;
+  min-width: 250px;
+}
+</style>
+<style lang="scss">
+#create-list,
+#upload-list,
+#new-file-menu-drop {
+  .oc-icon-m svg {
+    height: 100% !important;
+  }
 }
 </style>

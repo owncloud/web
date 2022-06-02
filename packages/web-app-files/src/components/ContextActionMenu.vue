@@ -12,7 +12,7 @@
         :key="`section-${section.name}-action-${actionIndex}`"
         :action="action"
         :items="items"
-        class="oc-files-context-action oc-px-s oc-rounded"
+        class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
     </oc-list>
   </div>
@@ -62,15 +62,11 @@ export default {
   white-space: normal;
 
   > li {
-    padding: 6px;
-    &:hover {
-      background-color: var(--oc-color-background-hover);
-    }
-
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     a,
     button,
     span {
-      color: var(--oc-color-swatch-passive-default) !important;
       display: inline-flex;
       font-weight: normal !important;
       gap: 10px;
@@ -78,11 +74,6 @@ export default {
       vertical-align: top;
       width: 100%;
       text-align: left;
-
-      &:hover {
-        color: var(--oc-color-swatch-passive-default);
-        text-decoration: none !important;
-      }
     }
   }
 

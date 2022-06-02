@@ -109,12 +109,5 @@ export default {
 <style lang="scss">
 .action-menu-item {
   vertical-align: middle;
-  &:hover {
-    color: var(--oc-color-swatch-brand-hover);
-    text-decoration: underline;
-    .oc-icon > svg {
-      fill: var(--oc-color-swatch-brand-hover) !important;
-    }
-  }
 }
 </style>

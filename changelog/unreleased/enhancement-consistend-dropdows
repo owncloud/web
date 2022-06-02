@@ -1,0 +1,6 @@
+Enhancement: Consistent dropdown menus
+
+Made the main dropdown menus (new, upload, context, etc) constistent in size, hover effect and spacing/margins.
+
+https://github.com/owncloud/web/issues/6555
+https://github.com/owncloud/web/pull/6762
