@@ -57,7 +57,7 @@ module.exports = {
       locateStrategy: 'css selector'
     },
     uploadedFiles: {
-      selector: '.upload-info-successful-uploads span.oc-resource-name',
+      selector: '.upload-info-items span.oc-resource-name',
       locateStrategy: 'css selector'
     },
     fileDropzone: {

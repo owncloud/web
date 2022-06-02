@@ -27,6 +27,7 @@
       />
       <div
         v-else
+        class="upload-info-label"
         :class="{
           'upload-info-danger': errors.length && !uploadsCancelled,
           'upload-info-success': !errors.length && !uploadsCancelled
@@ -37,7 +38,7 @@
       <div class="oc-flex">
         <oc-button
           appearance="raw"
-          class="oc-text-muted oc-text-small"
+          class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
         ></oc-button>
