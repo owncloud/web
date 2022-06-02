@@ -16,7 +16,6 @@ else
 	fi
 	php occ app:list
 	php occ config:system:set trusted_domains 1 --value=owncloud
-	php occ config:system:set dav.propfind.depth_infinity --value=true
 	php occ log:manage --level $2
 	php occ config:list
 	if [ "$3" == "builtInWeb" ]
