@@ -54,6 +54,7 @@ Summary
 * Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
+* Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
@@ -458,6 +459,13 @@ Details
 
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6781
+
+* Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
+
+   The contextual helpers needed to actively be enabled in the configuration. We have now enabled
+   them by default and admins can disable them using the configuration.
+
+   https://github.com/owncloud/web/pull/6750#issuecomment-1143753289
 
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 
