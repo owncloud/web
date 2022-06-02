@@ -218,9 +218,7 @@ export default defineComponent({
 
     const hasShareJail = useCapabilityShareJailEnabled()
     const resourceTargetLocation = computed(() =>
-      createLocationSpaces(
-        unref(hasShareJail) ? 'files-spaces-share' : 'files-spaces-personal-home'
-      )
+      createLocationSpaces(unref(hasShareJail) ? 'files-spaces-share' : 'files-spaces-personal')
     )
     const resourceTargetParamMapping = computed(() =>
       unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined

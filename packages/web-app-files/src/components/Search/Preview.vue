@@ -45,7 +45,7 @@ export default {
   setup() {
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal'),
       resourceTargetLocationSpace: createLocationSpaces('files-spaces-project')
     }
   },

@@ -135,7 +135,7 @@ export default defineComponent({
     )
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal'),
       hasShareJail: useCapabilityShareJailEnabled(),
       graphClient
     }
@@ -179,13 +179,12 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        let storageId = this.user.id
-        console.log(this.user)
         const needsRedirectToHome =
           this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
-        const redirectWithStorageId = to.params.storageId === 'home'
+        const needsRedirectWithStorageId = to.params.storageId === 'home'
 
-        if (redirectWithStorageId) {
+        if (needsRedirectWithStorageId) {
+          let storageId = this.user.id
           if (this.hasShareJail) {
             const drivesResponse = await this.graphClient.drives.listMyDrives(
               '',
@@ -199,6 +198,7 @@ export default defineComponent({
             to,
             params: { ...to.params, storageId }
           })
+          return
         }
 
         if (needsRedirectToHome) {

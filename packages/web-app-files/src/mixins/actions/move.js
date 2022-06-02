@@ -18,7 +18,7 @@ export default {
             this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')

@@ -14,7 +14,7 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSpacesActive(router, 'files-spaces-personal-home')
+    return isLocationSpacesActive(router, 'files-spaces-personal')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {

@@ -417,7 +417,7 @@ export default {
           })
         }
 
-        return createLocationSpaces('files-spaces-personal-home', {
+        return createLocationSpaces('files-spaces-personal', {
           params: { item: parentShare.path }
         })
       }

@@ -85,7 +85,7 @@ export default {
         return createLocationSpaces('files-spaces-share')
       }
 
-      return createLocationSpaces('files-spaces-personal-home')
+      return createLocationSpaces('files-spaces-personal')
     }
   },
   methods: {

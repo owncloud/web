@@ -72,7 +72,7 @@ function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
           ? createLocationShares('files-shares-via-link')
           : deletePermanent
           ? createLocationTrash('files-trash-personal')
-          : createLocationSpaces('files-spaces-personal-home'),
+          : createLocationSpaces('files-spaces-personal'),
         resolve: (r) => {
           return { href: r.name }
         }

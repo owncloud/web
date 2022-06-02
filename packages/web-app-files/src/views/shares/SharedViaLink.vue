@@ -92,7 +92,7 @@ export default defineComponent({
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
 
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal')
     }
   },
 

@@ -185,7 +185,7 @@ describe('LocationPicker', () => {
         expect(spyLeaveLocationPicker).toHaveBeenCalledWith('/some/item')
         expect(spyRouterPush).toHaveBeenCalledTimes(1)
         expect(spyRouterPush).toHaveBeenCalledWith({
-          name: 'files-spaces-personal-home',
+          name: 'files-spaces-personal',
           params: {
             item: '/some/item',
             storageId: 'home'

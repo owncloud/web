@@ -37,7 +37,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   },
   {
     name: locationPublicDrop.name,
-    path: '/public/drop/:token',
+    path: '/public/drop/:token?',
     component: components.FilesDrop,
     meta: { auth: false, title: $gettext('Public file upload') }
   }

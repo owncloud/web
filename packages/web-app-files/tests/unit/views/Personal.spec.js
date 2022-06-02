@@ -16,7 +16,7 @@ const router = {
   push: jest.fn(),
   afterEach: jest.fn(),
   currentRoute: {
-    ...createLocationSpaces('files-spaces-personal-home'),
+    ...createLocationSpaces('files-spaces-personal'),
     query: {}
   },
   resolve: (r) => {

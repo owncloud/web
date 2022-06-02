@@ -24,7 +24,7 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               this.$_isFilesAppActive &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&

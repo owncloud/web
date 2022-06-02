@@ -30,7 +30,7 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-personal-home')
+const personalHomeLocation = createLocationSpaces('files-spaces-personal')
 
 const newFileHandlers = [
   {

@@ -377,7 +377,7 @@ export default {
           break
         default:
           this.$router.push(
-            createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
+            createLocationSpaces('files-spaces-personal', { params: { item: target || '/' } })
           )
       }
     },

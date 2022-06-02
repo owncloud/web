@@ -172,7 +172,7 @@ export default defineComponent({
         })
       }
 
-      return createLocationSpaces('files-spaces-personal-home', {
+      return createLocationSpaces('files-spaces-personal', {
         params: { item: sharedParentDir.value }
       })
     })

@@ -168,12 +168,7 @@ describe('SideBar', () => {
   })
 })
 
-function createWrapper({
-  item,
-  selectedItems,
-  mocks,
-  currentRouteName = 'files-spaces-personal-home'
-}) {
+function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-spaces-personal' }) {
   const localVue = createLocalVue()
   localVue.use(Vuex)
   localVue.use(VueCompositionAPI)

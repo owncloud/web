@@ -3,7 +3,7 @@ import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
 type spaceTypes =
-  | 'files-spaces-personal-home'
+  | 'files-spaces-personal'
   | 'files-spaces-project'
   | 'files-spaces-projects'
   | 'files-spaces-share'
@@ -13,13 +13,13 @@ export const createLocationSpaces = (name: spaceTypes, location = {}): Location 
 
 export const locationSpacesProject = createLocationSpaces('files-spaces-project')
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+export const locationSpacesPersonal = createLocationSpaces('files-spaces-personal')
 export const locationSpacesShare = createLocationSpaces('files-spaces-share')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
   locationSpacesProjects,
-  locationSpacesPersonalHome,
+  locationSpacesPersonal,
   locationSpacesShare
 )
 
@@ -47,7 +47,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       },
       {
         path: 'personal/:storageId?/:item*',
-        name: locationSpacesPersonalHome.name,
+        name: locationSpacesPersonal.name,
         component: components.Personal,
         meta: {
           patchCleanPath: true,
