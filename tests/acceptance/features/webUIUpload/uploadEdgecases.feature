@@ -106,33 +106,3 @@ Feature: File Upload
     And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI
     And as "Alice" the content of "simple-folder/0" in the server should be the same as the content of local file "0"
-
-  @issue-3015 @issue-ocis-reva-200
-  Scenario: Upload a file with the same name as already existing folder
-    Given user "Alice" has created folder "new-lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
-    When the user uploads overwriting file "new-lorem.txt" using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to upload
-      """
-  # Then the following error message should be displayed on the webUI
-  #   """
-  #   (Any nice error message)
-  #   """
-
-
-  # When this issue is fixed merge with the scenario above
-  @issue-3015 @skipOnOC10 @issue-ocis-reva-200
-  Scenario: Upload a file with the same name as already existing folder (ocis bug demonstration)
-    Given user "Alice" has created folder "new-lorem.txt" in the server
-    And the user has reloaded the current page of the webUI
-    When the user uploads overwriting file "new-lorem.txt" using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to upload
-      """
-# Then the following error message should be displayed on the webUI
-#   """
-#   (Any nice error message)
-#   """
