@@ -179,10 +179,7 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        const needsRedirectToHome =
-          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
         const needsRedirectWithStorageId = to.params.storageId === 'home'
-
         if (needsRedirectWithStorageId) {
           let storageId = this.user.id
           if (this.hasShareJail) {
@@ -190,19 +187,20 @@ export default defineComponent({
               '',
               'driveType eq personal'
             )
-
             storageId = drivesResponse.data.value[0].id
           }
 
-          await this.$router.replace({
+          return this.$router.replace({
             to,
-            params: { ...to.params, storageId }
+            params: { ...to.params, storageId },
+            query: to.query
           })
-          return
         }
 
+        const needsRedirectToHome =
+          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
         if (needsRedirectToHome) {
-          this.$router.replace(
+          return this.$router.replace(
             {
               name: to.name,
               params: {
@@ -216,11 +214,9 @@ export default defineComponent({
               console.error(e)
             }
           )
-
-          return
         }
 
-        const sameRoute = to.name === from?.name
+        const sameRoute = to.name === from?.name && to.params?.storageId === from?.params?.storageId
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
           this.loadResourcesTask.perform(this, sameRoute)

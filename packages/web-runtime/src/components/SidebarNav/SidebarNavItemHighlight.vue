@@ -35,12 +35,16 @@ export default {
   },
   methods: {
     animateHighlightPosition(target, durationSeconds = 0.2) {
-      const initialId = this.getInitialId()
+      const highlightedElement = document.getElementById('highlighter')
+      if (!highlightedElement) {
+        return
+      }
+      const initialId = highlightedElement.getAttribute('data-initial-id')
       const currentElement = this.getNavigationItem(initialId)
       const targetElement = this.getNavigationItem(target)
       const distanceAbs = this.getDistanceBetweenElements(currentElement, targetElement)
       const distance = target < initialId ? -distanceAbs : distanceAbs
-      const style = this.getHighlightingElement().style
+      const style = highlightedElement.style
       style.setProperty('transition-duration', `${durationSeconds}s`)
       style.setProperty('transform', `translateY(${distance}px)`)
     },
@@ -58,12 +62,6 @@ export default {
       const aPosition = this.getPositionAtCenter(a)
       const bPosition = this.getPositionAtCenter(b)
       return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y)
-    },
-    getHighlightingElement() {
-      return document.getElementById('highlighter')
-    },
-    getInitialId() {
-      return this.getHighlightingElement().getAttribute('data-initial-id')
     }
   }
 }
