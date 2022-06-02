@@ -53,7 +53,7 @@
     "@cucumber/pretty-formatter": "^1.0.0-alpha.2",
     "@noble/hashes": "^1.0.0",
     "@playwright/test": "^1.21.1",
-    "@rollup-extras/plugin-copy": "^1.2.3",
+    "@rollup-extras/plugin-copy": "^1.2.5",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-html": "^0.2.4",
