@@ -37,7 +37,10 @@ module.exports = {
      */
     getUploadedFiles: async function () {
       let elements = []
-      await this.waitForElementVisible('@uploadedFiles')
+      await this.waitForElementVisible('@uploadInfoSuccessLabel')
+        .click('@toggleUploadDetailsButton')
+        .waitForElementVisible('@uploadedFiles')
+
       await this.api.elements('@uploadedFiles', (result) => {
         elements = result.value
       })
@@ -54,6 +57,14 @@ module.exports = {
   elements: {
     fileUploadInput: {
       selector: 'input[type=file]',
+      locateStrategy: 'css selector'
+    },
+    toggleUploadDetailsButton: {
+      selector: '.upload-info-toggle-details-btn',
+      locateStrategy: 'css selector'
+    },
+    uploadInfoSuccessLabel: {
+      selector: '.upload-info-success',
       locateStrategy: 'css selector'
     },
     uploadedFiles: {

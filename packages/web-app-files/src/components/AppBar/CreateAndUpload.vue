@@ -277,9 +277,10 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
 
-    onFileSuccess(file: UppyResource) {
-      this.$uppyService.publish('fileSuccessfullyUploaded', file)
-      this.SET_QUOTA(this.user.quota)
+    onFileSuccess() {
+      if (this.user?.quota) {
+        this.SET_QUOTA(this.user.quota)
+      }
     },
 
     onUploadComplete(result) {

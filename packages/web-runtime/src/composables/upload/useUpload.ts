@@ -170,7 +170,7 @@ const createDirectoryTree = ({
           await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
         }
 
-        uppyService.publish('fileSuccessfullyUploaded', uppyResource)
+        uppyService.publish('uploadSuccess', uppyResource)
 
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)

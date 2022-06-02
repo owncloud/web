@@ -260,7 +260,7 @@ export default {
         this.handleTopLevelFolderUpdate(file, 'error')
       }
     })
-    this.$uppyService.subscribe('fileSuccessfullyUploaded', (file) => {
+    this.$uppyService.subscribe('uploadSuccess', (file) => {
       // item inside folder
       if (!this.uploads[file.meta.uploadId]) {
         if (!file.isFolder) {

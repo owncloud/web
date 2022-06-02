@@ -15,7 +15,6 @@ type UppyServiceTopics =
   | 'uploadError'
   | 'fileAdded'
   | 'filesSelected'
-  | 'fileSuccessfullyUploaded'
   | 'progress'
   | 'addedForUpload'
 
