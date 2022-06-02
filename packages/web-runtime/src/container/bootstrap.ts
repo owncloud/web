@@ -14,10 +14,12 @@ import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { useDefaultThemeName } from '../composables'
 import { clientService } from 'web-pkg/src/services'
+import { authService } from '../services/auth'
 import { UppyService } from '../services/uppyService'
 
 import { init as SentryInit } from '@sentry/browser'
 import { Vue as SentryVueIntegration } from '@sentry/integrations'
+import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -28,15 +30,18 @@ import { Vue as SentryVueIntegration } from '@sentry/integrations'
  *
  * @param path - path to main configuration
  */
-export const requestConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
+export const announceConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
   const request = await fetch(path)
   if (request.status !== 200) {
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  return request.json().catch((error) => {
+  const rawConfig = (await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
-  })
+  })) as RawConfig
+  configurationManager.initialize(rawConfig)
+  // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
+  return rawConfig
 }
 
 /**
@@ -56,7 +61,6 @@ export const announceStore = async ({
   store: Store<any>
 }): Promise<void> => {
   await store.dispatch('loadConfig', runtimeConfiguration)
-  await store.dispatch('initAuth')
 
   /**
    * TODO: Find a different way to access store from within JS files
@@ -260,6 +264,29 @@ export const announceClientService = ({
  */
 export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
   vue.prototype.$uppyService = new UppyService()
+}
+
+/**
+ * announce authService and inject it into vue
+ *
+ * @param vue
+ * @param configurationManager
+ * @param store
+ * @param router
+ */
+export const announceAuthService = async ({
+  vue,
+  configurationManager,
+  store,
+  router
+}: {
+  vue: VueConstructor
+  configurationManager: ConfigurationManager
+  store: Store<any>
+  router: VueRouter
+}): Promise<void> => {
+  await authService.initialize(configurationManager, clientService, store, router)
+  vue.prototype.$authService = authService
 }
 
 /**

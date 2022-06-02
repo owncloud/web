@@ -8,9 +8,10 @@ import {
 } from './defaults'
 
 import { router } from './router'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 import {
-  requestConfiguration,
+  announceConfiguration,
   announceApplications,
   announceClient,
   announceDefaults,
@@ -21,14 +22,16 @@ import {
   announceVersions,
   applicationStore,
   announceUppyService,
-  startSentry
+  startSentry,
+  announceAuthService
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
-  const runtimeConfiguration = await requestConfiguration(configurationPath)
+  const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
   announceClientService({ vue: Vue, runtimeConfiguration })
   announceUppyService({ vue: Vue })
+  await announceAuthService({ vue: Vue, configurationManager, store, router })
   await announceClient(runtimeConfiguration)
   await announceStore({ vue: Vue, store, runtimeConfiguration })
   await announceApplications({

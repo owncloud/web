@@ -12,6 +12,7 @@ import {
 import { linkRoleUploaderFolder } from '../../helpers/share'
 import omit from 'lodash-es/omit'
 import { Store } from 'vuex'
+import { authService } from 'web-runtime/src/services/auth'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -107,7 +108,7 @@ const unauthenticatedUserReady = async (router: Router, store: Store<any>) => {
   const publicToken = (router.currentRoute.params.item || '').split('/')[0]
   const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
-  await store.dispatch('loadCapabilities', {
+  await authService.fetchCapabilities({
     publicToken,
     ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
   })

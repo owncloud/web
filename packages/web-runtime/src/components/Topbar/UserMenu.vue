@@ -80,6 +80,7 @@
 import { mapGetters } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
+import { authService } from '../../services/auth'
 
 export default {
   props: {
@@ -136,7 +137,7 @@ export default {
     logout() {
       // Use timeout to leave enough time for the dropdown to be hidden
       setTimeout(() => {
-        this.$store.dispatch('logout')
+        authService.logout()
       })
     }
   }

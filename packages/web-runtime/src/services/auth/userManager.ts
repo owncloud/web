@@ -6,11 +6,12 @@ import {
   User
 } from 'oidc-client-ts'
 import { buildUrl } from '../../router'
+import { ConfigurationManager } from 'web-pkg/src/configuration'
 
 export class UserManager extends OidcUserManager {
   private readonly storePrefix
 
-  constructor(config) {
+  constructor(configurationManager: ConfigurationManager) {
     const storePrefix = 'oc_oAuth' // FIXME: we want this unique and reproducible
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
@@ -30,25 +31,26 @@ export class UserManager extends OidcUserManager {
       client_id: ''
     }
 
-    if (config.openIdConnect) {
+    if (configurationManager.isOIDC) {
       Object.assign(openIdConfig, {
         scope: 'openid profile offline_access',
         loadUserInfo: true,
-        ...config.openIdConnect
+        ...configurationManager.oidc
       })
-    } else if (config.auth) {
+    } else if (configurationManager.isOAuth2) {
+      const oAuth2 = configurationManager.oAuth2
       Object.assign(openIdConfig, {
-        authority: config.auth.url,
-        client_id: config.auth.clientId,
+        authority: oAuth2.url,
+        client_id: oAuth2.clientId,
         client_authentication: 'client_secret_basic',
-        client_secret: config.auth.clientSecret,
+        client_secret: oAuth2.clientSecret,
 
         scope: 'profile',
         loadUserInfo: false,
         metadata: {
-          issuer: config.auth.url,
-          authorization_endpoint: config.auth.authUrl,
-          token_endpoint: config.auth.url,
+          issuer: oAuth2.url,
+          authorization_endpoint: oAuth2.authUrl,
+          token_endpoint: oAuth2.url,
           userinfo_endpoint: ''
         }
       })

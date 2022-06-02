@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authService } from '../services/auth'
 export default {
   name: 'OidcCallbackPage',
   data() {
@@ -57,14 +58,11 @@ export default {
         return
       }
       if (this.$route.path === '/oidc-silent-redirect') {
-        this.signinSilentCallback()
+        authService.signInSilentCallback()
       } else {
-        this.callback()
+        authService.signInCallback()
       }
     })
-  },
-  methods: {
-    ...mapActions(['callback', 'signinSilentCallback'])
   }
 }
 </script>

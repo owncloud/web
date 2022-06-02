@@ -22,7 +22,7 @@
           variation="primary"
           appearance="filled"
           class="oc-login-authorize-button"
-          @click="login()"
+          @click="performLogin"
         >
           <translate>Login</translate>
         </oc-button>
@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authService } from '../services/auth'
 export default {
   name: 'LoginPage',
   data() {
@@ -68,14 +69,16 @@ export default {
 
   created() {
     if (this.configuration.currentTheme.loginPage.autoRedirect) {
-      this.login()
+      this.performLogin()
     } else {
       this.initialized = true
     }
   },
 
   methods: {
-    ...mapActions(['login'])
+    performLogin() {
+      authService.login()
+    }
   }
 }
 </script>

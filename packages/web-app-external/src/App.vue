@@ -39,6 +39,7 @@ import LoadingScreen from './components/LoadingScreen.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../web-app-files/src/helpers/resources'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import { authService } from 'web-runtime/src/services/auth'
 
 // FIXME: hacky, get rid asap, just a workaround
 // same as packages/web-app-files/src/views/PublicFiles.vue
@@ -50,7 +51,7 @@ const unauthenticatedUserReady = async (router, store) => {
   const publicToken = (router.currentRoute.params.filePath || '').split('/')[0]
   const publicLinkPassword = store.getters['Files/publicLinkPassword']
 
-  await store.dispatch('loadCapabilities', {
+  await authService.fetchCapabilities({
     publicToken,
     ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
   })
