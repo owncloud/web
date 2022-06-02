@@ -53,6 +53,7 @@ Summary
 * Enhancement - Capability-based searchbar rendering: [#6856](https://github.com/owncloud/web/pull/6856)
 * Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
+* Enhancement - Consistent dropdown menus: [#6555](https://github.com/owncloud/web/issues/6555)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
@@ -452,6 +453,14 @@ Details
 
    https://github.com/owncloud/web/pull/7034
 
+* Enhancement - Consistent dropdown menus: [#6555](https://github.com/owncloud/web/issues/6555)
+
+   Made the main dropdown menus (new, upload, context, etc) constistent in size, hover effect and
+   spacing/margins.
+
+   https://github.com/owncloud/web/issues/6555
+   https://github.com/owncloud/web/pull/6762
+
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
    We've fixed the following issues to enhance UI/UX: - wording for new space button - wording for
@@ -676,8 +685,9 @@ Details
    https://github.com/owncloud/owncloud-design-system/pull/2049 - Enhancement - Export
    package members: https://github.com/owncloud/owncloud-design-system/pull/2048 -
    Enhancement - Make OcResource inline-flex:
-   https://github.com/owncloud/owncloud-design-system/pull/2041 - Bugfix - Disabled
-   textarea color contrast in darkmode:
+   https://github.com/owncloud/owncloud-design-system/pull/2041 - Enhancement - Hover in
+   ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069 - Bugfix -
+   Disabled textarea color contrast in darkmode:
    https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
    Fix event handlers in loops:
    https://github.com/owncloud/owncloud-design-system/pull/2054
@@ -685,7 +695,7 @@ Details
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/web/pull/6953
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.5
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.9
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
