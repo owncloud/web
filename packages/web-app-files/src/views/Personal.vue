@@ -32,7 +32,6 @@
         v-else
         id="files-personal-table"
         v-model="selectedResources"
-        v-hotkey="keymap"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -149,11 +148,6 @@ export default defineComponent({
 
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-    keymap() {
-      return {
-        'ctrl+c': this.copySelectedFiles
-      }
     },
 
     breadcrumbs() {

@@ -13,6 +13,7 @@
     :selection="selection"
     :sort-by="sortBy"
     :sort-dir="sortDir"
+    v-hotkey="keymap"
     padding-x="medium"
     @highlight="fileClicked"
     @rowMounted="rowMounted"
@@ -397,6 +398,12 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
+    keymap() {
+      return {
+        'ctrl+c': this.copySelectedFiles,
+        'command+c': this.copySelectedFiles
+      }
+    },
     popperOptions() {
       return {
         modifiers: [
@@ -562,6 +569,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    ...mapActions('Files', [
+      'copySelectedFiles',
+      'cutSelectedFiles',
+      'pasteSelectedFiles'
+    ]),
     hasRenameAction(item) {
       return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
         .length
