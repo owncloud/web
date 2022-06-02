@@ -15,8 +15,5 @@
     "search",
     "text-editor"
   ],
-  "applications" : [],
-  "options": {
-    "contextHelpers": true
-  }
+  "applications" : []
 }

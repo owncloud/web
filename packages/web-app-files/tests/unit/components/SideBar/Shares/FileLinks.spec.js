@@ -173,9 +173,6 @@ describe('FileLinks', () => {
     return new Vuex.Store({
       getters: {
         configuration: jest.fn(() => ({
-          options: {
-            contextHelpers: true
-          },
           server: 'http://example.com/',
           currentTheme: {
             general: {

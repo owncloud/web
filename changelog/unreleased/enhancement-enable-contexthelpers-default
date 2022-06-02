@@ -1,0 +1,6 @@
+Enhancement: Make contexthelpers opt-out
+
+The contextual helpers needed to actively be enabled in the configuration. 
+We have now enabled them by default and admins can disable them using the configuration.
+
+https://github.com/owncloud/web/pull/6750#issuecomment-1143753289
