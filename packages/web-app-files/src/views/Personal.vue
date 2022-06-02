@@ -179,7 +179,8 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        const needsRedirectWithStorageId = to.params.storageId === 'home'
+        const needsRedirectWithStorageId =
+          to.params.storageId === 'home' || isNil(to.params.storageId)
         if (needsRedirectWithStorageId) {
           let storageId = this.user.id
           if (this.hasShareJail) {
