@@ -1,0 +1,6 @@
+Enhancement: Add Hotkeys to ResourceTable 
+
+We've added hotkeys for copy, cut and paste.
+
+https://github.com/owncloud/web/pull/7078
+https://github.com/owncloud/web/issues/7071
