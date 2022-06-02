@@ -54,13 +54,13 @@ module.exports = {
       const yearSelector = this.getSelectorExpiryDateYear(date)
       return this.waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
-        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
+        .waitForElementVisible('@datepickerMonthAndYearTitle')
         .click('@datepickerMonthAndYearTitle')
-        .waitForElementVisible(yearSelector, 500)
+        .waitForElementVisible(yearSelector)
         .click(yearSelector)
         .waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
-        .waitForElementNotPresent('@datepickerMonthAndYearTitle', 500)
+        .waitForElementNotPresent('@datepickerMonthAndYearTitle')
     },
     /**
      * sets provided month in expiry date field on webUI
@@ -72,10 +72,10 @@ module.exports = {
       const monthSelector = this.getSelectorExpiryDateMonth(date)
       return this.waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
-        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
+        .waitForElementVisible('@datepickerMonthAndYearTitle')
         .waitForElementVisible(monthSelector)
         .click(monthSelector)
-        .waitForElementNotPresent('@datepickerMonthAndYearTitle', 500)
+        .waitForElementNotPresent('@datepickerMonthAndYearTitle')
     },
     /**
      * sets provided day in expiry date field on webUI
@@ -120,9 +120,9 @@ module.exports = {
 
       await this.waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')
-        .waitForElementVisible('@datepickerMonthAndYearTitle', 500)
+        .waitForElementVisible('@datepickerMonthAndYearTitle')
         .click('@datepickerMonthAndYearTitle')
-        .waitForElementVisible(yearSelector, 500)
+        .waitForElementVisible(yearSelector)
         .getAttribute(yearSelector, 'class', (result) => {
           if (result.value.includes('is-disabled') === true) {
             disabled = true
