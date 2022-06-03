@@ -1,19 +1,14 @@
-import {
-  resolveAllConflicts,
-  resolveFileExists,
-  ResolveConflict
-} from '../../../../src/helpers/resource'
+import { resolveAllConflicts, ResolveConflict } from '../../../../src/helpers/resource'
 
-const spyModalConflict = { resolveFileExists }
 const resourcesToMove = [
   {
     id: 'a',
-    path: 'a',
+    name: 'a',
     webDavPath: '/a'
   },
   {
     id: 'b',
-    path: 'b',
+    name: 'b',
     webDavPath: '/b'
   }
 ]
