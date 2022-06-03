@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-flex-column">
-    <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
+    <app-bar :has-shares-navigation="!isLightweight" :has-bulk-actions="true" />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <!-- Pending shares -->
@@ -296,7 +296,12 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['configuration', 'getToken']),
+    ...mapGetters(['user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
+
+    isLightweight() {
+      return this.user.usertype === 'lightweight'
+    },
 
     // pending shares
     pendingSelected: {

@@ -136,7 +136,11 @@ const actions = {
           token,
           isAuthenticated: true,
           groups: userGroups,
-          language
+          language,
+          usertype:
+            user['user-type'] === 'federated' || user['user-type'] === 'lightweight'
+              ? 'lightweight'
+              : ''
         })
 
         if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
@@ -265,6 +269,7 @@ const mutations = {
     state.groups = user.groups
     state.language = user.language
     sentrySetUser({ username: user.id })
+    state.usertype = user.usertype
   },
   SET_CAPABILITIES(state, data) {
     state.capabilities = data.capabilities
