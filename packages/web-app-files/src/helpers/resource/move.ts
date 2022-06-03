@@ -83,7 +83,7 @@ export const resolveAllConflicts = async (
   // Collect all conflicting resources
   const allConflicts = []
   for (const resource of resourcesToMove) {
-    const potentialTargetWebDavPath = join(webDavPrefix, targetFolder.path, resource.path)
+    const potentialTargetWebDavPath = join(webDavPrefix, targetFolder.path, resource.name)
     const exists = targetFolderItems.some((e) => e.name === potentialTargetWebDavPath)
     if (exists) {
       allConflicts.push({
