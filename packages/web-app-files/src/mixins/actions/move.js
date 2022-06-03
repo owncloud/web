@@ -63,6 +63,11 @@ export default {
         query.storageId = this.$route.params.storageId
       }
 
+      if (isLocationSpacesActive(this.$router, 'files-spaces-personal')) {
+        context = 'personal'
+        query.storageId = this.$route.params.storageId
+      }
+
       const item = this.currentFolder.path || this.homeFolder
 
       return this.$router.push(

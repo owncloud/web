@@ -17,6 +17,7 @@ const router = {
   afterEach: jest.fn(),
   currentRoute: {
     ...createLocationSpaces('files-spaces-personal'),
+    params: { storageId: '1234' },
     query: {}
   },
   resolve: (r) => {

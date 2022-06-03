@@ -124,6 +124,7 @@ export const getStore = function ({
     },
     getters: {
       configuration: () => ({
+        server: 'https://owncloud.test',
         currentTheme: {
           loginPage: {
             backgroundImg: loginBackgroundImg

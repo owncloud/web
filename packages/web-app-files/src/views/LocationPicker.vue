@@ -355,7 +355,8 @@ export default {
             item: itemPath
           },
           query: {
-            resource: this.resources
+            resource: this.resources,
+            ...(this.$route.query.storageId && { storageId: this.$route.query.storageId })
           }
         }
       }
@@ -364,21 +365,23 @@ export default {
     leaveLocationPicker(target) {
       switch (this.$route.params.context) {
         case 'public':
-          this.$router.push(
+          return this.$router.push(
             createLocationPublic('files-public-files', { params: { item: target } })
           )
-          break
         case 'space':
-          this.$router.push(
+          return this.$router.push(
             createLocationSpaces('files-spaces-project', {
               params: { storageId: this.$route.query.storageId, item: target || '/' }
             })
           )
-          break
-        default:
-          this.$router.push(
-            createLocationSpaces('files-spaces-personal', { params: { item: target || '/' } })
+        case 'personal':
+          return this.$router.push(
+            createLocationSpaces('files-spaces-personal', {
+              params: { storageId: this.$route.query.storageId, item: target || '/' }
+            })
           )
+        default:
+          return this.$router.push(createLocationSpaces('files-spaces-personal'))
       }
     },
 
@@ -429,13 +432,26 @@ export default {
                   targetPath
                 )
                 break
+              case 'personal':
               default:
-                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
-                targetPath += `/${resourceName}`
-                promise = this.$client.files.move(
-                  buildWebDavFilesPath(this.user.id, resource),
-                  targetPath
-                )
+                if (this.hasShareJail) {
+                  targetPath = buildWebDavSpacesPath(
+                    this.$route.query.storageId,
+                    this.target || '/'
+                  )
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.move(
+                    buildWebDavSpacesPath(this.$route.query.storageId, resource),
+                    targetPath
+                  )
+                } else {
+                  targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.move(
+                    buildWebDavFilesPath(this.user.id, resource),
+                    targetPath
+                  )
+                }
             }
             break
           }
@@ -460,13 +476,27 @@ export default {
                   targetPath
                 )
                 break
+              case 'personal':
               default:
-                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
-                targetPath += `/${resourceName}`
-                promise = this.$client.files.copy(
-                  buildWebDavFilesPath(this.user.id, resource),
-                  targetPath
-                )
+                if (this.hasShareJail) {
+                  targetPath = buildWebDavSpacesPath(
+                    this.$route.query.storageId,
+                    this.target || '/'
+                  )
+                  resourceName = basename(resource)
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.copy(
+                    buildWebDavSpacesPath(this.$route.query.storageId, resource),
+                    targetPath
+                  )
+                } else {
+                  targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.copy(
+                    buildWebDavFilesPath(this.user.id, resource),
+                    targetPath
+                  )
+                }
             }
             break
           }
