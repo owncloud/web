@@ -131,15 +131,17 @@ export const showResultMessage = async (
   movedResources,
   showMessage,
   $gettext,
-  $gettextInterpolate
+  $gettextInterpolate,
+  $ngettext
 ) => {
   if (errors.length === 0) {
     const count = movedResources.length
-    const title = $gettextInterpolate(
-      $gettext('%{count} item was moved successfully'),
-      { count },
-      true
+    const ntitle = $ngettext(
+      '%{count} item was moved successfully',
+      '%{count} items were moved successfully',
+      count
     )
+    const title = $gettextInterpolate(ntitle, { count }, true)
     showMessage({
       title,
       status: 'success'
@@ -171,7 +173,8 @@ export const move = async (
   hideModal,
   showMessage,
   $gettext,
-  $gettextInterpolate
+  $gettextInterpolate,
+  $ngettext
 ) => {
   const errors = []
   const resolvedConflicts = await resolveAllConflicts(
@@ -215,6 +218,6 @@ export const move = async (
       errors.push(error)
     }
   }
-  showResultMessage(errors, movedResources, showMessage, $gettext, $gettextInterpolate)
+  showResultMessage(errors, movedResources, showMessage, $gettext, $gettextInterpolate, $ngettext)
   return movedResources
 }

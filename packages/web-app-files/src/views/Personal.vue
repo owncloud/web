@@ -235,7 +235,8 @@ export default defineComponent({
         this.hideModal,
         this.showMessage,
         this.$gettext,
-        this.$gettextInterpolate
+        this.$gettextInterpolate,
+        this.$ngettext
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)
