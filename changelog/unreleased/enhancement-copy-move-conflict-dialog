@@ -1,0 +1,6 @@
+Enhancement: Copy/Move conflict dialog
+
+We've added a conflict dialog for moving resources via drag&drop in the files list
+
+https://github.com/owncloud/web/pull/6994
+https://github.com/owncloud/web/issues/6996

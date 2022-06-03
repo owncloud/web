@@ -1,10 +1,11 @@
 import Uppy from '@uppy/core'
-import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
-import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
-import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import StatusBar from '@uppy/status-bar'
-import { UppyResource } from '../composables/upload'
+import { TusOptions } from '@uppy/tus'
+import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { bus } from 'web-pkg/src/instance'
+import { UppyResource } from '../composables/upload'
+import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
+import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -62,7 +63,7 @@ export class UppyService {
       return
     }
 
-    this.uppy.use(CustomTus, tusPluginOptions)
+    this.uppy.use(CustomTus, tusPluginOptions as TusOptions)
   }
 
   useXhr({ headers }: { headers: { [key: string]: string } }) {

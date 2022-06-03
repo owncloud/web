@@ -8,6 +8,7 @@ const state = {
   message: '',
   cancelText: '',
   confirmText: '',
+  buttonSecondaryText: '',
   // Input values
   confirmDisabled: false,
   hasInput: false,
@@ -17,10 +18,13 @@ const state = {
   inputPlaceholder: '',
   inputLabel: '',
   inputError: '',
+  checkboxLabel: '',
   // Events
   onCancel: emptyReturn,
   onConfirm: emptyReturn,
-  onInput: emptyReturn
+  onInput: emptyReturn,
+  onCheckboxValueChanged: emptyReturn,
+  onConfirmSecondary: emptyReturn
 }
 
 const actions = {
@@ -48,6 +52,8 @@ const mutations = {
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
+    state.buttonSecondaryText = modal.buttonSecondaryText
+    state.checkboxLabel = modal.checkboxLabel || ''
     state.cancelText = modal.cancelText || 'Cancel'
     state.confirmText = modal.confirmText || 'Confirm'
     state.confirmDisabled = modal.confirmDisabled || false
@@ -61,6 +67,8 @@ const mutations = {
     state.inputError = modal.inputError || null
     state.inputDisabled = modal.inputDisabled || false
     state.onInput = modal.onInput || emptyReturn
+    state.onCheckboxValueChanged = modal.onCheckboxValueChanged || emptyReturn
+    state.onConfirmSecondary = modal.onConfirmSecondary || emptyReturn
   },
 
   HIDE_MODAL(state) {
