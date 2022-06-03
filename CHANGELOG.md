@@ -54,6 +54,7 @@ Summary
 * Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - Consistent dropdown menus: [#6555](https://github.com/owncloud/web/issues/6555)
+* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
@@ -461,6 +462,13 @@ Details
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6762
 
+* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
+
+   We've added a conflict dialog for moving resources via drag&drop in the files list
+
+   https://github.com/owncloud/web/issues/6996
+   https://github.com/owncloud/web/pull/6994
+
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
    We've fixed the following issues to enhance UI/UX: - wording for new space button - wording for
@@ -699,7 +707,7 @@ Details
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
-   We've updated the ownCloud SDK to version 3.0.0-alpha.9.
+   We've updated the ownCloud SDK to version 3.0.0-alpha.10.
 
    - Change - Pass full trash bin path to methods of FilesTrash class:
    https://github.com/owncloud/owncloud-sdk/pull/1021 - Enhancement - Enforce share_type
@@ -712,13 +720,16 @@ Details
    https://github.com/owncloud/owncloud-sdk/pull/1013 - Enhancement - Send oc-etag on
    putFileContents and getFileContents methods:
    https://github.com/owncloud/owncloud-sdk/pull/1067 - Enhancement - Enable search
-   results for ocis: https://github.com/owncloud/owncloud-sdk/pull/1057 - Bugfix - Always
-   add X-Request-ID: https://github.com/owncloud/owncloud-sdk/pull/1016 - Bugfix - Always
-   add X-Requested-With header: https://github.com/owncloud/owncloud-sdk/pull/1020
+   results for ocis: https://github.com/owncloud/owncloud-sdk/pull/1057 - Enhancement -
+   Add overwrite flag for file move: https://github.com/owncloud/owncloud-sdk/pull/1073 -
+   Bugfix - Always add X-Request-ID: https://github.com/owncloud/owncloud-sdk/pull/1016 -
+   Bugfix - Always add X-Requested-With header:
+   https://github.com/owncloud/owncloud-sdk/pull/1020
 
    https://github.com/owncloud/web/pull/6820
    https://github.com/owncloud/web/pull/6952
-   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.9
+   https://github.com/owncloud/web/pull/6994
+   https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.10
 
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
