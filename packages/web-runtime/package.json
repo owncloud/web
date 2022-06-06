@@ -40,7 +40,7 @@
     "utf8": "^3.0.0",
     "uuid": "^8.3.2",
     "v-calendar": "^2.3.2",
-    "vue": "^2.6.10",
+    "vue": "^3.2.36",
     "vue-async-computed": "^3.9.0",
     "vue-concurrency": "^2.2.1",
     "vue-events": "^3.1.0",

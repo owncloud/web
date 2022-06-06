@@ -6,7 +6,7 @@
   "dependencies": {
     "p-cancelable": "^3.0.0",
     "portal-vue": "^2.1.7",
-    "vue": "^2.6.10",
+    "vue": "^3.2.36",
     "vue-async-computed": "^3.9.0"
   },
   "devDependencies": {
