@@ -11855,8 +11855,8 @@ __metadata:
     tslib: ^2.4.0
     typescript: ^4.6.4
     url-search-params-polyfill: ^8.0.0
-    v-hotkey: ^0.9.0
     vue: ^2.6.10
+    vue-hotkeys-rt: ^0.1.0
     vue-jest: ^3.0.7
     vue-template-compiler: ^2.6.12
     vuex-mock-store: 0.0.8
@@ -13432,17 +13432,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"v-hotkey@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "v-hotkey@npm:0.9.0"
-  dependencies:
-    core-js: ^2.6.5
-  peerDependencies:
-    vue: ^2.x
-  checksum: 67312f1a6105563fe3b3dfd3d6f4c81d1168e204d7010ff3eb192d9db89b8e9ccf5b5cf4f61125186cd2ffbf8af646559632ca2634782736aa6e3c0a2d65a52a
-  languageName: node
-  linkType: hard
-
 "v8-compile-cache-lib@npm:^3.0.0":
   version: 3.0.0
   resolution: "v8-compile-cache-lib@npm:3.0.0"
@@ -13563,6 +13552,22 @@ __metadata:
   version: 2.1.12
   resolution: "vue-gettext@npm:2.1.12"
   checksum: 6ce8143c567c66656a9ee3847339fb8250b74cb67e6b518a3ac10d4eeaf78606ea49df57ac5046442128032f19f6aec5bddad085054bc33c78f90915c260aee2
+  languageName: node
+  linkType: hard
+
+"vue-hot-reload-api@npm:^2.3.4":
+  version: 2.3.4
+  resolution: "vue-hot-reload-api@npm:2.3.4"
+  checksum: 9befc0b3d6c1cc69430813fb7cfd2125c6a228730a36fad0653e4ddb60c8d4cf3ddc9649d2c9105c3d6044b42e8c8dce62b3c245bc65a6f187c1e2ca82a79252
+  languageName: node
+  linkType: hard
+
+"vue-hotkeys-rt@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "vue-hotkeys-rt@npm:0.1.0"
+  dependencies:
+    vue-hot-reload-api: ^2.3.4
+  checksum: 6c1ef1fc5c4558dbfdc4d147c70e56685dd82b550279eab5649f4cdc51c7e664187395eeb7098e397a20ca57d025b8e55373cf8bdee7e846eb6468703b36d163
   languageName: node
   linkType: hard
 
