@@ -140,7 +140,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, unref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
@@ -150,7 +150,7 @@ import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isAuthenticatedRoute, isLocationSpacesActive } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
-import { useRoute, useRouter } from 'web-pkg/src/composables'
+import { useRouteParam, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
@@ -163,23 +163,24 @@ export default defineComponent({
   setup() {
     const sharedParentDir = ref('')
     const router = useRouter()
-    const route = useRoute()
+    const currentStorageId = useRouteParam('storageId')
 
     const sharedParentRoute = computed(() => {
       if (isLocationSpacesActive(router, 'files-spaces-project')) {
         return createLocationSpaces('files-spaces-project', {
-          params: { storageId: route.value.params.storageId, item: sharedParentDir.value }
+          params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
         })
       }
 
       return createLocationSpaces('files-spaces-personal', {
-        params: { item: sharedParentDir.value }
+        params: { item: unref(sharedParentDir) }
       })
     })
 
     return {
       sharedParentDir,
-      sharedParentRoute
+      sharedParentRoute,
+      currentStorageId
     }
   },
 
@@ -392,7 +393,7 @@ export default defineComponent({
         client: this.$client,
         path: this.file.path,
         $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
       this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },

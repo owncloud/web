@@ -8,8 +8,10 @@ import stubs from '@/tests/unit/stubs'
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
 import { spaceRoleManager } from '../../../../../src/helpers/share'
-import * as reactivities from 'web-pkg/src/composables/reactivity'
+import * as reactivityComposables from 'web-pkg/src/composables/reactivity'
+import * as routerComposables from 'web-pkg/src/composables/router'
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
+import { buildSpace } from '../../../../../src/helpers/resources'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -21,9 +23,11 @@ localVue.use(GetTextPlugin, {
 })
 
 jest.mock('web-pkg/src/composables/reactivity')
+jest.mock('web-pkg/src/composables/router')
 
 const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
+const storageId = '1'
 
 const selectors = {
   firstCollaboratorListItem: `div[data-testid="collaborator-user-item-${Collaborators[0].collaborator.name}"]`
@@ -115,24 +119,26 @@ describe('FileShares', () => {
       mockAxios.reset()
     })
     it('loads space members if a space is given', async () => {
-      const spaceMock = {
-        id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
-      }
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve({
-          data: spaceMock
-        })
-      })
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({
           data: { role: spaceRoleManager.name }
         })
       })
 
-      const wrapper = getShallowMountedWrapper({ user })
+      const spaceMock = buildSpace({
+        id: '1',
+        driveType: 'project',
+        root: {
+          permissions: [
+            {
+              roles: ['manager'],
+              grantedTo: [{ user: { id: user.uuid } }]
+            }
+          ]
+        }
+      })
+      const wrapper = getShallowMountedWrapper({ user, spaces: [spaceMock] })
 
-      await wrapper.vm.loadSpaceTask.last
       await wrapper.vm.loadSpaceMembersTask.last
       expect(wrapper.vm.spaceMembers.length).toBe(1)
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
@@ -187,7 +193,8 @@ const storeOptions = (data) => {
     outgoingCollaborators = [],
     incomingCollaborators = [],
     owner,
-    canShare = true
+    canShare = true,
+    spaces = []
   } = data
   if (!owner) {
     owner = user
@@ -206,7 +213,8 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] }
+          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] },
+          spaces
         },
         namespaced: true,
         getters: {
@@ -267,10 +275,12 @@ const storeOptions = (data) => {
 }
 
 function getMountedWrapper(data) {
+  routerComposables.useRouteParam.mockReturnValue(() => storageId)
+
   return mount(FileShares, {
     localVue,
     setup: () => ({
-      spaceMembers: []
+      currentStorageId: storageId
     }),
     store: createStore(data),
     stubs: {
@@ -278,9 +288,6 @@ function getMountedWrapper(data) {
       'oc-button': false
     },
     mocks: {
-      $route: {
-        params: { storageId: 1 }
-      },
       $router: {
         currentRoute: { name: 'some-route' },
         resolve: (r) => {
@@ -294,21 +301,20 @@ function getMountedWrapper(data) {
 }
 
 function getShallowMountedWrapper(data, loading = false) {
-  reactivities.useDebouncedRef.mockImplementationOnce(() => loading)
+  reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
+  routerComposables.useRouteParam.mockReturnValue(() => storageId)
 
   return shallowMount(FileShares, {
     localVue,
+    setup: () => ({
+      currentStorageId: storageId
+    }),
     store: createStore(data),
     stubs: {
       ...stubs,
       'oc-button': true
     },
     mocks: {
-      $route: {
-        params: {
-          storageId: 1
-        }
-      },
       $router: {
         currentRoute: { name: 'some-route' },
         resolve: (r) => {

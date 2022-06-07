@@ -186,6 +186,9 @@ export default {
       return this.$gettext('Invite')
     },
 
+    currentStorageId() {
+      return this.$route.params.storageId
+    },
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
     },
@@ -326,8 +329,8 @@ export default {
             let storageId
             if (this.resourceIsSpace) {
               storageId = this.highlightedFile.id
-            } else if (this.$route.params.storageId) {
-              storageId = this.$route.params.storageId
+            } else if (this.currentStorageId) {
+              storageId = this.currentStorageId
             }
 
             this.addShare({
