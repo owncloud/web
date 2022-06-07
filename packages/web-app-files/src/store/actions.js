@@ -10,7 +10,7 @@ import {
   buildSpace
 } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { loadPreview, move } from '../helpers/resource'
+import { loadPreview, move, copy } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
@@ -58,8 +58,9 @@ export default {
       upsertResource
     }
   ) {
+    let movedResources;
     if (context.state.clipboardAction === 'cut') {
-      const movedResources = await move(
+      movedResources = await move(
         context.state.clipboardResources,
         context.state.currentFolder,
         client,
@@ -71,11 +72,22 @@ export default {
         $ngettext
       )
       context.commit('CLEAR_CLIPBOARD')
-      movedResources[0].path = pathUtil.join(
-        context.state.currentFolder.path,
-        movedResources[0].name
+    }
+    if (context.state.clipboardAction === 'copy') {
+      movedResources = await copy(
+        context.state.clipboardResources,
+        context.state.currentFolder,
+        client,
+        createModal,
+        hideModal,
+        showMessage,
+        $gettext,
+        $gettextInterpolate,
+        $ngettext
       )
-      upsertResource(movedResources[0])
+    }
+    for(var resource of movedResources) {
+      upsertResource(resource)
     }
   },
   resetFileSelection(context) {

@@ -174,7 +174,56 @@ export const move = async (
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext
+  $ngettext,
+) => {
+  return await copyMoveResource(
+    resourcesToMove,
+    targetFolder,
+    client,
+    createModal,
+    hideModal,
+    showMessage,
+    $gettext,
+    $gettextInterpolate,
+    $ngettext,
+    false
+  )
+}
+export const copy = async (
+  resourcesToMove,
+  targetFolder,
+  client,
+  createModal,
+  hideModal,
+  showMessage,
+  $gettext,
+  $gettextInterpolate,
+  $ngettext,
+) => {
+  return await copyMoveResource(
+    resourcesToMove,
+    targetFolder,
+    client,
+    createModal,
+    hideModal,
+    showMessage,
+    $gettext,
+    $gettextInterpolate,
+    $ngettext,
+    true
+  )
+}
+export const copyMoveResource = async (
+  resourcesToMove,
+  targetFolder,
+  client,
+  createModal,
+  hideModal,
+  showMessage,
+  $gettext,
+  $gettextInterpolate,
+  $ngettext,
+  copy=false
 ) => {
   const errors = []
   const resolvedConflicts = await resolveAllConflicts(
@@ -203,14 +252,24 @@ export const move = async (
       }
       if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
         targetName = $gettextInterpolate($gettext('%{name} copy'), { name: resource.name }, true)
+        resource.name = targetName
       }
     }
+    resource.path = join(targetFolder.path, resource.name)
     try {
-      await client.files.move(
-        resource.webDavPath,
-        join(targetFolder.webDavPath, targetName),
-        overwriteTarget
-      )
+      if(copy) {
+        await client.files.copy(
+          resource.webDavPath,
+          join(targetFolder.webDavPath, targetName),
+          overwriteTarget
+        )
+      }else {
+        await client.files.move(
+          resource.webDavPath,
+          join(targetFolder.webDavPath, targetName),
+          overwriteTarget
+        )
+      }
       movedResources.push(resource)
     } catch (error) {
       console.error(error)
