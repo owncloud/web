@@ -1,5 +1,4 @@
 import Uppy from '@uppy/core'
-import StatusBar from '@uppy/status-bar'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { bus } from 'web-pkg/src/instance'
@@ -16,6 +15,8 @@ type UppyServiceTopics =
   | 'uploadError'
   | 'fileAdded'
   | 'filesSelected'
+  | 'progress'
+  | 'addedForUpload'
 
 export class UppyService {
   uppy: Uppy
@@ -91,6 +92,10 @@ export class UppyService {
     this.uppy.use(XHRUpload, xhrPluginOptions)
   }
 
+  tusActive() {
+    return !!this.uppy.getPlugin('Tus')
+  }
+
   useDropTarget({
     targetSelector,
     uppyService
@@ -116,64 +121,6 @@ export class UppyService {
     }
   }
 
-  useStatusBar({
-    targetSelector,
-    getText
-  }: {
-    targetSelector: string
-    getText: (msgid: string) => string
-  }) {
-    if (this.uppy.getPlugin('StatusBar')) {
-      return
-    }
-
-    this.uppy.use(StatusBar, {
-      id: 'StatusBar',
-      target: targetSelector,
-      hideAfterFinish: true,
-      showProgressDetails: true,
-      hideUploadButton: false,
-      hideRetryButton: false,
-      hidePauseResumeButton: false,
-      hideCancelButton: false,
-      doneButtonHandler: null,
-      locale: {
-        strings: {
-          uploading: getText('Uploading'),
-          complete: getText('Complete'),
-          uploadFailed: getText('Upload failed'),
-          paused: getText('Paused'),
-          retry: getText('Retry'),
-          cancel: getText('Cancel'),
-          pause: getText('Pause'),
-          resume: getText('Resume'),
-          done: getText('Done'),
-          filesUploadedOfTotal: {
-            0: getText('%{complete} of %{smart_count} file uploaded'),
-            1: getText('%{complete} of %{smart_count} files uploaded')
-          },
-          dataUploadedOfTotal: getText('%{complete} of %{total}'),
-          xTimeLeft: getText('%{time} left'),
-          uploadXFiles: {
-            0: getText('Upload %{smart_count} file'),
-            1: getText('Upload %{smart_count} files')
-          },
-          uploadXNewFiles: {
-            0: getText('Upload +%{smart_count} file'),
-            1: getText('Upload +%{smart_count} files')
-          },
-          upload: getText('Upload'),
-          retryUpload: getText('Retry upload'),
-          xMoreFilesAdded: {
-            0: getText('%{smart_count} more file added'),
-            1: getText('%{smart_count} more files added')
-          },
-          showErrorDetails: getText('Show error details')
-        }
-      }
-    })
-  }
-
   subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): string {
     return bus.subscribe(topic, callback)
   }
@@ -187,22 +134,24 @@ export class UppyService {
   }
 
   private setUpEvents() {
-    this.uppy.on('upload', () => {
-      this.publish('uploadStarted')
+    this.uppy.on('progress', (value) => {
+      this.publish('progress', value)
     })
     this.uppy.on('cancel-all', () => {
       this.publish('uploadCancelled')
     })
     this.uppy.on('complete', (result) => {
-      this.publish('uploadCompleted')
+      this.publish('uploadCompleted', result)
       result.successful.forEach((file) => {
         this.uppy.removeFile(file.id)
-        this.publish('uploadSuccess', file)
-      })
-      result.failed.forEach((file) => {
-        this.publish('uploadError', file)
       })
       this.clearInputs()
+    })
+    this.uppy.on('upload-success', (file) => {
+      this.publish('uploadSuccess', file)
+    })
+    this.uppy.on('upload-error', (file) => {
+      this.publish('uploadError', file)
     })
     this.uppy.on('file-removed', () => {
       this.publish('uploadRemoved')
@@ -254,6 +203,22 @@ export class UppyService {
         }
       }
     })
+  }
+
+  retryAllUploads() {
+    return this.uppy.retryAll()
+  }
+
+  pauseAllUploads() {
+    return this.uppy.pauseAll()
+  }
+
+  resumeAllUploads() {
+    return this.uppy.resumeAll()
+  }
+
+  cancelAllUploads() {
+    return this.uppy.cancelAll()
   }
 
   clearInputs() {

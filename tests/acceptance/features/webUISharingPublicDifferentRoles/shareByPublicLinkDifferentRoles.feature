@@ -239,7 +239,6 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
-      | 'single'quotes.txt |
       | new-lorem.txt      |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
@@ -269,7 +268,6 @@ Feature: Share by public link with different roles
     And the public uploads file "'single'quotes.txt" in files-drop page
     And the public uploads file "new-lorem.txt" in files-drop page
     Then the following files should be listed on the files-drop page:
-      | 'single'quotes.txt |
       | new-lorem.txt      |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
