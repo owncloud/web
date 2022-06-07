@@ -1,5 +1,6 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
+    <hotkeys :shortcuts="['C', 'V', 'X']" :debug="true" @triggered="handleShortcut" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" />
     </div>
@@ -20,7 +21,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -61,7 +62,28 @@ export default defineComponent({
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
     }),
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+
+    handleShortcut(data) {
+      if (data.key === 67) {
+        this.copySelectedFiles()
+      } else if (data.key === 86) {
+        this.pasteSelectedFiles({
+          client: this.$client,
+          createModal: this.createModal,
+          hideModal: this.hideModal,
+          showMessage: this.showMessage,
+          $gettext: this.$gettext,
+          $gettextInterpolate: this.$gettextInterpolate,
+          $ngettext: this.$ngettext,
+          upsertResource: this.UPSERT_RESOURCE
+        })
+      } else if (data.key === 88) {
+        this.cutSelectedFiles()
+      }
+    },
 
     focusSideBar(component, event) {
       this.focus({

@@ -1,6 +1,5 @@
 <template>
   <div id="web">
-    <hotkeys :shortcuts="['C', 'V', 'X']" :debug="true" @triggered="handleShortcut" />
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="web-content-main">
       <translate>Skip to main</translate>
@@ -36,7 +35,7 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
@@ -59,12 +58,6 @@ export default defineComponent({
   computed: {
     ...mapState(['route', 'user', 'modal', 'sidebar']),
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
-    keymap() {
-      return {
-        'ctrl+c': this.copySelectedFiles,
-        'command+c': this.copySelectedFiles
-      }
-    },
     layout() {
       if (this.user.isAuthenticated && !this.user.userReady) {
         return LayoutLoading
@@ -166,28 +159,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['fetchNotifications']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
-    ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
-
-    handleShortcut(data) {
-      if (data.key === 67) {
-        this.copySelectedFiles()
-      } else if (data.key === 86) {
-        this.pasteSelectedFiles({
-          client: this.$client,
-          createModal: this.createModal,
-          hideModal: this.hideModal,
-          showMessage: this.showMessage,
-          $gettext: this.$gettext,
-          $gettextInterpolate: this.$gettextInterpolate,
-          $ngettext: this.$ngettext,
-          upsertResource: this.UPSERT_RESOURCE
-        })
-      } else if (data.key === 88) {
-        this.cutSelectedFiles()
-      }
-    },
 
     focusModal(component, event) {
       this.focus({
