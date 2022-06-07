@@ -422,6 +422,15 @@ export default {
   background-color: var(--oc-color-background-secondary);
   bottom: 20px;
   width: 400px;
+  z-index: 4;
+
+  @media (max-width: 640px) {
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+  }
 
   .oc-resource-details {
     padding-left: var(--oc-space-xsmall);
