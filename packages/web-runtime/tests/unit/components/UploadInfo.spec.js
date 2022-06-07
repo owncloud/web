@@ -30,7 +30,7 @@ describe('UploadInfo component', () => {
         filesInProgressCount: 1,
         runningUploads: 1
       })
-      const uploadTitle = wrapper.find('.upload-info-title span').text()
+      const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('1 item uploading...')
     })
     it('should show that an upload was successful', () => {
@@ -41,7 +41,7 @@ describe('UploadInfo component', () => {
         successful: [{ name: 'file', type: 'file' }],
         errors: []
       })
-      const uploadTitle = wrapper.find('.upload-info-title span').text()
+      const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('Upload complete')
     })
     it('should show that an upload failed', () => {
@@ -52,7 +52,7 @@ describe('UploadInfo component', () => {
         errors: [{ name: 'file', type: 'file' }],
         successful: []
       })
-      const uploadTitle = wrapper.find('.upload-info-title span').text()
+      const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('Upload failed')
     })
     it('should show that an upload was cancelled', () => {
@@ -64,7 +64,7 @@ describe('UploadInfo component', () => {
         successful: [],
         uploadsCancelled: true
       })
-      const uploadTitle = wrapper.find('.upload-info-title span').text()
+      const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('Upload cancelled')
     })
   })

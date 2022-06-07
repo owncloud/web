@@ -6,15 +6,16 @@
         oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top
       "
     >
-      <span class="oc-flex oc-flex-middle oc-my-xs" v-text="uploadInfoTitle" />
+      <p class="oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
         v-oc-tooltip="$gettext('Close')"
         appearance="raw"
+        variation="inverse"
         @click="closeInfo"
       >
-        <oc-icon variation="inverse" name="close" />
+        <oc-icon name="close" />
       </oc-button>
     </div>
     <div class="upload-info-status oc-p-m oc-flex oc-flex-between oc-flex-middle">
@@ -55,7 +56,7 @@
         <oc-button
           v-if="runningUploads && uploadsPausable"
           id="pause-upload-info-btn"
-          v-oc-tooltip="uploadsPaused ? $gettext('Resume uploads') : $gettext('Pause uploads')"
+          v-oc-tooltip="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           class="oc-ml-s"
           appearance="raw"
           @click="togglePauseUploads"
@@ -65,7 +66,7 @@
         <oc-button
           v-if="runningUploads"
           id="cancel-upload-info-btn"
-          v-oc-tooltip="$gettext('Cancel')"
+          v-oc-tooltip="$gettext('Cancel upload')"
           class="oc-ml-s"
           appearance="raw"
           @click="cancelAllUploads"
@@ -93,8 +94,7 @@
           />
           <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
           <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
-          <oc-spinner v-else size="small" />
-
+          <div v-else class="oc-flex"><oc-spinner size="small" /></div>
           <oc-resource
             v-if="displayFileAsResource(item)"
             :key="item.path"
@@ -107,7 +107,7 @@
             :folder-link="folderLink(item)"
             :parent-folder-link="parentFolderLink(item)"
           />
-          <span v-else class="oc-flex oc-flex-middle">
+          <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
             <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
             <oc-resource-name
               :name="item.name"
@@ -429,6 +429,9 @@ export default {
 
   .upload-info-title {
     background-color: var(--oc-color-swatch-brand-default);
+  }
+
+  .upload-info-title p {
     color: var(--oc-color-swatch-inverse-default);
   }
 
