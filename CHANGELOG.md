@@ -81,6 +81,7 @@ Summary
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
+* Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
 Details
@@ -730,6 +731,17 @@ Details
    https://github.com/owncloud/web/pull/6952
    https://github.com/owncloud/web/pull/6994
    https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.10
+
+* Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
+
+   * Remove fetching of newly uploaded files to improve performance * Redesign the upload overlay
+   * Show uploading files in the upload overlay * Immediately show the upload overlay when
+   uploading folders to tell the user that the upload is starting * Only show top level folders in
+   the upload overlay when uploading folders * Remove the Uppy StatusBar plugin
+
+   https://github.com/owncloud/web/issues/7066
+   https://github.com/owncloud/web/issues/7069
+   https://github.com/owncloud/web/pull/7067
 
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
