@@ -11,7 +11,6 @@ export default {
         document.getElementById('files-breadcrumb').children[0].children
       )
       const activeBreadcrumbItem = activeBreadcrumb.getElementsByTagName('button')[0]
-
       if (!activeBreadcrumbItem) {
         return
       }

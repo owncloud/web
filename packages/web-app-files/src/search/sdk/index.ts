@@ -53,6 +53,6 @@ export default class Provider extends EventBus implements SearchProvider {
   }
 
   public get available(): boolean {
-    return this.store.getters.capabilities.dav.reports.includes('search-files')
+    return this.store.getters.capabilities?.dav?.reports?.includes('search-files')
   }
 }
