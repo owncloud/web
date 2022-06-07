@@ -1,7 +1,7 @@
 import PQueue from 'p-queue'
+import pathUtil, { dirname } from 'path'
 
 import { getParentPaths } from '../helpers/path'
-import { dirname } from 'path'
 import {
   buildResource,
   buildShare,
@@ -10,7 +10,7 @@ import {
   buildSpace
 } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { loadPreview } from '../helpers/resource'
+import { loadPreview, move } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
@@ -45,8 +45,38 @@ export default {
     context.commit('CLIPBOARD_SELECTED')
     context.commit('SET_CLIPBOARD_ACTION', clipboardActions.cut)
   },
-  pasteSelectedFiles(context) {
-    context.commit('CLEAR_CLIPBOARD')
+  async pasteSelectedFiles(
+    context,
+    {
+      client,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      upsertResource
+    }
+  ) {
+    if (context.state.clipboardAction === 'cut') {
+      const movedResources = await move(
+        context.state.clipboardResources,
+        context.state.currentFolder,
+        client,
+        createModal,
+        hideModal,
+        showMessage,
+        $gettext,
+        $gettextInterpolate,
+        $ngettext
+      )
+      context.commit('CLEAR_CLIPBOARD')
+      movedResources[0].path = pathUtil.join(
+        context.state.currentFolder.path,
+        movedResources[0].name
+      )
+      upsertResource(movedResources[0])
+    }
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

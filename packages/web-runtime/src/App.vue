@@ -36,7 +36,7 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
@@ -166,13 +166,24 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['fetchNotifications']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     handleShortcut(data) {
       if (data.key === 67) {
         this.copySelectedFiles()
       } else if (data.key === 86) {
-        this.pasteSelectedFiles()
+        this.pasteSelectedFiles({
+          client: this.$client,
+          createModal: this.createModal,
+          hideModal: this.hideModal,
+          showMessage: this.showMessage,
+          $gettext: this.$gettext,
+          $gettextInterpolate: this.$gettextInterpolate,
+          $ngettext: this.$ngettext,
+          upsertResource: this.UPSERT_RESOURCE
+        })
       } else if (data.key === 88) {
         this.cutSelectedFiles()
       }
