@@ -174,7 +174,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L106)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:130](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L130)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:147](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L147)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:278](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L278)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:276](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L276)
 -   [webUIMoveFilesFolders/moveFiles.feature:97](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L97)
 -   [webUIMoveFilesFolders/moveFolders.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFolders.feature#L72)
 -   [webUIFilesActionMenu/versions.feature:93](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L93)

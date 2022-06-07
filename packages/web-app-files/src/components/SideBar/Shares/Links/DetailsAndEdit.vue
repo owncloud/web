@@ -402,8 +402,8 @@ export default {
         confirmText: this.link.password ? this.$gettext('Apply') : this.$gettext('Set'),
         hasInput: true,
         inputDescription: this.$gettext("Password can't be empty"),
-        inputType: 'password',
         inputLabel: this.$gettext('Password'),
+        inputType: 'password',
         onCancel: this.hideModal,
         onInput: (password) => this.checkPasswordNotEmpty(password),
         onConfirm: (password) => {
