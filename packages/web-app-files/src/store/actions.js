@@ -16,7 +16,7 @@ import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
-import { clipboardActions } from '../helpers/clipboardActions'
+import { ClipboardActions } from '../helpers/clipboardActions'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -39,11 +39,11 @@ export default {
   },
   copySelectedFiles(context) {
     context.commit('CLIPBOARD_SELECTED')
-    context.commit('SET_CLIPBOARD_ACTION', clipboardActions.copy)
+    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
   },
   cutSelectedFiles(context) {
     context.commit('CLIPBOARD_SELECTED')
-    context.commit('SET_CLIPBOARD_ACTION', clipboardActions.cut)
+    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
   },
   async pasteSelectedFiles(
     context,
