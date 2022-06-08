@@ -1,0 +1,6 @@
+Bugfix: Complete-state of the upload overlay
+
+We've fixed a bug where the complete-state of the upload overlay would show before the upload even started.
+
+https://github.com/owncloud/web/pull/7100
+https://github.com/owncloud/web/issues/7097

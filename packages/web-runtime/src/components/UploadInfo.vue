@@ -166,7 +166,10 @@ export default {
       if (this.errors.length) {
         return this.$gettext('Upload failed')
       }
-      return this.$gettext('Upload complete')
+      if (!this.runningUploads) {
+        return this.$gettext('Upload complete')
+      }
+      return this.$gettext('Preparing upload...')
     },
     uploadingLabel() {
       if (this.errors.length) {
