@@ -1,0 +1,6 @@
+Enhancement: Upload time estimation
+
+The estimated remaining time for an upload will now be displayed in the upload overlay.
+
+https://github.com/owncloud/web/pull/7088
+https://github.com/owncloud/web/issues/7066
