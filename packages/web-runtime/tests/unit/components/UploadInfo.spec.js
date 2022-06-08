@@ -130,6 +130,18 @@ describe('UploadInfo component', () => {
       expect(uploadedItems.length).toBe(2)
     })
   })
+  describe('getRemainingTime method', () => {
+    it.each([
+      { ms: 1000, expected: 'Few seconds left' },
+      { ms: 1000 * 60 * 30, expected: '30 minutes left' },
+      { ms: 1000 * 60 * 60, expected: '1 hour left' },
+      { ms: 1000 * 60 * 60 * 2, expected: '2 hours left' }
+    ])('should return the proper string', ({ ms, expected }) => {
+      const wrapper = getShallowWrapper()
+      const estimatedTime = wrapper.vm.getRemainingTime(ms)
+      expect(estimatedTime).toBe(expected)
+    })
+  })
 })
 
 function createStore() {
