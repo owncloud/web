@@ -18,14 +18,16 @@
         <oc-icon name="close" />
       </oc-button>
     </div>
-    <div class="upload-info-status oc-p-m oc-flex oc-flex-between oc-flex-middle">
-      <oc-progress
-        v-if="runningUploads"
-        :value="totalProgress"
-        :max="100"
-        size="small"
-        class="upload-info-progress"
-      />
+    <div
+      class="upload-info-status oc-px-m oc-pt-m oc-flex oc-flex-between oc-flex-middle"
+      :class="{
+        'oc-pb-m': !runningUploads
+      }"
+    >
+      <div v-if="runningUploads" class="oc-flex oc-flex-middle">
+        <oc-spinner size="small" class="oc-mr-s" />
+        <span class="oc-text-small oc-text-muted" v-text="remainingTime" />
+      </div>
       <div
         v-else
         class="upload-info-label"
@@ -74,6 +76,9 @@
           <oc-icon name="close-circle" fill-type="line" />
         </oc-button>
       </div>
+    </div>
+    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-mb-m oc-mt-s">
+      <oc-progress :value="totalProgress" :max="100" size="small" />
     </div>
     <div v-if="infoExpanded" class="upload-info-items oc-px-m oc-pb-m">
       <ul class="oc-list">
@@ -144,7 +149,12 @@ export default {
     totalProgress: 0, // current uploads progress (0-100)
     uploadsPaused: false, // all uploads paused?
     uploadsCancelled: false, // all uploads cancelled?
-    runningUploads: 0 // all uploads (not files!) that are in progress currently
+    runningUploads: 0, // all uploads (not files!) that are in progress currently
+    bytesTotal: 0,
+    bytesUploaded: 0,
+    filesInEstimation: {},
+    timeStarted: null,
+    remainingTime: undefined
   }),
   computed: {
     ...mapGetters(['configuration']),
@@ -198,6 +208,10 @@ export default {
   },
   created() {
     this.$uppyService.subscribe('uploadStarted', () => {
+      if (!this.remainingTime) {
+        this.remainingTime = this.$gettext('Calculating estimated time...')
+      }
+
       // No upload in progress -> clean overlay
       if (!this.runningUploads && this.showInfo) {
         this.cleanOverlay()
@@ -231,9 +245,37 @@ export default {
     })
     this.$uppyService.subscribe('uploadCompleted', () => {
       this.runningUploads -= 1
+
+      if (!this.runningUploads) {
+        this.resetProgress()
+      }
     })
     this.$uppyService.subscribe('progress', (value) => {
       this.totalProgress = value
+    })
+    this.$uppyService.subscribe('upload-progress', ({ file, progress }) => {
+      if (!this.timeStarted) {
+        this.timeStarted = new Date()
+      }
+
+      if (this.filesInEstimation[file.meta.uploadId] === undefined) {
+        this.filesInEstimation[file.meta.uploadId] = 0
+        this.bytesTotal += progress.bytesTotal
+      }
+
+      const byteIncrease = progress.bytesUploaded - this.filesInEstimation[file.meta.uploadId]
+      this.bytesUploaded += byteIncrease
+      this.filesInEstimation[file.meta.uploadId] = progress.bytesUploaded
+
+      const timeElapsed = new Date() - this.timeStarted
+      const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
+      if (progressPercent === 0) {
+        return
+      }
+      const totalTimeNeededInMilliseconds = (timeElapsed / progressPercent) * 100
+      const remainingMilliseconds = totalTimeNeededInMilliseconds - timeElapsed
+
+      this.remainingTime = this.getRemainingTime(remainingMilliseconds)
     })
     this.$uppyService.subscribe('uploadError', (file) => {
       if (this.errors.includes(file.meta.uploadId)) {
@@ -301,6 +343,33 @@ export default {
     })
   },
   methods: {
+    getRemainingTime(remainingMilliseconds) {
+      const roundedRemainingMinutes = Math.round(remainingMilliseconds / 1000 / 60)
+      if (roundedRemainingMinutes >= 1 && roundedRemainingMinutes < 60) {
+        return this.$gettextInterpolate(
+          this.$ngettext(
+            '%{ roundedRemainingMinutes } minute left',
+            '%{ roundedRemainingMinutes } minutes left',
+            roundedRemainingMinutes
+          ),
+          { roundedRemainingMinutes }
+        )
+      }
+
+      const roundedRemainingHours = Math.round(remainingMilliseconds / 1000 / 60 / 60)
+      if (roundedRemainingHours > 0) {
+        return this.$gettextInterpolate(
+          this.$ngettext(
+            '%{ roundedRemainingHours } hour left',
+            '%{ roundedRemainingHours } hours left',
+            roundedRemainingHours
+          ),
+          { roundedRemainingHours }
+        )
+      }
+
+      return this.$gettext('Few seconds left')
+    },
     handleTopLevelFolderUpdate(file, status) {
       const topLevelFolder = this.uploads[file.meta.topLevelFolderId]
       if (status === 'success') {
@@ -318,6 +387,7 @@ export default {
       this.showInfo = false
       this.infoExpanded = false
       this.cleanOverlay()
+      this.resetProgress()
     },
     cleanOverlay() {
       this.uploadsCancelled = false
@@ -326,6 +396,13 @@ export default {
       this.successful = []
       this.filesInProgressCount = 0
       this.runningUploads = 0
+    },
+    resetProgress() {
+      this.bytesTotal = 0
+      this.bytesUploaded = 0
+      this.filesInEstimation = {}
+      this.timeStarted = null
+      this.remainingTime = undefined
     },
     displayFileAsResource(file) {
       return !!file.targetRoute
@@ -392,6 +469,7 @@ export default {
     togglePauseUploads() {
       if (this.uploadsPaused) {
         this.$uppyService.resumeAllUploads()
+        this.timeStarted = null
       } else {
         this.$uppyService.pauseAllUploads()
       }
@@ -402,6 +480,7 @@ export default {
       this.uploadsCancelled = true
       this.filesInProgressCount = 0
       this.runningUploads = 0
+      this.resetProgress()
       this.$uppyService.cancelAllUploads()
       const runningUploads = Object.values(this.uploads).filter(
         (u) => u.status !== 'success' && u.status !== 'error'
@@ -453,9 +532,6 @@ export default {
     overflow-y: auto;
   }
 
-  .upload-info-progress {
-    width: 50%;
-  }
   .upload-info-danger {
     color: var(--oc-color-swatch-danger-default);
   }

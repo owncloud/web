@@ -17,6 +17,7 @@ type UppyServiceTopics =
   | 'filesSelected'
   | 'progress'
   | 'addedForUpload'
+  | 'upload-progress'
 
 export class UppyService {
   uppy: Uppy
@@ -136,6 +137,9 @@ export class UppyService {
   private setUpEvents() {
     this.uppy.on('progress', (value) => {
       this.publish('progress', value)
+    })
+    this.uppy.on('upload-progress', (file, progress) => {
+      this.publish('upload-progress', { file, progress })
     })
     this.uppy.on('cancel-all', () => {
       this.publish('uploadCancelled')
