@@ -82,6 +82,7 @@ Summary
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
+* Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
 Details
@@ -742,6 +743,13 @@ Details
    https://github.com/owncloud/web/issues/7066
    https://github.com/owncloud/web/issues/7069
    https://github.com/owncloud/web/pull/7067
+
+* Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
+
+   The estimated remaining time for an upload will now be displayed in the upload overlay.
+
+   https://github.com/owncloud/web/issues/7066
+   https://github.com/owncloud/web/pull/7088
 
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 
