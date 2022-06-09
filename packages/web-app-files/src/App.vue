@@ -1,6 +1,5 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
-    <hotkeys :shortcuts="['C', 'V', 'X']" :debug="true" @triggered="handleShortcut" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" />
     </div>
@@ -56,6 +55,14 @@ export default defineComponent({
     })
   },
 
+  mounted() {
+    document.addEventListener('keydown', this.handleShortcut, false)
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleShortcut)
+  },
+
   methods: {
     ...mapActions('Files', ['resetFileSelection']),
     ...mapActions('Files/sidebar', {
@@ -66,10 +73,14 @@ export default defineComponent({
     ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
-    handleShortcut(data) {
-      if (data.key === 67) {
+    handleShortcut(event) {
+      console.log(event)
+      const key = event.keyCode || event.which
+      const ctr = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
+      if (!ctr /* CTRL | CMD */) return
+      if (key === 67) {
         this.copySelectedFiles()
-      } else if (data.key === 86) {
+      } else if (key === 86) {
         this.pasteSelectedFiles({
           client: this.$client,
           createModal: this.createModal,
@@ -80,7 +91,7 @@ export default defineComponent({
           $ngettext: this.$ngettext,
           upsertResource: this.UPSERT_RESOURCE
         })
-      } else if (data.key === 88) {
+      } else if (key === 88) {
         this.cutSelectedFiles()
       }
     },

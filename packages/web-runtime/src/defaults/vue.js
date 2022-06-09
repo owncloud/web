@@ -15,7 +15,6 @@ import AsyncComputed from 'vue-async-computed'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueCompositionAPI from '@vue/composition-api'
-import Hotkeys from 'vue-hotkeys-rt'
 
 Vue.use(VueCompositionAPI)
 Vue.use(Vuex)
@@ -32,7 +31,6 @@ Vue.use(PortalVue)
 Vue.use(AsyncComputed)
 
 Vue.component('avatar-image', Avatar)
-Vue.component('hotkeys', Hotkeys)
 
 Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)
