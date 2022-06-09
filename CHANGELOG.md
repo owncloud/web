@@ -45,6 +45,7 @@ Summary
 * Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
 * Bugfix - Complete-state of the upload overlay: [#7100](https://github.com/owncloud/web/pull/7100)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
+* Bugfix - Parent folder name on public links: [#7104](https://github.com/owncloud/web/pull/7104)
 * Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
 * Enhancement - Add config option for hoverable quick actions: [#7022](https://github.com/owncloud/web/pull/7022)
 * Enhancement - Add OcContextualHelper: [#6590](https://github.com/owncloud/web/issues/6590)
@@ -392,6 +393,14 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6846
+
+* Bugfix - Parent folder name on public links: [#7104](https://github.com/owncloud/web/pull/7104)
+
+   We've fixed a bug where the parent folder link in the upload overlay on public pages would show
+   the link's token instead of "Public link".
+
+   https://github.com/owncloud/web/issues/7101
+   https://github.com/owncloud/web/pull/7104
 
 * Bugfix - Use OC-ETag instead of ETag in text editor app: [#6952](https://github.com/owncloud/web/pull/6952)
 
