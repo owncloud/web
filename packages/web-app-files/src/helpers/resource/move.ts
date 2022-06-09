@@ -72,13 +72,15 @@ export const resolveAllConflicts = async (
   hideModal,
   $gettext,
   $gettextInterpolate,
-  resolveFileExistsMethod
+  resolveFileExistsMethod,
+  copy = false
 ) => {
   // if we implement MERGE, we need to use 'infinity' instead of 1
   const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
   const targetPath = targetFolder.path
   const index = targetFolder.webDavPath.lastIndexOf(targetPath)
-  const webDavPrefix = targetFolder.webDavPath.substring(0, index)
+  const webDavPrefix =
+    targetPath === '/' ? targetFolder.webDavPath : targetFolder.webDavPath.substring(0, index)
 
   // Collect all conflicting resources
   const allConflicts = []
@@ -174,7 +176,7 @@ export const move = async (
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext,
+  $ngettext
 ) => {
   return await copyMoveResource(
     resourcesToMove,
@@ -198,7 +200,7 @@ export const copy = async (
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext,
+  $ngettext
 ) => {
   return await copyMoveResource(
     resourcesToMove,
@@ -223,7 +225,7 @@ export const copyMoveResource = async (
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  copy=false
+  copy = false
 ) => {
   const errors = []
   const resolvedConflicts = await resolveAllConflicts(
@@ -234,7 +236,8 @@ export const copyMoveResource = async (
     hideModal,
     $gettext,
     $gettextInterpolate,
-    resolveFileExists
+    resolveFileExists,
+    copy
   )
   const movedResources = []
 
@@ -257,19 +260,20 @@ export const copyMoveResource = async (
     }
     resource.path = join(targetFolder.path, resource.name)
     try {
-      if(copy) {
+      if (copy) {
         await client.files.copy(
           resource.webDavPath,
           join(targetFolder.webDavPath, targetName),
           overwriteTarget
         )
-      }else {
+      } else {
         await client.files.move(
           resource.webDavPath,
           join(targetFolder.webDavPath, targetName),
           overwriteTarget
         )
       }
+      resource.webDavPath = join(targetFolder.webDavPath, resource.name)
       movedResources.push(resource)
     } catch (error) {
       console.error(error)

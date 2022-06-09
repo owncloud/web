@@ -1,5 +1,6 @@
 import PQueue from 'p-queue'
-import pathUtil, { dirname } from 'path'
+import { dirname } from 'path'
+import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
 import {
@@ -58,7 +59,7 @@ export default {
       upsertResource
     }
   ) {
-    let movedResources;
+    let movedResources
     if (context.state.clipboardAction === 'cut') {
       movedResources = await move(
         context.state.clipboardResources,
@@ -86,8 +87,9 @@ export default {
         $ngettext
       )
     }
-    for(var resource of movedResources) {
-      upsertResource(resource)
+    for (const resource of movedResources) {
+      const loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
+      upsertResource(buildResource(loadedResource))
     }
   },
   resetFileSelection(context) {
