@@ -397,7 +397,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
-
     popperOptions() {
       return {
         modifiers: [

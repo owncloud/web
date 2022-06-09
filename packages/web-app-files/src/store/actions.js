@@ -103,10 +103,15 @@ export default {
         $ngettext
       )
     }
-    for (const resource of movedResources) {
+    const loadMovedResource = async (resource) => {
       const loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
       upsertResource(buildResource(loadedResource))
     }
+    const loadingResources = []
+    for (const resource of movedResources) {
+      loadingResources.push(loadMovedResource(resource))
+    }
+    await Promise.all(loadingResources)
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

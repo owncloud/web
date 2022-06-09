@@ -178,7 +178,7 @@ export const move = async (
   $gettextInterpolate,
   $ngettext
 ) => {
-  return await copyMoveResource(
+  return copyMoveResource(
     resourcesToMove,
     targetFolder,
     client,
@@ -202,7 +202,7 @@ export const copy = async (
   $gettextInterpolate,
   $ngettext
 ) => {
-  return await copyMoveResource(
+  return copyMoveResource(
     resourcesToMove,
     targetFolder,
     client,

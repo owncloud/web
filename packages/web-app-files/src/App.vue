@@ -78,9 +78,12 @@ export default defineComponent({
       const key = event.keyCode || event.which
       const ctr = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       if (!ctr /* CTRL | CMD */) return
-      if (key === 67) {
+      const isCopyAction = key === 67
+      const isPaseAction = key === 86
+      const isCutAction = key === 88
+      if (isCopyAction) {
         this.copySelectedFiles()
-      } else if (key === 86) {
+      } else if (isPaseAction) {
         this.pasteSelectedFiles({
           client: this.$client,
           createModal: this.createModal,
@@ -91,7 +94,7 @@ export default defineComponent({
           $ngettext: this.$ngettext,
           upsertResource: this.UPSERT_RESOURCE
         })
-      } else if (key === 88) {
+      } else if (isCutAction) {
         this.cutSelectedFiles()
       }
     },
