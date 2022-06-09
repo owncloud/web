@@ -60,7 +60,7 @@ export default {
     }
   ) {
     let movedResources
-    if (context.state.clipboardAction === 'cut') {
+    if (context.state.clipboardAction === ClipboardActions.Cut) {
       movedResources = await move(
         context.state.clipboardResources,
         context.state.currentFolder,
@@ -74,7 +74,7 @@ export default {
       )
       context.commit('CLEAR_CLIPBOARD')
     }
-    if (context.state.clipboardAction === 'copy') {
+    if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copy(
         context.state.clipboardResources,
         context.state.currentFolder,
