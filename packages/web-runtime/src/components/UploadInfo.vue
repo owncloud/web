@@ -335,7 +335,14 @@ export default {
       }
 
       this.uploads[file.meta.uploadId] = file
-      this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
+
+      if (file.meta.route.name === 'files-public-files') {
+        // Strip token to not display it in the overlay
+        const strippedTokenPath = file.meta.currentFolder.split('/').slice(1).join('/')
+        this.uploads[file.meta.uploadId].path = `${strippedTokenPath}${file.name}`
+      } else {
+        this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
+      }
       this.uploads[file.meta.uploadId].targetRoute = file.meta.route
 
       if (!file.isFolder) {
@@ -426,6 +433,10 @@ export default {
       if (this.hasShareJail && targetRoute?.name === 'files-spaces-share') {
         return targetRoute.params.shareName
       }
+
+      if (targetRoute?.name === 'files-public-files') {
+        return this.$gettext('Public link')
+      }
       return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
     },
     createFolderLink(path, storageId, targetRoute) {
@@ -447,6 +458,10 @@ export default {
       if (strippedPath) {
         route.params = { ...targetRoute.params }
         route.params.item = strippedPath
+      }
+
+      if (route.name === 'files-public-files') {
+        route.params.item = targetRoute.params.item
       }
 
       return route

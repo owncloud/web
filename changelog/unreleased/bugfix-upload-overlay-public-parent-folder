@@ -1,0 +1,6 @@
+Bugfix: Parent folder name on public links
+
+We've fixed a bug where the parent folder link in the upload overlay on public pages would show the link's token instead of "Public link".
+
+https://github.com/owncloud/web/pull/7104
+https://github.com/owncloud/web/issues/7101
