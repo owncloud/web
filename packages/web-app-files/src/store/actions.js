@@ -41,10 +41,26 @@ export default {
   copySelectedFiles(context) {
     context.commit('CLIPBOARD_SELECTED')
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
+    context.dispatch(
+      'showMessage',
+      {
+        title: $gettext('Copied to clipboard!'),
+        status: 'success'
+      },
+      { root: true }
+    )
   },
   cutSelectedFiles(context) {
     context.commit('CLIPBOARD_SELECTED')
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
+    context.dispatch(
+      'showMessage',
+      {
+        title: $gettext('Copied to clipboard!'),
+        status: 'success'
+      },
+      { root: true }
+    )
   },
   async pasteSelectedFiles(
     context,
