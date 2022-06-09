@@ -336,7 +336,7 @@ export default {
 
       this.uploads[file.meta.uploadId] = file
 
-      if (file.meta.route.name === 'files-public-files') {
+      if (file.meta.route?.name === 'files-public-files') {
         // Strip token to not display it in the overlay
         const strippedTokenPath = file.meta.currentFolder.split('/').slice(1).join('/')
         this.uploads[file.meta.uploadId].path = `${strippedTokenPath}${file.name}`
