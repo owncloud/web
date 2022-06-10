@@ -176,7 +176,7 @@ describe('CreateAndUpload component', () => {
               size: 1001
             },
             meta: {
-              routeStorage: 'home'
+              routeName: 'files-spaces-personal'
             }
           }
         ])

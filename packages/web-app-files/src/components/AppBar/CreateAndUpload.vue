@@ -673,7 +673,7 @@ export default defineComponent({
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
-        if (uppyResource.meta.routeStorage === 'home') {
+        if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
         } else {
           targetUploadSpace = this.spaces.find(

@@ -468,7 +468,6 @@ export default {
         query: targetRoute.query,
         params: {
           ...(storageId && path && { storageId }),
-          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage }),
           ...(targetRoute.params?.shareName && { shareName: targetRoute.params?.shareName })
         }
       }
