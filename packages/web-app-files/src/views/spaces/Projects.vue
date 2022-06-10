@@ -206,7 +206,8 @@ export default defineComponent({
             continue
           }
 
-          const webDavPathComponents = space.spaceImageData.webDavUrl.split('/')
+          const decodedUri = decodeURI(space.spaceImageData.webDavUrl)
+          const webDavPathComponents = decodedUri.split('/')
           const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id))
           if (!idComponent) {
             return
