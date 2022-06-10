@@ -3,6 +3,7 @@ import { getStore, localVue, createFile } from '../views.setup.js'
 import { createLocationSpaces } from '../../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
+import Users from '@/__fixtures__/users'
 
 const component = { ...SharedViaLink, mounted: jest.fn() }
 
@@ -190,6 +191,7 @@ function createStore({ totalFilesCount, highlightedFile, selectedFiles } = {}) {
   return getStore({
     highlightedFile,
     totalFilesCount,
-    selectedFiles
+    selectedFiles,
+    user: { id: Users.alice.id }
   })
 }

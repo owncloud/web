@@ -577,24 +577,24 @@ export default defineComponent({
       this.openWithPanel('sharing-item')
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file, false)
+      return this.createFolderLink(file.path, file)
     },
     parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file, true)
+      return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(path, resource, parentFolder) {
+    createFolderLink(path, resource) {
       if (this.targetRoute === null) {
         return {}
       }
 
       const params = {
         item: path.replace(/^\//, '') || '/',
-        ...this.targetRoute.params,
-        ...mapResourceFields(resource, this.targetRouteParamMapping)
+        ...mapResourceFields(resource, this.targetRouteParamMapping),
+        ...this.targetRoute.params
       }
       const query = {
-        ...this.targetRoute.query,
-        ...mapResourceFields(resource, this.targetRouteQueryMapping)
+        ...mapResourceFields(resource, this.targetRouteQueryMapping),
+        ...this.targetRoute.query
       }
 
       if (this.hasProjectSpaces) {

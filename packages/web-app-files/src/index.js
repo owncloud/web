@@ -132,7 +132,7 @@ export default {
   },
   userReady({ store }) {
     // Load spaces to make them available across the application
-    if (store.getters.capabilities.spaces?.enabled) {
+    if (store.getters.capabilities?.spaces?.enabled) {
       store.dispatch('Files/loadSpaces', { clientService })
     }
 

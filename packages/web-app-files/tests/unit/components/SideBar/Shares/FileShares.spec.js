@@ -188,18 +188,13 @@ function getResource({
 }
 
 const storeOptions = (data) => {
-  let {
+  const {
     user,
     outgoingCollaborators = [],
     incomingCollaborators = [],
-    owner,
     canShare = true,
     spaces = []
   } = data
-  if (!owner) {
-    owner = user
-  }
-
   return {
     actions: {
       createModal: jest.fn(),

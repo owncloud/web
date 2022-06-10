@@ -99,9 +99,9 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, unref } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 
 const visibilityObserver = new VisibilityObserver()
@@ -133,9 +133,14 @@ export default defineComponent({
       store.getters.configuration.server,
       store.getters.getToken
     )
+    const storageId = useRouteParam('storageId')
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal'),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
+        params: {
+          storageId: unref(storageId)
+        }
+      }),
       hasShareJail: useCapabilityShareJailEnabled(),
       graphClient
     }
