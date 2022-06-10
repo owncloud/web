@@ -1,20 +1,20 @@
 Feature: spaces.personal
 
   Scenario: unstructured collection of testable space interactions,
-    once all needed features are there, split this into independent tests.
-    contains following features:
-    - ✓ assign role to user
-    - ✓ create space & internal alias to differentiate multiple spaces with the same name
-    - ✓ open space
-    - ✓ rename space
-    - ✓ change/set space subtitle
-    - ✓ change/set space description
-    - ✓ change/set space quota
-    - ✓ resources & existing resource actions
-    - ✗ change/set space image
-    - ✗ trash bin
-    - ✗ share
-    - ✗ link
+  once all needed features are there, split this into independent tests.
+  contains following features:
+  - ✓ assign role to user
+  - ✓ create space & internal alias to differentiate multiple spaces with the same name
+  - ✓ open space
+  - ✓ rename space
+  - ✓ change/set space subtitle
+  - ✓ change/set space description
+  - ✓ change/set space quota
+  - ✓ resources & existing resource actions
+  - ✓ change/set space image
+  - ✗ trash bin
+  - ✗ share
+  - ✗ link
     Given "Admin" creates following users
       | id    |
       | Alice |
@@ -36,6 +36,7 @@ Feature: spaces.personal
     And "Alice" updates the space "team.1" subtitle to "developer team - subtitle"
     And "Alice" updates the space "team.1" description to "developer team - description"
     And "Alice" updates the space "team.1" quota to "50"
+    And "Alice" updates the space "team.1" image to "testavatar.png"
 
     # shared examples
     And "Alice" creates the following resources
@@ -65,6 +66,7 @@ Feature: spaces.personal
     And "Alice" updates the space "team.2" subtitle to "management team - subtitle"
     And "Alice" updates the space "team.2" description to "management team - description"
     And "Alice" updates the space "team.2" quota to "500"
+    And "Alice" updates the space "team.2" image to "sampleGif.gif"
 
     And "Alice" creates the following resources
       | resource     | type   |
@@ -101,6 +103,7 @@ Feature: spaces.personal
       | simple.pdf | folder_to_shared |
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
+    And "Alice" updates the space "team.1" image to "testavatar.jpeg"
     And "Alice" uploads the following resource
       | resource          | to               | create_version |
       | PARENT/simple.pdf | folder_to_shared | true           |

@@ -1,5 +1,6 @@
 import { Page } from 'playwright'
 import { SpacesEnvironment } from '../../../environment'
+import { File } from '../../../types'
 import {
   addSpaceMembers,
   canUserEditSpaceResource,
@@ -8,6 +9,7 @@ import {
   changeSpaceDescription,
   changeSpaceName,
   changeSpaceSubtitle,
+  changeSpaceImage,
   createSpace,
   createSpaceArgs,
   openSpace,
@@ -78,5 +80,10 @@ export class Spaces {
   async openTrashbin(key): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await openSpaceTrashBin({ id, page: this.#page })
+  }
+
+  async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await changeSpaceImage({ id, resource, page: this.#page })
   }
 }

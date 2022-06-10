@@ -35,7 +35,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|description|quota) to "([^"]*)"$/,
+  /^"([^"]*)" (changes|updates) the space "([^"]*)" (name|subtitle|description|quota|image) to "([^"]*)"$/,
   async function (
     this: World,
     stepUser: string,
@@ -59,6 +59,12 @@ When(
         break
       case 'quota':
         await spacesObject.changeQuota({ key, value })
+        break
+      case 'image':
+        await spacesObject.changeSpaceImage({
+          key,
+          resource: this.filesEnvironment.getFile({ name: value })
+        })
         break
       default:
         throw new Error(`${action} not implemented`)
