@@ -510,7 +510,7 @@ config = {
                     "webUIMoveFilesFolders",
                     "webUIUserJourney",
                 ],
-                "debugSuites": "OCISDebug",
+                "webUIDebug": "OCISDebug",
             },
             "extraEnvironment": {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
@@ -526,7 +526,7 @@ config = {
             "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
-            "debutSuites": ["debugSuites"],
+            "debugSuites": ["webUIDebug"],
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
