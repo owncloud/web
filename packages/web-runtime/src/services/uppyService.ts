@@ -51,7 +51,8 @@ export class UppyService {
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: [0, 500, 1000]
+      retryDelays: [0, 500, 1000],
+      uploadDataDuringCreation: true
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')

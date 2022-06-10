@@ -9,7 +9,6 @@ import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
-import { Location } from 'vue-router/types/router'
 import * as uuid from 'uuid'
 
 export interface UppyResource {
@@ -22,11 +21,15 @@ export interface UppyResource {
     currentFolder: string
     relativeFolder: string
     relativePath: string
-    route: Location
     tusEndpoint: string
     webDavBasePath: string
     uploadId: string
     topLevelFolderId?: string
+    routeName?: string
+    routeItem?: string
+    routeShareName?: string
+    routeStorage?: string
+    routeStorageId?: string
   }
 }
 
@@ -152,9 +155,13 @@ const createDirectoryTree = ({
           type: 'folder',
           meta: {
             relativeFolder: createdSubFolders,
-            route: file.meta.route,
             currentFolder: file.meta.currentFolder,
-            uploadId
+            uploadId,
+            routeName: file.meta.routeName,
+            routeItem: file.meta.routeItem,
+            routeShareName: file.meta.routeShareName,
+            routeStorage: file.meta.routeStorage,
+            routeStorageId: file.meta.routeStorageId
           }
         }
 
