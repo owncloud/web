@@ -1947,3 +1947,19 @@ Feature: File Upload
     And as "Alice" folder "simple-empty-folder/PARENT" should exist in the server
     And as "Alice" file "simple-empty-folder/PARENT/parent.txt" should exist in the server
     And as "Alice" folder "simple-empty-folder/PARENT/CHILD" should exist in the server
+
+  Scenario: Upload of a folder inside a subdirectory
+    Given user "Alice" has created folder "simple-empty-folder" in the server
+    And the user has reloaded the current page of the webUI
+    When the user browses to the folder "simple-empty-folder" on the files page
+    And the user uploads folder "PARENT" using the webUI
+    Then no message should be displayed on the webUI
+    And folder "PARENT" should be listed on the webUI
+    When the user opens folder "PARENT" using the webUI
+    Then the following resources should be listed on the webUI
+      | entry_name |
+      | parent.txt |
+      | CHILD      |
+    And as "Alice" folder "simple-empty-folder/PARENT" should exist in the server
+    And as "Alice" file "simple-empty-folder/PARENT/parent.txt" should exist in the server
+    And as "Alice" folder "simple-empty-folder/PARENT/CHILD" should exist in the server
