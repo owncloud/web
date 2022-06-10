@@ -1,0 +1,5 @@
+Bugfix: Reload of an updated space-image and/or -readme
+
+We've fixed a bug where the image and/or readme for a space wouldn't reload automatically after being updated.
+
+https://github.com/owncloud/web/pull/7108

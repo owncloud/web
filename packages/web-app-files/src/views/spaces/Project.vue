@@ -263,7 +263,8 @@ export default defineComponent({
         if (!val) {
           return
         }
-        const webDavPathComponents = this.space.spaceImageData.webDavUrl.split('/')
+        const decodedUri = decodeURI(this.space.spaceImageData.webDavUrl)
+        const webDavPathComponents = decodedUri.split('/')
         const idComponent = webDavPathComponents.find((c) => c.startsWith(this.space.id))
         if (!idComponent) {
           return
@@ -295,7 +296,8 @@ export default defineComponent({
         if (!val) {
           return
         }
-        const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
+        const decodedUri = decodeURI(this.space.spaceReadmeData.webDavUrl)
+        const webDavPathComponents = decodedUri.split('/')
         const idComponent = webDavPathComponents.find((c) => c.startsWith(this.space.id))
         if (!idComponent) {
           return
