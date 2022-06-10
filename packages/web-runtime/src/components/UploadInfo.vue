@@ -107,7 +107,7 @@
             :resource="item"
             :is-path-displayed="true"
             :is-thumbnail-displayed="displayThumbnails"
-            :is-resource-clickable="false"
+            :is-resource-clickable="isResourceClickable(item)"
             :parent-folder-name-default="defaultParentFolderName(item)"
             :folder-link="folderLink(item)"
             :parent-folder-link="parentFolderLink(item)"
@@ -416,6 +416,9 @@ export default {
     },
     displayFileAsResource(file) {
       return !!file.targetRoute
+    },
+    isResourceClickable(file) {
+      return file.isFolder === true
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file.storageId, file.targetRoute)

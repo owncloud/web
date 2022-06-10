@@ -1,0 +1,6 @@
+Enhancement: Clickable folder links in upload overlay
+
+Uploaded folders can now be clicked in the upload overlay, which navigates the user to the clicked folder.
+
+https://github.com/owncloud/web/pull/7109
+https://github.com/owncloud/web/issues/7102

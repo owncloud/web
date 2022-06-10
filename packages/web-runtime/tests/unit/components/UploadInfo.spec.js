@@ -129,6 +129,18 @@ describe('UploadInfo component', () => {
       const uploadedItems = wrapper.findAll('.upload-info-items li')
       expect(uploadedItems.length).toBe(2)
     })
+    it('folder is clickable', () => {
+      const wrapper = getShallowWrapper({
+        showInfo: true,
+        infoExpanded: true,
+        uploads: [{ name: 'file', type: 'folder', isFolder: true, targetRoute: {}, path: '' }]
+      })
+
+      const info = wrapper.find('.upload-info-items')
+      expect(info.exists()).toBeTruthy()
+      const resourceStub = wrapper.find('.upload-info-items li oc-resource-stub')
+      expect(resourceStub.props().isResourceClickable).toBeTruthy()
+    })
   })
   describe('getRemainingTime method', () => {
     it.each([
