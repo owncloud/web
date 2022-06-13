@@ -2,7 +2,7 @@ import get from 'lodash-es/get.js'
 import Vue from 'vue'
 import qs from 'qs'
 // eslint-disable-next-line no-unused-vars
-import Router from 'vue-router'
+import Router, { Route, RouteRecordPublic } from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
@@ -69,41 +69,41 @@ export const router = patchRouter(
         path: '/login',
         name: 'login',
         component: LoginPage,
-        meta: { auth: false, title: $gettext('Login') }
+        meta: { __public: true, auth: false, title: $gettext('Login') }
       },
       {
         path: '/oidc-callback',
         component: OidcCallbackPage,
-        meta: { auth: false, title: $gettext('Oidc callback') }
+        meta: { __public: true, title: $gettext('Oidc callback') }
       },
       {
         path: '/oidc-silent-redirect',
         component: OidcCallbackPage,
-        meta: { auth: false, title: $gettext('Oidc redirect') }
+        meta: { __public: true, title: $gettext('Oidc redirect') }
       },
       {
         path: '/f/:fileId',
         name: 'privateLink',
         redirect: '/files/ops/resolver/private-link/:fileId',
-        meta: { title: $gettext('Private link') }
+        meta: { __public: true, title: $gettext('Private link') }
       },
       {
         path: '/s/:token',
         name: 'publicLink',
         redirect: '/files/ops/resolver/public-link/:token',
-        meta: { auth: false, title: $gettext('Public link') }
+        meta: { __public: true, title: $gettext('Public link') }
       },
       {
         path: '/access-denied',
         name: 'accessDenied',
         component: AccessDeniedPage,
-        meta: { auth: false, title: $gettext('Access denied') }
+        meta: { __public: true, title: $gettext('Access denied') }
       },
       {
         path: '/account',
         name: 'account',
         component: Account,
-        meta: { title: $gettext('Account') }
+        meta: { __public: true, title: $gettext('Account') }
       }
     ]
   })
@@ -141,7 +141,7 @@ export const buildUrl = (pathname) => {
 router.beforeEach(function (to, from, next) {
   const store = (Vue as any).$store
   const isAuthenticated = store.getters.isAuthenticated
-  if (isAuthRequired(router, to)) {
+  if (isUserRequired(router, to)) {
     if (isAuthenticated) {
       const url = store.getters.urlBeforeLogin
       store.dispatch('saveUrlBeforeLogin', null)
@@ -166,23 +166,45 @@ router.beforeEach(function (to, from, next) {
  * @param to {Route}
  * @returns {boolean}
  */
-const isAuthRequired = (router, to) => {
+export const isUserRequired = (router: Router, to: Route): boolean => {
+  if(!isAuthenticationRequired(router, to)) {
+    return false
+  }
+
   if (to.meta?.auth !== false) {
     return true
   }
 
-  /**
-   * The contextRouteName in routes is used to give applications additional context where the new route was triggered from.
-   * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
-   */
-  const contextRouteNameKey = 'contextRouteName'
-  if (!to.query || !to.query[contextRouteNameKey]) {
+  const contextRoute = getContextRoute(router, to)
+  if (contextRoute?.meta?.auth !== false) {
+      return true
+  }
+
+  return false
+}
+
+/**
+ * The contextRouteName in routes is used to give applications additional context where the new route was triggered from.
+ * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
+ */
+const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null => {
+ const contextRouteNameKey = 'contextRouteName'
+ if (!to.query || !to.query[contextRouteNameKey]) {
+   return null
+ }
+
+ return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
+}
+
+export const isAuthenticationRequired = (router: Router, to: Route): boolean => {
+  if (to.meta?.__public === true) {
     return false
   }
 
-  const contextRoute = router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
-  if (contextRoute) {
-    return contextRoute.meta?.auth !== false
+  const contextRoute = getContextRoute(router, to)
+  if(contextRoute?.meta?.__public) {
+    return false
   }
-  return false
+
+  return true
 }
