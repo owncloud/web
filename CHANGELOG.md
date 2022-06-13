@@ -76,6 +76,7 @@ Summary
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 * Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+* Enhancement - Add Hotkeys to ResourceTable: [#7078](https://github.com/owncloud/web/pull/7078)
 * Enhancement - Rendering of share-indicators in ResourceTable: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Prevent the resource name in the sidebar from being truncated: [#6776](https://github.com/owncloud/web/issues/6776)
@@ -650,6 +651,13 @@ Details
    String.prototype.slice() which works similarly but isn't deprecated.
 
    https://github.com/owncloud/web/pull/6718
+
+* Enhancement - Add Hotkeys to ResourceTable: [#7078](https://github.com/owncloud/web/pull/7078)
+
+   We've added hotkeys for copy, cut and paste.
+
+   https://github.com/owncloud/web/issues/7071
+   https://github.com/owncloud/web/pull/7078
 
 * Enhancement - Rendering of share-indicators in ResourceTable: [#7038](https://github.com/owncloud/web/issues/7038)
 
