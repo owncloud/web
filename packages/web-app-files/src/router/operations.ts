@@ -28,7 +28,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     path: '/ops/location-picker/:context/:action/:item*',
     component: components.LocationPicker,
     meta: {
-      verbose: true,
       auth: false,
       patchCleanPath: true
     }
