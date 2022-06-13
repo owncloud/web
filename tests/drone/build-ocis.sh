@@ -27,7 +27,13 @@ else
 			make ci-node-generate
 		else # golang
 			cd "$GOPATH"/src/github.com/owncloud/ocis/ocis || exit
-			make build
+			if make build
+			then
+				echo "oCIS build successful."
+			else
+				echo "oCIS build failed."
+				exit 1
+			fi
 			mkdir -p /var/www/owncloud/ocis-build/"$OCIS_COMMITID"
 			cp bin/ocis /var/www/owncloud/ocis-build/"$OCIS_COMMITID"/
 			ls -la /var/www/owncloud/ocis-build/"$OCIS_COMMITID"/
