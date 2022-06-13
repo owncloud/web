@@ -3,6 +3,7 @@ import { getStore, localVue, createFile } from '../views.setup.js'
 import { createLocationSpaces } from '../../../../src/router'
 import FileActions from '@files/src/mixins/fileActions'
 import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
+import Users from '@/__fixtures__/users'
 
 const component = { ...SharedViaLink, mounted: jest.fn() }
 
@@ -109,7 +110,7 @@ describe('SharedViaLink view', () => {
         expect(ocTableFiles.props().areThumbnailsDisplayed).toBe(false)
         expect(ocTableFiles.props().headerPosition).toBe(0)
         expect(ocTableFiles.props().targetRoute).toMatchObject(
-          createLocationSpaces('files-spaces-personal-home')
+          createLocationSpaces('files-spaces-personal')
         )
       })
       it('should set props on list-info component', () => {
@@ -190,6 +191,7 @@ function createStore({ totalFilesCount, highlightedFile, selectedFiles } = {}) {
   return getStore({
     highlightedFile,
     totalFilesCount,
-    selectedFiles
+    selectedFiles,
+    user: { id: Users.alice.id }
   })
 }

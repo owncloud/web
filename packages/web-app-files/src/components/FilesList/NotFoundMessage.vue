@@ -61,9 +61,9 @@ export default {
 
     return {
       showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
-      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal-home'),
+      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal'),
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-project'),
-      homeRoute: createLocationSpaces('files-spaces-personal-home', {
+      homeRoute: createLocationSpaces('files-spaces-personal', {
         params: { item: store.getters.homeFolder }
       }),
       publicLinkRoute: createLocationPublic('files-public-files', {

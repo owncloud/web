@@ -175,7 +175,7 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useCapabilityShareJailEnabled, useRouteQuery } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -216,11 +216,14 @@ export default defineComponent({
       any[]
     >()
 
+    const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
     const resourceTargetLocation = computed(() =>
-      createLocationSpaces(
-        unref(hasShareJail) ? 'files-spaces-share' : 'files-spaces-personal-home'
-      )
+      unref(hasShareJail)
+        ? createLocationSpaces('files-spaces-share')
+        : createLocationSpaces('files-spaces-personal', {
+            params: { storageId: store.getters.user.id }
+          })
     )
     const resourceTargetParamMapping = computed(() =>
       unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined

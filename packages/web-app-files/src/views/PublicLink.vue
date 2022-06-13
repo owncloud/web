@@ -103,16 +103,17 @@ export default {
         .then((files) => {
           this.passwordRequired = false
           this.setPublicLinkPassword(password)
-          const publicOperationName =
-            files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4'
-              ? 'files-public-drop'
-              : 'files-public-files'
+
+          let publicOperationName = 'files-public-files'
+          let publicOperationParams = { item: this.$route.params.token }
+          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
+            publicOperationName = 'files-public-drop'
+            publicOperationParams = { token: this.$route.params.token }
+          }
 
           this.$router.push(
             createLocationPublic(publicOperationName, {
-              params: {
-                item: this.$route.params.token
-              }
+              params: publicOperationParams
             })
           )
         })
@@ -130,6 +131,7 @@ export default {
               this.$refs.passwordInput.focus()
             })
           } else {
+            console.error(error)
             this.errorMessage = error
           }
         })

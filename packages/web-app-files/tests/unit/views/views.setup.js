@@ -67,7 +67,7 @@ export const routes = [
   },
   {
     path: '/files/spaces/personal/home/',
-    name: 'files-spaces-personal-home'
+    name: 'files-spaces-personal'
   },
   {
     path: '/files/spaces/project/',
@@ -124,6 +124,7 @@ export const getStore = function ({
     },
     getters: {
       configuration: () => ({
+        server: 'https://owncloud.test',
         currentTheme: {
           loginPage: {
             backgroundImg: loginBackgroundImg

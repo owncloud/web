@@ -162,7 +162,7 @@ export default defineComponent({
         uppyService
       }),
       ...useUploadHelpers(),
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
+      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),

@@ -16,7 +16,7 @@ export default {
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files')

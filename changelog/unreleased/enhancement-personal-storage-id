@@ -1,0 +1,5 @@
+Enhancement: Personal space id in URL
+
+We now include the personal space id in the URL instead of using a magic "home" alias. When using the old "home" alias the user gets redirected to the URL with their personal space id.
+
+https://github.com/owncloud/web/pull/7053

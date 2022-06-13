@@ -295,7 +295,7 @@ export default {
       const viaPath = this.link.path
       const locationName = isLocationSpacesActive(this.$router, 'files-spaces-project')
         ? 'files-spaces-project'
-        : 'files-spaces-personal-home'
+        : 'files-spaces-personal'
 
       return createLocationSpaces(locationName, {
         params: {

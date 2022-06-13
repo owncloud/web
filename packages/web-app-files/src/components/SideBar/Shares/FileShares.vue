@@ -64,13 +64,18 @@
 import { dirname } from 'path'
 import { useTask } from 'vue-concurrency'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { watch, computed } from '@vue/composition-api'
-import { useStore, useDebouncedRef } from 'web-pkg/src/composables'
+import { watch, computed, ref, unref } from '@vue/composition-api'
+import {
+  useStore,
+  useDebouncedRef,
+  useRouteParam,
+  useCapabilityProjectSpacesEnabled
+} from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import { buildSpace, buildSpaceShare } from '../../../helpers/resources'
+import { buildSpaceShare } from '../../../helpers/resources'
 import { ShareTypes } from '../../../helpers/share'
 import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
@@ -97,53 +102,53 @@ export default {
         sharesTreeLoading.value
     })
 
+    const currentSpace = ref(null)
+    const spaceMembers = ref([])
+    const currentStorageId = useRouteParam('storageId')
+    watch(
+      currentStorageId,
+      (storageId) => {
+        currentSpace.value = store.state.Files.spaces?.find((space) => space.id === storageId)
+      },
+      { immediate: true }
+    )
+    const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
+
     const graphClient = clientService.graphAuthenticated(
       store.getters.configuration.server,
       store.getters.getToken
     )
 
-    const loadSpaceTask = useTask(function* (signal, ref, storageId) {
-      const graphResponse = yield graphClient.drives.getDrive(storageId)
-
-      if (!graphResponse.data) {
-        return
-      }
-
-      ref.currentSpace = buildSpace(graphResponse.data)
-    })
-
     const loadSpaceMembersTask = useTask(function* (signal, ref) {
       const promises = []
       const spaceShares = []
 
-      for (const role of Object.keys(ref.currentSpace.spaceRoles)) {
-        for (const userId of ref.currentSpace.spaceRoles[role]) {
+      for (const role of Object.keys(unref(currentSpace).spaceRoles)) {
+        for (const userId of unref(currentSpace).spaceRoles[role]) {
           promises.push(
             graphClient.users.getUser(userId).then((resolved) => {
-              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, ref.currentSpace.id))
+              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id))
             })
           )
         }
       }
 
       yield Promise.all(promises).then(() => {
-        ref.spaceMembers = sortSpaceMembers(spaceShares)
+        spaceMembers.value = sortSpaceMembers(spaceShares)
       })
     })
 
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
-      loadSpaceTask,
+      currentStorageId,
+      currentSpace,
+      spaceMembers,
+      isCurrentSpaceTypeProject,
       loadSpaceMembersTask,
       sharesListCollapsed,
-      sharesLoading
-    }
-  },
-  data() {
-    return {
-      currentSpace: null,
-      spaceMembers: []
+      sharesLoading,
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
   computed: {
@@ -279,11 +284,12 @@ export default {
       return null
     },
     currentUserIsMemberOfSpace() {
-      return this.currentSpace?.spaceMemberIds.includes(this.user.uuid)
+      return this.currentSpace?.spaceMemberIds?.includes(this.user.uuid)
     },
     showSpaceMembers() {
       return (
         this.currentSpace &&
+        this.isCurrentSpaceTypeProject &&
         this.highlightedFile.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
@@ -299,13 +305,9 @@ export default {
       immediate: true
     }
   },
-  async mounted() {
-    if (this.$route.params.storageId) {
-      await this.loadSpaceTask.perform(this, this.$route.params.storageId)
-
-      if (this.showSpaceMembers) {
-        this.loadSpaceMembersTask.perform(this)
-      }
+  mounted() {
+    if (this.showSpaceMembers) {
+      this.loadSpaceMembersTask.perform()
     }
   },
   methods: {
@@ -369,7 +371,7 @@ export default {
         client: this.$client,
         share: share,
         resource: this.highlightedFile,
-        storageId: this.$route.params.storageId
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
         .then(() => {
           this.hideModal()
@@ -386,23 +388,22 @@ export default {
         })
     },
     $_reloadShares() {
-      this.loadCurrentFileOutgoingShares({
+      const requestParams = {
         client: this.$client,
-        path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
+      }
+      this.loadCurrentFileOutgoingShares({
+        ...requestParams,
+        path: this.highlightedFile.path
       })
       this.loadIncomingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        ...requestParams,
+        path: this.highlightedFile.path
       })
       this.loadSharesTree({
-        client: this.$client,
-        path: dirname(this.highlightedFile.path),
-        $gettext: this.$gettext,
-        storageId: this.$route.params.storageId
+        ...requestParams,
+        path: dirname(this.highlightedFile.path)
       })
     },
     getSharedParentRoute(parentShare) {
@@ -413,11 +414,11 @@ export default {
       if (this.sharesTree[parentShare.path]) {
         if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
           return createLocationSpaces('files-spaces-project', {
-            params: { storageId: this.$route.params.storageId, item: parentShare.path }
+            params: { storageId: this.currentStorageId, item: parentShare.path }
           })
         }
 
-        return createLocationSpaces('files-spaces-personal-home', {
+        return createLocationSpaces('files-spaces-personal', {
           params: { item: parentShare.path }
         })
       }

@@ -72,7 +72,7 @@ export default {
         query.scrollTo = resource.name
       }
       this.$router.push(
-        createLocationSpaces('files-spaces-personal-home', {
+        createLocationSpaces('files-spaces-personal', {
           params,
           query
         })

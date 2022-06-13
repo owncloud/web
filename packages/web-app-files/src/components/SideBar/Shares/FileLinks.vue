@@ -132,7 +132,11 @@ export default defineComponent({
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
-    return { graphClient, hasSpaces: useCapabilitySpacesEnabled(), linkListCollapsed }
+    return {
+      graphClient,
+      hasSpaces: useCapabilitySpacesEnabled(),
+      linkListCollapsed
+    }
   },
   data() {
     return {
@@ -346,14 +350,14 @@ export default defineComponent({
         graphClient: this.graphClient,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        storageId: this.currentStorageId,
+        ...(this.currentStorageId && { storageId: this.currentStorageId }),
         resource: this.highlightedFile
       })
       this.loadSharesTree({
         client: this.$client,
         path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        storageId: this.currentStorageId
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
     },
 
@@ -425,6 +429,7 @@ export default defineComponent({
         quicklink: link.quicklink,
         name: link.name,
         ...(this.currentStorageId && {
+          storageId: this.currentStorageId,
           spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
         })
       }
@@ -437,8 +442,7 @@ export default defineComponent({
         path: this.highlightedFile.path,
         client: this.$client,
         $gettext: this.$gettext,
-        params,
-        storageId: this.currentStorageId
+        params
       }).catch(showError)
 
       this.currentView = VIEW_SHOW
@@ -495,7 +499,12 @@ export default defineComponent({
       this.hideModal()
       // removeLink currently fetches all shares from the backend in order to reload the shares indicators
       // TODO: Check if to-removed link is last link share and only reload if it's the last link
-      await this.removeLink({ client, share, resource, storageId: this.currentStorageId })
+      await this.removeLink({
+        client,
+        share,
+        resource,
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
+      })
         .then(
           this.showMessage({
             title: this.$gettext('Link was deleted successfully')

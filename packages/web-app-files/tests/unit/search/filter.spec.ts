@@ -59,7 +59,7 @@ describe('FilterProvider', () => {
   it('is only available on certain routes', () => {
     ;[
       { route: { name: 'foo' } },
-      { route: createLocationSpaces('files-spaces-personal-home'), available: true },
+      { route: createLocationSpaces('files-spaces-personal'), available: true },
       { route: { name: 'bar' } }
     ].forEach((v) => {
       const search = new FilterSearch(store, {

@@ -36,7 +36,7 @@ import { isAuthenticatedRoute, ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',
-  redirect: (to) => createLocationSpaces('files-spaces-personal-home', to)
+  redirect: (to) => createLocationSpaces('files-spaces-personal', to)
 }
 
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [

@@ -51,7 +51,7 @@ export default {
   },
   setup() {
     return {
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home')
+      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal')
     }
   },
   computed: {
