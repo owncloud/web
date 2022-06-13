@@ -1,7 +1,8 @@
 import PQueue from 'p-queue'
+import { dirname } from 'path'
+import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
-import { dirname } from 'path'
 import {
   buildResource,
   buildShare,
@@ -10,12 +11,13 @@ import {
   buildSpace
 } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { loadPreview } from '../helpers/resource'
+import { loadPreview, move, copy } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
+import { ClipboardActions } from '../helpers/clipboardActions'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -35,6 +37,81 @@ export default {
     } else {
       context.commit('ADD_FILE_SELECTION', file)
     }
+  },
+  copySelectedFiles(context) {
+    context.commit('CLIPBOARD_SELECTED')
+    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
+    context.dispatch(
+      'showMessage',
+      {
+        title: $gettext('Copied to clipboard!'),
+        status: 'success'
+      },
+      { root: true }
+    )
+  },
+  cutSelectedFiles(context) {
+    context.commit('CLIPBOARD_SELECTED')
+    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
+    context.dispatch(
+      'showMessage',
+      {
+        title: $gettext('Copied to clipboard!'),
+        status: 'success'
+      },
+      { root: true }
+    )
+  },
+  async pasteSelectedFiles(
+    context,
+    {
+      client,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      upsertResource
+    }
+  ) {
+    let movedResources
+    if (context.state.clipboardAction === ClipboardActions.Cut) {
+      movedResources = await move(
+        context.state.clipboardResources,
+        context.state.currentFolder,
+        client,
+        createModal,
+        hideModal,
+        showMessage,
+        $gettext,
+        $gettextInterpolate,
+        $ngettext
+      )
+      context.commit('CLEAR_CLIPBOARD')
+    }
+    if (context.state.clipboardAction === ClipboardActions.Copy) {
+      movedResources = await copy(
+        context.state.clipboardResources,
+        context.state.currentFolder,
+        client,
+        createModal,
+        hideModal,
+        showMessage,
+        $gettext,
+        $gettextInterpolate,
+        $ngettext
+      )
+    }
+    const loadMovedResource = async (resource) => {
+      const loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
+      upsertResource(buildResource(loadedResource))
+    }
+    const loadingResources = []
+    for (const resource of movedResources) {
+      loadingResources.push(loadMovedResource(resource))
+    }
+    await Promise.all(loadingResources)
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

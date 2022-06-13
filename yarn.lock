@@ -9730,22 +9730,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~3.0.0-alpha.10":
-  version: 3.0.0-alpha.10
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.10"
+"owncloud-sdk@npm:~3.0.0-alpha.12":
+  version: 3.0.0-alpha.12
+  resolution: "owncloud-sdk@npm:3.0.0-alpha.12"
   peerDependencies:
-    axios: ^0.26.0
+    axios: ^0.27.2
     cross-fetch: ^3.0.6
-    promise: ^8.0.3
+    promise: ^8.1.0
     qs: ^6.10.3
     utf8: ^3.0.0
     uuid: ^8.2.0
-    webdav: 4.9.0
+    webdav: 4.10.0
     xml-js: ^1.6.11
   dependenciesMeta:
     "@pact-foundation/pact":
       built: true
-  checksum: e9bed0381d1958175654ccd43a2f175b25ef358209d7556210fcefb9e5ee10de948a6b94b9dc9d09aa126b18bd97c6aadd67573ace583b217c3ec089360afb21
+  checksum: 2c9810e356c54e2809e6318fbe789eb76534e661fd01b927e9ca60771c9eb86c192c8403f4b8110b0b2c2d719ed6e0679a34d4d3bcf3061e42541432a6116ce1
   languageName: node
   linkType: hard
 
@@ -13782,7 +13782,7 @@ __metadata:
     marked: ^4.0.12
     oidc-client: 1.11.5
     owncloud-design-system: ^13.1.0
-    owncloud-sdk: ~3.0.0-alpha.10
+    owncloud-sdk: ~3.0.0-alpha.12
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7

@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -55,13 +55,48 @@ export default defineComponent({
     })
   },
 
+  mounted() {
+    document.addEventListener('keydown', this.handleShortcut, false)
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleShortcut)
+  },
+
   methods: {
     ...mapActions('Files', ['resetFileSelection']),
     ...mapActions('Files/sidebar', {
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
     }),
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+
+    handleShortcut(event) {
+      const key = event.keyCode || event.which
+      const ctr = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
+      if (!ctr /* CTRL | CMD */) return
+      const isCopyAction = key === 67
+      const isPaseAction = key === 86
+      const isCutAction = key === 88
+      if (isCopyAction) {
+        this.copySelectedFiles()
+      } else if (isPaseAction) {
+        this.pasteSelectedFiles({
+          client: this.$client,
+          createModal: this.createModal,
+          hideModal: this.hideModal,
+          showMessage: this.showMessage,
+          $gettext: this.$gettext,
+          $gettextInterpolate: this.$gettextInterpolate,
+          $ngettext: this.$ngettext,
+          upsertResource: this.UPSERT_RESOURCE
+        })
+      } else if (isCutAction) {
+        this.cutSelectedFiles()
+      }
+    },
 
     focusSideBar(component, event) {
       this.focus({
