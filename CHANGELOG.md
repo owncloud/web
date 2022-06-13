@@ -69,6 +69,7 @@ Summary
 * Enhancement - Load language from user object if given: [#7023](https://github.com/owncloud/web/pull/7023)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
+* Enhancement - Personal space id in URL: [#7053](https://github.com/owncloud/web/pull/7053)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 * Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
@@ -593,6 +594,13 @@ Details
 
    https://github.com/owncloud/web/issues/6970
    https://github.com/owncloud/web/pull/6991
+
+* Enhancement - Personal space id in URL: [#7053](https://github.com/owncloud/web/pull/7053)
+
+   We now include the personal space id in the URL instead of using a magic "home" alias. When using
+   the old "home" alias the user gets redirected to the URL with their personal space id.
+
+   https://github.com/owncloud/web/pull/7053
 
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 
