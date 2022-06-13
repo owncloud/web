@@ -1,0 +1,6 @@
+Bugfix: Upload meta data serialization
+
+We've fixed a bug where meta properties of uploading resources could not be serialized, resulting in unnecessary network requests.
+
+https://github.com/owncloud/web/pull/6846
+https://github.com/owncloud/web/issues/6819

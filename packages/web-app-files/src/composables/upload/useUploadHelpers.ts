@@ -226,11 +226,16 @@ const inputFilesToUppyFiles = ({
           currentFolder,
           relativeFolder: directory,
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
-          route: fileRoute,
           tusEndpoint,
           webDavBasePath: unref(webDavBasePath), // WebDAV base path where the files will be uploaded to
           uploadId: uuid.v4(),
-          topLevelFolderId
+          topLevelFolderId,
+          routeName: fileRoute.name,
+          routeItem: fileRoute.params?.item || '',
+          routeShareName: (fileRoute.params as any)?.shareName || '',
+          routeShareId: (fileRoute.query as any)?.shareId || '',
+          routeStorage: (fileRoute.params as any)?.storage || '',
+          routeStorageId: (fileRoute.params as any)?.storageId || ''
         }
       })
     }

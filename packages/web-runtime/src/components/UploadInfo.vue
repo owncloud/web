@@ -343,7 +343,7 @@ export default {
       } else {
         this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
       }
-      this.uploads[file.meta.uploadId].targetRoute = file.meta.route
+      this.uploads[file.meta.uploadId].targetRoute = this.buildRouteFromUppyResource(file)
 
       if (!file.isFolder) {
         this.uploads[file.meta.uploadId].status = 'success'
@@ -425,6 +425,24 @@ export default {
     },
     parentFolderLink(file) {
       return this.createFolderLink(path.dirname(file.path), file.storageId, file.targetRoute)
+    },
+    buildRouteFromUppyResource(resource) {
+      if (!resource.meta.routeName) {
+        return null
+      }
+
+      return {
+        name: resource.meta.routeName,
+        query: {
+          shareId: resource.meta.routeShareId
+        },
+        params: {
+          item: resource.meta.routeItem,
+          shareName: resource.meta.routeShareName,
+          storage: resource.meta.routeStorage,
+          storageId: resource.meta.routeStorageId
+        }
+      }
     },
     defaultParentFolderName(file) {
       const { targetRoute } = file

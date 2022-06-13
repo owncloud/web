@@ -34,11 +34,13 @@ export class UppyService {
     tusMaxChunkSize,
     uploadChunkSize,
     tusHttpMethodOverride,
+    tusExtension,
     headers
   }: {
     tusMaxChunkSize: number
     uploadChunkSize: number
     tusHttpMethodOverride: boolean
+    tusExtension: string
     headers: { [key: string]: string }
   }) {
     const chunkSize =
@@ -46,12 +48,15 @@ export class UppyService {
         ? Math.max(tusMaxChunkSize, uploadChunkSize)
         : uploadChunkSize
 
+    const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
+
     const tusPluginOptions = {
       headers: headers,
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: [0, 500, 1000]
+      retryDelays: [0, 500, 1000],
+      uploadDataDuringCreation
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
