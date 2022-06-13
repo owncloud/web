@@ -2022,7 +2022,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.4.0, @popperjs/core@npm:^2.9.0":
+"@popperjs/core@npm:^2.11.5":
+  version: 2.11.5
+  resolution: "@popperjs/core@npm:2.11.5"
+  checksum: fd7f9dca3fb716d7426332b6ee283f88d2724c0ab342fb678865a640bad403dfb9eeebd8204a406986162f7e2b33394f104320008b74d0e9066d7322f70ea35d
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.9.0":
   version: 2.10.2
   resolution: "@popperjs/core@npm:2.10.2"
   checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
@@ -2903,12 +2910,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/composition-api@npm:^1.4.9":
-  version: 1.4.9
-  resolution: "@vue/composition-api@npm:1.4.9"
+"@vue/composition-api@npm:^1.6.2":
+  version: 1.6.2
+  resolution: "@vue/composition-api@npm:1.6.2"
   peerDependencies:
     vue: ">= 2.5 < 3"
-  checksum: 08853aee4326804f9b8e53d7abc53bbcfc44e1b9df260644656ae39803b4c3427d5deeb87821413a1e82737704447743cf573315f3f4f038c2b29c7cf6cd5910
+  checksum: 76016b8f36d382b11696112c09033bdd857cd99c6c67b4e7ac10f6a98dd56acbdc790164b915875cc2a674bb6421840b5c34bff3fa9abb5a79fd02eb35b46a7f
   languageName: node
   linkType: hard
 
@@ -9700,9 +9707,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.1.0-rc.9":
-  version: 13.1.0-rc.9
-  resolution: "owncloud-design-system@npm:13.1.0-rc.9"
+"owncloud-design-system@npm:^13.1.0":
+  version: 13.1.0
+  resolution: "owncloud-design-system@npm:13.1.0"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9719,7 +9726,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: af88c0a64b005a260d6748199c0dc5aa8337c91385a0e749699276087fa36b9043d4054982addf4dc4b17a2c344f0f31c99298fe91fe33f084a7f05c8645ade0
+  checksum: 861941fec6d8da858ebc9433de5e9d4be3c3bffb818a3e66e7983ad49841e7651217ee46a272c9bb1a5c49e6dc5b4d75b1ec394e7ba29936b886839c702fc1ff
   languageName: node
   linkType: hard
 
@@ -13753,7 +13760,7 @@ __metadata:
   resolution: "web-runtime@workspace:packages/web-runtime"
   dependencies:
     "@fortawesome/fontawesome-free": ^6.1.1
-    "@popperjs/core": ^2.4.0
+    "@popperjs/core": ^2.11.5
     "@sentry/browser": ^6.19.7
     "@sentry/integrations": ^6.19.7
     "@types/luxon": ^2.3.1
@@ -13762,7 +13769,7 @@ __metadata:
     "@uppy/drop-target": ^1.1.3
     "@uppy/tus": ^2.4.0
     "@uppy/xhr-upload": ^2.1.0
-    "@vue/composition-api": ^1.4.9
+    "@vue/composition-api": ^1.6.2
     axios: ^0.26.1
     cross-fetch: ^3.0.6
     easygettext: "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz"
@@ -13774,7 +13781,7 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client: 1.11.5
-    owncloud-design-system: ^13.1.0-rc.9
+    owncloud-design-system: ^13.1.0
     owncloud-sdk: ~3.0.0-alpha.10
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
