@@ -43,11 +43,19 @@ export const buildRoutes = (): RouteConfig[] =>
   [
     {
       path: '/list',
-      redirect: (to) => createLocationSpaces('files-spaces-personal', to)
+      redirect: (to) =>
+        createLocationSpaces('files-spaces-personal', {
+          ...to,
+          params: { ...to.params, storageId: 'home' }
+        })
     },
     {
       path: '/list/all/:item*',
-      redirect: (to) => createLocationSpaces('files-spaces-personal', to)
+      redirect: (to) =>
+        createLocationSpaces('files-spaces-personal', {
+          ...to,
+          params: { ...to.params, storageId: 'home' }
+        })
     },
     {
       path: '/list/favorites',

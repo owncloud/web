@@ -99,7 +99,7 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
-import { defineComponent, unref } from '@vue/composition-api'
+import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
 import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
@@ -134,13 +134,16 @@ export default defineComponent({
       store.getters.getToken
     )
     const storageId = useRouteParam('storageId')
-    return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
+    const resourceTargetLocation = computed(() => {
+      return createLocationSpaces('files-spaces-personal', {
         params: {
           storageId: unref(storageId)
         }
-      }),
+      })
+    })
+    return {
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      resourceTargetLocation,
       hasShareJail: useCapabilityShareJailEnabled(),
       graphClient
     }
