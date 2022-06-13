@@ -99,7 +99,6 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * announce applications to the runtime, it takes care that all requirements are fulfilled and then:
  * - bulk build all applications
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
- * - bulk activate all applications, all applications are registered, it's safe to request a application api here
  *
  * @param runtimeConfiguration
  * @param store
@@ -107,7 +106,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param translations
  * @param supportedLanguages
  */
-export const announceApplications = async ({
+export const registerApplications = async ({
   runtimeConfiguration,
   store,
   router,
@@ -119,7 +118,7 @@ export const announceApplications = async ({
   router: VueRouter
   translations: unknown
   supportedLanguages: { [key: string]: string }
-}): Promise<void> => {
+}): Promise<NextApplication[]> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
     rewriteDeprecatedAppNames(runtimeConfiguration)
 
@@ -151,6 +150,19 @@ export const announceApplications = async ({
     return acc
   }, [])
 
+  return applications
+}
+
+/**
+ * Bulk activate all applications, all applications are registered, it's safe to request a application api here
+ *
+ * @param applications
+ */
+ export const initializeApplications = async ({
+  applications
+}: {
+  applications: NextApplication[]
+}): Promise<void> => {
   await Promise.all(applications.map((application) => application.initialize()))
   await Promise.all(applications.map((application) => application.ready()))
 }

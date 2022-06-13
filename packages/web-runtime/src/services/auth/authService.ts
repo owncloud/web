@@ -24,16 +24,10 @@ export class AuthService {
     this.clientService = clientService
     this.store = store
     this.router = router
-    this.initializeUserManager()
-
-    const accessToken = this.userManager.getAccessToken()
-    if (accessToken) {
-      await this.updateAccessToken(accessToken, true)
-      console.log(this.store.getters.user)
-    }
+    await this.initializeUserManager()
   }
 
-  private initializeUserManager() {
+  private async initializeUserManager() {
     this.userManager = new UserManager(this.configurationManager)
     this.userManager.events.addAccessTokenExpired((...args) => {
       console.log('AccessToken Expired：', ...args)
@@ -71,6 +65,12 @@ export class AuthService {
       await this.resetStateAfterLogout()
       await this.router.push({ name: 'accessDenied' })
     })
+
+    const accessToken = this.userManager.getAccessToken()
+    if (accessToken) {
+      await this.updateAccessToken(accessToken, true)
+      console.log(this.store.getters.user)
+    }
   }
 
   private initializeOwnCloudSdk(accessToken): void {
