@@ -1,8 +1,6 @@
 import { Resource } from './index'
 import { join } from 'path'
-import {
-  buildResource,
-} from '../resources'
+import { buildResource } from '../resources'
 
 export enum ResolveStrategy {
   SKIP,
@@ -218,12 +216,11 @@ export const copy = async (
   )
 }
 
-const resolveFileNameDuplicate = (name, existingFiles, iteration=1) => {
-  console.log(existingFiles)
+export const resolveFileNameDuplicate = (name, existingFiles, iteration = 1) => {
   const potentialName = `${name} (${iteration})`
   const hasConflict = existingFiles.some((f) => f.name === potentialName)
-  if(!hasConflict) return potentialName
-  return resolveFileNameDuplicate(name, existingFiles, iteration+1)
+  if (!hasConflict) return potentialName
+  return resolveFileNameDuplicate(name, existingFiles, iteration + 1)
 }
 
 export const copyMoveResource = async (
@@ -270,7 +267,10 @@ export const copyMoveResource = async (
         overwriteTarget = true
       }
       if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
-        targetName = resolveFileNameDuplicate(resource.name, [...movedResources, ...targetFolderResources])
+        targetName = resolveFileNameDuplicate(resource.name, [
+          ...movedResources,
+          ...targetFolderResources
+        ])
         resource.name = targetName
       }
     }
