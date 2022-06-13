@@ -1,5 +1,6 @@
 import { ClientService } from 'web-pkg/src/services'
 import {
+  useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
   useCapabilityFilesTusSupportMaxChunkSize,
   useClientService,
@@ -53,6 +54,7 @@ export function useUpload(options: UploadOptions): UploadResult {
 
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
+  const tusExtension = useCapabilityFilesTusExtension()
   const uploadChunkSize = computed((): number => store.getters.configuration.uploadChunkSize)
 
   const headers = computed((): { [key: string]: string } => {
@@ -78,6 +80,7 @@ export function useUpload(options: UploadOptions): UploadResult {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         uploadChunkSize: unref(uploadChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
+        tusExtension: unref(tusExtension),
         headers: unref(headers)
       }
     }
