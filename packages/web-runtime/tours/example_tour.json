@@ -1,0 +1,72 @@
+{
+  "translations": {
+    "en": {
+      "tourName": "Example Tour",
+      "tooltip": "See new features",
+      "steps": [
+        {
+          "title": "Example News",
+          "text": "Discover the new features and try them yourself",
+          "buttons": ["back", "next"],
+          "learnMoreLink": "https://doc.owncloud.com/docs/next/"
+        },
+        {
+          "title": "1.  Example Feature",
+          "text": "<div><p>Example feature description </p><p>Example feature description 2 </p></div>",
+          "buttons": ["back", "next"],
+          "learnMoreLink": "https://doc.owncloud.com/docs/next/"
+        },
+        {
+          "title": "Coming soon",
+          "text": "<div><p>Other features will be coming in the coming months</p>\r\n    <p> Stay tuned!</p></div>",
+          "buttons": ["back", "next"]
+        }
+      ]
+    },
+    "de": {
+      "tourName": "Beispielstour",
+      "tooltip": "Entdecke neue Features",
+      "steps": [
+        {
+          "title": "Beispielsneugigkeiten!",
+          "text": "Entdecke neue Features und probiere sie aus",
+          "buttons": ["back", "next"],
+          "learnMoreLink": "https://doc.owncloud.com/docs/next/"
+        },
+        {
+          "title": "1.  Beispielsfeature",
+          "text": "<div><p> Beschreibung des Features </p><p> Beschreibung des Features 2</p></div>",
+          "buttons": ["back", "next"],
+          "learnMoreLink": "https://doc.owncloud.com/docs/next/"
+        },
+        {
+          "title": "Bald:",
+          "text": "<div><p>Mehr Festures werden in kommenden Monaten verfügbar sein</p>\r\n  <p> Bleib dran!</p></div>",
+          "buttons": ["back", "next"]
+        }
+      ]
+    }
+  },
+  "confirmCancel": false,
+  "confirmCancelMessage": "",
+  "classPrefix": "",
+  "defaultStepOptions": {
+    "cancelIcon": {
+      "enabled": true
+    },
+    "classes": "a",
+    "scrollTo": {
+      "behavior": "smooth",
+      "block": "center"
+    }
+  },
+  "exitOnEsc": true,
+  "allowedLocations": [],
+  "deniedLocations": ["files-operations-resolver-public-link", "files-public-files"],
+  "useModalOverlay": true,
+  "tourId": "Example Tour",
+  "autostart": {
+    "timeout": 3000,
+    "location": "files-spaces-personal-home"
+  }
+}

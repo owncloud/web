@@ -21,7 +21,8 @@ import {
   announceVersions,
   applicationStore,
   announceUppyService,
-  startSentry
+  startSentry,
+  announceTours
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
@@ -41,6 +42,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
+  await announceTours({ store, runtimeConfiguration })
 }
 
 export const renderSuccess = (): void => {

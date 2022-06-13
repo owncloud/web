@@ -94,6 +94,7 @@ const plugins = [
       { src: './packages/web-container/img/*', dest: 'img' },
       { src: './packages/web-container/*.{html,json,txt}' },
       { src: './packages/web-runtime/themes/**/*', dest: 'themes' },
+      { src: './packages/web-runtime/tours/*', dest: 'tours' },
       { src: `./config/${production ? 'config.json.dist' : 'config.json'}` }
     ]
   }),
