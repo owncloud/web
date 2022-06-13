@@ -74,7 +74,6 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     handleShortcut(event) {
-      console.log(event)
       const key = event.keyCode || event.which
       const ctr = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       if (!ctr /* CTRL | CMD */) return
