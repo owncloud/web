@@ -12,8 +12,8 @@ import { configurationManager } from 'web-pkg/src/configuration'
 
 import {
   announceConfiguration,
-  registerApplications,
   initializeApplications,
+  announceApplicationsReady,
   announceClient,
   announceDefaults,
   announceClientService,
@@ -30,19 +30,20 @@ import {
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
-  announceClientService({ vue: Vue, runtimeConfiguration })
-  announceUppyService({ vue: Vue })
-  await announceAuthService({ vue: Vue, configurationManager, store, router })
-  await announceClient(runtimeConfiguration)
   await announceStore({ vue: Vue, store, runtimeConfiguration })
-  const applications = await registerApplications({
+  const applications = await initializeApplications({
     runtimeConfiguration,
     store,
     supportedLanguages,
     router,
     translations
   })
-  await initializeApplications({applications})
+  announceClientService({ vue: Vue, runtimeConfiguration })
+  announceUppyService({ vue: Vue })
+  await announceClient(runtimeConfiguration)
+  await announceAuthService({ vue: Vue, configurationManager, store, router })
+
+  await announceApplicationsReady({applications})
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })

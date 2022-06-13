@@ -106,7 +106,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param translations
  * @param supportedLanguages
  */
-export const registerApplications = async ({
+export const initializeApplications = async ({
   runtimeConfiguration,
   store,
   router,
@@ -150,6 +150,8 @@ export const registerApplications = async ({
     return acc
   }, [])
 
+  await Promise.all(applications.map((application) => application.initialize()))
+
   return applications
 }
 
@@ -158,12 +160,11 @@ export const registerApplications = async ({
  *
  * @param applications
  */
- export const initializeApplications = async ({
+ export const announceApplicationsReady = async ({
   applications
 }: {
   applications: NextApplication[]
 }): Promise<void> => {
-  await Promise.all(applications.map((application) => application.initialize()))
   await Promise.all(applications.map((application) => application.ready()))
 }
 
