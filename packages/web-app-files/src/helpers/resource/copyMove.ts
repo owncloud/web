@@ -1,5 +1,8 @@
 import { Resource } from './index'
 import { join } from 'path'
+import {
+  buildResource,
+} from '../resources'
 
 export enum ResolveStrategy {
   SKIP,
@@ -64,10 +67,11 @@ export const resolveFileExists = (
     createModal(modal)
   })
 }
+
 export const resolveAllConflicts = async (
   resourcesToMove,
   targetFolder,
-  client,
+  targetFolderItems,
   createModal,
   hideModal,
   $gettext,
@@ -75,8 +79,6 @@ export const resolveAllConflicts = async (
   resolveFileExistsMethod,
   copy = false
 ) => {
-  // if we implement MERGE, we need to use 'infinity' instead of 1
-  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
   const targetPath = targetFolder.path
   const index = targetFolder.webDavPath.lastIndexOf(targetPath)
   const webDavPrefix =
@@ -215,6 +217,15 @@ export const copy = async (
     true
   )
 }
+
+const resolveFileNameDuplicate = (name, existingFiles, iteration=1) => {
+  console.log(existingFiles)
+  const potentialName = `${name} (${iteration})`
+  const hasConflict = existingFiles.some((f) => f.name === potentialName)
+  if(!hasConflict) return potentialName
+  return resolveFileNameDuplicate(name, existingFiles, iteration+1)
+}
+
 export const copyMoveResource = async (
   resourcesToMove,
   targetFolder,
@@ -228,10 +239,13 @@ export const copyMoveResource = async (
   copy = false
 ) => {
   const errors = []
+  // if we implement MERGE, we need to use 'infinity' instead of 1
+  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
+  const targetFolderResources = targetFolderItems.map((i) => buildResource(i))
   const resolvedConflicts = await resolveAllConflicts(
     resourcesToMove,
     targetFolder,
-    client,
+    targetFolderItems,
     createModal,
     hideModal,
     $gettext,
@@ -241,7 +255,9 @@ export const copyMoveResource = async (
   )
   const movedResources = []
 
-  for (const resource of resourcesToMove) {
+  for (let resource of resourcesToMove) {
+    // because javascripts way of cloning is awesome
+    resource = JSON.parse(JSON.stringify(resource))
     const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
     let targetName = resource.name
     let overwriteTarget = false
@@ -254,7 +270,7 @@ export const copyMoveResource = async (
         overwriteTarget = true
       }
       if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
-        targetName = $gettextInterpolate($gettext('%{name} copy'), { name: resource.name }, true)
+        targetName = resolveFileNameDuplicate(resource.name, [...movedResources, ...targetFolderResources])
         resource.name = targetName
       }
     }
