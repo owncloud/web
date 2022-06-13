@@ -233,6 +233,7 @@ const inputFilesToUppyFiles = ({
           routeName: fileRoute.name,
           routeItem: fileRoute.params?.item || '',
           routeShareName: (fileRoute.params as any)?.shareName || '',
+          routeShareId: (fileRoute.query as any)?.shareId || '',
           routeStorage: (fileRoute.params as any)?.storage || '',
           routeStorageId: (fileRoute.params as any)?.storageId || ''
         }

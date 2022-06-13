@@ -433,6 +433,9 @@ export default {
 
       return {
         name: resource.meta.routeName,
+        query: {
+          shareId: resource.meta.routeShareId
+        },
         params: {
           item: resource.meta.routeItem,
           shareName: resource.meta.routeShareName,
@@ -468,6 +471,7 @@ export default {
         query: targetRoute.query,
         params: {
           ...(storageId && path && { storageId }),
+          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage }),
           ...(targetRoute.params?.shareName && { shareName: targetRoute.params?.shareName })
         }
       }

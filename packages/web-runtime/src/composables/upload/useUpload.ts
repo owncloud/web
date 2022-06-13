@@ -18,6 +18,7 @@ export interface UppyResource {
   type: string
   data: Blob
   meta: {
+    // must only contain primitive types because the properties can't be serialized otherwise!
     currentFolder: string
     relativeFolder: string
     relativePath: string
@@ -28,6 +29,7 @@ export interface UppyResource {
     routeName?: string
     routeItem?: string
     routeShareName?: string
+    routeShareId?: string
     routeStorage?: string
     routeStorageId?: string
   }
