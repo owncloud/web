@@ -732,6 +732,7 @@ Details
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/web/pull/6953
+   https://github.com/owncloud/web/pull/7094
    https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.9
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
