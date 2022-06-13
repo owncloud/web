@@ -44,6 +44,7 @@ Summary
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
 * Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
+* Bugfix - Upload meta data serialization: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Complete-state of the upload overlay: [#7100](https://github.com/owncloud/web/pull/7100)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Parent folder name on public links: [#7104](https://github.com/owncloud/web/pull/7104)
@@ -86,6 +87,7 @@ Summary
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 * Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
+* Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 * Enhancement - Clickable folder links in upload overlay: [#7109](https://github.com/owncloud/web/pull/7109)
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
@@ -388,6 +390,14 @@ Details
 
    https://github.com/owncloud/web/issues/7006
    https://github.com/owncloud/web/pull/7036
+
+* Bugfix - Upload meta data serialization: [#6846](https://github.com/owncloud/web/pull/6846)
+
+   We've fixed a bug where meta properties of uploading resources could not be serialized,
+   resulting in unnecessary network requests.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6846
 
 * Bugfix - Complete-state of the upload overlay: [#7100](https://github.com/owncloud/web/pull/7100)
 
@@ -776,6 +786,13 @@ Details
    https://github.com/owncloud/web/pull/6952
    https://github.com/owncloud/web/pull/6994
    https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.10
+
+* Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
+
+   Uploading via tus now uses the `uploadDataDuringCreation` option which saves up one request.
+
+   https://github.com/owncloud/web/issues/7066
+   https://github.com/owncloud/web/pull/7111
 
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 
