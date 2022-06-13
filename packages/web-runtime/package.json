@@ -26,7 +26,7 @@
     "oidc-client": "1.11.5",
     "owncloud-design-system": "^13.1.0",
     "owncloud-sdk": "~3.0.0-alpha.10",
-    "p-queue": "^6.6.2",
+    "p-queue": "^7.2.0",
     "popper-max-size-modifier": "^0.2.0",
     "portal-vue": "^2.1.7",
     "postcss-import": "^12.0.1",
