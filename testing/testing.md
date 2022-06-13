@@ -82,13 +82,13 @@ and make sure there are no conflicting ports and everything runs smoothly. You c
 Depending on the backend you want to run the tests on, you can either run
 
 ```shell
-$ yarn test:e2e:cucumber tests/e2e/cucumber
+$ yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature
 ```
 
 for an ownCloud 10 backend or
 
 ```shell
-$ OCIS=true yarn test:e2e:cucumber tests/e2e/cucumber
+$ OCIS=true yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature
 ```
 
 for an oCIS backend.
