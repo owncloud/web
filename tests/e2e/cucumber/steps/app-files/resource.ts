@@ -1,4 +1,4 @@
-import { DataTable, When } from '@cucumber/cucumber'
+import { DataTable, When, Then } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
@@ -140,6 +140,43 @@ When(
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.downloadVersion({ folder, files: fileInfo[folder] })
+    }
+  }
+)
+
+Then(
+  /^"([^"]*)" (should|should not) be able to empty the trashbin?$/,
+  async function (this: World, stepUser: string, actionType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const message = await resourceObject.emptyTrashBin()
+    if (actionType === 'should not') {
+      expect(message).toBe('failed to delete all files permanently')
+    } else {
+      expect(message).toBe('all deleted files were removed')
+    }
+  }
+)
+
+Then(
+  /^"([^"]*)" (should|should not) be able to delete following resource(s) from the trashbin?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      const message = await resourceObject.deleteTrashBin({ resource: info.resource })
+      const paths = info.resource.split('/')
+      if (actionType === 'should not') {
+        expect(message).toBe(`failed to delete "${paths[paths.length - 1]}"`)
+      } else {
+        expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
+      }
     }
   }
 )

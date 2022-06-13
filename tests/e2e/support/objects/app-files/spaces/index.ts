@@ -1,14 +1,20 @@
 import { Page } from 'playwright'
 import { SpacesEnvironment } from '../../../environment'
 import {
+  addSpaceMembers,
+  canUserEditSpaceResource,
+  canUserEditSpaceResourceArgs,
+  changeQuota,
+  changeSpaceDescription,
+  changeSpaceName,
+  changeSpaceSubtitle,
   createSpace,
   createSpaceArgs,
   openSpace,
-  changeSpaceName,
-  changeSpaceDescription,
-  changeSpaceSubtitle,
-  changeQuota
+  openSpaceTrashBin,
+  reloadSpacePage
 } from './actions'
+import { inviteMembersArgs } from '../share/actions'
 
 export class Spaces {
   #page: Page
@@ -52,5 +58,25 @@ export class Spaces {
   async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await changeQuota({ id, value, page: this.#page })
+  }
+
+  async addMembers(args: Omit<inviteMembersArgs, 'page'>): Promise<void> {
+    await addSpaceMembers({ ...args, page: this.#page })
+  }
+
+  async canUserEditResource(args: Omit<canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
+    const startUrl = this.#page.url()
+    const canEdit = await canUserEditSpaceResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return canEdit
+  }
+
+  async reloadPage(): Promise<void> {
+    await reloadSpacePage(this.#page)
+  }
+
+  async openTrashbin(key): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    await openSpaceTrashBin({ id, page: this.#page })
   }
 }

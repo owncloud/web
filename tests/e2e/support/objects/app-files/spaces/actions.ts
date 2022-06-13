@@ -1,6 +1,7 @@
 import { Page } from 'playwright'
 import { sidebar } from '../utils'
 import util from 'util'
+import { inviteMembers, inviteMembersArgs } from '../share/actions'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -14,6 +15,10 @@ const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger'
 const spacesDescriptionInputArea = '#description-input-area'
+const sideBarActions =
+  '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
+const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger'
+const spaceContextButton = '#space-context-btn'
 /**/
 
 export interface createSpaceArgs {
@@ -157,4 +162,47 @@ export const changeQuota = async (args: {
   ])
 
   await sidebar.close({ page: page })
+}
+
+export const addSpaceMembers = async (args: inviteMembersArgs): Promise<void> => {
+  const { page, role, users } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await inviteMembers({ page, users, role })
+  await sidebar.close({ page: page })
+}
+
+export interface canUserEditSpaceResourceArgs {
+  resource: string
+  page: Page
+}
+export const canUserEditSpaceResource = async (
+  args: canUserEditSpaceResourceArgs
+): Promise<boolean> => {
+  const { resource, page } = args
+  const notExpectedActions = ['move', 'rename', 'delete']
+  await sidebar.open({ page: page, resource })
+  await sidebar.openPanel({ page: page, name: 'actions' })
+  const presentActions = await page.locator(sideBarActions).allTextContents()
+  const presentActionsToLower = presentActions.map((actions) => actions.toLowerCase())
+  for (const actions of notExpectedActions) {
+    if (presentActionsToLower.includes(actions)) {
+      return true
+    }
+  }
+  return false
+}
+
+export const reloadSpacePage = async (page): Promise<void> => {
+  await page.reload()
+}
+export interface openSpaceTrashBinArgs {
+  id: string
+  page: Page
+}
+export const openSpaceTrashBin = async (args: openSpaceTrashBinArgs): Promise<void> => {
+  const { id, page } = args
+  await openSpace({ page, id })
+  await page.locator(spaceContextButton).click()
+  await page.locator(spaceDeletedFilesButton).click()
 }
