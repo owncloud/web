@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v13.1.0
+Enhancement: Update ODS to v13.2.0-rc.1
 
-We updated the ownCloud Design System to version 13.1.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 13.2.0-rc.1. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Enhancement - Add isFileExtensionDisplayed property: https://github.com/owncloud/owncloud-design-system/pull/2087
 - Enhancement - OcModal input type: https://github.com/owncloud/owncloud-design-system/pull/2077
@@ -11,6 +11,7 @@ We updated the ownCloud Design System to version 13.1.0. Please refer to the ful
 - Enhancement - Export package members: https://github.com/owncloud/owncloud-design-system/pull/2048
 - Enhancement - Make OcResource inline-flex: https://github.com/owncloud/owncloud-design-system/pull/2041
 - Enhancement - Hover in ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069
+- Enhancement - Implement an indeterminate state for the progress bar: https://github.com/owncloud/owncloud-design-system/pull/2200
 - Bugfix - Disabled textarea color contrast in darkmode: https://github.com/owncloud/owncloud-design-system/pull/2055
 - Bugfix - OcTextInput: Fix event handlers in loops: https://github.com/owncloud/owncloud-design-system/pull/2054
 
@@ -18,4 +19,5 @@ https://github.com/owncloud/web/pull/6749
 https://github.com/owncloud/web/pull/6750
 https://github.com/owncloud/web/pull/6953
 https://github.com/owncloud/web/pull/7094
-https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0
+https://github.com/owncloud/web/pull/7123
+https://github.com/owncloud/owncloud-design-system/releases/tag/13.2.0-rc.1
