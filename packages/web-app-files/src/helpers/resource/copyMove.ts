@@ -282,10 +282,7 @@ export const copyMoveResource = async (
     }
     try {
       if (copy && !overwriteTarget) {
-        await client.files.copy(
-          resource.webDavPath,
-          join(targetFolder.webDavPath, targetName)
-        )
+        await client.files.copy(resource.webDavPath, join(targetFolder.webDavPath, targetName))
       } else {
         await client.files.move(
           resource.webDavPath,

@@ -325,7 +325,7 @@ export default {
 function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
   let index = files.findIndex((r) => r.id === resource.id)
-  if(resource.webDavPath && resource.webDavPath.length && index === -1) {
+  if (resource.webDavPath && resource.webDavPath.length && index === -1) {
     index = files.findIndex((r) => r.webDavPath === resource.webDavPath)
   }
   const found = index > -1
