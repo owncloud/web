@@ -732,7 +732,12 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-      await this.updateStoreForCreatedFolders(files)
+
+      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
+      if (reloadRequired) {
+        bus.publish('app.files.list.load')
+      }
+
       this.$uppyService.uploadFiles(files)
     },
 

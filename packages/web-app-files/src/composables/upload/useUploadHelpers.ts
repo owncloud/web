@@ -1,10 +1,7 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
-import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { User } from '../../helpers/user'
-import { DavProperties } from 'web-pkg/src/constants'
-import { ClientService } from 'web-pkg/src/services'
-import { Store } from 'vuex'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
@@ -19,7 +16,6 @@ import * as uuid from 'uuid'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
-  updateStoreForCreatedFolders(files: UppyResource[]): void
   currentPath: Ref<string>
   uploadPath: Ref<string>
   personalDriveId: Ref<string>
@@ -38,7 +34,6 @@ export function useUploadHelpers(): UploadHelpersResult {
   const getToken = computed((): string => store.getters.getToken)
   const server = computed((): string => store.getters.configuration.server)
   const hasShareJail = useCapabilityShareJailEnabled()
-  const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
   const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
@@ -103,12 +98,6 @@ export function useUploadHelpers(): UploadHelpersResult {
       currentPath,
       webDavBasePath
     }),
-    updateStoreForCreatedFolders: updateStoreForCreatedFolders({
-      clientService,
-      store,
-      isPublicLocation,
-      publicLinkPassword
-    }),
     currentPath,
     uploadPath,
     personalDriveId
@@ -123,52 +112,6 @@ const getPersonalDriveId = async (clientService, server: string, getToken: strin
     throw new Error('No personal space found')
   }
   return drivesResponse.data.value[0].id
-}
-
-const updateStoreForCreatedFolders = ({
-  clientService,
-  store,
-  isPublicLocation,
-  publicLinkPassword
-}: {
-  clientService: ClientService
-  store: Store<any>
-  isPublicLocation: Ref<boolean>
-  publicLinkPassword: Ref<string>
-}) => {
-  return async (files: UppyResource[]) => {
-    const { owncloudSdk: client } = clientService
-    const fetchedFolders = []
-    for (const file of files) {
-      if (!file.meta.relativeFolder) {
-        continue
-      }
-
-      const relativeFolder = `/${file.meta.relativeFolder.replace(/^\/+/, '')}`
-      // Only care about the root folders, no need to fetch nested folders
-      const rootFolder = relativeFolder.split('/').slice(0, 2).join('/')
-      const rootFolderPath = `${file.meta.webDavBasePath}/${rootFolder}`
-
-      if (fetchedFolders.includes(rootFolderPath)) {
-        continue
-      }
-
-      let resource
-      if (unref(isPublicLocation)) {
-        resource = await client.publicFiles.getFileInfo(
-          `${file.meta.currentFolder}${rootFolder}`,
-          unref(publicLinkPassword),
-          DavProperties.PublicLink
-        )
-      } else {
-        resource = await client.files.fileInfo(rootFolderPath, DavProperties.Default)
-      }
-
-      resource = buildResource(resource)
-      store.commit('Files/UPSERT_RESOURCE', resource)
-      fetchedFolders.push(rootFolderPath)
-    }
-  }
 }
 
 const inputFilesToUppyFiles = ({

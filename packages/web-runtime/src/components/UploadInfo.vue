@@ -56,7 +56,7 @@
           <oc-icon name="restart" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads && uploadsPausable"
+          v-if="runningUploads && uploadsPausable && !inPreparation"
           id="pause-upload-info-btn"
           v-oc-tooltip="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           class="oc-ml-s"
@@ -66,7 +66,7 @@
           <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads"
+          v-if="runningUploads && !inPreparation"
           id="cancel-upload-info-btn"
           v-oc-tooltip="$gettext('Cancel upload')"
           class="oc-ml-s"
@@ -154,6 +154,7 @@ export default {
     totalProgress: 0, // current uploads progress (0-100)
     uploadsPaused: false, // all uploads paused?
     uploadsCancelled: false, // all uploads cancelled?
+    inPreparation: true, // preparation before upload
     runningUploads: 0, // all uploads (not files!) that are in progress currently
     bytesTotal: 0,
     bytesUploaded: 0,
@@ -165,7 +166,7 @@ export default {
     ...mapGetters(['configuration']),
 
     uploadInfoTitle() {
-      if (this.filesInProgressCount) {
+      if (this.filesInProgressCount && !this.inPreparation) {
         return this.$gettextInterpolate(
           this.$ngettext(
             '%{ filesInProgressCount } item uploading...',
@@ -232,6 +233,10 @@ export default {
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
 
       for (const file of files) {
+        if (file.data?.size) {
+          this.bytesTotal += file.data.size
+        }
+
         const { relativeFolder, uploadId, topLevelFolderId } = file.meta
         const isTopLevelItem = !relativeFolder
         // only add top level items to this.uploads because we only show those
@@ -264,11 +269,11 @@ export default {
     this.$uppyService.subscribe('upload-progress', ({ file, progress }) => {
       if (!this.timeStarted) {
         this.timeStarted = new Date()
+        this.inPreparation = false
       }
 
       if (this.filesInEstimation[file.meta.uploadId] === undefined) {
         this.filesInEstimation[file.meta.uploadId] = 0
-        this.bytesTotal += progress.bytesTotal
       }
 
       const byteIncrease = progress.bytesUploaded - this.filesInEstimation[file.meta.uploadId]
@@ -418,6 +423,7 @@ export default {
       this.filesInEstimation = {}
       this.timeStarted = null
       this.remainingTime = undefined
+      this.inPreparation = true
     },
     displayFileAsResource(file) {
       return !!file.targetRoute

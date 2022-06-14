@@ -13,7 +13,6 @@ type UppyServiceTopics =
   | 'uploadRemoved'
   | 'uploadSuccess'
   | 'uploadError'
-  | 'fileAdded'
   | 'filesSelected'
   | 'progress'
   | 'addedForUpload'
@@ -49,7 +48,7 @@ export class UppyService {
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: [0, 500, 1000],
+      retryDelays: null,
       uploadDataDuringCreation
     }
 
@@ -161,7 +160,6 @@ export class UppyService {
       this.clearInputs()
     })
     this.uppy.on('file-added', (file) => {
-      this.publish('fileAdded')
       const addedFile = file as unknown as UppyResource
       if (this.uppy.getPlugin('XHRUpload')) {
         const escapedName = encodeURIComponent(addedFile.name)
@@ -192,20 +190,7 @@ export class UppyService {
   }
 
   uploadFiles(files: UppyResource[]) {
-    files.forEach((file) => {
-      try {
-        this.uppy.addFile(file)
-      } catch (err) {
-        console.error('error upload file:', file)
-        if (err.isRestriction) {
-          // handle restrictions
-          console.error('Restriction error:', err)
-        } else {
-          // handle other errors
-          console.error(err)
-        }
-      }
-    })
+    this.uppy.addFiles(files)
   }
 
   retryAllUploads() {
