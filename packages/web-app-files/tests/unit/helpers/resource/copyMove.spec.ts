@@ -54,8 +54,8 @@ describe('copyMove', () => {
       jest.fn(),
       jest.fn()
     )
-    expect(client.files.copy).toHaveBeenCalledWith('/a', '/target/a', false)
-    expect(client.files.copy).toHaveBeenCalledWith('/b', '/target/b', false)
+    expect(client.files.copy).toHaveBeenCalledWith('/a', '/target/a')
+    expect(client.files.copy).toHaveBeenCalledWith('/b', '/target/b')
   })
   it('should move files if no conflicts exist', async () => {
     const client = {

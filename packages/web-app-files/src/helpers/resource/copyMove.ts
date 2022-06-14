@@ -280,13 +280,11 @@ export const copyMoveResource = async (
         resource.name = targetName
       }
     }
-    resource.path = join(targetFolder.path, resource.name)
     try {
-      if (copy) {
+      if (copy && !overwriteTarget) {
         await client.files.copy(
           resource.webDavPath,
-          join(targetFolder.webDavPath, targetName),
-          overwriteTarget
+          join(targetFolder.webDavPath, targetName)
         )
       } else {
         await client.files.move(
@@ -295,6 +293,7 @@ export const copyMoveResource = async (
           overwriteTarget
         )
       }
+      resource.path = join(targetFolder.path, resource.name)
       resource.webDavPath = join(targetFolder.webDavPath, resource.name)
       movedResources.push(resource)
     } catch (error) {
