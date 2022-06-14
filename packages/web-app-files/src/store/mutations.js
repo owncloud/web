@@ -324,7 +324,10 @@ export default {
 // eslint-disable-next-line camelcase
 function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
-  const index = files.findIndex((r) => r.id === resource.id)
+  let index = files.findIndex((r) => r.id === resource.id)
+  if (resource.webDavPath && resource.webDavPath.length && index === -1) {
+    index = files.findIndex((r) => r.webDavPath === resource.webDavPath)
+  }
   const found = index > -1
 
   state.filesSearched = null
