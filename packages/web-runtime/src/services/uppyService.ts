@@ -43,11 +43,7 @@ export class UppyService {
     tusExtension: string
     headers: { [key: string]: string }
   }) {
-    const chunkSize =
-      tusMaxChunkSize > 0 && uploadChunkSize !== Infinity
-        ? Math.max(tusMaxChunkSize, uploadChunkSize)
-        : uploadChunkSize
-
+    const chunkSize = tusMaxChunkSize > 0 ? tusMaxChunkSize : uploadChunkSize
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
 
     const tusPluginOptions = {
