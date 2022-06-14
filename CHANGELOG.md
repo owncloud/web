@@ -58,7 +58,7 @@ Summary
 * Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - Consistent dropdown menus: [#6555](https://github.com/owncloud/web/issues/6555)
-* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
+* Enhancement - Copy/Move conflict dialog: [#7119](https://github.com/owncloud/web/pull/7119)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
@@ -503,11 +503,12 @@ Details
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6762
 
-* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
+* Enhancement - Copy/Move conflict dialog: [#7119](https://github.com/owncloud/web/pull/7119)
 
    We've added a conflict dialog for moving resources via drag&drop in the files list
 
    https://github.com/owncloud/web/issues/6996
+   https://github.com/owncloud/web/pull/7119
    https://github.com/owncloud/web/pull/6994
 
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
