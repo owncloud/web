@@ -309,48 +309,12 @@ module.exports = {
     /**
      * creates a new public link
      *
-     * @param {Object} settings - Parameters to be set up for a new public link share
-     * @param {string} settings.role - Role of the viewer of the public link
-     * @param {string} settings.name - Name of the public link share
-     * @param {string} settings.password - Password for a public link share
-     * @param {string} settings.expireDate - Expire date for a public link share
      * @returns {*}
      */
-    addNewLink: async function (settings = null) {
-      await this.waitForElementVisible('@publicLinkAddButton')
-        .click('@publicLinkAddButton')
-        .waitForElementVisible('@publicLinkCreateButton')
-      if (settings !== null) {
-        for (const [key, value] of Object.entries(settings)) {
-          await this.setPublicLinkForm(key, value)
-        }
-      }
+    addNewLink: function () {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
-        .waitForOutstandingAjaxCalls()
-    },
-    /**
-     * tries to create a new public link in specified date
-     *
-     * @param {string} settings.expireDate - Expire date for a public link share
-     * @returns {*}
-     */
-    setPublicLinkDate: async function (days) {
-      await this.waitForElementVisible('@publicLinkAddButton')
-        .click('@publicLinkAddButton')
-        .waitForElementVisible('@publicLinkCreateButton')
-      if (days) {
-        const isExpiryDateChanged = await this.setPublicLinkForm('expireDate', days)
-        if (!isExpiryDateChanged) {
-          console.log('WARNING: Cannot create share with disabled expiration date!')
-          return
-        }
-      }
-      return this.waitForElementVisible('@publicLinkCreateButton')
-        .initAjaxCounters()
-        .click('@publicLinkCreateButton')
-        .waitForElementNotPresent('@publicLinkCreateButton')
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -436,8 +400,8 @@ module.exports = {
         result.value.forEach((item) => {
           promiseList.push(
             new Promise((resolve) => {
-              this.api.elementIdAttribute(item.ELEMENT, 'href', (href) => {
-                resolve(href.value)
+              this.api.elementIdAttribute(item.ELEMENT, 'innerText', (text) => {
+                resolve(text)
               })
             })
           )
@@ -484,6 +448,24 @@ module.exports = {
       await this.click('@dialogConfirmBtnEnabled')
     },
 
+    changeLatestLinkName: async function (newName) {
+      let latestLinkName
+      await this.waitForElementVisible('@latestLinkName').getText(
+        '@latestLinkName',
+        (result) => (latestLinkName = result.value)
+      )
+      await this.changeName(latestLinkName, newName)
+    },
+
+    changeLatestLinkRole: async function (newRole) {
+      let latestLinkName
+      await this.waitForElementVisible('@latestLinkName').getText(
+        '@latestLinkName',
+        (result) => (latestLinkName = result.value)
+      )
+      await this.changeRole(latestLinkName, newRole)
+    },
+
     addPassword: async function (linkName, password) {
       await this.clickLinkEditBtn(linkName)
       await this.clickLinkAddPasswordBtn(linkName)
@@ -496,6 +478,20 @@ module.exports = {
         .useCss()
 
       await this.click('@dialogConfirmBtnEnabled')
+    },
+
+    setRequiredPassword: async function (password) {
+      await this.useXpath()
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+        .clearValue('@dialogInput')
+        .setValue('@dialogInput', password)
+        .useCss()
+
+      await this.waitForElementVisible('@dialogConfirmBtnEnabled')
+        .initAjaxCounters()
+        .click('@dialogConfirmBtnEnabled')
+        .waitForOutstandingAjaxCalls()
     },
 
     changePassword: async function (linkName, password) {
@@ -549,6 +545,10 @@ module.exports = {
     }
   },
   elements: {
+    latestLinkName: {
+      selector: '//div[@id="oc-files-file-link"]//ul/li[1]//h4',
+      locateStrategy: 'xpath'
+    },
     expirationDateFieldWrapper: {
       selector: '#oc-files-file-link-expire-date'
     },
@@ -564,7 +564,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkUrl: {
-      selector: '//a[contains(@class, "oc-files-file-link-url")]',
+      selector: '//p[contains(@class, "oc-files-file-link-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkName: {
@@ -580,12 +580,6 @@ module.exports = {
     publicLinkSubVia: {
       selector: '.oc-files-file-link-via'
     },
-    publicLinkAddButton: {
-      selector: '#files-file-link-add'
-    },
-    addLinkButton: {
-      selector: '#files-file-link-add'
-    },
     selectRoleButton: {
       selector: '#files-file-link-role-button'
     },
@@ -600,14 +594,6 @@ module.exports = {
     },
     roleUploader: {
       selector: '#files-role-uploader'
-    },
-    errorMessageInsidePublicLinkContainer: {
-      selector: '//div[contains(@class, "oc-notification-message-warning")]',
-      locateStrategy: 'xpath'
-    },
-    publicLinkNameInputField: {
-      selector: '//input[@id="oc-files-file-link-name"]',
-      locateStrategy: 'xpath'
     },
     publicLinkEditRoleButton: {
       selector:
@@ -662,10 +648,7 @@ module.exports = {
       selector: '#oc-files-file-link-password-delete'
     },
     publicLinkCreateButton: {
-      selector: '#oc-files-file-link-create'
-    },
-    publicLinkSaveButton: {
-      selector: '#oc-files-file-link-save'
+      selector: '#files-file-link-add'
     },
     publicLinkRoleSelectionDropdown: {
       selector: '//div[contains(@class, "files-file-link-role-button-wrapper")]//span[.="%s"]',

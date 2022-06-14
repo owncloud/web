@@ -19,6 +19,7 @@ const state = {
   inputLabel: '',
   inputError: '',
   checkboxLabel: '',
+  inputType: 'text',
   // Events
   onCancel: emptyReturn,
   onConfirm: emptyReturn,
@@ -66,6 +67,7 @@ const mutations = {
     state.inputLabel = modal.inputLabel || null
     state.inputError = modal.inputError || null
     state.inputDisabled = modal.inputDisabled || false
+    state.inputType = modal.inputType || 'text'
     state.onInput = modal.onInput || emptyReturn
     state.onCheckboxValueChanged = modal.onCheckboxValueChanged || emptyReturn
     state.onConfirmSecondary = modal.onConfirmSecondary || emptyReturn

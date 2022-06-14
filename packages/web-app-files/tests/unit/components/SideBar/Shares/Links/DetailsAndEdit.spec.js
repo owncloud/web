@@ -14,13 +14,7 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const availableRoleOptions = LinkShareRoles.list(false, true).map((role) => {
-  return {
-    role,
-    name: role.name,
-    label: role.label
-  }
-})
+const availableRoleOptions = LinkShareRoles.list(false, true)
 
 const exampleLink = {
   name: 'Example link',
@@ -46,7 +40,7 @@ describe('DetailsAndEdit component', () => {
   })
 })
 
-function getShallowMountedWrapper(link, expireDateEnforced = false, modifiable = false) {
+function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
   return shallowMount(DetailsAndEdit, {
     propsData: {
       availableRoleOptions,
@@ -58,12 +52,8 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, modifiable =
         max: null
       },
       link,
-      modifiable,
-      passwordEnforced: {
-        read_only: false,
-        upload_only: false,
-        read_write: false
-      }
+      isModifiable,
+      isPasswordEnforced: false
     },
     store: createStore(),
     directives: {

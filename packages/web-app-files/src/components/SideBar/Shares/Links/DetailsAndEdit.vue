@@ -1,13 +1,13 @@
 <template>
   <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
-    <div v-if="modifiable">
+    <div v-if="isModifiable">
       <oc-button
         :id="`edit-public-link-role-dropdown-toggl-${link.id}`"
         appearance="raw"
         class="edit-public-link-role-dropdown-toggl oc-text-left"
         gap-size="none"
       >
-        <span class="oc-invisible-sr" v-text="linkRole" />
+        <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
         <span v-text="visibilityHint" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
@@ -25,7 +25,7 @@
           >
             <oc-button
               :id="`files-role-${roleOption.label.toLowerCase()}`"
-              :class="{ selected: parseInt(link.permissions) === roleOption.role.bitmask(false) }"
+              :class="{ selected: parseInt(link.permissions) === roleOption.bitmask(false) }"
               appearance="raw"
               justify-content="space-between"
               class="oc-py-xs oc-px-s"
@@ -33,7 +33,7 @@
                 updateLink({
                   link: {
                     ...link,
-                    permissions: roleOption.role.bitmask(false)
+                    permissions: roleOption.bitmask(false)
                   },
                   dropRef: $refs.editPublicLinkRoleDropdown
                 })
@@ -44,10 +44,10 @@
                   class="oc-text-bold oc-display-block oc-width-1-1"
                   v-text="roleOption.label"
                 />
-                <span>{{ roleOption.role.description() }}</span>
+                <span>{{ roleOption.description() }}</span>
               </span>
               <oc-icon
-                v-if="parseInt(link.permissions) === roleOption.role.bitmask(false)"
+                v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
                 name="check"
               />
             </oc-button>
@@ -56,10 +56,10 @@
       </oc-drop>
     </div>
     <p v-else class="oc-my-rm">
-      <span class="oc-invisible-sr" v-text="linkRole" />
+      <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
       <span v-text="visibilityHint" />
     </p>
-    <div :class="{ 'oc-pr-s': !modifiable }" class="details-buttons">
+    <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button
         v-if="link.indirect"
         v-oc-tooltip="viaTooltip"
@@ -87,7 +87,7 @@
         name="calendar"
         fill-type="line"
       />
-      <div v-if="modifiable">
+      <div v-if="isModifiable">
         <oc-button
           :id="`edit-public-link-dropdown-toggl-${link.id}`"
           appearance="raw"
@@ -107,6 +107,7 @@
               <oc-datepicker
                 v-if="option.showDatepicker"
                 v-model="newExpiration"
+                class="link-expiry-picker"
                 :min-date="expirationDate.min"
                 :max-date="expirationDate.max"
                 :locale="$language.current"
@@ -144,8 +145,7 @@ import { DateTime } from 'luxon'
 import { mapActions } from 'vuex'
 import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
-import { showQuickLinkPasswordModal } from '../../../../quickActions'
-import { LinkShareRoles, SharePermissions } from '../../../../helpers/share'
+import { LinkShareRoles } from '../../../../helpers/share'
 
 export default {
   name: 'DetailsAndEdit',
@@ -168,18 +168,17 @@ export default {
       type: Boolean,
       default: false
     },
-    link: {
-      type: Object,
-      required: true
-    },
-    modifiable: {
+    isModifiable: {
       type: Boolean,
       default: false
     },
-    passwordEnforced: {
+    isPasswordEnforced: {
+      type: Boolean,
+      default: false
+    },
+    link: {
       type: Object,
-      default: () => {},
-      required: false
+      required: true
     }
   },
   data() {
@@ -195,16 +194,8 @@ export default {
       ).description()
     },
 
-    linkRole() {
-      const currentRole = LinkShareRoles.getByBitmask(
-        parseInt(this.link.permissions),
-        this.isFolderShare
-      )
-      return currentRole.label
-    },
-
-    linkShareRoles() {
-      return LinkShareRoles
+    currentLinkRoleLabel() {
+      return LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).label
     },
 
     editButtonLabel() {
@@ -258,7 +249,7 @@ export default {
           method: this.showPasswordModal
         })
 
-        if (!this.passwordEnforcedForRole) {
+        if (!this.isPasswordEnforced) {
           result.push({
             id: 'remove-password',
             title: this.$gettext('Remove password'),
@@ -272,7 +263,7 @@ export default {
           })
         }
       }
-      if (!this.passwordEnforcedForRole && !this.link.password) {
+      if (!this.isPasswordEnforced && !this.link.password) {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),
@@ -341,10 +332,6 @@ export default {
       )
     },
 
-    passwordEnforcedForRole() {
-      return this.checkPasswordEnforcedFor(this.link)
-    },
-
     passwortProtectionTooltip() {
       return this.$gettext('This link is password-protected')
     }
@@ -361,52 +348,14 @@ export default {
   },
 
   methods: {
-    ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
-
-    checkPasswordEnforcedFor(link) {
-      const currentRole = this.availableRoleOptions.find(({ role }) => {
-        return parseInt(link.permissions) === role.bitmask(false)
-      })
-
-      const canRead = currentRole.role.hasPermission(SharePermissions.read)
-      const canCreate = currentRole.role.hasPermission(SharePermissions.create)
-      const canDelete = currentRole.role.hasPermission(SharePermissions.delete)
-
-      if (this.passwordEnforced.read_only === true) {
-        return canRead && !canCreate && !canDelete
-      }
-      if (this.passwordEnforced.upload_only === true) {
-        return !canRead && canCreate && !canDelete
-      }
-      if (this.passwordEnforced.read_write === true) {
-        return canRead && canCreate && !canDelete
-      }
-      if (this.passwordEnforced.read_write_delete === true) {
-        return canRead && canCreate && canDelete
-      }
-      return false
-    },
+    ...mapActions(['createModal', 'hideModal', 'setModalInputErrorMessage']),
 
     updateLink({
       link = this.link,
       dropRef = this.$refs.editPublicLinkDropdown,
       onSuccess = () => {}
     }) {
-      if (this.checkPasswordEnforcedFor(link) && link.password === false) {
-        showQuickLinkPasswordModal({ store: this.$store }, (password) => {
-          if (!password || password.trim() === '') {
-            return this.showMessage({
-              title: this.$gettext('Password cannot be empty'),
-              status: 'danger'
-            })
-          }
-          link.password = password
-          this.$emit('updateLink', { link, onSuccess })
-          this.hideModal()
-        })
-      } else {
-        this.$emit('updateLink', { link, onSuccess })
-      }
+      this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
     },
     deleteLink() {
@@ -453,8 +402,8 @@ export default {
         confirmText: this.link.password ? this.$gettext('Apply') : this.$gettext('Set'),
         hasInput: true,
         inputDescription: this.$gettext("Password can't be empty"),
-        inputType: 'password',
         inputLabel: this.$gettext('Password'),
+        inputType: 'password',
         onCancel: this.hideModal,
         onInput: (password) => this.checkPasswordNotEmpty(password),
         onConfirm: (password) => {

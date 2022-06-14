@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v13.1.0-rc.5
+Enhancement: Update ODS to v13.1.0
 
-We updated the ownCloud Design System to version 13.1.0-rc.5. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 13.1.0. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Enhancement - Add isFileExtensionDisplayed property: https://github.com/owncloud/owncloud-design-system/pull/2087
 - Enhancement - OcModal input type: https://github.com/owncloud/owncloud-design-system/pull/2077
@@ -18,4 +18,4 @@ https://github.com/owncloud/web/pull/6749
 https://github.com/owncloud/web/pull/6750
 https://github.com/owncloud/web/pull/6953
 https://github.com/owncloud/web/pull/7094
-https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.9
+https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0

@@ -24,12 +24,7 @@ export default {
     expirationDate: {
       type: Object,
       default: () => {},
-      required: false
-    },
-    passwordEnforced: {
-      type: Object,
-      default: () => {},
-      required: false
+      required: true
     }
   },
   computed: {
@@ -48,15 +43,13 @@ export default {
   },
   methods: {
     createQuickLink() {
-      // handle expiredate && passwordenforcement
       this.$emit('createPublicLink', {
         link: {
           name: this.$gettext('Quicklink'),
           permissions: 1,
-          quicklink: true
-        },
-        showError: (e) => {
-          this.error = e
+          expiration: this.expirationDate.enforced ? this.expirationDate.default : null,
+          quicklink: true,
+          password: false
         }
       })
     }
