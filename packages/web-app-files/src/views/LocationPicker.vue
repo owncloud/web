@@ -312,12 +312,12 @@ export default {
     currentHint() {
       if (this.currentAction === 'move') {
         return this.$gettext(
-          'Navigate into the desired folder and move selected resources into it. You can navigate into a folder by clicking on its name. To navigate back, you can click on the breadcrumbs. Resources will be moved into the folder where you are currently located.'
+          'Navigate to the desired destination to move the selected files and folders to. The selected files and folders will be moved into the folder where you are currently located.'
         )
       }
 
       return this.$gettext(
-        'Navigate into the desired folder and copy selected resources into it. You can navigate into a folder by clicking on its name. To navigate back, you can click on the breadcrumbs. Resources will be copied into the folder where you are currently located.'
+        'Navigate to the desired destination to copy the selected files and folders to. The selected files and folders will be copied into the folder where you are currently located.'
       )
     }
   },
