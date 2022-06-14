@@ -2,7 +2,7 @@ import { Resource, extractNameWithoutExtension } from './index'
 import { join } from 'path'
 import { buildResource } from '../resources'
 
-export enum ResolveStrategy {
+enum ResolveStrategy {
   SKIP,
   REPLACE,
   KEEP_BOTH
@@ -11,12 +11,12 @@ export interface ResolveConflict {
   strategy: ResolveStrategy
   doForAllConflicts: boolean
 }
-export interface FileConflict {
+interface FileConflict {
   resource: Resource
   strategy?: ResolveStrategy
 }
 
-export const resolveFileExists = (
+const resolveFileExists = (
   createModal,
   hideModal,
   resource,
@@ -24,14 +24,16 @@ export const resolveFileExists = (
   $gettext,
   $gettextInterpolate,
   isSingleConflict
-) => {
+): Promise<ResolveConflict> => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
     const modal = {
       variation: 'danger',
       title: $gettext('File already exists'),
       message: $gettextInterpolate(
-        $gettext('Resource with name %{name} already exists.'),
+        resource.isFolder
+          ? $gettext('Folder with name %{name} already exists.')
+          : $gettext('File with name %{name} already exists.'),
         { name: resource.name },
         true
       ),
@@ -41,7 +43,7 @@ export const resolveFileExists = (
       checkboxLabel: isSingleConflict
         ? ''
         : $gettextInterpolate(
-            $gettext('Do this for all %{count} conflicts'),
+            $gettext('Apply to all %{count} conflicts'),
             { count: conflictCount },
             true
           ),
@@ -74,8 +76,7 @@ export const resolveAllConflicts = async (
   hideModal,
   $gettext,
   $gettextInterpolate,
-  resolveFileExistsMethod,
-  copy = false
+  resolveFileExistsMethod
 ) => {
   const targetPath = targetFolder.path
   const index = targetFolder.webDavPath.lastIndexOf(targetPath)
@@ -115,7 +116,7 @@ export const resolveAllConflicts = async (
       conflictsLeft,
       $gettext,
       $gettextInterpolate,
-      allConflicts.length === 1
+      conflictsLeft === 1
     )
     conflict.strategy = result.strategy
     resolvedConflicts.push(conflict)
@@ -128,21 +129,29 @@ export const resolveAllConflicts = async (
   }
   return resolvedConflicts
 }
-export const showResultMessage = async (
+
+const showResultMessage = (
   errors,
   movedResources,
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext
+  $ngettext,
+  copy = true
 ) => {
   if (errors.length === 0) {
     const count = movedResources.length
-    const ntitle = $ngettext(
-      '%{count} item was moved successfully',
-      '%{count} items were moved successfully',
-      count
-    )
+    const ntitle = copy
+      ? $ngettext(
+          '%{count} item was copied successfully',
+          '%{count} items were copied successfully',
+          count
+        )
+      : $ngettext(
+          '%{count} item was moved successfully',
+          '%{count} items were moved successfully',
+          count
+        )
     const title = $gettextInterpolate(ntitle, { count }, true)
     showMessage({
       title,
@@ -151,13 +160,15 @@ export const showResultMessage = async (
     return
   }
   let title = $gettextInterpolate(
-    $gettext('Failed to move %{count} resources'),
+    copy
+      ? $gettext('Failed to copy %{count} resources')
+      : $gettext('Failed to move %{count} resources'),
     { count: errors.length },
     true
   )
   if (errors.length === 1) {
     title = $gettextInterpolate(
-      $gettext('Failed to move "%{name}"'),
+      copy ? $gettext('Failed to copy "%{name}"') : $gettext('Failed to move "%{name}"'),
       { name: errors[0]?.resourceName },
       true
     )
@@ -167,7 +178,8 @@ export const showResultMessage = async (
     status: 'danger'
   })
 }
-export const move = async (
+
+export const move = (
   resourcesToMove,
   targetFolder,
   client,
@@ -177,7 +189,7 @@ export const move = async (
   $gettext,
   $gettextInterpolate,
   $ngettext
-) => {
+): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
     targetFolder,
@@ -191,7 +203,8 @@ export const move = async (
     false
   )
 }
-export const copy = async (
+
+export const copy = (
   resourcesToMove,
   targetFolder,
   client,
@@ -201,7 +214,7 @@ export const copy = async (
   $gettext,
   $gettextInterpolate,
   $ngettext
-) => {
+): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
     targetFolder,
@@ -229,7 +242,7 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
-export const copyMoveResource = async (
+const copyMoveResource = async (
   resourcesToMove,
   targetFolder,
   client,
@@ -240,7 +253,7 @@ export const copyMoveResource = async (
   $gettextInterpolate,
   $ngettext,
   copy = false
-) => {
+): Promise<Resource[]> => {
   const errors = []
   // if we implement MERGE, we need to use 'infinity' instead of 1
   const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
@@ -253,10 +266,9 @@ export const copyMoveResource = async (
     hideModal,
     $gettext,
     $gettextInterpolate,
-    resolveFileExists,
-    copy
+    resolveFileExists
   )
-  const movedResources = []
+  const movedResources: Resource[] = []
 
   for (let resource of resourcesToMove) {
     // shallow copy of resources to prevent modifing existing rows
@@ -299,6 +311,14 @@ export const copyMoveResource = async (
       errors.push(error)
     }
   }
-  showResultMessage(errors, movedResources, showMessage, $gettext, $gettextInterpolate, $ngettext)
+  showResultMessage(
+    errors,
+    movedResources,
+    showMessage,
+    $gettext,
+    $gettextInterpolate,
+    $ngettext,
+    copy
+  )
   return movedResources
 }
