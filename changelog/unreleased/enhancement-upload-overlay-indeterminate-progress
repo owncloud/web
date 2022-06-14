@@ -1,0 +1,7 @@
+Enhancement: Indeterminate progress bar in upload overlay
+
+We've added an indeterminate state to the progress bar in the upload overlay as long as the upload is preparing.
+
+https://github.com/owncloud/web/pull/7123
+https://github.com/owncloud/web/issues/7105
+
