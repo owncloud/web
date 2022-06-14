@@ -77,7 +77,7 @@ export default {
   },
   setup() {
     const defaults = useAppDefaults({
-      applicationName: 'text-editor'
+      applicationId: 'text-editor'
     })
     const { applicationConfig, currentFileContext } = defaults
     const serverContent = ref()

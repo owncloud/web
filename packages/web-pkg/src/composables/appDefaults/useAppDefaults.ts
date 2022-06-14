@@ -1,7 +1,7 @@
 import { computed, unref, Ref } from '@vue/composition-api'
 import { useRouter, useRoute } from '../router'
 import { useStore } from '../store'
-import { ClientService, clientService as defaultClientService } from '../../services'
+import { ClientService } from '../../services'
 import { basename } from 'path'
 
 import { FileContext } from './types'
@@ -14,13 +14,16 @@ import {
 import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
+import { useAppDocumentTitle } from './useAppDocumentTitle'
+import { usePublicLinkPassword, usePublicLinkContext } from '../authContext'
+import { useClientService } from '../clientService'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
 // https://github.com/owncloud/web/issues/3301
 
 interface AppDefaultsOptions {
-  applicationName: string
+  applicationId: string
   clientService?: ClientService
 }
 
@@ -36,25 +39,11 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const router = useRouter()
   const store = useStore()
   const currentRoute = useRoute()
-  const clientService = options.clientService || defaultClientService
+  const clientService = options.clientService ?? useClientService()
+  const applicationId = options.applicationId
 
-  const isPublicLinkContext = computed(() => {
-    return unref(currentRoute).query[contextRouteNameKey] === 'files-public-files'
-  })
-
-  const publicLinkPassword = computed(() => {
-    return store.getters['Files/publicLinkPassword']
-  })
-
-  const accessToken = computed(() => {
-    return store.getters.getToken
-  })
-
-  const publicToken = computed(() => {
-    return (unref(currentRoute).params.item || unref(currentRoute).params.filePath || '').split(
-      '/'
-    )[0]
-  })
+  const isPublicLinkContext = usePublicLinkContext({ currentRoute })
+  const publicLinkPassword = usePublicLinkPassword({ store })
 
   const currentFileContext = computed((): FileContext => {
     const queryItemAsString = (queryItem: string | string[]) => {
@@ -65,7 +54,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       return queryItem
     }
 
-    const path = `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`
+    const path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`
 
     return {
       path,
@@ -75,19 +64,17 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     }
   })
 
+  useAppDocumentTitle({ store, document, applicationId, currentFileContext })
+
   return {
     isPublicLinkContext,
     currentFileContext,
-
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
     ...useAppFileHandling({
       clientService,
-      store,
       isPublicLinkContext,
-      publicLinkPassword,
-      accessToken,
-      publicToken
+      publicLinkPassword
     }),
     ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
   }

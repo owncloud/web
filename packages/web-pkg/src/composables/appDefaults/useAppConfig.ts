@@ -1,27 +1,21 @@
 import { Store } from 'vuex'
-import { computed, Ref } from '@vue/composition-api'
-
+import { computed, Ref, unref } from '@vue/composition-api'
+import { useAppMeta } from './useAppMeta'
+import type { AppConfigObject } from './types'
 interface AppConfigOptions {
   store: Store<any>
-  applicationName: string
+  applicationId: string
 }
-
-type AppConfigObject = Record<string, any>
 
 export interface AppConfigResult {
   applicationConfig: Ref<AppConfigObject>
 }
 
 export function useAppConfig(options: AppConfigOptions): AppConfigResult {
-  const store = options.store
-  const applicationName = options.applicationName
-  const applicationConfig = computed(() => {
-    const editor = store.state.apps.fileEditors.find((e) => e.app === applicationName)
-    if (!editor) {
-      throw new Error(`useAppConfig: could not find config for applicationName: ${applicationName}`)
-    }
-    return editor.config || {}
-  })
+  const applicationMetaResult = useAppMeta(options)
+  const applicationConfig = computed(
+    () => unref(applicationMetaResult.applicationMeta).config || {}
+  )
 
   return {
     applicationConfig

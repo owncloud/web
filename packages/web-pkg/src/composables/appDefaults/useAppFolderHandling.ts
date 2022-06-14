@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { computed, Ref, ref, unref } from '@vue/composition-api'
 import { dirname } from 'path'
 
-import { ClientService, clientService as defaultClientService } from '../../services'
+import { ClientService } from '../../services'
 import { MaybeRef } from '../../utils'
 
 import { DavProperties } from '../../constants'
@@ -25,13 +25,12 @@ export interface AppFolderHandlingResult {
   loadFolderForFileContext(context: MaybeRef<FileContext>): Promise<any>
 }
 
-export function useAppFolderHandling(options: AppFolderHandlingOptions): AppFolderHandlingResult {
-  const client = (options.clientService || defaultClientService).owncloudSdk
-  const store = options.store
-
-  const isPublicLinkContext = options.isPublicLinkContext
-  const publicLinkPassword = options.publicLinkPassword
-
+export function useAppFolderHandling({
+  store,
+  clientService: { owncloudSdk: client },
+  isPublicLinkContext,
+  publicLinkPassword
+}: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
   const activeFiles = computed(() => {
     return store.getters['Files/activeFiles']

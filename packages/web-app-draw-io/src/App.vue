@@ -34,7 +34,7 @@ export default {
   setup() {
     return {
       ...useAppDefaults({
-        applicationName: 'draw-io'
+        applicationId: 'draw-io'
       })
     }
   },

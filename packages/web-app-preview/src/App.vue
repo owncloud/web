@@ -117,17 +117,18 @@
     </div>
   </main>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import Preview from './index'
 
-export default {
+export default defineComponent({
   name: 'Preview',
   setup() {
     return {
       ...useAppDefaults({
-        applicationName: 'media'
+        applicationId: 'preview'
       })
     }
   },
@@ -359,7 +360,7 @@ export default {
       this.updateLocalHistory()
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

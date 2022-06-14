@@ -119,7 +119,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useAppDefaults, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useRequest, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -167,10 +167,8 @@ export default defineComponent({
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
-      ...useAppDefaults({
-        applicationName: 'files'
-      }),
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      ...useRequest()
     }
   },
   data: () => ({
