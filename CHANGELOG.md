@@ -85,7 +85,7 @@ Summary
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
-* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.1.0: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
@@ -636,10 +636,13 @@ Details
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 
    We have redesigned the public link list in the right sidebar. Links now can be edited in-line and
-   have a similiar look-and-feel to people and group shares.
+   have a similiar look-and-feel to people and group shares. Additionally, creating new links
+   now is less cumbersome and the default name, while not configurable from the backend anymore,
+   is now translated.
 
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6885
+   https://github.com/owncloud/web/pull/6961
 
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 
@@ -731,10 +734,10 @@ Details
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6890
 
-* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.1.0: [#6749](https://github.com/owncloud/web/pull/6749)
 
-   We updated the ownCloud Design System to version 13.1.0-rc.5. Please refer to the full
-   changelog in the ODS release (linked) for more details. Summary:
+   We updated the ownCloud Design System to version 13.1.0. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
 
    - Enhancement - Add isFileExtensionDisplayed property:
    https://github.com/owncloud/owncloud-design-system/pull/2087 - Enhancement - OcModal
@@ -760,7 +763,7 @@ Details
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/web/pull/6953
    https://github.com/owncloud/web/pull/7094
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.9
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
