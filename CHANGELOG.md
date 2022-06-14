@@ -85,11 +85,12 @@ Summary
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
-* Enhancement - Update ODS to v13.1.0: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.2.0-rc.1: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 * Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 * Enhancement - Clickable folder links in upload overlay: [#7109](https://github.com/owncloud/web/pull/7109)
+* Enhancement - Indeterminate progress bar in upload overlay: [#7123](https://github.com/owncloud/web/pull/7123)
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
 * Enhancement - Wording improvements: [#7125](https://github.com/owncloud/web/pull/7125)
@@ -735,10 +736,10 @@ Details
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6890
 
-* Enhancement - Update ODS to v13.1.0: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.2.0-rc.1: [#6749](https://github.com/owncloud/web/pull/6749)
 
-   We updated the ownCloud Design System to version 13.1.0. Please refer to the full changelog in
-   the ODS release (linked) for more details. Summary:
+   We updated the ownCloud Design System to version 13.2.0-rc.1. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
 
    - Enhancement - Add isFileExtensionDisplayed property:
    https://github.com/owncloud/owncloud-design-system/pull/2087 - Enhancement - OcModal
@@ -754,8 +755,10 @@ Details
    package members: https://github.com/owncloud/owncloud-design-system/pull/2048 -
    Enhancement - Make OcResource inline-flex:
    https://github.com/owncloud/owncloud-design-system/pull/2041 - Enhancement - Hover in
-   ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069 - Bugfix -
-   Disabled textarea color contrast in darkmode:
+   ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069 -
+   Enhancement - Implement an indeterminate state for the progress bar:
+   https://github.com/owncloud/owncloud-design-system/pull/2200 - Bugfix - Disabled
+   textarea color contrast in darkmode:
    https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
    Fix event handlers in loops:
    https://github.com/owncloud/owncloud-design-system/pull/2054
@@ -764,7 +767,8 @@ Details
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/web/pull/6953
    https://github.com/owncloud/web/pull/7094
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0
+   https://github.com/owncloud/web/pull/7123
+   https://github.com/owncloud/owncloud-design-system/releases/tag/13.2.0-rc.1
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
@@ -817,6 +821,14 @@ Details
 
    https://github.com/owncloud/web/issues/7102
    https://github.com/owncloud/web/pull/7109
+
+* Enhancement - Indeterminate progress bar in upload overlay: [#7123](https://github.com/owncloud/web/pull/7123)
+
+   We've added an indeterminate state to the progress bar in the upload overlay as long as the
+   upload is preparing.
+
+   https://github.com/owncloud/web/issues/7105
+   https://github.com/owncloud/web/pull/7123
 
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 
