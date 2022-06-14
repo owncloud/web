@@ -78,7 +78,12 @@
       </div>
     </div>
     <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-mb-m oc-mt-s">
-      <oc-progress :value="totalProgress" :max="100" size="small" />
+      <oc-progress
+        :value="totalProgress"
+        :max="100"
+        size="small"
+        :indeterminate="!filesInProgressCount"
+      />
     </div>
     <div v-if="infoExpanded" class="upload-info-items oc-px-m oc-pb-m">
       <ul class="oc-list">

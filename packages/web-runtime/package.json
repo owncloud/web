@@ -24,7 +24,7 @@
     "luxon": "^2.4.0",
     "marked": "^4.0.12",
     "oidc-client": "1.11.5",
-    "owncloud-design-system": "^13.1.0",
+    "owncloud-design-system": "^13.2.0-rc.1",
     "owncloud-sdk": "~3.0.0-alpha.13",
     "p-queue": "^6.6.2",
     "popper-max-size-modifier": "^0.2.0",
