@@ -1,4 +1,4 @@
-import { Resource } from './index'
+import { Resource, extractNameWithoutExtension } from './index'
 import { join } from 'path'
 import { buildResource } from '../resources'
 
@@ -221,8 +221,7 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   if (extension.length === 0) {
     potentialName = `${name} (${iteration})`
   } else {
-    const extensionIndexInName = name.lastIndexOf(`.${extension}`)
-    const nameWithoutExtension = name.substring(0, extensionIndexInName)
+    const nameWithoutExtension = extractNameWithoutExtension({ name, extension } as Resource)
     potentialName = `${nameWithoutExtension} (${iteration}).${extension}`
   }
   const hasConflict = existingFiles.some((f) => f.name === potentialName)
