@@ -488,7 +488,10 @@ module.exports = {
         .setValue('@dialogInput', password)
         .useCss()
 
-      await this.click('@dialogConfirmBtnEnabled')
+      await this.waitForElementVisible('@dialogConfirmBtnEnabled')
+        .initAjaxCounters()
+        .click('@dialogConfirmBtnEnabled')
+        .waitForOutstandingAjaxCalls()
     },
 
     changePassword: async function (linkName, password) {
