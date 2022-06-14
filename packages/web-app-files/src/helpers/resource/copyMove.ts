@@ -216,11 +216,18 @@ export const copy = async (
   )
 }
 
-export const resolveFileNameDuplicate = (name, existingFiles, iteration = 1) => {
-  const potentialName = `${name} (${iteration})`
+export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
+  let potentialName
+  if (extension.length === 0) {
+    potentialName = `${name} (${iteration})`
+  } else {
+    const extensionIndexInName = name.lastIndexOf(`.${extension}`)
+    const nameWithoutExtension = name.substring(0, extensionIndexInName)
+    potentialName = `${nameWithoutExtension} (${iteration}).${extension}`
+  }
   const hasConflict = existingFiles.some((f) => f.name === potentialName)
   if (!hasConflict) return potentialName
-  return resolveFileNameDuplicate(name, existingFiles, iteration + 1)
+  return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
 export const copyMoveResource = async (
@@ -253,8 +260,8 @@ export const copyMoveResource = async (
   const movedResources = []
 
   for (let resource of resourcesToMove) {
-    // because javascripts way of cloning is awesome
-    resource = JSON.parse(JSON.stringify(resource))
+    // shallow copy of resources to prevent modifing existing rows
+    resource = { ...resource }
     const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
     let targetName = resource.name
     let overwriteTarget = false
@@ -267,7 +274,7 @@ export const copyMoveResource = async (
         overwriteTarget = true
       }
       if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
-        targetName = resolveFileNameDuplicate(resource.name, [
+        targetName = resolveFileNameDuplicate(resource.name, resource.extension, [
           ...movedResources,
           ...targetFolderResources
         ])
