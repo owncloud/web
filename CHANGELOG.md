@@ -92,6 +92,7 @@ Summary
 * Enhancement - Clickable folder links in upload overlay: [#7109](https://github.com/owncloud/web/pull/7109)
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
+* Enhancement - Wording improvements: [#7125](https://github.com/owncloud/web/pull/7125)
 
 Details
 -------
@@ -831,6 +832,12 @@ Details
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6853
    https://github.com/owncloud/web/pull/6864
+
+* Enhancement - Wording improvements: [#7125](https://github.com/owncloud/web/pull/7125)
+
+   We've simplified and improved the wording of some copy/move related ui elements.
+
+   https://github.com/owncloud/web/pull/7125
 
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================
