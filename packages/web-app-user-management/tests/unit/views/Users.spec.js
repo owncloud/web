@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex-extensions'
-import Users from '../../../src/views/Users'
+import Users from '../../../src/views/Users.vue'
 import Vuex from 'vuex'
 import mockAxios from 'jest-mock-axios'
 

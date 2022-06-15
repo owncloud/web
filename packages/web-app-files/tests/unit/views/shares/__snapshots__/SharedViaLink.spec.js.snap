@@ -2,7 +2,7 @@
 
 exports[`SharedViaLink view when the view is not loading anymore when there are no files to be displayed should show no-content-message component 1`] = `
 <div>
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hassharesnavigation="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
+  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" filecountforsizeinfo="2" filecountforbulkactions="2" hassharesnavigation="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
   <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty" id="files-shared-via-link-empty">
     <div class="oc-icon oc-icon-xxl oc-icon-passive">
       <!---->

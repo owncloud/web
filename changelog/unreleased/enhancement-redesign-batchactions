@@ -1,0 +1,6 @@
+Enhancement: Redesign batchactions
+
+We have updated the batchactions to only be displayed for at least two selected resources on personal, shares and spaces views.
+This and using `raw` instead of `outline` buttons makes for a less distracting experience for the user.
+
+https://github.com/owncloud/web/pull/6351

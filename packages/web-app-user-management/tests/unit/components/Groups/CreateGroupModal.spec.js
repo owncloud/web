@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import CreateGroupModal from '../../../../src/components/Groups/CreateGroupModal'
+import CreateGroupModal from '../../../../src/components/Groups/CreateGroupModal.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

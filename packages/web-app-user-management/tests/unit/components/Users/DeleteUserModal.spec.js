@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import DeleteUserModal from '../../../../src/components/Users/DeleteUserModal'
+import DeleteUserModal from '../../../../src/components/Users/DeleteUserModal.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

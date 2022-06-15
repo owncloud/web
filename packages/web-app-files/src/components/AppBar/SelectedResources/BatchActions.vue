@@ -5,7 +5,7 @@
       :key="`batch-action-${i}`"
       :action="action"
       :items="selectedFiles"
-      appearance="outline"
+      appearance="raw"
       class="oc-mr-s"
     />
   </oc-list>
@@ -40,12 +40,6 @@ export default {
   ],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-
-    filterParams() {
-      return {
-        resources: this.selectedFiles
-      }
-    },
 
     menuItemsBatchActions() {
       return [

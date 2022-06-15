@@ -75,7 +75,7 @@ export default {
       }
 
       return {
-        appearance: this.appearance,
+        appearance: action.appearance ? action.appearance : this.appearance,
         ...(action.isDisabled && { disabled: action.isDisabled() }),
         ...(action.variation && { variation: action.variation })
       }

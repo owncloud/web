@@ -2,7 +2,7 @@
 
 exports[`List component when no resource is found should show no-content-message component 1`] = `
 <div class="files-search-result">
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
+  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" filecountforsizeinfo="2" filecountforbulkactions="2" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
   <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
     <div class="oc-icon oc-icon-xxl oc-icon-passive">
       <!---->
@@ -17,7 +17,7 @@ exports[`List component when no resource is found should show no-content-message
 
 exports[`List component when no search term is entered should show no-content-message component 1`] = `
 <div class="files-search-result">
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
+  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" filecountforsizeinfo="2" filecountforbulkactions="2" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
   <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
     <div class="oc-icon oc-icon-xxl oc-icon-passive">
       <!---->

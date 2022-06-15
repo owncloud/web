@@ -115,6 +115,8 @@ function getShallowWrapper(
   slots = {},
   props = {
     breadcrumbs: [],
+    fileCountForSizeInfo: 2,
+    fileCountForBulkActions: 2,
     hasBulkActions: false,
     hasSharesNavigation: false,
     hasSidebarToggle: true,

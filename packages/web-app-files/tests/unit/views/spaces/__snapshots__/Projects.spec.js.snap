@@ -2,7 +2,7 @@
 
 exports[`Spaces projects view should list spaces 1`] = `
 <div>
-  <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" showactionsonselection="true" class="oc-border-b"></app-bar-stub>
+  <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" filecountforsizeinfo="2" filecountforbulkactions="2" showactionsonselection="true" class="oc-border-b"></app-bar-stub>
   <div class="spaces-list oc-px-m oc-mt-l">
     <ul class="
           oc-grid

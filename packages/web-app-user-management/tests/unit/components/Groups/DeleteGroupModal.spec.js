@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import DeleteGroupModal from '../../../../src/components/Groups/DeleteGroupModal'
+import DeleteGroupModal from '../../../../src/components/Groups/DeleteGroupModal.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import CreateUserModal from '../../../../src/components/Users/CreateUserModal'
+import CreateUserModal from '../../../../src/components/Users/CreateUserModal.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
-import Groups from '../../../src/views/Groups'
+import Groups from '../../../src/views/Groups.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

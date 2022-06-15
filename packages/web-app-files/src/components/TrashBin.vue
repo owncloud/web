@@ -1,6 +1,11 @@
 <template>
   <div>
-    <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
+    <app-bar
+      :breadcrumbs="breadcrumbs"
+      :has-bulk-actions="true"
+      :file-count-for-bulk-actions="0"
+      :file-count-for-size-info="1"
+    />
     <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <no-content-message

@@ -33,7 +33,7 @@
       </div>
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
-          <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
+          <slot v-if="showActionsOnSelection && areDefaultActionsVisible" name="actions" />
           <size-info v-if="showSelectionInfo" class="oc-visible@l" />
           <batch-actions v-if="showBatchActions" />
         </div>
@@ -70,6 +70,8 @@ export default {
   props: {
     breadcrumbs: { type: Array, default: () => [] },
     breadcrumbsContextActionsItems: { type: Array, default: () => [] },
+    fileCountForSizeInfo: { type: Number, default: 2 },
+    fileCountForBulkActions: { type: Number, default: 2 },
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
@@ -85,27 +87,45 @@ export default {
       return this.$gettext(title)
     },
     areDefaultActionsVisible() {
-      return this.selectedFiles.length < 1
+      return this.selectedFiles.length < this.fileCountForBulkActions
     },
     showContextActions() {
       return last(this.breadcrumbs).allowContextActions
     },
     showSelectionInfo() {
-      return this.hasBulkActions && this.selectedFiles.length > 0
+      return this.hasBulkActions && this.selectedFiles.length >= this.fileCountForSizeInfo
     },
     showBatchActions() {
-      return this.hasBulkActions
+      return this.hasBulkActions && this.selectedFiles.length >= this.fileCountForBulkActions
     },
     selectedResourcesAnnouncement() {
-      if (this.selectedFiles.length === 0) {
+      if (this.selectedFiles.length >= this.fileCountForBulkActions) {
+        if (!this.selectedFiles.length) {
+          return this.$gettext('No items selected. Actions are available above the table.')
+        }
+
+        return this.$gettextInterpolate(
+          this.$ngettext(
+            '%{ amount } item selected. Actions are available above the table.',
+            '%{ amount } items selected. Actions are available above the table.',
+            this.selectedFiles.length
+          ),
+          { amount: this.selectedFiles.length }
+        )
+      }
+
+      if (!this.selectedFiles.length) {
         return this.$gettext('No items selected.')
       }
-      const translated = this.$ngettext(
-        '%{ amount } item selected. Actions are available above the table.',
-        '%{ amount } items selected. Actions are available above the table.',
-        this.selectedFiles.length
+
+      return this.$gettextInterpolate(
+        this.$ngettext(
+          '%{ amount } item selected.',
+          '%{ amount } items selected.',
+          this.selectedFiles.length
+        ),
+        { amount: this.selectedFiles.length }
       )
-      return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
 

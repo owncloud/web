@@ -198,7 +198,8 @@ export default defineComponent({
 
     showActions() {
       return (
-        !this.selectedFiles.length && !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
+        this.selectedFiles.length < 2 &&
+        !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
       )
     },
 

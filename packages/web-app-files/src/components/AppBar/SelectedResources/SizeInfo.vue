@@ -1,5 +1,15 @@
 <template>
-  <div class="oc-flex oc-flex-middle oc-text-nowrap size-info">
+  <div class="oc-pl-xs oc-flex oc-flex-middle oc-text-nowrap size-info">
+    <oc-button
+      id="files-clear-selection"
+      v-oc-tooltip="clearSelectionLabel"
+      :aria-label="clearSelectionLabel"
+      class="oc-mr-m"
+      appearance="raw"
+      @click="RESET_SELECTION"
+    >
+      <oc-icon name="close" />
+    </oc-button>
     <translate
       v-if="selectedResourcesSize !== '?'"
       key="multiple-select-info-with-size"
@@ -18,16 +28,6 @@
       translate-comment="Number of selected resources displayed above the files list"
       >%{ amount } selected
     </translate>
-    <oc-button
-      id="files-clear-selection"
-      v-oc-tooltip="clearSelectionLabel"
-      :aria-label="clearSelectionLabel"
-      class="oc-ml-m"
-      appearance="outline"
-      @click="RESET_SELECTION"
-    >
-      <oc-icon name="close" />
-    </oc-button>
   </div>
 </template>
 

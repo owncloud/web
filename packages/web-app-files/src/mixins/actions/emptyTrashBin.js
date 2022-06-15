@@ -10,6 +10,7 @@ export default {
     $_emptyTrashBin_items() {
       return [
         {
+          appearance: 'outline',
           name: 'empty-trash-bin',
           icon: 'delete-bin-5',
           label: () => this.$gettext('Empty trash bin'),
