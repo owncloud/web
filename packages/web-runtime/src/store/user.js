@@ -24,38 +24,26 @@ const state = {
 }
 
 const actions = {
-  cleanUpLoginState(context, options = { clearOIDCLoginState: true }) {
+  cleanUpLoginState(context) {
     if (context.state.id === '') {
       return
     }
+
     // reset user
     this.reset({ self: false, nested: false, modules: { user: { self: true } } })
 
     // clear dynamic navItems
     context.dispatch('clearDynamicNavItems')
 
-    if (options.clearOIDCLoginState) {
-      // clear oidc client state
-      vueAuthInstance.clearLoginState()
-    }
+    // clear oidc client state
+    vueAuthInstance.clearLoginState()
   },
   async logout(context) {
-    const logoutFinalizer = (isOauth2 = false) => {
+    const logoutFinalizer = () => {
       // Remove signed in user
-      context.dispatch('cleanUpLoginState', { clearOIDCLoginState: !isOauth2 })
+      context.dispatch('cleanUpLoginState')
       context.dispatch('hideModal')
       context.dispatch('loadSettingsValues')
-
-      // Force redirect
-      if (isOauth2) {
-        if (context.getters?.configuration?.auth?.logoutUrl) {
-          return (window.location = context.getters?.configuration?.auth?.logoutUrl)
-        } else if (context.getters?.configuration?.server) {
-          return (window.location = `${context.getters?.configuration?.server}/index.php/logout`)
-        }
-
-        router.push({ name: 'login' })
-      }
     }
     const u = await vueAuthInstance.getStoredUserObject()
 
@@ -73,7 +61,7 @@ const actions = {
         })
     } else {
       // Oauth2 logout
-      logoutFinalizer(true)
+      logoutFinalizer()
     }
   },
   async initAuth(context, payload = { autoRedirect: false }) {
@@ -172,6 +160,15 @@ const actions = {
       vueAuthInstance.events().addUserUnloaded(() => {
         console.log('user unloaded…')
         context.dispatch('cleanUpLoginState')
+
+        if (context.getters?.configuration?.auth) {
+          // => OAuth2
+          if (context.getters?.configuration?.auth?.logoutUrl) {
+            return (window.location = context.getters?.configuration?.auth?.logoutUrl)
+          } else if (context.getters?.configuration?.server) {
+            return (window.location = `${context.getters?.configuration?.server}index.php/logout`)
+          }
+        }
         router.push({ name: 'login' })
       })
       vueAuthInstance.events().addSilentRenewError((error) => {

@@ -4,3 +4,4 @@ We've fixed an issue, where the user won't be logged out if the backend is ownCl
 
 https://github.com/owncloud/web/pull/6939
 https://github.com/owncloud/web/issues/5886
+https://github.com/owncloud/web/pull/7128
