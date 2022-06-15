@@ -168,7 +168,8 @@ const inputFilesToUppyFiles = ({
           routeShareName: (params as any)?.shareName || '',
           routeShareId: (query as any)?.shareId || '',
           routeStorage: (params as any)?.storage || '',
-          routeStorageId: (params as any)?.storageId || ''
+          routeStorageId: (params as any)?.storageId || '',
+          routeParamName: (params as any)?.name || ''
         }
       })
     }

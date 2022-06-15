@@ -432,10 +432,10 @@ export default {
       return file.isFolder === true
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file.storageId, file.targetRoute)
+      return this.createFolderLink(file.path, file.targetRoute)
     },
     parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.storageId, file.targetRoute)
+      return this.createFolderLink(path.dirname(file.path), file.targetRoute)
     },
     buildRouteFromUppyResource(resource) {
       if (!resource.meta.routeName) {
@@ -451,7 +451,8 @@ export default {
           item: resource.meta.routeItem,
           shareName: resource.meta.routeShareName,
           storage: resource.meta.routeStorage,
-          storageId: resource.meta.routeStorageId
+          storageId: resource.meta.routeStorageId,
+          name: resource.meta.routeParamName
         }
       }
     },
@@ -471,7 +472,7 @@ export default {
       }
       return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
     },
-    createFolderLink(path, storageId, targetRoute) {
+    createFolderLink(path, targetRoute) {
       if (!targetRoute) {
         return {}
       }
@@ -481,7 +482,8 @@ export default {
         name: targetRoute.name,
         query: targetRoute.query,
         params: {
-          ...(storageId && path && { storageId }),
+          ...(targetRoute.params?.storageId &&
+            path && { storageId: targetRoute.params?.storageId }),
           ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage }),
           ...(targetRoute.params?.shareName && { shareName: targetRoute.params?.shareName })
         }
