@@ -33,9 +33,9 @@ export class UserManager extends OidcUserManager {
 
     if (configurationManager.isOIDC) {
       Object.assign(openIdConfig, {
-        scope: 'openid profile offline_access',
         loadUserInfo: true,
-        ...configurationManager.oidc
+        ...configurationManager.oidc,
+        scope: 'openid profile offline_access'
       })
     } else if (configurationManager.isOAuth2) {
       const oAuth2 = configurationManager.oAuth2

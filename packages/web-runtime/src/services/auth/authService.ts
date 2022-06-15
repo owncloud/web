@@ -73,7 +73,6 @@ export class AuthService {
     const accessToken = this.userManager.getAccessToken()
     if (accessToken) {
       await this.updateAccessToken(accessToken)
-      console.log(this.store.getters.user)
     }
   }
 
@@ -137,8 +136,11 @@ export class AuthService {
   }
 
   private async updateAccessToken(accessToken: string): Promise<void> {
-    this.initializeOwnCloudSdk(accessToken)
-    if (!this.store.getters.user.id) {
+    if (this.store.getters.getToken !== accessToken) {
+      this.initializeOwnCloudSdk(accessToken)
+    }
+
+    if (!this.store.getters.getToken) {
       await this.fetchUserInfo(accessToken)
     } else {
       // TODO: discuss if we want to cache the accessToken in the store or otherwise.
@@ -149,6 +151,7 @@ export class AuthService {
   }
 
   private async fetchUserInfo(accessToken): Promise<void> {
+    console.log('fetching user info with access token', accessToken)
     let login
     try {
       login = await this.clientService.owncloudSdk.login()
