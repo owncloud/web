@@ -116,6 +116,13 @@ export class AuthService {
       const accessToken = this.userManager.getAccessToken()
       await this.updateAccessToken(accessToken)
 
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('waiting 5 seconds...')
+          resolve('waited 5 second')
+        }, 5000)
+      })
+
       // FIXME: don't we want to go back to the route from before the login?! and NEVER to `/`?!
       // if the IDP doesn't provide a refresh token we currently land here. which leads to a hard redirect to `/` on any access token expiry. BAD.
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -136,16 +143,19 @@ export class AuthService {
   }
 
   private async updateAccessToken(accessToken: string): Promise<void> {
-    if (this.store.getters.getToken !== accessToken) {
-      this.initializeOwnCloudSdk(accessToken)
+    const userKnown = !!this.store.getters.user.id
+    const accessTokenChanged = this.store.getters.getToken !== accessToken
+    if (!accessTokenChanged) {
+      console.log('early return, access token unchanged')
+      return
     }
+    this.store.commit('SET_ACCESS_TOKEN', accessToken)
+    this.initializeOwnCloudSdk(accessToken)
+    console.log('initialized sdk')
 
-    if (!this.store.getters.getToken) {
+    if (!userKnown) {
+      console.log('user unknown')
       await this.fetchUserInfo(accessToken)
-    } else {
-      // TODO: discuss if we want to cache the accessToken in the store or otherwise.
-      // The userManager already holds the accessToken, but querying it is rather expensive.
-      this.store.commit('SET_ACCESS_TOKEN', accessToken)
     }
     this.triggerUserReady()
   }
