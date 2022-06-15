@@ -120,7 +120,7 @@ export default defineComponent({
       'currentFolder',
       'highlightedFile',
       'totalFilesCount',
-      'totalFilesSize',
+      'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
@@ -178,7 +178,14 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST', 'REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'SET_CURRENT_FOLDER',
+      'LOAD_FILES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'REMOVE_FILE',
+      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
+    ]),
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]

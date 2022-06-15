@@ -112,9 +112,13 @@ export default {
     const loadMovedResource = async (resource) => {
       const isPublicFilesRoute = routeContext === 'files-public-files'
       let loadedResource
-      if(isPublicFilesRoute) {
-        loadedResource = await client.publicFiles.getFileInfo(resource.webDavPath, publicLinkPassword, DavProperties.PublicLink)
-      }else {
+      if (isPublicFilesRoute) {
+        loadedResource = await client.publicFiles.getFileInfo(
+          resource.webDavPath,
+          publicLinkPassword,
+          DavProperties.PublicLink
+        )
+      } else {
         loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
       }
       upsertResource(buildResource(loadedResource))
