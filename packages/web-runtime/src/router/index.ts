@@ -138,10 +138,19 @@ export const buildUrl = (pathname) => {
   return baseUrl.href
 }
 
-router.beforeEach(function (to, from, next) {
+router.beforeEach(async (to, from, next) => {
+  console.log('router.beforeEach', to, from, (router as any).authService)
+
   const store = (Vue as any).$store
+  const authService = (router as any).authService
+
   const isAuthenticated = store.getters.isAuthenticated
   if (isUserRequired(router, to)) {
+    await authService.initializeUserManager()
+
+    // const user = await authService.getUserPromise
+    // console.log('user available', user)
+
     if (isAuthenticated) {
       const url = store.getters.urlBeforeLogin
       store.dispatch('saveUrlBeforeLogin', null)
