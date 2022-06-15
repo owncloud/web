@@ -84,6 +84,7 @@ Summary
 * Enhancement - Prevent the resource name in the sidebar from being truncated: [#6776](https://github.com/owncloud/web/issues/6776)
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
+* Enhancement - Use tus chunksize from backend: [#7120](https://github.com/owncloud/web/pull/7120)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 * Enhancement - Update ODS to v13.2.0-rc.1: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
@@ -727,6 +728,14 @@ Details
    for example, as a project space gets added or renamed.
 
    https://github.com/owncloud/web/pull/6868
+
+* Enhancement - Use tus chunksize from backend: [#7120](https://github.com/owncloud/web/pull/7120)
+
+   We now use the chunksize value coming from the backend for uploading via tus. If no chunksize is
+   given, it will default to `Infinity`. The Web config `uploadChunkSize` has been removed as a
+   result.
+
+   https://github.com/owncloud/web/pull/7120
 
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 
