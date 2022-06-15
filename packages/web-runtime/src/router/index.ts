@@ -141,7 +141,7 @@ export const buildUrl = (pathname) => {
 let waitForUserToBeAvailable = false
 router.beforeEach(async (to, from, next) => {
   console.log('router.beforeEach', to, from, (router as any).authService)
-  if(to.path === '/oidc-callback') {
+  if (to.path === '/oidc-callback') {
     waitForUserToBeAvailable = true
   }
 
@@ -149,7 +149,6 @@ router.beforeEach(async (to, from, next) => {
   const authService = (router as any).authService
 
   console.log('router', router)
-
 
   await authService.initializeUserManager()
 
@@ -161,14 +160,15 @@ router.beforeEach(async (to, from, next) => {
   })
 
   if (isUserRequired(router, to)) {
-
-
     if (!isAuthenticated && waitForUserToBeAvailable) {
-      console.log('wait for user available')
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('waiting 1 second')
+        }, 1000)
+      })
       const user = await authService.getUserPromise
       console.log('user available', user)
     }
-
 
     if (isAuthenticated) {
       const url = store.getters.urlBeforeLogin
@@ -195,7 +195,7 @@ router.beforeEach(async (to, from, next) => {
  * @returns {boolean}
  */
 export const isUserRequired = (router: Router, to: Route): boolean => {
-  if(!isAuthenticationRequired(router, to)) {
+  if (!isAuthenticationRequired(router, to)) {
     return false
   }
 
@@ -205,7 +205,7 @@ export const isUserRequired = (router: Router, to: Route): boolean => {
 
   const contextRoute = getContextRoute(router, to)
   if (contextRoute?.meta?.auth !== false) {
-      return true
+    return true
   }
 
   return false
@@ -216,12 +216,12 @@ export const isUserRequired = (router: Router, to: Route): boolean => {
  * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
  */
 const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null => {
- const contextRouteNameKey = 'contextRouteName'
- if (!to.query || !to.query[contextRouteNameKey]) {
-   return null
- }
+  const contextRouteNameKey = 'contextRouteName'
+  if (!to.query || !to.query[contextRouteNameKey]) {
+    return null
+  }
 
- return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
+  return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
 }
 
 export const isAuthenticationRequired = (router: Router, to: Route): boolean => {
@@ -230,7 +230,7 @@ export const isAuthenticationRequired = (router: Router, to: Route): boolean => 
   }
 
   const contextRoute = getContextRoute(router, to)
-  if(contextRoute?.meta?.__public) {
+  if (contextRoute?.meta?.__public) {
     return false
   }
 

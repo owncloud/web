@@ -28,7 +28,7 @@ export class AuthService {
 
   public async initializeUserManager() {
     console.log('currentRoute', this.router.currentRoute)
-    if(this.userManager) {
+    if (this.userManager) {
       return
     }
 
@@ -39,22 +39,11 @@ export class AuthService {
     this.userManager.events.addAccessTokenExpiring((...args) => {
       console.log('AccessToken Expiring：', ...args)
     })
-
-    ;(this as any).getUserPromise = new Promise(async (resolve, reject) => {
-      this.userManager.events.addUserLoaded(async (user) => {
-        console.log(
-          `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
-        )
-        console.log('user available loaded')
-        await this.updateAccessToken(user.access_token, false)
-        console.log('user available loaded: update access token done')
-        resolve(user)
-      })
-
-      const user = await this.userManager.getUser()
-      if(user !== null) {
-        resolve(user)
-      }
+    this.userManager.events.addUserLoaded(async (user) => {
+      console.log(
+        `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
+      )
+      await this.updateAccessToken(user.access_token)
     })
     this.userManager.events.addUserSignedIn(() => {
       console.log('user signed in')
@@ -83,7 +72,7 @@ export class AuthService {
 
     const accessToken = this.userManager.getAccessToken()
     if (accessToken) {
-      await this.updateAccessToken(accessToken, true)
+      await this.updateAccessToken(accessToken)
       console.log(this.store.getters.user)
     }
   }
@@ -126,7 +115,7 @@ export class AuthService {
 
       // might be the case that we didn't have an access token before, so we need to (re-)fetch all user info.
       const accessToken = this.userManager.getAccessToken()
-      await this.updateAccessToken(accessToken, true)
+      await this.updateAccessToken(accessToken)
 
       // FIXME: don't we want to go back to the route from before the login?! and NEVER to `/`?!
       // if the IDP doesn't provide a refresh token we currently land here. which leads to a hard redirect to `/` on any access token expiry. BAD.
@@ -144,12 +133,12 @@ export class AuthService {
 
     // silent callback implies that we had a valid access token before. Not needed to re-fetch all user info.
     const accessToken = this.userManager.getAccessToken()
-    await this.updateAccessToken(accessToken, false)
+    await this.updateAccessToken(accessToken)
   }
 
-  private async updateAccessToken(accessToken: string, fetchUserInfo: boolean): Promise<void> {
+  private async updateAccessToken(accessToken: string): Promise<void> {
     this.initializeOwnCloudSdk(accessToken)
-    if (fetchUserInfo) {
+    if (!this.store.getters.user.id) {
       await this.fetchUserInfo(accessToken)
     } else {
       // TODO: discuss if we want to cache the accessToken in the store or otherwise.
