@@ -27,6 +27,11 @@ export class AuthService {
   }
 
   public async initializeUserManager() {
+    console.log('currentRoute', this.router.currentRoute)
+    if(this.userManager) {
+      return
+    }
+
     this.userManager = new UserManager(this.configurationManager)
     this.userManager.events.addAccessTokenExpired((...args) => {
       console.log('AccessToken Expired：', ...args)
@@ -36,25 +41,20 @@ export class AuthService {
     })
 
     ;(this as any).getUserPromise = new Promise(async (resolve, reject) => {
-      const user = await this.userManager.getUser()
-      if(user !== null) {
-        resolve(user)
-      }
-
       this.userManager.events.addUserLoaded(async (user) => {
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
+        console.log('user available loaded')
         await this.updateAccessToken(user.access_token, false)
+        console.log('user available loaded: update access token done')
         resolve(user)
       })
-    })
 
-    this.userManager.events.addUserLoaded(async (user) => {
-      console.log(
-        `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
-      )
-      await this.updateAccessToken(user.access_token, false)
+      const user = await this.userManager.getUser()
+      if(user !== null) {
+        resolve(user)
+      }
     })
     this.userManager.events.addUserSignedIn(() => {
       console.log('user signed in')

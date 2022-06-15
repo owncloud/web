@@ -138,18 +138,37 @@ export const buildUrl = (pathname) => {
   return baseUrl.href
 }
 
+let waitForUserToBeAvailable = false
 router.beforeEach(async (to, from, next) => {
   console.log('router.beforeEach', to, from, (router as any).authService)
+  if(to.path === '/oidc-callback') {
+    waitForUserToBeAvailable = true
+  }
 
   const store = (Vue as any).$store
   const authService = (router as any).authService
 
-  const isAuthenticated = store.getters.isAuthenticated
-  if (isUserRequired(router, to)) {
-    await authService.initializeUserManager()
+  console.log('router', router)
 
-    // const user = await authService.getUserPromise
-    // console.log('user available', user)
+
+  await authService.initializeUserManager()
+
+  const isAuthenticated = store.getters.isAuthenticated
+  console.log('******* user available:', {
+    isAuthenticated,
+    isUserRequired: isUserRequired(router, to),
+    waitForUserToBeAvailable
+  })
+
+  if (isUserRequired(router, to)) {
+
+
+    if (!isAuthenticated && waitForUserToBeAvailable) {
+      console.log('wait for user available')
+      const user = await authService.getUserPromise
+      console.log('user available', user)
+    }
+
 
     if (isAuthenticated) {
       const url = store.getters.urlBeforeLogin
