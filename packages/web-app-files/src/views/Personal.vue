@@ -157,7 +157,8 @@ export default defineComponent({
       'highlightedFile',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize'
+      'totalFilesSize',
+      'publicLinkPassword'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
@@ -267,7 +268,9 @@ export default defineComponent({
         this.showMessage,
         this.$gettext,
         this.$gettextInterpolate,
-        this.$ngettext
+        this.$ngettext,
+        this.$route.name,
+        this.publicLinkPassword
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)
