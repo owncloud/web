@@ -9730,9 +9730,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~3.0.0-alpha.13":
-  version: 3.0.0-alpha.13
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.13"
+"owncloud-sdk@npm:~3.0.0-alpha.14":
+  version: 3.0.0-alpha.14
+  resolution: "owncloud-sdk@npm:3.0.0-alpha.14"
   peerDependencies:
     axios: ^0.27.2
     cross-fetch: ^3.0.6
@@ -9745,7 +9745,7 @@ __metadata:
   dependenciesMeta:
     "@pact-foundation/pact":
       built: true
-  checksum: beb4581642e4ef89c269a7de872c3f626ee0ed06301189cdec84575df73c68dd989dd6803d239f53def3213aa397779dd7c2d3cb8af3f82fabfde27abad869ba
+  checksum: 84a37f8fd9dc532963aae1c48f423b86ae5b384a6073515ffaa393e9061ce30f481211a6852b9d433241a911a9ccce092e6076dc74fc3fff154c8b1b8d3c8177
   languageName: node
   linkType: hard
 
