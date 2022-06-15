@@ -116,7 +116,6 @@ export default defineComponent({
 
   computed: {
     ...mapGetters('Files', [
-      'publicLinkPassword',
       'currentFolder',
       'highlightedFile',
       'totalFilesCount',

@@ -157,8 +157,7 @@ export default defineComponent({
       'highlightedFile',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'publicLinkPassword'
+      'totalFilesSize'
     ]),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 

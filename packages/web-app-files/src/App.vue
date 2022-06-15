@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -34,7 +34,6 @@ export default defineComponent({
       sidebarClosed: 'closed',
       sidebarActivePanel: 'activePanel'
     }),
-    ...mapGetters('Files', ['publicLinkPassword']),
 
     showSidebar() {
       return !this.sidebarClosed
@@ -81,7 +80,6 @@ export default defineComponent({
       const isCopyAction = key === 67
       const isPasteAction = key === 86
       const isCutAction = key === 88
-      console.log(this.$route.name)
       if (isCopyAction) {
         this.copySelectedFiles()
       } else if (isPasteAction) {
