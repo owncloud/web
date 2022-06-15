@@ -173,7 +173,7 @@ export default defineComponent({
       }
 
       return this.activeFiles.filter((file) => {
-        return Preview.mimeTypes.includes(file.mimeType?.toLowerCase())
+        return Preview.mimeTypes().includes(file.mimeType?.toLowerCase())
       })
     },
     activeFilteredFile() {
