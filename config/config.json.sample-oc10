@@ -1,7 +1,6 @@
 {
   "server" : "http://localhost:8080",
   "theme": "https://localhost:9100/themes/owncloud/theme.json",
-  "version": "0.1.0",
   "auth": {
     "clientId": "UmCVsEIxdWmssxa6uVRRPC3txYBVN4qqxooJbsPhuuoPmHk9Pt9Oy68N4ZaKXUYy",
     "url": "http://localhost:8080/index.php/apps/oauth2/api/v1/token",
