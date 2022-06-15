@@ -48,8 +48,9 @@ export class UppyService {
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
-      retryDelays: null,
-      uploadDataDuringCreation
+      retryDelays: [0, 500, 1000],
+      // @TODO Use uploadDataDuringCreation once https://github.com/tus/tus-js-client/issues/397 is solved
+      uploadDataDuringCreation: false
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
