@@ -13,6 +13,7 @@ import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
+import path from 'path'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -123,33 +124,22 @@ const inputFilesToUppyFiles = ({
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
-    const { params } = unref(route)
+    const { name, params, query } = unref(route)
     const currentFolder = unref(currentPath)
+    const trimmedUploadPath = unref(uploadPath).replace(/\/+$/, '')
     const topLevelFolderIds = {}
 
     for (const file of files) {
       // Get the relative path of the file when the file was inside a directory on the client computer
       const relativeFilePath = file.webkitRelativePath || (file as any).relativePath || null
       // Directory without filename
-      const directory = relativeFilePath
-        ? relativeFilePath.substring(0, relativeFilePath.lastIndexOf('/'))
-        : ''
+      const directory = path.dirname(relativeFilePath) === '.' ? '' : path.dirname(relativeFilePath)
 
       // Build tus endpoint to dynamically set it on file upload.
       // Looks something like: https://localhost:9200/remote.php/dav/files/admin
-      let tusEndpoint
-      if (directory) {
-        tusEndpoint = `${unref(uploadPath).replace(/\/+$/, '')}/${directory.replace(/^\/+/, '')}`
-      } else {
-        tusEndpoint = unref(uploadPath)
-      }
-
-      // Build the route object for this file. This is used later by the upload-info-box
-      const item = params.item ? `${params.item}/${directory}` : directory
-      const fileRoute = {
-        ...unref(route),
-        params: { ...params, item }
-      }
+      const tusEndpoint = directory
+        ? `${trimmedUploadPath}/${directory.replace(/^\/+/, '')}`
+        : unref(uploadPath)
 
       let topLevelFolderId
       if (relativeFilePath) {
@@ -173,12 +163,12 @@ const inputFilesToUppyFiles = ({
           webDavBasePath: unref(webDavBasePath), // WebDAV base path where the files will be uploaded to
           uploadId: uuid.v4(),
           topLevelFolderId,
-          routeName: fileRoute.name,
-          routeItem: fileRoute.params?.item || '',
-          routeShareName: (fileRoute.params as any)?.shareName || '',
-          routeShareId: (fileRoute.query as any)?.shareId || '',
-          routeStorage: (fileRoute.params as any)?.storage || '',
-          routeStorageId: (fileRoute.params as any)?.storageId || ''
+          routeName: name,
+          routeItem: params.item ? `${params.item}/${directory}` : directory,
+          routeShareName: (params as any)?.shareName || '',
+          routeShareId: (query as any)?.shareId || '',
+          routeStorage: (params as any)?.storage || '',
+          routeStorageId: (params as any)?.storageId || ''
         }
       })
     }
