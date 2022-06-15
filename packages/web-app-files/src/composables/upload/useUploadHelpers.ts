@@ -133,7 +133,10 @@ const inputFilesToUppyFiles = ({
       // Get the relative path of the file when the file was inside a directory on the client computer
       const relativeFilePath = file.webkitRelativePath || (file as any).relativePath || null
       // Directory without filename
-      const directory = path.dirname(relativeFilePath) === '.' ? '' : path.dirname(relativeFilePath)
+      const directory =
+        !relativeFilePath || path.dirname(relativeFilePath) === '.'
+          ? ''
+          : path.dirname(relativeFilePath)
 
       // Build tus endpoint to dynamically set it on file upload.
       // Looks something like: https://localhost:9200/remote.php/dav/files/admin
