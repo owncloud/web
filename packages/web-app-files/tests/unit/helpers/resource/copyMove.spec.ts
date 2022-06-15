@@ -36,7 +36,9 @@ describe('copyMove', () => {
   })
   it.each([
     { action: 'copy', publicFiles: true },
-    { action: 'move', publicFiles: true }
+    { action: 'move', publicFiles: true },
+    { action: 'copy', publicFiles: false },
+    { action: 'move', publicFiles: false }
   ])('should copy and move files if no conflicts exist', async (dataSet) => {
     const client = {
       files: {
