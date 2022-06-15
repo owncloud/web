@@ -199,6 +199,7 @@ Details
 
    https://github.com/owncloud/web/issues/5886
    https://github.com/owncloud/web/pull/6939
+   https://github.com/owncloud/web/pull/7128
 
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 
