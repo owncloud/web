@@ -55,7 +55,6 @@ export function useUpload(options: UploadOptions): UploadResult {
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
   const tusExtension = useCapabilityFilesTusExtension()
-  const uploadChunkSize = computed((): number => store.getters.configuration.uploadChunkSize)
 
   const headers = computed((): { [key: string]: string } => {
     if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
@@ -78,7 +77,6 @@ export function useUpload(options: UploadOptions): UploadResult {
       return {
         isTusSupported,
         tusMaxChunkSize: unref(tusMaxChunkSize),
-        uploadChunkSize: unref(uploadChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
         tusExtension: unref(tusExtension),
         headers: unref(headers)
