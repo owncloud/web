@@ -43,6 +43,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
+import { autostartTours } from './helpers/tours'
 
 export default defineComponent({
   components: {
@@ -58,7 +59,12 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['route', 'user', 'modal', 'sidebar']),
-    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
+    ...mapGetters([
+      'configuration',
+      'capabilities',
+      'getSettingsValue',
+      'currentTranslatedTourInfos'
+    ]),
     layout() {
       if (this.user.isAuthenticated && !this.user.userReady) {
         return LayoutLoading
@@ -100,6 +106,8 @@ export default defineComponent({
       handler: function (to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
+        if (this.currentTranslatedTourInfos.length > 0)
+          autostartTours(this.currentTranslatedTourInfos, to.name)
       }
     },
     capabilities: {
@@ -132,6 +140,7 @@ export default defineComponent({
         if (languageCode) {
           this.$language.current = languageCode
           document.documentElement.lang = languageCode
+          this.setCurrentTranslatedTourInfos(languageCode)
         }
       }
     }
@@ -159,7 +168,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(['fetchNotifications']),
+    ...mapActions(['fetchNotifications', 'setCurrentTranslatedTourInfos']),
 
     focusModal(component, event) {
       this.focus({

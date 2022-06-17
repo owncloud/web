@@ -10,6 +10,7 @@ import router from './router'
 import settings from './settings'
 import modal from './modal'
 import navigation from './navigation'
+import tours from './tours'
 
 const vuexPersistInSession = new VuexPersistence({
   key: 'webStateInSessionStorage',
@@ -37,7 +38,8 @@ export default {
     router,
     settings,
     modal,
-    navigation
+    navigation,
+    tours
   },
   strict
 }
