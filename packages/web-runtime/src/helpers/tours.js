@@ -56,7 +56,7 @@ export function createTranslatedTourInfos(tours) {
       }
       translatedTour.steps = []
       t.translations[language].steps.forEach((s, j) => {
-        const buttons = addButtons(s.buttons, s.moreInfoLink)
+        const buttons = addButtons(s.buttons, s.learnMoreLink)
         translatedTour.steps.push({
           title: s.title,
           text: s.text,
@@ -120,13 +120,13 @@ export function createTranslatedTour(tourInfo) {
   return tour
 }
 
-function addButtons(buttons, moreInfoLink) {
+function addButtons(buttons, learnMoreLink) {
   const actionButtons = []
 
-  moreInfoLink &&
+  learnMoreLink &&
     actionButtons.push({
       action() {
-        return window.open(moreInfoLink, '_blank').focus()
+        return window.open(learnMoreLink, '_blank').focus()
       },
       classes: 'oc-button oc-button-m oc-button-passive',
       text: $gettext('Learn more'),
