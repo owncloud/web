@@ -165,15 +165,6 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
 
-  @skipOnOC10
-  Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner (ocis bug demonstration)
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
-    And user "Brian" has logged in using the webUI
-    When the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
-    And no custom permissions should be set for collaborator "Alice Hansen" for folder "simple-folder" on the webUI
-
 
   Scenario: Resource owner upgrades share permissions of a re-share
     Given user "Carol" has been created with default attributes and without skeleton files in the server
