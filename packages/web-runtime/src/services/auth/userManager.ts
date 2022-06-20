@@ -12,7 +12,7 @@ export class UserManager extends OidcUserManager {
   private readonly storePrefix
 
   constructor(configurationManager: ConfigurationManager) {
-    const storePrefix = 'oc_oAuth' // FIXME: we want this unique and reproducible
+    const storePrefix = 'oc_oAuth.' // FIXME: we want this unique and reproducible
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
       store: sessionStorage
