@@ -28,7 +28,6 @@ const vuexPersistInSession = new VuexPersistence({
 const strict = process.env.NODE_ENV === 'development'
 
 export default {
-  plugins: [vuexPersistInSession.plugin],
   modules: {
     app,
     apps,
