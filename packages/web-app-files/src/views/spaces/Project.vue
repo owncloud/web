@@ -96,6 +96,8 @@
         :target-route="resourceTargetLocation"
         :sort-by="sortBy"
         :sort-dir="sortDir"
+        :drag-drop="true"
+        @fileDropped="fileDropped"
         @sort="handleSort"
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
@@ -129,7 +131,7 @@ import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
-import { loadPreview } from '../../helpers/resource'
+import { loadPreview, move } from '../../helpers/resource'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -192,7 +194,8 @@ export default defineComponent({
       'highlightedFile',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize'
+      'totalFilesSize',
+      'publicLinkPassword'
     ]),
     ...mapGetters(['user', 'getToken', 'configuration']),
 
@@ -359,7 +362,31 @@ export default defineComponent({
       'REMOVE_FILE_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
-
+    async fileDropped(fileIdTarget) {
+      const selected = [...this.selectedResources]
+      const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
+      const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
+      if (isTargetSelected) return
+      if (targetInfo.type !== 'folder') return
+      const movedResources = await move(
+        selected,
+        targetInfo,
+        this.$client,
+        this.createModal,
+        this.hideModal,
+        this.showMessage,
+        this.$gettext,
+        this.$gettextInterpolate,
+        this.$ngettext,
+        this.$route.name,
+        this.publicLinkPassword
+      )
+      for (const resource of movedResources) {
+        this.REMOVE_FILE(resource)
+        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILE_SELECTION(resource)
+      }
+    },
     rowMounted(resource, component) {
       if (!this.displayThumbnails) {
         return

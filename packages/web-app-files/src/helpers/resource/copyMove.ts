@@ -1,6 +1,7 @@
 import { Resource, extractNameWithoutExtension } from './index'
 import { join } from 'path'
 import { buildResource } from '../resources'
+import { DavProperties } from 'web-pkg/src/constants'
 
 enum ResolveStrategy {
   SKIP,
@@ -188,7 +189,9 @@ export const move = (
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext
+  $ngettext,
+  context,
+  publicLinkPassword
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
@@ -200,6 +203,8 @@ export const move = (
     $gettext,
     $gettextInterpolate,
     $ngettext,
+    context,
+    publicLinkPassword,
     false
   )
 }
@@ -213,7 +218,9 @@ export const copy = (
   showMessage,
   $gettext,
   $gettextInterpolate,
-  $ngettext
+  $ngettext,
+  context,
+  publicLinkPassword
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
@@ -225,6 +232,8 @@ export const copy = (
     $gettext,
     $gettextInterpolate,
     $ngettext,
+    context,
+    publicLinkPassword,
     true
   )
 }
@@ -242,6 +251,60 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
+const clientListFilesInFolder = async (
+  client: any,
+  webDavPath: string,
+  depth: number,
+  context: string,
+  publicLinkPassword: string
+) => {
+  const isPublicFilesRoute = context === 'files-public-files'
+  if (isPublicFilesRoute) {
+    return client.publicFiles.list(webDavPath, publicLinkPassword, DavProperties.Default, depth)
+  }
+  return client.files.list(webDavPath, depth, DavProperties.Default)
+}
+
+const clientMoveFilesInFolder = async (
+  client: any,
+  webDavPathSource: string,
+  webDavPathTarget: string,
+  overwrite: boolean,
+  context: string,
+  publicLinkPassword: string
+) => {
+  const isPublicFilesRoute = context === 'files-public-files'
+  if (isPublicFilesRoute) {
+    return client.publicFiles.move(
+      webDavPathSource,
+      webDavPathTarget,
+      publicLinkPassword,
+      overwrite
+    )
+  }
+  return client.files.move(webDavPathSource, webDavPathTarget, overwrite)
+}
+
+const clientCopyFilesInFolder = async (
+  client: any,
+  webDavPathSource: string,
+  webDavPathTarget: string,
+  overwrite: boolean,
+  context: string,
+  publicLinkPassword: string
+) => {
+  const isPublicFilesRoute = context === 'files-public-files'
+  if (isPublicFilesRoute) {
+    return client.publicFiles.copy(
+      webDavPathSource,
+      webDavPathTarget,
+      publicLinkPassword,
+      overwrite
+    )
+  }
+  return client.files.copy(webDavPathSource, webDavPathTarget, overwrite)
+}
+
 const copyMoveResource = async (
   resourcesToMove,
   targetFolder,
@@ -252,11 +315,20 @@ const copyMoveResource = async (
   $gettext,
   $gettextInterpolate,
   $ngettext,
+  context,
+  publicLinkPassword,
   copy = false
 ): Promise<Resource[]> => {
   const errors = []
   // if we implement MERGE, we need to use 'infinity' instead of 1
-  const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
+  // const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
+  const targetFolderItems = await clientListFilesInFolder(
+    client,
+    targetFolder.webDavPath,
+    1,
+    context,
+    publicLinkPassword
+  )
   const targetFolderResources = targetFolderItems.map((i) => buildResource(i))
   const resolvedConflicts = await resolveAllConflicts(
     resourcesToMove,
@@ -293,13 +365,24 @@ const copyMoveResource = async (
       }
     }
     try {
-      if (copy && !overwriteTarget) {
-        await client.files.copy(resource.webDavPath, join(targetFolder.webDavPath, targetName))
-      } else {
-        await client.files.move(
+      const webDavPathTarget = join(targetFolder.webDavPath, targetName)
+      if (copy) {
+        await clientCopyFilesInFolder(
+          client,
           resource.webDavPath,
-          join(targetFolder.webDavPath, targetName),
-          overwriteTarget
+          webDavPathTarget,
+          overwriteTarget,
+          context,
+          publicLinkPassword
+        )
+      } else {
+        await clientMoveFilesInFolder(
+          client,
+          resource.webDavPath,
+          webDavPathTarget,
+          overwriteTarget,
+          context,
+          publicLinkPassword
         )
       }
       resource.path = join(targetFolder.path, resource.name)

@@ -1,0 +1,7 @@
+Enhancement: Enable Drag&Drop and keyboard shortcuts for all views
+
+We've enabled drag&drop move and keyboard shortcut copy/cut/paste
+for publicFiles, sharedResource and spaces.
+
+https://github.com/owncloud/web/issues/7122
+https://github.com/owncloud/web/pull/7126
