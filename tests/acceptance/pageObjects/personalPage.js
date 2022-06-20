@@ -161,12 +161,7 @@ module.exports = {
      */
     uploadFile: function (filePath) {
       return this.selectFileForUpload(filePath)
-        .waitForElementVisible(
-          '@fileUploadProgress',
-          this.api.globals.waitForNegativeConditionTimeout,
-          this.api.globals.waitForConditionPollInterval,
-          false
-        )
+        .waitForElementVisible('@fileUploadStatus')
         .closeFileFolderUploadProgress()
     },
 
@@ -216,12 +211,7 @@ module.exports = {
         .click('@uploadFilesButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@folderUploadInput', folderName)
-        .waitForElementVisible(
-          '@fileUploadProgress',
-          this.api.globals.waitForNegativeConditionTimeout,
-          this.api.globals.waitForConditionPollInterval,
-          false
-        )
+        .waitForElementVisible('@fileUploadStatus')
         .closeFileFolderUploadProgress()
     },
     /**
@@ -417,6 +407,9 @@ module.exports = {
     },
     fileUploadProgress: {
       selector: '#upload-info'
+    },
+    fileUploadStatus: {
+      selector: '.upload-info-status .upload-info-success, .upload-info-status .upload-info-danger'
     },
     filesFoldersUploadProgressClose: {
       selector: '#upload-info #close-upload-info-btn'
