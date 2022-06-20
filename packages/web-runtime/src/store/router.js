@@ -5,6 +5,9 @@ const state = {
 const actions = {
   saveUrlBeforeLogin({ commit }, url) {
     commit('SAVE_URL_BEFORE_LOGIN', url)
+  },
+  clearUrlBeforeLogin({ commit }) {
+    commit('SAVE_URL_BEFORE_LOGIN', null)
   }
 }
 

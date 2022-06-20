@@ -2,8 +2,7 @@ import {
   Log,
   WebStorageStateStore,
   UserManager as OidcUserManager,
-  UserManagerSettings,
-  User
+  UserManagerSettings
 } from 'oidc-client-ts'
 import { buildUrl } from '../../router'
 import { ConfigurationManager } from 'web-pkg/src/configuration'

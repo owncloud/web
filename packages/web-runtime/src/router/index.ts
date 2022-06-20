@@ -159,32 +159,14 @@ router.beforeEach(async (to, from, next) => {
     waitForUserToBeAvailable
   })
 
-  if (isUserRequired(router, to)) {
-    if (!isAuthenticated && waitForUserToBeAvailable) {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('waiting 1 second')
-        }, 1000)
-      })
-      const user = await authService.getUserPromise
-      console.log('user available', user)
-    }
+  debugger
 
-    if (isAuthenticated) {
-      const url = store.getters.urlBeforeLogin
-      store.dispatch('saveUrlBeforeLogin', null)
-      if (url) {
-        next(url)
-      } else {
-        next()
-      }
-    } else {
-      store.dispatch('saveUrlBeforeLogin', to.fullPath)
-      next('/login')
-    }
-  } else {
-    next()
+  if (isUserRequired(router, to) && !isAuthenticated) {
+    await store.dispatch('saveUrlBeforeLogin', to.fullPath)
+    return next('/login')
   }
+
+  next()
 })
 
 /**

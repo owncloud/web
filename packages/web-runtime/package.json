@@ -23,7 +23,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.4.0",
     "marked": "^4.0.12",
-    "oidc-client-ts": "^2.0.4",
+    "oidc-client-ts": "^2.0.5",
     "owncloud-design-system": "^13.1.0",
     "owncloud-sdk": "~3.0.0-alpha.10",
     "p-queue": "^6.6.2",

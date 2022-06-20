@@ -49,21 +49,19 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      if (this.$route.query.error) {
-        this.error = true
-        console.warn(
-          'OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description
-        )
-        return
-      }
-      console.log('oidcCallback mounted', this.$route)
-      if (this.$route.path === '/oidc-silent-redirect') {
-        authService.signInSilentCallback()
-      } else {
-        authService.signInCallback()
-      }
-    })
+    if (this.$route.query.error) {
+      this.error = true
+      console.warn(
+        'OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description
+      )
+      return
+    }
+    console.log('oidcCallback mounted', this.$route)
+    if (this.$route.path === '/oidc-silent-redirect') {
+      authService.signInSilentCallback()
+    } else {
+      authService.signInCallback()
+    }
   }
 }
 </script>

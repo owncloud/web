@@ -102,33 +102,15 @@ export class AuthService {
   }
 
   public async signInCallback() {
-    // craft a url that the parser in oidc-client-ts can handle …
-    // oidc-client-ts > 2.0.4 should accept relative urls as well. Until we have that we prepend our current origin
-    const url =
-      window.location.origin +
-      '/?' +
-      new URLSearchParams(router.currentRoute.query as Record<string, string>).toString()
-
     try {
-      await this.userManager.signinRedirectCallback(url)
+      const user = await this.userManager.signinRedirectCallback()
+      await this.updateAccessToken(user.access_token)
 
-      // might be the case that we didn't have an access token before, so we need to (re-)fetch all user info.
-      const accessToken = await this.userManager.getAccessToken()
-      await this.updateAccessToken(accessToken)
-
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          console.log('waiting 5 seconds...')
-          resolve('waited 5 second')
-        }, 5000)
-      })
-
-      // FIXME: don't we want to go back to the route from before the login?! and NEVER to `/`?!
-      // if the IDP doesn't provide a refresh token we currently land here. which leads to a hard redirect to `/` on any access token expiry. BAD.
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      router.push({ path: '/' }).catch(() => {})
+      const url = this.store.getters.urlBeforeLogin
+      await this.store.dispatch('clearUrlBeforeLogin')
+      return router.push({ path: url })
     } catch (e) {
-      console.warn('error in OpenIdConnect:', e)
+      console.warn('error during authentication:', e)
       await this.resetStateAfterLogout()
       return router.push({ name: 'accessDenied' })
     }
@@ -146,7 +128,6 @@ export class AuthService {
     const userKnown = !!this.store.getters.user.id
     const accessTokenChanged = this.store.getters.getToken !== accessToken
     if (!accessTokenChanged) {
-      console.log('early return, access token unchanged')
       return
     }
     this.store.commit('SET_ACCESS_TOKEN', accessToken)

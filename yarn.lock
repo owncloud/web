@@ -9601,13 +9601,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oidc-client-ts@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "oidc-client-ts@npm:2.0.4"
+"oidc-client-ts@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "oidc-client-ts@npm:2.0.5"
   dependencies:
     crypto-js: ^4.1.1
     jwt-decode: ^3.1.2
-  checksum: 266b411794e5509b24695081c2d53e2198b2aeea6cec726535122d6067735e92635b3ec5431d56b1978c3d4966f6d55aad3157e7b2d0de8aa774ee213beb9db6
+  checksum: 8db72d4f534d3081ebed9b8fb3d53ea00efe8e7030187791e1a9b8e71ed35245b28a239c8369ed173282914e6f4e80ebf3059ed6e913804bbc924df9d77cbb98
   languageName: node
   linkType: hard
 
@@ -13784,7 +13784,7 @@ __metadata:
     lodash-es: ^4.17.21
     luxon: ^2.4.0
     marked: ^4.0.12
-    oidc-client-ts: ^2.0.4
+    oidc-client-ts: ^2.0.5
     owncloud-design-system: ^13.1.0
     owncloud-sdk: ~3.0.0-alpha.10
     p-queue: ^6.6.2
