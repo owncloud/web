@@ -102,6 +102,23 @@ describe('copyMove', () => {
     }
   })
 
+  it('should prevent recursive paste', async () => {
+    const result = await Resource.copy(
+      resourcesToMove,
+      resourcesToMove[0],
+      {},
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      false,
+      ''
+    )
+    expect(result.length).toBe(0)
+  })
+
   it('should not show message if no conflict exists', async () => {
     const targetFolderItems = [
       {

@@ -131,6 +131,22 @@ export const resolveAllConflicts = async (
   return resolvedConflicts
 }
 
+const hasRecursion = (resourcesToMove: Resource[], targetResource: Resource): boolean => {
+  return resourcesToMove.some((resource: Resource) =>
+    targetResource.webDavPath.startsWith(resource.webDavPath)
+  )
+}
+
+const showRecursionErrorMessage = (movedResources, showMessage, $ngettext) => {
+  const count = movedResources.length
+  const title = $ngettext(
+    "You can't paste the selected file at this location because you can't paste an item into itself.",
+    "You can't paste the selected files at this location because you can't paste an item into itself.",
+    count
+  )
+  showMessage({ title, status: 'danger' })
+}
+
 const showResultMessage = (
   errors,
   movedResources,
@@ -319,6 +335,11 @@ const copyMoveResource = async (
   publicLinkPassword,
   copy = false
 ): Promise<Resource[]> => {
+  if (hasRecursion(resourcesToMove, targetFolder)) {
+    showRecursionErrorMessage(resourcesToMove, showMessage, $ngettext)
+    return []
+  }
+
   const errors = []
   // if we implement MERGE, we need to use 'infinity' instead of 1
   // const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
@@ -330,6 +351,7 @@ const copyMoveResource = async (
     publicLinkPassword
   )
   const targetFolderResources = targetFolderItems.map((i) => buildResource(i))
+
   const resolvedConflicts = await resolveAllConflicts(
     resourcesToMove,
     targetFolder,
