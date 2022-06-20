@@ -33,6 +33,7 @@ export interface UppyResource {
     routeShareId?: string
     routeStorage?: string
     routeStorageId?: string
+    routeParamName?: string
   }
 }
 
@@ -163,8 +164,10 @@ const createDirectoryTree = ({
             routeName: file.meta.routeName,
             routeItem: file.meta.routeItem,
             routeShareName: file.meta.routeShareName,
+            routeShareId: file.meta.routeShareId,
             routeStorage: file.meta.routeStorage,
-            routeStorageId: file.meta.routeStorageId
+            routeStorageId: file.meta.routeStorageId,
+            routeParamName: file.meta.routeParamName
           }
         }
 
