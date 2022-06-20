@@ -61,6 +61,7 @@ Summary
 * Enhancement - Copy/Move conflict dialog: [#7119](https://github.com/owncloud/web/pull/7119)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
+* Enhancement - Enable Drag&Drop and keyboard shortcuts for all views: [#7122](https://github.com/owncloud/web/issues/7122)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
@@ -530,6 +531,14 @@ Details
    them by default and admins can disable them using the configuration.
 
    https://github.com/owncloud/web/pull/6750#issuecomment-1143753289
+
+* Enhancement - Enable Drag&Drop and keyboard shortcuts for all views: [#7122](https://github.com/owncloud/web/issues/7122)
+
+   We've enabled drag&drop move and keyboard shortcut copy/cut/paste for publicFiles,
+   sharedResource and spaces.
+
+   https://github.com/owncloud/web/issues/7122
+   https://github.com/owncloud/web/pull/7126
 
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 
