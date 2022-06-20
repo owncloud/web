@@ -72,6 +72,7 @@ Summary
 * Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
 * Enhancement - Personal space id in URL: [#7053](https://github.com/owncloud/web/pull/7053)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
+* Enhancement - Customize additional mimeTypes for preview app: [#6933](https://github.com/owncloud/web/issues/6933)
 * Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
@@ -626,6 +627,16 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6837
+
+* Enhancement - Customize additional mimeTypes for preview app: [#6933](https://github.com/owncloud/web/issues/6933)
+
+   We've added support for customizing additional mimeTypes for the preview app. In case the
+   backend supports more mimeTypes than our hardcoded list in the preview app, you can now
+   announce them to ownCloud Web with additional config. See
+   https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+   https://github.com/owncloud/web/issues/6933
+   https://github.com/owncloud/web/pull/7131
 
 * Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 
