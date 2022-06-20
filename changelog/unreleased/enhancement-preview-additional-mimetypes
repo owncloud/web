@@ -1,0 +1,6 @@
+Enhancement: Customize additional mimeTypes for preview app
+
+We've added support for customizing additional mimeTypes for the preview app. In case the backend supports more mimeTypes than our hardcoded list in the preview app, you can now announce them to ownCloud Web with additional config. See https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+https://github.com/owncloud/web/issues/6933
+https://github.com/owncloud/web/pull/7131
