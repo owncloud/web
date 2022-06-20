@@ -516,6 +516,7 @@ Details
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7119
    https://github.com/owncloud/web/pull/6994
+   https://github.com/owncloud/web/pull/7151
 
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
