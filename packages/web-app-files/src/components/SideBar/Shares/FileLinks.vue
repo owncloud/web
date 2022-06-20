@@ -53,7 +53,7 @@
             :available-role-options="availableRoleOptions"
             :can-rename="true"
             :expiration-date="expirationDate"
-            :is-folder-share="highlightedFile.isFolder"
+            :is-folder-share="link.indirect || highlightedFile.isFolder"
             :is-modifiable="canEdit && !link.indirect"
             :is-password-enforced="isPasswordEnforcedFor(link)"
             :link="link"
@@ -319,7 +319,7 @@ export default defineComponent({
     isPasswordEnforcedFor(link) {
       const currentRole = LinkShareRoles.getByBitmask(
         parseInt(link.permissions),
-        this.highlightedFile.isFolder
+        link.indirect || this.highlightedFile.isFolder
       )
 
       const canRead = currentRole.hasPermission(SharePermissions.read)
