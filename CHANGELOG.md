@@ -664,9 +664,11 @@ Details
    now is less cumbersome and the default name, while not configurable from the backend anymore,
    is now translated.
 
+   https://github.com/owncloud/web/issues/7149
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6885
    https://github.com/owncloud/web/pull/6961
+   https://github.com/owncloud/web/pull/7150
 
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 
