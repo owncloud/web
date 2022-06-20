@@ -67,26 +67,8 @@ export class UserManager extends OidcUserManager {
    *
    * @return (string|null)
    */
-  getAccessToken(): string | null {
-    const user = this.getStoredUserObject()
+  async getAccessToken(): Promise<string | null> {
+    const user = await this.getUser()
     return user?.access_token
-  }
-
-  /**
-   * Looks up the current user without enforcing a signin if no user exists.
-   * Returns null otherwise.
-   *
-   * @return (User|null)
-   */
-  getStoredUserObject(): User | null {
-    const storageString = sessionStorage.getItem(this.storePrefix + this._userStoreKey)
-    if (storageString) {
-      const user = User.fromStorageString(storageString)
-      if (user) {
-        this.events.load(user, false)
-        return user
-      }
-    }
-    return null
   }
 }

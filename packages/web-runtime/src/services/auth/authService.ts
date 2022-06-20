@@ -70,7 +70,7 @@ export class AuthService {
       await this.router.push({ name: 'accessDenied' })
     })
 
-    const accessToken = this.userManager.getAccessToken()
+    const accessToken = await this.userManager.getAccessToken()
     if (accessToken) {
       await this.updateAccessToken(accessToken)
     }
@@ -113,7 +113,7 @@ export class AuthService {
       await this.userManager.signinRedirectCallback(url)
 
       // might be the case that we didn't have an access token before, so we need to (re-)fetch all user info.
-      const accessToken = this.userManager.getAccessToken()
+      const accessToken = await this.userManager.getAccessToken()
       await this.updateAccessToken(accessToken)
 
       await new Promise((resolve) => {
@@ -138,7 +138,7 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
 
     // silent callback implies that we had a valid access token before. Not needed to re-fetch all user info.
-    const accessToken = this.userManager.getAccessToken()
+    const accessToken = await this.userManager.getAccessToken()
     await this.updateAccessToken(accessToken)
   }
 
@@ -257,7 +257,7 @@ export class AuthService {
   }
 
   public async logout() {
-    const u = this.userManager.getStoredUserObject()
+    const u = await this.userManager.getUser()
     if (u && u.id_token) {
       return this.userManager.signoutRedirect({ id_token_hint: u.id_token })
     } else {
