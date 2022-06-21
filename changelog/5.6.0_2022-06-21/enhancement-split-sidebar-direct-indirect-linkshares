@@ -1,0 +1,6 @@
+Enhancement: Separate direct and indirect link shares in sidebar
+
+We have split the list of link shares into two lists, one with direct (and editable) and another one with read-only indirect link shares of parent folders for better structure in the sidebar.
+
+https://github.com/owncloud/web/pull/7140
+https://github.com/owncloud/web/issues/7132

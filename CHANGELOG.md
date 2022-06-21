@@ -1,3 +1,35 @@
+Changelog for ownCloud Web [5.6.0] (2022-06-21)
+=======================================
+The following sections list the changes in ownCloud web 5.6.0 relevant to
+ownCloud admins and users.
+
+[5.6.0]: https://github.com/owncloud/web/compare/v5.5.0...v5.6.0
+
+Summary
+-------
+
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+Details
+-------
+
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
+
+   Some views were missing parameters of their default target locations, e.g. the Favorites view
+   and the search result page didn't link to the correct folders anymore. This has been fixed by
+   always setting the personal view with the id of the current user as default.
+
+   https://github.com/owncloud/web/pull/7156
+
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+   We have split the list of link shares into two lists, one with direct (and editable) and another
+   one with read-only indirect link shares of parent folders for better structure in the sidebar.
+
+   https://github.com/owncloud/web/issues/7132
+   https://github.com/owncloud/web/pull/7140
+
 Changelog for ownCloud Web [5.5.0] (2022-06-20)
 =======================================
 The following sections list the changes in ownCloud web 5.5.0 relevant to

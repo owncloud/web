@@ -22,7 +22,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -43,9 +43,12 @@ export default {
     }
   },
   setup() {
+    const store = useStore()
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal'),
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
+        params: { storageId: store.getters.user.id }
+      }),
       resourceTargetLocationSpace: createLocationSpaces('files-spaces-project')
     }
   },

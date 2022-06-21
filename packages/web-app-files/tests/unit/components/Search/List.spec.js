@@ -32,6 +32,8 @@ const selectors = {
   listInfo: 'list-info-stub'
 }
 
+const user = { id: 'test' }
+
 describe('List component', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -120,7 +122,8 @@ function createStore(activeFiles) {
         options: {
           disablePreviews: true
         }
-      })
+      }),
+      user: () => user
     },
     modules: {
       Files: {

@@ -15,7 +15,7 @@ import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import { Browser, chromium, firefox, webkit } from 'playwright'
-import { spaceStore } from '../../support/store'
+import { spaceStore, linkStore } from '../../support/store'
 
 export { World }
 
@@ -105,8 +105,9 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()
-    spaceStore.clear()
   }
+  spaceStore.clear()
+  linkStore.clear()
 })
 
 AfterAll(() => state.browser && state.browser.close())

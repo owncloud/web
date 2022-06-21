@@ -58,6 +58,7 @@ import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { Resource } from '../../helpers/resource'
+import { useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -73,10 +74,13 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
 
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
+        params: { storageId: store.getters.user.id }
+      })
     }
   },
   computed: {

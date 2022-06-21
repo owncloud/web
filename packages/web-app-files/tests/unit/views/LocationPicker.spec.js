@@ -35,6 +35,8 @@ const router = {
   }
 }
 
+const user = { id: 'test' }
+
 const listLoaderStub = 'app-loading-spinner-stub'
 const breadcrumbStub = 'oc-breadcrumb-stub'
 const listInfoStub = 'list-info-stub'
@@ -185,7 +187,10 @@ describe('LocationPicker', () => {
         expect(spyLeaveLocationPicker).toHaveBeenCalledWith('/some/item')
         expect(spyRouterPush).toHaveBeenCalledTimes(1)
         expect(spyRouterPush).toHaveBeenCalledWith({
-          name: 'files-spaces-personal'
+          name: 'files-spaces-personal',
+          params: {
+            storageId: user.id
+          }
         })
       })
     })
@@ -440,7 +445,7 @@ describe('LocationPicker', () => {
       totalFilesSize: totalFilesSize,
       totalFilesCount: totalFilesCount,
       generalThemeName: generalThemeName,
-      user: { id: 'test' }
+      user
     })
   }
 
