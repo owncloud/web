@@ -72,6 +72,8 @@ export default {
       $gettext,
       $gettextInterpolate,
       $ngettext,
+      routeContext,
+      publicLinkPassword,
       upsertResource
     }
   ) {
@@ -86,7 +88,9 @@ export default {
         showMessage,
         $gettext,
         $gettextInterpolate,
-        $ngettext
+        $ngettext,
+        routeContext,
+        publicLinkPassword
       )
       context.commit('CLEAR_CLIPBOARD')
     }
@@ -100,11 +104,23 @@ export default {
         showMessage,
         $gettext,
         $gettextInterpolate,
-        $ngettext
+        $ngettext,
+        routeContext,
+        publicLinkPassword
       )
     }
     const loadMovedResource = async (resource) => {
-      const loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
+      const isPublicFilesRoute = routeContext === 'files-public-files'
+      let loadedResource
+      if (isPublicFilesRoute) {
+        loadedResource = await client.publicFiles.getFileInfo(
+          resource.webDavPath,
+          publicLinkPassword,
+          DavProperties.PublicLink
+        )
+      } else {
+        loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
+      }
       upsertResource(buildResource(loadedResource))
     }
     const loadingResources = []

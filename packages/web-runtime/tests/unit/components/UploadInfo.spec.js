@@ -67,6 +67,16 @@ describe('UploadInfo component', () => {
       const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('Upload cancelled')
     })
+    it('should show that an upload is preparing', () => {
+      const wrapper = getShallowWrapper({
+        showInfo: true,
+        filesInProgressCount: 0,
+        runningUploads: 1,
+        inPreparation: true
+      })
+      const uploadTitle = wrapper.find('.upload-info-title p').text()
+      expect(uploadTitle).toBe('Preparing upload...')
+    })
   })
   describe('progress bar', () => {
     it('should show the progress bar when an upload is in progress', () => {
@@ -176,7 +186,8 @@ function getShallowWrapper({
   runningUploads = 0,
   successful = [],
   errors = [],
-  uploadsCancelled = false
+  uploadsCancelled = false,
+  inPreparation = false
 } = {}) {
   return shallowMount(UploadInfo, {
     localVue,
@@ -190,7 +201,8 @@ function getShallowWrapper({
         runningUploads,
         successful,
         errors,
-        uploadsCancelled
+        uploadsCancelled,
+        inPreparation
       }
     },
     mocks: {

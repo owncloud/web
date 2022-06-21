@@ -225,6 +225,31 @@ Make sure that Collabora Online works as expected in the Classic UI and add the 
 The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
 {{< /hint >}}
 
+## Additional configuration for certain core apps
+There is additional configuration available for certain core apps. You can find them listed below.
+
+### Preview app
+In case the backend has additional preview providers configured there is no mechanism, yet, to announce those to the `Preview` app in ownCloud Web. As an intermediate solution you can add the additional supported mimeTypes to the `Preview` app by following these steps:
+1. Remove the `"preview"` string from the `"apps"` section in your `config.json` file
+2. Add the following config to your `config.json` file:
+```json
+"external_apps": [
+    {
+      "id": "preview",
+      "path": "web-app-preview",
+      "config": {
+        "mimeTypes": ["image/tiff", "image/webp"]
+      }
+    }
+  ],
+```
+
+If you already have an `"external_apps"` section, just add the preview app to the list. Please adjust the `"mimeTypes"` list according to your additional preview providers. See https://github.com/owncloud/files_mediaviewer#supporting-more-media-types for advise on how to add preview providers to the backend.
+
+{{< hint info >}}
+The reason why the `preview` app needs to be ported from the `apps` section to the `external_apps` section is that only the `external_apps` support additional configuration. There are plans to change the configuration of apps to give you a coherent admin experience in that regard. 
+{{< /hint >}}
+
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
