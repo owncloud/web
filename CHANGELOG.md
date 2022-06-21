@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.5.0...master
+
+Summary
+-------
+
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+Details
+-------
+
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+   We have split the list of link shares into two lists, one with direct (and editable) and another
+   one with read-only indirect link shares of parent folders for better structure in the sidebar.
+
+   https://github.com/owncloud/web/issues/7132
+   https://github.com/owncloud/web/pull/7140
+
 Changelog for ownCloud Web [5.5.0] (2022-06-20)
 =======================================
 The following sections list the changes in ownCloud web 5.5.0 relevant to
