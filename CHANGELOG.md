@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
 * Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
 
 Details
 -------
+
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
+
+   Some views were missing parameters of their default target locations, e.g. the Favorites view
+   and the search result page didn't link to the correct folders anymore. This has been fixed by
+   always setting the personal view with the id of the current user as default.
+
+   https://github.com/owncloud/web/pull/7156
 
 * Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
 
