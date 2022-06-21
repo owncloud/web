@@ -29,49 +29,52 @@ export class AuthService {
   }
 
   public async initializeUserManager() {
-    if (this.userManager) {
-      return
+    if (!this.userManager) {
+      this.userManager = new UserManager(this.configurationManager)
+      this.userManager.events.addAccessTokenExpired((...args) => {
+        console.log('AccessToken Expired：', ...args)
+      })
+      this.userManager.events.addAccessTokenExpiring((...args) => {
+        console.log('AccessToken Expiring：', ...args)
+      })
+      this.userManager.events.addUserLoaded(async (user) => {
+        console.log(
+          `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
+        )
+        await this.updateAccessToken(user.access_token)
+      })
+      this.userManager.events.addUserSignedIn(() => {
+        console.log('user signed in')
+      })
+      this.userManager.events.addUserUnloaded(async () => {
+        console.log('user unloaded…')
+        await this.resetStateAfterLogout()
+
+        // handle redirect after logout
+        if (this.configurationManager.isOAuth2) {
+          const oAuth2 = this.configurationManager.oAuth2
+          if (oAuth2.logoutUrl) {
+            return (window.location = oAuth2.logoutUrl as any)
+          }
+          return (window.location =
+            `${this.configurationManager.serverUrl}/index.php/logout` as any)
+        }
+      })
+      this.userManager.events.addSilentRenewError(async (error) => {
+        console.error('Silent Renew Error：', error)
+        await this.resetStateAfterLogout()
+        await this.router.push({ name: 'accessDenied' })
+      })
     }
 
-    this.userManager = new UserManager(this.configurationManager)
-    this.userManager.events.addAccessTokenExpired((...args) => {
-      console.log('AccessToken Expired：', ...args)
-    })
-    this.userManager.events.addAccessTokenExpiring((...args) => {
-      console.log('AccessToken Expiring：', ...args)
-    })
-    this.userManager.events.addUserLoaded(async (user) => {
-      console.log(
-        `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
-      )
-      await this.updateAccessToken(user.access_token)
-    })
-    this.userManager.events.addUserSignedIn(() => {
-      console.log('user signed in')
-    })
-    this.userManager.events.addUserUnloaded(async () => {
-      console.log('user unloaded…')
-      await this.resetStateAfterLogout()
-
-      // handle redirect after logout
-      if (this.configurationManager.isOAuth2) {
-        const oAuth2 = this.configurationManager.oAuth2
-        if (oAuth2.logoutUrl) {
-          return (window.location = oAuth2.logoutUrl as any)
-        }
-        return (window.location = `${this.configurationManager.serverUrl}/index.php/logout` as any)
-      }
-    })
-    this.userManager.events.addSilentRenewError(async (error) => {
-      console.error('Silent Renew Error：', error)
-      await this.resetStateAfterLogout()
-      await this.router.push({ name: 'accessDenied' })
-    })
-
+    // relevant for page reload: token is already in userStore
+    // no userLoaded event and no signInCallback gets triggered
+    console.time('userManager.initialize: getAccessToken')
     const accessToken = await this.userManager.getAccessToken()
     if (accessToken) {
       await this.updateAccessToken(accessToken)
     }
+    console.timeEnd('userManager.initialize: getAccessToken')
   }
 
   private initializeOwnCloudSdk(accessToken): void {
@@ -107,8 +110,7 @@ export class AuthService {
       new URLSearchParams(this.router.currentRoute.query as Record<string, string>).toString()
 
     try {
-      const user = await this.userManager.signinRedirectCallback(url)
-      await this.updateAccessToken(user.access_token)
+      await this.userManager.signinRedirectCallback(url)
 
       const redirectUrl = sessionStorage.getItem(postLoginRedirectUrlKey) || '/'
       sessionStorage.removeItem(postLoginRedirectUrlKey)
@@ -124,6 +126,8 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
 
     // silent callback implies that we had a valid access token before. Not needed to re-fetch all user info.
+    // TODO: find out when we arrive in the silent callback
+    debugger
     const accessToken = await this.userManager.getAccessToken()
     await this.updateAccessToken(accessToken)
   }

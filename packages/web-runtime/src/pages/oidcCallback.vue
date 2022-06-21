@@ -57,7 +57,7 @@ export default {
       )
       return
     }
-    console.log('oidcCallback mounted', this.$route)
+
     if (this.$route.path === '/oidc-silent-redirect') {
       authService.signInSilentCallback()
     } else {

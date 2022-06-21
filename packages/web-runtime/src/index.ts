@@ -43,6 +43,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceClient(runtimeConfiguration)
   await announceAuthService({ vue: Vue, configurationManager, store, router })
 
+  // TODO: the following functions can only be called after the user is ready (see navigation guard in router/index.ts)
   await announceApplicationsReady({ applications })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
