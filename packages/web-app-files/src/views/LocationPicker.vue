@@ -381,7 +381,11 @@ export default {
             })
           )
         default:
-          return this.$router.push(createLocationSpaces('files-spaces-personal'))
+          return this.$router.push(
+            createLocationSpaces('files-spaces-personal', {
+              params: { storageId: this.$store.getters.user.id }
+            })
+          )
       }
     },
 
