@@ -2,7 +2,6 @@ import { UserManager } from './userManager'
 import { Store } from 'vuex'
 import { clientService, ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import { router } from '../../router'
 import isEmpty from 'lodash-es/isEmpty'
 import get from 'lodash-es/get'
 import VueRouter from 'vue-router'
@@ -59,12 +58,9 @@ export class AuthService {
         const oAuth2 = this.configurationManager.oAuth2
         if (oAuth2.logoutUrl) {
           return (window.location = oAuth2.logoutUrl as any)
-        } else if (this.configurationManager.serverUrl) {
-          return (window.location =
-            `${this.configurationManager.serverUrl}/index.php/logout` as any)
         }
+        return (window.location = `${this.configurationManager.serverUrl}/index.php/logout` as any)
       }
-      return this.router.push({ name: 'login' })
     })
     this.userManager.events.addSilentRenewError(async (error) => {
       console.error('Silent Renew Error：', error)
@@ -105,17 +101,22 @@ export class AuthService {
   }
 
   public async signInCallback() {
+    // craft a url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
+    const url =
+      '/?' +
+      new URLSearchParams(this.router.currentRoute.query as Record<string, string>).toString()
+
     try {
-      const user = await this.userManager.signinRedirectCallback()
+      const user = await this.userManager.signinRedirectCallback(url)
       await this.updateAccessToken(user.access_token)
 
       const redirectUrl = sessionStorage.getItem(postLoginRedirectUrlKey) || '/'
       sessionStorage.removeItem(postLoginRedirectUrlKey)
-      return router.push({ path: redirectUrl })
+      return this.router.push({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
       await this.resetStateAfterLogout()
-      return router.push({ name: 'accessDenied' })
+      return this.router.push({ name: 'accessDenied' })
     }
   }
 
@@ -153,7 +154,7 @@ export class AuthService {
     } catch (e) {
       console.warn('Seems that your token is invalid. Error:', e)
       await this.resetStateAfterLogout()
-      await router.replace({ name: 'accessDenied' })
+      await this.router.replace({ name: 'accessDenied' })
       return
     }
 

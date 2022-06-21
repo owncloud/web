@@ -43,7 +43,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceClient(runtimeConfiguration)
   await announceAuthService({ vue: Vue, configurationManager, store, router })
 
-  await announceApplicationsReady({applications})
+  await announceApplicationsReady({ applications })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })

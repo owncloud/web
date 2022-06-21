@@ -112,6 +112,7 @@ export const router = patchRouter(
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
   const baseUrl = new URL(window.location.href.split('#')[0])
+  baseUrl.search = ''
   if (isHistoryMode) {
     // in history mode we can't determine the base path, it must be provided by the document
     baseUrl.pathname = new URL(base.href).pathname
@@ -138,13 +139,9 @@ export const buildUrl = (pathname) => {
   return baseUrl.href
 }
 
-let waitForUserToBeAvailable = false
 router.beforeEach(async (to, from, next) => {
-  console.error('router.beforeEach', to?.fullPath)
-  // console.log('router.beforeEach', to, from, (router as any).authService)
-  if (to.path === '/oidc-callback') {
-    waitForUserToBeAvailable = true
-  }
+  console.error('router.beforeEach from', from?.fullPath, from?.query)
+  console.error('router.beforeEach to', to?.fullPath, to)
 
   const store = (Vue as any).$store
   const authService = (router as any).authService
@@ -154,8 +151,7 @@ router.beforeEach(async (to, from, next) => {
   const isAuthenticated = store.getters.isAuthenticated
   console.log('******* user available:', {
     isAuthenticated,
-    isUserRequired: isUserRequired(router, to),
-    waitForUserToBeAvailable
+    isUserRequired: isUserRequired(router, to)
   })
 
   if (isUserRequired(router, to) && !isAuthenticated) {

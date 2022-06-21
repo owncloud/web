@@ -42,6 +42,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
+import { isUserRequired } from './router'
 
 export default defineComponent({
   components: {
@@ -59,10 +60,6 @@ export default defineComponent({
     ...mapState(['route', 'user', 'modal', 'sidebar']),
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
     layout() {
-      if (this.user.isAuthenticated && !this.user.userReady) {
-        return LayoutLoading
-      }
-
       if (
         !this.$route.name ||
         [
@@ -75,6 +72,10 @@ export default defineComponent({
         ].includes(this.$route.name)
       ) {
         return LayoutPlain
+      }
+
+      if (isUserRequired(this.$router, this.$route) && !this.user.isAuthenticated) {
+        return LayoutLoading
       }
 
       return LayoutApplication
