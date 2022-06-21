@@ -7,19 +7,22 @@ import isEmpty from 'lodash-es/isEmpty'
 import get from 'lodash-es/get'
 import VueRouter from 'vue-router'
 
+const postLoginRedirectUrlKey = 'postLoginRedirectUrl'
+
 export class AuthService {
   private configurationManager: ConfigurationManager
   private userManager: UserManager
   private clientService: ClientService
   private store: Store<any>
   private router: VueRouter
+  private updateAccessTokenPromise: Promise<void> | null
 
-  public async initialize(
+  public initialize(
     configurationManager: ConfigurationManager,
     clientService: ClientService,
     store: Store<any>,
     router: VueRouter
-  ): Promise<void> {
+  ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
     this.store = store
@@ -27,7 +30,6 @@ export class AuthService {
   }
 
   public async initializeUserManager() {
-    console.log('currentRoute', this.router.currentRoute)
     if (this.userManager) {
       return
     }
@@ -97,7 +99,8 @@ export class AuthService {
     this.clientService.owncloudSdk.init(options)
   }
 
-  public login() {
+  public login(redirectUrl?: string) {
+    sessionStorage.setItem(postLoginRedirectUrlKey, redirectUrl)
     return this.userManager.signinRedirect()
   }
 
@@ -106,9 +109,9 @@ export class AuthService {
       const user = await this.userManager.signinRedirectCallback()
       await this.updateAccessToken(user.access_token)
 
-      const url = this.store.getters.urlBeforeLogin
-      await this.store.dispatch('clearUrlBeforeLogin')
-      return router.push({ path: url })
+      const redirectUrl = sessionStorage.getItem(postLoginRedirectUrlKey) || '/'
+      sessionStorage.removeItem(postLoginRedirectUrlKey)
+      return router.push({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
       await this.resetStateAfterLogout()
@@ -124,25 +127,26 @@ export class AuthService {
     await this.updateAccessToken(accessToken)
   }
 
-  private async updateAccessToken(accessToken: string): Promise<void> {
+  private updateAccessToken(accessToken: string): Promise<void> {
     const userKnown = !!this.store.getters.user.id
     const accessTokenChanged = this.store.getters.getToken !== accessToken
     if (!accessTokenChanged) {
-      return
+      return this.updateAccessTokenPromise
     }
     this.store.commit('SET_ACCESS_TOKEN', accessToken)
-    this.initializeOwnCloudSdk(accessToken)
-    console.log('initialized sdk')
 
-    if (!userKnown) {
-      console.log('user unknown')
-      await this.fetchUserInfo(accessToken)
-    }
-    this.triggerUserReady()
+    this.updateAccessTokenPromise = (async () => {
+      this.initializeOwnCloudSdk(accessToken)
+
+      if (!userKnown) {
+        await this.fetchUserInfo(accessToken)
+      }
+      this.triggerUserReady()
+    })()
+    return this.updateAccessTokenPromise
   }
 
   private async fetchUserInfo(accessToken): Promise<void> {
-    console.log('fetching user info with access token', accessToken)
     let login
     try {
       login = await this.clientService.owncloudSdk.login()

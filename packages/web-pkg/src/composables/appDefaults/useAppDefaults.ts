@@ -9,7 +9,8 @@ import {
   useAppNavigation,
   AppNavigationResult,
   contextQueryToFileContextProps,
-  contextRouteNameKey
+  contextRouteNameKey,
+  queryItemAsString
 } from './useAppNavigation'
 import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
@@ -57,14 +58,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   const currentFileContext = computed((): FileContext => {
-    const queryItemAsString = (queryItem: string | string[]) => {
-      if (Array.isArray(queryItem)) {
-        return queryItem[0]
-      }
-
-      return queryItem
-    }
-
     const path = `/${unref(currentRoute).params.filePath.split('/').filter(Boolean).join('/')}`
 
     return {

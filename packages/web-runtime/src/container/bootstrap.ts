@@ -160,7 +160,7 @@ export const initializeApplications = async ({
  *
  * @param applications
  */
- export const announceApplicationsReady = async ({
+export const announceApplicationsReady = async ({
   applications
 }: {
   applications: NextApplication[]
@@ -298,7 +298,7 @@ export const announceAuthService = async ({
   store: Store<any>
   router: VueRouter
 }): Promise<void> => {
-  await authService.initialize(configurationManager, clientService, store, router)
+  authService.initialize(configurationManager, clientService, store, router)
   vue.prototype.$authService = authService
   ;(router as any).authService = authService
 }

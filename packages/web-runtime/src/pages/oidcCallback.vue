@@ -24,6 +24,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import { authService } from '../services/auth'
+
+let done = false
+
 export default {
   name: 'OidcCallbackPage',
   data() {
@@ -60,6 +63,12 @@ export default {
     if (this.$route.path === '/oidc-silent-redirect') {
       authService.signInSilentCallback()
     } else {
+      if (done) {
+        console.log('signInCallback: nono')
+        return
+      }
+      done = true
+      console.log('signInCallback: exec')
       authService.signInCallback()
     }
   }

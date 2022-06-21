@@ -39,8 +39,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { authService } from '../services/auth'
+import { queryItemAsString, useRouteQuery } from 'web-pkg/src/composables'
 export default {
   name: 'LoginPage',
+  setup() {
+    return {
+      redirectUrl: useRouteQuery('redirectUrl')
+    }
+  },
   data() {
     return {
       loading: false,
@@ -77,7 +83,7 @@ export default {
 
   methods: {
     performLogin() {
-      authService.login()
+      authService.login(queryItemAsString(this.redirectUrl))
     }
   }
 }

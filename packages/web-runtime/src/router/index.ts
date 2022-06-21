@@ -140,15 +140,14 @@ export const buildUrl = (pathname) => {
 
 let waitForUserToBeAvailable = false
 router.beforeEach(async (to, from, next) => {
-  console.log('router.beforeEach', to, from, (router as any).authService)
+  console.error('router.beforeEach', to?.fullPath)
+  // console.log('router.beforeEach', to, from, (router as any).authService)
   if (to.path === '/oidc-callback') {
     waitForUserToBeAvailable = true
   }
 
   const store = (Vue as any).$store
   const authService = (router as any).authService
-
-  console.log('router', router)
 
   await authService.initializeUserManager()
 
@@ -159,11 +158,8 @@ router.beforeEach(async (to, from, next) => {
     waitForUserToBeAvailable
   })
 
-  debugger
-
   if (isUserRequired(router, to) && !isAuthenticated) {
-    await store.dispatch('saveUrlBeforeLogin', to.fullPath)
-    return next('/login')
+    return next({ path: '/login', query: { redirectUrl: to.fullPath } })
   }
 
   next()
