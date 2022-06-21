@@ -41,7 +41,7 @@
         size="large"
         :value="selection"
         :option="item"
-        @input="emitSelect"
+        @input="fileClicked"
         @click.native.stop
       />
     </template>
@@ -169,6 +169,7 @@
 </template>
 
 <script lang="ts">
+import { bus } from 'web-pkg/src/instance'
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
@@ -677,6 +678,7 @@ export default defineComponent({
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
+      bus.publish('app.files.list.clicked', resource);
       this.emitSelect([resource])
     },
     formatDate(date) {

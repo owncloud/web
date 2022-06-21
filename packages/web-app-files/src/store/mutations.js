@@ -91,17 +91,16 @@ export default {
   SET_CLIPBOARD_ACTION(state, action) {
     state.clipboardAction = action
   },
+  SET_LATEST_SELECTED_FILE(state, file) {
+    state.latestSelectedId = file
+  },
   SET_FILE_SELECTION(state, files) {
-    console.log("im here jo")
-    console.log(files)
     const latestSelected = files.find(i => !state.selectedIds.some(j => j === i.id))
     const latestSelectedId = latestSelected ? latestSelected.id : state.latestSelectedId
     state.latestSelectedId = latestSelectedId
-    console.log(state.latestSelectedId)
     state.selectedIds = files.map((f) => f.id)
   },
   ADD_FILE_SELECTION(state, file) {
-    console.log("im here jo 2")
     const selected = [...state.selectedIds]
     const fileIndex = selected.findIndex((id) => {
       return id === file.id
@@ -115,6 +114,7 @@ export default {
   REMOVE_FILE_SELECTION(state, file) {
     const selected = [...state.selectedIds]
     if (selected.length > 1) {
+      state.latestSelectedId = file.id
       state.selectedIds = selected.filter((id) => file.id !== id)
       return
     }

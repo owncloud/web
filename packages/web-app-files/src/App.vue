@@ -19,6 +19,7 @@
   </main>
 </template>
 <script lang="ts">
+import { bus } from 'web-pkg/src/instance'
 import Mixins from './mixins'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
@@ -30,10 +31,9 @@ export default defineComponent({
     SideBar
   },
   mixins: [Mixins],
-  setup() {
-    const store = useStore()
+  data: () => {
     return {
-      publicLinkPassword: usePublicLinkPassword({ store })
+      selectionCounter: 0
     }
   },
   computed: {
@@ -62,6 +62,13 @@ export default defineComponent({
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
+    const fileListClickedEvent = bus.subscribe('app.files.list.clicked', (resource) => {
+      console.log(resource);
+    })
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
+    })
   },
 
   mounted() {
@@ -80,7 +87,7 @@ export default defineComponent({
     }),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['copySelectedFiles', 'cutSelectedFiles', 'pasteSelectedFiles']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE']),
 
     handleShortcut(event) {
       this.handleFileActionsShortcuts(event)
@@ -88,6 +95,7 @@ export default defineComponent({
     },
 
     handleFileSelectionShortcuts(event) {
+      // click has to reset selectioncounter
       const key = event.keyCode || event.which
       const isShiftPressed = event.shiftKey
       if(!isShiftPressed) return
@@ -96,26 +104,34 @@ export default defineComponent({
       if(isDownPressed) {
         const latestSelectedRow = document.querySelectorAll(`[data-item-id='${this.latestSelectedId}']`)[0]
         const nextRow = latestSelectedRow.nextSibling as HTMLElement
+        if(nextRow === null) return
         const nextResourceId = nextRow.getAttribute("data-item-id")
 
-        console.log(nextRow)
-        console.log(nextResourceId)
-        this.toggleFileSelection({id: nextResourceId})
+        if(this.selectionCounter < 0) {
+          // deselect
+          this.toggleFileSelection({id: this.latestSelectedId})
+          this.SET_LATEST_SELECTED_FILE(nextResourceId)
+        }else {
+          // select
+          this.toggleFileSelection({id: nextResourceId})
+        }
+        this.selectionCounter = this.selectionCounter + 1
       }
       if(isUpPressed) {
         const latestSelectedRow = document.querySelectorAll(`[data-item-id='${this.latestSelectedId}']`)[0]
         const nextRow = latestSelectedRow.previousSibling as HTMLElement
+        if(nextRow === null) return
         const nextResourceId = nextRow.getAttribute("data-item-id")
-
-        console.log(nextRow)
-        console.log(nextResourceId)
-        this.toggleFileSelection({id: nextResourceId})
+        if(this.selectionCounter > 0) {
+          // deselect
+          this.toggleFileSelection({id: this.latestSelectedId})
+          this.SET_LATEST_SELECTED_FILE(nextResourceId)
+        }else {
+          // select
+          this.toggleFileSelection({id: nextResourceId})
+        }
+        this.selectionCounter = this.selectionCounter - 1
       }
-      // get last selected id
-      // find index in dom
-      // get id from dom index + 1 or  - 1
-      
-      //document.getElementsByClassName("oc-table-highlighted")[0].parentElement.childNodes[0]
     },
 
     handleFileActionsShortcuts(event) {
