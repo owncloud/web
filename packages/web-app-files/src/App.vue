@@ -34,6 +34,7 @@ export default defineComponent({
       sidebarClosed: 'closed',
       sidebarActivePanel: 'activePanel'
     }),
+    ...mapState('Files', ['latestSelectedId']),
 
     showSidebar() {
       return !this.sidebarClosed
@@ -47,7 +48,8 @@ export default defineComponent({
           this.closeSidebar()
         }
       }
-    }
+    },
+
   },
   created() {
     this.$root.$on('upload-end', () => {
@@ -64,7 +66,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['resetFileSelection']),
+    ...mapActions('Files', ['resetFileSelection', 'toggleFileSelection']),
     ...mapActions('Files/sidebar', {
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
@@ -74,6 +76,42 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     handleShortcut(event) {
+      this.handleFileActionsShortcuts(event)
+      this.handleFileSelectionShortcuts(event)
+    },
+
+    handleFileSelectionShortcuts(event) {
+      const key = event.keyCode || event.which
+      const isShiftPressed = event.shiftKey
+      if(!isShiftPressed) return
+      const isUpPressed = key === 38
+      const isDownPressed = key === 40
+      if(isDownPressed) {
+        const latestSelectedRow = document.querySelectorAll(`[data-item-id='${this.latestSelectedId}']`)[0]
+        const nextRow = latestSelectedRow.nextSibling as HTMLElement
+        const nextResourceId = nextRow.getAttribute("data-item-id")
+
+        console.log(nextRow)
+        console.log(nextResourceId)
+        this.toggleFileSelection({id: nextResourceId})
+      }
+      if(isUpPressed) {
+        const latestSelectedRow = document.querySelectorAll(`[data-item-id='${this.latestSelectedId}']`)[0]
+        const nextRow = latestSelectedRow.previousSibling as HTMLElement
+        const nextResourceId = nextRow.getAttribute("data-item-id")
+
+        console.log(nextRow)
+        console.log(nextResourceId)
+        this.toggleFileSelection({id: nextResourceId})
+      }
+      // get last selected id
+      // find index in dom
+      // get id from dom index + 1 or  - 1
+      
+      //document.getElementsByClassName("oc-table-highlighted")[0].parentElement.childNodes[0]
+    },
+
+    handleFileActionsShortcuts(event) {
       const key = event.keyCode || event.which
       const ctr = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       if (!ctr /* CTRL | CMD */) return

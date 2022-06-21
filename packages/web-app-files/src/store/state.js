@@ -3,6 +3,7 @@ export default {
   files: [],
   filesSearched: null,
   selectedIds: [],
+  latestSelectedId: null,
   clipboardResources: [],
   clipboardAction: null,
   versions: [],
