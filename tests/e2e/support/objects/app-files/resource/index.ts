@@ -4,10 +4,13 @@ import {
   createResourceArgs,
   deleteResource,
   deleteResourceArgs,
+  deleteResourceTrashbin,
+  deleteResourceTrashbinArgs,
   downloadResources,
   downloadResourcesArgs,
   downloadResourceVersion,
   downloadResourceVersionArgs,
+  emptyTrashBinResources,
   moveOrCopyResource,
   moveOrCopyResourceArgs,
   renameResource,
@@ -89,5 +92,16 @@ export class Resource {
     const downloads = await downloadResourceVersion({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return downloads
+  }
+
+  async emptyTrashBin() {
+    return await emptyTrashBinResources(this.#page)
+  }
+
+  async deleteTrashBin(args: Omit<deleteResourceTrashbinArgs, 'page'>): Promise<string> {
+    const startUrl = this.#page.url()
+    const message = await deleteResourceTrashbin({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return message
   }
 }

@@ -46,6 +46,18 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       break
   }
 
+  await inviteMembers({ page, users, role })
+  await sidebar.close({ page: page })
+}
+
+export interface inviteMembersArgs {
+  page: Page
+  users: User[]
+  role: string
+}
+
+export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
+  const { page, role, users } = args
   for (const user of users) {
     const shareInputLocator = page.locator(invitationInput)
     await Promise.all([
@@ -67,8 +79,6 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
     ),
     page.locator(shareInvitationButton).click()
   ])
-
-  await sidebar.close({ page: page })
 }
 
 /**/

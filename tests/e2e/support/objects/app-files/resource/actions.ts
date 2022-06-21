@@ -9,6 +9,7 @@ const downloadButtonSideBar = '#oc-files-actions-sidebar .oc-files-actions-downl
 const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-trigger'
 const downloadButtonBatchActionMultiple = '.oc-files-actions-download-archive-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
+const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
 const fileRow = '//ancestor::tr'
 const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
@@ -24,6 +25,9 @@ const fileRenameInput = '.oc-text-input'
 const deleteButton = 'button.oc-files-actions-delete-trigger'
 const actionConfirmationButton = '.oc-modal-body-actions-confirm'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
+const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
+const notificationMessageDialog = '.oc-notification-message-title'
+const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 
 export const clickResource = async ({
   page,
@@ -166,7 +170,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 export type selectResourcesArgs = {
   page: Page
   names: string[]
-  folder: string
+  folder?: string
   select: boolean
 }
 
@@ -183,6 +187,7 @@ export const selectOrDeselectResources = async (args: selectResourcesArgs): Prom
     })
     if (exists) {
       const resourceCheckbox = page.locator(util.format(checkBox, resource))
+
       if (!(await resourceCheckbox.isChecked()) && select) {
         await resourceCheckbox.check()
       } else if (await resourceCheckbox.isChecked()) {
@@ -337,7 +342,6 @@ export const downloadResourceVersion = async (
   await clickResource({ page, path: folder })
   await sidebar.open({ page, resource: fileName[0] })
   await sidebar.openPanel({ page, name: 'versions' })
-
   const [download] = await Promise.all([
     page.waitForResponse(
       (resp) =>
@@ -349,4 +353,40 @@ export const downloadResourceVersion = async (
   await sidebar.close({ page: page })
   downloads.push(download)
   return downloads
+}
+
+export const emptyTrashBinResources = async (page): Promise<string> => {
+  await page.locator(emptyTrashBinButton).click()
+  const statuses = [204, 403]
+  await Promise.all([
+    page.waitForResponse(
+      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
+    ),
+    page.locator(actionConfirmationButton).click()
+  ])
+  const message = await page.locator(notificationMessageDialog).textContent()
+  return message.trim().toLowerCase()
+}
+
+export interface deleteResourceTrashbinArgs {
+  resource: string
+  page: Page
+}
+
+export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): Promise<string> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  const statuses = [204, 403]
+  await page.locator(permanentDeleteButton).first().click()
+  await Promise.all([
+    page.waitForResponse(
+      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
+    ),
+    page.locator(actionConfirmationButton).click()
+  ])
+  const message = await page.locator(notificationMessageDialog).textContent()
+  return message.trim().toLowerCase()
 }
