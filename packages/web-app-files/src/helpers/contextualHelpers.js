@@ -46,6 +46,9 @@ export const shareViaLinkHelp = {
     )
   ]
 }
+export const shareViaIndirectLinkHelp = {
+  text: $gettext('This file is shared, because one of the folders it is in is shared via link.')
+}
 export const shareQuickLinkHelp = {
   text: $gettext('The Quick link is the link that is always copied if you'),
   list: [

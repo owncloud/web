@@ -53,8 +53,8 @@
             :available-role-options="availableRoleOptions"
             :can-rename="true"
             :expiration-date="expirationDate"
-            :is-folder-share="link.indirect || highlightedFile.isFolder"
-            :is-modifiable="canEdit && !link.indirect"
+            :is-folder-share="highlightedFile.isFolder"
+            :is-modifiable="canEdit"
             :is-password-enforced="isPasswordEnforcedFor(link)"
             :link="link"
             @updateLink="checkLinkToUpdate"
@@ -63,7 +63,44 @@
         </li>
       </oc-list>
       <div v-if="links.length > 3" class="oc-flex oc-flex-center">
-        <oc-button appearance="raw" @click="toggleLinkListCollapsed" v-text="collapseButtonTitle" />
+        <oc-button appearance="raw" @click="toggleLinkListCollapsed">
+          <span v-text="collapseButtonTitle" />
+          <oc-icon :name="collapseButtonIcon" fill-type="line" />
+        </oc-button>
+      </div>
+      <div v-if="indirectLinks.length" id="indirect-link-list">
+        <hr class="link-separator oc-my-m" />
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+          <span v-text="indirectLinksHeading" />
+          <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
+        </h3>
+        <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
+          <li
+            v-for="link in displayIndirectLinks"
+            :key="link.key"
+            class="oc-py-s"
+            :data-testid="`files-link-id-${link.id}`"
+          >
+            <name-and-copy :link="link" />
+            <details-and-edit
+              :available-role-options="availableRoleOptions"
+              :expiration-date="expirationDate"
+              :is-folder-share="true"
+              :is-modifiable="false"
+              :link="link"
+            />
+          </li>
+        </oc-list>
+        <div class="oc-flex oc-flex-center">
+          <oc-button
+            id="indirect-link-list-toggle"
+            appearance="raw"
+            @click="toggleIndirectLinkListCollapsed"
+          >
+            <span v-text="indirectCollapseButtonTitle" />
+            <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
+          </oc-button>
+        </div>
       </div>
     </template>
   </div>
@@ -76,7 +113,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import mixins from '../../../mixins'
-import { shareViaLinkHelp } from '../../../helpers/contextualHelpers'
+import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
 import { cloneStateObject } from '../../../helpers/store'
@@ -101,10 +138,13 @@ export default defineComponent({
     )
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const indirectLinkListCollapsed =
+      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
       graphClient,
       hasSpaces: useCapabilitySpacesEnabled(),
+      indirectLinkListCollapsed,
       linkListCollapsed
     }
   },
@@ -124,7 +164,16 @@ export default defineComponent({
     },
 
     collapseButtonTitle() {
-      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+      return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
+    },
+    collapseButtonIcon() {
+      return this.linkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
+    },
+    indirectCollapseButtonTitle() {
+      return this.indirectLinkListCollapsed ? this.$gettext('Show') : this.$gettext('Hide')
+    },
+    indirectCollapseButtonIcon() {
+      return this.indirectLinkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
     },
 
     quicklink() {
@@ -190,6 +239,9 @@ export default defineComponent({
     viaLinkHelp() {
       return shareViaLinkHelp
     },
+    indirectLinkHelp() {
+      return shareViaIndirectLinkHelp
+    },
 
     canCreatePublicLinks() {
       return this.highlightedFile.canShare({ user: this.user })
@@ -216,8 +268,13 @@ export default defineComponent({
       return this.$gettext('Share via public link')
     },
 
+    indirectLinksHeading() {
+      const translated = this.$gettext('Indirect links (%{ count })')
+      return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
+    },
+
     links() {
-      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks
+      return this.currentFileOutgoingLinks
         .filter((link) => !link.quicklink)
         .map((share) => {
           share.key = 'direct-link-' + share.id
@@ -226,8 +283,6 @@ export default defineComponent({
         .sort((a, b) => {
           return b.stime - a.stime
         })
-
-      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
     },
 
     displayLinks() {
@@ -235,6 +290,13 @@ export default defineComponent({
         return this.links.slice(0, 3)
       }
       return this.links
+    },
+
+    displayIndirectLinks() {
+      if (this.indirectLinkListCollapsed) {
+        return []
+      }
+      return this.indirectLinks
     },
 
     indirectLinks() {
@@ -297,6 +359,10 @@ export default defineComponent({
 
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
+    },
+
+    toggleIndirectLinkListCollapsed() {
+      this.indirectLinkListCollapsed = !this.indirectLinkListCollapsed
     },
 
     reloadLinks() {
