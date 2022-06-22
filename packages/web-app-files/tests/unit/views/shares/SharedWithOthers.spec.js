@@ -3,6 +3,7 @@ import { getStore, localVue } from '../views.setup.js'
 import FileActions from '@files/src/mixins/fileActions.js'
 import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import SharedData from '@/__fixtures__/sharedFiles.js'
+import Users from '@/__fixtures__/users'
 import { createLocationShares } from '../../../../src/router'
 import { buildSharedResource } from '../../../../src/helpers/resources'
 import { Settings, DateTime } from 'luxon'
@@ -203,7 +204,8 @@ describe('SharedWithOthers view', () => {
   } = {}) {
     const store = getStore({
       selectedFiles,
-      totalFilesCount: { files: paginatedResources.length, folders: 0 }
+      totalFilesCount: { files: paginatedResources.length, folders: 0 },
+      user: { id: Users.alice.id }
     })
     const component = {
       ...SharedWithOthers,

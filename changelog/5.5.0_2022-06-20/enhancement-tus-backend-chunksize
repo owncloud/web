@@ -1,0 +1,5 @@
+Enhancement: Use tus chunksize from backend
+
+We now use the chunksize value coming from the backend for uploading via tus. If no chunksize is given, it will default to `Infinity`. The Web config `uploadChunkSize` has been removed as a result.
+
+https://github.com/owncloud/web/pull/7120

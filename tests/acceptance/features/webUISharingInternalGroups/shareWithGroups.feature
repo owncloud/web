@@ -162,7 +162,7 @@ Feature: Sharing files and folders with internal groups
     Then file "lorem.txt" should be listed on the webUI
     And the content of file "/new-simple-folder/lorem.txt" for user "Carol" should be "lorem content" in the server
 
-  @issue-ocis-1277
+
   Scenario: user shares the file/folder with a group and delete the share with group
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has logged in using the webUI
@@ -176,7 +176,7 @@ Feature: Sharing files and folders with internal groups
     And as "Brian" file "/Shares/lorem.txt" should not exist in the server
     And as "Brian" file "lorem (2).txt" should not exist in the server
 
-  @issue-ocis-1277
+
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created in the server
     And user "Alice" has created file "lorem.txt" in the server

@@ -147,7 +147,7 @@ function getWrapper(renameFilePromise) {
     localVue,
     mocks: {
       $router: {
-        currentRoute: createLocationSpaces('files-spaces-personal-home'),
+        currentRoute: createLocationSpaces('files-spaces-personal'),
         resolve: (r) => {
           return { href: r.name }
         }

@@ -42,7 +42,7 @@ When(
     }
 
     const { page } = actor
-    const { url } = this.linksEnvironment.getLink({ key: name })
+    const { url } = this.linksEnvironment.getLink({ name })
     const pageObject = new objects.applicationFiles.page.Public({ page })
     await pageObject.open({ url })
   }
@@ -79,7 +79,7 @@ When(
   }
 )
 
-Then(
+When(
   /^"([^"]*)" downloads the following public link resource(s)? using the (sidebar panel|batch action)$/,
   async function (
     this: World,
@@ -124,5 +124,16 @@ Then(
   '{string} should not be able to open the old link {string}',
   function (this: World, stepUser: string, name: string): void {
     expect(linkStore.has(name)).toBe(false)
+  }
+)
+
+When(
+  '{string} deletes the following resources from public link',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    for (const info of stepTable.hashes()) {
+      await pageObject.delete({ resource: info.resource })
+    }
   }
 )

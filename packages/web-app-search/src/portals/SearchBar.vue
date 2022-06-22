@@ -96,6 +96,10 @@ export default {
   },
 
   mounted() {
+    if (!this.availableProviders.length) {
+      return
+    }
+
     const input = this.$el.getElementsByTagName('input')[0]
     const routeTerm = get(this, '$route.query.term')
 

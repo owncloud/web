@@ -1,10 +1,7 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
-import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { User } from '../../helpers/user'
-import { DavProperties } from 'web-pkg/src/constants'
-import { ClientService } from 'web-pkg/src/services'
-import { Store } from 'vuex'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
@@ -16,10 +13,10 @@ import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
+import path from 'path'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
-  updateStoreForCreatedFolders(files: UppyResource[]): void
   currentPath: Ref<string>
   uploadPath: Ref<string>
   personalDriveId: Ref<string>
@@ -38,7 +35,6 @@ export function useUploadHelpers(): UploadHelpersResult {
   const getToken = computed((): string => store.getters.getToken)
   const server = computed((): string => store.getters.configuration.server)
   const hasShareJail = useCapabilityShareJailEnabled()
-  const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
   const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
@@ -103,12 +99,6 @@ export function useUploadHelpers(): UploadHelpersResult {
       currentPath,
       webDavBasePath
     }),
-    updateStoreForCreatedFolders: updateStoreForCreatedFolders({
-      clientService,
-      store,
-      isPublicLocation,
-      publicLinkPassword
-    }),
     currentPath,
     uploadPath,
     personalDriveId
@@ -125,52 +115,6 @@ const getPersonalDriveId = async (clientService, server: string, getToken: strin
   return drivesResponse.data.value[0].id
 }
 
-const updateStoreForCreatedFolders = ({
-  clientService,
-  store,
-  isPublicLocation,
-  publicLinkPassword
-}: {
-  clientService: ClientService
-  store: Store<any>
-  isPublicLocation: Ref<boolean>
-  publicLinkPassword: Ref<string>
-}) => {
-  return async (files: UppyResource[]) => {
-    const { owncloudSdk: client } = clientService
-    const fetchedFolders = []
-    for (const file of files) {
-      if (!file.meta.relativeFolder) {
-        continue
-      }
-
-      const relativeFolder = `/${file.meta.relativeFolder.replace(/^\/+/, '')}`
-      // Only care about the root folders, no need to fetch nested folders
-      const rootFolder = relativeFolder.split('/').slice(0, 2).join('/')
-      const rootFolderPath = `${file.meta.webDavBasePath}/${rootFolder}`
-
-      if (fetchedFolders.includes(rootFolderPath)) {
-        continue
-      }
-
-      let resource
-      if (unref(isPublicLocation)) {
-        resource = await client.publicFiles.getFileInfo(
-          `${file.meta.currentFolder}${rootFolder}`,
-          unref(publicLinkPassword),
-          DavProperties.PublicLink
-        )
-      } else {
-        resource = await client.files.fileInfo(rootFolderPath, DavProperties.Default)
-      }
-
-      resource = buildResource(resource)
-      store.commit('Files/UPSERT_RESOURCE', resource)
-      fetchedFolders.push(rootFolderPath)
-    }
-  }
-}
-
 const inputFilesToUppyFiles = ({
   route,
   uploadPath,
@@ -180,33 +124,25 @@ const inputFilesToUppyFiles = ({
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
-    const { params } = unref(route)
+    const { name, params, query } = unref(route)
     const currentFolder = unref(currentPath)
+    const trimmedUploadPath = unref(uploadPath).replace(/\/+$/, '')
     const topLevelFolderIds = {}
 
     for (const file of files) {
       // Get the relative path of the file when the file was inside a directory on the client computer
       const relativeFilePath = file.webkitRelativePath || (file as any).relativePath || null
       // Directory without filename
-      const directory = relativeFilePath
-        ? relativeFilePath.substring(0, relativeFilePath.lastIndexOf('/'))
-        : ''
+      const directory =
+        !relativeFilePath || path.dirname(relativeFilePath) === '.'
+          ? ''
+          : path.dirname(relativeFilePath)
 
       // Build tus endpoint to dynamically set it on file upload.
       // Looks something like: https://localhost:9200/remote.php/dav/files/admin
-      let tusEndpoint
-      if (directory) {
-        tusEndpoint = `${unref(uploadPath).replace(/\/+$/, '')}/${directory.replace(/^\/+/, '')}`
-      } else {
-        tusEndpoint = unref(uploadPath)
-      }
-
-      // Build the route object for this file. This is used later by the upload-info-box
-      const item = params.item ? `${params.item}/${directory}` : directory
-      const fileRoute = {
-        ...unref(route),
-        params: { ...params, item }
-      }
+      const tusEndpoint = directory
+        ? `${trimmedUploadPath}/${directory.replace(/^\/+/, '')}`
+        : unref(uploadPath)
 
       let topLevelFolderId
       if (relativeFilePath) {
@@ -226,11 +162,17 @@ const inputFilesToUppyFiles = ({
           currentFolder,
           relativeFolder: directory,
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
-          route: fileRoute,
           tusEndpoint,
           webDavBasePath: unref(webDavBasePath), // WebDAV base path where the files will be uploaded to
           uploadId: uuid.v4(),
-          topLevelFolderId
+          topLevelFolderId,
+          routeName: name,
+          routeItem: params.item ? `${params.item}/${directory}` : directory,
+          routeShareName: (params as any)?.shareName || '',
+          routeShareId: (query as any)?.shareId || '',
+          routeStorage: (params as any)?.storage || '',
+          routeStorageId: (params as any)?.storageId || '',
+          routeParamName: (params as any)?.name || ''
         }
       })
     }

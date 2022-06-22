@@ -139,6 +139,7 @@ export default {
             )
             return
           }
+          console.error(error)
           this.errorMessage = error
         })
         .finally(() => {

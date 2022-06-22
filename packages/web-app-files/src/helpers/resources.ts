@@ -144,7 +144,6 @@ export function buildSpace(space) {
       disabled = space.root.deleted?.state === 'trashed'
     }
   }
-
   return {
     id: space.id,
     fileId: '',
@@ -154,7 +153,7 @@ export function buildSpace(space) {
     description: space.description,
     extension: '',
     path: '',
-    webDavPath: '',
+    webDavPath: buildWebDavSpacesPath(space.id, ''),
     driveType: space.driveType,
     type: 'space',
     isFolder: true,

@@ -20,6 +20,8 @@ const searchResult = {
   }
 }
 
+const user = { id: 'test' }
+
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const wrapper = getWrapper()
@@ -94,7 +96,8 @@ function getWrapper({
           options: {
             disablePreviews: true
           }
-        })
+        }),
+        user: () => user
       },
       modules: {
         Files: {

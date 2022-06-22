@@ -85,7 +85,6 @@ const mutations = {
     state.server = config.server.endsWith('/') ? config.server : config.server + '/'
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
-    state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications
     if (config.options !== undefined) {

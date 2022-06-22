@@ -35,7 +35,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-rename">Rename</oc-button-stub>
           </li>
           <li>
-            <oc-datepicker-stub min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en"></oc-datepicker-stub>
+            <oc-datepicker-stub min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en" class="link-expiry-picker"></oc-datepicker-stub>
           </li>
           <li>
             <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-add-password">Add password</oc-button-stub>

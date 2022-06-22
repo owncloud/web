@@ -119,7 +119,7 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useAppDefaults, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useRequest, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -162,15 +162,13 @@ export default defineComponent({
         uppyService
       }),
       ...useUploadHelpers(),
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal-home'),
+      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
-      ...useAppDefaults({
-        applicationName: 'files'
-      }),
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      ...useRequest()
     }
   },
   data: () => ({
@@ -673,11 +671,11 @@ export default defineComponent({
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
-        if (uppyResource.meta.route.params?.storage === 'home') {
+        if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
         } else {
           targetUploadSpace = this.spaces.find(
-            (space) => space.id === uppyResource.meta.route?.params?.storageId
+            (space) => space.id === uppyResource.meta.routeStorageId
           )
         }
 
@@ -734,7 +732,12 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-      await this.updateStoreForCreatedFolders(files)
+
+      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
+      if (reloadRequired) {
+        bus.publish('app.files.list.load')
+      }
+
       this.$uppyService.uploadFiles(files)
     },
 

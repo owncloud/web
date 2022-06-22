@@ -61,7 +61,9 @@ export default {
       let resource = await this.$client.files.fileInfo(resourcePath, DavProperties.Default)
       resource = buildResource(resource)
 
-      const params = {}
+      const params = {
+        storageId: this.$store.getters.user.id
+      }
       const query = {}
       if (resource.isFolder) {
         // if folder: route directly into it
@@ -72,7 +74,7 @@ export default {
         query.scrollTo = resource.name
       }
       this.$router.push(
-        createLocationSpaces('files-spaces-personal-home', {
+        createLocationSpaces('files-spaces-personal', {
           params,
           query
         })

@@ -1,5 +1,6 @@
 import { ClientService } from 'web-pkg/src/services'
 import {
+  useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
   useCapabilityFilesTusSupportMaxChunkSize,
   useClientService,
@@ -9,7 +10,6 @@ import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { useActiveLocation } from 'files/src/composables'
 import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
-import { Location } from 'vue-router/types/router'
 import * as uuid from 'uuid'
 
 export interface UppyResource {
@@ -19,14 +19,21 @@ export interface UppyResource {
   type: string
   data: Blob
   meta: {
+    // must only contain primitive types because the properties can't be serialized otherwise!
     currentFolder: string
     relativeFolder: string
     relativePath: string
-    route: Location
     tusEndpoint: string
     webDavBasePath: string
     uploadId: string
     topLevelFolderId?: string
+    routeName?: string
+    routeItem?: string
+    routeShareName?: string
+    routeShareId?: string
+    routeStorage?: string
+    routeStorageId?: string
+    routeParamName?: string
   }
 }
 
@@ -48,7 +55,7 @@ export function useUpload(options: UploadOptions): UploadResult {
 
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
-  const uploadChunkSize = computed((): number => store.getters.configuration.uploadChunkSize)
+  const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
     if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
@@ -71,8 +78,8 @@ export function useUpload(options: UploadOptions): UploadResult {
       return {
         isTusSupported,
         tusMaxChunkSize: unref(tusMaxChunkSize),
-        uploadChunkSize: unref(uploadChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
+        tusExtension: unref(tusExtension),
         headers: unref(headers)
       }
     }
@@ -152,9 +159,15 @@ const createDirectoryTree = ({
           type: 'folder',
           meta: {
             relativeFolder: createdSubFolders,
-            route: file.meta.route,
             currentFolder: file.meta.currentFolder,
-            uploadId
+            uploadId,
+            routeName: file.meta.routeName,
+            routeItem: file.meta.routeItem,
+            routeShareName: file.meta.routeShareName,
+            routeShareId: file.meta.routeShareId,
+            routeStorage: file.meta.routeStorage,
+            routeStorageId: file.meta.routeStorageId,
+            routeParamName: file.meta.routeParamName
           }
         }
 

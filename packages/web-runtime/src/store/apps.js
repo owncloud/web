@@ -4,6 +4,7 @@ const state = {
     edit: false
   },
   fileEditors: [],
+  fileEditorConfigs: {},
   newFileHandlers: [],
   fileSideBars: [],
   customFilesListIndicators: [],
@@ -134,7 +135,10 @@ const getters = {
   fileSideBars: (state) => {
     return state.fileSideBars
   },
-  customFilesListIndicators: (state) => state.customFilesListIndicators
+  customFilesListIndicators: (state) => state.customFilesListIndicators,
+  extensionConfigByAppId: (state) => (appId) => {
+    return state.fileEditorConfigs[appId] || {}
+  }
 }
 
 export default {

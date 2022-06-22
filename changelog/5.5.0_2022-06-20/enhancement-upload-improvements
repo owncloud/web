@@ -1,0 +1,19 @@
+Enhancement: Upload progress & overlay improvements
+
+* Remove fetching of newly uploaded files and folders to improve performance
+* Redesign the upload overlay
+* Show uploading files in the upload overlay
+* Immediately show the upload overlay when uploading folders to tell the user that the upload is starting
+* Only show top level folders in the upload overlay when uploading folders
+* Remove the Uppy StatusBar plugin
+* Use `uppy.addFiles()` instead of calling `uppy.addFile()` for each file
+* The upload overlay now shows a more proper time estimation when uploading many files
+* The user feedback of the upload overlay during upload preparation has been improved
+* Several router bugs have been fixed in the upload overlay
+* Temporarily disabled `uploadDataDuringCreation` to prevent the local storage from getting to full
+* Some more refactoring under the hood has been made
+
+https://github.com/owncloud/web/pull/7067
+https://github.com/owncloud/web/pull/7127
+https://github.com/owncloud/web/issues/7066
+https://github.com/owncloud/web/issues/7069

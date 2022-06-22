@@ -3,31 +3,23 @@ import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
 type spaceTypes =
-  | 'files-spaces-personal-home'
+  | 'files-spaces-personal'
   | 'files-spaces-project'
   | 'files-spaces-projects'
   | 'files-spaces-share'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
-  createLocation(
-    name,
-    {
-      params: {
-        ...(name === 'files-spaces-personal-home' && { storage: 'home' })
-      }
-    },
-    location
-  )
+  createLocation(name, location)
 
 export const locationSpacesProject = createLocationSpaces('files-spaces-project')
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-export const locationSpacesPersonalHome = createLocationSpaces('files-spaces-personal-home')
+export const locationSpacesPersonal = createLocationSpaces('files-spaces-personal')
 export const locationSpacesShare = createLocationSpaces('files-spaces-share')
 
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
   locationSpacesProjects,
-  locationSpacesPersonalHome,
+  locationSpacesPersonal,
   locationSpacesShare
 )
 
@@ -54,9 +46,8 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        // intentionally not `storageId`, yet, because we use an alphanumeric alias here instead of an id
-        path: 'personal/:storage/:item*',
-        name: locationSpacesPersonalHome.name,
+        path: 'personal/:storageId?/:item*',
+        name: locationSpacesPersonal.name,
         component: components.Personal,
         meta: {
           patchCleanPath: true,

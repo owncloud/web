@@ -79,6 +79,18 @@ export default {
   CLEAR_FILES_SEARCHED(state) {
     state.filesSearched = null
   },
+  CLEAR_CLIPBOARD(state) {
+    state.clipboardResources = []
+    state.clipboardAction = null
+  },
+  CLIPBOARD_SELECTED(state) {
+    state.clipboardResources = state.files.filter((f) => {
+      return state.selectedIds.some((id) => f.id === id)
+    })
+  },
+  SET_CLIPBOARD_ACTION(state, action) {
+    state.clipboardAction = action
+  },
   SET_FILE_SELECTION(state, files) {
     state.selectedIds = files.map((f) => f.id)
   },
@@ -312,7 +324,10 @@ export default {
 // eslint-disable-next-line camelcase
 function $_upsertResource(state, resource, allowInsert) {
   const files = [...state.files]
-  const index = files.findIndex((r) => r.id === resource.id)
+  let index = files.findIndex((r) => r.id === resource.id)
+  if (resource.webDavPath && resource.webDavPath.length && index === -1) {
+    index = files.findIndex((r) => r.webDavPath === resource.webDavPath)
+  }
   const found = index > -1
 
   state.filesSearched = null

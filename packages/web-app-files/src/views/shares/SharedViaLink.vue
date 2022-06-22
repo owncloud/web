@@ -72,6 +72,7 @@ import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from '../../helpers/resource'
 import { shareQuickLinkHelp } from '../../helpers/contextualHelpers'
+import { useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -89,10 +90,13 @@ export default defineComponent({
   mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
 
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home')
+      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
+        params: { storageId: store.getters.user.id }
+      })
     }
   },
 

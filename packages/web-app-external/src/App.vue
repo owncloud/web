@@ -69,7 +69,7 @@ export default {
   setup() {
     return {
       ...useAppDefaults({
-        applicationName: 'external'
+        applicationId: 'external'
       })
     }
   },
@@ -103,10 +103,6 @@ export default {
     fileId() {
       return this.$route.query.fileId
     }
-  },
-  mounted() {
-    const appNameTitle = this.appName ? `${this.appName} - ` : ''
-    document.title = `${this.currentFileContext.fileName} - ${appNameTitle}${this.configuration.currentTheme.general.name}`
   },
   async created() {
     await unauthenticatedUserReady(this.$router, this.$store)

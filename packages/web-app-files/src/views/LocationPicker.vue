@@ -312,12 +312,12 @@ export default {
     currentHint() {
       if (this.currentAction === 'move') {
         return this.$gettext(
-          'Navigate into the desired folder and move selected resources into it. You can navigate into a folder by clicking on its name. To navigate back, you can click on the breadcrumbs. Resources will be moved into the folder where you are currently located.'
+          'Navigate to the desired destination to move the selected files and folders to. The selected files and folders will be moved into the folder where you are currently located.'
         )
       }
 
       return this.$gettext(
-        'Navigate into the desired folder and copy selected resources into it. You can navigate into a folder by clicking on its name. To navigate back, you can click on the breadcrumbs. Resources will be copied into the folder where you are currently located.'
+        'Navigate to the desired destination to copy the selected files and folders to. The selected files and folders will be copied into the folder where you are currently located.'
       )
     }
   },
@@ -355,7 +355,8 @@ export default {
             item: itemPath
           },
           query: {
-            resource: this.resources
+            resource: this.resources,
+            ...(this.$route.query.storageId && { storageId: this.$route.query.storageId })
           }
         }
       }
@@ -364,20 +365,26 @@ export default {
     leaveLocationPicker(target) {
       switch (this.$route.params.context) {
         case 'public':
-          this.$router.push(
+          return this.$router.push(
             createLocationPublic('files-public-files', { params: { item: target } })
           )
-          break
         case 'space':
-          this.$router.push(
+          return this.$router.push(
             createLocationSpaces('files-spaces-project', {
               params: { storageId: this.$route.query.storageId, item: target || '/' }
             })
           )
-          break
+        case 'personal':
+          return this.$router.push(
+            createLocationSpaces('files-spaces-personal', {
+              params: { storageId: this.$route.query.storageId, item: target || '/' }
+            })
+          )
         default:
-          this.$router.push(
-            createLocationSpaces('files-spaces-personal-home', { params: { item: target || '/' } })
+          return this.$router.push(
+            createLocationSpaces('files-spaces-personal', {
+              params: { storageId: this.$store.getters.user.id }
+            })
           )
       }
     },
@@ -429,13 +436,26 @@ export default {
                   targetPath
                 )
                 break
+              case 'personal':
               default:
-                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
-                targetPath += `/${resourceName}`
-                promise = this.$client.files.move(
-                  buildWebDavFilesPath(this.user.id, resource),
-                  targetPath
-                )
+                if (this.hasShareJail) {
+                  targetPath = buildWebDavSpacesPath(
+                    this.$route.query.storageId,
+                    this.target || '/'
+                  )
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.move(
+                    buildWebDavSpacesPath(this.$route.query.storageId, resource),
+                    targetPath
+                  )
+                } else {
+                  targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.move(
+                    buildWebDavFilesPath(this.user.id, resource),
+                    targetPath
+                  )
+                }
             }
             break
           }
@@ -460,13 +480,27 @@ export default {
                   targetPath
                 )
                 break
+              case 'personal':
               default:
-                targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
-                targetPath += `/${resourceName}`
-                promise = this.$client.files.copy(
-                  buildWebDavFilesPath(this.user.id, resource),
-                  targetPath
-                )
+                if (this.hasShareJail) {
+                  targetPath = buildWebDavSpacesPath(
+                    this.$route.query.storageId,
+                    this.target || '/'
+                  )
+                  resourceName = basename(resource)
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.copy(
+                    buildWebDavSpacesPath(this.$route.query.storageId, resource),
+                    targetPath
+                  )
+                } else {
+                  targetPath = buildWebDavFilesPath(this.user.id, this.target || '/')
+                  targetPath += `/${resourceName}`
+                  promise = this.$client.files.copy(
+                    buildWebDavFilesPath(this.user.id, resource),
+                    targetPath
+                  )
+                }
             }
             break
           }

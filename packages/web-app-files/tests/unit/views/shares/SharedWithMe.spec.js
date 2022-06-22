@@ -3,6 +3,7 @@ import { localVue, getStore, getRouter } from '../views.setup'
 import SharedWithMe from '@files/src/views/shares/SharedWithMe.vue'
 import { ShareStatus, ShareTypes } from '@files/src/helpers/share'
 import { extractDomSelector } from '../../../../src/helpers/resource'
+import Users from '@/__fixtures__/users'
 
 const stubs = {
   'app-bar': true,
@@ -54,7 +55,8 @@ describe('SharedWithMe view', () => {
             store: getStore({
               highlightedFile: file,
               activeFiles: [file],
-              totalFilesCount: { files: 0, folders: 1 }
+              totalFilesCount: { files: 0, folders: 1 },
+              user: { id: Users.alice.id }
             })
           })
           expect(wrapper.find(selectors.pendingTable).exists()).toBeFalsy()
@@ -68,7 +70,8 @@ describe('SharedWithMe view', () => {
             store: getStore({
               highlightedFile: file,
               activeFiles: [file],
-              totalFilesCount: { files: 0, folders: 1 }
+              totalFilesCount: { files: 0, folders: 1 },
+              user: { id: Users.alice.id }
             })
           })
           expect(wrapper.find(selectors.pendingTable).exists()).toBeTruthy()
@@ -88,7 +91,8 @@ describe('SharedWithMe view', () => {
           store: getStore({
             highlightedFile: pendingShares[0],
             activeFiles: pendingShares,
-            totalFilesCount: { files: 0, folders: pendingShares.length }
+            totalFilesCount: { files: 0, folders: pendingShares.length },
+            user: { id: Users.alice.id }
           })
         })
         describe('as long as the pending shares are collapsed', () => {
@@ -106,7 +110,8 @@ describe('SharedWithMe view', () => {
               store: getStore({
                 highlightedFile: pendingShares[0],
                 activeFiles: pendingShares,
-                totalFilesCount: { files: 0, folders: pendingShares.length }
+                totalFilesCount: { files: 0, folders: pendingShares.length },
+                user: { id: Users.alice.id }
               })
             })
             await wrapper.find(selectors.pendingExpand).trigger('click')
@@ -137,7 +142,8 @@ describe('SharedWithMe view', () => {
         store: getStore({
           highlightedFile: file,
           activeFiles: [file],
-          totalFilesCount: { files: 0, folders: 1 }
+          totalFilesCount: { files: 0, folders: 1 },
+          user: { id: Users.alice.id }
         })
       })
       it('should not show a "no content" message', () => {
@@ -159,7 +165,8 @@ describe('SharedWithMe view', () => {
         store: getStore({
           highlightedFile: file,
           activeFiles: [file],
-          totalFilesCount: { files: 0, folders: 1 }
+          totalFilesCount: { files: 0, folders: 1 },
+          user: { id: Users.alice.id }
         }),
         viewMode: ShareStatus.declined
       })
@@ -182,7 +189,8 @@ describe('SharedWithMe view', () => {
 function mountOptions({
   store = getStore({
     activeFiles: [],
-    totalFilesCount: { files: 0, folders: 0 }
+    totalFilesCount: { files: 0, folders: 0 },
+    user: { id: Users.alice.id }
   }),
   loading = false,
   viewMode = ShareStatus.accepted

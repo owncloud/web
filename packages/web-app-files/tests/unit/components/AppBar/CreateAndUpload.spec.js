@@ -30,7 +30,7 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-personal-home')
+const personalHomeLocation = createLocationSpaces('files-spaces-personal')
 
 const newFileHandlers = [
   {
@@ -176,11 +176,7 @@ describe('CreateAndUpload component', () => {
               size: 1001
             },
             meta: {
-              route: {
-                params: {
-                  storage: 'home'
-                }
-              }
+              routeName: 'files-spaces-personal'
             }
           }
         ])

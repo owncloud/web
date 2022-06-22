@@ -48,7 +48,7 @@ const navItems = [
     },
     icon: appInfo.icon,
     route: {
-      path: `/${appInfo.id}/spaces/personal/home`
+      path: `/${appInfo.id}/spaces/personal`
     }
   },
   {
@@ -132,7 +132,7 @@ export default {
   },
   userReady({ store }) {
     // Load spaces to make them available across the application
-    if (store.getters.capabilities.spaces?.enabled) {
+    if (store.getters.capabilities?.spaces?.enabled) {
       store.dispatch('Files/loadSpaces', { clientService })
     }
 

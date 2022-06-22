@@ -43,3 +43,7 @@ export const useCapabilityFilesTusSupportMaxChunkSize = createCapabilityComposab
   'files.tus_support.max_chunk_size',
   0
 )
+export const useCapabilityFilesTusExtension = createCapabilityComposable<string>(
+  'files.tus_support.extension',
+  ''
+)

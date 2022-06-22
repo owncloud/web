@@ -17,7 +17,7 @@ export default {
             this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal-home') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
@@ -58,6 +58,11 @@ export default {
 
       if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
         context = 'space'
+        query.storageId = this.$route.params.storageId
+      }
+
+      if (isLocationSpacesActive(this.$router, 'files-spaces-personal')) {
+        context = 'personal'
         query.storageId = this.$route.params.storageId
       }
 

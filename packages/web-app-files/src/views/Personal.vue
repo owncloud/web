@@ -99,9 +99,10 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -127,10 +128,24 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
+    const store = useStore()
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
+    const storageId = useRouteParam('storageId')
+    const resourceTargetLocation = computed(() => {
+      return createLocationSpaces('files-spaces-personal', {
+        params: {
+          storageId: unref(storageId)
+        }
+      })
+    })
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal-home'),
-      hasShareJail: useCapabilityShareJailEnabled()
+      resourceTargetLocation,
+      hasShareJail: useCapabilityShareJailEnabled(),
+      graphClient
     }
   },
 
@@ -171,12 +186,30 @@ export default defineComponent({
 
   watch: {
     $route: {
-      handler: function (to, from) {
+      handler: async function (to, from) {
+        const needsRedirectWithStorageId =
+          to.params.storageId === 'home' || isNil(to.params.storageId)
+        if (needsRedirectWithStorageId) {
+          let storageId = this.user.id
+          if (this.hasShareJail) {
+            const drivesResponse = await this.graphClient.drives.listMyDrives(
+              '',
+              'driveType eq personal'
+            )
+            storageId = drivesResponse.data.value[0].id
+          }
+
+          return this.$router.replace({
+            to,
+            params: { ...to.params, storageId },
+            query: to.query
+          })
+        }
+
         const needsRedirectToHome =
           this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
-
         if (needsRedirectToHome) {
-          this.$router.replace(
+          return this.$router.replace(
             {
               name: to.name,
               params: {
@@ -190,11 +223,9 @@ export default defineComponent({
               console.error(e)
             }
           )
-
-          return
         }
 
-        const sameRoute = to.name === from?.name
+        const sameRoute = to.name === from?.name && to.params?.storageId === from?.params?.storageId
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
           this.loadResourcesTask.perform(this, sameRoute)
@@ -236,7 +267,9 @@ export default defineComponent({
         this.showMessage,
         this.$gettext,
         this.$gettextInterpolate,
-        this.$ngettext
+        this.$ngettext,
+        this.$route.name,
+        this.publicLinkPassword
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)

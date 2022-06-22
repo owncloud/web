@@ -3,7 +3,61 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.4.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v5.6.0...master
+
+Summary
+-------
+
+* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
+
+Details
+-------
+
+* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
+
+   Mime types that don't start with `video/`, `audio/` or `image/` were not rendered by the
+   preview app. Files with unknown mime type category are now being rendered as images.
+
+   https://github.com/owncloud/web/pull/7161
+
+Changelog for ownCloud Web [5.6.0] (2022-06-21)
+=======================================
+The following sections list the changes in ownCloud web 5.6.0 relevant to
+ownCloud admins and users.
+
+[5.6.0]: https://github.com/owncloud/web/compare/v5.5.0...v5.6.0
+
+Summary
+-------
+
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+Details
+-------
+
+* Bugfix - Folder link targets: [#7156](https://github.com/owncloud/web/pull/7156)
+
+   Some views were missing parameters of their default target locations, e.g. the Favorites view
+   and the search result page didn't link to the correct folders anymore. This has been fixed by
+   always setting the personal view with the id of the current user as default.
+
+   https://github.com/owncloud/web/pull/7156
+
+* Enhancement - Separate direct and indirect link shares in sidebar: [#7140](https://github.com/owncloud/web/pull/7140)
+
+   We have split the list of link shares into two lists, one with direct (and editable) and another
+   one with read-only indirect link shares of parent folders for better structure in the sidebar.
+
+   https://github.com/owncloud/web/issues/7132
+   https://github.com/owncloud/web/pull/7140
+
+Changelog for ownCloud Web [5.5.0] (2022-06-20)
+=======================================
+The following sections list the changes in ownCloud web 5.5.0 relevant to
+ownCloud admins and users.
+
+[5.5.0]: https://github.com/owncloud/web/compare/v5.4.0...v5.5.0
 
 Summary
 -------
@@ -44,6 +98,7 @@ Summary
 * Bugfix - Spaces Contextmenu trigger id isn't valid: [#6845](https://github.com/owncloud/web/issues/6845)
 * Bugfix - The selected app item has a bad text color contrast in light mode: [#6954](https://github.com/owncloud/web/pull/6954)
 * Bugfix - Drag and drop upload when a file is selected: [#7036](https://github.com/owncloud/web/pull/7036)
+* Bugfix - Upload meta data serialization: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Complete-state of the upload overlay: [#7100](https://github.com/owncloud/web/pull/7100)
 * Bugfix - Upload overlay links: [#6846](https://github.com/owncloud/web/pull/6846)
 * Bugfix - Parent folder name on public links: [#7104](https://github.com/owncloud/web/pull/7104)
@@ -57,9 +112,10 @@ Summary
 * Enhancement - CERN features setting: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - CERN-specific help in shares tooltip: [#7034](https://github.com/owncloud/web/pull/7034)
 * Enhancement - Consistent dropdown menus: [#6555](https://github.com/owncloud/web/issues/6555)
-* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
+* Enhancement - Copy/Move conflict dialog: [#7119](https://github.com/owncloud/web/pull/7119)
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 * Enhancement - Make contexthelpers opt-out: [#6750](https://github.com/owncloud/web/pull/6750#issuecomment-1143753289)
+* Enhancement - Enable Drag&Drop and keyboard shortcuts for all views: [#7122](https://github.com/owncloud/web/issues/7122)
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 * Enhancement - EOS links insidebar, fix tooltips: [#6849](https://github.com/owncloud/web/issues/6849)
 * Enhancement - Fixed aspect ratio for spaces images: [#6829](https://github.com/owncloud/web/pull/6829)
@@ -69,25 +125,32 @@ Summary
 * Enhancement - Load language from user object if given: [#7023](https://github.com/owncloud/web/pull/7023)
 * Enhancement - Make rename resource icon always visible instead just on hover: [#6817](https://github.com/owncloud/web/pull/6817)
 * Enhancement - Use new WebDAV endpoints for uploads: [#6970](https://github.com/owncloud/web/issues/6970)
+* Enhancement - Personal space id in URL: [#7053](https://github.com/owncloud/web/pull/7053)
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
+* Enhancement - Customize additional mimeTypes for preview app: [#6933](https://github.com/owncloud/web/issues/6933)
 * Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 * Enhancement - Get rid of the integration tests: [#6863](https://github.com/owncloud/web/pull/6863)
 * Enhancement - Remove the upload progress component: [#6825](https://github.com/owncloud/web/pull/6825)
 * Enhancement - Replace deprecated String.prototype.substr(): [#6718](https://github.com/owncloud/web/pull/6718)
+* Enhancement - Add Hotkeys to ResourceTable: [#7078](https://github.com/owncloud/web/pull/7078)
 * Enhancement - Rendering of share-indicators in ResourceTable: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Resumable uploads: [#6202](https://github.com/owncloud/web/pull/6202)
 * Enhancement - Prevent the resource name in the sidebar from being truncated: [#6776](https://github.com/owncloud/web/issues/6776)
 * Enhancement - Show default action at the first place in context menu: [#6971](https://github.com/owncloud/web/issues/6971)
 * Enhancement - Space store improvements: [#6868](https://github.com/owncloud/web/pull/6868)
+* Enhancement - Use tus chunksize from backend: [#7120](https://github.com/owncloud/web/pull/7120)
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
-* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.2.0-rc.1: [#6749](https://github.com/owncloud/web/pull/6749)
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
+* Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 * Enhancement - Clickable folder links in upload overlay: [#7109](https://github.com/owncloud/web/pull/7109)
+* Enhancement - Indeterminate progress bar in upload overlay: [#7123](https://github.com/owncloud/web/pull/7123)
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 * Enhancement - Use event bus for upload related actions: [#6853](https://github.com/owncloud/web/pull/6853)
+* Enhancement - Wording improvements: [#7125](https://github.com/owncloud/web/pull/7125)
 
 Details
 -------
@@ -192,6 +255,7 @@ Details
 
    https://github.com/owncloud/web/issues/5886
    https://github.com/owncloud/web/pull/6939
+   https://github.com/owncloud/web/pull/7128
 
 * Bugfix - Edit public links with expiration: [#6858](https://github.com/owncloud/web/issues/6858)
 
@@ -387,6 +451,14 @@ Details
    https://github.com/owncloud/web/issues/7006
    https://github.com/owncloud/web/pull/7036
 
+* Bugfix - Upload meta data serialization: [#6846](https://github.com/owncloud/web/pull/6846)
+
+   We've fixed a bug where meta properties of uploading resources could not be serialized,
+   resulting in unnecessary network requests.
+
+   https://github.com/owncloud/web/issues/6819
+   https://github.com/owncloud/web/pull/6846
+
 * Bugfix - Complete-state of the upload overlay: [#7100](https://github.com/owncloud/web/pull/7100)
 
    We've fixed a bug where the complete-state of the upload overlay would show before the upload
@@ -491,12 +563,14 @@ Details
    https://github.com/owncloud/web/issues/6555
    https://github.com/owncloud/web/pull/6762
 
-* Enhancement - Copy/Move conflict dialog: [#6994](https://github.com/owncloud/web/pull/6994)
+* Enhancement - Copy/Move conflict dialog: [#7119](https://github.com/owncloud/web/pull/7119)
 
    We've added a conflict dialog for moving resources via drag&drop in the files list
 
    https://github.com/owncloud/web/issues/6996
+   https://github.com/owncloud/web/pull/7119
    https://github.com/owncloud/web/pull/6994
+   https://github.com/owncloud/web/pull/7151
 
 * Enhancement - Design polishing: [#6781](https://github.com/owncloud/web/pull/6781)
 
@@ -512,6 +586,14 @@ Details
    them by default and admins can disable them using the configuration.
 
    https://github.com/owncloud/web/pull/6750#issuecomment-1143753289
+
+* Enhancement - Enable Drag&Drop and keyboard shortcuts for all views: [#7122](https://github.com/owncloud/web/issues/7122)
+
+   We've enabled drag&drop move and keyboard shortcut copy/cut/paste for publicFiles,
+   sharedResource and spaces.
+
+   https://github.com/owncloud/web/issues/7122
+   https://github.com/owncloud/web/pull/7126
 
 * Enhancement - Enable search all files for ocis backend: [#6841](https://github.com/owncloud/web/pull/6841)
 
@@ -593,6 +675,13 @@ Details
    https://github.com/owncloud/web/issues/6970
    https://github.com/owncloud/web/pull/6991
 
+* Enhancement - Personal space id in URL: [#7053](https://github.com/owncloud/web/pull/7053)
+
+   We now include the personal space id in the URL instead of using a magic "home" alias. When using
+   the old "home" alias the user gets redirected to the URL with their personal space id.
+
+   https://github.com/owncloud/web/pull/7053
+
 * Enhancement - Polish the upload overlay: [#6837](https://github.com/owncloud/web/pull/6837)
 
    We polished the overlay that pops up on the bottom right corner when uploading files:
@@ -602,6 +691,16 @@ Details
 
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6837
+
+* Enhancement - Customize additional mimeTypes for preview app: [#6933](https://github.com/owncloud/web/issues/6933)
+
+   We've added support for customizing additional mimeTypes for the preview app. In case the
+   backend supports more mimeTypes than our hardcoded list in the preview app, you can now
+   announce them to ownCloud Web with additional config. See
+   https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+   https://github.com/owncloud/web/issues/6933
+   https://github.com/owncloud/web/pull/7131
 
 * Enhancement - Log correct oCIS version if available: [#3805](https://github.com/owncloud/ocis/pull/3805)
 
@@ -616,10 +715,15 @@ Details
 * Enhancement - Redesign link sharing: [#6749](https://github.com/owncloud/web/pull/6749)
 
    We have redesigned the public link list in the right sidebar. Links now can be edited in-line and
-   have a similiar look-and-feel to people and group shares.
+   have a similiar look-and-feel to people and group shares. Additionally, creating new links
+   now is less cumbersome and the default name, while not configurable from the backend anymore,
+   is now translated.
 
+   https://github.com/owncloud/web/issues/7149
    https://github.com/owncloud/web/pull/6749
    https://github.com/owncloud/web/pull/6885
+   https://github.com/owncloud/web/pull/6961
+   https://github.com/owncloud/web/pull/7150
 
 * Enhancement - Refactor upload input components: [#6859](https://github.com/owncloud/web/pull/6859)
 
@@ -650,6 +754,13 @@ Details
    String.prototype.slice() which works similarly but isn't deprecated.
 
    https://github.com/owncloud/web/pull/6718
+
+* Enhancement - Add Hotkeys to ResourceTable: [#7078](https://github.com/owncloud/web/pull/7078)
+
+   We've added hotkeys for copy, cut and paste.
+
+   https://github.com/owncloud/web/issues/7071
+   https://github.com/owncloud/web/pull/7078
 
 * Enhancement - Rendering of share-indicators in ResourceTable: [#7038](https://github.com/owncloud/web/issues/7038)
 
@@ -696,6 +807,14 @@ Details
 
    https://github.com/owncloud/web/pull/6868
 
+* Enhancement - Use tus chunksize from backend: [#7120](https://github.com/owncloud/web/pull/7120)
+
+   We now use the chunksize value coming from the backend for uploading via tus. If no chunksize is
+   given, it will default to `Infinity`. The Web config `uploadChunkSize` has been removed as a
+   result.
+
+   https://github.com/owncloud/web/pull/7120
+
 * Enhancement - Enable tus upload for password protected public links: [#6819](https://github.com/owncloud/web/issues/6819)
 
    Uploading files on password protected public links now features tus uploads if the backend
@@ -704,9 +823,9 @@ Details
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6890
 
-* Enhancement - Update ODS to v13.1.0-rc.5: [#6749](https://github.com/owncloud/web/pull/6749)
+* Enhancement - Update ODS to v13.2.0-rc.1: [#6749](https://github.com/owncloud/web/pull/6749)
 
-   We updated the ownCloud Design System to version 13.1.0-rc.5. Please refer to the full
+   We updated the ownCloud Design System to version 13.2.0-rc.1. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Enhancement - Add isFileExtensionDisplayed property:
@@ -723,8 +842,10 @@ Details
    package members: https://github.com/owncloud/owncloud-design-system/pull/2048 -
    Enhancement - Make OcResource inline-flex:
    https://github.com/owncloud/owncloud-design-system/pull/2041 - Enhancement - Hover in
-   ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069 - Bugfix -
-   Disabled textarea color contrast in darkmode:
+   ocDrop menus: https://github.com/owncloud/owncloud-design-system/pull/2069 -
+   Enhancement - Implement an indeterminate state for the progress bar:
+   https://github.com/owncloud/owncloud-design-system/pull/2200 - Bugfix - Disabled
+   textarea color contrast in darkmode:
    https://github.com/owncloud/owncloud-design-system/pull/2055 - Bugfix - OcTextInput:
    Fix event handlers in loops:
    https://github.com/owncloud/owncloud-design-system/pull/2054
@@ -733,7 +854,8 @@ Details
    https://github.com/owncloud/web/pull/6750
    https://github.com/owncloud/web/pull/6953
    https://github.com/owncloud/web/pull/7094
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v13.1.0-rc.9
+   https://github.com/owncloud/web/pull/7123
+   https://github.com/owncloud/owncloud-design-system/releases/tag/13.2.0-rc.1
 
 * Enhancement - Update SDK: [#6820](https://github.com/owncloud/web/pull/6820)
 
@@ -761,16 +883,29 @@ Details
    https://github.com/owncloud/web/pull/6994
    https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0-alpha.10
 
+* Enhancement - Upload data during creation: [#7111](https://github.com/owncloud/web/pull/7111)
+
+   Uploading via tus now uses the `uploadDataDuringCreation` option which saves up one request.
+
+   https://github.com/owncloud/web/issues/7066
+   https://github.com/owncloud/web/pull/7111
+
 * Enhancement - Upload progress & overlay improvements: [#7067](https://github.com/owncloud/web/pull/7067)
 
-   * Remove fetching of newly uploaded files to improve performance * Redesign the upload overlay
-   * Show uploading files in the upload overlay * Immediately show the upload overlay when
-   uploading folders to tell the user that the upload is starting * Only show top level folders in
-   the upload overlay when uploading folders * Remove the Uppy StatusBar plugin
+   * Remove fetching of newly uploaded files and folders to improve performance * Redesign the
+   upload overlay * Show uploading files in the upload overlay * Immediately show the upload
+   overlay when uploading folders to tell the user that the upload is starting * Only show top level
+   folders in the upload overlay when uploading folders * Remove the Uppy StatusBar plugin * Use
+   `uppy.addFiles()` instead of calling `uppy.addFile()` for each file * The upload overlay now
+   shows a more proper time estimation when uploading many files * The user feedback of the upload
+   overlay during upload preparation has been improved * Several router bugs have been fixed in
+   the upload overlay * Temporarily disabled `uploadDataDuringCreation` to prevent the local
+   storage from getting to full * Some more refactoring under the hood has been made
 
    https://github.com/owncloud/web/issues/7066
    https://github.com/owncloud/web/issues/7069
    https://github.com/owncloud/web/pull/7067
+   https://github.com/owncloud/web/pull/7127
 
 * Enhancement - Clickable folder links in upload overlay: [#7109](https://github.com/owncloud/web/pull/7109)
 
@@ -779,6 +914,14 @@ Details
 
    https://github.com/owncloud/web/issues/7102
    https://github.com/owncloud/web/pull/7109
+
+* Enhancement - Indeterminate progress bar in upload overlay: [#7123](https://github.com/owncloud/web/pull/7123)
+
+   We've added an indeterminate state to the progress bar in the upload overlay as long as the
+   upload is preparing.
+
+   https://github.com/owncloud/web/issues/7105
+   https://github.com/owncloud/web/pull/7123
 
 * Enhancement - Upload time estimation: [#7088](https://github.com/owncloud/web/pull/7088)
 
@@ -794,6 +937,12 @@ Details
    https://github.com/owncloud/web/issues/6819
    https://github.com/owncloud/web/pull/6853
    https://github.com/owncloud/web/pull/6864
+
+* Enhancement - Wording improvements: [#7125](https://github.com/owncloud/web/pull/7125)
+
+   We've simplified and improved the wording of some copy/move related ui elements.
+
+   https://github.com/owncloud/web/pull/7125
 
 Changelog for ownCloud Web [5.4.0] (2022-04-11)
 =======================================

@@ -14,9 +14,11 @@ Feature: link
       | lorem.txt | folderPublic |
     #Then "Alice" should see the following resource
     #  | folderPublic/lorem.txt |
-    And "Alice" creates a public link for the following resource using the sidebar panel
-      | resource     | name         | role     | dateOfExpiration | password |
-      | folderPublic | myPublicLink | uploader | +5 days          | 12345    |
+    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
+    And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "uploader"
+    And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"
+    And "Alice" sets the password of the public link named "myPublicLink" of resource "folderPublic" to "12345"
     #Then "Alice" should see 1 public link
     When "Anonymous" opens the public link "myPublicLink"
     And "Anonymous" unlocks the public link with password "12345"

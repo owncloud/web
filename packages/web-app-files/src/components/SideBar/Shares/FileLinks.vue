@@ -1,123 +1,130 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
-    <div
-      v-show="currentView === VIEW_SHOW"
-      :key="VIEW_SHOW"
-      :aria-hidden="currentView !== VIEW_SHOW"
-    >
-      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
-      <template v-else>
-        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-          <span v-text="linksHeading" />
-          <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
-        </h3>
-        <div v-if="canCreatePublicLinks" class="oc-mt-m">
-          <name-and-copy v-if="quicklink" :link="quicklink" />
-          <create-quick-link
-            v-else
-            :password-enforced="passwordEnforced"
-            :expiration-date="globalExpirationDate"
-            @createPublicLink="createLink"
-          />
+    <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
+    <template v-else>
+      <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+        <span v-text="linksHeading" />
+        <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
+      </h3>
+      <div v-if="canCreatePublicLinks" class="oc-mt-m">
+        <name-and-copy v-if="quicklink" :link="quicklink" />
+        <create-quick-link
+          v-else
+          :expiration-date="expirationDate"
+          @createPublicLink="checkLinkToCreate"
+        />
+        <details-and-edit
+          v-if="quicklink"
+          :available-role-options="availableRoleOptions"
+          :can-rename="false"
+          :expiration-date="expirationDate"
+          :is-folder-share="highlightedFile.isFolder"
+          :is-modifiable="canEdit"
+          :is-password-enforced="isPasswordEnforcedFor(quicklink)"
+          :link="quicklink"
+          @updateLink="checkLinkToUpdate"
+          @removePublicLink="deleteLinkConfirmation"
+        />
+        <hr class="link-separator oc-my-m" />
+        <oc-button
+          id="files-file-link-add"
+          variation="primary"
+          appearance="raw"
+          data-testid="files-link-add-btn"
+          @click="addNewLink"
+          v-text="addButtonLabel"
+        />
+      </div>
+      <p
+        v-else
+        data-testid="files-links-no-reshare-permissions-message"
+        class="oc-mt-m"
+        v-text="noResharePermsMessage"
+      />
+      <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+        <li
+          v-for="link in displayLinks"
+          :key="link.key"
+          class="oc-py-s"
+          :data-testid="`files-link-id-${link.id}`"
+        >
+          <name-and-copy :link="link" />
           <details-and-edit
-            v-if="quicklink"
-            :is-folder-share="highlightedFile.isFolder"
-            :link="quicklink"
-            :modifiable="canEdit"
-            :can-rename="false"
-            :password-enforced="passwordEnforced"
-            :expiration-date="globalExpirationDate"
             :available-role-options="availableRoleOptions"
-            @updateLink="updatePublicLink"
+            :can-rename="true"
+            :expiration-date="expirationDate"
+            :is-folder-share="highlightedFile.isFolder"
+            :is-modifiable="canEdit"
+            :is-password-enforced="isPasswordEnforcedFor(link)"
+            :link="link"
+            @updateLink="checkLinkToUpdate"
             @removePublicLink="deleteLinkConfirmation"
           />
-          <hr class="oc-my-m" />
-          <oc-button
-            id="files-file-link-add"
-            variation="primary"
-            appearance="raw"
-            data-testid="files-link-add-btn"
-            @click="addNewLink"
-            v-text="addButtonLabel"
-          />
-        </div>
-        <p
-          v-else
-          data-testid="files-links-no-reshare-permissions-message"
-          class="oc-mt-m"
-          v-text="noResharePermsMessage"
-        />
-        <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+        </li>
+      </oc-list>
+      <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+        <oc-button appearance="raw" @click="toggleLinkListCollapsed">
+          <span v-text="collapseButtonTitle" />
+          <oc-icon :name="collapseButtonIcon" fill-type="line" />
+        </oc-button>
+      </div>
+      <div v-if="indirectLinks.length" id="indirect-link-list">
+        <hr class="link-separator oc-my-m" />
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+          <span v-text="indirectLinksHeading" />
+          <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
+        </h3>
+        <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
           <li
-            v-for="link in displayLinks"
+            v-for="link in displayIndirectLinks"
             :key="link.key"
             class="oc-py-s"
             :data-testid="`files-link-id-${link.id}`"
           >
             <name-and-copy :link="link" />
             <details-and-edit
-              :is-folder-share="highlightedFile.isFolder"
-              :link="link"
-              :modifiable="canEdit && !link.indirect"
-              :can-rename="true"
-              :password-enforced="passwordEnforced"
-              :expiration-date="globalExpirationDate"
               :available-role-options="availableRoleOptions"
-              @updateLink="updatePublicLink"
-              @removePublicLink="deleteLinkConfirmation"
+              :expiration-date="expirationDate"
+              :is-folder-share="true"
+              :is-modifiable="false"
+              :link="link"
             />
           </li>
         </oc-list>
-        <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+        <div class="oc-flex oc-flex-center">
           <oc-button
+            id="indirect-link-list-toggle"
             appearance="raw"
-            @click="toggleLinkListCollapsed"
-            v-text="collapseButtonTitle"
-          />
+            @click="toggleIndirectLinkListCollapsed"
+          >
+            <span v-text="indirectCollapseButtonTitle" />
+            <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
+          </oc-button>
         </div>
-      </template>
-    </div>
-    <div
-      v-if="currentView === VIEW_CREATE"
-      :key="VIEW_CREATE"
-      :aria-hidden="currentView !== VIEW_CREATE"
-    >
-      <create-form
-        :default-link-name="defaultNewLinkName"
-        :password-enforced="passwordEnforced"
-        :expiration-date="globalExpirationDate"
-        :available-role-options="availableRoleOptions"
-        @createPublicLink="createLink"
-        @cancelLinkCreation="cancelCreation"
-      />
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 <script lang="ts">
-import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapState } from 'vuex'
-import mixins from '../../../mixins'
-import { getParentPaths } from '../../../helpers/path'
-import { textUtils } from '../../../helpers/textUtils'
-import { cloneStateObject } from '../../../helpers/store'
-import CreateForm from './Links/CreateForm.vue'
-import DetailsAndEdit from './Links/DetailsAndEdit.vue'
-import NameAndCopy from './Links/NameAndCopy.vue'
-import CreateQuickLink from './Links/CreateQuickLink.vue'
-import { ShareTypes, LinkShareRoles } from '../../../helpers/share'
-import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
 import { defineComponent } from '@vue/composition-api'
-import { shareViaLinkHelp } from '../../../helpers/contextualHelpers'
-
-const VIEW_SHOW = 'showLinks'
-const VIEW_CREATE = 'addPublicLink'
+import { DateTime } from 'luxon'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { clientService } from 'web-pkg/src/services'
+import mixins from '../../../mixins'
+import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
+import { getParentPaths } from '../../../helpers/path'
+import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
+import { cloneStateObject } from '../../../helpers/store'
+import { showQuickLinkPasswordModal } from '../../../quickActions'
+import CreateQuickLink from './Links/CreateQuickLink.vue'
+import DetailsAndEdit from './Links/DetailsAndEdit.vue'
+import NameAndCopy from './Links/NameAndCopy.vue'
 
 export default defineComponent({
   name: 'FileLinks',
   components: {
-    CreateForm,
     CreateQuickLink,
     DetailsAndEdit,
     NameAndCopy
@@ -131,14 +138,14 @@ export default defineComponent({
     )
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const indirectLinkListCollapsed =
+      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
-    return { graphClient, hasSpaces: useCapabilitySpacesEnabled(), linkListCollapsed }
-  },
-  data() {
     return {
-      VIEW_SHOW,
-      VIEW_CREATE,
-      currentView: VIEW_SHOW
+      graphClient,
+      hasSpaces: useCapabilitySpacesEnabled(),
+      indirectLinkListCollapsed,
+      linkListCollapsed
     }
   },
   computed: {
@@ -157,18 +164,23 @@ export default defineComponent({
     },
 
     collapseButtonTitle() {
-      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+      return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
     },
-
-    defaultNewLinkName() {
-      return this.capabilities?.files_sharing?.public?.defaultPublicLinkShareName || ''
+    collapseButtonIcon() {
+      return this.linkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
+    },
+    indirectCollapseButtonTitle() {
+      return this.indirectLinkListCollapsed ? this.$gettext('Show') : this.$gettext('Hide')
+    },
+    indirectCollapseButtonIcon() {
+      return this.indirectLinkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
     },
 
     quicklink() {
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
-    globalExpirationDate() {
+    expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
       let defaultExpireDate = null
@@ -202,14 +214,7 @@ export default defineComponent({
       const roles = LinkShareRoles.list(
         this.highlightedFile.isFolder,
         this.capabilities.files_sharing?.public?.can_edit
-      ).map((role) => {
-        return {
-          role,
-          name: role.name,
-          label: this.$gettext(role.label)
-        }
-      })
-
+      )
       // add empty permission link if oCIS for alias link
       return [
         // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
@@ -233,6 +238,9 @@ export default defineComponent({
 
     viaLinkHelp() {
       return shareViaLinkHelp
+    },
+    indirectLinkHelp() {
+      return shareViaIndirectLinkHelp
     },
 
     canCreatePublicLinks() {
@@ -260,16 +268,20 @@ export default defineComponent({
       return this.$gettext('Share via public link')
     },
 
-    links() {
-      const nonQuickLinkOutgoingLinks = this.currentFileOutgoingLinks.filter(
-        (link) => !link.quicklink
-      )
+    indirectLinksHeading() {
+      const translated = this.$gettext('Indirect links (%{ count })')
+      return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
+    },
 
-      return [...nonQuickLinkOutgoingLinks, ...this.indirectLinks]
-        .sort(this.linksComparator)
+    links() {
+      return this.currentFileOutgoingLinks
+        .filter((link) => !link.quicklink)
         .map((share) => {
           share.key = 'direct-link-' + share.id
           return share
+        })
+        .sort((a, b) => {
+          return b.stime - a.stime
         })
     },
 
@@ -278,6 +290,13 @@ export default defineComponent({
         return this.links.slice(0, 3)
       }
       return this.links
+    },
+
+    displayIndirectLinks() {
+      if (this.indirectLinkListCollapsed) {
+        return []
+      }
+      return this.indirectLinks
     },
 
     indirectLinks() {
@@ -301,7 +320,9 @@ export default defineComponent({
           })
         }
       })
-      return allShares.sort(this.linksComparator)
+      return allShares.sort((a, b) => {
+        return b.stime - a.stime
+      })
     },
 
     resourceIsSpace() {
@@ -340,47 +361,86 @@ export default defineComponent({
       this.linkListCollapsed = !this.linkListCollapsed
     },
 
+    toggleIndirectLinkListCollapsed() {
+      this.indirectLinkListCollapsed = !this.indirectLinkListCollapsed
+    },
+
     reloadLinks() {
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         graphClient: this.graphClient,
         path: this.highlightedFile.path,
         $gettext: this.$gettext,
-        storageId: this.currentStorageId,
+        ...(this.currentStorageId && { storageId: this.currentStorageId }),
         resource: this.highlightedFile
       })
       this.loadSharesTree({
         client: this.$client,
         path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
         $gettext: this.$gettext,
-        storageId: this.currentStorageId
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
       })
     },
 
-    linksComparator(l1, l2) {
-      // sorting priority 1: display name (lower case, ascending), 2: creation time (descending)
-      const name1 = l1.name.toLowerCase().trim()
-      const name2 = l2.name.toLowerCase().trim()
-      const l1Direct = !l1.indirect
-      const l2Direct = !l2.indirect
+    isPasswordEnforcedFor(link) {
+      const currentRole = LinkShareRoles.getByBitmask(
+        parseInt(link.permissions),
+        link.indirect || this.highlightedFile.isFolder
+      )
 
-      if (l1Direct === l2Direct) {
-        if (name1 === name2) {
-          return l1.stime - l2.stime
-        }
+      const canRead = currentRole.hasPermission(SharePermissions.read)
+      const canUpdate = currentRole.hasPermission(SharePermissions.update)
+      const canCreate = currentRole.hasPermission(SharePermissions.create)
+      const canDelete = currentRole.hasPermission(SharePermissions.delete)
 
-        return textUtils.naturalSortCompare(name1, name2)
+      if (this.passwordEnforced.read_only === true) {
+        return canRead && !canUpdate && !canCreate && !canDelete
       }
-
-      return l1Direct ? -1 : 1
+      if (this.passwordEnforced.upload_only === true) {
+        return !canRead && !canUpdate && canCreate && !canDelete
+      }
+      if (this.passwordEnforced.read_write === true) {
+        return canRead && !canUpdate && canCreate && !canDelete
+      }
+      if (this.passwordEnforced.read_write_delete === true) {
+        return canRead && canUpdate && canCreate && canDelete
+      }
+      return false
     },
 
     addNewLink() {
-      this.currentView = VIEW_CREATE
+      this.checkLinkToCreate({
+        link: {
+          name: this.$gettext('Link'),
+          permissions: 1,
+          expiration: this.expirationDate.default,
+          password: false
+        }
+      })
     },
 
-    cancelCreation() {
-      this.currentView = VIEW_SHOW
+    checkLinkToCreate({ link, onError = () => {} }) {
+      const paramsToCreate = this.getParamsForLink(link)
+
+      if (this.isPasswordEnforcedFor(link)) {
+        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+          this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
+        })
+      } else {
+        this.createLink({ params: paramsToCreate, onError })
+      }
+    },
+
+    checkLinkToUpdate({ link, onSuccess = () => {} }) {
+      const params = this.getParamsForLink(link)
+
+      if (!link.password && this.isPasswordEnforcedFor(link)) {
+        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+          this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
+        })
+      } else {
+        this.updatePublicLink({ params, onSuccess })
+      }
     },
 
     getParamsForLink(link) {
@@ -421,38 +481,40 @@ export default defineComponent({
       return {
         expireDate,
         password,
+        id: link.id,
         permissions: link.permissions,
         quicklink: link.quicklink,
         name: link.name,
         ...(this.currentStorageId && {
+          storageId: this.currentStorageId,
           spaceRef: `${this.currentStorageId}${this.highlightedFile.path}`
         })
       }
     },
 
-    async createLink({ link, showError }) {
-      const params = this.getParamsForLink(link)
-
+    async createLink({ params, onError = (e) => {} }) {
       await this.addLink({
         path: this.highlightedFile.path,
         client: this.$client,
         $gettext: this.$gettext,
-        params,
-        storageId: this.currentStorageId
-      }).catch(showError)
-
-      this.currentView = VIEW_SHOW
+        params
+      }).catch((e) => {
+        onError(e)
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to create link'),
+          status: 'danger'
+        })
+      })
 
       this.showMessage({
         title: this.$gettext('Link was created successfully')
       })
     },
 
-    async updatePublicLink({ link, onSuccess = () => {}, onError = (e) => {} }) {
-      const params = this.getParamsForLink(link)
-
+    async updatePublicLink({ params, onSuccess = () => {}, onError = (e) => {} }) {
       await this.updateLink({
-        id: link.id,
+        id: params.id,
         client: this.$client,
         params
       })
@@ -495,7 +557,12 @@ export default defineComponent({
       this.hideModal()
       // removeLink currently fetches all shares from the backend in order to reload the shares indicators
       // TODO: Check if to-removed link is last link share and only reload if it's the last link
-      await this.removeLink({ client, share, resource, storageId: this.currentStorageId })
+      await this.removeLink({
+        client,
+        share,
+        resource,
+        ...(this.currentStorageId && { storageId: this.currentStorageId })
+      })
         .then(
           this.showMessage({
             title: this.$gettext('Link was deleted successfully')
@@ -516,5 +583,9 @@ export default defineComponent({
 .link-name-container {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
+}
+.link-separator {
+  background: var(--oc-color-input-border);
+  height: 2px;
 }
 </style>

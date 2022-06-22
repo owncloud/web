@@ -25,7 +25,7 @@ export default {
   setup() {
     return {
       ...useAppDefaults({
-        applicationName: 'pdf-viewer'
+        applicationId: 'pdf-viewer'
       })
     }
   },

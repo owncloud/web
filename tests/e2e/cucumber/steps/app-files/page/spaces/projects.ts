@@ -1,4 +1,5 @@
-import { DataTable, When } from '@cucumber/cucumber'
+import { DataTable, When, Then } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
 import { World } from '../../../../environment'
 import { objects } from '../../../../../support'
 
@@ -62,5 +63,49 @@ When(
       default:
         throw new Error(`${action} not implemented`)
     }
+  }
+)
+
+When(
+  '{string} adds following users to the project space',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      await spacesObject.addMembers({
+        users: [this.usersEnvironment.getUser({ key: info.user })],
+        role: info.role
+      })
+    }
+  }
+)
+
+Then(
+  '{string} should see folder {string} but should not be able to edit',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const userCanEdit = await spacesObject.canUserEditResource({ resource })
+    expect(userCanEdit).toBe(false)
+  }
+)
+
+When(
+  '{string} reloads the spaces page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    await spacesObject.reloadPage()
+  }
+)
+
+When(
+  '{string} navigates to the trashbin of the project space {string}',
+  async function (this: World, stepUser: string, key: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
+    await pageObject.navigate()
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    await spacesObject.openTrashbin(key)
   }
 )

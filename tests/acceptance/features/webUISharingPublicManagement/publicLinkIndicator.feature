@@ -69,8 +69,8 @@ Feature: Public link share indicator
     And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName          | expectedIndicators        |
-      | simple-folder     | link-direct,user-indirect |
+      | fileName      | expectedIndicators        |
+      | simple-folder | link-direct,user-indirect |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName     | expectedIndicators          |
@@ -86,8 +86,8 @@ Feature: Public link share indicator
     And user "Brian" has shared folder "simple-folder/sub-folder" with link with "read" permissions in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName          | expectedIndicators |
-      | simple-folder     | user-indirect      |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-indirect      |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName     | expectedIndicators        |
@@ -114,12 +114,10 @@ Feature: Public link share indicator
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
     When the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
-    And the user creates a new public link for resource "simple-folder" using the webUI with
-      | field | value |
-      | name  | first |
-    And the user creates a new public link for resource "simple-folder" using the webUI with
-      | field | value  |
-      | name  | second |
+    And the user creates a new public link for resource "simple-folder" using the webUI
+    And the user renames the most recently created public link of resource "simple-folder" to "first"
+    And the user creates a new public link for resource "simple-folder" using the webUI
+    And the user renames the most recently created public link of resource "simple-folder" to "second"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators      |
       | simple-folder | user-direct,link-direct |
@@ -127,9 +125,8 @@ Feature: Public link share indicator
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators          |
       | testimage.png | user-indirect,link-indirect |
-    When the user creates a new public link for resource "testimage.png" using the webUI with
-      | field | value |
-      | name  | third |
+    When the user creates a new public link for resource "testimage.png" using the webUI
+    And the user renames the most recently created public link of resource "testimage.png" to "third"
     # the indicator changes from link-indirect to link-direct to show the direct share
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators        |

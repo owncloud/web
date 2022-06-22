@@ -9711,9 +9711,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "owncloud-design-system@npm:13.1.0"
+"owncloud-design-system@npm:^13.2.0-rc.1":
+  version: 13.2.0-rc.1
+  resolution: "owncloud-design-system@npm:13.2.0-rc.1"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9730,26 +9730,26 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 861941fec6d8da858ebc9433de5e9d4be3c3bffb818a3e66e7983ad49841e7651217ee46a272c9bb1a5c49e6dc5b4d75b1ec394e7ba29936b886839c702fc1ff
+  checksum: 56d47b1a9b276dfb289fc0fb523bfa96ce223f595afe9230d8675da84b7393ede45768ae185339a268644e4ecacb9d610617662ff8ddf5b7b0f16ebd36a76916
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~3.0.0-alpha.10":
-  version: 3.0.0-alpha.10
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.10"
+"owncloud-sdk@npm:~3.0.0-alpha.14":
+  version: 3.0.0-alpha.14
+  resolution: "owncloud-sdk@npm:3.0.0-alpha.14"
   peerDependencies:
-    axios: ^0.26.0
+    axios: ^0.27.2
     cross-fetch: ^3.0.6
-    promise: ^8.0.3
+    promise: ^8.1.0
     qs: ^6.10.3
     utf8: ^3.0.0
     uuid: ^8.2.0
-    webdav: 4.9.0
+    webdav: 4.10.0
     xml-js: ^1.6.11
   dependenciesMeta:
     "@pact-foundation/pact":
       built: true
-  checksum: e9bed0381d1958175654ccd43a2f175b25ef358209d7556210fcefb9e5ee10de948a6b94b9dc9d09aa126b18bd97c6aadd67573ace583b217c3ec089360afb21
+  checksum: 84a37f8fd9dc532963aae1c48f423b86ae5b384a6073515ffaa393e9061ce30f481211a6852b9d433241a911a9ccce092e6076dc74fc3fff154c8b1b8d3c8177
   languageName: node
   linkType: hard
 
@@ -13785,8 +13785,8 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
-    owncloud-design-system: ^13.1.0
-    owncloud-sdk: ~3.0.0-alpha.10
+    owncloud-design-system: ^13.2.0-rc.1
+    owncloud-sdk: ~3.0.0-alpha.14
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
