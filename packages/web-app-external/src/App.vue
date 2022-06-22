@@ -103,6 +103,17 @@ export default {
       return this.$route.query.fileId
     }
   },
+  mounted() {
+    if (this.appName) {
+      document.title = [
+        this.currentFileContext.fileName,
+        this.appName,
+        this.configuration.currentTheme.general.name
+      ]
+        .filter(Boolean)
+        .join(' - ')
+    }
+  },
   async created() {
     await unauthenticatedUserReady(this.$router, this.$store)
 
