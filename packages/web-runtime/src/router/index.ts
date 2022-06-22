@@ -1,52 +1,24 @@
-import get from 'lodash-es/get.js'
 import Vue from 'vue'
 import qs from 'qs'
 // eslint-disable-next-line no-unused-vars
-import Router, { Route, RouteRecordPublic } from 'vue-router'
+import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
+import { setupAuthGuard } from './setupAuthGuard'
+import { patchRouter } from './patchCleanPath'
 
 Vue.use(Router)
 
-// type: patch
-// temporary patch till we have upgraded web to the latest vue router which make this obsolete
-// this takes care that routes like 'foo/bar/baz' which by default would be converted to 'foo%2Fbar%2Fbaz' stay as they are
-// should immediately go away and be removed after finalizing the update
-// to apply the patch to a route add meta.patchCleanPath = true to it
-// to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
-const patchRouter = (router: Router) => {
-  const bindMatcher = router.match.bind(router)
-  const cleanPath = (route) =>
-    [
-      ['%2F', '/'],
-      ['//', '/']
-    ].reduce((path, rule) => path.replaceAll(rule[0], rule[1]), route || '')
-
-  router.match = (raw, current, redirectFrom) => {
-    const bindMatch = bindMatcher(raw, current, redirectFrom)
-
-    if (!get(bindMatch, 'meta.patchCleanPath', false)) {
-      return bindMatch
-    }
-
-    return {
-      ...bindMatch,
-      path: cleanPath(bindMatch.path),
-      fullPath: cleanPath(bindMatch.fullPath)
-    }
-  }
-
-  return router
-}
+export * from './helpers'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
 }
 
-const base = document.querySelector('base')
+export const base = document.querySelector('base')
 export const router = patchRouter(
   new Router({
     parseQuery(query) {
@@ -109,99 +81,4 @@ export const router = patchRouter(
   })
 )
 
-export const buildUrl = (pathname) => {
-  const isHistoryMode = !!base
-  const baseUrl = new URL(window.location.href.split('#')[0])
-  baseUrl.search = ''
-  if (isHistoryMode) {
-    // in history mode we can't determine the base path, it must be provided by the document
-    baseUrl.pathname = new URL(base.href).pathname
-  } else {
-    // in hash mode, auto-determine the base path by removing `/index.html`
-    if (baseUrl.pathname.endsWith('/index.html')) {
-      baseUrl.pathname = baseUrl.pathname.split('/').slice(0, -1).filter(Boolean).join('/')
-    }
-  }
-
-  /**
-   * build full url by either
-   * - concatenating baseUrl and pathname (for unknown/non-router urls, e.g. `oidc-callback.html`) or
-   * - resolving via router (for known routes)
-   */
-  if (/\.(html?)$/i.test(pathname)) {
-    baseUrl.pathname = [...baseUrl.pathname.split('/'), ...pathname.split('/')]
-      .filter(Boolean)
-      .join('/')
-  } else {
-    baseUrl[isHistoryMode ? 'pathname' : 'hash'] = router.resolve(pathname).href
-  }
-
-  return baseUrl.href
-}
-
-router.beforeEach(async (to, from, next) => {
-  console.error('router.beforeEach from', from?.fullPath, from?.query)
-  console.error('router.beforeEach to', to?.fullPath, to)
-
-  const store = (Vue as any).$store
-  const authService = (router as any).authService
-
-  await authService.initializeUserManager()
-
-  if (isUserRequired(router, to) && !store.getters.user.id) {
-    return next({ path: '/login', query: { redirectUrl: to.fullPath } })
-  }
-  // TODO: we want to check if a public link password is required and if we have none -> redirect to new public link password input page
-
-  next()
-})
-
-/**
- * Checks if the `to` route needs authentication from the IDP by checking both the route itself and - if present - also the context route.
- *
- * @param router {Router}
- * @param to {Route}
- * @returns {boolean}
- */
-export const isUserRequired = (router: Router, to: Route): boolean => {
-  if (!isAuthenticationRequired(router, to)) {
-    return false
-  }
-
-  if (to.meta?.auth !== false) {
-    return true
-  }
-
-  const contextRoute = getContextRoute(router, to)
-  if (contextRoute?.meta?.auth !== false) {
-    return true
-  }
-
-  return false
-}
-
-/**
- * The contextRouteName in routes is used to give applications additional context where the new route was triggered from.
- * This means that the new route needs to fulfill both its own auth requirements and the auth requirements from the context route.
- */
-const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null => {
-  const contextRouteNameKey = 'contextRouteName'
-  if (!to.query || !to.query[contextRouteNameKey]) {
-    return null
-  }
-
-  return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
-}
-
-export const isAuthenticationRequired = (router: Router, to: Route): boolean => {
-  if (to.meta?.__public === true) {
-    return false
-  }
-
-  const contextRoute = getContextRoute(router, to)
-  if (contextRoute?.meta?.__public) {
-    return false
-  }
-
-  return true
-}
+setupAuthGuard(router)
