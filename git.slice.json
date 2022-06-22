@@ -1,0 +1,18 @@
+{
+  "repoUrl": "https://gitstart@github.com/GitStartHQ/client-ownCloud-web.git",
+  "folders": ["./"],
+  "branch": "master",
+  "ignore": [
+    "git-slice.json",
+    "CODEOWNERS",
+    ".github/CODEOWNERS",
+    "studio/.vercel",
+    "examples",
+    "docs/pull_request_template.md",
+    "web/docs/reference/cli/.gitkeep",
+    "web/docs/reference/dart/.gitkeep",
+    "web/docs/reference/javascript/.gitkeep",
+    "web/docs/reference/tools/auth.mdx",
+    "docs/README.md"
+  ]
+}
