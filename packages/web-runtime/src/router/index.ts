@@ -148,7 +148,7 @@ router.beforeEach(async (to, from, next) => {
 
   await authService.initializeUserManager()
 
-  if (isUserRequired(router, to) && !store.getters.isAuthenticated) {
+  if (isUserRequired(router, to) && !store.getters.user.id) {
     return next({ path: '/login', query: { redirectUrl: to.fullPath } })
   }
   // TODO: we want to check if a public link password is required and if we have none -> redirect to new public link password input page

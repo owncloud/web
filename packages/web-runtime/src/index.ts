@@ -31,7 +31,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
   await announceStore({ vue: Vue, store, runtimeConfiguration })
-  const applications = await initializeApplications({
+  await initializeApplications({
     runtimeConfiguration,
     store,
     supportedLanguages,
@@ -42,9 +42,6 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   announceUppyService({ vue: Vue })
   await announceClient(runtimeConfiguration)
   await announceAuthService({ vue: Vue, configurationManager, store, router })
-
-  // TODO: the following functions can only be called after the user is ready (see navigation guard in router/index.ts)
-  await announceApplicationsReady({ applications })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
@@ -66,10 +63,12 @@ export const renderSuccess = (): void => {
 
   store.watch(
     (state, getters) => getters.isUserReady,
-    (newValue, oldValue) => {
+    async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
         return
       }
+      console.log('******* running announceApplicationsReady')
+      await announceApplicationsReady({ applications })
       applications.forEach((application) => application.userReady(instance))
     },
     {

@@ -58,7 +58,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['route', 'user', 'modal', 'sidebar']),
-    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
+    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue', 'isUserReady']),
     layout() {
       if (
         !this.$route.name ||
@@ -74,7 +74,8 @@ export default defineComponent({
         return LayoutPlain
       }
 
-      if (isUserRequired(this.$router, this.$route) && !this.user.isAuthenticated) {
+      // TODO: as soon as public links set `isUserReady` as well we can reduce this check to `if (!this.isUserReady)`.
+      if (isUserRequired(this.$router, this.$route) && !this.isUserReady) {
         return LayoutLoading
       }
 

@@ -33,6 +33,7 @@ export class AuthService {
       this.userManager = new UserManager(this.configurationManager)
       this.userManager.events.addAccessTokenExpired((...args) => {
         console.log('AccessToken Expired：', ...args)
+        // TODO: we want to log out the user here because token refresh failed.
       })
       this.userManager.events.addAccessTokenExpiring((...args) => {
         console.log('AccessToken Expiring：', ...args)
@@ -103,6 +104,9 @@ export class AuthService {
     return this.userManager.signinRedirect()
   }
 
+  /**
+   * Sign in callback gets called from the IDP after initial login.
+   */
   public async signInCallback() {
     // craft a url that the parser in oidc-client-ts can handle… this is required for oauth2 logins
     const url =
@@ -122,14 +126,15 @@ export class AuthService {
     }
   }
 
+  /**
+   * Sign in silent callback gets called with OIDC during access token renewal when no `refresh_token`
+   * is present (`refresh_token` exists when `offline_access` is present in scopes).
+   *
+   * The oidc-client lib emits a userLoaded event internally, which already handles the token update
+   * in web.
+   */
   public async signInSilentCallback() {
     await this.userManager.signinSilentCallback()
-
-    // silent callback implies that we had a valid access token before. Not needed to re-fetch all user info.
-    // TODO: find out when we arrive in the silent callback
-    debugger
-    const accessToken = await this.userManager.getAccessToken()
-    await this.updateAccessToken(accessToken)
   }
 
   private updateAccessToken(accessToken: string): Promise<void> {
@@ -145,8 +150,8 @@ export class AuthService {
 
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
+        this.triggerUserReady()
       }
-      this.triggerUserReady()
     })()
     return this.updateAccessTokenPromise
   }
