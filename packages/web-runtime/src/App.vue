@@ -43,7 +43,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
-import { isUserRequired } from './router'
+import { isUserContext } from './router'
 
 export default defineComponent({
   components: {
@@ -76,7 +76,7 @@ export default defineComponent({
       }
 
       // TODO: as soon as public links set `isUserReady` as well we can reduce this check to `if (!this.isUserReady)`.
-      if (isUserRequired(this.$router, this.$route) && !this.isUserReady) {
+      if (isUserContext(this.$router, this.$route) && !this.isUserReady) {
         return LayoutLoading
       }
 

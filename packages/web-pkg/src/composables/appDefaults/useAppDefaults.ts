@@ -43,7 +43,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const clientService = options.clientService ?? useClientService()
   const applicationId = options.applicationId
 
-  const isPublicLinkContext = usePublicLinkContext({ currentRoute })
+  const isPublicLinkContext = usePublicLinkContext({ store })
   const publicLinkPassword = usePublicLinkPassword({ store })
 
   const currentFileContext = computed((): FileContext => {

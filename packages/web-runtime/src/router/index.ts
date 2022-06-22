@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import qs from 'qs'
-// eslint-disable-next-line no-unused-vars
 import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'

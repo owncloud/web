@@ -28,7 +28,7 @@ export class AuthService {
     this.router = router
   }
 
-  public async initializeUserManager() {
+  public async initializeContext() {
     if (!this.userManager) {
       this.userManager = new UserManager(this.configurationManager)
       this.userManager.events.addAccessTokenExpired((...args) => {
@@ -42,7 +42,7 @@ export class AuthService {
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
-        await this.updateAccessToken(user.access_token)
+        await this.updateUserContext(user.access_token)
       })
       this.userManager.events.addUserSignedIn(() => {
         console.log('user signed in')
@@ -72,31 +72,19 @@ export class AuthService {
     // no userLoaded event and no signInCallback gets triggered
     console.time('userManager.initialize: getAccessToken')
     const accessToken = await this.userManager.getAccessToken()
-    if (accessToken) {
-      await this.updateAccessToken(accessToken)
-    }
     console.timeEnd('userManager.initialize: getAccessToken')
-  }
-
-  private initializeOwnCloudSdk(accessToken): void {
-    const options = {
-      baseUrl: this.configurationManager.serverUrl,
-      auth: {
-        bearer: accessToken
-      },
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    }
-    if (this.store.getters.user.id) {
-      ;(options as any).userInfo = {
-        id: this.store.getters.user.id,
-        'display-name': this.store.getters.user.displayname,
-        email: this.store.getters.user.email
-      }
+    if (accessToken) {
+      console.time('userManager.initialize: updateAccessToken')
+      await this.updateUserContext(accessToken)
+      console.timeEnd('userManager.initialize: updateAccessToken')
     }
 
-    this.clientService.owncloudSdk.init(options)
+    // TODO: similar to the user context update above, we also need a public link context update.
+    // const publicLinkToken = <where to get the public link token from?!>
+    // if (publicLinkToken) {
+    //   const publicLinkPassword = <where to get the public link password from?!>
+    //   await this.updatePublicLinkContext(publicLinkToken, publicLinkPassword)
+    // }
   }
 
   public login(redirectUrl?: string) {
@@ -137,12 +125,14 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
   }
 
-  private updateAccessToken(accessToken: string): Promise<void> {
+  private updateUserContext(accessToken: string): Promise<void> {
     const userKnown = !!this.store.getters.user.id
-    const accessTokenChanged = this.store.getters.getToken !== accessToken
+    const accessTokenChanged = this.store.getters['runtime/auth/accessToken'] !== accessToken
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
     }
+    this.store.commit('runtime/auth/SET_USER_CONTEXT', { accessToken })
+    // TODO: SET_ACCESS_TOKEN is deprecated and will be removed soonish
     this.store.commit('SET_ACCESS_TOKEN', accessToken)
 
     this.updateAccessTokenPromise = (async () => {
@@ -154,6 +144,27 @@ export class AuthService {
       }
     })()
     return this.updateAccessTokenPromise
+  }
+
+  private initializeOwnCloudSdk(accessToken): void {
+    const options = {
+      baseUrl: this.configurationManager.serverUrl,
+      auth: {
+        bearer: accessToken
+      },
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }
+    if (this.store.getters.user.id) {
+      ;(options as any).userInfo = {
+        id: this.store.getters.user.id,
+        'display-name': this.store.getters.user.displayname,
+        email: this.store.getters.user.email
+      }
+    }
+
+    this.clientService.owncloudSdk.init(options)
   }
 
   private async fetchUserInfo(accessToken): Promise<void> {
@@ -205,6 +216,10 @@ export class AuthService {
       language,
       ...(user.quota.definition !== 'default' &&
         user.quota.definition !== 'none' && { quota: user.quota })
+    })
+    this.store.commit('runtime/auth/SET_USER_CONTEXT', {
+      accessToken,
+      userContextReady: true
     })
 
     await this.store.dispatch('loadSettingsValues')

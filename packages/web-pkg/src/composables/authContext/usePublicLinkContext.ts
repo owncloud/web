@@ -1,16 +1,12 @@
-import { Route } from 'vue-router'
-import { computed, unref } from '@vue/composition-api'
-import { contextRouteNameKey } from '../appDefaults/useAppNavigation'
-import { MaybeRef } from '../../utils'
-import { useRoute } from '../router'
+import { computed } from '@vue/composition-api'
+import { Store } from 'vuex'
 
-interface PublicLinkTokenOptions {
-  currentRoute?: MaybeRef<Route>
+interface PublicLinkContextOptions {
+  store: Store<any>
 }
 
-export const usePublicLinkContext = (options: PublicLinkTokenOptions) => {
-  const currentRoute = options.currentRoute || useRoute()
+export const usePublicLinkContext = ({ store }: PublicLinkContextOptions) => {
   return computed(() => {
-    return unref(currentRoute).query[contextRouteNameKey] === 'files-public-files'
+    return store.getters['runtime/auth/isPublicLinkContextReady']
   })
 }
