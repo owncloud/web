@@ -1,0 +1,5 @@
+Bugfix: Map unknown mime types to image rendering in Preview app
+
+Mime types that don't start with `video/`, `audio/` or `image/` were not rendered by the preview app. Files with unknown mime type category are now being rendered as images.
+
+https://github.com/owncloud/web/pull/7161
