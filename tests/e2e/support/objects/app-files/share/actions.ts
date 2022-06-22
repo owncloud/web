@@ -114,33 +114,39 @@ export const declineShare = async (args: declineShareArgs): Promise<void> => {
 
 export interface changeShareeRoleArgs {
   page: Page
-  folder: string
+  folder?: string
   users: User[]
   role: string
 }
 
 export const changeShareeRole = async (args: changeShareeRoleArgs): Promise<void> => {
   const { page, folder, users, role } = args
-  const folderPaths = folder.split('/')
-  const folderName = folderPaths.pop()
+  if (folder) {
+    const folderPaths = folder.split('/')
+    const folderName = folderPaths.pop()
 
-  if (folderPaths.length) {
-    await clickResource({ page, path: folderPaths.join('/') })
+    if (folderPaths.length) {
+      await clickResource({ page, path: folderPaths.join('/') })
+    }
+
+    await sidebar.open({ page, resource: folderName })
+    await sidebar.openPanel({ page, name: 'sharing' })
   }
-
-  await sidebar.open({ page, resource: folderName })
-  await sidebar.openPanel({ page, name: 'sharing' })
+  // await page.pause()
 
   for (const user of users) {
     const userColumn = util.format(collaboratorUserItem, user.id)
     await Promise.all([
       page.click(util.format(recipientRoleDropdownButton, userColumn)),
       page.click(util.format(recipientRoleItemSelector, userColumn, role)),
-      page.waitForResponse(
-        (resp) =>
-          resp.url().includes('shares') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'PUT'
+      page.waitForResponse((resp) =>
+        folder
+          ? resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'PUT'
+          : resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'POST'
       )
     ])
   }
@@ -150,21 +156,23 @@ export const changeShareeRole = async (args: changeShareeRoleArgs): Promise<void
 
 export interface removeShareeArgs {
   page: Page
-  folder: string
+  folder?: string
   users: User[]
 }
 
 export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
   const { page, folder, users } = args
-  const folderPaths = folder.split('/')
-  const folderName = folderPaths.pop()
+  if (folder) {
+    const folderPaths = folder.split('/')
+    const folderName = folderPaths.pop()
 
-  if (folderPaths.length) {
-    await clickResource({ page, path: folderPaths.join('/') })
+    if (folderPaths.length) {
+      await clickResource({ page, path: folderPaths.join('/') })
+    }
+
+    await sidebar.open({ page: page, resource: folderName })
+    await sidebar.openPanel({ page: page, name: 'sharing' })
   }
-
-  await sidebar.open({ page: page, resource: folderName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
 
   for (const user of users) {
     const userColumn = util.format(collaboratorUserSelector, user.id)

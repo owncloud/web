@@ -181,6 +181,32 @@ Then(
   }
 )
 
+Then(
+  /^"([^"]*)" (should|should not) be able to restore following resource(s) from the trashbin?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    _: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      const message = await resourceObject.restoreTrashBin({
+        resource: info.resource,
+        actionType
+      })
+      const paths = info.resource.split('/')
+      if (actionType === 'should not') {
+        expect(message).toBe(`failed to restore "${paths[paths.length - 1]}"`)
+      } else {
+        expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+      }
+    }
+  }
+)
+
 export const processDownload = async (
   stepTable: DataTable,
   pageObject: any,

@@ -28,6 +28,7 @@ const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
+const restoreResourceButton = '.oc-files-actions-restore-trigger'
 
 export const clickResource = async ({
   page,
@@ -387,6 +388,32 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
     ),
     page.locator(actionConfirmationButton).click()
   ])
+  const message = await page.locator(notificationMessageDialog).textContent()
+  return message.trim().toLowerCase()
+}
+
+export interface restoreResourceTrashbinArgs {
+  resource: string
+  actionType: string
+  page: Page
+}
+
+export const restoreResourceTrashbin = async (
+  args: restoreResourceTrashbinArgs
+): Promise<string> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  const statuses = [201, 403]
+  await Promise.all([
+    page.waitForResponse(
+      (resp) => statuses.includes(resp.status()) && resp.request().method() === 'MOVE'
+    ),
+    await page.locator(restoreResourceButton).click()
+  ])
+
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
 }

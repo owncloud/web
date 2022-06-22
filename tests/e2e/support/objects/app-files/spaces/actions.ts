@@ -2,8 +2,8 @@ import { Page } from 'playwright'
 import { sidebar } from '../utils'
 import { File } from '../../../types'
 import util from 'util'
-import { inviteMembers, inviteMembersArgs } from '../share/actions'
-import { expect } from '@playwright/test'
+import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
+import { User } from '../../../types'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -25,6 +25,7 @@ const spaceContextButton = '#space-context-btn'
 const spaceOverviewImg = '.space-overview-image'
 
 export let spaceImageId = ''
+const emptySpacesSelector = '//span[@data-msgid="%s"]'
 /**/
 
 export interface createSpaceArgs {
@@ -251,4 +252,45 @@ export const changeSpaceImage = async (args: {
   spaceImageId = src
 
   await sidebar.close({ page: page })
+}
+export interface removeAccessMembersArgs {
+  users: User[]
+  page: Page
+}
+export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
+  const { page, users } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await removeSharee({ page, users })
+}
+
+export interface searchForSpacesIdsArgs {
+  spaceID: string
+  page: Page
+}
+export const searchForSpacesIds = async (args: searchForSpacesIdsArgs): Promise<boolean> => {
+  const { page, spaceID } = args
+  const emptySpacesMessage = "You don't have access to any spaces"
+
+  // for empty case
+  if (await page.$(util.format(emptySpacesSelector, emptySpacesMessage))) {
+    return true
+  }
+  // if more than one spaces exists
+  if (!(await page.$(util.format(spaceIdSelector, spaceID)))) {
+    return true
+  }
+  return false
+}
+
+export interface changeSpaceRoleArgs {
+  role: string
+  users: User[]
+  page: Page
+}
+export const changeSpaceRole = async (args: changeSpaceRoleArgs): Promise<void> => {
+  const { page, role, users } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await changeShareeRole({ page, users, role })
 }
