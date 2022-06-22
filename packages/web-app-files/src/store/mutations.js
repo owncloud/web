@@ -95,7 +95,7 @@ export default {
     state.latestSelectedId = file
   },
   SET_FILE_SELECTION(state, files) {
-    const latestSelected = files.find(i => !state.selectedIds.some(j => j === i.id))
+    const latestSelected = files.find((i) => !state.selectedIds.some((j) => j === i.id))
     const latestSelectedId = latestSelected ? latestSelected.id : state.latestSelectedId
     state.latestSelectedId = latestSelectedId
     state.selectedIds = files.map((f) => f.id)

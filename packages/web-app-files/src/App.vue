@@ -21,7 +21,7 @@
 </template>
 <script lang="ts">
 import Mixins from './mixins'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import KeymapActions from './components/FilesList/KeymapActions.vue'
 import { defineComponent } from '@vue/composition-api'
@@ -51,8 +51,7 @@ export default defineComponent({
           this.closeSidebar()
         }
       }
-    },
-
+    }
   },
   created() {
     this.$root.$on('upload-end', () => {
