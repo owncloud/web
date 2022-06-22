@@ -4,6 +4,8 @@
 
 <script lang="ts">
 import { bus } from 'web-pkg/src/instance'
+import { useResourcesViewDefaults } from '../../composables'
+import { Resource } from '../../helpers/resource'
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
@@ -17,6 +19,12 @@ export default {
 
   computed: {
     ...mapState('Files', ['latestSelectedId'])
+  },
+
+	setup() {
+    return {
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+    }
   },
 
   created() {
@@ -46,7 +54,7 @@ export default {
       'resetFileSelection',
       'toggleFileSelection'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE', 'SET_FILE_SELECTION']),
 
     handleShortcut(event) {
       const key = event.keyCode || event.which
@@ -54,7 +62,7 @@ export default {
       const shift = event.shiftKey
 
       this.handleFileActionsShortcuts(key, ctrl)
-      this.handleFileSelectionShortcuts(key, shift, event)
+      this.handleFileSelectionShortcuts(key, shift, ctrl, event)
     },
 
     handleFileActionsShortcuts(key, ctrl) {
@@ -67,17 +75,24 @@ export default {
       if (isCutAction) return this.cutSelectedFiles()
     },
 
-    handleFileSelectionShortcuts(key, shift, event) {
+    handleFileSelectionShortcuts(key, shift, ctrl, event) {
       const isUpPressed = key === 38
       const isDownPressed = key === 40
 			const isEscapePressed = key === 27
 			const isSpacePressed = key === 32
+			const isAPressed = key === 65
 
 			if (isSpacePressed) return this.handleSpaceAction(event)
 			if (isEscapePressed) return this.resetFileSelection()
       if (isDownPressed && shift) return this.handleShiftDownAction()
       if (isUpPressed && shift) return this.handleShiftUpAction()
+			if (isAPressed && ctrl) return this.handleSelectAllAction(event)
     },
+
+		handleSelectAllAction(event) {
+			event.preventDefault()
+			this.SET_FILE_SELECTION(this.paginatedResources)
+		},
 
 		handleSpaceAction(event) {
 			event.preventDefault()
