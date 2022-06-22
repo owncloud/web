@@ -143,7 +143,7 @@ describe('The app provider extension', () => {
       Promise.resolve({
         ok: true,
         status: 200,
-        json: () => providerSuccessResponseGet
+        data: providerSuccessResponseGet
       })
     )
 
@@ -158,7 +158,7 @@ describe('The app provider extension', () => {
       Promise.resolve({
         ok: true,
         status: 200,
-        json: () => providerSuccessResponsePost
+        data: providerSuccessResponsePost
       })
     )
     const wrapper = createShallowMountWrapper(makeRequest)
