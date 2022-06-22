@@ -9,8 +9,6 @@ import { Resource } from '../../helpers/resource'
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
-  props: {},
-
   data: () => {
     return {
       selectionCursor: 0
@@ -27,22 +25,14 @@ export default {
     }
   },
 
-  created() {
-    const fileListClickedEvent = bus.subscribe('app.files.list.clicked', () => {
-      this.selectionCursor = 0
-    })
+  mounted() {
+		document.addEventListener('keydown', this.handleShortcut, false)
+    const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
 
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
+			document.removeEventListener('keydown', this.handleShortcut)
     })
-  },
-
-  mounted() {
-    document.addEventListener('keydown', this.handleShortcut, false)
-  },
-
-  beforeDestroy() {
-    document.removeEventListener('keydown', this.handleShortcut)
   },
 
   methods: {
@@ -66,13 +56,13 @@ export default {
     },
 
     handleFileActionsShortcuts(key, ctrl) {
-      if (!ctrl /* CTRL | CMD */) return
       const isCopyAction = key === 67
       const isPasteAction = key === 86
       const isCutAction = key === 88
-      if (isCopyAction) return this.copySelectedFiles()
-      if (isPasteAction) return this.handlePasteAction()
-      if (isCutAction) return this.cutSelectedFiles()
+
+      if (isCopyAction && ctrl) return this.copySelectedFiles()
+      if (isPasteAction && ctrl) return this.handlePasteAction()
+      if (isCutAction && ctrl) return this.cutSelectedFiles()
     },
 
     handleFileSelectionShortcuts(key, shift, ctrl, event) {
@@ -83,14 +73,20 @@ export default {
 			const isAPressed = key === 65
 
 			if (isSpacePressed) return this.handleSpaceAction(event)
-			if (isEscapePressed) return this.resetFileSelection()
+			if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction()
       if (isUpPressed && shift) return this.handleShiftUpAction()
 			if (isAPressed && ctrl) return this.handleSelectAllAction(event)
     },
 
+		handleEscapeAction() {
+			this.resetSelectionCursor()
+			this.resetFileSelection()
+		},
+
 		handleSelectAllAction(event) {
 			event.preventDefault()
+			this.resetSelectionCursor()
 			this.SET_FILE_SELECTION(this.paginatedResources)
 		},
 
@@ -100,12 +96,8 @@ export default {
 		},
 
     handleShiftUpAction() {
-      const latestSelectedRow = document.querySelectorAll(
-        `[data-item-id='${this.latestSelectedId}']`
-      )[0]
-      const nextRow = latestSelectedRow.previousSibling as HTMLElement
-      if (nextRow === null) return
-      const nextResourceId = nextRow.getAttribute('data-item-id')
+      const nextResourceId = this.getNextResourceId(true)
+			if(nextResourceId === -1) return
       if (this.selectionCursor > 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -118,13 +110,8 @@ export default {
     },
 
     handleShiftDownAction() {
-      const latestSelectedRow = document.querySelectorAll(
-        `[data-item-id='${this.latestSelectedId}']`
-      )[0]
-      const nextRow = latestSelectedRow.nextSibling as HTMLElement
-      if (nextRow === null) return
-      const nextResourceId = nextRow.getAttribute('data-item-id')
-
+      const nextResourceId = this.getNextResourceId()
+			if(nextResourceId === -1) return
       if (this.selectionCursor < 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -147,7 +134,21 @@ export default {
         $ngettext: this.$ngettext,
         upsertResource: this.UPSERT_RESOURCE
       })
-    }
+    },
+		
+		resetSelectionCursor() {
+			this.selectionCursor = 0
+		},
+
+		getNextResourceId(previous=false) {
+			const latestSelectedRow = document.querySelectorAll(
+        `[data-item-id='${this.latestSelectedId}']`
+      )[0]
+      const nextRow = (previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling) as HTMLElement
+      if (nextRow === null) return -1
+      const nextResourceId = nextRow.getAttribute('data-item-id')
+			return nextResourceId
+		}
   }
 }
 </script>
