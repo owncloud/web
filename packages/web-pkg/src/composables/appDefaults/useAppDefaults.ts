@@ -15,7 +15,7 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { usePublicLinkPassword, usePublicLinkContext } from '../authContext'
+import { usePublicLinkPassword, usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
@@ -76,6 +76,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       isPublicLinkContext,
       publicLinkPassword
     }),
-    ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
+    ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword }),
+    ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
   }
 }

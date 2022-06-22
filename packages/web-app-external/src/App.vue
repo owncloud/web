@@ -141,9 +141,7 @@ export default {
         return
       }
 
-      const data = await response.json()
-
-      if (!data.app_url || !data.method) {
+      if (!response.data.app_url || !response.data.method) {
         this.errorMessage = this.$gettext('Error in app server response')
         this.loading = false
         this.loadingError = true
@@ -151,9 +149,9 @@ export default {
         return
       }
 
-      this.appUrl = data.app_url
-      this.method = data.method
-      if (data.form_parameters) this.formParameters = data.form_parameters
+      this.appUrl = response.data.app_url
+      this.method = response.data.method
+      if (response.data.form_parameters) this.formParameters = response.data.form_parameters
 
       if (this.method === 'POST' && this.formParameters) {
         this.$nextTick(() => this.$refs.subm.click())
