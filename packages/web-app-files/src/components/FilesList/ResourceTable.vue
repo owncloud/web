@@ -41,7 +41,7 @@
         size="large"
         :value="selection"
         :option="item"
-        @input="fileClicked"
+        @input="onCheckboxInput"
         @click.native.stop
       />
     </template>
@@ -303,7 +303,7 @@ export default defineComponent({
       default: true
     },
     /**
-     * Top position of header used when the header is sticky in pixels
+     * Top position of header used when the head^er is sticky in pixels
      */
     headerPosition: {
       type: Number,
@@ -564,6 +564,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    onCheckboxInput(resources) {
+      this.emitSelect(resources)
+    },
     hasRenameAction(item) {
       return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
         .length
@@ -678,7 +681,6 @@ export default defineComponent({
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      bus.publish('app.files.list.clicked', resource);
       this.emitSelect([resource])
     },
     formatDate(date) {
@@ -694,6 +696,7 @@ export default defineComponent({
        * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
        * @property {array} resources The selected resources
        */
+      bus.publish('app.files.list.clicked')
       this.$emit('select', resources)
     },
     toggleSelectionAll() {
