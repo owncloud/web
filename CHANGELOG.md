@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.6.0...master
+
+Summary
+-------
+
+* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
+
+Details
+-------
+
+* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
+
+   Mime types that don't start with `video/`, `audio/` or `image/` were not rendered by the
+   preview app. Files with unknown mime type category are now being rendered as images.
+
+   https://github.com/owncloud/web/pull/7161
+
 Changelog for ownCloud Web [5.6.0] (2022-06-21)
 =======================================
 The following sections list the changes in ownCloud web 5.6.0 relevant to
