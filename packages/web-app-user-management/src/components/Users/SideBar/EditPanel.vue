@@ -28,13 +28,11 @@
         default-value="●●●●●●●●"
       />
       <oc-select
-        class="oc-mb-l"
         v-model="editUser.role"
         :label="$gettext('Role')"
         option-label="displayName"
         :options="roles"
         :clearable="false"
-        :fix-message-line="true"
       />
     </div>
     <compare-save-dialog
