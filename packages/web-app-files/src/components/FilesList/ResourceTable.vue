@@ -682,9 +682,11 @@ export default defineComponent({
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      if(data[1].metaKey) {
+      if (data[1].metaKey) {
         bus.publish('app.files.list.clicked.meta', data[0])
-      }else {
+      } else if (data[1].shiftKey) {
+        bus.publish('app.files.list.clicked.shift', data[0])
+      } else {
         this.emitSelect([data[0]])
       }
     },
@@ -715,7 +717,7 @@ export default defineComponent({
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      //this.$emit('fileClick', resource)
+      // this.$emit('fileClick', resource)
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {

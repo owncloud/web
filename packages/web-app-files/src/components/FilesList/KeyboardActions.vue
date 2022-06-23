@@ -19,21 +19,29 @@ export default {
     ...mapState('Files', ['latestSelectedId'])
   },
 
-	setup() {
+  setup() {
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...useResourcesViewDefaults<Resource, any, any[]>()
     }
   },
 
   mounted() {
-		document.addEventListener('keydown', this.handleShortcut, false)
+    document.addEventListener('keydown', this.handleShortcut, false)
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
-    const fileListClickedMetaEvent = bus.subscribe('app.files.list.clicked.meta', this.handleCtrlClick)
+    const fileListClickedMetaEvent = bus.subscribe(
+      'app.files.list.clicked.meta',
+      this.handleCtrlClick
+    )
+    const fileListClickedShiftEvent = bus.subscribe(
+      'app.files.list.clicked.shift',
+      this.handleShiftClick
+    )
 
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
-			document.removeEventListener('keydown', this.handleShortcut)
+      bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
+      document.removeEventListener('keydown', this.handleShortcut)
     })
   },
 
@@ -46,7 +54,12 @@ export default {
       'resetFileSelection',
       'toggleFileSelection'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE', 'SET_FILE_SELECTION', 'ADD_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'UPSERT_RESOURCE',
+      'SET_LATEST_SELECTED_FILE',
+      'SET_FILE_SELECTION',
+      'ADD_FILE_SELECTION'
+    ]),
 
     handleShortcut(event) {
       const key = event.keyCode || event.which
@@ -70,40 +83,61 @@ export default {
     handleFileSelectionShortcuts(key, shift, ctrl, event) {
       const isUpPressed = key === 38
       const isDownPressed = key === 40
-			const isEscapePressed = key === 27
-			const isSpacePressed = key === 32
-			const isAPressed = key === 65
+      const isEscapePressed = key === 27
+      const isSpacePressed = key === 32
+      const isAPressed = key === 65
 
-			if (isSpacePressed) return this.handleSpaceAction(event)
-			if (isEscapePressed) return this.handleEscapeAction()
+      if (isSpacePressed) return this.handleSpaceAction(event)
+      if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)
       if (isUpPressed && shift) return this.handleShiftUpAction(event)
-			if (isAPressed && ctrl) return this.handleSelectAllAction(event)
+      if (isAPressed && ctrl) return this.handleSelectAllAction(event)
+    },
+
+    handleShiftClick(resource) {
+      const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
+      const resourceNodes = Object.values(parent.parentNode.childNodes) as HTMLElement[]
+      const latestNode = resourceNodes.find(
+        (r) => r.getAttribute('data-item-id') === this.latestSelectedId
+      )
+      const clickedNode = resourceNodes.find((r) => r.getAttribute('data-item-id') === resource.id)
+
+      let latestNodeIndex = resourceNodes.indexOf(latestNode)
+      latestNodeIndex = latestNodeIndex === -1 ? 0 : latestNodeIndex
+
+      const clickedNodeIndex = resourceNodes.indexOf(clickedNode)
+      const minIndex = Math.min(latestNodeIndex, clickedNodeIndex)
+      const maxIndex = Math.max(latestNodeIndex, clickedNodeIndex)
+
+      for (let i = minIndex; i <= maxIndex; i++) {
+        const nodeId = resourceNodes[i].getAttribute('data-item-id')
+        this.ADD_FILE_SELECTION({ id: nodeId })
+      }
     },
 
     handleCtrlClick(resource) {
       this.toggleFileSelection({ id: resource.id })
     },
 
-		handleEscapeAction() {
-			this.resetSelectionCursor()
-			this.resetFileSelection()
-		},
+    handleEscapeAction() {
+      this.resetSelectionCursor()
+      this.resetFileSelection()
+    },
 
-		handleSelectAllAction(event) {
-			event.preventDefault()
-			this.resetSelectionCursor()
-			this.SET_FILE_SELECTION(this.paginatedResources)
-		},
+    handleSelectAllAction(event) {
+      event.preventDefault()
+      this.resetSelectionCursor()
+      this.SET_FILE_SELECTION(this.paginatedResources)
+    },
 
-		handleSpaceAction(event) {
-			event.preventDefault()
-			this.toggleFileSelection({ id: this.latestSelectedId })
-		},
+    handleSpaceAction(event) {
+      event.preventDefault()
+      this.toggleFileSelection({ id: this.latestSelectedId })
+    },
 
     handleShiftUpAction() {
       const nextResourceId = this.getNextResourceId(true)
-			if(nextResourceId === -1) return
+      if (nextResourceId === -1) return
       if (this.selectionCursor > 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -117,7 +151,7 @@ export default {
 
     handleShiftDownAction() {
       const nextResourceId = this.getNextResourceId()
-			if(nextResourceId === -1) return
+      if (nextResourceId === -1) return
       if (this.selectionCursor < 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -141,20 +175,22 @@ export default {
         upsertResource: this.UPSERT_RESOURCE
       })
     },
-		
-		resetSelectionCursor() {
-			this.selectionCursor = 0
-		},
 
-		getNextResourceId(previous=false) {
-			const latestSelectedRow = document.querySelectorAll(
+    resetSelectionCursor() {
+      this.selectionCursor = 0
+    },
+
+    getNextResourceId(previous = false) {
+      const latestSelectedRow = document.querySelectorAll(
         `[data-item-id='${this.latestSelectedId}']`
       )[0]
-      const nextRow = (previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling) as HTMLElement
+      const nextRow = (
+        previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
+      ) as HTMLElement
       if (nextRow === null) return -1
       const nextResourceId = nextRow.getAttribute('data-item-id')
-			return nextResourceId
-		}
+      return nextResourceId
+    }
   }
 }
 </script>
