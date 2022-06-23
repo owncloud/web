@@ -3348,7 +3348,9 @@ def checkForUndefinedSteps():
                 "name": "install-nightwatch-v2",
                 "image": OC_CI_CORE_NODEJS,
                 "commands": [
-                    "cd %s/tests/acceptance" % dir["web"],
+                    "pwd",
+                    "ls -la",
+                    "cd tests/acceptance",
                     "yarn add -D nightwatch@2.x.x",
                 ],
             },
@@ -3356,7 +3358,7 @@ def checkForUndefinedSteps():
                 "name": "check-for-undefined-steps",
                 "image": OC_CI_CORE_NODEJS,
                 "commands": [
-                    "cd %s/tests/acceptance" % dir["web"],
+                    "cd tests/acceptance",
                     "yarn test:acceptance:dry",
                 ],
             },
