@@ -96,7 +96,6 @@
               v-if="activePanel === 'EditPanel'"
               :users="selectedUsers"
               :roles="roles"
-              :groups="groups"
               @confirm="editUser"
             />
             <GroupAssignmentsPanel
