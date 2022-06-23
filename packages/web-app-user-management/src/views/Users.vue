@@ -447,23 +447,8 @@ export default {
 
     async editUser(editUser) {
       try {
-        const user = this.users.find((user) => user.id === editUser.id)
         await this.graphClient.users.editUser(editUser.id, editUser)
 
-        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
-          return !user.memberOf.includes(editUserGroup)
-        })
-        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
-          return !editUser.memberOf.includes(editUserGroup)
-        })
-
-        for (const groupToAdd of groupsToAdd) {
-          await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
-        }
-
-        for (const groupToDelete of groupsToDelete) {
-          await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
-        }
         /**
          * Setting api calls are just temporary and will be replaced with the graph api,
          * as the backend supports it.
@@ -481,11 +466,8 @@ export default {
           }
         )
 
-        this.$set(
-          this.users,
-          this.users.findIndex((user) => user.id === editUser.id),
-          editUser
-        )
+        const user = this.users.findIndex((user) => user.id === editUser.id)
+        this.$set(this.users, user, editUser)
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */
