@@ -37,6 +37,8 @@ export interface Graph {
     createGroup: (group: Group) => AxiosPromise<Group>
     editGroup: (groupId: string, group: Group) => AxiosPromise<void>
     deleteGroup: (groupId: string) => AxiosPromise<void>
+    addMember: (groupId: string, userId:string, server: string) => AxiosPromise<void>
+    deleteMember: (groupId: string, userId:string) => AxiosPromise<void>
   }
 }
 
@@ -73,14 +75,20 @@ const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any) =>
-        usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]))
+        usersApiFactory.listUsers(0, 0, '', '', false, new Set<any>([orderBy]), new Set<any>([]), new Set<any>(['memberOf']))
     },
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
       editGroup: (groupId: string, group: Group) => groupApiFactory.updateGroup(groupId, group),
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
       listGroups: (orderBy?: any) =>
-        groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]))
+        groupsApiFactory.listGroups(0, 0, '', '', false, new Set<any>([orderBy]), new Set<any>([]), new Set<any>(['members']) ),
+      addMember: (groupId: string, userId: string, server: string) => {
+        groupApiFactory.addMember(groupId, {'@odata.id' : `${server}graph/v1.0/users/${userId}`} )
+      },
+      deleteMember: (groupId: string, userId: string) => {
+        groupApiFactory.deleteMember(groupId, userId )
+      }
     }
   }
 }

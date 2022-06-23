@@ -17,6 +17,7 @@
           :user-name="group.displayName"
         />
         <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
+
       </div>
       <table
         class="details-table"
