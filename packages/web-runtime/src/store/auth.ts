@@ -15,11 +15,11 @@ const getters = {
 }
 
 const mutations = {
-  SET_USER_CONTEXT(state, { accessToken, userContextReady }) {
+  SET_ACCESS_TOKEN(state, accessToken) {
     state.accessToken = accessToken
-    if (typeof userContextReady === 'boolean') {
-      state.userContextReady = userContextReady
-    }
+  },
+  SET_USER_CONTEXT_READY(state, ready) {
+    state.userContextReady = ready
   },
   SET_PUBLIC_LINK_CONTEXT(state, { publicLinkToken, publicLinkPassword, publicLinkContextReady }) {
     state.publicLinkToken = publicLinkToken

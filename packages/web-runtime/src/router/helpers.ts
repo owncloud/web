@@ -1,5 +1,6 @@
 import { base, router } from './index'
 import Router, { Route, RouteRecordPublic } from 'vue-router'
+import { contextQueryToFileContextProps } from 'web-pkg/src/composables'
 
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
@@ -58,8 +59,9 @@ export const isUserContext = (router: Router, to: Route): boolean => {
 /**
  * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) is a public link (with or without password).
  *
- * @param router
- * @param to
+ * @param router {Router}
+ * @param to {Route}
+ * @returns {boolean}
  */
 export const isPublicLinkContext = (router: Router, to: Route): boolean => {
   if (!isAuthenticationRequired(router, to)) {
@@ -77,6 +79,21 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
   }
 
   return false
+}
+
+/**
+ * Extracts the public link token from the various possible route params.
+ *
+ * @param to {Route}
+ * @returns {string}
+ */
+export const extractPublicLinkToken = (to: Route): string => {
+  const contextRouteParams = contextQueryToFileContextProps(to.query)?.routeParams
+  if (contextRouteParams) {
+    return (contextRouteParams.item || '').split('/')[0]
+  }
+
+  return (to.params.item || to.params.filePath || to.params.token || '').split('/')[0]
 }
 
 /**

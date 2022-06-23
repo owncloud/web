@@ -43,7 +43,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
-import { isUserContext } from './router'
+import { isPublicLinkContext, isUserContext } from './router'
 
 export default defineComponent({
   components: {
@@ -59,7 +59,8 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['route', 'user', 'modal', 'sidebar']),
-    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue', 'isUserReady']),
+    ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
+    ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
       if (
         !this.$route.name ||
@@ -67,16 +68,18 @@ export default defineComponent({
           'login',
           'oidcCallback',
           'oidcSilentRedirect',
-          'privateLink',
-          'publicLink',
+          'resolvePrivateLink',
+          'resolvePublicLink',
           'accessDenied'
         ].includes(this.$route.name)
       ) {
         return LayoutPlain
       }
 
-      // TODO: as soon as public links set `isUserReady` as well we can reduce this check to `if (!this.isUserReady)`.
-      if (isUserContext(this.$router, this.$route) && !this.isUserReady) {
+      if (isUserContext(this.$router, this.$route) && !this.isUserContextReady) {
+        return LayoutLoading
+      }
+      if (isPublicLinkContext(this.$router, this.$route) && !this.isPublicLinkContextReady) {
         return LayoutLoading
       }
 

@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import qs from 'qs'
 import Router from 'vue-router'
-import LoginPage from '../pages/login.vue'
-import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
+import LoginPage from '../pages/login.vue'
+import OidcCallbackPage from '../pages/oidcCallback.vue'
+import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 
@@ -54,15 +55,16 @@ export const router = patchRouter(
       },
       {
         path: '/f/:fileId',
-        name: 'privateLink',
+        name: 'resolvePrivateLink',
         redirect: '/files/ops/resolver/private-link/:fileId',
         meta: { __public: true, title: $gettext('Private link') }
       },
       {
         path: '/s/:token',
-        name: 'publicLink',
-        redirect: '/files/ops/resolver/public-link/:token',
+        name: 'resolvePublicLink',
+        component: ResolvePublicLinkPage,
         meta: { __public: true, title: $gettext('Public link') }
+        // redirect: '/files/ops/resolver/public-link/:token'
       },
       {
         path: '/access-denied',

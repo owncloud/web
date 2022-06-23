@@ -10,14 +10,12 @@ const state = {
   capabilities: [],
   version: {},
   groups: [],
-  userReady: false,
   quota: null,
   language: null
 }
 
 const getters = {
   isAuthenticated: (state) => state.isAuthenticated,
-  isUserReady: (state) => state.userReady,
   getToken: (state) => state.token,
   capabilities: (state) => state.capabilities,
   quota: (state) => state.quota,
@@ -49,9 +47,6 @@ const mutations = {
   },
   SET_ACCESS_TOKEN(state, accessToken) {
     state.token = accessToken
-  },
-  SET_USER_READY(state, ready) {
-    state.userReady = ready
   },
   SET_QUOTA(state, quota) {
     // Turn strings into ints

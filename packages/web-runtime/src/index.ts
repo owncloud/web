@@ -62,7 +62,9 @@ export const renderSuccess = (): void => {
   })
 
   store.watch(
-    (state, getters) => getters.isUserReady,
+    (state, getters) =>
+      getters['runtime/auth/isUserContextReady'] ||
+      getters['runtime/auth/isPublicLinkContextReady'],
     async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
         return

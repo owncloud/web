@@ -1,16 +1,19 @@
 import { UserManager } from './userManager'
+import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
 import { clientService, ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
 import isEmpty from 'lodash-es/isEmpty'
 import get from 'lodash-es/get'
-import VueRouter from 'vue-router'
+import VueRouter, { Route } from 'vue-router'
+import { extractPublicLinkToken, isPublicLinkContext } from '../../router'
 
 const postLoginRedirectUrlKey = 'postLoginRedirectUrl'
 
 export class AuthService {
   private configurationManager: ConfigurationManager
   private userManager: UserManager
+  private publicLinkManager: PublicLinkManager
   private clientService: ClientService
   private store: Store<any>
   private router: VueRouter
@@ -28,7 +31,29 @@ export class AuthService {
     this.router = router
   }
 
-  public async initializeContext() {
+  /**
+   * Initialize publicLinkContext and userContext (whichever is available, respectively).
+   *
+   * FIXME: at the moment the order "publicLink first, user second" is important, because we trigger the `ready` hook of all applications
+   * as soon as any context is ready. This works well for user context pages, because they can't have a public link context at the same time.
+   * Public links on the other hand could have a logged in user as well, thus we need to make sure that the public link context is loaded first.
+   * For the moment this is fine. In the future we might want to wait triggering the `ready` hook of applications until all available contexts
+   * are loaded.
+   *
+   * @param to {Route}
+   */
+  public async initializeContext(to: Route) {
+    if (!this.publicLinkManager) {
+      this.publicLinkManager = new PublicLinkManager()
+    }
+
+    if (isPublicLinkContext(this.router, to)) {
+      const publicLinkToken = extractPublicLinkToken(to)
+      if (publicLinkToken) {
+        await this.updatePublicLinkContext(publicLinkToken)
+      }
+    }
+
     if (!this.userManager) {
       this.userManager = new UserManager(this.configurationManager)
       this.userManager.events.addAccessTokenExpired((...args) => {
@@ -78,13 +103,6 @@ export class AuthService {
       await this.updateUserContext(accessToken)
       console.timeEnd('userManager.initialize: updateAccessToken')
     }
-
-    // TODO: similar to the user context update above, we also need a public link context update.
-    // const publicLinkToken = <where to get the public link token from?!>
-    // if (publicLinkToken) {
-    //   const publicLinkPassword = <where to get the public link password from?!>
-    //   await this.updatePublicLinkContext(publicLinkToken, publicLinkPassword)
-    // }
   }
 
   public login(redirectUrl?: string) {
@@ -131,7 +149,7 @@ export class AuthService {
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
     }
-    this.store.commit('runtime/auth/SET_USER_CONTEXT', { accessToken })
+    this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
     // TODO: SET_ACCESS_TOKEN is deprecated and will be removed soonish
     this.store.commit('SET_ACCESS_TOKEN', accessToken)
 
@@ -140,7 +158,7 @@ export class AuthService {
 
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
-        this.triggerUserReady()
+        this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
     })()
     return this.updateAccessTokenPromise
@@ -170,6 +188,7 @@ export class AuthService {
   private async fetchUserInfo(accessToken): Promise<void> {
     let login
     try {
+      // TODO: introduce new `loadUser` function in SDK, then use it here and use our own authService.fetchCapabilities
       login = await this.clientService.owncloudSdk.login()
     } catch (e) {
       console.warn('Seems that your token is invalid. Error:', e)
@@ -217,15 +236,11 @@ export class AuthService {
       ...(user.quota.definition !== 'default' &&
         user.quota.definition !== 'none' && { quota: user.quota })
     })
-    this.store.commit('runtime/auth/SET_USER_CONTEXT', {
-      accessToken,
-      userContextReady: true
-    })
 
     await this.store.dispatch('loadSettingsValues')
   }
 
-  public async fetchCapabilities({
+  private async fetchCapabilities({
     accessToken = '',
     publicToken = '',
     user = '',
@@ -261,9 +276,50 @@ export class AuthService {
     )
   }
 
-  private triggerUserReady(): void {
-    // TODO: we can get rid of the user ready hook when the authLogic is properly blocking. Until then we need it...
-    this.store.commit('SET_USER_READY', true)
+  public async resolvePublicLink(token: string, passwordRequired: boolean, password: string) {
+    this.publicLinkManager.setPasswordRequired(token, passwordRequired)
+    this.publicLinkManager.setPassword(token, password)
+    this.publicLinkManager.setResolved(token, true)
+
+    await this.updatePublicLinkContext(token)
+  }
+
+  private async updatePublicLinkContext(token: string) {
+    if (!this.publicLinkManager.isResolved(token)) {
+      return
+    }
+    if (
+      this.store.getters['runtime/auth/isPublicLinkContextReady'] &&
+      this.store.getters['runtime/auth/publicLinkToken'] === token
+    ) {
+      return
+    }
+
+    let password
+    if (this.publicLinkManager.isPasswordRequired(token)) {
+      password = this.publicLinkManager.getPassword(token)
+    }
+
+    await this.fetchCapabilities({
+      publicToken: token,
+      user: 'public',
+      password
+    })
+    // ocis at the moment is not able to create archives for public links that are password protected
+    // till this is supported by the backend remove it hard as a workaround
+    // https://github.com/owncloud/web/issues/6515
+    // if (publicLinkPassword) {
+    //   store.commit('SET_CAPABILITIES', {
+    //     capabilities: omit(store.getters.capabilities, ['files.archivers']),
+    //     version: store.getters.version
+    //   })
+    // }
+
+    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
+      publicLinkToken: token,
+      publicLinkPassword: password,
+      publicLinkContextReady: true
+    })
   }
 
   public async logout() {
