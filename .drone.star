@@ -797,7 +797,7 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = [checkForUndefinedSteps(ctx) + acceptance(ctx)]
+    acceptance_pipelines = checkForUndefinedSteps(ctx) + acceptance(ctx)
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
 def afterPipelines(ctx):
