@@ -8,10 +8,27 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
+* Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
 
 Details
 -------
+
+* Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
+
+   The `external` app was missing the dynamic app name after some recent refactoring. It has been
+   reintroduced.
+
+   https://github.com/owncloud/web/pull/7173
+
+* Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+
+   Bug introduced in #6870. A method used to communicate with the backend was not properly added to
+   the extension after being moved to a different location.
+
+   https://github.com/owncloud/web/pull/7166
+   https://github.com/owncloud/web/pull/7173
 
 * Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
 
