@@ -792,12 +792,13 @@ def beforePipelines(ctx):
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
+           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx)) + \
+           pipelinesDependsOn(checkForUndefinedSteps(), yarnCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = checkForUndefinedSteps(ctx) + acceptance(ctx)
+    acceptance_pipelines = acceptance(ctx)
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
 def afterPipelines(ctx):
@@ -3333,7 +3334,7 @@ def publishTracingResult(ctx, suite):
         },
     }]
 
-def checkForUndefinedSteps(ctx):
+def checkForUndefinedSteps():
     return [{
         "kind": "pipeline",
         "type": "docker",
