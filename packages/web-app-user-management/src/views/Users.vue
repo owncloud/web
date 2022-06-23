@@ -432,7 +432,10 @@ export default {
         this.showMessage({
           title: this.$gettext('User was created successfully')
         })
-        this.users.push({ ...response?.data, ...{ memberOf: [] } })
+        this.users.push({
+          ...response?.data,
+          ...{ memberOf: [], role: this.roles.find((role) => role.name === 'user') }
+        })
       } catch (error) {
         console.error(error)
         this.showMessage({
