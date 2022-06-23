@@ -105,16 +105,16 @@ export default {
     const fileIndex = selected.findIndex((id) => {
       return id === file.id
     })
+    state.latestSelectedId = file.id
     if (fileIndex === -1) {
-      state.latestSelectedId = file.id
       selected.push(file.id)
       state.selectedIds = selected
     }
   },
   REMOVE_FILE_SELECTION(state, file) {
     const selected = [...state.selectedIds]
+    state.latestSelectedId = file.id
     if (selected.length > 1) {
-      state.latestSelectedId = file.id
       state.selectedIds = selected.filter((id) => file.id !== id)
       return
     }

@@ -44,7 +44,7 @@ export default {
       'resetFileSelection',
       'toggleFileSelection'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE', 'SET_FILE_SELECTION']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_LATEST_SELECTED_FILE', 'SET_FILE_SELECTION', 'ADD_FILE_SELECTION']),
 
     handleShortcut(event) {
       const key = event.keyCode || event.which
@@ -74,8 +74,8 @@ export default {
 
 			if (isSpacePressed) return this.handleSpaceAction(event)
 			if (isEscapePressed) return this.handleEscapeAction()
-      if (isDownPressed && shift) return this.handleShiftDownAction()
-      if (isUpPressed && shift) return this.handleShiftUpAction()
+      if (isDownPressed && shift) return this.handleShiftDownAction(event)
+      if (isUpPressed && shift) return this.handleShiftUpAction(event)
 			if (isAPressed && ctrl) return this.handleSelectAllAction(event)
     },
 
@@ -104,7 +104,7 @@ export default {
         this.SET_LATEST_SELECTED_FILE(nextResourceId)
       } else {
         // select
-        this.toggleFileSelection({ id: nextResourceId })
+        this.ADD_FILE_SELECTION({ id: nextResourceId })
       }
       this.selectionCursor = this.selectionCursor - 1
     },
@@ -118,7 +118,7 @@ export default {
         this.SET_LATEST_SELECTED_FILE(nextResourceId)
       } else {
         // select
-        this.toggleFileSelection({ id: nextResourceId })
+        this.ADD_FILE_SELECTION({ id: nextResourceId })
       }
       this.selectionCursor = this.selectionCursor + 1
     },

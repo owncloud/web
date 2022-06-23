@@ -41,7 +41,8 @@
         size="large"
         :value="selection"
         :option="item"
-        @input="onCheckboxInput"
+        :outline="isLatestSelectedItem(item)"
+        @input="emitSelect"
         @click.native.stop
       />
     </template>
@@ -398,7 +399,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
+    ...mapState('Files', ['areFileExtensionsShown', 'spaces', 'latestSelectedId']),
     popperOptions() {
       return {
         modifiers: [
@@ -564,8 +565,8 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
-    onCheckboxInput(resources) {
-      this.emitSelect(resources)
+    isLatestSelectedItem(item) {
+      return item.id === this.latestSelectedId
     },
     hasRenameAction(item) {
       return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
@@ -676,12 +677,16 @@ export default defineComponent({
        */
       this.$emit('rowMounted', resource, component)
     },
-    fileClicked(resource) {
+    fileClicked(data) {
       /**
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      this.emitSelect([resource])
+      if(data[1].metaKey) {
+        alert("ctrl is pressed")
+      }else {
+        this.emitSelect([data[0]])
+      }
     },
     formatDate(date) {
       return DateTime.fromJSDate(new Date(date))
@@ -710,7 +715,7 @@ export default defineComponent({
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      this.$emit('fileClick', resource)
+      //this.$emit('fileClick', resource)
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {
