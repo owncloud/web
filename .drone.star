@@ -797,7 +797,7 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
+    acceptance_pipelines = [checkForUndefinedSteps(ctx) + acceptance(ctx)]
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
 
 def afterPipelines(ctx):
@@ -3329,6 +3329,42 @@ def publishTracingResult(ctx, suite):
             "status": status,
             "event": [
                 "pull_request",
+            ],
+        },
+    }]
+
+def checkForUndefinedSteps(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "check-undefined-steps",
+        "platform": {
+            "os": "linux",
+            "arch": "amd64",
+        },
+        "steps": [
+            {
+                "name": "install-nightwatch-v2",
+                "image": OC_CI_CORE_NODEJS,
+                "commands": [
+                    "cd %s/tests/acceptance" % dir["web"],
+                    "yarn add -D nightwatch@2.x.x",
+                ],
+            },
+            {
+                "name": "check-for-undefined-steps",
+                "image": OC_CI_CORE_NODEJS,
+                "commands": [
+                    "cd %s/tests/acceptance" % dir["web"],
+                    "yarn test:acceptance:dry",
+                ],
+            },
+        ],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/tags/**",
+                "refs/pull/**",
             ],
         },
     }]
