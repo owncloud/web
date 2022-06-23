@@ -34,17 +34,29 @@
     </template>
     <template #role="{ item }"> {{ item.role.displayName }} </template>
     <template #actions="{ item }">
-      <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
-        <oc-icon size="small" name="information" />
+      <oc-button
+        v-oc-tooltip="$gettext('Details')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('clickDetails', item)"
+      >
+        <oc-icon name="information" fill-type="line" />
       </oc-button>
       <oc-button
         v-oc-tooltip="$gettext('Group assignments')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
         @click="$emit('clickGroupAssignments', item)"
       >
-        <oc-icon size="small" name="group-2" />
+        <oc-icon name="group-2" fill-type="line" />
       </oc-button>
-      <oc-button v-oc-tooltip="$gettext('Edit')" @click="$emit('clickEdit', item)">
-        <oc-icon size="small" name="pencil" />
+      <oc-button
+        v-oc-tooltip="$gettext('Edit')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('clickEdit', item)"
+      >
+        <oc-icon name="pencil" fill-type="line" />
       </oc-button>
     </template>
     <template #footer>
