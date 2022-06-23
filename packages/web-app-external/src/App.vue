@@ -37,8 +37,9 @@ import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../web-app-files/src/helpers/resources'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { buildResource } from 'files/src/helpers/resources'
+import { computed, unref } from '@vue/composition-api'
+import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 
 // FIXME: hacky, get rid asap, just a workaround
 // same as packages/web-app-files/src/views/PublicFiles.vue
@@ -66,10 +67,14 @@ export default {
     LoadingScreen
   },
   setup() {
+    const appName = useRouteQuery('app')
+    const applicationName = computed(() => queryItemAsString(unref(appName)))
     return {
       ...useAppDefaults({
-        applicationId: 'external'
-      })
+        applicationId: 'external',
+        applicationName
+      }),
+      applicationName
     }
   },
 
@@ -87,17 +92,14 @@ export default {
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
       return this.$gettextInterpolate(translated, {
-        appName: this.appName
+        appName: this.applicationName
       })
     },
     iFrameTitle() {
       const translated = this.$gettext('"%{appName}" app content area')
       return this.$gettextInterpolate(translated, {
-        appName: this.appName
+        appName: this.applicationName
       })
-    },
-    appName() {
-      return this.$route.query.app
     },
     fileId() {
       return this.$route.query.fileId
@@ -118,7 +120,7 @@ export default {
         configUrl +
         appOpenUrl +
         `?file_id=${fileId}` +
-        (this.appName ? `&app_name=${this.appName}` : '')
+        (this.applicationName ? `&app_name=${this.applicationName}` : '')
 
       const response = await this.makeRequest('POST', url)
 
@@ -130,9 +132,7 @@ export default {
         return
       }
 
-      const data = await response.json()
-
-      if (!data.app_url || !data.method) {
+      if (!response.data.app_url || !response.data.method) {
         this.errorMessage = this.$gettext('Error in app server response')
         this.loading = false
         this.loadingError = true
@@ -140,9 +140,9 @@ export default {
         return
       }
 
-      this.appUrl = data.app_url
-      this.method = data.method
-      if (data.form_parameters) this.formParameters = data.form_parameters
+      this.appUrl = response.data.app_url
+      this.method = response.data.method
+      if (response.data.form_parameters) this.formParameters = response.data.form_parameters
 
       if (this.method === 'POST' && this.formParameters) {
         this.$nextTick(() => this.$refs.subm.click())

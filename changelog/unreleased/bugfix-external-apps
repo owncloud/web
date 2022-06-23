@@ -1,0 +1,6 @@
+Bugfix: External apps fixes
+
+Bug introduced in #6870. A method used to communicate with the backend was not properly added to the extension after being moved to a different location.
+
+https://github.com/owncloud/web/pull/7166
+https://github.com/owncloud/web/pull/7173
