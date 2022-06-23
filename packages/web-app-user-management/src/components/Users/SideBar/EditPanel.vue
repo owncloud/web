@@ -64,10 +64,6 @@ export default {
     roles: {
       type: Array,
       required: true
-    },
-    groups: {
-      type: Array,
-      required: true
     }
   },
   data() {
