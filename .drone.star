@@ -789,11 +789,11 @@ def beforePipelines(ctx):
            licenseCheck(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
+           checkForUndefinedSteps() + \
            yarnCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(checkForUndefinedSteps(), yarnCache(ctx))
+           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
