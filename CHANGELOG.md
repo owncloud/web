@@ -3,14 +3,13 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.6.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v5.6.1...master
 
 Summary
 -------
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
-* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
 
 Details
 -------
@@ -29,6 +28,21 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+Changelog for ownCloud Web [5.6.1] (2022-06-22)
+=======================================
+The following sections list the changes in ownCloud web 5.6.1 relevant to
+ownCloud admins and users.
+
+[5.6.1]: https://github.com/owncloud/web/compare/v5.6.0...v5.6.1
+
+Summary
+-------
+
+* Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
+
+Details
+-------
 
 * Bugfix - Map unknown mime types to image rendering in Preview app: [#7161](https://github.com/owncloud/web/pull/7161)
 
