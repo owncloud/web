@@ -210,10 +210,9 @@ export default {
       const usersResponse = yield graphClient.users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
-      users.value.forEach(user => {
+      users.value.forEach((user) => {
         user.memberOf = user.memberOf || []
       })
-
 
       yield loadGroupsTask.perform()
       yield loadRolesTask.perform()
@@ -433,7 +432,7 @@ export default {
         this.showMessage({
           title: this.$gettext('User was created successfully')
         })
-        this.users.push({...response?.data, ...{memberOf: []}})
+        this.users.push({ ...response?.data, ...{ memberOf: [] } })
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -448,19 +447,18 @@ export default {
         const user = this.users.find((user) => user.id === editUser.id)
         await this.graphClient.users.editUser(editUser.id, editUser)
 
-        const groupsToAdd = editUser.memberOf.filter(editUserGroup => {
+        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
           return !user.memberOf.includes(editUserGroup)
         })
-        const groupsToDelete = user.memberOf.filter(editUserGroup => {
+        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
           return !editUser.memberOf.includes(editUserGroup)
         })
 
-
-        for(const groupToAdd of groupsToAdd ){
+        for (const groupToAdd of groupsToAdd) {
           await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
         }
 
-        for (const groupToDelete of groupsToDelete){
+        for (const groupToDelete of groupsToDelete) {
           await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
         }
         /**
@@ -480,7 +478,11 @@ export default {
           }
         )
 
-        this.$set(this.users, this.users.findIndex((user) => user.id === editUser.id), editUser)
+        this.$set(
+          this.users,
+          this.users.findIndex((user) => user.id === editUser.id),
+          editUser
+        )
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */
@@ -498,27 +500,30 @@ export default {
       }
     },
 
-    async editUserGroupAssignments(editUser){
+    async editUserGroupAssignments(editUser) {
       try {
         const user = this.users.find((user) => user.id === editUser.id)
 
-        const groupsToAdd = editUser.memberOf.filter(editUserGroup => {
+        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
           return !user.memberOf.includes(editUserGroup)
         })
-        const groupsToDelete = user.memberOf.filter(editUserGroup => {
+        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
           return !editUser.memberOf.includes(editUserGroup)
         })
 
-
-        for(const groupToAdd of groupsToAdd ){
+        for (const groupToAdd of groupsToAdd) {
           await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
         }
 
-        for (const groupToDelete of groupsToDelete){
+        for (const groupToDelete of groupsToDelete) {
           await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
         }
 
-        this.$set(this.users, this.users.findIndex((user) => user.id === editUser.id), editUser)
+        this.$set(
+          this.users,
+          this.users.findIndex((user) => user.id === editUser.id),
+          editUser
+        )
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */

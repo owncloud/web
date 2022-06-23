@@ -37,7 +37,10 @@
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
         <oc-icon size="small" name="information" />
       </oc-button>
-      <oc-button v-oc-tooltip="$gettext('Group assignments')" @click="$emit('clickGroupAssignments', item)">
+      <oc-button
+        v-oc-tooltip="$gettext('Group assignments')"
+        @click="$emit('clickGroupAssignments', item)"
+      >
         <oc-icon size="small" name="group-2" />
       </oc-button>
       <oc-button v-oc-tooltip="$gettext('Edit')" @click="$emit('clickEdit', item)">

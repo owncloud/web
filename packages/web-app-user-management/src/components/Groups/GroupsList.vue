@@ -33,7 +33,7 @@
       <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
     </template>
     <template #members="rowData">
-        {{rowData.item.members.length}}
+      {{ rowData.item.members.length }}
     </template>
     <template #actions="{ item }">
       <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">

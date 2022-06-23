@@ -1,6 +1,6 @@
 <template>
   <div v-if="user" class="oc-mt-xl">
-    <UserInfoBox :user="user"/>
+    <UserInfoBox :user="user" />
     <div v-if="editUser" class="oc-background-highlight oc-p-m">
       <oc-text-input
         v-model="editUser.displayName"

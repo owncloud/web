@@ -1,10 +1,6 @@
 <template>
   <div v-if="user" class="oc-mt-xl">
-    <div class="oc-flex group-info oc-mb-l">
-      <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
-      <span v-text="user.onPremisesSamAccountName"></span>
-      <span class="oc-text-muted group-info-display-name" v-text="user.displayName"></span>
-    </div>
+    <UserInfoBox :user="user" />
     <div v-if="editUser" class="oc-background-highlight oc-p-m">
       <oc-select
         v-model="editUser.memberOf"
@@ -47,7 +43,7 @@ export default {
   },
   data() {
     return {
-      editUser: {},
+      editUser: {}
     }
   },
   computed: {
@@ -56,16 +52,16 @@ export default {
     },
 
     originalObjectUser() {
-      return { user: { ...this.user} }
+      return { user: { ...this.user } }
     },
     compareObjectUser() {
       return { user: { ...this.editUser } }
-    },
+    }
   },
   watch: {
     user: {
       handler: function () {
-        this.editUser = { ...this.user, }
+        this.editUser = { ...this.user }
       },
       deep: true,
       immediate: true
@@ -73,8 +69,8 @@ export default {
   },
   methods: {
     revertChanges() {
-      this.editUser = { ...this.user} }
-
+      this.editUser = { ...this.user }
+    }
   }
 }
 </script>
