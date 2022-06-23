@@ -9,7 +9,8 @@ import {
   useAppNavigation,
   AppNavigationResult,
   contextQueryToFileContextProps,
-  contextRouteNameKey
+  contextRouteNameKey,
+  queryItemAsString
 } from './useAppNavigation'
 import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
@@ -17,6 +18,7 @@ import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHan
 import { useAppDocumentTitle } from './useAppDocumentTitle'
 import { usePublicLinkPassword, usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
+import { MaybeRef } from '../../utils'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -24,6 +26,7 @@ import { useClientService } from '../clientService'
 
 interface AppDefaultsOptions {
   applicationId: string
+  applicationName?: MaybeRef<string>
   clientService?: ClientService
 }
 
@@ -46,14 +49,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const publicLinkPassword = usePublicLinkPassword({ store })
 
   const currentFileContext = computed((): FileContext => {
-    const queryItemAsString = (queryItem: string | string[]) => {
-      if (Array.isArray(queryItem)) {
-        return queryItem[0]
-      }
-
-      return queryItem
-    }
-
     const path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`
 
     return {
@@ -64,7 +59,13 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     }
   })
 
-  useAppDocumentTitle({ store, document, applicationId, currentFileContext })
+  useAppDocumentTitle({
+    store,
+    document,
+    applicationId,
+    applicationName: options.applicationName,
+    currentFileContext
+  })
 
   return {
     isPublicLinkContext,
