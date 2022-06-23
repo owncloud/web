@@ -683,7 +683,7 @@ export default defineComponent({
        * @property {object} resource The resource for which the event is triggered
        */
       if(data[1].metaKey) {
-        alert("ctrl is pressed")
+        bus.publish('app.files.list.clicked.meta', data[0])
       }else {
         this.emitSelect([data[0]])
       }

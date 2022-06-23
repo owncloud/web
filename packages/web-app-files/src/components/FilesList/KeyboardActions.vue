@@ -28,9 +28,11 @@ export default {
   mounted() {
 		document.addEventListener('keydown', this.handleShortcut, false)
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
+    const fileListClickedMetaEvent = bus.subscribe('app.files.list.clicked.meta', this.handleCtrlClick)
 
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
+      bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
 			document.removeEventListener('keydown', this.handleShortcut)
     })
   },
@@ -77,6 +79,10 @@ export default {
       if (isDownPressed && shift) return this.handleShiftDownAction(event)
       if (isUpPressed && shift) return this.handleShiftUpAction(event)
 			if (isAPressed && ctrl) return this.handleSelectAllAction(event)
+    },
+
+    handleCtrlClick(resource) {
+      this.toggleFileSelection({ id: resource.id })
     },
 
 		handleEscapeAction() {
