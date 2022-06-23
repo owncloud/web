@@ -30,11 +30,11 @@ export default {
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
       'app.files.list.clicked.meta',
-      this.handleCtrlClick
+      this.handleCtrlClickAction
     )
     const fileListClickedShiftEvent = bus.subscribe(
       'app.files.list.clicked.shift',
-      this.handleShiftClick
+      this.handleShiftClickAction
     )
 
     this.$on('beforeDestroy', () => {
@@ -54,12 +54,12 @@ export default {
       'resetFileSelection',
       'toggleFileSelection'
     ]),
-    ...mapMutations('Files', [
-      'UPSERT_RESOURCE',
-      'SET_LATEST_SELECTED_FILE',
-      'SET_FILE_SELECTION',
-      'ADD_FILE_SELECTION'
-    ]),
+    ...mapMutations('Files', {
+      upsertResource: 'UPSERT_RESOURCE',
+      setLatestSelectedFile: 'SET_LATEST_SELECTED_FILE',
+      setFileSelection: 'SET_FILE_SELECTION',
+      addFileSelection: 'ADD_FILE_SELECTION'
+    }),
 
     handleShortcut(event) {
       const key = event.keyCode || event.which
@@ -87,6 +87,8 @@ export default {
       const isSpacePressed = key === 32
       const isAPressed = key === 65
 
+      if (isDownPressed && !shift) return this.handleNavigateAction(event)
+      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)
@@ -94,7 +96,17 @@ export default {
       if (isAPressed && ctrl) return this.handleSelectAllAction(event)
     },
 
-    handleShiftClick(resource) {
+    handleNavigateAction(event, up = false) {
+      event.preventDefault()
+      this.resetSelectionCursor()
+      this.resetFileSelection()
+      if (!this.latestSelectedId) return
+      const nextId = this.getNextResourceId(up)
+      if (nextId === -1) return
+      this.addFileSelection({ id: nextId })
+    },
+
+    handleShiftClickAction(resource) {
       const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
       const resourceNodes = Object.values(parent.parentNode.childNodes) as HTMLElement[]
       const latestNode = resourceNodes.find(
@@ -111,11 +123,11 @@ export default {
 
       for (let i = minIndex; i <= maxIndex; i++) {
         const nodeId = resourceNodes[i].getAttribute('data-item-id')
-        this.ADD_FILE_SELECTION({ id: nodeId })
+        this.addFileSelection({ id: nodeId })
       }
     },
 
-    handleCtrlClick(resource) {
+    handleCtrlClickAction(resource) {
       this.toggleFileSelection({ id: resource.id })
     },
 
@@ -127,7 +139,7 @@ export default {
     handleSelectAllAction(event) {
       event.preventDefault()
       this.resetSelectionCursor()
-      this.SET_FILE_SELECTION(this.paginatedResources)
+      this.setFileSelection(this.paginatedResources)
     },
 
     handleSpaceAction(event) {
@@ -141,10 +153,10 @@ export default {
       if (this.selectionCursor > 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
-        this.SET_LATEST_SELECTED_FILE(nextResourceId)
+        this.setLatestSelectedFile(nextResourceId)
       } else {
         // select
-        this.ADD_FILE_SELECTION({ id: nextResourceId })
+        this.addFileSelection({ id: nextResourceId })
       }
       this.selectionCursor = this.selectionCursor - 1
     },
@@ -155,10 +167,10 @@ export default {
       if (this.selectionCursor < 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
-        this.SET_LATEST_SELECTED_FILE(nextResourceId)
+        this.setLatestSelectedFile(nextResourceId)
       } else {
         // select
-        this.ADD_FILE_SELECTION({ id: nextResourceId })
+        this.addFileSelection({ id: nextResourceId })
       }
       this.selectionCursor = this.selectionCursor + 1
     },
@@ -172,7 +184,7 @@ export default {
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        upsertResource: this.UPSERT_RESOURCE
+        upsertResource: this.upsertResource
       })
     },
 
