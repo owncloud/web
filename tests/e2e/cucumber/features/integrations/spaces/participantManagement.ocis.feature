@@ -65,12 +65,13 @@ Feature: spaces participant management
       | parent/textfile.txt |
     When "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
-    And "Alice" remove access to following users to the project space
+    And "Alice" removes access to following users from the project space
       | user  |
       | Brian |
     When "Brian" navigates to the projects space page
-    Then "Brian" cannot see space "team.1"
+    Then "Brian" should not be able to see space "team.1"
     And "Brian" logs out
-    When "Alice" changes roles of the following users to the project space
+    When "Alice" changes the roles of the following users in the project space
       | user  | role    |
       | Carol | manager |
+    And "Alice" logs out

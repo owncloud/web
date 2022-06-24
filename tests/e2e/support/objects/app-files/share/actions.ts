@@ -132,7 +132,6 @@ export const changeShareeRole = async (args: changeShareeRoleArgs): Promise<void
     await sidebar.open({ page, resource: folderName })
     await sidebar.openPanel({ page, name: 'sharing' })
   }
-  // await page.pause()
 
   for (const user of users) {
     const userColumn = util.format(collaboratorUserItem, user.id)

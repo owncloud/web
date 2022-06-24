@@ -87,7 +87,7 @@ When(
 )
 
 When(
-  '{string} remove access to following users to the project space',
+  '{string} removes access to following users from the project space',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
@@ -110,7 +110,7 @@ Then(
 )
 
 Then(
-  '{string} cannot see space {string}',
+  '{string} should not be able to see space {string}',
   async function (this: World, stepUser: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
@@ -141,7 +141,7 @@ When(
 )
 
 When(
-  '{string} changes roles of the following users to the project space',
+  '{string} changes the roles of the following users in the project space',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
