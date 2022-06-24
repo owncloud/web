@@ -142,6 +142,9 @@ export default {
     const loadResourcesTask = useTask(function* (signal, ref) {
       const response = yield graphClient.groups.listGroups('displayName')
       groups.value = response.data.value || []
+      groups.value.forEach((group) => {
+        group.members = group.members || []
+      })
     })
 
     return {
@@ -340,7 +343,7 @@ export default {
         this.showMessage({
           title: this.$gettext('Group was created successfully')
         })
-        this.groups.push(response?.data)
+        this.groups.push({ ...response?.data, members: [] })
       } catch (error) {
         console.error(error)
         this.showMessage({

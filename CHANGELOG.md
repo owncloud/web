@@ -3,7 +3,46 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.6.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v5.6.1...master
+
+Summary
+-------
+
+* Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
+* Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+
+Details
+-------
+
+* Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
+
+   The `external` app was missing the dynamic app name after some recent refactoring. It has been
+   reintroduced.
+
+   https://github.com/owncloud/web/pull/7173
+
+* Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+
+   Bug introduced in #6870. A method used to communicate with the backend was not properly added to
+   the extension after being moved to a different location.
+
+   https://github.com/owncloud/web/pull/7166
+   https://github.com/owncloud/web/pull/7173
+
+* Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+
+   We have added a new quick action in the user management where the user can be assigned to groups.
+
+   https://github.com/owncloud/web/issues/6678
+   https://github.com/owncloud/web/pull/7176
+
+Changelog for ownCloud Web [5.6.1] (2022-06-22)
+=======================================
+The following sections list the changes in ownCloud web 5.6.1 relevant to
+ownCloud admins and users.
+
+[5.6.1]: https://github.com/owncloud/web/compare/v5.6.0...v5.6.1
 
 Summary
 -------

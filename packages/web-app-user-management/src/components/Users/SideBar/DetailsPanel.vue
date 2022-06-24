@@ -9,11 +9,7 @@
       <p>{{ multipleUsersSelectedText }}</p>
     </div>
     <div v-if="user">
-      <div class="oc-flex user-info oc-mb-l">
-        <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
-        <span v-text="user.onPremisesSamAccountName"></span>
-        <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
-      </div>
+      <UserInfoBox :user="user" />
       <table
         class="details-table"
         :aria-label="$gettext('Overview of the information about the selected user')"
@@ -43,8 +39,12 @@
   </div>
 </template>
 <script>
+import UserInfoBox from './UserInfoBox.vue'
 export default {
   name: 'DetailsPanel',
+  components: {
+    UserInfoBox
+  },
   props: {
     users: {
       type: Array,
@@ -70,13 +70,6 @@ export default {
 }
 </script>
 <style lang="scss">
-.user-info {
-  align-items: center;
-  flex-direction: column;
-}
-.user-info-display-name {
-  font-size: 1.5rem;
-}
 .details-table {
   text-align: left;
 
