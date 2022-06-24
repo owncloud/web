@@ -1,9 +1,11 @@
 import { ClientService } from 'web-pkg/src/services'
 import {
+  useAccessToken,
   useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
   useCapabilityFilesTusSupportMaxChunkSize,
   useClientService,
+  usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
 import { computed, Ref, unref, watch } from '@vue/composition-api'
@@ -47,11 +49,11 @@ interface UploadResult {
 
 export function useUpload(options: UploadOptions): UploadResult {
   const store = useStore()
-  const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
+  const publicLinkPassword = usePublicLinkPassword({ store })
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isPublicDropLocation = useActiveLocation(isLocationPublicActive, 'files-public-drop')
   const clientService = useClientService()
-  const getToken = computed((): string => store.getters.getToken)
+  const accessToken = useAccessToken({ store })
 
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
@@ -67,7 +69,7 @@ export function useUpload(options: UploadOptions): UploadResult {
       return {}
     }
     return {
-      Authorization: 'Bearer ' + unref(getToken)
+      Authorization: 'Bearer ' + unref(accessToken)
     }
   })
 

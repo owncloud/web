@@ -120,16 +120,18 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { useAccessToken, useAppDefaults, useStore } from 'web-pkg/src/composables'
 import Preview from './index'
 
 export default defineComponent({
   name: 'Preview',
   setup() {
+    const store = useStore()
     return {
       ...useAppDefaults({
         applicationId: 'preview'
-      })
+      }),
+      accessToken: useAccessToken({ store })
     }
   },
   data() {
@@ -303,7 +305,11 @@ export default defineComponent({
         // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
         let mediaUrl
         if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-          mediaUrl = await this.mediaSource(url, 'url', null)
+          const headers = new Headers()
+          if (!this.isPublicLinkContext) {
+            headers.append('Authorization', 'Bearer ' + this.accessToken)
+          }
+          mediaUrl = await this.mediaSource(url, 'url', headers)
         } else {
           mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         }

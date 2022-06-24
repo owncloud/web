@@ -7,7 +7,6 @@ export default {
     Vue.mixin({
       computed: {
         ...mapGetters(['getToken', 'isAuthenticated', 'capabilities']),
-        ...mapGetters('Files', ['publicLinkPassword']),
         ...mapGetters(['configuration']),
 
         isUrlSigningEnabled() {

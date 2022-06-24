@@ -146,7 +146,7 @@ export default defineComponent({
       }
 
       const password = passwordRequired ? this.password : ''
-      authService.resolvePublicLink(this.token, passwordRequired, password)
+      await authService.resolvePublicLink(this.token, passwordRequired, password)
 
       const redirectUrl = queryItemAsString(this.redirectUrl)
       if (redirectUrl) {
