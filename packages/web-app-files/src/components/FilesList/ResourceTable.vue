@@ -304,7 +304,7 @@ export default defineComponent({
       default: true
     },
     /**
-     * Top position of header used when the head^er is sticky in pixels
+     * Top position of header used when the header is sticky in pixels
      */
     headerPosition: {
       type: Number,
@@ -717,7 +717,7 @@ export default defineComponent({
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      // this.$emit('fileClick', resource)
+      this.$emit('fileClick', resource)
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {

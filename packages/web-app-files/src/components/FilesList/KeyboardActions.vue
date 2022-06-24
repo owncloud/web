@@ -56,7 +56,7 @@ export default {
     ]),
     ...mapMutations('Files', {
       upsertResource: 'UPSERT_RESOURCE',
-      setLatestSelectedFile: 'SET_LATEST_SELECTED_FILE',
+      setLatestSelectedFile: 'SET_LATEST_SELECTED_FILE_ID',
       setFileSelection: 'SET_FILE_SELECTION',
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
