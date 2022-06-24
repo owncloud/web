@@ -119,7 +119,12 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useRequest, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useRequest,
+  useCapabilityShareJailEnabled,
+  useStore,
+  usePublicLinkPassword
+} from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -138,6 +143,7 @@ export default defineComponent({
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
+    const store = useStore()
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
@@ -168,7 +174,8 @@ export default defineComponent({
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
-      ...useRequest()
+      ...useRequest(),
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
   data: () => ({
@@ -178,13 +185,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', [
-      'files',
-      'currentFolder',
-      'publicLinkPassword',
-      'spaces',
-      'selectedFiles'
-    ]),
+    ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {

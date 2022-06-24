@@ -223,6 +223,15 @@ export const getStore = function ({
           }
         }
       },
+      runtime: {
+        modules: {
+          auth: {
+            getters: {
+              publicLinkPassword: () => publicLinkPassword
+            }
+          }
+        }
+      },
       user: { state: user }
     }
   })

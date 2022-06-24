@@ -3,14 +3,11 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
-import {
-  isLocationPublicActive,
-  createLocationPublic,
-  createLocationOperations
-} from '../../router'
+import { isLocationPublicActive, createLocationPublic } from '../../router'
 
 import { linkRoleUploaderFolder } from '../../helpers/share'
 import { Store } from 'vuex'
+import { authService } from 'web-runtime/src/services/auth'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,7 +29,7 @@ export class FolderLoaderPublicFiles implements FolderLoader {
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      const publicLinkPassword = store.getters['Files/publicLinkPassword']
+      const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
 
       try {
         let resources = yield client.publicFiles.list(
@@ -66,20 +63,11 @@ export class FolderLoaderPublicFiles implements FolderLoader {
         console.error(error)
 
         if (error.statusCode === 401) {
-          redirectToResolvePage(router)
-          return
+          return authService.handleAuthError(router.currentRoute)
         }
       }
 
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     })
   }
-}
-
-const redirectToResolvePage = (router: Router) => {
-  router.push(
-    createLocationOperations('files-operations-resolver-public-link', {
-      params: { token: router.currentRoute.params.item }
-    })
-  )
 }

@@ -69,6 +69,12 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       isPublicLinkContext,
       publicLinkPassword
     }),
-    ...useAppFolderHandling({ clientService, store, isPublicLinkContext, publicLinkPassword })
+    ...useAppFolderHandling({
+      clientService,
+      store,
+      currentRoute,
+      isPublicLinkContext,
+      publicLinkPassword
+    })
   }
 }

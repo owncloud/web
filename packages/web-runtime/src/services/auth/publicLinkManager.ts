@@ -3,6 +3,12 @@ export class PublicLinkManager {
     return `publicLink.${token}.${suffix}`
   }
 
+  clear(token: string): void {
+    ;['resolved', 'passwordRequired', 'password'].forEach((key) => {
+      sessionStorage.removeItem(PublicLinkManager.buildStorageKey(token, key))
+    })
+  }
+
   isResolved(token: string): boolean {
     const resolved = sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'resolved'))
     return resolved === 'true'
@@ -28,12 +34,21 @@ export class PublicLinkManager {
   }
 
   getPassword(token: string): string {
-    return sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'password')) || ''
+    const password = sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'password'))
+    if (password) {
+      try {
+        return Buffer.from(password, 'base64').toString()
+      } catch (e) {
+        this.clear(token)
+      }
+    }
+    return ''
   }
 
   setPassword(token: string, password: string): void {
     if (password.length) {
-      sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'password'), password)
+      const encodedPassword = Buffer.from(password).toString('base64')
+      sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'password'), encodedPassword)
     } else {
       sessionStorage.removeItem(PublicLinkManager.buildStorageKey(token, 'password'))
     }

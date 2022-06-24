@@ -62,22 +62,5 @@ export default {
   },
   versions: (state) => {
     return state.versions
-  },
-  publicLinkPassword: (state) => {
-    // we need to use the state for reactivity
-    if (state.publicLinkPassword) {
-      return state.publicLinkPassword
-    }
-
-    let password = sessionStorage.getItem('publicLinkInfo')
-    if (password) {
-      try {
-        password = Buffer.from(password, 'base64').toString()
-      } catch (e) {
-        sessionStorage.removeItem('publicLinkInfo')
-      }
-    }
-
-    return password
   }
 }

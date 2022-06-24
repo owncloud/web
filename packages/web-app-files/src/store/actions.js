@@ -155,7 +155,11 @@ export default {
     for (const file of files) {
       let p = null
       if (publicPage) {
-        p = client.publicFiles.delete(file.path, null, context.getters.publicLinkPassword)
+        p = client.publicFiles.delete(
+          file.path,
+          null,
+          context.rootGetters['runtime/auth/publicLinkPassword']
+        )
       } else {
         p = client.files.delete(file.webDavPath)
       }
@@ -213,7 +217,11 @@ export default {
       const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
       if (publicPage) {
         return client.publicFiles
-          .move(file.webDavPath, newPath + newValue, context.getters.publicLinkPassword)
+          .move(
+            file.webDavPath,
+            newPath + newValue,
+            context.rootGetters['runtime/auth/publicLinkPassword']
+          )
           .then(() => {
             if (!isSameResource) {
               context.commit('RENAME_FILE', { file, newValue, newPath })
@@ -675,9 +683,6 @@ export default {
       response = []
     }
     context.commit('SET_VERSIONS', response)
-  },
-  setPublicLinkPassword(context, password) {
-    context.commit('SET_PUBLIC_LINK_PASSWORD', password)
   },
 
   addLink(context, { path, client, params, storageId }) {

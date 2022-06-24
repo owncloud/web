@@ -276,6 +276,18 @@ export class AuthService {
     )
   }
 
+  public handleAuthError(route: Route) {
+    if (isPublicLinkContext(this.router, route)) {
+      const token = extractPublicLinkToken(route)
+      this.publicLinkManager.clear(token)
+      return this.router.push({
+        name: 'resolvePublicLink',
+        params: { token },
+        query: { redirectUrl: route.fullPath }
+      })
+    }
+  }
+
   public async resolvePublicLink(token: string, passwordRequired: boolean, password: string) {
     this.publicLinkManager.setPasswordRequired(token, passwordRequired)
     this.publicLinkManager.setPassword(token, password)

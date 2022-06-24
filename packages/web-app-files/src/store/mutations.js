@@ -211,16 +211,6 @@ export default {
   SHARESTREE_LOADING(state, loading) {
     state.sharesTreeLoading = loading
   },
-  SET_PUBLIC_LINK_PASSWORD(state, password) {
-    // cache into state for reactivity
-    state.publicLinkPassword = password
-    if (password) {
-      const encodedPassword = Buffer.from(password).toString('base64')
-      sessionStorage.setItem('publicLinkInfo', encodedPassword)
-    } else {
-      sessionStorage.removeItem('publicLinkInfo')
-    }
-  },
 
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null

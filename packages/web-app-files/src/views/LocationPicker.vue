@@ -98,7 +98,11 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityShareJailEnabled,
+  usePublicLinkPassword,
+  useStore
+} from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 
@@ -120,6 +124,7 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
@@ -175,7 +180,8 @@ export default {
 
     return {
       ...useResourcesViewDefaults({ loadResourcesTask }),
-      hasShareJail
+      hasShareJail,
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
 
@@ -189,7 +195,7 @@ export default {
       'locationPickerTargetFolder',
       'currentFolder'
     ]),
-    ...mapGetters('Files', ['publicLinkPassword', 'totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['configuration']),
     ...mapGetters(['homeFolder']),
     ...mapState(['user']),

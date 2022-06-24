@@ -4,7 +4,6 @@ import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
-import PublicLink from './views/PublicLink.vue'
 import Personal from './views/Personal.vue'
 import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
@@ -105,7 +104,6 @@ export default {
     LocationPicker,
     PrivateLink,
     PublicFiles,
-    PublicLink,
     SearchResults,
     SharedResource,
     SharedViaLink,

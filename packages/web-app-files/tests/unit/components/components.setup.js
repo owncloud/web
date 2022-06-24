@@ -128,8 +128,7 @@ export const getStore = function ({
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,
           pages: () => pages,
-          davProperties: () => davProperties,
-          publicLinkPassword: () => publicLinkPassword
+          davProperties: () => davProperties
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
@@ -173,6 +172,15 @@ export const getStore = function ({
               UPDATE_CURRENT_PAGE: () => {}
             },
             namespaced: true
+          }
+        }
+      },
+      runtime: {
+        modules: {
+          auth: {
+            getters: {
+              publicLinkPassword: () => publicLinkPassword
+            }
           }
         }
       },
