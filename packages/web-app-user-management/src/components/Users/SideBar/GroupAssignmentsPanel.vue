@@ -4,13 +4,35 @@
     <div v-if="editUser" class="oc-background-highlight oc-p-m">
       <oc-select
         v-model="editUser.memberOf"
-        taggable
         multiple
         :options="groups"
         option-label="displayName"
         :label="$gettext('Add or remove groups')"
         :fix-message-line="true"
-      />
+      >
+        <template #selected-option="{ displayName, id }">
+          <span class="oc-flex oc-flex-center">
+            <avatar-image
+              class="oc-flex oc-align-self-center oc-mr-s"
+              :width="16.8"
+              :userid="id"
+              :user-name="displayName"
+            />
+            <span>{{ displayName }}</span>
+          </span>
+        </template>
+        <template #option="{ displayName, id }">
+          <span class="oc-flex oc-flex-center">
+            <avatar-image
+              class="oc-flex oc-align-self-center oc-mr-s"
+              :width="16.8"
+              :userid="id"
+              :user-name="displayName"
+            />
+            <span>{{ displayName }}</span>
+          </span>
+        </template>
+      </oc-select>
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
