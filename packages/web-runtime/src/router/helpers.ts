@@ -49,11 +49,7 @@ export const isUserContext = (router: Router, to: Route): boolean => {
   }
 
   const contextRoute = getContextRoute(router, to)
-  if (contextRoute?.meta?.auth !== false) {
-    return true
-  }
-
-  return false
+  return contextRoute && contextRoute.meta?.auth !== false
 }
 
 /**
@@ -74,11 +70,7 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
   }
 
   const contextRoute = getContextRoute(router, to)
-  if (publicLinkRouteNames.includes(contextRoute?.name)) {
-    return true
-  }
-
-  return false
+  return contextRoute && publicLinkRouteNames.includes(contextRoute?.name)
 }
 
 /**
