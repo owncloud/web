@@ -4,9 +4,6 @@ import Vue from 'vue'
 
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
-    console.error('router.beforeEach from', from?.fullPath, from?.query)
-    console.error('router.beforeEach to', to?.fullPath, to)
-
     const store = (Vue as any).$store
     const authService = (Vue as any).$authService
     await authService.initializeContext(to)

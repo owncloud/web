@@ -95,13 +95,9 @@ export class AuthService {
 
     // relevant for page reload: token is already in userStore
     // no userLoaded event and no signInCallback gets triggered
-    console.time('userManager.initialize: getAccessToken')
     const accessToken = await this.userManager.getAccessToken()
-    console.timeEnd('userManager.initialize: getAccessToken')
     if (accessToken) {
-      console.time('userManager.initialize: updateAccessToken')
       await this.updateUserContext(accessToken)
-      console.timeEnd('userManager.initialize: updateAccessToken')
     }
   }
 

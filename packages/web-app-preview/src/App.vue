@@ -305,6 +305,7 @@ export default defineComponent({
         // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
         let mediaUrl
         if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
+          // TODO: get rid of `mediaSource`, use preview loading mechanism from files app instead (needs to be extracted to web-pkg first)
           const headers = new Headers()
           if (!this.isPublicLinkContext) {
             headers.append('Authorization', 'Bearer ' + this.accessToken)
