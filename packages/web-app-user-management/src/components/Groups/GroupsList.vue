@@ -32,9 +32,17 @@
     <template #avatar="rowData">
       <avatar-image :width="32" :userid="rowData.item.id" :user-name="rowData.item.displayName" />
     </template>
+    <template #members="rowData">
+      {{ rowData.item.members.length }}
+    </template>
     <template #actions="{ item }">
-      <oc-button v-oc-tooltip="$gettext('Details')" @click="$emit('clickDetails', item)">
-        <oc-icon size="small" name="information" />
+      <oc-button
+        v-oc-tooltip="$gettext('Details')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('clickDetails', item)"
+      >
+        <oc-icon name="information" fill-type="line" />
       </oc-button>
       <!-- Editing groups is currently not supported by backend
       <oc-button v-oc-tooltip="$gettext('Edit')" class="oc-ml-s" @click="$emit('clickEdit', item)">
@@ -103,6 +111,12 @@ export default {
         {
           name: 'displayName',
           title: this.$gettext('Group name'),
+          sortable: true
+        },
+        {
+          name: 'members',
+          title: this.$gettext('Members'),
+          type: 'slot',
           sortable: true
         },
         {

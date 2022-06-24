@@ -51,7 +51,7 @@ export const contextQueryToFileContextProps = (
   }
 }
 
-const queryItemAsString = (queryItem: string | string[]) => {
+export const queryItemAsString = (queryItem: string | string[]) => {
   if (Array.isArray(queryItem)) {
     return queryItem[0]
   }

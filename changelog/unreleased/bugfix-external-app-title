@@ -1,0 +1,5 @@
+Bugfix: Re-introduce dynamic app name in document title
+
+The `external` app was missing the dynamic app name after some recent refactoring. It has been reintroduced.
+
+https://github.com/owncloud/web/pull/7173

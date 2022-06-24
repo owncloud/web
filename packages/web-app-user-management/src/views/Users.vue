@@ -76,6 +76,7 @@
               @toggleSelectUser="toggleSelectUser"
               @toggleSelectAllUsers="toggleSelectAllUsers"
               @clickDetails="showDetailsSideBarPanel"
+              @clickGroupAssignments="showGroupAssignmentsPanel"
               @clickEdit="showEditSideBarPanel"
             />
           </div>
@@ -97,6 +98,13 @@
               :roles="roles"
               @confirm="editUser"
             />
+            <GroupAssignmentsPanel
+              v-if="activePanel === 'GroupAssignmentsPanel'"
+              :users="selectedUsers"
+              :roles="roles"
+              :groups="groups"
+              @confirm="editUserGroupAssignments"
+            />
           </template>
         </side-bar>
       </template>
@@ -110,6 +118,7 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
+import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
@@ -126,6 +135,7 @@ export default {
   components: {
     EditPanel,
     DetailsPanel,
+    GroupAssignmentsPanel,
     UsersList,
     AppLoadingSpinner,
     NoContentMessage,
@@ -136,6 +146,7 @@ export default {
   setup() {
     const store = useStore()
     const users = ref([])
+    const groups = ref([])
     const roles = ref([])
     const userAssignments = ref({})
     const graphClient = clientService.graphAuthenticated(
@@ -190,10 +201,20 @@ export default {
       userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
     })
 
+    const loadGroupsTask = useTask(function* (signal, ref) {
+      const groupsResponse = yield graphClient.groups.listGroups()
+      groups.value = groupsResponse.data.value
+    })
+
     const loadResourcesTask = useTask(function* (signal, ref) {
       const usersResponse = yield graphClient.users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
+      users.value.forEach((user) => {
+        user.memberOf = user.memberOf || []
+      })
+
+      yield loadGroupsTask.perform()
       yield loadRolesTask.perform()
 
       for (const user of users.value) {
@@ -204,6 +225,7 @@ export default {
     return {
       users,
       roles,
+      groups,
       loadResourcesTask,
       graphClient
     }
@@ -218,7 +240,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'configuration']),
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
@@ -253,6 +275,14 @@ export default {
           icon: 'pencil',
           title: $gettext('Edit user'),
           component: EditPanel,
+          default: false,
+          enabled: this.selectedUsers.length === 1
+        },
+        {
+          app: 'GroupAssignmentsPanel',
+          icon: 'group-2',
+          title: $gettext('Group assignments'),
+          component: GroupAssignmentsPanel,
           default: false,
           enabled: this.selectedUsers.length === 1
         }
@@ -345,6 +375,12 @@ export default {
       this.sideBarOpen = true
     },
 
+    showGroupAssignmentsPanel(user) {
+      this.selectedUsers = user ? [user] : []
+      this.activePanel = 'GroupAssignmentsPanel'
+      this.sideBarOpen = true
+    },
+
     async deleteUsers(users) {
       const promises = users.map((user) => this.graphClient.users.deleteUser(user.id))
 
@@ -396,7 +432,10 @@ export default {
         this.showMessage({
           title: this.$gettext('User was created successfully')
         })
-        this.users.push(response?.data)
+        this.users.push({
+          ...response?.data,
+          ...{ memberOf: [], role: this.roles.find((role) => role.name === 'user') }
+        })
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -441,6 +480,47 @@ export default {
         console.error(error)
         this.showMessage({
           title: this.$gettext('Failed to edit user'),
+          status: 'danger'
+        })
+      }
+    },
+
+    async editUserGroupAssignments(editUser) {
+      try {
+        const user = this.users.find((user) => user.id === editUser.id)
+
+        const groupsToAdd = editUser.memberOf.filter((editUserGroup) => {
+          return !user.memberOf.includes(editUserGroup)
+        })
+        const groupsToDelete = user.memberOf.filter((editUserGroup) => {
+          return !editUser.memberOf.includes(editUserGroup)
+        })
+
+        for (const groupToAdd of groupsToAdd) {
+          await this.graphClient.groups.addMember(groupToAdd.id, user.id, this.configuration.server)
+        }
+
+        for (const groupToDelete of groupsToDelete) {
+          await this.graphClient.groups.deleteMember(groupToDelete.id, user.id)
+        }
+
+        this.$set(
+          this.users,
+          this.users.findIndex((user) => user.id === editUser.id),
+          editUser
+        )
+        /**
+         * The user object gets actually exchanged, therefore we update the selected users
+         */
+        this.selectedUsers = [editUser]
+
+        this.showMessage({
+          title: this.$gettext('Group assignments were edited successfully')
+        })
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to edit group assignments'),
           status: 'danger'
         })
       }

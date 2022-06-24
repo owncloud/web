@@ -1,0 +1,6 @@
+Enhancement: Introduce group assignments
+
+We have added a new quick action in the user management where the user can be assigned to groups.
+
+https://github.com/owncloud/web/pull/7176
+https://github.com/owncloud/web/issues/6678

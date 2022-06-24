@@ -215,16 +215,16 @@ export default defineComponent({
       return this.getUrlForResource(this.activeFilteredFile)
     },
 
-    isActiveFileTypeVideo() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
-    },
-
     isActiveFileTypeImage() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('image')
+      return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
     },
 
     isActiveFileTypeAudio() {
       return this.activeFilteredFile.mimeType.toLowerCase().startsWith('audio')
+    },
+
+    isActiveFileTypeVideo() {
+      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
     },
 
     isUrlSigningEnabled() {

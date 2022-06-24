@@ -30,7 +30,7 @@
           </li>
           <li
             v-for="(newFileHandler, key) in newFileHandlers"
-            :key="key"
+            :key="`file-creation-item-${key}`"
             class="create-list-file oc-menu-item-hover"
           >
             <oc-button
@@ -48,7 +48,7 @@
           <template v-if="mimetypesAllowedForCreation">
             <li
               v-for="(mimetype, key) in mimetypesAllowedForCreation"
-              :key="key"
+              :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
               <oc-button
