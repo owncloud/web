@@ -98,11 +98,11 @@ export default {
 
     handleNavigateAction(event, up = false) {
       event.preventDefault()
-      this.resetSelectionCursor()
-      this.resetFileSelection()
       if (!this.latestSelectedId) return
       const nextId = this.getNextResourceId(up)
       if (nextId === -1) return
+      this.resetSelectionCursor()
+      this.resetFileSelection()
       this.addFileSelection({ id: nextId })
     },
 
