@@ -22,15 +22,17 @@
           </span>
         </template>
         <template #option="{ displayName, id }">
-          <span class="oc-flex oc-flex-center">
-            <avatar-image
-              class="oc-flex oc-align-self-center oc-mr-s"
-              :width="16.8"
-              :userid="id"
-              :user-name="displayName"
-            />
-            <span>{{ displayName }}</span>
-          </span>
+          <div class="oc-flex">
+            <span class="oc-flex oc-flex-center">
+              <avatar-image
+                class="oc-flex oc-align-self-center oc-mr-s"
+                :width="16.8"
+                :userid="id"
+                :user-name="displayName"
+              />
+              <span>{{ displayName }}</span>
+            </span>
+          </div>
         </template>
       </oc-select>
     </div>
