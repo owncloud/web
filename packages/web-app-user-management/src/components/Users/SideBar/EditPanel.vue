@@ -1,10 +1,6 @@
 <template>
   <div v-if="user" class="oc-mt-xl">
-    <div class="oc-flex group-info oc-mb-l">
-      <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
-      <span v-text="user.onPremisesSamAccountName"></span>
-      <span class="oc-text-muted group-info-display-name" v-text="user.displayName"></span>
-    </div>
+    <UserInfoBox :user="user" />
     <div v-if="editUser" class="oc-background-highlight oc-p-m">
       <oc-text-input
         v-model="editUser.displayName"
@@ -51,11 +47,13 @@
 </template>
 <script>
 import * as EmailValidator from 'email-validator'
+import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from '../../CompareSaveDialog.vue'
 
 export default {
   name: 'EditPanel',
   components: {
+    UserInfoBox,
     CompareSaveDialog
   },
   props: {
@@ -155,12 +153,5 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-}
-.user-info {
-  align-items: center;
-  flex-direction: column;
-}
-.user-info-display-name {
-  font-size: 1.5rem;
 }
 </style>
