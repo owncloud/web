@@ -1,4 +1,6 @@
 // dummy to trick gettext string extraction into recognizing strings
+import { SharePermissionBit } from 'web-pkg/src/constants'
+
 const $gettext = (str) => {
   return str
 }
@@ -32,11 +34,26 @@ export class SharePermission {
 }
 
 export abstract class SharePermissions {
-  static readonly read = new SharePermission('read', 1, $gettext('Read'))
-  static readonly update = new SharePermission('update', 2, $gettext('Update'))
-  static readonly create = new SharePermission('create', 4, $gettext('Create'))
-  static readonly delete = new SharePermission('delete', 8, $gettext('Delete'))
-  static readonly share = new SharePermission('share', 16, $gettext('Share'))
+  static readonly read = new SharePermission('read', SharePermissionBit.Read, $gettext('Read'))
+  static readonly update = new SharePermission(
+    'update',
+    SharePermissionBit.Update,
+    $gettext('Update')
+  )
+
+  static readonly create = new SharePermission(
+    'create',
+    SharePermissionBit.Create,
+    $gettext('Create')
+  )
+
+  static readonly delete = new SharePermission(
+    'delete',
+    SharePermissionBit.Delete,
+    $gettext('Delete')
+  )
+
+  static readonly share = new SharePermission('share', SharePermissionBit.Share, $gettext('Share'))
 
   static permissionsToBitmask(permissions: SharePermission[]): number {
     return (permissions || []).reduce((b: number, p: SharePermission) => b | p.bit, 0)

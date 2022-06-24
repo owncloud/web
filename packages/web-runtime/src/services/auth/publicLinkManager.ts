@@ -22,7 +22,6 @@ export class PublicLinkManager {
     const passwordRequired = sessionStorage.getItem(
       PublicLinkManager.buildStorageKey(token, 'passwordRequired')
     )
-    console.log('type of isPasswordRequired from session storage: ', typeof passwordRequired)
     return passwordRequired === 'true'
   }
 

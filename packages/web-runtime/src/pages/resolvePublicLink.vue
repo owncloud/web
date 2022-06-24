@@ -61,7 +61,7 @@
 
 <script type="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { DavProperties, DavProperty, SharePermissionBit } from "web-pkg/src/constants";
 import { authService } from "../services/auth";
 
 import {
@@ -153,8 +153,7 @@ export default defineComponent({
         return this.$router.push({ path: redirectUrl })
       }
 
-      console.log('publicLink', publicLink)
-      if (publicLink.getProperty(DavProperty.PublicLinkPermission) === '4') {
+      if (parseInt(publicLink.fileInfo[DavProperty.PublicLinkPermission]) === SharePermissionBit.Create) {
         return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
       }
 

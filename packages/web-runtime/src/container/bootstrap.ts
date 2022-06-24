@@ -166,8 +166,6 @@ export const announceApplicationsReady = async ({
   applications: NextApplication[]
 }): Promise<void> => {
   await Promise.all(applications.map((application) => application.ready()))
-  console.log('applications ready')
-  console.log('user id: ', (window.Vue as any).$store.getters.user.id)
 }
 
 /**

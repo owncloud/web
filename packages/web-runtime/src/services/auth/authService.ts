@@ -309,14 +309,18 @@ export class AuthService {
       password = this.publicLinkManager.getPassword(token)
     }
 
-    await this.fetchCapabilities({
-      publicToken: token,
-      user: 'public',
-      password
-    })
-    // ocis at the moment is not able to create archives for public links that are password protected
-    // till this is supported by the backend remove it hard as a workaround
-    // https://github.com/owncloud/web/issues/6515
+    try {
+      await this.fetchCapabilities({
+        publicToken: token,
+        user: 'public',
+        password
+      })
+    } catch (e) {
+      console.error(e)
+    }
+    // FIXME: ocis at the moment is not able to create archives for public links that are password protected
+    // until this is supported by the backend remove it hard as a workaround
+    // https://github.com/owncloud/web/issues/6423
     // if (publicLinkPassword) {
     //   store.commit('SET_CAPABILITIES', {
     //     capabilities: omit(store.getters.capabilities, ['files.archivers']),
