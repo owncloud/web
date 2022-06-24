@@ -125,6 +125,7 @@ export default {
         const nodeId = resourceNodes[i].getAttribute('data-item-id')
         this.addFileSelection({ id: nodeId })
       }
+      this.setLatestSelectedFile(resource.id)
     },
 
     handleCtrlClickAction(resource) {
