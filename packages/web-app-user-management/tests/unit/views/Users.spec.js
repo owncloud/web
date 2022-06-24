@@ -74,6 +74,60 @@ describe('Users view', () => {
     })
   })
 
+  describe('method "editUserGroupAssignments"', () => {
+    it('should show message on success', async () => {
+      const editUser = {
+        id: '1',
+        memberOf: [
+          {
+            displayName: 'group',
+            id: '04114ac6-f050-41d2-98db-6f016abccf2c'
+          }
+        ]
+      }
+
+      const wrapper = getMountedWrapper({
+        mocks: {
+          users: [
+            {
+              id: '1',
+              memberOf: []
+            }
+          ]
+        }
+      })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const setStub = jest.spyOn(wrapper.vm, '$set')
+
+      await wrapper.vm.editUserGroupAssignments(editUser)
+
+      expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
+      expect(showMessageStub).toHaveBeenCalled()
+      expect(setStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      const editUser = {
+        id: '1',
+        memberOf: [
+          {
+            displayName: 'group',
+            id: '04114ac6-f050-41d2-98db-6f016abccf2c'
+          }
+        ]
+      }
+      mockAxios.post.mockImplementationOnce(() => {
+        return Promise.resolve({})
+      })
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = getMountedWrapper({ resolveAddMember: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editUserGroupAssignments(editUser)
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
   describe('method "deleteUsers"', () => {
     it('should hide the modal and show message on success', async () => {
       const wrapper = getMountedWrapper()
@@ -156,7 +210,8 @@ function getMountedWrapper({
   mocks = {},
   resolveCreateUser = true,
   resolveEditUser = true,
-  resolveDeleteUser = true
+  resolveDeleteUser = true,
+  resolveAddMember = true
 } = {}) {
   return shallowMount(Users, {
     localVue,
@@ -165,7 +220,10 @@ function getMountedWrapper({
         showMessage: jest.fn()
       },
       getters: {
-        getToken: () => 'token'
+        getToken: () => 'token',
+        configuration: () => ({
+          server: 'https://example.com/'
+        })
       }
     }),
     mocks: {
@@ -181,6 +239,9 @@ function getMountedWrapper({
           createUser: () => (resolveCreateUser ? Promise.resolve() : Promise.reject(new Error(''))),
           editUser: () => (resolveEditUser ? Promise.resolve() : Promise.reject(new Error(''))),
           deleteUser: () => (resolveDeleteUser ? Promise.resolve() : Promise.reject(new Error('')))
+        },
+        groups: {
+          addMember: () => (resolveAddMember ? Promise.resolve() : Promise.reject(new Error('')))
         }
       },
       users: [
@@ -196,7 +257,8 @@ function getMountedWrapper({
       return {
         selectedUsers: [
           {
-            id: 1
+            id: 1,
+            memberOf: []
           }
         ],
         ...data
