@@ -1,7 +1,9 @@
 import { Page } from 'playwright'
 import { sidebar } from '../utils'
+import { File } from '../../../types'
 import util from 'util'
 import { inviteMembers, inviteMembersArgs } from '../share/actions'
+import { expect } from '@playwright/test'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -10,6 +12,7 @@ const spaceIdSelector = `[data-space-id="%s"]`
 const spacesRenameOptionSelector = '.oc-files-actions-rename-trigger'
 const editSpacesSubtitleOptionSelector = '.oc-files-actions-edit-description-trigger'
 const editQuotaOptionSelector = '.oc-files-actions-edit-quota-trigger'
+const editImageOptionSelector = '.oc-files-actions-upload-space-image-trigger'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
@@ -19,6 +22,9 @@ const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger'
 const spaceContextButton = '#space-context-btn'
+const spaceOverviewImg = '.space-overview-image'
+
+export let spaceImageId = ''
 /**/
 
 export interface createSpaceArgs {
@@ -205,4 +211,44 @@ export const openSpaceTrashBin = async (args: openSpaceTrashBinArgs): Promise<vo
   await openSpace({ page, id })
   await page.locator(spaceContextButton).click()
   await page.locator(spaceDeletedFilesButton).click()
+}
+
+/**/
+
+export const changeSpaceImage = async (args: {
+  id: string
+  page: Page
+  resource: File
+}): Promise<void> => {
+  const { id, page, resource } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-actions' })
+
+  const [fileChooser] = await Promise.all([
+    page.waitForEvent('filechooser'),
+    page.locator(editImageOptionSelector).click()
+  ])
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(id)) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
+    ),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(resource.name) &&
+        resp.status() === 207 &&
+        resp.request().method() === 'PROPFIND'
+    ),
+    fileChooser.setFiles(resource.path)
+  ])
+
+  const img = await page.locator(spaceOverviewImg)
+  const src = await img.evaluate((e) => (e as HTMLImageElement).src)
+  expect(src).not.toBe(spaceImageId)
+  spaceImageId = src
+
+  await sidebar.close({ page: page })
 }
