@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
 -------
@@ -28,6 +29,13 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+
+   We have added a new quick action in the user management where the user can be assigned to groups.
+
+   https://github.com/owncloud/web/issues/6678
+   https://github.com/owncloud/web/pull/7176
 
 Changelog for ownCloud Web [5.6.1] (2022-06-22)
 =======================================
