@@ -1,9 +1,9 @@
 import { Page } from 'playwright'
 import { sidebar } from '../utils'
-import { File } from '../../../types'
+import { File, User } from '../../../types'
 import util from 'util'
 import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
-import { User } from '../../../types'
+import { expect } from '@playwright/test'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -25,7 +25,6 @@ const spaceContextButton = '#space-context-btn'
 const spaceOverviewImg = '.space-overview-image'
 
 export let spaceImageId = ''
-const emptySpacesSelector = '//span[@data-msgid="%s"]'
 /**/
 
 export interface createSpaceArgs {
@@ -262,25 +261,6 @@ export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): P
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
   await removeSharee({ page, users })
-}
-
-export interface searchForSpacesIdsArgs {
-  spaceID: string
-  page: Page
-}
-export const searchForSpacesIds = async (args: searchForSpacesIdsArgs): Promise<boolean> => {
-  const { page, spaceID } = args
-  const emptySpacesMessage = "You don't have access to any spaces"
-
-  // for empty case
-  if (await page.$(util.format(emptySpacesSelector, emptySpacesMessage))) {
-    return true
-  }
-  // if more than one spaces exists
-  if (!(await page.$(util.format(spaceIdSelector, spaceID)))) {
-    return true
-  }
-  return false
 }
 
 export interface changeSpaceRoleArgs {

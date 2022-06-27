@@ -17,11 +17,11 @@ import {
   reloadSpacePage,
   removeAccessMembersArgs,
   removeAccessSpaceMembers,
-  searchForSpacesIds,
   changeSpaceRoleArgs,
   changeSpaceRole
 } from './actions'
 import { inviteMembersArgs } from '../share/actions'
+import { spaceWithSpaceIDExist } from './utils'
 
 export class Spaces {
   #page: Page
@@ -81,7 +81,7 @@ export class Spaces {
   }
 
   async spacesIdExist(spaceID: string): Promise<boolean> {
-    return await searchForSpacesIds({ spaceID, page: this.#page })
+    return await spaceWithSpaceIDExist({ spaceID, page: this.#page })
   }
 
   async canUserEditResource(args: Omit<canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
