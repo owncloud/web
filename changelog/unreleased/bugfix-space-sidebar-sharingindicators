@@ -1,0 +1,6 @@
+Bugfix: Space sidebar sharing indicators
+
+We have fixed the way the sharing indicators for space members and link shares were displayed in the details panel of the sidebar as well as the click behavior for accessing the shares panel through the sharing information.
+
+https://github.com/owncloud/web/pull/6921
+https://github.com/owncloud/web/issues/6917
