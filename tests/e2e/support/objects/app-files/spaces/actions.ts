@@ -1,8 +1,8 @@
 import { Page } from 'playwright'
 import { sidebar } from '../utils'
-import { File } from '../../../types'
+import { File, User } from '../../../types'
 import util from 'util'
-import { inviteMembers, inviteMembersArgs } from '../share/actions'
+import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
 import { expect } from '@playwright/test'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
@@ -251,4 +251,26 @@ export const changeSpaceImage = async (args: {
   spaceImageId = src
 
   await sidebar.close({ page: page })
+}
+export interface removeAccessMembersArgs {
+  users: User[]
+  page: Page
+}
+export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
+  const { page, users } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await removeSharee({ page, users })
+}
+
+export interface changeSpaceRoleArgs {
+  role: string
+  users: User[]
+  page: Page
+}
+export const changeSpaceRole = async (args: changeSpaceRoleArgs): Promise<void> => {
+  const { page, role, users } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await changeShareeRole({ page, users, role })
 }
