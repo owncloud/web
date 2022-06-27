@@ -9,35 +9,10 @@
       @cancel="cancel"
     >
       <template #content>
-        <oc-select
-          v-model="selectedOption"
-          :selectable="optionSelectable"
-          taggable
-          push-tags
-          :clearable="false"
-          :options="options"
-          :create-option="createOption"
-          option-label="displayValue"
-          :label="$gettext('Space quota')"
-        >
-          <template #selected-option="{ displayValue, displayUnit }">
-            <span>{{ displayValue }}</span>
-            <span v-if="displayUnit" class="oc-text-muted oc-ml-s">{{ displayUnit }}</span>
-          </template>
-          <template #search="{ attributes, events }">
-            <input class="vs__search" v-bind="attributes" v-on="events" />
-          </template>
-          <template #option="{ displayValue, displayUnit, error }">
-            <div class="oc-flex oc-flex-between">
-              <span>{{ displayValue }}</span>
-              <span v-if="displayUnit" class="oc-text-muted">{{ displayUnit }}</span>
-            </div>
-            <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
-          </template>
-        </oc-select>
-        <p
-          class="oc-mt-xs oc-text-meta"
-          v-text="$gettext('Select a quota option or enter your own value')"
+        <quota-select
+          :title="$gettext('Space quota')"
+          :total-quota="selectedOption"
+          @selectedOptionChange="changeSelectedQuotaOption"
         />
       </template>
     </oc-modal>
@@ -48,9 +23,13 @@
 import { defineComponent } from '@vue/runtime-core'
 import { mapActions, mapMutations } from 'vuex'
 import { useGraphClient } from 'web-client/src/composables'
+import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
+  components: {
+    QuotaSelect
+  },
   props: {
     space: {
       type: Object,
@@ -68,87 +47,35 @@ export default defineComponent({
   },
   data: function () {
     return {
-      selectedOption: {},
-      options: []
+      selectedOption: 0
     }
   },
   computed: {
     confirmButtonDisabled() {
-      return this.space.spaceQuota.total === this.selectedOption.value
+      return this.space.spaceQuota.total === this.selectedOption
     },
     modalTitle() {
       return this.$gettextInterpolate(this.$gettext('Change quota for space %{name}'), {
         name: this.space.name
       })
-    },
-    DEFAULT_OPTIONS() {
-      return [
-        {
-          displayValue: '1',
-          displayUnit: 'GB',
-          value: Math.pow(10, 9)
-        },
-        {
-          displayValue: '5',
-          displayUnit: 'GB',
-          value: 5 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '10',
-          displayUnit: 'GB',
-          value: 10 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '50',
-          displayUnit: 'GB',
-          value: 50 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '100',
-          displayUnit: 'GB',
-          value: 100 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '500',
-          displayUnit: 'GB',
-          value: 500 * Math.pow(10, 9)
-        },
-        {
-          displayValue: '1000',
-          displayUnit: 'GB',
-          value: 1000 * Math.pow(10, 9)
-        },
-        {
-          displayValue: this.$gettext('No restriction'),
-          displayUnit: '',
-          value: 0,
-          unlimited: true
-        }
-      ]
     }
   },
   mounted() {
-    this.setOptions()
+    this.selectedOption = this.space.spaceQuota.total || 0
   },
   methods: {
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
 
+    changeSelectedQuotaOption(option) {
+      this.selectedOption = option.value
+    },
     editQuota() {
-      const quotaOption = this.selectedOption
-
-      if (!quotaOption.unlimited && isNaN(quotaOption.value)) {
-        return this.showMessage({
-          title: this.$gettext('Changing space quota failed…'),
-          status: 'danger'
-        })
-      }
-
       return this.graphClient.drives
-        .updateDrive(this.space.id, { quota: { total: this.selectedOption.value } }, {})
+        .updateDrive(this.space.id, { quota: { total: this.selectedOption } }, {})
         .then(({ data }) => {
           this.cancel()
-          this.UPDATE_RESOURCE_FIELD({
+          this.UPDATE_SPACE_FIELD({
             id: this.space.id,
             field: 'spaceQuota',
             value: data.quota
@@ -164,71 +91,6 @@ export default defineComponent({
             status: 'danger'
           })
         })
-    },
-    optionSelectable(option) {
-      if (option.unlimited) {
-        return true
-      }
-
-      if (!option.value) {
-        return false
-      }
-
-      return !isNaN(option.value)
-    },
-    createOption(option) {
-      if (option.endsWith('.') || option.endsWith(',')) {
-        option = option.slice(0, -1)
-      }
-
-      const optionIsNumberRegex = /^[1-9]\d*(([.,])\d+)?$/g
-
-      if (!optionIsNumberRegex.test(option)) {
-        return {
-          displayValue: option,
-          error: this.$gettext('Please enter only numbers')
-        }
-      }
-
-      option = option.replace(',', '.')
-      return {
-        displayValue: parseFloat(option).toFixed(2).toString().replace('.00', ''),
-        displayUnit: 'GB',
-        value: parseFloat(parseFloat(option).toFixed(2)) * Math.pow(10, 9)
-      }
-    },
-    setOptions() {
-      this.options = [...this.DEFAULT_OPTIONS]
-
-      let selectedQuotaInOptions = null
-
-      if ('total' in this.space.spaceQuota) {
-        selectedQuotaInOptions = this.options.find(
-          (option) => option.value === this.space.spaceQuota.total
-        )
-      } else {
-        selectedQuotaInOptions = this.options.find((option) => option.unlimited === true)
-      }
-
-      if (selectedQuotaInOptions) {
-        this.selectedOption = selectedQuotaInOptions
-        return
-      }
-
-      const newOption = {
-        displayValue: (this.space.spaceQuota.total * Math.pow(10, -9))
-          .toFixed(2)
-          .toString()
-          .replace('.00', ''),
-        displayUnit: 'GB',
-        value: this.space.spaceQuota.total
-      }
-      this.options.push(newOption)
-      this.options = [
-        ...this.options.filter((o) => o.value).sort((a, b) => a.value - b.value),
-        ...this.options.filter((o) => !o.value)
-      ]
-      this.selectedOption = newOption
     }
   }
 })
