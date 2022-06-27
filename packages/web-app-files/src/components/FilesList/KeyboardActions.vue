@@ -26,7 +26,8 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('keydown', this.handleShortcut, false)
+    const filesList = document.getElementById('files-list')
+    filesList.addEventListener('keydown', this.handleShortcut, false)
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
       'app.files.list.clicked.meta',

@@ -213,13 +213,6 @@ export default defineComponent({
         root: document.querySelector('#files-sidebar'),
         threshold: 0.05
       })
-      const doFocus = () => {
-        const selector = document.querySelector(this.focused)
-        if (!selector) {
-          return
-        }
-        selector.focus()
-      }
 
       const clearOldPanelName = () => {
         this.oldPanelName = null
@@ -233,10 +226,6 @@ export default defineComponent({
       hiddenObserver.disconnect()
 
       this.$refs.panels.forEach((panel) => {
-        visibilityObserver.observe(panel, {
-          onEnter: doFocus,
-          onExit: doFocus
-        })
         hiddenObserver.observe(panel, {
           onExit: clearOldPanelName
         })
