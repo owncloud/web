@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -29,6 +30,15 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+
+   We have fixed the way the sharing indicators for space members and link shares were displayed in
+   the details panel of the sidebar as well as the click behavior for accessing the shares panel
+   through the sharing information.
+
+   https://github.com/owncloud/web/issues/6917
+   https://github.com/owncloud/web/pull/6921
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
