@@ -682,13 +682,15 @@ export default defineComponent({
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      if (data[1].metaKey) {
-        bus.publish('app.files.list.clicked.meta', data[0])
-      } else if (data[1].shiftKey) {
-        bus.publish('app.files.list.clicked.shift', data[0])
-      } else {
-        this.emitSelect([data[0]])
+      const resource = data[0]
+      const eventData = data[1]
+      if (eventData && eventData.metaKey) {
+        return bus.publish('app.files.list.clicked.meta', resource)
       }
+      if (eventData && eventData.shiftKey) {
+        return bus.publish('app.files.list.clicked.shift', resource)
+      }
+      return this.emitSelect([resource])
     },
     formatDate(date) {
       return DateTime.fromJSDate(new Date(date))
