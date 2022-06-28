@@ -37,7 +37,6 @@ Feature: spaces participant management
     When "Alice" reloads the spaces page
     And "Alice" creates a public link for the resource "parent" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "parent" changing role to "editor"
-    And "Alice" logs out
     And "Anonymous" opens the public link "Link"
     And "Anonymous" uploads the following resources in public link page
       | resource     |
@@ -48,11 +47,31 @@ Feature: spaces participant management
     And "Brian" deletes the following resources
       | resource            |
       | parent/textfile.txt |
-    And "Brian" logs out
     And "Anonymous" logs out
     When "Carol" navigates to the trashbin of the project space "team.1"
     Then "Carol" should not be able to delete following resources from the trashbin
       | resource            |
       | parent/lorem.txt    |
       | parent/textfile.txt |
+    And "Carol" should not be able to restore following resources from the trashbin
+      | resource            |
+      | parent/lorem.txt    |
+      | parent/textfile.txt |
     And "Carol" logs out
+    When "Brian" navigates to the trashbin of the project space "team.1"
+    Then "Brian" should be able to restore following resources from the trashbin
+      | resource            |
+      | parent/lorem.txt    |
+      | parent/textfile.txt |
+    When "Alice" navigates to the projects space page
+    And "Alice" navigates to the project space "team.1"
+    And "Alice" removes access to following users from the project space
+      | user  |
+      | Brian |
+    When "Brian" navigates to the projects space page
+    Then "Brian" should not be able to see space "team.1"
+    And "Brian" logs out
+    When "Alice" changes the roles of the following users in the project space
+      | user  | role    |
+      | Carol | manager |
+    And "Alice" logs out

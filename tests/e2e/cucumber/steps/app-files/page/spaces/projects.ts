@@ -86,6 +86,19 @@ When(
   }
 )
 
+When(
+  '{string} removes access to following users from the project space',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      await spacesObject.removeAccessToMember({
+        users: [this.usersEnvironment.getUser({ key: info.user })]
+      })
+    }
+  }
+)
+
 Then(
   '{string} should see folder {string} but should not be able to edit',
   async function (this: World, stepUser: string, resource: string): Promise<void> {
@@ -93,6 +106,17 @@ Then(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const userCanEdit = await spacesObject.canUserEditResource({ resource })
     expect(userCanEdit).toBe(false)
+  }
+)
+
+Then(
+  '{string} should not be able to see space {string}',
+  async function (this: World, stepUser: string, space: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const spaceID = spacesObject.getSpaceID({ key: space })
+    const isSpaceNotVisible = await spacesObject.spacesIdExist(spaceID)
+    expect(isSpaceNotVisible).toBe(true)
   }
 )
 
@@ -113,5 +137,19 @@ When(
     await pageObject.navigate()
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     await spacesObject.openTrashbin(key)
+  }
+)
+
+When(
+  '{string} changes the roles of the following users in the project space',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    for (const info of stepTable.hashes()) {
+      await spacesObject.changeRoles({
+        users: [this.usersEnvironment.getUser({ key: info.user })],
+        role: info.role
+      })
+    }
   }
 )

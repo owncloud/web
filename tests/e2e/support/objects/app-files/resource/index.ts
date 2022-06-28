@@ -18,7 +18,9 @@ import {
   restoreResourceVersion,
   restoreResourceVersionArgs,
   uploadResource,
-  uploadResourceArgs
+  uploadResourceArgs,
+  restoreResourceTrashbinArgs,
+  restoreResourceTrashbin
 } from './actions'
 
 export class Resource {
@@ -101,6 +103,13 @@ export class Resource {
   async deleteTrashBin(args: Omit<deleteResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const message = await deleteResourceTrashbin({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return message
+  }
+
+  async restoreTrashBin(args: Omit<restoreResourceTrashbinArgs, 'page'>): Promise<string> {
+    const startUrl = this.#page.url()
+    const message = await restoreResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
   }
