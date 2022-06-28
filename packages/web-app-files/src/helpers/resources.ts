@@ -107,6 +107,9 @@ export function buildResource(resource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
+    canDeny: function () {
+      return this.permissions.indexOf(DavPermission.Deny) >= 0
+    },
     getDomSelector: () => extractDomSelector(id)
   }
 }
@@ -269,6 +272,7 @@ export function buildSharedResource(
     resource.canShare = () => true
     resource.canRename = () => true
     resource.canBeDeleted = () => true
+    resource.canDeny = () => SharePermissions.deny.enabled(share.permissions)
   }
 
   resource.extension = extractExtensionFromFile(resource)

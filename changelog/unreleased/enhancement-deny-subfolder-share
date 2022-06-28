@@ -1,0 +1,5 @@
+Enhancement: Deny subfolders inside share
+
+Subfolders within non-link shares can now be denied for certain share receivers if the backend is capabable of negative ACLs.
+
+https://github.com/owncloud/web/pull/7190
