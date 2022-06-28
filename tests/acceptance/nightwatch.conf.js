@@ -21,10 +21,6 @@ const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 const SELENIUM_HOST = process.env.SELENIUM_HOST || 'localhost'
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
-const SAUCE_USERNAME = process.env.SAUCE_USERNAME
-const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
-const BROWSER_NAME = process.env.BROWSER_NAME
-const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
 const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/storage/owncloud'
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
@@ -92,7 +88,7 @@ const config = {
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {
-        browserName: BROWSER_NAME || 'chrome',
+        browserName: 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
@@ -124,15 +120,6 @@ const config = {
           args: ['disable-gpu', 'disable-dev-shm-usage', 'ignore-certificate-errors'],
           w3c: false
         },
-        idleTimeout: 180
-      }
-    },
-    saucelabs: {
-      desiredCapabilities: {
-        tunnelIdentifier: SAUCELABS_TUNNEL_NAME,
-        screenResolution: '1280x1024',
-        username: SAUCE_USERNAME,
-        access_key: SAUCE_ACCESS_KEY,
         idleTimeout: 180
       }
     }

@@ -6,7 +6,6 @@ NOTIFICATIONS = 3
 ALPINE_GIT = "alpine/git:latest"
 DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
-HENRICH_DOCKER_SAUCE_CONNECT = "henrrich/docker-sauce-connect:latest"
 MELTWATER_DRONE_CACHE = "meltwater/drone-cache:v1"
 MINIO_MC = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
@@ -1580,24 +1579,6 @@ def browserService(alternateSuiteName, browser):
             }],
         }]
 
-    if not isLocalBrowser(browser):
-        return [{
-            "name": "saucelabs",
-            "image": HENRICH_DOCKER_SAUCE_CONNECT,
-            "pull": "if-not-exists",
-            "environment": {
-                "SAUCE_USERNAME": {
-                    "from_secret": "sauce_username",
-                },
-                "SAUCE_ACCESS_KEY": {
-                    "from_secret": "sauce_access_key",
-                },
-            },
-            "commands": [
-                "/usr/local/sauce-connect/bin/sc -i %s" % getSaucelabsTunnelName(alternateSuiteName, browser),
-            ],
-        }]
-
     return []
 
 def waitForBrowserService():
@@ -1686,16 +1667,6 @@ def getDbDatabase(db):
         return "XE"
 
     return "owncloud"
-
-def getSaucelabsTunnelName(alternateSuiteName, browser):
-    return "${DRONE_BUILD_NUMBER}-acceptance-%s-%s" % (alternateSuiteName, browser)
-
-def getSaucelabsBrowserName(browser):
-    if (browser == "IE11"):
-        return "internet explorer"
-    if (browser == "Edge"):
-        return "MicrosoftEdge"
-    return browser
 
 def isLocalBrowser(browser):
     return ((browser == "chrome") or (browser == "firefox"))
@@ -2379,7 +2350,7 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots, retry):
+def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, visualTesting, screenShots, retry):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
@@ -2394,15 +2365,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
             environment["TEST_CONTEXT"] = suite
     else:
         environment["TEST_CONTEXT"] = suite
-        environment["BROWSER_NAME"] = getSaucelabsBrowserName(browser)
         environment["SELENIUM_PORT"] = "4445"
-        environment["SAUCELABS_TUNNEL_NAME"] = getSaucelabsTunnelName(alternateSuiteName, browser)
-        environment["SAUCE_USERNAME"] = {
-            "from_secret": "sauce_username",
-        }
-        environment["SAUCE_ACCESS_KEY"] = {
-            "from_secret": "sauce_access_key",
-        }
 
     if (ctx.build.event == "cron") or (not retry):
         environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
