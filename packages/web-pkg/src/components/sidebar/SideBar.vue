@@ -91,6 +91,7 @@
 
 <script lang="ts">
 import { VisibilityObserver } from 'web-pkg/src/observer'
+import { mapState } from 'vuex'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Panel } from './types'
 
@@ -137,6 +138,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     activeAvailablePanelName() {
       if (!this.sidebarActivePanel) {
         return null
@@ -168,22 +170,13 @@ export default defineComponent({
       },
       immediate: true
     },
-    loading: {
-      handler() {
+    sidebarClosed: {
+      handler: function () {
         this.$nextTick(() => {
           this.initVisibilityObserver()
         })
       },
       immediate: true
-    },
-    availablePanels: {
-      handler() {
-        this.$nextTick(() => {
-          this.initVisibilityObserver()
-        })
-      },
-      immediate: true,
-      deep: true
     }
   },
 
@@ -213,7 +206,13 @@ export default defineComponent({
         root: document.querySelector('#files-sidebar'),
         threshold: 0.05
       })
-
+      const doFocus = () => {
+        const selector = document.querySelector(this.focused)
+        if (!selector) {
+          return
+        }
+        selector.focus()
+      }
       const clearOldPanelName = () => {
         this.oldPanelName = null
       }
@@ -226,6 +225,10 @@ export default defineComponent({
       hiddenObserver.disconnect()
 
       this.$refs.panels.forEach((panel) => {
+        visibilityObserver.observe(panel, {
+          onEnter: doFocus,
+          onExit: doFocus
+        })
         hiddenObserver.observe(panel, {
           onExit: clearOldPanelName
         })
