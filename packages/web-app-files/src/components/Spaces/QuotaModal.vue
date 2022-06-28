@@ -45,8 +45,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { computed, unref } from '@vue/composition-api'
 
 export default {
   name: 'SpaceQuotaModal',
@@ -60,6 +62,16 @@ export default {
       required: true
     }
   },
+  setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
+    )
+    return {
+      graphClient
+    }
+  },
   data: function () {
     return {
       selectedOption: {},
@@ -67,7 +79,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
     confirmButtonDisabled() {
       return this.space.spaceQuota.total === this.selectedOption.value
     },
@@ -139,8 +150,7 @@ export default {
         })
       }
 
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
-      return graphClient.drives
+      return this.graphClient.drives
         .updateDrive(this.space.id, { quota: { total: this.selectedOption.value } }, {})
         .then(({ data }) => {
           this.cancel()

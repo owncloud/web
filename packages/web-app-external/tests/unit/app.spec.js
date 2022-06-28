@@ -36,7 +36,6 @@ const mockFileInfo = jest.fn(() => ({
 
 const storeOptions = {
   getters: {
-    getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
     configuration: jest.fn(() => ({
       server: 'http://example.com/',
       currentTheme: {
@@ -45,7 +44,6 @@ const storeOptions = {
         }
       }
     })),
-    userReady: () => true,
     capabilities: jest.fn(() => ({
       files: {
         app_providers: [
@@ -69,6 +67,18 @@ const storeOptions = {
       },
       mutations: {
         SET_MIME_TYPES: jest.fn()
+      }
+    },
+    runtime: {
+      namespaced: true,
+      modules: {
+        auth: {
+          namespaced: true,
+          getters: {
+            accessToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
+            isUserContextReady: jest.fn(() => true)
+          }
+        }
       }
     }
   }

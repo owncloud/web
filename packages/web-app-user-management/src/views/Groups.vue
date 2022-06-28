@@ -110,8 +110,8 @@ import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { useStore } from 'web-pkg/src/composables'
-import { ref } from '@vue/composition-api'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { computed, ref, unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
@@ -134,9 +134,9 @@ export default {
   setup() {
     const store = useStore()
     const groups = ref([])
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     const loadResourcesTask = useTask(function* (signal, ref) {

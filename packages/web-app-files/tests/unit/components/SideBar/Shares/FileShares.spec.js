@@ -232,10 +232,20 @@ const storeOptions = (data) => {
             state.highlightedFile = newFile
           }
         }
+      },
+      runtime: {
+        namespaced: true,
+        modules: {
+          auth: {
+            namespaced: true,
+            getters: {
+              accessToken: () => 'GFwHKXdsMgoFwt'
+            }
+          }
+        }
       }
     },
     getters: {
-      getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
       configuration: jest.fn(() => ({
         options: {
           sidebar: {

@@ -11,7 +11,6 @@
   </main>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
@@ -35,9 +34,6 @@ export default {
     filePath: '',
     blobUrl: ''
   }),
-  computed: {
-    ...mapGetters(['getToken'])
-  },
   created() {
     this.loadPdf(this.currentFileContext)
   },

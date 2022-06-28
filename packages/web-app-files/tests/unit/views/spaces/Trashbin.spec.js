@@ -62,8 +62,7 @@ function getWrapper() {
               name: 'ownCloud'
             }
           }
-        }),
-        getToken: () => 'token'
+        })
       }
     }),
     stubs: {

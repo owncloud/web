@@ -78,7 +78,7 @@ export default defineComponent({
   methods: {
     performLogout(event) {
       if (event.target.id === 'exitAnchor') {
-        authService.logout()
+        authService.logoutUser()
       }
     }
   }

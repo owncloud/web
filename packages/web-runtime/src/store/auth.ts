@@ -32,7 +32,8 @@ const mutations = {
 
 const actions = {
   clearUserContext({ commit }) {
-    commit('SET_USER_CONTEXT', { accessToken: null, userContextReady: false })
+    commit('SET_ACCESS_TOKEN', null)
+    commit('SET_USER_CONTEXT_READY', false)
   },
   clearPublicLinkContext({ commit }) {
     commit('SET_PUBLIC_LINK_CONTEXT', {

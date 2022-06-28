@@ -80,8 +80,7 @@ function getWrapper() {
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        getToken: () => 'token'
+        })
       },
       modules: {
         Files: {

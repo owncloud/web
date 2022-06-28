@@ -69,7 +69,8 @@ import {
   useStore,
   useDebouncedRef,
   useRouteParam,
-  useCapabilityProjectSpacesEnabled
+  useCapabilityProjectSpacesEnabled,
+  useAccessToken
 } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
@@ -114,9 +115,9 @@ export default {
     )
     const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
 
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     const loadSpaceMembersTask = useTask(function* (signal, ref) {
@@ -126,9 +127,13 @@ export default {
       for (const role of Object.keys(unref(currentSpace).spaceRoles)) {
         for (const userId of unref(currentSpace).spaceRoles[role]) {
           promises.push(
-            graphClient.users.getUser(userId).then((resolved) => {
-              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id))
-            })
+            unref(graphClient)
+              .users.getUser(userId)
+              .then((resolved) => {
+                spaceShares.push(
+                  buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id)
+                )
+              })
           )
         }
       }

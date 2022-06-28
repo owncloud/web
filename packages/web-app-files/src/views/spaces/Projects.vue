@@ -130,8 +130,8 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { computed, defineComponent } from '@vue/composition-api'
-import { useStore } from 'web-pkg/src/composables'
+import { computed, defineComponent, unref } from '@vue/composition-api'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
@@ -152,16 +152,19 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const spaces = computed(() => store.getters['Files/activeFiles'] || [])
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_FILES_SEARCHED()
       ref.CLEAR_CURRENT_FILES_LIST()
 
-      const response = yield graphClient.drives.listMyDrives('name asc', 'driveType eq project')
+      const response = yield unref(graphClient).drives.listMyDrives(
+        'name asc',
+        'driveType eq project'
+      )
       let loadedSpaces = response.data?.value || []
 
       loadedSpaces = loadedSpaces.map(buildSpace)
@@ -171,7 +174,8 @@ export default defineComponent({
     return {
       spaces,
       graphClient,
-      loadResourcesTask
+      loadResourcesTask,
+      accessToken
     }
   },
   data: function () {
@@ -180,7 +184,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user', 'getToken']),
+    ...mapGetters(['user']),
     breadcrumbs() {
       return [{ text: this.$gettext('Spaces') }]
     },
@@ -226,7 +230,7 @@ export default defineComponent({
                 dimensions: ImageDimension.Preview,
                 server: this.configuration.server,
                 userId: this.user.id,
-                token: this.getToken
+                token: this.accessToken
               }).then((imageBlob) => {
                 this.$set(this.imageContentObject, space.id, {
                   fileId: space.spaceImageData.id,

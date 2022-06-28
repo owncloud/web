@@ -104,7 +104,7 @@ export default defineComponent({
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
-    ...mapGetters(['configuration', 'getToken', 'user']),
+    ...mapGetters(['configuration', 'user']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {

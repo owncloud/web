@@ -63,6 +63,7 @@ export class UppyService {
       tusPlugin.setOptions(tusPluginOptions)
       return
     }
+    console.log(`useTus with authorization ${headers.Authorization}`)
 
     this.uppy.use(CustomTus, tusPluginOptions as TusOptions)
   }

@@ -61,8 +61,7 @@ function getWrapper(resolvePutFileContents = true) {
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        getToken: () => 'token'
+        })
       },
       modules: {
         Files: {

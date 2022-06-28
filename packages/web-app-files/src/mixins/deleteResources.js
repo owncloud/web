@@ -15,6 +15,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['user']),
+    ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
 
     $_deleteResources_isInTrashbin() {
       return (
@@ -151,7 +152,7 @@ export default {
       this.deleteFiles({
         client: this.$client,
         files: this.$_deleteResources_resources,
-        publicPage: this.publicPage(),
+        isPublicLinkContext: this.isPublicLinkContext,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
       }).then(async () => {

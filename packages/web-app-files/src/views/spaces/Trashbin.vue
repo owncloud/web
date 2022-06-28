@@ -8,8 +8,8 @@
 <script lang="ts">
 import TrashBin from '../../components/TrashBin.vue'
 import { bus } from 'web-pkg/src/instance'
-import { useStore } from 'web-pkg/src/composables'
-import { defineComponent, ref } from '@vue/composition-api'
+import { useAccessToken, useRouteParam, useStore } from 'web-pkg/src/composables'
+import { computed, defineComponent, ref, unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { buildSpace } from '../../helpers/resources'
@@ -21,20 +21,22 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const space = ref({})
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const currentStorageId = useRouteParam('storageId')
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     const loadResourcesTask = useTask(function* (signal, ref) {
-      const response = yield graphClient.drives.getDrive(ref.$router.currentRoute.params.storageId)
+      const response = yield unref(graphClient).drives.getDrive(unref(currentStorageId))
       const loadedSpace = response.data || {}
       space.value = buildSpace(loadedSpace)
     })
 
     return {
       space,
-      loadResourcesTask
+      loadResourcesTask,
+      accessToken
     }
   },
 

@@ -58,7 +58,6 @@ function getWrapper(resourcesToDelete) {
           getUser: jest.fn(() => user)
         }
       },
-      publicPage: () => false,
       currentFolder: currentFolder
     },
     data: () => {

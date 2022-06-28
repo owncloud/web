@@ -150,11 +150,11 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, publicPage, firstRun = true }) {
+  deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
     const promises = []
     for (const file of files) {
       let p = null
-      if (publicPage) {
+      if (isPublicLinkContext) {
         p = client.publicFiles.delete(
           file.path,
           null,
@@ -177,7 +177,7 @@ export default {
               return context.dispatch('deleteFiles', {
                 files: [file],
                 client,
-                publicPage,
+                isPublicLinkContext,
                 firstRun: false
               })
             }
@@ -212,10 +212,10 @@ export default {
       context.commit('REMOVE_FILE_FROM_SEARCHED', file)
     }
   },
-  renameFile(context, { file, newValue, client, publicPage, isSameResource }) {
+  renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
       const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
-      if (publicPage) {
+      if (isPublicLinkContext) {
         return client.publicFiles
           .move(
             file.webDavPath,
@@ -753,7 +753,7 @@ export default {
             clientService: this.$clientService,
             username: obj.username,
             server: rootGetters.configuration.server,
-            token: rootGetters.getToken
+            token: rootGetters['runtime/auth/accessToken']
           },
           true
         ).then((url) =>
@@ -767,13 +767,8 @@ export default {
     })
   },
 
-  async loadSpaces(context, { clientService }) {
-    const graphClient = clientService.graphAuthenticated(
-      context.rootGetters.configuration.server,
-      context.rootGetters.getToken
-    )
+  async loadSpaces(context, { graphClient }) {
     const graphResponse = await graphClient.drives.listMyDrives()
-
     if (!graphResponse.data) {
       return
     }
@@ -797,7 +792,7 @@ export default {
         dimensions,
         server: rootGetters.configuration.server,
         userId: rootGetters.user.id,
-        token: rootGetters.getToken
+        token: rootGetters['runtime/auth/accessToken']
       },
       true
     )

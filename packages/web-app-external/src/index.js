@@ -24,7 +24,7 @@ export default {
   routes,
   store,
   translations,
-  userReady({ store }) {
+  ready({ store }) {
     store.dispatch('External/fetchMimeTypes')
   }
 }

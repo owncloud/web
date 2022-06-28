@@ -79,8 +79,7 @@ function getWrapper(
     },
     stubs: mountStubs,
     mocks: {
-      $route: route,
-      publicPage: () => false
+      $route: route
     },
     computed: {
       actions: () => getActions(actions)

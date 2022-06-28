@@ -122,7 +122,7 @@ import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsP
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useStore } from "web-pkg/src/composables";
 import { ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
@@ -130,6 +130,7 @@ import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
+import { computed, unref } from "@vue/composition-api/dist/vue-composition-api";
 
 export default {
   components: {
@@ -149,9 +150,9 @@ export default {
     const groups = ref([])
     const roles = ref([])
     const userAssignments = ref({})
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     /**
@@ -164,7 +165,7 @@ export default {
         {},
         {
           headers: {
-            authorization: `Bearer ${store.getters.getToken}`
+            authorization: `Bearer ${unref(accessToken)}`
           }
         }
       )
@@ -183,7 +184,7 @@ export default {
         },
         {
           headers: {
-            authorization: `Bearer ${store.getters.getToken}`
+            authorization: `Bearer ${unref(accessToken)}`
           }
         }
       )
@@ -227,7 +228,8 @@ export default {
       roles,
       groups,
       loadResourcesTask,
-      graphClient
+      graphClient,
+      accessToken
     }
   },
   data: function () {
@@ -240,7 +242,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
+    ...mapGetters(['configuration']),
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
@@ -461,7 +463,7 @@ export default {
           },
           {
             headers: {
-              authorization: `Bearer ${this.getToken}`
+              authorization: `Bearer ${this.accessToken}`
             }
           }
         )

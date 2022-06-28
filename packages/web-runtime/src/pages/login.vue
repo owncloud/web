@@ -83,7 +83,7 @@ export default {
 
   methods: {
     performLogin() {
-      authService.login(queryItemAsString(this.redirectUrl))
+      authService.loginUser(queryItemAsString(this.redirectUrl))
     }
   }
 }

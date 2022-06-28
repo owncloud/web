@@ -62,7 +62,6 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'versions']),
-    ...mapGetters(['getToken']),
     hasVersion() {
       return this.versions.length > 0
     }
@@ -99,7 +98,7 @@ export default {
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
-      return this.downloadFile(this.highlightedFile, null, version)
+      return this.downloadFile(this.highlightedFile, version)
     }
   }
 }

@@ -101,7 +101,12 @@ import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
-import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useCapabilityShareJailEnabled,
+  useRouteParam,
+  useStore
+} from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 
 const visibilityObserver = new VisibilityObserver()
@@ -129,9 +134,9 @@ export default defineComponent({
   ],
   setup() {
     const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
     const storageId = useRouteParam('storageId')
     const resourceTargetLocation = computed(() => {

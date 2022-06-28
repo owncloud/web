@@ -271,8 +271,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
         }),
         user: () => ({
           id: 'marie'
-        }),
-        getToken: jest.fn()
+        })
       },
       modules: {
         Files: {

@@ -15,24 +15,22 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 import { buildSpace } from '../../helpers/resources'
-import { useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { computed, unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 
 export default {
   setup() {
     const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     return { graphClient }
-  },
-  computed: {
-    ...mapGetters(['getToken', 'configuration'])
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),

@@ -1,7 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import AsyncComputed from 'vue-async-computed'
 
 import stubs from '@/tests/unit/stubs'
 
@@ -18,8 +16,6 @@ const spaceMock = {
 }
 
 const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(AsyncComputed)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -52,32 +48,11 @@ describe('SpaceInfo', () => {
 
 function createWrapper(spaceResource) {
   return shallowMount(SpaceInfo, {
-    store: new Vuex.Store({
-      getters: {
-        user: function () {
-          return { id: 'marie' }
-        },
-        capabilities: jest.fn(() => ({}))
-      },
-      modules: {
-        Files: {
-          namespaced: true,
-          getters: {
-            highlightedFile: function () {
-              return spaceResource
-            }
-          }
-        }
-      }
-    }),
     localVue,
     stubs: {
       ...stubs,
       'oc-resource-icon': true,
       'oc-resource-name': true
-    },
-    directives: {
-      OcTooltip: null
     },
     mixins: [
       {
@@ -87,16 +62,6 @@ function createWrapper(spaceResource) {
         }
       }
     ],
-    mocks: {
-      $router: {
-        currentRoute: {
-          name: 'some-route',
-          query: { page: 1 }
-        },
-        resolve: (r) => ({ href: r.name })
-      },
-      publicPage: () => false
-    },
     provide: {
       displayedItem: {
         value: spaceResource

@@ -3,6 +3,7 @@ import { UppyResource } from 'web-runtime/src/composables/upload'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { User } from '../../helpers/user'
 import {
+  useAccessToken,
   useCapabilityShareJailEnabled,
   useClientService,
   useRoute,
@@ -32,7 +33,7 @@ interface inputFileOptions {
 export function useUploadHelpers(): UploadHelpersResult {
   const store = useStore()
   const route = useRoute()
-  const getToken = computed((): string => store.getters.getToken)
+  const accessToken = useAccessToken({ store })
   const server = computed((): string => store.getters.configuration.server)
   const hasShareJail = useCapabilityShareJailEnabled()
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
@@ -47,7 +48,7 @@ export function useUploadHelpers(): UploadHelpersResult {
       personalDriveId.value = await getPersonalDriveId(
         clientService,
         unref(server),
-        unref(getToken)
+        unref(accessToken)
       )
     }
   })
@@ -105,8 +106,8 @@ export function useUploadHelpers(): UploadHelpersResult {
   }
 }
 
-const getPersonalDriveId = async (clientService, server: string, getToken: string) => {
-  const graphClient = clientService.graphAuthenticated(server, getToken)
+const getPersonalDriveId = async (clientService, server: string, accessToken: string) => {
+  const graphClient = clientService.graphAuthenticated(server, accessToken)
 
   const drivesResponse = await graphClient.drives.listMyDrives('', 'driveType eq personal')
   if (!drivesResponse.data) {

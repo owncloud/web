@@ -26,9 +26,10 @@ export class FolderLoaderSpacesProject implements FolderLoader {
 
       let space
       if (!sameRoute) {
+        const accessToken = store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(
           store.getters.configuration.server,
-          store.getters.getToken
+          accessToken
         )
 
         const storageId = router.currentRoute.params.storageId

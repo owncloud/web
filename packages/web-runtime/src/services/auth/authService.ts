@@ -1,23 +1,18 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
-import { clientService, ClientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
-import isEmpty from 'lodash-es/isEmpty'
-import get from 'lodash-es/get'
 import VueRouter, { Route } from 'vue-router'
-import { extractPublicLinkToken, isPublicLinkContext } from '../../router'
-
-const postLoginRedirectUrlKey = 'postLoginRedirectUrl'
+import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from '../../router'
 
 export class AuthService {
-  private configurationManager: ConfigurationManager
-  private userManager: UserManager
-  private publicLinkManager: PublicLinkManager
   private clientService: ClientService
+  private configurationManager: ConfigurationManager
   private store: Store<any>
   private router: VueRouter
-  private updateAccessTokenPromise: Promise<void> | null
+  private userManager: UserManager
+  private publicLinkManager: PublicLinkManager
 
   public initialize(
     configurationManager: ConfigurationManager,
@@ -44,21 +39,29 @@ export class AuthService {
    */
   public async initializeContext(to: Route) {
     if (!this.publicLinkManager) {
-      this.publicLinkManager = new PublicLinkManager()
+      this.publicLinkManager = new PublicLinkManager({
+        clientService: this.clientService,
+        configurationManager: this.configurationManager,
+        store: this.store
+      })
     }
 
     if (isPublicLinkContext(this.router, to)) {
       const publicLinkToken = extractPublicLinkToken(to)
       if (publicLinkToken) {
-        await this.updatePublicLinkContext(publicLinkToken)
+        await this.publicLinkManager.updateContext(publicLinkToken)
       }
     }
 
     if (!this.userManager) {
-      this.userManager = new UserManager(this.configurationManager)
-      this.userManager.events.addAccessTokenExpired((...args) => {
+      this.userManager = new UserManager({
+        clientService: this.clientService,
+        configurationManager: this.configurationManager,
+        store: this.store
+      })
+      this.userManager.events.addAccessTokenExpired(async (...args) => {
         console.log('AccessToken Expired：', ...args)
-        // TODO: we want to log out the user here because token refresh failed.
+        await this.handleAuthError(this.router.currentRoute)
       })
       this.userManager.events.addAccessTokenExpiring((...args) => {
         console.log('AccessToken Expiring：', ...args)
@@ -67,14 +70,19 @@ export class AuthService {
         console.log(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
-        await this.updateUserContext(user.access_token)
+        try {
+          await this.userManager.updateContext(user.access_token)
+        } catch (e) {
+          console.error(e)
+          await this.handleAuthError(this.router.currentRoute)
+        }
       })
       this.userManager.events.addUserSignedIn(() => {
         console.log('user signed in')
       })
       this.userManager.events.addUserUnloaded(async () => {
         console.log('user unloaded…')
-        await this.resetStateAfterLogout()
+        await this.resetStateAfterUserLogout()
 
         // handle redirect after logout
         if (this.configurationManager.isOAuth2) {
@@ -88,8 +96,7 @@ export class AuthService {
       })
       this.userManager.events.addSilentRenewError(async (error) => {
         console.error('Silent Renew Error：', error)
-        await this.resetStateAfterLogout()
-        await this.router.push({ name: 'accessDenied' })
+        await this.handleAuthError(this.router.currentRoute)
       })
     }
 
@@ -97,12 +104,17 @@ export class AuthService {
     // no userLoaded event and no signInCallback gets triggered
     const accessToken = await this.userManager.getAccessToken()
     if (accessToken) {
-      await this.updateUserContext(accessToken)
+      try {
+        await this.userManager.updateContext(accessToken)
+      } catch (e) {
+        console.error(e)
+        await this.handleAuthError(this.router.currentRoute)
+      }
     }
   }
 
-  public login(redirectUrl?: string) {
-    sessionStorage.setItem(postLoginRedirectUrlKey, redirectUrl)
+  public loginUser(redirectUrl?: string) {
+    this.userManager.setPostLoginRedirectUrl(redirectUrl)
     return this.userManager.signinRedirect()
   }
 
@@ -118,13 +130,11 @@ export class AuthService {
     try {
       await this.userManager.signinRedirectCallback(url)
 
-      const redirectUrl = sessionStorage.getItem(postLoginRedirectUrlKey) || '/'
-      sessionStorage.removeItem(postLoginRedirectUrlKey)
+      const redirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
       return this.router.push({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
-      await this.resetStateAfterLogout()
-      return this.router.push({ name: 'accessDenied' })
+      return this.handleAuthError(this.router.currentRoute)
     }
   }
 
@@ -139,139 +149,6 @@ export class AuthService {
     await this.userManager.signinSilentCallback()
   }
 
-  private updateUserContext(accessToken: string): Promise<void> {
-    const userKnown = !!this.store.getters.user.id
-    const accessTokenChanged = this.store.getters['runtime/auth/accessToken'] !== accessToken
-    if (!accessTokenChanged) {
-      return this.updateAccessTokenPromise
-    }
-    this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
-    // TODO: SET_ACCESS_TOKEN is deprecated and will be removed soonish
-    this.store.commit('SET_ACCESS_TOKEN', accessToken)
-
-    this.updateAccessTokenPromise = (async () => {
-      this.initializeOwnCloudSdk(accessToken)
-
-      if (!userKnown) {
-        await this.fetchUserInfo(accessToken)
-        this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
-      }
-    })()
-    return this.updateAccessTokenPromise
-  }
-
-  private initializeOwnCloudSdk(accessToken): void {
-    const options = {
-      baseUrl: this.configurationManager.serverUrl,
-      auth: {
-        bearer: accessToken
-      },
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    }
-    if (this.store.getters.user.id) {
-      ;(options as any).userInfo = {
-        id: this.store.getters.user.id,
-        'display-name': this.store.getters.user.displayname,
-        email: this.store.getters.user.email
-      }
-    }
-
-    this.clientService.owncloudSdk.init(options)
-  }
-
-  private async fetchUserInfo(accessToken): Promise<void> {
-    let login
-    try {
-      // TODO: introduce new `loadUser` function in SDK, then use it here and use our own authService.fetchCapabilities
-      login = await this.clientService.owncloudSdk.login()
-    } catch (e) {
-      console.warn('Seems that your token is invalid. Error:', e)
-      await this.resetStateAfterLogout()
-      await this.router.replace({ name: 'accessDenied' })
-      return
-    }
-
-    const [capabilities, userGroups, user] = await Promise.all([
-      this.clientService.owncloudSdk.getCapabilities(false),
-      this.clientService.owncloudSdk.users.getUserGroups(login.id),
-      this.clientService.owncloudSdk.users.getUser(login.id)
-    ])
-    this.store.commit('SET_CAPABILITIES', capabilities)
-
-    // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
-    // see https://github.com/owncloud/ocis/issues/3271
-    let graphUser
-    if (this.store.getters.capabilities.spaces?.enabled) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configurationManager.serverUrl,
-        accessToken
-      )
-      graphUser = await graphClient.users.getMe()
-    }
-
-    let userEmail = ''
-    if (login && login.email) {
-      userEmail = login.email
-    } else if (user && user.email) {
-      userEmail = user.email
-    }
-
-    const language = user?.language
-    this.store.commit('SET_USER', {
-      id: login.id,
-      uuid: graphUser?.data?.id || '',
-      username: login.username,
-      displayname: login.displayname || login['display-name'],
-      email: userEmail,
-      token: accessToken,
-      isAuthenticated: true,
-      groups: userGroups,
-      language,
-      ...(user.quota.definition !== 'default' &&
-        user.quota.definition !== 'none' && { quota: user.quota })
-    })
-
-    await this.store.dispatch('loadSettingsValues')
-  }
-
-  private async fetchCapabilities({
-    accessToken = '',
-    publicToken = '',
-    user = '',
-    password = '',
-    overwrite = false
-  }): Promise<void> {
-    if (!isEmpty(this.store.getters.capabilities) && !overwrite) {
-      return
-    }
-
-    const endpoint = new URL(this.configurationManager.serverUrl)
-    endpoint.pathname = endpoint.pathname.replace(/\/$/, '') + '/ocs/v1.php/cloud/capabilities'
-    endpoint.searchParams.append('format', 'json')
-
-    const headers = {
-      'X-Requested-With': 'XMLHttpRequest',
-      ...(publicToken && { 'public-token': publicToken }),
-      ...(user &&
-        password && {
-          Authorization: 'Basic ' + Buffer.from([user, password].join(':')).toString('base64')
-        }),
-      ...(accessToken && {
-        Authorization: 'Bearer ' + accessToken
-      })
-    }
-
-    const capabilitiesApiResponse = await fetch(endpoint.href, { headers })
-    const capabilitiesApiResponseJson = await capabilitiesApiResponse.json()
-
-    this.store.commit(
-      'SET_CAPABILITIES',
-      get(capabilitiesApiResponseJson, 'ocs.data', { capabilities: null, version: null })
-    )
-  }
-
   public async handleAuthError(route: Route) {
     if (isPublicLinkContext(this.router, route)) {
       const token = extractPublicLinkToken(route)
@@ -283,6 +160,10 @@ export class AuthService {
         query: { redirectUrl: route.fullPath }
       })
     }
+    if (isUserContext(this.router, route)) {
+      await this.resetStateAfterUserLogout()
+      return this.router.push({ name: 'accessDenied' })
+    }
   }
 
   public async resolvePublicLink(token: string, passwordRequired: boolean, password: string) {
@@ -290,52 +171,10 @@ export class AuthService {
     this.publicLinkManager.setPassword(token, password)
     this.publicLinkManager.setResolved(token, true)
 
-    await this.updatePublicLinkContext(token)
+    await this.publicLinkManager.updateContext(token)
   }
 
-  private async updatePublicLinkContext(token: string) {
-    if (!this.publicLinkManager.isResolved(token)) {
-      return
-    }
-    if (
-      this.store.getters['runtime/auth/isPublicLinkContextReady'] &&
-      this.store.getters['runtime/auth/publicLinkToken'] === token
-    ) {
-      return
-    }
-
-    let password
-    if (this.publicLinkManager.isPasswordRequired(token)) {
-      password = this.publicLinkManager.getPassword(token)
-    }
-
-    try {
-      await this.fetchCapabilities({
-        publicToken: token,
-        user: 'public',
-        password
-      })
-    } catch (e) {
-      console.error(e)
-    }
-    // FIXME: ocis at the moment is not able to create archives for public links that are password protected
-    // until this is supported by the backend remove it hard as a workaround
-    // https://github.com/owncloud/web/issues/6423
-    // if (publicLinkPassword) {
-    //   store.commit('SET_CAPABILITIES', {
-    //     capabilities: omit(store.getters.capabilities, ['files.archivers']),
-    //     version: store.getters.version
-    //   })
-    // }
-
-    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
-      publicLinkToken: token,
-      publicLinkPassword: password,
-      publicLinkContextReady: true
-    })
-  }
-
-  public async logout() {
+  public async logoutUser() {
     const u = await this.userManager.getUser()
     if (u && u.id_token) {
       return this.userManager.signoutRedirect({ id_token_hint: u.id_token })
@@ -344,8 +183,9 @@ export class AuthService {
     }
   }
 
-  private async resetStateAfterLogout() {
+  private async resetStateAfterUserLogout() {
     // TODO: create UserUnloadTask interface and allow registering unload-tasks in the authService
+    await this.store.dispatch('runtime/auth/clearUserContext')
     await this.store.dispatch('resetUserState')
     await Promise.all([
       this.store.dispatch('clearDynamicNavItems'),

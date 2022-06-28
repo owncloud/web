@@ -1,7 +1,5 @@
 import VueRouter, { Location } from 'vue-router'
 import merge from 'lodash-es/merge'
-import get from 'lodash-es/get'
-import { RouteMeta } from 'vue-router/types/router'
 
 export interface ActiveRouteDirectorFunc<T extends string> {
   (router: VueRouter, ...comparatives: T[]): boolean
@@ -66,15 +64,6 @@ export const isLocationActiveDirector = <T extends string>(
 
     return isLocationActive(router, first, ...rest)
   }
-}
-
-/**
- * helper to check if route needs authentication or not
- *
- * @param route
- */
-export const isAuthenticatedRoute = (route: { meta?: RouteMeta }): boolean => {
-  return get(route, 'meta.auth', true) === true
 }
 
 /**

@@ -106,8 +106,13 @@ import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useCapabilityFilesSharingResharing,
+  useStore
+} from 'web-pkg/src/composables'
 import { extractDomSelector } from '../../../../helpers/resource'
+import { computed, unref } from '@vue/composition-api'
 
 export default {
   name: 'ListItem',
@@ -131,13 +136,18 @@ export default {
     }
   },
   setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
+    )
     return {
-      hasResharing: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing(),
+      graphClient
     }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['getToken', 'configuration']),
     ...mapState(['user']),
 
     shareType() {
@@ -253,10 +263,6 @@ export default {
         .endOf('day')
         .setLocale(this.$language.current)
         .toRelative()
-    },
-
-    graphClient() {
-      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     },
 
     sharedParentDir() {

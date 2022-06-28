@@ -123,7 +123,8 @@ import {
   useRequest,
   useCapabilityShareJailEnabled,
   useStore,
-  usePublicLinkPassword
+  usePublicLinkPassword,
+  useUserContext
 } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
@@ -175,7 +176,8 @@ export default defineComponent({
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
       ...useRequest(),
-      publicLinkPassword: usePublicLinkPassword({ store })
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      isUserContext: useUserContext({ store })
     }
   },
   data: () => ({
@@ -184,7 +186,7 @@ export default defineComponent({
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
@@ -749,8 +751,7 @@ export default defineComponent({
         conflicts.length
       )
 
-      const isVersioningEnabled =
-        !this.publicPage() && this.capabilities.files && this.capabilities.files.versioning
+      const isVersioningEnabled = this.isUserContext && this.capabilities?.files?.versioning
 
       let translatedMsg
       if (isVersioningEnabled) {

@@ -156,7 +156,7 @@ export default {
           if (unref(hasShareJail)) {
             const graphClient = clientService.graphAuthenticated(
               ref.$store.getters.configuration.server,
-              ref.$store.getters.getToken
+              ref.$store.getters['runtime/auth/accessToken']
             )
             const userResponse = yield graphClient.users.getMe()
             if (!userResponse.data) {

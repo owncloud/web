@@ -127,11 +127,14 @@ export default {
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
-  },
-  userReady({ store }) {
+
     // Load spaces to make them available across the application
     if (store.getters.capabilities?.spaces?.enabled) {
-      store.dispatch('Files/loadSpaces', { clientService })
+      const graphClient = clientService.graphAuthenticated(
+        store.getters.configuration.server,
+        store.getters['runtime/auth/accessToken']
+      )
+      store.dispatch('Files/loadSpaces', { graphClient })
     }
 
     archiverService.initialize(

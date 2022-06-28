@@ -107,10 +107,10 @@
 </template>
 <script lang="ts">
 import { dirname } from 'path'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, computed, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import { useStore, useCapabilitySpacesEnabled, useAccessToken } from 'web-pkg/src/composables'
 import { clientService } from 'web-pkg/src/services'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
@@ -132,9 +132,9 @@ export default defineComponent({
   mixins: [mixins],
   setup() {
     const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
     )
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad

@@ -1,7 +1,12 @@
 import { HttpClient } from '../http'
-import { client, Graph } from 'web-client'
+import { client, Graph, OCS } from 'web-client'
 
 export type OwnCloudSdk = any
+interface OcClient {
+  token: string
+  graph: Graph
+  ocs: OCS
+}
 
 export class ClientService {
   private httpAuthenticatedClient: {
@@ -11,10 +16,8 @@ export class ClientService {
 
   private httpUnAuthenticatedClient: HttpClient
 
-  private graphAuthenticatedClient: {
-    token: string
-    instance: Graph
-  }
+  private ocUserContextClient: OcClient
+  private ocPublicLinkContextClient: OcClient
 
   private owncloudSdkClient: OwnCloudSdk
 
@@ -35,15 +38,43 @@ export class ClientService {
   }
 
   public graphAuthenticated(serverUrl: string, token: string): Graph {
-    if (!this.graphAuthenticatedClient || this.graphAuthenticatedClient.token !== token) {
-      const { graph } = client(serverUrl, token)
-      this.graphAuthenticatedClient = {
+    this.initOcUserContextClient(serverUrl, token)
+    return this.ocUserContextClient.graph
+  }
+
+  public ocsUserContext(serverUrl: string, token: string): OCS {
+    this.initOcUserContextClient(serverUrl, token)
+    return this.ocUserContextClient.ocs
+  }
+
+  private initOcUserContextClient(serverUrl: string, token: string) {
+    if (!this.ocUserContextClient || this.ocUserContextClient.token !== token) {
+      const { graph, ocs } = client(serverUrl, { accessToken: token })
+      this.ocUserContextClient = {
         token,
-        instance: graph
+        graph,
+        ocs
       }
     }
+  }
 
-    return this.graphAuthenticatedClient.instance
+  public ocsPublicLinkContext(serverUrl: string, token: string, password?: string): OCS {
+    this.initOcPublicLinkContextClient(serverUrl, token, password)
+    return this.ocPublicLinkContextClient.ocs
+  }
+
+  private initOcPublicLinkContextClient(serverUrl: string, token: string, password?: string) {
+    if (!this.ocPublicLinkContextClient || this.ocPublicLinkContextClient.token !== token) {
+      const { graph, ocs } = client(serverUrl, {
+        publicLinkToken: token,
+        publicLinkPassword: password
+      })
+      this.ocPublicLinkContextClient = {
+        token,
+        graph,
+        ocs
+      }
+    }
   }
 
   public get httpUnAuthenticated(): HttpClient {

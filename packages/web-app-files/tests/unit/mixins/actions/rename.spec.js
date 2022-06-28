@@ -157,7 +157,6 @@ function getWrapper(renameFilePromise) {
       },
       $gettextInterpolate: jest.fn(),
       $gettext: jest.fn(),
-      publicPage: () => false,
       flatFileList: false
     },
     store: createStore(Vuex.Store, {

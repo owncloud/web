@@ -120,7 +120,12 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
-import { useAccessToken, useAppDefaults, useStore } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useAppDefaults,
+  usePublicLinkContext,
+  useStore
+} from 'web-pkg/src/composables'
 import Preview from './index'
 
 export default defineComponent({
@@ -131,7 +136,8 @@ export default defineComponent({
       ...useAppDefaults({
         applicationId: 'preview'
       }),
-      accessToken: useAccessToken({ store })
+      accessToken: useAccessToken({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data() {
@@ -147,7 +153,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['getToken', 'capabilities']),
+    ...mapGetters(['capabilities']),
 
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
@@ -338,7 +344,7 @@ export default defineComponent({
         return
       }
 
-      return this.downloadFile(this.activeFilteredFile, this.isPublicLinkContext)
+      return this.downloadFile(this.activeFilteredFile)
     },
     next() {
       if (this.isFileContentLoading) {

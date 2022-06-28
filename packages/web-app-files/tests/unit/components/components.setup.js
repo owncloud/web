@@ -68,6 +68,7 @@ export const getStore = function ({
   loginLogo = '',
   davProperties = [],
   publicLinkPassword = null,
+  accessToken = '',
   slogan = null,
   user = null,
   generalThemeName = '',
@@ -97,7 +98,6 @@ export const getStore = function ({
         }
       }),
       capabilities: () => {},
-      getToken: () => '',
       homeFolder: () => '/',
       user: () => user
     },
@@ -179,6 +179,7 @@ export const getStore = function ({
         modules: {
           auth: {
             getters: {
+              accessToken: () => accessToken,
               publicLinkPassword: () => publicLinkPassword
             }
           }

@@ -92,12 +92,17 @@ import {
   SpacePeopleShareRoles
 } from '../../../../../helpers/share'
 import { clientService } from 'web-pkg/src/services'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useCapabilityFilesSharingResharing,
+  useStore
+} from 'web-pkg/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern,
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
+import { computed, unref } from '@vue/composition-api'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -121,8 +126,14 @@ export default {
   },
 
   setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
+    const graphClient = computed(() =>
+      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
+    )
     return {
-      hasResharing: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing(),
+      graphClient
     }
   },
 
@@ -141,7 +152,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['configuration', 'getToken', 'user', 'capabilities']),
+    ...mapGetters(['configuration', 'user', 'capabilities']),
 
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -191,9 +202,6 @@ export default {
     },
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
-    },
-    graphClient() {
-      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     }
   },
   mounted() {
