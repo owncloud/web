@@ -1396,7 +1396,7 @@ def acceptance(ctx):
                         steps += waitForMiddlewareService()
 
                         # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], browser, params["visualTesting"], params["screenShots"], params["retry"])
+                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], params["visualTesting"], params["screenShots"], params["retry"])
 
                         # capture the screenshots from visual regression testing (only runs on failure)
                         if (params["visualTesting"]):
@@ -1404,7 +1404,7 @@ def acceptance(ctx):
                             steps += buildGithubCommentVisualDiff(ctx, suiteName, params["runningOnOCIS"])
 
                         # Capture the screenshots from acceptance tests (only runs on failure)
-                        if (isLocalBrowser(browser) and params["screenShots"]):
+                        if (params["screenShots"]):
                             steps += uploadScreenshots() + buildGithubComment(suiteName)
 
                         if (params["earlyFail"]):
@@ -1667,9 +1667,6 @@ def getDbDatabase(db):
         return "XE"
 
     return "owncloud"
-
-def isLocalBrowser(browser):
-    return ((browser == "chrome") or (browser == "firefox"))
 
 def installCore(db):
     host = getDbName(db)
@@ -2354,18 +2351,15 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
-    if isLocalBrowser(browser):
-        environment["LOCAL_UPLOAD_DIR"] = "/uploads"
-        if type(suite) == "list":
-            paths = ""
-            for path in suite:
-                paths = paths + "features/" + path + " "
-            environment["TEST_PATHS"] = paths
-        elif (suite != "all"):
-            environment["TEST_CONTEXT"] = suite
-    else:
+
+    environment["LOCAL_UPLOAD_DIR"] = "/uploads"
+    if type(suite) == "list":
+        paths = ""
+        for path in suite:
+            paths = paths + "features/" + path + " "
+        environment["TEST_PATHS"] = paths
+    elif (suite != "all"):
         environment["TEST_CONTEXT"] = suite
-        environment["SELENIUM_PORT"] = "4445"
 
     if (ctx.build.event == "cron") or (not retry):
         environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
