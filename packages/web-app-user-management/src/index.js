@@ -9,6 +9,8 @@ function $gettext(msg) {
   return msg
 }
 
+const store = window.Vue.$store
+
 const appInfo = {
   name: $gettext('User management'),
   id: 'user-management',
@@ -41,6 +43,9 @@ const navItems = [
     icon: 'user',
     route: {
       path: `/${appInfo.id}/users?`
+    },
+    enabled: () => {
+      return store.getters.user.role.name === 'admin'
     }
   },
   {
@@ -48,6 +53,9 @@ const navItems = [
     icon: 'group-2',
     route: {
       path: `/${appInfo.id}/groups?`
+    },
+    enabled: () => {
+      return store.getters.user.role.name === 'admin'
     }
   }
 ]
