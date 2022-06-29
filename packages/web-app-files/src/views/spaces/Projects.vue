@@ -8,7 +8,7 @@
       :show-actions-on-selection="true"
     >
       <template #actions>
-        <create-space />
+        <create-space v-if="hasCreatePermission" />
       </template>
       <template #content>
         <p v-text="spacesHint" />
@@ -136,7 +136,7 @@ import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
-import { clientService } from 'web-pkg/src/services'
+import { clientService, PermissionManagerService } from 'web-pkg/src/services'
 import { loadPreview } from '../../helpers/resource'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -188,8 +188,8 @@ export default defineComponent({
       return this.$gettext('Store your project related files in Spaces for seamless collaboration.')
     },
     hasCreatePermission() {
-      // @TODO
-      return true
+      const permissionManagerService = new PermissionManagerService(this.user)
+      return permissionManagerService.hasSpaceManagement()
     }
   },
   watch: {
