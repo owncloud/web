@@ -14,16 +14,13 @@ const { runOcc } = require('./helpers/occHelper')
 const codify = require('./helpers/codify')
 
 const RUNNING_ON_CI = process.env.CI === 'true'
-const RUNNING_ON_SAUCELABS = process.env.SAUCE_USERNAME === 'true'
 
 const CUCUMBER_LOCAL_TIMEOUT = 60000
 const CUCUMBER_DRONE_TIMEOUT = 180000
-const SAUCELABS_ASYNC_SCRIPT_TIMEOUT = 10000
 const CUCUMBER_TIMEOUT = RUNNING_ON_CI ? CUCUMBER_DRONE_TIMEOUT : CUCUMBER_LOCAL_TIMEOUT
 setDefaultTimeout(CUCUMBER_TIMEOUT)
 
-let env = RUNNING_ON_CI ? 'drone' : 'local'
-env = RUNNING_ON_SAUCELABS ? 'saucelabs' : env
+const env = RUNNING_ON_CI ? 'drone' : 'local'
 
 // create report dir if not exists
 const reportDir = 'report'
@@ -44,16 +41,6 @@ Before(function startDriverOnLocal() {
 
 Before(function createSessionForEnv() {
   return createSession({ env })
-})
-
-Before(function logSessionInfoOnSauceLabs() {
-  if (process.env.SAUCE_USERNAME) {
-    return client
-      .session(function (session) {
-        console.log('  Link to saucelabs job: https://app.saucelabs.com/tests/' + session.sessionId)
-      })
-      .timeoutsAsyncScript(SAUCELABS_ASYNC_SCRIPT_TIMEOUT)
-  }
 })
 
 async function cacheAndSetConfigs(server) {
