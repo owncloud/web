@@ -4,12 +4,14 @@ import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import { FilterSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
+import { PermissionManagerService } from 'web-pkg/src/services'
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
 }
 
-const store = window.Vue.$store
+const user = window.Vue.$store.getters.user
+const permissionManagerService = new PermissionManagerService(user)
 
 const appInfo = {
   name: $gettext('User management'),
@@ -45,7 +47,7 @@ const navItems = [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
-      return store.getters.user.role.name === 'admin'
+      return permissionManagerService.hasUserManagement()
     }
   },
   {
@@ -55,7 +57,7 @@ const navItems = [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
-      return store.getters.user.role.name === 'admin'
+      return permissionManagerService.hasUserManagement()
     }
   }
 ]
