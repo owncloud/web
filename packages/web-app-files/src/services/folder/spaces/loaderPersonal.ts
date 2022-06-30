@@ -7,6 +7,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { fetchResources } from '../util'
 import get from 'lodash-es/get'
+import { Polling } from '../../../constants'
 
 export class FolderLoaderSpacesPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
@@ -18,34 +19,56 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, router, clientService } = context
+    const { store, clientService } = context
+    const resourcePollingDelay = Polling.ProcessingDelay
+    const resourcePollingDelayIncreaseFactor = Polling.ProcessingDelayIncreaseFactor
+    const resourcePollingTask = useTask(function* (signal, path, delay = 0) {
+      const { store, router, clientService } = context
+      yield new Promise((resolve) => setTimeout(resolve, delay))
+
+      let resources = yield fetchResources(
+        clientService.owncloudSdk,
+        buildWebDavSpacesPath(
+          router.currentRoute.params.storageId,
+          path || router.currentRoute.params.item || ''
+        ),
+        DavProperties.Default
+      )
+
+      resources = resources.map(buildResource)
+
+      const hasProcessingResources = resources.some(({ processing }) => processing)
+
+      if (hasProcessingResources) {
+        resourcePollingTask.perform(
+          path,
+          delay * resourcePollingDelayIncreaseFactor || resourcePollingDelay
+        )
+      }
+
+      if (hasProcessingResources && delay) {
+        return
+      }
+
+      const currentFolder = resources.shift()
+
+      yield store.dispatch('Files/loadSharesTree', {
+        client: clientService.owncloudSdk,
+        path: currentFolder.path
+      })
+
+      store.commit('Files/LOAD_FILES', {
+        currentFolder,
+        files: resources,
+        loadIndicators: true
+      })
+    })
 
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        let resources = yield fetchResources(
-          clientService.owncloudSdk,
-          buildWebDavSpacesPath(
-            router.currentRoute.params.storageId,
-            path || router.currentRoute.params.item || ''
-          ),
-          DavProperties.Default
-        )
-        resources = resources.map(buildResource)
-
-        const currentFolder = resources.shift()
-
-        yield store.dispatch('Files/loadSharesTree', {
-          client: clientService.owncloudSdk,
-          path: currentFolder.path
-        })
-
-        store.commit('Files/LOAD_FILES', {
-          currentFolder,
-          files: resources,
-          loadIndicators: true
-        })
+        yield resourcePollingTask.perform(path)
 
         // fetch user quota
         ;(async () => {

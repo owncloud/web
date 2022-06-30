@@ -22,6 +22,7 @@ export interface Resource {
   size?: number
   permissions?: number
   starred?: boolean
+  processing?: boolean
   etag?: string
   sharePermissions?: number
   shareTypes?: number[]

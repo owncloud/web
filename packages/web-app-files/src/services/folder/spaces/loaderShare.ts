@@ -5,6 +5,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
+import { Polling } from '../../../constants'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
@@ -19,9 +20,10 @@ export class FolderLoaderSpacesShare implements FolderLoader {
 
   public getTask(context: TaskContext): FolderLoaderTask {
     const { store, router, clientService } = context
-
-    return useTask(function* (signal1, signal2, ref, shareId, path = null) {
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+    const resourcePollingDelay = Polling.ProcessingDelay
+    const resourcePollingDelayIncreaseFactor = Polling.ProcessingDelayIncreaseFactor
+    const resourcePollingTask = useTask(function* (signal, shareId, path, delay = 0) {
+      yield new Promise((resolve) => setTimeout(resolve, delay))
 
       const webDavResponse = yield clientService.owncloudSdk.files.list(
         buildWebDavSpacesPath(
@@ -31,12 +33,31 @@ export class FolderLoaderSpacesShare implements FolderLoader {
       )
 
       const resources = webDavResponse.map(buildResource)
+      const hasProcessingResources = resources.some(({ processing }) => processing)
+
+      if (hasProcessingResources) {
+        resourcePollingTask.perform(
+          shareId,
+          path,
+          delay * resourcePollingDelayIncreaseFactor || resourcePollingDelay
+        )
+      }
+
+      if (hasProcessingResources && delay) {
+        return
+      }
+
       const currentFolder = resources.shift()
 
       store.commit('Files/LOAD_FILES', {
         currentFolder,
         files: resources
       })
+    })
+
+    return useTask(function* (signal1, signal2, ref, shareId, path = null) {
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      yield resourcePollingTask.perform(shareId, path)
     })
   }
 }

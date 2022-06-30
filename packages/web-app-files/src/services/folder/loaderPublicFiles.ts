@@ -2,6 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { Polling } from '../../constants'
 import { buildResource } from '../../helpers/resources'
 import {
   isLocationPublicActive,
@@ -29,38 +30,55 @@ export class FolderLoaderPublicFiles implements FolderLoader {
       router,
       clientService: { owncloudSdk: client }
     } = context
+    const resourcePollingDelay = Polling.ProcessingDelay
+    const resourcePollingDelayIncreaseFactor = Polling.ProcessingDelayIncreaseFactor
+    const resourcePollingTask = useTask(function* (signal, path, delay = 0) {
+      const publicLinkPassword = store.getters['Files/publicLinkPassword']
+
+      yield new Promise((resolve) => setTimeout(resolve, delay))
+
+      let resources = yield client.publicFiles.list(
+        path || router.currentRoute.params.item,
+        publicLinkPassword,
+        DavProperties.PublicLink
+      )
+
+      const hasProcessingResources = resources.some(({ processing }) => processing)
+
+      if (hasProcessingResources) {
+        resourcePollingTask.perform(
+          path,
+          delay * resourcePollingDelayIncreaseFactor || resourcePollingDelay
+        )
+      }
+
+      if (hasProcessingResources && delay) {
+        return
+      }
+
+      // Redirect to files drop if the link has role "uploader"
+      const sharePermissions = parseInt(resources[0].getProperty(DavProperty.PublicLinkPermission))
+      if (linkRoleUploaderFolder.bitmask(false) === sharePermissions) {
+        router.replace(
+          createLocationPublic('files-public-drop', {
+            params: { token: router.currentRoute.params.item }
+          })
+        )
+        return
+      }
+
+      resources = resources.map(buildResource)
+      store.commit('Files/LOAD_FILES', {
+        currentFolder: resources[0],
+        files: resources.slice(1)
+      })
+    })
 
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-      const publicLinkPassword = store.getters['Files/publicLinkPassword']
-
       try {
-        let resources = yield client.publicFiles.list(
-          path || router.currentRoute.params.item,
-          publicLinkPassword,
-          DavProperties.PublicLink
-        )
-
-        // Redirect to files drop if the link has role "uploader"
-        const sharePermissions = parseInt(
-          resources[0].getProperty(DavProperty.PublicLinkPermission)
-        )
-        if (linkRoleUploaderFolder.bitmask(false) === sharePermissions) {
-          router.replace(
-            createLocationPublic('files-public-drop', {
-              params: { token: router.currentRoute.params.item }
-            })
-          )
-          return
-        }
-
-        resources = resources.map(buildResource)
-        store.commit('Files/LOAD_FILES', {
-          currentFolder: resources[0],
-          files: resources.slice(1)
-        })
-
+        yield resourcePollingTask.perform(path)
         ref.refreshFileListHeaderPosition()
       } catch (error) {
         store.commit('Files/SET_CURRENT_FOLDER', null)

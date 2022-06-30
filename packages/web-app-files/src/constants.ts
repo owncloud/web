@@ -12,3 +12,8 @@ export abstract class ImageType {
   static readonly Preview: string = 'preview'
   static readonly Avatar: string = 'avatar'
 }
+
+export abstract class Polling {
+  static readonly ProcessingDelay: number = 1500
+  static readonly ProcessingDelayIncreaseFactor: number = 1.5
+}

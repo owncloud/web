@@ -1,0 +1,6 @@
+Enhancement: Async uploads
+
+We've added polling to support asynchronous uploads - polling for resource updates happens automatically as soon as the server response is `HTTP/1.1 425 TOO EARLY`,
+no additional configuration is needed.
+
+https://github.com/owncloud/web/pull/7202

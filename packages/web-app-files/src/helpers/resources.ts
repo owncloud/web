@@ -85,6 +85,7 @@ export function buildResource(resource): Resource {
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    processing: resource.processing,
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
