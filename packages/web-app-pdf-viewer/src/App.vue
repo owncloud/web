@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     async loadPdf(fileContext) {
-      console.log(fileContext)
       try {
         this.loading = true
         const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
@@ -77,7 +76,7 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: 90%;
+  height: calc(100% - 50px);
 }
 
 .pdf-viewer-tool-bar {
