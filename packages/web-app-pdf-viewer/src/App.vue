@@ -3,14 +3,14 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <div class="oc-flex oc-pl-s oc-pr-s pdf-viewer-tool-bar">
+      <div class="oc-flex oc-p-s pdf-viewer-tool-bar">
         <span>{{ fileName }}</span>
         <oc-button id="text-editor-controls-close" @click="closeApp">
           <oc-icon name="close" />
         </oc-button>
       </div>
       <object
-        class="pdf-viewer oc-width-1-1 oc-height-1-1"
+        class="pdf-viewer oc-width-1-1"
         :data="blobUrl"
         type="application/pdf"
       />
@@ -81,11 +81,12 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  height: 95%;
 }
 
 .pdf-viewer-tool-bar {
+  height: 5%;
   align-items: center;
   justify-content: space-between;
-  height: 10%;
 }
 </style>
