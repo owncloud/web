@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -33,6 +34,15 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+
+   We've fixed a bug, where users with insufficient permissions could access the user management
+   and were able to see the "New Space" button in the space overview.
+
+   https://github.com/owncloud/web/issues/7181
+   https://github.com/owncloud/web/issues/7079
+   https://github.com/owncloud/web/pull/7197
 
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
