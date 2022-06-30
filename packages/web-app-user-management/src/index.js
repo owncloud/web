@@ -9,8 +9,6 @@ function $gettext(msg) {
   return msg
 }
 
-const permissionManager = window.Vue.$permissionManager
-
 const appInfo = {
   name: $gettext('User management'),
   id: 'user-management',
@@ -45,6 +43,7 @@ const navItems = [
       path: `/${appInfo.id}/users?`
     },
     enabled: () => {
+      const permissionManager = window.Vue.$permissionManager
       return permissionManager.hasUserManagement()
     }
   },
@@ -55,6 +54,7 @@ const navItems = [
       path: `/${appInfo.id}/groups?`
     },
     enabled: () => {
+      const permissionManager = window.Vue.$permissionManager
       return permissionManager.hasUserManagement()
     }
   }

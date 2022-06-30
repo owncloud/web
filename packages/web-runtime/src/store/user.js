@@ -101,19 +101,6 @@ const actions = {
 
         const userGroups = await client.users.getUserGroups(login.id)
         const user = await client.users.getUser(login.id)
-        const {
-          data: { bundles: roles }
-        } = await axios.post(
-          '/api/v0/settings/roles-list',
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${token}`
-            }
-          }
-        )
-
-        context.commit('SET_ROLES', roles)
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
         let graphUser
@@ -121,6 +108,20 @@ const actions = {
         if (context.state.capabilities.spaces?.enabled) {
           const graphClient = clientService.graphAuthenticated(instance, token)
           graphUser = await graphClient.users.getMe()
+
+          const {
+            data: { bundles: roles }
+          } = await axios.post(
+            '/api/v0/settings/roles-list',
+            {},
+            {
+              headers: {
+                authorization: `Bearer ${token}`
+              }
+            }
+          )
+
+          context.commit('SET_ROLES', roles)
 
           const userAssignmentResponse = await axios.post(
             '/api/v0/settings/assignments-list',
