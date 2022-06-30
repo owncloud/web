@@ -60,14 +60,14 @@ export class AuthService {
         store: this.store
       })
       this.userManager.events.addAccessTokenExpired(async (...args) => {
-        console.log('AccessToken Expired：', ...args)
+        console.error('AccessToken Expired：', ...args)
         await this.handleAuthError(this.router.currentRoute)
       })
       this.userManager.events.addAccessTokenExpiring((...args) => {
-        console.log('AccessToken Expiring：', ...args)
+        console.debug('AccessToken Expiring：', ...args)
       })
       this.userManager.events.addUserLoaded(async (user) => {
-        console.log(
+        console.debug(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
         )
         try {

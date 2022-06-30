@@ -126,6 +126,7 @@ export class PublicLinkManager {
         capabilities: omit(response.capabilities, ['files.archivers']),
         version: response.version
       })
+      return
     }
 
     this.store.commit('SET_CAPABILITIES', response)
