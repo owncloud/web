@@ -1,5 +1,6 @@
 <template>
   <div>
+    <keyboard-actions :paginated-resources="paginatedResources" />
     <app-bar
       :has-bulk-actions="true"
       :breadcrumbs="breadcrumbs"
@@ -90,6 +91,7 @@ import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 import { defineComponent } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
+import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -103,7 +105,8 @@ export default defineComponent({
     AppLoadingSpinner,
     NoContentMessage,
     NotFoundMessage,
-    ContextActions
+    ContextActions,
+    KeyboardActions
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinMountSideBar],

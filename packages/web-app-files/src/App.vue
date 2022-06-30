@@ -1,6 +1,5 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
-    <keymap-actions />
     <div
       id="files-list"
       ref="filesListWrapper"
@@ -28,14 +27,12 @@
 import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
-import KeymapActions from './components/FilesList/KeyboardActions.vue'
 import { defineComponent } from '@vue/composition-api'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
-    SideBar,
-    KeymapActions
+    SideBar
   },
   mixins: [Mixins],
   computed: {

@@ -4,11 +4,15 @@
 
 <script lang="ts">
 import { bus } from 'web-pkg/src/instance'
-import { useResourcesViewDefaults } from '../../composables'
-import { Resource } from '../../helpers/resource'
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
+  props: {
+    paginatedResources: {
+      type: Array,
+      required: true
+    }
+  },
   data: () => {
     return {
       selectionCursor: 0
@@ -17,12 +21,6 @@ export default {
 
   computed: {
     ...mapState('Files', ['latestSelectedId'])
-  },
-
-  setup() {
-    return {
-      ...useResourcesViewDefaults<Resource, any, any[]>()
-    }
   },
 
   mounted() {
@@ -39,10 +37,11 @@ export default {
     )
 
     this.$on('beforeDestroy', () => {
+      console.log('before')
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      document.removeEventListener('keydown', this.handleShortcut)
+      filesList.removeEventListener('keydown', this.handleShortcut)
     })
   },
 
