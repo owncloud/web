@@ -9,11 +9,7 @@
           <oc-icon name="close" />
         </oc-button>
       </div>
-      <object
-        class="pdf-viewer oc-width-1-1"
-        :data="blobUrl"
-        type="application/pdf"
-      />
+      <object class="pdf-viewer oc-width-1-1" :data="blobUrl" type="application/pdf" />
     </div>
   </main>
 </template>
