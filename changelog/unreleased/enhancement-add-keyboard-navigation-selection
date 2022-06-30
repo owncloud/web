@@ -1,0 +1,15 @@
+Enhancement: Add Keyboard navigation/selection
+
+We've added the possibility to navigate and select via keyboard.
+- Navigation:
+    - via keyboard arrows up/down for moving up and down through the rows of the file list
+- Selection
+    - via keyboard space bar: select / deselect the currently highlighted row
+    - via keyboard shift + arrows up/down: add a series of rows
+    - via keyboard cmd/ctrl + a: select all rows
+    - via keyboard esc: deselect all rows
+    - via mouse holding cmd/ctrl + left click on a row: add/remove the clicked item to/from the current selection model
+    - via mouse holding shift + left click on a row: add the clicked row and the series of rows towards the most recently clicked row to the current selection model.
+
+https://github.com/owncloud/web/pull/7153
+https://github.com/owncloud/web/issues/6029

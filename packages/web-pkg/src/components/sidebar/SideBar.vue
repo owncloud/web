@@ -171,7 +171,8 @@ export default defineComponent({
       immediate: true
     },
     sidebarClosed: {
-      handler: function () {
+      handler: function (closed) {
+        if (closed) return
         this.$nextTick(() => {
           this.initVisibilityObserver()
         })

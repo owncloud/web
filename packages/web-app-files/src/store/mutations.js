@@ -91,8 +91,8 @@ export default {
   SET_CLIPBOARD_ACTION(state, action) {
     state.clipboardAction = action
   },
-  SET_LATEST_SELECTED_FILE_ID(state, file) {
-    state.latestSelectedId = file
+  SET_LATEST_SELECTED_FILE_ID(state, fileId) {
+    state.latestSelectedId = fileId
   },
   SET_FILE_SELECTION(state, files) {
     const latestSelected = files.find((i) => !state.selectedIds.some((j) => j === i.id))
