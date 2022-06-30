@@ -2,12 +2,15 @@
   <main>
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
-    <object
-      v-else
-      class="pdf-viewer oc-width-1-1 oc-height-1-1"
-      :data="blobUrl"
-      type="application/pdf"
-    />
+    <div v-else class="oc-height-1-1">
+      <div class="oc-flex oc-p-s pdf-viewer-tool-bar">
+        <span>{{ fileName }}</span>
+        <oc-button id="text-editor-controls-close" size="small" @click="closeApp">
+          <oc-icon name="close" size="small" />
+        </oc-button>
+      </div>
+      <object class="pdf-viewer oc-width-1-1" :data="blobUrl" type="application/pdf" />
+    </div>
   </main>
 </template>
 <script>
@@ -36,7 +39,11 @@ export default {
     blobUrl: ''
   }),
   computed: {
-    ...mapGetters(['getToken'])
+    ...mapGetters(['getToken']),
+
+    fileName() {
+      return this.currentFileContext.fileName
+    }
   },
   created() {
     this.loadPdf(this.currentFileContext)
@@ -69,5 +76,11 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  height: calc(100% - 50px);
+}
+
+.pdf-viewer-tool-bar {
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
