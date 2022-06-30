@@ -4,13 +4,13 @@ beforeEach(jest.resetAllMocks)
 
 describe('permissionManager', () => {
   describe('method "hasUserManagement"', () => {
-    test('should be true if user has sufficient rights', () => {
+    it('should be true if user has sufficient rights', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'admin' } } }
       } as any)
       expect(permissionManager.hasUserManagement()).toBeTruthy()
     })
-    test('should be false if user has insufficient rights', () => {
+    it('should be false if user has insufficient rights', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'user' } } }
       } as any)
@@ -18,13 +18,13 @@ describe('permissionManager', () => {
     })
   })
   describe('method "hasSpaceManagement"', () => {
-    test('should be true if user has sufficient rights', () => {
+    it('should be true if user has sufficient rights', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'admin' } } }
       } as any)
       expect(permissionManager.hasUserManagement()).toBeTruthy()
     })
-    test('should be false if user has insufficient rights', () => {
+    it('should be false if user has insufficient rights', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'user' } } }
       } as any)
