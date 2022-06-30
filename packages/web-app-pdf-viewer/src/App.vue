@@ -5,10 +5,9 @@
     <div v-else class="oc-height-1-1">
       <div class="oc-flex oc-pl-s oc-pr-s pdf-viewer-tool-bar">
         <span>{{ fileName }}</span>
-          <oc-button id="text-editor-controls-close" :size="small" @click="closeApp">
-            <oc-icon name="close" />
-          </oc-button>
-        </div>
+        <oc-button id="text-editor-controls-close" @click="closeApp">
+          <oc-icon name="close" />
+        </oc-button>
       </div>
       <object
         class="pdf-viewer oc-width-1-1 oc-height-1-1"
