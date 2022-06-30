@@ -11,7 +11,9 @@ Summary
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -41,6 +43,15 @@ Details
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
 
+* Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
+
+   We've repositioned the notifications to no longer block the searchbar - they are now in the
+   bottom right corner, above the (possibly visible) upload information. It has also been
+   redesigned to better fit the overall design.
+
+   https://github.com/owncloud/web/issues/7082
+   https://github.com/owncloud/web/pull/7139
+
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 
    We've improved the performance of share indicators when loading resource tables as well as
@@ -48,6 +59,25 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7188
+
+* Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
+
+   We updated the ownCloud Design System to version 14.0.0-alpha.2. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   - Change - Remove OcAlert component:
+   https://github.com/owncloud/owncloud-design-system/pull/2210 - Change - Remove
+   transition animations:
+   https://github.com/owncloud/owncloud-design-system/pull/2210 - Change - Revamp
+   animations: https://github.com/owncloud/owncloud-design-system/pull/2210 -
+   Enhancement - Progress bar indeterminate state:
+   https://github.com/owncloud/owncloud-design-system/pull/2200 - Enhancement -
+   Redesign notifications:
+   https://github.com/owncloud/owncloud-design-system/pull/2210 - Bugfix - Remove click
+   event on OcIcon: https://github.com/owncloud/owncloud-design-system/pull/2216
+
+   https://github.com/owncloud/web/pull/7139
+   https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.2
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
