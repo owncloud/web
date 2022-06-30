@@ -1,0 +1,13 @@
+Enhancement: Update ODS to v14.0.0-alpha.2
+
+We updated the ownCloud Design System to version 14.0.0-alpha.2. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+
+- Change - Remove OcAlert component: https://github.com/owncloud/owncloud-design-system/pull/2210
+- Change - Remove transition animations: https://github.com/owncloud/owncloud-design-system/pull/2210
+- Change - Revamp animations: https://github.com/owncloud/owncloud-design-system/pull/2210
+- Enhancement - Progress bar indeterminate state: https://github.com/owncloud/owncloud-design-system/pull/2200
+- Enhancement - Redesign notifications: https://github.com/owncloud/owncloud-design-system/pull/2210
+- Bugfix - Remove click event on OcIcon: https://github.com/owncloud/owncloud-design-system/pull/2216
+
+https://github.com/owncloud/web/pull/7139
+https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.2

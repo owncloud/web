@@ -40,6 +40,9 @@ const state = {
   options: {
     contextHelpers: true,
     defaultExtension: 'files',
+    // ugly hack to still have notifications but don't have
+    // them blocking UI elements in acceptance/E2E tests
+    topCenterNotifications: false,
     disablePreviews: false,
     displayResourcesLazy: true,
     homeFolder: '',

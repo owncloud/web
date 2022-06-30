@@ -1,18 +1,19 @@
 <template>
-  <oc-notifications>
+  <oc-notifications :position="notificationPosition">
     <oc-notification-message
       v-for="item in $_ocMessages_limited"
       :key="item.id"
       :title="item.title"
       :message="item.desc"
       :status="item.status"
-      class="oc-width-large"
       @close="deleteMessage(item)"
     />
   </oc-notifications>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     activeMessages: {
@@ -22,6 +23,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration']),
+    notificationPosition() {
+      if (this.configuration.options.topCenterNotifications) {
+        return 'top-center'
+      }
+      return 'default'
+    },
     $_ocMessages_limited() {
       return this.activeMessages ? this.activeMessages.slice(0, 5) : []
     }

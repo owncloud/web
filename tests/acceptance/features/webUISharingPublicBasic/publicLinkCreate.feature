@@ -56,7 +56,6 @@ Feature: Create public link shares
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
-
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
   Scenario: simple file sharing by public link (ocis bug demonstration)
@@ -72,7 +71,6 @@ Feature: Create public link shares
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
-
   @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
     Given user "Alice" has created folder "simple-folder" in the server
@@ -82,7 +80,6 @@ Feature: Create public link shares
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI
     And the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then file "lorem.txt" should be listed on the webUI
-
 
 
   Scenario: share two files with same name but different paths by public link
@@ -97,8 +94,6 @@ Feature: Create public link shares
     And the user has browsed to the shared-via-link page
     Then file with path "lorem.txt" should be listed on the webUI
     And file with path "simple-folder/lorem.txt" should be listed on the webUI
-
-
 
 
   Scenario: user creates a multiple public link of a file and delete the first link
@@ -167,8 +162,6 @@ Feature: Create public link shares
       | file    | lorem.txt     |
 
 
-
-
   Scenario: User can create a public link via quick action
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
@@ -185,10 +178,7 @@ Feature: Create public link shares
       Quicklink copied into your clipboard
       """
 
-  # This test is skipped in OCIS as it's starting to fail frequently
-  # and it won't be that much relevant after sharing jail is implemented
-  # see issue https://github.com/owncloud/web/issues/6419 and
-  # https://github.com/owncloud/web/issues/6321#issuecomment-1057813530 for more context
+  # This test is skipped in OCIS as the sharing jail has been implemented
   @skipOnOCIS
   Scenario: Sharing the share_folder as public link is not possible
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server

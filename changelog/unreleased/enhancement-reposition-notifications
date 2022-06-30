@@ -1,0 +1,7 @@
+Enhancement: Reposition notifications
+
+We've repositioned the notifications to no longer block the searchbar - they are now in the bottom right corner, above the (possibly visible) upload information.
+It has also been redesigned to better fit the overall design.
+
+https://github.com/owncloud/web/pull/7139
+https://github.com/owncloud/web/issues/7082

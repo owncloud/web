@@ -8,14 +8,6 @@
       @closeApp="closeApp"
       @save="save"
     />
-    <oc-notifications>
-      <oc-notification-message
-        v-if="lastError"
-        :message="lastError"
-        status="danger"
-        @close="clearLastError"
-      />
-    </oc-notifications>
     <div class="oc-flex editor-wrapper-height">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
@@ -37,14 +29,14 @@
   </main>
 </template>
 <script>
-import AppBar from './AppBar.vue'
-import { useAppDefaults } from 'web-pkg/src/composables'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
 import { computed, onMounted, onBeforeUnmount, ref, unref } from '@vue/composition-api'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
+import { useAppDefaults } from 'web-pkg/src/composables'
+import AppBar from './AppBar.vue'
 
 export default {
   name: 'TextEditor',
@@ -121,26 +113,24 @@ export default {
           (error) => {
             switch (error.statusCode) {
               case 412:
-                lastError.value =
-                  'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                this.errorPopup(
+                  this.$gettext(
+                    'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+                  )
+                )
                 break
               case 500:
-                lastError.value = 'Error when contacting the server'
+                this.errorPopup(this.$gettext('Error when contacting the server'))
                 break
               case 401:
-                lastError.value = "You're not authorized to save this file"
+                this.errorPopup(this.$gettext("You're not authorized to save this file"))
                 break
               default:
-                lastError.value = error.message || error
+                this.errorPopup(error.message || error)
             }
           }
         )
     }).restartable()
-
-    const lastError = ref()
-    const clearLastError = () => {
-      lastError.value = null
-    }
 
     const renderedMarkdown = computed(() => {
       return unref(currentContent) && showPreview
@@ -214,19 +204,25 @@ export default {
       isDirty,
       isReadOnly,
       currentContent,
-      lastError,
       renderedMarkdown,
       config,
 
       // methods
-      clearLastError,
       save,
       handleSKey,
       handleUnload
     }
   },
   methods: {
-    ...mapActions(['createModal', 'hideModal'])
+    ...mapActions(['createModal', 'hideModal', 'showMessage']),
+
+    errorPopup(error) {
+      this.showMessage({
+        title: this.$gettext('An error occurred'),
+        desc: error,
+        status: 'danger'
+      })
+    }
   }
 }
 </script>
