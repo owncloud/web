@@ -1,0 +1,6 @@
+Enhancement: Improve performance of share indicators
+
+We've improved the performance of share indicators when loading resource tables as well as when adding or removing shares.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7188

@@ -1,10 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
+import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetText from 'vue-gettext'
 
 import MessageBar from 'web-runtime/src/components/MessageBar.vue'
 
 const localVue = createLocalVue()
+localVue.use(Vuex)
 localVue.use(DesignSystem)
 localVue.use(GetText, {
   translations: 'does-not-matter.json',
@@ -99,6 +101,15 @@ function getShallowWrapper(activeMessages = []) {
     propsData: {
       activeMessages
     },
+    store: new Vuex.Store({
+      getters: {
+        configuration: () => ({
+          options: {
+            topCenterNotifications: false
+          }
+        })
+      }
+    }),
     stubs: {
       'oc-icon': true,
       'oc-notifications': true,
