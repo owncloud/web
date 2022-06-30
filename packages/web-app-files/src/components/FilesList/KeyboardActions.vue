@@ -5,12 +5,18 @@
 <script lang="ts">
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   props: {
     paginatedResources: {
       type: Array,
       required: true
+    },
+    keybindOnElementId: {
+      type: String,
+      required: false,
+      default: 'files-view'
     }
   },
   data: () => {
@@ -24,7 +30,7 @@ export default {
   },
 
   mounted() {
-    const filesList = document.getElementById('files-list')
+    const filesList = document.getElementById(this.keybindOnElementId)
     if (filesList) {
       filesList.addEventListener('keydown', this.handleShortcut, false)
     }
@@ -39,7 +45,6 @@ export default {
     )
 
     this.$on('beforeDestroy', () => {
-      console.log('before')
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
@@ -207,5 +212,5 @@ export default {
       return nextResourceId
     }
   }
-}
+})
 </script>

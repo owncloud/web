@@ -677,11 +677,13 @@ export default defineComponent({
        */
       this.$emit('rowMounted', resource, component)
     },
-    fileClicked(...[resource, eventData]) {
+    fileClicked(data) {
       /**
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
+      const resource = data[0]
+      const eventData = data[1]
       if (eventData && eventData.metaKey) {
         return bus.publish('app.files.list.clicked.meta', resource)
       }

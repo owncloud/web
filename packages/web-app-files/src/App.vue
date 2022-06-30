@@ -1,11 +1,6 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
-    <div
-      id="files-list"
-      ref="filesListWrapper"
-      tabindex="-1"
-      class="files-list-wrapper oc-width-expand"
-    >
+    <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" />
     </div>
     <side-bar
