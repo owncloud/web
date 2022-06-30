@@ -224,6 +224,7 @@ export const announceTours = async ({
 }): Promise<void> => {
   const { tours } = await loadTours(runtimeConfiguration?.tours)
   await store.dispatch('setAllTranslatedTourInfos', tours)
+  await store.dispatch('setCurrentTranslatedTourInfos')
 }
 
 /**
