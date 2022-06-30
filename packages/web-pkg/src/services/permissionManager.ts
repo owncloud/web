@@ -1,3 +1,4 @@
+import { Store } from 'vuex'
 interface Role {
   name: 'admin' | 'spaceadmin' | 'user' | 'guest'
 }
@@ -5,11 +6,11 @@ interface User {
   role: Role
 }
 
-export class PermissionManagerService {
-  private readonly user: User
+export class PermissionManager {
+  private readonly store: Store<any>
 
-  constructor(user: User) {
-    this.user = user
+  constructor(store: Store<any>) {
+    this.store = store
   }
 
   public hasUserManagement() {
@@ -18,5 +19,9 @@ export class PermissionManagerService {
 
   public hasSpaceManagement() {
     return ['admin', 'spaceadmin'].includes(this.user.role.name)
+  }
+
+  get user(): User {
+    return this.store.getters.user
   }
 }
