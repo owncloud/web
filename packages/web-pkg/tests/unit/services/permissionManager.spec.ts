@@ -22,13 +22,13 @@ describe('permissionManager', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'admin' } } }
       } as any)
-      expect(permissionManager.hasUserManagement()).toBeTruthy()
+      expect(permissionManager.hasSpaceManagement()).toBeTruthy()
     })
     it('should be false if user has insufficient rights', () => {
       const permissionManager = new PermissionManager({
         getters: { user: { role: { name: 'user' } } }
       } as any)
-      expect(permissionManager.hasUserManagement()).toBeFalsy()
+      expect(permissionManager.hasSpaceManagement()).toBeFalsy()
     })
   })
 })
