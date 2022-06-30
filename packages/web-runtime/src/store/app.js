@@ -9,9 +9,6 @@ const state = {
 }
 
 const actions = {
-  toggleSidebar(context, visible) {
-    context.commit('TOGGLE_SIDEBAR', visible)
-  },
   showMessage({ commit }, message) {
     commit('ENQUEUE_MESSAGE', message)
   },
