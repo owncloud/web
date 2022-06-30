@@ -1,0 +1,8 @@
+Bugfix: Create space and access user management permission
+
+We've fixed a bug, where users with insufficient permissions could access the user management and were able to see
+the "New Space" button in the space overview.
+
+https://github.com/owncloud/web/pull/7197
+https://github.com/owncloud/web/issues/7181
+https://github.com/owncloud/web/issues/7079

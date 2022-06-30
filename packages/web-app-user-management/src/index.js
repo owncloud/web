@@ -41,6 +41,10 @@ const navItems = [
     icon: 'user',
     route: {
       path: `/${appInfo.id}/users?`
+    },
+    enabled: () => {
+      const permissionManager = window.Vue.$permissionManager
+      return permissionManager.hasUserManagement()
     }
   },
   {
@@ -48,6 +52,10 @@ const navItems = [
     icon: 'group-2',
     route: {
       path: `/${appInfo.id}/groups?`
+    },
+    enabled: () => {
+      const permissionManager = window.Vue.$permissionManager
+      return permissionManager.hasUserManagement()
     }
   }
 ]

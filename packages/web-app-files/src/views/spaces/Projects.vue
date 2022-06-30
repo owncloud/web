@@ -8,7 +8,7 @@
       :show-actions-on-selection="true"
     >
       <template #actions>
-        <create-space />
+        <create-space v-if="hasCreatePermission" />
       </template>
       <template #content>
         <p v-text="spacesHint" />
@@ -188,8 +188,7 @@ export default defineComponent({
       return this.$gettext('Store your project related files in Spaces for seamless collaboration.')
     },
     hasCreatePermission() {
-      // @TODO
-      return true
+      return this.$permissionManager.hasSpaceManagement()
     }
   },
   watch: {
