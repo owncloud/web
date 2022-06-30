@@ -39,19 +39,16 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
         resources = resources.map(buildResource)
 
         const currentFolder = resources.shift()
+        yield store.dispatch('Files/loadSharesTree', {
+          client,
+          path: currentFolder.path
+        })
 
         store.commit('Files/LOAD_FILES', {
           currentFolder,
-          files: resources
+          files: resources,
+          loadIndicators: true
         })
-
-        // load indicators
-        ;(() => {
-          store.dispatch('Files/loadIndicators', {
-            client: client,
-            currentFolder: currentFolder.path
-          })
-        })()
 
         // fetch user quota
         ;(async () => {
