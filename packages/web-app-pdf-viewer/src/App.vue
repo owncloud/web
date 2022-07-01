@@ -4,7 +4,8 @@
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
       <div class="oc-flex oc-p-s pdf-viewer-tool-bar">
-        <span>{{ fileName }}</span>
+        <oc-spinner v-if="loadResourceTask.isRunning" />
+        <oc-resource v-else :resource="resource" />
         <oc-button id="text-editor-controls-close" size="small" @click="closeApp">
           <oc-icon name="close" size="small" />
         </oc-button>
@@ -18,6 +19,10 @@ import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
+import { buildResource } from 'files/src/helpers/resources'
+import { ref } from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services'
+import { useTask } from 'vue-concurrency'
 
 export default {
   name: 'PDFViewer',
@@ -26,7 +31,17 @@ export default {
     LoadingScreen
   },
   setup() {
+    const resource = ref([])
+    const sdk = clientService.owncloudSdk
+
+    const loadResourceTask = useTask(function* (signal, ref) {
+      const response = yield sdk.files.fileInfo(ref.currentFileContext.path)
+      resource.value = buildResource(response)
+    })
+
     return {
+      loadResourceTask,
+      resource,
       ...useAppDefaults({
         applicationId: 'pdf-viewer'
       })
@@ -47,6 +62,9 @@ export default {
   },
   created() {
     this.loadPdf(this.currentFileContext)
+  },
+  async mounted() {
+    await this.loadResourceTask.perform(this)
   },
   unmounted() {
     this.unloadPdf()
