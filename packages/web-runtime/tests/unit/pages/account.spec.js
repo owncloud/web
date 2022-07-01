@@ -123,36 +123,49 @@ describe('account page', () => {
         expect(groupNames).toMatchSnapshot()
       })
     })
+  })
 
-    describe('method "editPassword"', () => {
-      it('should show message on success', async () => {
-        mockAxios.request.mockImplementationOnce(() => {
-          return Promise.resolve()
-        })
-        const store = getStore({ server: 'https://example.com' })
-        const wrapper = getWrapper(store, { resolveChangeOwnPassword: true })
-
-        const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-
-        await wrapper.vm.editPassword('password', 'newPassword')
-
-        expect(showMessageStub).toHaveBeenCalled()
+  describe('method "editPassword"', () => {
+    it('should show message on success', async () => {
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
       })
+      const store = getStore({ server: 'https://example.com' })
+      const wrapper = getWrapper(store)
 
-      it('should show message on error', async () => {
-        mockAxios.request.mockImplementationOnce(() => {
-          return Promise.reject(new Error())
-        })
-        const store = getStore({ server: 'https://example.com' })
-        const wrapper = getWrapper(store, { resolveChangeOwnPassword: false })
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
-        jest.spyOn(console, 'error').mockImplementation(() => {})
-        const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      await wrapper.vm.editPassword('password', 'newPassword')
 
-        await wrapper.vm.editPassword('password', 'newPassword')
+      expect(showMessageStub).toHaveBeenCalled()
+    })
 
-        expect(showMessageStub).toHaveBeenCalled()
+    it('should show message on error', async () => {
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.reject(new Error())
       })
+      const store = getStore({ server: 'https://example.com' })
+      const wrapper = getWrapper(store)
+
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+
+      await wrapper.vm.editPassword('password', 'newPassword')
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
+  describe('computed method "isChangePasswordEnabled"', () => {
+    it('should be true if capability is enabled', () => {
+      const store = getStore({ capabilities: { spaces: { enabled: true } } })
+      const wrapper = getWrapper(store)
+      expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
+    })
+    it('should be false if capability is not enabled', () => {
+      const store = getStore()
+      const wrapper = getWrapper(store)
+      expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
     })
   })
 })
@@ -165,7 +178,7 @@ function getWrapper(store = getStore()) {
   const opts = {
     localVue,
     mocks: {
-      $route,
+      $route
     },
     stubs: {
       'oc-spinner': true,
@@ -181,7 +194,8 @@ function getStore({
   user = {},
   server = '',
   getNavItemsByExtension = jest.fn(() => []),
-  isAccountEditingEnabled = true
+  isAccountEditingEnabled = true,
+  capabilities = {}
 } = {}) {
   return createStore(Vuex.Store, {
     actions: {
@@ -197,7 +211,7 @@ function getStore({
       }),
       getToken: () => 'token',
       capabilities: () => {
-        return {}
+        return capabilities
       },
       getNavItemsByExtension: () => getNavItemsByExtension,
       apps: () => ({
