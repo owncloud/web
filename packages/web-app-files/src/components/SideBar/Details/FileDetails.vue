@@ -106,6 +106,34 @@
             </div>
           </td>
         </tr>
+        <tr v-if="cernFeatures && getSambaPath(file.path)">
+          <th scope="col" class="oc-pr-s" v-text="sambaPathLabel" />
+          <td>
+            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+              <p
+                ref="sambaFilePath"
+                v-oc-tooltip="getSambaPath(file.path)"
+                class="oc-my-rm oc-text-truncate"
+                v-text="getSambaPath(file.path)"
+              />
+              <oc-button
+                v-oc-tooltip="copySambaPathLabel"
+                :aria-label="copySambaPathLabel"
+                appearance="raw"
+                :variation="copiedSamba ? 'success' : 'passive'"
+                @click="copySambaPathToClipboard"
+              >
+                <oc-icon
+                  v-if="copiedSamba"
+                  key="oc-copy-to-clipboard-copied"
+                  name="checkbox-circle"
+                  class="_clipboard-success-animation"
+                />
+                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+              </oc-button>
+            </div>
+          </td>
+        </tr>
         <tr v-if="runningOnEos">
           <th scope="col" class="oc-pr-s" v-text="directLinkLabel" />
           <td>
@@ -154,6 +182,7 @@ import { useRouteParam, useRouter } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
+import pathMappings from '../../../helpers/path/pathMappings'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -193,6 +222,7 @@ export default defineComponent({
     shareIndicators: [],
     copiedDirect: false,
     copiedEos: false,
+    copiedSamba: false,
     timeout: null
   }),
   computed: {
@@ -204,6 +234,9 @@ export default defineComponent({
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
+    },
+    cernFeatures() {
+      return !!this.configuration?.options?.cernFeatures
     },
     hasContent() {
       return (
@@ -283,7 +316,7 @@ export default defineComponent({
       return this.file.owner?.[0].additionalInfo
     },
     directLink() {
-      return `${this.configuration.server}files/spaces/personal/home${encodePath(this.file.path)}`
+      return `${this.configuration.server}files/spaces${encodePath(this.file.path)}`
     },
     directLinkLabel() {
       return this.$gettext('Direct link')
@@ -296,6 +329,12 @@ export default defineComponent({
     },
     copyEosPathLabel() {
       return this.$gettext('Copy EOS path')
+    },
+    sambaPathLabel() {
+      return this.$gettext('Windows Path')
+    },
+    copySambaPathLabel() {
+      return this.$gettext('Copy Windows path')
     },
     showSize() {
       return this.getResourceSize(this.file.size) !== '?'
@@ -438,6 +477,22 @@ export default defineComponent({
         desc: this.$gettext('The EOS path has been copied to your clipboard.')
       })
     },
+    copySambaPathToClipboard() {
+      copyToClipboard(this.getSambaPath(this.file.path))
+      this.copiedSamba = true
+      this.clipboardSuccessHandler()
+      this.showMessage({
+        title: this.$gettext('Windows path copied'),
+        desc: this.$gettext('The Windows path has been copied to your clipboard.')
+      })
+    },
+    getSambaPath(path) {
+      const pathComponents = path?.split('/').filter(Boolean)
+      if (pathComponents.length > 2 && pathComponents[0] === 'eos') {
+        const translated = pathMappings[pathComponents[1]]
+        return translated && `${translated}${pathComponents.slice(2).join('\\')}`
+      }
+    },
     copyDirectLinkToClipboard() {
       copyToClipboard(this.directLink)
       this.copiedDirect = true
@@ -452,6 +507,7 @@ export default defineComponent({
       this.timeout = setTimeout(() => {
         this.copiedDirect = false
         this.copiedEos = false
+        this.copiedSamba = false
       }, 550)
     }
   }
