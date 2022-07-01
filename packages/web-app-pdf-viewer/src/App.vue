@@ -54,11 +54,7 @@ export default {
     blobUrl: ''
   }),
   computed: {
-    ...mapGetters(['getToken']),
-
-    fileName() {
-      return this.currentFileContext.fileName
-    }
+    ...mapGetters(['getToken'])
   },
   created() {
     this.loadPdf(this.currentFileContext)
