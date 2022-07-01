@@ -15,6 +15,7 @@ Summary
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
@@ -78,6 +79,15 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7188
+
+* Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
+
+   We've added support to block certain file extensions from the text-editor app with additional
+   config. See
+   https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+   https://github.com/owncloud/web/issues/6661
+   https://github.com/owncloud/web/pull/7174
 
 * Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
 
