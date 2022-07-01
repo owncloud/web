@@ -147,7 +147,7 @@ export default {
     editPassword(currentPassword, newPassword) {
       const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
       return graphClient.users
-        .changeOwnPassword(currentPassword, newPassword)
+        .changeOwnPassword(currentPassword.trim(), newPassword.trim())
         .then(() => {
           this.closeEditPasswordModal()
           this.showMessage({
