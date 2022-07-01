@@ -46,11 +46,7 @@ export default {
   created() {
     this.loadPdf(this.currentFileContext)
   },
-  async mounted() {
-    const fileInfo = await this.getFileInfo(this.currentFileContext.path, {})
-    this.resource = buildResource(fileInfo)
-  },
-  unmounted() {
+  beforeDestroy() {
     this.unloadPdf()
   },
   methods: {
@@ -59,6 +55,8 @@ export default {
         this.loading = true
         const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
         this.blobUrl = URL.createObjectURL(response.body)
+        const fileInfo = await this.getFileInfo(this.currentFileContext.path, {})
+        this.resource = buildResource(fileInfo)
       } catch (e) {
         this.loadingError = true
         console.error('Error fetching pdf', e)
