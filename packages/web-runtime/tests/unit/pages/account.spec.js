@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import GetTextPlugin from 'vue-gettext'
 import VueCompositionAPI from '@vue/composition-api'
+import mockAxios from 'jest-mock-axios'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -122,6 +123,37 @@ describe('account page', () => {
         expect(groupNames).toMatchSnapshot()
       })
     })
+
+    describe('method "editPassword"', () => {
+      it('should show message on success', async () => {
+        mockAxios.request.mockImplementationOnce(() => {
+          return Promise.resolve()
+        })
+        const store = getStore({ server: 'https://example.com' })
+        const wrapper = getWrapper(store, { resolveChangeOwnPassword: true })
+
+        const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+
+        await wrapper.vm.editPassword('password', 'newPassword')
+
+        expect(showMessageStub).toHaveBeenCalled()
+      })
+
+      it('should show message on error', async () => {
+        mockAxios.request.mockImplementationOnce(() => {
+          return Promise.reject(new Error())
+        })
+        const store = getStore({ server: 'https://example.com' })
+        const wrapper = getWrapper(store, { resolveChangeOwnPassword: false })
+
+        jest.spyOn(console, 'error').mockImplementation(() => {})
+        const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+
+        await wrapper.vm.editPassword('password', 'newPassword')
+
+        expect(showMessageStub).toHaveBeenCalled()
+      })
+    })
   })
 })
 
@@ -133,7 +165,7 @@ function getWrapper(store = getStore()) {
   const opts = {
     localVue,
     mocks: {
-      $route
+      $route,
     },
     stubs: {
       'oc-spinner': true,
@@ -152,11 +184,18 @@ function getStore({
   isAccountEditingEnabled = true
 } = {}) {
   return createStore(Vuex.Store, {
+    actions: {
+      createModal: jest.fn(),
+      hideModal: jest.fn(),
+      showMessage: jest.fn(),
+      setModalInputErrorMessage: jest.fn()
+    },
     getters: {
       user: () => user,
       configuration: () => ({
         server: server
       }),
+      getToken: () => 'token',
       capabilities: () => {
         return {}
       },

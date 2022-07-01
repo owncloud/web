@@ -5,7 +5,7 @@
       <div>
         <edit-password-modal
           v-if="editPasswordModalOpen"
-          :cancel="closeEditPasswordModal"
+          @cancel="closeEditPasswordModal"
           @confirm="editPassword"
         ></edit-password-modal>
         <oc-button
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { clientService } from 'web-pkg/src/services'
 
@@ -103,11 +103,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps', 'capabilities']),
+    ...mapGetters([
+      'user',
+      'configuration',
+      'getNavItemsByExtension',
+      'apps',
+      'capabilities',
+      'getToken'
+    ]),
     isAccountEditingEnabled() {
       return !this.apps.settings
     },
     isChangePasswordEnabled() {
+      // FIXME: spaces capability is not correct here, we need to retrieve an appropriate capability
       return this.capabilities.spaces?.enabled
     },
     pageTitle() {
@@ -134,6 +142,7 @@ export default {
     this.loadGroups()
   },
   methods: {
+    ...mapActions(['showMessage']),
     async loadGroups() {
       this.groups = await this.$client.users.getUserGroups(this.user.id)
       this.loadingGroups = false

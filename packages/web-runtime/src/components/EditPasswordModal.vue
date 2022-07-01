@@ -6,7 +6,7 @@
       :button-confirm-text="$gettext('Confirm')"
       :button-confirm-disabled="confirmButtonDisabled"
       @confirm="editPassword"
-      @cancel="cancel"
+      @cancel="$emit('cancel')"
     >
       <template #content>
         <oc-text-input
@@ -38,12 +38,6 @@
 <script>
 export default {
   name: 'EditPasswordModal',
-  props: {
-    cancel: {
-      type: Function,
-      required: true
-    }
-  },
   data: function () {
     return {
       currentPassword: '',
