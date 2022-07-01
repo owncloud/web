@@ -241,13 +241,37 @@ In case the backend has additional preview providers configured there is no mech
         "mimeTypes": ["image/tiff", "image/webp"]
       }
     }
-  ],
+  ]
 ```
 
 If you already have an `"external_apps"` section, just add the preview app to the list. Please adjust the `"mimeTypes"` list according to your additional preview providers. See https://github.com/owncloud/files_mediaviewer#supporting-more-media-types for advise on how to add preview providers to the backend.
 
+### Text-Editor app
+The `text-editor` app provides a list of file extensions that the app is associated with, both for opening files and for creating new files. 
+By default, only `.txt` and `.md` files appear in the file creation menu and offer the text-editor as default app on a left mouse click 
+in the file list. For other file types the text-editor app only appears in the right mouse click context menu. In case you want to change this 
+default set of primary file extensions for the text-editor you can overwrite it as follows:
+1. Remove the `"text-editor"` string from the `"apps"` section in your `config.json` file
+2. Add the following config to your `config.json` file:
+```json
+"external_apps": [
+    {
+      "id": "text-editor",
+      "path": "web-app-text-editor",
+      "config": {
+        "primaryExtensions": ["txt", "yaml"]
+      }
+    }
+  ]
+```
+With the above example config the text editor will offer creation of new files for `.txt` and `.yaml` files instead of `.txt` and `.md` files. 
+Also, a left mouse click on any `.txt` or `.yaml` file will open the respective file in the text-editor app. In this example, `.md` files would 
+not be opened in the text-editor by default anymore, but the text-editor will would appear in the context menu for the file as alternative app. 
+
+If you already have an `"external_apps"` section, just add the preview app to the list. Please adjust the `"mimeTypes"` list according to your additional preview providers. See https://github.com/owncloud/files_mediaviewer#supporting-more-media-types for advise on how to add preview providers to the backend.
+ 
 {{< hint info >}}
-The reason why the `preview` app needs to be ported from the `apps` section to the `external_apps` section is that only the `external_apps` support additional configuration. There are plans to change the configuration of apps to give you a coherent admin experience in that regard. 
+The reason why the app needs to be ported from the `apps` section to the `external_apps` section is that only the `external_apps` support additional configuration. There are plans to change the configuration of apps to give you a coherent admin experience in that regard. 
 {{< /hint >}}
 
 ## Accessing ownCloud Web
