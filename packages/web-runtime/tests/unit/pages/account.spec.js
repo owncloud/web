@@ -157,6 +157,9 @@ function getStore({
       configuration: () => ({
         server: server
       }),
+      capabilities: () => {
+        return {}
+      },
       getNavItemsByExtension: () => getNavItemsByExtension,
       apps: () => ({
         ...(isAccountEditingEnabled || { settings: {} })
