@@ -4,6 +4,11 @@ import Vue from 'vue'
 
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
+    if (to.path === from?.path) {
+      // note: query changes can never trigger re-init of the auth context.
+      return next()
+    }
+
     const store = (Vue as any).$store
     const authService = (Vue as any).$authService
     await authService.initializeContext(to)
@@ -22,7 +27,6 @@ export const setupAuthGuard = (router: Router) => {
         query: { redirectUrl: to.fullPath }
       })
     }
-
-    next()
+    return next()
   })
 }
