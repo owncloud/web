@@ -55,7 +55,7 @@ export default {
         this.loading = true
         const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
         this.blobUrl = URL.createObjectURL(response.body)
-        const fileInfo = await this.getFileInfo(this.currentFileContext.path, {})
+        const fileInfo = await this.getFileInfo(fileContext.path, {})
         this.resource = buildResource(fileInfo)
       } catch (e) {
         this.loadingError = true
