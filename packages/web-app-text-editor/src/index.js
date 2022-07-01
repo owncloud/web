@@ -63,8 +63,9 @@ const fileExtensions = () => {
     primaryExtensions = [primaryExtensions]
   }
   return extensions.reduce((acc, extensionItem) => {
-    if (primaryExtensions.includes(extensionItem.extension)) {
-      extensionItem.canBeDefault = true
+    const isPrimary = primaryExtensions.includes(extensionItem.extension)
+    extensionItem.canBeDefault = isPrimary
+    if (isPrimary) {
       extensionItem.newFileMenu = {
         menuTitle($gettext) {
           return $gettext(extensionItem.label)
