@@ -53,7 +53,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
-  const meChangepasswordApiFactory = MeChangepasswordApiFactory(config, config.basePath, axiosClient)
+  const meChangepasswordApiFactory = MeChangepasswordApiFactory(
+    config,
+    config.basePath,
+    axiosClient
+  )
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)

@@ -1,4 +1,8 @@
-import { initializeApplications, announceApplicationsReady, announcePermissionManager } from '../../../src/container'
+import {
+  initializeApplications,
+  announceApplicationsReady,
+  announcePermissionManager
+} from '../../../src/container'
 import { buildApplication } from '../../../src/container/application'
 import { Vue } from './../../../src/defaults'
 

@@ -11,7 +11,6 @@ import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
 import axios from 'axios'
 
-
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 
 export interface UserManagerOptions {
