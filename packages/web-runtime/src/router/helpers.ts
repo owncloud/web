@@ -85,7 +85,16 @@ export const extractPublicLinkToken = (to: Route): string => {
     return (contextRouteParams.item || '').split('/')[0]
   }
 
-  return (to.params.item || to.params.filePath || to.params.token || '').split('/')[0]
+  // CERN code to extract the token from a url that starts with /public
+  let filePath
+  if (to.params.filePath) {
+    const pathElems = to.params.filePath.split('/')
+    if (pathElems.length > 0) {
+      filePath = pathElems[1]
+    }
+  }
+
+  return (to.params.item || filePath || to.params.token || '').split('/')[0]
 }
 
 /**

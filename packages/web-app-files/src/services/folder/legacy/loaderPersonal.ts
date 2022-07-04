@@ -58,7 +58,7 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
 
         // fetch user quota
         ;(async () => {
-          const user = await client.users.getUser(router.currentRoute.params.storageId)
+          const user = await client.users.getUser(store.getters.user.id)
           store.commit('SET_QUOTA', user.quota)
         })()
       } catch (error) {
