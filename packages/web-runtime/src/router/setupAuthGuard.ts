@@ -1,11 +1,12 @@
 import { extractPublicLinkToken, isPublicLinkContext, isUserContext } from './index'
-import Router from 'vue-router'
+import Router, { Route } from 'vue-router'
 import Vue from 'vue'
+import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
 
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
-    if (to.path === from?.path) {
-      // note: query changes can never trigger re-init of the auth context.
+    if (from && to.path === from.path && !hasContextRouteNameChanged(to, from)) {
+      // note: expect for the context route, query changes can never trigger re-init of the auth context
       return next()
     }
 
@@ -29,4 +30,15 @@ export const setupAuthGuard = (router: Router) => {
     }
     return next()
   })
+}
+
+export const hasContextRouteNameChanged = (to: Route, from: Route): boolean => {
+  if (!to.query[contextRouteNameKey] && !from.query[contextRouteNameKey]) {
+    return false
+  }
+
+  return (
+    queryItemAsString(to.query[contextRouteNameKey]) !==
+    queryItemAsString(from.query[contextRouteNameKey])
+  )
 }

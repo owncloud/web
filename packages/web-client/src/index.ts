@@ -12,6 +12,7 @@ interface Client {
   ocs: OCS
 }
 
+// TODO: extract axios client creation into ClientService
 export const client = (baseURI: string, authParams: AuthParameters): Client => {
   const auth = new Auth(authParams)
   const axiosClient = axios.create({
