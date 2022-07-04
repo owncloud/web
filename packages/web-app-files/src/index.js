@@ -48,7 +48,7 @@ const navItems = [
     },
     icon: appInfo.icon,
     route: {
-      path: `/${appInfo.id}/spaces/personal`
+      path: `/${appInfo.id}/spaces`
     }
   },
   {

@@ -10,6 +10,6 @@ export const usePublicLinkToken = ({ currentRoute }: PublicLinkTokenOptions) => 
   return computed(() => {
     return (unref(currentRoute).params.item || unref(currentRoute).params.filePath || '').split(
       '/'
-    )[0]
+    )[1]
   })
 }

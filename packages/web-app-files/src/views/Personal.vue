@@ -187,24 +187,24 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        const needsRedirectWithStorageId =
-          to.params.storageId === 'home' || isNil(to.params.storageId)
-        if (needsRedirectWithStorageId) {
-          let storageId = this.user.id
-          if (this.hasShareJail) {
-            const drivesResponse = await this.graphClient.drives.listMyDrives(
-              '',
-              'driveType eq personal'
-            )
-            storageId = drivesResponse.data.value[0].id
-          }
+        // const needsRedirectWithStorageId =
+        //   to.params.storageId === 'home' || isNil(to.params.storageId)
+        // if (needsRedirectWithStorageId) {
+        //   let storageId = this.user.id
+        //   if (this.hasShareJail) {
+        //     const drivesResponse = await this.graphClient.drives.listMyDrives(
+        //       '',
+        //       'driveType eq personal'
+        //     )
+        //     storageId = drivesResponse.data.value[0].id
+        //   }
 
-          return this.$router.replace({
-            to,
-            params: { ...to.params, storageId },
-            query: to.query
-          })
-        }
+        //   return this.$router.replace({
+        //     to,
+        //     params: { ...to.params, storageId },
+        //     query: to.query
+        //   })
+        // }
 
         const needsRedirectToHome =
           this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
