@@ -177,6 +177,18 @@ function getWrapper(renameFilePromise) {
               return renameFilePromise
             })
           }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => '',
+                isPublicLinkContextReady: () => false
+              }
+            }
+          }
         }
       },
       actions: {

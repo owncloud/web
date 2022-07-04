@@ -80,6 +80,18 @@ function getWrapper(resourcesToDelete) {
                 })
             )
           }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => '',
+                isPublicLinkContextReady: () => false
+              }
+            }
+          }
         }
       },
       mutations: {

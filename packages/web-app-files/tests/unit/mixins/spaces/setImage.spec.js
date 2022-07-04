@@ -73,6 +73,17 @@ describe('setImage', () => {
             mutations: {
               UPDATE_SPACE_FIELD: jest.fn()
             }
+          },
+          runtime: {
+            namespaced: true,
+            modules: {
+              auth: {
+                namespaced: true,
+                getters: {
+                  accessToken: () => ''
+                }
+              }
+            }
           }
         }
       })

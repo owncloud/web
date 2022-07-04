@@ -88,6 +88,17 @@ function getWrapper() {
           mutations: {
             UPDATE_RESOURCE_FIELD: jest.fn()
           }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            }
+          }
         }
       }
     })

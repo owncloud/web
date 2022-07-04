@@ -143,6 +143,17 @@ function getWrapper() {
             REMOVE_FILE: jest.fn(),
             REMOVE_SPACE: jest.fn()
           }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            }
+          }
         }
       }
     })
