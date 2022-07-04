@@ -46,7 +46,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        path: 'personal/:storageId?/:item*',
+        path: ':item*',
         name: locationSpacesPersonal.name,
         component: components.Personal,
         meta: {
