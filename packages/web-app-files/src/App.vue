@@ -1,7 +1,7 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
-      <router-view id="files-view" />
+      <router-view id="files-view" tabindex="0" />
     </div>
     <side-bar
       v-if="showSidebar"
