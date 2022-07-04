@@ -32,16 +32,17 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from 'files/src/helpers/resources'
 import { computed, unref } from '@vue/composition-api'
-import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
+import { queryItemAsString, useAppDefaults, useRequest, useRouteQuery } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   name: 'ExternalApp',
 
   components: {
@@ -56,6 +57,7 @@ export default {
         applicationId: 'external',
         applicationName
       }),
+      ...useRequest(),
       applicationName
     }
   },
@@ -141,5 +143,5 @@ export default {
       return buildResource(file)
     }
   }
-}
+})
 </script>

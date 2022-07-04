@@ -111,12 +111,14 @@ describe('The app provider extension', () => {
 
   it('should show a loading spinner while loading', async () => {
     const makeRequest = jest.fn(() =>
-      setTimeout(() => {
-        Promise.resolve({
-          ok: true,
-          status: 200
-        })
-      }, 500)
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            status: 200
+          })
+        }, 500)
+      })
     )
     const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
