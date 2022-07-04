@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-pl-xs oc-flex oc-flex-middle oc-text-nowrap size-info">
+  <div class="oc-pl-xs oc-flex oc-flex-middle oc-text-nowrap size-info oc-mr-s">
     <oc-button
       id="files-clear-selection"
       v-oc-tooltip="clearSelectionLabel"

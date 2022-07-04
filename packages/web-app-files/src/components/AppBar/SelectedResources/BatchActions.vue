@@ -75,7 +75,7 @@ export default {
 
     align-items: center;
     display: flex;
-    gap: var(--oc-space-small);
+    gap: var(--oc-space-medium);
   }
 }
 </style>

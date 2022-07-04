@@ -311,17 +311,15 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
   const { page, resource } = args
   const folderPaths = resource.split('/')
   const resourceName = folderPaths.pop()
+  const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (folderPaths.length) {
     await clickResource({ page, path: folderPaths.join('/') })
   }
 
-  const resourceCheckbox = page.locator(util.format(checkBox, resourceName))
+  await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+  await page.locator(util.format(filesAction, 'delete')).click()
 
-  if (!(await resourceCheckbox.isChecked())) {
-    await resourceCheckbox.check()
-  }
-  await page.locator(deleteButton).first().click()
   await page.locator(actionConfirmationButton).click()
   await page.waitForResponse(
     (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
