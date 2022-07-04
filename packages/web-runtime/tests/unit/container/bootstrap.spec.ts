@@ -1,5 +1,6 @@
-import { announceApplications } from '../../../src/container'
+import { announceApplications, announcePermissionManager } from '../../../src/container'
 import { buildApplication } from '../../../src/container/application'
+import { Vue } from './../../../src/defaults'
 
 jest.mock('../../../src/container/application')
 
@@ -38,5 +39,14 @@ describe('announce applications', () => {
     expect(errorSpy).toHaveBeenCalledTimes(2)
     expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
     expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
+  })
+})
+
+describe('announcePermissionManager', () => {
+  it('should inject vue object contains permissionManager instance', () => {
+    const vue = Vue
+    announcePermissionManager({ vue: Vue, store: {} as any })
+    expect(vue.prototype.$permissionManager).toBeDefined()
+    expect(vue.$permissionManager).toBeDefined()
   })
 })

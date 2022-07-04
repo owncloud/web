@@ -13,7 +13,7 @@ import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { useDefaultThemeName } from '../composables'
-import { clientService } from 'web-pkg/src/services'
+import { clientService, PermissionManager } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 
 import { init as SentryInit } from '@sentry/browser'
@@ -251,6 +251,24 @@ export const announceClientService = ({
   vue.prototype.$client = sdk
   vue.prototype.$clientService = clientService
   vue.prototype.$clientService.owncloudSdk = sdk
+}
+
+/**
+ * announce uppyService and inject it into vue
+ *
+ * @param vue
+ * @param store
+ */
+export const announcePermissionManager = ({
+  vue,
+  store
+}: {
+  vue: VueConstructor
+  store: Store<any>
+}): void => {
+  const permissionManager = new PermissionManager(store)
+  vue.prototype.$permissionManager = permissionManager
+  set(vue, '$permissionManager', permissionManager)
 }
 
 /**

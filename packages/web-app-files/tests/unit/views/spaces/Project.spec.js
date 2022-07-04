@@ -144,7 +144,7 @@ describe('Spaces project view', () => {
         })
       })
 
-      const wrapper = getMountedWrapper([], { id: 1 })
+      const wrapper = getMountedWrapper([Files['/'][0]], { id: 1 })
       await wrapper.vm.loadResourcesTask.last
 
       expect(wrapper.find(selectors.spaceImage).exists()).toBeFalsy()
@@ -285,7 +285,8 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           },
           actions: {
             loadIndicators: jest.fn(),
-            loadCurrentFileOutgoingShares: jest.fn()
+            loadCurrentFileOutgoingShares: jest.fn(),
+            loadSharesTree: jest.fn()
           },
           getters: {
             activeFiles: () => spaceResources,

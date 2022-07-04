@@ -730,7 +730,7 @@ export default {
     // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
     commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
     await dispatch('loadSharesTree', { client, path: currentFolder, storageId })
-    commit('LOAD_INDICATORS')
+    commit('LOAD_INDICATORS', currentFolder)
   },
 
   loadAvatars({ commit, rootGetters }, { resource }) {

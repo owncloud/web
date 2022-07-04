@@ -7,7 +7,6 @@
       <top-bar :applications-list="applicationsList" :active-notifications="activeNotifications" />
     </div>
     <div id="web-content-main" class="oc-px-s oc-pb-s">
-      <message-bar :active-messages="activeMessages" @deleteMessage="deleteMessage" />
       <div class="app-container oc-flex">
         <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
         <router-view
@@ -18,7 +17,10 @@
         />
       </div>
     </div>
-    <upload-info />
+    <div class="snackbars">
+      <message-bar :active-messages="activeMessages" @deleteMessage="deleteMessage" />
+      <upload-info />
+    </div>
   </div>
 </template>
 
@@ -192,6 +194,20 @@ export default defineComponent({
       .app-content {
         transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
       }
+    }
+  }
+
+  .snackbars {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+
+    @media (max-width: 640px) {
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 500px;
     }
   }
 }
