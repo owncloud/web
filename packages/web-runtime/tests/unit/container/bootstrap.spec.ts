@@ -1,9 +1,9 @@
-import { announceApplications } from '../../../src/container'
+import { initializeApplications, announceApplicationsReady } from '../../../src/container'
 import { buildApplication } from '../../../src/container/application'
 
 jest.mock('../../../src/container/application')
 
-describe('announce applications', () => {
+describe('initialize applications', () => {
   it('continues even if one or more applications are falsy', async () => {
     const fishyError = new Error('fishy')
     const initialize = jest.fn()
@@ -21,7 +21,7 @@ describe('announce applications', () => {
 
     jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
-    await announceApplications({
+    const applications = await initializeApplications({
       runtimeConfiguration: {
         apps: ['internalFishy', 'internalValid'],
         external_apps: [{ path: 'externalFishy' }, { path: 'externalValid' }]
@@ -32,11 +32,14 @@ describe('announce applications', () => {
       supportedLanguages: {}
     })
 
+
     expect(buildApplicationMock).toHaveBeenCalledTimes(4)
     expect(initialize).toHaveBeenCalledTimes(2)
-    expect(ready).toHaveBeenCalledTimes(2)
     expect(errorSpy).toHaveBeenCalledTimes(2)
     expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
     expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
+
+    await announceApplicationsReady({ applications })
+    expect(ready).toHaveBeenCalledTimes(2)
   })
 })
