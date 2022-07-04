@@ -4,9 +4,12 @@ import QuotaModal from '@files/src/components/Spaces/QuotaModal.vue'
 import stubs from 'tests/unit/stubs'
 import { createStore } from 'vuex-extensions'
 import mockAxios from 'jest-mock-axios'
+import VueCompositionAPI from '@vue/composition-api'
+
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 
 afterEach(() => jest.clearAllMocks())
 
