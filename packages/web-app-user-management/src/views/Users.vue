@@ -202,12 +202,12 @@ export default {
     })
 
     const loadGroupsTask = useTask(function* (signal, ref) {
-      const groupsResponse = yield graphClient.groups.listGroups()
+      const groupsResponse = yield unref(graphClient).groups.listGroups()
       groups.value = groupsResponse.data.value
     })
 
     const loadResourcesTask = useTask(function* (signal, ref) {
-      const usersResponse = yield graphClient.users.listUsers('displayName')
+      const usersResponse = yield unref(graphClient).users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
       users.value.forEach((user) => {
