@@ -102,6 +102,7 @@ const providerSuccessResponseGet = {
 
 describe('The app provider extension', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
@@ -110,15 +111,16 @@ describe('The app provider extension', () => {
   })
 
   it('should show a loading spinner while loading', async () => {
-    const makeRequest = jest.fn(() =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve({
-            ok: true,
-            status: 200
-          })
-        }, 500)
-      })
+    const makeRequest = jest.fn(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve({
+              ok: true,
+              status: 200
+            })
+          }, 500)
+        })
     )
     const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()

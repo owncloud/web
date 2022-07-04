@@ -32,7 +32,6 @@ describe('initialize applications', () => {
       supportedLanguages: {}
     })
 
-
     expect(buildApplicationMock).toHaveBeenCalledTimes(4)
     expect(initialize).toHaveBeenCalledTimes(2)
     expect(errorSpy).toHaveBeenCalledTimes(2)

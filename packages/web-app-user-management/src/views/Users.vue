@@ -122,15 +122,14 @@ import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsP
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { useAccessToken, useStore } from "web-pkg/src/composables";
-import { ref } from '@vue/composition-api'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { ref, computed, unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
-import { computed, unref } from "@vue/composition-api/dist/vue-composition-api";
 
 export default {
   components: {

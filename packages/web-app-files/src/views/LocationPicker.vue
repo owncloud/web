@@ -311,7 +311,7 @@ export default defineComponent({
       }
 
       if ((this.$route as Route).query.storageId) {
-        (route.query as any).storageId = this.$route.query.storageId
+        ;(route.query as any).storageId = this.$route.query.storageId
       }
 
       return route

@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import qs from 'qs'
 import Router from 'vue-router'
 import AccessDeniedPage from '../pages/accessDenied.vue'

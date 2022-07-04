@@ -6,7 +6,6 @@ import { createStore } from 'vuex-extensions'
 import mockAxios from 'jest-mock-axios'
 import VueCompositionAPI from '@vue/composition-api'
 
-
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(VueCompositionAPI)

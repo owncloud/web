@@ -12,20 +12,17 @@ const defaultStubs = {
   'oc-grid': true,
   'oc-button': true,
   'oc-icon': true,
-  'oc-table-files': true,
-
-  // 'list-info': false,
-  // 'translate': false,
-  // 'pagination': false,
-  // 'RouterLink': undefined
+  'oc-table-files': true
 }
 
 localVue.prototype.$client.files = {
   list: async () => [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   move: async () => {}
 }
 localVue.prototype.$client.publicFiles = {
   list: async () => [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   move: async () => {}
 }
 
@@ -179,7 +176,10 @@ describe('LocationPicker', () => {
         expect(cancelButton.find(translateStub).exists()).toBeTruthy()
       })
       it('should call "leaveLocationPicker" method when clicked', async () => {
-        const spyLeaveLocationPicker = jest.spyOn((LocationPicker as any).methods, 'leaveLocationPicker')
+        const spyLeaveLocationPicker = jest.spyOn(
+          (LocationPicker as any).methods,
+          'leaveLocationPicker'
+        )
         const spyRouterPush = jest.spyOn(router, 'push')
 
         const wrapper = getMountedWrapper()
@@ -457,7 +457,7 @@ describe('LocationPicker', () => {
       stubs,
       mocks: {
         $route,
-        $router: router,
+        $router: router
       },
       setup: () => ({
         loadResourcesTask: {
@@ -476,8 +476,8 @@ describe('LocationPicker', () => {
     setup
   }: {
     store?: Store<any>
-    $route?: unknown,
-    loading?: boolean,
+    $route?: unknown
+    loading?: boolean
     setup?: unknown
   } = {}) {
     return shallowMount(component, mountOptions(store, $route, loading, setup))
@@ -490,8 +490,8 @@ describe('LocationPicker', () => {
     setup
   }: {
     store?: Store<any>
-    $route?: unknown,
-    loading?: boolean,
+    $route?: unknown
+    loading?: boolean
     setup?: unknown
   } = {}) {
     return mount(
