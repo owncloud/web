@@ -3,6 +3,7 @@ import LocationPicker from '@files/src/views/LocationPicker.vue'
 import { mount, RouterLinkStub, shallowMount } from '@vue/test-utils'
 import { createLocationOperations } from '../../../src/router'
 import omit from 'lodash-es/omit'
+import { Store } from 'vuex'
 
 const component = { ...LocationPicker, mounted: jest.fn() }
 
@@ -11,7 +12,12 @@ const defaultStubs = {
   'oc-grid': true,
   'oc-button': true,
   'oc-icon': true,
-  'oc-table-files': true
+  'oc-table-files': true,
+
+  // 'list-info': false,
+  // 'translate': false,
+  // 'pagination': false,
+  // 'RouterLink': undefined
 }
 
 localVue.prototype.$client.files = {
@@ -65,8 +71,6 @@ describe('LocationPicker', () => {
       { action: 'copy', item: '/parent' },
       { action: 'random-action', item: '/सिम्पल फोल्डर/टेश्ट' },
       { action: '', item: '/parent/child' },
-      { action: true, item: '/parent/child' },
-      { action: {}, item: '/parent/child' },
       {
         action: 'random-action',
         item: '/सिम्पल फोल्डर/टेश्ट फोल्डर'
@@ -175,7 +179,7 @@ describe('LocationPicker', () => {
         expect(cancelButton.find(translateStub).exists()).toBeTruthy()
       })
       it('should call "leaveLocationPicker" method when clicked', async () => {
-        const spyLeaveLocationPicker = jest.spyOn(LocationPicker.methods, 'leaveLocationPicker')
+        const spyLeaveLocationPicker = jest.spyOn((LocationPicker as any).methods, 'leaveLocationPicker')
         const spyRouterPush = jest.spyOn(router, 'push')
 
         const wrapper = getMountedWrapper()
@@ -230,7 +234,7 @@ describe('LocationPicker', () => {
         expect(confirmButton.text()).toBe(input.expectedText)
       })
       it('should call "confirmAction" method when clicked', async () => {
-        const spyConfirmAction = jest.spyOn(LocationPicker.methods, 'confirmAction')
+        const spyConfirmAction = jest.spyOn((LocationPicker as any).methods, 'confirmAction')
         const wrapper = getMountedWrapper({
           store: createStore({ currentFolder: { canCreate: jest.fn(() => true) } })
         })
@@ -339,7 +343,6 @@ describe('LocationPicker', () => {
           (input) => {
             const route = getRoute({ resource: '/home/some-resource' })
             const wrapper = getShallowWrapper({
-              data: { loading: false },
               $route: route,
               setup: {
                 paginatedResources: [input]
@@ -366,7 +369,6 @@ describe('LocationPicker', () => {
             paginationPage: 1
           }
           const wrapper = getMountedWrapper({
-            data: { loading: false },
             store: store,
             $route: route,
             setup: setup
@@ -389,7 +391,6 @@ describe('LocationPicker', () => {
           })
           const route = getRoute({ resource: '/home/some-resource' })
           const wrapper = getMountedWrapper({
-            data: { loading: false },
             store: store,
             $route: route,
             setup: {
@@ -449,14 +450,14 @@ describe('LocationPicker', () => {
     })
   }
 
-  function mountOptions(store, $route, loading, setup = {}, stubs = defaultStubs) {
+  function mountOptions(store, $route, loading, setup = {}, stubs: any = defaultStubs) {
     return {
       localVue,
-      store: store,
+      store,
       stubs,
       mocks: {
         $route,
-        $router: router
+        $router: router,
       },
       setup: () => ({
         loadResourcesTask: {
@@ -473,6 +474,11 @@ describe('LocationPicker', () => {
     $route = getRoute(),
     loading = false,
     setup
+  }: {
+    store?: Store<any>
+    $route?: unknown,
+    loading?: boolean,
+    setup?: unknown
   } = {}) {
     return shallowMount(component, mountOptions(store, $route, loading, setup))
   }
@@ -482,6 +488,11 @@ describe('LocationPicker', () => {
     $route = getRoute(),
     loading = false,
     setup
+  }: {
+    store?: Store<any>
+    $route?: unknown,
+    loading?: boolean,
+    setup?: unknown
   } = {}) {
     return mount(
       component,

@@ -79,7 +79,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 
 import { basename, join } from 'path'
@@ -105,8 +105,10 @@ import {
 } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
+import { Route } from 'vue-router'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   metaInfo() {
     const title = `${this.title} - ${this.configuration.currentTheme.general.name}`
 
@@ -308,8 +310,8 @@ export default {
         }
       }
 
-      if (this.$route.query.storageId) {
-        route.query.storageId = this.$route.query.storageId
+      if ((this.$route as Route).query.storageId) {
+        (route.query as any).storageId = this.$route.query.storageId
       }
 
       return route
@@ -569,7 +571,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
