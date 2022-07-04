@@ -12,6 +12,7 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -55,13 +56,23 @@ Details
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
 
+* Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+
+   We have added a new change own password dialog to the account info page, so the user has the
+   possibility to change their own password.
+
+   https://github.com/owncloud/web/issues/7183
+   https://github.com/owncloud/web/pull/7206
+
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 
    We've added a toolbar to the pdf-viewer app, where the user can see the name of the opened pdf file
    and also close the app.
 
    https://github.com/owncloud/web/issues/7198
+   https://github.com/owncloud/web/issues/7205
    https://github.com/owncloud/web/pull/7201
+   https://github.com/owncloud/web/pull/7207
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
