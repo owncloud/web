@@ -6,8 +6,10 @@
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 
 export default defineComponent({
+  mixins: [MixinFilesListScrolling],
   props: {
     paginatedResources: {
       type: Array,
@@ -111,6 +113,7 @@ export default defineComponent({
       this.resetSelectionCursor()
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
+      this.scrollToResource({ id: nextId })
     },
 
     handleShiftClickAction(resource) {
@@ -166,6 +169,7 @@ export default defineComponent({
         // select
         this.addFileSelection({ id: nextResourceId })
       }
+      this.scrollToResource({ id: nextResourceId })
       this.selectionCursor = this.selectionCursor - 1
     },
 
@@ -180,6 +184,7 @@ export default defineComponent({
         // select
         this.addFileSelection({ id: nextResourceId })
       }
+      this.scrollToResource({ id: nextResourceId })
       this.selectionCursor = this.selectionCursor + 1
     },
 
