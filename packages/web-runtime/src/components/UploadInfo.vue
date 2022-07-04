@@ -548,16 +548,11 @@ export default {
 
 <style lang="scss">
 #upload-info {
-  position: absolute;
-  right: 20px;
   background-color: var(--oc-color-background-secondary);
-  bottom: 20px;
   width: 400px;
   z-index: 4;
 
   @media (max-width: 640px) {
-    left: 0;
-    right: 0;
     margin: 0 auto;
     width: 100%;
     max-width: 500px;

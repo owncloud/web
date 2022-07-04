@@ -9,6 +9,8 @@ import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
+import axios from 'axios'
+
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 
@@ -150,12 +152,44 @@ export class UserManager extends OidcUserManager {
     // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
     // see https://github.com/owncloud/ocis/issues/3271
     let graphUser
+    let role = null
     if (this.store.getters.capabilities.spaces?.enabled) {
       const graphClient = this.clientService.graphAuthenticated(
         this.configurationManager.serverUrl,
         accessToken
       )
       graphUser = await graphClient.users.getMe()
+      const {
+        data: { bundles: roles }
+      } = await axios.post(
+        '/api/v0/settings/roles-list',
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+
+      this.store.commit('SET_ROLES', roles)
+
+      const userAssignmentResponse = await axios.post(
+        '/api/v0/settings/assignments-list',
+        {
+          account_uuid: graphUser.data.id
+        },
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      const assignments = userAssignmentResponse.data?.assignments
+      const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
+
+      if (roleAssignment) {
+        role = roles.find((role) => role.id === roleAssignment.roleId)
+      }
     }
     const [user, userGroups] = await Promise.all([
       await this.clientService.owncloudSdk.users.getUser(login.id),
@@ -168,6 +202,7 @@ export class UserManager extends OidcUserManager {
       displayname: user.displayname || login['display-name'],
       email: login?.email || user?.email || '',
       groups: userGroups,
+      role,
       language: login?.language,
       ...(user.quota &&
         user.quota.definition !== 'default' &&

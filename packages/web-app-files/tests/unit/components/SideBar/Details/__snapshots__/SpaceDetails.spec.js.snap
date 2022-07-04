@@ -5,25 +5,30 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
   <div class="oc-space-details-sidebar-image oc-text-center">
     <oc-icon-stub name="layout-grid" size="xxlarge" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
   </div>
-  <!---->
-  <div>
-    <table aria-label="Overview of the information about the selected space" class="details-table">
-      <tr>
-        <th scope="col" class="oc-pr-s">Last activity</th>
-        <td>Invalid DateTime</td>
-      </tr>
-      <!---->
-      <tr>
-        <th scope="col" class="oc-pr-s">Manager</th>
-        <td><span>alice</span></td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s">Quota</th>
-        <td>
-          <space-quota-stub spacequota="[object Object]"></space-quota-stub>
-        </td>
-      </tr>
-    </table>
+  <div class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px;">
+    <oc-button-stub appearance="raw" aria-label="Open member list in share panel">
+      <oc-icon-stub name="group"></oc-icon-stub>
+    </oc-button-stub>
+    <!---->
+    <p>This space has 1 member.</p>
+    <oc-button-stub appearance="raw" aria-label="Open share panel" size="small"><span class="oc-text-small">Show</span></oc-button-stub>
   </div>
+  <table aria-label="Overview of the information about the selected space" class="details-table">
+    <tr>
+      <th scope="col" class="oc-pr-s">Last activity</th>
+      <td>Invalid DateTime</td>
+    </tr>
+    <!---->
+    <tr>
+      <th scope="col" class="oc-pr-s">Manager</th>
+      <td><span>alice</span></td>
+    </tr>
+    <tr>
+      <th scope="col" class="oc-pr-s">Quota</th>
+      <td>
+        <space-quota-stub spacequota="[object Object]"></space-quota-stub>
+      </td>
+    </tr>
+  </table>
 </div>
 `;

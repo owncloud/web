@@ -6319,10 +6319,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"filesize@npm:^8.0.7":
-  version: 8.0.7
-  resolution: "filesize@npm:8.0.7"
-  checksum: 8603d27c5287b984cb100733640645e078f5f5ad65c6d913173e01fb99e09b0747828498fd86647685ccecb69be31f3587b9739ab1e50732116b2374aff4cbf9
+"filesize@npm:^9.0.11":
+  version: 9.0.11
+  resolution: "filesize@npm:9.0.11"
+  checksum: 7e8a9f9a4089e3ee29de64c241b50db8db4008351ace959873cb950bac0c2e1e09f4b45f42eaed8acd589a895dde978ed199e7a9982902fa06ca0be48e5ea92d
   languageName: node
   linkType: hard
 
@@ -9711,13 +9711,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:^13.2.0-rc.1":
-  version: 13.2.0-rc.1
-  resolution: "owncloud-design-system@npm:13.2.0-rc.1"
+"owncloud-design-system@npm:^14.0.0-alpha.2":
+  version: 14.0.0
+  resolution: "owncloud-design-system@npm:14.0.0"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
-    filesize: ^8.0.0
+    filesize: ^9.0.9
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
     fuse.js: ^6.4.6
@@ -9730,7 +9730,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 56d47b1a9b276dfb289fc0fb523bfa96ce223f595afe9230d8675da84b7393ede45768ae185339a268644e4ecacb9d610617662ff8ddf5b7b0f16ebd36a76916
+  checksum: 1b3b43770d9d5e0fe7bb52b997b2a165f5f8dfdc9765b5f95cc30c050be9f8b4b7af5b2438006f701fd0c48a8c62d6fd005c969e4aa6e9f804324b88a157214b
   languageName: node
   linkType: hard
 
@@ -13777,7 +13777,7 @@ __metadata:
     axios: ^0.26.1
     cross-fetch: ^3.0.6
     easygettext: "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz"
-    filesize: ^8.0.7
+    filesize: ^9.0.11
     focus-trap: ^6.4.0
     focus-trap-vue: ^1.1.1
     fuse.js: ^6.5.3
@@ -13785,7 +13785,7 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
-    owncloud-design-system: ^13.2.0-rc.1
+    owncloud-design-system: ^14.0.0-alpha.2
     owncloud-sdk: ~3.0.0-alpha.14
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0

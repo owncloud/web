@@ -23,8 +23,9 @@ import {
   announceVersions,
   applicationStore,
   announceUppyService,
-  startSentry,
-  announceAuthService
+  announceAuthService,
+  announcePermissionManager,
+  startSentry
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
@@ -40,6 +41,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   })
   announceClientService({ vue: Vue, runtimeConfiguration })
   announceUppyService({ vue: Vue })
+  announcePermissionManager({ vue: Vue, store })
   await announceClient(runtimeConfiguration)
   await announceAuthService({ vue: Vue, configurationManager, store, router })
   announceTranslations({ vue: Vue, supportedLanguages, translations })

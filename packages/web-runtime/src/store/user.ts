@@ -9,7 +9,9 @@ const state = {
   version: {},
   groups: [],
   quota: null,
-  language: null
+  language: null,
+  role: null,
+  roles: []
 }
 
 const getters = {
@@ -42,6 +44,7 @@ const mutations = {
     state.email = email
     state.groups = user.groups
     state.language = user.language
+    state.role = user.role
     sentrySetUser({ username: user.id })
   },
   SET_CAPABILITIES(state, data) {
@@ -56,6 +59,9 @@ const mutations = {
     quota.total = parseInt(quota.total)
 
     state.quota = quota
+  },
+  SET_ROLES(state, roles) {
+    state.roles = roles
   }
 }
 

@@ -12,78 +12,55 @@
         class="space-default-image oc-px-m oc-py-m"
       />
     </div>
-    <div
-      v-if="hasMemberShares || hasLinkShares"
-      class="oc-flex oc-flex-middle oc-mb-m oc-text-small"
-    >
-      <div v-if="hasMemberShares" class="oc-flex oc-flex-middle">
-        <oc-button
-          appearance="raw"
-          :aria-label="$gettext('Open the member panel')"
-          @click="expandMemberPanel"
-        >
-          <oc-icon name="group" class="oc-mr-s" />
-        </oc-button>
-      </div>
-      <div v-if="hasLinkShares" class="oc-flex oc-flex-middle">
-        <oc-button
-          appearance="raw"
-          :aria-label="$gettext('Open the link panel')"
-          @click="expandLinkPanel"
-        >
-          <oc-icon name="link" class="oc-mr-s" />
-        </oc-button>
-      </div>
-      <div>
-        <span v-if="hasMemberShares">
-          <span v-text="memberShareLabel" />
-          <oc-button
-            appearance="raw"
-            :aria-label="$gettext('Open the member panel')"
-            size="small"
-            @click="expandMemberPanel"
-          >
-            <span class="oc-text-small" v-text="$gettext('Show')"></span>
-          </oc-button>
-        </span>
-        <span v-if="hasMemberShares && hasLinkShares">·</span>
-        <span v-if="hasLinkShares">
-          <span v-text="linkShareLabel" />
-          <oc-button
-            appearance="raw"
-            :aria-label="$gettext('Open the link panel')"
-            size="small"
-            @click="expandLinkPanel"
-          >
-            <span class="oc-text-small" v-text="$gettext('Show')"></span>
-          </oc-button>
-        </span>
-      </div>
+    <div v-if="hasShares" class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px">
+      <oc-button
+        v-if="hasMemberShares"
+        appearance="raw"
+        :aria-label="openSharesPanelMembersHint"
+        @click="expandSharesPanel"
+      >
+        <oc-icon name="group" />
+      </oc-button>
+      <oc-button
+        v-if="hasLinkShares"
+        appearance="raw"
+        :aria-label="openSharesPanelLinkHint"
+        @click="expandSharesPanel"
+      >
+        <oc-icon name="link" />
+      </oc-button>
+      <p v-text="shareLabel" />
+      <oc-button
+        appearance="raw"
+        :aria-label="openSharesPanelHint"
+        size="small"
+        @click="expandSharesPanel"
+      >
+        <span class="oc-text-small" v-text="$gettext('Show')" />
+      </oc-button>
     </div>
-    <div>
-      <table class="details-table" :aria-label="detailsTableLabel">
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
-          <td v-text="lastModifyDate" />
-        </tr>
-        <tr v-if="space.description">
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
-          <td v-text="space.description" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
-          <td>
-            <span v-text="ownerUsernames" />
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
-          <td>
-            <space-quota :space-quota="space.spaceQuota" />
-          </td>
-        </tr>
-      </table>
-    </div>
+    <table class="details-table" :aria-label="detailsTableLabel">
+      <tr>
+        <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
+        <td v-text="lastModifyDate" />
+      </tr>
+      <tr v-if="space.description">
+        <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
+        <td v-text="space.description" />
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s" v-text="$gettext('Manager')" />
+        <td>
+          <span v-text="ownerUsernames" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
+        <td>
+          <space-quota :space-quota="space.spaceQuota" />
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 <script lang="ts">
@@ -93,11 +70,11 @@ import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
-import { spaceRoleManager } from '../../../helpers/share'
-import SpaceQuota from '../../SpaceQuota.vue'
 import { loadPreview } from '../../../helpers/resource'
+import { spaceRoleManager } from '../../../helpers/share'
 import { ImageDimension } from '../../../constants'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import SpaceQuota from '../../SpaceQuota.vue'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -144,9 +121,58 @@ export default defineComponent({
       'currentFileOutgoingLinks'
     ]),
     ...mapGetters(['user']),
-
     space() {
       return this.displayedItem.value
+    },
+    hasShares() {
+      return this.hasMemberShares || this.hasLinkShares
+    },
+    shareLabel() {
+      if (this.hasMemberShares && !this.hasLinkShares) {
+        return this.memberShareLabel
+      }
+      if (!this.hasMemberShares && this.hasLinkShares) {
+        return this.linkShareLabel
+      }
+
+      switch (this.memberShareCount) {
+        case 1:
+          return this.$gettextInterpolate(
+            this.$ngettext(
+              'This space has one member and %{linkShareCount} link.',
+              'This space has one member and %{linkShareCount} links.',
+              this.linkShareCount
+            ),
+            {
+              linkShareCount: this.linkShareCount
+            }
+          )
+        default:
+          if (this.linkShareCount === 1) {
+            return this.$gettextInterpolate(
+              'This space has %{memberShareCount} members and one link.',
+              {
+                memberShareCount: this.memberShareCount
+              }
+            )
+          }
+          return this.$gettextInterpolate(
+            'This space has %{memberShareCount} members and %{linkShareCount} links.',
+            {
+              memberShareCount: this.memberShareCount,
+              linkShareCount: this.linkShareCount
+            }
+          )
+      }
+    },
+    openSharesPanelHint() {
+      return this.$gettext('Open share panel')
+    },
+    openSharesPanelLinkHint() {
+      return this.$gettext('Open link list in share panel')
+    },
+    openSharesPanelMembersHint() {
+      return this.$gettext('Open member list in share panel')
     },
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected space')
@@ -169,7 +195,7 @@ export default defineComponent({
         .join(', ')
     },
     hasMemberShares() {
-      return this.memberShareCount > 1
+      return this.memberShareCount > 0
     },
     hasLinkShares() {
       return this.linkShareCount > 0
@@ -221,13 +247,8 @@ export default defineComponent({
       setSidebarPanel: 'setActivePanel',
       closeSidebar: 'close'
     }),
-
-    expandMemberPanel() {
+    expandSharesPanel() {
       this.setSidebarPanel('space-share-item')
-    },
-
-    expandLinkPanel() {
-      this.setSidebarPanel('links-item')
     }
   }
 })

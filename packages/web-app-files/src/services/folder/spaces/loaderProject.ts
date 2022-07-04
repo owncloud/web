@@ -66,16 +66,17 @@ export class FolderLoaderSpacesProject implements FolderLoader {
       }
 
       const currentFolder = resources.shift()
+      yield store.dispatch('Files/loadSharesTree', {
+        client: clientService.owncloudSdk,
+        path: currentFolder.path
+      })
 
       ref.LOAD_FILES({
         currentFolder,
-        files: resources
+        files: resources,
+        loadIndicators: true
       })
-      ref.loadIndicators({
-        client: ref.$client,
-        currentFolder: currentFolder?.path,
-        storageId: space.id
-      })
+
       ref.UPSERT_SPACE(space)
 
       if (!sameRoute) {

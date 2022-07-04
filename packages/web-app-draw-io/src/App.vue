@@ -1,13 +1,5 @@
 <template>
   <main>
-    <oc-notifications>
-      <oc-notification-message
-        v-if="notificationMessage"
-        :message="notificationMessage"
-        :status="notificationStatus"
-        @close="clearNotificationMessage"
-      />
-    </oc-notifications>
     <div v-if="loading" class="oc-position-center">
       <oc-spinner size="xlarge" />
       <p v-translate class="oc-invisible">Loading media</p>
@@ -43,9 +35,7 @@ export default {
     filePath: '',
     fileExtension: '',
     isReadOnly: null,
-    currentETag: null,
-    notificationMessage: null,
-    notificationStatus: null
+    currentETag: null
   }),
   computed: {
     config() {
@@ -96,23 +86,19 @@ export default {
   },
   methods: {
     ...mapActions(['showMessage']),
-    error(error) {
+    errorPopup(error) {
       this.showMessage({
-        title: this.$gettext('The diagram could not be loaded…'),
+        title: this.$gettext('An error occurred'),
         desc: error,
         status: 'danger'
       })
     },
-    errorPopup(error) {
-      this.notificationStatus = 'danger'
-      this.notificationMessage = error
-    },
     successPopup(msg) {
-      this.notificationStatus = 'success'
-      this.notificationMessage = msg
-    },
-    clearNotificationMessage() {
-      this.notificationMessage = null
+      this.showMessage({
+        title: this.$gettext('The diagram was successfully saved'),
+        desc: msg,
+        status: 'success'
+      })
     },
     errorNotification(error) {
       this.$refs.drawIoEditor.contentWindow.postMessage(
@@ -132,7 +118,7 @@ export default {
           this.loading = false
         })
         .catch((error) => {
-          this.error(error)
+          this.errorPopup(error)
         })
     },
     load() {
@@ -149,7 +135,7 @@ export default {
           )
         })
         .catch((error) => {
-          this.error(error)
+          this.errorPopup(error)
         })
     },
     importVisio() {
@@ -190,7 +176,7 @@ export default {
           reader.readAsDataURL(blob)
         })
         .catch((error) => {
-          this.error(error)
+          this.errorPopup(error)
         })
     },
     save(payload, auto = false) {

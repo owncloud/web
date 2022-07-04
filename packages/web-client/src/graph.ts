@@ -9,6 +9,7 @@ import {
   Group,
   GroupApiFactory,
   GroupsApiFactory,
+  MeChangepasswordApiFactory,
   MeDrivesApi,
   MeUserApiFactory,
   User,
@@ -28,6 +29,7 @@ export interface Graph {
     getUser: (userId: string) => AxiosPromise<User>
     createUser: (user: User) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
     listUsers: (orderBy?: string) => AxiosPromise<CollectionOfUser>
@@ -51,6 +53,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
+  const meChangepasswordApiFactory = MeChangepasswordApiFactory(config, config.basePath, axiosClient)
   const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
   const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
@@ -73,6 +76,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       getUser: (userId: string) => userApiFactory.getUser(userId),
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () => meUserApiFactory.meGet(),
+      changeOwnPassword: (currentPassword, newPassword) =>
+        meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any) =>

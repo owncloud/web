@@ -36,18 +36,16 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
 
         const currentFolder = resources.shift()
 
-        store.commit('Files/LOAD_FILES', {
-          currentFolder,
-          files: resources
+        yield store.dispatch('Files/loadSharesTree', {
+          client: clientService.owncloudSdk,
+          path: currentFolder.path
         })
 
-        // load indicators
-        ;(() => {
-          store.dispatch('Files/loadIndicators', {
-            client: clientService.owncloudSdk,
-            currentFolder: currentFolder.path
-          })
-        })()
+        store.commit('Files/LOAD_FILES', {
+          currentFolder,
+          files: resources,
+          loadIndicators: true
+        })
 
         // fetch user quota
         ;(async () => {

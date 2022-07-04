@@ -53,8 +53,15 @@ export default {
   CLEAR_SPACES(state) {
     state.spaces = []
   },
-  LOAD_FILES(state, { currentFolder, files }) {
+  LOAD_FILES(state, { currentFolder, files, loadIndicators = false }) {
     state.currentFolder = currentFolder
+
+    if (loadIndicators) {
+      for (const file of files) {
+        file.indicators = getIndicators(file, state.sharesTree)
+      }
+    }
+
     state.files = files
   },
   SET_CURRENT_FOLDER(state, currentFolder) {
@@ -228,8 +235,9 @@ export default {
     state.versions = versions
   },
 
-  LOAD_INDICATORS(state) {
-    for (const resource of state.files) {
+  LOAD_INDICATORS(state, path) {
+    const files = state.files.filter((f) => f.path.startsWith(path))
+    for (const resource of files) {
       const indicators = getIndicators(resource, state.sharesTree)
 
       if (!indicators.length && !resource.indicators.length) {

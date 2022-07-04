@@ -269,7 +269,7 @@ module.exports = {
   elements: {
     message: {
       selector:
-        '//*[contains(@class, "oc-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
+        '//*[contains(@class, "oc-notification-message")]//div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
     messages: {
@@ -278,7 +278,7 @@ module.exports = {
     },
     errorMessage: {
       selector:
-        '//*[contains(@class, "oc-notification-message-danger")]/div/div[contains(@class, "oc-notification-message-title")]',
+        '//*[contains(@class, "oc-notification-message-danger")]//div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
     errorMessages: {

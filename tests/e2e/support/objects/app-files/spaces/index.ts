@@ -14,9 +14,14 @@ import {
   createSpaceArgs,
   openSpace,
   openSpaceTrashBin,
-  reloadSpacePage
+  reloadSpacePage,
+  removeAccessMembersArgs,
+  removeAccessSpaceMembers,
+  changeSpaceRoleArgs,
+  changeSpaceRole
 } from './actions'
 import { inviteMembersArgs } from '../share/actions'
+import { spaceWithSpaceIDExist } from './utils'
 
 export class Spaces {
   #page: Page
@@ -66,11 +71,28 @@ export class Spaces {
     await addSpaceMembers({ ...args, page: this.#page })
   }
 
+  async removeAccessToMember(args: Omit<removeAccessMembersArgs, 'page'>): Promise<void> {
+    await removeAccessSpaceMembers({ ...args, page: this.#page })
+  }
+
+  getSpaceID({ key }: { key: string }): string {
+    const { id } = this.#spacesEnvironment.getSpace({ key })
+    return id
+  }
+
+  async spacesIdExist(spaceID: string): Promise<boolean> {
+    return await spaceWithSpaceIDExist({ spaceID, page: this.#page })
+  }
+
   async canUserEditResource(args: Omit<canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
     const startUrl = this.#page.url()
     const canEdit = await canUserEditSpaceResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return canEdit
+  }
+
+  async changeRoles(args: Omit<changeSpaceRoleArgs, 'page'>): Promise<void> {
+    await changeSpaceRole({ ...args, page: this.#page })
   }
 
   async reloadPage(): Promise<void> {

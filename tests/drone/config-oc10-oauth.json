@@ -8,6 +8,7 @@
     "authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
   },
   "options": {
+    "topCenterNotifications": true,
     "displayResourcesLazy": false,
     "sidebar": {
       "shares": {
