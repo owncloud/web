@@ -98,7 +98,7 @@ export default {
       return (
         this.isPersonalLocation &&
         this.capabilities.files.privateLinks &&
-        this.file?.owner?.username === this.user?.username
+        this.file?.ownerId === this.user?.id
       )
     },
 
