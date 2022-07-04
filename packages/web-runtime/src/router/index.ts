@@ -9,8 +9,6 @@ import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 
-Vue.use(Router)
-
 export * from './helpers'
 
 // just a dummy function to trick gettext tools
