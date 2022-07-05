@@ -60,10 +60,6 @@ tests/acceptance/.yarn/*
 !tests/acceptance/.yarn/sdks
 !tests/acceptance/.yarn/versions
 
-# visual regression testing artifacts
-/tests/vrt/diff
-/tests/vrt/latest
-
 # acceptance test artifacts
 logfile.txt
 comments.file
