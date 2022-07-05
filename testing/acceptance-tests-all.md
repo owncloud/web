@@ -92,32 +92,6 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 - run `yarn test:acceptance:ocis <feature-files-to-test>`
 - If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' yarn test:acceptance:ocis <feature-files-to-test>`
 
-### Visual Regression Testing
-
-The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisons are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.
-
-#### Running the visual regression tests
-
-When you run the acceptance tests as usual, all the visual regression comparisons are skipped. To run the acceptance test suite with the visual comparison enabled you need to set the env variable, `VISUAL_TEST` to `true`
-
-eg.
-```
-VISUAL_TEST=true yarn test:acceptance:oc10 <feature-file-to-test>
-```
-
-#### Updating the snapshots
-
-If there is some change in the components, and you want to update the snapshots of the components you can run the tests with `UPDATE_VRT_SCREENSHOTS` set to `true`. When this env variable is set, the testrunner will ignore if the visual comparison fails and updates the baseline images with the latest images if the comparison fails.
-
-eg.
-```
-VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true yarn test:acceptance:oc10 <feature-file-to-test>
-```
-
-**note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolution may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
-
-see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
-
 ## Available settings to be set by environment variables
 
 These values can be set using the environment variables to configure `yarn test:acceptance:oc10` and `yarn test:acceptance:ocis` to match your local test environment.
@@ -138,8 +112,6 @@ These values can be set using the environment variables to configure `yarn test:
 | `OCIS_REVA_DATA_ROOT`       | Data directory of oCIS                                             | /var/tmp/reva |
 | `TESTING_DATA_DIR`       | Testing data directory for new users                                                           | - |
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
-| `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
-| `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
 | `MIDDLEWARE_HOST` | Middleware host URL | http://host.docker.internal:3000 |
 
 ## Tips
