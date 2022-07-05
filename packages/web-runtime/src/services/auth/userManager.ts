@@ -12,6 +12,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import axios from 'axios'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
+type UnloadReason = 'authError' | 'logout'
 
 export interface UserManagerOptions {
   clientService: ClientService
@@ -25,6 +26,7 @@ export class UserManager extends OidcUserManager {
   private configurationManager: ConfigurationManager
   private store: Store<any>
   private updateAccessTokenPromise: Promise<void> | null
+  private _unloadReason: UnloadReason
 
   constructor(options: UserManagerOptions) {
     const storePrefix = 'oc_oAuth.'
@@ -88,6 +90,15 @@ export class UserManager extends OidcUserManager {
   async getAccessToken(): Promise<string | null> {
     const user = await this.getUser()
     return user?.access_token
+  }
+
+  async removeUser(unloadReason: UnloadReason = 'logout') {
+    this._unloadReason = unloadReason
+    await super.removeUser()
+  }
+
+  get unloadReason(): UnloadReason {
+    return this._unloadReason
   }
 
   getAndClearPostLoginRedirectUrl(): string {

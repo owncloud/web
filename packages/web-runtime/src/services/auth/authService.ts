@@ -84,6 +84,10 @@ export class AuthService {
         console.log('user unloaded…')
         await this.resetStateAfterUserLogout()
 
+        if (this.userManager.unloadReason === 'authError') {
+          return this.router.push({ name: 'accessDenied' })
+        }
+
         // handle redirect after logout
         if (this.configurationManager.isOAuth2) {
           const oAuth2 = this.configurationManager.oAuth2
@@ -161,8 +165,7 @@ export class AuthService {
       })
     }
     if (isUserContext(this.router, route)) {
-      await this.resetStateAfterUserLogout()
-      return this.router.push({ name: 'accessDenied' })
+      await this.userManager.removeUser('authError')
     }
   }
 
