@@ -1,11 +1,25 @@
-import { HttpClient } from '../http'
+import { HttpClient } from '../../http'
 import { client, Graph, OCS } from 'web-client'
+import { Auth, AuthParameters } from './auth'
+import axios, { AxiosInstance } from 'axios'
 
 export type OwnCloudSdk = any
 interface OcClient {
   token: string
   graph: Graph
   ocs: OCS
+}
+
+const createAxiosInstance = (authParams: AuthParameters): AxiosInstance => {
+  const auth = new Auth(authParams)
+  const axiosClient = axios.create({
+    headers: auth.getHeaders()
+  })
+  axiosClient.interceptors.request.use((config) => {
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+    return config
+  })
+  return axiosClient
 }
 
 export class ClientService {
@@ -49,7 +63,7 @@ export class ClientService {
 
   private initOcUserContextClient(serverUrl: string, token: string) {
     if (!this.ocUserContextClient || this.ocUserContextClient.token !== token) {
-      const { graph, ocs } = client(serverUrl, { accessToken: token })
+      const { graph, ocs } = client(serverUrl, createAxiosInstance({ accessToken: token }))
       this.ocUserContextClient = {
         token,
         graph,
@@ -65,10 +79,13 @@ export class ClientService {
 
   private initOcPublicLinkContextClient(serverUrl: string, token: string, password?: string) {
     if (!this.ocPublicLinkContextClient || this.ocPublicLinkContextClient.token !== token) {
-      const { graph, ocs } = client(serverUrl, {
-        publicLinkToken: token,
-        publicLinkPassword: password
-      })
+      const { graph, ocs } = client(
+        serverUrl,
+        createAxiosInstance({
+          publicLinkToken: token,
+          publicLinkPassword: password
+        })
+      )
       this.ocPublicLinkContextClient = {
         token,
         graph,

@@ -68,12 +68,9 @@ export const renderSuccess = (): void => {
       getters['runtime/auth/isUserContextReady'] ||
       getters['runtime/auth/isPublicLinkContextReady'],
     async (newValue, oldValue) => {
-      // FIXME: a silent token renewal via iframe currently does a full re-init-cycle?! `oldValue` is false and `newValue` true in that case.
-      // can be triggered by setting short token lifetime (1 minute) in ocis and not having `offline_access` in the requested scopes.
       if (!newValue || newValue === oldValue) {
         return
       }
-      console.log('******* running ready() hook for all applications')
       await announceApplicationsReady({ applications })
     },
     {
