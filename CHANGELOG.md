@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
@@ -22,6 +23,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
+
+   We've fixed a bug where an error was thrown when pasting with empty clipboard
+
+   https://github.com/owncloud/web/issues/7146
+   https://github.com/owncloud/web/pull/7214
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 
