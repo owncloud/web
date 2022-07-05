@@ -21,7 +21,7 @@
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div class="oc-flex oc-p-s preview-tool-bar">
-        <oc-resource :resource="activeMediaFileCached.resource" />
+        <oc-resource :resource="activeFilteredFile" />
         <div>
           <oc-button
             class="preview-controls-download"
@@ -31,7 +31,7 @@
           >
             <oc-icon size="small" name="file-download" />
           </oc-button>
-          <oc-button size="small" @click="closeApp">
+          <oc-button :aria-label="$gettext('Close preview')" size="small" @click="closeApp">
             <oc-icon name="close" size="small" />
           </oc-button>
         </div>
@@ -306,8 +306,7 @@ export default defineComponent({
           mimeType: this.activeFilteredFile.mimeType,
           isVideo: this.isActiveFileTypeVideo,
           isImage: this.isActiveFileTypeImage,
-          isAudio: this.isActiveFileTypeAudio,
-          resource: this.activeFilteredFile
+          isAudio: this.isActiveFileTypeAudio
         })
         this.isFileContentLoading = false
         this.isFileContentError = false
