@@ -1,9 +1,14 @@
 <template>
   <div class="oc-flex oc-p-s app-top-bar">
-    <oc-resource :is-thumbnail-displayed="false" :resource="resource" />
+    <oc-resource id="app-top-bar-resource" :is-thumbnail-displayed="false" :resource="resource" />
     <div>
       <slot name="right"></slot>
-      <oc-button :aria-label="$gettext('Close preview')" size="small" @click="$emit('close')">
+      <oc-button
+        id="app-top-bar-close"
+        :aria-label="$gettext('Close preview')"
+        size="small"
+        @click="$emit('close')"
+      >
         <oc-icon name="close" size="small" />
       </oc-button>
     </div>

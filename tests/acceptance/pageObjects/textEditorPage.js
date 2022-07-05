@@ -84,7 +84,7 @@ module.exports = {
       selector: '#text-editor-controls-save'
     },
     closeButton: {
-      selector: '#text-editor-controls-close'
+      selector: '#app-top-bar-close'
     },
     fileName: {
       selector: '#text-editor-file-path'
