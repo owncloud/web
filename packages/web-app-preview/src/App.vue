@@ -20,6 +20,22 @@
     />
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <div class="oc-flex oc-p-s preview-tool-bar">
+        <oc-resource :resource="activeMediaFileCached.resource" />
+        <div>
+          <oc-button
+            class="preview-controls-download"
+            size="small"
+            :aria-label="$gettext('Download currently viewed file')"
+            @click="triggerActiveFileDownload"
+          >
+            <oc-icon size="small" name="file-download" />
+          </oc-button>
+          <oc-button size="small" @click="closeApp">
+            <oc-icon name="close" size="small" />
+          </oc-button>
+        </div>
+      </div>
       <div
         v-show="activeMediaFileCached"
         class="
@@ -52,15 +68,7 @@
         </audio>
       </div>
     </template>
-
     <div class="oc-position-medium oc-position-bottom-center preview-details">
-      <p
-        v-if="activeFilteredFile"
-        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s preview-file-name"
-        aria-hidden="true"
-      >
-        {{ activeFilteredFile.name }}
-      </p>
       <div
         class="
           oc-background-brand
@@ -94,24 +102,6 @@
           @click="next"
         >
           <oc-icon size="large" name="arrow-drop-right" />
-        </oc-button>
-        <oc-button
-          class="preview-controls-download"
-          appearance="raw"
-          variation="inverse"
-          :aria-label="$gettext('Download currently viewed file')"
-          @click="triggerActiveFileDownload"
-        >
-          <oc-icon size="large" name="file-download" fill-type="line" />
-        </oc-button>
-        <oc-button
-          class="preview-controls-close"
-          appearance="raw"
-          variation="inverse"
-          :aria-label="$gettext('Close preview')"
-          @click="closeApp"
-        >
-          <oc-icon size="large" name="close" />
         </oc-button>
       </div>
     </div>
@@ -307,6 +297,7 @@ export default defineComponent({
         } else {
           mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         }
+
         this.cachedFiles.push({
           id: this.activeFilteredFile.id,
           name: this.activeFilteredFile.name,
@@ -315,7 +306,8 @@ export default defineComponent({
           mimeType: this.activeFilteredFile.mimeType,
           isVideo: this.isActiveFileTypeVideo,
           isImage: this.isActiveFileTypeImage,
-          isAudio: this.isActiveFileTypeAudio
+          isAudio: this.isActiveFileTypeAudio,
+          resource: this.activeFilteredFile
         })
         this.isFileContentLoading = false
         this.isFileContentError = false
@@ -377,6 +369,11 @@ export default defineComponent({
   }
 }
 
+.preview-tool-bar {
+  align-items: center;
+  justify-content: space-between;
+}
+
 .preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
 }
@@ -384,18 +381,6 @@ export default defineComponent({
 @media (max-width: 959px) {
   .preview-player {
     max-width: 100vw;
-  }
-
-  .preview-details {
-    left: 0;
-    margin: 0;
-    max-width: 100%;
-    transform: none !important;
-    width: 100%;
-
-    .preview-controls-action-bar {
-      width: 100%;
-    }
   }
 }
 </style>
