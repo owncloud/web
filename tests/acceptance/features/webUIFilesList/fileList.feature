@@ -12,11 +12,11 @@ Feature: User can view files inside a folder
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has logged in using the webUI
 
-  Scenario: Resources are listed
+  Scenario: Resources are listed and files list displays quicklink quick action
     When the user browses to the files page
+    Then quick action "quicklink" should be displayed on the webUI
     Then folder "simple-folder" should be listed on the webUI
     And file "textfile0.txt" should be listed on the webUI
-    And the top bar should match the default baseline
 
   @issue-1910
   Scenario: Empty folders display no resources in the list
@@ -24,11 +24,6 @@ Feature: User can view files inside a folder
     And the user opens folder "empty-thing" directly on the webUI
     Then there should be no resources listed on the webUI
 
-
-  Scenario: All files list displays quicklink quick action
-    When the user browses to the files page
-    Then quick action "quicklink" should be displayed on the webUI
-    And the sidebar should match the default baseline
 
   Scenario: files are not selected when the user logs in
     When the user browses to the files page

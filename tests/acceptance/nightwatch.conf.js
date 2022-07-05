@@ -31,22 +31,14 @@ const OPENID_LOGIN = RUN_ON_OCIS || process.env.OPENID_LOGIN === 'true'
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = process.env.SCREENSHOTS === 'true'
 
-const VISUAL_TEST = process.env.VISUAL_TEST === 'true'
-const UPDATE_VRT_SCREENSHOTS = process.env.UPDATE_VRT_SCREENSHOTS === 'true'
-
 const MIDDLEWARE_HOST = withHttp(
   process.env.MIDDLEWARE_HOST ||
     (RUN_ON_OCIS ? 'http://host.docker.internal:3000' : 'http://host.docker.internal:3001')
 )
 
-function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
-  return path.join(process.cwd(), basePath, imagePath)
-}
-
 const config = {
   page_objects_path: './pageObjects',
-  custom_commands_path: ['./customCommands', 'node_modules/nightwatch-vrt/commands'],
-  custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
+  custom_commands_path: ['./customCommands'],
   test_settings: {
     default: {
       // ocis doesn't have '#' in the url path anymore
@@ -70,19 +62,6 @@ const config = {
         testing_data_dir: TESTING_DATA_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
         webUIConfig: WEB_UI_CONFIG,
-        visual_test: VISUAL_TEST,
-        visual_regression_settings: {
-          generate_screenshot_path: generateScreenshotFilePath,
-          latest_screenshots_path: 'tests/vrt/latest',
-          latest_suffix: '',
-          baseline_screenshots_path: 'tests/vrt/baseline',
-          baseline_suffix: '',
-          diff_screenshots_path: 'tests/vrt/diff',
-          diff_suffix: '',
-          threshold: 0.002,
-          prompt: false,
-          always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
-        },
         screenshots: SCREENSHOTS,
         middlewareUrl: MIDDLEWARE_HOST
       },
@@ -124,10 +103,6 @@ const config = {
       }
     }
   }
-}
-
-if (VISUAL_TEST) {
-  process.env.SCREEN_RESOLUTION = '1280x1024'
 }
 
 module.exports = config
