@@ -305,7 +305,7 @@ export default defineComponent({
   &.is-active-default-panel,
   &.is-active-sub-panel {
     visibility: unset;
-    transform: translateX(0px);
+    transform: translateX(0);
   }
 
   &__header {
