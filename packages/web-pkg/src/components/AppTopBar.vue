@@ -1,11 +1,6 @@
 <template>
   <div class="oc-flex oc-p-s app-top-bar">
-    <oc-resource
-      id="app-top-bar-resource"
-      :is-path-displayed="true"
-      :is-thumbnail-displayed="false"
-      :resource="resource"
-    />
+    <oc-resource id="app-top-bar-resource" :is-thumbnail-displayed="false" :resource="resource" />
     <div>
       <slot name="right"></slot>
       <oc-button

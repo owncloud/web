@@ -1,5 +1,5 @@
 <template>
-  <main id="text-editor" class="oc-px-l oc-py-m oc-height-1-1">
+  <main id="text-editor" class="oc-height-1-1">
     <div v-if="isLoading" class="oc-text-center">
       <oc-spinner :aria-label="$gettext('Loading editor content')" />
     </div>
@@ -15,7 +15,7 @@
         </oc-button>
       </template>
     </app-top-bar>
-    <div class="oc-flex editor-wrapper-height">
+    <div class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
@@ -79,7 +79,8 @@ export default {
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const { applicationConfig, currentFileContext } = defaults
+    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents } =
+      defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()
@@ -89,57 +90,47 @@ export default {
     const loadFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
 
-      unref(defaults)
-        .getFileInfo(filePath, [DavProperty.Permissions])
-        .then((response) => {
-          isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
-            (p) => response.fileInfo[DavProperty.Permissions].indexOf(p) > -1
-          )
-          resource.value = buildResource(response)
-        })
+      const fileInfoResponse = yield getFileInfo(filePath, [DavProperty.Permissions])
+      isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
+        (p) => fileInfoResponse.fileInfo[DavProperty.Permissions].indexOf(p) > -1
+      )
+      resource.value = buildResource(fileInfoResponse)
 
-      return yield unref(defaults)
-        .getFileContents(filePath)
-        .then((response) => {
-          serverContent.value = currentContent.value = response.body
-          currentETag.value = response.headers['OC-ETag']
-          return response
-        })
+      const fileContentsResponse = yield getFileContents(filePath)
+      serverContent.value = currentContent.value = fileContentsResponse.body
+      currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
+    loadFileTask.perform()
 
     const saveFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
-      return yield unref(defaults)
-        .putFileContents(filePath, newContent, {
+      try {
+        const putFileContentsResponse = yield putFileContents(filePath, newContent, {
           previousEntityTag: unref(currentETag)
         })
-        .then(
-          (response) => {
-            serverContent.value = newContent
-            currentETag.value = response['OC-ETag']
-          },
-          (error) => {
-            switch (error.statusCode) {
-              case 412:
-                this.errorPopup(
-                  this.$gettext(
-                    'This file was updated outside this window. Please refresh the page (all changes will be lost).'
-                  )
-                )
-                break
-              case 500:
-                this.errorPopup(this.$gettext('Error when contacting the server'))
-                break
-              case 401:
-                this.errorPopup(this.$gettext("You're not authorized to save this file"))
-                break
-              default:
-                this.errorPopup(error.message || error)
-            }
-          }
-        )
+        serverContent.value = newContent
+        currentETag.value = putFileContentsResponse['OC-ETag']
+      } catch (e) {
+        switch (e.statusCode) {
+          case 412:
+            this.errorPopup(
+              this.$gettext(
+                'This file was updated outside this window. Please refresh the page (all changes will be lost).'
+              )
+            )
+            break
+          case 500:
+            this.errorPopup(this.$gettext('Error when contacting the server'))
+            break
+          case 401:
+            this.errorPopup(this.$gettext("You're not authorized to save this file"))
+            break
+          default:
+            this.errorPopup(e.message || e)
+        }
+      }
     }).restartable()
 
     const renderedMarkdown = computed(() => {
@@ -170,8 +161,6 @@ export default {
     })
 
     onMounted(() => {
-      loadFileTask.perform()
-
       // Enable ctrl/cmd + s
       document.addEventListener('keydown', handleSKey, false)
       // Ensure reload is not possible if there are changes
@@ -247,6 +236,6 @@ export default {
   height: 100%;
 }
 .editor-wrapper-height {
-  height: calc(100% - 42px);
+  height: calc(100% - 52px);
 }
 </style>
