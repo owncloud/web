@@ -73,6 +73,6 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: calc(100% - 50px);
+  height: calc(100% - 60px);
 }
 </style>
