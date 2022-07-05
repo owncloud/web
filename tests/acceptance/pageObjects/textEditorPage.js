@@ -87,7 +87,7 @@ module.exports = {
       selector: '#app-top-bar-close'
     },
     fileName: {
-      selector: '#text-editor-file-path'
+      selector: '.oc-resource-basename'
     },
     previewPanel: {
       selector: '#text-editor-preview'
