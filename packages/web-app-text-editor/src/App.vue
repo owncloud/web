@@ -1,13 +1,15 @@
 <template>
   <main id="text-editor" class="oc-px-l oc-py-m oc-height-1-1">
-    <app-bar
-      :current-file-context="currentFileContext"
-      :is-loading="isLoading"
-      :is-dirty="isDirty"
-      :is-read-only="isReadOnly"
-      @closeApp="closeApp"
-      @save="save"
-    />
+    <div v-if="isLoading" class="oc-text-center">
+      <oc-spinner :aria-label="$gettext('Loading editor content')" />
+    </div>
+    <app-top-bar v-else :resource="resource" @close="closeApp">
+      <template #right>
+        <oc-button id="text-editor-controls-save" :disabled="isReadOnly || !isDirty" @click="save">
+          <oc-icon name="save" size="small" />
+        </oc-button>
+      </template>
+    </app-top-bar>
     <div class="oc-flex editor-wrapper-height">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
@@ -36,12 +38,13 @@ import { computed, onMounted, onBeforeUnmount, ref, unref } from '@vue/compositi
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
-import AppBar from './AppBar.vue'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import { buildResource } from 'files/src/helpers/resources'
 
 export default {
   name: 'TextEditor',
   components: {
-    AppBar
+    AppTopBar
   },
   beforeRouteLeave(_to, _from, next) {
     if (this.isDirty) {
@@ -76,6 +79,7 @@ export default {
     const currentContent = ref()
     const currentETag = ref()
     const isReadOnly = ref(true)
+    const resource = ref()
 
     const loadFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
@@ -86,6 +90,7 @@ export default {
           isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
             (p) => response.fileInfo[DavProperty.Permissions].indexOf(p) > -1
           )
+          resource.value = buildResource(response)
         })
 
       return yield unref(defaults)
@@ -206,6 +211,7 @@ export default {
       currentContent,
       renderedMarkdown,
       config,
+      resource,
 
       // methods
       save,
