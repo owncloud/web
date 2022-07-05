@@ -21,7 +21,7 @@
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div class="oc-flex oc-p-s preview-tool-bar">
-        <oc-resource :resource="activeFilteredFile" />
+        <oc-resource :is-thumbnail-displayed="false" :resource="activeFilteredFile" />
         <div>
           <oc-button
             class="preview-controls-download"
