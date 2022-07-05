@@ -55,7 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'user']),
+    ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
     timeData() {
       const interpolate = (obj) => {
@@ -95,11 +95,7 @@ export default {
     },
 
     privateLinkEnabled() {
-      return (
-        this.isPersonalLocation &&
-        this.capabilities.files.privateLinks &&
-        this.file?.ownerId === this.user?.id
-      )
+      return this.isPersonalLocation && this.capabilities.files.privateLinks
     },
 
     file() {
