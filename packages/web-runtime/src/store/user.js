@@ -5,6 +5,7 @@ import { router } from '../router'
 import { clientService } from 'web-pkg/src/services'
 
 import { setUser as sentrySetUser } from '@sentry/browser'
+import axios from 'axios'
 
 let vueAuthInstance
 
@@ -20,7 +21,9 @@ const state = {
   groups: [],
   userReady: false,
   quota: null,
-  language: null
+  language: null,
+  role: {},
+  roles: []
 }
 
 const actions = {
@@ -101,9 +104,42 @@ const actions = {
 
         // FIXME: Can be removed as soon as the uuid is integrated in the OCS api
         let graphUser
+        let role = []
         if (context.state.capabilities.spaces?.enabled) {
           const graphClient = clientService.graphAuthenticated(instance, token)
           graphUser = await graphClient.users.getMe()
+
+          const {
+            data: { bundles: roles }
+          } = await axios.post(
+            '/api/v0/settings/roles-list',
+            {},
+            {
+              headers: {
+                authorization: `Bearer ${token}`
+              }
+            }
+          )
+
+          context.commit('SET_ROLES', roles)
+
+          const userAssignmentResponse = await axios.post(
+            '/api/v0/settings/assignments-list',
+            {
+              account_uuid: graphUser.data.id
+            },
+            {
+              headers: {
+                authorization: `Bearer ${token}`
+              }
+            }
+          )
+          const assignments = userAssignmentResponse.data?.assignments
+          const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
+
+          if (roleAssignment) {
+            role = roles.find((role) => role.id === roleAssignment.roleId)
+          }
         }
 
         let userEmail = ''
@@ -124,6 +160,7 @@ const actions = {
           token,
           isAuthenticated: true,
           groups: userGroups,
+          role,
           language
         })
 
@@ -261,6 +298,7 @@ const mutations = {
     state.token = user.token
     state.groups = user.groups
     state.language = user.language
+    state.role = user.role
     sentrySetUser({ username: user.id })
   },
   SET_CAPABILITIES(state, data) {
@@ -281,6 +319,9 @@ const mutations = {
     quota.total = parseInt(quota.total)
 
     state.quota = quota
+  },
+  SET_ROLES(state, roles) {
+    state.roles = roles
   }
 }
 
@@ -300,8 +341,8 @@ const getters = {
   capabilities: (state) => {
     return state.capabilities
   },
-
-  quota: (state) => state.quota
+  quota: (state) => state.quota,
+  roles: (state) => state.roles
 }
 
 export default {

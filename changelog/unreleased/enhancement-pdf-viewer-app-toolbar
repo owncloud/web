@@ -1,0 +1,9 @@
+Enhancement: Added a toolbar to pdf-viewer app
+
+We've added a toolbar to the pdf-viewer app,
+where the user can see the name of the opened pdf file and also close the app.
+
+https://github.com/owncloud/web/pull/7201
+https://github.com/owncloud/web/pull/7207
+https://github.com/owncloud/web/issues/7198
+https://github.com/owncloud/web/issues/7205

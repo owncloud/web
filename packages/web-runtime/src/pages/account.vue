@@ -3,6 +3,20 @@
     <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
       <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
       <div>
+        <edit-password-modal
+          v-if="editPasswordModalOpen"
+          @cancel="closeEditPasswordModal"
+          @confirm="editPassword"
+        ></edit-password-modal>
+        <oc-button
+          v-if="isChangePasswordEnabled"
+          variation="primary"
+          data-testid="account-page-edit-url-btn"
+          @click="showEditPasswordModal"
+        >
+          <oc-icon name="lock" />
+          <translate>Change Password</translate>
+        </oc-button>
         <oc-button
           v-if="editUrl"
           variation="primary"
@@ -72,19 +86,37 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import EditPasswordModal from '../components/EditPasswordModal.vue'
+import { clientService } from 'web-pkg/src/services'
+
 export default {
   name: 'Personal',
+  components: {
+    EditPasswordModal
+  },
   data() {
     return {
       loadingGroups: true,
-      groups: []
+      groups: [],
+      editPasswordModalOpen: false
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps']),
+    ...mapGetters([
+      'user',
+      'configuration',
+      'getNavItemsByExtension',
+      'apps',
+      'capabilities',
+      'getToken'
+    ]),
     isAccountEditingEnabled() {
       return !this.apps.settings
+    },
+    isChangePasswordEnabled() {
+      // FIXME: spaces capability is not correct here, we need to retrieve an appropriate capability
+      return this.capabilities.spaces?.enabled
     },
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
@@ -110,9 +142,34 @@ export default {
     this.loadGroups()
   },
   methods: {
+    ...mapActions(['showMessage']),
     async loadGroups() {
       this.groups = await this.$client.users.getUserGroups(this.user.id)
       this.loadingGroups = false
+    },
+    showEditPasswordModal() {
+      this.editPasswordModalOpen = true
+    },
+    closeEditPasswordModal() {
+      this.editPasswordModalOpen = false
+    },
+    editPassword(currentPassword, newPassword) {
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      return graphClient.users
+        .changeOwnPassword(currentPassword.trim(), newPassword.trim())
+        .then(() => {
+          this.closeEditPasswordModal()
+          this.showMessage({
+            title: this.$gettext('Password was changed successfully')
+          })
+        })
+        .catch((error) => {
+          console.error(error)
+          this.showMessage({
+            title: this.$gettext('Failed to change password'),
+            status: 'danger'
+          })
+        })
     }
   }
 }

@@ -77,7 +77,7 @@ export default {
       upsertResource
     }
   ) {
-    let movedResources
+    let movedResources = []
     if (context.state.clipboardAction === ClipboardActions.Cut) {
       movedResources = await move(
         context.state.clipboardResources,

@@ -8,16 +8,28 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+* Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
 -------
+
+* Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
+
+   We've fixed a bug where an error was thrown when pasting with empty clipboard
+
+   https://github.com/owncloud/web/issues/7146
+   https://github.com/owncloud/web/pull/7214
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 
@@ -34,6 +46,15 @@ Details
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
 
+* Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+
+   We've fixed a bug, where users with insufficient permissions could access the user management
+   and were able to see the "New Space" button in the space overview.
+
+   https://github.com/owncloud/web/issues/7181
+   https://github.com/owncloud/web/issues/7079
+   https://github.com/owncloud/web/pull/7197
+
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
    We have fixed the way the sharing indicators for space members and link shares were displayed in
@@ -42,6 +63,24 @@ Details
 
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
+
+* Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+
+   We have added a new change own password dialog to the account info page, so the user has the
+   possibility to change their own password.
+
+   https://github.com/owncloud/web/issues/7183
+   https://github.com/owncloud/web/pull/7206
+
+* Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
+
+   We've added a toolbar to the pdf-viewer app, where the user can see the name of the opened pdf file
+   and also close the app.
+
+   https://github.com/owncloud/web/issues/7198
+   https://github.com/owncloud/web/issues/7205
+   https://github.com/owncloud/web/pull/7201
+   https://github.com/owncloud/web/pull/7207
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
@@ -59,6 +98,15 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7188
+
+* Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
+
+   We've added support to block certain file extensions from the text-editor app with additional
+   config. See
+   https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+   https://github.com/owncloud/web/issues/6661
+   https://github.com/owncloud/web/pull/7174
 
 * Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
 

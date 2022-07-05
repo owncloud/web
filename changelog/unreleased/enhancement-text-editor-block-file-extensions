@@ -1,0 +1,6 @@
+Enhancement: Option to block file extensions from text-editor app
+
+We've added support to block certain file extensions from the text-editor app with additional config. See https://owncloud.dev/clients/web/deployments/oc10-app/#additional-configuration-for-certain-core-apps
+
+https://github.com/owncloud/web/issues/6661
+https://github.com/owncloud/web/pull/7174
