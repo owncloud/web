@@ -5,7 +5,12 @@
     </div>
     <app-top-bar v-else :resource="resource" @close="closeApp">
       <template #right>
-        <oc-button id="text-editor-controls-save" :disabled="isReadOnly || !isDirty" @click="save">
+        <oc-button
+          id="text-editor-controls-save"
+          :aria-label="$gettext('Save')"
+          :disabled="isReadOnly || !isDirty"
+          @click="save"
+        >
           <oc-icon name="save" size="small" />
         </oc-button>
       </template>

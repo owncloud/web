@@ -5,7 +5,7 @@
       <slot name="right"></slot>
       <oc-button
         id="app-top-bar-close"
-        :aria-label="$gettext('Close preview')"
+        :aria-label="$gettext('Close')"
         size="small"
         @click="$emit('close')"
       >
