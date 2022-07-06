@@ -20,7 +20,7 @@
     />
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <app-top-bar :resource="activeMediaFileCached" @close="closeApp">
+      <app-top-bar :resource="activeFilteredFile" @close="closeApp">
         <template #right>
           <oc-button
             class="preview-download"
