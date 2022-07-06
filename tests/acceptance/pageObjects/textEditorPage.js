@@ -29,8 +29,16 @@ module.exports = {
       })
       return content
     },
-    getFileName: function () {
-      return this.getInnerText('@fileName')
+    getFileName: async function () {
+      let fileName = ''
+      await this.waitForElementVisible('@fileName').getAttribute(
+        '@fileName',
+        'data-test-resource-name',
+        (result) => {
+          fileName = result.value
+        }
+      )
+      return fileName
     },
     getContentFromEditor: function () {
       return this.getInputValue('@editorTextarea')
@@ -87,7 +95,7 @@ module.exports = {
       selector: '#app-top-bar-close'
     },
     fileName: {
-      selector: '.oc-resource-basename'
+      selector: '.oc-resource-name'
     },
     previewPanel: {
       selector: '#text-editor-preview'
