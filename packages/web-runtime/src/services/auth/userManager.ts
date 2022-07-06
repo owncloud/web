@@ -50,7 +50,7 @@ export class UserManager extends OidcUserManager {
 
     if (options.configurationManager.isOIDC) {
       Object.assign(openIdConfig, {
-        scope: 'openid profile offline_access',
+        scope: 'openid profile',
         loadUserInfo: true,
         ...options.configurationManager.oidc
       })
