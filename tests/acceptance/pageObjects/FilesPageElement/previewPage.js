@@ -85,7 +85,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//span[@data-test-resource-name="%s"]',
+      selector: `div[@id='app-top-bar-resource']//span[@data-test-resource-name='%s']`,
       locateStrategy: 'xpath'
     }
   }
