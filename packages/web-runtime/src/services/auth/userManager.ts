@@ -59,8 +59,10 @@ export class UserManager extends OidcUserManager {
       Object.assign(openIdConfig, {
         authority: oAuth2.url,
         client_id: oAuth2.clientId,
-        client_authentication: 'client_secret_basic',
-        client_secret: oAuth2.clientSecret,
+        ...(oAuth2.clientSecret && {
+          client_authentication: 'client_secret_basic',
+          client_secret: oAuth2.clientSecret
+        }),
 
         scope: 'profile',
         loadUserInfo: false,
