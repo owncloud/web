@@ -84,7 +84,7 @@
             />
           </td>
         </tr>
-        <tr v-if="runningOnEos">
+        <tr v-if="runningOnEos && !isPublicLinkContext">
           <th scope="col" class="oc-pr-s" v-text="eosPathLabel" />
           <td>
             <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
@@ -103,6 +103,34 @@
               >
                 <oc-icon
                   v-if="copiedEos"
+                  key="oc-copy-to-clipboard-copied"
+                  name="checkbox-circle"
+                  class="_clipboard-success-animation"
+                />
+                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
+              </oc-button>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="cernFeatures && getSambaPath(file.path) && !isPublicLinkContext">
+          <th scope="col" class="oc-pr-s" v-text="sambaPathLabel" />
+          <td>
+            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
+              <p
+                ref="sambaFilePath"
+                v-oc-tooltip="getSambaPath(file.path)"
+                class="oc-my-rm oc-text-truncate"
+                v-text="getSambaPath(file.path)"
+              />
+              <oc-button
+                v-oc-tooltip="copySambaPathLabel"
+                :aria-label="copySambaPathLabel"
+                appearance="raw"
+                :variation="copiedSamba ? 'success' : 'passive'"
+                @click="copySambaPathToClipboard"
+              >
+                <oc-icon
+                  v-if="copiedSamba"
                   key="oc-copy-to-clipboard-copied"
                   name="checkbox-circle"
                   class="_clipboard-success-animation"
@@ -167,6 +195,7 @@ import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
+import pathMappings from '../../../helpers/path/pathMappings'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -206,6 +235,7 @@ export default defineComponent({
     shareIndicators: [],
     copiedDirect: false,
     copiedEos: false,
+    copiedSamba: false,
     timeout: null
   }),
   computed: {
@@ -217,6 +247,9 @@ export default defineComponent({
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
+    },
+    cernFeatures() {
+      return !!this.configuration?.options?.cernFeatures
     },
     hasContent() {
       return (
@@ -295,7 +328,9 @@ export default defineComponent({
       return this.file.owner?.[0].additionalInfo
     },
     directLink() {
-      return `${this.configuration.server}files/spaces/personal/home${encodePath(this.file.path)}`
+      return !this.isPublicLinkContext
+        ? `${this.configuration.server}files/spaces${encodePath(this.file.path)}`
+        : `${this.configuration.server.replace(/\/+$/, '')}${this.file.downloadURL}`
     },
     directLinkLabel() {
       return this.$gettext('Direct link')
@@ -304,10 +339,16 @@ export default defineComponent({
       return this.$gettext('Copy direct link')
     },
     eosPathLabel() {
-      return this.$gettext('EOS Path')
+      return this.$gettext('FUSE Path')
     },
     copyEosPathLabel() {
-      return this.$gettext('Copy EOS path')
+      return this.$gettext('Copy FUSE path')
+    },
+    sambaPathLabel() {
+      return this.$gettext('Windows Path')
+    },
+    copySambaPathLabel() {
+      return this.$gettext('Copy Windows path')
     },
     resourceSize() {
       return formatFileSize(this.file.size, this.$language.current)
@@ -438,9 +479,25 @@ export default defineComponent({
       this.copiedEos = true
       this.clipboardSuccessHandler()
       this.showMessage({
-        title: this.$gettext('EOS path copied'),
-        desc: this.$gettext('The EOS path has been copied to your clipboard.')
+        title: this.$gettext('FUSE path copied'),
+        desc: this.$gettext('The FUSE path has been copied to your clipboard.')
       })
+    },
+    copySambaPathToClipboard() {
+      copyToClipboard(this.getSambaPath(this.file.path))
+      this.copiedSamba = true
+      this.clipboardSuccessHandler()
+      this.showMessage({
+        title: this.$gettext('Windows path copied'),
+        desc: this.$gettext('The Windows path has been copied to your clipboard.')
+      })
+    },
+    getSambaPath(path) {
+      const pathComponents = path?.split('/').filter(Boolean)
+      if (pathComponents.length > 1 && pathComponents[0] === 'eos') {
+        const translated = pathMappings[pathComponents[1]]
+        return translated && `${translated}${pathComponents.slice(2).join('\\')}`
+      }
     },
     copyDirectLinkToClipboard() {
       copyToClipboard(this.directLink)
@@ -456,6 +513,7 @@ export default defineComponent({
       this.timeout = setTimeout(() => {
         this.copiedDirect = false
         this.copiedEos = false
+        this.copiedSamba = false
       }, 550)
     }
   }
