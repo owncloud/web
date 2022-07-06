@@ -19,7 +19,6 @@
       drop-id="account-info-container"
       toggle="#_userMenuButton"
       mode="click"
-      close-on-click
       padding-size="small"
     >
       <oc-list class="user-menu-list">
@@ -48,6 +47,59 @@
             <translate>{{ app.title }}</translate>
           </oc-button>
         </li>
+        <template v-if="cernFeatures">
+          <li>
+            <oc-button id="oc-topbar-account-links" appearance="raw">
+              <oc-icon name="links" fill-type="line" class="oc-p-xs" />
+              <translate>Service links</translate>
+            </oc-button>
+            <oc-drop
+              id="links"
+              toggle="#oc-topbar-account-links"
+              mode="hover"
+              position="left-start"
+              is-nested
+              close-on-click
+              padding-size="small"
+            >
+              <oc-list class="user-menu-list"
+                ><li>
+                  <oc-button
+                    type="a"
+                    appearance="raw"
+                    href="https://cernbox.docs.cern.ch/"
+                    target="_blanc"
+                  >
+                    <oc-icon :name="'book-2'" fill-type="line" class="oc-p-xs" />
+                    <translate>CERNBox documentation</translate>
+                  </oc-button>
+                </li>
+                <li>
+                  <oc-button
+                    type="a"
+                    appearance="raw"
+                    href="https://cern.service-now.com/service-portal?id=service_element&name=CERNBox-Service"
+                    target="_blanc"
+                  >
+                    <oc-icon :name="'questionnaire'" fill-type="line" class="oc-p-xs" />
+                    <translate>Open SNOW ticket</translate>
+                  </oc-button>
+                </li>
+                <li>
+                  <oc-button
+                    type="a"
+                    appearance="raw"
+                    href="https://cernbox.web.cern.ch/cernbox/downloads/"
+                    target="_blanc"
+                  >
+                    <oc-icon :name="'computer'" fill-type="line" class="oc-p-xs" />
+                    <translate>CERNBOX clients</translate>
+                  </oc-button>
+                </li>
+              </oc-list>
+            </oc-drop>
+          </li>
+        </template>
         <li>
           <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
             <oc-icon name="logout-box-r" fill-type="line" class="oc-p-xs" />
@@ -96,11 +148,17 @@ export default {
       hasSpaces: useCapabilitySpacesEnabled()
     }
   },
+  data: () => ({
+    hovered: false
+  }),
   computed: {
     ...mapGetters(['quota', 'user']),
     ...mapGetters({ legacyQuota: 'quota' }),
     ...mapState('runtime/spaces', ['spaces']),
-
+    ...mapGetters(['user', 'configuration']),
+    cernFeatures() {
+      return !!this.configuration?.options?.cernFeatures
+    },
     quota() {
       return this.hasSpaces
         ? this.spaces.find((s) => s.driveType === 'personal')?.spaceQuota
@@ -161,6 +219,9 @@ export default {
     })
   },
   methods: {
+    toggleHover() {
+      this.hovered = !this.hovered
+    },
     logout() {
       authService.logoutUser()
     }
