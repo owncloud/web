@@ -11,6 +11,7 @@ Summary
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
@@ -46,6 +47,15 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+
+   We've fixed a bug where the filename hovers over the image content in the preview app and the
+   bottom toolbar is not accurate centered. Therefore we have introduced a new top bar, where the
+   filename will be shown and the download and the close button will be displayed.
+
+   https://github.com/owncloud/web/issues/6300
+   https://github.com/owncloud/web/pull/7216
 
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 
