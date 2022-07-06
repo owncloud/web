@@ -16,6 +16,7 @@ Summary
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+* Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -89,6 +90,16 @@ Details
 
    https://github.com/owncloud/web/issues/7183
    https://github.com/owncloud/web/pull/7206
+
+* Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
+
+   We've enhanced web to be able to re-share resources when using an ownCloud infinite scale
+   backend. It now works for project and personal spaces as well as the sharing jail. Besides that
+   we also send roles, space-ref and path as separate values to the sharing api which simplifies
+   the usage of it.
+
+   https://github.com/owncloud/web/issues/6894
+   https://github.com/owncloud/web/pull/7086
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 
