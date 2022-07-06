@@ -20,22 +20,18 @@
     />
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <div class="oc-flex oc-p-s preview-tool-bar">
-        <oc-resource :is-thumbnail-displayed="false" :resource="activeFilteredFile" />
-        <div>
+      <app-top-bar :resource="activeMediaFileCached" @close="closeApp">
+        <template #right>
           <oc-button
-            class="preview-controls-download"
+            class="preview-download"
             size="small"
             :aria-label="$gettext('Download currently viewed file')"
             @click="triggerActiveFileDownload"
           >
             <oc-icon size="small" name="file-download" />
           </oc-button>
-          <oc-button :aria-label="$gettext('Close preview')" size="small" @click="closeApp">
-            <oc-icon name="close" size="small" />
-          </oc-button>
-        </div>
-      </div>
+        </template>
+      </app-top-bar>
       <div
         v-show="activeMediaFileCached"
         class="
@@ -112,9 +108,13 @@ import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import Preview from './index'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 
 export default defineComponent({
   name: 'Preview',
+  components: {
+    AppTopBar
+  },
   setup() {
     return {
       ...useAppDefaults({
