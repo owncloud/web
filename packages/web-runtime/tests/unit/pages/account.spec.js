@@ -5,8 +5,11 @@ import { createStore } from 'vuex-extensions'
 import GetTextPlugin from 'vue-gettext'
 import VueCompositionAPI from '@vue/composition-api'
 import mockAxios from 'jest-mock-axios'
+import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()
+localVue.prototype.$clientService = clientService
+
 localVue.use(Vuex)
 localVue.use(VueCompositionAPI)
 

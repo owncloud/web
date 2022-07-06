@@ -12,8 +12,10 @@ import * as reactivityComposables from 'web-pkg/src/composables/reactivity'
 import * as routerComposables from 'web-pkg/src/composables/router'
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 import { buildSpace } from '../../../../../src/helpers/resources'
+import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()
+localVue.prototype.$clientService = clientService
 localVue.use(DesignSystem)
 localVue.use(Vuex)
 localVue.use(VueCompositionAPI)
