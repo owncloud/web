@@ -17,8 +17,7 @@ import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { dirname } from 'path'
-import { clientService } from 'web-pkg/src/services'
-import { useStore } from 'web-pkg/src/composables'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   name: 'SharesPanel',
@@ -32,13 +31,9 @@ export default defineComponent({
     showLinks: { type: Boolean, default: false }
   },
   setup() {
-    const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
-
-    return { graphClient }
+    return {
+      ...useGraphClient()
+    }
   },
   watch: {
     highlightedFile: {
