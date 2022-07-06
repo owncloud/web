@@ -104,9 +104,9 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
 import { Route } from 'vue-router'
 import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   metaInfo() {
@@ -128,6 +128,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
+    const { graphClient } = useGraphClient()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -156,11 +157,7 @@ export default defineComponent({
           break
         default:
           if (unref(hasShareJail)) {
-            const graphClient = clientService.graphAuthenticated(
-              ref.$store.getters.configuration.server,
-              ref.$store.getters['runtime/auth/accessToken']
-            )
-            const userResponse = yield graphClient.users.getMe()
+            const userResponse = yield unref(graphClient).users.getMe()
             if (!userResponse.data) {
               throw new Error('graph.user.getMe() has no data')
             }

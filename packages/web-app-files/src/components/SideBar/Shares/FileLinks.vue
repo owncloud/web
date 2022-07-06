@@ -107,11 +107,10 @@
 </template>
 <script lang="ts">
 import { dirname } from 'path'
-import { defineComponent, computed, unref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { useStore, useCapabilitySpacesEnabled, useAccessToken } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
+import { useStore, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
@@ -121,6 +120,7 @@ import { showQuickLinkPasswordModal } from '../../../quickActions'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -132,17 +132,13 @@ export default defineComponent({
   mixins: [mixins],
   setup() {
     const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed =
       !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
-      graphClient,
+      ...useGraphClient(),
       hasSpaces: useCapabilitySpacesEnabled(),
       indirectLinkListCollapsed,
       linkListCollapsed

@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import debounce from 'lodash-es/debounce'
 import PQueue from 'p-queue'
 
@@ -91,25 +91,21 @@ import {
   ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
-import {
-  useAccessToken,
-  useCapabilityFilesSharingResharing,
-  useStore
-} from 'web-pkg/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern,
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
-import { computed, unref } from '@vue/composition-api'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
   return str
 }
 
-export default {
+export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
     AutocompleteItem,
@@ -126,14 +122,9 @@ export default {
   },
 
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
     return {
-      hasResharing: useCapabilityFilesSharingResharing(),
-      graphClient
+      ...useGraphClient(),
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
 
@@ -371,5 +362,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

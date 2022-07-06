@@ -97,7 +97,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
@@ -105,16 +105,12 @@ import { DateTime } from 'luxon'
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
-import {
-  useAccessToken,
-  useCapabilityFilesSharingResharing,
-  useStore
-} from 'web-pkg/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { extractDomSelector } from '../../../../helpers/resource'
-import { computed, unref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   name: 'ListItem',
   components: {
     EditDropdown,
@@ -136,14 +132,9 @@ export default {
     }
   },
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
     return {
-      hasResharing: useCapabilityFilesSharingResharing(),
-      graphClient
+      ...useGraphClient(),
+      hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   computed: {
@@ -319,7 +310,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

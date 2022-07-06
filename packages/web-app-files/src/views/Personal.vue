@@ -101,13 +101,8 @@ import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
-import {
-  useAccessToken,
-  useCapabilityShareJailEnabled,
-  useRouteParam,
-  useStore
-} from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
+import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
+import { useGraphClient } from 'web-client/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -133,11 +128,6 @@ export default defineComponent({
     MixinFilesListFilter
   ],
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
     const storageId = useRouteParam('storageId')
     const resourceTargetLocation = computed(() => {
       return createLocationSpaces('files-spaces-personal', {
@@ -147,10 +137,10 @@ export default defineComponent({
       })
     })
     return {
+      ...useGraphClient(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetLocation,
-      hasShareJail: useCapabilityShareJailEnabled(),
-      graphClient
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
 

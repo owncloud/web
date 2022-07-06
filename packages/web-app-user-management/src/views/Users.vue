@@ -112,7 +112,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
@@ -123,15 +123,16 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { ref, computed, unref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   components: {
     EditPanel,
     DetailsPanel,
@@ -150,15 +151,13 @@ export default {
     const roles = ref([])
     const userAssignments = ref({})
     const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
+    const { graphClient } = useGraphClient()
 
     /**
      * Setting api calls are just temporary and will be replaced with the graph api,
      * as the backend supports it.
      */
-    const loadRolesTask = useTask(function* (signal, ref) {
+    const loadRolesTask = useTask(function* (signal) {
       const rolesResponse = yield axios.post(
         '/api/v0/settings/roles-list',
         {},
@@ -201,12 +200,12 @@ export default {
       userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
     })
 
-    const loadGroupsTask = useTask(function* (signal, ref) {
+    const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield unref(graphClient).groups.listGroups()
       groups.value = groupsResponse.data.value
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
+    const loadResourcesTask = useTask(function* (signal) {
       const usersResponse = yield unref(graphClient).users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
@@ -527,7 +526,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .users-sidebar {

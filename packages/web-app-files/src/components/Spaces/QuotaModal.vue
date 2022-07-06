@@ -44,13 +44,12 @@
   </portal>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from '@vue/runtime-core'
 import { mapActions, mapMutations } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { computed, unref } from '@vue/composition-api'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   name: 'SpaceQuotaModal',
   props: {
     space: {
@@ -63,13 +62,8 @@ export default {
     }
   },
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
     return {
-      graphClient
+      ...useGraphClient()
     }
   },
   data: function () {
@@ -200,7 +194,7 @@ export default {
       return {
         displayValue: parseFloat(option).toFixed(2).toString().replace('.00', ''),
         displayUnit: 'GB',
-        value: parseFloat(option).toFixed(2) * Math.pow(10, 9)
+        value: parseFloat(parseFloat(option).toFixed(2)) * Math.pow(10, 9)
       }
     },
     setOptions() {
@@ -237,5 +231,5 @@ export default {
       this.selectedOption = newOption
     }
   }
-}
+})
 </script>

@@ -14,23 +14,16 @@
   </oc-button>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 
 import { buildSpace } from '../../helpers/resources'
-import { useAccessToken, useStore } from 'web-pkg/src/composables'
-import { computed, unref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { defineComponent } from '@vue/composition-api'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
-
-    return { graphClient }
+    return useGraphClient()
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
@@ -123,5 +116,5 @@ export default {
         })
     }
   }
-}
+})
 </script>

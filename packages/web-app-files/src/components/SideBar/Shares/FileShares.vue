@@ -69,10 +69,8 @@ import {
   useStore,
   useDebouncedRef,
   useRouteParam,
-  useCapabilityProjectSpacesEnabled,
-  useAccessToken
+  useCapabilityProjectSpacesEnabled
 } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
@@ -81,6 +79,7 @@ import { ShareTypes } from '../../../helpers/share'
 import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default {
   name: 'FileShares',
@@ -115,10 +114,7 @@ export default {
     )
     const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
 
-    const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
+    const { graphClient } = useGraphClient({ store })
 
     const loadSpaceMembersTask = useTask(function* (signal, ref) {
       const promises = []

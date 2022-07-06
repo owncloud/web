@@ -136,10 +136,10 @@ import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
-import { clientService } from 'web-pkg/src/services'
 import { loadPreview } from '../../helpers/resource'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   components: {
@@ -153,9 +153,7 @@ export default defineComponent({
     const store = useStore()
     const spaces = computed(() => store.getters['Files/activeFiles'] || [])
     const accessToken = useAccessToken({ store })
-    const graphClient = computed(() =>
-      clientService.graphAuthenticated(store.getters.configuration.server, unref(accessToken))
-    )
+    const { graphClient } = useGraphClient()
 
     const loadResourcesTask = useTask(function* (signal, ref) {
       ref.CLEAR_FILES_SEARCHED()
