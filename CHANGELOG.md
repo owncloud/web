@@ -13,6 +13,7 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -63,6 +64,13 @@ Details
 
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
+
+* Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
+
+   We've added a app top bar component for consistency, which will be used by the apps: preview,
+   text-editor and pdf-viewer.
+
+   https://github.com/owncloud/web/pull/7217
 
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 
