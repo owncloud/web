@@ -188,7 +188,6 @@ export default defineComponent({
     return {
       sharedParentDir,
       sharedParentRoute,
-      currentStorageId,
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store })
     }
@@ -403,7 +402,7 @@ export default defineComponent({
         client: this.$client,
         path: this.file.path,
         $gettext: this.$gettext,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
+        storageId: this.file.fileId
       })
       this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },

@@ -91,7 +91,10 @@ import {
   ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../../helpers/share'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern,
@@ -124,7 +127,8 @@ export default defineComponent({
   setup() {
     return {
       ...useGraphClient(),
-      hasResharing: useCapabilityFilesSharingResharing()
+      hasResharing: useCapabilityFilesSharingResharing(),
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
 
@@ -188,9 +192,6 @@ export default defineComponent({
       return this.$gettext('Invite')
     },
 
-    currentStorageId() {
-      return this.$route.params.storageId
-    },
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
     }
@@ -325,24 +326,24 @@ export default defineComponent({
                   this.selectedRole.permissions(this.hasResharing || this.resourceIsSpace)
                 )
 
-            let storageId
-            if (this.resourceIsSpace) {
-              storageId = this.highlightedFile.id
-            } else if (this.currentStorageId) {
-              storageId = this.currentStorageId
+            let path = this.highlightedFile.path
+            // sharing a share root from the share jail -> use resource name as path
+            if (this.hasShareJail && path === '/') {
+              path = `/${this.highlightedFile.name}`
             }
 
             this.addShare({
               client: this.$client,
               graphClient: this.graphClient,
-              path: this.highlightedFile.path,
+              path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
               displayName: collaborator.label,
               shareType: collaborator.value.shareType,
               permissions: bitmask,
+              role: this.selectedRole,
               expirationDate: this.expirationDate,
-              storageId
+              storageId: this.highlightedFile.fileId || this.highlightedFile.id
             })
           })
         )

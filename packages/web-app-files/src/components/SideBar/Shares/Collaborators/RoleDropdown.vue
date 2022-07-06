@@ -89,7 +89,6 @@ import {
   PeopleShareRoles,
   SharePermissions,
   ShareRole,
-  ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../helpers/share'
 import * as uuid from 'uuid'
@@ -157,11 +156,8 @@ export default {
       return this.allowSharePermission && this.resource.canShare()
     },
     share() {
-      const userShares = this.sharesTree[this.resource.path]?.filter((s) =>
-        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
-      )
-
-      return userShares?.length ? userShares[0] : undefined
+      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
+      return this.sharesTree['']?.find((s) => s.incoming)
     },
     allowCustomSharing() {
       return this.capabilities?.files_sharing?.allow_custom

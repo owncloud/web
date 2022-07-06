@@ -306,7 +306,8 @@ export default defineComponent({
         graphClient: this.graphClient,
         share: this.share,
         permissions: bitmask,
-        expirationDate: expirationDate || ''
+        expirationDate: expirationDate || '',
+        role
       })
     }
   }

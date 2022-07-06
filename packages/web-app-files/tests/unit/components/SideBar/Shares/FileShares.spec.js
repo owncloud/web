@@ -93,18 +93,6 @@ describe('FileShares', () => {
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
-    it('reloads shares if highlighted file is changed', async () => {
-      const spyOnReloadShares = jest
-        .spyOn(FileShares.methods, '$_reloadShares')
-        .mockImplementation()
-      const wrapper = getMountedWrapper({
-        user,
-        outgoingCollaborators: collaborators
-      })
-      wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', { name: 'testfile2' })
-      await wrapper.vm.$nextTick()
-      expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
-    })
     it('correctly passes the shared parent route to the collaborator list item', () => {
       const wrapper = getShallowMountedWrapper({
         user,
@@ -312,7 +300,8 @@ function getShallowMountedWrapper(data, loading = false) {
   return shallowMount(FileShares, {
     localVue,
     setup: () => ({
-      currentStorageId: storageId
+      currentStorageId: storageId,
+      hasResharing: false
     }),
     store: createStore(data),
     stubs: {

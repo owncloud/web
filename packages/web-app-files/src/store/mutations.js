@@ -53,15 +53,8 @@ export default {
   CLEAR_SPACES(state) {
     state.spaces = []
   },
-  LOAD_FILES(state, { currentFolder, files, loadIndicators = false }) {
+  LOAD_FILES(state, { currentFolder, files }) {
     state.currentFolder = currentFolder
-
-    if (loadIndicators) {
-      for (const file of files) {
-        file.indicators = getIndicators(file, state.sharesTree)
-      }
-    }
-
     state.files = files
   },
   SET_CURRENT_FOLDER(state, currentFolder) {

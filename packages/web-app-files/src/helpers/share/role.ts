@@ -324,6 +324,18 @@ export abstract class LinkShareRoles {
     return [...this.all, linkRoleEditorFile] // Always return all roles
       .find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
   }
+
+  /**
+   * Filter all roles that have either exactly the permissions from the bitmask or a subset of them.
+   * @param bitmask
+   * @param isFolder
+   * @param canEditFile
+   */
+  static filterByBitmask(bitmask: number, isFolder: boolean, canEditFile = false): ShareRole[] {
+    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter((r) => {
+      return r.folder === isFolder && bitmask === (bitmask | r.bitmask(false))
+    })
+  }
 }
 
 /**
