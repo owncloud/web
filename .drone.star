@@ -2923,7 +2923,7 @@ def skipIfUnchanged(ctx, type):
 
     return []
 
-def genericCache(name, action, mounts, cache_key):
+def genericCache(name, action, mounts):
     rebuild = "false"
     restore = "false"
     if action == "rebuild":
@@ -2953,7 +2953,7 @@ def genericCache(name, action, mounts, cache_key):
     }
     return step
 
-def genericCachePurge(ctx, name, cache_key):
+def genericCachePurge(ctx, name):
     return {
         "kind": "pipeline",
         "type": "docker",
@@ -2965,16 +2965,20 @@ def genericCachePurge(ctx, name, cache_key):
         "steps": [
             {
                 "name": "purge-cache",
-                "image": MINIO_MC,
-                "failure": "ignore",
-                "environment": {
-                    "MC_HOST_cache": {
-                        "from_secret": "cache_s3_connection_url",
+                "image": PLUGINS_S3_CACHE,
+                "settings": {
+                    "access_key": {
+                        "from_secret": "cache_s3_access_key",
+                    },
+                    "endpoint": {
+                        "from_secret": "cache_s3_endpoint",
+                    },
+                    "flush": True,
+                    "flush_age": "14",
+                    "secret_key": {
+                        "from_secret": "cache_s3_secret_key",
                     },
                 },
-                "commands": [
-                    "mc rm --recursive --force cache/cache/%s/%s" % (ctx.repo.name, cache_key),
-                ],
             },
         ],
         "trigger": {
@@ -2992,11 +2996,10 @@ def genericCachePurge(ctx, name, cache_key):
 
 def genericBuildArtifactCache(ctx, name, action, path):
     name = "%s_build_artifact_cache" % (name)
-    cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
     if action == "rebuild" or action == "restore":
-        return genericCache(name, action, [path], cache_key)
+        return genericCache(name, action, [path])
     if action == "purge":
-        return genericCachePurge(ctx, name, cache_key)
+        return genericCachePurge(ctx, name)
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):
