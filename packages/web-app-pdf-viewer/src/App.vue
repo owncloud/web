@@ -3,12 +3,7 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <div class="oc-flex oc-p-s pdf-viewer-tool-bar">
-        <oc-resource :resource="resource" />
-        <oc-button id="text-editor-controls-close" size="small" @click="closeApp">
-          <oc-icon name="close" size="small" />
-        </oc-button>
-      </div>
+      <app-top-bar :resource="resource" @close="closeApp" />
       <object class="pdf-viewer oc-width-1-1" :data="blobUrl" type="application/pdf" />
     </div>
   </main>
@@ -16,6 +11,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import { buildResource } from 'files/src/helpers/resources'
@@ -24,7 +20,8 @@ export default {
   name: 'PDFViewer',
   components: {
     ErrorScreen,
-    LoadingScreen
+    LoadingScreen,
+    AppTopBar
   },
   setup() {
     return {
@@ -76,11 +73,6 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: calc(100% - 50px);
-}
-
-.pdf-viewer-tool-bar {
-  align-items: center;
-  justify-content: space-between;
+  height: calc(100% - 52px);
 }
 </style>
