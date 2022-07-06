@@ -201,11 +201,11 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       </tr>
       <!---->
       <tr>
-        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <th scope="col" class="oc-pr-s">FUSE Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+            <oc-button-stub aria-label="Copy FUSE path" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -293,11 +293,11 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
       </tr>
       <!---->
       <tr>
-        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <th scope="col" class="oc-pr-s">FUSE Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+            <oc-button-stub aria-label="Copy FUSE path" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -415,11 +415,11 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       </tr>
       <!---->
       <tr>
-        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <th scope="col" class="oc-pr-s">FUSE Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate"></p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+            <oc-button-stub aria-label="Copy FUSE path" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
@@ -503,11 +503,11 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
       </tr>
       <!---->
       <tr>
-        <th scope="col" class="oc-pr-s">EOS Path</th>
+        <th scope="col" class="oc-pr-s">FUSE Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate"></p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
+            <oc-button-stub aria-label="Copy FUSE path" appearance="raw" variation="passive">
               <oc-icon-stub name="clipboard"></oc-icon-stub>
             </oc-button-stub>
           </div>
