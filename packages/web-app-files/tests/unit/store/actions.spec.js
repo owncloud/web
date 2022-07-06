@@ -108,7 +108,8 @@ describe('vuex store actions', () => {
         client: clientMock,
         graphClient: graphClientMock,
         share: dataSet.share,
-        permissions: 1,
+        permissions: spaceRoleManager.bitmask(false),
+        role: spaceRoleManager,
         expirationDate: null
       })
 
@@ -128,7 +129,8 @@ describe('vuex store actions', () => {
         graphClient: graphClientMock,
         shareType: dataSet.shareType,
         storageId: dataSet.storageId,
-        permissions: 1,
+        permissions: spaceRoleManager.bitmask(false),
+        role: spaceRoleManager,
         expirationDate: null
       })
 

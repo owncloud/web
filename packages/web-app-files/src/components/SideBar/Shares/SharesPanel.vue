@@ -15,6 +15,10 @@ import { defineComponent } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
+import { mapActions, mapGetters } from 'vuex'
+import { dirname } from 'path'
+import { clientService } from 'web-pkg/src/services'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SharesPanel',
@@ -26,6 +30,57 @@ export default defineComponent({
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
+  },
+  setup() {
+    const store = useStore()
+    const graphClient = clientService.graphAuthenticated(
+      store.getters.configuration.server,
+      store.getters.getToken
+    )
+
+    return { graphClient }
+  },
+  watch: {
+    highlightedFile: {
+      handler: function (newItem, oldItem) {
+        if (oldItem !== newItem) {
+          this.$_reloadShares()
+        }
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...mapGetters('Files', ['highlightedFile'])
+  },
+  methods: {
+    ...mapActions('Files', [
+      'loadCurrentFileOutgoingShares',
+      'loadSharesTree',
+      'loadIncomingShares'
+    ]),
+    $_reloadShares() {
+      this.loadCurrentFileOutgoingShares({
+        client: this.$client,
+        graphClient: this.graphClient,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId,
+        resource: this.highlightedFile
+      })
+      this.loadIncomingShares({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId
+      })
+      this.loadSharesTree({
+        client: this.$client,
+        path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId
+      })
+    }
   }
 })
 </script>

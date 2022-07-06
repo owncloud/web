@@ -20,7 +20,8 @@ export interface ActorOptions extends ActorsOptions {
 export const buildBrowserContextOptions = (options: ActorOptions): BrowserContextOptions => {
   const contextOptions: BrowserContextOptions = {
     acceptDownloads: options.context.acceptDownloads,
-    ignoreHTTPSErrors: true
+    ignoreHTTPSErrors: true,
+    locale: 'en-US'
   }
 
   if (options.context.reportVideo) {

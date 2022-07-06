@@ -309,7 +309,8 @@ export default {
         graphClient: this.graphClient,
         share: this.share,
         permissions: bitmask,
-        expirationDate: expirationDate || ''
+        expirationDate: expirationDate || '',
+        role
       })
     }
   }

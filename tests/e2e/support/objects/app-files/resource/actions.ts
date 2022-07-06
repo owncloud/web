@@ -48,6 +48,10 @@ export const clickResource = async ({
         (resp) => resp.url().endsWith(encodeURIComponent(name)) || resp.url().endsWith(itemId)
       )
     ])
+
+    // toDo: remove me
+    // @jannik: please have a look here what we can wait for to be sure that it's there
+    await new Promise((resolve) => setTimeout(resolve, 250))
   }
 }
 
