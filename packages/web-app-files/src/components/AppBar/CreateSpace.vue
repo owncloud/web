@@ -23,7 +23,9 @@ import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   setup() {
-    return useGraphClient()
+    return {
+      ...useGraphClient()
+    }
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
