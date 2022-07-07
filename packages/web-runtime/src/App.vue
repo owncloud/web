@@ -43,7 +43,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
-import { isPublicLinkContext, isUserContext } from './router'
+import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
 
 export default defineComponent({
   components: {
@@ -62,17 +62,7 @@ export default defineComponent({
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
-      if (
-        !this.$route.name ||
-        [
-          'login',
-          'oidcCallback',
-          'oidcSilentRedirect',
-          'resolvePrivateLink',
-          'resolvePublicLink',
-          'accessDenied'
-        ].includes(this.$route.name)
-      ) {
+      if (!this.$route.name || !isAuthenticationRequired(this.$router, this.$route)) {
         return LayoutPlain
       }
 

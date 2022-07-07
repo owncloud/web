@@ -97,13 +97,22 @@ export const extractPublicLinkToken = (to: Route): string => {
  * @param to {Route}
  * @returns {boolean}
  */
-const isAuthenticationRequired = (router: Router, to: Route): boolean => {
-  if (to.meta?.__public === true) {
+export const isAuthenticationRequired = (router: Router, to: Route): boolean => {
+  const publicRouteNames = [
+    'login',
+    'oidcCallback',
+    'oidcSilentRedirect',
+    'resolvePrivateLink',
+    'resolvePublicLink',
+    'accessDenied'
+  ]
+
+  if (publicRouteNames.includes(to.name)) {
     return false
   }
 
   const contextRoute = getContextRoute(router, to)
-  if (contextRoute?.meta?.__public) {
+  if (publicRouteNames.includes(contextRoute?.name)) {
     return false
   }
 

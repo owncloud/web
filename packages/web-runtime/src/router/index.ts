@@ -38,42 +38,43 @@ export const router = patchRouter(
         path: '/login',
         name: 'login',
         component: LoginPage,
-        meta: { __public: true, auth: false, title: $gettext('Login') }
+        meta: { title: $gettext('Login') }
       },
       {
         path: '/oidc-callback',
+        name: 'oidcCallback',
         component: OidcCallbackPage,
-        meta: { __public: true, title: $gettext('Oidc callback') }
+        meta: { title: $gettext('Oidc callback') }
       },
       {
         path: '/oidc-silent-redirect',
+        name: 'oidcSilentRedirect',
         component: OidcCallbackPage,
-        meta: { __public: true, title: $gettext('Oidc redirect') }
+        meta: { title: $gettext('Oidc redirect') }
       },
       {
         path: '/f/:fileId',
         name: 'resolvePrivateLink',
         redirect: '/files/ops/resolver/private-link/:fileId',
-        meta: { __public: true, title: $gettext('Private link') }
+        meta: { title: $gettext('Private link') }
       },
       {
         path: '/s/:token',
         name: 'resolvePublicLink',
         component: ResolvePublicLinkPage,
-        meta: { __public: true, title: $gettext('Public link') }
-        // redirect: '/files/ops/resolver/public-link/:token'
+        meta: { title: $gettext('Public link') }
       },
       {
         path: '/access-denied',
         name: 'accessDenied',
         component: AccessDeniedPage,
-        meta: { __public: true, title: $gettext('Access denied') }
+        meta: { title: $gettext('Access denied') }
       },
       {
         path: '/account',
         name: 'account',
         component: Account,
-        meta: { __public: true, title: $gettext('Account') }
+        meta: { title: $gettext('Account') }
       }
     ]
   })
