@@ -6,7 +6,7 @@ import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
     if (from && to.path === from.path && !hasContextRouteNameChanged(to, from)) {
-      // note: expect for the context route, query changes can never trigger re-init of the auth context
+      // note: except for the context route, query changes can never trigger re-init of the auth context
       return next()
     }
 
