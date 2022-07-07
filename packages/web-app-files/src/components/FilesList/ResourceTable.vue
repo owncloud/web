@@ -655,10 +655,10 @@ export default defineComponent({
         getReferenceClientRect: () => ({
           width: 0,
           height: 0,
-          top: contextMenuButtonPos.top,
-          bottom: contextMenuButtonPos.bottom,
-          left: contextMenuButtonPos.x,
-          right: contextMenuButtonPos.x
+          top: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.top,
+          bottom: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.bottom,
+          left: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x,
+          right: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x
         })
       })
 
