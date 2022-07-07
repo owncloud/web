@@ -154,7 +154,6 @@ export class AuthService {
     if (isPublicLinkContext(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)
-      await this.store.dispatch('runtime/auth/clearPublicLinkContext')
       return this.router.push({
         name: 'resolvePublicLink',
         params: { token },

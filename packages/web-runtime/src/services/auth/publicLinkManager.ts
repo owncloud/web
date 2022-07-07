@@ -25,10 +25,11 @@ export class PublicLinkManager {
     return `oc.publicLink.${token}.${suffix}`
   }
 
-  clear(token: string): void {
+  async clear(token: string): Promise<void> {
     ;['resolved', 'passwordRequired', 'password'].forEach((key) => {
       sessionStorage.removeItem(PublicLinkManager.buildStorageKey(token, key))
     })
+    await this.store.dispatch('runtime/auth/clearPublicLinkContext')
   }
 
   isResolved(token: string): boolean {
