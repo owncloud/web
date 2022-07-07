@@ -141,9 +141,6 @@ export class UserManager extends OidcUserManager {
       baseUrl: this.configurationManager.serverUrl,
       auth: {
         bearer: accessToken
-      },
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
       }
     }
     if (this.store.getters.user.id) {
