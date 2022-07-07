@@ -169,13 +169,13 @@ export default defineComponent({
         uppyService
       }),
       ...useUploadHelpers(),
+      ...useRequest(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
-      ...useRequest(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       isUserContext: useUserContext({ store })
     }
