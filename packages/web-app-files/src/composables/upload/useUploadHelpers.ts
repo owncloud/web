@@ -14,6 +14,8 @@ import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
 import path from 'path'
+import { useGraphClient } from 'web-client/src/composables'
+import { Graph } from 'web-client'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -32,8 +34,6 @@ interface inputFileOptions {
 export function useUploadHelpers(): UploadHelpersResult {
   const store = useStore()
   const route = useRoute()
-  const getToken = computed((): string => store.getters.getToken)
-  const server = computed((): string => store.getters.configuration.server)
   const hasShareJail = useCapabilityShareJailEnabled()
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
@@ -41,14 +41,11 @@ export function useUploadHelpers(): UploadHelpersResult {
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
   const personalDriveId = ref('')
+  const { graphClient } = useGraphClient()
 
   onMounted(async () => {
     if (unref(hasShareJail) && !unref(isPublicLocation)) {
-      personalDriveId.value = await getPersonalDriveId(
-        clientService,
-        unref(server),
-        unref(getToken)
-      )
+      personalDriveId.value = await getPersonalDriveId(unref(graphClient))
     }
   })
 
@@ -105,10 +102,8 @@ export function useUploadHelpers(): UploadHelpersResult {
   }
 }
 
-const getPersonalDriveId = async (clientService, server: string, getToken: string) => {
-  const graphClient = clientService.graphAuthenticated(server, getToken)
-
-  const drivesResponse = await graphClient.drives.listMyDrives('', 'driveType eq personal')
+const getPersonalDriveId = async (graphClient: Graph) => {
+  const drivesResponse = await unref(graphClient).drives.listMyDrives('', 'driveType eq personal')
   if (!drivesResponse.data) {
     throw new Error('No personal space found')
   }

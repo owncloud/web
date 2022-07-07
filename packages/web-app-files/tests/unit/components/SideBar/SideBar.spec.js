@@ -202,8 +202,7 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           },
           getters: {
             highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => selectedItems,
-            publicLinkPassword: () => ''
+            selectedFiles: () => selectedItems
           },
           mutations: {
             SET_HIGHLIGHTED_FILE(state, file) {
@@ -215,6 +214,15 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
               namespaced: true,
               state: {
                 activePanel: null
+              }
+            }
+          }
+        },
+        runtime: {
+          modules: {
+            auth: {
+              getters: {
+                publicLinkPassword: () => ''
               }
             }
           }

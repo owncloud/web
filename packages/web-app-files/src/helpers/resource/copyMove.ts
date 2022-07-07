@@ -207,7 +207,7 @@ export const move = (
   $gettextInterpolate,
   $ngettext,
   context,
-  publicLinkPassword
+  publicLinkPassword = null
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
@@ -236,7 +236,7 @@ export const copy = (
   $gettextInterpolate,
   $ngettext,
   context,
-  publicLinkPassword
+  publicLinkPassword = null
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,

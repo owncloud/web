@@ -14,11 +14,11 @@ export class PermissionManager {
   }
 
   public hasUserManagement() {
-    return this.user.role.name === 'admin'
+    return this.user.role?.name === 'admin'
   }
 
   public hasSpaceManagement() {
-    return ['admin', 'spaceadmin'].includes(this.user.role.name)
+    return ['admin', 'spaceadmin'].includes(this.user.role?.name)
   }
 
   get user(): User {

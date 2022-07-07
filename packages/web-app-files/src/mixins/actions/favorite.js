@@ -30,9 +30,7 @@ export default {
               return false
             }
 
-            return (
-              this.isAuthenticated && this.capabilities.files && this.capabilities.files.favorites
-            )
+            return this.capabilities?.files?.favorites
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-favorite-trigger'

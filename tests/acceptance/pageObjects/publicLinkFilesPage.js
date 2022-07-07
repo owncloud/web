@@ -2,8 +2,8 @@ const { join } = require('../helpers/path')
 const util = require('util')
 
 module.exports = {
-  url: function () {
-    return join(this.api.launchUrl, '/files/ops/resolver/public-link/')
+  url: function (token = '') {
+    return join(this.api.launchUrl, '/s', token)
   },
   commands: {
     /**
@@ -11,12 +11,12 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: function (token) {
-      return this.navigate(join(this.url(), token)).waitForElementPresent(
+      return this.navigate(this.url(token)).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
     },
     navigateAndWaitForPasswordPage: function (token) {
-      this.navigate(join(this.api.launchUrl, '/files/ops/resolver/public-link', token))
+      this.navigate(this.url(token))
       return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     },
     /**

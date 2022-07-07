@@ -157,7 +157,6 @@ function getWrapper(renameFilePromise) {
       },
       $gettextInterpolate: jest.fn(),
       $gettext: jest.fn(),
-      publicPage: () => false,
       flatFileList: false
     },
     store: createStore(Vuex.Store, {
@@ -177,6 +176,18 @@ function getWrapper(renameFilePromise) {
             renameFile: jest.fn(() => {
               return renameFilePromise
             })
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => '',
+                isPublicLinkContextReady: () => false
+              }
+            }
           }
         }
       },

@@ -6,9 +6,10 @@ import type { Method, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ClientService } from '../../services'
 import { useAccessToken, usePublicLinkPassword, usePublicLinkToken, usePublicLinkContext } from './'
 import { useStore } from '../store'
-import { useRoute } from '../router'
+import Router from 'vue-router'
 
 interface RequestOptions {
+  router?: Router
   store?: Store<any>
   clientService?: ClientService
   currentRoute?: Route
@@ -21,12 +22,11 @@ export interface RequestResult {
 export function useRequest(options: RequestOptions = {}): RequestResult {
   const clientService = options.clientService ?? useClientService()
   const store = options.store ?? useStore()
-  const currentRoute = options.currentRoute ?? useRoute()
 
-  const isPublicLinkContext = usePublicLinkContext({ currentRoute })
+  const isPublicLinkContext = usePublicLinkContext({ store })
   const publicLinkPassword = usePublicLinkPassword({ store })
   const accessToken = useAccessToken({ store })
-  const publicToken = usePublicLinkToken({ currentRoute })
+  const publicToken = usePublicLinkToken({ store })
 
   const makeRequest = (
     method: Method,

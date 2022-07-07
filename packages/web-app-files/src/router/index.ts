@@ -32,7 +32,7 @@ import {
   isLocationTrashActive,
   createLocationTrash
 } from './trash'
-import { isAuthenticatedRoute, ActiveRouteDirectorFunc } from './utils'
+import { ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',
@@ -62,7 +62,6 @@ export {
   isLocationSpacesActive,
   isLocationPublicActive,
   isLocationActive,
-  isAuthenticatedRoute,
   isLocationTrashActive,
   createLocationTrash,
   buildRoutes,

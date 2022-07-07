@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import debounce from 'lodash-es/debounce'
 import PQueue from 'p-queue'
 
@@ -91,7 +91,6 @@ import {
   ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled
@@ -101,13 +100,15 @@ import {
   shareInviteCollaboratorHelpCern,
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
   return str
 }
 
-export default {
+export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
     AutocompleteItem,
@@ -125,6 +126,7 @@ export default {
 
   setup() {
     return {
+      ...useGraphClient(),
       hasResharing: useCapabilityFilesSharingResharing(),
       hasShareJail: useCapabilityShareJailEnabled()
     }
@@ -145,7 +147,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['configuration', 'getToken', 'user', 'capabilities']),
+    ...mapGetters(['configuration', 'user', 'capabilities']),
 
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -192,9 +194,6 @@ export default {
 
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
-    },
-    graphClient() {
-      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     }
   },
   mounted() {
@@ -364,5 +363,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

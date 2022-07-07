@@ -1,0 +1,13 @@
+Bugfix: Access token renewal
+
+Access token renewals had some flaws which have been fixed as follows:
+- OAuth2: access token renewal was not working at all, fixed by switching to authorization code flow with PKCE extension and by migrating from the unmaintained `oidc-client` library to `oidc-client-ts`.
+- OpenID Connect: when `offline_access` scope was not requested each token renewal caused a redirect to `/`, which was due to a faulty token update implementation and is fixed.
+
+WARNING: With a setup of ownCloud 10.x.x + oauth2-app older than v0.5.3 this bugfix is a breaking change.
+There was a bug in the oauth2-app that required to add the `clientSecret` in the `auth` section of the `config.json` file (although code flow with PKCE doesn't need it).
+To mitigate this, please add the `clientSecret` for your `clientId` to the `config.json` file. If the oauth2-app v0.5.3 or newer is
+used that's not needed.
+
+https://github.com/owncloud/web/issues/7030
+https://github.com/owncloud/web/pull/7072

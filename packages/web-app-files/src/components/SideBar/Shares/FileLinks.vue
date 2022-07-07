@@ -116,7 +116,6 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
@@ -125,6 +124,7 @@ import { cloneStateObject } from '../../../helpers/store'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
+import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { isLocationSpacesActive } from '../../../router'
 
@@ -138,17 +138,13 @@ export default defineComponent({
   mixins: [mixins],
   setup() {
     const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
 
     const linkListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const indirectLinkListCollapsed =
       !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
-      graphClient,
+      ...useGraphClient(),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),

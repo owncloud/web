@@ -72,7 +72,6 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
@@ -81,6 +80,7 @@ import { ShareTypes } from '../../../helpers/share'
 import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default {
   name: 'FileShares',
@@ -115,10 +115,7 @@ export default {
     )
     const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
 
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const { graphClient } = useGraphClient({ store })
 
     const loadSpaceMembersTask = useTask(function* (signal, ref) {
       const promises = []
@@ -127,9 +124,13 @@ export default {
       for (const role of Object.keys(unref(currentSpace).spaceRoles)) {
         for (const userId of unref(currentSpace).spaceRoles[role]) {
           promises.push(
-            graphClient.users.getUser(userId).then((resolved) => {
-              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id))
-            })
+            unref(graphClient)
+              .users.getUser(userId)
+              .then((resolved) => {
+                spaceShares.push(
+                  buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id)
+                )
+              })
           )
         }
       }

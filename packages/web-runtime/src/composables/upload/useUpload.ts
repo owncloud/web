@@ -1,14 +1,15 @@
 import { ClientService } from 'web-pkg/src/services'
 import {
+  useAccessToken,
   useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
   useCapabilityFilesTusSupportMaxChunkSize,
   useClientService,
+  usePublicLinkContext,
+  usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
 import { computed, Ref, unref, watch } from '@vue/composition-api'
-import { useActiveLocation } from 'files/src/composables'
-import { isLocationPublicActive } from 'files/src/router'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
 
@@ -47,18 +48,17 @@ interface UploadResult {
 
 export function useUpload(options: UploadOptions): UploadResult {
   const store = useStore()
-  const publicLinkPassword = computed((): string => store.getters['Files/publicLinkPassword'])
-  const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
-  const isPublicDropLocation = useActiveLocation(isLocationPublicActive, 'files-public-drop')
   const clientService = useClientService()
-  const getToken = computed((): string => store.getters.getToken)
+  const publicLinkPassword = usePublicLinkPassword({ store })
+  const isPublicLinkContext = usePublicLinkContext({ store })
+  const accessToken = useAccessToken({ store })
 
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
   const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
-    if (unref(isPublicLocation) || unref(isPublicDropLocation)) {
+    if (unref(isPublicLinkContext)) {
       const password = unref(publicLinkPassword)
       if (password) {
         return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
@@ -67,24 +67,22 @@ export function useUpload(options: UploadOptions): UploadResult {
       return {}
     }
     return {
-      Authorization: 'Bearer ' + unref(getToken)
+      Authorization: 'Bearer ' + unref(accessToken)
     }
   })
 
   const uppyOptions = computed(() => {
     const isTusSupported = unref(tusMaxChunkSize) > 0
 
-    if (isTusSupported) {
-      return {
-        isTusSupported,
+    return {
+      isTusSupported,
+      headers: unref(headers),
+      ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
-        tusExtension: unref(tusExtension),
-        headers: unref(headers)
-      }
+        tusExtension: unref(tusExtension)
+      })
     }
-
-    return { isTusSupported, headers: unref(headers) }
   })
 
   watch(
@@ -102,7 +100,7 @@ export function useUpload(options: UploadOptions): UploadResult {
   return {
     createDirectoryTree: createDirectoryTree({
       clientService,
-      isPublicLocation,
+      isPublicLinkContext,
       publicLinkPassword,
       uppyService: options.uppyService
     })
@@ -111,12 +109,12 @@ export function useUpload(options: UploadOptions): UploadResult {
 
 const createDirectoryTree = ({
   clientService,
-  isPublicLocation,
+  isPublicLinkContext,
   publicLinkPassword,
   uppyService
 }: {
   clientService: ClientService
-  isPublicLocation: Ref<boolean>
+  isPublicLinkContext: Ref<boolean>
   publicLinkPassword?: Ref<string>
   uppyService: UppyService
 }) => {
@@ -173,7 +171,7 @@ const createDirectoryTree = ({
 
         uppyService.publish('addedForUpload', [uppyResource])
 
-        if (unref(isPublicLocation)) {
+        if (unref(isPublicLinkContext)) {
           await client.publicFiles.createFolder(
             currentFolder,
             folderToCreate,

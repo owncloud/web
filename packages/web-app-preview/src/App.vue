@@ -106,7 +106,12 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useAppDefaults,
+  usePublicLinkContext,
+  useStore
+} from 'web-pkg/src/composables'
 import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 
@@ -116,10 +121,13 @@ export default defineComponent({
     AppTopBar
   },
   setup() {
+    const store = useStore()
     return {
       ...useAppDefaults({
         applicationId: 'preview'
-      })
+      }),
+      accessToken: useAccessToken({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data() {
@@ -135,7 +143,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['getToken', 'capabilities']),
+    ...mapGetters(['capabilities']),
 
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
@@ -293,7 +301,12 @@ export default defineComponent({
         // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
         let mediaUrl
         if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-          mediaUrl = await this.mediaSource(url, 'url', null)
+          // TODO: get rid of `mediaSource`, use preview loading mechanism from files app instead (needs to be extracted to web-pkg first)
+          const headers = new Headers()
+          if (!this.isPublicLinkContext) {
+            headers.append('Authorization', 'Bearer ' + this.accessToken)
+          }
+          mediaUrl = await this.mediaSource(url, 'url', headers)
         } else {
           mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         }
@@ -322,7 +335,7 @@ export default defineComponent({
         return
       }
 
-      return this.downloadFile(this.activeFilteredFile, this.isPublicLinkContext)
+      return this.downloadFile(this.activeFilteredFile)
     },
     next() {
       if (this.isFileContentLoading) {

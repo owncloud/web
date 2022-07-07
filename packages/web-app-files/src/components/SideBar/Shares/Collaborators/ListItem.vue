@@ -97,7 +97,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
@@ -105,11 +105,12 @@ import { DateTime } from 'luxon'
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from '../../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { extractDomSelector } from '../../../../helpers/resource'
+import { defineComponent } from '@vue/composition-api'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   name: 'ListItem',
   components: {
     EditDropdown,
@@ -132,12 +133,12 @@ export default {
   },
   setup() {
     return {
+      ...useGraphClient(),
       hasResharing: useCapabilityFilesSharingResharing()
     }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['getToken', 'configuration']),
     ...mapState(['user']),
 
     shareType() {
@@ -255,10 +256,6 @@ export default {
         .toRelative()
     },
 
-    graphClient() {
-      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
-    },
-
     sharedParentDir() {
       return this.sharedParentRoute?.params?.item.split('/').pop()
     }
@@ -314,7 +311,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

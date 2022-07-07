@@ -1,5 +1,6 @@
 export * from './useAccessToken'
 export * from './usePublicLinkContext'
 export * from './usePublicLinkPassword'
-export * from './usePublicToken'
+export * from './usePublicLinkToken'
 export * from './useRequest'
+export * from './useUserContext'

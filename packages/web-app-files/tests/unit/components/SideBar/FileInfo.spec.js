@@ -1,7 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import AsyncComputed from 'vue-async-computed'
 
 import stubs from '@/tests/unit/stubs'
 
@@ -24,7 +23,6 @@ const simpleDeletedFile = {
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-localVue.use(AsyncComputed)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -135,8 +133,7 @@ function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled
           query: { page: 1 }
         },
         resolve: (r) => ({ href: r.name })
-      },
-      publicPage: () => false
+      }
     },
     provide: {
       displayedItem: {

@@ -9,6 +9,7 @@ export default {
     ...mapGetters('Files', ['files', 'currentFolder']),
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
+    ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
 
     $_rename_items() {
       return [
@@ -193,7 +194,7 @@ export default {
         client: this.$client,
         file: resource,
         newValue: newName,
-        publicPage: this.publicPage(),
+        isPublicLinkContext: this.isPublicLinkContext,
         isSameResource: sameResource
       })
         .then(() => {

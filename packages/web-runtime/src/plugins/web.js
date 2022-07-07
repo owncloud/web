@@ -6,9 +6,7 @@ export default {
   install(Vue) {
     Vue.mixin({
       computed: {
-        ...mapGetters(['getToken', 'isAuthenticated', 'capabilities']),
-        ...mapGetters('Files', ['publicLinkPassword']),
-        ...mapGetters(['configuration']),
+        ...mapGetters(['capabilities']),
 
         isUrlSigningEnabled() {
           return this.capabilities.core && this.capabilities.core['support-url-signing']
@@ -17,19 +15,14 @@ export default {
       methods: {
         ...mapActions(['showMessage']),
 
-        publicPage() {
-          // public page is either when not authenticated
-          // but also when accessing pages that require no auth even when authenticated
-          return !this.isAuthenticated || this.$route.meta.auth === false
-        },
-        // FIXME: optional publicLinkContext parameter is a mess
-        async downloadFile(file, publicLinkContext = null, version = null) {
-          const publicPage = publicLinkContext !== null ? publicLinkContext : this.publicPage()
+        async downloadFile(file, version = null) {
+          const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
+          const isUserContext = this.$store.getters['runtime/auth/isUserContextReady']
 
           // construct the url and headers
           let url = null
           let headers = {}
-          if (publicPage) {
+          if (isPublicLinkContext) {
             url = file.downloadURL
           } else {
             if (version === null) {
@@ -37,11 +30,12 @@ export default {
             } else {
               url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
             }
-            headers = { Authorization: 'Bearer ' + this.getToken }
+            const accessToken = this.$store.getters['runtime/auth/accessToken']
+            headers = { Authorization: 'Bearer ' + accessToken }
           }
 
           // download with signing enabled
-          if (!publicPage && this.isUrlSigningEnabled) {
+          if (isUserContext && this.isUrlSigningEnabled) {
             try {
               const response = await fetch(url, {
                 method: 'HEAD',

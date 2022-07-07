@@ -12,6 +12,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/auth', ['accessToken']),
     ...mapState(['user']),
     $_setSpaceImage_items() {
       return [
@@ -56,7 +57,10 @@ export default {
     ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     async $_setSpaceImage_trigger({ resources }) {
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      const graphClient = clientService.graphAuthenticated(
+        this.configuration.server,
+        this.accessToken
+      )
       const storageId = this.$route.params.storageId
       const sourcePath = resources[0].webDavPath
       const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`

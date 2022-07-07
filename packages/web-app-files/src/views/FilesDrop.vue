@@ -43,6 +43,7 @@ import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
+import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 export default {
   components: {
@@ -51,6 +52,7 @@ export default {
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
+    const store = useStore()
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
@@ -69,7 +71,8 @@ export default {
     return {
       ...useUpload({
         uppyService
-      })
+      }),
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
   data() {
@@ -80,7 +83,6 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['publicLinkPassword']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title)
     },

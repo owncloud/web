@@ -198,8 +198,7 @@ function getWrapper(route, { filename, extension, type = '', mimeType }, availab
     },
     stubs: mountStubs,
     mocks: {
-      $route: route,
-      publicPage: () => false
+      $route: route
     },
     provide: {
       currentSpace: {

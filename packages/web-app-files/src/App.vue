@@ -23,12 +23,19 @@ import Mixins from './mixins'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
+import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
     SideBar
   },
   mixins: [Mixins],
+  setup() {
+    const store = useStore()
+    return {
+      publicLinkPassword: usePublicLinkPassword({ store })
+    }
+  },
   computed: {
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',

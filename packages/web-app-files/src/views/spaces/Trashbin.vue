@@ -8,26 +8,23 @@
 <script lang="ts">
 import TrashBin from '../../components/TrashBin.vue'
 import { bus } from 'web-pkg/src/instance'
-import { useStore } from 'web-pkg/src/composables'
-import { defineComponent, ref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { useRouteParam } from 'web-pkg/src/composables'
+import { defineComponent, ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { buildSpace } from '../../helpers/resources'
 import { mapGetters } from 'vuex'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   components: { TrashBin },
 
   setup() {
-    const store = useStore()
     const space = ref({})
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const currentStorageId = useRouteParam('storageId')
+    const { graphClient } = useGraphClient()
 
     const loadResourcesTask = useTask(function* (signal, ref) {
-      const response = yield graphClient.drives.getDrive(ref.$router.currentRoute.params.storageId)
+      const response = yield unref(graphClient).drives.getDrive(unref(currentStorageId))
       const loadedSpace = response.data || {}
       space.value = buildSpace(loadedSpace)
     })

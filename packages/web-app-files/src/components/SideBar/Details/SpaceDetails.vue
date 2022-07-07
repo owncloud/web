@@ -64,15 +64,16 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
-import { mapActions, mapGetters } from 'vuex'
-import { useTask } from 'vue-concurrency'
+import { defineComponent, ref, unref } from '@vue/composition-api'
 import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
+import { mapActions, mapGetters } from 'vuex'
+import { useTask } from 'vue-concurrency'
 import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
 import { loadPreview } from '../../../helpers/resource'
 import { spaceRoleManager } from '../../../helpers/share'
 import { ImageDimension } from '../../../constants'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../SpaceQuota.vue'
 
 export default defineComponent({
@@ -81,6 +82,8 @@ export default defineComponent({
   mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   setup() {
+    const store = useStore()
+    const accessToken = useAccessToken({ store })
     const spaceImage = ref('')
 
     const loadImageTask = useTask(function* (signal, ref) {
@@ -105,7 +108,7 @@ export default defineComponent({
         dimensions: ImageDimension.Preview,
         server: ref.configuration.server,
         userId: ref.user.id,
-        token: ref.getToken
+        token: unref(accessToken)
       })
     })
 
@@ -117,7 +120,7 @@ export default defineComponent({
       'currentFileOutgoingCollaborators',
       'currentFileOutgoingLinks'
     ]),
-    ...mapGetters(['user', 'getToken']),
+    ...mapGetters(['user']),
     space() {
       return this.displayedItem.value
     },
