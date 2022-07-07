@@ -17,8 +17,6 @@ export class Auth {
 
   getHeaders(): any {
     return {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/x-www-form-urlencoded',
       ...(this.publicLinkToken && { 'public-token': this.publicLinkToken }),
       ...(this.publicLinkPassword && {
         Authorization:

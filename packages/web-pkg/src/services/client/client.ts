@@ -16,6 +16,7 @@ const createAxiosInstance = (authParams: AuthParameters): AxiosInstance => {
     headers: auth.getHeaders()
   })
   axiosClient.interceptors.request.use((config) => {
+    config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     return config
   })
