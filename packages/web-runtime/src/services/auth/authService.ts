@@ -94,7 +94,6 @@ export class AuthService {
           return (window.location =
             `${this.configurationManager.serverUrl}/index.php/logout` as any)
         }
-        return (window.location = this.userManager.settings.post_logout_redirect_uri as any)
       })
       this.userManager.events.addSilentRenewError(async (error) => {
         console.error('Silent Renew Error：', error)
