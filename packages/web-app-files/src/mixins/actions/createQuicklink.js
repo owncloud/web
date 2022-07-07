@@ -32,9 +32,10 @@ export default {
   methods: {
     async $_createQuicklink_trigger({ resources }) {
       const store = this.$store
+      const [resource] = resources
       await createQuicklink({
-        resource: resources[0],
-        storageId: this.$route.params.storageId,
+        resource,
+        storageId: this.$route.params.storageId || resource?.fileId || resource?.id,
         store
       })
 
