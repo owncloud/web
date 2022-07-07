@@ -1,0 +1,8 @@
+Bugfix: Access token renewal
+
+Access token renewals had some flaws which have been fixed as follows:
+- OAuth2: access token renewal was not working at all, fixed by switching to authorization code flow with PKCE extension
+- OpenID Connect: when `offline_access` scope was not requested each token renewal caused a redirect to `/`, which was due to a faulty token update implementation and is fixed.
+
+https://github.com/owncloud/web/issues/7030
+https://github.com/owncloud/web/pull/7072
