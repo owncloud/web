@@ -15,7 +15,7 @@ export interface AppNavigationResult {
 }
 
 export const contextRouteNameKey = 'contextRouteName'
-export const contextRouteParamsKey = 'contextRouteParams'
+const contextRouteParamsKey = 'contextRouteParams'
 const contextRouteQueryKey = 'contextRouteQuery'
 
 /*
