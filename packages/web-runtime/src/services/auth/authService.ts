@@ -77,9 +77,6 @@ export class AuthService {
           await this.handleAuthError(this.router.currentRoute)
         }
       })
-      this.userManager.events.addUserSignedIn(() => {
-        console.log('user signed in')
-      })
       this.userManager.events.addUserUnloaded(async () => {
         console.log('user unloaded…')
         await this.resetStateAfterUserLogout()
