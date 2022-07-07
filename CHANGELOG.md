@@ -13,6 +13,7 @@ Summary
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+* Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
@@ -66,6 +67,14 @@ Details
 
    https://github.com/owncloud/web/issues/6300
    https://github.com/owncloud/web/pull/7216
+
+* Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
+
+   We've fixed a bug where apps like preview, pdf-viewer or text-editor weren't working while
+   browsing the shared with others page with oc10 as backend.
+
+   https://github.com/owncloud/web/issues/7049
+   https://github.com/owncloud/web/pull/7228
 
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 
