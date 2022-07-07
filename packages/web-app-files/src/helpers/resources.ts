@@ -354,7 +354,7 @@ export function buildSharedResource(
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
     type: share.item_type,
-    mimeType: parseInt(share.state) === 0 ? share.mimetype : '',
+    mimeType: share.mimetype,
     isFolder,
     sdate: DateTime.fromSeconds(parseInt(share.stime)).toRFC2822(),
     indicators: [],
