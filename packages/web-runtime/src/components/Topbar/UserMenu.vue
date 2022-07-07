@@ -135,10 +135,7 @@ export default {
   },
   methods: {
     logout() {
-      // Use timeout to leave enough time for the dropdown to be hidden
-      setTimeout(() => {
-        authService.logoutUser()
-      })
+      authService.logoutUser()
     }
   }
 }
