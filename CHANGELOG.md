@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
@@ -26,6 +27,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
+
+   We've fixed a bug where triggering the context menu by keyboard navigation misplaced the menu
+   and made it inaccessible.
+
+   https://github.com/owncloud/web/issues/7187
+   https://github.com/owncloud/web/pull/7230
 
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
