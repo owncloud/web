@@ -126,7 +126,6 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
-   https://github.com/owncloud/web/pull/7242
 
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 
