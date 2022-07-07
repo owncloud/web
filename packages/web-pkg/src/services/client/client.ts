@@ -2,6 +2,7 @@ import { HttpClient } from '../../http'
 import { client, Graph, OCS } from 'web-client'
 import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
+import { v4 as uuidV4 } from 'uuid'
 
 export type OwnCloudSdk = any
 interface OcClient {
@@ -16,6 +17,7 @@ const createAxiosInstance = (authParams: AuthParameters): AxiosInstance => {
     headers: auth.getHeaders()
   })
   axiosClient.interceptors.request.use((config) => {
+    config.headers['X-Request-ID'] = uuidV4()
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     return config
