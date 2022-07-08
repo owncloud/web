@@ -10,6 +10,7 @@ const state = {
   groups: [],
   quota: null,
   language: null,
+  usertype: '',
   role: null,
   roles: []
 }
@@ -45,6 +46,7 @@ const mutations = {
     state.groups = user.groups
     state.language = user.language
     state.role = user.role
+    state.usertype = user.usertype
     sentrySetUser({ username: user.id })
   },
   SET_CAPABILITIES(state, data) {

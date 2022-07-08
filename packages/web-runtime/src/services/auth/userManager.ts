@@ -191,6 +191,10 @@ export class UserManager extends OidcUserManager {
       displayname: user.displayname || login['display-name'],
       email: login?.email || user?.email || '',
       groups: graphUser?.data?.memberOf || userGroups || [],
+      usertype:
+        user['user-type'] === 'federated' || user['user-type'] === 'lightweight'
+          ? 'lightweight'
+          : user['user-type'],
       role,
       language: login?.language
     })

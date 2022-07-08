@@ -1,5 +1,10 @@
 <template>
-  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
+  <div
+    v-if="(isLightweight && !isHomeRoute) || !isLightweight"
+    id="files-app-bar"
+    ref="filesAppBar"
+    :class="{ 'files-app-bar-squashed': sideBarOpen }"
+  >
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -87,6 +92,13 @@ export default {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
+    ...mapGetters(['user']),
+    isLightweight() {
+      return this.user.usertype === 'lightweight'
+    },
+    isHomeRoute() {
+      return this.$route.fullPath.includes(`/${this.user.id.charAt(0)}/${this.user.id}`)
+    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)
