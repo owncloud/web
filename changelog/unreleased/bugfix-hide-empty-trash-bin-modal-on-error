@@ -1,0 +1,7 @@
+Bugfix: Hide empty trash bin modal on error
+
+We've fixed a bug where the empty trash bin modal was shown if an error occurred.
+
+https://github.com/owncloud/web/pull/7248
+https://github.com/owncloud/web/issues/7129
+
