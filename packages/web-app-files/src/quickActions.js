@@ -66,8 +66,6 @@ export default {
     label: ($gettext) => $gettext('Copy quicklink'),
     icon: 'link',
     handler: async (ctx) => {
-      ctx.storageId = ctx.item.storageId
-
       const passwordEnforced =
         ctx.store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
         true
