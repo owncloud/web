@@ -79,17 +79,16 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
+    ...mapGetters(['user']),
 
     isProjectsRoute() {
       return this.$route.name === 'files-common-projects'
     },
     isLightweight() {
-      return window.Vue.$store.getters.user.usertype === 'lightweight'
+      return this.user.usertype === 'lightweight'
     },
     isHomeRoute() {
-      return this.$route.fullPath.includes(
-        `/${window.Vue.$store.getters.user.id.charAt(0)}/${window.Vue.$store.getters.user.id}`
-      )
+      return this.$route.fullPath.includes(`/${this.user.id.charAt(0)}/${this.user.id}`)
     },
     pageTitle() {
       const title = this.$route.meta.title

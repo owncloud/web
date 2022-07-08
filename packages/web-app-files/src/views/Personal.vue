@@ -162,14 +162,10 @@ export default defineComponent({
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
     isLightweight() {
-      const windowVue = window.Vue as any
-      return windowVue.$store.getters.user.usertype === 'lightweight'
+      return this.user.usertype === 'lightweight'
     },
     isHomeRoute() {
-      const windowVue = window.Vue as any
-      return this.$route.fullPath.includes(
-        `/${windowVue.$store.getters.user.id.charAt(0)}/${windowVue.$store.getters.user.id}`
-      )
+      return this.$route.fullPath.includes(`/${this.user.id.charAt(0)}/${this.user.id}`)
     },
     isEmpty() {
       return this.paginatedResources.length < 1
