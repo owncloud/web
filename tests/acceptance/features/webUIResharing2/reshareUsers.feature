@@ -25,7 +25,9 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-  @issue-ocis-1922
+  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -37,7 +39,9 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-
+  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -47,7 +51,9 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
-  @issue-ocis-2260 @issue-ocis-1922
+   # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
@@ -72,33 +78,9 @@ Feature: Resharing shared files with different permissions
       | Custom permissions   | Custom permissions   | update, share                 | share, update                 | read, update, share                 |
       | Custom permissions   | Editor               | delete, share, create, update | share, delete, update, create | read, share, delete, update, create |
 
-  @skipOnOC10 @issue-ocis-2260 @issue-ocis-1922
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer (ocis bug demonstration)
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian" in the server
-    And user "Alice" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
-    Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    And user "Carol" should have received a share with these details in the server:
-      | field       | value                 |
-      | uid_owner   | Alice                 |
-      | share_with  | Carol                 |
-      | file_target | /Shares/simple-folder |
-      | item_type   | folder                |
-      | permissions | <permissions>         |
-    Examples:
-      | role                 | displayed-role       | collaborators-permissions | displayed-permissions | permissions                  |
-      | Viewer               | Viewer               | ,                         | ,                     | read                         |
-      | Editor               | Editor               | ,                         | ,                     | all                          |
-      | Custom permissions   | Custom permissions   | create                    | create                | read, create                 |
-      | Custom permissions   | Custom permissions   | update                    | update                | read, update                 |
-      | Custom permissions   | Editor               | delete, create, update    |                       | read, delete, update, create |
-
-  @issue-ocis-1743
+   # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
     And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
