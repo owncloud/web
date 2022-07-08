@@ -4,7 +4,6 @@ import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
-import PublicLink from './views/PublicLink.vue'
 import Personal from './views/Personal.vue'
 import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
@@ -105,7 +104,6 @@ export default {
     LocationPicker,
     PrivateLink,
     PublicFiles,
-    PublicLink,
     SearchResults,
     SharedResource,
     SharedViaLink,
@@ -129,11 +127,14 @@ export default {
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
-  },
-  userReady({ store }) {
+
     // Load spaces to make them available across the application
     if (store.getters.capabilities?.spaces?.enabled) {
-      store.dispatch('Files/loadSpaces', { clientService })
+      const graphClient = clientService.graphAuthenticated(
+        store.getters.configuration.server,
+        store.getters['runtime/auth/accessToken']
+      )
+      store.dispatch('Files/loadSpaces', { graphClient })
     }
 
     archiverService.initialize(

@@ -232,7 +232,7 @@ function getWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      publicPage: jest.fn(() => false)
+      isUserContext: jest.fn(() => false)
     },
     propsData: {
       currentPath: ''
@@ -257,7 +257,7 @@ function getShallowWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      publicPage: jest.fn(() => false)
+      isUserContext: jest.fn(() => false)
     },
     propsData: {
       currentPath: ''
@@ -277,7 +277,6 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
       user: function () {
         return { id: 'alice' }
       },
-      getToken: jest.fn(),
       newFileHandlers: jest.fn(() => fileHandlers)
     },
     modules: {

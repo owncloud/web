@@ -20,6 +20,18 @@
     />
     <template v-else>
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <app-top-bar :resource="activeFilteredFile" @close="closeApp">
+        <template #right>
+          <oc-button
+            class="preview-download"
+            size="small"
+            :aria-label="$gettext('Download currently viewed file')"
+            @click="triggerActiveFileDownload"
+          >
+            <oc-icon size="small" name="file-download" />
+          </oc-button>
+        </template>
+      </app-top-bar>
       <div
         v-show="activeMediaFileCached"
         class="
@@ -52,15 +64,7 @@
         </audio>
       </div>
     </template>
-
     <div class="oc-position-medium oc-position-bottom-center preview-details">
-      <p
-        v-if="activeFilteredFile"
-        class="oc-text-lead oc-text-center oc-text-truncate oc-p-s preview-file-name"
-        aria-hidden="true"
-      >
-        {{ activeFilteredFile.name }}
-      </p>
       <div
         class="
           oc-background-brand
@@ -95,24 +99,6 @@
         >
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
-        <oc-button
-          class="preview-controls-download"
-          appearance="raw"
-          variation="inverse"
-          :aria-label="$gettext('Download currently viewed file')"
-          @click="triggerActiveFileDownload"
-        >
-          <oc-icon size="large" name="file-download" fill-type="line" />
-        </oc-button>
-        <oc-button
-          class="preview-controls-close"
-          appearance="raw"
-          variation="inverse"
-          :aria-label="$gettext('Close preview')"
-          @click="closeApp"
-        >
-          <oc-icon size="large" name="close" />
-        </oc-button>
       </div>
     </div>
   </main>
@@ -120,16 +106,28 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  useAppDefaults,
+  usePublicLinkContext,
+  useStore
+} from 'web-pkg/src/composables'
 import Preview from './index'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 
 export default defineComponent({
   name: 'Preview',
+  components: {
+    AppTopBar
+  },
   setup() {
+    const store = useStore()
     return {
       ...useAppDefaults({
         applicationId: 'preview'
-      })
+      }),
+      accessToken: useAccessToken({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data() {
@@ -145,7 +143,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['getToken', 'capabilities']),
+    ...mapGetters(['capabilities']),
 
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
@@ -303,10 +301,16 @@ export default defineComponent({
         // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
         let mediaUrl
         if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-          mediaUrl = await this.mediaSource(url, 'url', null)
+          // TODO: get rid of `mediaSource`, use preview loading mechanism from files app instead (needs to be extracted to web-pkg first)
+          const headers = new Headers()
+          if (!this.isPublicLinkContext) {
+            headers.append('Authorization', 'Bearer ' + this.accessToken)
+          }
+          mediaUrl = await this.mediaSource(url, 'url', headers)
         } else {
           mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         }
+
         this.cachedFiles.push({
           id: this.activeFilteredFile.id,
           name: this.activeFilteredFile.name,
@@ -331,7 +335,7 @@ export default defineComponent({
         return
       }
 
-      return this.downloadFile(this.activeFilteredFile, this.isPublicLinkContext)
+      return this.downloadFile(this.activeFilteredFile)
     },
     next() {
       if (this.isFileContentLoading) {
@@ -377,6 +381,11 @@ export default defineComponent({
   }
 }
 
+.preview-tool-bar {
+  align-items: center;
+  justify-content: space-between;
+}
+
 .preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
 }
@@ -384,18 +393,6 @@ export default defineComponent({
 @media (max-width: 959px) {
   .preview-player {
     max-width: 100vw;
-  }
-
-  .preview-details {
-    left: 0;
-    margin: 0;
-    max-width: 100%;
-    transform: none !important;
-    width: 100%;
-
-    .preview-controls-action-bar {
-      width: 100%;
-    }
   }
 }
 </style>

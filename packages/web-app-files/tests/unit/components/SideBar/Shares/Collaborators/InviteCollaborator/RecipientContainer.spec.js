@@ -88,7 +88,6 @@ const storeOptions = (avatarsEnabled) => {
     },
     getters: {
       user: () => user,
-      getToken: () => '',
       capabilities: () => {
         return {
           files_sharing: {

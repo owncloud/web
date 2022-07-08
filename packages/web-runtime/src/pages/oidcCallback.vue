@@ -22,7 +22,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authService } from '../services/auth'
+
 export default {
   name: 'OidcCallbackPage',
   data() {
@@ -48,23 +50,19 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      if (this.$route.query.error) {
-        this.error = true
-        console.warn(
-          'OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description
-        )
-        return
-      }
-      if (this.$route.path === '/oidc-silent-redirect') {
-        this.signinSilentCallback()
-      } else {
-        this.callback()
-      }
-    })
-  },
-  methods: {
-    ...mapActions(['callback', 'signinSilentCallback'])
+    if (this.$route.query.error) {
+      this.error = true
+      console.warn(
+        'OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description
+      )
+      return
+    }
+
+    if (this.$route.path === '/oidc-silent-redirect') {
+      authService.signInSilentCallback()
+    } else {
+      authService.signInCallback()
+    }
   }
 }
 </script>

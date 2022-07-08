@@ -4,8 +4,12 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import GetTextPlugin from 'vue-gettext'
 import VueCompositionAPI from '@vue/composition-api'
+import mockAxios from 'jest-mock-axios'
+import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()
+localVue.prototype.$clientService = clientService
+
 localVue.use(Vuex)
 localVue.use(VueCompositionAPI)
 
@@ -123,6 +127,50 @@ describe('account page', () => {
       })
     })
   })
+
+  describe('method "editPassword"', () => {
+    it('should show message on success', async () => {
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.resolve()
+      })
+      const store = getStore({ server: 'https://example.com' })
+      const wrapper = getWrapper(store)
+
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+
+      await wrapper.vm.editPassword('password', 'newPassword')
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      mockAxios.request.mockImplementationOnce(() => {
+        return Promise.reject(new Error())
+      })
+      const store = getStore({ server: 'https://example.com' })
+      const wrapper = getWrapper(store)
+
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+
+      await wrapper.vm.editPassword('password', 'newPassword')
+
+      expect(showMessageStub).toHaveBeenCalled()
+    })
+  })
+
+  describe('computed method "isChangePasswordEnabled"', () => {
+    it('should be true if capability is enabled', () => {
+      const store = getStore({ capabilities: { spaces: { enabled: true } } })
+      const wrapper = getWrapper(store)
+      expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
+    })
+    it('should be false if capability is not enabled', () => {
+      const store = getStore()
+      const wrapper = getWrapper(store)
+      expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
+    })
+  })
 })
 
 function getWrapper(store = getStore()) {
@@ -149,14 +197,25 @@ function getStore({
   user = {},
   server = '',
   getNavItemsByExtension = jest.fn(() => []),
-  isAccountEditingEnabled = true
+  isAccountEditingEnabled = true,
+  capabilities = {}
 } = {}) {
   return createStore(Vuex.Store, {
+    actions: {
+      createModal: jest.fn(),
+      hideModal: jest.fn(),
+      showMessage: jest.fn(),
+      setModalInputErrorMessage: jest.fn()
+    },
     getters: {
       user: () => user,
       configuration: () => ({
         server: server
       }),
+      getToken: () => 'token',
+      capabilities: () => {
+        return capabilities
+      },
       getNavItemsByExtension: () => getNavItemsByExtension,
       apps: () => ({
         ...(isAccountEditingEnabled || { settings: {} })

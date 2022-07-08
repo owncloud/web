@@ -298,7 +298,7 @@ export default defineComponent({
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['configuration', 'getToken']),
+    ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     // pending shares

@@ -1,0 +1,9 @@
+Enhancement: Re-sharing for ocis
+
+We've enhanced web to be able to re-share resources when using an ownCloud infinite scale backend. It now works for project and personal spaces as well as the sharing jail.
+Besides that we also send roles, space-ref and path as separate values to the sharing api which simplifies the usage of it.
+
+https://github.com/owncloud/web/pull/7086
+https://github.com/owncloud/web/issues/6894
+https://github.com/owncloud/web/pull/7243
+https://github.com/owncloud/web/issues/7225

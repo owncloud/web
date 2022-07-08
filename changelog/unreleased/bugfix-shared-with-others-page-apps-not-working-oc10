@@ -1,0 +1,7 @@
+Bugfix: Shared with others page apps not working with oc10 as backend
+
+We've fixed a bug where apps like preview, pdf-viewer or text-editor weren't working while browsing
+the shared with others page with oc10 as backend.
+
+https://github.com/owncloud/web/pull/7228
+https://github.com/owncloud/web/issues/7049

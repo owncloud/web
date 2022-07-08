@@ -13,6 +13,4 @@ export abstract class NextApplication {
   abstract ready(): Promise<void>
 
   abstract mounted(instance: Vue): Promise<void>
-
-  abstract userReady(instance: Vue): Promise<void>
 }

@@ -61,7 +61,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration'])
+    ...mapGetters(['capabilities', 'configuration']),
+    ...mapGetters('runtime/auth', ['accessToken'])
   },
   watch: {
     userid: function (userid) {
@@ -89,7 +90,7 @@ export default {
       const headers = new Headers()
       const instance = this.configuration.server || window.location.origin
       const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
-      headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('Authorization', 'Bearer ' + this.accessToken)
       headers.append('X-Requested-With', 'XMLHttpRequest')
       fetch(url, { headers })
         .then((response) => {

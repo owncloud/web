@@ -30,8 +30,6 @@ export default {
   sharesTreeError: null,
   sharesTreeLoading: false,
 
-  publicLinkPassword: null,
-
   /**
    * View settings
    */

@@ -12,8 +12,10 @@ import * as reactivityComposables from 'web-pkg/src/composables/reactivity'
 import * as routerComposables from 'web-pkg/src/composables/router'
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 import { buildSpace } from '../../../../../src/helpers/resources'
+import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()
+localVue.prototype.$clientService = clientService
 localVue.use(DesignSystem)
 localVue.use(Vuex)
 localVue.use(VueCompositionAPI)
@@ -92,18 +94,6 @@ describe('FileShares', () => {
       wrapper.find(selectors.firstCollaboratorListItem).vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
-    })
-    it('reloads shares if highlighted file is changed', async () => {
-      const spyOnReloadShares = jest
-        .spyOn(FileShares.methods, '$_reloadShares')
-        .mockImplementation()
-      const wrapper = getMountedWrapper({
-        user,
-        outgoingCollaborators: collaborators
-      })
-      wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', { name: 'testfile2' })
-      await wrapper.vm.$nextTick()
-      expect(spyOnReloadShares).toHaveBeenCalledTimes(1)
     })
     it('correctly passes the shared parent route to the collaborator list item', () => {
       const wrapper = getShallowMountedWrapper({
@@ -232,10 +222,20 @@ const storeOptions = (data) => {
             state.highlightedFile = newFile
           }
         }
+      },
+      runtime: {
+        namespaced: true,
+        modules: {
+          auth: {
+            namespaced: true,
+            getters: {
+              accessToken: () => 'GFwHKXdsMgoFwt'
+            }
+          }
+        }
       }
     },
     getters: {
-      getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
       configuration: jest.fn(() => ({
         options: {
           sidebar: {
@@ -302,7 +302,8 @@ function getShallowMountedWrapper(data, loading = false) {
   return shallowMount(FileShares, {
     localVue,
     setup: () => ({
-      currentStorageId: storageId
+      currentStorageId: storageId,
+      hasResharing: false
     }),
     store: createStore(data),
     stubs: {

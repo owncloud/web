@@ -25,7 +25,6 @@
     "lodash": "^4.17.21",
     "nightwatch": "1.7.11",
     "nightwatch-api": "3.0.1",
-    "nightwatch-vrt": "^0.2.10",
     "node-fetch": "^2.6.7",
     "tslib": "^2.2.0",
     "url-search-params-polyfill": "^8.0.0",

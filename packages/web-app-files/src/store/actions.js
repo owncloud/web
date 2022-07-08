@@ -14,7 +14,7 @@ import { $gettext, $gettextInterpolate } from '../gettext'
 import { loadPreview, move, copy } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
-import { ShareTypes, SpacePeopleShareRoles } from '../helpers/share'
+import { ShareTypes } from '../helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
@@ -77,7 +77,7 @@ export default {
       upsertResource
     }
   ) {
-    let movedResources
+    let movedResources = []
     if (context.state.clipboardAction === ClipboardActions.Cut) {
       movedResources = await move(
         context.state.clipboardResources,
@@ -150,12 +150,16 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, publicPage, firstRun = true }) {
+  deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
     const promises = []
     for (const file of files) {
       let p = null
-      if (publicPage) {
-        p = client.publicFiles.delete(file.path, null, context.getters.publicLinkPassword)
+      if (isPublicLinkContext) {
+        p = client.publicFiles.delete(
+          file.path,
+          null,
+          context.rootGetters['runtime/auth/publicLinkPassword']
+        )
       } else {
         p = client.files.delete(file.webDavPath)
       }
@@ -173,7 +177,7 @@ export default {
               return context.dispatch('deleteFiles', {
                 files: [file],
                 client,
-                publicPage,
+                isPublicLinkContext,
                 firstRun: false
               })
             }
@@ -208,12 +212,16 @@ export default {
       context.commit('REMOVE_FILE_FROM_SEARCHED', file)
     }
   },
-  renameFile(context, { file, newValue, client, publicPage, isSameResource }) {
+  renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
       const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
-      if (publicPage) {
+      if (isPublicLinkContext) {
         return client.publicFiles
-          .move(file.webDavPath, newPath + newValue, context.getters.publicLinkPassword)
+          .move(
+            file.webDavPath,
+            newPath + newValue,
+            context.rootGetters['runtime/auth/publicLinkPassword']
+          )
           .then(() => {
             if (!isSameResource) {
               context.commit('RENAME_FILE', { file, newValue, newPath })
@@ -243,11 +251,6 @@ export default {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
-    }
-
     if (resource?.type === 'space') {
       const promises = []
       const spaceMembers = []
@@ -264,7 +267,7 @@ export default {
       }
 
       promises.push(
-        client.shares.getShares(path, { reshares: true, spaceRef }).then((data) => {
+        client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
           for (const element of data) {
             spaceLinks.push(
               buildShare(
@@ -294,7 +297,7 @@ export default {
 
     // see https://owncloud.dev/owncloud-sdk/Shares.html
     client.shares
-      .getShares(path, { reshares: true, spaceRef })
+      .getShares(path, { reshares: true, spaceRef: storageId })
       .then((data) => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_SET',
@@ -342,70 +345,56 @@ export default {
         context.commit('INCOMING_SHARES_LOADING', false)
       })
   },
-  changeShare(
+  async changeShare(
     { commit, getters, rootGetters },
-    { client, graphClient, share, permissions, expirationDate }
+    { client, graphClient, share, permissions, expirationDate, role }
   ) {
-    const params = {
-      permissions: permissions,
-      expireDate: expirationDate
-    }
-
-    if (!params.permissions) {
-      return new Promise((resolve, reject) => {
-        reject(new Error('Nothing changed'))
-      })
+    if (!permissions && !role) {
+      throw new Error('Nothing changed')
     }
 
     if (share.shareType === ShareTypes.space.value) {
-      return new Promise((resolve, reject) => {
-        client.shares
-          .shareSpaceWithUser('', share.collaborator.name, share.id, {
-            permissions
-          })
-          .then(() => {
-            const role = SpacePeopleShareRoles.getByBitmask(permissions)
-            const shareObj = {
-              role: role.name,
-              onPremisesSamAccountName: share.collaborator.name,
-              displayName: share.collaborator.displayName
-            }
-            const updatedShare = buildSpaceShare(shareObj, share.id)
-            commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', updatedShare)
-
-            graphClient.drives.getDrive(share.id).then((response) => {
-              const space = buildSpace(response.data)
-              commit('UPDATE_RESOURCE_FIELD', {
-                id: share.id,
-                field: 'spaceRoles',
-                value: space.spaceRoles
-              })
-            })
-
-            resolve(updatedShare)
-          })
-          .catch((e) => {
-            reject(e)
-          })
+      await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
+        permissions,
+        role: role.name
       })
+
+      const spaceShare = buildSpaceShare(
+        {
+          role: role.name,
+          onPremisesSamAccountName: share.collaborator.name,
+          displayName: share.collaborator.displayName
+        },
+        share.id
+      )
+
+      commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', spaceShare)
+
+      const { data: drive } = await graphClient.drives.getDrive(share.id)
+      const space = buildSpace(drive)
+      commit('UPDATE_RESOURCE_FIELD', {
+        id: share.id,
+        field: 'spaceRoles',
+        value: space.spaceRoles
+      })
+
+      return
     }
 
-    return new Promise((resolve, reject) => {
-      client.shares
-        .updateShare(share.id, params)
-        .then((updatedShare) => {
-          const share = buildCollaboratorShare(
-            updatedShare.shareInfo,
-            getters.highlightedFile,
-            allowSharePermissions(rootGetters)
-          )
-          commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', share)
-          resolve(share)
-        })
-        .catch((e) => {
-          reject(e)
-        })
+    const updatedShare = await client.shares.updateShare(share.id, {
+      role: role.name,
+      permissions,
+      expireDate: expirationDate
     })
+
+    commit(
+      'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
+      buildCollaboratorShare(
+        updatedShare.shareInfo,
+        getters.highlightedFile,
+        allowSharePermissions(rootGetters)
+      )
+    )
   },
   addShare(
     context,
@@ -416,22 +405,19 @@ export default {
       shareWith,
       shareType,
       permissions,
+      role,
       expirationDate,
       storageId,
       displayName
     }
   ) {
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
-    }
-
     if (shareType === ShareTypes.group.value) {
       client.shares
         .shareFileWithGroup(path, shareWith, {
-          permissions: permissions,
-          expirationDate: expirationDate,
-          spaceRef
+          permissions,
+          role: role.name,
+          expirationDate,
+          spaceRef: storageId
         })
         .then((share) => {
           context.commit(
@@ -462,10 +448,10 @@ export default {
     if (shareType === ShareTypes.space.value) {
       client.shares
         .shareSpaceWithUser(path, shareWith, storageId, {
-          permissions
+          permissions,
+          role: role.name
         })
         .then(() => {
-          const role = SpacePeopleShareRoles.getByBitmask(permissions)
           const shareObj = {
             role: role.name,
             onPremisesSamAccountName: shareWith,
@@ -505,10 +491,11 @@ export default {
     const remoteShare = shareType === ShareTypes.remote.value
     client.shares
       .shareFileWithUser(path, shareWith, {
-        permissions: permissions,
         remoteUser: remoteShare,
-        expirationDate: expirationDate,
-        spaceRef
+        permissions,
+        role: role.name,
+        expirationDate,
+        spaceRef: storageId
       })
       .then((share) => {
         context.commit(
@@ -534,7 +521,7 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, resource, storageId }) {
+  deleteShare(context, { client, graphClient, share, path, storageId }) {
     const additionalParams = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
@@ -547,7 +534,7 @@ export default {
 
         if (share.shareType !== ShareTypes.space.value) {
           context.dispatch('updateCurrentFileShareTypes')
-          context.dispatch('loadIndicators', { client, currentFolder: resource.path, storageId })
+          context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
         } else {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
@@ -587,20 +574,7 @@ export default {
     const parentPaths = getParentPaths(path, true)
     const sharesTree = {}
 
-    if (!parentPaths.length) {
-      return Promise.resolve()
-    }
-
-    let spaceRef
-    if (storageId) {
-      spaceRef = `${storageId}${path}`
-    }
-
-    // remove last entry which is the root folder
-    parentPaths.pop()
-
     context.commit('SHARESTREE_LOADING', true)
-
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
     parentPaths.forEach((queryPath) => {
@@ -613,7 +587,7 @@ export default {
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
           client.shares
-            .getShares(queryPath, { reshares: true, spaceRef })
+            .getShares(queryPath, { reshares: true, spaceRef: storageId })
             .then((data) => {
               data.forEach((element) => {
                 sharesTree[queryPath].push({
@@ -638,7 +612,7 @@ export default {
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
           client.shares
-            .getShares(queryPath, { shared_with_me: true, spaceRef })
+            .getShares(queryPath, { shared_with_me: true, spaceRef: storageId })
             .then((data) => {
               data.forEach((element) => {
                 sharesTree[queryPath].push({
@@ -676,9 +650,6 @@ export default {
     }
     context.commit('SET_VERSIONS', response)
   },
-  setPublicLinkPassword(context, password) {
-    context.commit('SET_PUBLIC_LINK_PASSWORD', password)
-  },
 
   addLink(context, { path, client, params, storageId }) {
     return new Promise((resolve, reject) => {
@@ -710,13 +681,13 @@ export default {
         })
     })
   },
-  removeLink(context, { share, client, resource, storageId }) {
+  removeLink(context, { share, client, path, storageId }) {
     client.shares
       .deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: resource.path, storageId })
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
       })
       .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
@@ -748,7 +719,7 @@ export default {
             clientService: this.$clientService,
             username: obj.username,
             server: rootGetters.configuration.server,
-            token: rootGetters.getToken
+            token: rootGetters['runtime/auth/accessToken']
           },
           true
         ).then((url) =>
@@ -762,13 +733,8 @@ export default {
     })
   },
 
-  async loadSpaces(context, { clientService }) {
-    const graphClient = clientService.graphAuthenticated(
-      context.rootGetters.configuration.server,
-      context.rootGetters.getToken
-    )
+  async loadSpaces(context, { graphClient }) {
     const graphResponse = await graphClient.drives.listMyDrives()
-
     if (!graphResponse.data) {
       return
     }
@@ -792,7 +758,7 @@ export default {
         dimensions,
         server: rootGetters.configuration.server,
         userId: rootGetters.user.id,
-        token: rootGetters.getToken
+        token: rootGetters['runtime/auth/accessToken']
       },
       true
     )

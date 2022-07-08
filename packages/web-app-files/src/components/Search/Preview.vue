@@ -22,7 +22,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -49,7 +49,8 @@ export default {
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
       }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project')
+      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
+      accessToken: useAccessToken({ store })
     }
   },
   data() {
@@ -58,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'user', 'getToken']),
+    ...mapGetters(['configuration', 'user']),
     ...mapState('Files', ['spaces']),
 
     matchingSpace() {
@@ -96,7 +97,7 @@ export default {
           dimensions: ImageDimension.Thumbnail,
           server: this.configuration.server,
           userId: this.user.id,
-          token: this.getToken
+          token: this.accessToken
         },
         true
       )

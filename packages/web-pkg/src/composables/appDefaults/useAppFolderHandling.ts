@@ -10,9 +10,12 @@ import { buildResource } from '../../../../web-app-files/src/helpers/resources'
 import { Resource } from '../../../../web-app-files/src/helpers/resource'
 
 import { FileContext } from './types'
+import { authService } from 'web-runtime/src/services/auth'
+import { Route } from 'vue-router'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
+  currentRoute: Ref<Route>
   clientService?: ClientService
   isPublicLinkContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
@@ -27,6 +30,7 @@ export interface AppFolderHandlingResult {
 
 export function useAppFolderHandling({
   store,
+  currentRoute,
   clientService: { owncloudSdk: client },
   isPublicLinkContext,
   publicLinkPassword
@@ -59,6 +63,9 @@ export function useAppFolderHandling({
         files: resources.slice(1)
       })
     } catch (error) {
+      if (error.statusCode === 401) {
+        return authService.handleAuthError(unref(currentRoute))
+      }
       store.commit('Files/SET_CURRENT_FOLDER', null)
       console.error(error)
     }

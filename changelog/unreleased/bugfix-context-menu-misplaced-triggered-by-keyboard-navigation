@@ -1,0 +1,6 @@
+Bugfix: Context menu misplaced when triggered by keyboard navigation
+
+We've fixed a bug where triggering the context menu by keyboard navigation misplaced the menu and made it inaccessible.
+
+https://github.com/owncloud/web/pull/7230
+https://github.com/owncloud/web/issues/7187

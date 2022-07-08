@@ -32,7 +32,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
@@ -40,26 +40,9 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from 'files/src/helpers/resources'
 import { computed, unref } from '@vue/composition-api'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/runtime-core'
 
-// FIXME: hacky, get rid asap, just a workaround
-// same as packages/web-app-files/src/views/PublicFiles.vue
-const unauthenticatedUserReady = async (router, store) => {
-  if (store.getters.userReady) {
-    return
-  }
-
-  const publicToken = (router.currentRoute.params.filePath || '').split('/')[0]
-  const publicLinkPassword = store.getters['Files/publicLinkPassword']
-
-  await store.dispatch('loadCapabilities', {
-    publicToken,
-    ...(publicLinkPassword && { user: 'public', password: publicLinkPassword })
-  })
-
-  store.commit('SET_USER_READY', true)
-}
-
-export default {
+export default defineComponent({
   name: 'ExternalApp',
 
   components: {
@@ -106,8 +89,6 @@ export default {
     }
   },
   async created() {
-    await unauthenticatedUserReady(this.$router, this.$store)
-
     this.loading = true
     try {
       const filePath = this.currentFileContext.path
@@ -161,5 +142,5 @@ export default {
       return buildResource(file)
     }
   }
-}
+})
 </script>

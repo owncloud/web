@@ -1,0 +1,6 @@
+Bugfix: Prevent error when pasting with empty clipboard
+
+We've fixed a bug where an error was thrown when pasting with empty clipboard
+
+https://github.com/owncloud/web/pull/7214
+https://github.com/owncloud/web/issues/7146

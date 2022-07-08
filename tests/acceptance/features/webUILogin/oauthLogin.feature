@@ -43,7 +43,7 @@ Feature: login users
     And the user has browsed to the personal page
     And user "Alice" has been deleted in the server
     When the user reloads the current page of the webUI
-    Then the user should be redirected to the owncloud login page
+    Then the user should be redirected to the login error page
 
 
   Scenario: the user session of a deleted user should not be valid for newly created user of same name
@@ -51,4 +51,4 @@ Feature: login users
     And user "Alice" has been deleted in the server
     And user "Alice" has been created with default attributes and without skeleton files in the server
     When the user reloads the current page of the webUI
-    Then the user should be redirected to the owncloud login page
+    Then the user should be redirected to the login error page

@@ -32,7 +32,11 @@ import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityShareJailEnabled,
+  usePublicLinkPassword,
+  useStore
+} from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -44,8 +48,10 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore()
     return {
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
 
@@ -59,7 +65,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'publicLinkPassword']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     ...mapState(['user']),

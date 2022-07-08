@@ -14,7 +14,7 @@
   </main>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { basename } from 'path'
 import qs from 'qs'
 import { DateTime } from 'luxon'
@@ -38,7 +38,6 @@ export default {
     currentETag: null
   }),
   computed: {
-    ...mapGetters(['getToken']),
     config() {
       const {
         url = 'https://embed.diagrams.net',

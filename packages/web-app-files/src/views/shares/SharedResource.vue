@@ -233,8 +233,7 @@ export default defineComponent({
         this.$gettext,
         this.$gettextInterpolate,
         this.$ngettext,
-        this.$route.name,
-        this.publicLinkPassword
+        this.$route.name
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)

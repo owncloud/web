@@ -147,6 +147,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import Mixins from '../../mixins'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useResourcesViewDefaults } from '../../composables'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -170,12 +171,14 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
     const space = ref({})
 
     return {
       ...useResourcesViewDefaults(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
-      space
+      space,
+      accessToken: useAccessToken({ store })
     }
   },
   data: function () {
@@ -194,10 +197,9 @@ export default defineComponent({
       'highlightedFile',
       'currentFolder',
       'totalFilesCount',
-      'totalFilesSize',
-      'publicLinkPassword'
+      'totalFilesSize'
     ]),
-    ...mapGetters(['user', 'getToken', 'configuration']),
+    ...mapGetters(['user', 'configuration']),
 
     breadcrumbs() {
       return concatBreadcrumbs(
@@ -286,7 +288,7 @@ export default defineComponent({
               dimensions: ImageDimension.Preview,
               server: this.configuration.server,
               userId: this.user.id,
-              token: this.getToken
+              token: this.accessToken
             }).then((imageBlob) => {
               this.imageContent = imageBlob
             })
@@ -378,8 +380,7 @@ export default defineComponent({
         this.$gettext,
         this.$gettextInterpolate,
         this.$ngettext,
-        this.$route.name,
-        this.publicLinkPassword
+        this.$route.name
       )
       for (const resource of movedResources) {
         this.REMOVE_FILE(resource)

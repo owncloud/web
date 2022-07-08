@@ -234,11 +234,6 @@ function createStore({
   versions = defaultVersions
 } = {}) {
   return new Vuex.Store({
-    getters: {
-      getToken: function () {
-        return 'token'
-      }
-    },
     modules: {
       Files: {
         namespaced: true,

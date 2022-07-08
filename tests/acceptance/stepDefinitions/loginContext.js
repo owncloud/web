@@ -31,6 +31,10 @@ When(
 
 When('user {string} logs in using the webUI', (username) => loginHelper.loginAsUser(username))
 
+When('user {string} fills in the login form using the webUI', (username) =>
+  loginHelper.fillInAndSubmitLogin(username)
+)
+
 Then('the files table should not be empty', () => {
   return (
     client.page.FilesPageElement.filesList()

@@ -26,6 +26,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
     body,
     user: admin
   })
+
   checkResponseStatus(response, 'Failed while creating user')
   return user
 }

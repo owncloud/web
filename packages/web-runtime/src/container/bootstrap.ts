@@ -13,11 +13,13 @@ import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
 import { useDefaultThemeName } from '../composables'
-import { clientService } from 'web-pkg/src/services'
+import { authService } from '../services/auth'
+import { clientService, PermissionManager } from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 
 import { init as SentryInit } from '@sentry/browser'
 import { Vue as SentryVueIntegration } from '@sentry/integrations'
+import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -28,15 +30,18 @@ import { Vue as SentryVueIntegration } from '@sentry/integrations'
  *
  * @param path - path to main configuration
  */
-export const requestConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
+export const announceConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
   const request = await fetch(path)
   if (request.status !== 200) {
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  return request.json().catch((error) => {
+  const rawConfig = (await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
-  })
+  })) as RawConfig
+  configurationManager.initialize(rawConfig)
+  // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
+  return rawConfig
 }
 
 /**
@@ -56,7 +61,6 @@ export const announceStore = async ({
   store: Store<any>
 }): Promise<void> => {
   await store.dispatch('loadConfig', runtimeConfiguration)
-  await store.dispatch('initAuth')
 
   /**
    * TODO: Find a different way to access store from within JS files
@@ -95,7 +99,6 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * announce applications to the runtime, it takes care that all requirements are fulfilled and then:
  * - bulk build all applications
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
- * - bulk activate all applications, all applications are registered, it's safe to request a application api here
  *
  * @param runtimeConfiguration
  * @param store
@@ -103,7 +106,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * @param translations
  * @param supportedLanguages
  */
-export const announceApplications = async ({
+export const initializeApplications = async ({
   runtimeConfiguration,
   store,
   router,
@@ -115,7 +118,7 @@ export const announceApplications = async ({
   router: VueRouter
   translations: unknown
   supportedLanguages: { [key: string]: string }
-}): Promise<void> => {
+}): Promise<NextApplication[]> => {
   const { apps: internalApplications = [], external_apps: externalApplications = [] } =
     rewriteDeprecatedAppNames(runtimeConfiguration)
 
@@ -148,6 +151,20 @@ export const announceApplications = async ({
   }, [])
 
   await Promise.all(applications.map((application) => application.initialize()))
+
+  return applications
+}
+
+/**
+ * Bulk activate all applications, all applications are registered, it's safe to request a application api here
+ *
+ * @param applications
+ */
+export const announceApplicationsReady = async ({
+  applications
+}: {
+  applications: NextApplication[]
+}): Promise<void> => {
   await Promise.all(applications.map((application) => application.ready()))
 }
 
@@ -257,9 +274,50 @@ export const announceClientService = ({
  * announce uppyService and inject it into vue
  *
  * @param vue
+ * @param store
+ */
+export const announcePermissionManager = ({
+  vue,
+  store
+}: {
+  vue: VueConstructor
+  store: Store<any>
+}): void => {
+  const permissionManager = new PermissionManager(store)
+  vue.prototype.$permissionManager = permissionManager
+  set(vue, '$permissionManager', permissionManager)
+}
+
+/**
+ * announce uppyService and inject it into vue
+ *
+ * @param vue
  */
 export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
   vue.prototype.$uppyService = new UppyService()
+}
+
+/**
+ * announce authService and inject it into vue
+ *
+ * @param vue
+ * @param configurationManager
+ * @param store
+ * @param router
+ */
+export const announceAuthService = async ({
+  vue,
+  configurationManager,
+  store,
+  router
+}: {
+  vue: VueConstructor
+  configurationManager: ConfigurationManager
+  store: Store<any>
+  router: VueRouter
+}): Promise<void> => {
+  authService.initialize(configurationManager, clientService, store, router)
+  set(vue, '$authService', authService)
 }
 
 /**

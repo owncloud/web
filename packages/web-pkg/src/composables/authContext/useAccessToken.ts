@@ -7,6 +7,6 @@ interface AccessTokenOptions {
 
 export const useAccessToken = ({ store }: AccessTokenOptions) => {
   return computed(() => {
-    return store.getters.getToken
+    return store.getters['runtime/auth/accessToken']
   })
 }

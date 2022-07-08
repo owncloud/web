@@ -6,7 +6,6 @@ NOTIFICATIONS = 3
 ALPINE_GIT = "alpine/git:latest"
 DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
-MELTWATER_DRONE_CACHE = "meltwater/drone-cache:v1"
 MINIO_MC = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -27,6 +26,7 @@ PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3"
+PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 SELENIUM_STANDALONE_CHROME_DEBUG = "selenium/standalone-chrome-debug:3.141.59"
 SELENIUM_STANDALONE_FIREFOX_DEBUG = "selenium/standalone-firefox-debug:3.141.59"
@@ -174,7 +174,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": False,
             "screenShots": True,
         },
         # These suites have all or most of their scenarios expected to fail.
@@ -188,7 +187,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": False,
             "screenShots": True,
             "retry": False,
         },
@@ -205,7 +203,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
-            "visualTesting": False,
             "screenShots": True,
             "notificationsAppNeeded": True,
         },
@@ -513,7 +510,6 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "runningOnOCIS": True,
-            "visualTesting": False,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
         },
@@ -1262,7 +1258,6 @@ def acceptance(ctx):
         "federatedServerVersion": OC10_VERSION,
         "runningOnOCIS": False,
         "screenShots": False,
-        "visualTesting": False,
         "openIdConnect": False,
         "oc10IntegrationAppIncluded": False,
         "skip": False,
@@ -1396,12 +1391,7 @@ def acceptance(ctx):
                         steps += waitForMiddlewareService()
 
                         # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], params["visualTesting"], params["screenShots"], params["retry"])
-
-                        # capture the screenshots from visual regression testing (only runs on failure)
-                        if (params["visualTesting"]):
-                            steps += listScreenShots() + uploadVisualDiff() + uploadVisualScreenShots()
-                            steps += buildGithubCommentVisualDiff(ctx, suiteName, params["runningOnOCIS"])
+                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], params["screenShots"], params["retry"])
 
                         # Capture the screenshots from acceptance tests (only runs on failure)
                         if (params["screenShots"]):
@@ -2164,6 +2154,7 @@ def ocisService():
                 "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "FRONTEND_ENABLE_RESHARING": "true",
             },
             "commands": [
                 "cd %s/ocis-build" % dir["base"],
@@ -2347,7 +2338,7 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, visualTesting, screenShots, retry):
+def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, screenShots, retry):
     environment = {}
     if (filterTags != ""):
         environment["TEST_TAGS"] = filterTags
@@ -2363,8 +2354,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
 
     if (ctx.build.event == "cron") or (not retry):
         environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
-    if (visualTesting):
-        environment["VISUAL_TEST"] = "true"
     if (screenShots):
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
@@ -2566,134 +2555,6 @@ def uploadScreenshots():
             },
             "AWS_SECRET_ACCESS_KEY": {
                 "from_secret": "cache_public_s3_secret_key",
-            },
-        },
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
-def listScreenShots():
-    return [{
-        "name": "list screenshots-visual",
-        "image": OC_CI_NODEJS,
-        "commands": [
-            "ls -laR %s/tests/vrt" % dir["web"],
-        ],
-        "when": {
-            "status": [
-                "failure",
-            ],
-        },
-    }]
-
-def uploadVisualDiff():
-    return [{
-        "name": "upload-diff-screenshots",
-        "image": PLUGINS_S3,
-        "pull": "if-not-exists",
-        "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
-            "path_style": True,
-            "source": "%s/tests/vrt/diff/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/vrt" % dir["web"],
-            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots",
-        },
-        "environment": {
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_public_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_public_s3_secret_key",
-            },
-        },
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
-def uploadVisualScreenShots():
-    return [{
-        "name": "upload-latest-screenshots",
-        "image": PLUGINS_S3,
-        "pull": "if-not-exists",
-        "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
-            "path_style": True,
-            "source": "%s/tests/vrt/latest/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/vrt" % dir["web"],
-            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots",
-        },
-        "environment": {
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_public_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_public_s3_secret_key",
-            },
-        },
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
-
-def buildGithubCommentVisualDiff(ctx, suite, runningOnOCIS):
-    backend = "ocis" if runningOnOCIS else "oc10"
-    branch = ctx.build.source if ctx.build.event == "pull_request" else "master"
-    return [{
-        "name": "build-github-comment-vrt",
-        "image": OC_UBUNTU,
-        "commands": [
-            "cd %s/tests/vrt" % dir["web"],
-            "if [ ! -d diff ]; then exit 0; fi",
-            "cd diff",
-            "if [ ! -d %s ]; then exit 0; fi" % backend,
-            "cd %s" % backend,
-            "ls -la",
-            'echo "<details><summary>:boom: Visual regression tests failed. Please find the screenshots inside ...</summary>\\n\\n<p>\\n\\n" >> %s/comments.file' % dir["web"],
-            'echo "Diff Image: </br>" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots/diff/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
-            "cd ../../latest",
-            "cd %s" % backend,
-            'echo "Actual Image: </br>" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/$CACHE_BUCKET/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/vrt/screenshots/latest/%s/$f)" >> %s/comments.file; done' % (backend, dir["web"]),
-            'echo "Comparing Against: </br>" >> %s/comments.file' % dir["web"],
-            'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> %s/comments.file; done' % (branch, backend, dir["web"]),
-            'echo "\n</p></details>" >> %s/comments.file' % dir["web"],
-            "more %s/comments.file" % dir["web"],
-        ],
-        "environment": {
-            "TEST_CONTEXT": suite,
-            "CACHE_ENDPOINT": {
-                "from_secret": "cache_public_s3_server",
-            },
-            "CACHE_BUCKET": {
-                "from_secret": "cache_public_s3_bucket",
             },
         },
         "when": {
@@ -3075,26 +2936,21 @@ def genericCache(name, action, mounts, cache_key):
 
     step = {
         "name": "%s_%s" % (action, name),
-        "image": MELTWATER_DRONE_CACHE,
-        "environment": {
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "image": PLUGINS_S3_CACHE,
         "settings": {
             "endpoint": {
                 "from_secret": "cache_s3_endpoint",
             },
-            "bucket": "cache",
-            "region": "us-east-1",  # not used at all, but fails if not given!
-            "path_style": "true",
-            "cache_key": cache_key,
             "rebuild": rebuild,
             "restore": restore,
             "mount": mounts,
+            "access_key": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "secret_key": {
+                "from_secret": "cache_s3_secret_key",
+            },
+            "filename": "%s.tar" % (cache_key),
         },
     }
     return step
@@ -3111,16 +2967,21 @@ def genericCachePurge(ctx, name, cache_key):
         "steps": [
             {
                 "name": "purge-cache",
-                "image": MINIO_MC,
-                "failure": "ignore",
-                "environment": {
-                    "MC_HOST_cache": {
-                        "from_secret": "cache_s3_connection_url",
+                "image": PLUGINS_S3_CACHE,
+                "settings": {
+                    "access_key": {
+                        "from_secret": "cache_s3_access_key",
                     },
+                    "endpoint": {
+                        "from_secret": "cache_s3_endpoint",
+                    },
+                    "flush": True,
+                    "flush_age": "14",
+                    "secret_key": {
+                        "from_secret": "cache_s3_secret_key",
+                    },
+                    "filename": "%s.tar" % (cache_key),
                 },
-                "commands": [
-                    "mc rm --recursive --force cache/cache/%s/%s" % (ctx.repo.name, cache_key),
-                ],
             },
         ],
         "trigger": {

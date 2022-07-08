@@ -86,10 +86,10 @@ import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { createLocationOperations } from '../router'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 import { defineComponent } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
+import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -109,8 +109,10 @@ export default defineComponent({
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinMountSideBar],
 
   setup() {
+    const store = useStore()
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>()
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
 
@@ -228,14 +230,6 @@ export default defineComponent({
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-
-    redirectToResolvePage() {
-      this.$router.push(
-        createLocationOperations('files-operations-resolver-public-link', {
-          params: { token: this.$route.params.item }
-        })
-      )
     }
   }
 })

@@ -1,0 +1,9 @@
+Enhancement: Loading context blocks application bootstrap
+
+The bootstrap architecture has been improved to ensure that the respective context (user or public link)
+is fully resolved before applications can finalize their boot process and switch over to rendering their content.
+This means that application developers can rely on user data / public link data being loaded (including
+e.g. capabilities) when the web runtime triggers the boot processes and rendering of applications.
+
+https://github.com/owncloud/web/issues/7030
+https://github.com/owncloud/web/pull/7072

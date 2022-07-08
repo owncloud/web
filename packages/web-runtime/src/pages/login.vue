@@ -22,7 +22,7 @@
           variation="primary"
           appearance="filled"
           class="oc-login-authorize-button"
-          @click="login()"
+          @click="performLogin"
         >
           <translate>Login</translate>
         </oc-button>
@@ -37,9 +37,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authService } from '../services/auth'
+import { queryItemAsString, useRouteQuery } from 'web-pkg/src/composables'
 export default {
   name: 'LoginPage',
+  setup() {
+    return {
+      redirectUrl: useRouteQuery('redirectUrl')
+    }
+  },
   data() {
     return {
       loading: false,
@@ -68,14 +75,16 @@ export default {
 
   created() {
     if (this.configuration.currentTheme.loginPage.autoRedirect) {
-      this.login()
+      this.performLogin()
     } else {
       this.initialized = true
     }
   },
 
   methods: {
-    ...mapActions(['login'])
+    performLogin() {
+      authService.loginUser(queryItemAsString(this.redirectUrl))
+    }
   }
 }
 </script>

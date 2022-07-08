@@ -4,9 +4,13 @@ import QuotaModal from '@files/src/components/Spaces/QuotaModal.vue'
 import stubs from 'tests/unit/stubs'
 import { createStore } from 'vuex-extensions'
 import mockAxios from 'jest-mock-axios'
+import VueCompositionAPI from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()
+localVue.prototype.$clientService = clientService
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 
 afterEach(() => jest.clearAllMocks())
 
@@ -100,14 +104,22 @@ function getWrapper() {
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        getToken: () => 'token'
+        })
       },
       modules: {
         Files: {
           namespaced: true,
           mutations: {
             UPDATE_RESOURCE_FIELD: jest.fn()
+          },
+          state: {
+            currentFolder: {
+              id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
+              spaceReadmeData: {
+                webDavUrl:
+                  'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
+              }
+            }
           }
         }
       }
@@ -121,23 +133,6 @@ function getWrapper() {
           state: 'normal',
           total: 10000000000,
           used: 164
-        }
-      }
-    },
-    modules: {
-      Files: {
-        namespaced: true,
-        mutations: {
-          UPDATE_RESOURCE_FIELD: jest.fn()
-        },
-        state: {
-          currentFolder: {
-            id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
-            spaceReadmeData: {
-              webDavUrl:
-                'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
-            }
-          }
         }
       }
     },

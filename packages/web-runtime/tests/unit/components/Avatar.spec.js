@@ -132,7 +132,6 @@ function getShallowWrapper(loading = false) {
 function createStore() {
   return new Vuex.Store({
     getters: {
-      getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
       capabilities: jest.fn(() => ({
         files_sharing: {
           user: {
@@ -143,6 +142,19 @@ function createStore() {
       configuration: jest.fn(() => ({
         server: 'https://oc10.org'
       }))
+    },
+    modules: {
+      runtime: {
+        namespaced: true,
+        modules: {
+          auth: {
+            namespaced: true,
+            getters: {
+              accessToken: () => 'GFwHKXdsMgoFwt'
+            }
+          }
+        }
+      }
     }
   })
 }

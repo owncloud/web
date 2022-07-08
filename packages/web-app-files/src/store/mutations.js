@@ -53,15 +53,8 @@ export default {
   CLEAR_SPACES(state) {
     state.spaces = []
   },
-  LOAD_FILES(state, { currentFolder, files, loadIndicators = false }) {
+  LOAD_FILES(state, { currentFolder, files }) {
     state.currentFolder = currentFolder
-
-    if (loadIndicators) {
-      for (const file of files) {
-        file.indicators = getIndicators(file, state.sharesTree)
-      }
-    }
-
     state.files = files
   },
   SET_CURRENT_FOLDER(state, currentFolder) {
@@ -225,16 +218,6 @@ export default {
   },
   SHARESTREE_LOADING(state, loading) {
     state.sharesTreeLoading = loading
-  },
-  SET_PUBLIC_LINK_PASSWORD(state, password) {
-    // cache into state for reactivity
-    state.publicLinkPassword = password
-    if (password) {
-      const encodedPassword = Buffer.from(password).toString('base64')
-      sessionStorage.setItem('publicLinkInfo', encodedPassword)
-    } else {
-      sessionStorage.removeItem('publicLinkInfo')
-    }
   },
 
   CLEAR_CURRENT_FILES_LIST(state) {

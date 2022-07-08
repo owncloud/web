@@ -47,8 +47,7 @@ module.exports = {
         .useCss()
     },
     downloadMediaResource: function () {
-      const downloadButtonXpath =
-        this.elements.actionBar.selector + this.elements.downLoadButton.selector
+      const downloadButtonXpath = this.elements.downLoadButton.selector
       return this.useXpath()
         .waitForElementVisible(downloadButtonXpath)
         .click(downloadButtonXpath)
@@ -56,7 +55,7 @@ module.exports = {
         .useCss()
     },
     closeMediaResource: function () {
-      const closeButtonXpath = this.elements.actionBar.selector + this.elements.closeButton.selector
+      const closeButtonXpath = this.elements.closeButton.selector
       return this.useXpath()
         .waitForElementVisible(closeButtonXpath)
         .click(closeButtonXpath)
@@ -78,15 +77,15 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     downLoadButton: {
-      selector: `//button[contains(@class, "preview-controls-download")]`,
+      selector: `//button[contains(@class, "preview-download")]`,
       locateStrategy: 'xpath'
     },
     closeButton: {
-      selector: `//button[contains(@class, "preview-controls-close")]`,
+      selector: `//button[@id='app-top-bar-close']`,
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//p[contains(@class, "preview-file-name") and contains(text(),"%s")]',
+      selector: `//div[@id='app-top-bar-resource']//span[@data-test-resource-name='%s']`,
       locateStrategy: 'xpath'
     }
   }

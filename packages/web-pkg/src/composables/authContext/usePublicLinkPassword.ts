@@ -7,6 +7,6 @@ interface PublicLinkPasswordOptions {
 
 export const usePublicLinkPassword = ({ store }: PublicLinkPasswordOptions) => {
   return computed(() => {
-    return store.getters['Files/publicLinkPassword']
+    return store.getters['runtime/auth/publicLinkPassword']
   })
 }

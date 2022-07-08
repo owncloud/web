@@ -148,12 +148,19 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from '../../../helpers/resource'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isAuthenticatedRoute, isLocationSpacesActive } from '../../../router'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { ShareTypes } from '../../../helpers/share'
-import { useRouteParam, useRouter } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  usePublicLinkContext,
+  useRouteParam,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
+import { isUserContext } from 'web-runtime/src/router'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -163,6 +170,7 @@ export default defineComponent({
   setup() {
     const sharedParentDir = ref('')
     const router = useRouter()
+    const store = useStore()
     const currentStorageId = useRouteParam('storageId')
 
     const sharedParentRoute = computed(() => {
@@ -180,7 +188,8 @@ export default defineComponent({
     return {
       sharedParentDir,
       sharedParentRoute,
-      currentStorageId
+      isPublicLinkContext: usePublicLinkContext({ store }),
+      accessToken: useAccessToken({ store })
     }
   },
 
@@ -197,7 +206,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
-    ...mapGetters(['user', 'getToken', 'configuration']),
+    ...mapGetters(['user', 'configuration']),
 
     file() {
       return this.displayedItem.value
@@ -251,7 +260,7 @@ export default defineComponent({
       )
     },
     showShares() {
-      return this.hasAnyShares && isAuthenticatedRoute(this.$route)
+      return this.hasAnyShares && isUserContext(this.$router, this.$route)
     },
     detailSharingInformation() {
       const isFolder = this.file.type === 'folder'
@@ -307,7 +316,7 @@ export default defineComponent({
       if (this.file.type === 'folder') {
         return
       }
-      return this.versions.length > 0 && isAuthenticatedRoute(this.$route)
+      return this.versions.length > 0 && isUserContext(this.$router, this.$route)
     },
     versionsLabel() {
       return this.$gettext('Versions')
@@ -374,11 +383,11 @@ export default defineComponent({
         await new Promise((resolve) => setTimeout(resolve, 500))
         return loadPreview({
           resource: this.file,
-          isPublic: !isAuthenticatedRoute(this.$route),
+          isPublic: this.isPublicLinkContext,
           dimensions: ImageDimension.Preview,
           server: this.configuration.server,
           userId: this.user.id,
-          token: this.getToken
+          token: this.accessToken
         })
       },
       lazy: true,
@@ -393,7 +402,7 @@ export default defineComponent({
         client: this.$client,
         path: this.file.path,
         $gettext: this.$gettext,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
+        storageId: this.file.fileId
       })
       this.shareIndicators = getIndicators(this.file, this.sharesTree)
     },
@@ -423,7 +432,7 @@ export default defineComponent({
     async loadData() {
       this.loading = true
       const calls = []
-      if (this.file.type === 'file' && isAuthenticatedRoute(this.$route)) {
+      if (this.file.type === 'file' && isUserContext(this.$router, this.$route)) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))

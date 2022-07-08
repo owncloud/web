@@ -1,0 +1,9 @@
+Bugfix: Filename hovers over the image in the preview app
+
+We've fixed a bug where the filename hovers over the image content in the preview app and the bottom toolbar is not
+accurate centered.
+Therefore we have introduced a new top bar, where the filename will be shown
+and the download and the close button will be displayed.
+
+https://github.com/owncloud/web/pull/7216
+https://github.com/owncloud/web/issues/6300

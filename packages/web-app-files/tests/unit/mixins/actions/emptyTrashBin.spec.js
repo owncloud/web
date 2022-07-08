@@ -102,7 +102,6 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {
         configuration: () => ({
           server: 'https://example.com'
         }),
-        getToken: () => 'token',
         capabilities: () => {}
       },
       modules: {

@@ -1,8 +1,7 @@
 import {
   isLocationActive,
   isLocationActiveDirector,
-  createLocation,
-  isAuthenticatedRoute
+  createLocation
 } from '../../../src/router/utils'
 import VueRouter from 'vue-router'
 
@@ -73,14 +72,6 @@ describe('utils', () => {
       expect(testLocation.path).toBeFalsy()
       expect(testLocation.params.foo).toBe('foo-param-value')
       expect(testLocation.query.bar).toBe('bar-query-value')
-    })
-  })
-
-  describe('isRouteWithAuthentication', () => {
-    test('return true by default', () => {
-      expect(isAuthenticatedRoute({})).toBe(true)
-      expect(isAuthenticatedRoute({ meta: { auth: true } })).toBe(true)
-      expect(isAuthenticatedRoute({ meta: { auth: false } })).toBe(false)
     })
   })
 })

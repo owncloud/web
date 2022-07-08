@@ -2,12 +2,8 @@ import PQueue from 'p-queue'
 
 export default {
   install(Vue) {
-    function _mediaSource(source, returnAs = 'url', headers = null) {
+    function _mediaSource(source, returnAs = 'url', headers) {
       return new Promise((resolve, reject) => {
-        if (headers === null) {
-          headers = new Headers()
-          headers.append('Authorization', 'Bearer ' + Vue.$store.getters.getToken)
-        }
         headers.append('X-Requested-With', 'XMLHttpRequest')
 
         fetch(source, { headers })
@@ -79,7 +75,7 @@ export default {
         }
       },
       methods: {
-        mediaSource(source, returnAs = 'url', headers = null) {
+        mediaSource(source, returnAs = 'url', headers) {
           return this.mediaSourceQueue.add(() => _mediaSource(source, returnAs, headers))
         }
       }
