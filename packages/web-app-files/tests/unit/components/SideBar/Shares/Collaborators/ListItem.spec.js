@@ -18,7 +18,7 @@ const selectors = {
   notUserAvatar: 'oc-avatar-item-stub.files-collaborators-collaborator-indicator',
   collaboratorAdditionalInfo: '.files-collaborators-collaborator-additional-info',
   collaboratorName: '.files-collaborators-collaborator-name',
-  shareType: '.files-collaborators-collaborator-share-type',
+  accessDetailsButton: '.files-collaborators-collaborator-access-details-button',
   collaboratorRole: '.files-collaborators-collaborator-role',
   collaboratorEdit: '.files-collaborators-collaborator-edit',
   shareInheritanceIndicators: '.oc-resource-indicators'
@@ -58,25 +58,9 @@ describe('Collaborator ListItem component', () => {
       const wrapper = createWrapper()
       expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
     })
-    describe('additionalInfo', () => {
-      it('shows additional information about the collaborator if set', () => {
-        const wrapper = createWrapper()
-        expect(wrapper.find(selectors.collaboratorAdditionalInfo).text()).toEqual(
-          '(brian@owncloud.com)'
-        )
-      })
-      it('does not show additional information about the collaborator if not set', () => {
-        const wrapper = createWrapper({
-          collaborator: {
-            displayName: 'Alice Hansen'
-          }
-        })
-        expect(wrapper.find(selectors.collaboratorAdditionalInfo).exists()).toBeFalsy()
-      })
-    })
-    it.each(ShareTypes.authenticated)('shows a label for the share type', (shareType) => {
+    it.each(ShareTypes.authenticated)('shows a button for the access details', (shareType) => {
       const wrapper = createWrapper({ shareType: shareType.value })
-      expect(wrapper.find(selectors.shareType).text()).toBe(shareType.label)
+      expect(wrapper.find(selectors.accessDetailsButton).exists()).toBeTruthy()
     })
   })
   describe('modifiable property', () => {
