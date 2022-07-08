@@ -1,3 +1,4 @@
+import tours from './tours'
 import app from './app'
 import apps from './apps'
 import auth from './auth'
@@ -27,7 +28,8 @@ export default {
     settings,
     modal,
     navigation,
-    runtime
+    runtime,
+    tours
   },
   strict
 }

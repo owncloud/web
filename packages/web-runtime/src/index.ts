@@ -25,7 +25,8 @@ import {
   announceUppyService,
   announceAuthService,
   announcePermissionManager,
-  startSentry
+  startSentry,
+  announceTours
 } from './container'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
@@ -40,14 +41,16 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
     translations
   })
   const theme = announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  const tours = announceTours({ store, runtimeConfiguration })
   announceClientService({ vue: Vue, runtimeConfiguration })
   await announceClient(runtimeConfiguration)
   const authService = announceAuthService({ vue: Vue, configurationManager, store, router }) // Requires client
-  await Promise.allSettled([applications, authService, theme])
+  await Promise.allSettled([applications, authService, theme, tours])
   announceUppyService({ vue: Vue })
   announcePermissionManager({ vue: Vue, store })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   announceDefaults({ store, router })
+  await announceTours({ store, runtimeConfiguration })
 }
 
 export const renderSuccess = (): void => {
