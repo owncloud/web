@@ -28,7 +28,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFavorites/unfavoriteFile.feature:70](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L70)
 -   [webUIFavorites/unfavoriteFile.feature:87](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L87)
 -   [webUIFavorites/unfavoriteFile.feature:102](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L102)
--   [webUIResharing1/reshareUsers.feature:219](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L219)
+-   [webUIResharing1/reshareUsers.feature:194](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L194)
 
 ### [file_path property is not unique for a share created with same resource name i.e already present in sharee](https://github.com/owncloud/ocis/issues/2249)
 -   [webUIRenameFiles/renameFiles.feature:209](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L209)
@@ -100,7 +100,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsersBlacklisted/shareWithUsers.feature:52](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersBlacklisted/shareWithUsers.feature#L52)
 -   [webUISharingInternalUsersBlacklisted/shareWithUsers.feature:70](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersBlacklisted/shareWithUsers.feature#L70)
 -   [webUISharingInternalUsersBlacklisted/shareWithUsers.feature:82](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersBlacklisted/shareWithUsers.feature#L82)
--   [webUISharingInternalGroups/shareWithGroups.feature:200](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L200)
+-   [webUISharingInternalGroups/shareWithGroups.feature:202](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L202)
 
 ### webUI-Private-Links
 -   [webUIPrivateLinks/accessingPrivateLinks.feature:9](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPrivateLinks/accessingPrivateLinks.feature#L9)
@@ -137,14 +137,14 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [No occ command in ocis](https://github.com/owncloud/ocis/issues/1317)
 ### [Expiration date set is not implemented in user share](https://github.com/owncloud/ocis/issues/1250)
--   [webUISharingInternalGroups/shareWithGroups.feature:277](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L277)
+-   [webUISharingInternalGroups/shareWithGroups.feature:279](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L279)
 
 ### [Different path for shares inside folder](https://github.com/owncloud/ocis/issues/1231)
 
 ### [Implement expiration date for shares](https://github.com/owncloud/ocis/issues/1250)
-- [webUISharingInternalGroups/shareWithGroups.feature:255](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L255)
-- [webUISharingInternalGroups/shareWithGroups.feature:307](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L307)
-- [webUISharingInternalGroups/shareWithGroups.feature:308](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L308)
+- [webUISharingInternalGroups/shareWithGroups.feature:257](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L257)
+- [webUISharingInternalGroups/shareWithGroups.feature:309](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L309)
+- [webUISharingInternalGroups/shareWithGroups.feature:310](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L310)
 - [webUISharingExpirationDate/shareWithExpirationDate.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExpirationDate/shareWithExpirationDate.feature#L21)
 
 ### [Notifications endpoint](https://github.com/owncloud/ocis/issues/14)
@@ -322,8 +322,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingAcceptShares/acceptShares.feature:201](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L201)
 
 ### [not possible to overwrite a received shared file](https://github.com/owncloud/ocis/issues/2267)
--   [webUISharingInternalGroups/shareWithGroups.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L77)
--   [webUISharingInternalUsers/shareWithUsers.feature:57](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L57)
+-   [webUISharingInternalGroups/shareWithGroups.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L79)
+-   [webUISharingInternalUsers/shareWithUsers.feature:59](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L59)
 
 ### [web config update is not properly reflected after the ocis start](https://github.com/owncloud/ocis/issues/2944)
 -   [webUIFiles/breadcrumb.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/breadcrumb.feature#L50)
