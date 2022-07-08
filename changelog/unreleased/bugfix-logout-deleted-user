@@ -1,0 +1,9 @@
+Bugfix: Logout deleted user on page reload
+
+A user that gets disabled or deleted in the backend now sees an authentication error page upon page reload.
+From there they can now properly reach the login page to log in again via a different user (or leave the page entirely).
+
+https://github.com/owncloud/web/issues/4677
+https://github.com/owncloud/web/issues/4564
+https://github.com/owncloud/web/issues/4795
+https://github.com/owncloud/web/pull/7072

@@ -1,6 +1,6 @@
-import PublicLink from '@files/src/views/PublicLink.vue'
-import { getStore, localVue } from './views.setup.js'
+import { getStore, localVue } from 'files/tests/unit/views/views.setup.js'
 import { shallowMount, mount } from '@vue/test-utils'
+import resolvePublicLink from '../../../src/pages/resolvePublicLink'
 
 const theme = {
   general: { slogan: 'some-slogan' }
@@ -13,7 +13,7 @@ const stubs = {
 
 const route = { meta: { title: 'some page title' }, params: { token: 'some-token' } }
 
-const component = { ...PublicLink, mounted: jest.fn(), created: jest.fn() }
+const component = { ...resolvePublicLink, mounted: jest.fn(), created: jest.fn() }
 
 const selectors = {
   cardFooter: '.oc-card-footer',
@@ -26,7 +26,7 @@ const selectors = {
 const spinnerStub = 'oc-spinner-stub'
 const textInputStub = 'oc-text-input-stub'
 
-describe('PublicLink', () => {
+describe('resolvePublicLink', () => {
   describe('theming options', () => {
     const wrapper = getWrapper()
 
@@ -123,7 +123,7 @@ describe('PublicLink', () => {
       })
 
       it('should call "resolvePublicLink" method on form submit', async () => {
-        const spyResolvePublicLink = jest.spyOn(PublicLink.methods, 'resolvePublicLink')
+        const spyResolvePublicLink = jest.spyOn(resolvePublicLink.methods, 'resolvePublicLink')
         const wrapper = getMountedWrapper({ loading: false })
 
         await wrapper.setData({ passwordRequired: true, password: 'some-pass' })

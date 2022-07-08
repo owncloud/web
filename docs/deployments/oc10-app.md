@@ -9,11 +9,11 @@ geekdocFilePath: oc10-app.md
 
 {{< toc >}}
 
-The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy early integration into existing ownCloud 10 instances.
+ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy integration into existing ownCloud 10 instances.
 After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/index.php/apps/web`.
 
 ## Prerequisites
-- Running [ownCloud 10 server](https://owncloud.com/download-server/) with version 10.6
+- Running [ownCloud 10 server](https://owncloud.com/download-server/) with version 10.8
 - Installed [oauth2 app](https://marketplace.owncloud.com/apps/oauth2)
 - Command line access to your server
 
@@ -33,7 +33,7 @@ You can mark the ownCloud web client as `trusted` by clicking the respective che
 {{< /hint >}}
 
 {{< hint >}}
-If you use OpenID Connect you instead need to add a new client for ownCloud Web to your identity provider.
+If you use OpenID Connect you need to add a new client for ownCloud Web to your identity provider instead.
 {{< /hint >}}
 
 ## Configure ownCloud 10
@@ -72,7 +72,8 @@ There are a few config values which need to be set in order for ownCloud Web to 
   "auth": {
     "clientId": "<client-id-from-oauth2>",
     "url": "https://<your-owncloud-server>/index.php/apps/oauth2/api/v1/token",
-    "authUrl": "https://<your-owncloud-server>/index.php/apps/oauth2/authorize"
+    "authUrl": "https://<your-owncloud-server>/index.php/apps/oauth2/authorize",
+    "logoutUrl": "https://<your-owncloud-server>/index.php/logout"
   },
   "apps" : [
     "files",

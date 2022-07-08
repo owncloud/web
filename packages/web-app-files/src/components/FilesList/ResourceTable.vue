@@ -135,6 +135,7 @@
         <slot name="quickActions" :resource="item" />
         <oc-button
           :id="`context-menu-trigger-${resourceDomSelector(item)}`"
+          ref="contextMenuButton"
           v-oc-tooltip="contextMenuLabel"
           :aria-label="contextMenuLabel"
           class="resource-table-btn-action-dropdown"
@@ -648,16 +649,19 @@ export default defineComponent({
       this.displayPositionedDropdown(instance._tippy, event)
     },
     displayPositionedDropdown(dropdown, event) {
+      const contextMenuButtonPos = this.$refs.contextMenuButton.$el.getBoundingClientRect()
+
       dropdown.setProps({
         getReferenceClientRect: () => ({
           width: 0,
           height: 0,
-          top: event.clientY,
-          bottom: event.clientY,
-          left: event.clientX,
-          right: event.clientX
+          top: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.top,
+          bottom: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.bottom,
+          left: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x,
+          right: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x
         })
       })
+
       dropdown.show()
     },
     rowMounted(resource, component) {

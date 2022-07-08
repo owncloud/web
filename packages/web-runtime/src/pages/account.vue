@@ -85,15 +85,21 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
-import { clientService } from 'web-pkg/src/services'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   name: 'Personal',
   components: {
     EditPasswordModal
+  },
+  setup() {
+    return {
+      ...useGraphClient()
+    }
   },
   data() {
     return {
@@ -103,14 +109,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'user',
-      'configuration',
-      'getNavItemsByExtension',
-      'apps',
-      'capabilities',
-      'getToken'
-    ]),
+    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps', 'capabilities']),
     isAccountEditingEnabled() {
       return !this.apps.settings
     },
@@ -154,8 +153,7 @@ export default {
       this.editPasswordModalOpen = false
     },
     editPassword(currentPassword, newPassword) {
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
-      return graphClient.users
+      return this.graphClient.users
         .changeOwnPassword(currentPassword.trim(), newPassword.trim())
         .then(() => {
           this.closeEditPasswordModal()
@@ -172,7 +170,7 @@ export default {
         })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .account-page-info dd {

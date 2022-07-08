@@ -6,7 +6,6 @@ NOTIFICATIONS = 3
 ALPINE_GIT = "alpine/git:latest"
 DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
-MELTWATER_DRONE_CACHE = "meltwater/drone-cache:v1"
 MINIO_MC = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -27,6 +26,7 @@ PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3"
+PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 SELENIUM_STANDALONE_CHROME_DEBUG = "selenium/standalone-chrome-debug:3.141.59"
 SELENIUM_STANDALONE_FIREFOX_DEBUG = "selenium/standalone-firefox-debug:3.141.59"
@@ -2154,6 +2154,7 @@ def ocisService():
                 "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "FRONTEND_ENABLE_RESHARING": "true",
             },
             "commands": [
                 "cd %s/ocis-build" % dir["base"],
@@ -2923,7 +2924,7 @@ def skipIfUnchanged(ctx, type):
 
     return []
 
-def genericCache(name, action, mounts, cache_key):
+def genericCache(name, action, mounts):
     rebuild = "false"
     restore = "false"
     if action == "rebuild":
@@ -2935,31 +2936,25 @@ def genericCache(name, action, mounts, cache_key):
 
     step = {
         "name": "%s_%s" % (action, name),
-        "image": MELTWATER_DRONE_CACHE,
-        "environment": {
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "image": PLUGINS_S3_CACHE,
         "settings": {
             "endpoint": {
                 "from_secret": "cache_s3_endpoint",
             },
-            "bucket": "cache",
-            "region": "us-east-1",  # not used at all, but fails if not given!
-            "path_style": "true",
-            "cache_key": cache_key,
             "rebuild": rebuild,
             "restore": restore,
             "mount": mounts,
+            "access_key": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "secret_key": {
+                "from_secret": "cache_s3_secret_key",
+            },
         },
     }
     return step
 
-def genericCachePurge(ctx, name, cache_key):
+def genericCachePurge(ctx, name):
     return {
         "kind": "pipeline",
         "type": "docker",
@@ -2971,16 +2966,20 @@ def genericCachePurge(ctx, name, cache_key):
         "steps": [
             {
                 "name": "purge-cache",
-                "image": MINIO_MC,
-                "failure": "ignore",
-                "environment": {
-                    "MC_HOST_cache": {
-                        "from_secret": "cache_s3_connection_url",
+                "image": PLUGINS_S3_CACHE,
+                "settings": {
+                    "access_key": {
+                        "from_secret": "cache_s3_access_key",
+                    },
+                    "endpoint": {
+                        "from_secret": "cache_s3_endpoint",
+                    },
+                    "flush": True,
+                    "flush_age": "14",
+                    "secret_key": {
+                        "from_secret": "cache_s3_secret_key",
                     },
                 },
-                "commands": [
-                    "mc rm --recursive --force cache/cache/%s/%s" % (ctx.repo.name, cache_key),
-                ],
             },
         ],
         "trigger": {
@@ -2998,11 +2997,10 @@ def genericCachePurge(ctx, name, cache_key):
 
 def genericBuildArtifactCache(ctx, name, action, path):
     name = "%s_build_artifact_cache" % (name)
-    cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
     if action == "rebuild" or action == "restore":
-        return genericCache(name, action, [path], cache_key)
+        return genericCache(name, action, [path])
     if action == "purge":
-        return genericCachePurge(ctx, name, cache_key)
+        return genericCachePurge(ctx, name)
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):

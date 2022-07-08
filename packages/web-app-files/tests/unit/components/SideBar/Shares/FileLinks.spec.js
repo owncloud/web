@@ -4,6 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from '@files/src/components/SideBar/Shares/FileLinks.vue'
+import { createLocationSpaces } from '../../../../../src/router'
 
 const localVue = createLocalVue()
 
@@ -142,7 +143,8 @@ describe('FileLinks', () => {
           path: '/lorem.txt',
           type: 'file',
           canShare: jest.fn(() => false),
-          isFolder: false
+          isFolder: false,
+          isReceivedShare: jest.fn()
         }
       })
 
@@ -160,7 +162,8 @@ describe('FileLinks', () => {
       path: '/lorem.txt',
       type: 'file',
       canShare: jest.fn(() => true),
-      isFolder: false
+      isFolder: false,
+      isReceivedShare: jest.fn()
     },
     currentFileOutgoingSharesLoading = false,
     sharesTreeLoading = false,
@@ -234,6 +237,12 @@ describe('FileLinks', () => {
       mocks: {
         $route: {
           params: {}
+        },
+        $router: {
+          currentRoute: createLocationSpaces('some-route'),
+          resolve: (r) => {
+            return { href: r.name }
+          }
         }
       }
     })
@@ -246,6 +255,12 @@ describe('FileLinks', () => {
       mocks: {
         $route: {
           params: {}
+        },
+        $router: {
+          currentRoute: createLocationSpaces('some-route'),
+          resolve: (r) => {
+            return { href: r.name }
+          }
         }
       }
     })

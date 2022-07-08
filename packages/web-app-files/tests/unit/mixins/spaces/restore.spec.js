@@ -129,8 +129,7 @@ function getWrapper() {
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        getToken: () => 'token'
+        })
       },
       modules: {
         user: {
@@ -143,6 +142,17 @@ function getWrapper() {
           namespaced: true,
           mutations: {
             UPDATE_RESOURCE_FIELD: jest.fn()
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            }
           }
         }
       }

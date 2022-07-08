@@ -68,6 +68,7 @@ export const getStore = function ({
   loginLogo = '',
   davProperties = [],
   publicLinkPassword = null,
+  accessToken = '',
   slogan = null,
   user = null,
   generalThemeName = '',
@@ -97,7 +98,6 @@ export const getStore = function ({
         }
       }),
       capabilities: () => {},
-      getToken: () => '',
       homeFolder: () => '/',
       user: () => user
     },
@@ -128,8 +128,7 @@ export const getStore = function ({
           highlightedFile: () => highlightedFile,
           currentFolder: () => currentFolder,
           pages: () => pages,
-          davProperties: () => davProperties,
-          publicLinkPassword: () => publicLinkPassword
+          davProperties: () => davProperties
         },
         mutations: {
           UPDATE_RESOURCE: (state, resource) => {
@@ -173,6 +172,16 @@ export const getStore = function ({
               UPDATE_CURRENT_PAGE: () => {}
             },
             namespaced: true
+          }
+        }
+      },
+      runtime: {
+        modules: {
+          auth: {
+            getters: {
+              accessToken: () => accessToken,
+              publicLinkPassword: () => publicLinkPassword
+            }
           }
         }
       },

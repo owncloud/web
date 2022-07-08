@@ -156,7 +156,7 @@ function createWrapper(
   testResource,
   testVersions = [],
   testPreview,
-  publicRoute = false,
+  publicLinkContext = false,
   runningOnEos = false
 ) {
   return shallowMount(FileDetails, {
@@ -222,9 +222,10 @@ function createWrapper(
     mocks: {
       $route: {
         meta: {
-          auth: !publicRoute
+          auth: !publicLinkContext
         }
-      }
+      },
+      $router: jest.fn()
     },
     provide: {
       displayedItem: {

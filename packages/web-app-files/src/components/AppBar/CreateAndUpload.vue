@@ -119,7 +119,13 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useRequest, useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useRequest,
+  useCapabilityShareJailEnabled,
+  useStore,
+  usePublicLinkPassword,
+  useUserContext
+} from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
@@ -138,6 +144,7 @@ export default defineComponent({
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
+    const store = useStore()
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
@@ -162,13 +169,15 @@ export default defineComponent({
         uppyService
       }),
       ...useUploadHelpers(),
+      ...useRequest(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
-      ...useRequest()
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      isUserContext: useUserContext({ store })
     }
   },
   data: () => ({
@@ -177,14 +186,8 @@ export default defineComponent({
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken', 'capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', [
-      'files',
-      'currentFolder',
-      'publicLinkPassword',
-      'spaces',
-      'selectedFiles'
-    ]),
+    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {
@@ -748,8 +751,7 @@ export default defineComponent({
         conflicts.length
       )
 
-      const isVersioningEnabled =
-        !this.publicPage() && this.capabilities.files && this.capabilities.files.versioning
+      const isVersioningEnabled = this.isUserContext && this.capabilities?.files?.versioning
 
       let translatedMsg
       if (isVersioningEnabled) {

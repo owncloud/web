@@ -34,6 +34,7 @@ export class Public {
   async authenticate({ password }: { password: string }): Promise<void> {
     await this.#page.locator(passwordInput).fill(password)
     await this.#page.locator(publicLinkAuthorizeButton).click()
+    await this.#page.waitForSelector('#web-content')
   }
 
   async dropUpload({ resources }: { resources: File[] }): Promise<void> {

@@ -9,13 +9,24 @@ const userSettings = require('./userSettings')
 
 module.exports = {
   /**
+   * Navigates to the login page and fills&submits the login form.
    *
    * @param {userId} userId
    * @param {password} [password=null] - If not passed, default password for given `userId` will be used
    */
   loginAsUser: async function (userId, password = null) {
     await client.page.loginPage().navigate()
+    await this.fillInAndSubmitLogin(userId, password)
+  },
 
+  /**
+   * Fills in the login form, assuming that we are on the login page already.
+   *
+   * @param userId
+   * @param password
+   * @return {Promise<void>}
+   */
+  fillInAndSubmitLogin: async function (userId, password = null) {
     password = password || userSettings.getPasswordForUser(userId)
     if (client.globals.openid_login) {
       await client.page.ocisLoginPage().login(userId, password)

@@ -30,7 +30,7 @@ import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
-import { useActiveApp, useRoute } from 'web-pkg/src/composables'
+import { useActiveApp, useRoute, useStore, useUserContext } from 'web-pkg/src/composables'
 import { watch, defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
@@ -41,6 +41,7 @@ export default defineComponent({
     UploadInfo
   },
   setup() {
+    const store = useStore()
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
     watch(
       useRoute(),
@@ -61,7 +62,8 @@ export default defineComponent({
       { immediate: true }
     )
     return {
-      activeApp: useActiveApp()
+      activeApp: useActiveApp(),
+      isUserContext: useUserContext({ store })
     }
   },
   data() {
@@ -91,7 +93,7 @@ export default defineComponent({
       return this.sidebarNavItems.length && this.windowWidth >= 640
     },
     sidebarNavItems() {
-      if (this.publicPage()) {
+      if (!this.isUserContext) {
         return []
       }
 

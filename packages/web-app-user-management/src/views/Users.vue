@@ -112,7 +112,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
@@ -122,16 +122,17 @@ import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsP
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { useStore } from 'web-pkg/src/composables'
-import { ref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   components: {
     EditPanel,
     DetailsPanel,
@@ -149,22 +150,20 @@ export default {
     const groups = ref([])
     const roles = ref([])
     const userAssignments = ref({})
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const accessToken = useAccessToken({ store })
+    const { graphClient } = useGraphClient()
 
     /**
      * Setting api calls are just temporary and will be replaced with the graph api,
      * as the backend supports it.
      */
-    const loadRolesTask = useTask(function* (signal, ref) {
+    const loadRolesTask = useTask(function* (signal) {
       const rolesResponse = yield axios.post(
         '/api/v0/settings/roles-list',
         {},
         {
           headers: {
-            authorization: `Bearer ${store.getters.getToken}`
+            authorization: `Bearer ${unref(accessToken)}`
           }
         }
       )
@@ -183,7 +182,7 @@ export default {
         },
         {
           headers: {
-            authorization: `Bearer ${store.getters.getToken}`
+            authorization: `Bearer ${unref(accessToken)}`
           }
         }
       )
@@ -201,13 +200,13 @@ export default {
       userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
     })
 
-    const loadGroupsTask = useTask(function* (signal, ref) {
-      const groupsResponse = yield graphClient.groups.listGroups()
+    const loadGroupsTask = useTask(function* (signal) {
+      const groupsResponse = yield unref(graphClient).groups.listGroups()
       groups.value = groupsResponse.data.value
     })
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      const usersResponse = yield graphClient.users.listUsers('displayName')
+    const loadResourcesTask = useTask(function* (signal) {
+      const usersResponse = yield unref(graphClient).users.listUsers('displayName')
       users.value = usersResponse.data.value || []
 
       users.value.forEach((user) => {
@@ -227,7 +226,8 @@ export default {
       roles,
       groups,
       loadResourcesTask,
-      graphClient
+      graphClient,
+      accessToken
     }
   },
   data: function () {
@@ -240,7 +240,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
+    ...mapGetters(['configuration']),
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
@@ -461,7 +461,7 @@ export default {
           },
           {
             headers: {
-              authorization: `Bearer ${this.getToken}`
+              authorization: `Bearer ${this.accessToken}`
             }
           }
         )
@@ -526,7 +526,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .users-sidebar {

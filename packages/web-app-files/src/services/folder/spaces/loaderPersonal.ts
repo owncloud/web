@@ -7,6 +7,8 @@ import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { fetchResources } from '../util'
 import get from 'lodash-es/get'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { getIndicators } from '../../../helpers/statusIndicators'
 
 export class FolderLoaderSpacesPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
@@ -35,16 +37,19 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
         resources = resources.map(buildResource)
 
         const currentFolder = resources.shift()
-
+        const hasShareJail = useCapabilityShareJailEnabled(store)
         yield store.dispatch('Files/loadSharesTree', {
           client: clientService.owncloudSdk,
           path: currentFolder.path
         })
 
+        for (const file of resources) {
+          file.indicators = getIndicators(file, store.state.Files.sharesTree, hasShareJail.value)
+        }
+
         store.commit('Files/LOAD_FILES', {
           currentFolder,
-          files: resources,
-          loadIndicators: true
+          files: resources
         })
 
         // fetch user quota

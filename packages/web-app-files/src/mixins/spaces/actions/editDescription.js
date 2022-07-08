@@ -3,7 +3,8 @@ import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
-    ...mapGetters(['configuration', 'getToken']),
+    ...mapGetters(['configuration']),
+    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_editDescription_items() {
       return [
@@ -60,7 +61,10 @@ export default {
     },
 
     $_editDescription_editDescriptionSpace(id, description) {
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
+      const graphClient = clientService.graphAuthenticated(
+        this.configuration.server,
+        this.accessToken
+      )
       return graphClient.drives
         .updateDrive(id, { description }, {})
         .then(() => {

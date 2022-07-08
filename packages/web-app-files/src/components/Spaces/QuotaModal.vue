@@ -44,11 +44,12 @@
   </portal>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { clientService } from 'web-pkg/src/services'
+<script lang="ts">
+import { defineComponent } from '@vue/runtime-core'
+import { mapActions, mapMutations } from 'vuex'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   name: 'SpaceQuotaModal',
   props: {
     space: {
@@ -60,6 +61,11 @@ export default {
       required: true
     }
   },
+  setup() {
+    return {
+      ...useGraphClient()
+    }
+  },
   data: function () {
     return {
       selectedOption: {},
@@ -67,7 +73,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
     confirmButtonDisabled() {
       return this.space.spaceQuota.total === this.selectedOption.value
     },
@@ -139,8 +144,7 @@ export default {
         })
       }
 
-      const graphClient = clientService.graphAuthenticated(this.configuration.server, this.getToken)
-      return graphClient.drives
+      return this.graphClient.drives
         .updateDrive(this.space.id, { quota: { total: this.selectedOption.value } }, {})
         .then(({ data }) => {
           this.cancel()
@@ -190,7 +194,7 @@ export default {
       return {
         displayValue: parseFloat(option).toFixed(2).toString().replace('.00', ''),
         displayUnit: 'GB',
-        value: parseFloat(option).toFixed(2) * Math.pow(10, 9)
+        value: parseFloat(parseFloat(option).toFixed(2)) * Math.pow(10, 9)
       }
     },
     setOptions() {
@@ -227,5 +231,5 @@ export default {
       this.selectedOption = newOption
     }
   }
-}
+})
 </script>

@@ -29,14 +29,13 @@
 
 <script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { useStore } from 'web-pkg/src/composables'
-import { clientService } from 'web-pkg/src/services'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { useTask } from 'vue-concurrency'
 import { defineComponent } from '@vue/composition-api'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -46,11 +45,7 @@ export default defineComponent({
   },
   inject: ['displayedItem'],
   setup() {
-    const store = useStore()
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const { graphClient } = useGraphClient()
 
     const loadSharesTask = useTask(function* (signal, ref) {
       yield ref.loadCurrentFileOutgoingShares({
@@ -148,7 +143,7 @@ export default defineComponent({
         client: this.$client,
         graphClient: this.graphClient,
         share: share,
-        resource: this.highlightedFile
+        path: this.highlightedFile.path
       })
         .then(() => {
           this.hideModal()

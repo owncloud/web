@@ -8,14 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+* Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
+* Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
+* Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+* Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
+* Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -23,6 +32,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
+
+   We've fixed a bug where triggering the context menu by keyboard navigation misplaced the menu
+   and made it inaccessible.
+
+   https://github.com/owncloud/web/issues/7187
+   https://github.com/owncloud/web/pull/7230
 
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
@@ -46,6 +63,34 @@ Details
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
 
+* Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+
+   A user that gets disabled or deleted in the backend now sees an authentication error page upon
+   page reload. From there they can now properly reach the login page to log in again via a different
+   user (or leave the page entirely).
+
+   https://github.com/owncloud/web/issues/4677
+   https://github.com/owncloud/web/issues/4564
+   https://github.com/owncloud/web/issues/4795
+   https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+
+   We've fixed a bug where the filename hovers over the image content in the preview app and the
+   bottom toolbar is not accurate centered. Therefore we have introduced a new top bar, where the
+   filename will be shown and the download and the close button will be displayed.
+
+   https://github.com/owncloud/web/issues/6300
+   https://github.com/owncloud/web/pull/7216
+
+* Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
+
+   We've fixed a bug where apps like preview, pdf-viewer or text-editor weren't working while
+   browsing the shared with others page with oc10 as backend.
+
+   https://github.com/owncloud/web/issues/7049
+   https://github.com/owncloud/web/pull/7228
+
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 
    We've fixed a bug, where users with insufficient permissions could access the user management
@@ -64,6 +109,42 @@ Details
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
 
+* Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
+
+   Access token renewals had some flaws which have been fixed as follows: - OAuth2: access token
+   renewal was not working at all, fixed by switching to authorization code flow with PKCE
+   extension and by migrating from the unmaintained `oidc-client` library to
+   `oidc-client-ts`. - OpenID Connect: when `offline_access` scope was not requested each
+   token renewal caused a redirect to `/`, which was due to a faulty token update implementation
+   and is fixed.
+
+   WARNING: With a setup of ownCloud 10.x.x + oauth2-app older than v0.5.3 this bugfix is a
+   breaking change. There was a bug in the oauth2-app that required to add the `clientSecret` in
+   the `auth` section of the `config.json` file (although code flow with PKCE doesn't need it). To
+   mitigate this, please add the `clientSecret` for your `clientId` to the `config.json` file.
+   If the oauth2-app v0.5.3 or newer is used that's not needed.
+
+   https://github.com/owncloud/web/issues/7030
+   https://github.com/owncloud/web/pull/7072
+
+* Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
+
+   We've added a app top bar component for consistency, which will be used by the apps: preview,
+   text-editor and pdf-viewer.
+
+   https://github.com/owncloud/web/pull/7217
+
+* Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
+
+   The bootstrap architecture has been improved to ensure that the respective context (user or
+   public link) is fully resolved before applications can finalize their boot process and switch
+   over to rendering their content. This means that application developers can rely on user data /
+   public link data being loaded (including e.g. capabilities) when the web runtime triggers the
+   boot processes and rendering of applications.
+
+   https://github.com/owncloud/web/issues/7030
+   https://github.com/owncloud/web/pull/7072
+
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 
    We have added a new change own password dialog to the account info page, so the user has the
@@ -71,6 +152,18 @@ Details
 
    https://github.com/owncloud/web/issues/7183
    https://github.com/owncloud/web/pull/7206
+
+* Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
+
+   We've enhanced web to be able to re-share resources when using an ownCloud infinite scale
+   backend. It now works for project and personal spaces as well as the sharing jail. Besides that
+   we also send roles, space-ref and path as separate values to the sharing api which simplifies
+   the usage of it.
+
+   https://github.com/owncloud/web/issues/6894
+   https://github.com/owncloud/web/issues/7225
+   https://github.com/owncloud/web/pull/7086
+   https://github.com/owncloud/web/pull/7243
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 
@@ -90,6 +183,17 @@ Details
 
    https://github.com/owncloud/web/issues/7082
    https://github.com/owncloud/web/pull/7139
+
+* Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
+
+   Bookmarks to a public link (e.g. when user navigated into a subfolder and then created a
+   bookmark) or to an app that was opened from a public link (e.g. photo opened in preview app) now
+   properly resolve the public link context before loading the bookmarked content. This
+   includes a roundtrip to the password input prompt for password protected public link, e.g.
+   when a password was set in the first place, has been changed in the meantime, etc.
+
+   https://github.com/owncloud/web/issues/7030
+   https://github.com/owncloud/web/pull/7072
 
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 

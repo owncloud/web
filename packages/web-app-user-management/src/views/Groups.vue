@@ -103,24 +103,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { useStore } from 'web-pkg/src/composables'
-import { ref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions } from 'vuex'
 import { $gettext } from 'files/src/router/utils'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
+import { useGraphClient } from 'web-client/src/composables'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   components: {
     SideBar,
     EditPanel,
@@ -132,15 +132,11 @@ export default {
     DeleteGroupModal
   },
   setup() {
-    const store = useStore()
     const groups = ref([])
-    const graphClient = clientService.graphAuthenticated(
-      store.getters.configuration.server,
-      store.getters.getToken
-    )
+    const { graphClient } = useGraphClient()
 
     const loadResourcesTask = useTask(function* (signal, ref) {
-      const response = yield graphClient.groups.listGroups('displayName')
+      const response = yield unref(graphClient).groups.listGroups('displayName')
       groups.value = response.data.value || []
       groups.value.forEach((group) => {
         group.members = group.members || []
@@ -371,7 +367,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

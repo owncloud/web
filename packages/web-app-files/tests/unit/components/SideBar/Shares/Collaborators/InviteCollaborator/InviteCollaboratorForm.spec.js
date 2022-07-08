@@ -109,10 +109,20 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
           actions: {
             addShare: jest.fn()
           }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => 'GFwHKXdsMgoFwt'
+              }
+            }
+          }
         }
       },
       getters: {
-        getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
         capabilities: () => ({
           files_sharing: { federation: { incoming: true, outgoing: true } }
         }),

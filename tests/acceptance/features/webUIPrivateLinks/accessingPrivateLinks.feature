@@ -17,7 +17,7 @@ Feature: Access private link
   Scenario: Access private link before authorisation
     When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page
-    When user "Alice" has logged in using the webUI
+    When user "Alice" fills in the login form using the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And the "details" details panel should be visible
 
@@ -40,8 +40,3 @@ Feature: Access private link
       """
       An error occurred while resolving the private link
       """
-
-
-  Scenario: Access the private link anonymously
-    When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
-    Then the user should be redirected to the IdP login page

@@ -29,8 +29,16 @@ module.exports = {
       })
       return content
     },
-    getFileName: function () {
-      return this.getInnerText('@fileName')
+    getFileName: async function () {
+      let fileName = ''
+      await this.waitForElementVisible('@fileName').getAttribute(
+        '@fileName',
+        'data-test-resource-name',
+        (result) => {
+          fileName = result.value
+        }
+      )
+      return fileName
     },
     getContentFromEditor: function () {
       return this.getInputValue('@editorTextarea')
@@ -84,10 +92,10 @@ module.exports = {
       selector: '#text-editor-controls-save'
     },
     closeButton: {
-      selector: '#text-editor-controls-close'
+      selector: '#app-top-bar-close'
     },
     fileName: {
-      selector: '#text-editor-file-path'
+      selector: '.oc-resource-name'
     },
     previewPanel: {
       selector: '#text-editor-preview'

@@ -36,7 +36,6 @@ const mockFileInfo = jest.fn(() => ({
 
 const storeOptions = {
   getters: {
-    getToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
     configuration: jest.fn(() => ({
       server: 'http://example.com/',
       currentTheme: {
@@ -45,7 +44,6 @@ const storeOptions = {
         }
       }
     })),
-    userReady: () => true,
     capabilities: jest.fn(() => ({
       files: {
         app_providers: [
@@ -70,6 +68,18 @@ const storeOptions = {
       mutations: {
         SET_MIME_TYPES: jest.fn()
       }
+    },
+    runtime: {
+      namespaced: true,
+      modules: {
+        auth: {
+          namespaced: true,
+          getters: {
+            accessToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
+            isUserContextReady: jest.fn(() => true)
+          }
+        }
+      }
     }
   }
 }
@@ -92,6 +102,7 @@ const providerSuccessResponseGet = {
 
 describe('The app provider extension', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
@@ -100,13 +111,16 @@ describe('The app provider extension', () => {
   })
 
   it('should show a loading spinner while loading', async () => {
-    const makeRequest = jest.fn(() =>
-      setTimeout(() => {
-        Promise.resolve({
-          ok: true,
-          status: 200
+    const makeRequest = jest.fn(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve({
+              ok: true,
+              status: 200
+            })
+          }, 500)
         })
-      }, 500)
     )
     const wrapper = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()

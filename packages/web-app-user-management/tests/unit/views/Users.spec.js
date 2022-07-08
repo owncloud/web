@@ -220,7 +220,6 @@ function getMountedWrapper({
         showMessage: jest.fn()
       },
       getters: {
-        getToken: () => 'token',
         configuration: () => ({
           server: 'https://example.com/'
         })

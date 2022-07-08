@@ -17,6 +17,9 @@ services:
       OCIS_JWT_SECRET: "${OCIS_JWT_SECRET:-some-ocis-jwt-secret}"
       OCIS_MACHINE_AUTH_API_KEY: "${OCIS_MACHINE_AUTH_API_KEY:-some-ocis-machine-auth-api-key}"
 
+      # FRONTEND
+      FRONTEND_ENABLE_RESHARING: "true"
+
       # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
@@ -32,7 +35,7 @@ services:
       IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
       IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
 
-      # Storage
+      # STORAGE
       STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
       STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
       STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
@@ -43,6 +46,7 @@ services:
       AUTH_BASIC_LDAP_BIND_PASSWORD: "${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
       GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}"
 
+      # PROXY
       PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint

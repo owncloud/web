@@ -58,7 +58,6 @@ function getWrapper(resourcesToDelete) {
           getUser: jest.fn(() => user)
         }
       },
-      publicPage: () => false,
       currentFolder: currentFolder
     },
     data: () => {
@@ -80,6 +79,18 @@ function getWrapper(resourcesToDelete) {
                   resolve()
                 })
             )
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => '',
+                isPublicLinkContextReady: () => false
+              }
+            }
           }
         }
       },

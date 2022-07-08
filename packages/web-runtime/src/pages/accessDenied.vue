@@ -30,7 +30,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authService } from '../services/auth'
 export default defineComponent({
   name: 'AccessDeniedPage',
   computed: {
@@ -75,10 +76,9 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['logout']),
     performLogout(event) {
       if (event.target.id === 'exitAnchor') {
-        this.logout()
+        authService.logoutUser()
       }
     }
   }

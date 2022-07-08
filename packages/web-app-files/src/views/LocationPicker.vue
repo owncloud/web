@@ -79,7 +79,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 
 import { basename, join } from 'path'
@@ -98,11 +98,17 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
 import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityShareJailEnabled,
+  usePublicLinkPassword,
+  useStore
+} from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
+import { Route } from 'vue-router'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
-export default {
+export default defineComponent({
   metaInfo() {
     const title = `${this.title} - ${this.configuration.currentTheme.general.name}`
 
@@ -120,7 +126,9 @@ export default {
   mixins: [MixinsGeneral, MixinFilesListFilter],
 
   setup() {
+    const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
+    const { graphClient } = useGraphClient()
     const loadResourcesTask = useTask(function* (signal, ref, target) {
       ref.CLEAR_CURRENT_FILES_LIST()
 
@@ -149,11 +157,7 @@ export default {
           break
         default:
           if (unref(hasShareJail)) {
-            const graphClient = clientService.graphAuthenticated(
-              ref.$store.getters.configuration.server,
-              ref.$store.getters.getToken
-            )
-            const userResponse = yield graphClient.users.getMe()
+            const userResponse = yield unref(graphClient).users.getMe()
             if (!userResponse.data) {
               throw new Error('graph.user.getMe() has no data')
             }
@@ -175,7 +179,8 @@ export default {
 
     return {
       ...useResourcesViewDefaults({ loadResourcesTask }),
-      hasShareJail
+      hasShareJail,
+      publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
 
@@ -189,7 +194,7 @@ export default {
       'locationPickerTargetFolder',
       'currentFolder'
     ]),
-    ...mapGetters('Files', ['publicLinkPassword', 'totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['configuration']),
     ...mapGetters(['homeFolder']),
     ...mapState(['user']),
@@ -302,8 +307,8 @@ export default {
         }
       }
 
-      if (this.$route.query.storageId) {
-        route.query.storageId = this.$route.query.storageId
+      if ((this.$route as Route).query.storageId) {
+        ;(route.query as any).storageId = this.$route.query.storageId
       }
 
       return route
@@ -563,7 +568,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

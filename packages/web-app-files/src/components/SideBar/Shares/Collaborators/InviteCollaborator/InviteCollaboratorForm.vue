@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import debounce from 'lodash-es/debounce'
 import PQueue from 'p-queue'
 
@@ -91,20 +91,24 @@ import {
   ShareTypes,
   SpacePeopleShareRoles
 } from '../../../../../helpers/share'
-import { clientService } from 'web-pkg/src/services'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled
+} from 'web-pkg/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern,
   shareSpaceAddMemberHelp
 } from '../../../../../helpers/contextualHelpers.js'
+import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-client/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
   return str
 }
 
-export default {
+export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
     AutocompleteItem,
@@ -122,7 +126,9 @@ export default {
 
   setup() {
     return {
-      hasResharing: useCapabilityFilesSharingResharing()
+      ...useGraphClient(),
+      hasResharing: useCapabilityFilesSharingResharing(),
+      hasShareJail: useCapabilityShareJailEnabled()
     }
   },
 
@@ -141,7 +147,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
-    ...mapGetters(['configuration', 'getToken', 'user', 'capabilities']),
+    ...mapGetters(['configuration', 'user', 'capabilities']),
 
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -186,14 +192,8 @@ export default {
       return this.$gettext('Invite')
     },
 
-    currentStorageId() {
-      return this.$route.params.storageId
-    },
     resourceIsSpace() {
       return this.highlightedFile.type === 'space'
-    },
-    graphClient() {
-      return clientService.graphAuthenticated(this.configuration.server, this.getToken)
     }
   },
   mounted() {
@@ -326,24 +326,24 @@ export default {
                   this.selectedRole.permissions(this.hasResharing || this.resourceIsSpace)
                 )
 
-            let storageId
-            if (this.resourceIsSpace) {
-              storageId = this.highlightedFile.id
-            } else if (this.currentStorageId) {
-              storageId = this.currentStorageId
+            let path = this.highlightedFile.path
+            // sharing a share root from the share jail -> use resource name as path
+            if (this.hasShareJail && path === '/') {
+              path = `/${this.highlightedFile.name}`
             }
 
             this.addShare({
               client: this.$client,
               graphClient: this.graphClient,
-              path: this.highlightedFile.path,
+              path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
               displayName: collaborator.label,
               shareType: collaborator.value.shareType,
               permissions: bitmask,
+              role: this.selectedRole,
               expirationDate: this.expirationDate,
-              storageId
+              storageId: this.highlightedFile.fileId || this.highlightedFile.id
             })
           })
         )
@@ -363,5 +363,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

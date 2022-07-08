@@ -96,7 +96,7 @@ export const buildRoutes = (): RouteConfig[] =>
       meta: {
         auth: false
       },
-      redirect: (to) => createLocationOperations('files-operations-resolver-public-link', to)
+      redirect: (to) => ({ name: 'resolvePublicLink', params: { token: to.params.token } })
     }
   ].map(deprecatedRedirect)
 

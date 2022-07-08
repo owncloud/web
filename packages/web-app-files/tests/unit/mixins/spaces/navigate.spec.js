@@ -70,8 +70,7 @@ function getWrapper({ invalidLocation = false } = {}) {
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        getToken: () => 'token'
+        })
       },
       modules: {
         Files: {
