@@ -78,6 +78,7 @@ export default {
           await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
         })
       }
+
       await createQuicklink({ ...ctx, resource: ctx.item })
       await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
     },
