@@ -12,8 +12,11 @@ export class ConfigurationManager {
   private oAuth2Configuration: OAuth2Configuration
   private oidcConfiguration: OIDCConfiguration
 
-  public initialize(rawConfig: RawConfig): void {
+  constructor() {
     this.runtimeConfiguration = { serverUrl: '' }
+  }
+
+  public initialize(rawConfig: RawConfig): void {
     this.serverUrl = rawConfig.server
     this.oAuth2Configuration = rawConfig.auth ? (rawConfig.auth as OAuth2Configuration) : null
     this.oidcConfiguration = rawConfig.openIdConnect

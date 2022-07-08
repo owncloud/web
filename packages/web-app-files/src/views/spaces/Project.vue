@@ -150,6 +150,7 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import { useResourcesViewDefaults } from '../../composables'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -289,7 +290,7 @@ export default defineComponent({
               resource,
               isPublic: false,
               dimensions: ImageDimension.Preview,
-              server: this.configuration.server,
+              server: configurationManager.serverUrl,
               userId: this.user.id,
               token: this.accessToken
             }).then((imageBlob) => {
