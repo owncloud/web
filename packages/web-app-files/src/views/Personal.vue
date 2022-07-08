@@ -103,7 +103,7 @@ import { useResourcesViewDefaults } from '../composables'
 import { defineComponent, unref, computed } from '@vue/composition-api'
 import { Resource, move } from '../helpers/resource'
 import { useGraphClient } from 'web-client/src/composables'
-import { useCapabilityShareJailEnabled, useRouteParam, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 
 const visibilityObserver = new VisibilityObserver()

@@ -23,7 +23,6 @@ import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
-import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
