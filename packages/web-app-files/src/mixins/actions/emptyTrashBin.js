@@ -64,7 +64,6 @@ export default {
       return this.$client.fileTrash
         .clearTrashBin(path)
         .then(() => {
-          this.hideModal()
           this.showMessage({
             title: this.$gettext('All deleted files were removed')
           })
@@ -79,6 +78,9 @@ export default {
             ),
             status: 'danger'
           })
+        })
+        .finally(() => {
+          this.hideModal()
         })
     }
   }
