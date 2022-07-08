@@ -16,7 +16,6 @@ interface CreateQuicklink {
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
-  console.log(args)
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
     permissions: 1,
@@ -27,7 +26,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     params.password = args.password
   }
 
-  const { resource, store } = args
+  const { storageId, resource, store } = args
   const expirationDate = store.state.user.capabilities.files_sharing.public.expire_date
 
   if (expirationDate.enforced) {
@@ -40,13 +39,15 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   // needs check for enforced password for default role (viewer?)
   // and concept to what happens if it is enforced
 
-  params.spaceRef = resource.id
+  if (storageId) {
+    params.spaceRef = `${storageId}${resource.path}`
+  }
 
   const link = await store.dispatch('Files/addLink', {
     path: resource.path,
     client: clientService.owncloudSdk,
     params,
-    storageId: resource.storageId
+    storageId
   })
 
   copyToClipboard(link.url)

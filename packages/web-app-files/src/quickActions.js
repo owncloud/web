@@ -66,6 +66,8 @@ export default {
     label: ($gettext) => $gettext('Copy quicklink'),
     icon: 'link',
     handler: async (ctx) => {
+      ctx.storageId = ctx.item.storageId
+
       const passwordEnforced =
         ctx.store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
         true
@@ -76,7 +78,6 @@ export default {
           await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
         })
       }
-
       await createQuicklink({ ...ctx, resource: ctx.item })
       await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
     },
