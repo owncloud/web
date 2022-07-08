@@ -6,6 +6,7 @@ import user from './user'
 import settings from './settings'
 import modal from './modal'
 import navigation from './navigation'
+import tours from './tours'
 
 const strict = process.env.NODE_ENV === 'development'
 
@@ -25,7 +26,8 @@ export default {
     settings,
     modal,
     navigation,
-    runtime
+    runtime,
+    tours
   },
   strict
 }
