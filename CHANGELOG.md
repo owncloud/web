@@ -12,6 +12,7 @@ Summary
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
@@ -19,6 +20,7 @@ Summary
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
+* Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
@@ -27,7 +29,7 @@ Summary
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
+* Enhancement - Update ODS to v14.0.0-alpha.4: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -62,6 +64,13 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
+
+   We've fixed a bug where the empty trash bin modal was shown if an error occurred.
+
+   https://github.com/owncloud/web/issues/7129
+   https://github.com/owncloud/web/pull/7248
 
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
@@ -134,6 +143,20 @@ Details
 
    https://github.com/owncloud/web/pull/7217
 
+* Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
+
+   We've added the possibility to navigate and select via keyboard. - Navigation: - via keyboard
+   arrows up/down for moving up and down through the rows of the file list - Selection - via keyboard
+   space bar: select / deselect the currently highlighted row - via keyboard shift + arrows
+   up/down: add a series of rows - via keyboard cmd/ctrl + a: select all rows - via keyboard esc:
+   deselect all rows - via mouse holding cmd/ctrl + left click on a row: add/remove the clicked item
+   to/from the current selection model - via mouse holding shift + left click on a row: add the
+   clicked row and the series of rows towards the most recently clicked row to the current
+   selection model.
+
+   https://github.com/owncloud/web/issues/6029
+   https://github.com/owncloud/web/pull/7153
+
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 
    The bootstrap architecture has been improved to ensure that the respective context (user or
@@ -163,6 +186,7 @@ Details
    https://github.com/owncloud/web/issues/6894
    https://github.com/owncloud/web/issues/7225
    https://github.com/owncloud/web/pull/7086
+   https://github.com/owncloud/web/pull/7247
    https://github.com/owncloud/web/pull/7243
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
@@ -212,21 +236,16 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.2: [#7139](https://github.com/owncloud/web/pull/7139)
+* Enhancement - Update ODS to v14.0.0-alpha.4: [#7139](https://github.com/owncloud/web/pull/7139)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.2. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.4. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Change - Remove OcAlert component:
-   https://github.com/owncloud/owncloud-design-system/pull/2210 - Change - Remove
-   transition animations:
-   https://github.com/owncloud/owncloud-design-system/pull/2210 - Change - Revamp
-   animations: https://github.com/owncloud/owncloud-design-system/pull/2210 -
-   Enhancement - Progress bar indeterminate state:
-   https://github.com/owncloud/owncloud-design-system/pull/2200 - Enhancement -
-   Redesign notifications:
-   https://github.com/owncloud/owncloud-design-system/pull/2210 - Bugfix - Remove click
-   event on OcIcon: https://github.com/owncloud/owncloud-design-system/pull/2216
+   - Bugfix - Remove click event on OcIcon: #2216 - Change - Remove OcAlert component: #2210 -
+   Change - Remove transition animations: #2210 - Change - Revamp animations: #2210 - Change -
+   OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add outline: #2218 -
+   Enhancement - Progress bar indeterminate state: #2200 - Enhancement - Redesign
+   notifications: #2210
 
    https://github.com/owncloud/web/pull/7139
    https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.2

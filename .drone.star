@@ -2924,7 +2924,7 @@ def skipIfUnchanged(ctx, type):
 
     return []
 
-def genericCache(name, action, mounts):
+def genericCache(name, action, mounts, cache_key):
     rebuild = "false"
     restore = "false"
     if action == "rebuild":
@@ -2950,11 +2950,12 @@ def genericCache(name, action, mounts):
             "secret_key": {
                 "from_secret": "cache_s3_secret_key",
             },
+            "filename": "%s.tar" % (cache_key),
         },
     }
     return step
 
-def genericCachePurge(ctx, name):
+def genericCachePurge(ctx, name, cache_key):
     return {
         "kind": "pipeline",
         "type": "docker",
@@ -2979,6 +2980,7 @@ def genericCachePurge(ctx, name):
                     "secret_key": {
                         "from_secret": "cache_s3_secret_key",
                     },
+                    "filename": "%s.tar" % (cache_key),
                 },
             },
         ],
@@ -2997,10 +2999,11 @@ def genericCachePurge(ctx, name):
 
 def genericBuildArtifactCache(ctx, name, action, path):
     name = "%s_build_artifact_cache" % (name)
+    cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
     if action == "rebuild" or action == "restore":
-        return genericCache(name, action, [path])
+        return genericCache(name, action, [path], cache_key)
     if action == "purge":
-        return genericCachePurge(ctx, name)
+        return genericCachePurge(ctx, name, cache_key)
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):

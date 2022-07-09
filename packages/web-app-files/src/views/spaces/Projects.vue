@@ -140,6 +140,7 @@ import { loadPreview } from '../../helpers/resource'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useGraphClient } from 'web-client/src/composables'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   components: {
@@ -225,7 +226,7 @@ export default defineComponent({
                 resource,
                 isPublic: false,
                 dimensions: ImageDimension.Preview,
-                server: this.configuration.server,
+                server: configurationManager.serverUrl,
                 userId: this.user.id,
                 token: this.accessToken
               }).then((imageBlob) => {

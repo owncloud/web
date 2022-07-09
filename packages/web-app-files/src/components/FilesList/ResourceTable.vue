@@ -41,6 +41,7 @@
         size="large"
         :value="selection"
         :option="item"
+        :outline="isLatestSelectedItem(item)"
         @input="emitSelect"
         @click.native.stop
       />
@@ -169,6 +170,7 @@
 </template>
 
 <script lang="ts">
+import { bus } from 'web-pkg/src/instance'
 import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
@@ -397,7 +399,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown', 'spaces']),
+    ...mapState('Files', ['areFileExtensionsShown', 'spaces', 'latestSelectedId']),
     popperOptions() {
       return {
         modifiers: [
@@ -563,6 +565,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    isLatestSelectedItem(item) {
+      return item.id === this.latestSelectedId
+    },
     hasRenameAction(item) {
       return this.$_rename_items.filter((menuItem) => menuItem.isEnabled({ resources: [item] }))
         .length
@@ -672,12 +677,20 @@ export default defineComponent({
        */
       this.$emit('rowMounted', resource, component)
     },
-    fileClicked(resource) {
+    fileClicked(data) {
       /**
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      this.emitSelect([resource])
+      const resource = data[0]
+      const eventData = data[1]
+      if (eventData && eventData.metaKey) {
+        return bus.publish('app.files.list.clicked.meta', resource)
+      }
+      if (eventData && eventData.shiftKey) {
+        return bus.publish('app.files.list.clicked.shift', resource)
+      }
+      return this.emitSelect([resource])
     },
     formatDate(date) {
       return DateTime.fromJSDate(new Date(date))
@@ -692,6 +705,7 @@ export default defineComponent({
        * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
        * @property {array} resources The selected resources
        */
+      bus.publish('app.files.list.clicked')
       this.$emit('select', resources)
     },
     toggleSelectionAll() {

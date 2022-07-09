@@ -1,13 +1,8 @@
 export default {
   methods: {
     scrollToResource(resource) {
-      const appBar = document.querySelector('#files-app-bar')
-      let offset = appBar.getBoundingClientRect().bottom
-
-      const tableHeader = document.querySelector('.files-table thead')
-      offset += tableHeader.getBoundingClientRect().height
-
-      this.$scrollTo(`.oc-tbody-tr-${resource.getDomSelector()}`, 300, { offset: -offset })
+      const resourceElement = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
+      resourceElement.scrollIntoView({ block: 'end' })
     }
   }
 }

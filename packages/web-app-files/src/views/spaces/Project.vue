@@ -1,5 +1,6 @@
 <template>
   <div class="space-overview">
+    <keyboard-actions :paginated-resources="paginatedResources" />
     <app-bar
       :has-bulk-actions="true"
       :breadcrumbs="breadcrumbs"
@@ -148,6 +149,8 @@ import Mixins from '../../mixins'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
+import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -162,7 +165,8 @@ export default defineComponent({
     ListInfo,
     Pagination,
     ContextActions,
-    SpaceContextActions
+    SpaceContextActions,
+    KeyboardActions
   },
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, Mixins],
   provide() {
@@ -286,7 +290,7 @@ export default defineComponent({
               resource,
               isPublic: false,
               dimensions: ImageDimension.Preview,
-              server: this.configuration.server,
+              server: configurationManager.serverUrl,
               userId: this.user.id,
               token: this.accessToken
             }).then((imageBlob) => {
