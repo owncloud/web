@@ -654,7 +654,7 @@ export default {
   addLink(context, { path, client, params, storageId }) {
     return new Promise((resolve, reject) => {
       client.shares
-        .shareFileWithLink(path, params)
+        .shareFileWithLink(path, { ...params, spaceRef: storageId })
         .then((data) => {
           const link = buildShare(data.shareInfo, null, allowSharePermissions(context.rootGetters))
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', link)
