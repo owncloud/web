@@ -3115,6 +3115,7 @@ def uploadTracingResult(ctx):
             "status": status,
             "event": [
                 "pull_request",
+                "cron",
             ],
         },
     }]
