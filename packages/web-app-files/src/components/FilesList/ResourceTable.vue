@@ -701,8 +701,6 @@ export default defineComponent({
       return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
     },
     emitSelect(resources) {
-      console.log('emit select')
-      console.log(resources)
       /**
        * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
        * @property {array} resources The selected resources

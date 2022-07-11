@@ -2,8 +2,6 @@ import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 
 export async function openNewCollaboratorsPanel(ctx) {
-  console.log('openNewCollaboratorsPanel')
-  console.log(ctx)
   await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
 }
 
