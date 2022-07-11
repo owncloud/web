@@ -17,9 +17,6 @@ services:
       OCIS_JWT_SECRET: "${OCIS_JWT_SECRET:-some-ocis-jwt-secret}"
       OCIS_MACHINE_AUTH_API_KEY: "${OCIS_MACHINE_AUTH_API_KEY:-some-ocis-machine-auth-api-key}"
 
-      # FRONTEND
-      FRONTEND_ENABLE_RESHARING: "true"
-
       # WEB
       WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
