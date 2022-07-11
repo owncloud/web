@@ -1,5 +1,6 @@
 <template>
-  <main id="files" class="oc-flex oc-height-1-1">
+  <main id="files" class="oc-flex oc-height-1-1" @dragenter="onDragEnter" @mouseleave="onDragLeave">
+    <div v-if="dragareaEnabled" class="dragarea" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
     </div>
@@ -29,6 +30,9 @@ export default defineComponent({
     SideBar
   },
   mixins: [Mixins],
+  data: () => ({
+    dragareaEnabled: false
+  }),
   computed: {
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',
@@ -62,6 +66,13 @@ export default defineComponent({
       setActiveSidebarPanel: 'setActivePanel'
     }),
 
+    onDragEnter(event) {
+      const hasFileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
+      this.dragareaEnabled = hasFileInEvent
+    },
+    onDragLeave() {
+      this.dragareaEnabled = false
+    },
     focusSideBar(component, event) {
       this.focus({
         from: document.activeElement,
@@ -78,7 +89,20 @@ main {
   max-height: 100%;
 }
 
+.dragarea {
+  background-color: rgba(60, 130, 225, 0.21);
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 9;
+  border-radius: 14px;
+  border: 2px dashed var(--oc-color-swatch-primary-muted);
+}
 .files-list-wrapper {
+  position: relative;
   overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -92,6 +116,10 @@ main {
   &:focus {
     outline: none;
   }
+}
+
+#files {
+  position: relative;
 }
 
 #files-sidebar {

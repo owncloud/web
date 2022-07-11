@@ -1,0 +1,7 @@
+Bugfix: Add Droparea again
+
+We've added the visual droparea again to indicate drag and drop
+from outside the application
+
+https://github.com/owncloud/web/issues/7080
+https://github.com/owncloud/web/pull/7251
