@@ -682,8 +682,8 @@ export default defineComponent({
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
        */
-      const resource = data[0]
-      const eventData = data[1]
+      const resource = Array.isArray(data) ? data[0] : data
+      const eventData = Array.isArray(data) ? data[1] : null
       if (eventData && eventData.metaKey) {
         return bus.publish('app.files.list.clicked.meta', resource)
       }
@@ -701,6 +701,8 @@ export default defineComponent({
       return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
     },
     emitSelect(resources) {
+      console.log('emit select')
+      console.log(resources)
       /**
        * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
        * @property {array} resources The selected resources
