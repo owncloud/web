@@ -209,8 +209,9 @@ Feature: Sharing files and folders with internal users with different permission
 
 
 
-
-  @issue-ocis-2260
+   # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions in the server

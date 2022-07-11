@@ -12,7 +12,9 @@ Feature: Sharing files and folders with internal users
       | Brian    |
     And user "Brian" has created folder "simple-folder" in the server
 
-  @smokeTest @issue-ocis-2260 @ocisSmokeTest @disablePreviews
+  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @smokeTest @disablePreviews @skipOnOCIS
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has created file "testimage.jpg" in the server
     And user "Brian" has created file "simple-folder/lorem.txt" in the server
@@ -238,8 +240,9 @@ Feature: Sharing files and folders with internal users
 
 
 
-
-  @issue-ocis-2260 @disablePreviews
+  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
+  @skipOnOCIS @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name
     Given user "Brian" has created folder "Sample,Folder,With,Comma" in the server
     And user "Brian" has created file "sample,1.txt" in the server
