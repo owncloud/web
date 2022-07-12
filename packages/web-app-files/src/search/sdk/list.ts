@@ -5,6 +5,8 @@ import { buildResource } from '../../helpers/resources'
 import { Component } from 'vue'
 import { DavProperties } from 'web-pkg/src/constants'
 
+export const searchLimit = 300
+
 export default class List implements SearchList {
   public readonly component: Component
 
@@ -19,7 +21,7 @@ export default class List implements SearchList {
 
     const plainResources = await clientService.owncloudSdk.files.search(
       term,
-      undefined,
+      searchLimit,
       DavProperties.Default
     )
 

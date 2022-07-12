@@ -35,6 +35,10 @@
           :folders="totalFilesCount.folders"
           :size="totalFilesSize"
         />
+        <div
+          class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+          v-text="searchResultExceedsLimitText"
+        />
       </template>
     </resource-table>
   </div>
@@ -59,6 +63,7 @@ import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { Resource } from '../../helpers/resource'
 import { useStore } from 'web-pkg/src/composables'
+import {searchLimit} from '../../search/sdk/list'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -88,6 +93,14 @@ export default defineComponent({
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    itemCount() {
+      return this.totalFilesCount.files + this.totalFilesCount.folders
+    },
+    searchResultExceedsLimitText() {
+      console.log(searchLimit)
+      const translated = this.$gettext('Found many, showing the %{itemCount} best matching results')
+      return this.$gettextInterpolate(translated, { itemCount: this.itemCount })
     }
   },
   watch: {
