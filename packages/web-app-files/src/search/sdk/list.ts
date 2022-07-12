@@ -1,4 +1,4 @@
-import { SearchList, SearchResult } from 'search/src/types'
+import { SearchList } from 'search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
@@ -14,7 +14,7 @@ export default class List implements SearchList {
     this.component = ListComponent
   }
 
-  async search(term: string): Promise<SearchResult[]> {
+  async search(term: string): Promise<any> {
     if (!term) {
       return []
     }
@@ -24,6 +24,19 @@ export default class List implements SearchList {
       searchLimit,
       DavProperties.Default
     )
+
+    return {
+      foundItems: 400,
+      resources: plainResources.map((plainResource) => {
+        let resourceName = decodeURIComponent(plainResource.name)
+        if (resourceName.startsWith('/dav')) {
+          resourceName = resourceName.slice(4)
+        }
+
+        const resource = buildResource({ ...plainResource, name: resourceName })
+        return { id: resource.id, data: resource }
+      })
+    }
 
     return plainResources.map((plainResource) => {
       let resourceName = decodeURIComponent(plainResource.name)

@@ -36,6 +36,7 @@
           :size="totalFilesSize"
         />
         <div
+          v-if="searchResultExceedsLimit"
           class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
           v-text="searchResultExceedsLimitText"
         />
@@ -61,9 +62,9 @@ import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import { searchLimit } from '../../search/sdk/list'
 import { Resource } from '../../helpers/resource'
 import { useStore } from 'web-pkg/src/composables'
-import {searchLimit} from '../../search/sdk/list'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -72,9 +73,9 @@ export default defineComponent({
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResults: {
-      type: Array,
+      type: Object,
       default: function () {
-        return []
+        return { foundItems: 0, resources: [] }
       }
     }
   },
@@ -97,10 +98,14 @@ export default defineComponent({
     itemCount() {
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
+    searchResultExceedsLimit() {
+      return this.searchResults.foundItems > searchLimit
+    },
     searchResultExceedsLimitText() {
-      console.log(searchLimit)
       const translated = this.$gettext('Found many, showing the %{itemCount} best matching results')
-      return this.$gettextInterpolate(translated, { itemCount: this.itemCount })
+      return this.$gettextInterpolate(translated, {
+        itemCount: this.itemCount
+      })
     }
   },
   watch: {
@@ -109,8 +114,8 @@ export default defineComponent({
         this.CLEAR_CURRENT_FILES_LIST()
         this.LOAD_FILES({
           currentFolder: null,
-          files: this.searchResults.length
-            ? this.searchResults.map((searchResult) => searchResult.data)
+          files: this.searchResults.resources.length
+            ? this.searchResults.resources.map((searchResult) => searchResult.data)
             : []
         })
       },
