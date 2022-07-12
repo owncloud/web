@@ -6,9 +6,10 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="Personal" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shares" index="1" target="/files/list/shared-with-me" icon="share-forward" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" index="2" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
+      <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
+      <sidebar-nav-item-stub name="Personal" index="ead217b9f25a453f85076276b4ed2e44" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shares" index="f366ad0f1fd24306a0b9e46e3c198e9c" target="/files/list/shared-with-me" icon="share-forward" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="e3d29d6d27ec4d12b48329db35a40b84" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
@@ -20,9 +21,10 @@ exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="Personal" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shares" index="1" target="/files/list/shared-with-me" icon="share-forward" filltype="fill"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" index="2" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
+      <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
+      <sidebar-nav-item-stub name="Personal" index="364dda49fa1348d3a411ff67ddd7ced2" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shares" index="3f4a797392eb4538843c7981e6e8063f" target="/files/list/shared-with-me" icon="share-forward" filltype="fill"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="fc4f85a00ee04609a6bbfdfdd4bedc51" target="/files/list/trash-bin" icon="delete" filltype="fill"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>
@@ -34,9 +36,10 @@ exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
   </button>
   <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
     <oc-list-stub>
-      <sidebar-nav-item-stub name="Personal" index="0" active="true" target="/files/list/all" icon="folder" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Shares" index="1" target="/files/list/shared-with-me" icon="share-forward" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub name="Deleted files" index="2" target="/files/list/trash-bin" icon="delete" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
+      <sidebar-nav-item-stub name="Personal" index="65097261372547949b0b756ddb26071f" active="true" target="/files/list/all" icon="folder" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Shares" index="8e07dbba28074f35a4eab290cfd7ccaf" target="/files/list/shared-with-me" icon="share-forward" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub name="Deleted files" index="c77a2805d46f4459b37d4e5039c6d1d3" target="/files/list/trash-bin" icon="delete" filltype="fill" collapsed="true"></sidebar-nav-item-stub>
     </oc-list-stub>
   </nav> <span class="footer">Footer</span>
 </div>

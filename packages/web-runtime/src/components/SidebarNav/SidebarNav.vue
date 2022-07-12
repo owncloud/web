@@ -56,6 +56,10 @@ export default {
     const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
     const highlighter = document.getElementById('nav-highlighter')
 
+    if (!highlighter || !navItem) {
+      return
+    }
+
     const resizeObserver = new ResizeObserver((data) => {
       const width = data[0].borderBoxSize[0].inlineSize
       highlighter.style.setProperty('transition-duration', `0.05s`)
