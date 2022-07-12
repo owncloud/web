@@ -11,7 +11,6 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
 
-
 const slots = {
   bottom: '<span class="footer">Footer</span>'
 }
