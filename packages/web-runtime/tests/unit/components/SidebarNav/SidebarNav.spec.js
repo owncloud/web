@@ -41,6 +41,9 @@ describe('OcSidebarNav', () => {
 
 function getWrapper() {
   return mount(SidebarNav, {
+    methods: {
+      getUuid: () => '1'
+    },
     store: new Vuex.Store({
       state: {
         navigation: {
