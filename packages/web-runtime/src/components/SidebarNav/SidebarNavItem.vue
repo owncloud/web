@@ -1,5 +1,9 @@
 <template>
-  <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
+  <li
+    ref="item"
+    class="oc-sidebar-nav-item oc-pb-xs oc-px-s"
+    :aria-current="active ? 'page' : null"
+  >
     <oc-button
       v-oc-tooltip="toolTip"
       type="router-link"
@@ -15,25 +19,20 @@
         <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
       </span>
       <oc-tag v-if="tag" class="oc-py-rm" size="small">{{ tag }}</oc-tag>
-      <sidebar-nav-item-highlight :index="index" :active="active" />
     </oc-button>
   </li>
 </template>
 <script>
-import SidebarNavItemHighlight from './SidebarNavItemHighlight.vue'
 import get from 'lodash-es/get'
 
 export default {
-  components: {
-    SidebarNavItemHighlight
-  },
   props: {
     name: {
       type: String,
       required: true
     },
     index: {
-      type: Number,
+      type: String,
       required: true
     },
     active: {
@@ -81,6 +80,29 @@ export default {
         placement: 'right',
         arrow: false
       }
+    }
+  },
+  watch: {
+    active(active) {
+      if (!active) return
+      this.animateHighlightPosition(this.index)
+    }
+  },
+  mounted() {
+    if (!this.active) return
+    this.animateHighlightPosition(this.index)
+  },
+  methods: {
+    animateHighlightPosition(target, durationSeconds = 0.2) {
+      const highlightedElement = document.getElementById('nav-highlighter')
+      if (!highlightedElement) {
+        return
+      }
+      const targetElement = this.$refs.item
+      const offset = targetElement.offsetTop
+      const style = highlightedElement.style
+      style.setProperty('transition-duration', `${durationSeconds}s`)
+      style.setProperty('transform', `translateY(${offset}px)`)
     }
   }
 }

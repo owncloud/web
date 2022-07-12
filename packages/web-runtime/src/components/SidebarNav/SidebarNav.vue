@@ -17,10 +17,11 @@
     </oc-button>
     <nav class="oc-sidebar-nav oc-my-m oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
       <oc-list>
+        <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient" />
         <sidebar-nav-item
-          v-for="(link, index) in navItems"
+          v-for="link in navItems"
           :key="link.route.path"
-          :index="index"
+          :index="getUuid()"
           :target="link.route.path"
           :active="link.active"
           :icon="link.icon"
@@ -39,6 +40,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import SidebarNavItem from './SidebarNavItem.vue'
+import * as uuid from 'uuid'
 
 export default {
   components: {
@@ -49,6 +51,22 @@ export default {
       type: Array,
       required: true
     }
+  },
+  mounted() {
+    const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+    const highlighter = document.getElementById('nav-highlighter')
+
+    const resizeObserver = new ResizeObserver((data) => {
+      const width = data[0].borderBoxSize[0].inlineSize
+      highlighter.style.setProperty('transition-duration', `0.05s`)
+      highlighter.style.setProperty('width', `${width}px`)
+    }).observe(navItem)
+    highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
+    highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
+
+    this.$on('beforeDestroy', () => {
+      resizeObserver.disconnect()
+    })
   },
   computed: {
     ...mapState(['navigation']),
@@ -68,12 +86,21 @@ export default {
 
     toggleSidebarButtonClick() {
       return this.navigation.closed ? this.openNavigation() : this.closeNavigation()
+    },
+
+    getUuid() {
+      return uuid.v4().replaceAll('-', '')
     }
   }
 }
 </script>
 
 <style lang="scss">
+#nav-highlighter {
+  position: absolute;
+  border-radius: 5px;
+  transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
+}
 #web-nav-sidebar {
   background-color: var(--oc-color-background-default);
   border-radius: 15px;
@@ -83,6 +110,10 @@ export default {
   overflow: hidden;
   transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
   z-index: 4;
+
+  .oc-list {
+    position: relative;
+  }
 
   .toggle-sidebar-button {
     min-height: 3rem;
