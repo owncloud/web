@@ -7,6 +7,12 @@ import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
 import stubs from '../../../../../../tests/unit/stubs'
 import sidebarNavItemFixtures from '../../../../../../__fixtures__/sidebarNavItems'
 
+jest.mock('uuid', () => ({
+  v4: () => {
+    return '00000000-0000-0000-0000-000000000000'
+  }
+}))
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
@@ -41,9 +47,6 @@ describe('OcSidebarNav', () => {
 
 function getWrapper() {
   return mount(SidebarNav, {
-    methods: {
-      getUuid: () => '1'
-    },
     store: new Vuex.Store({
       state: {
         navigation: {
