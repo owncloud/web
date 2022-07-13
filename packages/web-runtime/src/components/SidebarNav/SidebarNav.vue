@@ -5,6 +5,8 @@
       'oc-app-navigation-collapsed': navigation.closed,
       'oc-app-navigation-expanded': !navigation.closed
     }"
+    tabindex="-1"
+    @focus="unselectOnFocus"
   >
     <oc-button
       appearance="raw"
@@ -52,6 +54,19 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapState(['navigation']),
+
+    toggleSidebarButtonClass() {
+      return this.navigation.closed
+        ? 'toggle-sidebar-button-collapsed'
+        : 'toggle-sidebar-button-expanded oc-pr-s'
+    },
+
+    toggleSidebarButtonIcon() {
+      return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
+    }
+  },
   mounted() {
     const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
     const highlighter = document.getElementById('nav-highlighter')
@@ -72,21 +87,9 @@ export default {
       resizeObserver.disconnect()
     })
   },
-  computed: {
-    ...mapState(['navigation']),
-
-    toggleSidebarButtonClass() {
-      return this.navigation.closed
-        ? 'toggle-sidebar-button-collapsed'
-        : 'toggle-sidebar-button-expanded oc-pr-s'
-    },
-
-    toggleSidebarButtonIcon() {
-      return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
-    }
-  },
   methods: {
     ...mapActions(['openNavigation', 'closeNavigation']),
+    ...mapActions('Files', ['resetFileSelection']),
 
     toggleSidebarButtonClick() {
       return this.navigation.closed ? this.openNavigation() : this.closeNavigation()
@@ -94,6 +97,9 @@ export default {
 
     getUuid() {
       return uuid.v4().replaceAll('-', '')
+    },
+    unselectOnFocus(e) {
+      this.resetFileSelection()
     }
   }
 }
