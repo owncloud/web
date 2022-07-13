@@ -43,7 +43,7 @@ export default class Preview implements SearchPreview {
       DavProperties.Default
     )
 
-    const resources = plainResources.reduce((acc, plainResource) => {
+    const resources = plainResources.results.reduce((acc, plainResource) => {
       let resourceName = decodeURIComponent(plainResource.name)
       if (resourceName.startsWith('/dav')) {
         resourceName = resourceName.slice(4)

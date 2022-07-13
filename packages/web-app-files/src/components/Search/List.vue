@@ -28,17 +28,17 @@
       </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
-        <list-info
-          v-if="paginatedResources.length > 0"
-          class="oc-width-1-1 oc-my-s"
-          :files="totalFilesCount.files"
-          :folders="totalFilesCount.folders"
-          :size="totalFilesSize"
-        />
         <div
           v-if="searchResultExceedsLimit"
           class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
           v-text="searchResultExceedsLimitText"
+        />
+        <list-info
+          v-else-if="paginatedResources.length > 0"
+          class="oc-width-1-1 oc-my-s"
+          :files="totalFilesCount.files"
+          :folders="totalFilesCount.folders"
+          :size="totalFilesSize"
         />
       </template>
     </resource-table>
@@ -75,7 +75,7 @@ export default defineComponent({
     searchResults: {
       type: Object,
       default: function () {
-        return { foundItems: 0, resources: [] }
+        return { range: 0, resources: [] }
       }
     }
   },
@@ -98,13 +98,19 @@ export default defineComponent({
     itemCount() {
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
+    rangeItems() {
+      return this.searchResults.range.split('/')[1]
+    },
     searchResultExceedsLimit() {
-      return this.searchResults.foundItems > searchLimit
+      return this.rangeItems > searchLimit
     },
     searchResultExceedsLimitText() {
-      const translated = this.$gettext('Found many, showing the %{itemCount} best matching results')
+      const translated = this.$gettext(
+        'Found %{rangeItems}, showing the %{itemCount} best matching results'
+      )
       return this.$gettextInterpolate(translated, {
-        itemCount: this.itemCount
+        itemCount: this.itemCount,
+        rangeItems: this.rangeItems
       })
     }
   },
