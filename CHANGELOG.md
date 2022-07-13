@@ -29,7 +29,6 @@ Summary
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
-* Enhancement - Show nav item in left side sidebar while searching: [#7210](https://github.com/owncloud/web/pull/7210)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.4: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
@@ -99,6 +98,7 @@ Details
    We've refactored the navigation highlighter to fix several small glitches.
 
    https://github.com/owncloud/web/pull/7210
+   https://github.com/owncloud/web/pull/7270
 
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 
@@ -234,14 +234,6 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7188
-
-* Enhancement - Show nav item in left side sidebar while searching: [#7210](https://github.com/owncloud/web/pull/7210)
-
-   We've introduced a new nav item in the left sidebar which will fade in, while using the 'Search
-   all files' search provider.
-
-   https://github.com/owncloud/web/issues/7190
-   https://github.com/owncloud/web/pull/7210
 
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 
