@@ -42,7 +42,6 @@ export default class Preview implements SearchPreview {
       5, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
-
     const resources = plainResources.results.reduce((acc, plainResource) => {
       let resourceName = decodeURIComponent(plainResource.name)
       if (resourceName.startsWith('/dav')) {
