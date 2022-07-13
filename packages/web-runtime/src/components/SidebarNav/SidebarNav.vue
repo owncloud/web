@@ -114,6 +114,15 @@ export default {
   position: absolute;
   border-radius: 5px;
   transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
+  &::before {
+    bottom: 0;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
+    content: '';
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 40px;
+  }
 }
 #web-nav-sidebar {
   background-color: var(--oc-color-background-default);
