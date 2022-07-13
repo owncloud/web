@@ -17,7 +17,11 @@
     </oc-button>
     <nav class="oc-sidebar-nav oc-my-m oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
       <oc-list>
-        <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient" />
+        <div
+          v-show="isAnyNavItemActive"
+          id="nav-highlighter"
+          class="oc-ml-s oc-background-primary-gradient"
+        />
         <sidebar-nav-item
           v-for="link in navItems"
           :key="link.route.path"
@@ -63,10 +67,10 @@ export default {
     const resizeObserver = new ResizeObserver((data) => {
       const width = data[0].borderBoxSize[0].inlineSize
       highlighter.style.setProperty('transition-duration', `0.05s`)
-      if(width == 0) return
+      if (width === 0) return
       highlighter.style.setProperty('width', `${width}px`)
     }).observe(navItem)
-    if(navItem.clientWidth == 0) return
+    if (navItem.clientWidth === 0) return
     highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
     highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
 
@@ -85,6 +89,10 @@ export default {
 
     toggleSidebarButtonIcon() {
       return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
+    },
+
+    isAnyNavItemActive() {
+      return this.navItems.some((i) => i.active === true)
     }
   },
   methods: {
