@@ -99,10 +99,10 @@ export default defineComponent({
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
     rangeItems() {
-      return this.searchResults.range.split('/')[1]
+      return this.searchResults.range?.split('/')[1]
     },
     searchResultExceedsLimit() {
-      return this.rangeItems > searchLimit
+      return this.rangeItems && this.rangeItems > searchLimit
     },
     searchResultExceedsLimitText() {
       const translated = this.$gettext(
