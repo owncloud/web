@@ -63,8 +63,10 @@ export default {
     const resizeObserver = new ResizeObserver((data) => {
       const width = data[0].borderBoxSize[0].inlineSize
       highlighter.style.setProperty('transition-duration', `0.05s`)
+      if(width == 0) return
       highlighter.style.setProperty('width', `${width}px`)
     }).observe(navItem)
+    if(navItem.clientWidth == 0) return
     highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
     highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
 
