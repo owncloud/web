@@ -1,0 +1,7 @@
+Enhancement: Show nav item in left side sidebar while searching
+
+We've introduced a new nav item in the left sidebar which will fade in,
+while using the 'Search all files' search provider.
+
+https://github.com/owncloud/web/pull/7210
+https://github.com/owncloud/web/issues/7190
