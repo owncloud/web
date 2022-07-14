@@ -42,16 +42,6 @@ const appInfo = {
 }
 const navItems = [
   {
-    name: $gettext('Search'),
-    icon: 'search',
-    route: {
-      path: `/${appInfo.id}/search/list`
-    },
-    enabled() {
-      return window.location.pathname === this.route.path
-    }
-  },
-  {
     name(capabilities) {
       return capabilities.spaces?.enabled ? $gettext('Personal') : $gettext('All files')
     },
