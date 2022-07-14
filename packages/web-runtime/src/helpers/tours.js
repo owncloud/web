@@ -23,15 +23,17 @@ export async function autostartTours(tourInfos, location, token, userId) {
   const autostartTours = tourInfos.filter((t) => t.autostart?.location === location)
   if (autostartTours[0]) {
     const t = autostartTours[0]
-    const autostartDone = await isTourAutostartDone(t.tourId, token, userId)
+
+    let autostartDone = false
+
+    if (localStorage.getItem('tours/' + t.tourId)) autostartDone = true
+    else if (await isTourAutostartDone(t.tourId, token, userId)) {
+      localStorage.setItem('tours/' + t.tourId, 'true')
+      autostartDone = true
+    }
 
     // check if autostart not runs already, preference for autostart of the tour exists and location is correct
-    if (
-      !Shepherd.activeTour &&
-      !localStorage.getItem('tours/' + t.tourId) &&
-      !autostartDone &&
-      location === t.autostart.location
-    ) {
+    if (!Shepherd.activeTour && !autostartDone && location === t.autostart.location) {
       // save preference and start the tour
       saveTourAutostart(t.tourId, token, userId)
         .then(() => {
