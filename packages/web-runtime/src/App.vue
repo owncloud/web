@@ -36,15 +36,16 @@
   </div>
 </template>
 <script lang="ts">
+import { unref, defineComponent } from '@vue/composition-api'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
-import { defineComponent } from '@vue/composition-api'
 import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
 import { autostartTours } from './helpers/tours'
+import { useAccessToken } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
@@ -97,8 +98,10 @@ export default defineComponent({
       handler: function (to) {
         this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
-        if (this.currentTranslatedTourInfos.length > 0)
-          autostartTours(this.currentTranslatedTourInfos, to.name)
+        const store = this.$store
+        const accessToken = unref(useAccessToken({ store }))
+        if (this.user?.id && accessToken && this.currentTranslatedTourInfos.length > 0)
+          autostartTours(this.currentTranslatedTourInfos, to.name, accessToken, this.user.id)
       }
     },
     capabilities: {

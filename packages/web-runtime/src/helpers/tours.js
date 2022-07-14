@@ -19,17 +19,81 @@ export const loadTours = async (locations = []) => {
   return { tours }
 }
 /* autostarts the first tour of the tours array with autostart property if the current location matches tour settings for autostart */
-export function autostartTours(tourInfos, location) {
+export async function autostartTours(tourInfos, location, token, userId) {
   const autostartTours = tourInfos.filter((t) => t.autostart?.location === location)
   if (autostartTours[0]) {
     const t = autostartTours[0]
-    setTimeout(() => {
-      if (!(localStorage.getItem('tours/' + t.tourId) && location === t.autostart.location)) {
-        createTranslatedTour(t).start()
-        localStorage.setItem('tours/' + t.tourId, Date.now())
-      }
-    }, t.autostart.timeout)
+
+    let autostartDone = false
+
+    if (localStorage.getItem('tours/' + t.tourId)) autostartDone = true
+    else if (await isTourAutostartDone(t.tourId, token, userId)) {
+      localStorage.setItem('tours/' + t.tourId, 'true')
+      autostartDone = true
+    }
+
+    // check if autostart not runs already, preference for autostart of the tour exists and location is correct
+    if (!Shepherd.activeTour && !autostartDone && location === t.autostart.location) {
+      // save preference and start the tour
+      saveTourAutostart(t.tourId, token, userId)
+        .then(() => {
+          setTimeout(() => {
+            // save autostart event to local storage to prevent multiple autostarts at opening the app
+            if (!(localStorage.getItem('tours/' + t.tourId) && location === t.autostart.location)) {
+              createTranslatedTour(t).start()
+              localStorage.setItem('tours/' + t.tourId, 'true')
+            }
+          }, t.autostart.timeout)
+        })
+        .catch((err) => console.log(err))
+    }
   }
+}
+
+async function saveTourAutostart(tourId, token, userId) {
+  const headers = new Headers()
+  headers.append('Authorization', 'Bearer ' + token)
+  headers.append('X-Requested-With', 'XMLHttpRequest')
+
+  const formData = new FormData()
+  formData.append('key', tourId)
+  formData.append('ns', userId)
+  formData.append('value', true)
+  const response = await fetch('/preferences', {
+    method: 'POST',
+    headers,
+    body: formData
+  })
+
+  if (!response.ok) {
+    const message = `An error has occured by saving tourAutostart: ${response.status}`
+    throw new Error(message)
+  }
+}
+
+async function isTourAutostartDone(tourId, token, userId) {
+  const headers = new Headers()
+  headers.append('Authorization', 'Bearer ' + token)
+  headers.append('X-Requested-With', 'XMLHttpRequest')
+
+  const response = await fetch(
+    '/preferences?' +
+      new URLSearchParams({
+        key: tourId,
+        ns: userId
+      }),
+    {
+      method: 'GET',
+      headers
+    }
+  )
+
+  if (!response.ok) {
+    return false
+  }
+
+  const data = await response.json()
+  return data.value
 }
 
 export function createTranslatedTourInfos(tours) {
