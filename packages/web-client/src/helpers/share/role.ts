@@ -186,12 +186,12 @@ export const peopleRoleCustomFolder = new CustomShareRole(
   ]
 )
 export const peopleRoleDenyFolder = new PeopleShareRole(
-  'deny',
+  'denied',
   true,
-  $gettext('Deny'),
-  $gettext('deny'),
-  'user -unfollow',
-  [SharePermissions.deny]
+  $gettext('No access'),
+  $gettext('no access'),
+  'user-unfollow',
+  [SharePermissions.denied]
 )
 export const linkRoleInternalFile = new LinkShareRole(
   'none',

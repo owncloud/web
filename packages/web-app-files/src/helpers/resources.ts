@@ -272,7 +272,7 @@ export function buildSharedResource(
     resource.canShare = () => true
     resource.canRename = () => true
     resource.canBeDeleted = () => true
-    resource.canDeny = () => SharePermissions.deny.enabled(share.permissions)
+    resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   }
 
   resource.extension = extractExtensionFromFile(resource)
