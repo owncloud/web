@@ -221,15 +221,11 @@ export default defineComponent({
         )
       }
 
-      const roles = LinkShareRoles.list(
+      return LinkShareRoles.list(
         this.highlightedFile.isFolder,
-        this.capabilities.files_sharing?.public?.can_edit
+        this.capabilities.files_sharing?.public?.can_edit,
+        this.capabilities.files_sharing?.public?.alias
       )
-      // add empty permission link if oCIS for alias link
-      return [
-        // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
-        ...roles
-      ]
     },
 
     passwordEnforced() {
@@ -464,7 +460,7 @@ export default defineComponent({
         expireDate,
         password,
         id: link.id,
-        permissions: link.permissions,
+        permissions: link.permissions.toString(),
         quicklink: link.quicklink,
         name: link.name,
         spaceRef: this.highlightedFile.fileId,
