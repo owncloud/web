@@ -790,10 +790,8 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1142,7 +1140,7 @@ def e2eTests(ctx):
             "BASE_URL_OCIS": "ocis:9200",
             "HEADLESS": "true",
             "OCIS": "true",
-            "RETRY": "1",
+            "RETRY": "0",
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
@@ -1150,40 +1148,40 @@ def e2eTests(ctx):
         ],
     }]
 
-    e2e_test_occ = [{
-        "name": "e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "BASE_URL_OCC": "owncloud",
-            "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
-        },
-        "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
-        ],
-    }]
+    #    e2e_test_occ = [{
+    #        "name": "e2e-tests",
+    #        "image": OC_CI_NODEJS,
+    #        "environment": {
+    #            "BASE_URL_OCC": "owncloud",
+    #            "HEADLESS": "true",
+    #            "RETRY": "1",
+    #            "REPORT_TRACING": reportTracing,
+    #        },
+    #        "commands": [
+    #            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
+    #        ],
+    #    }]
 
     services = databaseService(db) + owncloudService() + webService()
 
-    stepsClassic = \
-        skipIfUnchanged(ctx, "e2e-tests") + \
-        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
-        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        installYarn() + \
-        buildWebApp() + \
-        installCore(db) + \
-        owncloudLog() + \
-        setupIntegrationWebApp() + \
-        setupServerAndAppsForIntegrationApp(logLevel) + \
-        setUpOauth2(True, True) + \
-        fixPermissions() + \
-        waitForOwncloudService() + \
-        copyFilesForUpload() + \
-        e2e_test_occ + \
-        uploadTracingResult(ctx) + \
-        publishTracingResult(ctx, "e2e-tests oC10") + \
-        githubComment("e2e-tests oC10")
+    #    stepsClassic = \
+    #        skipIfUnchanged(ctx, "e2e-tests") + \
+    #        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+    #        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+    #        installYarn() + \
+    #        buildWebApp() + \
+    #        installCore(db) + \
+    #        owncloudLog() + \
+    #        setupIntegrationWebApp() + \
+    #        setupServerAndAppsForIntegrationApp(logLevel) + \
+    #        setUpOauth2(True, True) + \
+    #        fixPermissions() + \
+    #        waitForOwncloudService() + \
+    #        copyFilesForUpload() + \
+    #        e2e_test_occ + \
+    #        uploadTracingResult(ctx) + \
+    #        publishTracingResult(ctx, "e2e-tests oC10") + \
+    #        githubComment("e2e-tests oC10")
 
     stepsInfinite = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1210,17 +1208,17 @@ def e2eTests(ctx):
     }
 
     return [
-        {
-            "kind": "pipeline",
-            "type": "docker",
-            "name": "e2e-tests OC10",
-            "workspace": e2e_workspace,
-            "steps": stepsClassic,
-            "services": services,
-            "depends_on": [],
-            "trigger": e2e_trigger,
-            "volumes": e2e_volumes,
-        },
+        #        {
+        #            "kind": "pipeline",
+        #            "type": "docker",
+        #            "name": "e2e-tests OC10",
+        #            "workspace": e2e_workspace,
+        #            "steps": stepsClassic,
+        #            "services": services,
+        #            "depends_on": [],
+        #            "trigger": e2e_trigger,
+        #            "volumes": e2e_volumes,
+        #        },
         {
             "kind": "pipeline",
             "type": "docker",
