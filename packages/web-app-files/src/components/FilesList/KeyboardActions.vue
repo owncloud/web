@@ -71,12 +71,14 @@ export default defineComponent({
     }),
 
     handleShortcut(event) {
+      event.preventDefault()
       const key = event.keyCode || event.which
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const shift = event.shiftKey
 
       this.handleFileActionsShortcuts(key, ctrl)
       this.handleFileSelectionShortcuts(key, shift, ctrl, event)
+      document.getElementById(this.keybindOnElementId).focus()
     },
 
     handleFileActionsShortcuts(key, ctrl) {
