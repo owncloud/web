@@ -1112,7 +1112,7 @@ def unitTests(ctx):
 def e2eTests(ctx):
     db = "mysql:5.5"
     logLevel = "2"
-    reportTracing = "false"
+    reportTracing = "true"
 
     if ("with-tracing" in ctx.build.title.lower()):
         reportTracing = "true"
@@ -1144,7 +1144,8 @@ def e2eTests(ctx):
             "REPORT_TRACING": reportTracing,
         },
         "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
+            #            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
+            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/features/integrations/spaces/participantManagement.ocis.feature",
         ],
     }]
 
