@@ -205,7 +205,7 @@ Feature: rename files
     And as "Alice" file "simple-folder/a-renamed-file.txt" should exist in the server
     And as "Alice" file "simple-folder/lorem.txt" should not exist in the server
 
-  @issue-2249
+  @issue-2249 @notToImplementOnOCIS
   Scenario: Rename a file and folder in shared with me page
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
