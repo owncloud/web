@@ -116,7 +116,6 @@ export default defineComponent({
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
       this.scrollToResource({ id: nextId })
-
     },
 
     handleShiftClickAction(resource) {
