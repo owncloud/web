@@ -50,7 +50,6 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
 }
 
 export const renderSuccess = (): void => {
-  announceVersions({ store })
   const applications = Array.from(applicationStore.values())
   const instance = new Vue({
     el: '#owncloud',
@@ -71,6 +70,7 @@ export const renderSuccess = (): void => {
       if (!newValue || newValue === oldValue) {
         return
       }
+      announceVersions({ store })
       await announceApplicationsReady({ applications })
     },
     {
