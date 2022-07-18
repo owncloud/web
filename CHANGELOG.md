@@ -165,6 +165,7 @@ Details
    https://github.com/owncloud/web/issues/6029
    https://github.com/owncloud/web/pull/7153
    https://github.com/owncloud/web/pull/7280
+   https://github.com/owncloud/web/pull/7283
 
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 
