@@ -74,7 +74,7 @@ export class ArchiverService {
     } else if (this.urlSigningEnabled) {
       url = await clientService.owncloudSdk.signUrl(downloadUrl)
     } else {
-      url = downloadUrl + '&access_token=' + (window.Vue as any).$store.state.user.token
+      url = downloadUrl + '&access_token=' + (window.Vue as any).$store.getters['runtime/auth/accessToken']
     }
     window.location = url
     return url

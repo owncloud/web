@@ -26,10 +26,7 @@ export default {
             ) {
               return false
             }
-            if (
-              isLocationCommonActive(this.$router, 'files-common-projects-trash') ||
-              isLocationCommonActive(this.$router, 'files-common-projects')
-            ) {
+            if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) {
               return false
             }
             if (resources.length !== 1) {
@@ -39,6 +36,9 @@ export default {
               if (resources[0].status !== ShareStatus.accepted) {
                 return false
               }
+            }
+            if (this.$route === 'files-spaces-personal') {
+              return true
             }
             return canShare(resources[0], this.$store)
           },

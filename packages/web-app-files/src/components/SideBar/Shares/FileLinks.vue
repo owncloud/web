@@ -261,6 +261,9 @@ export default defineComponent({
     },
 
     canCreatePublicLinks() {
+      const isProjects = this.$route.name === 'files-spaces-personal'
+      if (isProjects) return this.highlightedFile.canShare({ user: this.user })
+
       if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
         return false
       }

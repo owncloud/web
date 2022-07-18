@@ -59,7 +59,7 @@ export default {
             })
             return
           } else {
-            url = url + (url.includes('?') ? '&' : '?') + 'access_token=' + this.getToken
+            url = url + (url.includes('?') ? '&' : '?') + 'access_token=' + this.$store.getters['runtime/auth/accessToken']
           }
 
           this.triggerDownload(url, file.name)
