@@ -9,11 +9,11 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
         <oc-button-stub id="share-access-details-toggle-asdf" appearance="raw" class="oc-ml-xs files-collaborators-collaborator-access-details-button">
           <oc-icon-stub name="information" fill-type="line" size="small"></oc-icon-stub>
         </oc-button-stub>
-        <oc-drop-stub toggle="#share-access-details-toggle-asdf" mode="click">
+        <oc-drop-stub toggle="#share-access-details-toggle-asdf" mode="click" class="share-access-details-drop">
           <h5 class="oc-text-bold oc-mt-rm" data-msgid="Access details" data-current-language="en_US">Access details</h5>
           <oc-list-stub>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Addition" data-current-language="en_US">Addition</span><span class="oc-width-1-2">brian@owncloud.com</span></li>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Type" data-current-language="en_US">Type</span><span class="oc-width-1-2">User</span></li>
+            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Addition" data-current-language="en_US">Addition</span><span class="files-collaborators-collaborator-additional-info oc-width-1-2">brian@owncloud.com</span></li>
+            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Type" data-current-language="en_US">Type</span><span class="files-collaborators-collaborator-share-type oc-width-1-2">User</span></li>
           </oc-list-stub>
         </oc-drop-stub>
       </div>

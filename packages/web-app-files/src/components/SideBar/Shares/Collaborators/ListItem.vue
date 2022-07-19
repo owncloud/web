@@ -38,16 +38,26 @@
           >
             <oc-icon name="information" fill-type="line" size="small" />
           </oc-button>
-          <oc-drop :toggle="`#share-access-details-toggle-${share.id}`" mode="click">
+          <oc-drop
+            class="share-access-details-drop"
+            :toggle="`#share-access-details-toggle-${share.id}`"
+            mode="click"
+          >
             <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
             <oc-list>
               <li v-if="shareAdditionalInfo" class="oc-flex">
                 <span v-translate class="oc-width-1-2">Addition</span
-                ><span class="oc-width-1-2" v-text="shareAdditionalInfo" />
+                ><span
+                  class="files-collaborators-collaborator-additional-info oc-width-1-2"
+                  v-text="shareAdditionalInfo"
+                />
               </li>
               <li class="oc-flex">
                 <span v-translate class="oc-width-1-2">Type</span
-                ><span class="oc-width-1-2" v-text="shareTypeText" />
+                ><span
+                  class="files-collaborators-collaborator-share-type oc-width-1-2"
+                  v-text="shareTypeText"
+                />
               </li>
             </oc-list>
           </oc-drop>
