@@ -14,6 +14,7 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
@@ -84,6 +85,14 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
+
+   We've made sure that the oidc callback url does not appear in the browser history after the user
+   has been redirected back from the IdP to ownCloud Web.
+
+   https://github.com/owncloud/web/issues/3071
+   https://github.com/owncloud/web/pull/7293
 
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 
