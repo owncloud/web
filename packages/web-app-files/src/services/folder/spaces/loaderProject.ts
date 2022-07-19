@@ -71,7 +71,8 @@ export class FolderLoaderSpacesProject implements FolderLoader {
       const hasShareJail = useCapabilityShareJailEnabled(store)
       yield store.dispatch('Files/loadSharesTree', {
         client: clientService.owncloudSdk,
-        path: currentFolder.path
+        path: currentFolder.path,
+        storageId: space.fileId
       })
 
       for (const file of resources) {
