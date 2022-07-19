@@ -141,16 +141,16 @@ module.exports = {
       results = listItemElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
 
-        let contextButtonEl = null
+        let accessDetailsBtn = null
         await this.api.elementIdElement(
           collaboratorElementId,
           'css selector',
           this.elements.collaboratorAccessDetailsButton,
           (result) => {
-            contextButtonEl = result.value.ELEMENT
+            accessDetailsBtn = result.value.ELEMENT
           }
         )
-        await this.api.elementIdClick(contextButtonEl)
+        await this.api.elementIdClick(accessDetailsBtn)
         this.waitForElementVisible(this.elements.collaboratorAccessDetailsDrop)
 
         for (const attrName in subSelectors) {
@@ -174,7 +174,7 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-
+        await this.api.elementIdClick(collaboratorElementId)
         return collaboratorResult
       })
 
