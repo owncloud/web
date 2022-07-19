@@ -1,0 +1,6 @@
+Bugfix: Remove lazy table loading delay
+
+We've removed the lazy loading delay on the OcTable to improve the overall performance.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7298
