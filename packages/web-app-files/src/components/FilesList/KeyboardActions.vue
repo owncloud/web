@@ -107,13 +107,18 @@ export default defineComponent({
 
     handleNavigateAction(event, up = false) {
       event.preventDefault()
-      if (!this.latestSelectedId) return
-      const nextId = this.getNextResourceId(up)
+      let nextId
+      if (!this.latestSelectedId) {
+        nextId = this.getFirstResourceId()
+      } else {
+        nextId = this.getNextResourceId(up)
+      }
       if (nextId === -1) return
       this.resetSelectionCursor()
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
       this.scrollToResource({ id: nextId })
+      document.getElementById(this.keybindOnElementId).focus()
     },
 
     handleShiftClickAction(resource) {
@@ -213,8 +218,12 @@ export default defineComponent({
         previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
       ) as HTMLElement
       if (nextRow === null) return -1
-      const nextResourceId = nextRow.getAttribute('data-item-id')
-      return nextResourceId
+      return nextRow.getAttribute('data-item-id')
+    },
+
+    getFirstResourceId() {
+      const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
+      return firstRow.getAttribute('data-item-id')
     }
   }
 })

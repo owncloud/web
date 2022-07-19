@@ -30,9 +30,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFavorites/unfavoriteFile.feature:102](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L102)
 -   [webUIResharing1/reshareUsers.feature:194](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L194)
 
-### [file_path property is not unique for a share created with same resource name i.e already present in sharee](https://github.com/owncloud/ocis/issues/2249)
--   [webUIRenameFiles/renameFiles.feature:209](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L209)
-
 ### [when sharer renames the shared resource, sharee get the updated name](https://github.com/owncloud/ocis/issues/2256)
 -   [webUIRenameFiles/renameFiles.feature:234](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L234)
 
@@ -50,11 +47,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Scoped links](https://github.com/owncloud/web/issues/6844)
 -   [webUIFilesCopy/copyPrivateLinks.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copyPrivateLinks.feature#L20)
 -   [webUIFilesCopy/copyPrivateLinks.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copyPrivateLinks.feature#L21)
-
-### [Versions Cleanup not available](https://github.com/owncloud/ocis/issues/1310)
--   [webUIFilesActionMenu/versions.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L37)
--   [webUIFilesActionMenu/versions.feature:48](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L48)
--   [webUIFilesActionMenu/versions.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L63)
 
 ### [No occ command in ocis](https://github.com/owncloud/ocis/issues/1317)
 -   [webUIRestrictSharing/restrictReSharing.feature:23](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/restrictReSharing.feature#L23)
@@ -329,9 +321,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 -   [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
-
-### [Creating group with problematic group name via graph api gives 500 error](https://github.com/owncloud/ocis/issues/3631)
--   [webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:41](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature#L41)
 
 ### [Favorites deactivated in ocis temporarily](https://github.com/owncloud/ocis/issues/1228)
 -   [webUIFilesDetails/fileDetails.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L42)

@@ -102,5 +102,6 @@ main {
 #files-view {
   grid-area: main;
   z-index: 0;
+  outline: none;
 }
 </style>

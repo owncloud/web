@@ -109,7 +109,8 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Brian" has logged in using the webUI
     Then custom permission "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for file "lorem.txt" to "share" using the webUI
-    Then user "Alice" should have received a share with these details in the server:
+    Then custom permission "<permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
+    And user "Alice" should have received a share with these details in the server:
       | field       | value             |
       | uid_owner   | Brian             |
       | share_with  | Alice             |

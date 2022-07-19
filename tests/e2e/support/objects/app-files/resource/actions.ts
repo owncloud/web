@@ -326,10 +326,15 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     await resourceCheckbox.check()
   }
   await page.locator(deleteButton).first().click()
-  await page.locator(actionConfirmationButton).click()
-  await page.waitForResponse(
-    (resp) => resp.url().includes(encodeURIComponent(resourceName)) && resp.status() === 204
-  )
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes(encodeURIComponent(resourceName)) &&
+        resp.status() === 204 &&
+        resp.request().method() === 'DELETE'
+    ),
+    page.locator(actionConfirmationButton).click()
+  ])
 }
 
 export interface downloadResourceVersionArgs {

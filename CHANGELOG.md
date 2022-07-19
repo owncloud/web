@@ -15,6 +15,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+* Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
@@ -93,6 +94,18 @@ Details
    https://github.com/owncloud/web/issues/6300
    https://github.com/owncloud/web/pull/7216
 
+* Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
+
+   We fixed a regression with printing version information to the browser console (the backend
+   version was not showing up anymore). Since loading the public link / user context is blocking
+   the boot process of applications after a [recent
+   PR](https://github.com/owncloud/web/pull/7072) has been merged, we are now able to
+   reliably print the backend version on the first page load after login as well (was not possible
+   before).
+
+   https://github.com/owncloud/web/issues/7272
+   https://github.com/owncloud/web/pull/7284
+
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 
    We've refactored the navigation highlighter to fix several small glitches.
@@ -164,6 +177,8 @@ Details
 
    https://github.com/owncloud/web/issues/6029
    https://github.com/owncloud/web/pull/7153
+   https://github.com/owncloud/web/pull/7280
+   https://github.com/owncloud/web/pull/7283
 
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 

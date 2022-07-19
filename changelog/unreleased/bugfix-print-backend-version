@@ -1,0 +1,6 @@
+Bugfix: Print backend version
+
+We fixed a regression with printing version information to the browser console (the backend version was not showing up anymore). Since loading the public link / user context is blocking the boot process of applications after a [recent PR](https://github.com/owncloud/web/pull/7072) has been merged, we are now able to reliably print the backend version on the first page load after login as well (was not possible before).
+
+https://github.com/owncloud/web/issues/7272
+https://github.com/owncloud/web/pull/7284
