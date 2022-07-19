@@ -89,7 +89,7 @@ Feature: Versions of a file
     And the user browses to display the "versions" details of file "lorem.txt"
     Then the versions list should contain 1 entries
 
-  @issue-ocis-1328 @disablePreviews
+  @issue-ocis-1328 @disablePreviews @skipOnOCIS
   Scenario: sharee can see the versions of a file
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
     And user "user0" has uploaded file with content "lorem content" to "lorem-file.txt" in the server
