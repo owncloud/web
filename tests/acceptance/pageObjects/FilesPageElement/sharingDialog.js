@@ -514,7 +514,7 @@ module.exports = {
       const dateToSet = calculateDate(days)
       const isExpiryDateChanged = await collaboratorDialog
         .expandExpirationDatePicker(collaborator)
-        .setExpirationDate(dateToSet)
+        .setExpirationDate(dateToSet, 'collaborator', true)
       if (!isExpiryDateChanged) {
         console.log('WARNING: Cannot create share with disabled expiration date!')
       }
