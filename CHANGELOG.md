@@ -15,6 +15,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
+* Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
@@ -93,6 +94,14 @@ Details
 
    https://github.com/owncloud/web/issues/3071
    https://github.com/owncloud/web/pull/7293
+
+* Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
+
+   Due to a bug in how we handle spaces as resources internally we loaded personal shares when
+   listing project space shares.
+
+   https://github.com/owncloud/web/issues/7268
+   https://github.com/owncloud/web/pull/7294
 
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 
