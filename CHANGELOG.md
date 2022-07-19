@@ -23,6 +23,7 @@ Summary
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
+* Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
@@ -175,6 +176,13 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
+
+   We've fixed the access token renewal during ongoing uploads.
+
+   https://github.com/owncloud/web/issues/7240
+   https://github.com/owncloud/web/pull/7296
 
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 
