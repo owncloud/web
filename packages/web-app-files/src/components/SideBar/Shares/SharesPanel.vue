@@ -35,6 +35,9 @@ export default defineComponent({
       ...useGraphClient()
     }
   },
+  computed: {
+    ...mapGetters('Files', ['highlightedFile'])
+  },
   watch: {
     highlightedFile: {
       handler: function (newItem, oldItem) {
@@ -44,9 +47,6 @@ export default defineComponent({
       },
       immediate: true
     }
-  },
-  computed: {
-    ...mapGetters('Files', ['highlightedFile'])
   },
   methods: {
     ...mapActions('Files', [

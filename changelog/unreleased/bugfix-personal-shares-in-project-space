@@ -1,0 +1,6 @@
+Bugfix: Personal shares leaked into project space
+
+Due to a bug in how we handle spaces as resources internally we loaded personal shares when listing project space shares.
+
+https://github.com/owncloud/web/issues/7268
+https://github.com/owncloud/web/pull/7294

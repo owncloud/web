@@ -146,7 +146,7 @@ export function buildSpace(space) {
   }
   return {
     id: space.id,
-    fileId: '',
+    fileId: space.id,
     storageId: space.id,
     mimeType: '',
     name: space.name,

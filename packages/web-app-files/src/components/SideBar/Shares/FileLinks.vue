@@ -106,7 +106,6 @@
   </div>
 </template>
 <script lang="ts">
-import { dirname } from 'path'
 import { defineComponent } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
@@ -373,23 +372,6 @@ export default defineComponent({
 
     toggleIndirectLinkListCollapsed() {
       this.indirectLinkListCollapsed = !this.indirectLinkListCollapsed
-    },
-
-    reloadLinks() {
-      this.loadCurrentFileOutgoingShares({
-        client: this.$client,
-        graphClient: this.graphClient,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        ...(this.currentStorageId && { storageId: this.currentStorageId }),
-        resource: this.highlightedFile
-      })
-      this.loadSharesTree({
-        client: this.$client,
-        path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
-        $gettext: this.$gettext,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
-      })
     },
 
     isPasswordEnforcedFor(link) {
