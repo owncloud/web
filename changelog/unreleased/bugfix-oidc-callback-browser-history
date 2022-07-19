@@ -1,0 +1,6 @@
+Bugfix: Don't leak oidc callback url into browser history
+
+We've made sure that the oidc callback url does not appear in the browser history after the user has been redirected back from the IdP to ownCloud Web.
+
+https://github.com/owncloud/web/issues/3071
+https://github.com/owncloud/web/pull/7293

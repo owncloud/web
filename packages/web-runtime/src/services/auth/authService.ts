@@ -132,7 +132,7 @@ export class AuthService {
       await this.userManager.signinRedirectCallback(url)
 
       const redirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
-      return this.router.push({ path: redirectUrl })
+      return this.router.replace({ path: redirectUrl })
     } catch (e) {
       console.warn('error during authentication:', e)
       return this.handleAuthError(this.router.currentRoute)
