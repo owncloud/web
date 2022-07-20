@@ -174,7 +174,7 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-        await this.api.elementIdClick(collaboratorElementId)
+        this.api.mouseButtonClick()
         return collaboratorResult
       })
 
