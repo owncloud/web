@@ -109,7 +109,7 @@ export default defineComponent({
     },
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
-        const translated = this.$gettext('Showing max. of %{searchLimit} results')
+        const translated = this.$gettext('Showing up to %{searchLimit} results')
         return this.$gettextInterpolate(translated, {
           searchLimit
         })
