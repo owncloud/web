@@ -15,7 +15,7 @@ export default class Preview implements SearchPreview {
     this.available = true
   }
 
-  public search(term: string): Promise<SearchResult[]> {
+  public search(term: string): Promise<SearchResult> {
     // no cache required, the filtering is client only and fast enough to recalculate the set
     // of results every time on the fly
     const resources: any[] = filterResources(this.store.getters['Files/files'], term, 5)
@@ -30,7 +30,7 @@ export default class Preview implements SearchPreview {
       return acc
     }, [])
 
-    return Promise.resolve(searchResult)
+    return Promise.resolve({ values: searchResult })
   }
 
   public activate(): void {

@@ -1,12 +1,19 @@
-export interface SearchResult {
+export interface SearchResultValue {
   id: string
   data: unknown
+}
+
+export interface SearchResult {
+  meta?: {
+    range?: string | null | undefined
+  }
+  values: SearchResultValue[]
 }
 
 export interface SearchList {
   component: unknown
 
-  search(term: string): Promise<SearchResult[]>
+  search(term: string): Promise<SearchResult>
 }
 
 export interface SearchPreview extends SearchList {

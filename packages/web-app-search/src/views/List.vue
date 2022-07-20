@@ -1,13 +1,13 @@
 <template>
   <div class="oc-width-1-1">
     <div
-      v-if="$asyncComputed.searchResults.updating"
+      v-if="$asyncComputed.searchResult.updating"
       class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1 oc-width-1-1"
     >
       <oc-spinner size="large" :aria-hidden="true" aria-label="" />
     </div>
     <template v-else>
-      <component :is="listSearch.component" :search-results="searchResults" />
+      <component :is="listSearch.component" :search-result="searchResult" />
     </template>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
 
   asyncComputed: {
-    searchResults: {
+    searchResult: {
       get() {
         return this.listSearch.search(this.$route.query.term)
       },

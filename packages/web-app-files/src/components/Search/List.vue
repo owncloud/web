@@ -72,10 +72,10 @@ export default defineComponent({
   components: { AppBar, ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
-    searchResults: {
+    searchResult: {
       type: Object,
       default: function () {
-        return { range: 0, resources: [] }
+        return { meta: { range: null }, values: [] }
       }
     }
   },
@@ -99,10 +99,10 @@ export default defineComponent({
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
     rangeSupported() {
-      return this.searchResults.range
+      return this.searchResult.meta.range
     },
     rangeItems() {
-      return this.searchResults.range?.split('/')[1]
+      return this.searchResult.meta.range?.split('/')[1]
     },
     searchResultExceedsLimit() {
       return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
@@ -125,13 +125,13 @@ export default defineComponent({
     }
   },
   watch: {
-    searchResults: {
+    searchResult: {
       handler: function () {
         this.CLEAR_CURRENT_FILES_LIST()
         this.LOAD_FILES({
           currentFolder: null,
-          files: this.searchResults.resources.length
-            ? this.searchResults.resources.map((searchResult) => searchResult.data)
+          files: this.searchResult.values.length
+            ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
       },
