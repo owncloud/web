@@ -19,7 +19,7 @@ export interface SearchList {
 export interface SearchPreview extends SearchList {
   available: boolean
 
-  activate(searchResult: SearchResult): void
+  activate(searchResult: SearchResultValue): void
 }
 
 export interface SearchProvider {
