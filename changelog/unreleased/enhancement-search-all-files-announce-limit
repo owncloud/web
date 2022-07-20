@@ -1,1 +1,7 @@
-E
+Enhancement: Search all files announce limit
+
+We announce to the user if the search results in the "search all files" search provider exceeds the limit of 200 items.
+
+https://github.com/owncloud/web/pull/7267
+https://github.com/owncloud/web/pull/7306
+https://github.com/owncloud/web/issues/7192
