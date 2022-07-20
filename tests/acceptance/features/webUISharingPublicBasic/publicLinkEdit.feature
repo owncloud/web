@@ -7,7 +7,7 @@ Feature: Edit public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-  @issue-ocis-1328
+  @issue-ocis-1328 @skipOnOCIS
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server
@@ -34,7 +34,7 @@ Feature: Edit public link shares
 
 
 
-  @issue-ocis-1328
+  @issue-ocis-1328 @skipOnOCIS
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
     And user "Alice" has created folder "simple-folder" in the server

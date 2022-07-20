@@ -164,14 +164,23 @@ module.exports = {
      * @param {string} shareType link|collaborator
      * @returns {Promise<boolean>} returns true if succeeds to set provided expiration date
      */
-    setExpirationDate: async function (value, shareType = 'collaborator') {
+    setExpirationDate: async function (
+      value,
+      shareType = 'collaborator',
+      editCollaborator = false
+    ) {
       if (value === '') {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
       const dateToSet = new Date(Date.parse(value))
       if (shareType === 'link') {
         client.execute(
-          `document.querySelector('#oc-files-file-link-expire-date').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
+          `document.querySelector('.link-expiry-picker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
+          []
+        )
+      } else if (editCollaborator) {
+        client.execute(
+          `document.querySelector('.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
           []
         )
       } else {

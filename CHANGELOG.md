@@ -14,13 +14,18 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
+* Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
+* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
+* Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
+* Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -31,7 +36,7 @@ Summary
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.4: [#7139](https://github.com/owncloud/web/pull/7139)
+* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -85,6 +90,22 @@ Details
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
 
+* Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
+
+   We've made sure that the oidc callback url does not appear in the browser history after the user
+   has been redirected back from the IdP to ownCloud Web.
+
+   https://github.com/owncloud/web/issues/3071
+   https://github.com/owncloud/web/pull/7293
+
+* Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
+
+   Due to a bug in how we handle spaces as resources internally we loaded personal shares when
+   listing project space shares.
+
+   https://github.com/owncloud/web/issues/7268
+   https://github.com/owncloud/web/pull/7294
+
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 
    We've fixed a bug where the filename hovers over the image content in the preview app and the
@@ -105,6 +126,13 @@ Details
 
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
+
+* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
+
+   We've removed the lazy loading delay on the OcTable to improve the overall performance.
+
+   https://github.com/owncloud/web/issues/7038
+   https://github.com/owncloud/web/pull/7298
 
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 
@@ -156,6 +184,19 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
+
+   We've fixed the access token renewal during ongoing uploads.
+
+   https://github.com/owncloud/web/issues/7240
+   https://github.com/owncloud/web/pull/7296
+
+* Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+
+   We've fixed spacing issues with the upload overlay progress bar.
+
+   https://github.com/owncloud/web/pull/7297
 
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 
@@ -259,19 +300,19 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.4: [#7139](https://github.com/owncloud/web/pull/7139)
+* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.4. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.5. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Bugfix - Remove click event on OcIcon: #2216 - Change - Remove OcAlert component: #2210 -
-   Change - Remove transition animations: #2210 - Change - Revamp animations: #2210 - Change -
-   OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add outline: #2218 -
-   Enhancement - Progress bar indeterminate state: #2200 - Enhancement - Redesign
-   notifications: #2210
+   - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
+   - Change - Remove OcAlert component: #2210 - Change - Remove transition animations: #2210 -
+   Change - Revamp animations: #2210 - Change - OcTable emit event data on row click: #2218 -
+   Enhancement - OcCheckbox add outline: #2218 - Enhancement - Progress bar indeterminate
+   state: #2200 - Enhancement - Redesign notifications: #2210
 
-   https://github.com/owncloud/web/pull/7139
-   https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.2
+   https://github.com/owncloud/web/pull/7298
+   https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.5
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 

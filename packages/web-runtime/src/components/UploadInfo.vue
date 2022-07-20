@@ -77,7 +77,7 @@
         </oc-button>
       </div>
     </div>
-    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-mb-m oc-mt-s">
+    <div v-if="runningUploads" class="upload-info-progress oc-mx-m oc-pb-m oc-mt-s">
       <oc-progress
         :value="totalProgress"
         :max="100"

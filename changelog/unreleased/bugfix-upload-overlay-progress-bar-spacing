@@ -1,0 +1,5 @@
+Bugfix: Upload overlay progress bar spacing
+
+We've fixed spacing issues with the upload overlay progress bar.
+
+https://github.com/owncloud/web/pull/7297

@@ -1,0 +1,6 @@
+Bugfix: Access token renewal during upload
+
+We've fixed the access token renewal during ongoing uploads.
+
+https://github.com/owncloud/web/issues/7240
+https://github.com/owncloud/web/pull/7296

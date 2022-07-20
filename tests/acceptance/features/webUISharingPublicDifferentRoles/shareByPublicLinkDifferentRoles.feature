@@ -272,7 +272,7 @@ Feature: Share by public link with different roles
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
-  @issue-ocis-1328
+  @issue-ocis-1328 @skipOnOCIS
   Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes" in the server
     And user "Alice" has logged in using the webUI

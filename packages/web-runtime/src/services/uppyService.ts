@@ -33,24 +33,24 @@ export class UppyService {
     tusMaxChunkSize,
     tusHttpMethodOverride,
     tusExtension,
-    headers
+    onBeforeRequest
   }: {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
     tusExtension: string
-    headers: { [key: string]: string }
+    onBeforeRequest: () => void
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
 
     const tusPluginOptions = {
-      headers: headers,
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
       retryDelays: [0, 500, 1000],
       // @TODO Use uploadDataDuringCreation once https://github.com/tus/tus-js-client/issues/397 is solved
-      uploadDataDuringCreation: false
+      uploadDataDuringCreation: false,
+      onBeforeRequest
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
@@ -64,10 +64,16 @@ export class UppyService {
       return
     }
 
-    this.uppy.use(CustomTus, tusPluginOptions as TusOptions)
+    this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({ headers }: { headers: { [key: string]: string } }) {
+  useXhr({
+    headers
+  }: {
+    headers: () => {
+      [name: string]: string | number
+    }
+  }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',

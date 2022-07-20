@@ -76,7 +76,10 @@ export function useUpload(options: UploadOptions): UploadResult {
 
     return {
       isTusSupported,
-      headers: unref(headers),
+      onBeforeRequest: (req) => {
+        req.setHeader('Authorization', unref(headers).Authorization)
+      },
+      headers: () => unref(headers),
       ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),

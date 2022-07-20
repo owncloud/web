@@ -535,9 +535,7 @@ export default defineComponent({
       if (this.configuration?.options?.displayResourcesLazy) {
         fields.forEach((field) =>
           Object.assign(field, {
-            lazy: {
-              delay: 250
-            }
+            lazy: true
           })
         )
       }

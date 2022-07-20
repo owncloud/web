@@ -93,7 +93,7 @@ Feature: move files
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     But as "Alice" file "simple-folder/data.zip" should not exist in the server
 
-  @issue-ocis-1328
+  @skipOnOCIS
   Scenario: move a file into another folder with no change permission
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
