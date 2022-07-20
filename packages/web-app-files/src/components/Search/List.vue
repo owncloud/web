@@ -98,13 +98,23 @@ export default defineComponent({
     itemCount() {
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
+    rangeSupported() {
+      return this.searchResults.range
+    },
     rangeItems() {
       return this.searchResults.range?.split('/')[1]
     },
     searchResultExceedsLimit() {
-      return this.rangeItems && this.rangeItems > searchLimit
+      return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
     },
     searchResultExceedsLimitText() {
+      if (!this.rangeSupported) {
+        const translated = this.$gettext('Showing max. of %{searchLimit} results')
+        return this.$gettextInterpolate(translated, {
+          searchLimit
+        })
+      }
+
       const translated = this.$gettext(
         'Found %{rangeItems}, showing the %{itemCount} best matching results'
       )
