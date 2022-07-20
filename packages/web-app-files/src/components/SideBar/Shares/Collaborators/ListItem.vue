@@ -211,9 +211,6 @@ export default defineComponent({
     },
 
     shareAdditionalInfo() {
-      if (!this.share.collaborator.additionalInfo) {
-        return
-      }
       return this.share.collaborator.additionalInfo
     },
 
