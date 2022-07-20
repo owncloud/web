@@ -39,6 +39,11 @@ const searchEventOptions = {
 
 beforeEach(() => {
   jest.resetAllMocks()
+  dummyProviderOne.previewSearch.search.mockImplementation(() => {
+    return {
+      values: []
+    }
+  })
 })
 
 afterEach(() => {
@@ -331,10 +336,12 @@ describe('Search Bar portal component', () => {
         }
       }
     })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce([
-      { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
-      { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
-    ])
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      values: [
+        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
+        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
+      ]
+    })
     expect(wrapper.findAll('li.preview').length).toBe(0)
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
@@ -354,10 +361,12 @@ describe('Search Bar portal component', () => {
         }
       }
     })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce([
-      { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
-      { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
-    ])
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      values: [
+        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
+        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
+      ]
+    })
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
     await wrapper.findAll('li.preview').at(1).trigger('click')
