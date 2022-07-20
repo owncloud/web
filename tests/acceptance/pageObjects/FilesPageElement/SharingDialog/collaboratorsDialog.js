@@ -140,6 +140,19 @@ module.exports = {
 
       results = listItemElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
+
+        let accessDetailsBtn = null
+        await this.api.elementIdElement(
+          collaboratorElementId,
+          'css selector',
+          this.elements.collaboratorAccessDetailsButton,
+          (result) => {
+            accessDetailsBtn = result.value.ELEMENT
+          }
+        )
+        await this.api.elementIdClick(accessDetailsBtn)
+        this.waitForElementVisible(this.elements.collaboratorAccessDetailsDrop)
+
         for (const attrName in subSelectors) {
           let attrElementId = null
           await this.api.elementIdElement(
@@ -161,7 +174,7 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-
+        this.api.mouseButtonClick()
         return collaboratorResult
       })
 
@@ -273,6 +286,12 @@ module.exports = {
     expirationDatePickerTrigger: {
       selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
       locateStrategy: 'xpath'
+    },
+    collaboratorAccessDetailsButton: {
+      selector: '.files-collaborators-collaborator-access-details-button'
+    },
+    collaboratorAccessDetailsDrop: {
+      selector: '.share-access-details-drop'
     }
   }
 }

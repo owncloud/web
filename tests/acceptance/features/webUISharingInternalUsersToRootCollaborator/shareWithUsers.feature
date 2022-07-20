@@ -71,8 +71,8 @@ Feature: Shares collaborator list
     Then user "Brian Murphy" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
     Examples:
       | additional-info-field | additional-info-result |
-      | id                    | (Brian)                |
-      | email                 | (brian@example.org)    |
+      | id                    |  Brian                 |
+      | email                 |  brian@example.org     |
 
 
   Scenario: collaborators list does not contain additional info when disabled
