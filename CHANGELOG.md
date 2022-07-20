@@ -32,6 +32,7 @@ Summary
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
+* Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -262,6 +263,14 @@ Details
    https://github.com/owncloud/web/issues/7205
    https://github.com/owncloud/web/pull/7201
    https://github.com/owncloud/web/pull/7207
+
+* Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+
+   We've redesigned the shared with list, to achieve more spacing and a better user experience.
+   We've also fixed a bug, where the role in a child of a share wasn't shown.
+
+   https://github.com/owncloud/web/issues/7110
+   https://github.com/owncloud/web/pull/7252
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
