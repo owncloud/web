@@ -109,7 +109,7 @@ function getWrapper(searchTerm = '', files = []) {
     propsData: {
       searchResult: {
         meta: {
-          range: 'rows 0-100/100',
+          range: 'rows 0-100/100'
         },
         values: getSearchResults(files)
       }
