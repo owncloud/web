@@ -13,6 +13,7 @@
     :selection="selection"
     :sort-by="sortBy"
     :sort-dir="sortDir"
+    :lazy="lazyLoading"
     padding-x="medium"
     @highlight="fileClicked"
     @rowMounted="rowMounted"
@@ -532,15 +533,10 @@ export default defineComponent({
         })
       }
 
-      if (this.configuration?.options?.displayResourcesLazy) {
-        fields.forEach((field) =>
-          Object.assign(field, {
-            lazy: true
-          })
-        )
-      }
-
       return fields
+    },
+    lazyLoading() {
+      return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
       return this.selection.length === this.resources.length
