@@ -32,7 +32,7 @@
           </span>
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           <oc-button
-            :id="`share-access-details-toggle-${share.id}`"
+            :id="`share-access-details-toggle-${shareAccessToggleId}`"
             class="oc-ml-xs files-collaborators-collaborator-access-details-button"
             appearance="raw"
           >
@@ -40,7 +40,7 @@
           </oc-button>
           <oc-drop
             class="share-access-details-drop"
-            :toggle="`#share-access-details-toggle-${share.id}`"
+            :toggle="`#share-access-details-toggle-${shareAccessToggleId}`"
             mode="click"
           >
             <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
@@ -130,6 +130,7 @@ import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { extractDomSelector } from '../../../../helpers/resource'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
+import * as uuid from 'uuid'
 
 export default defineComponent({
   name: 'ListItem',
@@ -279,6 +280,9 @@ export default defineComponent({
       return {
         text: this.$gettext('Invite persons or groups to access this file or folder.')
       }
+    },
+    shareAccessToggleId() {
+      return uuid.v4()
     }
   },
   methods: {
