@@ -280,6 +280,7 @@ Details
 
    https://github.com/owncloud/web/issues/7110
    https://github.com/owncloud/web/pull/7252
+   https://github.com/owncloud/web/pull/7310
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
