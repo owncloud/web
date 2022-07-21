@@ -1,0 +1,7 @@
+Bugfix: Table lazy loading performance
+
+We've drastically increased the performance of the files table by removing the lazy loading delay and by moving the loading visualization from the OcTd to the OcTr component.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7298
+https://github.com/owncloud/web/pull/7312

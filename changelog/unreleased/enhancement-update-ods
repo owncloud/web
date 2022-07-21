@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v14.0.0-alpha.5
+Enhancement: Update ODS to v14.0.0-alpha.7
 
-We updated the ownCloud Design System to version 14.0.0-alpha.5. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Bugfix - Remove click event on OcIcon: #2216
 - Bugfix - Lazy loading render performance: #2260
@@ -11,6 +11,7 @@ We updated the ownCloud Design System to version 14.0.0-alpha.5. Please refer to
 - Enhancement - OcCheckbox add outline: #2218
 - Enhancement - Progress bar indeterminate state: #2200
 - Enhancement - Redesign notifications: #2210
+- Enhancement - Use oc colors for selected background and deselect icon: #2262
 
-https://github.com/owncloud/web/pull/7298
-https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.5
+https://github.com/owncloud/web/pull/7312
+https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.7
