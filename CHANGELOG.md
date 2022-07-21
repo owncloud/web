@@ -18,12 +18,12 @@ Summary
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
-* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
@@ -38,7 +38,7 @@ Summary
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
+* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -129,13 +129,6 @@ Details
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
 
-* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
-
-   We've removed the lazy loading delay on the OcTable to improve the overall performance.
-
-   https://github.com/owncloud/web/issues/7038
-   https://github.com/owncloud/web/pull/7298
-
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 
    We've refactored the navigation highlighter to fix several small glitches.
@@ -176,6 +169,15 @@ Details
 
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
+
+* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
+
+   We've drastically increased the performance of the files table by removing the lazy loading
+   delay and by moving the loading visualization from the OcTd to the OcTr component.
+
+   https://github.com/owncloud/web/issues/7038
+   https://github.com/owncloud/web/pull/7298
+   https://github.com/owncloud/web/pull/7312
 
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 
@@ -319,19 +321,20 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
+* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.5. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
    - Change - Remove OcAlert component: #2210 - Change - Remove transition animations: #2210 -
    Change - Revamp animations: #2210 - Change - OcTable emit event data on row click: #2218 -
    Enhancement - OcCheckbox add outline: #2218 - Enhancement - Progress bar indeterminate
-   state: #2200 - Enhancement - Redesign notifications: #2210
+   state: #2200 - Enhancement - Redesign notifications: #2210 - Enhancement - Use oc colors for
+   selected background and deselect icon: #2262
 
-   https://github.com/owncloud/web/pull/7298
-   https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.5
+   https://github.com/owncloud/web/pull/7312
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.7
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
