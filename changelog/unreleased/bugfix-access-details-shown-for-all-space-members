@@ -1,0 +1,4 @@
+Bugfix: Access details shown for all space members
+
+https://github.com/owncloud/web/pull/7310
+https://github.com/owncloud/web/issues/7305
