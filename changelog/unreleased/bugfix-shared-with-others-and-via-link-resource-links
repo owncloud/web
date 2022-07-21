@@ -1,4 +1,4 @@
-Bugfix: "Shared with others" and "Shared via Link" page resource links not working
+Bugfix: "Shared with others" and "Shared via Link" resource links not working
 
 We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page stopped working.
 
