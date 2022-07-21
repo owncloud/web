@@ -7,6 +7,7 @@ import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import { usePublicLinkContext, usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   mixins: [MixinFilesListScrolling],
@@ -19,6 +20,13 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'files-view'
+    }
+  },
+  setup() {
+    const store = useStore()
+    return {
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data: () => {
@@ -202,6 +210,8 @@ export default defineComponent({
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
+        isPublicLinkContext: this.isPublicLinkContext,
+        publicLinkPassword: this.publicLinkPassword,
         upsertResource: this.upsertResource
       })
     },

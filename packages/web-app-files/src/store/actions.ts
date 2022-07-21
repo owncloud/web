@@ -63,6 +63,9 @@ export default {
       { root: true }
     )
   },
+  async clearClipboardFiles(context) {
+    context.commit('CLEAR_CLIPBOARD')
+  },
   async pasteSelectedFiles(
     context,
     {
@@ -73,7 +76,7 @@ export default {
       $gettext,
       $gettextInterpolate,
       $ngettext,
-      routeContext,
+      isPublicLinkContext,
       publicLinkPassword,
       upsertResource
     }
@@ -90,10 +93,9 @@ export default {
         $gettext,
         $gettextInterpolate,
         $ngettext,
-        routeContext,
+        isPublicLinkContext,
         publicLinkPassword
       )
-      context.commit('CLEAR_CLIPBOARD')
     }
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copy(
@@ -106,14 +108,14 @@ export default {
         $gettext,
         $gettextInterpolate,
         $ngettext,
-        routeContext,
+        isPublicLinkContext,
         publicLinkPassword
       )
     }
+    context.commit('CLEAR_CLIPBOARD')
     const loadMovedResource = async (resource) => {
-      const isPublicFilesRoute = routeContext === 'files-public-files'
       let loadedResource
-      if (isPublicFilesRoute) {
+      if (isPublicLinkContext) {
         loadedResource = await client.publicFiles.getFileInfo(
           resource.webDavPath,
           publicLinkPassword,

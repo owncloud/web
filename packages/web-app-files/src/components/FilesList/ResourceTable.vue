@@ -61,6 +61,7 @@
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
+          :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
         />
         <oc-button
@@ -186,6 +187,7 @@ import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
+import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces } from '../../router'
 
@@ -400,7 +402,12 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown', 'latestSelectedId']),
+    ...mapState('Files', [
+      'areFileExtensionsShown',
+      'latestSelectedId',
+      'clipboardResources',
+      'clipboardAction'
+    ]),
     ...mapState('runtime/spaces', ['spaces']),
     popperOptions() {
       return {
@@ -562,6 +569,10 @@ export default defineComponent({
     ...mapActions('Files/sidebar', ['openWithPanel']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
+    },
+    isResourceCut(resource) {
+      if (this.clipboardAction !== ClipboardActions.Cut) return false
+      return this.clipboardResources.some((r) => r.id === resource.id)
     },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
@@ -801,6 +812,9 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .resource-table {
+  &-resource-cut {
+    opacity: 0.6;
+  }
   &-resource-wrapper {
     &-limit-max-width {
       max-width: calc(100% - var(--oc-space-medium));

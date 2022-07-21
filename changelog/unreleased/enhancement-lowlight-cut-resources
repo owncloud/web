@@ -1,0 +1,5 @@
+Enhancement: Lowlight cut resources
+
+We've added a visual indication to show which resources are being cut
+
+https://github.com/owncloud/web/pull/7309

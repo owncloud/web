@@ -1,0 +1,6 @@
+Enhancement: Keyboard shortcut indicators in ContextMenu
+
+We've added the option to display relevant keyboard shortcuts in the contextmenu to give notice to the user which shortcuts are available
+
+https://github.com/owncloud/web/pull/7309
+https://github.com/owncloud/web/issues/6892

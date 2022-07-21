@@ -19,7 +19,7 @@ const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const filesAction = `.oc-files-actions-%s-trigger`
-const locationConfirmButton = '#location-picker-btn-confirm'
+const clipboardBtns = '#clipboard-btns'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
 const deleteButton = 'button.oc-files-actions-delete-trigger'
@@ -229,15 +229,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     await clickResource({ page: page, path: newLocation })
   }
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith(resourceBase) &&
-        resp.status() === 201 &&
-        resp.request().method() === action.toUpperCase()
-    ),
-    page.locator(locationConfirmButton).click()
-  ])
+  await page.locator(clipboardBtns).first().click()
 
   await waitForResources({
     page,

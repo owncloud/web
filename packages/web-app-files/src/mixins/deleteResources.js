@@ -16,8 +16,6 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['user', 'configuration', 'capabilities']),
-    ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
-    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_deleteResources_isInTrashbin() {
       return (
@@ -152,10 +150,11 @@ export default {
     },
 
     $_deleteResources_filesList_delete() {
+      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
       this.deleteFiles({
         client: this.$client,
         files: this.$_deleteResources_resources,
-        isPublicLinkContext: this.isPublicLinkContext,
+        isPublicLinkContext,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
       }).then(async () => {
@@ -168,9 +167,10 @@ export default {
           isLocationSpacesActive(this.$router, 'files-spaces-personal')
         ) {
           if (this.capabilities?.spaces?.enabled) {
+            const accessToken = this.$store.getters['runtime/auth/accessToken']
             const graphClient = clientService.graphAuthenticated(
               this.configuration.server,
-              this.accessToken
+              accessToken
             )
             const driveResponse = await graphClient.drives.getDrive(
               this.$_deleteResources_resources[0].storageId

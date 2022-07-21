@@ -1365,7 +1365,6 @@ Then(
   async function (table) {
     const visibleItems =
       await client.page.FilesPageElement.appSideBar().getActionsMenuItemsExceptDefaults()
-
     const tableItems = table.rows()
     const expectedVisibleItems = []
     tableItems.forEach((element) => {

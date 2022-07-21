@@ -37,7 +37,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     confirmBtn: {
-      selector: 'button#location-picker-btn-confirm'
+      selector: '#clipboard-btns button:first-child'
     }
   }
 }

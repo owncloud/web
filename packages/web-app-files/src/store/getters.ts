@@ -11,6 +11,12 @@ export default {
   currentFolder: (state) => {
     return state.currentFolder
   },
+  clipboardResources: (state) => {
+    return state.clipboardResources
+  },
+  clipboardAction: (state) => {
+    return state.clipboardAction
+  },
   // a flat file list has no current folder nor parent
   flatFileList: (state) => !!state.currentFolder === false,
   activeFiles: (state, getters) => {

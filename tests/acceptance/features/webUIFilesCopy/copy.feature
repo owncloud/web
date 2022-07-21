@@ -32,7 +32,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then the error message with header 'Failed to copy "strängé filename (duplicate #2 &).txt"' should be displayed on the webUI
+    Then the "modal error" message with header 'File with name strängé filename (duplicate #2 &).txt already exists.' should be displayed on the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
@@ -78,7 +78,7 @@ Feature: copy files and folders
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    And the public uses the webUI to access the last public link created by user "Alice" in a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -113,7 +113,7 @@ Feature: copy files and folders
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then the error message with header 'Failed to copy "simple-empty-folder"' should be displayed on the webUI
+    Then the "error" message with header "You can't paste the selected file at this location because you can't paste an item into itself." should be displayed on the webUI
     And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 

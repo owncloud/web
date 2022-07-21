@@ -35,7 +35,7 @@ Feature: move folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal page
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
-    Then the error message with header 'Failed to move "simple-empty-folder"' should be displayed on the webUI
+    Then the "modal error" message with header 'Folder with name simple-empty-folder already exists.' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple folders at once
@@ -81,7 +81,7 @@ Feature: move folders
   Scenario: move a folder into the same folder
     Given user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then the error message with header 'Failed to move "simple-empty-folder"' should be displayed on the webUI
+    Then the "error" message with header "You can't paste the selected file at this location because you can't paste an item into itself." should be displayed on the webUI
     And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 

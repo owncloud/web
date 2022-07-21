@@ -33,6 +33,11 @@
         action.label(filterParams)
       }}</span>
       <span
+        v-if="action.shortcut && shortcutHint"
+        class="oc-files-context-action-shortcut"
+        v-text="action.shortcut"
+      />
+      <span
         v-if="action.opensInNewWindow"
         data-testid="action-sr-hint"
         class="oc-invisible-sr"
@@ -57,6 +62,11 @@ export default {
     appearance: {
       type: String,
       default: 'raw'
+    },
+    shortcutHint: {
+      type: Boolean,
+      default: true,
+      required: false
     }
   },
   computed: {
@@ -109,5 +119,11 @@ export default {
 <style lang="scss">
 .action-menu-item {
   vertical-align: middle;
+}
+.oc-files-context-action-shortcut {
+  justify-content: right !important;
+  font-size: 0.85rem;
+  font-weight: bold !important;
+  opacity: 0.7;
 }
 </style>
