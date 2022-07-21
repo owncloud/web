@@ -6,6 +6,12 @@ import GetTextPlugin from 'vue-gettext'
 import { peopleRoleViewerFolder, ShareTypes } from '../../../../../../src/helpers/share'
 import Users from '@/__fixtures__/users'
 
+jest.mock('uuid', () => ({
+  v4: () => {
+    return '00000000-0000-0000-0000-000000000000'
+  }
+}))
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(GetTextPlugin, {
