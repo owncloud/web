@@ -601,11 +601,12 @@ export default defineComponent({
         ...this.targetRoute.query
       }
 
+      const matchingSpace = this.getMatchingSpace(resource.storageId)
+
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource.storageId)
         if (matchingSpace?.driveType === 'project') {
           return createLocationSpaces('files-spaces-project', {
-            params,
+            params: { ...params, storageId: matchingSpace?.id || params.storageId },
             query
           })
         }
@@ -613,7 +614,7 @@ export default defineComponent({
 
       return {
         name: this.targetRoute.name,
-        params,
+        params: { ...params, storageId: matchingSpace?.id || params.storageId },
         query
       }
     },
