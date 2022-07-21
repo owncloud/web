@@ -75,7 +75,7 @@ export default defineComponent({
     searchResult: {
       type: Object,
       default: function () {
-        return { meta: { range: null }, values: [] }
+        return { range: null, values: [] }
       }
     }
   },
@@ -99,10 +99,10 @@ export default defineComponent({
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
     rangeSupported() {
-      return this.searchResult.meta?.range
+      return this.searchResult.range
     },
     rangeItems() {
-      return this.searchResult.meta?.range?.split('/')[1]
+      return this.searchResult.range?.split('/')[1]
     },
     searchResultExceedsLimit() {
       return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)

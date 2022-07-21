@@ -4,9 +4,7 @@ export interface SearchResultValue {
 }
 
 export interface SearchResult {
-  meta?: {
-    range?: string | null | undefined
-  }
+  range?: string | null
   values: SearchResultValue[]
 }
 

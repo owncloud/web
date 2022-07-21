@@ -17,9 +17,7 @@ export default class List implements SearchList {
   async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        meta: {
-          range: null
-        },
+        range: null,
         values: []
       }
     }
@@ -31,7 +29,7 @@ export default class List implements SearchList {
     )
 
     return {
-      meta: { range },
+      range,
       values: results.map((plainResource) => {
         let resourceName = decodeURIComponent(plainResource.name)
         if (resourceName.startsWith('/dav')) {

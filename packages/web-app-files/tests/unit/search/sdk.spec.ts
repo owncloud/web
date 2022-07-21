@@ -100,7 +100,7 @@ describe('SDKProvider', () => {
       ]
 
       const noTerm = await search.previewSearch.search('')
-      expect(noTerm).toEqual({ meta: { range: null }, values: [] })
+      expect(noTerm).toEqual({ range: null, values: [] })
 
       searchMock.mockReturnValueOnce({ results: files })
       const withTerm = await search.previewSearch.search('foo')
