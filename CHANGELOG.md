@@ -20,6 +20,7 @@ Summary
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
+* Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
@@ -141,6 +142,14 @@ Details
 
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
+
+* Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
+
+   We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page
+   stopped working.
+
+   https://github.com/owncloud/web/issues/7303
+   https://github.com/owncloud/web/pull/7308
 
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 
