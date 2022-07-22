@@ -31,17 +31,11 @@
             />
           </span>
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
-          <oc-button
-            :id="`share-access-details-toggle-${shareAccessToggleId}`"
-            class="oc-ml-xs files-collaborators-collaborator-access-details-button"
-            appearance="raw"
-          >
-            <oc-icon name="information" fill-type="line" size="small" />
-          </oc-button>
           <oc-drop
+            ref="accessDetails"
             class="share-access-details-drop"
-            :toggle="`#share-access-details-toggle-${shareAccessToggleId}`"
-            mode="click"
+            mode="manual"
+            target=".collaborator-edit-dropdown-options-btn"
           >
             <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
             <oc-list>
@@ -91,26 +85,27 @@
               />
               <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
             </span>
+            <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+              <router-link
+                v-oc-tooltip="$gettext('Navigate to parent folder')"
+                class="parent-folder oc-text-truncate"
+                :to="sharedParentRoute"
+              >
+                <span class="text" v-text="$gettext('via')" />
+                <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
+                <span class="text oc-text-truncate" v-text="sharedParentDir" />
+              </router-link>
+            </div>
             <edit-dropdown
-              v-if="canEditOrDelete"
               class="files-collaborators-collaborator-edit"
               data-testid="collaborator-edit"
               :expiration-date="share.expires ? share.expires : null"
               :share-category="shareCategory"
               @expirationDateChanged="shareExpirationChanged"
               @removeShare="removeShare"
+              @showAccessDetails="showAccessDetails"
+              @canEditOrDelte="canEditOrDelete"
             />
-          </div>
-          <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
-            <router-link
-              v-oc-tooltip="$gettext('Navigate to parent folder')"
-              class="parent-folder oc-text-truncate"
-              :to="sharedParentRoute"
-            >
-              <span class="text" v-text="$gettext('via')" />
-              <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
-              <span class="text oc-text-truncate" v-text="sharedParentDir" />
-            </router-link>
           </div>
         </div>
       </div>
@@ -291,6 +286,10 @@ export default defineComponent({
 
     removeShare() {
       this.$emit('onDelete', this.share)
+    },
+
+    showAccessDetails() {
+      this.$refs.accessDetails.show()
     },
 
     shareRoleChanged({ role, permissions }) {

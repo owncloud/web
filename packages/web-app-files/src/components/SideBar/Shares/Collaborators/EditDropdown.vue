@@ -35,6 +35,7 @@
         </li>
         <li v-for="(option, i) in options" :key="i" class="oc-px-s oc-py-xs">
           <oc-button
+            v-if="option.enabled"
             appearance="raw"
             :class="option.class"
             v-bind="option.additionalAttributes || {}"
@@ -69,6 +70,10 @@ export default {
       validator: function (value) {
         return ['user', 'group'].includes(value) || !value
       }
+    },
+    canEditOrDelete: {
+      type: Boolean,
+      required: true
     }
   },
   data: function () {
@@ -86,6 +91,7 @@ export default {
           title: this.$gettext('Remove expiration date'),
           method: this.removeExpirationDate,
           class: 'remove-expiration-date',
+          enabled: this.canEditOrDelete,
           additionalAttributes: {
             'data-testid': 'collaborator-remove-expiration-btn'
           }
@@ -97,10 +103,17 @@ export default {
           title: this.$gettext('Remove share'),
           method: this.removeShare,
           class: 'remove-share',
+          enabled: this.canEditOrDelete,
           additionalAttributes: {
             variation: 'danger',
             'data-testid': 'collaborator-remove-share-btn'
           }
+        },
+        {
+          title: this.$gettext('Access details'),
+          method: this.showAccessDetails,
+          enabled: true,
+          class: 'show-access-details'
         }
       ]
     },
@@ -233,6 +246,9 @@ export default {
     },
     removeShare() {
       this.$emit('removeShare')
+    },
+    showAccessDetails() {
+      this.$emit('showAccessDetails')
     }
   }
 }
