@@ -82,7 +82,7 @@ export default {
     },
     async fetchFileVersions() {
       this.loading = true
-      await this.loadVersions({ client: this.$client, fileId: this.highlightedFile.id })
+      await this.loadVersions({ client: this.$client, fileId: this.highlightedFile.fileId })
       this.loading = false
     },
     revertVersion(file) {
