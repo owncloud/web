@@ -38,22 +38,16 @@
             target=".collaborator-edit-dropdown-options-btn"
           >
             <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
-            <oc-list>
-              <li v-if="shareAdditionalInfo" class="oc-flex">
-                <span v-translate class="oc-width-1-2">Addition</span
-                ><span
-                  class="files-collaborators-collaborator-additional-info oc-width-1-2"
-                  v-text="shareAdditionalInfo"
-                />
-              </li>
-              <li class="oc-flex">
-                <span v-translate class="oc-width-1-2">Type</span
-                ><span
-                  class="files-collaborators-collaborator-share-type oc-width-1-2"
-                  v-text="shareTypeText"
-                />
-              </li>
-            </oc-list>
+            <dl>
+              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted">Addition</dt>
+              <dd
+                v-if="shareAdditionalInfo"
+                class="files-collaborators-collaborator-additional-info"
+                v-text="shareAdditionalInfo"
+              />
+              <dt v-translate class="oc-text-muted">Type</dt>
+              <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
+            </dl>
           </oc-drop>
         </div>
         <div class="oc-m-rm oc-flex oc-flex-middle oc-flex-between">
@@ -101,7 +95,7 @@
               data-testid="collaborator-edit"
               :expiration-date="share.expires ? share.expires : null"
               :share-category="shareCategory"
-              :canEditOrDelete="canEditOrDelete"
+              :can-edit-or-delete="canEditOrDelete"
               @expirationDateChanged="shareExpirationChanged"
               @removeShare="removeShare"
               @showAccessDetails="showAccessDetails"
@@ -341,5 +335,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 .sharee-avatar {
   min-width: 48px;
+}
+
+.share-access-details-drop {
+  dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+  }
+
+  dt {
+    grid-column-start: 1;
+  }
+
+  dd {
+    grid-column-start: 2;
+  }
 }
 </style>
