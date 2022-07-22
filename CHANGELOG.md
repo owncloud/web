@@ -27,6 +27,7 @@ Summary
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+* Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -51,6 +52,7 @@ Details
 
    https://github.com/owncloud/web/issues/7187
    https://github.com/owncloud/web/pull/7230
+   https://github.com/owncloud/web/pull/7314
 
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
@@ -209,6 +211,13 @@ Details
    We've fixed spacing issues with the upload overlay progress bar.
 
    https://github.com/owncloud/web/pull/7297
+
+* Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
+
+   We've fixed a bug where the versions of shared files where not visible for the share receivers.
+
+   https://github.com/owncloud/web/issues/7159
+   https://github.com/owncloud/web/pull/7313
 
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 
