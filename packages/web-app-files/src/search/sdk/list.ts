@@ -1,4 +1,4 @@
-import { SearchList } from 'search/src/types'
+import { SearchList, SearchResult } from 'search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
@@ -14,20 +14,23 @@ export default class List implements SearchList {
     this.component = ListComponent
   }
 
-  async search(term: string): Promise<any> {
+  async search(term: string): Promise<SearchResult> {
     if (!term) {
-      return []
+      return {
+        range: null,
+        values: []
+      }
     }
 
-    const searchResponse = await clientService.owncloudSdk.files.search(
+    const { range, results } = await clientService.owncloudSdk.files.search(
       term,
       searchLimit,
       DavProperties.Default
     )
 
     return {
-      range: searchResponse.range,
-      resources: searchResponse.results.map((plainResource) => {
+      range,
+      values: results.map((plainResource) => {
         let resourceName = decodeURIComponent(plainResource.name)
         if (resourceName.startsWith('/dav')) {
           resourceName = resourceName.slice(4)

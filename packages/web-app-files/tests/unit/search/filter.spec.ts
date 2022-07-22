@@ -81,7 +81,7 @@ describe('FilterProvider', () => {
       const search = new FilterSearch(store, jest.fn() as unknown as VueRouter)
       const result = await search.previewSearch.search('foo')
 
-      expect(result).toMatchObject([{ id: files[0].id, data: files[0] }])
+      expect(result).toMatchObject({ values: [{ id: files[0].id, data: files[0] }] })
     })
   })
 })

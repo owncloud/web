@@ -107,9 +107,9 @@ function getWrapper(searchTerm = '', files = []) {
   return mount(List, {
     localVue,
     propsData: {
-      searchResults: {
+      searchResult: {
         range: 'rows 0-100/100',
-        resources: getSearchResults(files)
+        values: getSearchResults(files)
       }
     },
     store: createStore(files),
