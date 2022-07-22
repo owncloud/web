@@ -8,10 +8,12 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
       <div class="oc-flex oc-flex-middle"><span class="oc-text-truncate oc-m-rm"><span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span></span> <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span>
         <oc-drop-stub mode="manual" target=".collaborator-edit-dropdown-options-btn" class="share-access-details-drop">
           <h5 class="oc-text-bold oc-mt-rm" data-msgid="Access details" data-current-language="en_US">Access details</h5>
-          <oc-list-stub>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Addition" data-current-language="en_US">Addition</span><span class="files-collaborators-collaborator-additional-info oc-width-1-2">brian@owncloud.com</span></li>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Type" data-current-language="en_US">Type</span><span class="files-collaborators-collaborator-share-type oc-width-1-2">User</span></li>
-          </oc-list-stub>
+          <dl>
+            <dt class="oc-text-muted" data-msgid="Addition" data-current-language="en_US">Addition</dt>
+            <dd class="files-collaborators-collaborator-additional-info">brian@owncloud.com</dd>
+            <dt class="oc-text-muted" data-msgid="Type" data-current-language="en_US">Type</dt>
+            <dd class="files-collaborators-collaborator-share-type">User</dd>
+          </dl>
         </oc-drop-stub>
       </div>
       <div class="oc-m-rm oc-flex oc-flex-middle oc-flex-between">
