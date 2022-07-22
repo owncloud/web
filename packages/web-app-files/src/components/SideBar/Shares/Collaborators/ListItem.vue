@@ -101,10 +101,10 @@
               data-testid="collaborator-edit"
               :expiration-date="share.expires ? share.expires : null"
               :share-category="shareCategory"
+              :canEditOrDelete="canEditOrDelete"
               @expirationDateChanged="shareExpirationChanged"
               @removeShare="removeShare"
               @showAccessDetails="showAccessDetails"
-              @canEditOrDelte="canEditOrDelete"
             />
           </div>
         </div>
