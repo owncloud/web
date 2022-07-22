@@ -37,6 +37,7 @@ Summary
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
+* Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
@@ -312,6 +313,15 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
+
+* Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
+
+   If the search results of a backend search exceed the limit of 200 items we now announce that
+   additional items exist.
+
+   https://github.com/owncloud/web/issues/7192
+   https://github.com/owncloud/web/pull/7267
+   https://github.com/owncloud/web/pull/7306
 
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 
