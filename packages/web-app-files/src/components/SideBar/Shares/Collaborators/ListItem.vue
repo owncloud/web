@@ -349,6 +349,7 @@ export default defineComponent({
 
   dd {
     grid-column-start: 2;
+    margin-left: var(--oc-space-medium);
   }
 }
 </style>
