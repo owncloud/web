@@ -141,11 +141,22 @@ module.exports = {
       results = listItemElementIds.map(async (collaboratorElementId) => {
         const collaboratorResult = {}
 
+        let collaboratorEditButton = null
+        await this.api.elementIdElement(
+          collaboratorElementId,
+          'css selector',
+          this.elements.collaboratorEditButton,
+          (result) => {
+            collaboratorEditButton = result.value.ELEMENT
+          }
+        )
+        await this.api.elementIdClick(collaboratorEditButton)
+
         let accessDetailsBtn = null
         await this.api.elementIdElement(
           collaboratorElementId,
           'css selector',
-          this.elements.collaboratorAccessDetailsButton,
+          '.show-access-details',
           (result) => {
             accessDetailsBtn = result.value.ELEMENT
           }
@@ -179,6 +190,7 @@ module.exports = {
       })
 
       results = await Promise.all(results)
+      console.log(results)
       return results
     },
     /**
@@ -287,8 +299,8 @@ module.exports = {
       selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
       locateStrategy: 'xpath'
     },
-    collaboratorAccessDetailsButton: {
-      selector: '.files-collaborators-collaborator-access-details-button'
+    collaboratorEditButton: {
+      selector: '.collaborator-edit-dropdown-options-btn'
     },
     collaboratorAccessDetailsDrop: {
       selector: '.share-access-details-drop'
