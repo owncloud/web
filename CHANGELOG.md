@@ -274,6 +274,7 @@ Details
    https://github.com/owncloud/web/pull/7086
    https://github.com/owncloud/web/pull/7247
    https://github.com/owncloud/web/pull/7243
+   https://github.com/owncloud/web/pull/7317
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 
