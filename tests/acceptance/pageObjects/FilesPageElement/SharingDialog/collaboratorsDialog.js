@@ -185,12 +185,11 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-        this.api.mouseButtonClick()
+        await this.api.elementIdClick(collaboratorElementId)
         return collaboratorResult
       })
 
       results = await Promise.all(results)
-      console.log(results)
       return results
     },
     /**
