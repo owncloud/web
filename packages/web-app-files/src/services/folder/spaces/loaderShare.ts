@@ -9,10 +9,7 @@ import {
 } from '../../../helpers/resources'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled
-} from 'web-pkg/src/composables'
+import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { DavProperties } from 'web-pkg/src/constants'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { unref } from '@vue/composition-api'
@@ -35,7 +32,6 @@ export class FolderLoaderSpacesShare implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       const hasResharing = useCapabilityFilesSharingResharing(store)
-      const hasShareJail = useCapabilityShareJailEnabled(store)
 
       const webDavResponse = yield clientService.owncloudSdk.files.list(
         buildWebDavSpacesPath(
@@ -50,13 +46,13 @@ export class FolderLoaderSpacesShare implements FolderLoader {
       let currentFolder = resources.shift()
 
       // sharing jail root -> load the parent share as current Folder
-      if (unref(hasShareJail) && currentFolder.path === '/') {
+      if (currentFolder.path === '/') {
         const parentShare = yield clientService.owncloudSdk.shares.getShare(shareId)
         const aggregatedShares = aggregateResourceShares(
           [parentShare.shareInfo],
           true,
           unref(hasResharing),
-          unref(hasShareJail)
+          true
         )
 
         currentFolder = aggregatedShares[0]
@@ -70,7 +66,7 @@ export class FolderLoaderSpacesShare implements FolderLoader {
         })
 
         for (const file of resources) {
-          file.indicators = getIndicators(file, store.state.Files.sharesTree, hasShareJail.value)
+          file.indicators = getIndicators(file, store.state.Files.sharesTree, true)
         }
       }
 
