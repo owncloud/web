@@ -185,7 +185,9 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-        await this.api.elementIdClick(collaboratorElementId)
+        this.moveToElement('@collaboratorAccessDetailsDrop', -9, 0)
+        this.api.mouseButtonClick()
+        this.waitForElementNotPresent('@collaboratorAccessDetailsDrop', 1000)
         return collaboratorResult
       })
 
