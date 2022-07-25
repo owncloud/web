@@ -62,10 +62,11 @@ export class FolderLoaderSpacesShare implements FolderLoader {
         currentFolder = aggregatedShares[0]
       }
 
-      if (hasResharing.value) {
+      if (hasResharing.value && resources.length) {
         yield store.dispatch('Files/loadSharesTree', {
           client: clientService.owncloudSdk,
-          path: currentFolder.path
+          path: currentFolder.path,
+          storageId: currentFolder.fileId
         })
 
         for (const file of resources) {
