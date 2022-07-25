@@ -2,7 +2,11 @@
   <div>
     <oc-loader v-if="loading" :aria-label="$gettext('Loading list of shares')" />
     <template v-else>
-      <space-members v-if="showSpaceMembers" class="oc-background-highlight oc-p-m oc-mb-m" />
+      <space-members
+        v-if="showSpaceMembers"
+        ref="peopleShares"
+        class="oc-background-highlight oc-p-m oc-mb-m"
+      />
       <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-m" />
       <file-links v-if="showLinks" ref="linkShares" class="oc-background-highlight oc-p-m" />
     </template>

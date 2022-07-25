@@ -1,28 +1,25 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading members')" />
-    <template v-else>
-      <invite-collaborator-form
-        v-if="currentUserCanShare"
-        key="new-collaborator"
-        :save-button-label="$gettext('Add')"
-        class="oc-my-s"
-      />
-      <template v-if="hasCollaborators">
-        <ul
-          id="files-collaborators-list"
-          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
-          :aria-label="$gettext('Space members')"
-        >
-          <li v-for="collaborator in members" :key="collaborator.key">
-            <collaborator-list-item
-              :share="collaborator"
-              :modifiable="isModifiable(collaborator)"
-              @onDelete="$_ocCollaborators_deleteShare_trigger(collaborator)"
-            />
-          </li>
-        </ul>
-      </template>
+    <invite-collaborator-form
+      v-if="currentUserCanShare"
+      key="new-collaborator"
+      :save-button-label="$gettext('Add')"
+      class="oc-my-s"
+    />
+    <template v-if="hasCollaborators">
+      <ul
+        id="files-collaborators-list"
+        class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
+        :aria-label="$gettext('Space members')"
+      >
+        <li v-for="collaborator in members" :key="collaborator.key">
+          <collaborator-list-item
+            :share="collaborator"
+            :modifiable="isModifiable(collaborator)"
+            @onDelete="$_ocCollaborators_deleteShare_trigger(collaborator)"
+          />
+        </li>
+      </ul>
     </template>
   </div>
 </template>
@@ -74,9 +71,6 @@ export default defineComponent({
       return this.currentFileOutgoingCollaborators.filter(
         (share) => share.shareType === ShareTypes.space.value
       )
-    },
-    sharesLoading() {
-      return this.currentFileOutgoingSharesLoading
     },
     hasCollaborators() {
       return this.members.length > 0
