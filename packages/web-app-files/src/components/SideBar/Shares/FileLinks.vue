@@ -564,7 +564,7 @@ export default defineComponent({
         client,
         share,
         path,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
+        storageId: resource.fileId
       })
         .then(
           this.showMessage({
