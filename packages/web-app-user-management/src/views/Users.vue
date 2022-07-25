@@ -16,7 +16,7 @@
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div id="users-wrapper" class="oc-width-expand">
-          <div id="users-app-bar" class="oc-p-m">
+          <div id="users-app-bar" ref="appBar" class="oc-p-m">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -72,6 +72,7 @@
             <UsersList
               :users="users"
               :selected-users="selectedUsers"
+              :header-position="listHeaderPosition"
               class="oc-mt-m"
               @toggleSelectUser="toggleSelectUser"
               @toggleSelectAllUsers="toggleSelectAllUsers"
@@ -232,6 +233,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      listHeaderPosition: 0,
       selectedUsers: [],
       createUserModalOpen: false,
       deleteUserModalOpen: false,
@@ -315,6 +317,10 @@ export default defineComponent({
       this.loadResourcesTask.perform(this)
     })
 
+    this.calculateListHeaderPosition()
+
+    window.addEventListener('resize', this.calculateListHeaderPosition)
+
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
     })
@@ -322,13 +328,15 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+    calculateListHeaderPosition() {
+      this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
+    },
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
       }
       this.selectedUsers = [...this.users]
     },
-
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 

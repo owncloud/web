@@ -16,7 +16,7 @@
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div id="groups-wrapper" class="oc-width-expand">
-          <div id="groups-app-bar" class="oc-app-bar oc-p-m">
+          <div id="groups-app-bar" ref="appBar" class="oc-app-bar oc-p-m">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -72,6 +72,7 @@
             <GroupsList
               :groups="groups"
               :selected-groups="selectedGroups"
+              :header-position="listHeaderPosition"
               class="oc-mt-m"
               @toggleSelectGroup="toggleSelectGroup"
               @toggleSelectAllGroups="toggleSelectAllGroups"
@@ -151,6 +152,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      listHeaderPosition: 0,
       selectedGroups: [],
       createGroupModalOpen: false,
       deleteGroupModalOpen: false,
@@ -228,6 +230,10 @@ export default defineComponent({
       this.loadResourcesTask.perform(this)
     })
 
+    this.calculateListHeaderPosition()
+
+    window.addEventListener('resize', this.calculateListHeaderPosition)
+
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
     })
@@ -235,6 +241,9 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+    calculateListHeaderPosition() {
+      this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
+    },
     toggleSelectAllGroups() {
       if (this.allGroupsSelected) {
         return (this.selectedGroups = [])
