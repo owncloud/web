@@ -199,7 +199,8 @@ export default defineComponent({
           if (
             this.hasShareJail &&
             (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-              isLocationSpacesActive(this.$router, 'files-spaces-share'))
+              (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+                this.highlightedFile.path === '/'))
           ) {
             item.name = this.highlightedFile.name
           }
