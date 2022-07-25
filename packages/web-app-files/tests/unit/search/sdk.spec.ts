@@ -100,14 +100,14 @@ describe('SDKProvider', () => {
       ]
 
       const noTerm = await search.previewSearch.search('')
-      expect(noTerm).toBeFalsy()
+      expect(noTerm).toEqual({ range: null, values: [] })
 
-      searchMock.mockReturnValueOnce(files)
+      searchMock.mockReturnValueOnce({ results: files })
       const withTerm = await search.previewSearch.search('foo')
-      expect(withTerm.map((r) => r.data)).toMatchObject(files)
+      expect(withTerm.values.map((r) => r.data)).toMatchObject(files)
 
       const withTermCached = await search.previewSearch.search('foo')
-      expect(withTermCached.map((r) => r.data)).toMatchObject(files)
+      expect(withTermCached.values.map((r) => r.data)).toMatchObject(files)
     })
   })
   describe('SDKProvider listSearch', () => {
@@ -119,9 +119,9 @@ describe('SDKProvider', () => {
         { id: 'baz', name: 'baz' }
       ]
 
-      searchMock.mockReturnValueOnce(files)
-      const withTerm = await search.listSearch.search('foo')
-      expect(withTerm.map((r) => r.data)).toMatchObject(files)
+      searchMock.mockReturnValueOnce({ results: files })
+      const withTerm = (await search.listSearch.search('foo')) as any
+      expect(withTerm.values.map((r) => r.data)).toMatchObject(files)
     })
   })
 })

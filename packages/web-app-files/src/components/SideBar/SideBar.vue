@@ -27,7 +27,12 @@ import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { Panel } from 'web-pkg/src/components/sidebar/'
 
 import { buildResource } from '../../helpers/resources'
-import { isLocationPublicActive, isLocationSharesActive, isLocationTrashActive } from '../../router'
+import {
+  isLocationPublicActive,
+  isLocationSharesActive,
+  isLocationSpacesActive,
+  isLocationTrashActive
+} from '../../router'
 import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
@@ -124,6 +129,9 @@ export default defineComponent({
       if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
         return !this.highlightedFile
       }
+      if (this.hasShareJail && isLocationSpacesActive(this.$router, 'files-spaces-share')) {
+        return false
+      }
       return !pathSegments.length
     },
     highlightedFileThumbnail() {
@@ -188,7 +196,12 @@ export default defineComponent({
             this.highlightedFile.webDavPath,
             DavProperties.Default
           )
-          if (this.hasShareJail && isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+          if (
+            this.hasShareJail &&
+            (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
+              (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+                this.highlightedFile.path === '/'))
+          ) {
             item.name = this.highlightedFile.name
           }
         }

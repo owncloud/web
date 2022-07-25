@@ -107,7 +107,10 @@ function getWrapper(searchTerm = '', files = []) {
   return mount(List, {
     localVue,
     propsData: {
-      searchResults: getSearchResults(files)
+      searchResult: {
+        range: 'rows 0-100/100',
+        values: getSearchResults(files)
+      }
     },
     store: createStore(files),
     router: new VueRouter(),

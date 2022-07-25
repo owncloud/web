@@ -1,18 +1,23 @@
-export interface SearchResult {
+export interface SearchResultValue {
   id: string
   data: unknown
+}
+
+export interface SearchResult {
+  range?: string | null
+  values: SearchResultValue[]
 }
 
 export interface SearchList {
   component: unknown
 
-  search(term: string): Promise<SearchResult[]>
+  search(term: string): Promise<SearchResult>
 }
 
 export interface SearchPreview extends SearchList {
   available: boolean
 
-  activate(searchResult: SearchResult): void
+  activate(searchResult: SearchResultValue): void
 }
 
 export interface SearchProvider {

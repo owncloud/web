@@ -32,21 +32,21 @@
           <span class="term">{{ term | truncate }}</span>
           <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
         </li>
-        <li v-if="$asyncComputed.searchResults.updating" class="loading spinner">
+        <li v-if="$asyncComputed.searchResult.updating" class="loading spinner">
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
         </li>
-        <template v-if="!$asyncComputed.searchResults.updating">
+        <template v-if="!$asyncComputed.searchResult.updating">
           <li
-            v-for="(searchResult, idx) in searchResults"
-            :key="searchResult.id"
+            v-for="(searchResultValue, idx) in searchResult.values"
+            :key="searchResultValue.id"
             class="preview"
             :class="{ first: idx === 0 }"
-            @click="activeProvider.previewSearch.activate(searchResult)"
+            @click="activeProvider.previewSearch.activate(searchResultValue)"
           >
             <component
               :is="activeProvider.previewSearch.component"
               :provider="activeProvider"
-              :search-result="searchResult"
+              :search-result="searchResultValue"
             />
           </li>
         </template>
@@ -112,24 +112,23 @@ export default {
   },
 
   asyncComputed: {
-    searchResults: {
+    searchResult: {
       get() {
         if (!this.optionsVisible) {
-          return []
+          return { values: [] }
         }
 
         if (!this.activeProvider) {
-          return []
+          return { values: [] }
         }
 
         if (!this.activeProvider.previewSearch) {
-          return []
+          return { values: [] }
         }
 
         if (!this.activeProvider.previewSearch.available) {
-          return []
+          return { values: [] }
         }
-
         return this.activeProvider.previewSearch.search(this.term)
       },
       watch: ['term', 'activeProvider', 'optionsVisible']

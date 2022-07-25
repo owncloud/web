@@ -28,8 +28,13 @@
       </template>
       <template #footer>
         <pagination :pages="paginationPages" :current-page="paginationPage" />
+        <div
+          v-if="searchResultExceedsLimit"
+          class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+          v-text="searchResultExceedsLimitText"
+        />
         <list-info
-          v-if="paginatedResources.length > 0"
+          v-else-if="paginatedResources.length > 0"
           class="oc-width-1-1 oc-my-s"
           :files="totalFilesCount.files"
           :folders="totalFilesCount.folders"
@@ -57,6 +62,7 @@ import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
+import { searchLimit } from '../../search/sdk/list'
 import { Resource } from '../../helpers/resource'
 import { useStore } from 'web-pkg/src/composables'
 
@@ -66,10 +72,10 @@ export default defineComponent({
   components: { AppBar, ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
-    searchResults: {
-      type: Array,
+    searchResult: {
+      type: Object,
       default: function () {
-        return []
+        return { range: null, values: [] }
       }
     }
   },
@@ -88,16 +94,44 @@ export default defineComponent({
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    itemCount() {
+      return this.totalFilesCount.files + this.totalFilesCount.folders
+    },
+    rangeSupported() {
+      return this.searchResult.range
+    },
+    rangeItems() {
+      return this.searchResult.range?.split('/')[1]
+    },
+    searchResultExceedsLimit() {
+      return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
+    },
+    searchResultExceedsLimitText() {
+      if (!this.rangeSupported) {
+        const translated = this.$gettext('Showing up to %{searchLimit} results')
+        return this.$gettextInterpolate(translated, {
+          searchLimit
+        })
+      }
+
+      const translated = this.$gettext(
+        'Found %{rangeItems}, showing the %{itemCount} best matching results'
+      )
+      return this.$gettextInterpolate(translated, {
+        itemCount: this.itemCount,
+        rangeItems: this.rangeItems
+      })
     }
   },
   watch: {
-    searchResults: {
+    searchResult: {
       handler: function () {
         this.CLEAR_CURRENT_FILES_LIST()
         this.LOAD_FILES({
           currentFolder: null,
-          files: this.searchResults.length
-            ? this.searchResults.map((searchResult) => searchResult.data)
+          files: this.searchResult.values.length
+            ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
       },

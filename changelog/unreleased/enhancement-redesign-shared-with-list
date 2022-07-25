@@ -1,0 +1,9 @@
+Enhancement: Redesign shared with list
+
+We've redesigned the shared with list, to achieve more spacing and a better user experience.
+We've also fixed a bug, where the role in a child of a share wasn't shown.
+
+https://github.com/owncloud/web/pull/7252
+https://github.com/owncloud/web/pull/7310
+https://github.com/owncloud/web/issues/7110
+

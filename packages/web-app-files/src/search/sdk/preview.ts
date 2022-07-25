@@ -11,7 +11,7 @@ import { Store } from 'vuex'
 
 export default class Preview implements SearchPreview {
   public readonly component: Component
-  private readonly cache: Cache<string, SearchResult[]>
+  private readonly cache: Cache<string, SearchResult>
   private readonly router: VueRouter
   private readonly store: Store<any>
 
@@ -27,9 +27,12 @@ export default class Preview implements SearchPreview {
   // every search requests hammers the backend even if it's not needed anymore..
   // for now we worked around it by using a cache mechanism and make use of debouncing
   @debounce(500)
-  public async search(term: string): Promise<SearchResult[]> {
+  public async search(term: string): Promise<SearchResult> {
     if (!term) {
-      return
+      return {
+        range: null,
+        values: []
+      }
     }
 
     if (this.cache.has(term)) {
@@ -37,13 +40,12 @@ export default class Preview implements SearchPreview {
     }
 
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
-    const plainResources = await clientService.owncloudSdk.files.search(
+    const { range, results } = await clientService.owncloudSdk.files.search(
       term,
       5, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
-
-    const resources = plainResources.reduce((acc, plainResource) => {
+    const resources = results.reduce((acc, plainResource) => {
       let resourceName = decodeURIComponent(plainResource.name)
       if (resourceName.startsWith('/dav')) {
         resourceName = resourceName.slice(4)
@@ -58,7 +60,7 @@ export default class Preview implements SearchPreview {
       return acc
     }, [])
 
-    return this.cache.set(term, resources)
+    return this.cache.set(term, { range, values: resources })
   }
 
   public get available(): boolean {

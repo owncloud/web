@@ -37,7 +37,7 @@
       :accessible-label="$gettext('User')"
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">
-      <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
+      <span class="files-collaborators-autocomplete-username" v-text="item.label" />
       <span
         v-if="item.value.shareWithAdditionalInfo"
         class="files-collaborators-autocomplete-additional-info"

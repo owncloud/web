@@ -13,6 +13,7 @@
     :selection="selection"
     :sort-by="sortBy"
     :sort-dir="sortDir"
+    :lazy="lazyLoading"
     padding-x="medium"
     @highlight="fileClicked"
     @rowMounted="rowMounted"
@@ -532,15 +533,10 @@ export default defineComponent({
         })
       }
 
-      if (this.configuration?.options?.displayResourcesLazy) {
-        fields.forEach((field) =>
-          Object.assign(field, {
-            lazy: true
-          })
-        )
-      }
-
       return fields
+    },
+    lazyLoading() {
+      return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
       return this.selection.length === this.resources.length
@@ -601,11 +597,12 @@ export default defineComponent({
         ...this.targetRoute.query
       }
 
+      const matchingSpace = this.getMatchingSpace(resource.storageId)
+
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource.storageId)
         if (matchingSpace?.driveType === 'project') {
           return createLocationSpaces('files-spaces-project', {
-            params,
+            params: { ...params, storageId: matchingSpace?.id || params.storageId },
             query
           })
         }
@@ -613,7 +610,7 @@ export default defineComponent({
 
       return {
         name: this.targetRoute.name,
-        params,
+        params: { ...params, storageId: matchingSpace?.id || params.storageId },
         query
       }
     },
@@ -658,10 +655,15 @@ export default defineComponent({
         getReferenceClientRect: () => ({
           width: 0,
           height: 0,
-          top: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.top,
-          bottom: event.pointerType === 'mouse' ? event.clientY : contextMenuButtonPos.bottom,
-          left: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x,
-          right: event.pointerType === 'mouse' ? event.clientX : contextMenuButtonPos.x
+          /**
+           * If event type is 'contextmenu' the trigger was a right click on the table row,
+           * so we render the dropdown at the position of the mouse pointer.
+           * Otherwise we render the dropdown at the position of the three-dot-menu
+           */
+          top: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.top,
+          bottom: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.bottom,
+          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
+          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
         })
       })
 

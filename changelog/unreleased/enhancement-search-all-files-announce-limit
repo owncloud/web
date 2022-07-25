@@ -1,0 +1,7 @@
+Enhancement: Search all files announce limit
+
+If the search results of a backend search exceed the limit of 200 items we now announce that additional items exist.
+
+https://github.com/owncloud/web/pull/7267
+https://github.com/owncloud/web/pull/7306
+https://github.com/owncloud/web/issues/7192

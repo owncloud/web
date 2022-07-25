@@ -1,0 +1,6 @@
+Bugfix: Versions of shared files not visible
+
+We've fixed a bug where the versions of shared files where not visible for the share receivers.
+
+https://github.com/owncloud/web/pull/7313
+https://github.com/owncloud/web/issues/7159

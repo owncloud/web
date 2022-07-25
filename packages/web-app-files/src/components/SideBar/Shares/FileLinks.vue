@@ -219,7 +219,7 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.highlightedFile.isReceivedShare() && this.canCreatePublicLinks && this.share) {
+      if (this.share?.incoming && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
@@ -564,7 +564,7 @@ export default defineComponent({
         client,
         share,
         path,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
+        storageId: resource.fileId
       })
         .then(
           this.showMessage({

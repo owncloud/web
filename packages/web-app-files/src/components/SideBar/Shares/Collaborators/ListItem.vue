@@ -5,7 +5,7 @@
     }`"
     class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs oc-flex-between"
   >
-    <div class="oc-width-2-3 oc-flex oc-flex-middle" style="gap: 10px">
+    <div class="oc-width-1-1 oc-flex oc-flex-middle" style="gap: 10px">
       <avatar-image
         v-if="isUser || isSpace"
         :userid="share.collaborator.name"
@@ -21,29 +21,87 @@
         :name="shareTypeKey"
         class="files-collaborators-collaborator-indicator"
       />
-      <div class="oc-text-truncate">
-        <p v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-bold oc-text-truncate oc-m-rm">
-          <span
-            aria-hidden="true"
-            class="files-collaborators-collaborator-name"
-            v-text="shareDisplayName"
-          />
-          <span
-            v-if="shareAdditionalInfo"
-            aria-hidden="true"
-            class="files-collaborators-collaborator-additional-info"
-            v-text="shareAdditionalInfo"
-          />
+      <div class="oc-text-truncate oc-width-1-1">
+        <div class="oc-flex oc-flex-middle">
+          <span v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate oc-m-rm">
+            <span
+              aria-hidden="true"
+              class="files-collaborators-collaborator-name"
+              v-text="shareDisplayName"
+            />
+          </span>
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
-        </p>
-        <p class="oc-m-rm oc-flex">
-          <span
-            aria-hidden="true"
-            class="files-collaborators-collaborator-share-type"
-            v-text="shareTypeText"
-          />
-          <span v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
-            <span class="oc-mx-s">·</span>
+          <oc-button
+            :id="`share-access-details-toggle-${shareAccessToggleId}`"
+            class="oc-ml-xs files-collaborators-collaborator-access-details-button"
+            appearance="raw"
+          >
+            <oc-icon name="information" fill-type="line" size="small" />
+          </oc-button>
+          <oc-drop
+            class="share-access-details-drop"
+            :toggle="`#share-access-details-toggle-${shareAccessToggleId}`"
+            mode="click"
+          >
+            <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
+            <oc-list>
+              <li v-if="shareAdditionalInfo" class="oc-flex">
+                <span v-translate class="oc-width-1-2">Addition</span
+                ><span
+                  class="files-collaborators-collaborator-additional-info oc-width-1-2"
+                  v-text="shareAdditionalInfo"
+                />
+              </li>
+              <li class="oc-flex">
+                <span v-translate class="oc-width-1-2">Type</span
+                ><span
+                  class="files-collaborators-collaborator-share-type oc-width-1-2"
+                  v-text="shareTypeText"
+                />
+              </li>
+            </oc-list>
+          </oc-drop>
+        </div>
+        <div class="oc-m-rm oc-flex oc-flex-middle oc-flex-between">
+          <div>
+            <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle">
+              <role-dropdown
+                :resource="highlightedFile"
+                :dom-selector="shareDomSelector"
+                :existing-permissions="share.customPermissions"
+                :existing-role="share.role"
+                :allow-share-permission="hasResharing || isSpace"
+                class="files-collaborators-collaborator-role"
+                @optionChange="shareRoleChanged"
+              />
+            </div>
+            <div v-else-if="share.role">
+              <span class="oc-mr-xs" v-text="share.role.label" />
+            </div>
+          </div>
+          <div class="oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+            <span v-if="hasExpirationDate">
+              <oc-icon
+                v-oc-tooltip="expirationDate"
+                class="files-collaborators-collaborator-expiration"
+                data-testid="recipient-info-expiration-date"
+                :aria-label="expirationDate"
+                name="calendar"
+                fill-type="line"
+              />
+              <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+            </span>
+            <edit-dropdown
+              v-if="canEditOrDelete"
+              class="files-collaborators-collaborator-edit"
+              data-testid="collaborator-edit"
+              :expiration-date="share.expires ? share.expires : null"
+              :share-category="shareCategory"
+              @expirationDateChanged="shareExpirationChanged"
+              @removeShare="removeShare"
+            />
+          </div>
+          <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
             <router-link
               v-oc-tooltip="$gettext('Navigate to parent folder')"
               class="parent-folder oc-text-truncate"
@@ -53,46 +111,9 @@
               <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
               <span class="text oc-text-truncate" v-text="sharedParentDir" />
             </router-link>
-          </span>
-          <span class="oc-invisible-sr" v-text="screenreaderShareDetails" />
-        </p>
-        <p v-if="hasExpirationDate" class="oc-m-rm">
-          <span
-            v-oc-tooltip="expirationDate"
-            aria-hidden="true"
-            class="files-collaborators-collaborator-expiration"
-            data-testid="recipient-info-expiration-date"
-            tabindex="0"
-            v-text="shareExpirationText"
-          />
-          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-        </p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div
-      v-if="canEditOrDelete"
-      class="oc-width-1-3 oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle"
-    >
-      <role-dropdown
-        :resource="highlightedFile"
-        :dom-selector="shareDomSelector"
-        :existing-permissions="share.customPermissions"
-        :existing-role="share.role"
-        :allow-share-permission="hasResharing || isSpace"
-        class="files-collaborators-collaborator-role"
-        @optionChange="shareRoleChanged"
-      />
-      <edit-dropdown
-        class="files-collaborators-collaborator-edit"
-        data-testid="collaborator-edit"
-        :expiration-date="share.expires ? share.expires : null"
-        :share-category="shareCategory"
-        @expirationDateChanged="shareExpirationChanged"
-        @removeShare="removeShare"
-      />
-    </div>
-    <div v-else-if="share.role">
-      <span class="oc-mr-xs" v-text="share.role.label" />
     </div>
   </div>
 </template>
@@ -109,6 +130,7 @@ import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { extractDomSelector } from '../../../../helpers/resource'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
+import * as uuid from 'uuid'
 
 export default defineComponent({
   name: 'ListItem',
@@ -190,14 +212,13 @@ export default defineComponent({
     },
 
     shareAdditionalInfo() {
-      if (!this.share.collaborator.additionalInfo) {
-        return
-      }
-      return ` (${this.share.collaborator.additionalInfo})`
+      return this.share.collaborator.additionalInfo
     },
 
     shareDisplayNameTooltip() {
-      return this.shareDisplayName + (this.shareAdditionalInfo || '')
+      return (
+        this.shareDisplayName + (this.shareAdditionalInfo ? `(${this.shareAdditionalInfo})` : '')
+      )
     },
 
     screenreaderShareDisplayName() {
@@ -212,11 +233,6 @@ export default defineComponent({
         translated = this.$gettext('Share receiver name: %{ displayName } (%{ additionalInfo })')
       }
       return this.$gettextInterpolate(translated, context)
-    },
-
-    screenreaderShareDetails() {
-      const translated = this.$gettext('Share type: %{ shareType }')
-      return this.$gettextInterpolate(translated, { shareType: this.shareTypeText })
     },
 
     shareExpirationText() {
@@ -258,6 +274,15 @@ export default defineComponent({
 
     sharedParentDir() {
       return this.sharedParentRoute?.params?.item.split('/').pop()
+    },
+
+    shareDetailsHelperContent() {
+      return {
+        text: this.$gettext('Invite persons or groups to access this file or folder.')
+      }
+    },
+    shareAccessToggleId() {
+      return uuid.v4()
     }
   },
   methods: {

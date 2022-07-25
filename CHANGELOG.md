@@ -12,31 +12,36 @@ Summary
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
-* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
+* Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+* Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
+* Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
+* Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
+* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -49,6 +54,7 @@ Details
 
    https://github.com/owncloud/web/issues/7187
    https://github.com/owncloud/web/pull/7230
+   https://github.com/owncloud/web/pull/7314
 
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
@@ -71,6 +77,13 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
+
+   We've fixed a bug where changing the page in a file list (pagination) doesn't scroll to top.
+
+   https://github.com/owncloud/web/issues/7138
+   https://github.com/owncloud/web/pull/7322
 
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 
@@ -127,19 +140,20 @@ Details
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
 
-* Bugfix - Remove lazy table loading delay: [#7038](https://github.com/owncloud/web/issues/7038)
-
-   We've removed the lazy loading delay on the OcTable to improve the overall performance.
-
-   https://github.com/owncloud/web/issues/7038
-   https://github.com/owncloud/web/pull/7298
-
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 
    We've refactored the navigation highlighter to fix several small glitches.
 
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
+
+* Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
+
+   We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page
+   stopped working.
+
+   https://github.com/owncloud/web/issues/7303
+   https://github.com/owncloud/web/pull/7308
 
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 
@@ -166,6 +180,15 @@ Details
 
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
+
+* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
+
+   We've drastically increased the performance of the files table by removing the lazy loading
+   delay and by moving the loading visualization from the OcTd to the OcTr component.
+
+   https://github.com/owncloud/web/issues/7038
+   https://github.com/owncloud/web/pull/7298
+   https://github.com/owncloud/web/pull/7312
 
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 
@@ -197,6 +220,13 @@ Details
    We've fixed spacing issues with the upload overlay progress bar.
 
    https://github.com/owncloud/web/pull/7297
+
+* Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
+
+   We've fixed a bug where the versions of shared files where not visible for the share receivers.
+
+   https://github.com/owncloud/web/issues/7159
+   https://github.com/owncloud/web/pull/7313
 
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 
@@ -249,9 +279,12 @@ Details
 
    https://github.com/owncloud/web/issues/6894
    https://github.com/owncloud/web/issues/7225
+   https://github.com/owncloud/web/issues/7223
    https://github.com/owncloud/web/pull/7086
    https://github.com/owncloud/web/pull/7247
    https://github.com/owncloud/web/pull/7243
+   https://github.com/owncloud/web/pull/7317
+   https://github.com/owncloud/web/pull/7319
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 
@@ -262,6 +295,15 @@ Details
    https://github.com/owncloud/web/issues/7205
    https://github.com/owncloud/web/pull/7201
    https://github.com/owncloud/web/pull/7207
+
+* Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+
+   We've redesigned the shared with list, to achieve more spacing and a better user experience.
+   We've also fixed a bug, where the role in a child of a share wasn't shown.
+
+   https://github.com/owncloud/web/issues/7110
+   https://github.com/owncloud/web/pull/7252
+   https://github.com/owncloud/web/pull/7310
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
@@ -283,6 +325,15 @@ Details
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
 
+* Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
+
+   If the search results of a backend search exceed the limit of 200 items we now announce that
+   additional items exist.
+
+   https://github.com/owncloud/web/issues/7192
+   https://github.com/owncloud/web/pull/7267
+   https://github.com/owncloud/web/pull/7306
+
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 
    We've improved the performance of share indicators when loading resource tables as well as
@@ -300,19 +351,20 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.5: [#7298](https://github.com/owncloud/web/pull/7298)
+* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.5. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
    - Change - Remove OcAlert component: #2210 - Change - Remove transition animations: #2210 -
    Change - Revamp animations: #2210 - Change - OcTable emit event data on row click: #2218 -
    Enhancement - OcCheckbox add outline: #2218 - Enhancement - Progress bar indeterminate
-   state: #2200 - Enhancement - Redesign notifications: #2210
+   state: #2200 - Enhancement - Redesign notifications: #2210 - Enhancement - Use oc colors for
+   selected background and deselect icon: #2262
 
-   https://github.com/owncloud/web/pull/7298
-   https://github.com/owncloud/owncloud-design-system/releases/tag/14.0.0-alpha.5
+   https://github.com/owncloud/web/pull/7312
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.7
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 

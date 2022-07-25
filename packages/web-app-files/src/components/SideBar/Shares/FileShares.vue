@@ -373,7 +373,7 @@ export default {
         client: this.$client,
         share: share,
         path,
-        ...(this.currentStorageId && { storageId: this.currentStorageId })
+        storageId: this.highlightedFile.fileId
       })
         .then(() => {
           this.hideModal()

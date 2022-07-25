@@ -1,0 +1,6 @@
+Bugfix: "Shared with others" and "Shared via Link" resource links not working
+
+We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page stopped working.
+
+https://github.com/owncloud/web/pull/7308
+https://github.com/owncloud/web/issues/7303
