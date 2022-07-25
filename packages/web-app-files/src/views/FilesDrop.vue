@@ -119,7 +119,7 @@ export default {
         .then((files) => {
           // Redirect to files list if the link doesn't have role "uploader"
           const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
-          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
+          if (!(sharePermissions === 36 || sharePermissions === 4)) {
             this.$router.replace(
               createLocationPublic('files-public-files', {
                 params: { item: this.publicLinkToken }
