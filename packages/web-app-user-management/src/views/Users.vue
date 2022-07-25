@@ -15,7 +15,7 @@
     <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
-        <div class="files-list-wrapper oc-width-expand">
+        <div class="users-wrapper oc-width-expand">
           <div class="oc-app-bar oc-p-m">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
@@ -529,6 +529,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.users-wrapper {
+  overflow-y: auto;
+}
+
 .users-sidebar {
   position: relative;
   overflow: hidden;
