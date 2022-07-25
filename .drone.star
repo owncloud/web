@@ -18,7 +18,7 @@ OC_CI_HUGO = "owncloudci/hugo:0.89.4"
 OC_CI_NODEJS = "owncloudci/nodejs:14"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.7.0"
+OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.8.0"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:18.09"
 PLUGINS_DOWNSTREAM = "plugins/downstream"
@@ -2144,6 +2144,8 @@ def ocisService():
                 "OCIS_INSECURE": "true",
                 "OCIS_LOG_LEVEL": "error",
                 "OCIS_URL": "https://ocis:9200",
+                "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
+                "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
                 "PROXY_ENABLE_BASIC_AUTH": True,
                 "STORAGE_HOME_DRIVER": "ocis",
                 "STORAGE_METADATA_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/metadata",
@@ -2154,6 +2156,7 @@ def ocisService():
                 "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "FRONTEND_SEARCH_MIN_LENGTH": "2",
             },
             "commands": [
                 "cd %s/ocis-build" % dir["base"],
