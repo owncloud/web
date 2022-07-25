@@ -37,9 +37,9 @@
             mode="manual"
             target=".collaborator-edit-dropdown-options-btn"
           >
-            <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
-            <dl>
-              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted">Addition</dt>
+            <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
+            <dl class="oc-mt-s">
+              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
               <dd
                 v-if="shareAdditionalInfo"
                 class="files-collaborators-collaborator-additional-info"
