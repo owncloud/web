@@ -1,4 +1,4 @@
-import quickActions, { canShare, openNewCollaboratorsPanel } from '../../quickActions'
+import quickActions, { canShare } from '../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from '../../helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
@@ -43,8 +43,8 @@ export default {
     }
   },
   methods: {
-    $_showShares_trigger({ resources }) {
-      openNewCollaboratorsPanel({ item: resources[0], client: this.$client, store: this.$store })
+    async $_showShares_trigger({ resources }) {
+      await this.$store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#peopleShares')
     }
   }
 }

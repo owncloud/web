@@ -69,6 +69,10 @@ exports[`FileShares if there are no collaborators does not render avatar wrapper
 
 exports[`FileShares renders loading spinner while loading 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <oc-loader-stub arialabel="Loading people list"></oc-loader-stub>
+  <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
+  <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
+  <!---->
+  <!---->
+  <!---->
 </div>
 `;
