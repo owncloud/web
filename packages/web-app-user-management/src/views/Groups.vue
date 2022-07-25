@@ -15,8 +15,8 @@
     <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
-        <div class="groups-wrapper oc-width-expand">
-          <div class="oc-app-bar oc-p-m">
+        <div id="groups-wrapper" class="oc-width-expand">
+          <div id="groups-app-bar" class="oc-app-bar oc-p-m">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -371,7 +371,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.groups-wrapper {
+#groups-app-bar {
+  background-color: var(--oc-color-background-default);
+  border-top-right-radius: 15px;
+  box-sizing: border-box;
+  z-index: 2;
+  position: sticky;
+  padding: 0 var(--oc-space-medium);
+  top: 0;
+}
+
+#groups-wrapper {
   overflow-y: auto;
 }
 

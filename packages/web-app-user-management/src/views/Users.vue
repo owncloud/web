@@ -15,8 +15,8 @@
     <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
-        <div class="users-wrapper oc-width-expand">
-          <div class="oc-app-bar oc-p-m">
+        <div id="users-wrapper" class="oc-width-expand">
+          <div id="users-app-bar" class="oc-p-m">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -529,7 +529,17 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.users-wrapper {
+#users-app-bar {
+  background-color: var(--oc-color-background-default);
+  border-top-right-radius: 15px;
+  box-sizing: border-box;
+  z-index: 2;
+  position: sticky;
+  padding: 0 var(--oc-space-medium);
+  top: 0;
+}
+
+#users-wrapper {
   overflow-y: auto;
 }
 
