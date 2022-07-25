@@ -1,49 +1,80 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
-    <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
-    <template v-else>
-      <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-        <span v-text="linksHeading" />
-        <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
-      </h3>
-      <div v-if="canCreatePublicLinks" class="oc-mt-m">
-        <name-and-copy v-if="quicklink" :link="quicklink" />
-        <create-quick-link
-          v-else
-          :expiration-date="expirationDate"
-          @createPublicLink="checkLinkToCreate"
-        />
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+      <span v-text="linksHeading" />
+      <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
+    </h3>
+    <div v-if="canCreatePublicLinks" class="oc-mt-m">
+      <name-and-copy v-if="quicklink" :link="quicklink" />
+      <create-quick-link
+        v-else
+        :expiration-date="expirationDate"
+        @createPublicLink="checkLinkToCreate"
+      />
+      <details-and-edit
+        v-if="quicklink"
+        :available-role-options="availableRoleOptions"
+        :can-rename="false"
+        :expiration-date="expirationDate"
+        :is-folder-share="highlightedFile.isFolder"
+        :is-modifiable="canEdit"
+        :is-password-enforced="isPasswordEnforcedFor(quicklink)"
+        :link="quicklink"
+        @updateLink="checkLinkToUpdate"
+        @removePublicLink="deleteLinkConfirmation"
+      />
+      <hr class="link-separator oc-my-m" />
+      <oc-button
+        id="files-file-link-add"
+        variation="primary"
+        appearance="raw"
+        data-testid="files-link-add-btn"
+        @click="addNewLink"
+        v-text="addButtonLabel"
+      />
+    </div>
+    <p
+      v-else
+      data-testid="files-links-no-reshare-permissions-message"
+      class="oc-mt-m"
+      v-text="noResharePermsMessage"
+    />
+    <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+      <li
+        v-for="link in displayLinks"
+        :key="link.key"
+        class="oc-py-s"
+        :data-testid="`files-link-id-${link.id}`"
+      >
+        <name-and-copy :link="link" />
         <details-and-edit
-          v-if="quicklink"
           :available-role-options="availableRoleOptions"
-          :can-rename="false"
+          :can-rename="true"
           :expiration-date="expirationDate"
           :is-folder-share="highlightedFile.isFolder"
           :is-modifiable="canEdit"
-          :is-password-enforced="isPasswordEnforcedFor(quicklink)"
-          :link="quicklink"
+          :is-password-enforced="isPasswordEnforcedFor(link)"
+          :link="link"
           @updateLink="checkLinkToUpdate"
           @removePublicLink="deleteLinkConfirmation"
         />
-        <hr class="link-separator oc-my-m" />
-        <oc-button
-          id="files-file-link-add"
-          variation="primary"
-          appearance="raw"
-          data-testid="files-link-add-btn"
-          @click="addNewLink"
-          v-text="addButtonLabel"
-        />
-      </div>
-      <p
-        v-else
-        data-testid="files-links-no-reshare-permissions-message"
-        class="oc-mt-m"
-        v-text="noResharePermsMessage"
-      />
-      <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
+      </li>
+    </oc-list>
+    <div v-if="links.length > 3" class="oc-flex oc-flex-center">
+      <oc-button appearance="raw" @click="toggleLinkListCollapsed">
+        <span v-text="collapseButtonTitle" />
+        <oc-icon :name="collapseButtonIcon" fill-type="line" />
+      </oc-button>
+    </div>
+    <div v-if="indirectLinks.length" id="indirect-link-list">
+      <hr class="link-separator oc-my-m" />
+      <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+        <span v-text="indirectLinksHeading" />
+        <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
+      </h3>
+      <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
         <li
-          v-for="link in displayLinks"
+          v-for="link in displayIndirectLinks"
           :key="link.key"
           class="oc-py-s"
           :data-testid="`files-link-id-${link.id}`"
@@ -51,58 +82,24 @@
           <name-and-copy :link="link" />
           <details-and-edit
             :available-role-options="availableRoleOptions"
-            :can-rename="true"
             :expiration-date="expirationDate"
-            :is-folder-share="highlightedFile.isFolder"
-            :is-modifiable="canEdit"
-            :is-password-enforced="isPasswordEnforcedFor(link)"
+            :is-folder-share="true"
+            :is-modifiable="false"
             :link="link"
-            @updateLink="checkLinkToUpdate"
-            @removePublicLink="deleteLinkConfirmation"
           />
         </li>
       </oc-list>
-      <div v-if="links.length > 3" class="oc-flex oc-flex-center">
-        <oc-button appearance="raw" @click="toggleLinkListCollapsed">
-          <span v-text="collapseButtonTitle" />
-          <oc-icon :name="collapseButtonIcon" fill-type="line" />
+      <div class="oc-flex oc-flex-center">
+        <oc-button
+          id="indirect-link-list-toggle"
+          appearance="raw"
+          @click="toggleIndirectLinkListCollapsed"
+        >
+          <span v-text="indirectCollapseButtonTitle" />
+          <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
         </oc-button>
       </div>
-      <div v-if="indirectLinks.length" id="indirect-link-list">
-        <hr class="link-separator oc-my-m" />
-        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-          <span v-text="indirectLinksHeading" />
-          <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
-        </h3>
-        <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
-          <li
-            v-for="link in displayIndirectLinks"
-            :key="link.key"
-            class="oc-py-s"
-            :data-testid="`files-link-id-${link.id}`"
-          >
-            <name-and-copy :link="link" />
-            <details-and-edit
-              :available-role-options="availableRoleOptions"
-              :expiration-date="expirationDate"
-              :is-folder-share="true"
-              :is-modifiable="false"
-              :link="link"
-            />
-          </li>
-        </oc-list>
-        <div class="oc-flex oc-flex-center">
-          <oc-button
-            id="indirect-link-list-toggle"
-            appearance="raw"
-            @click="toggleIndirectLinkListCollapsed"
-          >
-            <span v-text="indirectCollapseButtonTitle" />
-            <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
-          </oc-button>
-        </div>
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 <script lang="ts">

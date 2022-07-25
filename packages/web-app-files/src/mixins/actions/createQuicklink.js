@@ -39,7 +39,7 @@ export default {
         store
       })
 
-      await store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
+      await store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
     }
   }
 }

@@ -1,12 +1,11 @@
 <template>
   <div>
-    <div class="oc-background-highlight oc-p-m oc-mb-m">
-      <space-members v-if="showSpaceMembers" />
-      <file-shares v-else />
-    </div>
-    <div v-if="showLinks" class="oc-background-highlight oc-p-m">
-      <file-links />
-    </div>
+    <oc-loader v-if="loading" :aria-label="$gettext('Loading list of shares')" />
+    <template v-else>
+      <space-members v-if="showSpaceMembers" class="oc-background-highlight oc-p-m oc-mb-m" />
+      <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-m" />
+      <file-links v-if="showLinks" ref="linkShares" class="oc-background-highlight oc-p-m" />
+    </template>
   </div>
 </template>
 
@@ -15,7 +14,7 @@ import { defineComponent } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { dirname } from 'path'
 import { useGraphClient } from 'web-client/src/composables'
 
@@ -36,9 +35,39 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile'])
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingSharesLoading']),
+    ...mapState('Files/sidebar', ['activePanel']),
+    ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading']),
+
+    loading() {
+      return (
+        this.currentFileOutgoingSharesLoading ||
+        this.sharesTreeLoading ||
+        this.incomingSharesLoading
+      )
+    }
   },
   watch: {
+    loading: {
+      handler: function () {
+        if (this.loading) {
+          return
+        }
+
+        const [panelName, ref] = this.activePanel.split('#')
+        if (!ref) {
+          return
+        }
+
+        this.$nextTick(() => {
+          if (!this.$refs[ref]) {
+            return
+          }
+
+          this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
+        })
+      }
+    },
     highlightedFile: {
       handler: function (newItem, oldItem) {
         if (oldItem !== newItem) {

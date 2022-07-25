@@ -2,7 +2,7 @@ import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 
 export async function openNewCollaboratorsPanel(ctx) {
-  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
+  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#peopleShares')
 }
 
 export async function openSpaceMembersPanel(ctx) {
@@ -73,12 +73,12 @@ export default {
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
           await createQuicklink({ ...ctx, resource: ctx.item, password })
-          await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
+          await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
         })
       }
 
       await createQuicklink({ ...ctx, resource: ctx.item })
-      await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item')
+      await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
     },
     displayed: canShare
   }

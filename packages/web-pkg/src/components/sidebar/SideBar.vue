@@ -53,12 +53,15 @@
         </div>
 
         <slot name="header" />
-
-        <div class="sidebar-panel__body">
+        <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.app}`]">
           <template v-if="isContentDisplayed">
             <div class="sidebar-panel__body-content">
               <slot name="body">
-                <component :is="panel.component" v-bind="panel.componentAttrs" />
+                <component
+                  :is="panel.component"
+                  v-bind="panel.componentAttrs"
+                  @scrollToElement="scrollToElement"
+                />
               </slot>
             </div>
 
@@ -140,13 +143,14 @@ export default defineComponent({
   computed: {
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     activeAvailablePanelName() {
-      if (!this.sidebarActivePanel) {
+      const panelName = this.sidebarActivePanel?.split('#')[0]
+      if (!panelName) {
         return null
       }
-      if (!this.availablePanels.map((p) => p.app).includes(this.sidebarActivePanel)) {
+      if (!this.availablePanels.map((p) => p.app).includes(panelName)) {
         return null
       }
-      return this.sidebarActivePanel
+      return panelName
     },
     activePanelName() {
       return this.activeAvailablePanelName || this.defaultPanel.app
@@ -186,6 +190,22 @@ export default defineComponent({
     hiddenObserver.disconnect()
   },
   methods: {
+    scrollToElement({ element, panelName }) {
+      const sideBarPanelBodyEl = document.getElementsByClassName(
+        `sidebar-panel__body-${panelName}`
+      )[0]
+
+      const sideBarPanelPadding = Number(
+        window.getComputedStyle(sideBarPanelBodyEl, null).getPropertyValue('padding').split('px')[0]
+      )
+
+      sideBarPanelBodyEl.scrollTo(
+        0,
+        element.getBoundingClientRect().y -
+          sideBarPanelBodyEl.getBoundingClientRect().y -
+          sideBarPanelPadding
+      )
+    },
     setSidebarPanel(panel: string) {
       this.$emit('selectPanel', panel)
     },
