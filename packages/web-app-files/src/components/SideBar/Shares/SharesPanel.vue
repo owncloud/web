@@ -54,13 +54,10 @@ export default defineComponent({
           return
         }
 
-        const [panelName, ref] = this.activePanel.split('#')
-        if (!ref) {
-          return
-        }
-
         this.$nextTick(() => {
-          if (!this.$refs[ref]) {
+          const [panelName, ref] = this.activePanel.split('#')
+
+          if (!ref || !this.$refs[ref]) {
             return
           }
 

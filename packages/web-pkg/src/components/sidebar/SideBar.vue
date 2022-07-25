@@ -196,7 +196,7 @@ export default defineComponent({
       )[0]
 
       const sideBarPanelPadding = Number(
-        window.getComputedStyle(sideBarPanelBodyEl, null).getPropertyValue('padding').split('px')[0]
+        window.getComputedStyle(sideBarPanelBodyEl).getPropertyValue('padding')?.split('px')[0]
       )
 
       sideBarPanelBodyEl.scrollTo(
