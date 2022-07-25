@@ -20,6 +20,13 @@ export default {
       type: Number,
       required: true
     }
+  },
+  watch: {
+    currentPage: {
+      handler: function () {
+        document.getElementsByClassName('files-list-wrapper')[0]?.scrollTo(0, 0)
+      }
+    }
   }
 }
 </script>

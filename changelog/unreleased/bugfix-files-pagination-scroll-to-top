@@ -1,0 +1,6 @@
+Bugfix: Files pagination scroll to top
+
+We've fixed a bug where changing the page in a file list (pagination) doesn't scroll to top.
+
+https://github.com/owncloud/web/pull/7322
+https://github.com/owncloud/web/issues/7138
