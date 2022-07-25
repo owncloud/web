@@ -170,8 +170,8 @@ function mountOptions(store, loading, setup = {}) {
       $router: router
     },
     setup: () => ({
+      areResourcesLoading: loading,
       loadResourcesTask: {
-        isRunning: loading,
         perform: jest.fn()
       },
       ...setup

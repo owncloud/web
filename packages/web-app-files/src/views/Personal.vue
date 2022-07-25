@@ -11,7 +11,7 @@
         <create-and-upload />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message

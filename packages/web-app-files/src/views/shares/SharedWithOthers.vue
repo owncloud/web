@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-bar :has-shares-navigation="true" />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"

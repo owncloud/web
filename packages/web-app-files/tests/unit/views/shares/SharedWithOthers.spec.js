@@ -213,8 +213,8 @@ describe('SharedWithOthers view', () => {
       mounted: jest.fn(),
       setup: () => ({
         ...SharedWithOthers.setup(),
+        areResourcesLoading: loading,
         loadResourcesTask: {
-          isRunning: loading,
           perform: jest.fn()
         },
         paginatedResources: paginatedResources,

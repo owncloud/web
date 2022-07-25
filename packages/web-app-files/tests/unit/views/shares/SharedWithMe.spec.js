@@ -208,8 +208,8 @@ function mountOptions({
       $router: getRouter({ query })
     },
     setup: () => ({
+      areResourcesLoading: loading,
       loadResourcesTask: {
-        isRunning: loading,
         perform: jest.fn()
       },
       handleSort: jest.fn()
