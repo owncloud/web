@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 
 export default {
   computed: {
@@ -76,6 +77,9 @@ export default {
           this.showMessage({
             title: this.$gettext('Space was disabled successfully')
           })
+          if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+            this.$router.push(createLocationSpaces('files-spaces-projects'))
+          }
         })
         .catch((error) => {
           console.error(error)
