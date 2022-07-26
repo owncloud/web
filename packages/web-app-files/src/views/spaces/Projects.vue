@@ -287,7 +287,10 @@ export default defineComponent({
 
     spaceLinkClicked({ disabled }) {
       if (disabled) {
-        this.showMessage({ title: this.$gettext('Disabled spaces cannot be entered'), status: 'warning' })
+        this.showMessage({
+          title: this.$gettext('Disabled spaces cannot be entered'),
+          status: 'warning'
+        })
       }
     }
   }
