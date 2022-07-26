@@ -217,7 +217,11 @@ export default defineComponent({
       yield loadRolesTask.perform()
 
       for (const user of users.value) {
-        yield loadUserRoleTask.perform({ user })
+        try {
+          yield loadUserRoleTask.perform({ user })
+        } catch (e) {
+          console.error(`Failed to load role for user '${user.displayName}'`)
+        }
       }
     })
 
