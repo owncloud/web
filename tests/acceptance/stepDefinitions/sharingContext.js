@@ -145,7 +145,7 @@ const assertCollaboratorslistDoesNotContain = async function (type, name) {
       {
         displayName: collaboratorsDialog.elements.collaboratorInformationSubName
       },
-      null,
+      name,
       client.globals.waitForNegativeConditionTimeout
     )
     .then((shares) => {

@@ -22,6 +22,7 @@ module.exports = {
         .waitForAnimationToFinish() // wait for transition on the modal to finish
         .click(dialogConfirmSelector)
         .waitForAjaxCallsToStartAndFinish()
+        .waitForElementNotPresent('@collaboratorEditDropDownList')
     },
     /**
      * Open the role selection dialog for a new share or for editing the given collaborator
@@ -98,7 +99,7 @@ module.exports = {
       filterDisplayName = null,
       timeout = null
     ) {
-      let results = []
+      const results = []
 
       let listItemSelector = {
         selector: this.elements.collaboratorsListItem.selector
@@ -137,8 +138,7 @@ module.exports = {
           )
         }
       )
-
-      results = listItemElementIds.map(async (collaboratorElementId) => {
+      for (const collaboratorElementId of listItemElementIds) {
         const collaboratorResult = {}
 
         let collaboratorEditButton = null
@@ -156,7 +156,7 @@ module.exports = {
         await this.api.elementIdElement(
           collaboratorElementId,
           'css selector',
-          '.show-access-details',
+          this.elements.collaboratorAccessDetailsButton,
           (result) => {
             accessDetailsBtn = result.value.ELEMENT
           }
@@ -185,13 +185,12 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
+        results.push(collaboratorResult)
         this.moveToElement('@collaboratorAccessDetailsDrop', -9, 0)
         this.api.mouseButtonClick()
-        this.waitForElementNotPresent('@collaboratorAccessDetailsDrop', 1000)
-        return collaboratorResult
-      })
+        this.waitForElementNotPresent('@collaboratorAccessDetailsDrop', this.api.globals.waitForNegativeConditionTimeout)
+      }
 
-      results = await Promise.all(results)
       return results
     },
     /**
@@ -303,8 +302,14 @@ module.exports = {
     collaboratorEditButton: {
       selector: '.collaborator-edit-dropdown-options-btn'
     },
+    collaboratorAccessDetailsButton: {
+      selector: '.show-access-details'
+    },
     collaboratorAccessDetailsDrop: {
       selector: '.share-access-details-drop'
+    },
+    collaboratorEditDropDownList: {
+      selector: '.collaborator-edit-dropdown-options-list'
     }
   }
 }
