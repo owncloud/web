@@ -6,7 +6,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
     <avatar-image-stub userid="brian" user-name="Brian Murphy" width="48" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
     <div class="oc-text-truncate oc-width-1-1">
       <div class="oc-flex oc-flex-middle"><span class="oc-text-truncate oc-m-rm"><span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span></span> <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span>
-        <oc-drop-stub mode="manual" target=".collaborator-edit-dropdown-options-btn" class="share-access-details-drop">
+        <oc-drop-stub mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" class="share-access-details-drop">
           <h5 class="oc-text-bold oc-m-rm" data-msgid="Access details" data-current-language="en_US">Access details</h5>
           <dl class="oc-mt-s">
             <dt class="oc-text-muted oc-mb-s" data-msgid="Addition" data-current-language="en_US">Addition</dt>
@@ -29,7 +29,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
               <oc-icon-stub name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span class="text oc-text-truncate">folder</span>
             </router-link-stub>
           </div>
-          <edit-dropdown-stub sharecategory="user" caneditordelete="true" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
+          <edit-dropdown-stub sharecategory="user" caneditordelete="true" id="edit-drop-down-00000000-0000-0000-0000-000000000000" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
         </div>
       </div>
     </div>
