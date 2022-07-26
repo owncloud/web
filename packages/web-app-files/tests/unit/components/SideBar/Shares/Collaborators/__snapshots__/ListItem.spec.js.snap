@@ -6,15 +6,14 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
     <avatar-image-stub userid="brian" user-name="Brian Murphy" width="48" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
     <div class="oc-text-truncate oc-width-1-1">
       <div class="oc-flex oc-flex-middle"><span class="oc-text-truncate oc-m-rm"><span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span></span> <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span>
-        <oc-button-stub id="share-access-details-toggle-00000000-0000-0000-0000-000000000000" appearance="raw" class="oc-ml-xs files-collaborators-collaborator-access-details-button">
-          <oc-icon-stub name="information" fill-type="line" size="small"></oc-icon-stub>
-        </oc-button-stub>
-        <oc-drop-stub toggle="#share-access-details-toggle-00000000-0000-0000-0000-000000000000" mode="click" class="share-access-details-drop">
-          <h5 class="oc-text-bold oc-mt-rm" data-msgid="Access details" data-current-language="en_US">Access details</h5>
-          <oc-list-stub>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Addition" data-current-language="en_US">Addition</span><span class="files-collaborators-collaborator-additional-info oc-width-1-2">brian@owncloud.com</span></li>
-            <li class="oc-flex"><span class="oc-width-1-2" data-msgid="Type" data-current-language="en_US">Type</span><span class="files-collaborators-collaborator-share-type oc-width-1-2">User</span></li>
-          </oc-list-stub>
+        <oc-drop-stub mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" class="share-access-details-drop">
+          <h5 class="oc-text-bold oc-m-rm" data-msgid="Access details" data-current-language="en_US">Access details</h5>
+          <dl class="oc-mt-s">
+            <dt class="oc-text-muted oc-mb-s" data-msgid="Addition" data-current-language="en_US">Addition</dt>
+            <dd class="files-collaborators-collaborator-additional-info">brian@owncloud.com</dd>
+            <dt class="oc-text-muted" data-msgid="Type" data-current-language="en_US">Type</dt>
+            <dd class="files-collaborators-collaborator-share-type">User</dd>
+          </dl>
         </oc-drop-stub>
       </div>
       <div class="oc-m-rm oc-flex oc-flex-middle oc-flex-between">
@@ -25,12 +24,12 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
         </div>
         <div class="oc-flex oc-flex-between oc-flex-middle oc-pl-s">
           <!---->
-          <edit-dropdown-stub sharecategory="user" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
-        </div>
-        <div class="oc-resource-indicators oc-text-truncate">
-          <router-link-stub to="[object Object]" class="parent-folder oc-text-truncate"><span class="text">via</span>
-            <oc-icon-stub name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span class="text oc-text-truncate">folder</span>
-          </router-link-stub>
+          <div class="oc-resource-indicators oc-text-truncate">
+            <router-link-stub to="[object Object]" class="parent-folder oc-text-truncate"><span class="text">via</span>
+              <oc-icon-stub name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span class="text oc-text-truncate">folder</span>
+            </router-link-stub>
+          </div>
+          <edit-dropdown-stub sharecategory="user" caneditordelete="true" id="edit-drop-down-00000000-0000-0000-0000-000000000000" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
         </div>
       </div>
     </div>
