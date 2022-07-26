@@ -46,9 +46,10 @@
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">
-                <router-link
-                  :to="getSpaceProjectRoute(space)"
-                  @click.native="spaceLinkClicked(space)"
+                <component
+                  :is="space.disabled ? 'oc-button' : 'router-link'"
+                  v-bind="getSpaceLinkProps(space)"
+                  v-on="getSpaceLinkListeners(space)"
                 >
                   <oc-tag
                     v-if="space.disabled"
@@ -69,19 +70,20 @@
                     size="xxlarge"
                     class="space-default-image oc-px-m oc-py-m"
                   />
-                </router-link>
+                </component>
               </div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
                   <div class="oc-flex oc-flex-middle">
                     <oc-icon class="oc-mr-s" name="layout-grid" />
-                    <router-link
+                    <component
+                      :is="space.disabled ? 'oc-button' : 'router-link'"
+                      v-bind="getSpaceLinkProps(space)"
                       class="space-name oc-text-left"
-                      :to="getSpaceProjectRoute(space)"
-                      @click.native="spaceLinkClicked(space)"
+                      v-on="getSpaceLinkListeners(space)"
                     >
                       <span v-text="space.name"> </span>
-                    </router-link>
+                    </component>
                   </div>
                   <div class="oc-flex oc-flex-middle">
                     <div>
@@ -284,12 +286,27 @@ export default defineComponent({
       this.openSidebarWithPanel('space-share-item')
     },
 
-    spaceLinkClicked({ disabled }) {
-      if (disabled) {
-        this.showMessage({
-          title: this.$gettext('Disabled spaces cannot be entered'),
-          status: 'warning'
-        })
+    getSpaceLinkProps(space) {
+      if (space.disabled) {
+        return {
+          appearance: 'raw'
+        }
+      }
+      return { to: this.getSpaceProjectRoute(space) }
+    },
+
+    getSpaceLinkListeners(space) {
+      if (!space.disabled) {
+        return {}
+      }
+
+      return {
+        click: () => {
+          this.showMessage({
+            title: this.$gettext('Disabled spaces cannot be entered'),
+            status: 'warning'
+          })
+        }
       }
     }
   }
@@ -323,6 +340,11 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+  }
+
+  .oc-card-media-top button {
+    width: 100%;
     height: 100%;
   }
 
