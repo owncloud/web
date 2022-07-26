@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-loader v-if="loading" :aria-label="$gettext('Loading list of shares')" />
+    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading list of shares')" />
     <template v-else>
       <space-members
         v-if="showSpaceMembers"
@@ -14,13 +14,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, watch } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { dirname } from 'path'
 import { useGraphClient } from 'web-client/src/composables'
+import { useTask } from 'vue-concurrency'
+import { useDebouncedRef, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SharesPanel',
@@ -34,25 +36,41 @@ export default defineComponent({
     showLinks: { type: Boolean, default: false }
   },
   setup() {
-    return {
-      ...useGraphClient()
-    }
+    const store = useStore()
+    const currentFileOutgoingSharesLoading = computed(
+      () => store.getters['Files/currentFileOutgoingSharesLoading']
+    )
+    const incomingSharesLoading = computed(() => store.state.Files.incomingSharesLoading)
+    const sharesTreeLoading = computed(() => store.state.Files.sharesTreeLoading)
+    const sharesLoading = useDebouncedRef(true, 250)
+    watch([currentFileOutgoingSharesLoading, incomingSharesLoading, sharesTreeLoading], () => {
+      sharesLoading.value =
+        currentFileOutgoingSharesLoading.value ||
+        incomingSharesLoading.value ||
+        sharesTreeLoading.value
+    })
+
+    const { graphClient } = useGraphClient()
+
+    const loadSpaceMembersTask = useTask(function* (signal, ref) {
+      yield ref.loadCurrentFileOutgoingShares({
+        client: ref.$client,
+        graphClient,
+        path: ref.space.id,
+        storageId: ref.space.id,
+        resource: ref.space
+      })
+    })
+
+    return { graphClient, loadSpaceMembersTask, sharesLoading }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingSharesLoading']),
     ...mapState('Files/sidebar', ['activePanel']),
-    ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading']),
-
-    loading() {
-      return (
-        this.currentFileOutgoingSharesLoading ||
-        this.sharesTreeLoading ||
-        this.incomingSharesLoading
-      )
-    }
+    ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading'])
   },
   watch: {
-    loading: {
+    sharesLoading: {
       handler: function () {
         if (this.loading) {
           return
@@ -71,6 +89,10 @@ export default defineComponent({
       handler: function (newItem, oldItem) {
         if (oldItem !== newItem) {
           this.$_reloadShares()
+
+          if (this.showSpaceMembers) {
+            this.loadSpaceMembersTask.perform(this)
+          }
         }
       },
       immediate: true

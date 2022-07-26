@@ -30,7 +30,6 @@ import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { useTask } from 'vue-concurrency'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
 
@@ -43,26 +42,10 @@ export default defineComponent({
   inject: ['displayedItem'],
   setup() {
     const { graphClient } = useGraphClient()
-
-    const loadSharesTask = useTask(function* (signal, ref) {
-      yield ref.loadCurrentFileOutgoingShares({
-        client: ref.$client,
-        graphClient,
-        path: ref.space.id,
-        storageId: ref.space.id,
-        resource: ref.space
-      })
-    })
-
-    return { graphClient, loadSharesTask }
+    return { graphClient }
   },
   computed: {
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'currentFileOutgoingCollaborators',
-      'currentFileOutgoingSharesLoading',
-      'sharesTreeLoading'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
     ...mapState(['user']),
     space() {
       return this.displayedItem.value
@@ -86,18 +69,8 @@ export default defineComponent({
       return currentUserCollaborator?.role?.name === spaceRoleManager.name
     }
   },
-  watch: {
-    highlightedFile: {
-      handler: function (newItem, oldItem) {
-        if (oldItem !== newItem) {
-          this.loadSharesTask.perform(this)
-        }
-      },
-      immediate: true
-    }
-  },
   methods: {
-    ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'deleteShare']),
+    ...mapActions('Files', ['deleteShare']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
     isModifiable(share) {
