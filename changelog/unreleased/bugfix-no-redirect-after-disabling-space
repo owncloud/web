@@ -1,0 +1,7 @@
+Bugfix: No redirect after disabling space
+
+We've fixed a bug where the user was not redirected to the spaces overview after disabling the space
+inside the space view.
+
+https://github.com/owncloud/web/pull/7334
+https://github.com/owncloud/web/issues/7291
