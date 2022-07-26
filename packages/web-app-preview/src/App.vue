@@ -114,6 +114,8 @@ import {
 } from 'web-pkg/src/composables'
 import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import { loadPreview } from 'web-pkg/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'Preview',
@@ -143,7 +145,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['capabilities']),
+    ...mapGetters(['capabilities', 'user']),
 
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
@@ -295,20 +297,21 @@ export default defineComponent({
     },
 
     async loadActiveFileIntoCache(loadAsPreview) {
-      const url = loadAsPreview ? this.thumbUrl : this.rawMediaUrl
       try {
         // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
         // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
         let mediaUrl
         if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-          // TODO: get rid of `mediaSource`, use preview loading mechanism from files app instead (needs to be extracted to web-pkg first)
-          const headers = new Headers()
-          if (!this.isPublicLinkContext) {
-            headers.append('Authorization', 'Bearer ' + this.accessToken)
-          }
-          mediaUrl = await this.mediaSource(url, 'url', headers)
+          mediaUrl = await loadPreview({
+            resource: this.activeFilteredFile,
+            isPublic: this.isPublicLinkContext,
+            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number],
+            server: configurationManager.serverUrl,
+            userId: this.user.id,
+            token: this.accessToken
+          })
         } else {
-          mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+          mediaUrl = await this.$client.signUrl(this.rawMediaUrl, 86400) // Timeout of the signed URL = 24 hours
         }
 
         this.cachedFiles.push({
