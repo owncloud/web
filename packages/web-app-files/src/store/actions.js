@@ -11,7 +11,8 @@ import {
   buildSpace
 } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { loadPreview, move, copy } from '../helpers/resource'
+import { move, copy } from '../helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes } from '../helpers/share'

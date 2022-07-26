@@ -1,10 +1,10 @@
-import { loadPreview } from '../../../../src/helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers/preview'
 
-jest.mock('../../../../src/helpers/resource/publicPreviewUrl', () => ({
+jest.mock('web-pkg/src/helpers/preview/publicPreviewUrl', () => ({
   publicPreviewUrl: jest.fn().mockReturnValue('publicPreviewUrl')
 }))
 
-jest.mock('../../../../src/helpers/resource/privatePreviewBlob', () => ({
+jest.mock('web-pkg/src/helpers/preview/privatePreviewBlob', () => ({
   privatePreviewBlob: jest.fn().mockReturnValue('privatePreviewBlob')
 }))
 

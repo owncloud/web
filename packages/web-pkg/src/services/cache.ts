@@ -1,4 +1,4 @@
-import { Cache } from 'web-pkg/src/cache'
+import { Cache } from 'web-pkg/src/helpers/cache'
 
 const filePreviewCache = new Cache<
   string,
