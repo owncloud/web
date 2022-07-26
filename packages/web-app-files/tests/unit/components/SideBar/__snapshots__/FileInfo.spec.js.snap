@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileInfo shows deletion date info 1`] = `
+<div class="file_info">
+  <!---->
+  <div class="file_info__body oc-text-overflow">
+    <h3 data-testid="files-info-name">
+      <oc-resource-name-stub type="file"></oc-resource-name-stub>
+    </h3>
+    <p class="oc-my-rm">
+      <!----> <span data-testid="files-info-mdate" tabindex="0" aria-label="deleted RELATIVE_TIME (ABSOLUTE_TIME)">deleted RELATIVE_TIME</span>
+    </p>
+  </div>
+  <!---->
+</div>
+`;
+
+exports[`FileInfo shows modification date info 1`] = `
+<div class="file_info">
+  <!---->
+  <div class="file_info__body oc-text-overflow">
+    <h3 data-testid="files-info-name">
+      <oc-resource-name-stub type="file"></oc-resource-name-stub>
+    </h3>
+    <p class="oc-my-rm">740 B, <span data-testid="files-info-mdate" tabindex="0" aria-label="modified RELATIVE_TIME (ABSOLUTE_TIME)">modified RELATIVE_TIME</span></p>
+  </div>
+  <!---->
+</div>
+`;
