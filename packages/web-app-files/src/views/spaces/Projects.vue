@@ -46,7 +46,10 @@
               :class="getSpaceCardAdditionalClass(space)"
             >
               <div class="oc-card-media-top oc-border-b">
-                <router-link :to="getSpaceProjectRoute(space)">
+                <router-link
+                  :to="getSpaceProjectRoute(space)"
+                  @click.native="spaceLinkClicked(space)"
+                >
                   <oc-tag
                     v-if="space.disabled"
                     class="oc-position-absolute space-disabled-indicator"
@@ -72,7 +75,11 @@
                 <div class="oc-flex oc-flex-between oc-flex-middle">
                   <div class="oc-flex oc-flex-middle">
                     <oc-icon class="oc-mr-s" name="layout-grid" />
-                    <router-link class="space-name oc-text-left" :to="getSpaceProjectRoute(space)">
+                    <router-link
+                      class="space-name oc-text-left"
+                      :to="getSpaceProjectRoute(space)"
+                      @click.native="spaceLinkClicked(space)"
+                    >
                       <span v-text="space.name"> </span>
                     </router-link>
                   </div>
@@ -248,6 +255,7 @@ export default defineComponent({
     ...mapActions('Files/sidebar', {
       openSidebarWithPanel: 'openWithPanel'
     }),
+    ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
@@ -256,7 +264,10 @@ export default defineComponent({
       'SET_FILE_SELECTION'
     ]),
 
-    getSpaceProjectRoute({ id, name }) {
+    getSpaceProjectRoute({ id, name, disabled }) {
+      if (disabled) {
+        return '#'
+      }
       return createLocationSpaces('files-spaces-project', {
         params: { storageId: id, name }
       })
@@ -272,6 +283,12 @@ export default defineComponent({
     openSidebarSharePanel(space) {
       this.SET_FILE_SELECTION([space])
       this.openSidebarWithPanel('space-share-item')
+    },
+
+    spaceLinkClicked({ disabled }) {
+      if (disabled) {
+        this.showMessage({ title: this.$gettext('Cannot enter disabled space'), status: 'danger' })
+      }
     }
   }
 })
