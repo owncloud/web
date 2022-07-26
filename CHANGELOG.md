@@ -29,6 +29,7 @@ Summary
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+* Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
@@ -230,6 +231,14 @@ Details
    We've fixed spacing issues with the upload overlay progress bar.
 
    https://github.com/owncloud/web/pull/7297
+
+* Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
+
+   We've fixed a bug where the users list in the user management app was not loading if a user has no
+   assigned role.
+
+   https://github.com/owncloud/web/issues/7326
+   https://github.com/owncloud/web/pull/7332
 
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 
