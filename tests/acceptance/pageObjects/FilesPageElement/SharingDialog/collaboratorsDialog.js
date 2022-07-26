@@ -186,9 +186,18 @@ module.exports = {
           }
         }
         results.push(collaboratorResult)
-        this.moveToElement('@collaboratorAccessDetailsDrop', -9, 0)
-        this.api.mouseButtonClick()
-        this.waitForElementNotPresent(
+        let collaboratorAvatarElId = null
+        await this.api.elementIdElement(
+          collaboratorElementId,
+          'css selector',
+          '.files-collaborators-collaborator-indicator',
+          (result) => {
+            collaboratorAvatarElId = result.value.ELEMENT
+          }
+        )
+        // to hide the access details dialog from the screen, click on the collaborator avatar
+        await this.api.elementIdClick(collaboratorAvatarElId)
+        await this.waitForElementNotPresent(
           '@collaboratorAccessDetailsDrop',
           this.api.globals.waitForNegativeConditionTimeout
         )
