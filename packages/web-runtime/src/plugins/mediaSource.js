@@ -58,6 +58,7 @@ export default {
     // For use with <img> tags
     Vue.directive('image-source', {
       bind(el, binding) {
+        console.warn('deprecation: image-source will be removed in 6.0.0')
         _imageSourceHelper(el, binding)
       },
       update(el, binding) {
@@ -76,6 +77,7 @@ export default {
       },
       methods: {
         mediaSource(source, returnAs = 'url', headers) {
+          console.warn('deprecation: mediaSource will be removed in 6.0.0')
           return this.mediaSourceQueue.add(() => _mediaSource(source, returnAs, headers))
         }
       }
