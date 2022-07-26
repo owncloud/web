@@ -16,7 +16,7 @@
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div id="groups-wrapper" class="oc-width-expand">
-          <div id="groups-app-bar" ref="appBar" class="oc-app-bar oc-p-m">
+          <div id="groups-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -32,7 +32,7 @@
                 </oc-button>
               </div>
             </div>
-            <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
+            <div class="oc-flex-1 oc-flex oc-flex-start">
               <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
                 <span v-text="selectedGroupsText" />
                 <oc-button
@@ -73,7 +73,6 @@
               :groups="groups"
               :selected-groups="selectedGroups"
               :header-position="listHeaderPosition"
-              class="oc-mt-m"
               @toggleSelectGroup="toggleSelectGroup"
               @toggleSelectAllGroups="toggleSelectAllGroups"
               @clickDetails="showDetailsSideBarPanel"

@@ -16,7 +16,7 @@
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
         <div id="users-wrapper" class="oc-width-expand">
-          <div id="users-app-bar" ref="appBar" class="oc-p-m">
+          <div id="users-app-bar" ref="appBar" class="oc-py-s">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -32,7 +32,7 @@
                 </oc-button>
               </div>
             </div>
-            <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
+            <div class="oc-flex-1 oc-flex oc-flex-start">
               <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
                 <span v-text="selectedUsersText" />
                 <oc-button
@@ -73,7 +73,6 @@
               :users="users"
               :selected-users="selectedUsers"
               :header-position="listHeaderPosition"
-              class="oc-mt-m"
               @toggleSelectUser="toggleSelectUser"
               @toggleSelectAllUsers="toggleSelectAllUsers"
               @clickDetails="showDetailsSideBarPanel"
