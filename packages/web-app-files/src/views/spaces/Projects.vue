@@ -265,12 +265,11 @@ export default defineComponent({
     ]),
 
     getSpaceProjectRoute({ id, name, disabled }) {
-      if (disabled) {
-        return '#'
-      }
-      return createLocationSpaces('files-spaces-project', {
-        params: { storageId: id, name }
-      })
+      return disabled
+        ? '#'
+        : createLocationSpaces('files-spaces-project', {
+            params: { storageId: id, name }
+          })
     },
 
     getSpaceCardAdditionalClass(space) {
