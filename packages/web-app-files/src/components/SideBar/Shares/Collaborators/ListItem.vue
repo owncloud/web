@@ -35,7 +35,7 @@
             ref="accessDetails"
             class="share-access-details-drop"
             mode="manual"
-            target=".collaborator-edit-dropdown-options-btn"
+            :target="`#edit-drop-down-${editDropDownToggleId}`"
           >
             <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
             <dl class="oc-mt-s">
@@ -91,6 +91,7 @@
               </router-link>
             </div>
             <edit-dropdown
+              :id="`edit-drop-down-${editDropDownToggleId}`"
               class="files-collaborators-collaborator-edit"
               data-testid="collaborator-edit"
               :expiration-date="share.expires ? share.expires : null"
@@ -270,7 +271,7 @@ export default defineComponent({
         text: this.$gettext('Invite persons or groups to access this file or folder.')
       }
     },
-    shareAccessToggleId() {
+    editDropDownToggleId() {
       return uuid.v4()
     }
   },
@@ -283,6 +284,7 @@ export default defineComponent({
     },
 
     showAccessDetails() {
+      console.log('SHOW EVENT EMITTED')
       this.$refs.accessDetails.show()
     },
 
