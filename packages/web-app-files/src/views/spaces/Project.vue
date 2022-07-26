@@ -103,6 +103,14 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
+        <template #quickActions="{ resource }">
+          <quick-actions
+            :class="resource.preview"
+            class="oc-visible@s"
+            :item="resource"
+            :actions="app.quickActions"
+          />
+        </template>
         <template #contextMenu="{ resource }">
           <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
@@ -135,7 +143,7 @@ import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
 import { loadPreview, move } from '../../helpers/resource'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -150,6 +158,7 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import { useResourcesViewDefaults } from '../../composables'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
@@ -166,7 +175,8 @@ export default defineComponent({
     Pagination,
     ContextActions,
     SpaceContextActions,
-    KeyboardActions
+    KeyboardActions,
+    QuickActions
   },
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, Mixins],
   provide() {
@@ -204,6 +214,7 @@ export default defineComponent({
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'configuration']),
+    ...mapState(['app']),
 
     breadcrumbs() {
       return concatBreadcrumbs(
