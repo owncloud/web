@@ -146,6 +146,7 @@ Details
 
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
+   https://github.com/owncloud/web/pull/7324
 
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 
