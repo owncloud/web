@@ -15,8 +15,8 @@
     <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
       <app-loading-spinner v-if="loadResourcesTask.isRunning" />
       <template v-else>
-        <div class="files-list-wrapper oc-width-expand">
-          <div class="oc-app-bar oc-p-m">
+        <div id="users-wrapper" class="oc-width-expand">
+          <div id="users-app-bar" ref="appBar" class="oc-py-s">
             <div class="oc-flex oc-flex-between">
               <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
               <div>
@@ -32,7 +32,7 @@
                 </oc-button>
               </div>
             </div>
-            <div class="oc-flex-1 oc-flex oc-flex-start oc-mt-m">
+            <div class="oc-flex-1 oc-flex oc-flex-start">
               <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
                 <span v-text="selectedUsersText" />
                 <oc-button
@@ -72,7 +72,7 @@
             <UsersList
               :users="users"
               :selected-users="selectedUsers"
-              class="oc-mt-m"
+              :header-position="listHeaderPosition"
               @toggleSelectUser="toggleSelectUser"
               @toggleSelectAllUsers="toggleSelectAllUsers"
               @clickDetails="showDetailsSideBarPanel"
@@ -232,6 +232,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      listHeaderPosition: 0,
       selectedUsers: [],
       createUserModalOpen: false,
       deleteUserModalOpen: false,
@@ -315,6 +316,10 @@ export default defineComponent({
       this.loadResourcesTask.perform(this)
     })
 
+    this.calculateListHeaderPosition()
+
+    window.addEventListener('resize', this.calculateListHeaderPosition)
+
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
     })
@@ -322,13 +327,15 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+    calculateListHeaderPosition() {
+      this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
+    },
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
         return (this.selectedUsers = [])
       }
       this.selectedUsers = [...this.users]
     },
-
     toggleSelectUser(toggledUser) {
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 
@@ -529,6 +536,20 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+#users-app-bar {
+  background-color: var(--oc-color-background-default);
+  border-top-right-radius: 15px;
+  box-sizing: border-box;
+  z-index: 2;
+  position: sticky;
+  padding: 0 var(--oc-space-medium);
+  top: 0;
+}
+
+#users-wrapper {
+  overflow-y: auto;
+}
+
 .users-sidebar {
   position: relative;
   overflow: hidden;

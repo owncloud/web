@@ -6,6 +6,8 @@
     :fields="fields"
     :data="data"
     :highlighted="highlighted"
+    :sticky="true"
+    :header-position="headerPosition"
     @sort="handleSort"
   >
     <template #selectHeader>
@@ -73,6 +75,10 @@ export default {
     },
     selectedGroups: {
       type: Array,
+      required: true
+    },
+    headerPosition: {
+      type: Number,
       required: true
     }
   },
