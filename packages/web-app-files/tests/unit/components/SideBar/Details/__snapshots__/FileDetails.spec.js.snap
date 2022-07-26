@@ -94,7 +94,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 exports[`Details SideBar Panel displays a resource of type file on a private page with timestamp, size info and (me) as owner 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
@@ -322,7 +324,9 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
 exports[`Details SideBar Panel displays a resource of type folder on a private page with timestamp, size info and (me) as owner 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
@@ -356,7 +360,9 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 exports[`Details SideBar Panel displays a resource of type folder on a private page with timestamp, size info, share info and share date 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
@@ -390,7 +396,9 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 exports[`Details SideBar Panel displays a resource of type folder on a private page with timestamp, size info, share info and share date running on eos 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
@@ -444,7 +452,9 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 exports[`Details SideBar Panel displays a resource of type folder on a public page with owner, timestamp, size info and no share info 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
@@ -478,7 +488,9 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
 exports[`Details SideBar Panel displays a resource of type folder on a public page with owner, timestamp, size info and no share info running on eos 1`] = `
 <div id="oc-file-details-sidebar">
   <div>
-    <!---->
+    <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+      <oc-resource-icon resource="[object Object]" size="xxlarge"></oc-resource-icon>
+    </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
