@@ -12,6 +12,9 @@
       >
         <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
+      <div v-else class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-center">
+        <oc-resource-icon :resource="file" size="xxlarge"></oc-resource-icon>
+      </div>
       <div
         v-if="shareIndicators.length"
         key="file-shares"
