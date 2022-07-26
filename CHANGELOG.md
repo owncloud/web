@@ -15,6 +15,7 @@ Summary
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
@@ -102,6 +103,14 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
+
+   We've fixed a bug in the user management app where no scroll bar was displayed in the users or
+   groups list if it exceeds the screen size.
+
+   https://github.com/owncloud/web/issues/7266
+   https://github.com/owncloud/web/pull/7321
 
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 
