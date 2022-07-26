@@ -2,9 +2,12 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import SharesPanel from '@files/src/components/SideBar/Shares/SharesPanel.vue'
+import VueCompositionAPI from '@vue/composition-api'
 
+import SharesPanel from '@files/src/components/SideBar/Shares/SharesPanel.vue'
 const localVue = createLocalVue()
+localVue.use(VueCompositionAPI)
+
 localVue.use(DesignSystem)
 localVue.use(Vuex)
 localVue.use(GetTextPlugin, {
@@ -25,7 +28,7 @@ describe('SharesPanel', () => {
 
   describe('when loading is set to true', () => {
     it('should show the oc loader', () => {
-      const wrapper = getShallowWrapper({ currentFileOutgoingSharesLoading: true })
+      const wrapper = getShallowWrapper({ sharesLoading: true })
 
       expect(wrapper.find(ocLoaderStubSelector).exists()).toBeTruthy()
       expect(wrapper.find(ocLoaderStubSelector).attributes().arialabel).toBe(
@@ -33,14 +36,14 @@ describe('SharesPanel', () => {
       )
     })
   })
-  describe('when loading is set to false', () => {
+  describe('when sharesLoading is set to false', () => {
     it('should not show the oc loader', () => {
       const wrapper = getShallowWrapper()
       expect(wrapper.find('oc-loader-stub').exists()).toBeFalsy()
     })
   })
 
-  function getShallowWrapper({ currentFileOutgoingSharesLoading = false } = {}) {
+  function getShallowWrapper({ sharesLoading = false } = {}) {
     return shallowMount(SharesPanel, {
       localVue,
       store: new Vuex.Store({
@@ -54,7 +57,7 @@ describe('SharesPanel', () => {
               highlightedFile: (state) => {
                 return state.highlightedFile
               },
-              currentFileOutgoingSharesLoading: jest.fn(() => currentFileOutgoingSharesLoading)
+              currentFileOutgoingSharesLoading: jest.fn()
             },
             mutations: {
               SET_HIGHLIGHTED_FILE(state, file) {
@@ -66,6 +69,13 @@ describe('SharesPanel', () => {
       }),
       stubs: {
         'file-shares': true
+      },
+      setup: () => {
+        return {
+          sharesLoading: sharesLoading,
+          graphClient: jest.fn(),
+          loadSpaceMembersTask: jest.fn()
+        }
       }
     })
   }
