@@ -142,7 +142,6 @@ export default {
     text-decoration: none !important;
   }
   &.active {
-    cursor: default;
     overflow: hidden;
   }
 }
