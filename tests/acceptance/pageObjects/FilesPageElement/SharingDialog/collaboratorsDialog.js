@@ -188,7 +188,10 @@ module.exports = {
         results.push(collaboratorResult)
         this.moveToElement('@collaboratorAccessDetailsDrop', -9, 0)
         this.api.mouseButtonClick()
-        this.waitForElementNotPresent('@collaboratorAccessDetailsDrop', this.api.globals.waitForNegativeConditionTimeout)
+        this.waitForElementNotPresent(
+          '@collaboratorAccessDetailsDrop',
+          this.api.globals.waitForNegativeConditionTimeout
+        )
       }
 
       return results
