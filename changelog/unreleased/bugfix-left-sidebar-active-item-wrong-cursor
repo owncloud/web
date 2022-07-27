@@ -1,0 +1,7 @@
+Bugfix: Left sidebar active navigation item has wrong cursor
+
+We've fixed a bug where the active navigation item in the left sidebar had the wrong cursor and
+pretended to be not clickable.
+
+https://github.com/owncloud/web/pull/7348
+https://github.com/owncloud/web/issues/7343
