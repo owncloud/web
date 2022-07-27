@@ -43,7 +43,8 @@ module.exports = {
   },
   elements: {
     collaboratorsInFileRow: {
-      selector: '//*[contains(@class, "oc-avatars")]/span[contains(@class, "oc-avatar")]',
+      selector:
+        '//*[contains(@class, "oc-avatars")]/span[contains(@class, "oc-avatar")]|//*[contains(@class, "oc-avatars")]/div',
       locateStrategy: 'xpath'
     }
   }
