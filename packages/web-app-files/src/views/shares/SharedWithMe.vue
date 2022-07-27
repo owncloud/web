@@ -85,7 +85,7 @@
 
         <no-content-message
           v-if="!hasAccepted"
-          id="files-shared-with-me-shares-empty"
+          id="files-shared-with-me-accepted-empty"
           class="files-empty oc-flex-stretch"
           icon="group"
         >
@@ -95,7 +95,7 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-shared-with-me-shares-table"
+          id="files-shared-with-me-accepted-table"
           v-model="acceptedSelected"
           :data-test-share-status="ShareStatus.accepted"
           class="files-table"
@@ -120,17 +120,6 @@
               class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
               <oc-button
-                v-if="resource.status === ShareStatus.declined"
-                size="small"
-                variation="success"
-                class="file-row-share-status-accept"
-                @click.stop="$_acceptShare_trigger({ resources: [resource] })"
-              >
-                <oc-icon size="small" name="check" />
-                <translate>Accept</translate>
-              </oc-button>
-              <oc-button
-                v-if="resource.status === ShareStatus.accepted"
                 size="small"
                 class="file-row-share-status-decline"
                 @click.stop="$_declineShare_trigger({ resources: [resource] })"
@@ -166,7 +155,7 @@
 
         <no-content-message
           v-if="!hasDeclined"
-          id="files-shared-with-me-shares-empty"
+          id="files-shared-with-me-declined-empty"
           class="files-empty oc-flex-stretch"
           icon="group"
         >
@@ -176,7 +165,7 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-shared-with-me-shares-table"
+          id="files-shared-with-me-declined-table"
           v-model="declinedSelected"
           :data-test-share-status="ShareStatus.declined"
           class="files-table"
@@ -201,7 +190,6 @@
               class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
               <oc-button
-                v-if="resource.status === ShareStatus.declined"
                 size="small"
                 variation="success"
                 class="file-row-share-status-accept"
@@ -209,15 +197,6 @@
               >
                 <oc-icon size="small" name="check" />
                 <translate>Accept</translate>
-              </oc-button>
-              <oc-button
-                v-if="resource.status === ShareStatus.accepted"
-                size="small"
-                class="file-row-share-status-decline"
-                @click.stop="$_declineShare_trigger({ resources: [resource] })"
-              >
-                <oc-icon size="small" name="close" />
-                <translate>Decline</translate>
               </oc-button>
             </div>
           </template>
@@ -459,6 +438,7 @@ export default defineComponent({
     acceptedEmptyMessage() {
       return this.$gettext("You are not collaborating on other people's resources.")
     },
+
     declinedTitle() {
       return this.$gettext('Declined shares')
     },
@@ -472,14 +452,15 @@ export default defineComponent({
       return this.declinedItems.length
     },
     declinedCountFiles() {
-      return this.acceptedItems.filter((s) => s.type !== 'folder').length
+      return this.declinedItems.filter((s) => s.type !== 'folder').length
     },
     declinedCountFolders() {
-      return this.acceptedItems.filter((s) => s.type === 'folder').length
+      return this.declinedItems.filter((s) => s.type === 'folder').length
     },
     declinedEmptyMessage() {
       return this.$gettext("You don't have any previously declined shares.")
     },
+
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
     }
