@@ -5,6 +5,8 @@ import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
+import { buildResource } from 'files/src/helpers/resources'
+
 interface AppFileHandlingOptions {
   clientService: ClientService
   isPublicLinkContext: MaybeRef<boolean>
@@ -15,6 +17,7 @@ type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
   getUrlForResource(r: Resource, query?: QueryParameters): string
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
+  getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
   getFileContents(filePath: string, options: Record<string, any>): Promise<any>
   putFileContents(filePath: string, content: string, options: Record<string, any>): Promise<any>
 }
@@ -87,6 +90,14 @@ export function useAppFileHandling({
     return client.files.fileInfo(filePath, davProperties)
   }
 
+  const getFileResource = async (
+    filePath: string,
+    davProperties: DavProperties
+  ): Promise<Resource> => {
+    const fileInfo = await getFileInfo(filePath, davProperties)
+    return buildResource(fileInfo)
+  }
+
   const putFileContents = (
     filePath: string,
     content: string,
@@ -109,6 +120,7 @@ export function useAppFileHandling({
     getFileContents,
     getUrlForResource,
     getFileInfo,
+    getFileResource,
     putFileContents
   }
 }
