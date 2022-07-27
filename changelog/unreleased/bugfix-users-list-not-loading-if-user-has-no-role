@@ -1,0 +1,6 @@
+Bugfix: Users list not loading if user has no role
+
+We've fixed a bug where the users list in the user management app was not loading if a user has no assigned role.
+
+https://github.com/owncloud/web/pull/7332
+https://github.com/owncloud/web/issues/7326

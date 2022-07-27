@@ -14,7 +14,10 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
+* Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
+* Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
@@ -28,6 +31,7 @@ Summary
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+* Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
@@ -92,6 +96,14 @@ Details
    https://github.com/owncloud/web/issues/7129
    https://github.com/owncloud/web/pull/7248
 
+* Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
+
+   We've fixed a bug where the active navigation item in the left sidebar had the wrong cursor and
+   pretended to be not clickable.
+
+   https://github.com/owncloud/web/issues/7343
+   https://github.com/owncloud/web/pull/7348
+
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
    A user that gets disabled or deleted in the backend now sees an authentication error page upon
@@ -102,6 +114,22 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
+
+   We've fixed a bug in the user management app where no scroll bar was displayed in the users or
+   groups list if it exceeds the screen size.
+
+   https://github.com/owncloud/web/issues/7266
+   https://github.com/owncloud/web/pull/7321
+
+* Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
+
+   We've fixed a bug where the user was not redirected to the spaces overview after disabling the
+   space inside the space view.
+
+   https://github.com/owncloud/web/issues/7291
+   https://github.com/owncloud/web/pull/7334
 
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 
@@ -146,6 +174,7 @@ Details
 
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
+   https://github.com/owncloud/web/pull/7324
 
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 
@@ -220,6 +249,14 @@ Details
    We've fixed spacing issues with the upload overlay progress bar.
 
    https://github.com/owncloud/web/pull/7297
+
+* Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
+
+   We've fixed a bug where the users list in the user management app was not loading if a user has no
+   assigned role.
+
+   https://github.com/owncloud/web/issues/7326
+   https://github.com/owncloud/web/pull/7332
 
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 
@@ -304,6 +341,7 @@ Details
    https://github.com/owncloud/web/issues/7110
    https://github.com/owncloud/web/pull/7252
    https://github.com/owncloud/web/pull/7310
+   https://github.com/owncloud/web/pull/7315
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 

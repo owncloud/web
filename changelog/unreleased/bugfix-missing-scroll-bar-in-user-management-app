@@ -1,0 +1,7 @@
+Bugfix: Missing scroll bar in user management app
+
+We've fixed a bug in the user management app where no scroll bar was displayed in the users or groups list
+if it exceeds the screen size.
+
+https://github.com/owncloud/web/pull/7321
+https://github.com/owncloud/web/issues/7266

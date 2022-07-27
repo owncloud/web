@@ -64,21 +64,15 @@ describe('Collaborator ListItem component', () => {
       const wrapper = createWrapper()
       expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
     })
-    it.each(ShareTypes.authenticated)('shows a button for the access details', (shareType) => {
-      const wrapper = createWrapper({ shareType: shareType.value })
-      expect(wrapper.find(selectors.accessDetailsButton).exists()).toBeTruthy()
-    })
   })
   describe('modifiable property', () => {
     it('shows interactive elements when modifiable', () => {
       const wrapper = createWrapper({ modifiable: true })
       expect(wrapper.find(selectors.collaboratorRole).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.collaboratorEdit).exists()).toBeTruthy()
     })
     it('hides interactive elements when not modifiable', () => {
       const wrapper = createWrapper({ modifiable: false })
       expect(wrapper.find(selectors.collaboratorRole).exists()).toBeFalsy()
-      expect(wrapper.find(selectors.collaboratorEdit).exists()).toBeFalsy()
     })
   })
   describe('share inheritance indicators', () => {

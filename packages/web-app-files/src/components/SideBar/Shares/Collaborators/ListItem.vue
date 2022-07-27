@@ -31,35 +31,23 @@
             />
           </span>
           <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
-          <oc-button
-            :id="`share-access-details-toggle-${shareAccessToggleId}`"
-            class="oc-ml-xs files-collaborators-collaborator-access-details-button"
-            appearance="raw"
-          >
-            <oc-icon name="information" fill-type="line" size="small" />
-          </oc-button>
           <oc-drop
+            ref="accessDetails"
             class="share-access-details-drop"
-            :toggle="`#share-access-details-toggle-${shareAccessToggleId}`"
-            mode="click"
+            mode="manual"
+            :target="`#edit-drop-down-${editDropDownToggleId}`"
           >
-            <h5 v-translate class="oc-text-bold oc-mt-rm">Access details</h5>
-            <oc-list>
-              <li v-if="shareAdditionalInfo" class="oc-flex">
-                <span v-translate class="oc-width-1-2">Addition</span
-                ><span
-                  class="files-collaborators-collaborator-additional-info oc-width-1-2"
-                  v-text="shareAdditionalInfo"
-                />
-              </li>
-              <li class="oc-flex">
-                <span v-translate class="oc-width-1-2">Type</span
-                ><span
-                  class="files-collaborators-collaborator-share-type oc-width-1-2"
-                  v-text="shareTypeText"
-                />
-              </li>
-            </oc-list>
+            <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
+            <dl class="oc-mt-s">
+              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
+              <dd
+                v-if="shareAdditionalInfo"
+                class="files-collaborators-collaborator-additional-info"
+                v-text="shareAdditionalInfo"
+              />
+              <dt v-translate class="oc-text-muted">Type</dt>
+              <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
+            </dl>
           </oc-drop>
         </div>
         <div class="oc-m-rm oc-flex oc-flex-middle oc-flex-between">
@@ -91,26 +79,28 @@
               />
               <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
             </span>
+            <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+              <router-link
+                v-oc-tooltip="$gettext('Navigate to parent folder')"
+                class="parent-folder oc-text-truncate"
+                :to="sharedParentRoute"
+              >
+                <span class="text" v-text="$gettext('via')" />
+                <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
+                <span class="text oc-text-truncate" v-text="sharedParentDir" />
+              </router-link>
+            </div>
             <edit-dropdown
-              v-if="canEditOrDelete"
+              :id="`edit-drop-down-${editDropDownToggleId}`"
               class="files-collaborators-collaborator-edit"
               data-testid="collaborator-edit"
               :expiration-date="share.expires ? share.expires : null"
               :share-category="shareCategory"
+              :can-edit-or-delete="canEditOrDelete"
               @expirationDateChanged="shareExpirationChanged"
               @removeShare="removeShare"
+              @showAccessDetails="showAccessDetails"
             />
-          </div>
-          <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
-            <router-link
-              v-oc-tooltip="$gettext('Navigate to parent folder')"
-              class="parent-folder oc-text-truncate"
-              :to="sharedParentRoute"
-            >
-              <span class="text" v-text="$gettext('via')" />
-              <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
-              <span class="text oc-text-truncate" v-text="sharedParentDir" />
-            </router-link>
           </div>
         </div>
       </div>
@@ -281,7 +271,7 @@ export default defineComponent({
         text: this.$gettext('Invite persons or groups to access this file or folder.')
       }
     },
-    shareAccessToggleId() {
+    editDropDownToggleId() {
       return uuid.v4()
     }
   },
@@ -291,6 +281,11 @@ export default defineComponent({
 
     removeShare() {
       this.$emit('onDelete', this.share)
+    },
+
+    showAccessDetails() {
+      console.log('SHOW EVENT EMITTED')
+      this.$refs.accessDetails.show()
     },
 
     shareRoleChanged({ role, permissions }) {
@@ -342,5 +337,21 @@ export default defineComponent({
 <style lang="scss" scoped>
 .sharee-avatar {
   min-width: 48px;
+}
+
+.share-access-details-drop {
+  dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+  }
+
+  dt {
+    grid-column-start: 1;
+  }
+
+  dd {
+    grid-column-start: 2;
+    margin-left: var(--oc-space-medium);
+  }
 }
 </style>

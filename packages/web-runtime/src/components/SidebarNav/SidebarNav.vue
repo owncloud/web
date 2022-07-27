@@ -56,28 +56,6 @@ export default {
       required: true
     }
   },
-  mounted() {
-    const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
-    const highlighter = document.getElementById('nav-highlighter')
-
-    if (!highlighter || !navItem) {
-      return
-    }
-
-    const resizeObserver = new ResizeObserver((data) => {
-      const width = data[0].borderBoxSize[0].inlineSize
-      highlighter.style.setProperty('transition-duration', `0.05s`)
-      if (width === 0) return
-      highlighter.style.setProperty('width', `${width}px`)
-    }).observe(navItem)
-    if (navItem.clientWidth === 0) return
-    highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
-    highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
-
-    this.$on('beforeDestroy', () => {
-      resizeObserver.disconnect()
-    })
-  },
   computed: {
     ...mapState(['navigation']),
 
@@ -94,6 +72,31 @@ export default {
     isAnyNavItemActive() {
       return this.navItems.some((i) => i.active === true)
     }
+  },
+  mounted() {
+    const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+    const highlighter = document.getElementById('nav-highlighter')
+
+    if (!highlighter || !navItem) {
+      return
+    }
+
+    const resizeObserver = new ResizeObserver((data) => {
+      const width = data[0].borderBoxSize[0].inlineSize
+      highlighter.style.setProperty('transition-duration', `0.05s`)
+      if (width) {
+        highlighter.style.setProperty('width', `${width}px`)
+      }
+    })
+    resizeObserver.observe(navItem)
+    if (navItem.clientWidth) {
+      highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
+      highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
+    }
+
+    this.$on('beforeDestroy', () => {
+      resizeObserver.disconnect()
+    })
   },
   methods: {
     ...mapActions(['openNavigation', 'closeNavigation']),

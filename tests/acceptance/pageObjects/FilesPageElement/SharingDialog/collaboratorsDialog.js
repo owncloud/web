@@ -22,6 +22,7 @@ module.exports = {
         .waitForAnimationToFinish() // wait for transition on the modal to finish
         .click(dialogConfirmSelector)
         .waitForAjaxCallsToStartAndFinish()
+        .waitForElementNotPresent('@collaboratorEditDropDownList')
     },
     /**
      * Open the role selection dialog for a new share or for editing the given collaborator
@@ -98,7 +99,7 @@ module.exports = {
       filterDisplayName = null,
       timeout = null
     ) {
-      let results = []
+      const results = []
 
       let listItemSelector = {
         selector: this.elements.collaboratorsListItem.selector
@@ -137,9 +138,19 @@ module.exports = {
           )
         }
       )
-
-      results = listItemElementIds.map(async (collaboratorElementId) => {
+      for (const collaboratorElementId of listItemElementIds) {
         const collaboratorResult = {}
+
+        let collaboratorEditButton = null
+        await this.api.elementIdElement(
+          collaboratorElementId,
+          'css selector',
+          this.elements.collaboratorEditButton,
+          (result) => {
+            collaboratorEditButton = result.value.ELEMENT
+          }
+        )
+        await this.api.elementIdClick(collaboratorEditButton)
 
         let accessDetailsBtn = null
         await this.api.elementIdElement(
@@ -174,11 +185,24 @@ module.exports = {
             collaboratorResult[attrName] = false
           }
         }
-        this.api.mouseButtonClick()
-        return collaboratorResult
-      })
+        results.push(collaboratorResult)
+        let collaboratorAvatarElId = null
+        await this.api.elementIdElement(
+          collaboratorElementId,
+          'css selector',
+          '.files-collaborators-collaborator-indicator',
+          (result) => {
+            collaboratorAvatarElId = result.value.ELEMENT
+          }
+        )
+        // to hide the access details dialog from the screen, click on the collaborator avatar
+        await this.api.elementIdClick(collaboratorAvatarElId)
+        await this.waitForElementNotPresent(
+          '@collaboratorAccessDetailsDrop',
+          this.api.globals.waitForNegativeConditionTimeout
+        )
+      }
 
-      results = await Promise.all(results)
       return results
     },
     /**
@@ -287,11 +311,17 @@ module.exports = {
       selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
       locateStrategy: 'xpath'
     },
+    collaboratorEditButton: {
+      selector: '.collaborator-edit-dropdown-options-btn'
+    },
     collaboratorAccessDetailsButton: {
-      selector: '.files-collaborators-collaborator-access-details-button'
+      selector: '.show-access-details'
     },
     collaboratorAccessDetailsDrop: {
       selector: '.share-access-details-drop'
+    },
+    collaboratorEditDropDownList: {
+      selector: '.collaborator-edit-dropdown-options-list'
     }
   }
 }

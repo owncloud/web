@@ -6,6 +6,8 @@
     :fields="fields"
     :data="data"
     :highlighted="highlighted"
+    :sticky="true"
+    :header-position="headerPosition"
     @sort="handleSort"
   >
     <template #selectHeader>
@@ -32,7 +34,9 @@
     <template #avatar="{ item }">
       <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
     </template>
-    <template #role="{ item }"> {{ item.role.displayName }} </template>
+    <template #role="{ item }">
+      <template v-if="item.role">{{ item.role.displayName }}</template>
+    </template>
     <template #actions="{ item }">
       <oc-button
         v-oc-tooltip="$gettext('Details')"
@@ -82,6 +86,10 @@ export default {
     },
     selectedUsers: {
       type: Array,
+      required: true
+    },
+    headerPosition: {
+      type: Number,
       required: true
     }
   },
