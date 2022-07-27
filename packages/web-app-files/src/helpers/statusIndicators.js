@@ -98,7 +98,9 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       icon: 'group',
       target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
-      handler: indicatorHandler
+      handler: async (resource, panel) => {
+        await indicatorHandler(resource, panel, 'peopleShares')
+      }
     },
     {
       id: `file-link-${resource.getDomSelector()}`,
@@ -108,13 +110,15 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       icon: 'link',
       target: 'sharing-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
-      handler: indicatorHandler
+      handler: async (resource, panel) => {
+        await indicatorHandler(resource, panel, 'linkShares')
+      }
     }
   ]
 
   return indicators.filter((indicator) => indicator.visible)
 }
 
-const indicatorHandler = async (resource, panel) => {
-  await window.Vue.$store.dispatch('Files/sidebar/openWithPanel', panel)
+const indicatorHandler = async (resource, panel, ref) => {
+  await window.Vue.$store.dispatch('Files/sidebar/openWithPanel', `${panel}#${ref}`)
 }
