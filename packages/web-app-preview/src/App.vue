@@ -287,7 +287,12 @@ export default defineComponent({
         const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
         if (loadRawFile) {
-          if (this.isUrlSigningEnabled) {
+          // This code block requires way too much knowledge about how to retrieve a file
+          // just to be able to render it
+          // TODO: Come up with a reasonable api and move it to file handling composable
+          if (this.activeFilteredFile.downloadURL) {
+            mediaUrl = this.activeFilteredFile.downloadURL
+          } else if (this.isUrlSigningEnabled) {
             mediaUrl = await this.$client.signUrl(this.rawMediaUrl, 86400) // Timeout of the signed URL = 24 hours
           } else {
             const response = await this.getFileContents(this.activeFilteredFile.webDavPath, {
