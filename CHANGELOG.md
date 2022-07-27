@@ -14,6 +14,7 @@ Summary
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
+* Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
@@ -94,6 +95,14 @@ Details
 
    https://github.com/owncloud/web/issues/7129
    https://github.com/owncloud/web/pull/7248
+
+* Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
+
+   We've fixed a bug where the active navigation item in the left sidebar had the wrong cursor and
+   pretended to be not clickable.
+
+   https://github.com/owncloud/web/issues/7343
+   https://github.com/owncloud/web/pull/7348
 
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
