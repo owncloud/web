@@ -1,0 +1,5 @@
+Bugfix: Fix infinite loading spinner on invalid preview links
+
+The `preview` app now shows an error, when a file does not exist (for example when opening a bookmark to a file that does not exist anymore). Before it showed a loading spinner infinitely.
+
+https://github.com/owncloud/web/pull/7359
