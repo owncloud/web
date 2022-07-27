@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex oc-flex-column">
     <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="areResourcesLoading" />
+    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
     <template v-else>
       <shared-with-me-section
         v-if="pendingItems.length > 0"
@@ -41,17 +41,13 @@
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from '../../helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
-import { createLocationSpaces } from '../../router'
 import { Resource } from '../../helpers/resource'
-
-const displayedFields = ['name', 'status', 'owner', 'sdate', 'sharedWith']
 
 export default defineComponent({
   components: {
@@ -61,24 +57,11 @@ export default defineComponent({
   },
 
   setup() {
-    const { fileListHeaderY, storeItems, fields, loadResourcesTask, areResourcesLoading } =
-      useResourcesViewDefaults<Resource, any, any[]>()
-
-    const store = useStore()
-    const hasShareJail = useCapabilityShareJailEnabled()
-    const resourceTargetLocation = computed(() =>
-      unref(hasShareJail)
-        ? createLocationSpaces('files-spaces-share')
-        : createLocationSpaces('files-spaces-personal', {
-            params: { storageId: store.getters.user.id }
-          })
-    )
-    const resourceTargetParamMapping = computed(() =>
-      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined
-    )
-    const resourceTargetQueryMapping = computed(() =>
-      unref(hasShareJail) ? { id: 'shareId' } : undefined
-    )
+    const { storeItems, fields, loadResourcesTask } = useResourcesViewDefaults<
+      Resource,
+      any,
+      any[]
+    >()
 
     // pending shares
     const pending = computed(() =>
@@ -130,9 +113,7 @@ export default defineComponent({
 
     return {
       // defaults
-      fileListHeaderY,
       loadResourcesTask,
-      areResourcesLoading,
 
       // view specific
       pendingHandleSort,
@@ -148,12 +129,7 @@ export default defineComponent({
       declinedHandleSort,
       declinedSortBy,
       declinedSortDir,
-      declinedItems,
-
-      displayedFields,
-      resourceTargetLocation,
-      resourceTargetParamMapping,
-      resourceTargetQueryMapping
+      declinedItems
     }
   },
 
