@@ -261,9 +261,12 @@ export default defineComponent({
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (this.filteredFiles[i].webDavPath === filePath) {
           this.activeIndex = i
-          break
+          return
         }
       }
+
+      this.isFileContentLoading = false
+      this.isFileContentError = true
     },
 
     // react to PopStateEvent ()
