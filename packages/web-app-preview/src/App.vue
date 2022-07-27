@@ -197,20 +197,6 @@ export default defineComponent({
           return 3840
       }
     },
-    thumbUrl() {
-      const query = {
-        x: this.thumbDimensions,
-        y: this.thumbDimensions,
-        // strip double quotes from etag
-        // we have no etag, e.g. on shared with others page
-        c: this.activeFilteredFile.etag?.slice(1, -1),
-        scalingup: 0,
-        preview: 1,
-        a: 1
-      }
-
-      return this.getUrlForResource(this.activeFilteredFile, query)
-    },
     rawMediaUrl() {
       return this.getUrlForResource(this.activeFilteredFile)
     },
@@ -293,25 +279,31 @@ export default defineComponent({
         return
       }
 
-      this.loadActiveFileIntoCache(this.isActiveFileTypeImage)
+      this.loadActiveFileIntoCache()
     },
 
-    async loadActiveFileIntoCache(loadAsPreview) {
+    async loadActiveFileIntoCache() {
       try {
-        // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
-        // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
+        const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
-        if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
+        if (loadRawFile) {
+          if (this.isUrlSigningEnabled) {
+            mediaUrl = await this.$client.signUrl(this.rawMediaUrl, 86400) // Timeout of the signed URL = 24 hours
+          } else {
+            const response = await this.getFileContents(this.activeFilteredFile.webDavPath, {
+              responseType: 'blob'
+            })
+            mediaUrl = URL.createObjectURL(response.body)
+          }
+        } else {
           mediaUrl = await loadPreview({
             resource: this.activeFilteredFile,
             isPublic: this.isPublicLinkContext,
-            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number],
             server: configurationManager.serverUrl,
             userId: this.user.id,
-            token: this.accessToken
+            token: this.accessToken,
+            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
           })
-        } else {
-          mediaUrl = await this.$client.signUrl(this.rawMediaUrl, 86400) // Timeout of the signed URL = 24 hours
         }
 
         this.cachedFiles.push({
