@@ -18,7 +18,7 @@ export interface Resource {
   mdate?: string
   indicators?: any[]
   size?: number
-  permissions?: number
+  permissions?: string
   starred?: boolean
   etag?: string
   sharePermissions?: number

@@ -66,7 +66,7 @@ export function buildResource(resource): Resource {
       ? resource.fileInfo[DavProperty.ContentSize]
       : resource.fileInfo[DavProperty.ContentLength],
     indicators: [],
-    permissions: resource.fileInfo[DavProperty.Permissions] || '',
+    permissions: (resource.fileInfo[DavProperty.Permissions] as string) || '',
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
