@@ -64,7 +64,7 @@ import ContextActions from './FilesList/ContextActions.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { bus } from 'web-pkg/src/instance'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'TrashBin',

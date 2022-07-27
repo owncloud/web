@@ -1,7 +1,7 @@
 import { unref } from '@vue/composition-api'
 import qs from 'qs'
 
-import { Resource } from 'files/src/helpers/resource'
+import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'

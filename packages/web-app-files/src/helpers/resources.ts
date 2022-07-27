@@ -15,13 +15,8 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from './share'
-import {
-  extractDomSelector,
-  extractExtensionFromFile,
-  extractStorageId,
-  Resource
-} from './resource'
-import { User } from './user'
+import { extractDomSelector, extractExtensionFromFile, extractStorageId } from './resource'
+import { User, Resource } from 'web-client'
 import { SHARE_JAIL_ID } from '../services/folder'
 
 export function renameResource(resource, newName, newPath) {
