@@ -7,6 +7,21 @@
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
+    <h1 class="oc-invisible-sr" v-text="pageTitle" />
+    <app-top-bar :resource="activeFilteredFile" @close="closeApp">
+      <template #right>
+        <oc-button
+          v-if="!isFileContentError"
+          class="preview-download"
+          size="small"
+          :aria-label="$gettext('Download currently viewed file')"
+          @click="triggerActiveFileDownload"
+        >
+          <oc-icon size="small" name="file-download" />
+        </oc-button>
+      </template>
+    </app-top-bar>
+
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
@@ -19,19 +34,6 @@
       :accessible-label="$gettext('Failed to load media file')"
     />
     <template v-else>
-      <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <app-top-bar :resource="activeFilteredFile" @close="closeApp">
-        <template #right>
-          <oc-button
-            class="preview-download"
-            size="small"
-            :aria-label="$gettext('Download currently viewed file')"
-            @click="triggerActiveFileDownload"
-          >
-            <oc-icon size="small" name="file-download" />
-          </oc-button>
-        </template>
-      </app-top-bar>
       <div
         v-show="activeMediaFileCached"
         class="
@@ -259,9 +261,12 @@ export default defineComponent({
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (this.filteredFiles[i].webDavPath === filePath) {
           this.activeIndex = i
-          break
+          return
         }
       }
+
+      this.isFileContentLoading = false
+      this.isFileContentError = true
     },
 
     // react to PopStateEvent ()
