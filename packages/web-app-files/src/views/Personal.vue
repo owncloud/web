@@ -199,7 +199,7 @@ export default defineComponent({
 
           return this.$router.replace({
             to,
-            params: { ...to.params, storageId, item: '/' },
+            params: { ...to.params, storageId, item: to.params.item || this.homeFolder },
             query: to.query
           })
         }
