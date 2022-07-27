@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex oc-flex-column">
     <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <shared-with-me-section
         v-if="pendingItems.length > 0"
@@ -65,7 +65,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { storeItems, fields, loadResourcesTask } = useResourcesViewDefaults<
+    const { storeItems, fields, loadResourcesTask, areResourcesLoading } = useResourcesViewDefaults<
       Resource,
       any,
       any[]
@@ -122,6 +122,7 @@ export default defineComponent({
     return {
       // defaults
       loadResourcesTask,
+      areResourcesLoading,
 
       // view specific
       pendingHandleSort,
