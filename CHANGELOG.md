@@ -16,6 +16,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
+* Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
@@ -113,6 +114,14 @@ Details
 
    https://github.com/owncloud/web/issues/7345
    https://github.com/owncloud/web/pull/7355
+
+* Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
+
+   We fixed a small glitch in views of the files app, where the view would show a state like "Resource
+   not found" in the brief moment before the resource loading started. Now the views correctly
+   start in a loading state.
+
+   https://github.com/owncloud/web/pull/7325
 
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
