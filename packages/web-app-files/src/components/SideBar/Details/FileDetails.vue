@@ -420,9 +420,6 @@ export default defineComponent({
       }
       return null
     },
-    expandPeoplesPanel() {
-      this.setSidebarPanel('sharing-item')
-    },
     expandVersionsPanel() {
       this.setSidebarPanel('versions-item')
     },
