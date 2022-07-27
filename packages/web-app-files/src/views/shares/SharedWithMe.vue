@@ -17,7 +17,7 @@
           class="files-table"
           :class="{ 'files-table-squashed': !sidebarClosed }"
           :fields-displayed="displayedFields"
-          :are-thumbnails-displayed="displayThumbnails"
+          :are-thumbnails-displayed="false"
           :resources="showMorePending ? pendingItems : pendingItems.slice(0, 3)"
           :are-resources-clickable="false"
           :header-position="fileListHeaderY"
@@ -76,90 +76,167 @@
         </resource-table>
       </div>
 
-      <!-- Accepted or declined shares -->
-      <h2 class="oc-px-m oc-py-s">
-        {{ sharesTitle }}
-        <span class="oc-text-initial">({{ sharesCount }})</span>
-        <oc-button
-          id="files-shared-with-me-toggle-view-mode"
-          appearance="raw"
-          type="router-link"
-          :to="sharesToggleRouterLink"
-          :data-test-set-view-mode="sharesInvertedViewMode.toString()"
-        >
-          {{ sharesToggleLabel }}
-        </oc-button>
-      </h2>
+      <div>
+        <!-- Accepted shares -->
+        <h2 class="oc-px-m oc-py-s">
+          {{ acceptedTitle }}
+          <span class="oc-text-initial">({{ acceptedCount }})</span>
+        </h2>
 
-      <no-content-message
-        v-if="!hasShares"
-        id="files-shared-with-me-shares-empty"
-        class="files-empty oc-flex-stretch"
-        icon="group"
-      >
-        <template #message>
-          <span>{{ sharesEmptyMessage }}</span>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        id="files-shared-with-me-shares-table"
-        v-model="sharesSelected"
-        :data-test-share-status="viewMode"
-        class="files-table"
-        :class="{ 'files-table-squashed': !sidebarClosed }"
-        :fields-displayed="displayedFields"
-        :are-thumbnails-displayed="displayThumbnails"
-        :resources="sharesItems"
-        :are-resources-clickable="showsAcceptedShares"
-        :target-route="resourceTargetLocation"
-        :target-route-param-mapping="resourceTargetParamMapping"
-        :target-route-query-mapping="resourceTargetQueryMapping"
-        :header-position="fileListHeaderY"
-        :sort-by="sharesSortBy"
-        :sort-dir="sharesSortDir"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-        @sort="sharesHandleSort"
-      >
-        <template #status="{ resource }">
-          <div
-            :key="resource.getDomSelector() + resource.status"
-            class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
-          >
-            <oc-button
-              v-if="resource.status === ShareStatus.declined"
-              size="small"
-              variation="success"
-              class="file-row-share-status-accept"
-              @click.stop="$_acceptShare_trigger({ resources: [resource] })"
+        <no-content-message
+          v-if="!hasAccepted"
+          id="files-shared-with-me-shares-empty"
+          class="files-empty oc-flex-stretch"
+          icon="group"
+        >
+          <template #message>
+            <span>{{ acceptedEmptyMessage }}</span>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-shared-with-me-shares-table"
+          v-model="acceptedSelected"
+          :data-test-share-status="ShareStatus.accepted"
+          class="files-table"
+          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :fields-displayed="displayedFields"
+          :are-thumbnails-displayed="displayThumbnails"
+          :resources="acceptedItems"
+          :are-resources-clickable="true"
+          :target-route="resourceTargetLocation"
+          :target-route-param-mapping="resourceTargetParamMapping"
+          :target-route-query-mapping="resourceTargetQueryMapping"
+          :header-position="fileListHeaderY"
+          :sort-by="acceptedSortBy"
+          :sort-dir="acceptedSortDir"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+          @sort="acceptedHandleSort"
+        >
+          <template #status="{ resource }">
+            <div
+              :key="resource.getDomSelector() + resource.status"
+              class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
-              <oc-icon size="small" name="check" />
-              <translate>Accept</translate>
-            </oc-button>
-            <oc-button
-              v-if="resource.status === ShareStatus.accepted"
-              size="small"
-              class="file-row-share-status-decline"
-              @click.stop="$_declineShare_trigger({ resources: [resource] })"
+              <oc-button
+                v-if="resource.status === ShareStatus.declined"
+                size="small"
+                variation="success"
+                class="file-row-share-status-accept"
+                @click.stop="$_acceptShare_trigger({ resources: [resource] })"
+              >
+                <oc-icon size="small" name="check" />
+                <translate>Accept</translate>
+              </oc-button>
+              <oc-button
+                v-if="resource.status === ShareStatus.accepted"
+                size="small"
+                class="file-row-share-status-decline"
+                @click.stop="$_declineShare_trigger({ resources: [resource] })"
+              >
+                <oc-icon size="small" name="close" />
+                <translate>Decline</translate>
+              </oc-button>
+            </div>
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions
+              v-if="isResourceInAcceptedSelection(resource)"
+              :items="acceptedSelected"
+            />
+          </template>
+          <template #footer>
+            <list-info
+              v-if="hasAccepted"
+              class="oc-width-1-1 oc-my-s"
+              :files="acceptedCountFiles"
+              :folders="acceptedCountFolders"
+            />
+          </template>
+        </resource-table>
+      </div>
+
+      <div>
+        <!-- Declined shares -->
+        <h2 class="oc-px-m oc-py-s">
+          {{ declinedTitle }}
+          <span class="oc-text-initial">({{ declinedCount }})</span>
+        </h2>
+
+        <no-content-message
+          v-if="!hasDeclined"
+          id="files-shared-with-me-shares-empty"
+          class="files-empty oc-flex-stretch"
+          icon="group"
+        >
+          <template #message>
+            <span>{{ declinedEmptyMessage }}</span>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-shared-with-me-shares-table"
+          v-model="declinedSelected"
+          :data-test-share-status="ShareStatus.declined"
+          class="files-table"
+          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :fields-displayed="displayedFields"
+          :are-thumbnails-displayed="false"
+          :resources="declinedItems"
+          :are-resources-clickable="false"
+          :target-route="resourceTargetLocation"
+          :target-route-param-mapping="resourceTargetParamMapping"
+          :target-route-query-mapping="resourceTargetQueryMapping"
+          :header-position="fileListHeaderY"
+          :sort-by="declinedSortBy"
+          :sort-dir="declinedSortDir"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+          @sort="declinedHandleSort"
+        >
+          <template #status="{ resource }">
+            <div
+              :key="resource.getDomSelector() + resource.status"
+              class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
             >
-              <oc-icon size="small" name="close" />
-              <translate>Decline</translate>
-            </oc-button>
-          </div>
-        </template>
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSharesSelection(resource)" :items="sharesSelected" />
-        </template>
-        <template #footer>
-          <list-info
-            v-if="hasShares"
-            class="oc-width-1-1 oc-my-s"
-            :files="sharesCountFiles"
-            :folders="sharesCountFolders"
-          />
-        </template>
-      </resource-table>
+              <oc-button
+                v-if="resource.status === ShareStatus.declined"
+                size="small"
+                variation="success"
+                class="file-row-share-status-accept"
+                @click.stop="$_acceptShare_trigger({ resources: [resource] })"
+              >
+                <oc-icon size="small" name="check" />
+                <translate>Accept</translate>
+              </oc-button>
+              <oc-button
+                v-if="resource.status === ShareStatus.accepted"
+                size="small"
+                class="file-row-share-status-decline"
+                @click.stop="$_declineShare_trigger({ resources: [resource] })"
+              >
+                <oc-icon size="small" name="close" />
+                <translate>Decline</translate>
+              </oc-button>
+            </div>
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions
+              v-if="isResourceInDeclinedSelection(resource)"
+              :items="declinedSelected"
+            />
+          </template>
+          <template #footer>
+            <list-info
+              v-if="hasDeclined"
+              class="oc-width-1-1 oc-my-s"
+              :files="declinedCountFiles"
+              :folders="declinedCountFolders"
+            />
+          </template>
+        </resource-table>
+      </div>
     </template>
   </div>
 </template>
@@ -175,7 +252,7 @@ import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { useSort, useResourcesViewDefaults } from '../../composables'
-import { useCapabilityShareJailEnabled, useRouteQuery, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -229,10 +306,6 @@ export default defineComponent({
       unref(hasShareJail) ? { id: 'shareId' } : undefined
     )
 
-    const viewMode = computed(() =>
-      parseInt(String(unref(useRouteQuery('view-mode', ShareStatus.accepted.toString()))))
-    )
-
     // pending shares
     const pending = computed(() =>
       unref(storeItems).filter((item) => item.status === ShareStatus.pending)
@@ -249,20 +322,36 @@ export default defineComponent({
       sortDirQueryName: 'pending-sort-dir'
     })
 
-    // shares depending on view mode
-    const shares = computed(() =>
-      unref(storeItems).filter((item) => item.status === unref(viewMode))
+    // accepted shares
+    const accepted = computed(() =>
+      unref(storeItems).filter((item) => item.status === ShareStatus.accepted)
     )
     const {
-      sortBy: sharesSortBy,
-      sortDir: sharesSortDir,
-      items: sharesItems,
-      handleSort: sharesHandleSort
+      sortBy: acceptedSortBy,
+      sortDir: acceptedSortDir,
+      items: acceptedItems,
+      handleSort: acceptedHandleSort
     } = useSort({
-      items: shares,
+      items: accepted,
       fields,
-      sortByQueryName: 'shares-sort-by',
-      sortDirQueryName: 'shares-sort-dir'
+      sortByQueryName: 'accepted-sort-by',
+      sortDirQueryName: 'accepted-sort-dir'
+    })
+
+    // declined shares
+    const declined = computed(() =>
+      unref(storeItems).filter((item) => item.status === ShareStatus.declined)
+    )
+    const {
+      sortBy: declinedSortBy,
+      sortDir: declinedSortDir,
+      items: declinedItems,
+      handleSort: declinedHandleSort
+    } = useSort({
+      items: declined,
+      fields,
+      sortByQueryName: 'declined-sort-by',
+      sortDirQueryName: 'declined-sort-dir'
     })
 
     return {
@@ -272,15 +361,20 @@ export default defineComponent({
       areResourcesLoading,
 
       // view specific
-      viewMode,
       pendingHandleSort,
       pendingSortBy,
       pendingSortDir,
       pendingItems,
-      sharesHandleSort,
-      sharesSortBy,
-      sharesSortDir,
-      sharesItems,
+
+      acceptedHandleSort,
+      acceptedSortBy,
+      acceptedSortDir,
+      acceptedItems,
+
+      declinedHandleSort,
+      declinedSortBy,
+      declinedSortDir,
+      declinedItems,
 
       displayedFields,
       resourceTargetLocation,
@@ -299,7 +393,6 @@ export default defineComponent({
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
-    // pending shares
     pendingSelected: {
       get() {
         return this.selectedFiles.filter((r) => r.status === ShareStatus.pending)
@@ -307,6 +400,26 @@ export default defineComponent({
       set(resources) {
         // this will (intentionally) reset the file selection to pending shares only.
         this.SET_FILE_SELECTION(resources.filter((r) => r.status === ShareStatus.pending))
+      }
+    },
+
+    acceptedSelected: {
+      get() {
+        return this.selectedFiles.filter((r) => r.status === ShareStatus.accepted)
+      },
+      set(resources) {
+        // this will (intentionally) reset the file selection to pending shares only.
+        this.SET_FILE_SELECTION(resources.filter((r) => r.status === ShareStatus.accepted))
+      }
+    },
+
+    declinedSelected: {
+      get() {
+        return this.selectedFiles.filter((r) => r.status === ShareStatus.declined)
+      },
+      set(resources) {
+        // this will (intentionally) reset the file selection to pending shares only.
+        this.SET_FILE_SELECTION(resources.filter((r) => r.status === ShareStatus.declined))
       }
     },
     pendingTitle() {
@@ -325,66 +438,50 @@ export default defineComponent({
       return this.pendingItems.length
     },
 
-    // accepted or declined shares
-    showsAcceptedShares() {
-      return this.viewMode === ShareStatus.accepted
+    acceptedTitle() {
+      return this.$gettext('Accepted shares')
     },
-    showsDeclinedShares() {
-      return this.viewMode === ShareStatus.declined
+    acceptedHasMore() {
+      return this.acceptedCount > 3
     },
-    sharesSelected: {
-      get() {
-        return this.selectedFiles.filter((r) => r.status === this.viewMode)
-      },
-      set(resources) {
-        // this will (intentionally) reset the file selection to shares for the current view mode only.
-        this.SET_FILE_SELECTION(resources.filter((r) => r.status === this.viewMode))
-      }
+    hasAccepted() {
+      return this.acceptedCount > 0
     },
-    sharesTitle() {
-      return this.showsDeclinedShares
-        ? this.$gettext('Declined shares')
-        : this.$gettext('Accepted shares')
+    acceptedCount() {
+      return this.acceptedItems.length
     },
-    sharesToggleLabel() {
-      return this.showsDeclinedShares
-        ? this.$gettext('Show accepted shares')
-        : this.$gettext('Show declined shares')
+    acceptedCountFiles() {
+      return this.acceptedItems.filter((s) => s.type !== 'folder').length
     },
-    sharesEmptyMessage() {
-      return this.showsDeclinedShares
-        ? this.$gettext("You don't have any previously declined shares.")
-        : this.$gettext("You are not collaborating on other people's resources.")
+    acceptedCountFolders() {
+      return this.acceptedItems.filter((s) => s.type === 'folder').length
     },
-    hasShares() {
-      return this.sharesCount > 0
+    acceptedEmptyMessage() {
+      return this.$gettext("You are not collaborating on other people's resources.")
     },
-    sharesCount() {
-      return this.sharesItems.length
+    declinedTitle() {
+      return this.$gettext('Declined shares')
     },
-    sharesCountFiles() {
-      return this.sharesItems.filter((s) => s.type !== 'folder').length
+    declinedHasMore() {
+      return this.declinedCount > 3
     },
-    sharesCountFolders() {
-      return this.sharesItems.filter((s) => s.type === 'folder').length
+    hasDeclined() {
+      return this.declinedCount > 0
     },
-    sharesInvertedViewMode() {
-      return this.showsAcceptedShares ? ShareStatus.declined : ShareStatus.accepted
+    declinedCount() {
+      return this.declinedItems.length
     },
-    sharesToggleRouterLink() {
-      return {
-        name: this.$route.name,
-        params: {
-          ...this.$route.params
-        },
-        query: {
-          ...this.$route.query,
-          'view-mode': this.sharesInvertedViewMode
-        }
-      }
+    declinedCountFiles() {
+      return this.acceptedItems.filter((s) => s.type !== 'folder').length
+    },
+    declinedCountFolders() {
+      return this.acceptedItems.filter((s) => s.type === 'folder').length
+    },
+    declinedEmptyMessage() {
+      return this.$gettext("You don't have any previously declined shares.")
     },
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews && this.viewMode === ShareStatus.accepted
+      return !this.configuration?.options?.disablePreviews
     }
   },
 
@@ -432,8 +529,12 @@ export default defineComponent({
       return this.pendingSelected?.includes(resource)
     },
 
-    isResourceInSharesSelection(resource) {
-      return this.sharesSelected?.includes(resource)
+    isResourceInAcceptedSelection(resource) {
+      return this.acceptedSelected?.includes(resource)
+    },
+
+    isResourceInDeclinedSelection(resource) {
+      return this.declinedSelected?.includes(resource)
     }
   }
 })
