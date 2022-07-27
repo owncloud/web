@@ -1,9 +1,12 @@
-Enhancement: Update ODS to v14.0.0-alpha.7
+Enhancement: Update ODS to v14.0.0-alpha.8
 
-We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 14.0.0-alpha.8. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 - Bugfix - Remove click event on OcIcon: #2216
 - Bugfix - Lazy loading render performance: #2260
+- Bugfix - Omit special characters in user avatar initials: #2267
+- Bugfix - Avatar link icon: #2269
+- Bugfix - Remove width shrinking of the ocAvatarItem: #2242
 - Change - Remove OcAlert component: #2210
 - Change - Remove transition animations: #2210
 - Change - Revamp animations: #2210
@@ -13,5 +16,5 @@ We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to
 - Enhancement - Redesign notifications: #2210
 - Enhancement - Use oc colors for selected background and deselect icon: #2262
 
-https://github.com/owncloud/web/pull/7312
-https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.7
+https://github.com/owncloud/web/pull/7355
+https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.8

@@ -571,7 +571,7 @@ export default defineComponent({
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
-        this.openWithPanel('links-item')
+        this.openWithPanel('sharing-item')
         return
       }
       this.openWithPanel('sharing-item')

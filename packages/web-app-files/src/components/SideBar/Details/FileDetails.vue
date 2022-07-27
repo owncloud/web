@@ -423,9 +423,6 @@ export default defineComponent({
     expandPeoplesPanel() {
       this.setSidebarPanel('sharing-item')
     },
-    expandLinksPanel() {
-      this.setSidebarPanel('links-item')
-    },
     expandVersionsPanel() {
       this.setSidebarPanel('versions-item')
     },

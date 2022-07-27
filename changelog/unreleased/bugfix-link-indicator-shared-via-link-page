@@ -1,0 +1,6 @@
+Bugfix: Link indicator on "Shared via link"-page
+
+We've fixed the icon and the sidebar for the link indicator on the "Shared via link"-page.
+
+https://github.com/owncloud/web/pull/7355
+https://github.com/owncloud/web/issues/7345
