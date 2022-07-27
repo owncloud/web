@@ -186,7 +186,6 @@ import {
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector, Resource } from '../../helpers/resource'
-import { ShareTypes } from '../../helpers/share'
 import { createLocationSpaces } from '../../router'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
@@ -569,11 +568,7 @@ export default defineComponent({
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] })
     },
-    openSharingSidebar(file) {
-      if (file.share?.shareType === ShareTypes.link.value) {
-        this.openWithPanel('sharing-item')
-        return
-      }
+    openSharingSidebar() {
       this.openWithPanel('sharing-item')
     },
     folderLink(file) {
