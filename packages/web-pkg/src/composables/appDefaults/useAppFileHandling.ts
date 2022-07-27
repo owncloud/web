@@ -1,11 +1,11 @@
 import { unref } from '@vue/composition-api'
-import qs from 'qs'
 
 import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
 import { buildResource } from 'files/src/helpers/resources'
+import { useCapabilityCoreSupportUrlSigning } from '../capability'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
@@ -15,7 +15,7 @@ interface AppFileHandlingOptions {
 
 type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
-  getUrlForResource(r: Resource, query?: QueryParameters): string
+  getUrlForResource(r: Resource): Promise<string>
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
   getFileContents(filePath: string, options: Record<string, any>): Promise<any>
@@ -27,33 +27,55 @@ export function useAppFileHandling({
   isPublicLinkContext,
   publicLinkPassword
 }: AppFileHandlingOptions): AppFileHandlingResult {
-  const getUrlForResource = (
+  const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
+
+  const getUrlForResource = async (
     { webDavPath, downloadURL }: Resource,
-    query: QueryParameters = null
+    options: { signUrlTimeout?: number } = {}
   ) => {
-    const queryStr = qs.stringify(query)
-    if (unref(isPublicLinkContext)) {
-      // If the resource does not contain the downloadURL we fallback to the normal
-      // public files path.
-      if (!downloadURL) {
-        // TODO: check whether we can fix the resource to always contain public-files in the webDavPath
-        const urlPath = ['public-files', webDavPath].join('/')
-        return [client.files.getFileUrl(urlPath), queryStr].filter(Boolean).join('?')
+    const signUrlTimeout = options.signUrlTimeout || 86400
+    let signed = true
+    if (!downloadURL) {
+      // TODO: check whether we can fix the resource to always contain public-files in the webDavPath
+      let urlPath
+      if (unref(isPublicLinkContext)) {
+        urlPath = ['public-files', webDavPath].join('/')
+      } else {
+        urlPath = webDavPath
       }
 
-      // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
-      // download the file.
-      const [url, signedQuery] = downloadURL.split('?')
+      // compute unsigned url
+      downloadURL = client.files.getFileUrl(urlPath)
 
-      // Since the pre-signed url contains query parameters and the caller of this method
-      // can also provide query parameters we have to combine them.
-      const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
-      return [url, combinedQuery].filter(Boolean).join('?')
+      // sign url
+      if (unref(isUrlSigningSupported)) {
+        downloadURL = await client.signUrl(downloadURL, signUrlTimeout)
+      } else {
+        signed = false
+      }
     }
 
-    return [client.files.getFileUrl(webDavPath), queryStr].filter(Boolean).join('?')
+    // FIXME: re-introduce query parameters
+    // They are not supported by getFileContents() and as we don't need them right now, I'm disabling the feature completely for now
+    //
+    // // Since the pre-signed url contains query parameters and the caller of this method
+    // // can also provide query parameters we have to combine them.
+    // const queryStr = qs.stringify(options.query || null)
+    // const [url, signedQuery] = downloadURL.split('?')
+    // const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
+    // downloadURL = [url, combinedQuery].filter(Boolean).join('?')
+
+    if (!signed) {
+      const response = await getFileContents(webDavPath, {
+        responseType: 'blob'
+      })
+      downloadURL = URL.createObjectURL(response.body)
+    }
+
+    return downloadURL
   }
 
+  // TODO: support query parameters, possibly needs porting away from owncloud-sdk
   const getFileContents = async (filePath: string, options: Record<string, any>) => {
     if (unref(isPublicLinkContext)) {
       const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
