@@ -1,0 +1,8 @@
+Enhancement: Change file loading mechanism in `preview` app
+
+Make preview loading mechanism from the `files` app available for all apps and use it in `preview` app.
+
+*DEPRECATION*: This deprecates `v-image-source` directive and the `mediaSource` method mixed into all components. It will be removed in 6.0.0.
+
+https://github.com/owncloud/web/pull/7350
+https://github.com/owncloud/web/issues/7233

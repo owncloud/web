@@ -1,4 +1,4 @@
-import { publicPreviewUrl } from '../../../../src/helpers/resource'
+import { publicPreviewUrl } from 'web-pkg/src/helpers/preview'
 import mockAxios from 'jest-mock-axios'
 import { URLSearchParams } from 'url'
 
