@@ -21,6 +21,7 @@ Summary
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
+* Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
@@ -156,6 +157,14 @@ Details
 
    https://github.com/owncloud/web/issues/6300
    https://github.com/owncloud/web/pull/7216
+   https://github.com/owncloud/web/pull/7359
+
+* Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
+
+   The `preview` app now shows an error, when a file does not exist (for example when opening a
+   bookmark to a file that does not exist anymore). Before it showed a loading spinner infinitely.
+
+   https://github.com/owncloud/web/pull/7359
 
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 
