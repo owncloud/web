@@ -65,3 +65,38 @@ Given(
     })
   }
 )
+
+Given(
+  '{string} creates following group(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const admin = this.usersEnvironment.getUser({ key: stepUser })
+
+    for (const info of stepTable.hashes()) {
+      const group = this.usersEnvironment.getGroup({ key: info.id })
+      if (config.ocis) {
+        await api.graph.deleteGroup({ group, admin })
+        await api.graph.createGroup({ group, admin })
+      } else {
+        await api.user.deleteGroup({ group, admin })
+        await api.user.createGroup({ group, admin })
+      }
+    }
+  }
+)
+
+Given(
+  '{string} adds user(s) to the group(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const admin = this.usersEnvironment.getUser({ key: stepUser })
+
+    for (const info of stepTable.hashes()) {
+      const group = this.usersEnvironment.getGroup({ key: info.group })
+      const user = this.usersEnvironment.getUser({ key: info.user })
+      if (config.ocis) {
+        await api.graph.addUserToGroup({ user, group, admin })
+      } else {
+        await api.user.addUserToGroup({ user, group, admin })
+      }
+    }
+  }
+)

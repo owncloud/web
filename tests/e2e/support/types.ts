@@ -32,3 +32,8 @@ export interface File {
 export interface Me {
   id: string
 }
+
+export interface Group {
+  id: string
+  displayName: string
+}

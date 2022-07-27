@@ -1,5 +1,5 @@
 import { checkResponseStatus, checkOCJsonStatus, request } from './http'
-import { User } from '../types'
+import { Group, User } from '../types'
 import { URLSearchParams } from 'url'
 import join from 'join-path'
 
@@ -67,4 +67,60 @@ export const getUser = async ({ user }: { user: User }): Promise<User> => {
   })
 
   return user
+}
+
+export const createGroup = async ({
+  group,
+  admin
+}: {
+  group: Group
+  admin: User
+}): Promise<Group> => {
+  const body = new URLSearchParams()
+  body.append('groupid', group.id)
+  const response = await request({
+    method: 'POST',
+    path: join('ocs', 'v2.php', 'cloud', 'groups'),
+    body: body,
+    user: admin
+  })
+  checkResponseStatus(response, 'Failed while creating group')
+  return group
+}
+
+export const deleteGroup = async ({
+  group,
+  admin
+}: {
+  group: Group
+  admin: User
+}): Promise<Group> => {
+  await request({
+    method: 'DELETE',
+    path: join('ocs', 'v2.php', 'cloud', 'groups', encodeURIComponent(group.id)),
+    user: admin
+  })
+
+  return group
+}
+
+export const addUserToGroup = async ({
+  user,
+  group,
+  admin
+}: {
+  user: User
+  group: Group
+  admin: User
+}): Promise<Group> => {
+  const body = new URLSearchParams()
+  body.append('groupid', group.id)
+  const response = await request({
+    method: 'POST',
+    path: join('ocs', 'v2.php', 'cloud', 'users', user.id, 'groups'),
+    body: body,
+    user: admin
+  })
+  checkResponseStatus(response, 'Failed while adding an user to the group')
+  return group
 }

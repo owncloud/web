@@ -2,6 +2,8 @@ import { Page } from 'playwright'
 import {
   createShare,
   createShareArgs,
+  createReshare,
+  createReshareArgs,
   acceptShare,
   changeShareeRole,
   changeShareeRoleArgs,
@@ -25,6 +27,12 @@ export class Share {
     await this.#page.goto(startUrl)
     // why? o_O
     await this.#page.locator('body').click()
+  }
+
+  async createReshare(args: Omit<createReshareArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await createReshare({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
   }
 
   async accept(args: Omit<acceptShareArgs, 'page'>): Promise<void> {
