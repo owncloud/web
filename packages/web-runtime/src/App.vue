@@ -203,6 +203,7 @@ export default defineComponent({
 <style lang="scss">
 body {
   margin: 0;
+  font-size: 0.88rem;
 }
 
 #web {
