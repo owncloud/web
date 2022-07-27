@@ -16,6 +16,11 @@
     <div v-if="isLoading" class="oc-text-center">
       <oc-spinner :aria-label="$gettext('Loading editor content')" />
     </div>
+    <div v-else-if="isError" class="oc-text-center">
+      <div class="oc-position-center oc-text-center">
+        <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
+      </div>
+    </div>
     <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
@@ -144,6 +149,10 @@ export default {
       return unref(serverContent) !== unref(currentContent)
     })
 
+    const isError = computed(() => {
+      return loadFileTask.isError
+    })
+
     const isLoading = computed(() => {
       return loadFileTask.isRunning || saveFileTask.isRunning
     })
@@ -200,6 +209,7 @@ export default {
 
       // data
       isLoading,
+      isError,
       showPreview,
       isDirty,
       isReadOnly,
