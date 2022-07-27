@@ -41,18 +41,19 @@
     </div>
   </main>
 </template>
-<script>
+<script lang="ts">
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
-import { computed, onMounted, onBeforeUnmount, ref, unref } from '@vue/composition-api'
+import { computed, onMounted, onBeforeUnmount, ref, unref, Ref } from '@vue/composition-api'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { buildResource } from 'files/src/helpers/resources'
+import { defineComponent } from '@vue/runtime-core'
+import { Resource } from 'web-client'
 
-export default {
+export default defineComponent({
   name: 'TextEditor',
   components: {
     AppTopBar
@@ -85,24 +86,28 @@ export default {
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents } =
-      defaults
+    const {
+      applicationConfig,
+      currentFileContext,
+      getFileResource,
+      getFileContents,
+      putFileContents
+    } = defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()
     const isReadOnly = ref(true)
-    const resource = ref()
+    const resource: Ref<Resource> = ref()
 
     const loadFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
 
-      const fileInfoResponse = yield getFileInfo(filePath, [DavProperty.Permissions])
+      resource.value = yield getFileResource(unref(filePath), [DavProperty.Permissions])
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
-        (p) => fileInfoResponse.fileInfo[DavProperty.Permissions].indexOf(p) > -1
+        (p) => (resource.value.permissions || '').indexOf(p) > -1
       )
-      resource.value = buildResource(fileInfoResponse)
 
-      const fileContentsResponse = yield getFileContents(filePath)
+      const fileContentsResponse = yield getFileContents(unref(filePath), {})
       serverContent.value = currentContent.value = fileContentsResponse.body
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
@@ -113,7 +118,7 @@ export default {
       const newContent = unref(currentContent)
 
       try {
-        const putFileContentsResponse = yield putFileContents(filePath, newContent, {
+        const putFileContentsResponse = yield putFileContents(unref(filePath), newContent, {
           previousEntityTag: unref(currentETag)
         })
         serverContent.value = newContent
@@ -162,7 +167,7 @@ export default {
     })
 
     const fileExtension = computed(() => {
-      return unref(currentFileContext).path.split('.').pop()
+      return unref(unref(currentFileContext).path).split('.').pop()
     })
 
     const config = computed(() => {
@@ -235,7 +240,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 #text-editor-preview {
