@@ -75,7 +75,7 @@
           </oc-button>
         </div>
         <list-info
-          v-else-if="items.length > 0"
+          v-else
           class="oc-width-1-1 oc-my-s"
           :files="countFiles"
           :folders="countFolders"
@@ -104,6 +104,7 @@ import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from '../../helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
+import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -111,7 +112,8 @@ export default defineComponent({
   components: {
     ResourceTable,
     ContextActions,
-    ListInfo
+    ListInfo,
+    NoContentMessage
   },
 
   mixins: [
