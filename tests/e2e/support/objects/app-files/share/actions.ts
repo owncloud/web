@@ -8,7 +8,7 @@ const invitationInput = '#files-share-invite-input'
 const filesCollaboratorRolesSelector = '//*[@id="files-collaborators-role-button-new"]'
 const collaboratorRoleItemSelector = `//*[@id="files-role-%s"]`
 const shareInvitationButton = '#new-collaborators-form-create-button'
-const filesSharedWithMe = `#files-shared-with-me-shares-table [data-test-resource-name="%s"]`
+const filesSharedWithMeAccepted = `#files-shared-with-me-accepted-table [data-test-resource-name="%s"]`
 const collaboratorUserItem = `//*[@data-testid="collaborator-user-item-%s"]`
 const shareAcceptDeclineButton = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "file-row-share-%s")]`
 const quickShareButton = `//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]`
@@ -93,7 +93,7 @@ export const acceptShare = async (args: acceptShareArgs): Promise<void> => {
   await Promise.all([
     page.locator(util.format(shareAcceptDeclineButton, name, 'status-accept')).click(),
     page.waitForResponse((resp) => resp.url().includes('shares') && resp.status() === 200),
-    page.locator(util.format(filesSharedWithMe, args.name)).waitFor()
+    page.locator(util.format(filesSharedWithMeAccepted, args.name)).waitFor()
   ])
 }
 
