@@ -8,14 +8,14 @@
     </div>
   </main>
 </template>
-<script>
+<script lang="ts">
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { buildResource } from 'files/src/helpers/resources'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   name: 'PDFViewer',
   components: {
     ErrorScreen,
@@ -34,7 +34,7 @@ export default {
     loadingError: false,
     filePath: '',
     blobUrl: '',
-    resource: {}
+    resource: null
   }),
   created() {
     this.loadPdf(this.currentFileContext)
@@ -48,8 +48,7 @@ export default {
         this.loading = true
         const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
         this.blobUrl = URL.createObjectURL(response.body)
-        const fileInfo = await this.getFileInfo(fileContext.path, {})
-        this.resource = buildResource(fileInfo)
+        this.resource = await this.getFileResource(fileContext.path)
       } catch (e) {
         this.loadingError = true
         console.error('Error fetching pdf', e)
@@ -61,7 +60,7 @@ export default {
       URL.revokeObjectURL(this.blobUrl)
     }
   }
-}
+})
 </script>
 <style scoped>
 .pdf-viewer {
