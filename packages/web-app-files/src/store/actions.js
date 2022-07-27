@@ -152,6 +152,7 @@ export default {
   },
   deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
     const promises = []
+    const removedFiles = []
     for (const file of files) {
       let p = null
       if (isPublicLinkContext) {
@@ -165,10 +166,7 @@ export default {
       }
       const promise = p
         .then(() => {
-          context.dispatch('sidebar/close')
-          context.commit('REMOVE_FILE', file)
-          context.commit('REMOVE_FILE_SELECTION', file)
-          context.commit('REMOVE_FILE_FROM_SEARCHED', file)
+          removedFiles.push(file)
         })
         .catch((error) => {
           let translated = $gettext('Failed to delete "%{file}"')
@@ -196,7 +194,12 @@ export default {
         })
       promises.push(promise)
     }
-    return Promise.all(promises)
+    return Promise.all(promises).then(() => {
+      context.dispatch('sidebar/close')
+      context.commit('REMOVE_FILES', removedFiles)
+      context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
+      context.commit('RESET_SELECTION')
+    })
   },
   async clearTrashBin(context) {
     await context.dispatch('sidebar/close')
@@ -206,11 +209,9 @@ export default {
   },
   async removeFilesFromTrashbin(context, files) {
     await context.dispatch('sidebar/close')
-    for (const file of files) {
-      context.commit('REMOVE_FILE', file)
-      context.commit('REMOVE_FILE_SELECTION', file)
-      context.commit('REMOVE_FILE_FROM_SEARCHED', file)
-    }
+    context.commit('REMOVE_FILES', files)
+    context.commit('REMOVE_FILES_FROM_SEARCHED', files)
+    context.commit('RESET_SELECTION')
   },
   renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
