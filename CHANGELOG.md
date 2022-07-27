@@ -15,6 +15,7 @@ Summary
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
+* Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
@@ -47,7 +48,7 @@ Summary
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
+* Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -105,6 +106,13 @@ Details
 
    https://github.com/owncloud/web/issues/7343
    https://github.com/owncloud/web/pull/7348
+
+* Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
+
+   We've fixed the icon and the sidebar for the link indicator on the "Shared via link"-page.
+
+   https://github.com/owncloud/web/issues/7345
+   https://github.com/owncloud/web/pull/7355
 
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
@@ -407,20 +415,22 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.7: [#7312](https://github.com/owncloud/web/pull/7312)
+* Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.7. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.8. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
-   - Change - Remove OcAlert component: #2210 - Change - Remove transition animations: #2210 -
-   Change - Revamp animations: #2210 - Change - OcTable emit event data on row click: #2218 -
-   Enhancement - OcCheckbox add outline: #2218 - Enhancement - Progress bar indeterminate
-   state: #2200 - Enhancement - Redesign notifications: #2210 - Enhancement - Use oc colors for
-   selected background and deselect icon: #2262
+   - Bugfix - Omit special characters in user avatar initials: #2267 - Bugfix - Avatar link icon:
+   #2269 - Bugfix - Remove width shrinking of the ocAvatarItem: #2242 - Change - Remove OcAlert
+   component: #2210 - Change - Remove transition animations: #2210 - Change - Revamp animations:
+   #2210 - Change - OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add
+   outline: #2218 - Enhancement - Progress bar indeterminate state: #2200 - Enhancement -
+   Redesign notifications: #2210 - Enhancement - Use oc colors for selected background and
+   deselect icon: #2262
 
-   https://github.com/owncloud/web/pull/7312
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.7
+   https://github.com/owncloud/web/pull/7355
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.8
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
