@@ -5,19 +5,13 @@
       <span class="oc-text-initial">({{ items.length }})</span>
     </h2>
 
-    <no-content-message
-      v-if="!items.length > 0"
-      :id="noContentMessageId"
-      class="files-empty oc-flex-stretch"
-      icon="group"
-    >
+    <no-content-message v-if="!items.length > 0" class="files-empty oc-flex-stretch" icon="group">
       <template #message>
         <span>{{ emptyMessage }}</span>
       </template>
     </no-content-message>
     <resource-table
       v-else
-      :id="tableId"
       v-model="itemsSelected"
       :data-test-share-status="shareStatus"
       class="files-table"
@@ -43,7 +37,7 @@
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
           <oc-button
-            v-if="showAcceptButton"
+            v-if="getShowAcceptButton(resource)"
             size="small"
             variation="success"
             class="file-row-share-status-accept"
@@ -53,7 +47,7 @@
             <translate>Accept</translate>
           </oc-button>
           <oc-button
-            v-if="showDeclineButton"
+            v-if="getShowDeclineButton(resource)"
             size="small"
             class="file-row-share-decline oc-ml-s"
             @click.stop="$_declineShare_trigger({ resources: [resource] })"
@@ -69,7 +63,7 @@
       <template #footer>
         <div v-if="showMoreLessToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
           <oc-button
-            id="files-shared-with-me-pending-show-all"
+            id="files-shared-with-me-show-all"
             appearance="raw"
             gap-size="xsmall"
             size="small"
@@ -160,6 +154,14 @@ export default defineComponent({
     showMoreLessToggle: {
       type: Boolean,
       default: false
+    },
+    resourceClickable: {
+      type: Boolean,
+      default: true
+    },
+    displayThumbnails: {
+      type: Boolean,
+      default: true
     }
   },
   setup() {
@@ -208,27 +210,13 @@ export default defineComponent({
     countFolders() {
       return this.items.filter((s) => s.type === 'folder').length
     },
-    showAcceptButton() {
-      return this.shareStatus === ShareStatus.declined || this.shareStatus === ShareStatus.pending
-    },
-    showDeclineButton() {
-      return this.shareStatus === ShareStatus.accepted || this.shareStatus === ShareStatus.pending
-    },
     itemsSelected: {
       get() {
-        return this.selectedFiles.filter((r) => r.status === this.shareStatus)
+        return this.selectedFiles
       },
       set(resources) {
         this.SET_FILE_SELECTION(resources.filter((r) => r.status === this.shareStatus))
       }
-    },
-    displayThumbnails() {
-      return (
-        !this.configuration?.options?.disablePreviews && this.shareStatus === ShareStatus.accepted
-      )
-    },
-    resourceClickable() {
-      return this.shareStatus === ShareStatus.accepted
     },
     toggleMoreLabel() {
       return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')
@@ -241,30 +229,6 @@ export default defineComponent({
         return this.items
       }
       return this.items.slice(0, 3)
-    },
-    tableId() {
-      switch (this.shareStatus) {
-        case ShareStatus.pending:
-          return 'files-shared-with-me-pending-table'
-        case ShareStatus.accepted:
-          return 'files-shared-with-me-accepted-table'
-        case ShareStatus.declined:
-          return 'files-shared-with-me-declined-table'
-        default:
-          return ''
-      }
-    },
-    noContentMessageId() {
-      switch (this.shareStatus) {
-        case ShareStatus.pending:
-          return 'files-shared-with-me-pending-empty'
-        case ShareStatus.accepted:
-          return 'files-shared-with-me-accepted-empty'
-        case ShareStatus.declined:
-          return 'files-shared-with-me-declined-empty'
-        default:
-          return ''
-      }
     }
   },
   beforeDestroy() {
@@ -296,7 +260,12 @@ export default defineComponent({
         onExit: debounced.cancel
       })
     },
-
+    getShowAcceptButton(resource) {
+      return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending
+    },
+    getShowDeclineButton(resource) {
+      return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
+    },
     toggleShowMore() {
       this.showMore = !this.showMore
     }

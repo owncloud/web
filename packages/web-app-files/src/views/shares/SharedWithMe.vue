@@ -5,16 +5,20 @@
     <template v-else>
       <shared-with-me-section
         v-if="pendingItems.length > 0"
+        id="files-shared-with-me-pending-section"
         :title="pendingTitle"
         :items="pendingItems"
         :share-status="ShareStatus.pending"
         :sort-by="pendingSortBy"
         :sort-dir="pendingSortDir"
-        :sort-handler="acceptedHandleSort"
+        :sort-handler="pendingHandleSort"
         :show-more-less-toggle="true"
+        :resource-clickable="false"
+        :display-thumbnails="false"
       ></shared-with-me-section>
 
       <shared-with-me-section
+        id="files-shared-with-me-accepted-section"
         :title="acceptedTitle"
         :empty-message="acceptedEmptyMessage"
         :items="acceptedItems"
@@ -22,9 +26,12 @@
         :sort-by="acceptedSortBy"
         :sort-dir="acceptedSortDir"
         :sort-handler="acceptedHandleSort"
+        :resource-clickable="true"
+        :display-thumbnails="displayThumbnails"
       ></shared-with-me-section>
 
       <shared-with-me-section
+        id="files-shared-with-me-declined-section"
         :title="declinedTitle"
         :empty-message="declinedEmptyMessage"
         :items="declinedItems"
@@ -33,6 +40,7 @@
         :sort-by="declinedSortBy"
         :sort-dir="declinedSortDir"
         :sort-handler="declinedHandleSort"
+        :display-thumbnails="false"
       ></shared-with-me-section>
     </template>
   </div>
@@ -158,6 +166,9 @@ export default defineComponent({
     },
     declinedEmptyMessage() {
       return this.$gettext("You don't have any previously declined shares.")
+    },
+    displayThumbnails() {
+      return !this.configuration?.options?.disablePreviews
     }
   },
 

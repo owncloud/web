@@ -11,20 +11,23 @@ const stubs = {
   translate: true,
   'oc-pagination': true,
   'oc-spinner': true,
-  'context-actions': true
+  'context-actions': true,
+  'no-content-message': true
 }
 
 const selectors = {
-  pendingTable: '#files-shared-with-me-pending-table',
-  pendingTableRow: '#files-shared-with-me-pending-table tbody > tr.oc-tbody-tr',
-  pendingExpand: '#files-shared-with-me-pending-show-all[data-test-expand="true"]',
-  pendingCollapse: '#files-shared-with-me-pending-show-all[data-test-expand="false"]',
-  acceptedNoContentMessage: '#files-shared-with-me-accepted-empty',
-  declinedNoContentMessage: '#files-shared-with-me-declined-empty',
-  acceptedTable: '#files-shared-with-me-accepted-table',
-  declinedTable: '#files-shared-with-me-declined-table',
-  acceptedTableRow: '#files-shared-with-me-accepted-table tbody > tr.oc-tbody-tr',
-  declinedTableRow: '#files-shared-with-me-declined-table tbody > tr.oc-tbody-tr',
+  pendingTable: '#files-shared-with-me-pending-section .files-table',
+  pendingTableRow: '#files-shared-with-me-pending-section tbody > tr.oc-tbody-tr',
+  pendingExpand:
+    '#files-shared-with-me-pending-section #files-shared-with-me-show-all[data-test-expand="true"]',
+  pendingCollapse:
+    '#files-shared-with-me-pending-section #files-shared-with-me-show-all[data-test-expand="false"]',
+  acceptedNoContentMessage: '#files-shared-with-me-accepted-section .files-empty',
+  declinedNoContentMessage: '#files-shared-with-me-declined-section .files-empty',
+  acceptedTable: '#files-shared-with-me-accepted-section .files-table',
+  declinedTable: '#files-shared-with-me-declined-section .files-table',
+  acceptedTableRow: '#files-shared-with-me-accepted-section tbody > tr.oc-tbody-tr',
+  declinedTableRow: '#files-shared-with-me-declined-section tbody > tr.oc-tbody-tr',
   sharesToggleViewMode: '#files-shared-with-me-toggle-view-mode'
 }
 
@@ -209,7 +212,12 @@ function mountOptions({
       loadResourcesTask: {
         perform: jest.fn()
       },
-      handleSort: jest.fn()
+      pendingHandleSort: jest.fn(),
+      acceptedHandleSort: jest.fn(),
+      declinedHandleSort: jest.fn(),
+      pendingSortBy: '',
+      acceptedSortBy: '',
+      declinedSortBy: ''
     })
   }
 }
