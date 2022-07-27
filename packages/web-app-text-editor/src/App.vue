@@ -1,11 +1,9 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
-    <div v-if="isLoading" class="oc-text-center">
-      <oc-spinner :aria-label="$gettext('Loading editor content')" />
-    </div>
-    <app-top-bar v-else :resource="resource" @close="closeApp">
+    <app-top-bar :resource="resource" @close="closeApp">
       <template #right>
         <oc-button
+          v-if="!isLoading"
           id="text-editor-controls-save"
           :aria-label="$gettext('Save')"
           :disabled="isReadOnly || !isDirty"
@@ -15,7 +13,10 @@
         </oc-button>
       </template>
     </app-top-bar>
-    <div class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
+    <div v-if="isLoading" class="oc-text-center">
+      <oc-spinner :aria-label="$gettext('Loading editor content')" />
+    </div>
+    <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
           id="text-editor-input"
