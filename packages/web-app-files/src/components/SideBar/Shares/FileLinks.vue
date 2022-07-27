@@ -149,12 +149,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'currentFileOutgoingLinks',
-      'currentFileOutgoingSharesLoading',
-      'sharesTreeLoading'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks']),
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
@@ -277,10 +272,6 @@ export default defineComponent({
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
       return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
-    },
-
-    linksLoading() {
-      return this.currentFileOutgoingSharesLoading || this.sharesTreeLoading
     },
 
     linksHeading() {
