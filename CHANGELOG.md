@@ -27,6 +27,7 @@ Summary
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
+* Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
@@ -209,6 +210,14 @@ Details
 
    https://github.com/owncloud/web/issues/6917
    https://github.com/owncloud/web/pull/6921
+
+* Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
+
+   We've fixed a bug where the quick actions 'Add people' and 'Copy quicklink' were missing in the
+   spaces file list.
+
+   https://github.com/owncloud/web/issues/7339
+   https://github.com/owncloud/web/pull/7349
 
 * Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
 
