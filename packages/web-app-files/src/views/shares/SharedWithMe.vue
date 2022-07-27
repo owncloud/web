@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex oc-flex-column">
     <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <!-- Pending shares -->
       <div v-if="hasPending">
@@ -210,11 +210,8 @@ export default defineComponent({
   ],
 
   setup() {
-    const { fileListHeaderY, storeItems, fields, loadResourcesTask } = useResourcesViewDefaults<
-      Resource,
-      any,
-      any[]
-    >()
+    const { fileListHeaderY, storeItems, fields, loadResourcesTask, areResourcesLoading } =
+      useResourcesViewDefaults<Resource, any, any[]>()
 
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
@@ -272,6 +269,7 @@ export default defineComponent({
       // defaults
       fileListHeaderY,
       loadResourcesTask,
+      areResourcesLoading,
 
       // view specific
       viewMode,

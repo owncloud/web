@@ -258,8 +258,8 @@ function mountOptions({
     stubs,
     router: new VueRouter({ routes }),
     setup: () => ({
+      areResourcesLoading: loading,
       loadResourcesTask: {
-        isRunning: loading,
         perform: jest.fn()
       },
       ...setup()
