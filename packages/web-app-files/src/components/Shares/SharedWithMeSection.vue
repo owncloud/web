@@ -5,7 +5,7 @@
       <span class="oc-text-initial">({{ items.length }})</span>
     </h2>
 
-    <no-content-message v-if="!items.length > 0" class="files-empty oc-flex-stretch" icon="group">
+    <no-content-message v-if="!items.length" class="files-empty oc-flex-stretch" icon="group">
       <template #message>
         <span>{{ emptyMessage }}</span>
       </template>
@@ -278,3 +278,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.files-empty {
+  height: auto;
+}
+</style>

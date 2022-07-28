@@ -15,7 +15,7 @@
         :show-more-toggle="true"
         :resource-clickable="false"
         :display-thumbnails="false"
-      ></shared-with-me-section>
+      />
 
       <shared-with-me-section
         id="files-shared-with-me-accepted-section"
@@ -28,7 +28,7 @@
         :sort-handler="acceptedHandleSort"
         :resource-clickable="true"
         :display-thumbnails="displayThumbnails"
-      ></shared-with-me-section>
+      />
 
       <shared-with-me-section
         id="files-shared-with-me-declined-section"
@@ -42,7 +42,7 @@
         :show-more-toggle="true"
         :display-thumbnails="false"
         :resource-clickable="false"
-      ></shared-with-me-section>
+      />
     </template>
   </div>
 </template>
