@@ -66,7 +66,7 @@
           v-bind="extractTbodyTrProps(item, trIndex)"
           :data-item-id="item[idKey]"
           :draggable="dragDrop"
-          @click.native="$emit(constants.EVENT_TROW_CLICKED, item)"
+          @click.native="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
           @contextmenu.native="
             $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
           "
@@ -130,7 +130,7 @@
             v-bind="extractTbodyTrProps(item, trIndex)"
             :data-item-id="item[idKey]"
             :draggable="dragDrop"
-            @click.native="$emit(constants.EVENT_TROW_CLICKED, item)"
+            @click.native="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
             @contextmenu.native="
               $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
             "
@@ -158,7 +158,7 @@
       </oc-tbody>
       <tfoot v-if="$slots.footer" class="oc-table-footer">
         <tr class="oc-table-footer-row">
-          <td :colspan="footerColspan" class="oc-table-footer-cell">
+          <td :colspan="fullColspan" class="oc-table-footer-cell">
             <!-- @slot Footer of the table -->
             <slot name="footer" />
           </td>
@@ -317,6 +317,13 @@ export default {
       type: Array,
       required: false,
       default: () => []
+    },
+    /**
+     * Determines if the table content should be loaded lazily.
+     */
+    lazy: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -348,7 +355,7 @@ export default {
       return result
     },
 
-    footerColspan() {
+    fullColspan() {
       return this.fields.length
     },
 
@@ -485,6 +492,7 @@ export default {
     },
     extractTbodyTrProps(item, index) {
       return {
+        ...(this.lazy && { lazy: { colspan: this.fullColspan } }),
         class: [
           'oc-tbody-tr',
           `oc-tbody-tr-${this.itemDomSelector(item) || index}`,
@@ -513,10 +521,6 @@ export default {
 
       if (Object.prototype.hasOwnProperty.call(field, 'accessibleLabelCallback')) {
         props['aria-label'] = field.accessibleLabelCallback(item)
-      }
-
-      if (Object.prototype.hasOwnProperty.call(field, 'lazy')) {
-        props.lazy = field.lazy
       }
 
       return props
@@ -647,6 +651,7 @@ export default {
   }
 
   tr {
+    outline: none;
     height: var(--oc-size-height-table-row);
   }
 
