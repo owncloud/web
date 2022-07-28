@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
@@ -55,6 +56,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
+
+   We've fixed a bug where deleting many files in a batch action would fail.
+
+   https://github.com/owncloud/web/issues/7329
+   https://github.com/owncloud/web/pull/7357
 
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 
