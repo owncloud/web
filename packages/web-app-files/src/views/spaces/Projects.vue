@@ -178,11 +178,15 @@ export default defineComponent({
       loadedSpaces = loadedSpaces.map(buildSpace)
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
     })
+    const areResourcesLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
+    })
 
     return {
       spaces,
       graphClient,
       loadResourcesTask,
+      areResourcesLoading,
       accessToken
     }
   },
