@@ -4,7 +4,7 @@
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <object class="pdf-viewer oc-width-1-1" :data="blobUrl" type="application/pdf" />
+      <object class="pdf-viewer oc-width-1-1" :data="url" type="application/pdf" />
     </div>
   </main>
 </template>
@@ -33,7 +33,7 @@ export default defineComponent({
     loading: true,
     loadingError: false,
     filePath: '',
-    blobUrl: '',
+    url: '',
     resource: null
   }),
   created() {
@@ -46,9 +46,8 @@ export default defineComponent({
     async loadPdf(fileContext) {
       try {
         this.loading = true
-        const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
-        this.blobUrl = URL.createObjectURL(response.body)
         this.resource = await this.getFileResource(fileContext.path)
+        this.url = await this.getUrlForResource(this.resource)
       } catch (e) {
         this.loadingError = true
         console.error('Error fetching pdf', e)
@@ -57,7 +56,7 @@ export default defineComponent({
       }
     },
     unloadPdf() {
-      URL.revokeObjectURL(this.blobUrl)
+      this.revokeUrl(this.url)
     }
   }
 })

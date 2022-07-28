@@ -16,6 +16,7 @@ interface AppFileHandlingOptions {
 type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
   getUrlForResource(r: Resource): Promise<string>
+  revokeUrl(url: string): void
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
   getFileContents(filePath: string, options: Record<string, any>): Promise<any>
@@ -75,6 +76,12 @@ export function useAppFileHandling({
     return downloadURL
   }
 
+  const revokeUrl = (url: string) => {
+    if (url.startsWith('blob:')) {
+      URL.revokeObjectURL(url)
+    }
+  }
+
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk
   const getFileContents = async (filePath: string, options: Record<string, any>) => {
     if (unref(isPublicLinkContext)) {
@@ -114,7 +121,7 @@ export function useAppFileHandling({
 
   const getFileResource = async (
     filePath: string,
-    davProperties: DavProperties
+    davProperties: DavProperties = DavProperties.Default
   ): Promise<Resource> => {
     const fileInfo = await getFileInfo(filePath, davProperties)
     return buildResource(fileInfo)
@@ -141,6 +148,7 @@ export function useAppFileHandling({
   return {
     getFileContents,
     getUrlForResource,
+    revokeUrl,
     getFileInfo,
     getFileResource,
     putFileContents
