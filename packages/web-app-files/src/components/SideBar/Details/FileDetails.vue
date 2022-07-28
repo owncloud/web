@@ -12,7 +12,10 @@
       >
         <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
-      <div v-else class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
+      <div
+        v-else
+        class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
+      >
         <oc-resource-icon class="details-icon" :resource="file" size="xxxlarge" />
       </div>
       <div
