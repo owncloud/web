@@ -7,10 +7,10 @@
       ref="expirationDateDrop"
       :toggle="'#' + editShareBtnId"
       mode="click"
-      padding-size="remove"
+      padding-size="small"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li v-if="isExpirationSupported" class="oc-px-s oc-py-xs">
+        <li v-if="isExpirationSupported" class="oc-rounded oc-menu-item-hover">
           <oc-datepicker
             v-model="enteredExpirationDate"
             :min-date="minExpirationDate"
@@ -22,25 +22,28 @@
           >
             <template #default="{ togglePopover }">
               <oc-button
-                class="files-collaborators-expiration-button"
+                class="files-collaborators-expiration-button oc-p-s action-menu-item"
                 data-testid="recipient-datepicker-btn"
                 appearance="raw"
                 @click="togglePopover"
               >
+                <oc-icon name="calendar" fill-type="line" size="medium" variation="passive" />
                 <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
                 <span v-else v-text="$gettext('Set expiration date')" />
               </oc-button>
             </template>
           </oc-datepicker>
         </li>
-        <li v-for="(option, i) in options" :key="i" class="oc-px-s oc-py-xs">
+        <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
           <oc-button
             v-if="option.enabled"
             appearance="raw"
+            class="oc-p-s action-menu-item"
             :class="option.class"
             v-bind="option.additionalAttributes || {}"
             @click="option.method()"
           >
+            <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
             <span v-text="option.title" />
           </oc-button>
         </li>
@@ -92,6 +95,7 @@ export default {
           method: this.removeExpirationDate,
           class: 'remove-expiration-date',
           enabled: this.canEditOrDelete,
+          icon: 'calendar',
           additionalAttributes: {
             'data-testid': 'collaborator-remove-expiration-btn'
           }
@@ -104,8 +108,8 @@ export default {
           method: this.removeShare,
           class: 'remove-share',
           enabled: this.canEditOrDelete,
+          icon: 'delete-bin-5',
           additionalAttributes: {
-            variation: 'danger',
             'data-testid': 'collaborator-remove-share-btn'
           }
         },
@@ -113,6 +117,7 @@ export default {
           title: this.$gettext('Access details'),
           method: this.showAccessDetails,
           enabled: true,
+          icon: 'information',
           class: 'show-access-details'
         }
       ]
@@ -253,3 +258,9 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.collaborator-edit-dropdown-options-list .action-menu-item {
+  width: 100%;
+  justify-content: flex-start;
+}
+</style>

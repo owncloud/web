@@ -10,6 +10,7 @@ export abstract class ShareRole {
   private readonly _folder: boolean
   private readonly _label: string
   private readonly _inlineLabel: string
+  private readonly _icon: string
   private readonly _permissions: SharePermission[]
 
   constructor(
@@ -17,12 +18,14 @@ export abstract class ShareRole {
     folder: boolean,
     label: string,
     inlineLabel: string,
+    icon: string,
     permissions: SharePermission[]
   ) {
     this._name = name
     this._folder = folder
     this._label = label
     this._inlineLabel = inlineLabel
+    this._icon = icon
     this._permissions = permissions
   }
 
@@ -48,6 +51,10 @@ export abstract class ShareRole {
 
   get hasCustomPermissions(): boolean {
     return false
+  }
+
+  get icon(): string {
+    return this._icon
   }
 
   public permissions(allowSharing: boolean): SharePermission[] {
@@ -123,6 +130,7 @@ export const peopleRoleViewerFile = new PeopleShareRole(
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
+  'eye',
   [SharePermissions.read, SharePermissions.share]
 )
 export const peopleRoleViewerFolder = new PeopleShareRole(
@@ -130,6 +138,7 @@ export const peopleRoleViewerFolder = new PeopleShareRole(
   true,
   $gettext('Viewer'),
   $gettext('viewer'),
+  'eye',
   [SharePermissions.read, SharePermissions.share]
 )
 export const peopleRoleEditorFile = new PeopleShareRole(
@@ -137,6 +146,7 @@ export const peopleRoleEditorFile = new PeopleShareRole(
   false,
   $gettext('Editor'),
   $gettext('editor'),
+  'pencil',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleEditorFolder = new PeopleShareRole(
@@ -144,6 +154,7 @@ export const peopleRoleEditorFolder = new PeopleShareRole(
   true,
   $gettext('Editor'),
   $gettext('editor'),
+  'pencil',
   [
     SharePermissions.read,
     SharePermissions.update,
@@ -157,6 +168,7 @@ export const peopleRoleCustomFile = new CustomShareRole(
   false,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
+  'file-list',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleCustomFolder = new CustomShareRole(
@@ -164,6 +176,7 @@ export const peopleRoleCustomFolder = new CustomShareRole(
   true,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
+  'file-list',
   [
     SharePermissions.read,
     SharePermissions.update,
@@ -177,6 +190,7 @@ export const linkRoleViewerFile = new LinkShareRole(
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
+  'eye',
   [SharePermissions.read]
 )
 export const linkRoleViewerFolder = new LinkShareRole(
@@ -184,6 +198,7 @@ export const linkRoleViewerFolder = new LinkShareRole(
   true,
   $gettext('Viewer'),
   $gettext('viewer'),
+  'eye',
   [SharePermissions.read]
 )
 export const linkRoleContributorFolder = new LinkShareRole(
@@ -191,6 +206,7 @@ export const linkRoleContributorFolder = new LinkShareRole(
   true,
   $gettext('Contributor'),
   $gettext('contributor'),
+  'user-settings',
   [SharePermissions.read, SharePermissions.create]
 )
 export const linkRoleEditorFile = new LinkShareRole(
@@ -198,6 +214,7 @@ export const linkRoleEditorFile = new LinkShareRole(
   false,
   $gettext('Editor'),
   $gettext('editor'),
+  'pencil',
   [SharePermissions.read, SharePermissions.update]
 )
 export const linkRoleEditorFolder = new LinkShareRole(
@@ -205,6 +222,7 @@ export const linkRoleEditorFolder = new LinkShareRole(
   true,
   $gettext('Editor'),
   $gettext('editor'),
+  'pencil',
   [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
 )
 export const linkRoleUploaderFolder = new LinkShareRole(
@@ -212,6 +230,7 @@ export const linkRoleUploaderFolder = new LinkShareRole(
   true,
   $gettext('Uploader'),
   $gettext('uploader'),
+  'upload',
   [SharePermissions.create]
 )
 export const spaceRoleViewer = new SpaceShareRole(
@@ -219,6 +238,7 @@ export const spaceRoleViewer = new SpaceShareRole(
   false,
   $gettext('Viewer'),
   $gettext('viewer'),
+  'eye',
   [SharePermissions.read]
 )
 export const spaceRoleEditor = new SpaceShareRole(
@@ -226,6 +246,7 @@ export const spaceRoleEditor = new SpaceShareRole(
   false,
   $gettext('Editor'),
   $gettext('editor'),
+  'pencil',
   [SharePermissions.read, SharePermissions.update, SharePermissions.create, SharePermissions.delete]
 )
 export const spaceRoleManager = new SpaceShareRole(
@@ -233,6 +254,7 @@ export const spaceRoleManager = new SpaceShareRole(
   false,
   $gettext('Manager'),
   $gettext('manager'),
+  'user',
   [
     SharePermissions.read,
     SharePermissions.update,

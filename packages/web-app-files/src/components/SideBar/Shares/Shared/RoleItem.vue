@@ -26,5 +26,9 @@ export default {
 <style lang="scss" scoped>
 .roles-select-role-item {
   text-align: left;
+
+  span {
+    font-size: 0.875rem;
+  }
 }
 </style>

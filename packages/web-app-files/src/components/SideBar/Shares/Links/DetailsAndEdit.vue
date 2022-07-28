@@ -14,7 +14,7 @@
         ref="editPublicLinkRoleDropdown"
         :drop-id="`edit-public-link-role-dropdown`"
         :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
-        padding-size="remove"
+        padding-size="small"
         mode="click"
       >
         <oc-list class="roleDropdownList">
@@ -24,10 +24,17 @@
           >
             <oc-button
               :id="`files-role-${roleOption.label.toLowerCase()}`"
-              :class="{ selected: parseInt(link.permissions) === roleOption.bitmask(false) }"
+              :class="{
+                selected: parseInt(link.permissions) === roleOption.bitmask(false),
+                'oc-background-primary-gradient':
+                  parseInt(link.permissions) === roleOption.bitmask(false)
+              }"
               appearance="raw"
+              :variation="
+                parseInt(link.permissions) === roleOption.bitmask(false) ? 'inverse' : 'passive'
+              "
               justify-content="space-between"
-              class="oc-py-xs oc-px-s"
+              class="oc-p-s"
               @click="
                 updateLink({
                   link: {
@@ -39,11 +46,14 @@
               "
             >
               <span>
+                <oc-icon :name="roleOption.icon" />
+              </span>
+              <span>
                 <span
                   class="oc-text-bold oc-display-block oc-width-1-1"
                   v-text="$gettext(roleOption.label)"
                 />
-                <span>{{ $gettext(roleOption.description()) }}</span>
+                <span class="role-description">{{ $gettext(roleOption.description()) }}</span>
               </span>
               <oc-icon
                 v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
@@ -102,10 +112,15 @@
           ref="editPublicLinkDropdown"
           :drop-id="`edit-public-link-dropdown`"
           :toggle="`#edit-public-link-dropdown-toggl-${link.id}`"
+          padding-size="small"
           mode="click"
         >
-          <oc-list>
-            <li v-for="(option, i) in editOptions" :key="`public-link-edit-option-${i}`">
+          <oc-list class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s">
+            <li
+              v-for="(option, i) in editOptions"
+              :key="`public-link-edit-option-${i}`"
+              class="oc-rounded oc-menu-item-hover"
+            >
               <oc-datepicker
                 v-if="option.showDatepicker"
                 v-model="newExpiration"
@@ -119,20 +134,38 @@
                   <oc-button
                     :data-testid="`files-link-id-${link.id}-edit-${option.id}`"
                     appearance="raw"
+                    class="oc-p-s action-menu-item"
                     :variation="option.variation"
                     @click="togglePopover"
-                    v-text="option.title"
-                  />
+                  >
+                    <oc-icon :name="option.icon" fill-type="line" size="medium" />
+                    <span v-text="option.title" />
+                  </oc-button>
                 </template>
               </oc-datepicker>
               <oc-button
                 v-else
                 appearance="raw"
+                class="oc-p-s action-menu-item"
                 :data-testid="`files-link-id-${link.id}-edit-${option.id}`"
-                :variation="option.variation"
                 @click="option.method"
-                v-text="option.title"
-              />
+              >
+                <oc-icon :name="option.icon" fill-type="line" size="medium" />
+                <span v-text="option.title" />
+              </oc-button>
+            </li>
+          </oc-list>
+          <oc-list class="edit-public-link-dropdown-menu oc-pt-s">
+            <li class="oc-rounded oc-menu-item-hover">
+              <oc-button
+                appearance="raw"
+                class="oc-p-s action-menu-item"
+                :data-testid="`files-link-id-${link.id}-edit-${deleteOption.id}`"
+                @click="deleteOption.method"
+              >
+                <oc-icon :name="deleteOption.icon" fill-type="line" size="medium" />
+                <span v-text="deleteOption.title" />
+              </oc-button>
             </li>
           </oc-list>
         </oc-drop>
@@ -200,10 +233,6 @@ export default {
       return LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).label
     },
 
-    editButtonLabel() {
-      return this.$gettext('Edit link')
-    },
-
     editOptions() {
       const result = []
 
@@ -211,6 +240,7 @@ export default {
         result.push({
           id: 'rename',
           title: this.$gettext('Rename'),
+          icon: 'pencil',
           method: this.showRenameModal
         })
       }
@@ -220,12 +250,14 @@ export default {
           id: 'edit-expiration',
           title: this.$gettext('Edit expiration date'),
           method: this.updateLink,
+          icon: 'calendar',
           showDatepicker: true
         })
         if (!this.expirationDate.enforced) {
           result.push({
             id: 'remove-expiration',
             title: this.$gettext('Remove expiration date'),
+            icon: 'calendar',
             method: () =>
               this.updateLink({
                 link: {
@@ -240,6 +272,7 @@ export default {
           id: 'add-expiration',
           title: this.$gettext('Add expiration date'),
           method: this.updateLink,
+          icon: 'calendar',
           showDatepicker: true
         })
       }
@@ -248,6 +281,7 @@ export default {
         result.push({
           id: 'edit-password',
           title: this.$gettext('Edit password'),
+          icon: 'lock-password',
           method: this.showPasswordModal
         })
 
@@ -255,6 +289,7 @@ export default {
           result.push({
             id: 'remove-password',
             title: this.$gettext('Remove password'),
+            icon: 'lock-password',
             method: () =>
               this.updateLink({
                 link: {
@@ -269,19 +304,22 @@ export default {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),
+          icon: 'lock-password',
           method: this.showPasswordModal
         })
       }
 
-      return [
-        ...result,
-        {
-          id: 'delete',
-          title: this.$gettext('Delete link'),
-          method: this.deleteLink,
-          variation: 'danger'
-        }
-      ]
+      return result
+    },
+
+    deleteOption() {
+      return {
+        id: 'delete',
+        title: this.$gettext('Delete link'),
+        method: this.deleteLink,
+        icon: 'delete-bin-5',
+        variation: 'danger'
+      }
     },
 
     viaRouterParams() {
@@ -434,27 +472,40 @@ export default {
   justify-content: flex-end;
 }
 
+.role-description {
+  font-size: 0.875rem;
+}
+
 .roleDropdownList li {
+  margin: var(--oc-space-xsmall) 0;
+
   .oc-button {
     text-align: left;
-    border-radius: 0;
     width: 100%;
+    gap: var(--oc-space-medium);
+    justify-content: flex-start;
 
     &:hover,
     &:focus {
-      color: var(--oc-color-text-default) !important;
+      background-color: var(--oc-color-background-hover);
+      color: var(--oc-color-swatch-passive-default);
+      text-decoration: none;
     }
 
-    &.selected,
-    &:hover,
-    &:focus {
-      background-color: var(--oc-color-swatch-primary-default) !important;
-      color: var(--oc-color-text-inverse) !important;
+    &.selected {
+      color: var(--oc-color-swatch-inverse-default) !important;
 
       ::v-deep .oc-icon > svg {
-        fill: var(--oc-color-text-inverse) !important;
+        fill: var(--oc-color-swatch-inverse-default) !important;
       }
     }
+  }
+}
+
+.edit-public-link-dropdown-menu {
+  .action-menu-item {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 </style>
