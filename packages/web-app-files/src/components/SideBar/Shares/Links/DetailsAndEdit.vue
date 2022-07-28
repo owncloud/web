@@ -53,7 +53,7 @@
                   class="oc-text-bold oc-display-block oc-width-1-1"
                   v-text="$gettext(roleOption.label)"
                 />
-                <span class="role-description">{{ $gettext(roleOption.description()) }}</span>
+                <span class="oc-text-small">{{ $gettext(roleOption.description()) }}</span>
               </span>
               <oc-icon
                 v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
@@ -470,10 +470,6 @@ export default {
   min-width: 5rem !important;
   display: flex;
   justify-content: flex-end;
-}
-
-.role-description {
-  font-size: 0.875rem;
 }
 
 .roleDropdownList li {
