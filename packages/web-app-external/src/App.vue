@@ -36,8 +36,6 @@
 import { mapGetters } from 'vuex'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from 'files/src/helpers/resources'
 import { computed, unref } from '@vue/composition-api'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/runtime-core'
@@ -92,7 +90,7 @@ export default defineComponent({
     this.loading = true
     try {
       const filePath = this.currentFileContext.path
-      const fileId = this.fileId || (await this.getFileInfoResource(filePath)).fileId
+      const fileId = this.fileId || (await this.getFileResource(filePath)).fileId
 
       // fetch iframe params for app and file
       const configUrl = this.configuration.server
@@ -134,12 +132,6 @@ export default defineComponent({
       console.error('Error retrieving file information', error)
       this.loading = false
       this.loadingError = true
-    }
-  },
-  methods: {
-    async getFileInfoResource(path) {
-      const file = await this.getFileInfo(path, DavProperties.Default)
-      return buildResource(file)
     }
   }
 })

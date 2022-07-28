@@ -63,7 +63,7 @@ import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()

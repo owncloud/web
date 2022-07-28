@@ -1,4 +1,4 @@
-import type { User } from '../user'
+import type { User } from 'web-client'
 import type { ShareRole } from './role'
 import type { SharePermission } from './permission'
 

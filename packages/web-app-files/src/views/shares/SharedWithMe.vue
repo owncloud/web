@@ -56,7 +56,7 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from '../../helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   components: {

@@ -185,7 +185,8 @@ import {
 } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { extractDomSelector, Resource } from '../../helpers/resource'
+import { extractDomSelector } from '../../helpers/resource'
+import { Resource } from 'web-client'
 import { ShareTypes } from '../../helpers/share'
 import { createLocationSpaces } from '../../router'
 

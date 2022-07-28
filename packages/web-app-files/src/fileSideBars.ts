@@ -10,8 +10,7 @@ import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive }
 import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
 import { Panel } from '../../web-pkg/src/components/sidebar'
 
-import { Resource } from './helpers/resource'
-import { User } from './helpers/user'
+import { Resource, User } from 'web-client'
 import Router from 'vue-router'
 
 function $gettext(msg: string): string {

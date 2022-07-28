@@ -1,9 +1,9 @@
 import {
   extractDomSelector,
   extractExtensionFromFile,
-  extractNameWithoutExtension,
-  Resource
+  extractNameWithoutExtension
 } from '../../../../src/helpers/resource'
+import { Resource } from 'web-client'
 
 const resourceWithoutExtension = {
   name: 'file'

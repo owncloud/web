@@ -71,7 +71,7 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()

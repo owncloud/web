@@ -15,13 +15,8 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from './share'
-import {
-  extractDomSelector,
-  extractExtensionFromFile,
-  extractStorageId,
-  Resource
-} from './resource'
-import { User } from './user'
+import { extractDomSelector, extractExtensionFromFile, extractStorageId } from './resource'
+import { User, Resource } from 'web-client'
 import { SHARE_JAIL_ID } from '../services/folder'
 
 export function renameResource(resource, newName, newPath) {
@@ -71,7 +66,7 @@ export function buildResource(resource): Resource {
       ? resource.fileInfo[DavProperty.ContentSize]
       : resource.fileInfo[DavProperty.ContentLength],
     indicators: [],
-    permissions: resource.fileInfo[DavProperty.Permissions] || '',
+    permissions: (resource.fileInfo[DavProperty.Permissions] as string) || '',
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],

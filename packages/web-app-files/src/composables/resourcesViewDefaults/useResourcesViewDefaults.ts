@@ -14,7 +14,7 @@ import { useSort, SortDir } from '../sort/'
 import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
