@@ -3,10 +3,10 @@
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
   <div>
-    <oc-button-stub id="edit-public-link-role-dropdown-toggl-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggl oc-text-left"><span>Viewer</span>
+    <oc-button-stub id="edit-public-link-role-dropdown-toggle-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggle oc-text-left"><span class="edit-public-link-role-dropdown-toggle-current-role">Viewer</span>
       <oc-icon-stub name="arrow-down-s"></oc-icon-stub>
     </oc-button-stub>
-    <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggl-undefined" padding-size="remove" mode="click">
+    <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" padding-size="remove" mode="click">
       <oc-list-stub class="roleDropdownList">
         <li>
           <oc-button-stub id="files-role-viewer" appearance="raw" justify-content="space-between" class="oc-py-xs oc-px-s selected"><span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span>Recipients can view and download contents.</span></span>

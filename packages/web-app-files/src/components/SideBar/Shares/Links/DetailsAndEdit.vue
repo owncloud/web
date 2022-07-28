@@ -2,18 +2,21 @@
   <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
     <div v-if="isModifiable">
       <oc-button
-        :id="`edit-public-link-role-dropdown-toggl-${link.id}`"
+        :id="`edit-public-link-role-dropdown-toggle-${link.id}`"
         appearance="raw"
-        class="edit-public-link-role-dropdown-toggl oc-text-left"
+        class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <span v-text="$gettext(currentLinkRoleLabel)" />
+        <span
+          class="edit-public-link-role-dropdown-toggle-current-role"
+          v-text="$gettext(currentLinkRoleLabel)"
+        />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
         ref="editPublicLinkRoleDropdown"
         :drop-id="`edit-public-link-role-dropdown`"
-        :toggle="`#edit-public-link-role-dropdown-toggl-${link.id}`"
+        :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
         padding-size="remove"
         mode="click"
       >
