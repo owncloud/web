@@ -1,0 +1,6 @@
+Bugfix: Batch deleting multiple files
+
+We've fixed a bug where deleting many files in a batch action would fail.
+
+https://github.com/owncloud/web/pull/7357
+https://github.com/owncloud/web/issues/7329

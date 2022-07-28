@@ -190,8 +190,8 @@ export const getStore = function ({
           LOAD_FILES: () => {},
           SET_FILES_PAGE_LIMIT: () => {},
           SET_CURRENT_FOLDER: () => {},
-          REMOVE_FILE: () => {},
-          REMOVE_FILE_FROM_SEARCHED: () => {},
+          REMOVE_FILES: () => {},
+          REMOVE_FILES_FROM_SEARCHED: () => {},
           REMOVE_FILE_SELECTION: () => {},
           SET_FILE_SELECTION: () => {}
         },

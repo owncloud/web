@@ -69,12 +69,12 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
-  REMOVE_FILE_FROM_SEARCHED(state, file) {
+  REMOVE_FILES_FROM_SEARCHED(state, files) {
     if (!state.filesSearched) {
       return
     }
 
-    state.filesSearched = state.filesSearched.filter((i) => file.id !== i.id)
+    state.filesSearched = state.filesSearched.filter((i) => !files.find((f) => f.id === i.id))
   },
   CLEAR_FILES_SEARCHED(state) {
     state.filesSearched = null
@@ -123,8 +123,8 @@ export default {
   RESET_SELECTION(state) {
     state.selectedIds = []
   },
-  REMOVE_FILE(state, removedFile) {
-    state.files = [...state.files].filter((file) => file.id !== removedFile.id)
+  REMOVE_FILES(state, removedFiles) {
+    state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
     const resources = [...state.files]

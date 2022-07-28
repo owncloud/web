@@ -248,7 +248,11 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
-    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
+    ]),
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
@@ -269,8 +273,8 @@ export default defineComponent({
         this.$route.name
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },

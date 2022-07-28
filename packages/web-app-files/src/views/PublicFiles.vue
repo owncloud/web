@@ -186,8 +186,8 @@ export default defineComponent({
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
 
@@ -211,8 +211,8 @@ export default defineComponent({
         this.publicLinkPassword
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },
