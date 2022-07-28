@@ -7,8 +7,7 @@
         class="edit-public-link-role-dropdown-toggl oc-text-left"
         gap-size="none"
       >
-        <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
-        <span v-text="visibilityHint" />
+        <span v-text="currentLinkRoleLabel" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
@@ -56,8 +55,7 @@
       </oc-drop>
     </div>
     <p v-else class="oc-my-rm">
-      <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
-      <span v-text="visibilityHint" />
+      <span v-oc-tooltip="currentLinkRoleDescription" v-text="currentLinkRoleLabel" />
     </p>
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button
@@ -187,7 +185,7 @@ export default {
     }
   },
   computed: {
-    visibilityHint() {
+    currentLinkRoleDescription() {
       return LinkShareRoles.getByBitmask(
         parseInt(this.link.permissions),
         this.isFolderShare
