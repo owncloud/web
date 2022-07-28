@@ -82,7 +82,7 @@ export class AuthService {
         await this.resetStateAfterUserLogout()
 
         if (this.userManager.unloadReason === 'authError') {
-          return this.router.push({ name: 'accessDenied' })
+          return this.router.push('/') // this.router.push({ name: 'accessDenied' })
         }
 
         // handle redirect after logout
