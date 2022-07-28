@@ -133,6 +133,7 @@ Details
    start in a loading state.
 
    https://github.com/owncloud/web/pull/7325
+   https://github.com/owncloud/web/pull/7366
 
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 
