@@ -316,6 +316,7 @@ Details
    text-editor and pdf-viewer.
 
    https://github.com/owncloud/web/pull/7217
+   https://github.com/owncloud/web/pull/7362
 
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
 
