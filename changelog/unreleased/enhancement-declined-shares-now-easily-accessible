@@ -1,0 +1,10 @@
+Enhancement: Declined shares are now easily accessible
+
+We've redesigned the 'Shared with me' page,
+so the 'Declined shares' section is now displayed under the 'Accepted shares' section.
+There is no need to click the toggle button anymore which makes the 'Declined shares' easily accessible.
+
+https://github.com/owncloud/web/pull/7356
+https://github.com/owncloud/web/issues/7342
+
+
