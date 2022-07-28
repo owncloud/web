@@ -48,12 +48,12 @@ const publicLinkSetRoleButton = `#files-role-%s`
 const linkExpiryDatepicker = '.link-expiry-picker'
 const publicLinkEditRoleButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
-  `div/button[contains(@class, "edit-public-link-role-dropdown-toggl")]`
+  `div/button[contains(@class, "edit-public-link-role-dropdown-toggle")]`
 const addPublicLinkButton = '#files-file-link-add'
 const getMostRecentLink = '//div[@id="oc-files-file-link"]//ul/li[1]'
 const publicLink = `//ul/li/div/h4[contains(text(),'%s')]/following-sibling::div//p`
 const publicLinkCurrentRole =
-  '//button[contains(@class,"edit-public-link-role-dropdown-toggl")]//span[contains(@class,"oc-invisible-sr")]'
+  '//button[contains(@class,"edit-public-link-role-dropdown-toggle")]//span[contains(@class,"link-current-role")]'
 const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
 const editPublicLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +

@@ -114,7 +114,8 @@ function getWrapper() {
         currentRoute: createLocationSpaces('files-spaces-projects'),
         resolve: (r) => {
           return { href: r.name }
-        }
+        },
+        push: jest.fn()
       },
       $gettext: jest.fn()
     },

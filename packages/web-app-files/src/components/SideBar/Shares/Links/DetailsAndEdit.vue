@@ -2,19 +2,18 @@
   <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
     <div v-if="isModifiable">
       <oc-button
-        :id="`edit-public-link-role-dropdown-toggl-${link.id}`"
+        :id="`edit-public-link-role-dropdown-toggle-${link.id}`"
         appearance="raw"
-        class="edit-public-link-role-dropdown-toggl oc-text-left"
+        class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
-        <span v-text="visibilityHint" />
+        <span class="link-current-role" v-text="$gettext(currentLinkRoleLabel)" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
         ref="editPublicLinkRoleDropdown"
         :drop-id="`edit-public-link-role-dropdown`"
-        :toggle="`#edit-public-link-role-dropdown-toggl-${link.id}`"
+        :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
         padding-size="remove"
         mode="click"
       >
@@ -42,9 +41,9 @@
               <span>
                 <span
                   class="oc-text-bold oc-display-block oc-width-1-1"
-                  v-text="roleOption.label"
+                  v-text="$gettext(roleOption.label)"
                 />
-                <span>{{ roleOption.description() }}</span>
+                <span>{{ $gettext(roleOption.description()) }}</span>
               </span>
               <oc-icon
                 v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
@@ -56,8 +55,11 @@
       </oc-drop>
     </div>
     <p v-else class="oc-my-rm">
-      <span class="oc-invisible-sr" v-text="currentLinkRoleLabel" />
-      <span v-text="visibilityHint" />
+      <span
+        v-oc-tooltip="$gettext(currentLinkRoleDescription)"
+        class="link-current-role"
+        v-text="$gettext(currentLinkRoleLabel)"
+      />
     </p>
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button
@@ -187,7 +189,7 @@ export default {
     }
   },
   computed: {
-    visibilityHint() {
+    currentLinkRoleDescription() {
       return LinkShareRoles.getByBitmask(
         parseInt(this.link.permissions),
         this.isFolderShare

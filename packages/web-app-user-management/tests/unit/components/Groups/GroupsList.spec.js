@@ -61,6 +61,7 @@ function getMountedWrapper({ propsData = {} } = {}) {
     propsData: {
       groups: [],
       selectedGroups: [],
+      headerPosition: 0,
       ...propsData
     },
     stubs: {

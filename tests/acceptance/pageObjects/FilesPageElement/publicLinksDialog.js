@@ -575,7 +575,7 @@ module.exports = {
       selector: '.oc-files-file-link-name'
     },
     publicLinkSubRole: {
-      selector: '.link-details .oc-invisible-sr'
+      selector: '.link-details .link-current-role'
     },
     publicLinkSubVia: {
       selector: '.oc-files-file-link-via'
@@ -597,7 +597,7 @@ module.exports = {
     },
     publicLinkEditRoleButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/div/button[contains(@class, "edit-public-link-role-dropdown-toggl")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/div/button[contains(@class, "edit-public-link-role-dropdown-toggle")]',
       locateStrategy: 'xpath'
     },
     publicLinkEditButton: {
