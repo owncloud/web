@@ -3,7 +3,7 @@
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
   <div>
-    <oc-button-stub id="edit-public-link-role-dropdown-toggle-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggle oc-text-left"><span class="edit-public-link-role-dropdown-toggle-current-role">Viewer</span>
+    <oc-button-stub id="edit-public-link-role-dropdown-toggle-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggle oc-text-left"><span class="link-current-role">Viewer</span>
       <oc-icon-stub name="arrow-down-s"></oc-icon-stub>
     </oc-button-stub>
     <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" padding-size="remove" mode="click">
@@ -52,7 +52,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
 
 exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
-  <p class="oc-my-rm"><span>Viewer</span></p>
+  <p class="oc-my-rm"><span class="link-current-role">Viewer</span></p>
   <div class="details-buttons oc-pr-s">
     <!---->
     <!---->

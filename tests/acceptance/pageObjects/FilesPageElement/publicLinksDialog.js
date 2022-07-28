@@ -575,7 +575,7 @@ module.exports = {
       selector: '.oc-files-file-link-name'
     },
     publicLinkSubRole: {
-      selector: '.link-details .edit-public-link-role-dropdown-toggle-current-role'
+      selector: '.link-details .link-current-role'
     },
     publicLinkSubVia: {
       selector: '.oc-files-file-link-via'

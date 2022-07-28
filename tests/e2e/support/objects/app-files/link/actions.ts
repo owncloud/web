@@ -53,7 +53,7 @@ const addPublicLinkButton = '#files-file-link-add'
 const getMostRecentLink = '//div[@id="oc-files-file-link"]//ul/li[1]'
 const publicLink = `//ul/li/div/h4[contains(text(),'%s')]/following-sibling::div//p`
 const publicLinkCurrentRole =
-  '//button[contains(@class,"edit-public-link-role-dropdown-toggle")]//span[contains(@class,"edit-public-link-role-dropdown-toggle-current-role")]'
+  '//button[contains(@class,"edit-public-link-role-dropdown-toggle")]//span[contains(@class,"link-current-role")]'
 const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
 const editPublicLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +

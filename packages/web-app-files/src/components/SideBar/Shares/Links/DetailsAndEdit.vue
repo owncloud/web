@@ -7,10 +7,7 @@
         class="edit-public-link-role-dropdown-toggle oc-text-left"
         gap-size="none"
       >
-        <span
-          class="edit-public-link-role-dropdown-toggle-current-role"
-          v-text="$gettext(currentLinkRoleLabel)"
-        />
+        <span class="link-current-role" v-text="$gettext(currentLinkRoleLabel)" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
@@ -60,6 +57,7 @@
     <p v-else class="oc-my-rm">
       <span
         v-oc-tooltip="$gettext(currentLinkRoleDescription)"
+        class="link-current-role"
         v-text="$gettext(currentLinkRoleLabel)"
       />
     </p>
