@@ -7,7 +7,7 @@
         class="edit-public-link-role-dropdown-toggl oc-text-left"
         gap-size="none"
       >
-        <span v-text="currentLinkRoleLabel" />
+        <span v-text="$gettext(currentLinkRoleLabel)" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-drop
@@ -41,9 +41,9 @@
               <span>
                 <span
                   class="oc-text-bold oc-display-block oc-width-1-1"
-                  v-text="roleOption.label"
+                  v-text="$gettext(roleOption.label)"
                 />
-                <span>{{ roleOption.description() }}</span>
+                <span>{{ $gettext(roleOption.description()) }}</span>
               </span>
               <oc-icon
                 v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
@@ -55,7 +55,10 @@
       </oc-drop>
     </div>
     <p v-else class="oc-my-rm">
-      <span v-oc-tooltip="currentLinkRoleDescription" v-text="currentLinkRoleLabel" />
+      <span
+        v-oc-tooltip="$gettext(currentLinkRoleDescription)"
+        v-text="$gettext(currentLinkRoleLabel)"
+      />
     </p>
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button

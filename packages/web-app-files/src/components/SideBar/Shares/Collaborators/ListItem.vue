@@ -65,9 +65,9 @@
             </div>
             <div v-else-if="share.role">
               <span
-                v-oc-tooltip="share.role.description(false)"
+                v-oc-tooltip="$gettext(share.role.description(false))"
                 class="oc-mr-xs"
-                v-text="share.role.label"
+                v-text="$gettext(share.role.label)"
               />
             </div>
           </div>
