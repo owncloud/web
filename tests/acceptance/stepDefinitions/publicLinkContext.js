@@ -238,8 +238,6 @@ async function findMatchingPublicLinkByName(name, role, resource, via = null) {
 
   const shares = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkList()
 
-  console.log(shares)
-
   const share = shares.find((link) => link.name === name)
 
   if (!share) {
