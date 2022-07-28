@@ -47,7 +47,9 @@ export default defineComponent({
       try {
         this.loading = true
         this.resource = await this.getFileResource(fileContext.path)
-        this.url = await this.getUrlForResource(this.resource)
+        this.url = await this.getUrlForResource(this.resource, {
+          disposition: 'inline'
+        })
       } catch (e) {
         this.loadingError = true
         console.error('Error fetching pdf', e)

@@ -32,11 +32,13 @@ export function useAppFileHandling({
 
   const getUrlForResource = async (
     { webDavPath, downloadURL }: Resource,
-    options: { signUrlTimeout?: number } = {}
+    options: { disposition?: 'inline' | 'attachment'; signUrlTimeout?: number } = {}
   ) => {
     const signUrlTimeout = options.signUrlTimeout || 86400
+    const inlineDisposition = (options.disposition || 'attachment') === 'inline'
+
     let signed = true
-    if (!downloadURL) {
+    if (!downloadURL && !inlineDisposition) {
       // TODO: check whether we can fix the resource to always contain public-files in the webDavPath
       let urlPath
       if (unref(isPublicLinkContext)) {
@@ -66,7 +68,7 @@ export function useAppFileHandling({
     // const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
     // downloadURL = [url, combinedQuery].filter(Boolean).join('?')
 
-    if (!signed) {
+    if (!signed || inlineDisposition) {
       const response = await getFileContents(webDavPath, {
         responseType: 'blob'
       })
