@@ -69,13 +69,6 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
-  REMOVE_FILE_FROM_SEARCHED(state, file) {
-    if (!state.filesSearched) {
-      return
-    }
-
-    state.filesSearched = state.filesSearched.filter((i) => file.id !== i.id)
-  },
   REMOVE_FILES_FROM_SEARCHED(state, files) {
     if (!state.filesSearched) {
       return
@@ -129,9 +122,6 @@ export default {
   },
   RESET_SELECTION(state) {
     state.selectedIds = []
-  },
-  REMOVE_FILE(state, removedFile) {
-    state.files = [...state.files].filter((file) => file.id !== removedFile.id)
   },
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
