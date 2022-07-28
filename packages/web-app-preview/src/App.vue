@@ -240,7 +240,7 @@ export default defineComponent({
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
     this.cachedFiles.forEach((medium) => {
-      window.URL.revokeObjectURL(medium.url)
+      this.revokeUrl(medium.url)
     })
   },
 
