@@ -51,6 +51,7 @@ Summary
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
@@ -445,6 +446,11 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7188
+
+* Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+
+   https://github.com/owncloud/web/issues/7358
+   https://github.com/owncloud/web/pull/7364
 
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 
