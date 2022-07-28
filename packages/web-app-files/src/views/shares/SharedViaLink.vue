@@ -17,7 +17,7 @@
       <resource-table
         v-else
         id="files-shared-via-link-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :fields-displayed="['name', 'sharedWith', 'sdate']"

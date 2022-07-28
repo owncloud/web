@@ -117,6 +117,7 @@ export const getStore = function ({
           activeFiles: activeFiles,
           currentFolder: currentFolder,
           currentPage: currentPage,
+          selectedIds: selectedFiles ? selectedFiles.map((file) => file.id) : [],
           selectedResourcesForMove: selectedResourcesForMove,
           locationPickerTargetFolder: locationPickerTargetFolder
         },
@@ -145,7 +146,8 @@ export const getStore = function ({
           REMOVE_FILES: () => {},
           REMOVE_FILES_FROM_SEARCHED: () => {},
           REMOVE_FILE_SELECTION: () => {},
-          SET_FILE_SELECTION: () => {}
+          SET_FILE_SELECTION: () => {},
+          SET_SELECTED_IDS: () => {}
         },
         actions: {
           loadIndicators: () => {},

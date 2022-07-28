@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { useSort, useResourcesViewDefaults } from '../../composables'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -148,9 +148,7 @@ export default defineComponent({
   }),
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['configuration']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     pendingTitle() {
       return this.$gettext('Pending shares')

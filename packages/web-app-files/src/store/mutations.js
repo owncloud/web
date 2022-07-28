@@ -94,11 +94,19 @@ export default {
   SET_LATEST_SELECTED_FILE_ID(state, fileId) {
     state.latestSelectedId = fileId
   },
-  SET_FILE_SELECTION(state, files) {
-    const latestSelected = files.find((i) => !state.selectedIds.some((j) => j === i.id))
-    const latestSelectedId = latestSelected ? latestSelected.id : state.latestSelectedId
-    state.latestSelectedId = latestSelectedId
-    state.selectedIds = files.map((f) => f.id)
+  SET_FILE_SELECTION(state, selectedFiles) {
+    const latestSelected = selectedFiles.find((i) => !state.selectedIds.includes(i.id))
+    if (latestSelected) {
+      state.latestSelectedId = latestSelected.id
+    }
+    state.selectedIds = selectedFiles.map((f) => f.id)
+  },
+  SET_SELECTED_IDS(state, selectedIds) {
+    const latestSelectedId = selectedIds.find((id) => !state.selectedIds.includes(id))
+    if (latestSelectedId) {
+      state.latestSelectedId = latestSelectedId
+    }
+    state.selectedIds = selectedIds
   },
   ADD_FILE_SELECTION(state, file) {
     const selected = [...state.selectedIds]

@@ -131,6 +131,9 @@ function createStore(activeFiles) {
     modules: {
       Files: {
         namespaced: true,
+        state: {
+          selectedIds: []
+        },
         getters: {
           activeFiles: () => activeFiles,
           selectedFiles: () => [],

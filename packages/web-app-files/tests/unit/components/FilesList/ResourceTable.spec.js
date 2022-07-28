@@ -198,7 +198,7 @@ describe('ResourceTable', () => {
       it('de-selects all resources via the select-all checkbox', async () => {
         const wrapperSelected = getMountedWrapper({
           propsData: {
-            selection: resourcesWithAllFields.map((resource) => resource.id)
+            selectedIds: resourcesWithAllFields.map((resource) => resource.id)
           }
         })
 

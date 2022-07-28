@@ -15,7 +15,7 @@ exports[`Trashbin component when the view is not loading anymore when length of 
   </thead>
   <tbody>
     <tr tabindex="-1" data-item-id="file-id-1234" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-1234">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-1234" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-1234" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-1234" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-file-id-1234" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
           <div class="oc-resource oc-text-overflow"><span><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span></span>
@@ -35,7 +35,7 @@ exports[`Trashbin component when the view is not loading anymore when length of 
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="file-id-5896" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-5896">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-5896" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-5896" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-5896" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-file-id-5896" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
           <div class="oc-resource oc-text-overflow"><span><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span></span>
@@ -55,7 +55,7 @@ exports[`Trashbin component when the view is not loading anymore when length of 
       </td>
     </tr>
     <tr tabindex="-1" data-item-id="file-id-9856" draggable="false" class="oc-tbody-tr oc-tbody-tr-file-id-9856">
-      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-9856" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value="[object Object]"> <label for="resource-table-select-file-id-9856" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
+      <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m "><span><input id="resource-table-select-file-id-9856" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-file-id-9856" class="oc-invisible-sr oc-cursor-pointer">Select folder</label></span></td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
           <div class="oc-resource oc-text-overflow"><span><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span></span>
