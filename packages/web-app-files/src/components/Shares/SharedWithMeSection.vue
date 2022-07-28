@@ -61,7 +61,7 @@
         <context-actions :items="itemsSelected" />
       </template>
       <template #footer>
-        <div v-if="showMoreLessToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
+        <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
           <oc-button
             id="files-shared-with-me-show-all"
             appearance="raw"
@@ -153,9 +153,13 @@ export default defineComponent({
       type: Function,
       required: true
     },
-    showMoreLessToggle: {
+    showMoreToggle: {
       type: Boolean,
       default: false
+    },
+    showMoreToggleCount: {
+      type: Number,
+      default: 3
     },
     resourceClickable: {
       type: Boolean,
@@ -224,13 +228,13 @@ export default defineComponent({
       return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')
     },
     hasMore() {
-      return this.items.length > 3
+      return this.items.length > this.showMoreToggleCount
     },
     resourceItems() {
-      if (!this.showMoreLessToggle || this.showMore) {
+      if (!this.showMoreToggle || this.showMore) {
         return this.items
       }
-      return this.items.slice(0, 3)
+      return this.items.slice(0, this.showMoreToggleCount)
     }
   },
   beforeDestroy() {

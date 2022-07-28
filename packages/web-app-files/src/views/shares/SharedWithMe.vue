@@ -12,7 +12,7 @@
         :sort-by="pendingSortBy"
         :sort-dir="pendingSortDir"
         :sort-handler="pendingHandleSort"
-        :show-more-less-toggle="true"
+        :show-more-toggle="true"
         :resource-clickable="false"
         :display-thumbnails="false"
       ></shared-with-me-section>
@@ -36,11 +36,12 @@
         :empty-message="declinedEmptyMessage"
         :items="declinedItems"
         :share-status="ShareStatus.declined"
-        :resource-clickable="false"
         :sort-by="declinedSortBy"
         :sort-dir="declinedSortDir"
         :sort-handler="declinedHandleSort"
+        :show-more-toggle="true"
         :display-thumbnails="false"
+        :resource-clickable="false"
       ></shared-with-me-section>
     </template>
   </div>
