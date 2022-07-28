@@ -43,6 +43,7 @@ Summary
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Change file loading mechanism in `preview` app: [#7350](https://github.com/owncloud/web/pull/7350)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
+* Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
@@ -361,6 +362,15 @@ Details
 
    https://github.com/owncloud/web/issues/7183
    https://github.com/owncloud/web/pull/7206
+
+* Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
+
+   We've redesigned the 'Shared with me' page, so the 'Declined shares' section is now displayed
+   under the 'Accepted shares' section. There is no need to click the toggle button anymore which
+   makes the 'Declined shares' easily accessible.
+
+   https://github.com/owncloud/web/issues/7342
+   https://github.com/owncloud/web/pull/7356
 
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 
