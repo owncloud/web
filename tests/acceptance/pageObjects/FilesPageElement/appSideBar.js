@@ -209,7 +209,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     fileInfoIcon: {
-      selector: '.file_info .oc-icon'
+      selector: '.details-icon-wrapper .details-icon'
     },
     fileInfoResourceNameAnyType: {
       selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
