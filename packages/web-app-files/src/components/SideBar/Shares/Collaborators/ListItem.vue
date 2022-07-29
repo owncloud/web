@@ -39,7 +39,7 @@
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           </div>
           <div>
-            <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-right oc-flex-middle">
+            <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
               <role-dropdown
                 :resource="highlightedFile"
                 :dom-selector="shareDomSelector"

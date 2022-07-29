@@ -23,7 +23,7 @@
         @updateLink="checkLinkToUpdate"
         @removePublicLink="deleteLinkConfirmation"
       />
-      <hr class="link-separator oc-my-m" />
+      <hr class="oc-my-m" />
       <oc-button
         id="files-file-link-add"
         variation="primary"
@@ -67,7 +67,7 @@
       </oc-button>
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
-      <hr class="link-separator oc-my-m" />
+      <hr class="oc-my-m" />
       <h3 class="oc-text-bold oc-m-rm oc-text-initial">
         <span v-text="indirectLinksHeading" />
         <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
@@ -580,9 +580,5 @@ export default defineComponent({
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 5px;
-}
-.link-separator {
-  background: var(--oc-color-input-border);
-  height: 2px;
 }
 </style>
