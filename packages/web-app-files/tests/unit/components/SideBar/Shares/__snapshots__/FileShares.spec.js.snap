@@ -2,9 +2,10 @@
 
 exports[`FileShares if currentUser can not share initially renders no share permission message 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <!---->
   <!---->
@@ -14,9 +15,10 @@ exports[`FileShares if currentUser can not share initially renders no share perm
 
 exports[`FileShares if currentUser can share initially renders add people dialog 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <!---->
   <!---->
@@ -26,9 +28,10 @@ exports[`FileShares if currentUser can share initially renders add people dialog
 
 exports[`FileShares if there are collaborators present correctly passes the shared parent route to the collaborator list item 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-initial oc-text-bold oc-my-rm">Shared with</h4>
@@ -45,9 +48,10 @@ exports[`FileShares if there are collaborators present correctly passes the shar
 
 exports[`FileShares if there are collaborators present renders sharedWithLabel and sharee list 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-initial oc-text-bold oc-my-rm">Shared with</h4>
@@ -67,9 +71,10 @@ exports[`FileShares if there are collaborators present renders sharedWithLabel a
 
 exports[`FileShares if there are no collaborators does not render avatar wrapper or collaborator list 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <!---->
   <!---->
@@ -79,9 +84,10 @@ exports[`FileShares if there are no collaborators does not render avatar wrapper
 
 exports[`FileShares renders loading spinner while loading 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <h3 class="oc-text-bold oc-m-rm oc-text-initial"><span data-msgid="Share with people" data-current-language="en_US">Share with people</span>
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Share with people" data-current-language="en_US">Share with people</h3>
     <!---->
-  </h3>
+  </div>
   <p data-testid="files-collaborators-no-reshare-permissions-message">You don't have permission to share this file.</p>
   <!---->
   <!---->
