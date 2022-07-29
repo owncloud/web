@@ -12,7 +12,7 @@
     </no-content-message>
     <resource-table
       v-else
-      v-model="itemsSelected"
+      v-model="selectedResourcesIds"
       :data-test-share-status="shareStatus"
       class="files-table"
       :class="{ 'files-table-squashed': !sidebarClosed }"
@@ -58,7 +58,7 @@
         </div>
       </template>
       <template #contextMenu>
-        <context-actions :items="itemsSelected" />
+        <context-actions :items="selectedResources" />
       </template>
       <template #footer>
         <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
@@ -171,7 +171,11 @@ export default defineComponent({
     }
   },
   setup() {
-    const { fileListHeaderY } = useResourcesViewDefaults<Resource, any, any[]>()
+    const { fileListHeaderY, selectedResourcesIds, selectedResources } = useResourcesViewDefaults<
+      Resource,
+      any,
+      any[]
+    >()
 
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
@@ -193,7 +197,9 @@ export default defineComponent({
       resourceTargetLocation,
       resourceTargetParamMapping,
       resourceTargetQueryMapping,
-      fileListHeaderY
+      fileListHeaderY,
+      selectedResources,
+      selectedResourcesIds
     }
   },
 
@@ -203,7 +209,6 @@ export default defineComponent({
   }),
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['configuration']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
@@ -215,14 +220,6 @@ export default defineComponent({
     },
     countFolders() {
       return this.items.filter((s) => s.type === 'folder').length
-    },
-    itemsSelected: {
-      get() {
-        return this.selectedFiles
-      },
-      set(resources) {
-        this.SET_FILE_SELECTION(resources.filter((r) => r.status === this.shareStatus))
-      }
     },
     toggleMoreLabel() {
       return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')
@@ -242,7 +239,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadAvatars']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SET_FILE_SELECTION', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {

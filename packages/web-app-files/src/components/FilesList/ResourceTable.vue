@@ -10,7 +10,7 @@
     :drag-drop="dragDrop"
     :hover="hover"
     :item-dom-selector="resourceDomSelector"
-    :selection="selection"
+    :selection="selectedResources"
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :lazy="lazyLoading"
@@ -40,10 +40,9 @@
         :label="getResourceCheckboxLabel(item)"
         :hide-label="true"
         size="large"
-        :value="selection"
-        :option="item"
+        :value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
-        @input="emitSelect"
+        @input="setSelection($event, item)"
         @click.native.stop
       />
     </template>
@@ -200,7 +199,7 @@ const mapResourceFields = (resource: Resource, mapping = {}) => {
 export default defineComponent({
   mixins: [Rename],
   model: {
-    prop: 'selection',
+    prop: 'selectedIds',
     event: 'select'
   },
   props: {
@@ -250,7 +249,7 @@ export default defineComponent({
     /**
      * V-model for the selection
      */
-    selection: {
+    selectedIds: {
       type: Array,
       default: () => []
     },
@@ -540,10 +539,10 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return this.selection.length === this.resources.length
+      return this.selectedIds.length === this.resources.length
     },
-    selectedIds() {
-      return this.selection.map((r) => r.id)
+    selectedResources() {
+      return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
     },
     allResourcesCheckboxLabel() {
       return this.$gettext('Select all resources')
@@ -560,6 +559,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    isResourceSelected(item) {
+      return this.selectedIds.includes(item.id)
+    },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
     },
@@ -625,18 +627,18 @@ export default defineComponent({
       this.$emit('sort', opts)
     },
     addSelectedResource(file) {
-      const isSelected = this.selection.some((e) => e.id === file.id)
-      if (!isSelected) {
-        this.$emit('select', this.selection.concat([file]))
+      const isSelected = this.isResourceSelected(file)
+      if (isSelected) {
+        this.$emit('select', this.selectedIds)
       } else {
-        this.$emit('select', this.selection)
+        this.$emit('select', this.selectedIds.concat([file]))
       }
     },
     resetDropPosition(id, event, item) {
       const instance = this.$refs[id].tippy
       if (instance === undefined) return
-      if (!this.selection.includes(item)) {
-        this.emitSelect([item])
+      if (!this.isResourceSelected(item)) {
+        this.emitSelect([item.id])
       }
       this.displayPositionedDropdown(instance, event)
     },
@@ -644,8 +646,8 @@ export default defineComponent({
       event.preventDefault()
       const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
       if (instance === undefined) return
-      if (!this.selection.includes(item)) {
-        this.emitSelect([item])
+      if (!this.isResourceSelected(item)) {
+        this.emitSelect([item.id])
       }
       this.displayPositionedDropdown(instance._tippy, event)
     },
@@ -691,7 +693,7 @@ export default defineComponent({
       if (eventData && eventData.shiftKey) {
         return bus.publish('app.files.list.clicked.shift', resource)
       }
-      return this.emitSelect([resource])
+      return this.emitSelect([resource.id])
     },
     formatDate(date) {
       return DateTime.fromJSDate(new Date(date))
@@ -701,19 +703,22 @@ export default defineComponent({
     formatDateRelative(date) {
       return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
     },
-    emitSelect(resources) {
-      /**
-       * Triggered when a checkbox for selecting a resource or the checkbox for selecting all resources is clicked
-       * @property {array} resources The selected resources
-       */
+    setSelection(selected, resource) {
+      if (selected) {
+        this.emitSelect([...this.selectedIds, resource.id])
+      } else {
+        this.emitSelect(this.selectedIds.filter((id) => id !== resource.id))
+      }
+    },
+    emitSelect(selectedIds) {
       bus.publish('app.files.list.clicked')
-      this.$emit('select', resources)
+      this.$emit('select', selectedIds)
     },
     toggleSelectionAll() {
       if (this.areAllResourcesSelected) {
         return this.emitSelect([])
       }
-      this.emitSelect(this.resources)
+      this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
       /**

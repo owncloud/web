@@ -91,7 +91,7 @@
       <resource-table
         v-else
         id="files-spaces-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table oc-mt-xl"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"

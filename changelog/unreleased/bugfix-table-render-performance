@@ -1,0 +1,8 @@
+Bugfix: File list render performance
+
+We've drastically increased the initial render performance of the files list by removing the lazy loading delay and by moving the loading visualization from the OcTd to the OcTr component. For the selection of files there also has been a slight improvement in render speed.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7298
+https://github.com/owncloud/web/pull/7312
+https://github.com/owncloud/web/pull/7367

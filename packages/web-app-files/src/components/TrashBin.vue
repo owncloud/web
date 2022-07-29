@@ -17,7 +17,7 @@
       <resource-table
         v-else
         id="files-trashbin-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :fields-displayed="['name', 'ddate']"
@@ -97,7 +97,7 @@ export default defineComponent({
 
   computed: {
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
+    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {

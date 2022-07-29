@@ -35,6 +35,7 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   sortDir: ComputedRef<SortDir>
 
   selectedResources: WritableComputedRef<Resource[]>
+  selectedResourcesIds: WritableComputedRef<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
 }
 
@@ -79,9 +80,17 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
       store.commit('Files/SET_FILE_SELECTION', resources)
     }
   })
+  const selectedResourcesIds: WritableComputedRef<(string | number)[]> = computed({
+    get(): (string | number)[] {
+      return store.state.Files.selectedIds
+    },
+    set(selectedIds) {
+      store.commit('Files/SET_SELECTED_IDS', selectedIds)
+    }
+  })
 
   const isResourceInSelection = (resource: Resource) => {
-    return unref(selectedResources).includes(resource)
+    return unref(selectedResourcesIds).includes(resource.id)
   }
 
   return {
@@ -98,6 +107,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     sortBy,
     sortDir,
     selectedResources,
+    selectedResourcesIds,
     isResourceInSelection
   }
 }

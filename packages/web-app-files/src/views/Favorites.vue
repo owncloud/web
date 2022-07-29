@@ -11,7 +11,7 @@
       <resource-table
         v-else
         id="files-favorites-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
