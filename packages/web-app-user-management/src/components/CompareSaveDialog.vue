@@ -38,10 +38,6 @@ export default {
       type: Object,
       required: true
     },
-    objectId: {
-      type: Object,
-      required: true
-    },
     confirmButtonDisabled: {
       type: Boolean,
       default: () => {
@@ -66,7 +62,7 @@ export default {
         this.saved = false
       }
     },
-    objectId(){
+    'originalObject.id': function(){
         this.saved = false
     }
   },

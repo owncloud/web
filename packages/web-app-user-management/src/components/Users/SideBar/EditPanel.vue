@@ -37,7 +37,6 @@
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
-      :object-id="user.id"
       :original-object="originalObjectUser"
       :compare-object="compareObjectUser"
       :confirm-button-disabled="invalidFormData"
@@ -92,10 +91,10 @@ export default {
     },
 
     originalObjectUser() {
-      return { user: { ...this.user, passwordProfile: { password: '' } } }
+      return { ...this.user, passwordProfile: { password: '' } }
     },
     compareObjectUser() {
-      return { user: { ...this.editUser } }
+      return { ...this.editUser }
     },
     invalidFormData() {
       return Object.values(this.formData)

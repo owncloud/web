@@ -16,7 +16,6 @@
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
-      :object-id="group.id"
       :original-object="group"
       :compare-object="editGroup"
       :confirm-button-disabled="invalidFormData"
