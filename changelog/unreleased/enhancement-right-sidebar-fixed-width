@@ -1,0 +1,5 @@
+Enhancement: Use fixed width for the right sidebar
+
+We've set a fixed width of 440px to the right sidebar to have better control of its styling and alignment.
+
+https://github.com/owncloud/web/pull/7371

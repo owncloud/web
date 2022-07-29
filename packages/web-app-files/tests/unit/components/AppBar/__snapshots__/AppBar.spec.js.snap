@@ -85,7 +85,7 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <size-info-stub class="oc-visible@l"></size-info-stub>
+        <size-info-stub class="oc-visible@xl"></size-info-stub>
         <batch-actions-stub></batch-actions-stub>
       </div>
     </div>

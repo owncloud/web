@@ -34,7 +34,7 @@
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
           <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
-          <size-info v-if="showSelectionInfo" class="oc-visible@l" />
+          <size-info v-if="showSelectionInfo" class="oc-visible@xl" />
           <batch-actions v-if="showBatchActions" />
         </div>
       </div>
