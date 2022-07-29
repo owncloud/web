@@ -1,7 +1,11 @@
 <template>
   <div class="compare-save-dialog oc-p-s oc-width-1-1">
     <div class="oc-flex oc-flex-between oc-flex-middle oc-width-1-1">
-      <span>{{ unsavedChangesText }}</span>
+      <span v-if="saved" class="oc-flex oc-flex-middle">
+        <oc-icon name="checkbox-circle" />
+        <span v-translate class="oc-ml-s">Changes saved</span>
+      </span>
+      <span v-else>{{ unsavedChangesText }}</span>
       <div>
         <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
           <translate>Revert</translate>
@@ -21,6 +25,7 @@
 
 <script lang="js">
 import isEqual from 'lodash-es/isEqual'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'CompareSaveDialog',
@@ -40,6 +45,9 @@ export default {
       }
     },
   },
+  data: () => ({
+    saved: false,
+  }),
   computed: {
     unsavedChanges(){
       return !isEqual(this.originalObject, this.compareObject)
@@ -47,6 +55,20 @@ export default {
     unsavedChangesText(){
       return this.unsavedChanges ? this.$gettext('Unsaved changes') : this.$gettext('No changes')
     }
+  },
+  watch: {
+    unsavedChanges(){
+      if(this.unsavedChanges){
+        this.saved = false
+      }
+    }
+  },
+  mounted() {
+    const savedEventToken = bus.subscribe('app.user-management.entity.saved', () => {
+      this.saved = true
+    })
+
+    this.$on('beforeDestroy', () => bus.unsubscribe('app.user-management.entity.saved', savedEventToken))
   }
 }
 </script>
