@@ -74,7 +74,7 @@ export default {
 </script>
 <style lang="scss">
 .compare-save-dialog {
-  background: var(--oc-color-background-muted);
+  background: var(--oc-color-background-highlight);
 }
 .changes-saved {
   color: var(--oc-color-swatch-success-default);
