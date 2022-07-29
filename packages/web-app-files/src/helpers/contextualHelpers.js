@@ -42,12 +42,20 @@ export const shareSpaceAddMemberHelp = {
   endText: 'Members can only be added or removed by a Space Manager.'
 }
 export const shareViaLinkHelp = {
-  text: $gettext('Share a file or folder by link. Choose how access is granted:'),
+  title: $gettext('Choose how access is granted'),
   list: [
     {
+      text: $gettext('Only invited people can access'),
+      headline: true
+    },
+    {
       text: $gettext(
-        'Only invited people can access: Only people from the list "Invited people" can access. If there is no list, no people are invited yet.'
+        'Only people from the list "Invited people" can access. If there is no list, no people are invited yet.'
       )
+    },
+    {
+      text: $gettext('Everyone with the link'),
+      headline: true
     },
     {
       text: $gettext(
