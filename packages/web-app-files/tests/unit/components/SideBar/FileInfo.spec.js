@@ -49,38 +49,9 @@ describe('FileInfo', () => {
     const tooltipStub = jest.fn()
     const wrapper = createWrapper(simpleOwnFile, tooltipStub)
     expect(wrapper.find(selectors.name).exists()).toBeTruthy()
-    expect(wrapper.find(selectors.mdate).exists()).toBeTruthy()
-  })
-
-  it('shows modification date info', () => {
-    resetDateMocks()
-
-    const tooltipStub = jest.fn()
-    const wrapper = createWrapper(simpleOwnFile, tooltipStub)
-    expect(tooltipStub).toHaveBeenCalledTimes(1)
-    expect(formDateFromRFC).toHaveBeenCalledTimes(1)
-    expect(formDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 07:28:00 GMT')
-    expect(formRelativeDateFromRFC).toHaveBeenCalledTimes(1)
-    expect(formRelativeDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 07:28:00 GMT')
-
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('shows deletion date info', () => {
-    resetDateMocks()
-
-    const tooltipStub = jest.fn()
-    const wrapper = createWrapper(simpleDeletedFile, tooltipStub, 'files-trash-personal')
-
-    expect(tooltipStub).toHaveBeenCalledTimes(1)
-    expect(formDateFromRFC).toHaveBeenCalledTimes(1)
-    expect(formDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 09:29:00 GMT')
-    expect(formRelativeDateFromRFC).toHaveBeenCalledTimes(1)
-    expect(formRelativeDateFromRFC).toHaveBeenCalledWith('Wed, 21 Oct 2015 09:29:00 GMT')
-
-    expect(wrapper).toMatchSnapshot()
   })
 })
+
 
 function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled = false) {
   return shallowMount(FileInfo, {
