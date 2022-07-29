@@ -2,8 +2,8 @@
   <div class="compare-save-dialog oc-p-s oc-width-1-1">
     <div class="oc-flex oc-flex-between oc-flex-middle oc-width-1-1">
       <span v-if="saved" class="oc-flex oc-flex-middle">
-        <oc-icon name="checkbox-circle" />
-        <span v-translate class="oc-ml-s">Changes saved</span>
+        <oc-icon variation="success" name="checkbox-circle" />
+        <span v-translate class="changes-saved oc-ml-s">Changes saved</span>
       </span>
       <span v-else>{{ unsavedChangesText }}</span>
       <div>
@@ -75,5 +75,8 @@ export default {
 <style lang="scss">
 .compare-save-dialog {
   background: var(--oc-color-background-muted);
+}
+.changes-saved {
+  color: var(--oc-color-swatch-success-default);
 }
 </style>
