@@ -34,7 +34,11 @@
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
           <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
-          <size-info v-if="showSelectionInfo" class="oc-visible@xl" />
+          <size-info
+            v-if="showSelectionInfo"
+            class="oc-visible@l"
+            :class="{ 'files-app-bar-actions-squashed': !sidebarClosed }"
+          />
           <batch-actions v-if="showBatchActions" />
         </div>
       </div>
@@ -79,6 +83,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     pageTitle() {
       const title = this.$route.meta.title
@@ -149,6 +154,13 @@ export default {
     gap: var(--oc-space-small);
     justify-content: flex-end;
     min-height: 3rem;
+
+    &-squashed {
+      display: none;
+      @media only screen and (min-width: 1400px) {
+        display: inherit;
+      }
+    }
   }
 
   #files-breadcrumb {
