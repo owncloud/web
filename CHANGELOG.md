@@ -32,7 +32,7 @@ Summary
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
-* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
+* Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
@@ -257,14 +257,16 @@ Details
    https://github.com/owncloud/web/issues/7339
    https://github.com/owncloud/web/pull/7349
 
-* Bugfix - Table lazy loading performance: [#7038](https://github.com/owncloud/web/issues/7038)
+* Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 
-   We've drastically increased the performance of the files table by removing the lazy loading
-   delay and by moving the loading visualization from the OcTd to the OcTr component.
+   We've drastically increased the initial render performance of the files list by removing the
+   lazy loading delay and by moving the loading visualization from the OcTd to the OcTr component.
+   For the selection of files there also has been a slight improvement in render speed.
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7298
    https://github.com/owncloud/web/pull/7312
+   https://github.com/owncloud/web/pull/7367
 
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 
