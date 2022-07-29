@@ -1032,9 +1032,12 @@ Then(
   }
 )
 
-Then('the thumbnail should be visible in the app-sidebar', function () {
-  return client.page.FilesPageElement.appSideBar().isThumbnailVisible()
-})
+Then(
+  'the {string} preview of thumbnail should be visible in the {string} panel',
+  function (previewSize, panelName) {
+    return client.page.FilesPageElement.appSideBar().isThumbnailVisible(previewSize, panelName)
+  }
+)
 
 When('the user deletes the file {string} from the deleted files list', function (element) {
   return client.page.FilesPageElement.filesList().deleteImmediately(element)

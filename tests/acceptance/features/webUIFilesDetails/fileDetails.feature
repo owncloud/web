@@ -16,12 +16,17 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the personal page
     When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "actions" panel in details panel using the webUI
-    And the "actions" details panel should be visible
+    Then the "actions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "people" panel
+    When the user switches to "versions" panel in details panel using the webUI
+    Then the "versions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "versions" panel
 
   @files_versions-app-required
   Scenario: View different areas of the app-sidebar for a folder in files page
@@ -29,14 +34,14 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the personal page
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "actions" panel in details panel using the webUI
-    And the "actions" details panel should be visible
+    Then the "actions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "people" panel
 
   @files_versions-app-required @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a file in favorites page
@@ -46,12 +51,17 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the favorites page
     When the user opens the sidebar for file "lorem.txt" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "actions" panel in details panel using the webUI
-    And the "actions" details panel should be visible
+    Then the "actions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "people" panel
+    When the user switches to "versions" panel in details panel using the webUI
+    Then the "versions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "versions" panel
 
   @files_versions-app-required @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a folder in favorites page
@@ -61,14 +71,14 @@ Feature: User can open the details panel for any file or folder
     And the user has browsed to the favorites page
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
     And the "details" details panel should be visible
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "actions" panel in details panel using the webUI
-    And the "actions" details panel should be visible
+    Then the "actions" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
+    And the "small" preview of thumbnail should be visible in the "people" panel
 
   @issue-1158 @comments-app-required @public_link_share-feature-required
   Scenario: user shares a file through public link and then the details dialog should work in a Shared by link page
@@ -78,7 +88,7 @@ Feature: User can open the details panel for any file or folder
       | path | simple-folder |
     And the user has browsed to the shared-via-link page
     When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
-    Then the thumbnail should be visible in the app-sidebar
+    Then the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     When the user switches to "links" panel in details panel using the webUI
@@ -95,7 +105,7 @@ Feature: User can open the details panel for any file or folder
     Then folder "simple-folder" should be listed on the webUI
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
@@ -112,7 +122,7 @@ Feature: User can open the details panel for any file or folder
     Then folder "simple-folder" should be listed on the webUI
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
@@ -130,7 +140,7 @@ Feature: User can open the details panel for any file or folder
     Then folder "simple-folder" should be listed on the webUI
     When the user opens the sidebar for folder "simple-folder" on the webUI
     Then the app-sidebar should be visible
-    And the thumbnail should be visible in the app-sidebar
+    And the "big" preview of thumbnail should be visible in the "details" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
@@ -159,7 +169,7 @@ Feature: User can open the details panel for any file or folder
     And the user searches for tag "simple" using the webUI
     Then folder "simple-folder" should be listed on the webUI
     When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
-    Then the thumbnail should be visible in the app-sidebar
+    And the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     When the user switches to "links" panel in details panel using the webUI
