@@ -37,7 +37,7 @@
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
-      :object-id='user.id'
+      :object-id="user.id"
       :original-object="originalObjectUser"
       :compare-object="compareObjectUser"
       :confirm-button-disabled="invalidFormData"
