@@ -1,4 +1,4 @@
-import { buildQueryString } from '../../../../src/helpers/resource/common'
+import { buildQueryString } from 'web-pkg/src/helpers/preview/common'
 import { URLSearchParams } from 'url'
 
 describe('common', () => {

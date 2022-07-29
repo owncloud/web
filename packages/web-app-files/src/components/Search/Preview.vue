@@ -16,7 +16,7 @@
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { loadPreview } from '../../helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers/preview'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'

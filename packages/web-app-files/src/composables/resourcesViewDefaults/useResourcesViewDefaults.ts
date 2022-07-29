@@ -14,7 +14,7 @@ import { useSort, SortDir } from '../sort/'
 import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -24,6 +24,7 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   fileListHeaderY: Ref<any>
   refreshFileListHeaderPosition(): void
   loadResourcesTask: Task<TT, TU>
+  areResourcesLoading: ComputedRef<boolean>
   storeItems: ComputedRef<T[]>
   fields: ComputedRef<SortField[]>
   paginatedResources: ComputedRef<T[]>
@@ -34,6 +35,7 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   sortDir: ComputedRef<SortDir>
 
   selectedResources: WritableComputedRef<Resource[]>
+  selectedResourcesIds: WritableComputedRef<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
 }
 
@@ -41,6 +43,9 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   options: ResourcesViewDefaultsOptions<TT, TU> = {}
 ): ResourcesViewDefaultsResult<T, TT, TU> => {
   const loadResourcesTask = options.loadResourcesTask || folderService.getTask()
+  const areResourcesLoading = computed(() => {
+    return loadResourcesTask.isRunning || !loadResourcesTask.last
+  })
 
   const store = useStore()
   const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
@@ -75,15 +80,24 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
       store.commit('Files/SET_FILE_SELECTION', resources)
     }
   })
+  const selectedResourcesIds: WritableComputedRef<(string | number)[]> = computed({
+    get(): (string | number)[] {
+      return store.state.Files.selectedIds
+    },
+    set(selectedIds) {
+      store.commit('Files/SET_SELECTED_IDS', selectedIds)
+    }
+  })
 
   const isResourceInSelection = (resource: Resource) => {
-    return unref(selectedResources).includes(resource)
+    return unref(selectedResourcesIds).includes(resource.id)
   }
 
   return {
     fileListHeaderY,
     refreshFileListHeaderPosition,
     loadResourcesTask,
+    areResourcesLoading,
     storeItems,
     fields,
     paginatedResources,
@@ -93,6 +107,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     sortBy,
     sortDir,
     selectedResources,
+    selectedResourcesIds,
     isResourceInSelection
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-bar :has-shares-navigation="true" />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"
@@ -17,7 +17,7 @@
       <resource-table
         v-else
         id="files-shared-via-link-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :fields-displayed="['name', 'sharedWith', 'sdate']"
@@ -70,7 +70,7 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 import { shareQuickLinkHelp } from '../../helpers/contextualHelpers'
 import { useStore } from 'web-pkg/src/composables'
 

@@ -1,0 +1,6 @@
+Bugfix: Loading state in views
+
+We fixed a small glitch in views of the files app, where the view would show a state like "Resource not found" in the brief moment before the resource loading started. Now the views correctly start in a loading state.
+
+https://github.com/owncloud/web/pull/7325
+https://github.com/owncloud/web/pull/7366

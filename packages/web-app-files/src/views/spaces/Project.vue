@@ -11,7 +11,7 @@
         <create-and-upload />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
       <div v-else-if="isSpaceRoot">
@@ -91,7 +91,7 @@
       <resource-table
         v-else
         id="files-spaces-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table oc-mt-xl"
         :resources="paginatedResources"
         :target-route="resourceTargetLocation"
@@ -103,6 +103,14 @@
         @fileClick="$_fileActions_triggerDefaultAction"
         @rowMounted="rowMounted"
       >
+        <template #quickActions="{ resource }">
+          <quick-actions
+            :class="resource.preview"
+            class="oc-visible@s"
+            :item="resource"
+            :actions="app.quickActions"
+          />
+        </template>
         <template #contextMenu="{ resource }">
           <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
         </template>
@@ -132,10 +140,11 @@ import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
-import { loadPreview, move } from '../../helpers/resource'
+import { move } from '../../helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { createLocationSpaces } from '../../router'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -150,6 +159,7 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import { useResourcesViewDefaults } from '../../composables'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
@@ -166,7 +176,8 @@ export default defineComponent({
     Pagination,
     ContextActions,
     SpaceContextActions,
-    KeyboardActions
+    KeyboardActions,
+    QuickActions
   },
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, Mixins],
   provide() {
@@ -204,6 +215,7 @@ export default defineComponent({
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'configuration']),
+    ...mapState(['app']),
 
     breadcrumbs() {
       return concatBreadcrumbs(
@@ -364,8 +376,8 @@ export default defineComponent({
       'LOAD_FILES',
       'UPSERT_SPACE',
       'CLEAR_CURRENT_FILES_LIST',
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
     async fileDropped(fileIdTarget) {
@@ -387,8 +399,8 @@ export default defineComponent({
         this.$route.name
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },

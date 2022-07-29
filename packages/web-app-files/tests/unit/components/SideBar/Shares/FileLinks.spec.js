@@ -52,7 +52,6 @@ const selectors = {
 
 const linkListItemNameAndCopy = 'name-and-copy-stub'
 const linkListItemDetailsAndEdit = 'details-and-edit-stub'
-const ocLoaderStubSelector = 'oc-loader-stub'
 
 describe('FileLinks', () => {
   describe('links', () => {
@@ -91,71 +90,49 @@ describe('FileLinks', () => {
       expect(wrapper.find('oc-list-stub').exists()).toBeFalsy()
     })
   })
-  describe('when linksLoading is set to true', () => {
-    it('should show the oc loader', () => {
-      const store = createStore({ currentFileOutgoingSharesLoading: true })
-      const wrapper = getShallowWrapper(store)
-
-      expect(wrapper.find(ocLoaderStubSelector).exists()).toBeTruthy()
-      expect(wrapper.find(ocLoaderStubSelector).attributes().arialabel).toBe(
-        'Loading list of file links'
-      )
-    })
-  })
-  describe('when linksLoading is set to false', () => {
-    it('should not show the oc loader', () => {
+  describe('when canCreatePublicLinks is set to true', () => {
+    it('should show a button to add a link', () => {
       const store = createStore()
       const wrapper = getShallowWrapper(store)
 
-      expect(wrapper.find('oc-loader-stub').exists()).toBeFalsy()
+      expect(wrapper.find(selectors.linkAddButton).exists()).toBeTruthy()
     })
 
-    describe('when canCreatePublicLinks is set to true', () => {
-      it('should show a button to add a link', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(store)
+    describe('when the add-new-link button is clicked', () => {
+      let wrapper
+      const spyAddNewLink = jest.spyOn(FileLinks.methods, 'addNewLink')
 
-        expect(wrapper.find(selectors.linkAddButton).exists()).toBeTruthy()
+      beforeEach(() => {
+        const store = createStore({ links: [] })
+        wrapper = getMountedWrapper(store)
       })
 
-      describe('when the add-new-link button is clicked', () => {
-        let wrapper
-        const spyAddNewLink = jest.spyOn(FileLinks.methods, 'addNewLink')
+      it('should call addNewLink', async () => {
+        expect(spyAddNewLink).toHaveBeenCalledTimes(0)
 
-        beforeEach(() => {
-          const store = createStore({ links: [] })
-          wrapper = getMountedWrapper(store)
-        })
+        await wrapper.find(selectors.linkAddButton).trigger('click')
 
-        it('should call addNewLink', async () => {
-          expect(spyAddNewLink).toHaveBeenCalledTimes(0)
-
-          await wrapper.find(selectors.linkAddButton).trigger('click')
-
-          expect(spyAddNewLink).toHaveBeenCalledTimes(1)
-        })
-      })
-    })
-
-    describe('when canCreatePublicLinks is set to false', () => {
-      const store = createStore({
-        highlightedFile: {
-          path: '/lorem.txt',
-          type: 'file',
-          canShare: jest.fn(() => false),
-          isFolder: false,
-          isReceivedShare: jest.fn()
-        }
-      })
-
-      it('should show the "no reshare permissions" message', () => {
-        const wrapper = getShallowWrapper(store)
-
-        expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
+        expect(spyAddNewLink).toHaveBeenCalledTimes(1)
       })
     })
   })
+  describe('when canCreatePublicLinks is set to false', () => {
+    const store = createStore({
+      highlightedFile: {
+        path: '/lorem.txt',
+        type: 'file',
+        canShare: jest.fn(() => false),
+        isFolder: false,
+        isReceivedShare: jest.fn()
+      }
+    })
 
+    it('should show the "no reshare permissions" message', () => {
+      const wrapper = getShallowWrapper(store)
+
+      expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
+    })
+  })
   function createStore({
     links = defaultLinksList,
     highlightedFile = {

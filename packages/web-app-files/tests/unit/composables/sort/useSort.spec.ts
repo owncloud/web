@@ -1,7 +1,7 @@
 import { ref, readonly } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
-import { Resource } from '../../../../src/helpers/resource'
+import { Resource } from 'web-client/src/helpers/resource'
 
 describe('useSort', () => {
   it('should be valid', () => {

@@ -89,7 +89,10 @@ export const accentuatesTableRowTest = async <V extends Vue>(
             $_fileActions_triggerDefaultAction: noop
           }
         }
-      ]
+      ],
+      setup: () => ({
+        areResourcesLoading: false
+      })
     }
   )
 

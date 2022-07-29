@@ -11,17 +11,23 @@ const stubs = {
   translate: true,
   'oc-pagination': true,
   'oc-spinner': true,
-  'context-actions': true
+  'context-actions': true,
+  'no-content-message': true
 }
 
 const selectors = {
-  pendingTable: '#files-shared-with-me-pending-table',
-  pendingTableRow: '#files-shared-with-me-pending-table tbody > tr.oc-tbody-tr',
-  pendingExpand: '#files-shared-with-me-pending-show-all[data-test-expand="true"]',
-  pendingCollapse: '#files-shared-with-me-pending-show-all[data-test-expand="false"]',
-  sharesNoContentMessage: '#files-shared-with-me-shares-empty',
-  sharesTable: '#files-shared-with-me-shares-table',
-  sharesTableRow: '#files-shared-with-me-shares-table tbody > tr.oc-tbody-tr',
+  pendingTable: '#files-shared-with-me-pending-section .files-table',
+  pendingTableRow: '#files-shared-with-me-pending-section tbody > tr.oc-tbody-tr',
+  pendingExpand:
+    '#files-shared-with-me-pending-section #files-shared-with-me-show-all[data-test-expand="true"]',
+  pendingCollapse:
+    '#files-shared-with-me-pending-section #files-shared-with-me-show-all[data-test-expand="false"]',
+  acceptedNoContentMessage: '#files-shared-with-me-accepted-section .files-empty',
+  declinedNoContentMessage: '#files-shared-with-me-declined-section .files-empty',
+  acceptedTable: '#files-shared-with-me-accepted-section .files-table',
+  declinedTable: '#files-shared-with-me-declined-section .files-table',
+  acceptedTableRow: '#files-shared-with-me-accepted-section tbody > tr.oc-tbody-tr',
+  declinedTableRow: '#files-shared-with-me-declined-section tbody > tr.oc-tbody-tr',
   sharesToggleViewMode: '#files-shared-with-me-toggle-view-mode'
 }
 
@@ -36,8 +42,10 @@ describe('SharedWithMe view', () => {
     it('should not show other components', () => {
       const wrapper = getMountedWrapper({ loading: true })
       expect(wrapper.find(selectors.pendingTable).exists()).toBeFalsy()
-      expect(wrapper.find(selectors.sharesTable).exists()).toBeFalsy()
-      expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.acceptedTable).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.declinedTable).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.acceptedNoContentMessage).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.declinedNoContentMessage).exists()).toBeFalsy()
     })
   })
 
@@ -129,10 +137,10 @@ describe('SharedWithMe view', () => {
     describe('when there are no accepted shares to be displayed', () => {
       const wrapper = getMountedWrapper()
       it('should show a "no content" message', () => {
-        expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.acceptedNoContentMessage).exists()).toBeTruthy()
       })
       it('should not show the accepted shares list', () => {
-        expect(wrapper.find(selectors.sharesTable).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.acceptedTable).exists()).toBeFalsy()
       })
     })
 
@@ -147,15 +155,11 @@ describe('SharedWithMe view', () => {
         })
       })
       it('should not show a "no content" message', () => {
-        expect(wrapper.find(selectors.sharesNoContentMessage).exists()).toBeFalsy()
+        expect(wrapper.find(selectors.acceptedNoContentMessage).exists()).toBeFalsy()
       })
       it('should show the accepted shares list', () => {
-        expect(wrapper.find(selectors.sharesTable).exists()).toBeTruthy()
-        expect(wrapper.findAll(selectors.sharesTableRow).length).toBeGreaterThan(0)
-      })
-      it('should show a link to the declined shares', () => {
-        const link = wrapper.find(selectors.sharesToggleViewMode)
-        expect(link.attributes()['data-test-set-view-mode']).toBe(ShareStatus.declined.toString())
+        expect(wrapper.find(selectors.acceptedTable).exists()).toBeTruthy()
+        expect(wrapper.findAll(selectors.acceptedTableRow).length).toBeGreaterThan(0)
       })
     })
 
@@ -171,16 +175,12 @@ describe('SharedWithMe view', () => {
         viewMode: ShareStatus.declined
       })
       it('should not show a "no content" message', async () => {
-        const noContentMessage = await wrapper.find(selectors.sharesNoContentMessage)
+        const noContentMessage = await wrapper.find(selectors.declinedNoContentMessage)
         expect(noContentMessage.exists()).toBeFalsy()
       })
       it('should show the declined shares list', () => {
-        expect(wrapper.find(selectors.sharesTable).exists()).toBeTruthy()
-        expect(wrapper.findAll(selectors.sharesTableRow).length).toBeGreaterThan(0)
-      })
-      it('should show a link to the accepted shares', () => {
-        const link = wrapper.find(selectors.sharesToggleViewMode)
-        expect(link.attributes()['data-test-set-view-mode']).toBe(ShareStatus.accepted.toString())
+        expect(wrapper.find(selectors.declinedTable).exists()).toBeTruthy()
+        expect(wrapper.findAll(selectors.declinedTableRow).length).toBeGreaterThan(0)
       })
     })
   })
@@ -208,11 +208,16 @@ function mountOptions({
       $router: getRouter({ query })
     },
     setup: () => ({
+      areResourcesLoading: loading,
       loadResourcesTask: {
-        isRunning: loading,
         perform: jest.fn()
       },
-      handleSort: jest.fn()
+      pendingHandleSort: jest.fn(),
+      acceptedHandleSort: jest.fn(),
+      declinedHandleSort: jest.fn(),
+      pendingSortBy: '',
+      acceptedSortBy: '',
+      declinedSortBy: ''
     })
   }
 }

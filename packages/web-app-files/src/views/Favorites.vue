@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-bar />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
         <template #message>
@@ -11,7 +11,7 @@
       <resource-table
         v-else
         id="files-favorites-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-paths-displayed="true"
@@ -67,7 +67,7 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
+import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()

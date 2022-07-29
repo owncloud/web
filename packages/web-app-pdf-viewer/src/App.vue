@@ -1,21 +1,21 @@
 <template>
   <main>
+    <app-top-bar :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">
-      <app-top-bar :resource="resource" @close="closeApp" />
-      <object class="pdf-viewer oc-width-1-1" :data="blobUrl" type="application/pdf" />
+      <object class="pdf-viewer oc-width-1-1" :data="url" type="application/pdf" />
     </div>
   </main>
 </template>
-<script>
+<script lang="ts">
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { buildResource } from 'files/src/helpers/resources'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   name: 'PDFViewer',
   components: {
     ErrorScreen,
@@ -33,8 +33,8 @@ export default {
     loading: true,
     loadingError: false,
     filePath: '',
-    blobUrl: '',
-    resource: {}
+    url: '',
+    resource: null
   }),
   created() {
     this.loadPdf(this.currentFileContext)
@@ -46,10 +46,10 @@ export default {
     async loadPdf(fileContext) {
       try {
         this.loading = true
-        const response = await this.getFileContents(fileContext.path, { responseType: 'blob' })
-        this.blobUrl = URL.createObjectURL(response.body)
-        const fileInfo = await this.getFileInfo(fileContext.path, {})
-        this.resource = buildResource(fileInfo)
+        this.resource = await this.getFileResource(fileContext.path)
+        this.url = await this.getUrlForResource(this.resource, {
+          disposition: 'inline'
+        })
       } catch (e) {
         this.loadingError = true
         console.error('Error fetching pdf', e)
@@ -58,10 +58,10 @@ export default {
       }
     },
     unloadPdf() {
-      URL.revokeObjectURL(this.blobUrl)
+      this.revokeUrl(this.url)
     }
   }
-}
+})
 </script>
 <style scoped>
 .pdf-viewer {

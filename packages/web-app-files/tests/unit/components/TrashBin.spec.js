@@ -163,8 +163,8 @@ describe('Trashbin component', () => {
         $router
       },
       setup: () => ({
+        areResourcesLoading: loading,
         loadResourcesTask: {
-          isRunning: loading,
           perform: jest.fn()
         },
         paginatedResources: paginatedResources,

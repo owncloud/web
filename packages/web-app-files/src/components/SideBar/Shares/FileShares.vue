@@ -1,61 +1,58 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
-    <template v-else>
-      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
-      <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
-      <p
-        v-else
-        key="no-reshare-permissions-message"
-        data-testid="files-collaborators-no-reshare-permissions-message"
-        v-text="noResharePermsMessage"
-      />
-      <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-        <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+    <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
+    <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
+    <p
+      v-else
+      key="no-reshare-permissions-message"
+      data-testid="files-collaborators-no-reshare-permissions-message"
+      v-text="noResharePermsMessage"
+    />
+    <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
+      <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+    </div>
+    <template v-if="hasSharees">
+      <ul
+        id="files-collaborators-list"
+        class="oc-list oc-list-divider oc-overflow-hidden"
+        :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
+        :aria-label="$gettext('Share receivers')"
+      >
+        <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
+          <collaborator-list-item
+            :share="collaborator"
+            :modifiable="!collaborator.indirect"
+            :shared-parent-route="getSharedParentRoute(collaborator)"
+            @onDelete="$_ocCollaborators_deleteShare_trigger"
+          />
+        </li>
+      </ul>
+      <div v-if="showShareToggle" class="oc-flex oc-flex-center">
+        <oc-button
+          appearance="raw"
+          @click="toggleShareesListCollapsed"
+          v-text="collapseButtonTitle"
+        />
       </div>
-      <template v-if="hasSharees">
-        <ul
-          id="files-collaborators-list"
-          class="oc-list oc-list-divider oc-overflow-hidden"
-          :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
-          :aria-label="$gettext('Share receivers')"
-        >
-          <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
-            <collaborator-list-item
-              :share="collaborator"
-              :modifiable="!collaborator.indirect"
-              :shared-parent-route="getSharedParentRoute(collaborator)"
-              @onDelete="$_ocCollaborators_deleteShare_trigger"
-            />
-          </li>
-        </ul>
-        <div v-if="showShareToggle" class="oc-flex oc-flex-center">
-          <oc-button
-            appearance="raw"
-            @click="toggleShareesListCollapsed"
-            v-text="collapseButtonTitle"
-          />
-        </div>
-      </template>
-      <template v-if="showSpaceMembers">
-        <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
-        <ul
-          id="space-collaborators-list"
-          class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
-          :aria-label="spaceMemberLabel"
-        >
-          <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
-            <collaborator-list-item :share="collaborator" :modifiable="false" />
-          </li>
-        </ul>
-        <div v-if="showShareToggle" class="oc-flex oc-flex-center">
-          <oc-button
-            appearance="raw"
-            @click="toggleShareesListCollapsed"
-            v-text="collapseButtonTitle"
-          />
-        </div>
-      </template>
+    </template>
+    <template v-if="showSpaceMembers">
+      <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+      <ul
+        id="space-collaborators-list"
+        class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
+        :aria-label="spaceMemberLabel"
+      >
+        <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
+          <collaborator-list-item :share="collaborator" :modifiable="false" />
+        </li>
+      </ul>
+      <div v-if="showShareToggle" class="oc-flex oc-flex-center">
+        <oc-button
+          appearance="raw"
+          @click="toggleShareesListCollapsed"
+          v-text="collapseButtonTitle"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -66,7 +63,6 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { watch, computed, ref, unref } from '@vue/composition-api'
 import {
   useStore,
-  useDebouncedRef,
   useRouteParam,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
@@ -90,19 +86,6 @@ export default {
   },
   setup() {
     const store = useStore()
-    const currentFileOutgoingSharesLoading = computed(
-      () => store.getters['Files/currentFileOutgoingSharesLoading']
-    )
-    const incomingSharesLoading = computed(() => store.state.Files.incomingSharesLoading)
-    const sharesTreeLoading = computed(() => store.state.Files.sharesTreeLoading)
-    const sharesLoading = useDebouncedRef(true, 250)
-    watch([currentFileOutgoingSharesLoading, incomingSharesLoading, sharesTreeLoading], () => {
-      sharesLoading.value =
-        currentFileOutgoingSharesLoading.value ||
-        incomingSharesLoading.value ||
-        sharesTreeLoading.value
-    })
-
     const currentSpace = ref(null)
     const spaceMembers = ref([])
     const currentStorageId = useRouteParam('storageId')
@@ -149,7 +132,6 @@ export default {
       isCurrentSpaceTypeProject,
       loadSpaceMembersTask,
       sharesListCollapsed,
-      sharesLoading,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing()

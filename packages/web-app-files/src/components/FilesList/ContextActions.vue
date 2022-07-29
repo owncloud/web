@@ -26,7 +26,7 @@ import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 import { PropType } from '@vue/composition-api'
-import { Resource } from '../../helpers/resource'
+import { Resource } from 'web-client'
 
 export default {
   name: 'ContextActions',

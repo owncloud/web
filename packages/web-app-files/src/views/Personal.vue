@@ -11,7 +11,7 @@
         <create-and-upload />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
@@ -32,7 +32,7 @@
       <resource-table
         v-else
         id="files-personal-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -101,7 +101,8 @@ import ContextActions from '../components/FilesList/ContextActions.vue'
 import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent, unref, computed } from '@vue/composition-api'
-import { Resource, move } from '../helpers/resource'
+import { move } from '../helpers/resource'
+import { Resource } from 'web-client'
 import { useGraphClient } from 'web-client/src/composables'
 import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
@@ -199,7 +200,7 @@ export default defineComponent({
 
           return this.$router.replace({
             to,
-            params: { ...to.params, storageId },
+            params: { ...to.params, storageId, item: to.params.item || this.homeFolder },
             query: to.query
           })
         }
@@ -248,7 +249,11 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
-    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
+    ]),
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
@@ -269,8 +274,8 @@ export default defineComponent({
         this.$route.name
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },

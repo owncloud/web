@@ -101,6 +101,7 @@ function getWrapper({ propsData = {} } = {}) {
     propsData: {
       users: [],
       selectedUsers: [],
+      headerPosition: 0,
       ...propsData
     },
     stubs: {

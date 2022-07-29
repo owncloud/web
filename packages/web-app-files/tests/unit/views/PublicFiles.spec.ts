@@ -216,8 +216,8 @@ describe('PublicFiles view', () => {
         breadcrumbs: () => []
       },
       setup: () => ({
+        areResourcesLoading: loading,
         loadResourcesTask: {
-          isRunning: loading,
           perform: jest.fn()
         },
         paginatedResources: paginatedResources,

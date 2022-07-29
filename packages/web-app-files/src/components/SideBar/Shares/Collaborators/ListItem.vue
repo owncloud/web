@@ -64,7 +64,11 @@
               />
             </div>
             <div v-else-if="share.role">
-              <span class="oc-mr-xs" v-text="share.role.label" />
+              <span
+                v-oc-tooltip="$gettext(share.role.description(false))"
+                class="oc-mr-xs"
+                v-text="$gettext(share.role.label)"
+              />
             </div>
           </div>
           <div class="oc-flex oc-flex-between oc-flex-middle oc-pl-s">

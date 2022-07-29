@@ -1,4 +1,5 @@
-import { Resource, extractNameWithoutExtension } from './index'
+import { Resource } from 'web-client'
+import { extractNameWithoutExtension } from './index'
 import { join } from 'path'
 import { buildResource } from '../resources'
 import { DavProperties } from 'web-pkg/src/constants'

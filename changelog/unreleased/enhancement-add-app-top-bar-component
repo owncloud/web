@@ -4,3 +4,4 @@ We've added a app top bar component for consistency,
 which will be used by the apps: preview, text-editor and pdf-viewer.
 
 https://github.com/owncloud/web/pull/7217
+https://github.com/owncloud/web/pull/7362

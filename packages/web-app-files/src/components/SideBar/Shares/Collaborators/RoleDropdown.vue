@@ -145,7 +145,7 @@ export default {
         return this.$gettext('Invite with custom permissions')
       } else {
         return this.$gettextInterpolate(this.$gettext('Invite as %{ name }'), {
-          name: this.selectedRole.inlineLabel || ''
+          name: this.$gettext(this.selectedRole.inlineLabel) || ''
         })
       }
     },

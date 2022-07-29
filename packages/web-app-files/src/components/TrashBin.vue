@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <no-content-message
         v-if="isEmpty"
@@ -17,7 +17,7 @@
       <resource-table
         v-else
         id="files-trashbin-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :fields-displayed="['name', 'ddate']"
@@ -64,7 +64,7 @@ import ContextActions from './FilesList/ContextActions.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { bus } from 'web-pkg/src/instance'
 import { defineComponent } from '@vue/composition-api'
-import { Resource } from '../helpers/resource'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'TrashBin',
@@ -97,7 +97,7 @@ export default defineComponent({
 
   computed: {
     ...mapState('Files', ['files']),
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'totalFilesCount']),
+    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
     ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {

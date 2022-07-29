@@ -14,7 +14,7 @@
         <p v-text="spacesHint" />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <no-content-message
         v-if="!spaces.length"
@@ -145,7 +145,7 @@ import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
-import { loadPreview } from '../../helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useGraphClient } from 'web-client/src/composables'
@@ -178,11 +178,15 @@ export default defineComponent({
       loadedSpaces = loadedSpaces.map(buildSpace)
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
     })
+    const areResourcesLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
+    })
 
     return {
       spaces,
       graphClient,
       loadResourcesTask,
+      areResourcesLoading,
       accessToken
     }
   },

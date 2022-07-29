@@ -55,6 +55,7 @@ exports[`SpaceMembers if currentUser is manager does not allow role edit of the 
 
 exports[`SpaceMembers renders loading spinner while loading 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-  <oc-loader-stub arialabel="Loading members"></oc-loader-stub>
+  <!---->
+  <!---->
 </div>
 `;

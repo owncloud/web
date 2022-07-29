@@ -12,7 +12,7 @@ export const loadPreview = async (
   }: {
     resource: any
     isPublic: boolean
-    dimensions: [number, number]
+    dimensions?: [number, number]
     server?: string
     userId?: string
     token?: string

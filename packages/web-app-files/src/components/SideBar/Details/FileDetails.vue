@@ -145,7 +145,7 @@ import Mixins from '../../../mixins'
 import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
-import { loadPreview } from '../../../helpers/resource'
+import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
@@ -419,12 +419,6 @@ export default defineComponent({
         currentPath = path.dirname(currentPath)
       }
       return null
-    },
-    expandPeoplesPanel() {
-      this.setSidebarPanel('sharing-item')
-    },
-    expandLinksPanel() {
-      this.setSidebarPanel('links-item')
     },
     expandVersionsPanel() {
       this.setSidebarPanel('versions-item')

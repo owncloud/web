@@ -1,0 +1,6 @@
+Bugfix: Missing quick actions in spaces file list
+
+We've fixed a bug where the quick actions 'Add people' and 'Copy quicklink' were missing in the spaces file list.
+
+https://github.com/owncloud/web/pull/7349
+https://github.com/owncloud/web/issues/7339

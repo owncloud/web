@@ -11,7 +11,7 @@
         <create-and-upload />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
@@ -32,7 +32,7 @@
       <resource-table
         v-else
         id="files-public-files-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -89,7 +89,8 @@ import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 import { defineComponent } from '@vue/composition-api'
-import { Resource, move } from '../helpers/resource'
+import { move } from '../helpers/resource'
+import { Resource } from 'web-client'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 
@@ -186,8 +187,8 @@ export default defineComponent({
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
-      'REMOVE_FILE',
-      'REMOVE_FILE_FROM_SEARCHED',
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
 
@@ -211,8 +212,8 @@ export default defineComponent({
         this.publicLinkPassword
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },

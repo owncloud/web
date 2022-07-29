@@ -7,6 +7,21 @@
     @keydown.right="next"
     @keydown.esc="closeApp"
   >
+    <h1 class="oc-invisible-sr" v-text="pageTitle" />
+    <app-top-bar :resource="activeFilteredFile" @close="closeApp">
+      <template #right>
+        <oc-button
+          v-if="!isFileContentError"
+          class="preview-download"
+          size="small"
+          :aria-label="$gettext('Download currently viewed file')"
+          @click="triggerActiveFileDownload"
+        >
+          <oc-icon size="small" name="file-download" />
+        </oc-button>
+      </template>
+    </app-top-bar>
+
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
@@ -19,19 +34,6 @@
       :accessible-label="$gettext('Failed to load media file')"
     />
     <template v-else>
-      <h1 class="oc-invisible-sr" v-text="pageTitle" />
-      <app-top-bar :resource="activeFilteredFile" @close="closeApp">
-        <template #right>
-          <oc-button
-            class="preview-download"
-            size="small"
-            :aria-label="$gettext('Download currently viewed file')"
-            @click="triggerActiveFileDownload"
-          >
-            <oc-icon size="small" name="file-download" />
-          </oc-button>
-        </template>
-      </app-top-bar>
       <div
         v-show="activeMediaFileCached"
         class="
@@ -114,6 +116,8 @@ import {
 } from 'web-pkg/src/composables'
 import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import { loadPreview } from 'web-pkg/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'Preview',
@@ -143,7 +147,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['capabilities']),
+    ...mapGetters(['capabilities', 'user']),
 
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
@@ -195,20 +199,6 @@ export default defineComponent({
           return 3840
       }
     },
-    thumbUrl() {
-      const query = {
-        x: this.thumbDimensions,
-        y: this.thumbDimensions,
-        // strip double quotes from etag
-        // we have no etag, e.g. on shared with others page
-        c: this.activeFilteredFile.etag?.slice(1, -1),
-        scalingup: 0,
-        preview: 1,
-        a: 1
-      }
-
-      return this.getUrlForResource(this.activeFilteredFile, query)
-    },
     rawMediaUrl() {
       return this.getUrlForResource(this.activeFilteredFile)
     },
@@ -250,7 +240,7 @@ export default defineComponent({
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
     this.cachedFiles.forEach((medium) => {
-      window.URL.revokeObjectURL(medium.url)
+      this.revokeUrl(medium.url)
     })
   },
 
@@ -259,9 +249,12 @@ export default defineComponent({
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (this.filteredFiles[i].webDavPath === filePath) {
           this.activeIndex = i
-          break
+          return
         }
       }
+
+      this.isFileContentLoading = false
+      this.isFileContentError = true
     },
 
     // react to PopStateEvent ()
@@ -291,24 +284,24 @@ export default defineComponent({
         return
       }
 
-      this.loadActiveFileIntoCache(this.isActiveFileTypeImage)
+      this.loadActiveFileIntoCache()
     },
 
-    async loadActiveFileIntoCache(loadAsPreview) {
-      const url = loadAsPreview ? this.thumbUrl : this.rawMediaUrl
+    async loadActiveFileIntoCache() {
       try {
-        // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
-        // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
+        const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
-        if (loadAsPreview || !this.isUrlSigningEnabled || !this.$route.meta.auth) {
-          // TODO: get rid of `mediaSource`, use preview loading mechanism from files app instead (needs to be extracted to web-pkg first)
-          const headers = new Headers()
-          if (!this.isPublicLinkContext) {
-            headers.append('Authorization', 'Bearer ' + this.accessToken)
-          }
-          mediaUrl = await this.mediaSource(url, 'url', headers)
+        if (loadRawFile) {
+          mediaUrl = await this.getUrlForResource(this.activeFilteredFile)
         } else {
-          mediaUrl = await this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+          mediaUrl = await loadPreview({
+            resource: this.activeFilteredFile,
+            isPublic: this.isPublicLinkContext,
+            server: configurationManager.serverUrl,
+            userId: this.user.id,
+            token: this.accessToken,
+            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+          })
         }
 
         this.cachedFiles.push({

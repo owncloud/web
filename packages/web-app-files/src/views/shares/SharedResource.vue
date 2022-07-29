@@ -11,7 +11,7 @@
         <create-and-upload />
       </template>
     </app-bar>
-    <app-loading-spinner v-if="loadResourcesTask.isRunning" />
+    <app-loading-spinner v-if="areResourcesLoading" />
     <template v-else>
       <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
       <no-content-message
@@ -32,7 +32,7 @@
       <resource-table
         v-else
         id="files-shared-resource-table"
-        v-model="selectedResources"
+        v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
         :are-thumbnails-displayed="displayThumbnails"
@@ -104,7 +104,8 @@ import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent, unref } from '@vue/composition-api'
 import { fetchResources } from '../../services/folder'
-import { Resource, move } from '../../helpers/resource'
+import { move } from '../../helpers/resource'
+import { Resource } from 'web-client'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { useRouteParam, useRouteQuery } from 'web-pkg/src/composables'
 import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
@@ -216,7 +217,11 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadPreview']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['REMOVE_FILE', 'REMOVE_FILE_FROM_SEARCHED', 'REMOVE_FILE_SELECTION']),
+    ...mapMutations('Files', [
+      'REMOVE_FILES',
+      'REMOVE_FILES_FROM_SEARCHED',
+      'REMOVE_FILE_SELECTION'
+    ]),
 
     fetchResources,
 
@@ -239,8 +244,8 @@ export default defineComponent({
         this.$route.name
       )
       for (const resource of movedResources) {
-        this.REMOVE_FILE(resource)
-        this.REMOVE_FILE_FROM_SEARCHED(resource)
+        this.REMOVE_FILES([resource])
+        this.REMOVE_FILES_FROM_SEARCHED([resource])
         this.REMOVE_FILE_SELECTION(resource)
       }
     },

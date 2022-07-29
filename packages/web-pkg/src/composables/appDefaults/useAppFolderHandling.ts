@@ -7,7 +7,7 @@ import { MaybeRef } from '../../utils'
 
 import { DavProperties } from '../../constants'
 import { buildResource } from '../../../../web-app-files/src/helpers/resources'
-import { Resource } from '../../../../web-app-files/src/helpers/resource'
+import { Resource } from 'web-client'
 
 import { FileContext } from './types'
 import { authService } from 'web-runtime/src/services/auth'

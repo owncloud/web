@@ -1,4 +1,5 @@
-import { privatePreviewBlob } from '../../../../src/helpers/resource'
+import { privatePreviewBlob } from 'web-pkg/src/helpers/preview'
+
 import mockAxios from 'jest-mock-axios'
 import merge from 'lodash-es/merge'
 

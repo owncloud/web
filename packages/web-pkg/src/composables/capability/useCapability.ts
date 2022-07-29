@@ -24,6 +24,11 @@ const createCapabilityComposable = <T>(
   return (store?: Store<any>) => useCapability<T>(store || useStore(), name, defaultValue)
 }
 
+export const useCapabilityCoreSupportUrlSigning = createCapabilityComposable(
+  'core.support-url-signing',
+  false
+)
+
 export const useCapabilityFilesSharingResharing = createCapabilityComposable(
   'files_sharing.resharing',
   true

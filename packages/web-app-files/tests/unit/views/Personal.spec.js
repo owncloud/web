@@ -152,8 +152,8 @@ function createWrapper(selectedFiles = [resourceForestJpg]) {
     setup: () => ({
       ...Personal.setup(),
       paginatedResources: [...resources],
+      areResourcesLoading: false,
       loadResourcesTask: {
-        isRunning: false,
         perform: jest.fn()
       },
       handleSort: jest.fn()

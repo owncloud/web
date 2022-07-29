@@ -24,7 +24,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
   <tbody>
     <tr tabindex="-1" data-item-id="38" draggable="false" class="oc-tbody-tr oc-tbody-tr-38">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
-        <oc-checkbox-stub id="resource-table-select-38" value="" option="[object Object]" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub id="resource-table-select-38" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
@@ -47,7 +47,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
     </tr>
     <tr tabindex="-1" data-item-id="64" draggable="false" class="oc-tbody-tr oc-tbody-tr-64">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
-        <oc-checkbox-stub id="resource-table-select-64" value="" option="[object Object]" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub id="resource-table-select-64" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
@@ -70,7 +70,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
     </tr>
     <tr tabindex="-1" data-item-id="39" draggable="false" class="oc-tbody-tr oc-tbody-tr-39">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
-        <oc-checkbox-stub id="resource-table-select-39" value="" option="[object Object]" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub id="resource-table-select-39" label="Select folder" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
@@ -93,7 +93,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
     </tr>
     <tr tabindex="-1" data-item-id="30" draggable="false" class="oc-tbody-tr oc-tbody-tr-30">
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-table-data-cell oc-table-data-cell-select oc-pl-m ">
-        <oc-checkbox-stub id="resource-table-select-30" value="" option="[object Object]" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
+        <oc-checkbox-stub id="resource-table-select-30" label="Select file" hidelabel="true" size="large"></oc-checkbox-stub>
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
