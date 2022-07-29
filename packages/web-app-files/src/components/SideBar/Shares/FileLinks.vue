@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-      <span v-text="linksHeading" />
-      <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
-    </h3>
+    <div class="oc-flex">
+      <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
+      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
+    </div>
     <div v-if="canCreatePublicLinks" class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link

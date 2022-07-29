@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-      <span v-translate>Members</span>
-      <oc-contextual-helper v-if="helpersEnabled" v-bind="spaceAddMemberHelp" />
-    </h3>
+    <div class="oc-flex">
+      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Members</h3>
+      <oc-contextual-helper class="oc-pl-xs" v-if="helpersEnabled" v-bind="spaceAddMemberHelp" />
+    </div>
     <invite-collaborator-form
       v-if="currentUserCanShare"
       key="new-collaborator"
