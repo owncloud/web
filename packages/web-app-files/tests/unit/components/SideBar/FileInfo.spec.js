@@ -14,13 +14,6 @@ const simpleOwnFile = {
   size: '740'
 }
 
-const simpleDeletedFile = {
-  type: 'file',
-  ownerId: 'bob',
-  ownerDisplayName: 'Bob',
-  ddate: 'Wed, 21 Oct 2015 09:29:00 GMT'
-}
-
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(GetTextPlugin, {
@@ -29,29 +22,16 @@ localVue.use(GetTextPlugin, {
 })
 
 const selectors = {
-  name: '[data-testid="files-info-name"]',
-  mdate: '[data-testid="files-info-mdate"]'
-}
-
-const formDateFromRFC = jest.fn()
-const formRelativeDateFromRFC = jest.fn()
-const resetDateMocks = () => {
-  formDateFromRFC.mockReset()
-  formRelativeDateFromRFC.mockReset()
-  formDateFromRFC.mockImplementation(() => 'ABSOLUTE_TIME')
-  formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_TIME')
+  name: '[data-testid="files-info-name"]'
 }
 
 describe('FileInfo', () => {
   it('shows file info', () => {
-    resetDateMocks()
-
     const tooltipStub = jest.fn()
     const wrapper = createWrapper(simpleOwnFile, tooltipStub)
     expect(wrapper.find(selectors.name).exists()).toBeTruthy()
   })
 })
-
 
 function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled = false) {
   return shallowMount(FileInfo, {
@@ -86,14 +66,6 @@ function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled
     directives: {
       OcTooltip: tooltipStub
     },
-    mixins: [
-      {
-        methods: {
-          formDateFromRFC,
-          formRelativeDateFromRFC
-        }
-      }
-    ],
     mocks: {
       $route: {
         path: '/files'
