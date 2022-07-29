@@ -572,7 +572,11 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.link-name-container {
+#oc-files-file-link,
+#oc-files-sharing-sidebar {
+  border-radius: 5px;
+}
+.files-l .link-name-container {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
 }

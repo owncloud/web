@@ -222,7 +222,6 @@ export default defineComponent({
 .sidebar-panel {
   &__file_info,
   &__space_info {
-    border-bottom: 1px solid var(--oc-color-border);
     background-color: var(--oc-color-background-default);
     padding: 0 10px;
   }

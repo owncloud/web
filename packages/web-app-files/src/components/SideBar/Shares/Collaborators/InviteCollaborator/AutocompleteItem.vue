@@ -7,7 +7,7 @@
     <avatar-image
       v-if="isUser || isSpace"
       class="oc-mr-s"
-      :width="48"
+      :width="36"
       :userid="item.value.shareWith"
       :user-name="item.label"
     />
@@ -16,7 +16,7 @@
       key="avatar-guest"
       class="oc-mr-s files-recipient-suggestion-avatar"
       name="global"
-      size="xlarge"
+      size="large"
       :accessible-label="$gettext('Guest')"
     >
     </oc-icon>
@@ -25,7 +25,7 @@
       key="avatar-group"
       class="oc-mr-s files-recipient-suggestion-avatar"
       name="group"
-      size="xlarge"
+      size="large"
       :accessible-label="$gettext('Group')"
     />
     <oc-icon
@@ -33,7 +33,7 @@
       key="avatar-generic-person"
       class="oc-mr-s files-recipient-suggestion-avatar"
       name="person"
-      size="xlarge"
+      size="large"
       :accessible-label="$gettext('User')"
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">

@@ -1,9 +1,14 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
+    <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+      <span v-translate>Members</span>
+      <oc-contextual-helper v-if="helpersEnabled" v-bind="spaceAddMemberHelp" />
+    </h3>
     <invite-collaborator-form
       v-if="currentUserCanShare"
       key="new-collaborator"
       :save-button-label="$gettext('Add')"
+      :invite-label="$gettext('Add members')"
       class="oc-my-s"
     />
     <template v-if="hasCollaborators">
@@ -32,6 +37,7 @@ import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
+import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -46,7 +52,15 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapGetters(['configuration']),
     ...mapState(['user']),
+
+    helpersEnabled() {
+      return this.configuration?.options?.contextHelpers
+    },
+    spaceAddMemberHelp() {
+      return shareSpaceAddMemberHelp
+    },
     space() {
       return this.displayedItem.value
     },

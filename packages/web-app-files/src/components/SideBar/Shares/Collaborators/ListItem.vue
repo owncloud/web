@@ -10,18 +10,18 @@
         v-if="isUser || isSpace"
         :userid="share.collaborator.name"
         :user-name="share.collaborator.displayName"
-        :width="48"
+        :width="36"
         class="files-collaborators-collaborator-indicator"
       />
       <oc-avatar-item
         v-else
-        :width="48"
+        :width="36"
         icon-size="medium"
         :icon="shareTypeIcon"
         :name="shareTypeKey"
         class="files-collaborators-collaborator-indicator"
       />
-      <div class="oc-text-truncate oc-width-1-1">
+      <div class="oc-text-truncate oc-width-1-1 files-collaborators-collaborator-details">
         <div class="oc-flex oc-flex-middle">
           <span v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate oc-m-rm">
             <span
@@ -340,7 +340,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .sharee-avatar {
-  min-width: 48px;
+  min-width: 36px;
 }
 
 .share-access-details-drop {
