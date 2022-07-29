@@ -73,13 +73,6 @@ export default {
   computed: {
     user() {
       return this.users.length === 1 ? this.users[0] : null
-    },
-
-    originalObjectUser() {
-      return { ...this.user }
-    },
-    compareObjectUser() {
-      return { ...this.editUser }
     }
   },
   watch: {
