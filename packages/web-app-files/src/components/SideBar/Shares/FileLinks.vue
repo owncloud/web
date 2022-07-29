@@ -576,9 +576,10 @@ export default defineComponent({
 #oc-files-sharing-sidebar {
   border-radius: 5px;
 }
-.files-l .link-name-container {
+.link-name-container {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
+  border-radius: 5px;
 }
 .link-separator {
   background: var(--oc-color-input-border);

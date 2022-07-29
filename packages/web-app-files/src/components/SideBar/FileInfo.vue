@@ -21,7 +21,7 @@
 <script>
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import { isLocationSpacesActive } from '../../router'
 import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { useActiveLocation } from '../../composables'
