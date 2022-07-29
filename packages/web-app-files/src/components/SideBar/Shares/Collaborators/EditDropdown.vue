@@ -27,7 +27,7 @@
                 appearance="raw"
                 @click="togglePopover"
               >
-                <oc-icon name="calendar" fill-type="line" size="medium" variation="passive" />
+                <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
                 <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
                 <span v-else v-text="$gettext('Set expiration date')" />
               </oc-button>

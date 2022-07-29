@@ -12,9 +12,11 @@
       </oc-button>
       <oc-drop
         ref="editPublicLinkRoleDropdown"
+        class="edit-public-link-role-dropdown"
         :drop-id="`edit-public-link-role-dropdown`"
         :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
         padding-size="small"
+        offset="0"
         mode="click"
       >
         <oc-list class="roleDropdownList">
@@ -45,20 +47,22 @@
                 })
               "
             >
-              <span>
-                <oc-icon :name="roleOption.icon" />
+              <span class="oc-flex oc-flex-middle">
+                <oc-icon :name="roleOption.icon" class="oc-pl-s oc-pr-m" />
+                <span>
+                  <span
+                    class="oc-text-bold oc-display-block oc-width-1-1"
+                    v-text="$gettext(roleOption.label)"
+                  />
+                  <span class="oc-text-small">{{ $gettext(roleOption.description()) }}</span>
+                </span>
               </span>
-              <span>
-                <span
-                  class="oc-text-bold oc-display-block oc-width-1-1"
-                  v-text="$gettext(roleOption.label)"
+              <span class="oc-flex">
+                <oc-icon
+                  v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
+                  name="check"
                 />
-                <span class="oc-text-small">{{ $gettext(roleOption.description()) }}</span>
               </span>
-              <oc-icon
-                v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
-                name="check"
-              />
             </oc-button>
           </li>
         </oc-list>
@@ -96,7 +100,7 @@
         class="oc-files-public-link-expires"
         :data-testid="`files-link-id-${link.id}-expiration-date`"
         :aria-label="expirationDateTooltip"
-        name="calendar"
+        name="calendar-event"
         fill-type="line"
       />
       <div v-if="isModifiable">
@@ -250,7 +254,7 @@ export default {
           id: 'edit-expiration',
           title: this.$gettext('Edit expiration date'),
           method: this.updateLink,
-          icon: 'calendar',
+          icon: 'calendar-event',
           showDatepicker: true
         })
         if (!this.expirationDate.enforced) {
@@ -272,7 +276,7 @@ export default {
           id: 'add-expiration',
           title: this.$gettext('Add expiration date'),
           method: this.updateLink,
-          icon: 'calendar',
+          icon: 'calendar-event',
           showDatepicker: true
         })
       }
@@ -289,7 +293,7 @@ export default {
           result.push({
             id: 'remove-password',
             title: this.$gettext('Remove password'),
-            icon: 'lock-password',
+            icon: 'lock-unlock',
             method: () =>
               this.updateLink({
                 link: {
@@ -472,6 +476,14 @@ export default {
   justify-content: flex-end;
 }
 
+.edit-public-link-role-dropdown {
+  width: 400px;
+}
+
+.roleDropdownList span {
+  line-height: 1.3;
+}
+
 .roleDropdownList li {
   margin: var(--oc-space-xsmall) 0;
 
@@ -479,7 +491,6 @@ export default {
     text-align: left;
     width: 100%;
     gap: var(--oc-space-medium);
-    justify-content: flex-start;
 
     &:hover,
     &:focus {

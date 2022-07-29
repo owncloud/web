@@ -21,6 +21,8 @@
       :toggle="'#' + roleButtonId"
       mode="click"
       padding-size="small"
+      class="files-recipient-role-drop"
+      offset="0"
       close-on-click
     >
       <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
@@ -38,11 +40,13 @@
             :variation="isSelectedRole(role) ? 'inverse' : 'passive'"
             @click="selectRole(role)"
           >
-            <span>
-              <oc-icon :name="role.icon" />
+            <span class="oc-flex oc-flex-middle">
+              <oc-icon :name="role.icon" class="oc-pl-s oc-pr-m" />
+              <role-item :role="role" :allow-share-permission="allowSharePermission" />
             </span>
-            <role-item :role="role" :allow-share-permission="allowSharePermission" />
-            <oc-icon v-if="isSelectedRole(role)" name="check" />
+            <span class="oc-flex">
+              <oc-icon v-if="isSelectedRole(role)" name="check" />
+            </span>
           </oc-button>
         </li>
       </oc-list>
@@ -69,6 +73,7 @@
             :id="`files-collaborators-permission-${permission.key}`"
             :key="`files-collaborators-permission-checkbox-${permission.key}`"
             v-model="customPermissions"
+            size="large"
             :data-testid="`files-collaborators-permission-${permission.key}`"
             :label="$gettext(permission.label)"
             :option="permission"
@@ -83,11 +88,15 @@
           oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
         "
       >
-        <oc-button size="small" @click="cancelCustomPermissions" v-text="$gettext('Cancel')" />
         <oc-button
+          size="small"
+          @click="cancelCustomPermissions"
+          v-text="$gettext('Cancel')"
+        /><oc-button
           size="small"
           variation="primary"
           appearance="filled"
+          class="oc-ml-s"
           @click="confirmCustomPermissions"
           v-text="$gettext('Apply')"
         />
@@ -339,6 +348,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.files-recipient-role-drop {
+  width: 400px;
+}
 .files-recipient {
   &-role-drop {
     &-list {
@@ -359,7 +371,6 @@ export default {
     &-btn {
       width: 100%;
       gap: var(--oc-space-medium);
-      justify-content: flex-start;
 
       &:hover,
       &:focus {

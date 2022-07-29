@@ -168,7 +168,7 @@ export const peopleRoleCustomFile = new CustomShareRole(
   false,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'file-list',
+  'settings-3',
   [SharePermissions.read, SharePermissions.update, SharePermissions.share]
 )
 export const peopleRoleCustomFolder = new CustomShareRole(
@@ -176,7 +176,7 @@ export const peopleRoleCustomFolder = new CustomShareRole(
   true,
   $gettext('Custom permissions'),
   $gettext('custom permissions'),
-  'file-list',
+  'settings-3',
   [
     SharePermissions.read,
     SharePermissions.update,
