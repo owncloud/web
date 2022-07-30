@@ -68,7 +68,7 @@
       </oc-drop>
     </template>
     <template v-else>
-      <span v-oc-tooltip="newButtonAriaLabel">
+      <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-folder-btn"
           appearance="filled"
