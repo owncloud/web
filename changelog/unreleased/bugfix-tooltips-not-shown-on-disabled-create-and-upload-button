@@ -1,0 +1,7 @@
+Bugfix: Tooltips not shown on disabled create and upload button
+
+We've fixed a bug where tooltips that contain important information for example quota exceeded message weren't
+shown on hovering over the create or upload button.
+
+https://github.com/owncloud/web/pull/7376
+https://github.com/owncloud/web/issues/5937
