@@ -79,8 +79,7 @@ export default defineComponent({
       this.dragareaEnabled = false
     },
     onDragOver(event) {
-      const hasFileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      this.dragareaEnabled = hasFileInEvent
+      this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
     },
     focusSideBar(component, event) {
       this.focus({
