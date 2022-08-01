@@ -89,7 +89,7 @@ export default {
           this.showMessage({
             title: this.$ngettext(
               'The selected share was declined successfully',
-              'The selected shares was declined successfully',
+              'The selected shares were declined successfully',
               resources.length
             )
           })
