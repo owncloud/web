@@ -55,7 +55,7 @@ describe('Users view', () => {
       await wrapper.vm.editUser(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(busStub).toHaveBeenCalledWith('app.user-management.entity.saved')
+      expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
       expect(setStub).toHaveBeenCalled()
     })
 
@@ -102,7 +102,7 @@ describe('Users view', () => {
       await wrapper.vm.editUserGroupAssignments(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(busStub).toHaveBeenCalledWith('app.user-management.entity.saved')
+      expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
       expect(setStub).toHaveBeenCalled()
     })
 

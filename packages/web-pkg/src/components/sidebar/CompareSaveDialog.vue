@@ -65,11 +65,11 @@ export default {
     }
   },
   mounted() {
-    const savedEventToken = bus.subscribe('app.user-management.entity.saved', () => {
+    const savedEventToken = bus.subscribe('sidebar.entity.saved', () => {
       this.saved = true
     })
 
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.user-management.entity.saved', savedEventToken))
+    this.$on('beforeDestroy', () => bus.unsubscribe('sidebar.entity.saved', savedEventToken))
   }
 }
 </script>
