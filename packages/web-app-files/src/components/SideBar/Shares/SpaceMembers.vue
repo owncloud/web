@@ -92,10 +92,10 @@ export default defineComponent({
     $_ocCollaborators_deleteShare_trigger(share) {
       const modal = {
         variation: 'danger',
+        icon: 'alarm-warning',
         title: this.$gettext('Remove share'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
-        icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to remove this share?'),
         hasInput: false,
         onCancel: this.hideModal,
