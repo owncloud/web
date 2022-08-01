@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
+* Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
@@ -22,10 +23,12 @@ Summary
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
+* Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
+* Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
@@ -76,6 +79,14 @@ Details
    https://github.com/owncloud/web/issues/7187
    https://github.com/owncloud/web/pull/7230
    https://github.com/owncloud/web/pull/7314
+
+* Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+
+   We've fixed a bug where declining an accepted share in the dropdown next to the breadcrumb was
+   not possible.
+
+   https://github.com/owncloud/web/issues/6899
+   https://github.com/owncloud/web/pull/7379
 
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
@@ -172,6 +183,14 @@ Details
    https://github.com/owncloud/web/issues/3071
    https://github.com/owncloud/web/pull/7293
 
+* Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+
+   We've fixed a bug where opening a file of a shared space resource for example in the pdf viewer app
+   wasn't possible.
+
+   https://github.com/owncloud/web/issues/6899
+   https://github.com/owncloud/web/pull/7379
+
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 
    Due to a bug in how we handle spaces as resources internally we loaded personal shares when
@@ -208,6 +227,13 @@ Details
 
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
+
+* Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+
+   We've fixed a bug where renaming a file or a folder of a shared space wasn't possible.
+
+   https://github.com/owncloud/web/issues/6899
+   https://github.com/owncloud/web/pull/7379
 
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 
@@ -498,6 +524,7 @@ Details
 
    https://github.com/owncloud/web/issues/7351
    https://github.com/owncloud/web/pull/7375
+   https://github.com/owncloud/web/pull/7377
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
