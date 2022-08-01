@@ -55,6 +55,7 @@ Summary
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
 Details
@@ -489,6 +490,14 @@ Details
 
    https://github.com/owncloud/web/pull/7355
    https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.8
+
+* Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
+
+   We've replaced the pop up message when the user gets saved by a message which will be shown next to
+   the save button.
+
+   https://github.com/owncloud/web/issues/7351
+   https://github.com/owncloud/web/pull/7375
 
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
