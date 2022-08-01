@@ -1,24 +1,22 @@
 <template>
-  <div class="compare-save-dialog oc-p-s oc-width-1-1">
-    <div class="oc-flex oc-flex-between oc-flex-middle oc-width-1-1">
-      <span v-if="saved" class="oc-flex oc-flex-middle">
-        <oc-icon variation="success" name="checkbox-circle" />
-        <span v-translate class="changes-saved oc-ml-s">Changes saved</span>
-      </span>
-      <span v-else>{{ unsavedChangesText }}</span>
-      <div>
-        <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
-          <translate>Revert</translate>
-        </oc-button>
-        <oc-button
-          appearance="filled"
-          variation="primary"
-          :disabled="!unsavedChanges || confirmButtonDisabled"
-          @click="$emit('confirm')"
-        >
-          <translate>Save</translate>
-        </oc-button>
-      </div>
+  <div class="compare-save-dialog oc-p-s oc-width-1-1 oc-flex oc-flex-between oc-flex-middle">
+    <p v-if="saved" class="oc-flex oc-flex-middle">
+      <oc-icon variation="success" name="checkbox-circle" />
+      <span v-translate class="changes-saved oc-ml-s">Changes saved</span>
+    </p>
+    <p v-else>{{ unsavedChangesText }}</p>
+    <div>
+      <oc-button :disabled="!unsavedChanges" @click="$emit('revert')">
+        <translate>Revert</translate>
+      </oc-button>
+      <oc-button
+        appearance="filled"
+        variation="primary"
+        :disabled="!unsavedChanges || confirmButtonDisabled"
+        @click="$emit('confirm')"
+      >
+        <translate>Save</translate>
+      </oc-button>
     </div>
   </div>
 </template>
@@ -78,6 +76,7 @@ export default {
 <style lang="scss">
 .compare-save-dialog {
   background: var(--oc-color-background-highlight);
+  flex-flow: row wrap;
 }
 .changes-saved {
   color: var(--oc-color-swatch-success-default);
