@@ -348,11 +348,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.files-recipient-role-drop {
-  width: 400px;
-}
 .files-recipient {
   &-role-drop {
+    width: 400px;
+
     &-list {
       &:hover .files-recipient-role-drop-btn.selected:not(:hover),
       &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
