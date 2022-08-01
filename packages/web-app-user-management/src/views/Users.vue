@@ -484,7 +484,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        bus.publish('app.user-management.entity.saved')
+        bus.publish('sidebar.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -523,7 +523,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        bus.publish('app.user-management.entity.saved')
+        bus.publish('sidebar.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({

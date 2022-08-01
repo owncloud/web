@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import CompareSaveDialog from '../../CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
 
 export default {
   name: 'EditPanel',
