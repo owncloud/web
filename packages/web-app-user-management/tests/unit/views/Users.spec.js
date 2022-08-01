@@ -75,7 +75,7 @@ describe('Users view', () => {
   })
 
   describe('method "editUserGroupAssignments"', () => {
-    it('should emit event success', async () => {
+    it('should emit event on success', async () => {
       const editUser = {
         id: '1',
         memberOf: [
