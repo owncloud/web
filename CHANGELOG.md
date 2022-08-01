@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Add Droparea again: [#7080](https://github.com/owncloud/web/issues/7080)
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
@@ -65,6 +66,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Add Droparea again: [#7080](https://github.com/owncloud/web/issues/7080)
+
+   We've added the visual droparea again to indicate drag and drop upload
+
+   https://github.com/owncloud/web/issues/7080
+   https://github.com/owncloud/web/pull/7251
 
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 
