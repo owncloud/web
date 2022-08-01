@@ -17,6 +17,9 @@ type UppyServiceTopics =
   | 'progress'
   | 'addedForUpload'
   | 'upload-progress'
+  | 'drag-over'
+  | 'drag-out'
+  | 'drop'
 
 export class UppyService {
   uppy: Uppy
@@ -110,7 +113,16 @@ export class UppyService {
       target: targetSelector,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      uppyService
+      uppyService,
+      onDragOver: (event) => {
+        this.publish('drag-over', event)
+      },
+      onDragLeave: (event) => {
+        this.publish('drag-out', event)
+      },
+      onDrop: (event) => {
+        this.publish('drop', event)
+      }
     })
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <main id="files" class="oc-flex oc-height-1-1" @dragenter="onDragEnter" @mouseout="onDragLeave">
+  <main id="files" class="oc-flex oc-height-1-1">
     <div v-if="dragareaEnabled" class="dragarea" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
@@ -24,6 +24,7 @@ import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: {
@@ -57,6 +58,15 @@ export default defineComponent({
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
+    const dragOver = bus.subscribe('drag-over', this.onDragOver)
+    const dragOut = bus.subscribe('drag-out', this.hideDropzone)
+    const drop = bus.subscribe('drop', this.hideDropzone)
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('drag-over', dragOver)
+      bus.unsubscribe('drag-out', dragOut)
+      bus.unsubscribe('drop', drop)
+    })
   },
 
   methods: {
@@ -65,14 +75,12 @@ export default defineComponent({
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
     }),
-    onDragEnter(event) {
-      event.stopPropagation()
-      event.preventDefault()
+    hideDropzone() {
+      this.dragareaEnabled = false
+    },
+    onDragOver(event) {
       const hasFileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
       this.dragareaEnabled = hasFileInEvent
-    },
-    onDragLeave() {
-      this.dragareaEnabled = false
     },
     focusSideBar(component, event) {
       this.focus({
