@@ -9711,9 +9711,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:14.0.0-alpha.10":
-  version: 14.0.0-alpha.10
-  resolution: "owncloud-design-system@npm:14.0.0-alpha.10"
+"owncloud-design-system@npm:14.0.0-alpha.12":
+  version: 14.0.0-alpha.12
+  resolution: "owncloud-design-system@npm:14.0.0-alpha.12"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9730,7 +9730,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: faa79ee2f57a392c9784f72e28a9ab63e0a9ef6e0b8f930cd673ccaa6adc8ece2271b95ae8e1faf6919733beae2240c3b763039b5a4aba2c4eabf878dd8c1e35
+  checksum: 26903645886722969b982fc22bd0b6831df6d8c41a37b586ec0af803cbd33bc6f44aa7e6ee93698644c7467d18cc03bc5bf16eeb4a9da3126068a1d32b89a64a
   languageName: node
   linkType: hard
 
@@ -13773,7 +13773,7 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
-    owncloud-design-system: 14.0.0-alpha.10
+    owncloud-design-system: 14.0.0-alpha.12
     owncloud-sdk: ~3.0.0-alpha.15
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
