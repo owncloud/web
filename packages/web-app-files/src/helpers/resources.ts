@@ -392,7 +392,9 @@ export function buildSharedResource(
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
-    resource.webDavPath = buildWebDavFilesPath(share.uid_owner, share.path)
+    resource.webDavPath = hasShareJail
+      ? buildWebDavSpacesPath(resource.storageId, share.path)
+      : buildWebDavFilesPath(share.uid_owner, share.path)
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true

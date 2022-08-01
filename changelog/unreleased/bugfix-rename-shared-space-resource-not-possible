@@ -1,0 +1,6 @@
+Bugfix: Rename shared space resource not possible
+
+We've fixed a bug where renaming a file or a folder of a shared space wasn't possible.
+
+https://github.com/owncloud/web/pull/7379
+https://github.com/owncloud/web/issues/6899

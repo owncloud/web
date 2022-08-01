@@ -1,0 +1,6 @@
+Bugfix: Open file on shared space resource not possible
+
+We've fixed a bug where opening a file of a shared space resource for example in the pdf viewer app wasn't possible.
+
+https://github.com/owncloud/web/pull/7379
+https://github.com/owncloud/web/issues/6899
