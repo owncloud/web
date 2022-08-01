@@ -48,6 +48,7 @@ Summary
 * Enhancement - Change file loading mechanism in `preview` app: [#7350](https://github.com/owncloud/web/pull/7350)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
+* Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
@@ -58,7 +59,7 @@ Summary
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
@@ -414,6 +415,14 @@ Details
    https://github.com/owncloud/web/issues/7342
    https://github.com/owncloud/web/pull/7356
 
+* Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
+
+   We've styled and aligned all the drop menus in the right sidebar to match with the other drop
+   menus.
+
+   https://github.com/owncloud/web/issues/7335
+   https://github.com/owncloud/web/pull/7365
+
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 
    We've enhanced web to be able to re-share resources when using an ownCloud infinite scale
@@ -508,9 +517,9 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.8: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.8. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.12. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
@@ -520,10 +529,11 @@ Details
    #2210 - Change - OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add
    outline: #2218 - Enhancement - Progress bar indeterminate state: #2200 - Enhancement -
    Redesign notifications: #2210 - Enhancement - Use oc colors for selected background and
-   deselect icon: #2262
+   deselect icon: #2262 - Enhancement - Adjust avatar font weight from bold to normal: #2275 -
+   Enhancement - Add offset property to the drop component: #2276
 
    https://github.com/owncloud/web/pull/7355
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.8
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.12
 
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 
