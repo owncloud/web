@@ -8,7 +8,6 @@
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
-      class="oc-width-1-1 oc-width-2-5@m oc-width-1-4@xl"
       :sidebar-active-panel="sidebarActivePanel"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
@@ -97,6 +96,13 @@ main {
 #files-sidebar {
   position: relative;
   overflow: hidden;
+  width: 440px;
+}
+
+@media only screen and (max-width: 960px) {
+  #files-sidebar {
+    width: 100%;
+  }
 }
 
 #files-view {
