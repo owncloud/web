@@ -38,8 +38,8 @@
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
-      :original-object="originalObjectUser"
-      :compare-object="compareObjectUser"
+      :original-object="user"
+      :compare-object="editUser"
       @revert="revertChanges"
       @confirm="$emit('confirm', editUser)"
     ></compare-save-dialog>
@@ -73,13 +73,6 @@ export default {
   computed: {
     user() {
       return this.users.length === 1 ? this.users[0] : null
-    },
-
-    originalObjectUser() {
-      return { user: { ...this.user } }
-    },
-    compareObjectUser() {
-      return { user: { ...this.editUser } }
     }
   },
   watch: {

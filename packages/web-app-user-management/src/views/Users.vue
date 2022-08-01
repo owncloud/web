@@ -484,9 +484,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        this.showMessage({
-          title: this.$gettext('User was edited successfully')
-        })
+        bus.publish('app.user-management.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -525,9 +523,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        this.showMessage({
-          title: this.$gettext('Group assignments were edited successfully')
-        })
+        bus.publish('app.user-management.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({

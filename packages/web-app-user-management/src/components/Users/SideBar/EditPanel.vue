@@ -91,10 +91,10 @@ export default {
     },
 
     originalObjectUser() {
-      return { user: { ...this.user, passwordProfile: { password: '' } } }
+      return { ...this.user, passwordProfile: { password: '' } }
     },
     compareObjectUser() {
-      return { user: { ...this.editUser } }
+      return { ...this.editUser }
     },
     invalidFormData() {
       return Object.values(this.formData)

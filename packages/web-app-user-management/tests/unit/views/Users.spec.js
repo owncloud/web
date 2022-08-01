@@ -3,6 +3,7 @@ import { createStore } from 'vuex-extensions'
 import Users from '../../../src/views/Users'
 import Vuex from 'vuex'
 import mockAxios from 'jest-mock-axios'
+import { bus } from 'web-pkg/src/instance'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -32,7 +33,7 @@ describe('Users view', () => {
   })
 
   describe('method "editUser"', () => {
-    it('should show message on success', async () => {
+    it('should emit event on success', async () => {
       mockAxios.post.mockImplementationOnce(() => {
         return Promise.resolve({
           data: {
@@ -49,13 +50,12 @@ describe('Users view', () => {
           users: []
         }
       })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const busStub = jest.spyOn(bus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
-
       await wrapper.vm.editUser(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(busStub).toHaveBeenCalledWith('app.user-management.entity.saved')
       expect(setStub).toHaveBeenCalled()
     })
 
@@ -75,7 +75,7 @@ describe('Users view', () => {
   })
 
   describe('method "editUserGroupAssignments"', () => {
-    it('should show message on success', async () => {
+    it('should emit event on success', async () => {
       const editUser = {
         id: '1',
         memberOf: [
@@ -96,13 +96,13 @@ describe('Users view', () => {
           ]
         }
       })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const busStub = jest.spyOn(bus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
 
       await wrapper.vm.editUserGroupAssignments(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
-      expect(showMessageStub).toHaveBeenCalled()
+      expect(busStub).toHaveBeenCalledWith('app.user-management.entity.saved')
       expect(setStub).toHaveBeenCalled()
     })
 
