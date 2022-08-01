@@ -2,6 +2,7 @@
 
 exports[`FilesDrop should show page title and configuration theme general slogan 1`] = `
 <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
+  <!---->
   <h1 class="oc-invisible-sr">page route title</h1>
   <div class="oc-p oc-height-1-1">
     <div class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
@@ -21,6 +22,7 @@ exports[`FilesDrop should show page title and configuration theme general slogan
 
 exports[`FilesDrop should show spinner with loading text if wrapper is loading 1`] = `
 <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
+  <!---->
   <h1 class="oc-invisible-sr">page route title</h1>
   <div class="oc-p oc-height-1-1">
     <div class="oc-flex oc-flex-column oc-flex-middle">
@@ -38,6 +40,7 @@ exports[`FilesDrop should show spinner with loading text if wrapper is loading 1
 
 exports[`FilesDrop when "loading" is set to false should show error message if only it has truthy value 1`] = `
 <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
+  <!---->
   <h1 class="oc-invisible-sr">page route title</h1>
   <div class="oc-p oc-height-1-1">
     <div class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
@@ -62,6 +65,7 @@ exports[`FilesDrop when "loading" is set to false should show error message if o
 
 exports[`FilesDrop when "loading" is set to false should show share information title 1`] = `
 <div id="files-drop-container" class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between">
+  <!---->
   <h1 class="oc-invisible-sr">page route title</h1>
   <div class="oc-p oc-height-1-1">
     <div class="oc-flex oc-flex-column oc-flex-middle oc-height-1-1">
