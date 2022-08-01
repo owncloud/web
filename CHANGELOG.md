@@ -35,6 +35,7 @@ Summary
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
+* Bugfix - Tooltips not shown on disabled create and upload button: [#7376](https://github.com/owncloud/web/pull/7376)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
@@ -292,6 +293,14 @@ Details
 
    https://github.com/owncloud/web/issues/7240
    https://github.com/owncloud/web/pull/7296
+
+* Bugfix - Tooltips not shown on disabled create and upload button: [#7376](https://github.com/owncloud/web/pull/7376)
+
+   We've fixed a bug where tooltips that contain important information for example quota
+   exceeded message weren't shown on hovering over the create or upload button.
+
+   https://github.com/owncloud/web/issues/5937
+   https://github.com/owncloud/web/pull/7376
 
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 
