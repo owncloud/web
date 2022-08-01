@@ -455,9 +455,11 @@ Details
    We've also fixed a bug, where the role in a child of a share wasn't shown.
 
    https://github.com/owncloud/web/issues/7110
+   https://github.com/owncloud/web/issues/7340
    https://github.com/owncloud/web/pull/7252
    https://github.com/owncloud/web/pull/7310
    https://github.com/owncloud/web/pull/7315
+   https://github.com/owncloud/web/pull/7372
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
