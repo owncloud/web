@@ -1,18 +1,19 @@
 <template>
   <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
     <template v-if="createFileActionsAvailable">
-      <oc-button
-        id="new-file-menu-btn"
-        key="new-file-menu-btn-enabled"
-        v-oc-tooltip="newButtonTooltip"
-        :aria-label="newButtonAriaLabel"
-        appearance="filled"
-        variation="primary"
-        :disabled="uploadOrFileCreationBlocked"
-      >
-        <oc-icon name="add" />
-        <translate>New</translate>
-      </oc-button>
+      <span v-oc-tooltip="newButtonTooltip">
+        <oc-button
+          id="new-file-menu-btn"
+          key="new-file-menu-btn-enabled"
+          :aria-label="newButtonAriaLabel"
+          appearance="filled"
+          variation="primary"
+          :disabled="uploadOrFileCreationBlocked"
+        >
+          <oc-icon name="add" />
+          <translate>New</translate>
+        </oc-button>
+      </span>
       <oc-drop
         drop-id="new-file-menu-drop"
         toggle="#new-file-menu-btn"
@@ -67,29 +68,31 @@
       </oc-drop>
     </template>
     <template v-else>
-      <oc-button
-        id="new-folder-btn"
-        v-oc-tooltip="newButtonAriaLabel"
-        appearance="filled"
-        variation="primary"
-        :aria-label="newButtonAriaLabel"
-        :disabled="uploadOrFileCreationBlocked"
-        @click="showCreateResourceModal"
-      >
-        <oc-icon name="resource-type-folder" />
-        <translate>New folder</translate>
-      </oc-button>
+      <span v-oc-tooltip="newButtonTooltip">
+        <oc-button
+          id="new-folder-btn"
+          appearance="filled"
+          variation="primary"
+          :aria-label="newButtonAriaLabel"
+          :disabled="uploadOrFileCreationBlocked"
+          @click="showCreateResourceModal"
+        >
+          <oc-icon name="resource-type-folder" />
+          <translate>New folder</translate>
+        </oc-button>
+      </span>
     </template>
-    <oc-button
-      id="upload-menu-btn"
-      key="upload-menu-btn-enabled"
-      v-oc-tooltip="uploadButtonTooltip"
-      :aria-label="uploadButtonAriaLabel"
-      :disabled="uploadOrFileCreationBlocked"
-    >
-      <oc-icon name="upload" fill-type="line" />
-      <translate>Upload</translate>
-    </oc-button>
+    <span v-oc-tooltip="uploadButtonTooltip">
+      <oc-button
+        id="upload-menu-btn"
+        key="upload-menu-btn-enabled"
+        :aria-label="uploadButtonAriaLabel"
+        :disabled="uploadOrFileCreationBlocked"
+      >
+        <oc-icon name="upload" fill-type="line" />
+        <translate>Upload</translate>
+      </oc-button>
+    </span>
     <oc-drop
       drop-id="upload-menu-drop"
       toggle="#upload-menu-btn"
