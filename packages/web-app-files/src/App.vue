@@ -1,5 +1,5 @@
 <template>
-  <main id="files" class="oc-flex oc-height-1-1" @dragenter="onDragEnter" @mouseleave="onDragLeave">
+  <main id="files" class="oc-flex oc-height-1-1" @dragenter="onDragEnter" @mouseout="onDragLeave">
     <div v-if="dragareaEnabled" class="dragarea" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
@@ -65,8 +65,9 @@ export default defineComponent({
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
     }),
-
     onDragEnter(event) {
+      event.stopPropagation()
+      event.preventDefault()
       const hasFileInEvent = (event.dataTransfer.types || []).some((e) => e === 'Files')
       this.dragareaEnabled = hasFileInEvent
     },
