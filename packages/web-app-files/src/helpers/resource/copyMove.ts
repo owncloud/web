@@ -31,6 +31,7 @@ const resolveFileExists = (
     let doForAllConflicts = false
     const modal = {
       variation: 'danger',
+      icon: 'alarm-warning',
       title: $gettext('File already exists'),
       message: $gettextInterpolate(
         resource.isFolder

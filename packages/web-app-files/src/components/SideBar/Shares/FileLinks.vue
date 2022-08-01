@@ -522,6 +522,7 @@ export default defineComponent({
     deleteLinkConfirmation({ link }) {
       const modal = {
         variation: 'danger',
+        icon: 'alarm-warning',
         title: this.$gettext('Delete link'),
         message: this.$gettext(
           'Are you sure you want to delete this link? Recreating the same link again is not possible.'
