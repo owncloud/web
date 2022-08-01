@@ -486,6 +486,7 @@ export default defineComponent({
 
         bus.publish('app.user-management.entity.saved')
       } catch (error) {
+        console.error(error)
         this.showMessage({
           title: this.$gettext('Failed to edit user'),
           status: 'danger'
