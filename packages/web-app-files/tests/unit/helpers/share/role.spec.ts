@@ -20,7 +20,7 @@ describe('ShareRole', () => {
   describe('permissions', () => {
     it('returns full permissions of a role that has no share permission', () => {
       const permissions = [SharePermissions.read, SharePermissions.update]
-      const role = new PeopleShareRole('', true, '', '', permissions)
+      const role = new PeopleShareRole('', true, '', '', '', permissions)
       expect(role.permissions(false)).toEqual(permissions)
       expect(role.permissions(true)).toEqual(permissions)
     })
@@ -44,7 +44,7 @@ describe('ShareRole', () => {
     ])(
       'respects that re-sharing is %s for a role that has share permissions',
       (name, { permissions, allowSharing, result }) => {
-        const role = new PeopleShareRole('', true, '', '', permissions)
+        const role = new PeopleShareRole('', true, '', '', '', permissions)
         expect(role.permissions(allowSharing)).toEqual(result)
       }
     )

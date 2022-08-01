@@ -6,17 +6,13 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
     <oc-button-stub id="edit-public-link-role-dropdown-toggle-undefined" appearance="raw" gap-size="none" class="edit-public-link-role-dropdown-toggle oc-text-left"><span class="link-current-role">Viewer</span>
       <oc-icon-stub name="arrow-down-s"></oc-icon-stub>
     </oc-button-stub>
-    <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" padding-size="remove" mode="click">
+    <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" padding-size="small" offset="0" mode="click" class="edit-public-link-role-dropdown">
       <oc-list-stub class="roleDropdownList">
         <li>
-          <oc-button-stub id="files-role-viewer" appearance="raw" justify-content="space-between" class="oc-py-xs oc-px-s selected"><span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span>Recipients can view and download contents.</span></span>
-            <oc-icon-stub name="check"></oc-icon-stub>
-          </oc-button-stub>
+          <oc-button-stub id="files-role-viewer" appearance="raw" variation="inverse" justify-content="space-between" class="oc-p-s selected oc-background-primary-gradient"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span class="oc-text-small">Recipients can view and download contents.</span></span></span> <span class="oc-flex"><oc-icon-stub name="check"></oc-icon-stub></span></oc-button-stub>
         </li>
         <li>
-          <oc-button-stub id="files-role-editor" appearance="raw" justify-content="space-between" class="oc-py-xs oc-px-s"><span><span class="oc-text-bold oc-display-block oc-width-1-1">Editor</span> <span>Recipients can view, download and edit contents.</span></span>
-            <!---->
-          </oc-button-stub>
+          <oc-button-stub id="files-role-editor" appearance="raw" variation="passive" justify-content="space-between" class="oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Editor</span> <span class="oc-text-small">Recipients can view, download and edit contents.</span></span></span> <span class="oc-flex"><!----></span></oc-button-stub>
         </li>
       </oc-list-stub>
     </oc-drop-stub>
@@ -29,19 +25,27 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
       <oc-button-stub id="edit-public-link-dropdown-toggl-undefined" appearance="raw" data-testid="files-link-id-undefined-btn-edit" class="edit-drop-trigger">
         <oc-icon-stub name="more-2"></oc-icon-stub>
       </oc-button-stub>
-      <oc-drop-stub drop-id="edit-public-link-dropdown" toggle="#edit-public-link-dropdown-toggl-undefined" mode="click">
-        <oc-list-stub>
-          <li>
-            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-rename">Rename</oc-button-stub>
+      <oc-drop-stub drop-id="edit-public-link-dropdown" toggle="#edit-public-link-dropdown-toggl-undefined" padding-size="small" mode="click">
+        <oc-list-stub class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-rename" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="pencil" fill-type="line" size="medium"></oc-icon-stub> <span>Rename</span>
+            </oc-button-stub>
           </li>
-          <li>
+          <li class="oc-rounded oc-menu-item-hover">
             <oc-datepicker-stub min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en" class="link-expiry-picker"></oc-datepicker-stub>
           </li>
-          <li>
-            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-add-password">Add password</oc-button-stub>
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-add-password" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="lock-password" fill-type="line" size="medium"></oc-icon-stub> <span>Add password</span>
+            </oc-button-stub>
           </li>
-          <li>
-            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-delete" variation="danger">Delete link</oc-button-stub>
+        </oc-list-stub>
+        <oc-list-stub class="edit-public-link-dropdown-menu oc-pt-s">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub appearance="raw" data-testid="files-link-id-undefined-edit-delete" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="delete-bin-5" fill-type="line" size="medium"></oc-icon-stub> <span>Delete link</span>
+            </oc-button-stub>
           </li>
         </oc-list-stub>
       </oc-drop-stub>

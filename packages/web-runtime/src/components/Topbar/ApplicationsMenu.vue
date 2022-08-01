@@ -35,7 +35,7 @@
             :class="{ 'oc-background-primary-gradient': n.active }"
             :variation="n.active ? 'inverse' : 'passive'"
           >
-            <span class="icon-box" :class="{ 'icon-box-active': n.active }">
+            <span class="icon-box">
               <oc-icon :name="n.icon" />
             </span>
             <span v-text="$gettext(n.title)" />
@@ -93,9 +93,6 @@ export default {
       align-items: center;
       width: 40px;
       height: 40px;
-    }
-    .icon-box-active {
-      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.14);
     }
 
     .active-check {
