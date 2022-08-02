@@ -80,6 +80,21 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
+    <template #tags="{ item }">
+      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
+        <oc-tag size="small" class="oc-ml-xs">
+          {{ tag }}
+        </oc-tag>
+      </router-link>
+      <oc-tag
+        v-if="item.tags.length > 2"
+        size="small"
+        class="resource-table-tag-more"
+        @click="openTagsSidebar"
+      >
+        + {{ item.tags.length - 2 }}
+      </oc-tag>
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -187,7 +202,7 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { extractDomSelector } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { ShareTypes } from '../../helpers/share'
-import { createLocationSpaces } from '../../router'
+import { createLocationSpaces, createLocationCommon } from '../../router'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {
@@ -466,6 +481,13 @@ export default defineComponent({
             wrap: 'nowrap'
           },
           {
+            name: 'tags',
+            title: this.$gettext('Tags'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
+          },
+          {
             name: 'owner',
             title: this.$gettext('Share owner'),
             type: 'slot',
@@ -562,6 +584,11 @@ export default defineComponent({
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `tag:${tag}`, provider: 'files.sdk' }
+      })
+    },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
     },
@@ -571,6 +598,9 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] })
+    },
+    openTagsSidebar() {
+      this.openWithPanel('tags-item')
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
@@ -810,6 +840,9 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
+  }
+  &-tag-more {
+    cursor: pointer;
   }
   &-edit-name {
     display: inline-flex;

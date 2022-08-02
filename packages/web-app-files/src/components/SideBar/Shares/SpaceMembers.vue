@@ -2,7 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex">
       <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Members</h3>
-      <oc-contextual-helper class="oc-pl-xs" v-if="helpersEnabled" v-bind="spaceAddMemberHelp" />
+      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
     </div>
     <invite-collaborator-form
       v-if="currentUserCanShare"
