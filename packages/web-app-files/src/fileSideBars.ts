@@ -149,7 +149,9 @@ const panelGenerators: (({
     component: TagsPanel,
     componentAttrs: {},
     get enabled() {
-      if (multipleSelection || rootFolder || !highlightedFile.canEditTags()) return false
+      if (multipleSelection || rootFolder) return false
+      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags())
+        return false
       return !(
         isLocationTrashActive(router, 'files-trash-personal') ||
         isLocationTrashActive(router, 'files-trash-spaces-project') ||
