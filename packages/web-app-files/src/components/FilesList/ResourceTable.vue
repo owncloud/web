@@ -913,7 +913,7 @@ export default defineComponent({
   }
 
   &-squashed {
-    .resource-table-actions div {
+    .resource-table-actions div:first-child {
       display: none;
 
       @media only screen and (min-width: 1200px) {
