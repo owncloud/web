@@ -81,6 +81,7 @@ export function buildResource(resource): Resource {
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    tags: ['space', 'oddity'],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
