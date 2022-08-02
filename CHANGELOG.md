@@ -495,6 +495,7 @@ Details
    alignment.
 
    https://github.com/owncloud/web/pull/7371
+   https://github.com/owncloud/web/pull/7384
 
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 
