@@ -281,7 +281,7 @@ export function buildSharedResource(
     }
     resource.canDownload = () => parseInt(share.state) === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
-    resource.canRename = () => true
+    resource.canRename = () => parseInt(share.state) === ShareStatus.accepted
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith || []
