@@ -21,6 +21,7 @@ Summary
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
@@ -168,6 +169,14 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
+
+   We've fixed a bug where the file icon in the details panel was not shown, if no preview was
+   available.
+
+   https://github.com/owncloud/web/issues/7337
+   https://github.com/owncloud/web/pull/7344
 
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 
