@@ -82,18 +82,18 @@
     </template>
     <template #tags="{ item }">
       <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
-        <oc-tag size="small" class="oc-ml-xs">
+        <oc-file-tag size="small" class="oc-ml-xs">
           {{ tag }}
-        </oc-tag>
+        </oc-file-tag>
       </router-link>
-      <oc-tag
+      <oc-file-tag
         v-if="item.tags.length > 2"
         size="small"
         class="resource-table-tag-more"
         @click="openTagsSidebar"
       >
         + {{ item.tags.length - 2 }}
-      </oc-tag>
+      </oc-file-tag>
     </template>
     <template #mdate="{ item }">
       <span
