@@ -25,6 +25,14 @@ export class EventBus {
     subscriptions.forEach((subscription) => subscription.callback(data))
   }
 
+  public async asyncPublish(topic: string, data?: unknown): Promise<void> {
+    const subscriptions = this.topics.get(topic) || []
+
+    for (const sub of subscriptions) {
+      await sub.callback(data)
+    }
+  }
+
   public unsubscribe(topic: string, token: string): void {
     if (!this.topics.has(topic)) {
       return

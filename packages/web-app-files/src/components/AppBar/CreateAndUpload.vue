@@ -629,7 +629,8 @@ export default defineComponent({
       return null
     },
 
-    onFilesSelected(files: File[]) {
+    async onFilesSelected(files: File[]) {
+      await bus.asyncPublish('app.files.list.load')
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)

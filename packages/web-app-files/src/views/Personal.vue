@@ -235,8 +235,8 @@ export default defineComponent({
   },
 
   mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', async (path) => {
+      await this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
