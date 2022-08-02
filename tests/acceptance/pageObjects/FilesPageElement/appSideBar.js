@@ -12,7 +12,7 @@ module.exports = {
           '@fileInfoIconBigPreview'
         )
       } else {
-        const panelName = item === 'people' ? 'sharing' : item
+        const panelName = item === 'people' || item === 'links' ? 'sharing' : item
         return this.waitForElementVisible('@sidebar').waitForElementVisible(
           util.format(this.elements.fileInfoIconSmallPreview.selector, panelName)
         )
