@@ -90,6 +90,7 @@ Details
    https://github.com/owncloud/web/issues/7187
    https://github.com/owncloud/web/pull/7230
    https://github.com/owncloud/web/pull/7314
+   https://github.com/owncloud/web/pull/7386
 
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
