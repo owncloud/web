@@ -102,7 +102,7 @@ export function buildResource(resource): Resource {
     },
     canEditTags: function () {
       return (
-        this.permissions.indexOf(DavPermission.Updateable) >= 0 &&
+        this.permissions.indexOf(DavPermission.Updateable) >= 0 ||
         this.permissions.indexOf(DavPermission.FileUpdateable) >= 0
       )
     },
