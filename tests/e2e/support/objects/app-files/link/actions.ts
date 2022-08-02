@@ -58,14 +58,17 @@ const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")
 const editPublicLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
   `//ancestor::li//div[contains(@class, "details-buttons")]//button[contains(@class, "edit-drop-trigger")]`
-const editPublicLinkRenameButton = '//button[text()="Rename"]'
-const editPublicLinkSetExpirationButton = '//button[text()="Add expiration date"]'
-const editPublicLinkAddPasswordButton = '//button[text()="Add password"]'
+const editPublicLinkRenameButton =
+  '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Rename"]'
+const editPublicLinkSetExpirationButton =
+  '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Add expiration date"]'
+const editPublicLinkAddPasswordButton =
+  '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Add password"]'
 const editPublicLinkInput = '.oc-modal-body input.oc-text-input'
 const editPublicLinkRenameConfirm = '.oc-modal-body-actions-confirm'
 const deleteLinkButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
-  `//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Delete link"]`
+  `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {

@@ -35,16 +35,7 @@
         <span />
       </template>
     </oc-select>
-    <p>
-      <span
-        id="files-share-invite-hint"
-        class="oc-mt-xs oc-text-meta"
-        v-text="inviteDescriptionMessage"
-      />
-      <oc-contextual-helper v-if="resourceIsSpace && helpersEnabled" v-bind="spaceAddMemberHelp" />
-      <oc-contextual-helper v-else-if="helpersEnabled" v-bind="inviteCollaboratorHelp" />
-    </p>
-    <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l">
+    <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
         :resource="highlightedFile"
         :allow-share-permission="hasResharing || resourceIsSpace"
@@ -95,11 +86,7 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
-import {
-  shareInviteCollaboratorHelp,
-  shareInviteCollaboratorHelpCern,
-  shareSpaceAddMemberHelp
-} from '../../../../../helpers/contextualHelpers.js'
+
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
 
@@ -121,6 +108,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: () => $gettext('Share')
+    },
+    inviteLabel: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
 
@@ -149,34 +141,6 @@ export default defineComponent({
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
     ...mapGetters(['configuration', 'user', 'capabilities']),
 
-    helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
-    },
-
-    inviteCollaboratorHelp() {
-      const cernFeatures = !!this.configuration?.options?.cernFeatures
-      return cernFeatures
-        ? {
-            text: shareInviteCollaboratorHelp.text,
-            list: [...shareInviteCollaboratorHelp.list, ...shareInviteCollaboratorHelpCern.list]
-          }
-        : shareInviteCollaboratorHelp
-    },
-
-    spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp
-    },
-
-    inviteDescriptionMessage() {
-      if (this.capabilities.files_sharing.federation?.outgoing === true) {
-        return this.$gettext('Add new person by name, email or federation IDs')
-      }
-      const cernFeatures = !!this.configuration?.options?.cernFeatures
-      return cernFeatures
-        ? this.$gettext('Add new person by name, email or service/secondary/guest accounts')
-        : this.$gettext('Add new person by name or email')
-    },
-
     $_announcementWhenCollaboratorAdded() {
       return this.$gettext('Person was added')
     },
@@ -189,7 +153,7 @@ export default defineComponent({
       return parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
     },
     selectedCollaboratorsLabel() {
-      return this.$gettext('Invite')
+      return this.inviteLabel || this.$gettext('Invite')
     },
 
     resourceIsSpace() {

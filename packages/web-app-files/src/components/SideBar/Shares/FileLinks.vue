@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-      <span v-text="linksHeading" />
-      <oc-contextual-helper v-if="helpersEnabled" v-bind="viaLinkHelp" />
-    </h3>
+    <div class="oc-flex">
+      <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
+      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
+    </div>
     <div v-if="canCreatePublicLinks" class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
@@ -23,7 +23,7 @@
         @updateLink="checkLinkToUpdate"
         @removePublicLink="deleteLinkConfirmation"
       />
-      <hr class="link-separator oc-my-m" />
+      <hr class="oc-my-m" />
       <oc-button
         id="files-file-link-add"
         variation="primary"
@@ -67,7 +67,7 @@
       </oc-button>
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
-      <hr class="link-separator oc-my-m" />
+      <hr class="oc-my-m" />
       <h3 class="oc-text-bold oc-m-rm oc-text-initial">
         <span v-text="indirectLinksHeading" />
         <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
@@ -522,6 +522,7 @@ export default defineComponent({
     deleteLinkConfirmation({ link }) {
       const modal = {
         variation: 'danger',
+        icon: 'alarm-warning',
         title: this.$gettext('Delete link'),
         message: this.$gettext(
           'Are you sure you want to delete this link? Recreating the same link again is not possible.'
@@ -571,12 +572,13 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+#oc-files-file-link,
+#oc-files-sharing-sidebar {
+  border-radius: 5px;
+}
 .link-name-container {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
-}
-.link-separator {
-  background: var(--oc-color-input-border);
-  height: 2px;
+  border-radius: 5px;
 }
 </style>

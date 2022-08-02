@@ -323,7 +323,6 @@ export default defineComponent({
 
   &__header {
     padding: 0 10px;
-    border-bottom: 1px solid var(--oc-color-border);
 
     &.header {
       display: grid;

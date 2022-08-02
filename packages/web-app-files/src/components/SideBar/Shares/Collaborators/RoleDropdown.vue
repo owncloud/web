@@ -20,7 +20,9 @@
       ref="rolesDrop"
       :toggle="'#' + roleButtonId"
       mode="click"
-      padding-size="remove"
+      padding-size="small"
+      class="files-recipient-role-drop"
+      offset="0"
       close-on-click
     >
       <oc-list class="files-recipient-role-drop-list" :aria-label="rolesListAriaLabel">
@@ -30,12 +32,21 @@
             ref="roleSelect"
             appearance="raw"
             justify-content="space-between"
-            class="files-recipient-role-drop-btn oc-py-xs oc-px-s"
-            :class="{ selected: isSelectedRole(role) }"
+            class="files-recipient-role-drop-btn oc-p-s"
+            :class="{
+              'oc-background-primary-gradient': isSelectedRole(role),
+              selected: isSelectedRole(role)
+            }"
+            :variation="isSelectedRole(role) ? 'inverse' : 'passive'"
             @click="selectRole(role)"
           >
-            <role-item :role="role" :allow-share-permission="allowSharePermission" />
-            <oc-icon v-if="isSelectedRole(role)" name="check" />
+            <span class="oc-flex oc-flex-middle">
+              <oc-icon :name="role.icon" class="oc-pl-s oc-pr-m" />
+              <role-item :role="role" :allow-share-permission="allowSharePermission" />
+            </span>
+            <span class="oc-flex">
+              <oc-icon v-if="isSelectedRole(role)" name="check" />
+            </span>
           </oc-button>
         </li>
       </oc-list>
@@ -46,19 +57,23 @@
       class="files-recipient-custom-permissions-drop"
       mode="manual"
       :target="'#' + roleButtonId"
-      padding-size="small"
+      padding-size="remove"
     >
-      <h4 class="oc-text-bold oc-text-initial" v-text="$gettext(customPermissionsRole.label)" />
-      <oc-list class="oc-mb">
+      <h4
+        class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s"
+        v-text="$gettext(customPermissionsRole.label)"
+      />
+      <oc-list>
         <li
           v-for="permission in availablePermissions"
           :key="`files-collaborators-permission-${permission.key}`"
-          class="oc-my-xs"
+          class="oc-my-s oc-px-m"
         >
           <oc-checkbox
             :id="`files-collaborators-permission-${permission.key}`"
             :key="`files-collaborators-permission-checkbox-${permission.key}`"
             v-model="customPermissions"
+            size="large"
             :data-testid="`files-collaborators-permission-${permission.key}`"
             :label="$gettext(permission.label)"
             :option="permission"
@@ -67,12 +82,21 @@
           />
         </li>
       </oc-list>
-      <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns">
-        <oc-button size="small" @click="cancelCustomPermissions" v-text="$gettext('Cancel')" />
+      <div
+        class="
+          files-recipient-custom-permissions-drop-cancel-confirm-btns
+          oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
+        "
+      >
         <oc-button
+          size="small"
+          @click="cancelCustomPermissions"
+          v-text="$gettext('Cancel')"
+        /><oc-button
           size="small"
           variation="primary"
           appearance="filled"
+          class="oc-ml-s"
           @click="confirmCustomPermissions"
           v-text="$gettext('Apply')"
         />
@@ -326,6 +350,8 @@ export default {
 <style lang="scss" scoped>
 .files-recipient {
   &-role-drop {
+    width: 400px;
+
     &-list {
       &:hover .files-recipient-role-drop-btn.selected:not(:hover),
       &:focus .files-recipient-role-drop-btn.selected:not(:focus) {
@@ -335,26 +361,46 @@ export default {
           fill: var(--oc-color-swatch-passive-default);
         }
       }
+
+      li {
+        margin: var(--oc-space-xsmall) 0;
+      }
     }
 
     &-btn {
-      border-radius: 0;
       width: 100%;
+      gap: var(--oc-space-medium);
 
       &:hover,
       &:focus {
-        color: var(--oc-color-text-default) !important;
+        background-color: var(--oc-color-background-hover);
+        color: var(--oc-color-swatch-passive-default);
+        text-decoration: none;
       }
 
       &.selected {
-        background-color: var(--oc-color-swatch-primary-default) !important;
-        color: var(--oc-color-text-inverse) !important;
+        color: var(--oc-color-swatch-inverse-default) !important;
 
         ::v-deep .oc-icon > svg {
-          fill: var(--oc-color-text-inverse) !important;
+          fill: var(--oc-color-swatch-inverse-default) !important;
         }
       }
     }
+  }
+
+  &-custom-permissions-drop-cancel-confirm-btns {
+    background: var(--oc-color-background-hover);
+    text-align: right;
+  }
+}
+
+.files-collaborators-permission-checkbox::v-deep {
+  .oc-checkbox {
+    border: 2px solid var(--oc-color-background-hover);
+  }
+
+  label {
+    margin-left: var(--oc-space-small);
   }
 }
 </style>

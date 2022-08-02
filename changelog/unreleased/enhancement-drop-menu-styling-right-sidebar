@@ -1,0 +1,6 @@
+Enhancement: Drop menu styling in right sidebar
+
+We've styled and aligned all the drop menus in the right sidebar to match with the other drop menus.
+
+https://github.com/owncloud/web/pull/7365
+https://github.com/owncloud/web/issues/7335

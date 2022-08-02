@@ -48,7 +48,7 @@
 <script>
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import CompareSaveDialog from '../../CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
 
 export default {
   name: 'EditPanel',
@@ -91,10 +91,10 @@ export default {
     },
 
     originalObjectUser() {
-      return { user: { ...this.user, passwordProfile: { password: '' } } }
+      return { ...this.user, passwordProfile: { password: '' } }
     },
     compareObjectUser() {
-      return { user: { ...this.editUser } }
+      return { ...this.editUser }
     },
     invalidFormData() {
       return Object.values(this.formData)

@@ -1,6 +1,6 @@
 <template>
   <div class="oc-mb-s oc-width-1-1 oc-mb-l">
-    <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-my-s" v-text="heading" />
+    <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-my-rm" v-text="heading" />
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
       <div class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon name="link" fill-type="line" />

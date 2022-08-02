@@ -1,6 +1,13 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
+    <div class="oc-flex">
+      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
+      <oc-contextual-helper
+        v-if="helpersEnabled"
+        class="oc-pl-xs"
+        v-bind="inviteCollaboratorHelp"
+      />
+    </div>
     <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
     <p
       v-else
@@ -14,7 +21,7 @@
     <template v-if="hasSharees">
       <ul
         id="files-collaborators-list"
-        class="oc-list oc-list-divider oc-overflow-hidden"
+        class="oc-list oc-overflow-hidden"
         :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
         :aria-label="$gettext('Share receivers')"
       >
@@ -77,6 +84,10 @@ import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import { useGraphClient } from 'web-client/src/composables'
+import {
+  shareInviteCollaboratorHelp,
+  shareInviteCollaboratorHelpCern
+} from '../../../helpers/contextualHelpers'
 
 export default {
   name: 'FileShares',
@@ -139,9 +150,22 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapGetters(['configuration']),
     ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
+    inviteCollaboratorHelp() {
+      const cernFeatures = !!this.configuration?.options?.cernFeatures
+      return cernFeatures
+        ? {
+            text: shareInviteCollaboratorHelp.text,
+            list: [...shareInviteCollaboratorHelp.list, ...shareInviteCollaboratorHelpCern.list]
+          }
+        : shareInviteCollaboratorHelp
+    },
+    helpersEnabled() {
+      return this.configuration?.options?.contextHelpers
+    },
     sharedWithLabel() {
       return this.$gettext('Shared with')
     },
@@ -332,10 +356,10 @@ export default {
     $_ocCollaborators_deleteShare_trigger(share) {
       const modal = {
         variation: 'danger',
+        icon: 'alarm-warning',
         title: this.$gettext('Remove share'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
-        icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to remove this share?'),
         hasInput: false,
         onCancel: this.hideModal,
@@ -397,5 +421,14 @@ export default {
 <style>
 .avatars-wrapper {
   height: 40px;
+}
+.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-details {
+  border-top: 1px solid var(--oc-color-border);
+  margin-top: var(--oc-space-small);
+  padding-top: var(--oc-space-small);
+}
+.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-indicator {
+  margin-top: var(--oc-space-small);
+  padding-top: var(--oc-space-small);
 }
 </style>

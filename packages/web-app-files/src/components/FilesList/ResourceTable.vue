@@ -911,5 +911,24 @@ export default defineComponent({
       }
     }
   }
+
+  &-squashed {
+    .resource-table-actions div {
+      display: none;
+
+      @media only screen and (min-width: 1200px) {
+        display: inherit;
+      }
+    }
+
+    .oc-table-header-cell-indicators,
+    .oc-table-data-cell-indicators {
+      display: none;
+
+      @media only screen and (min-width: 1200px) {
+        display: table-cell;
+      }
+    }
+  }
 }
 </style>

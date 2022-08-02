@@ -607,32 +607,32 @@ module.exports = {
     },
     publicLinkRenameButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Rename"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Rename"]',
       locateStrategy: 'xpath'
     },
     publicLinkAddPasswordButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Add password"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Add password"]',
       locateStrategy: 'xpath'
     },
     publicLinkRemovePasswordButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Remove password"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Remove password"]',
       locateStrategy: 'xpath'
     },
     publicLinkRenamePasswordButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Edit password"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Edit password"]',
       locateStrategy: 'xpath'
     },
     publicLinkExpirationDateEditButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Edit expiration date"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Edit expiration date"]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button[text()="Delete link"]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {

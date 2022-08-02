@@ -46,10 +46,10 @@ export default {
 
       const modal = {
         variation: 'danger',
+        icon: 'alarm-warning',
         title: this.$gettext('Delete space') + ' ' + resources[0].name,
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
-        icon: 'alarm-warning',
         message: this.$gettext('Are you sure you want to delete this space?'),
         hasInput: false,
         onCancel: this.hideModal,

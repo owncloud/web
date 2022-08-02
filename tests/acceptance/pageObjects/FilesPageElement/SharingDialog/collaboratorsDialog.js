@@ -242,7 +242,7 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//span[contains(@class, "files-collaborators-collaborator-name") and contains(text(),"%s")]/ancestor::div[contains(@class, "files-collaborators-collaborator")]',
+        '//span[contains(@class, "files-collaborators-collaborator-name") and contains(text(),"%s")]/ancestor::li',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {

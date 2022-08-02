@@ -27,6 +27,13 @@ export default {
               return false
             }
 
+            if (
+              isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+              resources[0].path === '/'
+            ) {
+              return false
+            }
+
             const deleteDisabled = resources.some((resource) => {
               return !resource.canBeDeleted()
             })

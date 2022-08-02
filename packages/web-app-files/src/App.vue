@@ -1,5 +1,6 @@
 <template>
   <main id="files" class="oc-flex oc-height-1-1">
+    <div v-if="dragareaEnabled" class="dragarea" />
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
     </div>
@@ -8,7 +9,6 @@
       id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
-      class="oc-width-1-1 oc-width-2-5@m oc-width-1-4@xl"
       :sidebar-active-panel="sidebarActivePanel"
       @beforeDestroy="focusSideBar"
       @mounted="focusSideBar"
@@ -23,12 +23,16 @@ import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: {
     SideBar
   },
   mixins: [Mixins],
+  data: () => ({
+    dragareaEnabled: false
+  }),
   computed: {
     ...mapState('Files/sidebar', {
       sidebarClosed: 'closed',
@@ -53,6 +57,15 @@ export default defineComponent({
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
+    const dragOver = bus.subscribe('drag-over', this.onDragOver)
+    const dragOut = bus.subscribe('drag-out', this.hideDropzone)
+    const drop = bus.subscribe('drop', this.hideDropzone)
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('drag-over', dragOver)
+      bus.unsubscribe('drag-out', dragOut)
+      bus.unsubscribe('drop', drop)
+    })
   },
 
   methods: {
@@ -61,7 +74,12 @@ export default defineComponent({
       closeSidebar: 'close',
       setActiveSidebarPanel: 'setActivePanel'
     }),
-
+    hideDropzone() {
+      this.dragareaEnabled = false
+    },
+    onDragOver(event) {
+      this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    },
     focusSideBar(component, event) {
       this.focus({
         from: document.activeElement,
@@ -78,7 +96,20 @@ main {
   max-height: 100%;
 }
 
+.dragarea {
+  background-color: rgba(60, 130, 225, 0.21);
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 9;
+  border-radius: 14px;
+  border: 2px dashed var(--oc-color-swatch-primary-muted);
+}
 .files-list-wrapper {
+  position: relative;
   overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -94,9 +125,20 @@ main {
   }
 }
 
+#files {
+  position: relative;
+}
+
 #files-sidebar {
   position: relative;
   overflow: hidden;
+  width: 440px;
+}
+
+@media only screen and (max-width: 960px) {
+  #files-sidebar {
+    width: 100%;
+  }
 }
 
 #files-view {

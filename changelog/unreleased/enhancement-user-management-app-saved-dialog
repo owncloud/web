@@ -1,0 +1,7 @@
+Enhancement: User management app saved dialog
+
+We've replaced the pop up message when the user gets saved by a message which will be shown next to the save button.
+
+https://github.com/owncloud/web/pull/7375
+https://github.com/owncloud/web/pull/7377
+https://github.com/owncloud/web/issues/7351

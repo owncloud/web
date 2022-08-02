@@ -1,0 +1,6 @@
+Bugfix: Decline share not possible
+
+We've fixed a bug where declining an accepted share in the dropdown next to the breadcrumb was not possible.
+
+https://github.com/owncloud/web/pull/7379
+https://github.com/owncloud/web/issues/6899
