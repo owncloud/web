@@ -229,7 +229,8 @@ export function buildSharedResource(
     sdate: DateTime.fromSeconds(parseInt(share.stime)).toRFC2822(),
     indicators: [],
     path: undefined,
-    webDavPath: undefined
+    webDavPath: undefined,
+    tags: ['space', 'oddity']
   }
 
   if (incomingShares) {
@@ -261,6 +262,9 @@ export function buildSharedResource(
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
+    resource.canEditTags = () =>
+      parseInt(share.state) === ShareStatus.accepted &&
+      SharePermissions.update.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith || []
     resource.shareOwner = share.uid_owner
@@ -274,6 +278,7 @@ export function buildSharedResource(
     resource.canShare = () => true
     resource.canRename = () => true
     resource.canBeDeleted = () => true
+    resource.canEditTags = () => true
   }
 
   resource.extension = extractExtensionFromFile(resource)
