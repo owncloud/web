@@ -113,7 +113,6 @@ export default defineComponent({
       return option.toLowerCase()
     },
     showSelectNewLabel(option) {
-      console.log(this.$refs.tagSelect)
       return !this.$refs.tagSelect.$refs.select.optionExists(option)
     }
   }
