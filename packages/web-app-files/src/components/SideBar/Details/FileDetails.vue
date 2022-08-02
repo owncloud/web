@@ -143,7 +143,7 @@
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
           <td>
-            <router-link v-for="(tag, index) in file.tags" :to="getTagLink(tag)">
+            <router-link v-for="(tag, index) in file.tags" :key="tag" :to="getTagLink(tag)">
               <span>
                 <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
                 <span v-else v-text="tag" />

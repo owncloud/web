@@ -86,7 +86,7 @@ export default defineComponent({
   computed: {
     resource() {
       return this.displayedItem.value
-    },
+    }
   },
   mounted() {
     this.editAssignedTags = [...this.resource.tags]
