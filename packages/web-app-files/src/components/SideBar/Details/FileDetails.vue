@@ -347,7 +347,7 @@ export default defineComponent({
       return upperFirst(displayDate)
     },
     showTags() {
-      return this.file.tags.length
+      return this.file.tags?.length
     },
     tagsLabel() {
       return this.$gettext('Tags')
