@@ -26,7 +26,7 @@ export default {
             ) {
               return false
             }
-            return resources.length === 1
+            return resources.length === 1 && resources[0].canEditTags()
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-show-edit-tags-trigger'

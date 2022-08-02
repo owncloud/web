@@ -141,7 +141,7 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder }) => ({
+  ({ highlightedFile, router, multipleSelection, rootFolder }) => ({
     app: 'tags-item',
     icon: 'price-tag-3',
     iconFillType: 'line',
@@ -149,7 +149,7 @@ const panelGenerators: (({
     component: TagsPanel,
     componentAttrs: {},
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || rootFolder || !highlightedFile.canEditTags()) return false
       return !(
         isLocationTrashActive(router, 'files-trash-personal') ||
         isLocationTrashActive(router, 'files-trash-spaces-project') ||
