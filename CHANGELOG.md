@@ -37,6 +37,7 @@ Summary
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
+* Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
@@ -304,6 +305,12 @@ Details
 
    https://github.com/owncloud/web/issues/7339
    https://github.com/owncloud/web/pull/7349
+
+* Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
+
+   We now suppress error logs which occurred when opening the sidebar without an active panel.
+
+   https://github.com/owncloud/web/pull/7394
 
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 
