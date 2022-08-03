@@ -220,10 +220,6 @@ export function buildSpace(space) {
       ]
       return user && allowedRoles.includes(user.uuid)
     },
-    canEditQuota: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
-    },
     canCreate: function () {
       return true
     },
