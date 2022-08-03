@@ -20,7 +20,7 @@ describe('editQuota', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.$_editQuota_items[0].isEnabled({ resources: [] })).toBe(false)
     })
-    it('should be true when the current user has the "role-management"-permission', () => {
+    it('should be true when the current user has the "set-space-quota"-permission', () => {
       const spaceMock = {
         id: '1',
         quota: {},
@@ -33,7 +33,7 @@ describe('editQuota', () => {
         wrapper.vm.$_editQuota_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })
       ).toBe(true)
     })
-    it('should be false when the current user does not have the "role-management"-permission', () => {
+    it('should be false when the current user does not have the "set-space-quota"-permission', () => {
       const spaceMock = {
         id: '1',
         quota: {},

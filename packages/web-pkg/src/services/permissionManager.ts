@@ -37,7 +37,7 @@ export class PermissionManager {
   }
 
   public canEditSpaceQuota() {
-    return !!this.user.role?.settings.find((s) => s.name === 'role-management')
+    return !!this.user.role?.settings.find((s) => s.name === 'set-space-quota')
   }
 
   get user(): User {
