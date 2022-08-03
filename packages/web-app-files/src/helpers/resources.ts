@@ -403,7 +403,7 @@ export function buildSharedResource(
 
   resource.extension = extractExtensionFromFile(resource)
   resource.isReceivedShare = () => incomingShares
-  resource.canUpload = () => true
+  resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
   resource.getDomSelector = () => extractDomSelector(share.id)
