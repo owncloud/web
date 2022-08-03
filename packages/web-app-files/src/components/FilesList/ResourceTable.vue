@@ -843,6 +843,7 @@ export default defineComponent({
   }
   &-tag-more {
     cursor: pointer;
+    border: 0px !important;
   }
   &-edit-name {
     display: inline-flex;
