@@ -658,13 +658,13 @@ export default defineComponent({
         getReferenceClientRect: () => ({
           width: 0,
           height: 0,
+          top: event.clientY,
+          bottom: event.clientY,
           /**
            * If event type is 'contextmenu' the trigger was a right click on the table row,
            * so we render the dropdown at the position of the mouse pointer.
            * Otherwise we render the dropdown at the position of the three-dot-menu
            */
-          top: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.top,
-          bottom: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.bottom,
           left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
           right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
         })
@@ -913,7 +913,7 @@ export default defineComponent({
   }
 
   &-squashed {
-    .resource-table-actions div {
+    .resource-table-actions div:first-child {
       display: none;
 
       @media only screen and (min-width: 1200px) {

@@ -6,8 +6,17 @@ const util = require('util')
 
 module.exports = {
   commands: {
-    isThumbnailVisible: function () {
-      return this.waitForElementVisible('@sidebar').waitForElementVisible('@fileInfoIcon')
+    isThumbnailVisible: function (previewSize, item) {
+      if (previewSize === 'big') {
+        return this.waitForElementVisible('@sidebar').waitForElementVisible(
+          '@fileInfoIconBigPreview'
+        )
+      } else {
+        const panelName = item === 'people' || item === 'links' ? 'sharing' : item
+        return this.waitForElementVisible('@sidebar').waitForElementVisible(
+          util.format(this.elements.fileInfoIconSmallPreview.selector, panelName)
+        )
+      }
     },
     closeSidebarIfOpen: async function (timeout = 300) {
       if (!(await this.isSideBarOpen(false))) {
@@ -208,8 +217,11 @@ module.exports = {
       selector: '//*[@id="files-sidebar"]',
       locateStrategy: 'xpath'
     },
-    fileInfoIcon: {
-      selector: '.file_info .oc-icon'
+    fileInfoIconBigPreview: {
+      selector: '#oc-file-details-sidebar .details-icon'
+    },
+    fileInfoIconSmallPreview: {
+      selector: '#sidebar-panel-%s-item .file_info__icon'
     },
     fileInfoResourceNameAnyType: {
       selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
