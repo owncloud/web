@@ -38,6 +38,7 @@ Summary
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
+* Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -314,6 +315,12 @@ Details
 
    https://github.com/owncloud/web/issues/7339
    https://github.com/owncloud/web/pull/7349
+
+* Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
+
+   We've added the missing storage ID when navigating to a shared parent directory.
+
+   https://github.com/owncloud/web/pull/7396
 
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 
