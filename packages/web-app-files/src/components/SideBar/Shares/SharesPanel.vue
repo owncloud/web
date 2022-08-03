@@ -72,7 +72,7 @@ export default defineComponent({
   watch: {
     sharesLoading: {
       handler: function () {
-        if (this.loading) {
+        if (this.loading || !this.activePanel) {
           return
         }
         this.$nextTick(() => {
