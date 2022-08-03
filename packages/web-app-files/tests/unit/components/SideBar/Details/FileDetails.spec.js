@@ -206,7 +206,7 @@ function createWrapper(
       }
     }),
     localVue,
-    stubs: stubs,
+    stubs: { ...stubs, 'oc-resource-icon': true },
     directives: {
       OcTooltip
     },

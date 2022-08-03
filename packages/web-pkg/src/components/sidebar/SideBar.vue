@@ -286,7 +286,7 @@ export default defineComponent({
   height: 100%;
   max-height: 100%;
   display: grid;
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: auto 1fr;
   background-color: var(--oc-color-background-default);
   top: 0;
   position: absolute;
@@ -305,7 +305,7 @@ export default defineComponent({
   }
 
   &.compact-header {
-    grid-template-rows: 50px 70px 1fr;
+    grid-template-rows: auto auto 1fr;
   }
 
   &.sidebar-panel-default {
@@ -322,7 +322,7 @@ export default defineComponent({
   }
 
   &__header {
-    padding: 0 10px;
+    padding: 10px 10px 0 10px;
 
     &.header {
       display: grid;
