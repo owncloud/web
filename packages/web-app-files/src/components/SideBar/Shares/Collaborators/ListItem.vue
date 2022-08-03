@@ -60,17 +60,6 @@
           </div>
         </div>
         <div class="oc-flex oc-flex-between oc-flex-middle">
-          <span v-if="hasExpirationDate">
-            <oc-icon
-              v-oc-tooltip="expirationDate"
-              class="files-collaborators-collaborator-expiration"
-              data-testid="recipient-info-expiration-date"
-              :aria-label="expirationDate"
-              name="calendar"
-              fill-type="line"
-            />
-            <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-          </span>
           <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
             <router-link
               v-oc-tooltip="$gettext('Navigate to parent folder')"
@@ -82,6 +71,17 @@
               <span class="text oc-text-truncate" v-text="sharedParentDir" />
             </router-link>
           </div>
+          <span v-if="hasExpirationDate">
+            <oc-icon
+              v-oc-tooltip="expirationDate"
+              class="files-collaborators-collaborator-expiration"
+              data-testid="recipient-info-expiration-date"
+              :aria-label="expirationDate"
+              name="calendar"
+              fill-type="line"
+            />
+            <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+          </span>
           <edit-dropdown
             :id="`edit-drop-down-${editDropDownToggleId}`"
             class="files-collaborators-collaborator-edit"
