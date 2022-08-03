@@ -112,7 +112,9 @@ import {
   useStore,
   useCapabilitySpacesEnabled,
   useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing
+  useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingPublicCanEdit,
+  useCapabilityFilesSharingPublicAlias
 } from 'web-pkg/src/composables'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
@@ -146,6 +148,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -217,14 +221,14 @@ export default defineComponent({
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
-          this.capabilities.files_sharing?.public?.can_edit
+          this.hasPublicLinkEditing
         )
       }
 
       return LinkShareRoles.list(
         this.highlightedFile.isFolder,
-        this.capabilities.files_sharing?.public?.can_edit,
-        this.capabilities.files_sharing?.public?.alias
+        this.hasPublicLinkEditing,
+        this.hasPublicLinkAliasSupport
       )
     },
 
