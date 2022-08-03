@@ -1,0 +1,6 @@
+Bugfix: Selected item bottom glue
+
+We've fixed a bug where the selected item would be glued to the bottom when scrolling up via keyboard navigation. Also, the scrollTo param has been fixed and is now working again.
+
+https://github.com/owncloud/web/pull/7393
+https://github.com/owncloud/web/issues/7318
