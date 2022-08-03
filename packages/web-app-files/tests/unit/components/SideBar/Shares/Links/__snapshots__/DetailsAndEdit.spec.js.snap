@@ -9,6 +9,9 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
     <oc-drop-stub drop-id="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" padding-size="small" offset="0" mode="click" class="edit-public-link-role-dropdown">
       <oc-list-stub class="roleDropdownList">
         <li>
+          <oc-button-stub id="files-role-internal" appearance="raw" variation="passive" justify-content="space-between" class="oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="user" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Internal</span> <span class="oc-text-small">People need to be invited and login is required</span></span></span> <span class="oc-flex"><!----></span></oc-button-stub>
+        </li>
+        <li>
           <oc-button-stub id="files-role-viewer" appearance="raw" variation="inverse" justify-content="space-between" class="oc-p-s selected oc-background-primary-gradient"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span class="oc-text-small">Recipients can view and download contents.</span></span></span> <span class="oc-flex"><oc-icon-stub name="check"></oc-icon-stub></span></oc-button-stub>
         </li>
         <li>
