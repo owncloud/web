@@ -5,7 +5,7 @@
     }`"
     class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs oc-flex-between"
   >
-    <div class="oc-width-1-1 oc-flex oc-flex-middle" style="gap: 10px">
+    <div class="oc-width-1-1 oc-flex oc-flex-middle">
       <avatar-image
         v-if="isUser || isSpace"
         :userid="share.collaborator.name"
@@ -25,6 +25,7 @@
         class="
           oc-width-1-1 oc-flex oc-flex-between oc-flex-middle
           files-collaborators-collaborator-details
+          oc-pl-s
         "
       >
         <div>
@@ -59,7 +60,7 @@
             </div>
           </div>
         </div>
-        <div class="oc-flex oc-flex-between oc-flex-middle">
+        <div class="oc-flex oc-flex-between oc-flex-middle oc-ml-s oc-text-truncate">
           <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
             <router-link
               v-oc-tooltip="$gettext('Navigate to parent folder')"
