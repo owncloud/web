@@ -29,6 +29,10 @@ export default {
               return false
             }
 
+            if (!this.$permissionManager.canEditSpaceQuota()) {
+              return false
+            }
+
             return resources[0].canEditQuota({ user: this.user })
           },
           componentType: 'oc-button',
