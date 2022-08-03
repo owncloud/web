@@ -190,6 +190,7 @@ export const linkRoleInternalFile = new LinkShareRole(
   false,
   $gettext('Internal'),
   $gettext('internal'),
+  'user',
   [SharePermissions.internal]
 )
 export const linkRoleInternalFolder = new LinkShareRole(
@@ -197,6 +198,7 @@ export const linkRoleInternalFolder = new LinkShareRole(
   true,
   $gettext('Internal'),
   $gettext('internal'),
+  'user',
   [SharePermissions.internal]
 )
 export const linkRoleViewerFile = new LinkShareRole(
@@ -370,7 +372,12 @@ export abstract class LinkShareRoles {
    * @param canEditFile
    */
   static filterByBitmask(bitmask: number, isFolder: boolean, canEditFile = false): ShareRole[] {
-    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter((r) => {
+    return [
+      ...this.all,
+      linkRoleInternalFile,
+      linkRoleInternalFolder,
+      ...(canEditFile ? [linkRoleEditorFile] : [])
+    ].filter((r) => {
       return r.folder === isFolder && bitmask === (bitmask | r.bitmask(false))
     })
   }
