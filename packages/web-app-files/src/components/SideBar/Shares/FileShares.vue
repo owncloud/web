@@ -408,7 +408,7 @@ export default {
         }
 
         return createLocationSpaces('files-spaces-personal', {
-          params: { item: parentShare.path }
+          params: { storageId: this.currentStorageId, item: parentShare.path }
         })
       }
 

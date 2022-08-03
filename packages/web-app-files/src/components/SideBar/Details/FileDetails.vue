@@ -187,7 +187,7 @@ export default defineComponent({
       }
 
       return createLocationSpaces('files-spaces-personal', {
-        params: { item: unref(sharedParentDir) }
+        params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
       })
     })
 

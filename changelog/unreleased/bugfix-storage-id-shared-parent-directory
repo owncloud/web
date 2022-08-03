@@ -1,0 +1,5 @@
+Bugfix: Add storage ID when navigating to a shared parent directory
+
+We've added the missing storage ID when navigating to a shared parent directory.
+
+https://github.com/owncloud/web/pull/7396
