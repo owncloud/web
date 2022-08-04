@@ -25,14 +25,12 @@
           />
         </div>
         <div class="oc-pl-s oc-text-truncate">
-          <div class="oc-text-truncate">
-            <span v-oc-tooltip="shareDisplayNameTooltip">
-              <span
-                aria-hidden="true"
-                class="files-collaborators-collaborator-name"
-                v-text="shareDisplayName"
-              />
-            </span>
+          <div class="oc-text-truncate" v-oc-tooltip="shareDisplayNameTooltip">
+            <span
+              aria-hidden="true"
+              class="files-collaborators-collaborator-name"
+              v-text="shareDisplayName"
+            />
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           </div>
           <div>
@@ -290,7 +288,6 @@ export default defineComponent({
     },
 
     showAccessDetails() {
-      console.log('SHOW EVENT EMITTED')
       this.$refs.accessDetails.show()
     },
 
