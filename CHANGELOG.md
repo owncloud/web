@@ -49,6 +49,7 @@ Summary
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
+* Enhancement - Adjust helper texts: [#7404](https://github.com/owncloud/web/pull/7404)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Change file loading mechanism in `preview` app: [#7350](https://github.com/owncloud/web/pull/7350)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
@@ -416,6 +417,11 @@ Details
    https://github.com/owncloud/web/pull/7153
    https://github.com/owncloud/web/pull/7280
    https://github.com/owncloud/web/pull/7283
+
+* Enhancement - Adjust helper texts: [#7404](https://github.com/owncloud/web/pull/7404)
+
+   https://github.com/owncloud/web/issues/7331
+   https://github.com/owncloud/web/pull/7404
 
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 
