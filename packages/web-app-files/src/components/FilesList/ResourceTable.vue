@@ -84,6 +84,21 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
+    <template #tags="{ item }">
+      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
+        <oc-tag :rounded="true" size="small" class="oc-ml-xs">
+          {{ tag }}
+        </oc-tag>
+      </router-link>
+      <oc-tag
+        v-if="item.tags.length > 2"
+        size="small"
+        class="resource-table-tag-more"
+        @click="openTagsSidebar"
+      >
+        + {{ item.tags.length - 2 }}
+      </oc-tag>
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -192,7 +207,7 @@ import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationShares } from '../../router'
+import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
@@ -463,6 +478,13 @@ export default defineComponent({
             wrap: 'nowrap'
           },
           {
+            name: 'tags',
+            title: this.$gettext('Tags'),
+            type: 'slot',
+            alignH: 'right',
+            wrap: 'nowrap'
+          },
+          {
             name: 'owner',
             title: this.$gettext('Shared by'),
             type: 'slot',
@@ -567,6 +589,11 @@ export default defineComponent({
     shouldDisplayThumbnails(item) {
       return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `tag:${tag}`, provider: 'files.sdk' }
+      })
+    },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
     },
@@ -576,6 +603,9 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
+    },
+    openTagsSidebar() {
+      this.openWithPanel('tags-item')
     },
     openSharingSidebar(file) {
       let panelToOpen
@@ -867,6 +897,10 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
+  }
+  &-tag-more {
+    cursor: pointer;
+    border: 0px !important;
   }
   &-edit-name {
     display: inline-flex;
