@@ -6,6 +6,7 @@ export interface Resource {
   fileId?: string
   storageId?: string
   name?: string
+  tags?: string[]
   path: string
   webDavPath?: string
   downloadURL?: string
