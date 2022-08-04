@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-interface RoleSetting {
+interface Permission {
   description: string
   displayName: string
   id: string
@@ -15,7 +15,7 @@ interface RoleSetting {
 }
 interface Role {
   name: 'admin' | 'spaceadmin' | 'user' | 'guest'
-  settings: Array<RoleSetting>
+  settings: Array<Permission>
 }
 interface User {
   role: Role
