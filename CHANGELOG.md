@@ -36,6 +36,7 @@ Summary
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+* Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
@@ -299,6 +300,14 @@ Details
    https://github.com/owncloud/web/issues/7181
    https://github.com/owncloud/web/issues/7079
    https://github.com/owncloud/web/pull/7197
+
+* Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
+
+   By taking the space quota permission into account, we've fixed a bug where a regular space
+   member could see the "Edit space quota" action.
+
+   https://github.com/owncloud/web/issues/7400
+   https://github.com/owncloud/web/pull/7401
 
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
