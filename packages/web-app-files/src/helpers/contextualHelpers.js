@@ -111,10 +111,3 @@ export const shareViaIndirectLinkHelp = {
   ],
   readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
 }
-export const shareQuickLinkHelp = {
-  text: $gettext('The Quick link is the link that is always copied if you'),
-  list: [
-    { text: $gettext('right click on a file and choose "Get link" or') },
-    { text: $gettext('click on the quickaction "Get link"') }
-  ]
-}
