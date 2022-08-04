@@ -38,6 +38,34 @@ When(
 )
 
 When(
+  /^"([^"]*)" reshares the following (resource|resources)$/,
+  async function (this: World, stepUser: string, _: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
+      const { user, resource, role } = stepRow
+
+      if (!acc[resource]) {
+        acc[resource] = { users: [], role: '' }
+      }
+
+      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
+      acc[resource].role = role
+
+      return acc
+    }, {})
+
+    for (const folder of Object.keys(shareInfo)) {
+      await shareObject.createReshare({
+        folder,
+        users: shareInfo[folder].users,
+        role: shareInfo[folder].role
+      })
+    }
+  }
+)
+
+When(
   '{string} accepts the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

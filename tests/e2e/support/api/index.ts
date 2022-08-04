@@ -1,5 +1,5 @@
 export * as http from './http'
-export * as user from './user'
+export * as user from './userManagement'
 export * as config from './config'
 export * as settings from './settings'
 export * as graph from './graph'
