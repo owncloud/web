@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="oc-flex flex-en oc-flex-middle oc-ml-s oc-width-1-2" style="justify-content: end">
+      <div class="oc-flex flex-en oc-flex-middle oc-width-1-2" style="justify-content: end">
         <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
           <router-link
             v-oc-tooltip="$gettext('Navigate to parent folder')"
