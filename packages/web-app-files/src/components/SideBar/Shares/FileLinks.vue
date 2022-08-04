@@ -68,10 +68,12 @@
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
-      <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-        <span v-text="indirectLinksHeading" />
-        <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
-      </h3>
+      <div class="oc-flex">
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+          <span v-text="indirectLinksHeading" />
+        </h3>
+        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
+      </div>
       <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
         <li
           v-for="link in displayIndirectLinks"

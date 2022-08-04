@@ -7,39 +7,60 @@ export const empty = {
   list: ['', '', '']
 }
 export const shareInviteCollaboratorHelp = {
-  text: $gettext('Invite persons or groups to access this file or folder.'),
+  title: $gettext('Invite specific people'),
+  text: $gettext('Enter a name or group to share this item.'),
   list: [
-    { text: $gettext('Enter a name or group to share this item') },
+    { text: $gettext('Subfolders'), headline: true },
     {
       text: $gettext(
-        'If you share a folder,  all of its contents and subfolders will be shared with the entered persons or groups'
+        'If you share a folder, all of its contents and subfolders will be shared as well.'
       )
     },
+    { text: $gettext('Notification'), headline: true },
     {
-      text: $gettext('Invited persons or groups will be notified via e-mail or in-app notification')
+      text: $gettext('Invited people will be notified via email or in-app notification.')
     },
-    { text: $gettext('Invited persons can not see who else has access') }
-  ]
+    { text: $gettext('Incognito'), headline: true },
+    {
+      text: $gettext('Invited people can not see who else has access..')
+    },
+    { text: $gettext('“via folder”'), headline: true },
+    {
+      text: $gettext(
+        'The “via folder” is shown next to a share, if access has already been given via a parent folder. Click on the “via folder” to edit the share on its parent folder.'
+      )
+    }
+  ],
+  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
 }
 export const shareInviteCollaboratorHelpCern = {
   list: [
+    { text: $gettext('Search for service or secondary Account'), headline: true },
     {
       text: $gettext(
-        'To search for service or secondary accounts prefix the username with "a:" (like "a:doe") and for guest accounts prefix the username with "l:" (like "l:doe")'
+        'To search for service or secondary accounts prefix the username with "a:" (like "a:doe") and for guest accounts prefix the username with "l:" (like "l:doe").'
       )
     }
   ]
 }
 export const shareSpaceAddMemberHelp = {
-  text: $gettext('Add persons or groups as members to this Space. Members are allowed to:'),
+  title: $gettext('Add members to this Space'),
+  text: $gettext('Enter a name to add people or groups as members to this Space.'),
   list: [
-    { text: $gettext('see who else is member of this space') },
-    { text: $gettext('view all files in this space') },
-    { text: $gettext('(if permitted) edit or delete files in this Space') },
-    { text: $gettext('(if permitted) share folders of this Space with non-Members') },
-    { text: $gettext('see with whom a folder is shared') }
+    { text: $gettext('What members can do'), headline: true },
+    {
+      text: $gettext(
+        'Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role such as “Viewer” or “Editor”.'
+      )
+    },
+    { text: $gettext('What Space managers can do'), headline: true },
+    {
+      text: $gettext(
+        'Members with the Manager role can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.'
+      )
+    }
   ],
-  endText: 'Members can only be added or removed by a Space Manager.'
+  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
 }
 export const shareViaLinkHelp = {
   title: $gettext('Choose how access is granted'),
@@ -50,7 +71,7 @@ export const shareViaLinkHelp = {
     },
     {
       text: $gettext(
-        'Only people from the list "Invited people" can access. If there is no list, no people are invited yet.'
+        'Account and login is required. Only people from the list "Invited people" can access.'
       )
     },
     {
@@ -59,21 +80,34 @@ export const shareViaLinkHelp = {
     },
     {
       text: $gettext(
-        'Everyone with the link: Everyone with the link can access. Note: If you share this link with people from the list "Invited people", they need to login-in so that their individual assigned permissions can take effect. If they are not logged-in, the permissions of the link take effect.'
+        'No login required. Everyone with the link can access. If you share this link with people from the list "Invited people", they need to login so that their individual assigned permissions can take effect. If they are not logged-in, the permissions of the link take effect.'
+      )
+    },
+    {
+      text: $gettext('Quicklink'),
+      headline: true
+    },
+    {
+      text: $gettext(
+        'The quicklink is the default link that is copied when you select "Get link” from the context menu.'
       )
     }
-  ]
+  ],
+  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
 }
 export const shareViaIndirectLinkHelp = {
-  text: $gettext('This file is shared, because one of the folders it is in is shared via link.')
-}
-export const shareQuickLinkHelp = {
-  text: $gettext('The Quick link is the link that is always copied if you'),
+  title: $gettext('What are indirect links?'),
+  text: $gettext('Indirect links are links giving access by a parent folder.'),
   list: [
-    { text: $gettext('right click on a file and choose "Get link" or') },
-    { text: $gettext('click on the quickaction "Get link"') }
-  ]
-}
-export const shareAddLinkHelp = {
-  text: $gettext('Add and manage multiple links for the same file or folder.')
+    {
+      text: $gettext('How to edit indirect links'),
+      headline: true
+    },
+    {
+      text: $gettext(
+        'Indirect links can only be edited in their parent folder. Click on the folder icon below the link to navgate to the parent folder.'
+      )
+    }
+  ],
+  readMoreLink: 'https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing'
 }
