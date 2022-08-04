@@ -242,6 +242,7 @@ export default defineComponent({
         const sameRoute = to.name === from?.name && to.params?.storageId === from?.params?.storageId
         const sameItem = to.params?.item === from?.params?.item
         if (!sameRoute || !sameItem) {
+          this.loadResourcesTask.cancelAll()
           await this.loadResourcesTask.perform(this, sameRoute)
           // this can't be done in the task because the table will be rendered afterwards
           this.scrollToResourceFromRoute()
