@@ -156,12 +156,17 @@ export default {
 
     inviteCollaboratorHelp() {
       const cernFeatures = !!this.configuration?.options?.cernFeatures
-      return cernFeatures
-        ? {
-            text: shareInviteCollaboratorHelp.text,
-            list: [...shareInviteCollaboratorHelp.list, ...shareInviteCollaboratorHelpCern.list]
-          }
-        : shareInviteCollaboratorHelp
+
+      if (cernFeatures) {
+        const mergedHelp = shareInviteCollaboratorHelp
+        mergedHelp.list = [
+          ...shareInviteCollaboratorHelpCern.list,
+          ...shareInviteCollaboratorHelp.list
+        ]
+        return mergedHelp
+      }
+
+      return shareInviteCollaboratorHelp
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
