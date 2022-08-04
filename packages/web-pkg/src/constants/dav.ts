@@ -20,6 +20,7 @@ export abstract class DavProperty {
   static readonly ContentLength: string = '{DAV:}getcontentlength'
   static readonly ContentSize: string = '{http://owncloud.org/ns}size'
   static readonly LastModifiedDate: string = '{DAV:}getlastmodified'
+  static readonly Tags: string = '{http://owncloud.org/ns}tags'
   static readonly ETag: string = '{DAV:}getetag'
   static readonly MimeType: string = '{DAV:}getcontenttype'
   static readonly ResourceType: string = '{DAV:}resourcetype'
@@ -59,7 +60,8 @@ export abstract class DavProperties {
     DavProperty.ETag,
     DavProperty.MimeType,
     DavProperty.ResourceType,
-    DavProperty.DownloadURL
+    DavProperty.DownloadURL,
+    DavProperty.Tags
   ]
 
   static readonly PublicLink: DavProperty[] = DavProperties.Default.concat([

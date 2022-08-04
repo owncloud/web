@@ -99,15 +99,32 @@ export default defineComponent({
     revertChanges() {
       this.editAssignedTags = [...this.resource.tags]
     },
-    save() {
-      this.UPDATE_RESOURCE_FIELD({
-        id: this.resource.id,
-        field: 'tags',
-        value: [...this.editAssignedTags]
-      })
-      this.displayedItem.value.tags = [...this.editAssignedTags]
+    async save() {
+      try {
+        const tagsToAdd = this.editAssignedTags.filter((tag) => !this.resource.tags.includes(tag))
+        const tagsToRemove = this.resource.tags.filter(
+          (tag) => !this.editAssignedTags.includes(tag)
+        )
 
-      bus.publish('sidebar.entity.saved')
+        if (tagsToAdd.length) {
+          await this.$client.tags.addResourceTag(this.resource.fileId, tagsToAdd)
+        }
+
+        if (tagsToRemove.length) {
+          await this.$client.tags.removeResourceTag(this.resource.fileId, tagsToRemove)
+        }
+
+        this.UPDATE_RESOURCE_FIELD({
+          id: this.resource.id,
+          field: 'tags',
+          value: [...this.editAssignedTags]
+        })
+        this.displayedItem.value.tags = [...this.editAssignedTags]
+
+        bus.publish('sidebar.entity.saved')
+      } catch (e) {
+        console.error(e)
+      }
     },
     createOption(option) {
       return option.toLowerCase()
