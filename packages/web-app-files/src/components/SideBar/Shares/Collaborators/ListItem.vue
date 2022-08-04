@@ -3,34 +3,30 @@
     :data-testid="`collaborator-${isUser || isSpace ? 'user' : 'group'}-item-${
       share.collaborator.name
     }`"
-    class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs oc-flex-between"
+    class="files-collaborators-collaborator oc-py-xs"
   >
-    <div class="oc-width-1-1 oc-flex oc-flex-middle">
-      <avatar-image
-        v-if="isUser || isSpace"
-        :userid="share.collaborator.name"
-        :user-name="share.collaborator.displayName"
-        :width="36"
-        class="files-collaborators-collaborator-indicator"
-      />
-      <oc-avatar-item
-        v-else
-        :width="36"
-        icon-size="medium"
-        :icon="shareTypeIcon"
-        :name="shareTypeKey"
-        class="files-collaborators-collaborator-indicator"
-      />
-      <div
-        class="
-          oc-width-1-1 oc-flex oc-flex-between oc-flex-middle
-          files-collaborators-collaborator-details
-          oc-pl-s
-        "
-      >
+    <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
+      <div class="oc-width-1-2 oc-flex oc-flex-middle">
         <div>
-          <div>
-            <span v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate oc-m-rm">
+          <avatar-image
+            v-if="isUser || isSpace"
+            :userid="share.collaborator.name"
+            :user-name="share.collaborator.displayName"
+            :width="36"
+            class="files-collaborators-collaborator-indicator"
+          />
+          <oc-avatar-item
+            v-else
+            :width="36"
+            icon-size="medium"
+            :icon="shareTypeIcon"
+            :name="shareTypeKey"
+            class="files-collaborators-collaborator-indicator"
+          />
+        </div>
+        <div class="oc-pl-s oc-text-truncate">
+          <div class="oc-text-truncate">
+            <span v-oc-tooltip="shareDisplayNameTooltip">
               <span
                 aria-hidden="true"
                 class="files-collaborators-collaborator-name"
@@ -60,59 +56,59 @@
             </div>
           </div>
         </div>
-        <div class="oc-flex oc-flex-between oc-flex-middle oc-ml-s oc-text-truncate">
-          <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
-            <router-link
-              v-oc-tooltip="$gettext('Navigate to parent folder')"
-              class="parent-folder oc-text-truncate"
-              :to="sharedParentRoute"
-            >
-              <span class="text" v-text="$gettext('via')" />
-              <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
-              <span class="text oc-text-truncate" v-text="sharedParentDir" />
-            </router-link>
-          </div>
-          <span v-if="hasExpirationDate">
-            <oc-icon
-              v-oc-tooltip="expirationDate"
-              class="files-collaborators-collaborator-expiration"
-              data-testid="recipient-info-expiration-date"
-              :aria-label="expirationDate"
-              name="calendar"
-              fill-type="line"
-            />
-            <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-          </span>
-          <edit-dropdown
-            :id="`edit-drop-down-${editDropDownToggleId}`"
-            class="files-collaborators-collaborator-edit"
-            data-testid="collaborator-edit"
-            :expiration-date="share.expires ? share.expires : null"
-            :share-category="shareCategory"
-            :can-edit-or-delete="canEditOrDelete"
-            @expirationDateChanged="shareExpirationChanged"
-            @removeShare="removeShare"
-            @showAccessDetails="showAccessDetails"
-          />
-          <oc-drop
-            ref="accessDetails"
-            class="share-access-details-drop"
-            mode="manual"
-            :target="`#edit-drop-down-${editDropDownToggleId}`"
+      </div>
+      <div class="oc-flex flex-en oc-flex-middle oc-ml-s oc-width-1-2" style="justify-content: end">
+        <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+          <router-link
+            v-oc-tooltip="$gettext('Navigate to parent folder')"
+            class="parent-folder oc-text-truncate"
+            :to="sharedParentRoute"
           >
-            <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
-            <dl class="oc-mt-s">
-              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
-              <dd
-                v-if="shareAdditionalInfo"
-                class="files-collaborators-collaborator-additional-info"
-                v-text="shareAdditionalInfo"
-              />
-              <dt v-translate class="oc-text-muted">Type</dt>
-              <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
-            </dl>
-          </oc-drop>
+            <span class="text" v-text="$gettext('via')" />
+            <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
+            <span class="text oc-text-truncate" v-text="sharedParentDir" />
+          </router-link>
         </div>
+        <span v-if="hasExpirationDate">
+          <oc-icon
+            v-oc-tooltip="expirationDate"
+            class="files-collaborators-collaborator-expiration"
+            data-testid="recipient-info-expiration-date"
+            :aria-label="expirationDate"
+            name="calendar"
+            fill-type="line"
+          />
+          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+        </span>
+        <edit-dropdown
+          :id="`edit-drop-down-${editDropDownToggleId}`"
+          class="files-collaborators-collaborator-edit"
+          data-testid="collaborator-edit"
+          :expiration-date="share.expires ? share.expires : null"
+          :share-category="shareCategory"
+          :can-edit-or-delete="canEditOrDelete"
+          @expirationDateChanged="shareExpirationChanged"
+          @removeShare="removeShare"
+          @showAccessDetails="showAccessDetails"
+        />
+        <oc-drop
+          ref="accessDetails"
+          class="share-access-details-drop"
+          mode="manual"
+          :target="`#edit-drop-down-${editDropDownToggleId}`"
+        >
+          <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
+          <dl class="oc-mt-s">
+            <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
+            <dd
+              v-if="shareAdditionalInfo"
+              class="files-collaborators-collaborator-additional-info"
+              v-text="shareAdditionalInfo"
+            />
+            <dt v-translate class="oc-text-muted">Type</dt>
+            <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
+          </dl>
+        </oc-drop>
       </div>
     </div>
   </div>

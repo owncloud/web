@@ -432,8 +432,4 @@ export default {
   margin-top: var(--oc-space-small);
   padding-top: var(--oc-space-small);
 }
-.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-indicator {
-  margin-top: var(--oc-space-small);
-  padding-top: var(--oc-space-small);
-}
 </style>
