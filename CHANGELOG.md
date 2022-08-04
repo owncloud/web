@@ -32,11 +32,14 @@ Summary
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
+* Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
+* Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
+* Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
@@ -263,6 +266,14 @@ Details
    https://github.com/owncloud/web/pull/7270
    https://github.com/owncloud/web/pull/7324
 
+* Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
+
+   We've fixed a bug where the selected item would be glued to the bottom when scrolling up via
+   keyboard navigation. Also, the scrollTo param has been fixed and is now working again.
+
+   https://github.com/owncloud/web/issues/7318
+   https://github.com/owncloud/web/pull/7393
+
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 
    We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page
@@ -304,6 +315,18 @@ Details
 
    https://github.com/owncloud/web/issues/7339
    https://github.com/owncloud/web/pull/7349
+
+* Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
+
+   We've added the missing storage ID when navigating to a shared parent directory.
+
+   https://github.com/owncloud/web/pull/7396
+
+* Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
+
+   We now suppress error logs which occurred when opening the sidebar without an active panel.
+
+   https://github.com/owncloud/web/pull/7394
 
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 
@@ -451,11 +474,13 @@ Details
    https://github.com/owncloud/web/issues/6894
    https://github.com/owncloud/web/issues/7225
    https://github.com/owncloud/web/issues/7223
+   https://github.com/owncloud/web/issues/7397
    https://github.com/owncloud/web/pull/7086
    https://github.com/owncloud/web/pull/7247
    https://github.com/owncloud/web/pull/7243
    https://github.com/owncloud/web/pull/7317
    https://github.com/owncloud/web/pull/7319
+   https://github.com/owncloud/web/pull/7398
 
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 

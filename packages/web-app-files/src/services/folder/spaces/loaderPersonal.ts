@@ -65,7 +65,6 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
       ref.refreshFileListHeaderPosition()
 
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-      ref.scrollToResourceFromRoute()
     }).restartable()
   }
 }
