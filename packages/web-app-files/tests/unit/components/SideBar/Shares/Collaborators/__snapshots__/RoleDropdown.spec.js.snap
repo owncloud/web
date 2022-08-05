@@ -4,7 +4,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-16" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-15" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -17,7 +17,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-17" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-16" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -51,7 +51,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-18" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-17" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -64,7 +64,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-19" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-18" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -98,7 +98,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-20" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-19" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -111,7 +111,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-21" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-20" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -145,7 +145,7 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-26" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-25" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -158,7 +158,7 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-27" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-26" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -192,7 +192,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-24" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-23" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -205,7 +205,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-25" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-24" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -239,7 +239,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-22" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-21" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -252,7 +252,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-23" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-22" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -286,7 +286,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-6" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-5" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -299,7 +299,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-7" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-6" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
@@ -327,7 +327,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
 <span class="oc-flex oc-flex-middle"><oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><span>Invite as viewer</span>
 <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
-<oc-drop-stub dropid="oc-drop-4" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
+<oc-drop-stub dropid="oc-drop-3" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list">
     <li>
       <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-recipient-role-drop-btn-viewer" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <role-item-stub role="[object Object]" allowsharepermission="true"></role-item-stub></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
@@ -340,7 +340,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
     </li>
   </oc-list-stub>
 </oc-drop-stub>
-<oc-drop-stub dropid="oc-drop-5" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
+<oc-drop-stub dropid="oc-drop-4" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
   <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">

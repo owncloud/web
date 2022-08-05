@@ -23,7 +23,7 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
     <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="shares_navigation_mobile"><span>Shared with me</span>
       <oc-icon-stub name="arrow-down-s" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
     </oc-button-stub>
-    <div id="oc-drop-4" class="oc-drop oc-box-shadow-medium oc-rounded">
+    <div id="oc-drop-3" class="oc-drop oc-box-shadow-medium oc-rounded">
       <div class="oc-card oc-card-body oc-rounded oc-background-secondary oc-p-s">
         <ul class="oc-list oc-my-rm oc-mx-rm">
           <li>
