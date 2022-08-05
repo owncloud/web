@@ -175,6 +175,7 @@ config = {
                 "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
+            "skip": True,
         },
         # These suites have all or most of their scenarios expected to fail.
         # Eliminate wasted CI time by not retrying the failing scenarios.
@@ -189,6 +190,7 @@ config = {
             },
             "screenShots": True,
             "retry": False,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -205,6 +207,7 @@ config = {
             },
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -219,6 +222,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -235,6 +239,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-XGA": {
             "type": FULL,
@@ -312,6 +317,7 @@ config = {
                 "SCREEN_RESOLUTION": "768x1024",
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-Notifications-iPhone": {
             "type": NOTIFICATIONS,
@@ -328,6 +334,7 @@ config = {
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "skip": True,
         },
         "webUI-iPhone": {
             "type": FULL,
@@ -399,12 +406,14 @@ config = {
                     "webUITrashbinRestore",
                     "webUIUpload",
                 ],
+                "webUIDebug": "oC10iPhoneDebug",
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
+            "debugSuites": ["webUIDebug"],
         },
         "webUI-ocis": {
             "type": FULL,
@@ -512,6 +521,7 @@ config = {
             "runningOnOCIS": True,
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
             "screenShots": True,
+            "skip": True,
         },
         "webUI-notifications-oc10-integration": {
             "type": NOTIFICATIONS,
@@ -531,6 +541,7 @@ config = {
             "oc10IntegrationAppIncluded": True,
             "notificationsAppNeeded": True,
             "screenShots": True,
+            "skip": True,
         },
         "webUI-oc10-integration": {
             "type": FULL,
@@ -609,6 +620,7 @@ config = {
             "filterTags": "not @skip and not @skipOnOC10 and not @notToImplementOnOC10 and not @openIdLogin and @smokeTest",
             "oc10IntegrationAppIncluded": True,
             "screenShots": True,
+            "skip": True,
         },
     },
     "build": True,
@@ -790,10 +802,8 @@ def beforePipelines(ctx):
            pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
-    e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
