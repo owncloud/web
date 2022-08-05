@@ -297,10 +297,14 @@ module.exports = {
     },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsListItem
-      selector: '.files-collaborators-collaborator-additional-info'
+      selector:
+        '//div[contains(@class, "share-access-details-drop")]//dt[contains(text(),"Additional info")]/following-sibling::dd[1]',
+      locateStrategy: 'xpath'
     },
     collaboratorShareType: {
-      selector: '.files-collaborators-collaborator-share-type'
+      selector:
+        '//div[contains(@class, "share-access-details-drop")]//dt[contains(text(),"Type")]/following-sibling::dd[1]',
+      locateStrategy: 'xpath'
     },
     collaboratorExpirationInfo: {
       selector:
