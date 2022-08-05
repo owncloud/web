@@ -2392,8 +2392,7 @@ def cacheOcisPipeline(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": skipIfUnchanged(ctx, "cache") +
-                 buildOCISCache() +
+        "steps": buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
         "volumes": [{

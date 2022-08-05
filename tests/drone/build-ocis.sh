@@ -1,6 +1,8 @@
 #!/bin/bash
 
-STEP=$1 # which step to run
+# {string} which step to run
+# options: nodejs, golang
+STEP=$1
 
 REPO_URL=https://github.com/owncloud/ocis.git
 BASE_PATH=/var/www/owncloud/ocis-build/
@@ -24,7 +26,7 @@ else # golang
 		echo "oCIS build failed."
 		exit 1
 	fi
-	mkdir -p $BASE_PATH"$OCIS_COMMITID"
-	cp bin/ocis $BASE_PATH"$OCIS_COMMITID"/
-	ls -la $BASE_PATH"$OCIS_COMMITID"/
+	mkdir -p "$BASE_PATH""$OCIS_COMMITID"
+	cp bin/ocis "$BASE_PATH""$OCIS_COMMITID"/
+	ls -la "$BASE_PATH""$OCIS_COMMITID"/
 fi
