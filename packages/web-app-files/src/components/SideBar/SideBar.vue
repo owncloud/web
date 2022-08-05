@@ -168,6 +168,7 @@ export default defineComponent({
   },
   methods: {
     async fetchFileInfo() {
+      console.log('lol')
       if (!this.highlightedFile) {
         this.selectedFile = this.highlightedFile
         return
