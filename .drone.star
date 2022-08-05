@@ -2437,6 +2437,13 @@ def getOcis():
 def buildOCISCache():
     return [
         {
+            "name": "check-for-exisiting-cache",
+            "image": OC_UBUNTU,
+            "commands": [
+                "bash ./tests/drone/check-for-existing-oCIS-cache.sh",
+            ],
+        },
+        {
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
             "environment": {
