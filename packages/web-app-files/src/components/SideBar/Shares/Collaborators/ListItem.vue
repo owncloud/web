@@ -3,7 +3,7 @@
     :data-testid="`collaborator-${isUser || isSpace ? 'user' : 'group'}-item-${
       share.collaborator.name
     }`"
-    class="files-collaborators-collaborator"
+    class="files-collaborators-collaborator oc-py-xs"
   >
     <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
       <div class="oc-width-2-3 oc-flex oc-flex-middle">
