@@ -6,7 +6,7 @@
     class="files-collaborators-collaborator"
   >
     <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
-      <div class="oc-width-1-2 oc-flex oc-flex-middle">
+      <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
           <avatar-image
             v-if="isUser || isSpace"
@@ -25,7 +25,7 @@
           />
         </div>
         <div class="oc-pl-s oc-text-truncate">
-          <div class="oc-text-truncate" v-oc-tooltip="shareDisplayNameTooltip">
+          <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
             <span
               aria-hidden="true"
               class="files-collaborators-collaborator-name"
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      <div class="oc-flex flex-en oc-flex-middle oc-width-1-2" style="justify-content: end">
+      <div class="oc-flex flex-en oc-flex-middle oc-width-1-3" style="justify-content: end">
         <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
           <router-link
             v-oc-tooltip="$gettext('Navigate to parent folder')"
@@ -89,24 +89,13 @@
           @removeShare="removeShare"
           @showAccessDetails="showAccessDetails"
         />
-        <oc-drop
-          ref="accessDetails"
+        <oc-info-drop
+          ref="accessDetailsDrop"
           class="share-access-details-drop"
+          v-bind="isSpace ? accessDetailsPropsSpace : accessDetailsProps"
           mode="manual"
           :target="`#edit-drop-down-${editDropDownToggleId}`"
-        >
-          <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
-          <dl class="oc-mt-s">
-            <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
-            <dd
-              v-if="shareAdditionalInfo"
-              class="files-collaborators-collaborator-additional-info"
-              v-text="shareAdditionalInfo"
-            />
-            <dt v-translate class="oc-text-muted">Type</dt>
-            <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
-          </dl>
-        </oc-drop>
+        />
       </div>
     </div>
   </div>
@@ -277,6 +266,68 @@ export default defineComponent({
     },
     editDropDownToggleId() {
       return uuid.v4()
+    },
+    shareDate() {
+      return DateTime.fromSeconds(parseInt(this.share.stime))
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+    shareOwnerDisplayName() {
+      return this.share.owner.displayName
+    },
+    shareOwnerAdditionalInfo() {
+      return this.share.owner.additionalInfo
+    },
+    accessDetailsPropsSpace() {
+      const list = []
+
+      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
+
+      if (this.shareAdditionalInfo) {
+        list.push(
+          { text: this.$gettext('Additional info'), headline: true },
+          { text: this.shareAdditionalInfo }
+        )
+      }
+
+      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
+
+      return {
+        title: this.$gettext('Access details'),
+        list
+      }
+    },
+    accessDetailsProps() {
+      const list = []
+
+      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
+
+      if (this.shareAdditionalInfo) {
+        list.push(
+          { text: this.$gettext('Additional info'), headline: true },
+          { text: this.shareAdditionalInfo }
+        )
+      }
+
+      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
+      list.push(
+        { text: this.$gettext('Access expires'), headline: true },
+        { text: this.hasExpirationDate ? this.expirationDate : this.$gettext('no') }
+      )
+      list.push({ text: this.$gettext('Shared on'), headline: true }, { text: this.shareDate })
+      list.push(
+        { text: this.$gettext('Invited by'), headline: true },
+        {
+          text: this.shareOwnerAdditionalInfo
+            ? `${this.shareOwnerDisplayName} (${this.shareOwnerAdditionalInfo})`
+            : this.shareOwnerDisplayName
+        }
+      )
+
+      return {
+        title: this.$gettext('Access details'),
+        list
+      }
     }
   },
   methods: {
@@ -288,7 +339,7 @@ export default defineComponent({
     },
 
     showAccessDetails() {
-      this.$refs.accessDetails.show()
+      this.$refs.accessDetailsDrop.$refs.drop.show()
     },
 
     shareRoleChanged({ role, permissions }) {

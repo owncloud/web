@@ -419,6 +419,7 @@ export function buildShare(s, file, allowSharePermission): Share {
 }
 
 export function buildSpaceShare(s, storageId): Share {
+  console.log(s)
   let permissions, role
 
   switch (s.role) {

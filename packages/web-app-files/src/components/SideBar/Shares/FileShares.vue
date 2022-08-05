@@ -21,7 +21,7 @@
     <template v-if="hasSharees">
       <ul
         id="files-collaborators-list"
-        class="oc-list oc-overflow-hidden"
+        class="oc-list oc-list-divider oc-overflow-hidden"
         :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
         :aria-label="$gettext('Share receivers')"
       >
@@ -426,10 +426,5 @@ export default {
 <style>
 .avatars-wrapper {
   height: 40px;
-}
-.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-details {
-  border-top: 1px solid var(--oc-color-border);
-  margin-top: var(--oc-space-small);
-  padding-top: var(--oc-space-small);
 }
 </style>

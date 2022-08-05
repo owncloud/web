@@ -223,7 +223,7 @@ export default defineComponent({
   &__file_info,
   &__space_info {
     background-color: var(--oc-color-background-default);
-    padding: 10px 10px 0 10px;
+    padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
   }
 }
 
