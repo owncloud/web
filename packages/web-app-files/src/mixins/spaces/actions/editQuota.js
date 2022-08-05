@@ -29,7 +29,7 @@ export default {
               return false
             }
 
-            return resources[0].canEditQuota({ user: this.user })
+            return this.$permissionManager.canEditSpaceQuota()
           },
           componentType: 'oc-button',
           class: 'oc-files-actions-edit-quota-trigger'

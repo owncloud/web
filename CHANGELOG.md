@@ -36,6 +36,7 @@ Summary
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+* Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
@@ -49,6 +50,7 @@ Summary
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
 * Enhancement - Add Keyboard navigation/selection: [#7153](https://github.com/owncloud/web/pull/7153)
+* Enhancement - Adjust helper texts: [#7404](https://github.com/owncloud/web/pull/7404)
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Change file loading mechanism in `preview` app: [#7350](https://github.com/owncloud/web/pull/7350)
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
@@ -299,6 +301,14 @@ Details
    https://github.com/owncloud/web/issues/7079
    https://github.com/owncloud/web/pull/7197
 
+* Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
+
+   By taking the space quota permission into account, we've fixed a bug where a regular space
+   member could see the "Edit space quota" action.
+
+   https://github.com/owncloud/web/issues/7400
+   https://github.com/owncloud/web/pull/7401
+
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
    We have fixed the way the sharing indicators for space members and link shares were displayed in
@@ -416,6 +426,11 @@ Details
    https://github.com/owncloud/web/pull/7153
    https://github.com/owncloud/web/pull/7280
    https://github.com/owncloud/web/pull/7283
+
+* Enhancement - Adjust helper texts: [#7404](https://github.com/owncloud/web/pull/7404)
+
+   https://github.com/owncloud/web/issues/7331
+   https://github.com/owncloud/web/pull/7404
 
 * Enhancement - Loading context blocks application bootstrap: [#7030](https://github.com/owncloud/web/issues/7030)
 
