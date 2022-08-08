@@ -95,7 +95,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -325,7 +325,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -361,7 +361,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -397,7 +397,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -453,7 +453,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">
@@ -489,7 +489,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
 <div id="oc-file-details-sidebar">
   <div>
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-      <oc-resource-icon resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon>
+      <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <!---->
     <table aria-label="Overview of the information about the selected file" class="details-table">

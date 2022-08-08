@@ -5,9 +5,9 @@
       <space-members
         v-if="showSpaceMembers"
         ref="peopleShares"
-        class="oc-background-highlight oc-p-m oc-mb-m"
+        class="oc-background-highlight oc-p-m oc-mb-s"
       />
-      <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-m" />
+      <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-s" />
       <file-links v-if="showLinks" ref="linkShares" class="oc-background-highlight oc-p-m" />
     </template>
   </div>

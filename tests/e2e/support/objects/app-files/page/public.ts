@@ -18,8 +18,7 @@ const fileUploadInput = '//input[@id="files-file-upload-input"]'
 const resourceNameSelector = '[data-test-resource-name="%s"]'
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
-const publicLinkAuthorizeButton =
-  '//*[@id="password-submit"]|//*[@id="oc-textinput-3"]/ancestor::div[contains(@class, "oc-mb-s")]/following-sibling::button'
+const publicLinkAuthorizeButton = '.oc-login-authorize-button'
 export class Public {
   #page: Page
 

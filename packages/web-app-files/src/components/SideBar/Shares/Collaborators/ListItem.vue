@@ -3,39 +3,34 @@
     :data-testid="`collaborator-${isUser || isSpace ? 'user' : 'group'}-item-${
       share.collaborator.name
     }`"
-    class="files-collaborators-collaborator oc-flex oc-flex-middle oc-py-xs oc-flex-between"
+    class="files-collaborators-collaborator oc-py-xs"
   >
-    <div class="oc-width-1-1 oc-flex oc-flex-middle" style="gap: 10px">
-      <avatar-image
-        v-if="isUser || isSpace"
-        :userid="share.collaborator.name"
-        :user-name="share.collaborator.displayName"
-        :width="36"
-        class="files-collaborators-collaborator-indicator"
-      />
-      <oc-avatar-item
-        v-else
-        :width="36"
-        icon-size="medium"
-        :icon="shareTypeIcon"
-        :name="shareTypeKey"
-        class="files-collaborators-collaborator-indicator"
-      />
-      <div
-        class="
-          oc-width-1-1 oc-flex oc-flex-between oc-flex-middle
-          files-collaborators-collaborator-details
-        "
-      >
+    <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
+      <div class="oc-width-2-3 oc-flex oc-flex-middle">
         <div>
-          <div>
-            <span v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate oc-m-rm">
-              <span
-                aria-hidden="true"
-                class="files-collaborators-collaborator-name"
-                v-text="shareDisplayName"
-              />
-            </span>
+          <avatar-image
+            v-if="isUser || isSpace"
+            :userid="share.collaborator.name"
+            :user-name="share.collaborator.displayName"
+            :width="36"
+            class="files-collaborators-collaborator-indicator"
+          />
+          <oc-avatar-item
+            v-else
+            :width="36"
+            icon-size="medium"
+            :icon="shareTypeIcon"
+            :name="shareTypeKey"
+            class="files-collaborators-collaborator-indicator"
+          />
+        </div>
+        <div class="oc-pl-s oc-text-truncate">
+          <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
+            <span
+              aria-hidden="true"
+              class="files-collaborators-collaborator-name"
+              v-text="shareDisplayName"
+            />
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           </div>
           <div>
@@ -59,59 +54,48 @@
             </div>
           </div>
         </div>
-        <div class="oc-flex oc-flex-between oc-flex-middle">
-          <span v-if="hasExpirationDate">
-            <oc-icon
-              v-oc-tooltip="expirationDate"
-              class="files-collaborators-collaborator-expiration"
-              data-testid="recipient-info-expiration-date"
-              :aria-label="expirationDate"
-              name="calendar"
-              fill-type="line"
-            />
-            <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-          </span>
-          <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
-            <router-link
-              v-oc-tooltip="$gettext('Navigate to parent folder')"
-              class="parent-folder oc-text-truncate"
-              :to="sharedParentRoute"
-            >
-              <span class="text" v-text="$gettext('via')" />
-              <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
-              <span class="text oc-text-truncate" v-text="sharedParentDir" />
-            </router-link>
-          </div>
-          <edit-dropdown
-            :id="`edit-drop-down-${editDropDownToggleId}`"
-            class="files-collaborators-collaborator-edit"
-            data-testid="collaborator-edit"
-            :expiration-date="share.expires ? share.expires : null"
-            :share-category="shareCategory"
-            :can-edit-or-delete="canEditOrDelete"
-            @expirationDateChanged="shareExpirationChanged"
-            @removeShare="removeShare"
-            @showAccessDetails="showAccessDetails"
-          />
-          <oc-drop
-            ref="accessDetails"
-            class="share-access-details-drop"
-            mode="manual"
-            :target="`#edit-drop-down-${editDropDownToggleId}`"
+      </div>
+      <div class="oc-flex flex-en oc-flex-middle oc-width-1-3" style="justify-content: end">
+        <div v-if="sharedParentRoute" class="oc-resource-indicators oc-text-truncate">
+          <router-link
+            v-oc-tooltip="$gettext('Navigate to parent folder')"
+            class="parent-folder oc-text-truncate"
+            :to="sharedParentRoute"
           >
-            <h5 v-translate class="oc-text-bold oc-m-rm">Access details</h5>
-            <dl class="oc-mt-s">
-              <dt v-if="shareAdditionalInfo" v-translate class="oc-text-muted oc-mb-s">Addition</dt>
-              <dd
-                v-if="shareAdditionalInfo"
-                class="files-collaborators-collaborator-additional-info"
-                v-text="shareAdditionalInfo"
-              />
-              <dt v-translate class="oc-text-muted">Type</dt>
-              <dd class="files-collaborators-collaborator-share-type" v-text="shareTypeText" />
-            </dl>
-          </oc-drop>
+            <span class="text" v-text="$gettext('via')" />
+            <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
+            <span class="text oc-text-truncate" v-text="sharedParentDir" />
+          </router-link>
         </div>
+        <span v-if="hasExpirationDate">
+          <oc-icon
+            v-oc-tooltip="expirationDate"
+            class="files-collaborators-collaborator-expiration"
+            data-testid="recipient-info-expiration-date"
+            :aria-label="expirationDate"
+            name="calendar"
+            fill-type="line"
+          />
+          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+        </span>
+        <edit-dropdown
+          :id="`edit-drop-down-${editDropDownToggleId}`"
+          class="files-collaborators-collaborator-edit"
+          data-testid="collaborator-edit"
+          :expiration-date="share.expires ? share.expires : null"
+          :share-category="shareCategory"
+          :can-edit-or-delete="canEditOrDelete"
+          @expirationDateChanged="shareExpirationChanged"
+          @removeShare="removeShare"
+          @showAccessDetails="showAccessDetails"
+        />
+        <oc-info-drop
+          ref="accessDetailsDrop"
+          class="share-access-details-drop"
+          v-bind="isSpace ? accessDetailsPropsSpace : accessDetailsProps"
+          mode="manual"
+          :target="`#edit-drop-down-${editDropDownToggleId}`"
+        />
       </div>
     </div>
   </div>
@@ -282,6 +266,68 @@ export default defineComponent({
     },
     editDropDownToggleId() {
       return uuid.v4()
+    },
+    shareDate() {
+      return DateTime.fromSeconds(parseInt(this.share.stime))
+        .setLocale(this.$language.current)
+        .toLocaleString(DateTime.DATETIME_FULL)
+    },
+    shareOwnerDisplayName() {
+      return this.share.owner.displayName
+    },
+    shareOwnerAdditionalInfo() {
+      return this.share.owner.additionalInfo
+    },
+    accessDetailsPropsSpace() {
+      const list = []
+
+      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
+
+      if (this.shareAdditionalInfo) {
+        list.push(
+          { text: this.$gettext('Additional info'), headline: true },
+          { text: this.shareAdditionalInfo }
+        )
+      }
+
+      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
+
+      return {
+        title: this.$gettext('Access details'),
+        list
+      }
+    },
+    accessDetailsProps() {
+      const list = []
+
+      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
+
+      if (this.shareAdditionalInfo) {
+        list.push(
+          { text: this.$gettext('Additional info'), headline: true },
+          { text: this.shareAdditionalInfo }
+        )
+      }
+
+      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
+      list.push(
+        { text: this.$gettext('Access expires'), headline: true },
+        { text: this.hasExpirationDate ? this.expirationDate : this.$gettext('no') }
+      )
+      list.push({ text: this.$gettext('Shared on'), headline: true }, { text: this.shareDate })
+      list.push(
+        { text: this.$gettext('Invited by'), headline: true },
+        {
+          text: this.shareOwnerAdditionalInfo
+            ? `${this.shareOwnerDisplayName} (${this.shareOwnerAdditionalInfo})`
+            : this.shareOwnerDisplayName
+        }
+      )
+
+      return {
+        title: this.$gettext('Access details'),
+        list
+      }
     }
   },
   methods: {
@@ -293,8 +339,7 @@ export default defineComponent({
     },
 
     showAccessDetails() {
-      console.log('SHOW EVENT EMITTED')
-      this.$refs.accessDetails.show()
+      this.$refs.accessDetailsDrop.$refs.drop.show()
     },
 
     shareRoleChanged({ role, permissions }) {

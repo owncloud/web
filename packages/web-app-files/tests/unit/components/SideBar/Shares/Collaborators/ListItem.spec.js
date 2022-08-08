@@ -95,6 +95,11 @@ function createWrapper({
     displayName: 'Brian Murphy',
     additionalInfo: 'brian@owncloud.com'
   },
+  owner = {
+    name: 'marie',
+    displayName: 'Marie Curie',
+    additionalInfo: 'marie@owncloud.com'
+  },
   role = peopleRoleViewerFolder,
   modifiable = true,
   sharedParentRoute = null
@@ -119,6 +124,7 @@ function createWrapper({
       share: {
         id: 'asdf',
         collaborator,
+        owner,
         shareType,
         role
       },
