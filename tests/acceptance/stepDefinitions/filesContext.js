@@ -215,7 +215,7 @@ When('the user uploads a created file {string} using the webUI', function (eleme
 
 When('the user uploads a created file {string} with overwrite using the webUI', function (element) {
   const uploadPath = path.join(client.globals.mountedUploadDir, element)
-  client.page
+  return client.page
     .personalPage()
     .selectFileForUpload(uploadPath)
     .then(() => client.page.personalPage().confirmFileOverwrite())

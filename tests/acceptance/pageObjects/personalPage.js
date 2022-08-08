@@ -243,6 +243,7 @@ module.exports = {
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
+        .waitForElementVisible('@fileUploadStatus')
       return this
     },
     checkForButtonDisabled: function () {
