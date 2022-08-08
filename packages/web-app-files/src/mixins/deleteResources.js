@@ -145,14 +145,14 @@ export default {
         this.deleteResources_deleteOps.push(p)
       }
 
-      return Promise.all(this.deleteResources_deleteOps).then(() => {
+      Promise.all(this.deleteResources_deleteOps).then(() => {
         this.hideModal()
         this.toggleModalConfirmButton()
       })
     },
 
     $_deleteResources_filesList_delete() {
-      return this.deleteFiles({
+      this.deleteFiles({
         client: this.$client,
         files: this.$_deleteResources_resources,
         isPublicLinkContext: this.isPublicLinkContext,
