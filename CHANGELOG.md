@@ -518,6 +518,7 @@ Details
    https://github.com/owncloud/web/pull/7310
    https://github.com/owncloud/web/pull/7315
    https://github.com/owncloud/web/pull/7372
+   https://github.com/owncloud/web/pull/7402
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
