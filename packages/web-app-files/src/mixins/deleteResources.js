@@ -168,9 +168,9 @@ export default {
           this.SET_QUOTA(user.quota)
         }
         if (
-          (this.capabilities?.spaces?.enabled &&
-            isLocationSpacesActive(this.$router, 'files-spaces-project')) ||
-          isLocationSpacesActive(this.$router, 'files-spaces-personal')
+          this.capabilities?.spaces?.enabled &&
+          (isLocationSpacesActive(this.$router, 'files-spaces-project') ||
+            isLocationSpacesActive(this.$router, 'files-spaces-personal'))
         ) {
           const graphClient = clientService.graphAuthenticated(
             this.configuration.server,

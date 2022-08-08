@@ -78,7 +78,11 @@ function getWrapper(resourcesToDelete) {
       getters: {
         user: () => {
           return { id: 'marie' }
-        }
+        },
+        configuration: () => ({
+          server: 'https://example.com'
+        }),
+        capabilities: () => {}
       },
       modules: {
         Files: {
