@@ -122,6 +122,8 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
+import { useGraphClient } from 'web-client/src/composables'
+
 import {
   useRequest,
   useCapabilityShareJailEnabled,
@@ -173,6 +175,7 @@ export default defineComponent({
       }),
       ...useUploadHelpers(),
       ...useRequest(),
+      ...useGraphClient(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
@@ -278,7 +281,7 @@ export default defineComponent({
       'setModalInputErrorMessage',
       'hideModal'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     onFileSuccess() {
@@ -287,13 +290,20 @@ export default defineComponent({
       }
     },
 
-    onUploadComplete(result) {
+    async onUploadComplete(result) {
       if (result.successful) {
         const file = result.successful[0]
 
         if (!file) {
           return
         }
+
+        const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+        this.UPDATE_SPACE_FIELD({
+          id: driveResponse.data.id,
+          field: 'spaceQuota',
+          value: driveResponse.data.quota
+        })
 
         let pathFileWasUploadedTo = file.meta.currentFolder
         if (file.meta.relativeFolder) {

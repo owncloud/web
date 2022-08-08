@@ -4,6 +4,7 @@ import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
 import { isLocationTrashActive } from '../router'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   data: () => ({
@@ -16,6 +17,8 @@ export default {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['user']),
     ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
+    ...mapGetters(['configuration']),
+    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_deleteResources_isInTrashbin() {
       return (
@@ -97,6 +100,7 @@ export default {
   methods: {
     ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_trashbin_deleteOp(resource) {
@@ -142,14 +146,14 @@ export default {
         this.deleteResources_deleteOps.push(p)
       }
 
-      Promise.all(this.deleteResources_deleteOps).then(() => {
+      return Promise.all(this.deleteResources_deleteOps).then(() => {
         this.hideModal()
         this.toggleModalConfirmButton()
       })
     },
 
     $_deleteResources_filesList_delete() {
-      this.deleteFiles({
+      return this.deleteFiles({
         client: this.$client,
         files: this.$_deleteResources_resources,
         isPublicLinkContext: this.isPublicLinkContext,
@@ -185,12 +189,26 @@ export default {
       })
     },
 
-    $_deleteResources_delete() {
+    async $_deleteResources_delete() {
       this.toggleModalConfirmButton()
 
       this.$_deleteResources_isInTrashbin
-        ? this.$_deleteResources_trashbin_delete()
-        : this.$_deleteResources_filesList_delete()
+        ? await this.$_deleteResources_trashbin_delete()
+        : await this.$_deleteResources_filesList_delete()
+
+      const graphClient = clientService.graphAuthenticated(
+        this.configuration.server,
+        this.accessToken
+      )
+
+      const driveResponse = await graphClient.drives.getDrive(
+        this.$_deleteResources_resources[0].storageId
+      )
+      this.UPDATE_SPACE_FIELD({
+        id: driveResponse.data.id,
+        field: 'spaceQuota',
+        value: driveResponse.data.quota
+      })
     },
 
     $_deleteResources_displayDialog(resources) {
