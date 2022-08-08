@@ -168,7 +168,7 @@ export default {
           this.SET_QUOTA(user.quota)
         }
 
-        if (this.capabilities.spaces?.enabled) {
+        if (this.capabilities?.spaces?.enabled) {
           try {
             const graphClient = clientService.graphAuthenticated(
               this.configuration.server,

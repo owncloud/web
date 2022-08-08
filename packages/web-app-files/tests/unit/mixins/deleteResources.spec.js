@@ -67,7 +67,8 @@ function getWrapper(resourcesToDelete) {
       getters: {
         user: () => {
           return { id: 'marie' }
-        }
+        },
+        capabilities: jest.fn()
       },
       modules: {
         Files: {
