@@ -15,9 +15,8 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'configuration', 'capabilities']),
     ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
-    ...mapGetters(['configuration']),
     ...mapGetters('runtime/auth', ['accessToken']),
 
     $_deleteResources_isInTrashbin() {
@@ -196,19 +195,21 @@ export default {
         ? await this.$_deleteResources_trashbin_delete()
         : await this.$_deleteResources_filesList_delete()
 
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      if (this.capabilities.spaces?.enabled) {
+        const graphClient = clientService.graphAuthenticated(
+          this.configuration.server,
+          this.accessToken
+        )
 
-      const driveResponse = await graphClient.drives.getDrive(
-        this.$_deleteResources_resources[0].storageId
-      )
-      this.UPDATE_SPACE_FIELD({
-        id: driveResponse.data.id,
-        field: 'spaceQuota',
-        value: driveResponse.data.quota
-      })
+        const driveResponse = await graphClient.drives.getDrive(
+          this.$_deleteResources_resources[0].storageId
+        )
+        this.UPDATE_SPACE_FIELD({
+          id: driveResponse.data.id,
+          field: 'spaceQuota',
+          value: driveResponse.data.quota
+        })
+      }
     },
 
     $_deleteResources_displayDialog(resources) {

@@ -127,6 +127,7 @@ import { useGraphClient } from 'web-client/src/composables'
 import {
   useRequest,
   useCapabilityShareJailEnabled,
+  useCapabilitySpacesEnabled,
   useStore,
   usePublicLinkPassword,
   useUserContext
@@ -182,6 +183,7 @@ export default defineComponent({
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
+      hasSpaces: useCapabilitySpacesEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       isUserContext: useUserContext({ store })
     }
@@ -298,12 +300,14 @@ export default defineComponent({
           return
         }
 
-        const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
-        this.UPDATE_SPACE_FIELD({
-          id: driveResponse.data.id,
-          field: 'spaceQuota',
-          value: driveResponse.data.quota
-        })
+        if (this.hasSpaces) {
+          const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+          this.UPDATE_SPACE_FIELD({
+            id: driveResponse.data.id,
+            field: 'spaceQuota',
+            value: driveResponse.data.quota
+          })
+        }
 
         let pathFileWasUploadedTo = file.meta.currentFolder
         if (file.meta.relativeFolder) {
