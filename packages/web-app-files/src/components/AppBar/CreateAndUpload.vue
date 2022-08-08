@@ -301,12 +301,16 @@ export default defineComponent({
         }
 
         if (this.hasSpaces) {
-          const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
-          this.UPDATE_SPACE_FIELD({
-            id: driveResponse.data.id,
-            field: 'spaceQuota',
-            value: driveResponse.data.quota
-          })
+          try {
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } catch (e) {
+            console.error(e)
+          }
         }
 
         let pathFileWasUploadedTo = file.meta.currentFolder

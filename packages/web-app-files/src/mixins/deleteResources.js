@@ -168,6 +168,26 @@ export default {
           this.SET_QUOTA(user.quota)
         }
 
+        if (this.capabilities.spaces?.enabled) {
+          try {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.accessToken
+            )
+
+            const driveResponse = await graphClient.drives.getDrive(
+              this.$_deleteResources_resources[0].storageId
+            )
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } catch (e) {
+            console.error(e)
+          }
+        }
+
         let parentFolderPath
         if (
           this.resourcesToDelete.length &&
@@ -188,28 +208,12 @@ export default {
       })
     },
 
-    async $_deleteResources_delete() {
+    $_deleteResources_delete() {
       this.toggleModalConfirmButton()
 
       this.$_deleteResources_isInTrashbin
-        ? await this.$_deleteResources_trashbin_delete()
-        : await this.$_deleteResources_filesList_delete()
-
-      if (this.capabilities.spaces?.enabled) {
-        const graphClient = clientService.graphAuthenticated(
-          this.configuration.server,
-          this.accessToken
-        )
-
-        const driveResponse = await graphClient.drives.getDrive(
-          this.$_deleteResources_resources[0].storageId
-        )
-        this.UPDATE_SPACE_FIELD({
-          id: driveResponse.data.id,
-          field: 'spaceQuota',
-          value: driveResponse.data.quota
-        })
-      }
+        ? this.$_deleteResources_trashbin_delete()
+        : this.$_deleteResources_filesList_delete()
     },
 
     $_deleteResources_displayDialog(resources) {
