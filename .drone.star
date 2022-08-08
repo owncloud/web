@@ -2392,8 +2392,7 @@ def cacheOcisPipeline(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": skipIfUnchanged(ctx, "cache") +
-                 buildOCISCache() +
+        "steps": buildOCISCache() +
                  cacheOcis() +
                  listRemoteCache(),
         "volumes": [{
@@ -2436,6 +2435,13 @@ def getOcis():
 
 def buildOCISCache():
     return [
+        {
+            "name": "check-for-exisiting-cache",
+            "image": OC_UBUNTU,
+            "commands": [
+                "bash ./tests/drone/check-for-existing-oCIS-cache.sh",
+            ],
+        },
         {
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
