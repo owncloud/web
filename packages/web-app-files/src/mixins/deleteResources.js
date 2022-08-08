@@ -3,7 +3,7 @@ import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
-import { isLocationTrashActive } from '../router'
+import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { clientService } from 'web-pkg/src/services'
 
 export default {
@@ -167,25 +167,23 @@ export default {
           const user = await this.$client.users.getUser(this.user.id)
           this.SET_QUOTA(user.quota)
         }
-
-        if (this.capabilities?.spaces?.enabled) {
-          try {
-            const graphClient = clientService.graphAuthenticated(
-              this.configuration.server,
-              this.accessToken
-            )
-
-            const driveResponse = await graphClient.drives.getDrive(
-              this.$_deleteResources_resources[0].storageId
-            )
-            this.UPDATE_SPACE_FIELD({
-              id: driveResponse.data.id,
-              field: 'spaceQuota',
-              value: driveResponse.data.quota
-            })
-          } catch (e) {
-            console.error(e)
-          }
+        if (
+          (this.capabilities?.spaces?.enabled &&
+            isLocationSpacesActive(this.$router, 'files-spaces-project')) ||
+          isLocationSpacesActive(this.$router, 'files-spaces-personal')
+        ) {
+          const graphClient = clientService.graphAuthenticated(
+            this.configuration.server,
+            this.accessToken
+          )
+          const driveResponse = await graphClient.drives.getDrive(
+            this.$_deleteResources_resources[0].storageId
+          )
+          this.UPDATE_SPACE_FIELD({
+            id: driveResponse.data.id,
+            field: 'spaceQuota',
+            value: driveResponse.data.quota
+          })
         }
 
         let parentFolderPath

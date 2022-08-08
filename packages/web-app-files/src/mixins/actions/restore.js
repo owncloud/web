@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapState(['user']),
     ...mapState('Files', ['spaces']),
-    ...mapGetters(['capabilities', 'configuration']),
+    ...mapGetters(['configuration', 'capabilities']),
     ...mapGetters('runtime/auth', ['accessToken']),
 
     $_restore_items() {
@@ -114,27 +114,20 @@ export default {
         const user = await this.$client.users.getUser(this.user.id)
         this.SET_QUOTA(user.quota)
       }
-
       if (this.capabilities?.spaces?.enabled) {
-        try {
-          const graphClient = clientService.graphAuthenticated(
-            this.configuration.server,
-            this.accessToken
-          )
-
-          const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ? this.$route.params.storageId
-            : this.spaces.find((s) => s.driveType === 'personal').id
-
-          const driveResponse = await graphClient.drives.getDrive(driveId)
-          this.UPDATE_SPACE_FIELD({
-            id: driveResponse.data.id,
-            field: 'spaceQuota',
-            value: driveResponse.data.quota
-          })
-        } catch (e) {
-          console.error(e)
-        }
+        const graphClient = clientService.graphAuthenticated(
+          this.configuration.server,
+          this.accessToken
+        )
+        const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? this.$route.params.storageId
+          : this.spaces.find((s) => s.driveType === 'personal').id
+        const driveResponse = await graphClient.drives.getDrive(driveId)
+        this.UPDATE_SPACE_FIELD({
+          id: driveResponse.data.id,
+          field: 'spaceQuota',
+          value: driveResponse.data.quota
+        })
       }
     }
   }

@@ -101,8 +101,7 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        }),
-        capabilities: jest.fn()
+        })
       },
       modules: {
         user: {

@@ -300,17 +300,13 @@ export default defineComponent({
           return
         }
 
-        if (this.hasSpaces) {
-          try {
-            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
-            this.UPDATE_SPACE_FIELD({
-              id: driveResponse.data.id,
-              field: 'spaceQuota',
-              value: driveResponse.data.quota
-            })
-          } catch (e) {
-            console.error(e)
-          }
+        if (this.hasSpaces && (this.isSpacesProjectLocation || this.isPersonalLocation)) {
+          const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+          this.UPDATE_SPACE_FIELD({
+            id: driveResponse.data.id,
+            field: 'spaceQuota',
+            value: driveResponse.data.quota
+          })
         }
 
         let pathFileWasUploadedTo = file.meta.currentFolder

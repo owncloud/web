@@ -46,6 +46,10 @@ const mutations = {
     state.language = user.language
     state.role = user.role
     sentrySetUser({ username: user.id })
+
+    if (user.quota) {
+      this.commit('SET_QUOTA', user.quota)
+    }
   },
   SET_CAPABILITIES(state, data) {
     state.capabilities = data.capabilities
