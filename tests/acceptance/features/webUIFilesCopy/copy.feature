@@ -1,4 +1,4 @@
-Feature: copy files and folders
+Feature: copy files and folders test
   As a user
   I want to copy files and folders
   So that I can work safely on a copy without changing the original
