@@ -58,6 +58,7 @@ Summary
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
+* Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -506,6 +507,14 @@ Details
    https://github.com/owncloud/web/issues/7205
    https://github.com/owncloud/web/pull/7201
    https://github.com/owncloud/web/pull/7207
+
+* Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
+
+   We have added the possibility to create alias link shares for internal usage when the backend is
+   capable of handling them.
+
+   https://github.com/owncloud/web/issues/6844
+   https://github.com/owncloud/web/pull/7133
 
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 
