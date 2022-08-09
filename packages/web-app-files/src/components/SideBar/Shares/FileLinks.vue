@@ -4,10 +4,16 @@
       <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
-    <div v-if="canCreatePublicLinks" class="oc-mt-m">
+    <p
+      v-if="!canCreatePublicLinks"
+      data-testid="files-links-no-reshare-permissions-message"
+      class="oc-mt-m"
+      v-text="noResharePermsMessage"
+    />
+    <div class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
-        v-else
+        v-else-if="canCreatePublicLinks"
         :expiration-date="expirationDate"
         @createPublicLink="checkLinkToCreate"
       />
@@ -25,6 +31,7 @@
       />
       <hr class="oc-my-m" />
       <oc-button
+        v-if="canCreatePublicLinks"
         id="files-file-link-add"
         variation="primary"
         appearance="raw"
@@ -33,12 +40,7 @@
         v-text="addButtonLabel"
       />
     </div>
-    <p
-      v-else
-      data-testid="files-links-no-reshare-permissions-message"
-      class="oc-mt-m"
-      v-text="noResharePermsMessage"
-    />
+
     <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
       <li
         v-for="link in displayLinks"
