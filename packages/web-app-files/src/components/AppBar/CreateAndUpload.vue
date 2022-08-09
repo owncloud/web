@@ -154,7 +154,6 @@ export default defineComponent({
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
-      const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
       const uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
 
       uppyService.useDropTarget({
@@ -164,7 +163,6 @@ export default defineComponent({
 
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
-        uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
         uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
         uppyService.removeDropTarget()
       })
@@ -286,13 +284,8 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    onFileSuccess() {
-      if (!this.hasSpaces && this.user?.quota) {
-        this.SET_QUOTA(this.user.quota)
-      }
-    },
-
     async onUploadComplete(result) {
+      console.log('COMPLETE')
       if (result.successful) {
         const file = result.successful[0]
 
@@ -300,13 +293,18 @@ export default defineComponent({
           return
         }
 
-        if (this.hasSpaces && (this.isSpacesProjectLocation || this.isPersonalLocation)) {
-          const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
-          this.UPDATE_SPACE_FIELD({
-            id: driveResponse.data.id,
-            field: 'spaceQuota',
-            value: driveResponse.data.quota
-          })
+        if (this.isSpacesProjectLocation || this.isPersonalLocation) {
+          if (this.hasSpaces) {
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await this.$client.users.getUser(this.user.id)
+            this.SET_QUOTA(user.quota)
+          }
         }
 
         let pathFileWasUploadedTo = file.meta.currentFolder

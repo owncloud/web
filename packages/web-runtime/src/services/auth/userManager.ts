@@ -215,12 +215,7 @@ export class UserManager extends OidcUserManager {
       language: login?.language
     })
 
-    if (
-      !this.store.getters.capabilities.spaces?.enabled &&
-      user.quota &&
-      user.quota.definition !== 'default' &&
-      user.quota.definition !== 'none'
-    ) {
+    if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
       this.store.commit('SET_QUOTA', user.quota)
     }
 

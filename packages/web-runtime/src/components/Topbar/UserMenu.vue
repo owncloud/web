@@ -145,7 +145,7 @@ export default {
     quotaUsagePercent() {
       return this.useLegacyQuota
         ? this.quota.relative
-        : parseFloat(((this.quota.used / this.quota.total) * 100).toFixed(1))
+        : parseFloat(((this.quota.used / this.quota.total) * 100).toFixed(2))
     },
 
     quotaProgressVariant() {

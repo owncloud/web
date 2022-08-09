@@ -124,7 +124,7 @@ export default {
           field: 'spaceQuota',
           value: driveResponse.data.quota
         })
-      } else if (this.user?.id) {
+      } else {
         const user = await this.$client.users.getUser(this.user.id)
         this.SET_QUOTA(user.quota)
       }
