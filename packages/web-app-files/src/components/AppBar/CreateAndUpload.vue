@@ -285,7 +285,6 @@ export default defineComponent({
     ...mapMutations(['SET_QUOTA']),
 
     async onUploadComplete(result) {
-      console.log('COMPLETE')
       if (result.successful) {
         const file = result.successful[0]
 
