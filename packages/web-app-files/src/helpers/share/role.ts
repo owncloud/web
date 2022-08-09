@@ -185,6 +185,22 @@ export const peopleRoleCustomFolder = new CustomShareRole(
     SharePermissions.share
   ]
 )
+export const linkRoleInternalFile = new LinkShareRole(
+  'none',
+  false,
+  $gettext('Internal'),
+  $gettext('internal'),
+  'user',
+  [SharePermissions.internal]
+)
+export const linkRoleInternalFolder = new LinkShareRole(
+  'none',
+  true,
+  $gettext('Internal'),
+  $gettext('internal'),
+  'user',
+  [SharePermissions.internal]
+)
 export const linkRoleViewerFile = new LinkShareRole(
   'viewer',
   false,
@@ -336,14 +352,16 @@ export abstract class LinkShareRoles {
     linkRoleUploaderFolder
   ]
 
-  static list(isFolder: boolean, canEditFile = false): ShareRole[] {
-    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter(
-      (r) => r.folder === isFolder
-    )
+  static list(isFolder: boolean, canEditFile = false, hasAliasLinks = false): ShareRole[] {
+    return [
+      ...(hasAliasLinks ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
+      ...this.all,
+      ...(canEditFile ? [linkRoleEditorFile] : [])
+    ].filter((r) => r.folder === isFolder)
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean): ShareRole {
-    return [...this.all, linkRoleEditorFile] // Always return all roles
+    return [...this.all, linkRoleEditorFile, linkRoleInternalFile, linkRoleInternalFolder] // Always return all roles
       .find((r) => r.folder === isFolder && r.bitmask(false) === bitmask)
   }
 
@@ -354,7 +372,12 @@ export abstract class LinkShareRoles {
    * @param canEditFile
    */
   static filterByBitmask(bitmask: number, isFolder: boolean, canEditFile = false): ShareRole[] {
-    return [...this.all, ...(canEditFile ? [linkRoleEditorFile] : [])].filter((r) => {
+    return [
+      ...this.all,
+      linkRoleInternalFile,
+      linkRoleInternalFolder,
+      ...(canEditFile ? [linkRoleEditorFile] : [])
+    ].filter((r) => {
       return r.folder === isFolder && bitmask === (bitmask | r.bitmask(false))
     })
   }
@@ -380,6 +403,12 @@ const shareRoleDescriptions = {
  * Maps relevant permission bitmasks of link roles to descriptions
  */
 const linkRoleDescriptions = {
+  [linkRoleInternalFile.bitmask(false)]: $gettext(
+    'People need to be invited and login is required'
+  ),
+  [linkRoleInternalFolder.bitmask(false)]: $gettext(
+    'People need to be invited and login is required'
+  ),
   [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleContributorFolder.bitmask(false)]: $gettext(

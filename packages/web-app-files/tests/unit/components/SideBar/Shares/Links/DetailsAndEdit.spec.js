@@ -14,7 +14,7 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const availableRoleOptions = LinkShareRoles.list(false, true)
+const availableRoleOptions = LinkShareRoles.list(false, true, true)
 
 const exampleLink = {
   name: 'Example link',

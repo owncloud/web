@@ -112,7 +112,9 @@ import {
   useStore,
   useCapabilitySpacesEnabled,
   useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing
+  useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingPublicCanEdit,
+  useCapabilityFilesSharingPublicAlias
 } from 'web-pkg/src/composables'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
@@ -146,6 +148,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -217,19 +221,15 @@ export default defineComponent({
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
-          this.capabilities.files_sharing?.public?.can_edit
+          this.hasPublicLinkEditing
         )
       }
 
-      const roles = LinkShareRoles.list(
+      return LinkShareRoles.list(
         this.highlightedFile.isFolder,
-        this.capabilities.files_sharing?.public?.can_edit
+        this.hasPublicLinkEditing,
+        this.hasPublicLinkAliasSupport
       )
-      // add empty permission link if oCIS for alias link
-      return [
-        // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
-        ...roles
-      ]
     },
 
     passwordEnforced() {
@@ -464,7 +464,7 @@ export default defineComponent({
         expireDate,
         password,
         id: link.id,
-        permissions: link.permissions,
+        permissions: link.permissions.toString(),
         quicklink: link.quicklink,
         name: link.name,
         spaceRef: this.highlightedFile.fileId,
