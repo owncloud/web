@@ -155,7 +155,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { ShareTypes } from '../../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useAccessToken,
   usePublicLinkContext,

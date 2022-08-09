@@ -8,7 +8,7 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { ShareStatus } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 
 export default {
@@ -75,7 +75,7 @@ export default {
       }
 
       if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        return createLocationPublic('files-spaces-project')
+        return createLocationSpaces('files-spaces-project')
       }
 
       if (

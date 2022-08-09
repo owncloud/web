@@ -178,15 +178,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions } from 'vuex'
 import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
-import { LinkShareRoles } from '../../../../helpers/share'
+import { LinkShareRoles } from 'web-client/src/helpers/share'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   name: 'DetailsAndEdit',
   mixins: [Mixins],
   props: {
@@ -230,7 +231,7 @@ export default {
       return LinkShareRoles.getByBitmask(
         parseInt(this.link.permissions),
         this.isFolderShare
-      ).description()
+      ).description(false)
     },
 
     currentLinkRoleLabel() {
@@ -466,7 +467,7 @@ export default {
       this.createModal(modal)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from '@files/src/mixins/spaces/actions/delete.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -140,8 +140,7 @@ function getWrapper() {
         Files: {
           namespaced: true,
           mutations: {
-            REMOVE_FILES: jest.fn(),
-            REMOVE_SPACE: jest.fn()
+            REMOVE_FILES: jest.fn()
           }
         },
         runtime: {
@@ -151,6 +150,12 @@ function getWrapper() {
               namespaced: true,
               getters: {
                 accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                REMOVE_SPACE: jest.fn()
               }
             }
           }

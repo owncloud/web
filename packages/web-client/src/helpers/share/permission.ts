@@ -1,6 +1,6 @@
-// dummy to trick gettext string extraction into recognizing strings
-import { SharePermissionBit } from 'web-pkg/src/constants'
+import { SharePermissionBit } from './constants'
 
+// dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {
   return str
 }

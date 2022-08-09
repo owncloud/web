@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     async $_setSpaceImage_trigger({ resources }) {
       const graphClient = clientService.graphAuthenticated(

@@ -6,7 +6,7 @@ import Files from '@/__fixtures__/files'
 import mockAxios from 'jest-mock-axios'
 import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
-import { ShareTypes, spaceRoleManager } from '../../../../src/helpers/share'
+import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 import { thumbnailService } from '../../../../src/services'
 import { createLocationSpaces } from '../../../../src/router'
 
@@ -279,7 +279,6 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           mutations: {
             CLEAR_CURRENT_FILES_LIST: jest.fn(),
             CLEAR_FILES_SEARCHED: jest.fn(),
-            UPSERT_SPACE: jest.fn(),
             LOAD_FILES: jest.fn()
           },
           actions: {
@@ -295,6 +294,23 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             totalFilesSize: () => 10,
             pages: () => 1,
             currentFileOutgoingCollaborators: () => [spaceShare]
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: jest.fn()
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPSERT_SPACE: jest.fn()
+              }
+            }
           }
         }
       }

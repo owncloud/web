@@ -4,7 +4,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import disable from '@files/src/mixins/spaces/actions/disable.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

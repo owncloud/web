@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapGetters(['quota', 'user']),
     ...mapGetters({ legacyQuota: 'quota' }),
-    ...mapState('Files', ['spaces']),
+    ...mapState('runtime/spaces', ['spaces']),
 
     quota() {
       return this.hasSpaces

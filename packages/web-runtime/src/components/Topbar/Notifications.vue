@@ -57,10 +57,10 @@
     </oc-drop>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
-import { ShareStatus } from 'files/src/helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 
 export default {
   computed: {

@@ -158,7 +158,6 @@ export const getStore = function ({
           resource: null,
           filesPageLimit: 100,
           files: [],
-          spaces: [],
           activeFiles: activeFiles,
           currentFolder: currentFolder,
           currentPage: currentPage,
@@ -226,11 +225,19 @@ export const getStore = function ({
         }
       },
       runtime: {
+        namespaced: true,
         modules: {
           auth: {
+            namespaced: true,
             getters: {
               accessToken: () => accessToken,
               publicLinkPassword: () => publicLinkPassword
+            }
+          },
+          spaces: {
+            namespaced: true,
+            state: {
+              spaces: []
             }
           }
         }

@@ -4,7 +4,7 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import GetTextPlugin from 'vue-gettext'
 import { createLocationSpaces } from '../../../../src/router'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

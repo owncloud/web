@@ -2,13 +2,14 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource, buildWebDavSpacesPath } from '../../../helpers/resources'
+import { buildResource } from '../../../helpers/resources'
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { fetchResources } from '../util'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export class FolderLoaderSpacesPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {

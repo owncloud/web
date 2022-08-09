@@ -184,9 +184,9 @@ import {
 } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { extractDomSelector } from '../../helpers/resource'
+import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
-import { ShareTypes } from '../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces } from '../../router'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
@@ -400,7 +400,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown', 'spaces', 'latestSelectedId']),
+    ...mapState('Files', ['areFileExtensionsShown', 'latestSelectedId']),
+    ...mapState('runtime/spaces', ['spaces']),
     popperOptions() {
       return {
         modifiers: [
