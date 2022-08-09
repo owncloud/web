@@ -109,6 +109,7 @@ export default {
         })
       }
 
+      // Load quota
       if (this.capabilities?.spaces?.enabled) {
         const graphClient = clientService.graphAuthenticated(
           this.configuration.server,

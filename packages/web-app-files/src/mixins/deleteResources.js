@@ -163,10 +163,6 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (!this.capabilities?.spaces?.enabled && this.user?.id) {
-          const user = await this.$client.users.getUser(this.user.id)
-          this.SET_QUOTA(user.quota)
-        }
         if (
           this.capabilities?.spaces?.enabled &&
           (isLocationSpacesActive(this.$router, 'files-spaces-project') ||
@@ -184,6 +180,9 @@ export default {
             field: 'spaceQuota',
             value: driveResponse.data.quota
           })
+        } else if (this.user?.id) {
+          const user = await this.$client.users.getUser(this.user.id)
+          this.SET_QUOTA(user.quota)
         }
 
         let parentFolderPath
