@@ -165,7 +165,11 @@ export default defineComponent({
     },
 
     collaborators() {
-      return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
+      // filter out bad egroups
+      return [
+        ...this.currentFileOutgoingCollaborators.filter(e => e.collaborator.displayName || e.displayName),
+        ...this.indirectOutgoingShares.filter(e => e.collaborator.displayName || e.displayName),
+      ]
         .sort(this.collaboratorsComparator)
         .map((c) => {
           const collaborator = { ...c }
