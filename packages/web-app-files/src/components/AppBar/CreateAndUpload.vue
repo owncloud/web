@@ -287,7 +287,7 @@ export default defineComponent({
     ...mapMutations(['SET_QUOTA']),
 
     onFileSuccess() {
-      if (this.user?.quota) {
+      if (!this.hasSpaces && this.user?.quota) {
         this.SET_QUOTA(this.user.quota)
       }
     },

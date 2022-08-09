@@ -51,12 +51,6 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
           currentFolder,
           files: resources
         })
-
-        // fetch user quota
-        ;(async () => {
-          const user = await clientService.owncloudSdk.users.getUser(ref.user.id)
-          store.commit('SET_QUOTA', user.quota)
-        })()
       } catch (error) {
         store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)

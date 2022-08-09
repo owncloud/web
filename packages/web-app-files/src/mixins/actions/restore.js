@@ -109,11 +109,6 @@ export default {
         })
       }
 
-      // Load quota
-      if (this.user?.id) {
-        const user = await this.$client.users.getUser(this.user.id)
-        this.SET_QUOTA(user.quota)
-      }
       if (this.capabilities?.spaces?.enabled) {
         const graphClient = clientService.graphAuthenticated(
           this.configuration.server,
@@ -128,6 +123,9 @@ export default {
           field: 'spaceQuota',
           value: driveResponse.data.quota
         })
+      } else if (this.user?.id) {
+        const user = await this.$client.users.getUser(this.user.id)
+        this.SET_QUOTA(user.quota)
       }
     }
   }

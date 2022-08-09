@@ -163,7 +163,7 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (this.user?.id) {
+        if (!this.capabilities?.spaces?.enabled && this.user?.id) {
           const user = await this.$client.users.getUser(this.user.id)
           this.SET_QUOTA(user.quota)
         }
