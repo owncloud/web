@@ -11,6 +11,7 @@ import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceProject from './views/spaces/Project.vue'
 import SpaceTrashbin from './views/spaces/Trashbin.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
+import DriveResolver from './views/spaces/DriveResolver.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
@@ -109,7 +110,8 @@ export default {
     Spaces: {
       Project: SpaceProject,
       Projects: SpaceProjects,
-      Trashbin: SpaceTrashbin
+      Trashbin: SpaceTrashbin,
+      DriveResolver
     },
     Trashbin
   }),

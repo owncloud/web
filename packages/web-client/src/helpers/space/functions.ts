@@ -43,6 +43,7 @@ export function buildSpace(space) {
     extension: '',
     path: '',
     webDavPath: buildWebDavSpacesPath(space.id, ''),
+    driveAlias: space.driveAlias,
     driveType: space.driveType,
     type: 'space',
     isFolder: true,

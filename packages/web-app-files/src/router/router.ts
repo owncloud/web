@@ -23,6 +23,7 @@ export interface RouteComponents {
     Projects: ComponentOptions<Vue>
     Project: ComponentOptions<Vue>
     Trashbin: ComponentOptions<Vue>
+    DriveResolver: ComponentOptions<Vue>
   }
   Trashbin: ComponentOptions<Vue>
 }
