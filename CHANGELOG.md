@@ -30,6 +30,7 @@ Summary
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
+* Bugfix - Quicklinks not shown: [#7424](https://github.com/owncloud/web/pull/7424)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
@@ -253,6 +254,14 @@ Details
 
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
+
+* Bugfix - Quicklinks not shown: [#7424](https://github.com/owncloud/web/pull/7424)
+
+   We've fixed a bug where existing quicklinks were not shown when the user had no rights to create
+   them.
+
+   https://github.com/owncloud/web/issues/7406
+   https://github.com/owncloud/web/pull/7424
 
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
