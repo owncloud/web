@@ -45,7 +45,7 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     async $_restore_trigger({ resources }) {

@@ -283,7 +283,8 @@ export default defineComponent({
       'setModalInputErrorMessage',
       'hideModal'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_SPACE_FIELD']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     async onUploadComplete(result) {

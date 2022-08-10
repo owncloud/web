@@ -99,7 +99,7 @@ export default {
   methods: {
     ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_trashbin_deleteOp(resource) {
