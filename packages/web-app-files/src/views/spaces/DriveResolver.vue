@@ -4,8 +4,12 @@
     <p v-if="spacesLoading">Loading...</p>
     <template v-else>
       <p>Number of spaces loaded: {{ spaces.length }}</p>
-      <p v-if="space">found matching space. driveAlias: {{ space.driveAlias }}, item: {{ item }}</p>
+      <p v-if="space">
+        found matching space. {{ space.id }} driveAlias: {{ space.driveAlias }}, item: {{ item }}
+      </p>
       <p v-else>no matching space found</p>
+      <Personal v-if="space.driveType === 'personal'" :space="space" />
+      <Project v-else :space="space" />
     </template>
   </div>
 </template>
@@ -13,8 +17,14 @@
 <script lang="ts">
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRouteParam, useStore } from 'web-pkg/src/composables'
+import Personal from '../../views/Personal.vue'
+import Project from '../../views/spaces/Project.vue'
 
 export default defineComponent({
+  components: {
+    Personal,
+    Project
+  },
   setup() {
     const store = useStore()
     const spacesLoading = computed(() => store.getters['runtime/spaces/spacesLoading'])

@@ -137,7 +137,7 @@
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
@@ -195,15 +195,19 @@ export default defineComponent({
       currentSpace: computed(() => this.space)
     }
   },
+  props: {
+    space: {
+      type: Object,
+      required: true
+    }
+  },
   setup() {
     const store = useStore()
-    const space = ref({})
 
     return {
       ...useResourcesViewDefaults(),
       ...useGraphClient(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
-      space,
       accessToken: useAccessToken({ store })
     }
   },

@@ -1,6 +1,5 @@
 export * from './legacy/loaderPersonal'
-export * from './spaces/loaderPersonal'
-export * from './spaces/loaderProject'
+export * from './spaces/loaderSpaceGeneric'
 export * from './spaces/loaderShare'
 export * from './loaderFavorites'
 export * from './loaderPublicFiles'

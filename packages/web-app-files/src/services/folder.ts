@@ -6,7 +6,7 @@ import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services/client'
 
 import {
-  FolderLoaderSpacesProject,
+  FolderLoaderSpacesGeneric,
   FolderLoaderSpacesShare,
   FolderLoaderFavorites,
   FolderLoaderLegacyPersonal,
@@ -14,8 +14,7 @@ import {
   FolderLoaderSharedViaLink,
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
-  FolderLoaderTrashbin,
-  FolderLoaderSpacesPersonal
+  FolderLoaderTrashbin
 } from './folder/'
 
 export * from './folder/util'
@@ -43,8 +42,7 @@ export class FolderService {
       // legacy loaders
       new FolderLoaderLegacyPersonal(),
       // spaces loaders
-      new FolderLoaderSpacesPersonal(),
-      new FolderLoaderSpacesProject(),
+      new FolderLoaderSpacesGeneric(),
       new FolderLoaderSpacesShare(),
       // generic loaders
       new FolderLoaderFavorites(),

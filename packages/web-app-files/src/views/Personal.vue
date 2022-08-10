@@ -131,8 +131,14 @@ export default defineComponent({
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
-  setup() {
-    const storageId = useRouteParam('storageId')
+  props: {
+    space: {
+      type: Object,
+      required: false
+    }
+  },
+  setup(props) {
+    const storageId = props.space.fileId || useRouteParam('storageId')
     const resourceTargetLocation = computed(() => {
       return createLocationSpaces('files-spaces-personal', {
         params: {
@@ -186,7 +192,7 @@ export default defineComponent({
     $route: {
       handler: async function (to, from) {
         const needsRedirectWithStorageId =
-          to.params.storageId === 'home' || isNil(to.params.storageId)
+          to.params.storageId === 'home' || isNil(this.space.fileId)
         if (needsRedirectWithStorageId) {
           let storageId = this.user.id
           if (this.hasShareJail) {

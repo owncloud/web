@@ -1,23 +1,23 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../../helpers/resources'
 import { isLocationSpacesActive } from '../../../router'
+import { buildResource } from '../../../helpers/resources'
+import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
-import { fetchResources } from '../util'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { fetchResources } from '../util'
 
-export class FolderLoaderSpacesPersonal implements FolderLoader {
+export class FolderLoaderSpacesGeneric implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
-    return get(store, 'getters.capabilities.spaces.share_jail', false)
+    return get(store, 'getters.capabilities.spaces.enabled', false)
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSpacesActive(router, 'files-spaces-personal')
+    return isLocationSpacesActive(router, 'files-spaces-generic')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
@@ -27,21 +27,25 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        let resources = yield fetchResources(
+        const webDavResources = yield fetchResources(
           clientService.owncloudSdk,
-          buildWebDavSpacesPath(
-            router.currentRoute.params.storageId,
-            path || router.currentRoute.params.item || ''
-          ),
+          buildWebDavSpacesPath(ref.space.fileId, path || router.currentRoute.params.item || ''),
           DavProperties.Default
         )
-        resources = resources.map(buildResource)
+
+        let resources: any[]
+        if (!path) {
+          resources = [ref.space, ...webDavResources.slice(1).map(buildResource)]
+        } else {
+          resources = resources.map(buildResource)
+        }
 
         const currentFolder = resources.shift()
         const hasShareJail = useCapabilityShareJailEnabled(store)
         yield store.dispatch('Files/loadSharesTree', {
           client: clientService.owncloudSdk,
-          path: currentFolder.path
+          path: currentFolder.path,
+          storageId: ref.space.fileId
         })
 
         for (const file of resources) {
@@ -57,8 +61,8 @@ export class FolderLoaderSpacesPersonal implements FolderLoader {
         console.error(error)
       }
 
+      // FIXME: should not be part of the loader
       ref.refreshFileListHeaderPosition()
-
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
   }
