@@ -26,6 +26,7 @@ Summary
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+* Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
@@ -218,6 +219,13 @@ Details
 
    https://github.com/owncloud/web/issues/6899
    https://github.com/owncloud/web/pull/7379
+
+* Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
+
+   We've fixed a bug that broke opening a folder in a project space from the context menu via "Open
+   Folder" (simply clicking it wasn't affected).
+
+   https://github.com/owncloud/web/pull/7425
 
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 
