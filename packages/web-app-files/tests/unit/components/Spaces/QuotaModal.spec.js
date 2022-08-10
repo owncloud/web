@@ -85,15 +85,29 @@ function getWrapper() {
       modules: {
         Files: {
           namespaced: true,
-          mutations: {
-            UPDATE_SPACE_FIELD: jest.fn()
-          },
           state: {
             currentFolder: {
               id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
               spaceReadmeData: {
                 webDavUrl:
                   'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
+              }
+            }
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPDATE_SPACE_FIELD: jest.fn()
               }
             }
           }

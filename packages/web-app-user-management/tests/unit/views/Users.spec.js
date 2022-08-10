@@ -233,10 +233,21 @@ function getMountedWrapper({
         })
       },
       modules: {
-        Files: {
+        runtime: {
           namespaced: true,
-          mutations: {
-            UPDATE_SPACE_FIELD: jest.fn()
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPDATE_SPACE_FIELD: jest.fn()
+              }
+            }
           }
         }
       }
