@@ -50,22 +50,16 @@
             </router-link>
           </td>
         </tr>
+        <tr v-if="showOwner" data-testid="owner">
+          <th scope="col" class="oc-pr-s" v-text="ownerLabel" />
+          <td>
+            <span v-text="ownerDisplayName" />
+          </td>
+        </tr>
         <tr v-if="showSharedBy" data-testid="shared-by">
           <th scope="col" class="oc-pr-s" v-text="sharedByLabel" />
           <td>
             <span v-text="sharedByDisplayName" />
-          </td>
-        </tr>
-        <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
-          <th scope="col" class="oc-pr-s" v-text="ownerLabel" />
-          <td>
-            <p class="oc-m-rm">
-              {{ ownerDisplayName }}
-              <span v-if="ownedByCurrentUser" v-translate>(me)</span>
-              <span v-if="!ownedByCurrentUser && ownerAdditionalInfo"
-                >({{ ownerAdditionalInfo }})</span
-              >
-            </p>
           </td>
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
@@ -203,6 +197,8 @@ export default defineComponent({
     loading: false,
     sharedByName: '',
     sharedByDisplayName: '',
+    ownerName: '',
+    ownerDisplayName: '',
     sharedTime: 0,
     sharedItem: null,
     shareIndicators: [],
@@ -248,6 +244,15 @@ export default defineComponent({
         true
       )
     },
+    showOwner() {
+      return (
+        this.showShares &&
+        !this.ownedByCurrentUser &&
+        !this.sharesTreeLoading &&
+        this.ownerDisplayName &&
+        this.ownerName !== this.file.ownerId
+      )
+    },
     showSharedBy() {
       return (
         this.showShares &&
@@ -286,16 +291,6 @@ export default defineComponent({
     },
     ownerLabel() {
       return this.$gettext('Owner')
-    },
-    ownerDisplayName() {
-      return (
-        this.file.ownerDisplayName ||
-        this.file.shareOwnerDisplayname ||
-        this.file.owner?.[0].displayName
-      )
-    },
-    ownerAdditionalInfo() {
-      return this.file.owner?.[0].additionalInfo
     },
     directLink() {
       return `${this.configuration.server}files/spaces/personal/home${encodePath(this.file.path)}`
@@ -369,10 +364,16 @@ export default defineComponent({
       }
 
       this.sharedItem = userShares[0]
+
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
       if (this.sharedItem.owner?.additionalInfo) {
         this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
+      }
+      this.ownerName = this.sharedItem.fileOwner?.name
+      this.ownerDisplayName = this.sharedItem.fileOwner?.displayName
+      if (this.sharedItem.fileOwner?.additionalInfo) {
+        this.ownerDisplayName += ' (' + this.sharedItem.fileOwner.additionalInfo + ')'
       }
       this.sharedTime = this.sharedItem.stime
       this.sharedParentDir = sharePathParentOrCurrent
