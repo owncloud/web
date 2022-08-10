@@ -22,16 +22,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -65,19 +56,10 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           <router-link-stub><span>/Shares/123.png</span></router-link-stub>
         </td>
       </tr>
+      <!---->
       <tr data-testid="shared-by">
         <th scope="col" class="oc-pr-s">Shared by</th>
         <td><span>Marie Curie</span></td>
-      </tr>
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
       </tr>
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
@@ -105,16 +87,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Marie
-            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -146,16 +119,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -187,16 +151,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         </td>
       </tr>
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -243,16 +198,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -279,16 +225,7 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -335,16 +272,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Marie
-            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -371,16 +299,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -407,16 +326,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -463,16 +373,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
@@ -499,16 +400,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
       </tr>
       <!---->
       <!---->
-      <tr data-testid="ownerDisplayName">
-        <th scope="col" class="oc-pr-s">Owner</th>
-        <td>
-          <p class="oc-m-rm">
-            Einstein
-            <!---->
-            <!---->
-          </p>
-        </td>
-      </tr>
+      <!---->
       <tr data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
