@@ -57,11 +57,13 @@ describe('Users view', () => {
       })
       const busStub = jest.spyOn(bus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
+      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editUser(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
       expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
       expect(setStub).toHaveBeenCalled()
+      expect(updateSpaceFieldStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
