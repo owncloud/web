@@ -6,7 +6,7 @@ import VueCompositionAPI from '@vue/composition-api'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
-import { extractDomSelector } from '../../../../src/helpers/resource'
+import { extractDomSelector } from 'web-client/src/helpers'
 
 const router = {
   push: jest.fn(),

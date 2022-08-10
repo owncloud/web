@@ -280,33 +280,36 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
       newFileHandlers: jest.fn(() => fileHandlers)
     },
     modules: {
+      runtime: {
+        namespaced: true,
+        modules: {
+          spaces: {
+            namespaced: true,
+            getters: {
+              spaces: () => [
+                {
+                  id: '1',
+                  name: 'admin',
+                  driveType: 'personal',
+                  spaceQuota: {
+                    remaining: 1000
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
       Files: {
         namespaced: true,
         state: {
           currentFolder: {
             path: '/'
           },
-          spaces: [
-            {
-              id: '1',
-              name: 'admin',
-              driveType: 'personal'
-            }
-          ],
           ...state
         },
         getters: {
           currentFolder: () => state.currentFolder,
-          spaces: () => [
-            {
-              id: '1',
-              name: 'admin',
-              driveType: 'personal',
-              spaceQuota: {
-                remaining: 1000
-              }
-            }
-          ],
           selectedFiles: () => []
         }
       }

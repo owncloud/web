@@ -1,4 +1,4 @@
-import { spaceRoleManager } from '../share'
+import { spaceRoleManager } from 'web-client/src/helpers/share'
 
 export const sortSpaceMembers = (shares: Array<any>): Array<any> => {
   const sortedManagers = shares

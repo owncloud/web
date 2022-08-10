@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Share } from './share'
+import { Share } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import copyToClipboard from 'copy-to-clipboard'

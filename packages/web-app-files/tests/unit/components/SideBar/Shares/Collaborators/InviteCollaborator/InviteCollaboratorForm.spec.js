@@ -1,7 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import InviteCollaboratorForm from '@files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { ShareTypes } from '@files/src/helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import VueSelect from 'vue-select'

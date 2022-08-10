@@ -1,0 +1,5 @@
+Bugfix: Open Folder in project space context menu
+
+We've fixed a bug that broke opening a folder in a project space from the context menu via "Open Folder" (simply clicking it wasn't affected).
+
+https://github.com/owncloud/web/pull/7425

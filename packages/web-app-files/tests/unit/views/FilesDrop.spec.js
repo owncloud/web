@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import { getStore, localVue } from './views.setup.js'
 import { DavProperty } from 'web-pkg/src/constants'
-import { linkRoleUploaderFolder } from '@files/src/helpers/share'
+import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 
 localVue.use(VueCompositionAPI)

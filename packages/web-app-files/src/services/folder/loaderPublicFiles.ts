@@ -5,9 +5,9 @@ import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import { isLocationPublicActive, createLocationPublic } from '../../router'
 
-import { linkRoleUploaderFolder } from '../../helpers/share'
 import { Store } from 'vuex'
 import { authService } from 'web-runtime/src/services/auth'
+import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 
 export class FolderLoaderPublicFiles implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

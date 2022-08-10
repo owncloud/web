@@ -8,14 +8,16 @@
   </span>
 </template>
 
-<script>
-import { ShareRole } from '../../../../helpers/share'
+<script lang="ts">
+import { PropType } from '@vue/composition-api'
+import { defineComponent } from '@vue/runtime-core'
+import { ShareRole } from 'web-client/src/helpers/share'
 
-export default {
+export default defineComponent({
   name: 'RoleItem',
   props: {
     role: {
-      type: ShareRole,
+      type: Object as PropType<ShareRole>,
       required: true
     },
     allowSharePermission: {
@@ -23,7 +25,7 @@ export default {
       required: true
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -144,12 +144,13 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
-import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {

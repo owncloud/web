@@ -1,6 +1,6 @@
 import quickActions, { canShare } from '../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../router'
-import { ShareStatus } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {

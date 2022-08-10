@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import editReadmeContent from '@files/src/mixins/spaces/actions/editReadmeContent.js'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

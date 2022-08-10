@@ -100,10 +100,15 @@ function getWrapper({
         user: () => user
       },
       modules: {
-        Files: {
+        runtime: {
           namespaced: true,
-          state: {
-            spaces
+          modules: {
+            spaces: {
+              namespaced: true,
+              state: {
+                spaces
+              }
+            }
           }
         }
       }

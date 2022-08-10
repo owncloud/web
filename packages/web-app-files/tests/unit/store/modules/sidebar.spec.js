@@ -1,4 +1,4 @@
-import sidebarModule from '../../../../src/store/modules/sidebar.js'
+import sidebarModule from '../../../../src/store/modules/sidebar.ts'
 import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex)

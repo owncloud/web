@@ -48,8 +48,8 @@
   </div>
 </template>
 
-<script>
-import { ShareTypes } from '../../../../../helpers/share'
+<script lang="ts">
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default {
   name: 'AutocompleteItem',

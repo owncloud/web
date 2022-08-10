@@ -119,7 +119,7 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 import { useGraphClient } from 'web-client/src/composables'
@@ -141,6 +141,7 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -193,7 +194,8 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles']),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     mimetypesAllowedForCreation() {

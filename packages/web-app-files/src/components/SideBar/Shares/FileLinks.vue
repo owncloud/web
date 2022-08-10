@@ -121,7 +121,7 @@ import {
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
-import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
+import { ShareTypes, LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
 import { cloneStateObject } from '../../../helpers/store'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'

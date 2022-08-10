@@ -3,56 +3,9 @@ import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
-import { ShareTypes } from '../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default {
-  LOAD_SPACES(state, spaces) {
-    state.spaces = spaces
-  },
-  /**
-   * Updates a single space field. If the space with given id doesn't exist nothing will happen.
-   *
-   * @param state Current state of this store module
-   * @param params
-   * @param params.id Id of the resource to be updated
-   * @param params.field the resource field that the value should be applied to
-   * @param params.value the value that will be attached to the key
-   */
-  UPDATE_SPACE_FIELD(state, params) {
-    const spaceSource = state.spaces
-    const index = state.spaces.findIndex((r) => r.id === params.id)
-    if (index < 0) {
-      return
-    }
-
-    const resource = spaceSource[index]
-    const isReactive = has(resource, params.field)
-    const newResource = set(resource, params.field, params.value)
-
-    if (isReactive) {
-      return
-    }
-
-    Vue.set(spaceSource, index, newResource)
-  },
-  UPSERT_SPACE(state, space) {
-    const spaces = [...state.spaces]
-    const index = spaces.findIndex((r) => r.id === space.id)
-    const found = index > -1
-
-    if (found) {
-      spaces.splice(index, 1, space)
-    } else {
-      spaces.push(space)
-    }
-    state.spaces = spaces
-  },
-  REMOVE_SPACE(state, space) {
-    state.spaces = state.spaces.filter((s) => s.id !== space.id)
-  },
-  CLEAR_SPACES(state) {
-    state.spaces = []
-  },
   LOAD_FILES(state, { currentFolder, files }) {
     state.currentFolder = currentFolder
     state.files = files

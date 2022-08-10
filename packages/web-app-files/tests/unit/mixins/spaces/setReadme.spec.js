@@ -5,7 +5,7 @@ import setReadme from '@files/src/mixins/spaces/actions/setReadme.js'
 import { createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -77,6 +77,17 @@ describe('setReadme', () => {
             state: {
               currentFolder: {
                 id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
+              }
+            }
+          },
+          runtime: {
+            namespaced: true,
+            modules: {
+              spaces: {
+                namespaced: true,
+                mutations: {
+                  UPDATE_SPACE_FIELD: jest.fn()
+                }
               }
             }
           }

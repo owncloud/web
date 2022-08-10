@@ -139,7 +139,7 @@ import sanitizeHtml from 'sanitize-html'
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
-import { buildResource, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource } from '../../helpers/resources'
 import { move } from '../../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
@@ -161,6 +161,7 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -371,10 +372,10 @@ export default defineComponent({
     ...mapActions('Files/sidebar', {
       openSidebarWithPanel: 'openWithPanel'
     }),
+    ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
-      'UPSERT_SPACE',
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILES',
       'REMOVE_FILES_FROM_SEARCHED',

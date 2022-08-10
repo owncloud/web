@@ -3,7 +3,7 @@ import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import DeletedFiles from '@files/src/mixins/spaces/actions/deletedFiles.js'
 import { createLocationSpaces, createLocationTrash } from '../../../../src/router'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

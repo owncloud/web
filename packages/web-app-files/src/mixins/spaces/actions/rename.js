@@ -36,7 +36,8 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD', 'UPDATE_SPACE_FIELD']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_rename_trigger({ resources }) {
       if (resources.length !== 1) {

@@ -17,9 +17,9 @@
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 
-import { buildSpace } from '../../helpers/resources'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
+import { buildSpace } from 'web-client/src/helpers'
 
 export default defineComponent({
   setup() {
@@ -29,14 +29,14 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST',
       'SET_FILE_SELECTION',
       'UPSERT_RESOURCE',
-      'UPDATE_RESOURCE_FIELD',
-      'UPSERT_SPACE'
+      'UPDATE_RESOURCE_FIELD'
     ]),
 
     showCreateSpaceModal() {

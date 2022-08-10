@@ -1,7 +1,7 @@
 import { triggerShareAction } from '../../../../src/helpers/share/triggerShareAction'
 
 import OwnCloud from 'owncloud-sdk'
-import { ShareStatus } from '@files/src/helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 
 jest.unmock('axios')
 const $client = new OwnCloud()

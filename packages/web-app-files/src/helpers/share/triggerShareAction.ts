@@ -1,5 +1,5 @@
 import { buildSharedResource } from '../resources'
-import { ShareStatus } from './status'
+import { ShareStatus } from 'web-client/src/helpers/share/status'
 
 export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {
   const method = _getRequestMethod(status)

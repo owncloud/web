@@ -1,6 +1,6 @@
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
-import { ShareTypes } from './share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
