@@ -1,7 +1,0 @@
-Change: Replace locationpicker with clipboard actions
-
-We've replaced the locationpicker in batchactions and contextmenu with
-the new cut/copy/paste clipboard actions
-
-https://github.com/owncloud/web/pull/7309
-https://github.com/owncloud/web/issues/6892
