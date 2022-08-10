@@ -44,7 +44,7 @@ export default {
     },
     totalQuota: {
       type: Number,
-      default: null
+      default: 0
     }
   },
   data: function () {
@@ -145,13 +145,7 @@ export default {
     setOptions() {
       this.options = [...this.DEFAULT_OPTIONS]
 
-      let selectedQuotaInOptions = null
-
-      if (this.totalQuota) {
-        selectedQuotaInOptions = this.options.find((option) => option.value === this.totalQuota)
-      } else {
-        selectedQuotaInOptions = this.options.find((option) => option.unlimited === true)
-      }
+      const selectedQuotaInOptions = this.options.find((option) => option.value === this.totalQuota)
 
       if (selectedQuotaInOptions) {
         return
