@@ -51,6 +51,12 @@ const mutations = {
     state.capabilities = data.capabilities
     state.version = data.version
   },
+  /**
+   * Legacy for oC10, in OCIS quota sticks on the respective drive
+   * @param state
+   * @param quota
+   * @constructor
+   */
   SET_QUOTA(state, quota) {
     // Turn strings into ints
     quota.free = parseInt(quota.free)

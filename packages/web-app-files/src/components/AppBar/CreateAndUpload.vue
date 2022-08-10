@@ -122,9 +122,12 @@ import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
+import { useGraphClient } from 'web-client/src/composables'
+
 import {
   useRequest,
   useCapabilityShareJailEnabled,
+  useCapabilitySpacesEnabled,
   useStore,
   usePublicLinkPassword,
   useUserContext
@@ -151,7 +154,6 @@ export default defineComponent({
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
-      const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
       const uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
 
       uppyService.useDropTarget({
@@ -161,7 +163,6 @@ export default defineComponent({
 
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
-        uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
         uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
         uppyService.removeDropTarget()
       })
@@ -173,12 +174,14 @@ export default defineComponent({
       }),
       ...useUploadHelpers(),
       ...useRequest(),
+      ...useGraphClient(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
+      hasSpaces: useCapabilitySpacesEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       isUserContext: useUserContext({ store })
     }
@@ -278,21 +281,29 @@ export default defineComponent({
       'setModalInputErrorMessage',
       'hideModal'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    onFileSuccess() {
-      if (this.user?.quota) {
-        this.SET_QUOTA(this.user.quota)
-      }
-    },
-
-    onUploadComplete(result) {
+    async onUploadComplete(result) {
       if (result.successful) {
         const file = result.successful[0]
 
         if (!file) {
           return
+        }
+
+        if (this.isSpacesProjectLocation || this.isPersonalLocation) {
+          if (this.hasSpaces) {
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await this.$client.users.getUser(this.user.id)
+            this.SET_QUOTA(user.quota)
+          }
         }
 
         let pathFileWasUploadedTo = file.meta.currentFolder
