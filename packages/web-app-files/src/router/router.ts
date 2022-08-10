@@ -10,7 +10,6 @@ export interface RouteComponents {
   App: ComponentOptions<Vue>
   Favorites: ComponentOptions<Vue>
   FilesDrop: ComponentOptions<Vue>
-  LocationPicker: ComponentOptions<Vue>
   PrivateLink: ComponentOptions<Vue>
   PublicFiles: ComponentOptions<Vue>
   Personal: ComponentOptions<Vue>

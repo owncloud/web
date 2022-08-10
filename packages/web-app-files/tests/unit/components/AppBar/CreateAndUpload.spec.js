@@ -310,6 +310,7 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
         },
         getters: {
           currentFolder: () => state.currentFolder,
+          clipboardResources: () => [],
           selectedFiles: () => []
         }
       }

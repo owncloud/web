@@ -102,38 +102,38 @@ Feature: move files
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist in the server
 
-  Scenario: cancel moving a file
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the personal page
-    And the user selects move action for file "lorem.txt" using the webUI
-    And the user selects the folder "simple-folder" as a place to move the file using the webUI
-    And the user cancels the attempt to move resources using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    But  file "lorem.txt" should not be listed in the folder "simple-folder" on the webUI
 
-  Scenario: cancel moving of multiple files at once
-    Given user "Alice" has logged in using the webUI
-    And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has uploaded file "data.zip" to "testapp.zip" in the server
-    And the user has browsed to the personal page
-    When the user marks these files for batch action using the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
-    And the user selects the move button to move files using the webUI
-    And the user selects the folder "simple-folder" as a place to move the files using the webUI
-    And the user cancels the attempt to move resources using the webUI
-    Then the following files should be listed on the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
-    But these resources should not be listed in the folder "simple-folder" on the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-ocis-873
   Scenario: sharee moves a file shared by sharer into another folder
