@@ -55,10 +55,12 @@ export default {
           route: ({ resources }) => {
             const shareId = this.getShareId(resources[0])
             const shareName = this.getShareName(resources[0])
+            const { storageId } = resources[0]
             return merge({}, this.routeName, {
               params: {
                 item: resources[0].path,
-                ...(shareName && { shareName })
+                ...(shareName && { shareName }),
+                ...(storageId && { storageId })
               },
               query: {
                 ...(shareId && { shareId })
