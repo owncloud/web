@@ -30,6 +30,7 @@ Summary
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
+* Bugfix - Quicklinks not shown: [#7424](https://github.com/owncloud/web/pull/7424)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
@@ -58,6 +59,7 @@ Summary
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
+* Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -252,6 +254,14 @@ Details
 
    https://github.com/owncloud/web/issues/7272
    https://github.com/owncloud/web/pull/7284
+
+* Bugfix - Quicklinks not shown: [#7424](https://github.com/owncloud/web/pull/7424)
+
+   We've fixed a bug where existing quicklinks were not shown when the user had no rights to create
+   them.
+
+   https://github.com/owncloud/web/issues/7406
+   https://github.com/owncloud/web/pull/7424
 
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
@@ -506,6 +516,14 @@ Details
    https://github.com/owncloud/web/issues/7205
    https://github.com/owncloud/web/pull/7201
    https://github.com/owncloud/web/pull/7207
+
+* Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
+
+   We have added the possibility to create alias link shares for internal usage when the backend is
+   capable of handling them.
+
+   https://github.com/owncloud/web/issues/6844
+   https://github.com/owncloud/web/pull/7133
 
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 
