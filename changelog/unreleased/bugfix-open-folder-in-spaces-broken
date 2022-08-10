@@ -1,0 +1,5 @@
+Bugfix: Open folder in space broken
+
+We've fixed a bug where clicking 'Open folder' on a folder inside a space was broken.
+
+https://github.com/owncloud/web/pull/7427
