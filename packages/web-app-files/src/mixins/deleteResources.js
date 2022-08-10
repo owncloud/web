@@ -3,7 +3,8 @@ import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
-import { isLocationTrashActive } from '../router'
+import { isLocationTrashActive, isLocationSpacesActive } from '../router'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   data: () => ({
@@ -14,8 +15,9 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'configuration', 'capabilities']),
     ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
+    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_deleteResources_isInTrashbin() {
       return (
@@ -97,6 +99,7 @@ export default {
   methods: {
     ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_trashbin_deleteOp(resource) {
@@ -160,9 +163,27 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (this.user?.id) {
-          const user = await this.$client.users.getUser(this.user.id)
-          this.SET_QUOTA(user.quota)
+        if (
+          isLocationSpacesActive(this.$router, 'files-spaces-project') ||
+          isLocationSpacesActive(this.$router, 'files-spaces-personal')
+        ) {
+          if (this.capabilities?.spaces?.enabled) {
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              this.accessToken
+            )
+            const driveResponse = await graphClient.drives.getDrive(
+              this.$_deleteResources_resources[0].storageId
+            )
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await this.$client.users.getUser(this.user.id)
+            this.SET_QUOTA(user.quota)
+          }
         }
 
         let parentFolderPath

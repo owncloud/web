@@ -1,4 +1,4 @@
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationTrashActive } from '../../router'
 import {
@@ -7,10 +7,14 @@ import {
   buildWebDavSpacesTrashPath,
   buildWebDavSpacesPath
 } from '../../helpers/resources'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   computed: {
     ...mapState(['user']),
+    ...mapState('Files', ['spaces']),
+    ...mapGetters(['configuration', 'capabilities']),
+    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_restore_items() {
       return [
@@ -41,6 +45,8 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations(['SET_QUOTA']),
 
     async $_restore_trigger({ resources }) {
       const restoredResources = []
@@ -101,6 +107,26 @@ export default {
           title: this.$gettextInterpolate(translated, translateParams, true),
           status: 'danger'
         })
+      }
+
+      // Load quota
+      if (this.capabilities?.spaces?.enabled) {
+        const graphClient = clientService.graphAuthenticated(
+          this.configuration.server,
+          this.accessToken
+        )
+        const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+          ? this.$route.params.storageId
+          : this.spaces.find((s) => s.driveType === 'personal').id
+        const driveResponse = await graphClient.drives.getDrive(driveId)
+        this.UPDATE_SPACE_FIELD({
+          id: driveResponse.data.id,
+          field: 'spaceQuota',
+          value: driveResponse.data.quota
+        })
+      } else {
+        const user = await this.$client.users.getUser(this.user.id)
+        this.SET_QUOTA(user.quota)
       }
     }
   }

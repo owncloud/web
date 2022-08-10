@@ -101,7 +101,8 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        })
+        }),
+        capabilities: () => {}
       },
       modules: {
         user: {
@@ -119,6 +120,9 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
             removeFilesFromTrashbin: jest.fn()
           }
         }
+      },
+      mutations: {
+        SET_QUOTA: () => jest.fn()
       }
     })
   })
