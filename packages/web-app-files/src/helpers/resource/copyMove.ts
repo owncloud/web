@@ -135,7 +135,7 @@ export const resolveAllConflicts = async (
 
 const hasRecursion = (resourcesToMove: Resource[], targetResource: Resource): boolean => {
   return resourcesToMove.some((resource: Resource) =>
-    targetResource.webDavPath.startsWith(resource.webDavPath)
+    targetResource.webDavPath.endsWith(resource.webDavPath)
   )
 }
 
@@ -208,8 +208,8 @@ export const move = (
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  context,
-  publicLinkPassword = null
+  isPublicLinkContext: boolean,
+  publicLinkPassword: string | null = null
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
@@ -221,7 +221,7 @@ export const move = (
     $gettext,
     $gettextInterpolate,
     $ngettext,
-    context,
+    isPublicLinkContext,
     publicLinkPassword,
     false
   )
@@ -237,8 +237,8 @@ export const copy = (
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  context,
-  publicLinkPassword = null
+  isPublicLinkContext: boolean,
+  publicLinkPassword: string | null = null
 ): Promise<Resource[]> => {
   return copyMoveResource(
     resourcesToMove,
@@ -250,7 +250,7 @@ export const copy = (
     $gettext,
     $gettextInterpolate,
     $ngettext,
-    context,
+    isPublicLinkContext,
     publicLinkPassword,
     true
   )
@@ -273,11 +273,10 @@ const clientListFilesInFolder = async (
   client: any,
   webDavPath: string,
   depth: number,
-  context: string,
+  isPublicLinkContext: boolean,
   publicLinkPassword: string
 ) => {
-  const isPublicFilesRoute = context === 'files-public-files'
-  if (isPublicFilesRoute) {
+  if (isPublicLinkContext) {
     return client.publicFiles.list(webDavPath, publicLinkPassword, DavProperties.Default, depth)
   }
   return client.files.list(webDavPath, depth, DavProperties.Default)
@@ -288,11 +287,10 @@ const clientMoveFilesInFolder = async (
   webDavPathSource: string,
   webDavPathTarget: string,
   overwrite: boolean,
-  context: string,
+  isPublicLinkContext: boolean,
   publicLinkPassword: string
 ) => {
-  const isPublicFilesRoute = context === 'files-public-files'
-  if (isPublicFilesRoute) {
+  if (isPublicLinkContext) {
     return client.publicFiles.move(
       webDavPathSource,
       webDavPathTarget,
@@ -308,11 +306,10 @@ const clientCopyFilesInFolder = async (
   webDavPathSource: string,
   webDavPathTarget: string,
   overwrite: boolean,
-  context: string,
+  isPublicLinkContext: boolean,
   publicLinkPassword: string
 ) => {
-  const isPublicFilesRoute = context === 'files-public-files'
-  if (isPublicFilesRoute) {
+  if (isPublicLinkContext) {
     return client.publicFiles.copy(
       webDavPathSource,
       webDavPathTarget,
@@ -333,7 +330,7 @@ const copyMoveResource = async (
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  context,
+  isPublicLinkContext,
   publicLinkPassword,
   copy = false
 ): Promise<Resource[]> => {
@@ -349,7 +346,7 @@ const copyMoveResource = async (
     client,
     targetFolder.webDavPath,
     1,
-    context,
+    isPublicLinkContext,
     publicLinkPassword
   )
   const targetFolderResources = targetFolderItems.map((i) => buildResource(i))
@@ -396,7 +393,7 @@ const copyMoveResource = async (
           resource.webDavPath,
           webDavPathTarget,
           overwriteTarget,
-          context,
+          isPublicLinkContext,
           publicLinkPassword
         )
       } else {
@@ -405,7 +402,7 @@ const copyMoveResource = async (
           resource.webDavPath,
           webDavPathTarget,
           overwriteTarget,
-          context,
+          isPublicLinkContext,
           publicLinkPassword
         )
       }

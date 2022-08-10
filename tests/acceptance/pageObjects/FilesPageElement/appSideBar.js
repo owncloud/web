@@ -132,7 +132,7 @@ module.exports = {
       return items
     },
     getActionsMenuItemsExceptDefaults: async function () {
-      const defaultItems = ['add to favorites', 'copy', 'move', 'rename', 'delete']
+      const defaultItems = ['add to favorites', 'copy', 'cut', 'rename', 'delete']
       const items = []
       let elements
       await this.api.elements('@panelActionsItems', function (result) {

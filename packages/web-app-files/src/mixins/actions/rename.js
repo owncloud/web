@@ -9,7 +9,6 @@ export default {
     ...mapGetters('Files', ['files', 'currentFolder']),
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
-    ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
 
     $_rename_items() {
       return [
@@ -190,11 +189,12 @@ export default {
       this.toggleModalConfirmButton()
       const sameResource = isSameResource(resource, this.currentFolder)
 
+      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
       this.renameFile({
         client: this.$client,
         file: resource,
         newValue: newName,
-        isPublicLinkContext: this.isPublicLinkContext,
+        isPublicLinkContext,
         isSameResource: sameResource
       })
         .then(() => {

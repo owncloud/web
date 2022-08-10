@@ -1,7 +1,6 @@
 import App from './App.vue'
 import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
-import LocationPicker from './views/LocationPicker.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import Personal from './views/Personal.vue'
@@ -100,7 +99,6 @@ export default {
     Favorites,
     Personal,
     FilesDrop,
-    LocationPicker,
     PrivateLink,
     PublicFiles,
     SearchResults,

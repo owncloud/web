@@ -16,6 +16,7 @@ import DownloadFile from '../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../mixins/actions/emptyTrashBin'
 import Favorite from '../../mixins/actions/favorite'
 import Move from '../../mixins/actions/move'
+import Paste from '../../mixins/actions/paste'
 import Navigate from '../../mixins/actions/navigate'
 import Rename from '../../mixins/actions/rename'
 import Restore from '../../mixins/actions/restore'
@@ -43,6 +44,7 @@ export default {
     EmptyTrashBin,
     Favorite,
     Move,
+    Paste,
     Navigate,
     Rename,
     Restore,
@@ -148,6 +150,7 @@ export default {
         ...this.$_delete_items,
         ...this.$_move_items,
         ...this.$_copy_items,
+        ...this.$_paste_items,
         ...this.$_rename_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,

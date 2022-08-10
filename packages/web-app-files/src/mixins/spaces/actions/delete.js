@@ -37,7 +37,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_SPACE']),
+    ...mapMutations('Files', ['REMOVE_FILES']),
     ...mapMutations('runtime/spaces', ['REMOVE_SPACE']),
 
     $_delete_trigger({ resources }) {

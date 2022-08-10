@@ -1,25 +1,36 @@
 import { canBeMoved } from '../../helpers/permissions'
 import {
-  createLocationOperations,
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
+import { mapActions } from 'vuex'
 
 export default {
   computed: {
+    isMacOs() {
+      return window.navigator.platform.match('Mac')
+    },
+    getCutShortcutString() {
+      if (this.isMacOs) {
+        return this.$pgettext('Keyboard shortcut for macOS for cutting files', '⌘ + X')
+      }
+      return this.$pgettext('Keyboard shortcut for non-macOS systems for cutting files', 'Ctrl + X')
+    },
     $_move_items() {
       return [
         {
-          name: 'move',
-          icon: 'folder-shared',
+          name: 'cut',
+          icon: 'scissors',
           handler: this.$_move_trigger,
+          shortcut: this.getCutShortcutString,
           label: () =>
-            this.$pgettext('Action in the files list row to initiate moving resources', 'Move'),
+            this.$pgettext('Action in the files list row to initiate cutting resources', 'Cut'),
           isEnabled: ({ resources }) => {
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
@@ -45,41 +56,9 @@ export default {
     }
   },
   methods: {
-    $_move_trigger({ resources }) {
-      let context = 'private'
-
-      const query = {
-        resource: resources.map((resource) => {
-          return resource.path
-        })
-      }
-
-      if (isLocationPublicActive(this.$router, 'files-public-files')) {
-        context = 'public'
-      }
-
-      if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        context = 'space'
-        query.storageId = this.$route.params.storageId
-      }
-
-      if (isLocationSpacesActive(this.$router, 'files-spaces-personal')) {
-        context = 'personal'
-        query.storageId = this.$route.params.storageId
-      }
-
-      const item = this.currentFolder.path || this.homeFolder
-
-      return this.$router.push(
-        createLocationOperations('files-operations-location-picker', {
-          params: {
-            context,
-            item,
-            action: 'move'
-          },
-          query
-        })
-      )
+    ...mapActions('Files', ['cutSelectedFiles']),
+    $_move_trigger() {
+      this.cutSelectedFiles()
     }
   }
 }

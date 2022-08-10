@@ -1234,22 +1234,6 @@ When(
   }
 )
 
-Then('the move here file/folder button should be disabled', function () {
-  return client.page.personalPage().checkForButtonMoveHereDisabled()
-})
-
-When(
-  'the user selects move action for folder/file {string} using the webUI',
-  async function (resource) {
-    await client.page.FilesPageElement.filesList().openFileActionsMenu(resource)
-    return await client.page.FilesPageElement.fileActionsMenu().move()
-  }
-)
-
-When('the user cancels the attempt to move/copy resources using the webUI', function () {
-  return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress()
-})
-
 When(
   'the user batch moves these files/folders into folder {string} using the webUI',
   async function (target, resources) {
@@ -1257,24 +1241,9 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.personalPage().moveMultipleResources(target)
+    return client.page.FilesPageElement.filesList().moveMultipleResources(target)
   }
 )
-
-When(
-  'the user tries to batch move these files/folders into folder {string} using the webUI',
-  async function (target, resources) {
-    for (const item of resources.rows()) {
-      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
-    }
-
-    return client.page.personalPage().attemptToMoveMultipleResources(target)
-  }
-)
-
-When('the user selects the move button to move files using the webUI', function () {
-  return client.page.personalPage().click('@moveSelectedBtn')
-})
 
 When(
   'the user copies file/folder {string} into folder {string} using the webUI',
@@ -1297,34 +1266,15 @@ When(
 )
 
 When(
-  'the user selects copy action for file/folder {string} using the webUI',
-  async function (resource) {
-    await client.page.FilesPageElement.filesList().openFileActionsMenu(resource)
-    return await client.page.FilesPageElement.fileActionsMenu().copy()
-  }
-)
-
-When(
-  'the user selects the folder {string} as a place to copy/move the file/files/folder/folders using the webUI',
-  async function (target) {
-    await client.page.locationPicker().selectFolder(target)
-  }
-)
-
-When(
   'the user batch copies these files/folders into folder {string} using the webUI',
   async function (target, resources) {
     for (const item of resources.rows()) {
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return await client.page.personalPage().copyMultipleResources(target)
+    return await client.page.FilesPageElement.filesList().copyMultipleResources(target)
   }
 )
-
-When('the user selects the copy button to copy files using the webUI', function () {
-  return client.page.personalPage().click('@copySelectedBtn')
-})
 
 When(
   'the user creates a markdown file with the name {string} using the webUI',
@@ -1365,7 +1315,6 @@ Then(
   async function (table) {
     const visibleItems =
       await client.page.FilesPageElement.appSideBar().getActionsMenuItemsExceptDefaults()
-
     const tableItems = table.rows()
     const expectedVisibleItems = []
     tableItems.forEach((element) => {

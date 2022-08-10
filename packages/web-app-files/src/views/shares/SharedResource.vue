@@ -243,7 +243,7 @@ export default defineComponent({
         this.$gettext,
         this.$gettextInterpolate,
         this.$ngettext,
-        this.$route.name
+        false
       )
       for (const resource of movedResources) {
         this.REMOVE_FILES([resource])
