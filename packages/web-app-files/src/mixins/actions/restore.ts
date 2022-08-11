@@ -14,7 +14,6 @@ export default {
     ...mapState(['user']),
     ...mapState('runtime/spaces', ['spaces']),
     ...mapGetters(['configuration', 'capabilities']),
-    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_restore_items() {
       return [
@@ -111,10 +110,8 @@ export default {
 
       // Load quota
       if (this.capabilities?.spaces?.enabled) {
-        const graphClient = clientService.graphAuthenticated(
-          this.configuration.server,
-          this.accessToken
-        )
+        const accessToken = this.$store.getters['runtime/auth/accessToken']
+        const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
         const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? this.$route.params.storageId
           : this.spaces.find((s) => s.driveType === 'personal').id

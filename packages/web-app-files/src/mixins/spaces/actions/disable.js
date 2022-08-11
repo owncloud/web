@@ -5,7 +5,6 @@ import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 export default {
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/auth', ['accessToken']),
     ...mapState(['user']),
 
     $_disable_items() {
@@ -61,10 +60,8 @@ export default {
     },
 
     $_disable_disableSpace(id) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .deleteDrive(id)
         .then(() => {
