@@ -5,12 +5,13 @@
       type="a"
       :href="hrefOrFallback"
       target="_blank"
-      appearance="raw"
+      appearance="filled"
       variation="inverse"
       :aria-label="ariaLabelOrFallback"
       aria-describedby="oc-feedback-link-description"
     >
       <oc-icon name="feedback" />
+      <span class="hide-below-1280" v-text="$gettext('Give feedback')" />
     </oc-button>
     <p id="oc-feedback-link-description" class="oc-invisible-sr" v-text="descriptionOrFallback" />
   </div>
@@ -54,3 +55,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .hide-below-1280 {
+    display: flex;
+  }
+  
+  @media only screen and (max-width: 1280px) {
+    .hide-below-1280 {
+      display: none;
+    }
+  }
+</style>

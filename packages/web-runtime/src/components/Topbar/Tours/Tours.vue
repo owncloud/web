@@ -4,11 +4,10 @@
       v-if="tours.length === 1"
       id="toursButton"
       v-oc-tooltip="tours[0].tooltip"
-      size="small"
       @click.stop="startTour(0)"
     >
       <oc-icon name="map" />
-      {{ tours[0].tourName }}
+      <span class="hide-below-1280">{{ tours[0].tourName }}</span>
     </oc-button>
 
     <div v-else>
@@ -84,6 +83,16 @@ export default {
 <style lang="scss">
 .guide-highlight {
   background-color: var(--oc-color-background-highlight);
+}
+
+.hide-below-1280 {
+  display: flex;
+}
+
+@media only screen and (max-width: 1280px) {
+  .hide-below-1280 {
+    display: none;
+  }
 }
 
 #tour {

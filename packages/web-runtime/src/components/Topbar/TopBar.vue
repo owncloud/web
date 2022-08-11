@@ -15,8 +15,8 @@
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
       <tours />
-      <theme-switcher v-if="darkThemeAvailable" />
       <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
+      <theme-switcher v-if="darkThemeAvailable" />
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
     </div>
@@ -135,7 +135,7 @@ export default {
   .oc-topbar-right {
     gap: 20px;
   }
-  @media only screen and (max-width: 960px) {
+  @media only screen and (max-width: 1024px) {
     .oc-topbar-left,
     .oc-topbar-right {
       gap: 0.5rem;
