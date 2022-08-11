@@ -89,8 +89,8 @@ export default {
 
   watch: {
     $route: {
-      handler(r) {
-        if (this.activeProvider && !this.activeProvider.available) {
+      handler(r, o) {
+        if (!!o && this.activeProvider && !this.activeProvider.available) {
           this.activeProvider = undefined
         }
 
@@ -109,7 +109,6 @@ export default {
           input.value = routeTerm
         })
       },
-      // force eager callback execution
       immediate: true
     }
   },
