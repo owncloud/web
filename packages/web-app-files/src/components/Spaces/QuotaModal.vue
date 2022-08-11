@@ -65,7 +65,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     changeSelectedQuotaOption(option) {
       this.selectedOption = option.value
