@@ -7,7 +7,8 @@ import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
-import { spaceRoleEditor, spaceRoleManager } from './helpers/share'
+import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
+
 import { Panel } from '../../web-pkg/src/components/sidebar'
 
 import { Resource, User } from 'web-client'

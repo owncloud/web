@@ -34,11 +34,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
-import { linkRoleUploaderFolder } from '../helpers/share'
-import { createLocationOperations, createLocationPublic } from '../router'
+import { createLocationPublic } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
@@ -46,8 +45,10 @@ import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
+import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
+import { defineComponent } from '@vue/runtime-core'
 
-export default {
+export default defineComponent({
   components: {
     ResourceUpload
   },
@@ -151,14 +152,7 @@ export default {
         .catch((error) => {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
-            this.$router.push(
-              createLocationOperations('files-operations-resolver-public-link', {
-                params: {
-                  token: this.publicLinkToken
-                }
-              })
-            )
-            return
+            return this.$authService.handleAuthError(this.$router.currentRoute)
           }
           console.error(error)
           this.errorMessage = error
@@ -187,7 +181,7 @@ export default {
       this.$uppyService.uploadFiles(uppyResources)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

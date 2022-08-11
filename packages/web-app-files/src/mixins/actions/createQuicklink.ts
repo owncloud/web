@@ -1,5 +1,7 @@
 import quickActions, { canShare } from '../../quickActions'
-import { ShareStatus, createQuicklink } from '../../helpers/share'
+import { createQuicklink } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
+
 import { isLocationSharesActive } from '../../router'
 
 export default {

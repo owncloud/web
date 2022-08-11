@@ -1,6 +1,1 @@
 export * from './link'
-export * from './permission'
-export * from './role'
-export * from './share'
-export * from './status'
-export * from './type'

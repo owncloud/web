@@ -28,7 +28,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
-          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true"></oc-resource-stub>
+          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true" class=""></oc-resource-stub>
           <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="resource-table-edit-name"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
         </div>
       </td>
@@ -51,7 +51,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
-          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true"></oc-resource-stub>
+          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true" class=""></oc-resource-stub>
           <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="resource-table-edit-name"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
         </div>
       </td>
@@ -74,7 +74,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
-          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true"></oc-resource-stub>
+          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true" class=""></oc-resource-stub>
           <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="resource-table-edit-name"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
         </div>
       </td>
@@ -97,7 +97,7 @@ exports[`SharedWithOthers view when the wrapper is not loading anymore when leng
       </td>
       <td class="oc-td oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-expand oc-text-truncate oc-table-data-cell oc-table-data-cell-name">
         <div class="resource-table-resource-wrapper resource-table-resource-wrapper-limit-max-width">
-          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true"></oc-resource-stub>
+          <oc-resource-stub folderlink="[object Object]" parentfolderlink="[object Object]" resource="[object Object]" parentfoldernamedefault="All files and folders" ispathdisplayed="true" isextensiondisplayed="true" isresourceclickable="true" class=""></oc-resource-stub>
           <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="resource-table-edit-name"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span></oc-button-stub>
         </div>
       </td>

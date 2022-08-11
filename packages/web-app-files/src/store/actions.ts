@@ -7,15 +7,15 @@ import {
   buildResource,
   buildShare,
   buildCollaboratorShare,
-  buildSpaceShare,
-  buildSpace
+  buildSpaceShare
 } from '../helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { move, copy } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
-import { ShareTypes } from '../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
@@ -63,6 +63,9 @@ export default {
       { root: true }
     )
   },
+  async clearClipboardFiles(context) {
+    context.commit('CLEAR_CLIPBOARD')
+  },
   async pasteSelectedFiles(
     context,
     {
@@ -73,7 +76,7 @@ export default {
       $gettext,
       $gettextInterpolate,
       $ngettext,
-      routeContext,
+      isPublicLinkContext,
       publicLinkPassword,
       upsertResource
     }
@@ -90,10 +93,9 @@ export default {
         $gettext,
         $gettextInterpolate,
         $ngettext,
-        routeContext,
+        isPublicLinkContext,
         publicLinkPassword
       )
-      context.commit('CLEAR_CLIPBOARD')
     }
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResources = await copy(
@@ -106,14 +108,14 @@ export default {
         $gettext,
         $gettextInterpolate,
         $ngettext,
-        routeContext,
+        isPublicLinkContext,
         publicLinkPassword
       )
     }
+    context.commit('CLEAR_CLIPBOARD')
     const loadMovedResource = async (resource) => {
-      const isPublicFilesRoute = routeContext === 'files-public-files'
       let loadedResource
-      if (isPublicFilesRoute) {
+      if (isPublicLinkContext) {
         loadedResource = await client.publicFiles.getFileInfo(
           resource.webDavPath,
           publicLinkPassword,
@@ -524,7 +526,7 @@ export default {
       })
   },
   deleteShare(context, { client, graphClient, share, path, storageId }) {
-    const additionalParams = {}
+    const additionalParams: any = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
     }
@@ -733,16 +735,6 @@ export default {
         )
       })
     })
-  },
-
-  async loadSpaces(context, { graphClient }) {
-    const graphResponse = await graphClient.drives.listMyDrives()
-    if (!graphResponse.data) {
-      return
-    }
-
-    const spaces = graphResponse.data.value.map((space) => buildSpace(space))
-    context.commit('LOAD_SPACES', spaces)
   },
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {

@@ -73,13 +73,20 @@ Given('the property {string} has been deleted in web config file', function (key
 })
 
 Then(
-  'the {word} message with header {string} should be displayed on the webUI',
+  'the {string} message with header {string} should be displayed on the webUI',
   async function (type, message) {
     const text = await client.page.webPage().getDisplayedMessage(type, true)
     assert.strictEqual(text, message)
 
-    const element = type === 'error' ? '@errorMessage' : '@message'
-    return await client.page.webPage().waitForElementNotPresent(element)
+    const element =
+      type === 'error'
+        ? '@errorMessage'
+        : type === 'modal error'
+        ? '@modalErrorMessage'
+        : '@message'
+    if (type === 'error') {
+      return await client.page.webPage().waitForElementNotPresent(element)
+    }
   }
 )
 

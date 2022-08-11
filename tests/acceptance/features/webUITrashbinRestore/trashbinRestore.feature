@@ -230,7 +230,7 @@ Feature: Restore deleted files/folders
       | lorem.txt |
     When the user browses to the trashbin page
     And the user restores file "lorem.txt" from the trashbin using the webUI
-    Then the success message with header "lorem.txt was restored successfully" should be displayed on the webUI
+    Then the "success" message with header "lorem.txt was restored successfully" should be displayed on the webUI
     And file "lorem.txt" should not be listed on the webUI
     And folder "lorem.txt" should be listed on the webUI
     When the user browses to the files page using the webUI
@@ -249,7 +249,7 @@ Feature: Restore deleted files/folders
       | lorem.txt |
     When the user browses to the trashbin page
     And the user restores folder "lorem.txt" from the trashbin using the webUI
-    Then the success message with header "lorem.txt was restored successfully" should be displayed on the webUI
+    Then the "success" message with header "lorem.txt was restored successfully" should be displayed on the webUI
     And folder "lorem.txt" should not be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
     When the user browses to the files page using the webUI
@@ -272,7 +272,7 @@ Feature: Restore deleted files/folders
     And the user browses to the trashbin page
     Then as "Alice" file "fileToShare.txt" should exist in the trashbin in the server
     When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
-    Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
+    Then the "success" message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
     And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist in the server
 
   @issue-1502

@@ -33,7 +33,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { ShareTypes, spaceRoleManager } from '../../../helpers/share'
+import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'

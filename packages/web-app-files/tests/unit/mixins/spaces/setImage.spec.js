@@ -8,7 +8,7 @@ import mockAxios from 'jest-mock-axios'
 import sdkMock from '@/__mocks__/sdk'
 import fileFixtures from '__fixtures__/files'
 import { thumbnailService } from '../../../../src/services'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -68,12 +68,6 @@ describe('setImage', () => {
               uuid: 1
             }
           },
-          Files: {
-            namespaced: true,
-            mutations: {
-              UPDATE_SPACE_FIELD: jest.fn()
-            }
-          },
           runtime: {
             namespaced: true,
             modules: {
@@ -81,6 +75,12 @@ describe('setImage', () => {
                 namespaced: true,
                 getters: {
                   accessToken: () => ''
+                }
+              },
+              spaces: {
+                namespaced: true,
+                mutations: {
+                  UPDATE_SPACE_FIELD: jest.fn()
                 }
               }
             }

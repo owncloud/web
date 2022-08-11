@@ -67,7 +67,7 @@ describe('copyMove', () => {
         jest.fn(),
         jest.fn(),
         jest.fn(),
-        dataSet.publicFiles ? 'files-public-files' : '',
+        dataSet.publicFiles,
         ''
       )
       if (dataSet.publicFiles) {
@@ -89,7 +89,7 @@ describe('copyMove', () => {
         jest.fn(),
         jest.fn(),
         jest.fn(),
-        dataSet.publicFiles ? 'files-public-files' : '',
+        dataSet.publicFiles,
         ''
       )
       if (dataSet.publicFiles) {

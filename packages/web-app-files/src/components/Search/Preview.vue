@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration', 'user']),
-    ...mapState('Files', ['spaces']),
+    ...mapState('runtime/spaces', ['spaces']),
 
     matchingSpace() {
       return this.spaces.find((space) => space.id === this.resource.storageId)

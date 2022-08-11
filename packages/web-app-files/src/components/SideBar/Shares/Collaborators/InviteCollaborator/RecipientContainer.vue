@@ -17,10 +17,10 @@
   </oc-recipient>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
-import { ShareTypes } from '../../../../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 
 export default {

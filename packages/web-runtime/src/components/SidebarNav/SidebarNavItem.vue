@@ -144,5 +144,9 @@ export default {
   &.active {
     overflow: hidden;
   }
+
+  .oc-icon svg {
+    transition: all 0.3s;
+  }
 }
 </style>

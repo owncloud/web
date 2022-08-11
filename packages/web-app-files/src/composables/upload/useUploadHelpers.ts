@@ -1,6 +1,6 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
-import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildWebDavFilesPath } from '../../helpers/resources'
 import { User, Graph } from 'web-client'
 import {
   useCapabilityShareJailEnabled,
@@ -15,6 +15,7 @@ import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
 import path from 'path'
 import { useGraphClient } from 'web-client/src/composables'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]

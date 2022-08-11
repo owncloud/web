@@ -110,6 +110,15 @@
         </li>
       </oc-list>
     </oc-drop>
+    <div id="clipboard-btns" class="oc-button-group">
+      <oc-button v-if="showPasteHereButton" @click="pasteFilesHere">
+        <oc-icon fill-type="line" name="clipboard" />
+        <span v-translate>Paste here</span>
+      </oc-button>
+      <oc-button v-if="showPasteHereButton" @click="clearClipboardFiles">
+        <oc-icon fill-type="line" name="close" />
+      </oc-button>
+    </div>
   </div>
 </template>
 
@@ -119,7 +128,7 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 import { useGraphClient } from 'web-client/src/composables'
@@ -130,7 +139,8 @@ import {
   useCapabilitySpacesEnabled,
   useStore,
   usePublicLinkPassword,
-  useUserContext
+  useUserContext,
+  usePublicLinkContext
 } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
@@ -141,6 +151,7 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -183,7 +194,8 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data: () => ({
@@ -193,9 +205,13 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'clipboardResources']),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
+    showPasteHereButton() {
+      return this.clipboardResources && this.clipboardResources.length !== 0
+    },
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
       const mimeTypes = this.$store.getters['External/mimeTypes']
@@ -273,7 +289,12 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadIndicators']),
+    ...mapActions('Files', [
+      'loadPreview',
+      'loadIndicators',
+      'clearClipboardFiles',
+      'pasteSelectedFiles'
+    ]),
     ...mapActions([
       'openFile',
       'showMessage',
@@ -281,8 +302,26 @@ export default defineComponent({
       'setModalInputErrorMessage',
       'hideModal'
     ]),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_SPACE_FIELD']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
+
+    pasteFilesHere() {
+      this.pasteSelectedFiles({
+        client: this.$client,
+        createModal: this.createModal,
+        hideModal: this.hideModal,
+        showMessage: this.showMessage,
+        $gettext: this.$gettext,
+        $gettextInterpolate: this.$gettextInterpolate,
+        $ngettext: this.$ngettext,
+        isPublicLinkContext: this.isPublicLinkContext,
+        publicLinkPassword: this.publicLinkPassword,
+        upsertResource: this.UPSERT_RESOURCE
+      }).then(() => {
+        ;(document.activeElement as HTMLElement).blur()
+      })
+    },
 
     async onUploadComplete(result) {
       if (result.successful) {
@@ -807,7 +846,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #create-list {
   li {
     border: 1px solid transparent;
@@ -838,6 +877,14 @@ export default defineComponent({
 #new-file-menu-drop {
   .oc-icon-m svg {
     height: 100% !important;
+  }
+}
+#clipboard-btns {
+  :nth-child(1) {
+    border-right: 0px !important;
+  }
+  :nth-child(2) {
+    border-left: 0px !important;
   }
 }
 </style>

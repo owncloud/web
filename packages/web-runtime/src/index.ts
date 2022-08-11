@@ -77,6 +77,26 @@ export const renderSuccess = (): void => {
       immediate: true
     }
   )
+
+  store.watch(
+    (state, getters) => {
+      return getters['runtime/auth/isUserContextReady']
+    },
+    async (newValue, oldValue) => {
+      // Load spaces to make them available across the application
+      if (store.getters.capabilities?.spaces?.enabled) {
+        const clientService = instance.$clientService
+        const graphClient = clientService.graphAuthenticated(
+          store.getters.configuration.server,
+          store.getters['runtime/auth/accessToken']
+        )
+        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+      }
+    },
+    {
+      immediate: true
+    }
+  )
 }
 
 export const renderFailure = async (err: Error): Promise<void> => {

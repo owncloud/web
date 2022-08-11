@@ -216,6 +216,8 @@ module.exports = {
       let selector = titleOnly ? '@message' : '@messages'
       if (type === 'error') {
         selector = titleOnly ? '@errorMessage' : '@errorMessages'
+      } else if (type === 'modal error') {
+        selector = '@modalErrorMessage'
       }
       await this.waitForElementVisible(selector)
       await this.api.element(selector, (result) => {
@@ -279,6 +281,10 @@ module.exports = {
     errorMessage: {
       selector:
         '//*[contains(@class, "oc-notification-message-danger")]//div[contains(@class, "oc-notification-message-title")]',
+      locateStrategy: 'xpath'
+    },
+    modalErrorMessage: {
+      selector: '//div[@class=\'oc-modal-body\']/p[contains(@class, "oc-modal-body-message")]',
       locateStrategy: 'xpath'
     },
     errorMessages: {

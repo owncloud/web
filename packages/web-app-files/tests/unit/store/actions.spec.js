@@ -1,6 +1,6 @@
 import actions from '../../../src/store/actions'
-import { ShareTypes, spaceRoleManager } from '../../../src/helpers/share'
-import { buildSpace } from '../../../src/helpers/resources'
+import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
+import { buildSpace } from 'web-client/src/helpers'
 
 const stateMock = {
   commit: jest.fn(),

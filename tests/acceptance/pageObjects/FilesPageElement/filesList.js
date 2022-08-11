@@ -610,19 +610,17 @@ module.exports = {
       await fileActionsMenu.move()
 
       // Execute move
-      await client.page.locationPicker().selectFolderAndConfirm(target)
+      await this.selectFolderAndPasteFiles(target)
 
       return this
     },
 
-    cancelResourceMoveOrCopyProgress: async function () {
-      // cancel copy or move
-      await this.waitForElementVisible(this.elements.cancelMoveCopyBtn.selector).click(
-        this.elements.cancelMoveCopyBtn.selector
-      )
-      await this.waitForLoadingFinished()
+    moveMultipleResources: async function (target) {
+      // Trigger move
+      await this.click('@moveSelectedBtn')
 
-      return this
+      // Execute move
+      return await this.selectFolderAndPasteFiles(target)
     },
 
     copyResource: async function (resource, target) {
@@ -631,8 +629,42 @@ module.exports = {
       await fileActionsMenu.copy()
 
       // Execute copy
-      await client.page.locationPicker().selectFolderAndConfirm(target)
+      await this.selectFolderAndPasteFiles(target)
 
+      return this
+    },
+
+    copyMultipleResources: async function (target) {
+      // Trigger copy
+      await this.click('@copySelectedBtn')
+
+      // Execute copy
+      return await this.selectFolderAndPasteFiles(target)
+    },
+
+    selectFolderAndPasteFiles: async function (target) {
+      if (target.startsWith('/')) {
+        // if the target is absolute, we need to go to the root element first
+        await this.waitForElementVisible('@firstBreadcrumbLink').click('@firstBreadcrumbLink')
+      }
+      const targetSplitted = target.replace(/^(\/|\\)+/, '').split('/')
+      for (let i = 0; i < targetSplitted.length; i++) {
+        await client.page.FilesPageElement.filesList().navigateToFolder(targetSplitted[i])
+      }
+
+      await this.initAjaxCounters()
+        .waitForElementVisible('@pasteSelectedBtn')
+        .click('@pasteSelectedBtn')
+        .waitForAjaxCallsToStartAndFinish()
+      try {
+        await this.waitForElementNotPresent({
+          selector: '@pasteSelectedBtn',
+          timeout: 200
+        })
+      } catch (e) {
+        console.error(e)
+        throw new Error('ElementPresentError')
+      }
       return this
     },
 
@@ -767,15 +799,25 @@ module.exports = {
       selector: '//img[contains(@class, "oc-resource-thumbnail")]',
       locateStrategy: 'xpath'
     },
-    cancelMoveCopyBtn: {
-      selector: '#location-picker-btn-cancel'
-    },
     btnToggleSideBar: {
       selector: '#files-toggle-sidebar'
     },
     sharedWithToggleButton: {
       selector: '//*[contains(@class, "sharee-avatars")]/ancestor::button',
       locateStrategy: 'xpath'
+    },
+    firstBreadcrumbLink: {
+      selector: '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a',
+      locateStrategy: 'xpath'
+    },
+    moveSelectedBtn: {
+      selector: '.oc-files-actions-move-trigger'
+    },
+    copySelectedBtn: {
+      selector: '.oc-files-actions-copy-trigger'
+    },
+    pasteSelectedBtn: {
+      selector: '#clipboard-btns button:first-child'
     }
   }
 }

@@ -2,7 +2,7 @@ import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
-import { ShareStatus } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 import { isLocationSharesActive } from '../../router'
 import get from 'lodash-es/get'
 

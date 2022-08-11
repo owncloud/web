@@ -3,12 +3,13 @@ import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
-import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../../helpers/resources'
+import { buildResource } from '../../../helpers/resources'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
+import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export class FolderLoaderSpacesProject implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {

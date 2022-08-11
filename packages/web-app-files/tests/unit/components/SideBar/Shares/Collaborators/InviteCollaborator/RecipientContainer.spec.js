@@ -8,8 +8,8 @@ import Collaborators from '@/__fixtures__/collaborators'
 import SharedFiles from '@/__fixtures__/sharedFiles'
 
 import RecipientContainer from '@files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
-import { ShareTypes } from '@files/src/helpers/share/type'
-import { buildSharedResource } from '@files/src/helpers/resources'
+import { buildSharedResource } from 'web-client/src/helpers'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 jest.mock('@files/src/helpers/user/avatarUrl', () => ({
   avatarUrl: jest.fn().mockReturnValue('avatarUrl')

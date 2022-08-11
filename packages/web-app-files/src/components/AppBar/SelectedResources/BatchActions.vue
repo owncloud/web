@@ -7,6 +7,7 @@
       :items="selectedFiles"
       appearance="outline"
       class="oc-mr-s"
+      :shortcut-hint="false"
     />
   </oc-list>
 </template>

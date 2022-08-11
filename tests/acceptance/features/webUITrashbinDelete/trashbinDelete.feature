@@ -47,7 +47,7 @@ Feature: files and folders can be deleted from the trashbin
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Delete folders and check that they are gone (ocis bug demonstration)
     When the user deletes folder "simple-folder" using the webUI
-    Then the error message with header 'Failed to delete "simple-folder"' should be displayed on the webUI
+    Then the "error" message with header 'Failed to delete "simple-folder"' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     When the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "Folder,With,Comma" should not be listed on the webUI
@@ -98,7 +98,7 @@ Feature: files and folders can be deleted from the trashbin
   @issue-product-139
   Scenario: Clear trashbin
     When the user clears the trashbin
-    Then the success message with header "All deleted files were removed" should be displayed on the webUI
+    Then the "success" message with header "All deleted files were removed" should be displayed on the webUI
     And there should be no resources listed on the webUI
 
 

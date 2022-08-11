@@ -8,7 +8,7 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { ShareStatus } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 
 export default {
@@ -55,10 +55,12 @@ export default {
           route: ({ resources }) => {
             const shareId = this.getShareId(resources[0])
             const shareName = this.getShareName(resources[0])
+            const { storageId } = resources[0]
             return merge({}, this.routeName, {
               params: {
                 item: resources[0].path,
-                ...(shareName && { shareName })
+                ...(shareName && { shareName }),
+                ...(storageId && { storageId })
               },
               query: {
                 ...(shareId && { shareId })
@@ -75,7 +77,7 @@ export default {
       }
 
       if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        return createLocationPublic('files-spaces-project')
+        return createLocationSpaces('files-spaces-project')
       }
 
       if (

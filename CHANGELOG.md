@@ -23,9 +23,11 @@ Summary
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
+* Bugfix - SidebarNavItem icon flickering: [#7309](https://github.com/owncloud/web/pull/7309)
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 * Bugfix - Don't leak oidc callback url into browser history: [#3071](https://github.com/owncloud/web/issues/3071)
 * Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+* Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
@@ -58,10 +60,13 @@ Summary
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
+* Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
+* Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
 * Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+* Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
@@ -195,6 +200,13 @@ Details
    https://github.com/owncloud/web/issues/7266
    https://github.com/owncloud/web/pull/7321
 
+* Bugfix - SidebarNavItem icon flickering: [#7309](https://github.com/owncloud/web/pull/7309)
+
+   We've fixed a bug which caused the icons on the SidebarNav to flicker when transitioning in
+   lightmode
+
+   https://github.com/owncloud/web/pull/7309
+
 * Bugfix - No redirect after disabling space: [#7334](https://github.com/owncloud/web/pull/7334)
 
    We've fixed a bug where the user was not redirected to the spaces overview after disabling the
@@ -218,6 +230,13 @@ Details
 
    https://github.com/owncloud/web/issues/6899
    https://github.com/owncloud/web/pull/7379
+
+* Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
+
+   We've fixed a bug that broke opening a folder in a project space from the context menu via "Open
+   Folder" (simply clicking it wasn't affected).
+
+   https://github.com/owncloud/web/pull/7425
 
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
 
@@ -499,6 +518,20 @@ Details
    https://github.com/owncloud/web/issues/7335
    https://github.com/owncloud/web/pull/7365
 
+* Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
+
+   We've added the option to display relevant keyboard shortcuts in the contextmenu to give
+   notice to the user which shortcuts are available
+
+   https://github.com/owncloud/web/issues/6892
+   https://github.com/owncloud/web/pull/7309
+
+* Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
+
+   We've added a visual indication to show which resources are being cut
+
+   https://github.com/owncloud/web/pull/7309
+
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 
    We've enhanced web to be able to re-share resources when using an ownCloud infinite scale
@@ -547,6 +580,14 @@ Details
    https://github.com/owncloud/web/pull/7315
    https://github.com/owncloud/web/pull/7372
    https://github.com/owncloud/web/pull/7402
+
+* Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
+
+   We've replaced the locationpicker in batchactions and contextmenu with the new
+   cut/copy/paste clipboard actions.
+
+   https://github.com/owncloud/web/issues/6892
+   https://github.com/owncloud/web/pull/7309
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 

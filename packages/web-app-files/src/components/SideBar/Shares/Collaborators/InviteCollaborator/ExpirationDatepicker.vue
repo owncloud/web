@@ -53,7 +53,7 @@ import {
   customRef
 } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
-import { ShareTypes } from '../../../../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'DateCurrentpicker',

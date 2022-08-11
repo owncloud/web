@@ -1,4 +1,4 @@
-import { ShareTypes } from '../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default {
   selectedFiles: (state, getters) => {
@@ -7,12 +7,15 @@ export default {
   files: (state) => {
     return state.files
   },
-  spaces: (state) => {
-    return state.spaces
-  },
   filesAll: (state) => state.filesSearched || state.files,
   currentFolder: (state) => {
     return state.currentFolder
+  },
+  clipboardResources: (state) => {
+    return state.clipboardResources
+  },
+  clipboardAction: (state) => {
+    return state.clipboardAction
   },
   // a flat file list has no current folder nor parent
   flatFileList: (state) => !!state.currentFolder === false,

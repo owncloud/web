@@ -4,15 +4,15 @@ import { isLocationTrashActive } from '../../router'
 import {
   buildWebDavFilesTrashPath,
   buildWebDavFilesPath,
-  buildWebDavSpacesTrashPath,
-  buildWebDavSpacesPath
+  buildWebDavSpacesTrashPath
 } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default {
   computed: {
     ...mapState(['user']),
-    ...mapState('Files', ['spaces']),
+    ...mapState('runtime/spaces', ['spaces']),
     ...mapGetters(['configuration', 'capabilities']),
     ...mapGetters('runtime/auth', ['accessToken']),
 
@@ -45,7 +45,7 @@ export default {
   methods: {
     ...mapActions('Files', ['removeFilesFromTrashbin']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     async $_restore_trigger({ resources }) {
@@ -79,7 +79,7 @@ export default {
       if (restoredResources.length > 0) {
         this.removeFilesFromTrashbin(restoredResources)
         let translated
-        const translateParams = {}
+        const translateParams: any = {}
         if (restoredResources.length === 1) {
           translated = this.$gettext('%{resource} was restored successfully')
           translateParams.resource = restoredResources[0].name
@@ -95,7 +95,7 @@ export default {
       // failure handler (for partial and full failure)
       if (failedResources.length > 0) {
         let translated
-        const translateParams = {}
+        const translateParams: any = {}
         if (failedResources.length === 1) {
           translated = this.$gettext('Failed to restore "%{resource}"')
           translateParams.resource = failedResources[0].name

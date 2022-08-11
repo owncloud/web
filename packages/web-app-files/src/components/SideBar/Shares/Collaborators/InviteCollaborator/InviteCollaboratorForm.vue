@@ -81,7 +81,7 @@ import {
   SharePermissions,
   ShareTypes,
   SpacePeopleShareRoles
-} from '../../../../../helpers/share'
+} from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled

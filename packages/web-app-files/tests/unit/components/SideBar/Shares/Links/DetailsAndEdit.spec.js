@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '@/tests/unit/stubs'
 import DetailsAndEdit from '@files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShareRoles } from '@files/src/helpers/share'
+import { LinkShareRoles } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

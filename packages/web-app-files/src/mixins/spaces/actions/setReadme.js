@@ -8,7 +8,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('Files', ['currentFolder', 'spaces']),
+    ...mapState('Files', ['currentFolder']),
+    ...mapState('runtime/spaces', ['spaces']),
     ...mapState(['user']),
     $_setSpaceReadme_items() {
       return [
@@ -47,7 +48,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_SPACE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     async $_setSpaceReadme_trigger({ resources }) {
       try {

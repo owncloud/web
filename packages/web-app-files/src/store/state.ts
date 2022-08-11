@@ -7,7 +7,6 @@ export default {
   clipboardResources: [],
   clipboardAction: null,
   versions: [],
-  spaces: [],
 
   /**
    * Outgoing shares and links from currently highlighted element

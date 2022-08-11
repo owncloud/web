@@ -16,7 +16,7 @@ Feature: Visibility of the batch actions menu
     When the user marks the folder "simple-folder" using the webUI
     Then the following batch action buttons should be visible
       | buttonName |
-      | Move       |
+      | Cut        |
       | Copy       |
       | Delete     |
 
@@ -29,7 +29,7 @@ Feature: Visibility of the batch actions menu
       | buttonName |
       | Download   |
       | Delete     |
-      | Move       |
+      | Cut        |
       | Copy       |
 
 
@@ -43,7 +43,7 @@ Feature: Visibility of the batch actions menu
     Then the following batch action buttons should be visible
       | buttonName |
       | Delete     |
-      | Move       |
+      | Cut        |
       | Copy       |
 
   @skipOnOCIS
@@ -93,7 +93,7 @@ Feature: Visibility of the batch actions menu
     Then the following batch action buttons should not be visible
       | buttonName |
       | Delete     |
-      | Move       |
+      | Cut        |
       | Copy       |
 
 
@@ -106,7 +106,7 @@ Feature: Visibility of the batch actions menu
     Then the following batch action buttons should not be visible
       | buttonName |
       | Delete     |
-      | Move       |
+      | Cut        |
       | Copy       |
 
 

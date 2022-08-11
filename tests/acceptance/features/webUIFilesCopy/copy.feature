@@ -32,7 +32,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then the error message with header 'Failed to copy "strängé filename (duplicate #2 &).txt"' should be displayed on the webUI
+    Then the "modal error" message with header 'File with name strängé filename (duplicate #2 &).txt already exists.' should be displayed on the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once
@@ -78,7 +78,7 @@ Feature: copy files and folders
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
     And user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions in the server
-    And the public uses the webUI to access the last public link created by user "Alice" in a new session
+    When the public uses the webUI to access the last public link created by user "Alice" in a new session
     And the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -113,7 +113,7 @@ Feature: copy files and folders
     Given user "Alice" has created folder "simple-empty-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then the error message with header 'Failed to copy "simple-empty-folder"' should be displayed on the webUI
+    Then the "error" message with header "You can't paste the selected file at this location because you can't paste an item into itself." should be displayed on the webUI
     And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist in the server
 
 
@@ -127,40 +127,3 @@ Feature: copy files and folders
     And folder "simple-empty-folder" should be listed on the webUI
     And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist in the server
     And as "Alice" folder "simple-empty-folder" should exist in the server
-
-  Scenario: cancel copying a file
-    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Alice" has logged in using the webUI
-    And the user has browsed to the personal page
-    When the user selects copy action for folder "data.zip" using the webUI
-    And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
-    And the user cancels the attempt to copy resources using the webUI
-    Then file "data.zip" should be listed on the webUI
-    But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
-
-  Scenario: cancel copying of multiple files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has uploaded file "new-data.zip" to "testapp.zip" in the server
-    And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Alice" has logged in using the webUI
-    And the user has browsed to the personal page
-    When the user marks these files for batch action using the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
-    And the user selects the copy button to copy files using the webUI
-    And the user selects the folder "simple-empty-folder" as a place to copy the files using the webUI
-    And the user cancels the attempt to copy resources using the webUI
-    Then the following files should be listed on the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
-    But these resources should not be listed in the folder "simple-empty-folder" on the webUI
-      | file_name   |
-      | data.zip    |
-      | lorem.txt   |
-      | testapp.zip |
