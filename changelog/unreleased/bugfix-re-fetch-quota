@@ -1,0 +1,8 @@
+Bugfix: Re-fetch quota
+
+We've fixed a bug where uploading, deleting or restoring resources doesn't always re-fetch the quota and therefore
+was falsy displayed.
+
+https://github.com/owncloud/web/pull/7415
+https://github.com/owncloud/web/issues/6930
+https://github.com/owncloud/web/issues/7389

@@ -3,8 +3,8 @@ import Vuex from 'vuex'
 import ListItem from '@files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
-import { peopleRoleViewerFolder, ShareTypes } from '../../../../../../src/helpers/share'
 import Users from '@/__fixtures__/users'
+import { peopleRoleViewerFolder, ShareTypes } from 'web-client/src/helpers/share'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -95,6 +95,11 @@ function createWrapper({
     displayName: 'Brian Murphy',
     additionalInfo: 'brian@owncloud.com'
   },
+  owner = {
+    name: 'marie',
+    displayName: 'Marie Curie',
+    additionalInfo: 'marie@owncloud.com'
+  },
   role = peopleRoleViewerFolder,
   modifiable = true,
   sharedParentRoute = null
@@ -119,6 +124,7 @@ function createWrapper({
       share: {
         id: 'asdf',
         collaborator,
+        owner,
         shareType,
         role
       },

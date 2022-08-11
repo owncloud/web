@@ -286,7 +286,7 @@ export default defineComponent({
   height: 100%;
   max-height: 100%;
   display: grid;
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: auto 1fr;
   background-color: var(--oc-color-background-default);
   top: 0;
   position: absolute;
@@ -297,15 +297,15 @@ export default defineComponent({
   // hidden: if element is off screen
   // visible: if element is on screen
   visibility: hidden;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-top-right-radius: var(--oc-space-medium);
+  border-bottom-right-radius: var(--oc-space-medium);
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
   }
 
   &.compact-header {
-    grid-template-rows: 50px 70px 1fr;
+    grid-template-rows: auto auto 1fr;
   }
 
   &.sidebar-panel-default {
@@ -322,7 +322,7 @@ export default defineComponent({
   }
 
   &__header {
-    padding: 0 10px;
+    padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
 
     &.header {
       display: grid;
@@ -351,11 +351,11 @@ export default defineComponent({
   &__body {
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 10px;
+    padding: var(--oc-space-small);
   }
 
   &__navigation {
-    margin: 10px -10px -10px;
+    margin: var(--oc-space-small) - var(--oc-space-small) - var(--oc-space-small);
 
     > button {
       border-bottom: 1px solid var(--oc-color-border);
@@ -366,7 +366,7 @@ export default defineComponent({
       grid-template-columns: auto 1fr auto;
       text-align: left;
       height: 50px;
-      padding: 0 10px;
+      padding: 0 var(--oc-space-small);
 
       &:first-of-type {
         border-top: 1px solid var(--oc-color-border);

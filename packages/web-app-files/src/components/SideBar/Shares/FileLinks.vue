@@ -4,10 +4,16 @@
       <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
-    <div v-if="canCreatePublicLinks" class="oc-mt-m">
+    <p
+      v-if="!canCreatePublicLinks"
+      data-testid="files-links-no-reshare-permissions-message"
+      class="oc-mt-m"
+      v-text="noResharePermsMessage"
+    />
+    <div class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
-        v-else
+        v-else-if="canCreatePublicLinks"
         :expiration-date="expirationDate"
         @createPublicLink="checkLinkToCreate"
       />
@@ -25,6 +31,7 @@
       />
       <hr class="oc-my-m" />
       <oc-button
+        v-if="canCreatePublicLinks"
         id="files-file-link-add"
         variation="primary"
         appearance="raw"
@@ -33,12 +40,7 @@
         v-text="addButtonLabel"
       />
     </div>
-    <p
-      v-else
-      data-testid="files-links-no-reshare-permissions-message"
-      class="oc-mt-m"
-      v-text="noResharePermsMessage"
-    />
+
     <oc-list v-if="links.length" class="oc-overflow-hidden oc-my-m">
       <li
         v-for="link in displayLinks"
@@ -68,10 +70,12 @@
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
-      <h3 class="oc-text-bold oc-m-rm oc-text-initial">
-        <span v-text="indirectLinksHeading" />
-        <oc-contextual-helper v-if="helpersEnabled" v-bind="indirectLinkHelp" />
-      </h3>
+      <div class="oc-flex">
+        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+          <span v-text="indirectLinksHeading" />
+        </h3>
+        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
+      </div>
       <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
         <li
           v-for="link in displayIndirectLinks"
@@ -110,12 +114,14 @@ import {
   useStore,
   useCapabilitySpacesEnabled,
   useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing
+  useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingPublicCanEdit,
+  useCapabilityFilesSharingPublicAlias
 } from 'web-pkg/src/composables'
 import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
-import { ShareTypes, LinkShareRoles, SharePermissions } from '../../../helpers/share'
+import { ShareTypes, LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
 import { cloneStateObject } from '../../../helpers/store'
 import { showQuickLinkPasswordModal } from '../../../quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
@@ -144,6 +150,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -215,19 +223,15 @@ export default defineComponent({
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
-          this.capabilities.files_sharing?.public?.can_edit
+          this.hasPublicLinkEditing
         )
       }
 
-      const roles = LinkShareRoles.list(
+      return LinkShareRoles.list(
         this.highlightedFile.isFolder,
-        this.capabilities.files_sharing?.public?.can_edit
+        this.hasPublicLinkEditing,
+        this.hasPublicLinkAliasSupport
       )
-      // add empty permission link if oCIS for alias link
-      return [
-        // { role: null, name: 'Alias link', label: this.$gettext('Only invited people') },
-        ...roles
-      ]
     },
 
     passwordEnforced() {
@@ -462,7 +466,7 @@ export default defineComponent({
         expireDate,
         password,
         id: link.id,
-        permissions: link.permissions,
+        permissions: link.permissions.toString(),
         quicklink: link.quicklink,
         name: link.name,
         spaceRef: this.highlightedFile.fileId,

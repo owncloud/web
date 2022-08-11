@@ -46,9 +46,9 @@ export const openPanel = async ({ page, name }: { page: Page; name: string }): P
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
-
   const panelSelector = page.locator(`#sidebar-panel-${name}-item-select`)
   const nextPanel = page.locator(`#sidebar-panel-${name}-item`)
 
-  await Promise.all([locatorUtils.waitForEvent(nextPanel, 'transitionend'), panelSelector.click()])
+  await panelSelector.click()
+  await locatorUtils.waitForEvent(nextPanel, 'transitionend')
 }

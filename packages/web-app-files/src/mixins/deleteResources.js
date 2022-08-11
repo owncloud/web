@@ -3,7 +3,8 @@ import { cloneStateObject } from '../helpers/store'
 import { isSameResource } from '../helpers/resource'
 import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helpers/resources'
 import PQueue from 'p-queue'
-import { isLocationTrashActive } from '../router'
+import { isLocationTrashActive, isLocationSpacesActive } from '../router'
+import { clientService } from 'web-pkg/src/services'
 
 export default {
   data: () => ({
@@ -14,8 +15,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['user']),
-    ...mapGetters('runtime/auth', { isPublicLinkContext: 'isPublicLinkContextReady' }),
+    ...mapGetters(['user', 'configuration', 'capabilities']),
 
     $_deleteResources_isInTrashbin() {
       return (
@@ -97,6 +97,7 @@ export default {
   methods: {
     ...mapActions('Files', ['pushResourcesToDeleteList', 'removeFilesFromTrashbin', 'deleteFiles']),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_trashbin_deleteOp(resource) {
@@ -149,10 +150,11 @@ export default {
     },
 
     $_deleteResources_filesList_delete() {
+      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
       this.deleteFiles({
         client: this.$client,
         files: this.$_deleteResources_resources,
-        isPublicLinkContext: this.isPublicLinkContext,
+        isPublicLinkContext,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
       }).then(async () => {
@@ -160,9 +162,28 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (this.user?.id) {
-          const user = await this.$client.users.getUser(this.user.id)
-          this.SET_QUOTA(user.quota)
+        if (
+          isLocationSpacesActive(this.$router, 'files-spaces-project') ||
+          isLocationSpacesActive(this.$router, 'files-spaces-personal')
+        ) {
+          if (this.capabilities?.spaces?.enabled) {
+            const accessToken = this.$store.getters['runtime/auth/accessToken']
+            const graphClient = clientService.graphAuthenticated(
+              this.configuration.server,
+              accessToken
+            )
+            const driveResponse = await graphClient.drives.getDrive(
+              this.$_deleteResources_resources[0].storageId
+            )
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await this.$client.users.getUser(this.user.id)
+            this.SET_QUOTA(user.quota)
+          }
         }
 
         let parentFolderPath

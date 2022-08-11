@@ -61,7 +61,8 @@
 
 <script type="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty, SharePermissionBit } from "web-pkg/src/constants";
+import { DavProperties, DavProperty } from "web-pkg/src/constants";
+import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from "../services/auth";
 
 import {

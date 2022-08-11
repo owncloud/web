@@ -1,3 +1,7 @@
+# Most of the tests in this file is skipped in OCIS most of the tests set minimum characters for search 
+# while it can be configured in OCIS too but not in the same manner as oc10
+# the skipped tests are listed in issue https://github.com/owncloud/web/issues/7264 for further implementation in playwright 
+
 Feature: Autocompletion of share-with names
   As a user
   I want to share files, with minimal typing, to the right people or groups
@@ -28,7 +32,7 @@ Feature: Autocompletion of share-with names
       | users-finance |
       | other         |
 
-  @smokeTest @issue-ocis-1961
+  @smokeTest @issue-ocis-1961 @skipOnOCIS
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
@@ -40,7 +44,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "us" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @smokeTest @issue-ocis-1961
+  @smokeTest @issue-ocis-1961 @skipOnOCIS
   Scenario: autocompletion of regular existing groups
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
@@ -72,7 +76,7 @@ Feature: Autocompletion of share-with names
     When the user types "u" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @issue-ocis-1317
+  @skipOnOCIS
   Scenario: autocompletion when minimum characters is increased and not enough characters are typed
     Given the administrator has set the minimum characters for sharing autocomplete to "4" in the server
     And user "regularuser" has created folder "simple-folder" in the server
@@ -83,7 +87,7 @@ Feature: Autocompletion of share-with names
     When the user types "use" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @issue-ocis-1961
+  @issue-ocis-1961 @skipOnOCIS
   Scenario: autocomplete short user/display names when completely typed
     Given the administrator has set the minimum characters for sharing autocomplete to "3" in the server
     And user "regularuser" has created folder "simple-folder" in the server
@@ -97,7 +101,7 @@ Feature: Autocompletion of share-with names
     When the user types "Use" in the share-with-field
     Then "user" "Use" should be listed in the autocomplete list on the webUI
 
-  @issue-ocis-1961
+  @issue-ocis-1961 @skipOnOCIS
   Scenario: autocomplete short group names when completely typed
     Given the administrator has set the minimum characters for sharing autocomplete to "2" in the server
     And user "regularuser" has created folder "simple-folder" in the server
@@ -111,7 +115,7 @@ Feature: Autocompletion of share-with names
     When the user types "fi" in the share-with-field
     Then "group" "fi" should be listed in the autocomplete list on the webUI
 
-  @issue-ocis-1317
+  @skipOnOCIS
   Scenario: autocompletion when increasing the minimum characters for sharing autocomplete
     Given the administrator has set the minimum characters for sharing autocomplete to "3" in the server
     And user "regularuser" has created folder "simple-folder" in the server
@@ -124,7 +128,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "use" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @skipOnOCIS
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (folder)
     Given user "regularuser" has created folder "simple-folder" in the server
     And user "regularuser" has logged in using the webUI
@@ -137,7 +141,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @skipOnOCIS
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (file)
     Given user "regularuser" has created file "data.zip" in the server
     And user "regularuser" has logged in using the webUI
@@ -150,7 +154,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @issue-ocis-1317
+ @skipOnOCIS
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (folder)
     Given the administrator has set the minimum characters for sharing autocomplete to "2" in the server
     And user "regularuser" has created folder "simple-folder" in the server
@@ -164,7 +168,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @issue-ocis-1317
+  @skipOnOCIS
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (file)
     Given the administrator has set the minimum characters for sharing autocomplete to "2" in the server
     And user "regularuser" has created file "data.zip" in the server

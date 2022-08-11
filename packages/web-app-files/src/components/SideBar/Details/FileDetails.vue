@@ -13,6 +13,12 @@
         <oc-spinner v-if="$asyncComputed.preview.updating" />
       </div>
       <div
+        v-else
+        class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
+      >
+        <oc-resource-icon class="details-icon" :resource="file" size="xxxlarge" />
+      </div>
+      <div
         v-if="shareIndicators.length"
         key="file-shares"
         data-testid="sharingInfo"
@@ -149,7 +155,7 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { ShareTypes } from '../../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useAccessToken,
   usePublicLinkContext,
@@ -181,7 +187,7 @@ export default defineComponent({
       }
 
       return createLocationSpaces('files-spaces-personal', {
-        params: { item: unref(sharedParentDir) }
+        params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
       })
     })
 
@@ -483,7 +489,8 @@ export default defineComponent({
   }
 }
 
-.details-preview {
+.details-preview,
+.details-icon-wrapper {
   background-color: var(--oc-color-background-muted);
   border: 10px solid var(--oc-color-background-muted);
   height: 230px;
@@ -491,5 +498,12 @@ export default defineComponent({
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.details-icon > svg {
+  height: 192px !important;
+  max-height: 192px !important;
+  max-width: 192px !important;
+  width: 192px !important;
 }
 </style>

@@ -10,13 +10,13 @@ import {
   Share,
   ShareStatus,
   ShareTypes,
-  SpacePeopleShareRoles,
   spaceRoleEditor,
   spaceRoleManager,
   spaceRoleViewer
-} from './share'
-import { extractDomSelector, extractExtensionFromFile, extractStorageId } from './resource'
-import { User, Resource } from 'web-client'
+} from 'web-client/src/helpers/share'
+import { extractExtensionFromFile, extractStorageId } from './resource'
+import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
+import { Resource } from 'web-client'
 import { SHARE_JAIL_ID } from '../services/folder'
 
 export function renameResource(resource, newName, newPath) {
@@ -109,145 +109,12 @@ export function buildResource(resource): Resource {
   }
 }
 
-export function buildSpace(space) {
-  let spaceImageData, spaceReadmeData
-  let disabled = false
-  const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map((role) => [role.name, []]))
-
-  if (space.special) {
-    spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
-    spaceReadmeData = space.special.find((el) => el.specialFolder.name === 'readme')
-
-    if (spaceImageData) {
-      spaceImageData.webDavUrl = decodeURI(spaceImageData.webDavUrl)
-    }
-
-    if (spaceReadmeData) {
-      spaceReadmeData.webDavUrl = decodeURI(spaceReadmeData.webDavUrl)
-    }
-  }
-
-  if (space.root?.permissions) {
-    for (const permission of space.root.permissions) {
-      for (const role of SpacePeopleShareRoles.list()) {
-        if (permission.roles.includes(role.name)) {
-          spaceRoles[role.name].push(...permission.grantedTo.map((el) => el.user.id))
-        }
-      }
-    }
-
-    if (space.root.deleted) {
-      disabled = space.root.deleted?.state === 'trashed'
-    }
-  }
-  return {
-    id: space.id,
-    fileId: space.id,
-    storageId: space.id,
-    mimeType: '',
-    name: space.name,
-    description: space.description,
-    extension: '',
-    path: '',
-    webDavPath: buildWebDavSpacesPath(space.id, ''),
-    driveType: space.driveType,
-    type: 'space',
-    isFolder: true,
-    mdate: space.lastModifiedDateTime,
-    size: '',
-    indicators: [],
-    permissions: '',
-    starred: false,
-    etag: '',
-    sharePermissions: '',
-    shareTypes: (function () {
-      return []
-    })(),
-    privateLink: '',
-    downloadURL: '',
-    ownerDisplayName: '',
-    ownerId: space.owner?.user?.id,
-    disabled,
-    spaceQuota: space.quota,
-    spaceRoles,
-    spaceMemberIds: Object.values(spaceRoles).reduce((arr, ids) => arr.concat(ids), []),
-    spaceImageData,
-    spaceReadmeData,
-    canUpload: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canDownload: function () {
-      return true
-    },
-    canBeDeleted: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.includes(user.uuid)
-    },
-    canRename: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canEditDescription: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canRestore: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return this.disabled && user && allowedRoles.includes(user.uuid)
-    },
-    canDisable: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return !this.disabled && user && allowedRoles.includes(user.uuid)
-    },
-    canShare: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canEditImage: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canEditReadme: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [
-        ...this.spaceRoles[spaceRoleManager.name],
-        ...this.spaceRoles[spaceRoleEditor.name]
-      ]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canEditQuota: function ({ user }: { user?: User } = {}) {
-      const allowedRoles = [...this.spaceRoles[spaceRoleManager.name]]
-      return user && allowedRoles.includes(user.uuid)
-    },
-    canCreate: function () {
-      return true
-    },
-    isMounted: function () {
-      return true
-    },
-    isReceivedShare: function () {
-      return false
-    },
-    getDomSelector: () => extractDomSelector(space.id)
-  }
-}
-
 export function buildWebDavFilesPath(userId, path) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavFilesTrashPath(userId, path = '') {
   return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function buildWebDavSpacesPath(storageId, path) {
-  return '/' + `spaces/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavSpacesTrashPath(storageId, path = '') {
@@ -404,7 +271,7 @@ export function buildSharedResource(
 
   resource.extension = extractExtensionFromFile(resource)
   resource.isReceivedShare = () => incomingShares
-  resource.canUpload = () => true
+  resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
   resource.getDomSelector = () => extractDomSelector(share.id)

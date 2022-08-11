@@ -1,8 +1,8 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import acceptShare from '@files/src/mixins/actions/acceptShare.js'
+import acceptShare from '@files/src/mixins/actions/acceptShare.ts'
 import { createLocationShares } from '../../../../src/router'
-import { ShareStatus } from '@files/src/helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

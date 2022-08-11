@@ -2,17 +2,14 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSpacesActive } from '../../../router'
-import {
-  aggregateResourceShares,
-  buildResource,
-  buildWebDavSpacesPath
-} from '../../../helpers/resources'
+import { aggregateResourceShares, buildResource } from '../../../helpers/resources'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { DavProperties } from 'web-pkg/src/constants'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { unref } from '@vue/composition-api'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 

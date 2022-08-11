@@ -110,6 +110,15 @@
         </li>
       </oc-list>
     </oc-drop>
+    <div id="clipboard-btns" class="oc-button-group">
+      <oc-button v-if="showPasteHereButton" @click="pasteFilesHere">
+        <oc-icon fill-type="line" name="clipboard" />
+        <span v-translate>Paste here</span>
+      </oc-button>
+      <oc-button v-if="showPasteHereButton" @click="clearClipboardFiles">
+        <oc-icon fill-type="line" name="close" />
+      </oc-button>
+    </div>
   </div>
 </template>
 
@@ -119,15 +128,19 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource, buildWebDavFilesPath, buildWebDavSpacesPath } from '../../helpers/resources'
+import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
+import { useGraphClient } from 'web-client/src/composables'
+
 import {
   useRequest,
   useCapabilityShareJailEnabled,
+  useCapabilitySpacesEnabled,
   useStore,
   usePublicLinkPassword,
-  useUserContext
+  useUserContext,
+  usePublicLinkContext
 } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
@@ -138,6 +151,7 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -151,7 +165,6 @@ export default defineComponent({
 
     onMounted(() => {
       const filesSelectedSub = uppyService.subscribe('filesSelected', instance.onFilesSelected)
-      const uploadSuccessSub = uppyService.subscribe('uploadSuccess', instance.onFileSuccess)
       const uploadCompletedSub = uppyService.subscribe('uploadCompleted', instance.onUploadComplete)
 
       uppyService.useDropTarget({
@@ -161,7 +174,6 @@ export default defineComponent({
 
       instance.$on('beforeDestroy', () => {
         uppyService.unsubscribe('filesSelected', filesSelectedSub)
-        uppyService.unsubscribe('uploadSuccess', uploadSuccessSub)
         uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
         uppyService.removeDropTarget()
       })
@@ -173,14 +185,17 @@ export default defineComponent({
       }),
       ...useUploadHelpers(),
       ...useRequest(),
+      ...useGraphClient(),
       isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       hasShareJail: useCapabilityShareJailEnabled(),
+      hasSpaces: useCapabilitySpacesEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
-      isUserContext: useUserContext({ store })
+      isUserContext: useUserContext({ store }),
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data: () => ({
@@ -190,9 +205,13 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'spaces', 'selectedFiles']),
+    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'clipboardResources']),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
+    showPasteHereButton() {
+      return this.clipboardResources && this.clipboardResources.length !== 0
+    },
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
       const mimeTypes = this.$store.getters['External/mimeTypes']
@@ -270,7 +289,12 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadIndicators']),
+    ...mapActions('Files', [
+      'loadPreview',
+      'loadIndicators',
+      'clearClipboardFiles',
+      'pasteSelectedFiles'
+    ]),
     ...mapActions([
       'openFile',
       'showMessage',
@@ -279,20 +303,46 @@ export default defineComponent({
       'hideModal'
     ]),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    onFileSuccess() {
-      if (this.user?.quota) {
-        this.SET_QUOTA(this.user.quota)
-      }
+    pasteFilesHere() {
+      this.pasteSelectedFiles({
+        client: this.$client,
+        createModal: this.createModal,
+        hideModal: this.hideModal,
+        showMessage: this.showMessage,
+        $gettext: this.$gettext,
+        $gettextInterpolate: this.$gettextInterpolate,
+        $ngettext: this.$ngettext,
+        isPublicLinkContext: this.isPublicLinkContext,
+        publicLinkPassword: this.publicLinkPassword,
+        upsertResource: this.UPSERT_RESOURCE
+      }).then(() => {
+        ;(document.activeElement as HTMLElement).blur()
+      })
     },
 
-    onUploadComplete(result) {
+    async onUploadComplete(result) {
       if (result.successful) {
         const file = result.successful[0]
 
         if (!file) {
           return
+        }
+
+        if (this.isSpacesProjectLocation || this.isPersonalLocation) {
+          if (this.hasSpaces) {
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            this.UPDATE_SPACE_FIELD({
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
+          } else {
+            const user = await this.$client.users.getUser(this.user.id)
+            this.SET_QUOTA(user.quota)
+          }
         }
 
         let pathFileWasUploadedTo = file.meta.currentFolder
@@ -796,7 +846,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #create-list {
   li {
     border: 1px solid transparent;
@@ -827,6 +877,14 @@ export default defineComponent({
 #new-file-menu-drop {
   .oc-icon-m svg {
     height: 100% !important;
+  }
+}
+#clipboard-btns {
+  :nth-child(1) {
+    border-right: 0px !important;
+  }
+  :nth-child(2) {
+    border-left: 0px !important;
   }
 }
 </style>

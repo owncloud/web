@@ -2,7 +2,7 @@
   <div class="space-quota">
     <p class="oc-mb-s oc-mt-rm" v-text="spaceStorageDetailsLabel" />
     <oc-progress
-      :value="parseInt(quotaUsagePercent)"
+      :value="quotaUsagePercent"
       :max="100"
       size="small"
       :variation="quotaProgressVariant"
@@ -45,7 +45,7 @@ export default {
       return filesize(this.spaceQuota.used)
     },
     quotaUsagePercent() {
-      return ((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(1)
+      return parseFloat(((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2))
     },
     quotaProgressVariant() {
       switch (this.spaceQuota.state) {

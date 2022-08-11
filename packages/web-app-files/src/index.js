@@ -1,7 +1,6 @@
 import App from './App.vue'
 import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
-import LocationPicker from './views/LocationPicker.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
 import Personal from './views/Personal.vue'
@@ -22,7 +21,6 @@ import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
-import { clientService } from 'web-pkg/src/services'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -101,7 +99,6 @@ export default {
     Favorites,
     Personal,
     FilesDrop,
-    LocationPicker,
     PrivateLink,
     PublicFiles,
     SearchResults,
@@ -127,15 +124,6 @@ export default {
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
-
-    // Load spaces to make them available across the application
-    if (store.getters.capabilities?.spaces?.enabled) {
-      const graphClient = clientService.graphAuthenticated(
-        store.getters.configuration.server,
-        store.getters['runtime/auth/accessToken']
-      )
-      store.dispatch('Files/loadSpaces', { graphClient })
-    }
 
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,

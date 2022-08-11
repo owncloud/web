@@ -64,7 +64,7 @@
             </p>
             <oc-progress
               v-if="limitedPersonalStorage"
-              :value="quota.relative"
+              :value="quotaUsagePercent"
               :max="100"
               size="small"
               :variation="quotaProgressVariant"
@@ -77,10 +77,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
+import { useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 
 export default {
   props: {
@@ -90,8 +91,24 @@ export default {
       default: () => []
     }
   },
+  setup() {
+    return {
+      hasSpaces: useCapabilitySpacesEnabled()
+    }
+  },
   computed: {
     ...mapGetters(['quota', 'user']),
+    ...mapGetters({ legacyQuota: 'quota' }),
+    ...mapState('runtime/spaces', ['spaces']),
+
+    quota() {
+      return this.hasSpaces
+        ? this.spaces.find((s) => s.driveType === 'personal')?.spaceQuota
+        : this.legacyQuota
+    },
+    useLegacyQuota() {
+      return !this.hasSpaces
+    },
 
     userId() {
       return this.user.username || this.user.id
@@ -101,7 +118,7 @@ export default {
         return this.$gettext('Personal storage')
       }
       return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
-        percentage: this.quota.relative || 0
+        percentage: this.quotaUsagePercent || 0
       })
     },
     personalStorageDetailsLabel() {
@@ -116,14 +133,24 @@ export default {
       )
     },
     limitedPersonalStorage() {
+      if (!this.useLegacyQuota) {
+        return this.quota.total !== 0
+      }
+
       return !isNil(this.quota.relative) && this.quota.definition !== 'none'
     },
     quotaEnabled() {
       return !!this.quota
     },
+    quotaUsagePercent() {
+      return this.useLegacyQuota
+        ? this.quota.relative
+        : parseFloat(((this.quota.used / this.quota.total) * 100).toFixed(2))
+    },
+
     quotaProgressVariant() {
-      if ((this.quota.relative || 0) < 80) return 'primary'
-      if ((this.quota.relative || 0) < 90) return 'warning'
+      if ((this.quotaUsagePercent || 0) < 80) return 'primary'
+      if ((this.quotaUsagePercent || 0) < 90) return 'warning'
       return 'danger'
     }
   },

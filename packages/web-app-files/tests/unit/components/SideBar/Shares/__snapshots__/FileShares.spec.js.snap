@@ -36,7 +36,7 @@ exports[`FileShares if there are collaborators present correctly passes the shar
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-initial oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-overflow-hidden oc-m-rm">
+  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
     <li>
       <collaborator-list-item-stub share="[object Object]" sharedparentroute="[object Object]"></collaborator-list-item-stub>
     </li>
@@ -56,7 +56,7 @@ exports[`FileShares if there are collaborators present renders sharedWithLabel a
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-initial oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-overflow-hidden oc-m-rm">
+  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
     <li>
       <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
     </li>

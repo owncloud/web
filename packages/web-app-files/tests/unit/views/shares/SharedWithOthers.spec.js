@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { getStore, localVue } from '../views.setup.js'
-import FileActions from '@files/src/mixins/fileActions.js'
+import FileActions from '@files/src/mixins/fileActions.ts'
 import SharedWithOthers from '@files/src/views/shares/SharedWithOthers.vue'
 import SharedData from '@/__fixtures__/sharedFiles.js'
 import Users from '@/__fixtures__/users'

@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import deleteResources from '@files/src/mixins/deleteResources.js'
+import { createLocationSpaces } from '../../../src/router'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -27,9 +28,10 @@ describe('deleteResources', () => {
       const resourcesToDelete = [{ id: 2, path: '/' }]
       const wrapper = getWrapper(resourcesToDelete)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
+      const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
       await wrapper.vm.$_deleteResources_filesList_delete()
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.$router.length).toBeGreaterThanOrEqual(0)
+      expect(spyRouterPushStub).toHaveBeenCalledTimes(0)
       expect(spyHideModalStub).toHaveBeenCalledTimes(1)
     })
 
@@ -37,9 +39,10 @@ describe('deleteResources', () => {
       const resourcesToDelete = [currentFolder]
       const wrapper = getWrapper(resourcesToDelete)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
+      const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
       await wrapper.vm.$_deleteResources_filesList_delete()
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.$router.length).toBeGreaterThanOrEqual(1)
+      expect(spyRouterPushStub).toHaveBeenCalledTimes(1)
       expect(spyHideModalStub).toHaveBeenCalledTimes(1)
     })
   })
@@ -52,7 +55,15 @@ function getWrapper(resourcesToDelete) {
       $route: {
         name: 'files-personal'
       },
-      $router: [],
+      $router: {
+        currentRoute: createLocationSpaces('files-spaces-personal'),
+        resolve: (r) => {
+          return {
+            href: r.name
+          }
+        },
+        push: jest.fn()
+      },
       $client: {
         users: {
           getUser: jest.fn(() => user)
@@ -67,7 +78,11 @@ function getWrapper(resourcesToDelete) {
       getters: {
         user: () => {
           return { id: 'marie' }
-        }
+        },
+        configuration: () => ({
+          server: 'https://example.com'
+        }),
+        capabilities: () => {}
       },
       modules: {
         Files: {

@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '@/tests/unit/stubs'
 import DetailsAndEdit from '@files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShareRoles } from '@files/src/helpers/share'
+import { LinkShareRoles } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -14,7 +14,7 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 
-const availableRoleOptions = LinkShareRoles.list(false, true)
+const availableRoleOptions = LinkShareRoles.list(false, true, true)
 
 const exampleLink = {
   name: 'Example link',

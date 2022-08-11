@@ -61,6 +61,7 @@
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
+          :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
         />
         <oc-button
@@ -199,9 +200,10 @@ import {
 } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { extractDomSelector } from '../../helpers/resource'
+import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
-import { ShareTypes } from '../../helpers/share'
+import { ClipboardActions } from '../../helpers/clipboardActions'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationCommon } from '../../router'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
@@ -415,7 +417,13 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files', ['areFileExtensionsShown', 'spaces', 'latestSelectedId']),
+    ...mapState('Files', [
+      'areFileExtensionsShown',
+      'latestSelectedId',
+      'clipboardResources',
+      'clipboardAction'
+    ]),
+    ...mapState('runtime/spaces', ['spaces']),
     popperOptions() {
       return {
         modifiers: [
@@ -589,6 +597,10 @@ export default defineComponent({
         query: { term: `tag:${tag}`, provider: 'files.sdk' }
       })
     },
+    isResourceCut(resource) {
+      if (this.clipboardAction !== ClipboardActions.Cut) return false
+      return this.clipboardResources.some((r) => r.id === resource.id)
+    },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
     },
@@ -688,13 +700,13 @@ export default defineComponent({
         getReferenceClientRect: () => ({
           width: 0,
           height: 0,
+          top: event.clientY,
+          bottom: event.clientY,
           /**
            * If event type is 'contextmenu' the trigger was a right click on the table row,
            * so we render the dropdown at the position of the mouse pointer.
            * Otherwise we render the dropdown at the position of the three-dot-menu
            */
-          top: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.top,
-          bottom: event.type === 'contextmenu' ? event.clientY : contextMenuButtonPos.bottom,
           left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
           right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
         })
@@ -830,6 +842,9 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .resource-table {
+  &-resource-cut {
+    opacity: 0.6;
+  }
   &-resource-wrapper {
     &-limit-max-width {
       max-width: calc(100% - var(--oc-space-medium));
@@ -947,7 +962,7 @@ export default defineComponent({
   }
 
   &-squashed {
-    .resource-table-actions div {
+    .resource-table-actions div:first-child {
       display: none;
 
       @media only screen and (min-width: 1200px) {

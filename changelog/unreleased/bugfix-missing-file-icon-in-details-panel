@@ -1,0 +1,6 @@
+Bugfix: Missing file icon in details panel
+
+We've fixed a bug where the file icon in the details panel was not shown, if no preview was available.
+
+https://github.com/owncloud/web/pull/7344
+https://github.com/owncloud/web/issues/7337

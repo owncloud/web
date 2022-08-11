@@ -243,26 +243,11 @@ module.exports = {
         .click('@dialogConfirmBtnEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
+        .waitForElementVisible('@fileUploadStatus')
       return this
     },
     checkForButtonDisabled: function () {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
-    },
-
-    moveMultipleResources: async function (target) {
-      // Trigger move
-      await this.click('@moveSelectedBtn')
-
-      // Execute move
-      return await client.page.locationPicker().selectFolderAndConfirm(target)
-    },
-
-    copyMultipleResources: async function (target) {
-      // Trigger copy
-      await this.click('@copySelectedBtn')
-
-      // Execute copy
-      return await client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
     /**
@@ -311,15 +296,6 @@ module.exports = {
         searchBar = result.value
       })
       return searchBar.length > 0
-    },
-    clearSelection: async function () {
-      await this.useXpath()
-        .waitForElementVisible('@clearSelectionBtn')
-        .click('@clearSelectionBtn')
-        .waitForElementNotPresent('@clearSelectionBtn')
-    },
-    checkForButtonMoveHereDisabled: function () {
-      return this.waitForElementVisible('@moveHereConfirmBtn')
     },
     clearFileSelectionIfAny: async function () {
       let activeFileSelection = false
@@ -429,20 +405,11 @@ module.exports = {
     dialogInput: {
       selector: '.oc-modal-body-input .oc-text-input'
     },
-    moveSelectedBtn: {
-      selector: '.oc-files-actions-move-trigger'
-    },
-    copySelectedBtn: {
-      selector: '.oc-files-actions-copy-trigger'
-    },
     clearSelectionBtn: {
       selector: '#files-clear-selection'
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'
-    },
-    moveHereConfirmBtn: {
-      selector: '#location-picker-btn-confirm:disabled'
     }
   }
 }

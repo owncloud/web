@@ -1,10 +1,10 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import restore from '@files/src/mixins/spaces/actions/restore.js'
+import restore from '@files/src/mixins/spaces/actions/restore.ts'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

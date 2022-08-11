@@ -195,8 +195,10 @@ export default defineComponent({
 
   watch: {
     $route: {
-      handler: function () {
-        this.loadResourcesTask.perform(this, this.shareId, this.relativePath)
+      handler: async function () {
+        await this.loadResourcesTask.perform(this, this.shareId, this.relativePath)
+        // this can't be done in the task because the table will be rendered afterwards
+        this.scrollToResourceFromRoute()
       },
       immediate: true
     }
@@ -241,7 +243,7 @@ export default defineComponent({
         this.$gettext,
         this.$gettextInterpolate,
         this.$ngettext,
-        this.$route.name
+        false
       )
       for (const resource of movedResources) {
         this.REMOVE_FILES([resource])
@@ -271,15 +273,13 @@ export default defineComponent({
       const resourceName = this.$route.query.scrollTo
 
       if (resourceName && this.paginatedResources.length > 0) {
-        this.$nextTick(() => {
-          const resource = this.paginatedResources.find((r) => r.name === resourceName)
+        const resource = this.paginatedResources.find((r) => r.name === resourceName)
 
-          if (resource) {
-            this.selectedResources = [resource]
-            this.$_mountSideBar_showDefaultPanel(resource)
-            this.scrollToResource(resource)
-          }
-        })
+        if (resource) {
+          this.selectedResources = [resource]
+          this.$_mountSideBar_showDefaultPanel(resource)
+          this.scrollToResource(resource)
+        }
       }
     }
   }

@@ -1,0 +1,6 @@
+Bugfix: Quicklinks not shown
+
+We've fixed a bug where existing quicklinks were not shown when the user had no rights to create them.
+
+https://github.com/owncloud/web/pull/7424
+https://github.com/owncloud/web/issues/7406

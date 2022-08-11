@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import Restore from '@files/src/mixins/actions/restore.js'
+import Restore from '@files/src/mixins/actions/restore.ts'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
@@ -101,7 +101,8 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
       getters: {
         configuration: () => ({
           server: 'https://example.com'
-        })
+        }),
+        capabilities: () => {}
       },
       modules: {
         user: {
@@ -119,6 +120,9 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
             removeFilesFromTrashbin: jest.fn()
           }
         }
+      },
+      mutations: {
+        SET_QUOTA: () => jest.fn()
       }
     })
   })

@@ -4,7 +4,7 @@ import FileDetails from '../../../../../src/components/SideBar/Details/FileDetai
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
-import { ShareTypes } from '../../../../../src/helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -206,7 +206,7 @@ function createWrapper(
       }
     }),
     localVue,
-    stubs: stubs,
+    stubs: { ...stubs, 'oc-resource-icon': true },
     directives: {
       OcTooltip
     },

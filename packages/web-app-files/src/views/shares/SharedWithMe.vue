@@ -54,7 +54,7 @@ import { useSort, useResourcesViewDefaults } from '../../composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
-import { ShareStatus } from '../../helpers/share'
+import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
 

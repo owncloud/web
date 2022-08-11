@@ -1,0 +1,5 @@
+Bugfix: Suppress active panel error log
+
+We now suppress error logs which occurred when opening the sidebar without an active panel.
+
+https://github.com/owncloud/web/pull/7394

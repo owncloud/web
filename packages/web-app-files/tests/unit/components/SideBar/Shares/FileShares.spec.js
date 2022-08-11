@@ -7,11 +7,11 @@ import DesignSystem from 'owncloud-design-system'
 import stubs from '@/tests/unit/stubs'
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
-import { spaceRoleManager } from '../../../../../src/helpers/share'
+import { spaceRoleManager } from 'web-client/src/helpers/share'
 import * as reactivityComposables from 'web-pkg/src/composables/reactivity'
 import * as routerComposables from 'web-pkg/src/composables/router'
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
-import { buildSpace } from '../../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 import { clientService } from 'web-pkg/src/services'
 
 const localVue = createLocalVue()

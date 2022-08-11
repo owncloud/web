@@ -105,7 +105,7 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
@@ -114,10 +114,12 @@ import {
   SharePermissions,
   ShareRole,
   SpacePeopleShareRoles
-} from '../../../../helpers/share'
+} from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
+import { defineComponent } from '@vue/runtime-core'
+import { PropType } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
   props: {
@@ -126,7 +128,7 @@ export default {
       required: true
     },
     existingRole: {
-      type: ShareRole,
+      type: Object as PropType<ShareRole>,
       required: false,
       default: undefined
     },
@@ -344,7 +346,7 @@ export default {
       activateRoleSelect(activeRoleSelectIndex + (isArrowUp ? -1 : 1))
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

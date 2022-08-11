@@ -3,8 +3,7 @@ import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import { PeopleShareRoles } from '@files/src/helpers/share'
-import { SharePermissions, ShareTypes } from '../../../../../../src/helpers/share'
+import { PeopleShareRoles, SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

@@ -212,11 +212,12 @@ export class UserManager extends OidcUserManager {
       email: login?.email || user?.email || '',
       groups: userGroups,
       role,
-      language: login?.language,
-      ...(user.quota &&
-        user.quota.definition !== 'default' &&
-        user.quota.definition !== 'none' && { quota: user.quota })
+      language: login?.language
     })
+
+    if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
+      this.store.commit('SET_QUOTA', user.quota)
+    }
 
     await this.store.dispatch('loadSettingsValues')
   }

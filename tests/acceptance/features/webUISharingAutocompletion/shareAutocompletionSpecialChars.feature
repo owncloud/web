@@ -1,3 +1,4 @@
+# the tests skipped on OCIS are listed in issue https://github.com/owncloud/web/issues/7264 for further implementation in playwright 
 Feature: Autocompletion of share-with names
   As a user
   I want to share files, with minimal typing, to the right people or groups
@@ -50,11 +51,16 @@ Feature: Autocompletion of share-with names
 
     When the user types "<search>" in the share-with-field
     Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
+  
+    @skipOnOCIS
     Examples:
       | displayName | search |
       | -_.ocusr    | -_     |
       | ocusr-_.    | oc     |
-      | _ocusr@     | _u     |
+
+    Examples:
+      | displayName | search |
+      | _ocusr@     | _u     |  
 
   @issue-ocis-1317 @issue-ocis-1675
   Scenario Outline: autocompletion of groups having special characters in their names
@@ -65,12 +71,15 @@ Feature: Autocompletion of share-with names
     And user "regularuser" has logged in using the webUI
     And the user has browsed to the personal page
     And the user has opened the share dialog for file "data.zip"
-
     When the user types "<search>" in the share-with-field
     Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
     Examples:
       | group    | search |
       | @-_.     | @-     |
-      | -_.ocgrp | -_     |
-      | ocgrp-_. | oc     |
       | _ocgrp@  | _u     |
+      | -_.ocgrp | -_     |
+
+    @skipOnOCIS
+    Examples:
+      | group    | search |
+      | ocgrp-_. | oc     |

@@ -1,6 +1,11 @@
 <template>
   <div class="file_info">
-    <oc-resource-icon :resource="file" size="large" class="file_info__icon" />
+    <oc-resource-icon
+      v-if="sidebarActivePanel"
+      :resource="file"
+      size="large"
+      class="file_info__icon"
+    />
     <div class="file_info__body oc-text-overflow">
       <h3 data-testid="files-info-name">
         <oc-resource-name
@@ -21,7 +26,7 @@
 <script>
 import Mixins from '../../mixins'
 import MixinResources from '../../mixins/resources'
-import { isLocationSpacesActive } from '../../router'
+import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { useActiveLocation } from '../../composables'
@@ -47,6 +52,43 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
+    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
+    timeData() {
+      const interpolate = (obj) => {
+        obj.time = this.formDateFromRFC(obj.sourceTime)
+        obj.timeRelative = this.formRelativeDateFromRFC(obj.sourceTime)
+
+        obj.infoString = this.$gettextInterpolate(obj.infoString, obj)
+        obj.ariaLabel = this.$gettextInterpolate(obj.ariaLabel, obj)
+        return obj
+      }
+
+      if (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+      ) {
+        return interpolate({
+          sourceTime: this.file.ddate,
+          infoString: this.$pgettext('inline info about deletion date', 'deleted %{timeRelative}'),
+          ariaLabel: this.$pgettext(
+            'aria label for inline info about deletion date',
+            'deleted %{timeRelative} (%{time})'
+          )
+        })
+      }
+
+      return interpolate({
+        sourceTime: this.file.mdate,
+        infoString: this.$pgettext(
+          'inline info about last modification date',
+          'modified %{timeRelative}'
+        ),
+        ariaLabel: this.$pgettext(
+          'aria label for inline info about last modification date',
+          'modified %{timeRelative} (%{time})'
+        )
+      })
+    },
 
     privateLinkEnabled() {
       return this.isPersonalLocation && this.capabilities.files.privateLinks

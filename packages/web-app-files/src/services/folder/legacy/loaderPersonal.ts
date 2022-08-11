@@ -55,12 +55,6 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
           currentFolder,
           files: resources
         })
-
-        // fetch user quota
-        ;(async () => {
-          const user = await client.users.getUser(router.currentRoute.params.storageId)
-          store.commit('SET_QUOTA', user.quota)
-        })()
       } catch (error) {
         store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)
@@ -69,7 +63,6 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
       ref.refreshFileListHeaderPosition()
 
       ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
-      ref.scrollToResourceFromRoute()
     }).restartable()
   }
 }

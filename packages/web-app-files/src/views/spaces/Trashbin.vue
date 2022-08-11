@@ -11,7 +11,8 @@ import { bus } from 'web-pkg/src/instance'
 import { useRouteParam } from 'web-pkg/src/composables'
 import { defineComponent, ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
-import { buildSpace } from '../../helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
+
 import { mapGetters } from 'vuex'
 import { useGraphClient } from 'web-client/src/composables'
 

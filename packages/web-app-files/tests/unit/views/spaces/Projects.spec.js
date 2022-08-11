@@ -5,7 +5,7 @@ import mockAxios from 'jest-mock-axios'
 import SpaceProjects from '../../../../src/views/spaces/Projects.vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import { buildSpace } from '../../../../src/helpers/resources'
+import { buildSpace } from 'web-client/src/helpers'
 
 localVue.use(VueRouter)
 

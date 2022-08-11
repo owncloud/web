@@ -96,7 +96,7 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import { DavProperties } from 'web-pkg/src/constants'
 import { createLocationPublic, createLocationSpaces } from '../router'
-import { buildWebDavFilesPath, buildWebDavSpacesPath } from '../helpers/resources'
+import { buildWebDavFilesPath } from '../helpers/resources'
 import { useResourcesViewDefaults } from '../composables'
 import {
   useCapabilityShareJailEnabled,
@@ -107,6 +107,7 @@ import { unref } from '@vue/composition-api'
 import { Route } from 'vue-router'
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
+import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 export default defineComponent({
   metaInfo() {

@@ -1,0 +1,6 @@
+Bugfix: Respect space quota permission
+
+By taking the space quota permission into account, we've fixed a bug where a regular space member could see the "Edit space quota" action.
+
+https://github.com/owncloud/web/issues/7400
+https://github.com/owncloud/web/pull/7401

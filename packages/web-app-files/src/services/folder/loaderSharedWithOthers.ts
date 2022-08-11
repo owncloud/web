@@ -4,7 +4,7 @@ import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../router'
 import { aggregateResourceShares } from '../../helpers/resources'
 import { Store } from 'vuex'
-import { ShareTypes } from '../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled

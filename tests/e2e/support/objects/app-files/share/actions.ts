@@ -50,6 +50,28 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   await sidebar.close({ page: page })
 }
 
+export interface createReshareArgs {
+  page: Page
+  folder: string
+  users: User[]
+  role: string
+}
+
+export const createReshare = async (args: createReshareArgs): Promise<void> => {
+  const { page, folder, users, role } = args
+  const folderPaths = folder.split('/')
+  const folderName = folderPaths.pop()
+
+  if (folderPaths.length) {
+    await clickResource({ page: page, path: folderPaths.join('/') })
+  }
+  await sidebar.open({ page: page, resource: folderName })
+  await sidebar.openPanel({ page: page, name: 'sharing' })
+
+  await inviteMembers({ page, users, role })
+  await sidebar.close({ page: page })
+}
+
 export interface inviteMembersArgs {
   page: Page
   users: User[]

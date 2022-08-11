@@ -21,7 +21,7 @@
     <template v-if="hasSharees">
       <ul
         id="files-collaborators-list"
-        class="oc-list oc-overflow-hidden"
+        class="oc-list oc-list-divider oc-overflow-hidden"
         :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
         :aria-label="$gettext('Share receivers')"
       >
@@ -79,7 +79,7 @@ import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
 import { buildSpaceShare } from '../../../helpers/resources'
-import { ShareTypes } from '../../../helpers/share'
+import { ShareTypes } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
@@ -156,12 +156,17 @@ export default {
 
     inviteCollaboratorHelp() {
       const cernFeatures = !!this.configuration?.options?.cernFeatures
-      return cernFeatures
-        ? {
-            text: shareInviteCollaboratorHelp.text,
-            list: [...shareInviteCollaboratorHelp.list, ...shareInviteCollaboratorHelpCern.list]
-          }
-        : shareInviteCollaboratorHelp
+
+      if (cernFeatures) {
+        const mergedHelp = shareInviteCollaboratorHelp
+        mergedHelp.list = [
+          ...shareInviteCollaboratorHelpCern.list,
+          ...shareInviteCollaboratorHelp.list
+        ]
+        return mergedHelp
+      }
+
+      return shareInviteCollaboratorHelp
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -408,7 +413,7 @@ export default {
         }
 
         return createLocationSpaces('files-spaces-personal', {
-          params: { item: parentShare.path }
+          params: { storageId: this.currentStorageId, item: parentShare.path }
         })
       }
 
@@ -421,14 +426,5 @@ export default {
 <style>
 .avatars-wrapper {
   height: 40px;
-}
-.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-details {
-  border-top: 1px solid var(--oc-color-border);
-  margin-top: var(--oc-space-small);
-  padding-top: var(--oc-space-small);
-}
-.oc-list > :nth-child(n + 2) .files-collaborators-collaborator-indicator {
-  margin-top: var(--oc-space-small);
-  padding-top: var(--oc-space-small);
 }
 </style>
