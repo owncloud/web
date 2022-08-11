@@ -589,12 +589,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
     getTagLink(tag) {
       return createLocationCommon('files-common-search', {
-        query: { term: `tag:${tag}`, provider: 'files.sdk' }
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
       })
     },
     isResourceCut(resource) {
@@ -612,7 +613,7 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] })
     },
     openTagsSidebar() {
-      this.openWithPanel('tags-item')
+      this.openSidebar()
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {

@@ -58,6 +58,8 @@ import { defineComponent, ref } from '@vue/composition-api'
 import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
+import { useRequest, useStore } from 'web-pkg/src/composables'
+
 const tagsMaxCount = 100
 
 export default defineComponent({
@@ -67,9 +69,14 @@ export default defineComponent({
   },
   inject: ['displayedItem'],
   setup() {
+    const store = useStore()
     const allTags = ref([])
+    const { makeRequest } = useRequest()
     const loadAllTagsTask = useTask(function* (signal, ref) {
-      allTags.value = ['space', 'oddity', 'astronaut']
+      const {
+        data: { tags = [] }
+      } = yield makeRequest('GET', `${store.getters.configuration.server}experimental/tags`, {})
+      allTags.value = tags
     })
 
     return {

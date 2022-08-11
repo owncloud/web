@@ -56,7 +56,6 @@ export function buildResource(resource): Resource {
     storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name: path.basename(resource.name),
-    tags: ['space', 'mars', 'code', 'intern'],
     extension: isFolder ? '' : extension,
     path: resourcePath,
     webDavPath: resource.name,
@@ -229,8 +228,7 @@ export function buildSharedResource(
     sdate: DateTime.fromSeconds(parseInt(share.stime)).toRFC2822(),
     indicators: [],
     path: undefined,
-    webDavPath: undefined,
-    tags: ['space', 'oddity']
+    webDavPath: undefined
   }
 
   if (incomingShares) {
