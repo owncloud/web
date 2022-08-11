@@ -44,7 +44,7 @@
           :total-quota="editUser.drive.quota.total || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
         />
-        <div v-else v-translate>To set an individual quota, the user needs to login first.</div>
+        <div v-else v-translate>To set an individual quota, the user needs to have logged in once.</div>
       </div>
     </div>
     <compare-save-dialog
