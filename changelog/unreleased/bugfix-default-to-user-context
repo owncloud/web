@@ -1,0 +1,5 @@
+Bugfix: Default to user context
+
+We've fixed a bug where routes without explicit `auth` requirement (i.e. user context) and without any context route in the URL were recognized as neither user-context nor public-link-context. In such situations we now expect that the session requires a user and redirect to the login page.
+
+https://github.com/owncloud/web/pull/7437
