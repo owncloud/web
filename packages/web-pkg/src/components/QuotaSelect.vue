@@ -117,8 +117,12 @@ export default {
       return option.selectable !== false
     },
     createOption(option) {
+      if (option === '0') {
+        return
+      }
+
       option = option.replace(',', '.')
-      const optionIsNumberRegex = /^[1-9]\d*(([.,])\d+)?$/g
+      const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
 
       if (!optionIsNumberRegex.test(option)) {
         return {
