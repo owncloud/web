@@ -54,9 +54,7 @@
             :header-position="listHeaderPosition"
             @toggleSelectUser="toggleSelectUser"
             @toggleSelectAllUsers="toggleSelectAllUsers"
-            @clickDetails="showDetailsSideBarPanel"
-            @clickGroupAssignments="showGroupAssignmentsPanel"
-            @clickEdit="showEditSideBarPanel"
+            @showPanel="showPanel"
           />
         </div>
       </template>
@@ -340,20 +338,9 @@ export default defineComponent({
     closeSideBar() {
       this.sideBarOpen = false
     },
-    showDetailsSideBarPanel(user) {
-      this.selectedUsers = user ? [user] : []
-      this.activePanel = 'DetailsPanel'
-      this.sideBarOpen = true
-    },
-    async showEditSideBarPanel(user) {
-      await this.loadAdditionalUserDataTask.perform(this, user)
-      this.selectedUsers = user ? [user] : []
-      this.activePanel = 'EditPanel'
-      this.sideBarOpen = true
-    },
-    showGroupAssignmentsPanel(user) {
-      this.selectedUsers = user ? [user] : []
-      this.activePanel = 'GroupAssignmentsPanel'
+    showPanel({ user, panel }) {
+      this.selectedUsers = [user]
+      this.activePanel = panel
       this.sideBarOpen = true
     },
     async deleteUsers(users) {

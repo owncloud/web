@@ -54,8 +54,7 @@
             :header-position="listHeaderPosition"
             @toggleSelectGroup="toggleSelectGroup"
             @toggleSelectAllGroups="toggleSelectAllGroups"
-            @clickDetails="showDetailsSideBarPanel"
-            @clickEdit="showEditSideBarPanel"
+            @showPanel="showPanel"
           />
         </div>
       </template>
@@ -253,15 +252,9 @@ export default defineComponent({
       this.sideBarOpen = false
     },
 
-    showDetailsSideBarPanel(group) {
-      this.selectedGroups = group ? [group] : []
-      this.activePanel = 'DetailsPanel'
-      this.sideBarOpen = true
-    },
-
-    showEditSideBarPanel(group) {
-      this.selectedGroups = group ? [group] : []
-      this.activePanel = 'EditPanel'
+    showPanel({ group, panel }) {
+      this.selectedGroups = [group]
+      this.activePanel = panel
       this.sideBarOpen = true
     },
 
