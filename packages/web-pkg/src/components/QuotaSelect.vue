@@ -1,6 +1,7 @@
 <template>
   <div>
     <oc-select
+      ref="select"
       v-model="selectedOption"
       :selectable="optionSelectable"
       taggable
@@ -48,7 +49,7 @@ export default {
     },
     maxQuota: {
       type: Number,
-      default: 10 * Math.pow(10, 9)
+      default: 0
     }
   },
   data: function () {
@@ -104,13 +105,18 @@ export default {
     }
   },
   watch: {
-    totalQuota: {
-      handler: function () {
-        this.setOptions()
-        this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
-      },
-      immediate: true
+    totalQuota() {
+      const selectedOption = this.options.find((o) => o.value === this.totalQuota)
+      if (selectedOption) {
+        this.selectedOption = selectedOption
+      }
     }
+  },
+  mounted() {
+    console.log('MOUNTED')
+    console.log(this.totalQuota)
+    this.setOptions()
+    this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
   },
   methods: {
     optionSelectable(option) {
