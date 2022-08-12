@@ -45,6 +45,10 @@ export default {
     totalQuota: {
       type: Number,
       default: 0
+    },
+    maxQuota: {
+      type: Number,
+      default: 10 * Math.pow(10, 9)
     }
   },
   data: function () {
@@ -94,8 +98,7 @@ export default {
         {
           displayValue: this.$gettext('No restriction'),
           displayUnit: '',
-          value: 0,
-          unlimited: true
+          value: 0
         }
       ]
     }
@@ -111,56 +114,76 @@ export default {
   },
   methods: {
     optionSelectable(option) {
-      if (option.unlimited) {
-        return true
-      }
-
-      if (!option.value) {
-        return false
-      }
-
-      return !isNaN(option.value)
+      return option.selectable !== false
     },
     createOption(option) {
-      if (option.endsWith('.') || option.endsWith(',')) {
-        option = option.slice(0, -1)
-      }
-
+      option = option.replace(',', '.')
       const optionIsNumberRegex = /^[1-9]\d*(([.,])\d+)?$/g
 
       if (!optionIsNumberRegex.test(option)) {
         return {
           displayValue: option,
-          error: this.$gettext('Please enter only numbers')
+          error: this.$gettext('Please enter only numbers'),
+          selectable: false
         }
       }
 
-      option = option.replace(',', '.')
+      const value = parseFloat(option).toFixed(2) * Math.pow(10, 9)
+      const displayValue = parseFloat(option).toFixed(2).toString().replace('.00', '')
+
+      if (this.maxQuota && value > this.maxQuota) {
+        return {
+          value,
+          displayValue,
+          displayUnit: 'GB',
+          error: this.$gettextInterpolate(
+            this.$gettext('Max quota limit of %{ limit } GB exceeded'),
+            { limit: this.maxQuota * Math.pow(10, -9) }
+          ),
+          selectable: false
+        }
+      }
+
       return {
-        displayValue: parseFloat(option).toFixed(2).toString().replace('.00', ''),
-        displayUnit: 'GB',
-        value: parseFloat(option).toFixed(2) * Math.pow(10, 9)
+        value,
+        displayValue,
+        displayUnit: 'GB'
       }
     },
     setOptions() {
-      this.options = [...this.DEFAULT_OPTIONS]
+      let computedOptions = [...this.DEFAULT_OPTIONS]
 
-      const selectedQuotaInOptions = this.options.find((option) => option.value === this.totalQuota)
+      const selectedQuotaInOptions = computedOptions.find(
+        (option) => option.value === this.totalQuota
+      )
 
-      if (selectedQuotaInOptions) {
-        return
+      if (!selectedQuotaInOptions) {
+        const newOption = {
+          displayValue: (this.totalQuota * Math.pow(10, -9))
+            .toFixed(2)
+            .toString()
+            .replace('.00', ''),
+          displayUnit: 'GB',
+          value: this.totalQuota
+        }
+        computedOptions.push(newOption)
       }
 
-      const newOption = {
-        displayValue: (this.totalQuota * Math.pow(10, -9)).toFixed(2).toString().replace('.00', ''),
-        displayUnit: 'GB',
-        value: this.totalQuota
+      if (this.maxQuota) {
+        computedOptions.forEach((computedOption) => {
+          if (computedOption.value > this.maxQuota || computedOption.value === 0) {
+            computedOption.selectable = false
+          }
+        })
       }
-      this.options.push(newOption)
-      this.options = [
-        ...this.options.filter((o) => o.value).sort((a, b) => a.value - b.value),
-        ...this.options.filter((o) => !o.value)
+
+      // Sort options and make sure that unlimited is at the end
+      computedOptions = [
+        ...computedOptions.filter((o) => o.value).sort((a, b) => a.value - b.value),
+        ...computedOptions.filter((o) => !o.value)
       ]
+
+      this.options = computedOptions
     }
   }
 }
