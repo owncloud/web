@@ -1,5 +1,66 @@
 <template>
   <div>
+    <app-template
+      ref="template"
+      :loading="loadResourcesTask.isRunning"
+      :breadcrumbs="breadcrumbs"
+      :active-panel="activePanel"
+      :available-side-bar-panels="availableSideBarPanels"
+      :side-bar-open="sideBarOpen"
+      @selectPanel="selectPanel"
+      @closeSideBar="closeSideBar"
+      @toggleSideBar="toggleSideBar"
+    >
+      <template #topbarActions>
+        <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
+          <span v-text="selectedUsersText" />
+          <oc-button
+            id="files-clear-selection"
+            v-oc-tooltip="$gettext('Clear selection')"
+            :aria-label="$gettext('Clear selection')"
+            class="oc-ml-m"
+            appearance="outline"
+            @click="unselectAllUsers"
+          >
+            <oc-icon name="close" />
+          </oc-button>
+          <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
+            <oc-icon name="delete-bin" />
+            <translate>Delete</translate>
+          </oc-button>
+        </div>
+        <div v-else>
+          <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
+            <oc-icon name="add" />
+            <translate>New user</translate>
+          </oc-button>
+        </div>
+      </template>
+      <template #mainContent>
+        <no-content-message
+          v-if="!users.length"
+          id="user-management-users-empty"
+          class="files-empty"
+          icon="user"
+        >
+          <template #message>
+            <span v-translate>No users in here</span>
+          </template>
+        </no-content-message>
+        <div v-else>
+          <UsersList
+            :users="users"
+            :selected-users="selectedUsers"
+            :header-position="listHeaderPosition"
+            @toggleSelectUser="toggleSelectUser"
+            @toggleSelectAllUsers="toggleSelectAllUsers"
+            @clickDetails="showDetailsSideBarPanel"
+            @clickGroupAssignments="showGroupAssignmentsPanel"
+            @clickEdit="showEditSideBarPanel"
+          />
+        </div>
+      </template>
+    </app-template>
     <create-user-modal
       v-if="createUserModalOpen"
       :existing-users="users"
@@ -12,108 +73,6 @@
       @cancel="toggleDeleteUserModal"
       @confirm="deleteUsers"
     />
-    <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
-      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
-      <template v-else>
-        <div id="users-wrapper" class="oc-width-expand">
-          <div id="users-app-bar" ref="appBar" class="oc-py-s">
-            <div class="oc-flex oc-flex-between">
-              <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
-              <div>
-                <oc-button
-                  id="files-toggle-sidebar"
-                  v-oc-tooltip="toggleSidebarButtonLabel"
-                  :aria-label="toggleSidebarButtonLabel"
-                  appearance="raw"
-                  class="oc-my-s oc-p-xs"
-                  @click.stop="toggleSideBar"
-                >
-                  <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
-                </oc-button>
-              </div>
-            </div>
-            <div class="oc-flex-1 oc-flex oc-flex-start">
-              <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
-                <span v-text="selectedUsersText" />
-                <oc-button
-                  id="files-clear-selection"
-                  v-oc-tooltip="$gettext('Clear selection')"
-                  :aria-label="$gettext('Clear selection')"
-                  class="oc-ml-m"
-                  appearance="outline"
-                  @click="unselectAllUsers"
-                >
-                  <oc-icon name="close" />
-                </oc-button>
-                <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
-                  <oc-icon name="delete-bin" />
-                  <translate>Delete</translate>
-                </oc-button>
-              </div>
-              <div v-else>
-                <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
-                  <oc-icon name="add" />
-                  <translate>New user</translate>
-                </oc-button>
-              </div>
-            </div>
-          </div>
-          <no-content-message
-            v-if="!users.length"
-            id="user-management-users-empty"
-            class="files-empty"
-            icon="user"
-          >
-            <template #message>
-              <span v-translate>No users in here</span>
-            </template>
-          </no-content-message>
-          <div v-else>
-            <UsersList
-              :users="users"
-              :selected-users="selectedUsers"
-              :header-position="listHeaderPosition"
-              @toggleSelectUser="toggleSelectUser"
-              @toggleSelectAllUsers="toggleSelectAllUsers"
-              @clickDetails="showDetailsSideBarPanel"
-              @clickGroupAssignments="showGroupAssignmentsPanel"
-              @clickEdit="showEditSideBarPanel"
-            />
-          </div>
-        </div>
-        <side-bar
-          v-if="sideBarOpen"
-          class="users-sidebar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
-          :available-panels="availableSideBarPanels"
-          :sidebar-active-panel="activePanel"
-          :loading="false"
-          @selectPanel="selectPanel"
-          @close="closeSideBar"
-        >
-          <template #body>
-            <oc-loader
-              v-if="loadAdditionalUserDataTask.isRunning || !loadAdditionalUserDataTask.last"
-            />
-            <template v-else>
-              <DetailsPanel v-if="activePanel === 'DetailsPanel'" :users="selectedUsers" />
-              <EditPanel
-                v-if="activePanel === 'EditPanel'"
-                :user="selectedUsers[0]"
-                :roles="roles"
-                @confirm="editUser"
-              />
-              <GroupAssignmentsPanel
-                v-if="activePanel === 'GroupAssignmentsPanel'"
-                :user="selectedUsers[0]"
-                :roles="roles"
-                :groups="groups"
-                @confirm="editUserGroupAssignments"
-              />
-            </template>
-          </template>
-        </side-bar>
-      </template>
-    </main>
   </div>
 </template>
 
@@ -124,9 +83,7 @@ import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
@@ -136,18 +93,15 @@ import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
+import AppTemplate from '../components/AppTemplate.vue'
 
 export default defineComponent({
   components: {
-    EditPanel,
-    DetailsPanel,
-    GroupAssignmentsPanel,
+    AppTemplate,
     UsersList,
-    AppLoadingSpinner,
     NoContentMessage,
     CreateUserModal,
-    DeleteUserModal,
-    SideBar
+    DeleteUserModal
   },
   setup() {
     const store = useStore()
@@ -295,7 +249,8 @@ export default defineComponent({
           title: $gettext('User details'),
           component: DetailsPanel,
           default: true,
-          enabled: true
+          enabled: true,
+          componentAttrs: { users: this.selectedUsers }
         },
         {
           app: 'EditPanel',
@@ -303,7 +258,9 @@ export default defineComponent({
           title: $gettext('Edit user'),
           component: EditPanel,
           default: false,
-          enabled: this.selectedUsers.length === 1
+          enabled: this.selectedUsers.length === 1,
+          componentAttrs: { user: this.selectedUsers[0], roles: this.roles },
+          componentHandlers: { confirm: this.editUser }
         },
         {
           app: 'GroupAssignmentsPanel',
@@ -311,19 +268,11 @@ export default defineComponent({
           title: $gettext('Group assignments'),
           component: GroupAssignmentsPanel,
           default: false,
-          enabled: this.selectedUsers.length === 1
+          enabled: this.selectedUsers.length === 1,
+          componentAttrs: { user: this.selectedUsers[0], groups: this.groups },
+          componentHandlers: { confirm: this.editUserGroupAssignments }
         }
       ]
-    },
-
-    toggleSidebarButtonLabel() {
-      return this.sideBarOpen
-        ? this.$gettext('Close sidebar to hide details')
-        : this.$gettext('Open sidebar to view details')
-    },
-
-    toggleSidebarButtonIconFillType() {
-      return this.sideBarOpen ? 'fill' : 'line'
     }
   },
 
@@ -356,7 +305,7 @@ export default defineComponent({
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
+      this.listHeaderPosition = this.$refs.template.$refs.appBar.getBoundingClientRect().height
     },
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {
@@ -373,50 +322,41 @@ export default defineComponent({
 
       this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
     },
-
     unselectAllUsers() {
       this.selectedUsers = []
     },
-
     toggleCreateUserModal() {
       this.createUserModalOpen = !this.createUserModalOpen
     },
-
     toggleDeleteUserModal() {
       this.deleteUserModalOpen = !this.deleteUserModalOpen
     },
-
     selectPanel(panel) {
+      console.log(panel)
       this.activePanel = panel || 'DetailsPanel'
     },
-
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen
     },
-
     closeSideBar() {
       this.sideBarOpen = false
     },
-
     showDetailsSideBarPanel(user) {
       this.selectedUsers = user ? [user] : []
       this.activePanel = 'DetailsPanel'
       this.sideBarOpen = true
     },
-
     async showEditSideBarPanel(user) {
       await this.loadAdditionalUserDataTask.perform(this, user)
       this.selectedUsers = user ? [user] : []
       this.activePanel = 'EditPanel'
       this.sideBarOpen = true
     },
-
     showGroupAssignmentsPanel(user) {
       this.selectedUsers = user ? [user] : []
       this.activePanel = 'GroupAssignmentsPanel'
       this.sideBarOpen = true
     },
-
     async deleteUsers(users) {
       const promises = users.map((user) => this.graphClient.users.deleteUser(user.id))
 
@@ -460,7 +400,6 @@ export default defineComponent({
         })
       }
     },
-
     async createUser(user) {
       try {
         const response = await this.graphClient.users.createUser(user)
@@ -480,7 +419,6 @@ export default defineComponent({
         })
       }
     },
-
     async editUser(editUser) {
       try {
         await this.graphClient.users.editUser(editUser.id, editUser)
@@ -534,7 +472,6 @@ export default defineComponent({
         })
       }
     },
-
     async editUserGroupAssignments(editUser) {
       try {
         const user = this.users.find((user) => user.id === editUser.id)
@@ -576,24 +513,3 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-#users-app-bar {
-  background-color: var(--oc-color-background-default);
-  border-top-right-radius: 15px;
-  box-sizing: border-box;
-  z-index: 2;
-  position: sticky;
-  padding: 0 var(--oc-space-medium);
-  top: 0;
-}
-
-#users-wrapper {
-  overflow-y: auto;
-}
-
-.users-sidebar {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid var(--oc-color-border);
-}
-</style>

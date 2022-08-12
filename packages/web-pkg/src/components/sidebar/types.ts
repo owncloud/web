@@ -8,6 +8,7 @@ export interface Panel {
   title: string
   component: Component
   componentAttrs: any
+  componentHandlers: any
   default?: (() => boolean) | boolean
   enabled: boolean
   iconFillType?: IconFillType

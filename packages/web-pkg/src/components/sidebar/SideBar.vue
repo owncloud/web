@@ -60,6 +60,7 @@
                 <component
                   :is="panel.component"
                   v-bind="panel.componentAttrs"
+                  v-on="panel.componentHandlers"
                   @scrollToElement="scrollToElement"
                 />
               </slot>
