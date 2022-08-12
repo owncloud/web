@@ -53,7 +53,6 @@ import AppBar from './AppBar/AppBar.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
 
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinResources from '../mixins/resources'
 import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -79,7 +78,7 @@ export default defineComponent({
     ContextActions
   },
 
-  mixins: [MixinResources, MixinMountSideBar, MixinFilesListFilter],
+  mixins: [MixinMountSideBar, MixinFilesListFilter],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
     noContentMessage: {

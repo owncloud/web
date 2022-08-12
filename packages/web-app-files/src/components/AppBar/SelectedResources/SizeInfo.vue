@@ -3,8 +3,8 @@
     <translate
       v-if="selectedResourcesSize !== '?'"
       key="multiple-select-info-with-size"
-      :translate-n="selectedResourcesAmount"
-      :translate-params="{ amount: selectedResourcesAmount, size: selectedResourcesSize }"
+      :translate-n="selectedResourcesCount"
+      :translate-params="{ amount: selectedResourcesCount, size: selectedResourcesSize }"
       translate-plural="%{ amount } selected - %{ size }"
       translate-comment="Number of selected resources and their size displayed above the files list"
       >%{ amount } selected - %{ size }
@@ -12,8 +12,8 @@
     <translate
       v-else
       key="multiple-select-info"
-      :translate-n="selectedResourcesAmount"
-      :translate-params="{ amount: selectedResourcesAmount }"
+      :translate-n="selectedResourcesCount"
+      :translate-params="{ amount: selectedResourcesCount }"
       translate-plural="%{ amount } selected"
       translate-comment="Number of selected resources displayed above the files list"
       >%{ amount } selected
@@ -34,27 +34,22 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import { cloneStateObject } from '../../../helpers/store'
-import MixinResources from '../../../mixins/resources'
+import { formatFileSize } from 'web-pkg/src/helpers'
 
 export default {
-  mixins: [MixinResources],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 
-    selectedResourcesAmount() {
+    selectedResourcesCount() {
       return this.selectedFiles.length
     },
 
     selectedResourcesSize() {
-      const resources = cloneStateObject(this.selectedFiles)
-      let size = 0
-
-      for (const resource of resources) {
-        size += parseInt(resource.size, 10)
-      }
-
-      return this.getResourceSize(size)
+      const totalSize = this.selectedFiles.reduce((totalSize, file) => {
+        const size = typeof file.size === 'string' ? parseInt(file.size) : file.size
+        return totalSize + size
+      }, 0)
+      return formatFileSize(totalSize, this.$language.current)
     },
 
     clearSelectionLabel() {

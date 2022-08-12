@@ -40,13 +40,13 @@ const spaceShare = {
   }
 }
 
-const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
-const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
+const formatDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
+const formatDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
 const refreshShareDetailsTree = jest.fn()
 
 beforeEach(() => {
-  formDateFromJSDate.mockClear()
-  formDateFromHTTP.mockClear()
+  formatDateFromJSDate.mockClear()
+  formatDateFromHTTP.mockClear()
   refreshShareDetailsTree.mockReset()
 })
 
@@ -104,8 +104,8 @@ function createWrapper(spaceResource) {
     mixins: [
       {
         methods: {
-          formDateFromJSDate,
-          formDateFromHTTP
+          formatDateFromJSDate,
+          formatDateFromHTTP
         }
       }
     ],

@@ -6,12 +6,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import Mixins from '../../mixins'
-import MixinResources from '../../mixins/resources'
 
 export default defineComponent({
   name: 'NoSelection',
-  mixins: [Mixins, MixinResources],
   computed: {
     selectedFilesString() {
       return this.$gettext('Select a file or folder to view details.')
