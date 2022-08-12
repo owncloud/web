@@ -24,19 +24,17 @@
 </template>
 
 <script>
-import Mixins from '../../mixins'
-import MixinResources from '../../mixins/resources'
 import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { useActiveLocation } from '../../composables'
+import { formatDateFromRFC, formatRelativeDateFromRFC } from 'web-pkg/src/helpers'
 
 export default {
   name: 'FileInfo',
   components: {
     PrivateLinkItem
   },
-  mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   props: {
     isContentDisplayed: {
@@ -55,8 +53,8 @@ export default {
     ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     timeData() {
       const interpolate = (obj) => {
-        obj.time = this.formDateFromRFC(obj.sourceTime)
-        obj.timeRelative = this.formRelativeDateFromRFC(obj.sourceTime)
+        obj.time = formatDateFromRFC(obj.sourceTime, this.$language.current)
+        obj.timeRelative = formatRelativeDateFromRFC(obj.sourceTime, this.$language.current)
 
         obj.infoString = this.$gettextInterpolate(obj.infoString, obj)
         obj.ariaLabel = this.$gettextInterpolate(obj.ariaLabel, obj)

@@ -172,7 +172,6 @@
 
 <script lang="ts">
 import { bus } from 'web-pkg/src/instance'
-import { DateTime } from 'luxon'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
@@ -190,6 +189,7 @@ import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces } from '../../router'
+import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {
@@ -558,9 +558,6 @@ export default defineComponent({
     contextMenuLabel() {
       return this.$gettext('Show context menu')
     },
-    currentLanguage() {
-      return (this.$language?.current || '').split('_')[0]
-    },
     hoverableQuickActions() {
       return this.configuration?.options?.hoverableQuickActions
     }
@@ -708,12 +705,10 @@ export default defineComponent({
       return this.emitSelect([resource.id])
     },
     formatDate(date) {
-      return DateTime.fromJSDate(new Date(date))
-        .setLocale(this.currentLanguage)
-        .toLocaleString(DateTime.DATETIME_FULL)
+      return formatDateFromJSDate(new Date(date), this.$language.current)
     },
     formatDateRelative(date) {
-      return DateTime.fromJSDate(new Date(date)).setLocale(this.currentLanguage).toRelative()
+      return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
     },
     setSelection(selected, resource) {
       if (selected) {
