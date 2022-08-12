@@ -208,6 +208,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+
     calculateListHeaderPosition() {
       this.listHeaderPosition = this.$refs.template.$refs.appBar.getBoundingClientRect().height
     },
@@ -217,47 +218,36 @@ export default defineComponent({
       }
       this.selectedGroups = [...this.groups]
     },
-
     toggleSelectGroup(toggledGroup) {
       const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
-
       if (!isGroupSelected) {
         return this.selectedGroups.push(toggledGroup)
       }
-
       this.selectedGroups = this.selectedGroups.filter((group) => group.id !== toggledGroup.id)
     },
-
     unselectAllGroups() {
       this.selectedGroups = []
     },
-
     toggleCreateGroupModal() {
       this.createGroupModalOpen = !this.createGroupModalOpen
     },
-
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
     },
-
     selectPanel(panel) {
       this.activePanel = panel || 'DetailsPanel'
     },
-
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen
     },
-
     closeSideBar() {
       this.sideBarOpen = false
     },
-
     showPanel({ group, panel }) {
       this.selectedGroups = [group]
       this.activePanel = panel
       this.sideBarOpen = true
     },
-
     async deleteGroups(groups) {
       const promises = groups.map((group) => this.graphClient.groups.deleteGroup(group.id))
 
@@ -301,7 +291,6 @@ export default defineComponent({
         })
       }
     },
-
     async createGroup(group) {
       try {
         const response = await this.graphClient.groups.createGroup(group)
@@ -318,7 +307,6 @@ export default defineComponent({
         })
       }
     },
-
     async editGroup(editGroup) {
       try {
         await this.graphClient.groups.editGroup(editGroup.id, editGroup)
@@ -339,25 +327,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss">
-#groups-app-bar {
-  background-color: var(--oc-color-background-default);
-  border-top-right-radius: 15px;
-  box-sizing: border-box;
-  z-index: 2;
-  position: sticky;
-  padding: 0 var(--oc-space-medium);
-  top: 0;
-}
-
-#groups-wrapper {
-  overflow-y: auto;
-}
-
-.groups-sidebar {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid var(--oc-color-border);
-}
-</style>
