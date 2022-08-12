@@ -224,7 +224,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['user', 'configuration', 'capabilities']),
 
     file() {
       return this.displayedItem.value
@@ -347,7 +347,7 @@ export default defineComponent({
       return upperFirst(displayDate)
     },
     showTags() {
-      return this.file.tags?.length
+      return this.capabilities?.files.tags && this.file.tags?.length
     },
     tagsLabel() {
       return this.$gettext('Tags')

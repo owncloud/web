@@ -1,10 +1,12 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { isLocationTrashActive, isLocationPublicActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
 export default {
   mixins: [isFilesAppActive],
   computed: {
+    ...mapGetters(['capabilities']),
+
     $_showEditTags_items() {
       return [
         {
@@ -16,7 +18,7 @@ export default {
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
             // sidebar is currently only available inside files app
-            if (!this.$_isFilesAppActive) {
+            if (!this.$_isFilesAppActive || !this.capabilities?.files?.tags) {
               return false
             }
 
