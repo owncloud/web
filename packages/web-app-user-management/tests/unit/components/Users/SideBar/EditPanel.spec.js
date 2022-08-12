@@ -78,11 +78,11 @@ function getWrapper({ propsData = {} } = {}) {
       translate: jest.fn()
     },
     mocks: {
-      $gettext: jest.fn(),
+      $gettext: (text) => text,
       $gettextInterpolate: jest.fn()
     },
     propsData: {
-      users: [{ id: '1', displayName: 'jan', mail: 'jan@owncloud.com' }],
+      user: { id: '1', displayName: 'jan', mail: 'jan@owncloud.com', drive: { quota: {} } },
       roles: [{ id: '1', displayName: 'admin' }],
       ...propsData
     },
@@ -91,6 +91,7 @@ function getWrapper({ propsData = {} } = {}) {
       'avatar-image': true,
       'oc-button': true,
       'oc-select': true,
+      'quota-select': true,
       translate: true
     }
   })
