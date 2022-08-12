@@ -11,7 +11,6 @@ export default {
   },
   computed: {
     ...mapState('Files', ['currentFolder']),
-    ...mapGetters('runtime/auth', ['accessToken']),
     ...mapGetters(['configuration']),
     $_uploadImage_items() {
       return [
@@ -47,10 +46,8 @@ export default {
       this.$refs.spaceImageInput.click()
     },
     $_uploadImage_uploadImageSpace(ev) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       const file = ev.currentTarget.files[0]
 
       if (!file) {
