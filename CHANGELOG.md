@@ -11,11 +11,13 @@ Summary
 * Bugfix - Add Droparea again: [#7080](https://github.com/owncloud/web/issues/7080)
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
+* Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
+* Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
@@ -106,6 +108,14 @@ Details
    https://github.com/owncloud/web/pull/7314
    https://github.com/owncloud/web/pull/7386
 
+* Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+
+   We've adjusted date time formatting to show a less verbose format (e.g. hiding the time zone and
+   using month abbreviations).
+
+   https://github.com/owncloud/web/issues/7336
+   https://github.com/owncloud/web/pull/7443
+
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
    We've fixed a bug where declining an accepted share in the dropdown next to the breadcrumb was
@@ -142,6 +152,12 @@ Details
 
    https://github.com/owncloud/web/issues/7138
    https://github.com/owncloud/web/pull/7322
+
+* Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+
+   We've fixed file size formatting to respect the language setting of the user.
+
+   https://github.com/owncloud/web/pull/7443
 
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 
