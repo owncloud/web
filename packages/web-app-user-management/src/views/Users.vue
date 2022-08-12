@@ -332,7 +332,6 @@ export default defineComponent({
       this.deleteUserModalOpen = !this.deleteUserModalOpen
     },
     selectPanel(panel) {
-      console.log(panel)
       this.activePanel = panel || 'DetailsPanel'
     },
     toggleSideBar() {
