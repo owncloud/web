@@ -4,7 +4,6 @@ import { clientService } from 'web-pkg/src/services'
 export default {
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/auth', ['accessToken']),
     ...mapState(['user']),
 
     $_delete_items() {
@@ -61,10 +60,8 @@ export default {
     },
 
     $_delete_deleteSpace(id) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .deleteDrive(id, '', {
           headers: {

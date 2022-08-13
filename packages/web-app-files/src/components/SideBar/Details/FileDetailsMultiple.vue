@@ -16,7 +16,7 @@
           <th scope="col" class="oc-pr-s" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
-        <tr v-if="showSize" data-testid="size">
+        <tr data-testid="size">
           <th scope="col" class="oc-pr-s" v-text="sizeText" />
           <td v-text="sizeValue" />
         </tr>
@@ -25,14 +25,12 @@
   </div>
 </template>
 <script lang="ts">
-import Mixins from '../../../mixins'
-import MixinResources from '../../../mixins/resources'
 import { mapGetters } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
+import { formatFileSize } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileDetailsMultiple',
-  mixins: [Mixins, MixinResources],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     selectedFilesCount() {
@@ -53,10 +51,7 @@ export default defineComponent({
     sizeValue() {
       let size = 0
       this.selectedFiles.forEach((i) => (size += parseInt(i.size)))
-      return this.getResourceSize(size)
-    },
-    showSize() {
-      return this.getResourceSize(this.selectedFiles[0].size) !== '?'
+      return formatFileSize(size, this.$language.current)
     },
     sizeText() {
       return this.$gettext('Size')

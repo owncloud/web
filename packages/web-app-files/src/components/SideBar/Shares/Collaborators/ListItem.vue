@@ -103,7 +103,6 @@
 
 <script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
-import Mixins from '../../../../mixins'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
@@ -114,6 +113,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
 import * as uuid from 'uuid'
+import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'ListItem',
@@ -121,7 +121,6 @@ export default defineComponent({
     EditDropdown,
     RoleDropdown
   },
-  mixins: [Mixins],
   props: {
     share: {
       type: Object,
@@ -242,17 +241,17 @@ export default defineComponent({
     },
 
     expirationDate() {
-      return DateTime.fromJSDate(this.share.expires)
-        .endOf('day')
-        .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_FULL)
+      return formatDateFromDateTime(
+        DateTime.fromJSDate(this.share.expires).endOf('day'),
+        this.$language.current
+      )
     },
 
     expirationDateRelative() {
-      return DateTime.fromJSDate(this.share.expires)
-        .endOf('day')
-        .setLocale(this.$language.current)
-        .toRelative()
+      return formatRelativeDateFromDateTime(
+        DateTime.fromJSDate(this.share.expires).endOf('day'),
+        this.$language.current
+      )
     },
 
     sharedParentDir() {
@@ -268,9 +267,10 @@ export default defineComponent({
       return uuid.v4()
     },
     shareDate() {
-      return DateTime.fromSeconds(parseInt(this.share.stime))
-        .setLocale(this.$language.current)
-        .toLocaleString(DateTime.DATETIME_FULL)
+      return formatDateFromDateTime(
+        DateTime.fromSeconds(parseInt(this.share.stime)),
+        this.$language.current
+      )
     },
     shareOwnerDisplayName() {
       return this.share.owner.displayName

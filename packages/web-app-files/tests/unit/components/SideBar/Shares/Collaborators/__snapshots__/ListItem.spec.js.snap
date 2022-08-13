@@ -24,7 +24,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
       </div>
       <!---->
       <edit-dropdown-stub sharecategory="user" caneditordelete="true" id="edit-drop-down-00000000-0000-0000-0000-000000000000" data-testid="collaborator-edit" class="files-collaborators-collaborator-edit"></edit-dropdown-stub>
-      <oc-info-drop mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" class="share-access-details-drop"></oc-info-drop>
+      <oc-info-drop-stub mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" class="share-access-details-drop"></oc-info-drop-stub>
     </div>
   </div>
 </div>

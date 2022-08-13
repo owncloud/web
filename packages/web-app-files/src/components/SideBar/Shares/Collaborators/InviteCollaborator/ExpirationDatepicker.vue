@@ -54,6 +54,7 @@ import {
 } from '@vue/composition-api'
 import { useStore } from 'web-pkg/src/composables'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'DateCurrentpicker',
@@ -103,7 +104,10 @@ export default defineComponent({
         return null
       }
 
-      return DateTime.now().setLocale(language.value.current).plus({ days }).toJSDate()
+      return DateTime.now()
+        .setLocale(getLocaleFromLanguage(language.value.current))
+        .plus({ days })
+        .toJSDate()
     })
     const dateMax = computed(() => (enforced.value ? dateDefault.value : null))
     const dateCurrent = customRef<Date>((track, trigger) => {
@@ -120,14 +124,16 @@ export default defineComponent({
       }
     })
     const dateExpire = computed(() =>
-      DateTime.fromJSDate(dateCurrent.value)
-        .setLocale(language.value.current)
-        .endOf('day')
-        .toRelative()
+      formatRelativeDateFromDateTime(
+        DateTime.fromJSDate(dateCurrent.value).endOf('day'),
+        language.value.current
+      )
     )
 
     watch(dateCurrent, (val) => {
-      const dateCurrent = DateTime.fromJSDate(val).setLocale(language.value.current).endOf('day')
+      const dateCurrent = DateTime.fromJSDate(val)
+        .setLocale(getLocaleFromLanguage(language.value.current))
+        .endOf('day')
       emit('optionChange', {
         expirationDate: dateCurrent.isValid
           ? dateCurrent.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")

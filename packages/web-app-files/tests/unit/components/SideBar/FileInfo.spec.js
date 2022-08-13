@@ -53,6 +53,14 @@ function createWrapper(testResource, tooltipStub, routeName, privateLinksEnabled
             highlightedFile: function () {
               return testResource
             }
+          },
+          modules: {
+            sidebar: {
+              namespaced: true,
+              state: {
+                activePanel: null
+              }
+            }
           }
         }
       }

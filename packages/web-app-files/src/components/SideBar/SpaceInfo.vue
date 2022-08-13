@@ -17,11 +17,8 @@
 </template>
 
 <script>
-import Mixins from '../../mixins'
-
 export default {
   name: 'SpaceInfo',
-  mixins: [Mixins],
   inject: ['displayedItem'],
   computed: {
     space() {
