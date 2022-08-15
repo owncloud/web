@@ -19,7 +19,6 @@
   </main>
 </template>
 <script lang="ts">
-import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
@@ -29,7 +28,6 @@ export default defineComponent({
   components: {
     SideBar
   },
-  mixins: [Mixins],
   data: () => ({
     dragareaEnabled: false
   }),
@@ -55,7 +53,8 @@ export default defineComponent({
   },
   created() {
     this.$root.$on('upload-end', () => {
-      this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
+      // delay for screen reader virtual buffer
+      setTimeout(() => this.$refs.filesListWrapper.focus(), 500)
     })
     const dragOver = bus.subscribe('drag-over', this.onDragOver)
     const dragOut = bus.subscribe('drag-out', this.hideDropzone)

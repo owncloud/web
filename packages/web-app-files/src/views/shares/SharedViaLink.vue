@@ -54,7 +54,6 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
-import MixinResources from '../../mixins/resources'
 import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
@@ -85,7 +84,7 @@ export default defineComponent({
     ContextActions
   },
 
-  mixins: [FileActions, MixinResources, MixinMountSideBar, MixinFilesListFilter],
+  mixins: [FileActions, MixinMountSideBar, MixinFilesListFilter],
 
   setup() {
     const store = useStore()

@@ -77,7 +77,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         drivesApiFactory.deleteDrive(id, ifMatch, options)
     },
     users: {
-      getUser: (userId: string) => userApiFactory.getUser(userId),
+      getUser: (userId: string) =>
+        userApiFactory.getUser(userId, new Set<any>([]), new Set<any>(['drive'])),
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () => meUserApiFactory.meGet(),
       changeOwnPassword: (currentPassword, newPassword) =>

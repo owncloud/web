@@ -91,20 +91,25 @@
           @close="closeSideBar"
         >
           <template #body>
-            <DetailsPanel v-if="activePanel === 'DetailsPanel'" :users="selectedUsers" />
-            <EditPanel
-              v-if="activePanel === 'EditPanel'"
-              :users="selectedUsers"
-              :roles="roles"
-              @confirm="editUser"
+            <oc-loader
+              v-if="loadAdditionalUserDataTask.isRunning || !loadAdditionalUserDataTask.last"
             />
-            <GroupAssignmentsPanel
-              v-if="activePanel === 'GroupAssignmentsPanel'"
-              :users="selectedUsers"
-              :roles="roles"
-              :groups="groups"
-              @confirm="editUserGroupAssignments"
-            />
+            <template v-else>
+              <DetailsPanel v-if="activePanel === 'DetailsPanel'" :users="selectedUsers" />
+              <EditPanel
+                v-if="activePanel === 'EditPanel'"
+                :user="selectedUsers[0]"
+                :roles="roles"
+                @confirm="editUser"
+              />
+              <GroupAssignmentsPanel
+                v-if="activePanel === 'GroupAssignmentsPanel'"
+                :user="selectedUsers[0]"
+                :roles="roles"
+                :groups="groups"
+                @confirm="editUserGroupAssignments"
+              />
+            </template>
           </template>
         </side-bar>
       </template>
@@ -126,7 +131,7 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
 import { defineComponent } from '@vue/runtime-core'
@@ -225,11 +230,26 @@ export default defineComponent({
       }
     })
 
+    const loadAdditionalUserDataTask = useTask(function* (signal, ref, user) {
+      const { data } = yield unref(graphClient).users.getUser(user.id)
+
+      if (!data.drive) {
+        return
+      }
+
+      user.drive = data.drive
+
+      if (!user.drive.quota) {
+        user.drive.quota = { total: 0 }
+      }
+    })
+
     return {
       users,
       roles,
       groups,
       loadResourcesTask,
+      loadAdditionalUserDataTask,
       graphClient,
       accessToken
     }
@@ -246,6 +266,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
+    ...mapState({ currentUser: 'user' }),
+
     selectedUsersText() {
       const translated = this.$gettext('%{ userCount } selected')
 
@@ -331,6 +353,8 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
+
     calculateListHeaderPosition() {
       this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
     },
@@ -380,7 +404,8 @@ export default defineComponent({
       this.sideBarOpen = true
     },
 
-    showEditSideBarPanel(user) {
+    async showEditSideBarPanel(user) {
+      await this.loadAdditionalUserDataTask.perform(this, user)
       this.selectedUsers = user ? [user] : []
       this.activePanel = 'EditPanel'
       this.sideBarOpen = true
@@ -459,6 +484,22 @@ export default defineComponent({
     async editUser(editUser) {
       try {
         await this.graphClient.users.editUser(editUser.id, editUser)
+
+        if (editUser.drive) {
+          const updateDriveResponse = await this.graphClient.drives.updateDrive(
+            editUser.drive.id,
+            { quota: { total: editUser.drive.quota.total } },
+            {}
+          )
+          if (editUser.id === this.currentUser.uuid) {
+            // Load current user quota
+            this.UPDATE_SPACE_FIELD({
+              id: editUser.drive.id,
+              field: 'spaceQuota',
+              value: updateDriveResponse.data.quota
+            })
+          }
+        }
 
         /**
          * Setting api calls are just temporary and will be replaced with the graph api,
