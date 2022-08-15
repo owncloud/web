@@ -488,7 +488,7 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          this.capabilities.files.tags
+          this.capabilities?.files?.tags
             ? {
                 name: 'tags',
                 title: this.$gettext('Tags'),
