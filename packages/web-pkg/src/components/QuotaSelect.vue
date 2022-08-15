@@ -49,7 +49,7 @@ export default {
     },
     maxQuota: {
       type: Number,
-      default: Math.pow(10, 9)
+      default: 0
     }
   },
   data: function () {
