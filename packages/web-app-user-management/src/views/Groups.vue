@@ -223,6 +223,7 @@ export default defineComponent({
   },
 
   async mounted() {
+    console.log("mounted")
     await this.loadResourcesTask.perform(this)
 
     const loadResourcesEventToken = bus.subscribe('app.user-management.list.load', () => {
