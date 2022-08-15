@@ -203,6 +203,9 @@ export function buildSharedResource(
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => parseInt(share.state) === ShareStatus.accepted
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
+    resource.canEditTags = () =>
+      parseInt(share.state) === ShareStatus.accepted &&
+      SharePermissions.update.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith || []
     resource.shareOwner = share.uid_owner
@@ -216,6 +219,7 @@ export function buildSharedResource(
     resource.canShare = () => true
     resource.canRename = () => true
     resource.canBeDeleted = () => true
+    resource.canEditTags = () => true
   }
 
   resource.extension = extractExtensionFromFile(resource)
