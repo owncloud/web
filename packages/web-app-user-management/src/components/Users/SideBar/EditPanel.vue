@@ -127,9 +127,6 @@ export default {
       immediate: true
     }
   },
-  mounted() {
-    console.log(this.user)
-  },
   methods: {
     changeSelectedQuotaOption(option) {
       this.editUser.drive.quota.total = option.value

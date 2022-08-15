@@ -49,7 +49,7 @@ export default {
     },
     maxQuota: {
       type: Number,
-      default: 0
+      default: Math.pow(10, 9)
     }
   },
   data: function () {
@@ -113,8 +113,6 @@ export default {
     }
   },
   mounted() {
-    console.log('MOUNTED')
-    console.log(this.totalQuota)
     this.setOptions()
     this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
   },
