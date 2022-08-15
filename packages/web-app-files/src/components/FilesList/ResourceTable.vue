@@ -83,8 +83,9 @@
     </template>
     <template #tags="{ item }">
       <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
-        <oc-tag :rounded="true" size="small" class="oc-ml-xs">
-          {{ tag }}
+        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
+          <oc-icon name="price-tag-3" size="small" />
+          <span class="oc-text-truncate">{{ tag }}</span>
         </oc-tag>
       </router-link>
       <oc-tag
@@ -859,9 +860,12 @@ export default defineComponent({
       }
     }
   }
+  &-tag {
+    max-width: 80px;
+  }
   &-tag-more {
     cursor: pointer;
-    border: 0px !important;
+    border: 0 !important;
   }
   &-edit-name {
     display: inline-flex;
