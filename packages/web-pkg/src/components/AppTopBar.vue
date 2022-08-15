@@ -29,7 +29,8 @@ export default defineComponent({
   name: 'AppTopBar',
   props: {
     resource: {
-      type: Object
+      type: Object,
+      default: null
     }
   }
 })
