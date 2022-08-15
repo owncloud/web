@@ -80,7 +80,8 @@ function getWrapper({ totalQuota = 10000000000 } = {}) {
   return mount(QuotaSelect, {
     localVue,
     mocks: {
-      $gettext: jest.fn()
+      $gettext: jest.fn(),
+      $gettextInterpolate: jest.fn()
     },
     data: () => {
       return {

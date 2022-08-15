@@ -339,11 +339,6 @@ export default defineComponent({
       this.sideBarOpen = false
     },
     async showPanel({ user, panel }) {
-      /**
-       * Force mounted hook on sidebar, to force mounted hook in QuotaSelect component
-       * TODO: work with forceUpdate
-       **/
-      this.sideBarOpen = false
       await this.loadAdditionalUserDataTask.perform(this, user)
       this.selectedUsers = [user]
       this.activePanel = panel

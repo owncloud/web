@@ -40,6 +40,7 @@
         </div>
         <quota-select
           v-if="showQuota"
+          :key="'quota-select-' + user.id"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
