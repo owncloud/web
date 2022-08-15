@@ -416,7 +416,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'capabilities']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -488,13 +488,15 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          {
-            name: 'tags',
-            title: this.$gettext('Tags'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
+          this.capabilities.files.tags
+            ? {
+                name: 'tags',
+                title: this.$gettext('Tags'),
+                type: 'slot',
+                alignH: 'right',
+                wrap: 'nowrap'
+              }
+            : {},
           {
             name: 'owner',
             title: this.$gettext('Share owner'),
