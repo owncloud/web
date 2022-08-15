@@ -475,7 +475,7 @@ export default defineComponent({
           },
           {
             name: 'owner',
-            title: this.$gettext('Share owner'),
+            title: this.$gettext('Shared by'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap'
