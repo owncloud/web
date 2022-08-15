@@ -416,7 +416,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'capabilities']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -488,13 +488,15 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          {
-            name: 'tags',
-            title: this.$gettext('Tags'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap'
-          },
+          this.capabilities?.files?.tags
+            ? {
+                name: 'tags',
+                title: this.$gettext('Tags'),
+                type: 'slot',
+                alignH: 'right',
+                wrap: 'nowrap'
+              }
+            : {},
           {
             name: 'owner',
             title: this.$gettext('Share owner'),
@@ -589,12 +591,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
     getTagLink(tag) {
       return createLocationCommon('files-common-search', {
-        query: { term: `tag:${tag}`, provider: 'files.sdk' }
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
       })
     },
     isResourceCut(resource) {
@@ -612,7 +615,7 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] })
     },
     openTagsSidebar() {
-      this.openWithPanel('tags-item')
+      this.openSidebar()
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {

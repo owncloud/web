@@ -6,7 +6,6 @@ export interface Resource {
   fileId?: string
   storageId?: string
   name?: string
-  tags?: string[]
   path: string
   webDavPath?: string
   downloadURL?: string
@@ -25,6 +24,7 @@ export interface Resource {
   sharePermissions?: number
   shareTypes?: number[]
   privateLink?: string
+  tags?: string[]
 
   canCreate?(): boolean
   canUpload?(): boolean
@@ -33,6 +33,7 @@ export interface Resource {
   canRename?(): boolean
   canBeDeleted?(): boolean
   canBeRestored?(): boolean
+  canEditTags?(): boolean
 
   isReceivedShare?(): boolean
   isMounted?(): boolean
