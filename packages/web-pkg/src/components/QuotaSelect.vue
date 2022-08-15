@@ -54,7 +54,7 @@ export default {
   },
   data: function () {
     return {
-      selectedOption: {},
+      selectedOption: undefined,
       options: []
     }
   },

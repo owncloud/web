@@ -25,8 +25,7 @@
       </div>
       <side-bar
         v-if="sideBarOpen"
-        id="user-management-side-bar"
-        class="oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
+        class="user-management-side-bar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
         :available-panels="availableSideBarPanels"
         :sidebar-active-panel="activePanel"
         :loading="false"
@@ -98,7 +97,7 @@ export default defineComponent({
   overflow-y: auto;
 }
 
-#user-management-side-bar {
+.user-management-side-bar {
   position: relative;
   overflow: hidden;
   border-left: 1px solid var(--oc-color-border);

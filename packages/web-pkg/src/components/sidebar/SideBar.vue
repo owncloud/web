@@ -1,6 +1,6 @@
 <template>
   <div
-    data-testid="files-sidebar"
+    data-testid="app-sidebar"
     :class="{
       'has-active-sub-panel': !!activeAvailablePanelName,
       'oc-flex oc-flex-center oc-flex-middle': loading
@@ -223,11 +223,11 @@ export default defineComponent({
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
-        root: document.querySelector('#files-sidebar'),
+        root: document.querySelector('#app-sidebar'),
         threshold: 0.9
       })
       hiddenObserver = new VisibilityObserver({
-        root: document.querySelector('#files-sidebar'),
+        root: document.querySelector('#app-sidebar'),
         threshold: 0.05
       })
       const doFocus = () => {
@@ -277,7 +277,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#files-sidebar {
+#app-sidebar {
   border-left: 1px solid var(--oc-color-border);
 }
 
@@ -312,7 +312,7 @@ export default defineComponent({
   }
 
   &.sidebar-panel-default {
-    #files-sidebar.has-active-sub-panel & {
+    #app-sidebar.has-active-sub-panel & {
       transform: translateX(-30%);
       visibility: hidden;
     }
