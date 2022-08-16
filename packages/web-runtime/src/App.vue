@@ -201,6 +201,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+@font-face {
+  font-family: Nunito Sans;
+  src: url('/fonts/nunito.ttf');
+}
 body {
   margin: 0;
   font-size: var(--oc-font-size-small);
