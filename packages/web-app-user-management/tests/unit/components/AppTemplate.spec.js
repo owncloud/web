@@ -12,7 +12,7 @@ const stubSelectors = {
   sideBar: 'side-bar-stub'
 }
 
-const elSelector = {
+const elSelectors = {
   userManagementWrapper: '#user-management-wrapper'
 }
 
@@ -30,7 +30,7 @@ describe('AppTemplate', () => {
     })
     it('should not show user management wrapper', () => {
       const wrapper = getWrapper({ propsData: { loading: true } })
-      expect(wrapper.find(elSelector.userManagementWrapper).exists()).toBeFalsy()
+      expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeFalsy()
     })
   })
   describe('loading is false', () => {
@@ -44,7 +44,7 @@ describe('AppTemplate', () => {
     })
     it('should show user management wrapper', () => {
       const wrapper = getWrapper({ propsData: { loading: false } })
-      expect(wrapper.find(elSelector.userManagementWrapper).exists()).toBeTruthy()
+      expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeTruthy()
     })
   })
   describe('sideBarOpen is true', () => {
