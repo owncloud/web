@@ -81,6 +81,22 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
+    <template #tags="{ item }">
+      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
+        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
+          <oc-icon name="price-tag-3" size="small" />
+          <span class="oc-text-truncate">{{ tag }}</span>
+        </oc-tag>
+      </router-link>
+      <oc-tag
+        v-if="item.tags.length > 2"
+        size="small"
+        class="resource-table-tag-more"
+        @click="openTagsSidebar"
+      >
+        + {{ item.tags.length - 2 }}
+      </oc-tag>
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -188,7 +204,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces } from '../../router'
+import { createLocationSpaces, createLocationCommon } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
@@ -401,7 +417,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'capabilities']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -473,6 +489,15 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
+          this.capabilities?.files?.tags
+            ? {
+                name: 'tags',
+                title: this.$gettext('Tags'),
+                type: 'slot',
+                alignH: 'right',
+                wrap: 'nowrap'
+              }
+            : {},
           {
             name: 'owner',
             title: this.$gettext('Shared by'),
@@ -564,8 +589,14 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
+    },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+      })
     },
     isResourceCut(resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) return false
@@ -580,6 +611,9 @@ export default defineComponent({
     },
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] })
+    },
+    openTagsSidebar() {
+      this.openSidebar()
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
@@ -820,6 +854,13 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
+  }
+  &-tag {
+    max-width: 80px;
+  }
+  &-tag-more {
+    cursor: pointer;
+    border: 0 !important;
   }
   &-edit-name {
     display: inline-flex;

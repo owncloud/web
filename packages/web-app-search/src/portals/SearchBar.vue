@@ -88,27 +88,29 @@ export default {
   },
 
   watch: {
-    $route() {
-      if (this.activeProvider && !this.activeProvider.available) {
-        this.activeProvider = undefined
-      }
+    $route: {
+      handler(r, o) {
+        if (!!o && this.activeProvider && !this.activeProvider.available) {
+          this.activeProvider = undefined
+        }
+
+        this.$nextTick(() => {
+          if (!this.availableProviders.length) {
+            return
+          }
+
+          const routeTerm = get(r, 'query.term')
+          const input = this.$el.getElementsByTagName('input')[0]
+          if (!input || !routeTerm) {
+            return
+          }
+
+          this.term = routeTerm
+          input.value = routeTerm
+        })
+      },
+      immediate: true
     }
-  },
-
-  mounted() {
-    if (!this.availableProviders.length) {
-      return
-    }
-
-    const input = this.$el.getElementsByTagName('input')[0]
-    const routeTerm = get(this, '$route.query.term')
-
-    if (!input || !routeTerm) {
-      return
-    }
-
-    this.term = routeTerm
-    input.value = routeTerm
   },
 
   asyncComputed: {
