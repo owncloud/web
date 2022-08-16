@@ -72,7 +72,7 @@ describe('Groups view', () => {
     })
   })
 
-  describe('computed method "availableSideBarPanels"', () => {
+  describe('computed method "sideBarAvailablePanels"', () => {
     /**
      * As soon as edit panel will be available in group management, please un-skip it.
      */
@@ -80,19 +80,19 @@ describe('Groups view', () => {
     it.skip('should contain EditPanel with property enabled set true when one group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain EditPanel with property enabled set false when no group is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
     it('should contain EditPanel with property enabled set false when multiple groups are selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }, { id: '2' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
   })
@@ -160,6 +160,7 @@ function getMountedWrapper({
             id: 1
           }
         ],
+        sideBarActivePanel: 'DetailsPanel',
         ...data
       }
     },

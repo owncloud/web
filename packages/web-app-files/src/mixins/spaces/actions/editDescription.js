@@ -4,7 +4,6 @@ import { clientService } from 'web-pkg/src/services'
 export default {
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_editDescription_items() {
       return [
@@ -61,10 +60,8 @@ export default {
     },
 
     $_editDescription_editDescriptionSpace(id, description) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .updateDrive(id, { description }, {})
         .then(() => {

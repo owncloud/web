@@ -118,7 +118,6 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicAlias
 } from 'web-pkg/src/composables'
-import mixins from '../../../mixins'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes, LinkShareRoles, SharePermissions } from 'web-client/src/helpers/share'
@@ -129,6 +128,7 @@ import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { isLocationSpacesActive } from '../../../router'
+import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -137,7 +137,6 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
-  mixins: [mixins],
   setup() {
     const store = useStore()
 
@@ -197,7 +196,7 @@ export default defineComponent({
       if (expireDate.days) {
         const days = parseInt(expireDate.days)
         defaultExpireDate = DateTime.now()
-          .setLocale(this.$language.current)
+          .setLocale(getLocaleFromLanguage(this.$language.current))
           .plus({ days })
           .toJSDate()
       }
@@ -205,7 +204,7 @@ export default defineComponent({
       if (expireDate.enforced) {
         const days = parseInt(expireDate.days)
         maxExpireDateFromCaps = DateTime.now()
-          .setLocale(this.$language.current)
+          .setLocale(getLocaleFromLanguage(this.$language.current))
           .plus({ days })
           .toJSDate()
       }
@@ -213,7 +212,7 @@ export default defineComponent({
       return {
         enforced: expireDate.enforced,
         default: defaultExpireDate,
-        min: DateTime.now().setLocale(this.$language.current).toJSDate(),
+        min: DateTime.now().setLocale(getLocaleFromLanguage(this.$language.current)).toJSDate(),
         max: maxExpireDateFromCaps
       }
     },
@@ -436,7 +435,7 @@ export default defineComponent({
             ? DateTime.fromISO(link.expiration)
             : DateTime.fromJSDate(link.expiration)
         )
-          .setLocale(this.$language.current)
+          .setLocale(getLocaleFromLanguage(this.$language.current))
           .endOf('day')
           .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
       }

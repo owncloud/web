@@ -11,11 +11,13 @@ Summary
 * Bugfix - Add Droparea again: [#7080](https://github.com/owncloud/web/issues/7080)
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
+* Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
+* Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
@@ -50,6 +52,7 @@ Summary
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Tooltips not shown on disabled create and upload button: [#7376](https://github.com/owncloud/web/pull/7376)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
+* Bugfix - User management app close side bar throws error: [#7445](https://github.com/owncloud/web/pull/7445)
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 * Bugfix - Versions of shared files not visible: [#7313](https://github.com/owncloud/web/pull/7313)
 * Enhancement - Add app top bar component: [#7217](https://github.com/owncloud/web/pull/7217)
@@ -77,6 +80,7 @@ Summary
 * Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
 -------
@@ -104,6 +108,14 @@ Details
    https://github.com/owncloud/web/pull/7230
    https://github.com/owncloud/web/pull/7314
    https://github.com/owncloud/web/pull/7386
+
+* Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+
+   We've adjusted date time formatting to show a less verbose format (e.g. hiding the time zone and
+   using month abbreviations).
+
+   https://github.com/owncloud/web/issues/7336
+   https://github.com/owncloud/web/pull/7443
 
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
@@ -141,6 +153,12 @@ Details
 
    https://github.com/owncloud/web/issues/7138
    https://github.com/owncloud/web/pull/7322
+
+* Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+
+   We've fixed file size formatting to respect the language setting of the user.
+
+   https://github.com/owncloud/web/pull/7443
 
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 
@@ -427,6 +445,13 @@ Details
 
    https://github.com/owncloud/web/pull/7297
 
+* Bugfix - User management app close side bar throws error: [#7445](https://github.com/owncloud/web/pull/7445)
+
+   We've fixed a bug, where closing the side bar in the user management app threw an error, when a
+   group or user was selected.
+
+   https://github.com/owncloud/web/pull/7445
+
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 
    We've fixed a bug where the users list in the user management app was not loading if a user has no
@@ -681,6 +706,13 @@ Details
 
    https://github.com/owncloud/web/issues/6678
    https://github.com/owncloud/web/pull/7176
+
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
+
+   We've added the possibility to change user's quota in the user management app.
+
+   https://github.com/owncloud/web/issues/7059
+   https://github.com/owncloud/web/pull/7182
 
 Changelog for ownCloud Web [5.6.1] (2022-06-22)
 =======================================

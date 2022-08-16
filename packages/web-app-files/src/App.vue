@@ -6,7 +6,6 @@
     </div>
     <side-bar
       v-if="showSidebar"
-      id="files-sidebar"
       ref="filesSidebar"
       tabindex="-1"
       :sidebar-active-panel="sidebarActivePanel"
@@ -19,7 +18,6 @@
   </main>
 </template>
 <script lang="ts">
-import Mixins from './mixins'
 import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
@@ -29,7 +27,6 @@ export default defineComponent({
   components: {
     SideBar
   },
-  mixins: [Mixins],
   data: () => ({
     dragareaEnabled: false
   }),
@@ -55,7 +52,8 @@ export default defineComponent({
   },
   created() {
     this.$root.$on('upload-end', () => {
-      this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
+      // delay for screen reader virtual buffer
+      setTimeout(() => this.$refs.filesListWrapper.focus(), 500)
     })
     const dragOver = bus.subscribe('drag-over', this.onDragOver)
     const dragOut = bus.subscribe('drag-out', this.hideDropzone)
@@ -127,18 +125,6 @@ main {
 
 #files {
   position: relative;
-}
-
-#files-sidebar {
-  position: relative;
-  overflow: hidden;
-  width: 440px;
-}
-
-@media only screen and (max-width: 960px) {
-  #files-sidebar {
-    width: 100%;
-  }
 }
 
 #files-view {

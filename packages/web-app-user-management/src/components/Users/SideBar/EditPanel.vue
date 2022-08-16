@@ -1,39 +1,54 @@
 <template>
-  <div v-if="user" class="oc-mt-xl">
+  <div class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div v-if="editUser" class="oc-background-highlight oc-p-m">
-      <oc-text-input
-        v-model="editUser.displayName"
-        class="oc-mb-s"
-        :label="$gettext('First and last name')"
-        :error-message="formData.displayName.errorMessage"
-        :fix-message-line="true"
-        @input="validateDisplayName"
-      />
-      <oc-text-input
-        v-model="editUser.mail"
-        class="oc-mb-s"
-        :label="$gettext('Email')"
-        :error-message="formData.email.errorMessage"
-        type="email"
-        :fix-message-line="true"
-        @change="validateEmail"
-      />
-      <oc-text-input
-        v-model="editUser.passwordProfile.password"
-        class="oc-mb-s"
-        :label="$gettext('Password')"
-        type="password"
-        :fix-message-line="true"
-        default-value="●●●●●●●●"
-      />
-      <oc-select
-        v-model="editUser.role"
-        :label="$gettext('Role')"
-        option-label="displayName"
-        :options="roles"
-        :clearable="false"
-      />
+    <div class="oc-background-highlight oc-p-m">
+      <div>
+        <oc-text-input
+          v-model="editUser.displayName"
+          class="oc-mb-s"
+          :label="$gettext('First and last name')"
+          :error-message="formData.displayName.errorMessage"
+          :fix-message-line="true"
+          @input="validateDisplayName"
+        />
+        <oc-text-input
+          v-model="editUser.mail"
+          class="oc-mb-s"
+          :label="$gettext('Email')"
+          :error-message="formData.email.errorMessage"
+          type="email"
+          :fix-message-line="true"
+          @change="validateEmail"
+        />
+        <oc-text-input
+          v-model="editUser.passwordProfile.password"
+          class="oc-mb-s"
+          :label="$gettext('Password')"
+          type="password"
+          :fix-message-line="true"
+          default-value="●●●●●●●●"
+        />
+        <div class="oc-mb-s">
+          <oc-select
+            v-model="editUser.role"
+            :label="$gettext('Role')"
+            option-label="displayName"
+            :options="roles"
+            :clearable="false"
+          />
+          <div class="oc-text-input-message"></div>
+        </div>
+        <quota-select
+          v-if="showQuota"
+          :key="'quota-select-' + user.id"
+          :title="$gettext('Personal quota')"
+          :total-quota="editUser.drive.quota.total || 0"
+          @selectedOptionChange="changeSelectedQuotaOption"
+        />
+        <p v-else v-translate class="oc-m-rm">
+          To set an individual quota, the user needs to have logged in once.
+        </p>
+      </div>
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
@@ -49,16 +64,19 @@
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
+import { cloneDeep } from 'lodash-es'
 
 export default {
   name: 'EditPanel',
   components: {
     UserInfoBox,
-    CompareSaveDialog
+    CompareSaveDialog,
+    QuotaSelect
   },
   props: {
-    users: {
-      type: Array,
+    user: {
+      type: Object,
       required: true
     },
     roles: {
@@ -82,10 +100,6 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.users.length === 1 ? this.users[0] : null
-    },
-
     userRole() {
       return this.user ? this.userRoles[this.user.id] : null
     },
@@ -100,18 +114,25 @@ export default {
       return Object.values(this.formData)
         .map((v) => !!v.valid)
         .includes(false)
+    },
+    showQuota() {
+      return this.editUser.drive
     }
   },
   watch: {
     user: {
       handler: function () {
-        this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
+        this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
       },
       deep: true,
       immediate: true
     }
   },
   methods: {
+    changeSelectedQuotaOption(option) {
+      this.editUser.drive.quota.total = option.value
+    },
+
     validateDisplayName() {
       this.formData.displayName.valid = false
 
@@ -139,7 +160,7 @@ export default {
     },
 
     revertChanges() {
-      this.editUser = { ...this.user, ...{ passwordProfile: { password: '' } } }
+      this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''

@@ -35,32 +35,24 @@ describe('SizeInfo component', () => {
   })
 
   describe('when item(s) are selected', () => {
-    it.each([[[selectedFiles[0]]], [selectedFiles]])(
-      'should have selected number count and total size',
-      (selected) => {
-        const selectedCount = selected.length
-        let totalSize = 0
-        selected.forEach((file) => (totalSize += parseInt(file.size, 10)))
+    it.each([
+      { selected: [selectedFiles[0]], selectedCount: 1, totalSize: 5 },
+      { selected: selectedFiles, selectedCount: 3, totalSize: 305 }
+    ])('should have selected count and total size', ({ selected, selectedCount, totalSize }) => {
+      const store = createStore({ selected })
+      const wrapper = createWrapper({
+        store
+      })
+      const translate = wrapper.find('translate-stub')
 
-        jest
-          .spyOn(SizeInfo.mixins[0].methods, 'getResourceSize')
-          .mockImplementation((size) => size + ' B')
-        const store = createStore({ selected })
-        const wrapper = createWrapper({
-          store
-        })
-        const translate = wrapper.find('translate-stub')
-
-        expect(translate.exists()).toBeTruthy()
-        expect(translate.props().translateN).toEqual(selectedCount)
-        expect(translate.props().translateParams.amount).toEqual(selectedCount)
-        expect(translate.props().translateParams.size).toEqual(totalSize + ' B')
-        expect(translate.text()).toEqual('%{ amount } selected - %{ size }')
-      }
-    )
-    it('should have selected number count but not size if item size is NaN', () => {
-      jest.spyOn(SizeInfo.mixins[0].methods, 'getResourceSize').mockImplementation(() => '?')
-      const store = createStore({ selected: [{ path: selectedFiles[0].path }] })
+      expect(translate.exists()).toBeTruthy()
+      expect(translate.props().translateN).toBe(selectedCount)
+      expect(translate.props().translateParams.amount).toBe(selectedCount)
+      expect(translate.props().translateParams.size).toBe(totalSize + ' B')
+      expect(translate.text()).toBe('%{ amount } selected - %{ size }')
+    })
+    it('should have selected count but not size if item size is NaN', () => {
+      const store = createStore({ selected: [{ path: '/some-path', size: NaN }] })
 
       const wrapper = createWrapper({
         store

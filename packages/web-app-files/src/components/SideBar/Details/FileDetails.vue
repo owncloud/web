@@ -70,7 +70,7 @@
         </tr>
         <tr v-if="showSize" data-testid="sizeInfo">
           <th scope="col" class="oc-pr-s" v-text="sizeLabel" />
-          <td v-text="getResourceSize(file.size)" />
+          <td v-text="resourceSize" />
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s" v-text="versionsLabel" />
@@ -158,8 +158,6 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from '@vue/composition-api'
-import Mixins from '../../../mixins'
-import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -179,11 +177,10 @@ import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { isUserContext } from 'web-runtime/src/router'
+import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileDetails',
-  mixins: [Mixins, MixinResources],
-
   inject: ['displayedItem'],
   setup() {
     const sharedParentDir = ref('')
@@ -324,8 +321,11 @@ export default defineComponent({
     copyEosPathLabel() {
       return this.$gettext('Copy EOS path')
     },
+    resourceSize() {
+      return formatFileSize(this.file.size, this.$language.current)
+    },
     showSize() {
-      return this.getResourceSize(this.file.size) !== '?'
+      return this.resourceSize !== '?'
     },
     sizeLabel() {
       return this.$gettext('Size')
@@ -343,7 +343,7 @@ export default defineComponent({
       return this.$gettext('See all versions')
     },
     capitalizedTimestamp() {
-      const displayDate = this.formDateFromHTTP(this.file.mdate)
+      const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
     showTags() {

@@ -1,5 +1,64 @@
 <template>
   <div>
+    <app-template
+      ref="template"
+      :loading="loadResourcesTask.isRunning || !loadResourcesTask.last"
+      :breadcrumbs="breadcrumbs"
+      :side-bar-active-panel="sideBarActivePanel"
+      :side-bar-available-panels="sideBarAvailablePanels"
+      :side-bar-open="sideBarOpen"
+      @selectPanel="selectPanel"
+      @closeSideBar="closeSideBar"
+      @toggleSideBar="toggleSideBar"
+    >
+      <template #topbarActions>
+        <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
+          <span v-text="selectedGroupsText" />
+          <oc-button
+            id="files-clear-selection"
+            v-oc-tooltip="$gettext('Clear selection')"
+            :aria-label="$gettext('Clear selection')"
+            class="oc-ml-m"
+            appearance="outline"
+            @click="unselectAllGroups"
+          >
+            <oc-icon name="close" />
+          </oc-button>
+          <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
+            <oc-icon name="delete-bin" />
+            <translate>Delete</translate>
+          </oc-button>
+        </div>
+        <div v-else>
+          <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
+            <oc-icon name="add" />
+            <translate>New group</translate>
+          </oc-button>
+        </div>
+      </template>
+      <template #mainContent>
+        <no-content-message
+          v-if="!groups.length"
+          id="user-management-groups-empty"
+          class="files-empty"
+          icon="user"
+        >
+          <template #message>
+            <span v-translate>No groups in here</span>
+          </template>
+        </no-content-message>
+        <div v-else>
+          <GroupsList
+            :groups="groups"
+            :selected-groups="selectedGroups"
+            :header-position="listHeaderPosition"
+            @toggleSelectGroup="toggleSelectGroup"
+            @toggleSelectAllGroups="toggleSelectAllGroups"
+            @showPanel="showPanel"
+          />
+        </div>
+      </template>
+    </app-template>
     <create-group-modal
       v-if="createGroupModalOpen"
       :existing-groups="groups"
@@ -12,94 +71,6 @@
       @cancel="toggleDeleteGroupModal"
       @confirm="deleteGroups"
     />
-    <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
-      <app-loading-spinner v-if="loadResourcesTask.isRunning" />
-      <template v-else>
-        <div id="groups-wrapper" class="oc-width-expand">
-          <div id="groups-app-bar" ref="appBar" class="oc-app-bar oc-py-s">
-            <div class="oc-flex oc-flex-between">
-              <oc-breadcrumb class="oc-flex oc-flex-middle" :items="breadcrumbs" />
-              <div>
-                <oc-button
-                  id="files-toggle-sidebar"
-                  v-oc-tooltip="toggleSidebarButtonLabel"
-                  :aria-label="toggleSidebarButtonLabel"
-                  appearance="raw"
-                  class="oc-my-s oc-p-xs"
-                  @click.stop="toggleSideBar"
-                >
-                  <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
-                </oc-button>
-              </div>
-            </div>
-            <div class="oc-flex-1 oc-flex oc-flex-start">
-              <div v-if="selectedGroups.length" class="oc-flex oc-flex-middle">
-                <span v-text="selectedGroupsText" />
-                <oc-button
-                  id="files-clear-selection"
-                  v-oc-tooltip="$gettext('Clear selection')"
-                  :aria-label="$gettext('Clear selection')"
-                  class="oc-ml-m"
-                  appearance="outline"
-                  @click="unselectAllGroups"
-                >
-                  <oc-icon name="close" />
-                </oc-button>
-                <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteGroupModal">
-                  <oc-icon name="delete-bin" />
-                  <translate>Delete</translate>
-                </oc-button>
-              </div>
-              <div v-else>
-                <oc-button variation="primary" appearance="filled" @click="toggleCreateGroupModal">
-                  <oc-icon name="add" />
-                  <translate>New group</translate>
-                </oc-button>
-              </div>
-            </div>
-          </div>
-          <no-content-message
-            v-if="!groups.length"
-            id="user-management-groups-empty"
-            class="files-empty"
-            icon="group-2"
-          >
-            <template #message>
-              <span v-translate>No groups in here</span>
-            </template>
-          </no-content-message>
-          <div v-else>
-            <GroupsList
-              :groups="groups"
-              :selected-groups="selectedGroups"
-              :header-position="listHeaderPosition"
-              @toggleSelectGroup="toggleSelectGroup"
-              @toggleSelectAllGroups="toggleSelectAllGroups"
-              @clickDetails="showDetailsSideBarPanel"
-              @clickEdit="showEditSideBarPanel"
-            />
-          </div>
-        </div>
-        <side-bar
-          v-if="sideBarOpen"
-          class="groups-sidebar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
-          :available-panels="availableSideBarPanels"
-          :sidebar-active-panel="activePanel"
-          :loading="false"
-          @selectPanel="selectPanel"
-          @close="closeSideBar"
-        >
-          <template #body>
-            <DetailsPanel v-if="activePanel === 'DetailsPanel'" :groups="selectedGroups" />
-            <EditPanel
-              v-if="activePanel === 'EditPanel'"
-              :groups="selectedGroups"
-              @confirm="editGroup"
-            />
-          </template>
-        </side-bar>
-      </template>
-    </main>
   </div>
 </template>
 
@@ -107,9 +78,7 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
 import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { bus } from 'web-pkg/src/instance'
@@ -119,14 +88,12 @@ import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import { defineComponent } from '@vue/runtime-core'
+import AppTemplate from '../components/AppTemplate.vue'
 
 export default defineComponent({
   components: {
-    SideBar,
-    EditPanel,
-    DetailsPanel,
+    AppTemplate,
     GroupsList,
-    AppLoadingSpinner,
     NoContentMessage,
     CreateGroupModal,
     DeleteGroupModal
@@ -156,7 +123,7 @@ export default defineComponent({
       createGroupModalOpen: false,
       deleteGroupModalOpen: false,
       sideBarOpen: false,
-      activePanel: 'DetailsPanel'
+      sideBarActivePanel: 'DetailsPanel'
     }
   },
   computed: {
@@ -179,7 +146,7 @@ export default defineComponent({
       return this.groups.length === this.selectedGroups.length
     },
 
-    availableSideBarPanels() {
+    sideBarAvailablePanels() {
       return [
         {
           app: 'DetailsPanel',
@@ -187,7 +154,8 @@ export default defineComponent({
           title: $gettext('Group details'),
           component: DetailsPanel,
           default: true,
-          enabled: true
+          enabled: true,
+          componentAttrs: { groups: this.selectedGroups }
         },
         {
           app: 'EditPanel',
@@ -217,7 +185,7 @@ export default defineComponent({
   watch: {
     selectedGroups() {
       if (!this.selectedGroups.length || this.selectedGroups.length > 1) {
-        this.activePanel = 'DetailsPanel'
+        this.sideBarActivePanel = 'DetailsPanel'
       }
     }
   },
@@ -240,8 +208,9 @@ export default defineComponent({
 
   methods: {
     ...mapActions(['showMessage']),
+
     calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs.appBar.getBoundingClientRect().height
+      this.listHeaderPosition = this.$refs?.template?.$refs?.appBar?.getBoundingClientRect()?.height
     },
     toggleSelectAllGroups() {
       if (this.allGroupsSelected) {
@@ -249,53 +218,36 @@ export default defineComponent({
       }
       this.selectedGroups = [...this.groups]
     },
-
     toggleSelectGroup(toggledGroup) {
       const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
-
       if (!isGroupSelected) {
         return this.selectedGroups.push(toggledGroup)
       }
-
       this.selectedGroups = this.selectedGroups.filter((group) => group.id !== toggledGroup.id)
     },
-
     unselectAllGroups() {
       this.selectedGroups = []
     },
-
     toggleCreateGroupModal() {
       this.createGroupModalOpen = !this.createGroupModalOpen
     },
-
     toggleDeleteGroupModal() {
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
     },
-
     selectPanel(panel) {
-      this.activePanel = panel || 'DetailsPanel'
+      this.sideBarActivePanel = panel || 'DetailsPanel'
     },
-
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen
     },
-
     closeSideBar() {
       this.sideBarOpen = false
     },
-
-    showDetailsSideBarPanel(group) {
-      this.selectedGroups = group ? [group] : []
-      this.activePanel = 'DetailsPanel'
+    showPanel({ group, panel }) {
+      this.selectedGroups = [group]
+      this.sideBarActivePanel = panel
       this.sideBarOpen = true
     },
-
-    showEditSideBarPanel(group) {
-      this.selectedGroups = group ? [group] : []
-      this.activePanel = 'EditPanel'
-      this.sideBarOpen = true
-    },
-
     async deleteGroups(groups) {
       const promises = groups.map((group) => this.graphClient.groups.deleteGroup(group.id))
 
@@ -339,7 +291,6 @@ export default defineComponent({
         })
       }
     },
-
     async createGroup(group) {
       try {
         const response = await this.graphClient.groups.createGroup(group)
@@ -356,7 +307,6 @@ export default defineComponent({
         })
       }
     },
-
     async editGroup(editGroup) {
       try {
         await this.graphClient.groups.editGroup(editGroup.id, editGroup)
@@ -377,25 +327,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss">
-#groups-app-bar {
-  background-color: var(--oc-color-background-default);
-  border-top-right-radius: 15px;
-  box-sizing: border-box;
-  z-index: 2;
-  position: sticky;
-  padding: 0 var(--oc-space-medium);
-  top: 0;
-}
-
-#groups-wrapper {
-  overflow-y: auto;
-}
-
-.groups-sidebar {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid var(--oc-color-border);
-}
-</style>

@@ -214,7 +214,7 @@ module.exports = {
   },
   elements: {
     sidebar: {
-      selector: '//*[@id="files-sidebar"]',
+      selector: '//*[@id="app-sidebar"]',
       locateStrategy: 'xpath'
     },
     fileInfoIconBigPreview: {
@@ -224,21 +224,21 @@ module.exports = {
       selector: '#sidebar-panel-%s-item .file_info__icon'
     },
     fileInfoResourceNameAnyType: {
-      selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
+      selector: `//div[contains(@id, "app-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
       locateStrategy: 'xpath'
     },
     fileInfoResourceName: {
-      selector: `//div[contains(@id, "files-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]`,
+      selector: `//div[contains(@id, "app-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s) and @data-test-resource-type=%s]`,
       locateStrategy: 'xpath'
     },
     sidebarCloseBtn: {
       selector:
-        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-")]//button[contains(@class, "header__close")]',
+        '//div[contains(@id, "app-sidebar")]//*[contains(@class, "is-active-")]//button[contains(@class, "header__close")]',
       locateStrategy: 'xpath'
     },
     sidebarBackBtn: {
       selector:
-        '//div[contains(@id, "files-sidebar")]//*[contains(@class, "is-active-sub-panel")]//button[contains(@class, "header__back")]',
+        '//div[contains(@id, "app-sidebar")]//*[contains(@class, "is-active-sub-panel")]//button[contains(@class, "header__back")]',
       locateStrategy: 'xpath'
     },
     panelActionsItems: {
@@ -248,7 +248,7 @@ module.exports = {
     },
     panelSelectButtons: {
       selector:
-        '//div[contains(@id, "files-sidebar")]//div[@class="sidebar-panel__navigation"]/button',
+        '//div[contains(@id, "app-sidebar")]//div[@class="sidebar-panel__navigation"]/button',
       locateStrategy: 'xpath'
     },
     collaboratorsPanel: {
