@@ -89,7 +89,7 @@ describe('Search Bar portal component', () => {
     })
 
     expect(wrapper.vm.$data.activeProvider).toBeTruthy()
-    ;(wrapper.vm.$options.watch.$route.handler as any).call(wrapper.vm, undefined, true)
+    ;(wrapper.vm.$options.watch.$route as any).call(wrapper.vm)
     expect(wrapper.vm.$data.activeProvider).toBeFalsy()
   })
   test('notifies active provider to update term on input', async () => {
@@ -376,7 +376,7 @@ describe('Search Bar portal component', () => {
       data: 'dummyProviderOne - 2'
     })
   })
-  test('sets the search term and input term to the route value on mount', async () => {
+  test('sets the search term and input term to the route value on mount', () => {
     wrapper = mount(SearchBar, {
       localVue,
       data() {
@@ -396,8 +396,6 @@ describe('Search Bar portal component', () => {
         }
       }
     })
-
-    await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.$data.term).toBe('routeTerm')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('routeTerm')

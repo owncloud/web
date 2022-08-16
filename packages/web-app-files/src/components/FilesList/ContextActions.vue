@@ -22,7 +22,6 @@ import Rename from '../../mixins/actions/rename'
 import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
-import ShowEditTags from '../../mixins/actions/showEditTags'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
@@ -51,7 +50,6 @@ export default {
     Restore,
     ShowActions,
     ShowDetails,
-    ShowEditTags,
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,
@@ -154,7 +152,6 @@ export default {
         ...this.$_copy_items,
         ...this.$_paste_items,
         ...this.$_rename_items,
-        ...this.$_showEditTags_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,

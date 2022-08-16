@@ -39,7 +39,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <!---->
       <!---->
       <!---->
-      <!---->
     </table>
   </div>
 </div>
@@ -87,7 +86,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <!---->
       <!---->
       <!---->
-      <!---->
     </table>
   </div>
 </div>
@@ -121,7 +119,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <!---->
@@ -163,7 +160,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <!---->
@@ -228,7 +224,6 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
           </div>
         </td>
       </tr>
-      <!---->
     </table>
   </div>
 </div>
@@ -262,7 +257,6 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <!---->
@@ -322,7 +316,6 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
           </div>
         </td>
       </tr>
-      <!---->
     </table>
   </div>
 </div>
@@ -359,7 +352,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       <!---->
       <!---->
       <!---->
-      <!---->
     </table>
   </div>
 </div>
@@ -393,7 +385,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <!---->
@@ -453,7 +444,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
           </div>
         </td>
       </tr>
-      <!---->
     </table>
   </div>
 </div>
@@ -487,7 +477,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
       <!---->
       <!---->
       <!---->
@@ -547,7 +536,6 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
           </div>
         </td>
       </tr>
-      <!---->
     </table>
   </div>
 </div>

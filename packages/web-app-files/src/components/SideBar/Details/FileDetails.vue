@@ -140,17 +140,6 @@
             </div>
           </td>
         </tr>
-        <tr v-if="showTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
-          <td>
-            <router-link v-for="(tag, index) in file.tags" :key="tag" :to="getTagLink(tag)">
-              <span>
-                <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
-                <span v-else v-text="tag" />
-              </span>
-            </router-link>
-          </td>
-        </tr>
       </table>
     </div>
     <p v-else data-testid="noContentText" v-text="noContentText" />
@@ -163,9 +152,8 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isLocationSpacesActive, createLocationCommon } from '../../../router'
+import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-
 import {
   useAccessToken,
   usePublicLinkContext,
@@ -221,7 +209,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
-    ...mapGetters(['user', 'configuration', 'capabilities']),
+    ...mapGetters(['user', 'configuration']),
 
     file() {
       return this.displayedItem.value
@@ -345,12 +333,6 @@ export default defineComponent({
     capitalizedTimestamp() {
       const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
       return upperFirst(displayDate)
-    },
-    showTags() {
-      return this.capabilities?.files.tags && this.file.tags?.length
-    },
-    tagsLabel() {
-      return this.$gettext('Tags')
     },
     hasAnyShares() {
       return (
@@ -480,11 +462,6 @@ export default defineComponent({
         this.copiedDirect = false
         this.copiedEos = false
       }, 550)
-    },
-    getTagLink(tag) {
-      return createLocationCommon('files-common-search', {
-        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
-      })
     }
   }
 })
@@ -499,7 +476,6 @@ export default defineComponent({
     td {
       max-width: 0;
       width: 100%;
-      overflow-wrap: break-word;
 
       div {
         min-width: 0;
