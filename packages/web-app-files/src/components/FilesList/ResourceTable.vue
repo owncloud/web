@@ -821,7 +821,7 @@ export default defineComponent({
   }
   &-edit-name {
     display: inline-flex;
-    vertical-align: super;
+    vertical-align: middle;
     svg {
       fill: var(--oc-color-text-muted);
     }
