@@ -166,7 +166,8 @@ function createWrapper(
               runningOnEos
             }
           }
-        }
+        },
+        capabilities: () => {}
       },
       modules: {
         Files: {
