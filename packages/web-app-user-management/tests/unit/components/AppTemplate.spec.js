@@ -2,9 +2,11 @@ import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import AppTemplate from '../../../src/components/AppTemplate'
 import stubs from 'tests/unit/stubs'
+import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+localVue.use(DesignSystem)
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
