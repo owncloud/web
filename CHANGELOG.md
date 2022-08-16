@@ -76,6 +76,7 @@ Summary
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+* Enhancement - Add Tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
@@ -663,6 +664,19 @@ Details
 
    https://github.com/owncloud/web/issues/7358
    https://github.com/owncloud/web/pull/7364
+
+* Enhancement - Add Tag support: [#7388](https://github.com/owncloud/web/pull/7388)
+
+   Managing files via tags is now possible in web, the feature is experimental and will be only
+   available through a dedicated experimental web build. Beside that the web version is
+   experimental, it also needs a special experimental ocis version.
+
+   Creating Tags, tagging resources and search for tags now is possible and can be used as an
+   alternative way of working and organizing resources.
+
+   https://github.com/owncloud/web/pull/7388
+   https://github.com/owncloud/web/pull/7385
+   https://github.com/owncloud/web/pull/7442
 
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 
