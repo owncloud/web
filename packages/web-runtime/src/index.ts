@@ -91,6 +91,7 @@ export const renderSuccess = (): void => {
           store.getters['runtime/auth/accessToken']
         )
         store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { clientService })
       }
     },
     {

@@ -3,11 +3,13 @@ import Vue from 'vue'
 import { set, has } from 'lodash-es'
 
 const state = {
-  spaces: []
+  spaces: [],
+  spaceQuotas: {}
 }
 
 const getters = {
-  spaces: (state) => state.spaces
+  spaces: (state) => state.spaces,
+  spaceQuotas: (state) => state.spaceQuotas
 }
 
 const mutations = {
@@ -57,6 +59,9 @@ const mutations = {
   },
   CLEAR_SPACES(state) {
     state.spaces = []
+  },
+  LOAD_SPACE_QUOTAS(state, spaceQuotas) {
+    state.spaceQuotas = spaceQuotas
   }
 }
 
@@ -69,6 +74,13 @@ const actions = {
 
     const spaces = graphResponse.data.value.map((space) => buildSpace(space))
     context.commit('LOAD_SPACES', spaces)
+  },
+  async loadSpaceQuotas(context, { clientService }) {
+    await context.commit('LOAD_SPACE_QUOTAS', {
+      maxPersonalQuota: 10 * Math.pow(10, 9),
+      defaultProjectQuota: 10 * Math.pow(10, 9),
+      maxProjectQuota: 100 * Math.pow(10, 9)
+    })
   }
 }
 
