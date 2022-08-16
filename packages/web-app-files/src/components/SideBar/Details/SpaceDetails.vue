@@ -42,7 +42,7 @@
     <table class="details-table" :aria-label="detailsTableLabel">
       <tr>
         <th scope="col" class="oc-pr-s" v-text="$gettext('Last activity')" />
-        <td v-text="lastModifyDate" />
+        <td v-text="lastModifiedDate" />
       </tr>
       <tr v-if="space.description">
         <th scope="col" class="oc-pr-s" v-text="$gettext('Subtitle')" />
@@ -65,8 +65,6 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, unref } from '@vue/composition-api'
-import Mixins from '../../../mixins'
-import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource } from '../../../helpers/resources'
@@ -76,11 +74,11 @@ import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import { ImageDimension } from '../../../constants'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../SpaceQuota.vue'
+import { formatDateFromISO } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
-  mixins: [Mixins, MixinResources],
   inject: ['displayedItem'],
   setup() {
     const store = useStore()
@@ -178,8 +176,8 @@ export default defineComponent({
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected space')
     },
-    lastModifyDate() {
-      return this.formDateFromISO(this.space.mdate)
+    lastModifiedDate() {
+      return formatDateFromISO(this.space.mdate, this.$language.current)
     },
     ownerUsernames() {
       const userId = this.user?.id

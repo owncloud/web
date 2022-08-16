@@ -33,10 +33,10 @@ describe('QuotaModal', () => {
 
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const updateResourceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_RESOURCE_FIELD')
+      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
 
-      expect(updateResourceFieldStub).toHaveBeenCalledTimes(1)
+      expect(updateSpaceFieldStub).toHaveBeenCalledTimes(1)
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
 
@@ -48,35 +48,11 @@ describe('QuotaModal', () => {
 
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const updateResourceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_RESOURCE_FIELD')
+      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editQuota()
 
-      expect(updateResourceFieldStub).toHaveBeenCalledTimes(0)
+      expect(updateSpaceFieldStub).toHaveBeenCalledTimes(0)
       expect(showMessageStub).toHaveBeenCalledTimes(1)
-    })
-
-    it('should show message while selected value is not set', async () => {
-      const wrapper = getWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const updateResourceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_RESOURCE_FIELD')
-      wrapper.vm.selectedOption = {}
-      await wrapper.vm.editQuota()
-
-      expect(updateResourceFieldStub).toHaveBeenCalledTimes(0)
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
-    })
-  })
-  describe('method "optionSelectable"', () => {
-    it('should return true while option is a number', () => {
-      const wrapper = getWrapper()
-      expect(wrapper.vm.optionSelectable({ value: 11 })).toBeTruthy()
-      expect(wrapper.vm.optionSelectable({ value: 11.2 })).toBeTruthy()
-    })
-
-    it('should return false while option is not a number', () => {
-      const wrapper = getWrapper()
-      expect(wrapper.vm.optionSelectable({ value: null })).toBeFalsy()
-      expect(wrapper.vm.optionSelectable({ value: 'lorem ipsum' })).toBeFalsy()
     })
   })
 })
@@ -109,15 +85,29 @@ function getWrapper() {
       modules: {
         Files: {
           namespaced: true,
-          mutations: {
-            UPDATE_RESOURCE_FIELD: jest.fn()
-          },
           state: {
             currentFolder: {
               id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
               spaceReadmeData: {
                 webDavUrl:
                   'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
+              }
+            }
+          }
+        },
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPDATE_SPACE_FIELD: jest.fn()
               }
             }
           }

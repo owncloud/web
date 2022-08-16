@@ -26,13 +26,13 @@ const selectors = {
   subtitle: '[data-testid="space-info-subtitle"]'
 }
 
-const formDateFromRFC = jest.fn()
-const formRelativeDateFromRFC = jest.fn()
+const formatDateFromRFC = jest.fn()
+const formatRelativeDateFromRFC = jest.fn()
 const resetDateMocks = () => {
-  formDateFromRFC.mockReset()
-  formRelativeDateFromRFC.mockReset()
-  formDateFromRFC.mockImplementation(() => 'ABSOLUTE_TIME')
-  formRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_TIME')
+  formatDateFromRFC.mockReset()
+  formatRelativeDateFromRFC.mockReset()
+  formatDateFromRFC.mockImplementation(() => 'ABSOLUTE_TIME')
+  formatRelativeDateFromRFC.mockImplementation(() => 'RELATIVE_TIME')
 }
 
 describe('SpaceInfo', () => {
@@ -57,8 +57,8 @@ function createWrapper(spaceResource) {
     mixins: [
       {
         methods: {
-          formDateFromRFC,
-          formRelativeDateFromRFC
+          formatDateFromRFC,
+          formatRelativeDateFromRFC
         }
       }
     ],

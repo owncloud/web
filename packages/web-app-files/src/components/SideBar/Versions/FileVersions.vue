@@ -12,10 +12,10 @@
             class="oc-text-muted oc-text-nowrap"
             data-testid="file-versions-file-last-modified-date"
           >
-            {{ formRelativeDateFromHTTP(item.fileInfo[DavProperty.LastModifiedDate]) }}
+            {{ formatVersionDate(item) }}
           </oc-td>
           <oc-td class="oc-text-muted oc-text-nowrap" data-testid="file-versions-file-size">
-            {{ getResourceSize(item.fileInfo[DavProperty.ContentLength]) }}
+            {{ formatVersionFileSize(item) }}
           </oc-td>
           <oc-td width="shrink">
             <oc-button
@@ -48,14 +48,12 @@
   </div>
 </template>
 <script lang="ts">
-import Mixins from '../../../mixins'
-import MixinResources from '../../../mixins/resources'
 import { mapActions, mapGetters } from 'vuex'
 import { DavProperty } from 'web-pkg/src/constants'
+import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 
 export default {
   name: 'FileVersions',
-  mixins: [Mixins, MixinResources],
   data: () => ({
     loading: false,
     DavProperty
@@ -99,6 +97,15 @@ export default {
     downloadVersion(file) {
       const version = this.currentVersionId(file)
       return this.downloadFile(this.highlightedFile, version)
+    },
+    formatVersionDate(file) {
+      return formatRelativeDateFromHTTP(
+        file.fileInfo[DavProperty.LastModifiedDate],
+        this.$language.current
+      )
+    },
+    formatVersionFileSize(file) {
+      return formatFileSize(file.fileInfo[DavProperty.ContentLength], this.$language.current)
     }
   }
 }

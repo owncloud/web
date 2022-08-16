@@ -55,11 +55,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
-import Mixins from '../../../../mixins'
+import { formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
 export default {
   name: 'EditDropdown',
-  mixins: [Mixins],
   props: {
     expirationDate: {
       type: Date,
@@ -225,10 +224,10 @@ export default {
     },
 
     relativeExpirationDate() {
-      return DateTime.fromJSDate(this.enteredExpirationDate)
-        .setLocale(this.$language.current)
-        .endOf('day')
-        .toRelative()
+      return formatRelativeDateFromDateTime(
+        DateTime.fromJSDate(this.enteredExpirationDate).endOf('day'),
+        this.$language.current
+      )
     }
   },
   watch: {

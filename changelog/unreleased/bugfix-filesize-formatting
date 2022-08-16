@@ -1,0 +1,5 @@
+Bugfix: file size formatting
+
+We've fixed file size formatting to respect the language setting of the user.
+
+https://github.com/owncloud/web/pull/7443

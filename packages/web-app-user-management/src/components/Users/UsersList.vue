@@ -42,7 +42,7 @@
         v-oc-tooltip="$gettext('Details')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
-        @click="$emit('clickDetails', item)"
+        @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
       >
         <oc-icon name="information" fill-type="line" />
       </oc-button>
@@ -50,7 +50,7 @@
         v-oc-tooltip="$gettext('Group assignments')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
-        @click="$emit('clickGroupAssignments', item)"
+        @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
       >
         <oc-icon name="group-2" fill-type="line" />
       </oc-button>
@@ -58,7 +58,7 @@
         v-oc-tooltip="$gettext('Edit')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
-        @click="$emit('clickEdit', item)"
+        @click="$emit('showPanel', { user: item, panel: 'EditPanel' })"
       >
         <oc-icon name="pencil" fill-type="line" />
       </oc-button>

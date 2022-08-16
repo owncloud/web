@@ -15,16 +15,23 @@ localVue.use(GetTextPlugin, {
 })
 const OcTooltip = jest.fn()
 
-const simpleOwnFolder = {
+const createFile = (input) => {
+  return {
+    isReceivedShare: () => false,
+    getDomSelector: () => input.id,
+    ...input // spread input last so that input can overwrite predefined defaults
+  }
+}
+const simpleOwnFolder = createFile({
   id: '1',
   type: 'folder',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+})
 
-const sharedFolder = {
+const sharedFolder = createFile({
   id: '2',
   type: 'folder',
   ownerId: 'einstein',
@@ -32,18 +39,18 @@ const sharedFolder = {
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   shareTypes: [ShareTypes.user.value]
-}
+})
 
-const simpleOwnFile = {
+const simpleOwnFile = createFile({
   id: '3',
   type: 'file',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+})
 
-const sharedFile = {
+const sharedFile = createFile({
   id: '4',
   path: '/Shares/123.png',
   type: 'file',
@@ -54,17 +61,7 @@ const sharedFile = {
   mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
   shareTypes: [ShareTypes.user.value],
-  getDomSelector: () => '4'
-}
-
-const formDateFromJSDate = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
-const formDateFromHTTP = jest.fn().mockImplementation(() => 'ABSOLUTE_TIME')
-const refreshShareDetailsTree = jest.fn()
-
-beforeEach(() => {
-  formDateFromJSDate.mockClear()
-  formDateFromHTTP.mockClear()
-  refreshShareDetailsTree.mockReset()
+  isReceivedShare: () => true
 })
 
 describe('Details SideBar Panel', () => {
@@ -111,8 +108,6 @@ describe('Details SideBar Panel', () => {
 
       it('updates when the shareTree updates', async () => {
         const wrapper = createWrapper(sharedFile)
-        expect(refreshShareDetailsTree).toBeCalledTimes(1)
-
         // make sure this renders once when initial sharesTree become available
         wrapper.vm.$store.state.Files.sharesTree = {
           '/Shares': [{}]
@@ -210,15 +205,9 @@ function createWrapper(
     directives: {
       OcTooltip
     },
-    mixins: [
-      {
-        methods: {
-          formDateFromJSDate,
-          formDateFromHTTP,
-          refreshShareDetailsTree
-        }
-      }
-    ],
+    computed: {
+      capitalizedTimestamp: () => 'ABSOLUTE_TIME'
+    },
     mocks: {
       $route: {
         meta: {

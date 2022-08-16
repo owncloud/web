@@ -1,7 +1,7 @@
 <template>
-  <div v-if="user" class="oc-mt-xl">
+  <div class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div v-if="editUser" class="oc-background-highlight oc-p-m">
+    <div class="oc-background-highlight oc-p-m">
       <oc-select
         v-model="editUser.memberOf"
         multiple
@@ -56,8 +56,8 @@ export default {
     CompareSaveDialog
   },
   props: {
-    users: {
-      type: Array,
+    user: {
+      type: Object,
       required: true
     },
     groups: {
@@ -68,11 +68,6 @@ export default {
   data() {
     return {
       editUser: {}
-    }
-  },
-  computed: {
-    user() {
-      return this.users.length === 1 ? this.users[0] : null
     }
   },
   watch: {

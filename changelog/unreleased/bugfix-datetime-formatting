@@ -1,0 +1,6 @@
+Bugfix: datetime formatting
+
+We've adjusted date time formatting to show a less verbose format (e.g. hiding the time zone and using month abbreviations).
+
+https://github.com/owncloud/web/pull/7443
+https://github.com/owncloud/web/issues/7336

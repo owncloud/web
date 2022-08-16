@@ -42,7 +42,7 @@
         v-oc-tooltip="$gettext('Details')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
-        @click="$emit('clickDetails', item)"
+        @click="$emit('showPanel', { group: item, panel: 'DetailsPanel' })"
       >
         <oc-icon name="information" fill-type="line" />
       </oc-button>

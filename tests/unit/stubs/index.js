@@ -17,5 +17,6 @@ export default {
   'router-link': true,
   'portal-target': true,
   'oc-progress': true,
-  'oc-status-indicators': true
+  'oc-status-indicators': true,
+  'oc-info-drop': true
 }

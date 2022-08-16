@@ -182,14 +182,13 @@
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions } from 'vuex'
-import Mixins from '../../../../mixins'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
+import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
-  mixins: [Mixins],
   props: {
     availableRoleOptions: {
       type: Array,
@@ -345,17 +344,17 @@ export default defineComponent({
     },
 
     localExpirationDate() {
-      return DateTime.fromISO(this.link.expiration)
-        .setLocale(this.$language.current)
-        .endOf('day')
-        .toLocaleString(DateTime.DATETIME_FULL)
+      return formatDateFromDateTime(
+        DateTime.fromISO(this.link.expiration).endOf('day'),
+        this.$language.current
+      )
     },
 
     expirationDateRelative() {
-      return DateTime.fromISO(this.link.expiration)
-        .setLocale(this.$language.current)
-        .endOf('day')
-        .toRelative()
+      return formatRelativeDateFromDateTime(
+        DateTime.fromISO(this.link.expiration).endOf('day'),
+        this.$language.current
+      )
     },
 
     expirationDateTooltip() {

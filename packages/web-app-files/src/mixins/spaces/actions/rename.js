@@ -4,7 +4,6 @@ import { clientService } from 'web-pkg/src/services'
 export default {
   computed: {
     ...mapGetters(['configuration', 'user']),
-    ...mapGetters('runtime/auth', ['accessToken']),
 
     $_rename_items() {
       return [
@@ -68,10 +67,8 @@ export default {
     },
 
     $_rename_renameSpace(id, name) {
-      const graphClient = clientService.graphAuthenticated(
-        this.configuration.server,
-        this.accessToken
-      )
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       return graphClient.drives
         .updateDrive(id, { name }, {})
         .then(() => {

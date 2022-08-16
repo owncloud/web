@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getResourceSize } from 'web-runtime/src/helpers/resource'
+import { formatFileSize } from 'web-pkg/src/helpers'
 
 export default {
   props: {
@@ -52,7 +52,7 @@ export default {
           foldersCount: this.folders
         }
       )
-      const itemSize = getResourceSize(this.size)
+      const itemSize = formatFileSize(this.size, this.$language.current)
       const translated =
         this.size > 0
           ? this.$ngettext(

@@ -51,7 +51,6 @@
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import last from 'lodash-es/last'
 
-import Mixins from '../../mixins'
 import MixinFileActions from '../../mixins/fileActions'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
@@ -70,7 +69,7 @@ export default {
     SizeInfo,
     ViewOptions
   },
-  mixins: [Mixins, MixinFileActions],
+  mixins: [MixinFileActions],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
     breadcrumbsContextActionsItems: { type: Array, default: () => [] },

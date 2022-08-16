@@ -43,7 +43,12 @@ describe('Users view', () => {
           }
         })
       })
-      const editUser = { id: '1', displayName: 'jan', role: { id: '1', displayName: 'admin' } }
+      const editUser = {
+        id: '1',
+        displayName: 'jan',
+        role: { id: '1', displayName: 'admin' },
+        drive: { id: '1', quota: { total: 10000 } }
+      }
 
       const wrapper = getMountedWrapper({
         mocks: {
@@ -52,11 +57,13 @@ describe('Users view', () => {
       })
       const busStub = jest.spyOn(bus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
+      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editUser(editUser)
 
       expect(wrapper.vm.selectedUsers[0]).toEqual(editUser)
       expect(busStub).toHaveBeenCalledWith('sidebar.entity.saved')
       expect(setStub).toHaveBeenCalled()
+      expect(updateSpaceFieldStub).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
@@ -151,23 +158,23 @@ describe('Users view', () => {
     })
   })
 
-  describe('computed method "availableSideBarPanels"', () => {
+  describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel with property enabled set true when one user is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain EditPanel with property enabled set false when no user is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
     it('should contain EditPanel with property enabled set false when multiple users are selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
   })
@@ -216,6 +223,9 @@ function getMountedWrapper({
   return shallowMount(Users, {
     localVue,
     store: createStore(Vuex.Store, {
+      state: {
+        user: { id: '1', uuid: '1' }
+      },
       actions: {
         showMessage: jest.fn()
       },
@@ -223,6 +233,25 @@ function getMountedWrapper({
         configuration: () => ({
           server: 'https://example.com/'
         })
+      },
+      modules: {
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPDATE_SPACE_FIELD: jest.fn()
+              }
+            }
+          }
+        }
       }
     }),
     mocks: {
@@ -241,6 +270,9 @@ function getMountedWrapper({
         },
         groups: {
           addMember: () => (resolveAddMember ? Promise.resolve() : Promise.reject(new Error('')))
+        },
+        drives: {
+          updateDrive: (_, data) => Promise.resolve({ data })
         }
       },
       users: [

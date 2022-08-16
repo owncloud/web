@@ -154,7 +154,6 @@ import MixinFileActions from '../../mixins/fileActions'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import Mixins from '../../mixins'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
@@ -180,7 +179,7 @@ export default defineComponent({
     KeyboardActions,
     QuickActions
   },
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, Mixins],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
   provide() {
     return {
       currentSpace: computed(() => this.space)

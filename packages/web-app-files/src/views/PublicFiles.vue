@@ -35,6 +35,7 @@
         v-model="selectedResourcesIds"
         class="files-table"
         :class="{ 'files-table-squashed': !sidebarClosed }"
+        :fields-displayed="['name', 'size', 'mdate']"
         :are-thumbnails-displayed="displayThumbnails"
         :resources="paginatedResources"
         :target-route="targetRoute"
