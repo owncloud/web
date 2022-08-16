@@ -13,7 +13,7 @@
     "@uppy/tus": "^2.4.0",
     "@uppy/xhr-upload": "^2.1.0",
     "@vue/composition-api": "^1.6.2",
-    "axios": "^0.26.1",
+    "axios": "^0.27.1",
     "cross-fetch": "^3.0.6",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz",
     "filesize": "^9.0.11",
@@ -54,11 +54,12 @@
     "vuex-extensions": "^1.1.5",
     "vuex-router-sync": "^5.0.0",
     "web-pkg": "*",
-    "webdav": "4.9.0",
+    "webdav": "4.10.0",
     "webfontloader": "^1.6.28",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@jest/globals": "^27.0.0",
     "@types/luxon": "^2.3.1",
     "@types/semver": "^7.3.8"
   }

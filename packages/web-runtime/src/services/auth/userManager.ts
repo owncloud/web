@@ -168,37 +168,14 @@ export class UserManager extends OidcUserManager {
         accessToken
       )
       graphUser = await graphClient.users.getMe()
-      const {
-        data: { bundles: roles }
-      } = await axios.post(
-        '/api/v0/settings/roles-list',
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`
-          }
-        }
-      )
-
+      const [roles, settings] = await Promise.all([
+        this.fetchRoles({ accessToken }),
+        this.fetchSettings()
+      ])
       this.store.commit('SET_ROLES', roles)
+      this.store.commit('SET_SETTINGS_VALUES', settings)
 
-      const userAssignmentResponse = await axios.post(
-        '/api/v0/settings/assignments-list',
-        {
-          account_uuid: graphUser.data.id
-        },
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`
-          }
-        }
-      )
-      const assignments = userAssignmentResponse.data?.assignments
-      const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
-
-      if (roleAssignment) {
-        role = roles.find((role) => role.id === roleAssignment.roleId)
-      }
+      role = await this.fetchRole({ graphUser, accessToken, roles })
     }
     const [user, userGroups] = await Promise.all([
       await this.clientService.owncloudSdk.users.getUser(login.id),
@@ -218,8 +195,52 @@ export class UserManager extends OidcUserManager {
     if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
       this.store.commit('SET_QUOTA', user.quota)
     }
+  }
 
-    await this.store.dispatch('loadSettingsValues')
+  private async fetchRoles({ accessToken = '' }): Promise<any> {
+    try {
+      const {
+        data: { bundles: roles }
+      } = await axios.post(
+        '/api/v0/settings/roles-list',
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      return roles
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  private async fetchSettings(): Promise<any> {
+    try {
+      return await this.clientService.owncloudSdk.settings.getSettingsValues()
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+  }
+
+  private async fetchRole({ graphUser, accessToken, roles }): Promise<any> {
+    const userAssignmentResponse = await axios.post(
+      '/api/v0/settings/assignments-list',
+      {
+        account_uuid: graphUser.data.id
+      },
+      {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
+    const assignments = userAssignmentResponse.data?.assignments
+    const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
+    return roleAssignment ? roles.find((role) => role.id === roleAssignment.roleId) : null
   }
 
   private async fetchCapabilities({ accessToken = '' }): Promise<void> {
