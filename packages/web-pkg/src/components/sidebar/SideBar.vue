@@ -322,7 +322,7 @@ export default defineComponent({
   }
 
   &.sidebar-panel-default {
-    #app-sidebar.has-active-sub-panel & {
+    &.has-active-sub-panel & {
       transform: translateX(-30%);
       visibility: hidden;
     }
