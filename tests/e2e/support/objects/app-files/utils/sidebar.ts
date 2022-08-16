@@ -27,7 +27,7 @@ export const open = async ({
   page: Page
   resource?: string
 }): Promise<void> => {
-  if (await page.locator('#files-sidebar').count()) {
+  if (await page.locator('#app-sidebar').count()) {
     await close({ page })
   }
 

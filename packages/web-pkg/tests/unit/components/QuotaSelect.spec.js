@@ -11,19 +11,14 @@ afterEach(() => jest.clearAllMocks())
 
 describe('QuotaSelect', () => {
   describe('method "optionSelectable"', () => {
-    it('should return true while option is a number', () => {
+    it('should return true while option selectable property is not false', () => {
       const wrapper = getWrapper()
-      expect(wrapper.vm.optionSelectable({ value: 11 })).toBeTruthy()
-      expect(wrapper.vm.optionSelectable({ value: 11.2 })).toBeTruthy()
+      expect(wrapper.vm.optionSelectable({ selectable: true })).toBeTruthy()
+      expect(wrapper.vm.optionSelectable({})).toBeTruthy()
     })
-    it('should return true while option is unlimited', () => {
+    it('should return true while option selectable property is false', () => {
       const wrapper = getWrapper()
       expect(wrapper.vm.optionSelectable({ unlimited: true })).toBeTruthy()
-    })
-    it('should return false while option is not a number', () => {
-      const wrapper = getWrapper()
-      expect(wrapper.vm.optionSelectable({ value: null })).toBeFalsy()
-      expect(wrapper.vm.optionSelectable({ value: 'lorem ipsum' })).toBeFalsy()
     })
   })
   describe('method "createOption"', () => {
@@ -35,22 +30,15 @@ describe('QuotaSelect', () => {
         value: 11 * Math.pow(10, 9)
       })
     })
-    it('should remove unnecessary character while creating an option', () => {
+    it('should contain error property while maxQuota will be exceeded', () => {
       const wrapper = getWrapper()
-      expect(wrapper.vm.createOption('11,')).toEqual({
-        displayValue: '11',
-        displayUnit: 'GB',
-        value: 11 * Math.pow(10, 9)
-      })
-      expect(wrapper.vm.createOption('11.')).toEqual({
-        displayValue: '11',
-        displayUnit: 'GB',
-        value: 11 * Math.pow(10, 9)
-      })
+      expect(wrapper.vm.createOption('2000')).toHaveProperty('error')
     })
     it('should contain error property while creating an invalid option', () => {
       const wrapper = getWrapper()
-      expect(wrapper.vm.createOption('a,')).toHaveProperty('error')
+      expect(wrapper.vm.createOption('lorem ipsum')).toHaveProperty('error')
+      expect(wrapper.vm.createOption('1,')).toHaveProperty('error')
+      expect(wrapper.vm.createOption('1.')).toHaveProperty('error')
     })
   })
   describe('method "setOptions"', () => {
@@ -80,7 +68,8 @@ function getWrapper({ totalQuota = 10000000000 } = {}) {
   return mount(QuotaSelect, {
     localVue,
     mocks: {
-      $gettext: jest.fn()
+      $gettext: jest.fn(),
+      $gettextInterpolate: jest.fn()
     },
     data: () => {
       return {
@@ -95,6 +84,7 @@ function getWrapper({ totalQuota = 10000000000 } = {}) {
     store: createStore(Vuex.Store, {}),
     propsData: {
       totalQuota,
+      maxQuota: 100 * Math.pow(10, 9),
       title: 'Personal quota'
     },
     stubs: { ...stubs, portal: true, 'oc-modal': true, 'oc-select': true }

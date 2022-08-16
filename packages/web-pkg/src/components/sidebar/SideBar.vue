@@ -1,6 +1,7 @@
 <template>
   <div
-    data-testid="files-sidebar"
+    id="app-sidebar"
+    data-testid="app-sidebar"
     :class="{
       'has-active-sub-panel': !!activeAvailablePanelName,
       'oc-flex oc-flex-center oc-flex-middle': loading
@@ -23,70 +24,73 @@
           'compact-header': isHeaderCompact
         }"
       >
-        <div
-          v-if="[activePanelName, oldPanelName].includes(panel.app)"
-          class="sidebar-panel__header header"
-        >
-          <oc-button
-            v-if="!panel.default"
-            v-oc-tooltip="accessibleLabelBack"
-            class="header__back"
-            appearance="raw"
-            :aria-label="accessibleLabelBack"
-            @click="closePanel"
+        <template v-if="panel.enabled !== false">
+          <div
+            v-if="[activePanelName, oldPanelName].includes(panel.app)"
+            class="sidebar-panel__header header"
           >
-            <oc-icon name="arrow-left-s" fill-type="line" />
-          </oc-button>
-
-          <h2 class="header__title oc-my-rm">
-            {{ $gettext(panel.title) }}
-          </h2>
-
-          <oc-button
-            appearance="raw"
-            class="header__close"
-            :aria-label="$gettext('Close file sidebar')"
-            @click="closeSidebar"
-          >
-            <oc-icon name="close" />
-          </oc-button>
-        </div>
-
-        <slot name="header" />
-        <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.app}`]">
-          <template v-if="isContentDisplayed">
-            <div class="sidebar-panel__body-content">
-              <slot name="body">
-                <component
-                  :is="panel.component"
-                  v-bind="panel.componentAttrs"
-                  @scrollToElement="scrollToElement"
-                />
-              </slot>
-            </div>
-
-            <div
-              v-if="panel.default && availablePanels.length > 1"
-              class="sidebar-panel__navigation"
+            <oc-button
+              v-if="!panel.default"
+              v-oc-tooltip="accessibleLabelBack"
+              class="header__back"
+              appearance="raw"
+              :aria-label="accessibleLabelBack"
+              @click="closePanel"
             >
-              <oc-button
-                v-for="panelSelect in availablePanels.filter(
-                  (p) => !p.default && p.enabled !== false
-                )"
-                :id="`sidebar-panel-${panelSelect.app}-select`"
-                :key="`panel-select-${panelSelect.app}`"
-                :data-testid="`sidebar-panel-${panelSelect.app}-select`"
-                appearance="raw"
-                @click="openPanel(panelSelect.app)"
+              <oc-icon name="arrow-left-s" fill-type="line" />
+            </oc-button>
+
+            <h2 class="header__title oc-my-rm">
+              {{ $gettext(panel.title) }}
+            </h2>
+
+            <oc-button
+              appearance="raw"
+              class="header__close"
+              :aria-label="$gettext('Close file sidebar')"
+              @click="closeSidebar"
+            >
+              <oc-icon name="close" />
+            </oc-button>
+          </div>
+
+          <slot name="header" />
+          <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.app}`]">
+            <template v-if="isContentDisplayed">
+              <div class="sidebar-panel__body-content">
+                <slot name="body">
+                  <component
+                    :is="panel.component"
+                    v-bind="panel.componentAttrs"
+                    v-on="panel.componentListeners"
+                    @scrollToElement="scrollToElement"
+                  />
+                </slot>
+              </div>
+
+              <div
+                v-if="panel.default && availablePanels.length > 1"
+                class="sidebar-panel__navigation"
               >
-                <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
-                {{ $gettext(panelSelect.title) }}
-                <oc-icon name="arrow-right-s" fill-type="line" />
-              </oc-button>
-            </div>
-          </template>
-          <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
-        </div>
+                <oc-button
+                  v-for="panelSelect in availablePanels.filter(
+                    (p) => !p.default && p.enabled !== false
+                  )"
+                  :id="`sidebar-panel-${panelSelect.app}-select`"
+                  :key="`panel-select-${panelSelect.app}`"
+                  :data-testid="`sidebar-panel-${panelSelect.app}-select`"
+                  appearance="raw"
+                  @click="openPanel(panelSelect.app)"
+                >
+                  <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
+                  {{ $gettext(panelSelect.title) }}
+                  <oc-icon name="arrow-right-s" fill-type="line" />
+                </oc-button>
+              </div>
+            </template>
+            <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+          </div>
+        </template>
       </div>
     </template>
   </div>
@@ -220,11 +224,11 @@ export default defineComponent({
 
     initVisibilityObserver() {
       visibilityObserver = new VisibilityObserver({
-        root: document.querySelector('#files-sidebar'),
+        root: document.querySelector('#app-sidebar'),
         threshold: 0.9
       })
       hiddenObserver = new VisibilityObserver({
-        root: document.querySelector('#files-sidebar'),
+        root: document.querySelector('#app-sidebar'),
         threshold: 0.05
       })
       const doFocus = () => {
@@ -274,8 +278,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#files-sidebar {
+#app-sidebar {
   border-left: 1px solid var(--oc-color-border);
+  position: relative;
+  overflow: hidden;
+  width: 440px;
+}
+
+@media only screen and (max-width: 960px) {
+  #app-sidebar {
+    width: 100%;
+  }
 }
 
 .sidebar-panel {
@@ -309,7 +322,7 @@ export default defineComponent({
   }
 
   &.sidebar-panel-default {
-    #files-sidebar.has-active-sub-panel & {
+    &.has-active-sub-panel & {
       transform: translateX(-30%);
       visibility: hidden;
     }
