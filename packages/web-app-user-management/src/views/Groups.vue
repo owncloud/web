@@ -2,10 +2,10 @@
   <div>
     <app-template
       ref="template"
-      :loading="loadResourcesTask.isRunning"
+      :loading="loadResourcesTask.isRunning || !loadResourcesTask.last"
       :breadcrumbs="breadcrumbs"
-      :active-panel="activePanel"
-      :available-side-bar-panels="availableSideBarPanels"
+      :side-bar-active-panel="sideBarActivePanel"
+      :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
       @selectPanel="selectPanel"
       @closeSideBar="closeSideBar"
@@ -123,7 +123,7 @@ export default defineComponent({
       createGroupModalOpen: false,
       deleteGroupModalOpen: false,
       sideBarOpen: false,
-      activePanel: 'DetailsPanel'
+      sideBarActivePanel: 'DetailsPanel'
     }
   },
   computed: {
@@ -146,7 +146,7 @@ export default defineComponent({
       return this.groups.length === this.selectedGroups.length
     },
 
-    availableSideBarPanels() {
+    sideBarAvailablePanels() {
       return [
         {
           app: 'DetailsPanel',
@@ -185,7 +185,7 @@ export default defineComponent({
   watch: {
     selectedGroups() {
       if (!this.selectedGroups.length || this.selectedGroups.length > 1) {
-        this.activePanel = 'DetailsPanel'
+        this.sideBarActivePanel = 'DetailsPanel'
       }
     }
   },
@@ -235,7 +235,7 @@ export default defineComponent({
       this.deleteGroupModalOpen = !this.deleteGroupModalOpen
     },
     selectPanel(panel) {
-      this.activePanel = panel || 'DetailsPanel'
+      this.sideBarActivePanel = panel || 'DetailsPanel'
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen
@@ -245,7 +245,7 @@ export default defineComponent({
     },
     showPanel({ group, panel }) {
       this.selectedGroups = [group]
-      this.activePanel = panel
+      this.sideBarActivePanel = panel
       this.sideBarOpen = true
     },
     async deleteGroups(groups) {

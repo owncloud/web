@@ -1,5 +1,6 @@
 <template>
   <div
+    id="app-sidebar"
     data-testid="app-sidebar"
     :class="{
       'has-active-sub-panel': !!activeAvailablePanelName,
@@ -61,7 +62,7 @@
                   <component
                     :is="panel.component"
                     v-bind="panel.componentAttrs"
-                    v-on="panel.componentHandlers"
+                    v-on="panel.componentListeners"
                     @scrollToElement="scrollToElement"
                   />
                 </slot>
@@ -279,6 +280,15 @@ export default defineComponent({
 <style lang="scss">
 #app-sidebar {
   border-left: 1px solid var(--oc-color-border);
+  position: relative;
+  overflow: hidden;
+  width: 440px;
+}
+
+@media only screen and (max-width: 960px) {
+  #app-sidebar {
+    width: 100%;
+  }
 }
 
 .sidebar-panel {

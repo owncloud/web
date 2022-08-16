@@ -25,9 +25,8 @@
       </div>
       <side-bar
         v-if="sideBarOpen"
-        class="user-management-side-bar oc-width-1-1 oc-width-1-3@m oc-width-1-4@xl"
-        :available-panels="availableSideBarPanels"
-        :sidebar-active-panel="activePanel"
+        :available-panels="sideBarAvailablePanels"
+        :sidebar-active-panel="sideBarActivePanel"
         :loading="false"
         @selectPanel="(panel) => $emit('selectPanel', panel)"
         @close="$emit('closeSideBar')"
@@ -60,11 +59,11 @@ export default defineComponent({
       required: true,
       type: Boolean
     },
-    availableSideBarPanels: {
+    sideBarAvailablePanels: {
       required: true,
       type: Array
     },
-    activePanel: {
+    sideBarActivePanel: {
       required: true,
       type: String
     }
@@ -95,11 +94,5 @@ export default defineComponent({
 
 #user-management-wrapper {
   overflow-y: auto;
-}
-
-.user-management-side-bar {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid var(--oc-color-border);
 }
 </style>

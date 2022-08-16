@@ -6,7 +6,6 @@
     </div>
     <side-bar
       v-if="showSidebar"
-      id="app-sidebar"
       ref="filesSidebar"
       tabindex="-1"
       :sidebar-active-panel="sidebarActivePanel"
@@ -127,18 +126,6 @@ main {
 
 #files {
   position: relative;
-}
-
-#app-sidebar {
-  position: relative;
-  overflow: hidden;
-  width: 440px;
-}
-
-@media only screen and (max-width: 960px) {
-  #app-sidebar {
-    width: 100%;
-  }
 }
 
 #files-view {

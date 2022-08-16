@@ -2,10 +2,10 @@
   <div>
     <app-template
       ref="template"
-      :loading="loadResourcesTask.isRunning"
+      :loading="loadResourcesTask.isRunning || !loadResourcesTask.last"
       :breadcrumbs="breadcrumbs"
-      :active-panel="activePanel"
-      :available-side-bar-panels="availableSideBarPanels"
+      :side-bar-active-panel="sideBarActivePanel"
+      :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-open="sideBarOpen"
       @selectPanel="selectPanel"
       @closeSideBar="closeSideBar"
@@ -213,7 +213,7 @@ export default defineComponent({
       createUserModalOpen: false,
       deleteUserModalOpen: false,
       sideBarOpen: false,
-      activePanel: 'DetailsPanel'
+      sideBarActivePanel: 'DetailsPanel'
     }
   },
   computed: {
@@ -239,7 +239,7 @@ export default defineComponent({
       return this.users.length === this.selectedUsers.length
     },
 
-    availableSideBarPanels() {
+    sideBarAvailablePanels() {
       return [
         {
           app: 'DetailsPanel',
@@ -258,7 +258,7 @@ export default defineComponent({
           default: false,
           enabled: this.selectedUsers.length === 1,
           componentAttrs: { user: this.selectedUsers[0], roles: this.roles },
-          componentHandlers: { confirm: this.editUser }
+          componentListeners: { confirm: this.editUser }
         },
         {
           app: 'GroupAssignmentsPanel',
@@ -268,7 +268,7 @@ export default defineComponent({
           default: false,
           enabled: this.selectedUsers.length === 1,
           componentAttrs: { user: this.selectedUsers[0], groups: this.groups },
-          componentHandlers: { confirm: this.editUserGroupAssignments }
+          componentListeners: { confirm: this.editUserGroupAssignments }
         }
       ]
     }
@@ -277,7 +277,7 @@ export default defineComponent({
   watch: {
     selectedUsers() {
       if (!this.selectedUsers.length || this.selectedUsers.length > 1) {
-        this.activePanel = 'DetailsPanel'
+        this.sideBarActivePanel = 'DetailsPanel'
       }
     }
   },
@@ -330,7 +330,7 @@ export default defineComponent({
       this.deleteUserModalOpen = !this.deleteUserModalOpen
     },
     selectPanel(panel) {
-      this.activePanel = panel || 'DetailsPanel'
+      this.sideBarActivePanel = panel || 'DetailsPanel'
     },
     toggleSideBar() {
       this.sideBarOpen = !this.sideBarOpen
@@ -341,7 +341,7 @@ export default defineComponent({
     async showPanel({ user, panel }) {
       await this.loadAdditionalUserDataTask.perform(this, user)
       this.selectedUsers = [user]
-      this.activePanel = panel
+      this.sideBarActivePanel = panel
       this.sideBarOpen = true
     },
     async deleteUsers(users) {
