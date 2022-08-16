@@ -3,7 +3,6 @@ import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultipl
 import FileActions from './components/SideBar/Actions/FileActions.vue'
 import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
-import TagsPanel from './components/SideBar/TagsPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
@@ -139,24 +138,6 @@ const panelGenerators: (({
         return capabilities.files_sharing.api_enabled
       }
       return false
-    }
-  }),
-  ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
-    app: 'tags-item',
-    icon: 'price-tag-3',
-    iconFillType: 'line',
-    title: $gettext('Tags'),
-    component: TagsPanel,
-    componentAttrs: {},
-    get enabled() {
-      if (!capabilities?.files?.tags || multipleSelection || rootFolder) return false
-      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags())
-        return false
-      return !(
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
-      )
     }
   }),
   ({ highlightedFile, capabilities }) => ({

@@ -80,7 +80,6 @@ export function buildResource(resource): Resource {
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
-    tags: (resource.fileInfo[DavProperty.Tags] || '').split(',').filter(Boolean),
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
@@ -98,12 +97,6 @@ export function buildResource(resource): Resource {
     },
     canCreate: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
-    },
-    canEditTags: function () {
-      return (
-        this.permissions.indexOf(DavPermission.Updateable) >= 0 ||
-        this.permissions.indexOf(DavPermission.FileUpdateable) >= 0
-      )
     },
     isMounted: function () {
       return this.permissions.indexOf(DavPermission.Mounted) >= 0
@@ -260,9 +253,6 @@ export function buildSharedResource(
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
     resource.canRename = () => SharePermissions.update.enabled(share.permissions)
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
-    resource.canEditTags = () =>
-      parseInt(share.state) === ShareStatus.accepted &&
-      SharePermissions.update.enabled(share.permissions)
   } else {
     resource.sharedWith = share.sharedWith || []
     resource.shareOwner = share.uid_owner
@@ -276,7 +266,6 @@ export function buildSharedResource(
     resource.canShare = () => true
     resource.canRename = () => true
     resource.canBeDeleted = () => true
-    resource.canEditTags = () => true
   }
 
   resource.extension = extractExtensionFromFile(resource)
