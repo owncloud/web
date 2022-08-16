@@ -6,10 +6,12 @@ import {
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import isSearchActive from '../helpers/isSearchActive'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [isFilesAppActive, isSearchActive],
   computed: {
+    ...mapGetters(['homeFolder']),
     $_downloadFile_items() {
       return [
         {
@@ -39,6 +41,9 @@ export default {
               return false
             }
             if (resources[0].isFolder) {
+              return false
+            }
+            if (resources[0].path === this.homeFolder) {
               return false
             }
             return resources[0].canDownload()

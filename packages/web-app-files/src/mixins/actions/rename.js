@@ -13,6 +13,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'currentFolder']),
     ...mapGetters(['capabilities']),
+    ...mapGetters(['homeFolder']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     $_rename_items() {
@@ -44,6 +45,9 @@ export default {
               return false
             }
             if (resources.length !== 1) {
+              return false
+            }
+            if (resources[0].path === this.homeFolder) {
               return false
             }
             // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again

@@ -5,8 +5,10 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
+  ...mapGetters(['homeFolder']),
   computed: {
     isMacOs() {
       return window.navigator.platform.match('Mac')
@@ -45,7 +47,7 @@ export default {
             }
 
             const moveDisabled = resources.some((resource) => {
-              return canBeMoved(resource, this.currentFolder.path) === false
+              return canBeMoved(resource, this.currentFolder.path) === false || resource.path === this.homeFolder
             })
             return !moveDisabled
           },

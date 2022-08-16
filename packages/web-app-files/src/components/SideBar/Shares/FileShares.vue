@@ -119,6 +119,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapGetters(['homeFolder']),
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState('Files', ['incomingShares', 'sharesTree']),
@@ -156,11 +157,49 @@ export default {
       return this.collaborators.length > 0
     },
 
+    highlightedIsHomeFolder() {
+      return this.highlightedFile?.path === this.homeFolder
+    },
+
+    /**
+     * Returns all incoming shares, direct and indirect
+     *
+     * @return {Array.<Object>} list of incoming shares
+     */
+    $_allIncomingShares() {
+      // direct incoming shares
+      const allShares = [...this.incomingShares]
+
+      // indirect incoming shares
+      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      if (parentPaths.length === 0) {
+        return []
+      }
+
+      // remove root entry
+      parentPaths.pop()
+
+      parentPaths.forEach((parentPath) => {
+        const shares = this.sharesTree[parentPath]
+        if (shares) {
+          shares.forEach((share) => {
+            if (share.incoming) {
+              allShares.push(share)
+            }
+          })
+        }
+      })
+
+      return allShares
+    },
+
     collaborators() {
       // filter out bad egroups
       return [
-        ...this.currentFileOutgoingCollaborators.filter(e => e.collaborator.displayName || e.displayName),
-        ...this.indirectOutgoingShares.filter(e => e.collaborator.displayName || e.displayName),
+        ...this.currentFileOutgoingCollaborators.filter(
+          (e) => e.collaborator.displayName || e.displayName
+        ),
+        ...this.indirectOutgoingShares.filter((e) => e.collaborator.displayName || e.displayName)
       ]
         .sort(this.collaboratorsComparator)
         .map((collaborator) => {
@@ -215,6 +254,9 @@ export default {
     },
 
     currentUserCanShare() {
+      if (this.highlightedIsHomeFolder) {
+        return false
+      }
       if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
         return false
       }
@@ -226,9 +268,13 @@ export default {
       return this.highlightedFile.canShare({ user: this.user })
     },
     noResharePermsMessage() {
-      const translatedFile = this.$gettext("You don't have permission to share this file.")
-      const translatedFolder = this.$gettext("You don't have permission to share this folder.")
-      return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
+      if (this.highlightedIsHomeFolder) {
+        return this.$gettext("You can't share your entire home folder")
+      } else if (this.highlightedFile.type === 'file') {
+        return this.$gettext("You don't have permission to share this file.")
+      } else if (this.highlightedFile.type === 'folder') {
+        return this.$gettext("You don't have permission to share this folder.")
+      }
     },
     currentUserIsMemberOfSpace() {
       return this.currentSpace?.spaceMemberIds?.includes(this.user.uuid)

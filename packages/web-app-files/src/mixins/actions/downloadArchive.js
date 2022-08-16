@@ -8,10 +8,12 @@ import isFilesAppActive from './helpers/isFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
 import { archiverService } from '../../services'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [isFilesAppActive],
   computed: {
+    ...mapGetters(['homeFolder']),
     $_downloadArchive_items() {
       return [
         {
@@ -43,6 +45,9 @@ export default {
               return false
             }
             if (!archiverService.available) {
+              return false
+            }
+            if (resources[0].path === this.homeFolder) {
               return false
             }
             if (

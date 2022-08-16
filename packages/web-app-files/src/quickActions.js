@@ -5,6 +5,9 @@ import { SideBarEventTopics } from './composables/sideBar'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
+  if (item.path === store.getters.homeFolder) {
+    return false
+  }
   if (!capabilities.files_sharing || !capabilities.files_sharing.api_enabled) {
     return false
   }

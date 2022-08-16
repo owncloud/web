@@ -4,9 +4,11 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters(['homeFolder']),
     isMacOs() {
       return window.navigator.platform.match('Mac')
     },
@@ -36,6 +38,9 @@ export default {
               return false
             }
             if (resources.length === 0) {
+              return false
+            }
+            if (resources[0].path === this.homeFolder) {
               return false
             }
 
