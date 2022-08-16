@@ -11,25 +11,6 @@ const state = {
 const actions = {
   clearSettingsValues({ commit }) {
     commit('SET_SETTINGS_VALUES', null)
-  },
-
-  async loadSettingsValues({ commit, state, dispatch }) {
-    const oldSettingsValues = state.settingsValues
-    commit('SET_SETTINGS_VALUES', null)
-    try {
-      const values = await this._vm.$client.settings.getSettingsValues()
-      commit('SET_SETTINGS_VALUES', values)
-    } catch (error) {
-      commit('SET_SETTINGS_VALUES', oldSettingsValues)
-      dispatch('showMessage', {
-        title: 'Failed to load settings values.',
-        desc: error.response.statusText,
-        status: 'danger',
-        autoClose: {
-          enabled: true
-        }
-      })
-    }
   }
 }
 
