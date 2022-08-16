@@ -303,7 +303,7 @@ export default defineComponent({
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs.template.$refs.appBar.getBoundingClientRect().height
+      this.listHeaderPosition = this.$refs?.template?.$refs?.appBar?.getBoundingClientRect()?.height
     },
     toggleSelectAllUsers() {
       if (this.allUsersSelected) {

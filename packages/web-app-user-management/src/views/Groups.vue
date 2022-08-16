@@ -210,7 +210,7 @@ export default defineComponent({
     ...mapActions(['showMessage']),
 
     calculateListHeaderPosition() {
-      this.listHeaderPosition = this.$refs.template.$refs.appBar.getBoundingClientRect().height
+      this.listHeaderPosition = this.$refs?.template?.$refs?.appBar?.getBoundingClientRect()?.height
     },
     toggleSelectAllGroups() {
       if (this.allGroupsSelected) {
