@@ -75,8 +75,14 @@ const actions = {
     const spaces = graphResponse.data.value.map((space) => buildSpace(space))
     context.commit('LOAD_SPACES', spaces)
   },
-  async loadSpaceQuotas(context, { clientService }) {
-    await context.commit('LOAD_SPACE_QUOTAS', {
+  async loadSpaceQuotas(context, { httpAuthenticatedClient }) {
+    // FIXME: Use graphClient
+    const response = await httpAuthenticatedClient.get(
+      `${context.rootGetters.configuration.server}graph/v1.0/drivequotas`
+    )
+    console.log(response)
+    // TODO: Make something with response
+    context.commit('LOAD_SPACE_QUOTAS', {
       maxPersonalQuota: 10 * Math.pow(10, 9),
       defaultProjectQuota: 10 * Math.pow(10, 9),
       maxProjectQuota: 100 * Math.pow(10, 9)
