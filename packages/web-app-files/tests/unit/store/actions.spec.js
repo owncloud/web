@@ -140,7 +140,7 @@ describe('vuex store actions', () => {
 
   describe('deleteShare', () => {
     it.each([
-      { share: spaceShareMock, storageId: spaceMock.id, expectedCommitCalls: 2 },
+      { share: spaceShareMock, storageId: spaceMock.id, expectedCommitCalls: 4 },
       { share: shareMock, storageId: null, expectedCommitCalls: 1 }
     ])('succeeds using action %s', async (dataSet) => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
