@@ -1,0 +1,6 @@
+Bugfix: File size not updated while restoring file version
+
+We've fixed a bug where the file size was not updated in the files table or side bar while restoring a file version.
+
+https://github.com/owncloud/web/pull/7469
+https://github.com/owncloud/web/issues/7438
