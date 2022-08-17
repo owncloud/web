@@ -136,13 +136,8 @@ export default {
         }
       ])
     )
-    // FIXME: Remove mock data
-    thumbnailService.initialize(
-      get(store, 'getters.capabilities.files.thumbnail', {
-        enabled: true,
-        version: 'v0.1',
-        supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
-      })
-    )
+
+    console.log(store.getters)
+    thumbnailService.initialize(['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain'])
   }
 }

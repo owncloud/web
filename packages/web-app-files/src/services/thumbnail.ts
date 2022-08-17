@@ -1,26 +1,19 @@
-interface ThumbnailCapability {
-  enabled: boolean
-  version: string // version is just a major version, e.g. `v2`
-  supportedMimeTypes: string[]
-}
-
 export class ThumbnailService {
-  serverUrl: string
-  capability?: ThumbnailCapability
+  supportedMimeTypes: string[]
 
-  public initialize(thumbnailCapability: ThumbnailCapability = null): void {
-    this.capability = thumbnailCapability
+  public initialize(supportedMimeTypes: string[]): void {
+    this.supportedMimeTypes = supportedMimeTypes.map((mimeType) => mimeType.toLowerCase())
   }
 
   public get available(): boolean {
-    return !!this.capability?.version
-  }
-
-  private get supportedMimeTypes() {
-    return this.capability?.supportedMimeTypes || []
+    return true
   }
 
   public isMimetypeSupported(mimeType: string, onlyImages = false) {
+    if (!this.supportedMimeTypes.length) {
+      return true
+    }
+
     const mimeTypes = this.getSupportedMimeTypes(onlyImages ? 'image/' : null)
     return mimeTypes.includes(mimeType)
   }
