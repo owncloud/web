@@ -158,23 +158,23 @@ describe('Users view', () => {
     })
   })
 
-  describe('computed method "availableSideBarPanels"', () => {
+  describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel with property enabled set true when one user is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain EditPanel with property enabled set false when no user is selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
     it('should contain EditPanel with property enabled set false when multiple users are selected', () => {
       const wrapper = getMountedWrapper({ data: { selectedUsers: [{ id: '1' }, { id: '2' }] } })
       expect(
-        wrapper.vm.availableSideBarPanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
   })
