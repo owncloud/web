@@ -564,6 +564,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files/sidebar', ['openWithPanel']),
+    ...mapActions('Files', ['toggleFileSelection']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -637,11 +638,8 @@ export default defineComponent({
     },
     addSelectedResource(file) {
       const isSelected = this.isResourceSelected(file)
-      if (isSelected) {
-        this.$emit('select', this.selectedIds)
-      } else {
-        this.$emit('select', this.selectedIds.concat([file]))
-      }
+      if (isSelected) return
+      this.toggleFileSelection(file)
     },
     resetDropPosition(id, event, item) {
       const instance = this.$refs[id].tippy
