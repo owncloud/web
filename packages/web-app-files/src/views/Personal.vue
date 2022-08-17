@@ -198,11 +198,16 @@ export default defineComponent({
             storageId = drivesResponse.data.value[0].id
           }
 
-          return this.$router.replace({
-            to,
-            params: { ...to.params, storageId, item: to.params.item || this.homeFolder },
-            query: to.query
-          })
+          return (
+            this.$router
+              .replace({
+                to,
+                params: { ...to.params, storageId, item: to.params.item || this.homeFolder },
+                query: to.query
+              })
+              // avoid NavigationDuplicated error in console
+              .catch(() => {})
+          )
         }
 
         const needsRedirectToHome =
