@@ -89,6 +89,7 @@ export default {
     },
 
     privateLinkEnabled() {
+      return true
       return this.isPersonalLocation && this.capabilities.files.privateLinks
     },
 
@@ -106,6 +107,10 @@ export default {
   align-items: center;
   grid-gap: 5px;
 
+  button {
+    white-space: nowrap;
+  }
+
   &__body {
     text-align: left;
     font-size: 0.75rem;
@@ -114,6 +119,7 @@ export default {
       font-size: 0.9rem;
       font-weight: 600;
       margin: 0;
+      word-break: break-all;
     }
   }
 
