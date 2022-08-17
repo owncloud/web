@@ -47,7 +47,7 @@ variables of the user object to come up with a user specific home path. This use
 substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
-- `options.previewFileMimeTypes` Specifies which mimeTypes will be previewed in the ui. For example to only preview jpg and txt files set this option to `["image/jpg", "text/plain"]`.
+- `options.previewFileMimeTypes` Specifies which mimeTypes will be previewed in the ui. For example to only preview jpg and text files set this option to `["image/jpg", "text/plain"]`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
   allows ownCloud to get feedback from your user base through a dedicated survey website.
 - `options.feedbackLink` This accepts an object with the following optional fields to customize the feedback link in the topbar:
