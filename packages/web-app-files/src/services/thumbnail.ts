@@ -1,12 +1,10 @@
 export class ThumbnailService {
-  supportedMimeTypes: string[]
+  supportedMimeTypes: string[] = []
+  available = false
 
-  public initialize(supportedMimeTypes: string[]): void {
+  public initialize(supportedMimeTypes: string[], available: boolean): void {
     this.supportedMimeTypes = supportedMimeTypes
-  }
-
-  public get available(): boolean {
-    return true
+    this.available = available
   }
 
   public isMimetypeSupported(mimeType: string, onlyImages = false) {

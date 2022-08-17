@@ -139,7 +139,9 @@ export default {
     thumbnailService.initialize(
       store.getters.configuration?.options?.previewFileMimeTypes ||
         store.capabilities?.files?.thumbnail?.supportedMimeTypes ||
-        []
+        [],
+      // FIXME: use enabled flag from capabilities if available
+      true
     )
   }
 }
