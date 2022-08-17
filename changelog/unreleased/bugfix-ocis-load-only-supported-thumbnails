@@ -1,0 +1,6 @@
+Bugfix: OCIS Load only supported thumbnails
+
+We've fixed a bug where web was trying to load thumbnails for files that are not supported by the OCIS backend.
+Due to this change we avoid unnecessary requests.
+
+https://github.com/owncloud/web/pull/7474
