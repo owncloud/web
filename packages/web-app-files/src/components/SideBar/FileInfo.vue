@@ -19,7 +19,7 @@
         />
       </h3>
     </div>
-    <private-link-item v-if="privateLinkEnabled" />
+    <private-link-item v-if="privateLinkEnabled" class="oc-ml-s" />
   </div>
 </template>
 
