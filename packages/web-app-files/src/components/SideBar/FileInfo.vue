@@ -89,7 +89,6 @@ export default {
     },
 
     privateLinkEnabled() {
-      return true
       return this.isPersonalLocation && this.capabilities.files.privateLinks
     },
 
