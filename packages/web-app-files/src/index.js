@@ -136,6 +136,10 @@ export default {
         }
       ])
     )
-    thumbnailService.initialize(store.getters.configuration?.options?.previewFileMimeTypes || [])
+    thumbnailService.initialize(
+      store.getters.configuration?.options?.previewFileMimeTypes ||
+        store.capabilities?.files?.thumbnail?.supportedMimeTypes ||
+        []
+    )
   }
 }
