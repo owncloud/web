@@ -76,16 +76,14 @@ const actions = {
     context.commit('LOAD_SPACES', spaces)
   },
   async loadSpaceQuotas(context, { httpAuthenticatedClient }) {
-    // FIXME: Use graphClient
-    const response = await httpAuthenticatedClient.get(
+    // FIXME: Use graphClient after added to libre-graph-api specs https://github.com/owncloud/libre-graph-api
+    const { data } = await httpAuthenticatedClient.get(
       `${context.rootGetters.configuration.server}graph/v1.0/drivequotas`
     )
-    console.log(response)
-    // TODO: Make something with response
     context.commit('LOAD_SPACE_QUOTAS', {
-      maxPersonalQuota: 10 * Math.pow(10, 9),
-      defaultProjectQuota: 10 * Math.pow(10, 9),
-      maxProjectQuota: 100 * Math.pow(10, 9)
+      maxProjectQuota: data.max_project_quota || 0,
+      maxPersonalQuota: data.max_personal_quota || 0,
+      defaultProjectQuota: data.default_project_quota || 0
     })
   }
 }
