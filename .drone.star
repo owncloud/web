@@ -28,8 +28,8 @@ PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
-SELENIUM_STANDALONE_CHROME_DEBUG = "selenium/standalone-chrome-debug:3.141.59"
-SELENIUM_STANDALONE_FIREFOX_DEBUG = "selenium/standalone-firefox-debug:3.141.59"
+SELENIUM_STANDALONE_CHROME = "selenium/standalone-chrome:104.0-20220812"
+SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:latest"
 THEGEEKLAB_DRONE_GITHUB_COMMENT = "thegeeklab/drone-github-comment:1"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
@@ -1552,7 +1552,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "chrome":
         return [{
             "name": "selenium",
-            "image": SELENIUM_STANDALONE_CHROME_DEBUG,
+            "image": SELENIUM_STANDALONE_CHROME,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1562,7 +1562,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "firefox":
         return [{
             "name": "selenium",
-            "image": SELENIUM_STANDALONE_FIREFOX_DEBUG,
+            "image": SELENIUM_STANDALONE_FIREFOX,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
