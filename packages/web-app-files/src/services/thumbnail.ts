@@ -2,7 +2,7 @@ export class ThumbnailService {
   supportedMimeTypes: string[]
 
   public initialize(supportedMimeTypes: string[]): void {
-    this.supportedMimeTypes = supportedMimeTypes.map((mimeType) => mimeType.toLowerCase())
+    this.supportedMimeTypes = supportedMimeTypes
   }
 
   public get available(): boolean {

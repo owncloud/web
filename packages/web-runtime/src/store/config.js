@@ -52,6 +52,7 @@ const state = {
         showAllOnLoad: false
       }
     },
+    previewFileMimeTypes: [],
     runningOnEos: false,
     cernFeatures: false,
     sharingRecipientsPerPage: 200
@@ -108,6 +109,12 @@ const mutations = {
 const getters = {
   configuration: (state) => {
     return state
+  },
+  previewFileMimeTypes: (state) => {
+    const extensions = state.options.previewFileMimeTypes
+    return (Array.isArray(extensions) ? extensions : [])
+      .filter(Boolean)
+      .map((ext) => ext.toLowerCase())
   },
   homeFolder: (state, rootGetters) => {
     if (isEmpty(state.options.homeFolder)) {

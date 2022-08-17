@@ -136,8 +136,6 @@ export default {
         }
       ])
     )
-
-    console.log(store.getters)
-    thumbnailService.initialize(['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain'])
+    thumbnailService.initialize(store.getters.configuration?.options?.previewFileMimeTypes || [])
   }
 }
