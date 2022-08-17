@@ -111,8 +111,8 @@ const getters = {
     return state
   },
   previewFileMimeTypes: (state) => {
-    const extensions = state.options.previewFileMimeTypes
-    return (Array.isArray(extensions) ? extensions : [])
+    const mimeTypes = state.options.previewFileMimeTypes
+    return (Array.isArray(mimeTypes) ? mimeTypes : [])
       .filter(Boolean)
       .map((ext) => ext.toLowerCase())
   },
