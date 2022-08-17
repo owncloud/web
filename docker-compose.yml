@@ -93,7 +93,7 @@ services:
       dockerfile: selenium.Dockerfile
       context: ./dev/docker
       args:
-        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome}
+        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome:104.0-20220812}
     container_name: web_selenium
     ports:
       - 4444:4444
