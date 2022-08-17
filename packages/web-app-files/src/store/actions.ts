@@ -739,10 +739,7 @@ export default {
   },
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
-    if (
-      !this.thumbnailService.available ||
-      !thumbnailService.isMimetypeSupported(resource.mimeType)
-    ) {
+    if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
       return
     }
 

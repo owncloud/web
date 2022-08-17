@@ -1,10 +1,23 @@
-export class ThumbnailService {
-  supportedMimeTypes: string[] = []
-  available = false
+interface ThumbnailCapability {
+  enabled: boolean
+  version: string // version is just a major version, e.g. `v2`
+  supportedMimeTypes: string[]
+}
 
-  public initialize(supportedMimeTypes: string[], available: boolean): void {
-    this.supportedMimeTypes = supportedMimeTypes
-    this.available = available
+export class ThumbnailService {
+  serverUrl: string
+  capability?: ThumbnailCapability
+
+  public initialize(thumbnailCapability: ThumbnailCapability = null): void {
+    this.capability = thumbnailCapability
+  }
+
+  public get available(): boolean {
+    return !!this.capability?.version
+  }
+
+  private get supportedMimeTypes() {
+    return this.capability?.supportedMimeTypes || []
   }
 
   public isMimetypeSupported(mimeType: string, onlyImages = false) {

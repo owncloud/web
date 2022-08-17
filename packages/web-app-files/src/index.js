@@ -136,12 +136,13 @@ export default {
         }
       ])
     )
+    // FIXME: Use capability data only as soon as available
     thumbnailService.initialize(
-      store.getters.configuration?.options?.previewFileMimeTypes ||
-        store.capabilities?.files?.thumbnail?.supportedMimeTypes ||
-        [],
-      // FIXME: use enabled flag from capabilities if available
-      true
+      get(store, 'getters.capabilities.files.thumbnail', {
+        enabled: true,
+        version: 'v0.1',
+        supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
+      })
     )
   }
 }
