@@ -26,10 +26,9 @@
   ],
   "options" : {
     "previewFileMimeTypes" : [
-      "image/png",
-      "image/jpg",
-      "image/jpeg",
       "image/gif",
+      "image/png",
+      "image/jpeg",
       "text/plain"
     ]
   }
