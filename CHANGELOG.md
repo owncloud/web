@@ -46,6 +46,7 @@ Summary
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
+* Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
@@ -392,6 +393,15 @@ Details
 
    https://github.com/owncloud/web/issues/7400
    https://github.com/owncloud/web/pull/7401
+
+* Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
+
+   We've fixed a bug where viewers and editors of a space could see the actions to edit and remove
+   shares. We've also improved the error handling when something goes wrong while
+   editing/removing shares.
+
+   https://github.com/owncloud/web/issues/7436
+   https://github.com/owncloud/web/pull/7470
 
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
