@@ -14,14 +14,5 @@
     "search",
     "text-editor"
   ],
-  "applications" : [],
-  "options" : {
-    "previewFileMimeTypes" : [
-      "image/png",
-      "image/jpg",
-      "image/jpeg",
-      "image/gif",
-      "text/plain"
-    ]
-  }
+  "applications" : []
 }
