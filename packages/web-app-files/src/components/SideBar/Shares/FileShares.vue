@@ -28,7 +28,7 @@
         <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
-            :modifiable="shareIsModifiable(collaborator)"
+            :modifiable="isShareModifiable(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
             @onDelete="$_ocCollaborators_deleteShare_trigger"
           />
@@ -422,7 +422,7 @@ export default {
       return null
     },
 
-    shareIsModifiable(collaborator) {
+    isShareModifiable(collaborator) {
       if (
         this.currentUserIsMemberOfSpace &&
         !this.currentSpace?.spaceRoles.manager.includes(this.user.uuid)
