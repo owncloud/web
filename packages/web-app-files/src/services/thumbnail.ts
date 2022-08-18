@@ -21,6 +21,10 @@ export class ThumbnailService {
   }
 
   public isMimetypeSupported(mimeType: string, onlyImages = false) {
+    if (!this.supportedMimeTypes.length) {
+      return true
+    }
+
     const mimeTypes = this.getSupportedMimeTypes(onlyImages ? 'image/' : null)
     return mimeTypes.includes(mimeType)
   }
