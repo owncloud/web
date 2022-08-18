@@ -61,7 +61,7 @@ describe('AppTemplate', () => {
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
   })
-  describe('props', () => {
+  describe('property propagation', () => {
     describe('oc breadcrumb component', () => {
       it('receives correct props', () => {
         const wrapper = getWrapper({
