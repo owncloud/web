@@ -45,14 +45,14 @@
         class="oc-mr-xs quick-action-button oc-p-xs"
         @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
       >
-        <oc-icon name="information" fill-type="line" /> </oc-button
+        <oc-icon name="information" fill-type="line" /></oc-button
       ><oc-button
         v-oc-tooltip="$gettext('Group assignments')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
         @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
       >
-        <oc-icon name="group-2" fill-type="line" /> </oc-button
+        <oc-icon name="group-2" fill-type="line" /></oc-button
       ><oc-button
         v-oc-tooltip="$gettext('Edit')"
         appearance="raw"
