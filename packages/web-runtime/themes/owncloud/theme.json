@@ -136,9 +136,9 @@
         "icon-pdf": "rgb(225, 5, 14)"
       },
       "fontSizes": {
-        "default": "0.88rem",
-        "large": "1.3rem",
-        "medium": "0.88rem"
+        "default": "",
+        "large": "",
+        "medium": ""
       },
       "sizes": {
         "form-check-default": "",
