@@ -1,6 +1,7 @@
 <template>
   <oc-table
     ref="table"
+    class="users-table"
     :sort-by="sortBy"
     :sort-dir="sortDir"
     :fields="fields"
@@ -44,17 +45,15 @@
         class="oc-mr-xs quick-action-button oc-p-xs"
         @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
       >
-        <oc-icon name="information" fill-type="line" />
-      </oc-button>
-      <oc-button
+        <oc-icon name="information" fill-type="line" /> </oc-button
+      ><oc-button
         v-oc-tooltip="$gettext('Group assignments')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
         @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
       >
-        <oc-icon name="group-2" fill-type="line" />
-      </oc-button>
-      <oc-button
+        <oc-icon name="group-2" fill-type="line" /> </oc-button
+      ><oc-button
         v-oc-tooltip="$gettext('Edit')"
         appearance="raw"
         class="oc-mr-xs quick-action-button oc-p-xs"
@@ -234,5 +233,59 @@ export default {
 .highlight-mark {
   background: yellow;
   color: var(--oc-color-text-muted);
+}
+
+.users-table {
+  .oc-table-header-cell-actions,
+  .oc-table-data-cell-actions {
+    white-space: nowrap;
+  }
+
+  .oc-table-header-cell-role,
+  .oc-table-data-cell-role {
+    display: none;
+
+    @media only screen and (min-width: 1200px) {
+      display: table-cell;
+    }
+  }
+
+  .oc-table-header-cell-displayName,
+  .oc-table-data-cell-displayName {
+    display: none;
+
+    @media only screen and (min-width: 1000px) {
+      display: table-cell;
+    }
+  }
+
+  &-squashed {
+    .oc-table-header-cell-role,
+    .oc-table-data-cell-role {
+      display: none;
+
+      @media only screen and (min-width: 1600px) {
+        display: table-cell;
+      }
+    }
+
+    .oc-table-header-cell-displayName,
+    .oc-table-data-cell-displayName {
+      display: none;
+
+      @media only screen and (min-width: 1400px) {
+        display: table-cell;
+      }
+    }
+
+    .oc-table-header-cell-mail,
+    .oc-table-data-cell-mail {
+      display: none;
+
+      @media only screen and (min-width: 1200px) {
+        display: table-cell;
+      }
+    }
+  }
 }
 </style>
