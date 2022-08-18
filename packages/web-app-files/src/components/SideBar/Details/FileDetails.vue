@@ -360,17 +360,17 @@ export default defineComponent({
       if (sharePathParentOrCurrent === null) {
         return
       }
-      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
+      const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
         ShareTypes.containsAnyValue(
           [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
           [s.shareType]
         )
       )
-      if (userShares.length === 0) {
+      if (shares.length === 0) {
         return
       }
 
-      this.sharedItem = userShares[0]
+      this.sharedItem = shares[0]
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
       if (this.sharedItem.owner?.additionalInfo) {
