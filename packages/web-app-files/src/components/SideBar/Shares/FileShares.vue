@@ -28,7 +28,7 @@
         <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
-            :modifiable="!collaborator.indirect"
+            :modifiable="isShareModifiable(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
             @onDelete="$_ocCollaborators_deleteShare_trigger"
           />
@@ -103,7 +103,9 @@ export default {
     watch(
       currentStorageId,
       (storageId) => {
-        currentSpace.value = store.state.Files.spaces?.find((space) => space.id === storageId)
+        currentSpace.value = store.state.runtime.spaces?.spaces?.find(
+          (space) => space.id === storageId
+        )
       },
       { immediate: true }
     )
@@ -418,6 +420,17 @@ export default {
       }
 
       return null
+    },
+
+    isShareModifiable(collaborator) {
+      if (
+        this.currentUserIsMemberOfSpace &&
+        !this.currentSpace?.spaceRoles.manager.includes(this.user.uuid)
+      ) {
+        return false
+      }
+
+      return !collaborator.indirect
     }
   }
 }

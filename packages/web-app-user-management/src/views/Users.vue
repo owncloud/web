@@ -50,6 +50,7 @@
         <div v-else>
           <UsersList
             :users="users"
+            :class="{ 'users-table-squashed': sideBarOpen }"
             :selected-users="selectedUsers"
             :header-position="listHeaderPosition"
             @toggleSelectUser="toggleSelectUser"

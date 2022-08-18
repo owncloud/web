@@ -1,0 +1,6 @@
+Bugfix: Hide share actions for space viewers/editors
+
+We've fixed a bug where viewers and editors of a space could see the actions to edit and remove shares. We've also improved the error handling when something goes wrong while editing/removing shares.
+
+https://github.com/owncloud/web/issues/7436
+https://github.com/owncloud/web/pull/7470

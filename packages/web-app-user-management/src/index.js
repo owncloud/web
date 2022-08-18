@@ -26,12 +26,18 @@ const routes = [
   {
     path: '/users',
     name: 'user-management-users',
-    component: Users
+    component: Users,
+    meta: {
+      title: $gettext('Users')
+    }
   },
   {
     path: '/groups',
     name: 'user-management-groups',
-    component: Groups
+    component: Groups,
+    meta: {
+      title: $gettext('Groups')
+    }
   }
 ]
 

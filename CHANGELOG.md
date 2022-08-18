@@ -13,6 +13,7 @@ Summary
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+* Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
@@ -45,6 +46,7 @@ Summary
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
+* Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
@@ -82,6 +84,7 @@ Summary
 * Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+* Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
@@ -126,6 +129,15 @@ Details
 
    https://github.com/owncloud/web/issues/6899
    https://github.com/owncloud/web/pull/7379
+
+* Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
+
+   We've fixed a bug where routes without explicit `auth` requirement (i.e. user context) and
+   without any context route in the URL were recognized as neither user-context nor
+   public-link-context. In such situations we now expect that the session requires a user and
+   redirect to the login page.
+
+   https://github.com/owncloud/web/pull/7437
 
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 
@@ -382,6 +394,15 @@ Details
    https://github.com/owncloud/web/issues/7400
    https://github.com/owncloud/web/pull/7401
 
+* Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
+
+   We've fixed a bug where viewers and editors of a space could see the actions to edit and remove
+   shares. We've also improved the error handling when something goes wrong while
+   editing/removing shares.
+
+   https://github.com/owncloud/web/issues/7436
+   https://github.com/owncloud/web/pull/7470
+
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 
    We have fixed the way the sharing indicators for space members and link shares were displayed in
@@ -621,6 +642,7 @@ Details
    https://github.com/owncloud/web/pull/7315
    https://github.com/owncloud/web/pull/7372
    https://github.com/owncloud/web/pull/7402
+   https://github.com/owncloud/web/pull/7475
 
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 
@@ -722,6 +744,13 @@ Details
 
    https://github.com/owncloud/web/issues/6678
    https://github.com/owncloud/web/pull/7176
+
+* Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
+
+   We've improved the layout of the users table on small screens.
+
+   https://github.com/owncloud/web/issues/7439
+   https://github.com/owncloud/web/pull/7476
 
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
