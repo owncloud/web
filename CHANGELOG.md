@@ -13,9 +13,11 @@ Summary
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+* Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
@@ -125,6 +127,12 @@ Details
    https://github.com/owncloud/web/issues/6899
    https://github.com/owncloud/web/pull/7379
 
+* Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
+
+   We've fixed a bug that caused no selection when dragging a file.
+
+   https://github.com/owncloud/web/pull/7473
+
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 
    We've fixed a bug where an error was thrown when pasting with empty clipboard
@@ -146,6 +154,14 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
+
+   We've fixed a bug where the file size was not updated in the files table or side bar while
+   restoring a file version.
+
+   https://github.com/owncloud/web/issues/7438
+   https://github.com/owncloud/web/pull/7469
 
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 
