@@ -13,6 +13,7 @@ Summary
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Decline share not possible: [#7379](https://github.com/owncloud/web/pull/7379)
+* Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
@@ -127,6 +128,15 @@ Details
 
    https://github.com/owncloud/web/issues/6899
    https://github.com/owncloud/web/pull/7379
+
+* Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
+
+   We've fixed a bug where routes without explicit `auth` requirement (i.e. user context) and
+   without any context route in the URL were recognized as neither user-context nor
+   public-link-context. In such situations we now expect that the session requires a user and
+   redirect to the login page.
+
+   https://github.com/owncloud/web/pull/7437
 
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 
