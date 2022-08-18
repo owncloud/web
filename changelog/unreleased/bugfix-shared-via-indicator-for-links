@@ -1,0 +1,6 @@
+Bugfix: "Shared via"-indicator for links
+
+We've fixed a bug where the "Shared via"-indicator would be empty or not be displayed at all for public links.
+
+https://github.com/owncloud/web/issues/7478
+https://github.com/owncloud/web/pull/7479
