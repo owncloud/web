@@ -82,6 +82,7 @@ Summary
 * Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
+* Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
@@ -722,6 +723,13 @@ Details
 
    https://github.com/owncloud/web/issues/6678
    https://github.com/owncloud/web/pull/7176
+
+* Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
+
+   We've improved the layout of the users table on small screens.
+
+   https://github.com/owncloud/web/issues/7439
+   https://github.com/owncloud/web/pull/7476
 
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
