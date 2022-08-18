@@ -488,6 +488,7 @@ Details
    group or user was selected.
 
    https://github.com/owncloud/web/pull/7445
+   https://github.com/owncloud/web/pull/7461
 
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
 
