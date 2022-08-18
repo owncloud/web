@@ -66,6 +66,10 @@ export function useAppNavigation({
   const navigateToContext = (context: MaybeRef<FileContext>) => {
     const { fileName, routeName, routeParams, routeQuery } = unref(context)
 
+    if (!unref(routeName)) {
+      return router.push({ path: '/' })
+    }
+
     return router.push({
       name: unref(routeName),
       params: unref(routeParams),

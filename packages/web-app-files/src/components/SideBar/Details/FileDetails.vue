@@ -164,7 +164,6 @@ import {
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
-import { isUserContext } from 'web-runtime/src/router'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 
 export default defineComponent({
@@ -263,11 +262,13 @@ export default defineComponent({
       )
     },
     showShares() {
-      return this.hasAnyShares && isUserContext(this.$router, this.$route)
+      if (this.isPublicLinkContext) {
+        return false
+      }
+      return this.hasAnyShares
     },
     detailSharingInformation() {
-      const isFolder = this.file.type === 'folder'
-      if (isFolder) {
+      if (this.file.type === 'folder') {
         return this.$gettext('This folder has been shared.')
       }
       return this.$gettext('This file has been shared.')
@@ -319,10 +320,10 @@ export default defineComponent({
       return this.$gettext('Size')
     },
     showVersions() {
-      if (this.file.type === 'folder') {
+      if (this.file.type === 'folder' || this.isPublicLinkContext) {
         return
       }
-      return this.versions.length > 0 && isUserContext(this.$router, this.$route)
+      return this.versions.length > 0
     },
     versionsLabel() {
       return this.$gettext('Versions')
@@ -351,7 +352,8 @@ export default defineComponent({
   },
   watch: {
     file() {
-      this.loadData().then(this.refreshShareDetailsTree)
+      this.loadData()
+      this.refreshShareDetailsTree()
     },
     sharesTree() {
       // missing early return
@@ -430,9 +432,8 @@ export default defineComponent({
       this.setSidebarPanel('versions-item')
     },
     async loadData() {
-      this.loading = true
       const calls = []
-      if (this.file.type === 'file' && isUserContext(this.$router, this.$route)) {
+      if (this.file.type === 'file' && !this.isPublicLinkContext) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))
