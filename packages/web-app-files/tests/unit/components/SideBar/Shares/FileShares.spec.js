@@ -198,8 +198,7 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] },
-          spaces
+          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] }
         },
         namespaced: true,
         getters: {
@@ -225,6 +224,11 @@ const storeOptions = (data) => {
       },
       runtime: {
         namespaced: true,
+        state: {
+          spaces: {
+            spaces
+          }
+        },
         modules: {
           auth: {
             namespaced: true,
