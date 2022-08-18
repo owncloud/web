@@ -622,6 +622,7 @@ Details
    https://github.com/owncloud/web/pull/7315
    https://github.com/owncloud/web/pull/7372
    https://github.com/owncloud/web/pull/7402
+   https://github.com/owncloud/web/pull/7475
 
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 
