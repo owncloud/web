@@ -9,6 +9,7 @@
           appearance="filled"
           variation="primary"
           :disabled="uploadOrFileCreationBlocked"
+          v-oc-tooltip="newButtonAriaLabel"
         >
           <oc-icon name="add" />
           <translate>New</translate>
