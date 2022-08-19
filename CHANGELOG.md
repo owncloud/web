@@ -24,6 +24,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
+* Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
@@ -34,6 +35,7 @@ Summary
 * Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
+* Bugfix - Prevent unnecessary PROPFIND request during upload: [#7486](https://github.com/owncloud/web/issues/7486)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
@@ -210,6 +212,13 @@ Details
    https://github.com/owncloud/web/issues/7345
    https://github.com/owncloud/web/pull/7355
 
+* Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
+
+   We've fixed a bug where web was trying to load thumbnails for files that are not supported. Due to
+   configurable values, we avoid unnecessary requests.
+
+   https://github.com/owncloud/web/pull/7474
+
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 
    We fixed a small glitch in views of the files app, where the view would show a state like "Resource
@@ -291,6 +300,14 @@ Details
 
    https://github.com/owncloud/web/issues/7268
    https://github.com/owncloud/web/pull/7294
+
+* Bugfix - Prevent unnecessary PROPFIND request during upload: [#7486](https://github.com/owncloud/web/issues/7486)
+
+   We've removed the unnecessary PROPFIND request at the start of each upload, increasing upload
+   performance especially in larger folders.
+
+   https://github.com/owncloud/web/issues/7486
+   https://github.com/owncloud/web/pull/7488
 
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 
