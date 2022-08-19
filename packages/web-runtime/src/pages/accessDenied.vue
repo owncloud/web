@@ -12,7 +12,8 @@
         </h3>
         <h4 v-translate class="oc-mb-m">Your user session is invalid or has expired.</h4>
         <div v-translate class="oc-mb-m" @click="performLogout">
-          If you like to login with a different user please proceed to <a id="exitAnchor">exit</a>.
+          If you like to login with a different user please proceed to
+          <router-link id="exitAnchor" :to="{ name: 'login' }">exit</router-link>
         </div>
         <div v-translate class="oc-m-rm">
           <strong>Attention:</strong> this will log you out from all applications you are running in
