@@ -1,0 +1,7 @@
+Enhancement: Streamline UI sizings
+
+We've streamlined the font sizes and some other size related options to let the web UI appear a bit more condensed. In addition to that we've chosen a new font family for the UI ("Inter") which is embedded into the ownCloud Design System by default now.
+
+https://github.com/owncloud/web/pull/7363
+https://github.com/owncloud/web/issues/7333
+https://github.com/owncloud/owncloud-design-system/pull/2270
