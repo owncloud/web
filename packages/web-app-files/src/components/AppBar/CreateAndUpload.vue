@@ -345,13 +345,7 @@ export default defineComponent({
           }
         }
 
-        let pathFileWasUploadedTo = file.meta.currentFolder
-        if (file.meta.relativeFolder) {
-          pathFileWasUploadedTo += file.meta.relativeFolder
-        }
-
-        const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
-
+        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -788,12 +782,6 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-
-      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
-      if (reloadRequired) {
-        bus.publish('app.files.list.load')
-      }
-
       this.$uppyService.uploadFiles(files)
     },
 
