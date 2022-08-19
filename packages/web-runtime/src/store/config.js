@@ -52,7 +52,7 @@ const state = {
         showAllOnLoad: false
       }
     },
-    previewFileExtensions: [],
+    previewFileMimeTypes: [],
     runningOnEos: false,
     cernFeatures: false,
     sharingRecipientsPerPage: 200
@@ -110,9 +110,9 @@ const getters = {
   configuration: (state) => {
     return state
   },
-  previewFileExtensions: (state) => {
-    const extensions = state.options.previewFileExtensions
-    return (Array.isArray(extensions) ? extensions : [])
+  previewFileMimeTypes: (state) => {
+    const mimeTypes = state.options.previewFileMimeTypes
+    return (Array.isArray(mimeTypes) ? mimeTypes : [])
       .filter(Boolean)
       .map((ext) => ext.toLowerCase())
   },

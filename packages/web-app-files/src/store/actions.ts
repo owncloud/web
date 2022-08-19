@@ -19,6 +19,7 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
+import { thumbnailService } from '../services'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -749,10 +750,7 @@ export default {
   },
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
-    if (
-      rootGetters.previewFileExtensions.length &&
-      !rootGetters.previewFileExtensions.includes(resource.extension.toLowerCase())
-    ) {
+    if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
       return
     }
 
