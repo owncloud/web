@@ -104,7 +104,7 @@ Then(
   async function (this: World, linkName: string, stepUser: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const publicLinkUrls = await linkObject.publicLinkVisible(linkName)
+    const publicLinkUrls = await linkObject.getPublicLinkUrl(linkName)
     expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
   }
 )
@@ -119,7 +119,7 @@ Then(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const isVisible = await linkObject.linkEditButtonVisibile(linkName)
+    const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
     expect(isVisible).toBe(shouldOrShouldNot !== 'should not')
   }
 )

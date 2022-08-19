@@ -82,7 +82,7 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
-  async publicLinkVisible(linkName): Promise<string[]> {
+  async getPublicLinkUrl(linkName): Promise<string[]> {
     const linkUrl = this.#linksEnvironment.getLink({ name: linkName })
     const publicLink = await getPublicLinkVisibility({
       page: this.#page,
@@ -91,7 +91,7 @@ export class Link {
     return [linkUrl.url, publicLink]
   }
 
-  async linkEditButtonVisibile(linkName): Promise<boolean> {
+  async islinkEditButtonVisibile(linkName): Promise<boolean> {
     return await getLinkEditButtonVisibility({ page: this.#page, linkName })
   }
 }

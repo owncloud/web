@@ -90,10 +90,6 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   }
   await page.locator(addPublicLinkButton).click()
   await waitForPopupNotPresent(page)
-  // const message = await page.locator(linkUpdateDialog).textContent()
-  // expect(message.trim()).toBe('Link was created successfully')
-  // const linkId = await page.getAttribute(getMostRecentLink, 'data-testid')
-  // return linkId.replace('files-link-id-', '')
   return await page.locator(util.format(publicLink, 'Link')).textContent()
 }
 
