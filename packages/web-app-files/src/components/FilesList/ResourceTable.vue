@@ -809,6 +809,9 @@ export default defineComponent({
     opacity: 0.6;
   }
   &-resource-wrapper {
+    display: flex;
+    align-items: center;
+
     &-limit-max-width {
       max-width: calc(100% - var(--oc-space-medium));
     }
@@ -821,7 +824,7 @@ export default defineComponent({
   }
   &-edit-name {
     display: inline-flex;
-    vertical-align: middle;
+    margin-left: var(--oc-space-xsmall);
     svg {
       fill: var(--oc-color-text-muted);
     }
