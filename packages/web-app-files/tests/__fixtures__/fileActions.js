@@ -134,6 +134,7 @@ const fileActions = {
   'text-editor': {
     handler: jest.fn(),
     label: () => 'Open in Text Editor',
+    componentType: 'button',
     class: 'oc-files-actions-text-editor-trigger',
     selector: '.oc-files-actions-text-editor-trigger',
     opensInNewWindow: true
@@ -141,6 +142,7 @@ const fileActions = {
   'draw-io': {
     handler: jest.fn(),
     label: () => 'Open in DrawIO',
+    componentType: 'button',
     class: 'oc-files-actions-draw-io-trigger',
     selector: '.oc-files-actions-draw-io-trigger',
     opensInNewWindow: true
@@ -148,6 +150,7 @@ const fileActions = {
   preview: {
     handler: jest.fn(),
     label: () => 'Open in Preview',
+    componentType: 'button',
     class: 'oc-files-actions-preview-trigger',
     selector: '.oc-files-actions-preview-trigger'
   },

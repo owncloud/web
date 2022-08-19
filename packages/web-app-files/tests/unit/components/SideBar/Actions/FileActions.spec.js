@@ -18,13 +18,6 @@ localVue.use(GetTextPlugin, {
 
 const filesPersonalRoute = { name: 'files-personal' }
 
-const systemDefaultActions = [
-  [['copy']],
-  [['copy', 'move']],
-  [['copy', 'text-editor']],
-  [['copy', 'move', 'download', 'text-editor']]
-]
-
 describe('FileActions', () => {
   describe('when user is on personal route', () => {
     describe('action handlers', () => {
@@ -48,7 +41,12 @@ describe('FileActions', () => {
     })
 
     describe('menu items', () => {
-      it.each(systemDefaultActions)('renders a list of actions', (actions) => {
+      it.each([
+        [['copy']],
+        [['copy', 'move']],
+        [['copy', 'text-editor']],
+        [['copy', 'move', 'download', 'text-editor']]
+      ])('renders a list of actions', (actions) => {
         const wrapper = getWrapper(filesPersonalRoute, actions)
 
         for (const defaultAction of actions) {
