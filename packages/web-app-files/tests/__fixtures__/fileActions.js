@@ -90,7 +90,7 @@ const fileActions = {
     icon: 'file-download',
     handler: jest.fn(),
     label: () => 'Download',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-download-file-trigger',
     selector: '.oc-files-actions-download-file-trigger'
   },
@@ -99,7 +99,7 @@ const fileActions = {
     icon: 'file-copy',
     handler: jest.fn(),
     label: () => 'Copy',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-copy-trigger',
     selector: '.oc-files-actions-copy-trigger'
   },
@@ -108,7 +108,7 @@ const fileActions = {
     icon: 'pencil',
     handler: jest.fn(),
     label: () => 'Rename',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-rename-trigger',
     selector: '.oc-files-actions--rename-trigger'
   },
@@ -117,7 +117,7 @@ const fileActions = {
     icon: 'folder-shared',
     handler: jest.fn(),
     label: () => 'Move',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-move-trigger',
     selector: '.oc-files-actions-move-trigger'
   },
@@ -126,7 +126,7 @@ const fileActions = {
     icon: 'delete-bin-5',
     handler: jest.fn(),
     label: () => 'Delete',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-delete-trigger',
     selector: '.oc-files-actions-delete-trigger'
   },

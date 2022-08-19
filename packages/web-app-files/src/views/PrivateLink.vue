@@ -19,7 +19,7 @@
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
-          <p class="oc-text-large">{{ errorMessage }}</p>
+          <p class="oc-text-xlarge">{{ errorMessage }}</p>
         </div>
       </template>
       <div class="oc-card-footer">

@@ -49,7 +49,7 @@ export default {
             })
             return !moveDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-move-trigger'
         }
       ]

@@ -11,7 +11,7 @@ export default {
           label: () => this.$gettext('Members'),
           handler: this.$_showMembers_trigger,
           isEnabled: ({ resources }) => resources.length === 1,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-details-trigger'
         }
       ]

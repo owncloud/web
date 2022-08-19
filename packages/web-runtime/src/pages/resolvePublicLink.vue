@@ -19,7 +19,7 @@
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
-          <p class="oc-text-large">{{ isPasswordRequiredTask.last.error }}</p>
+          <p class="oc-text-xlarge">{{ isPasswordRequiredTask.last.error }}</p>
         </div>
       </template>
       <template v-else-if="isPasswordRequiredTask.last.value">

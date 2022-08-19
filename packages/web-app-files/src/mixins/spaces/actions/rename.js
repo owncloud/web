@@ -21,7 +21,7 @@ export default {
 
             return resources[0].canRename({ user: this.user })
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-rename-trigger'
         }
       ]
