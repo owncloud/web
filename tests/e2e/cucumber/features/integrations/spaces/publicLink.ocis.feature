@@ -6,6 +6,7 @@ Feature: spaces public link
             | Alice |
             | Brian |
             | Carol |
+            | marie |
         And "Admin" assigns following roles to the users
             | id    | role       |
             | Alice | SpaceAdmin |
@@ -22,13 +23,18 @@ Feature: spaces public link
             | spaceFolder | folder |
         And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
         And "Alice" adds following users to the project space
-            | user  | role   |
-            | Brian | editor |
-            | Carol | viewer |
+            | user  | role    |
+            | Brian | editor  |
+            | Carol | viewer  |
+            | marie | manager |
         When "Brian" logs in
         And "Brian" navigates to the projects space page
         And "Brian" navigates to the project space "team.1"
         Then public link named "spaceLink" should be visible to "Brian"
         But "Brian" 'should not' be able to edit the public link named "spaceLink"
         And "Brian" logs out
-
+        When "Marie" logs in
+        And "Marie" navigates to the projects space page
+        And "Marie" navigates to the project space "team.1"
+        Then public link named "spaceLink" should be visible to "Marie"
+        And "Marie" 'should' be able to edit the public link named "spaceLink"
