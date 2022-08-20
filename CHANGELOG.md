@@ -82,8 +82,9 @@ Summary
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+* Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
@@ -720,6 +721,16 @@ Details
    https://github.com/owncloud/web/issues/7358
    https://github.com/owncloud/web/pull/7364
 
+* Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
+
+   We've streamlined the font sizes and some other size related options to let the web UI appear a
+   bit more condensed. In addition to that we've chosen a new font family for the UI ("Inter") which
+   is embedded into the ownCloud Design System by default now.
+
+   https://github.com/owncloud/web/issues/7333
+   https://github.com/owncloud/web/pull/7363
+   https://github.com/owncloud/owncloud-design-system/pull/2270
+
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 
    We've added support to block certain file extensions from the text-editor app with additional
@@ -729,23 +740,55 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.12. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.16. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
-   - Bugfix - Omit special characters in user avatar initials: #2267 - Bugfix - Avatar link icon:
-   #2269 - Bugfix - Remove width shrinking of the ocAvatarItem: #2242 - Change - Remove OcAlert
-   component: #2210 - Change - Remove transition animations: #2210 - Change - Revamp animations:
-   #2210 - Change - OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add
-   outline: #2218 - Enhancement - Progress bar indeterminate state: #2200 - Enhancement -
-   Redesign notifications: #2210 - Enhancement - Use oc colors for selected background and
-   deselect icon: #2262 - Enhancement - Adjust avatar font weight from bold to normal: #2275 -
-   Enhancement - Add offset property to the drop component: #2276
+   * Bugfix - Omit special characters in user avatar initials:
+   [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
+   Avatar link icon:
+   [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269) * Bugfix -
+   Lazy loading render performance:
+   [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260) * Bugfix -
+   Remove width shrinking of the ocAvatarItem:
+   [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
+   Remove click event on OcIcon:
+   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Change -
+   Redesign contextual helper:
+   [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271) * Change -
+   Remove OcAlert component:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Remove transition animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Revamp animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   OcTable emit event data on row click:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add nestedd drop functionality:
+   [#2238](https://github.com/owncloud/owncloud-design-system/issues/2238) *
+   Enhancement - Add OcInfoDrop:
+   [#2286](https://github.com/owncloud/owncloud-design-system/pull/2286) *
+   Enhancement - Add rounded prop to OcTag:
+   [#2284](https://github.com/owncloud/owncloud-design-system/pull/2284) *
+   Enhancement - Adjust avatar font weight from bold to normal:
+   [#2275](https://github.com/owncloud/owncloud-design-system/pull/2275) *
+   Enhancement - OcCheckbox add outline:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add offset property to the drop component:
+   [#7335](https://github.com/owncloud/web/issues/7335) * Enhancement - Make UI smaller:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - OcSelect dark mode improvements:
+   [#2262](https://github.com/owncloud/owncloud-design-system/pull/2262) *
+   Enhancement - Progress bar indeterminate state:
+   [#2200](https://github.com/owncloud/owncloud-design-system/pull/2200) *
+   Enhancement - Redesign notifications:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) *
+   Enhancement - Use Inter font:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
    https://github.com/owncloud/web/pull/7355
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.12
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.16
 
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 
