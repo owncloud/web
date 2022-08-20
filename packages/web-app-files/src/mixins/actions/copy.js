@@ -47,7 +47,7 @@ export default {
             // a user always has their home dir with write access
             return true
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-copy-trigger'
         }
       ]

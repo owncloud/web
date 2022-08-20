@@ -38,7 +38,7 @@ export default {
             return this.space.canEditReadme({ user: this.user })
           },
           canBeDefault: false,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-set-space-readme-trigger'
         }
       ]

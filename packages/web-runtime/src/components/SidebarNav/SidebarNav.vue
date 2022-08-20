@@ -145,11 +145,11 @@ export default {
   }
 }
 .oc-app-navigation-expanded {
-  min-width: 250px !important;
-  max-width: 250px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
 }
 .oc-app-navigation-collapsed {
-  min-width: 64px !important;
-  max-width: 64px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
 }
 </style>

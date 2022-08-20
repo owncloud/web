@@ -29,7 +29,7 @@ const mockMenuSections = [
         canBeDefault: true,
         handler: jest.fn(),
         label: () => 'Open in editor',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-text-editor-trigger',
         class: 'oc-files-actions-text-editor-trigger'
       },
@@ -39,7 +39,7 @@ const mockMenuSections = [
           canBeDefault: true,
           handler: jest.fn(),
           label: () => 'Open in ' + app.name,
-          componentType: 'oc-button',
+          componentType: 'button',
           selector: `.oc-files-actions-${app.name}-trigger`,
           class: `oc-files-actions-${app.name}-trigger`
         }
@@ -49,7 +49,7 @@ const mockMenuSections = [
         canBeDefault: true,
         handler: jest.fn(),
         label: () => 'Download',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-download-file-trigger',
         class: 'oc-files-actions-download-file-trigger'
       },
@@ -57,7 +57,7 @@ const mockMenuSections = [
         icon: 'links',
         handler: jest.fn(),
         label: () => 'Create link',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-create-public-link-trigger',
         class: 'oc-files-actions-create-public-link-trigger'
       },
@@ -65,7 +65,7 @@ const mockMenuSections = [
         icon: 'group',
         handler: jest.fn(),
         label: () => 'Share',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-show-shares-trigger',
         class: 'oc-files-actions-show-shares-trigger'
       }
@@ -78,7 +78,7 @@ const mockMenuSections = [
         icon: 'pencil',
         handler: jest.fn(),
         label: () => 'Edit',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-rename-trigger',
         class: 'oc-files-actions-rename-trigger'
       },
@@ -86,7 +86,7 @@ const mockMenuSections = [
         icon: 'folder-shared',
         handler: jest.fn(),
         label: () => 'Move',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-move-trigger',
         class: 'oc-files-actions-move-trigger'
       },
@@ -94,7 +94,7 @@ const mockMenuSections = [
         icon: 'file-copy',
         handler: jest.fn(),
         label: () => 'Copy',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-copy-trigger',
         class: 'oc-files-actions-copy-trigger'
       },
@@ -102,7 +102,7 @@ const mockMenuSections = [
         icon: 'delete-bin-5',
         handler: jest.fn(),
         label: () => 'Delete',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-delete-trigger',
         class: 'oc-files-actions-delete-trigger'
       },
@@ -110,7 +110,7 @@ const mockMenuSections = [
         icon: 'slideshow',
         handler: jest.fn(),
         label: () => 'All actions',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-show-actions-trigger',
         class: 'oc-files-actions-show-actions-trigger'
       }
@@ -123,7 +123,7 @@ const mockMenuSections = [
         icon: 'information',
         handler: jest.fn(),
         label: () => 'Details',
-        componentType: 'oc-button',
+        componentType: 'button',
         selector: '.oc-files-actions-show-details-trigger',
         class: 'oc-files-actions-show-details-trigger'
       }

@@ -856,7 +856,7 @@ export default defineComponent({
 }
 #upload-list,
 #new-file-menu-drop {
-  min-width: 250px;
+  min-width: 230px;
 }
 </style>
 <style lang="scss">

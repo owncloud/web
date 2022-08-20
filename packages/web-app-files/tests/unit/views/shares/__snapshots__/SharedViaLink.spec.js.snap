@@ -7,7 +7,7 @@ exports[`SharedViaLink view when the view is not loading anymore when there are 
     <div class="oc-icon oc-icon-xxl oc-icon-passive">
       <!---->
     </div>
-    <div class="oc-text-muted oc-text-large"><span>There are no resources with a public link at the moment</span></div>
+    <div class="oc-text-muted oc-text-xlarge"><span>There are no resources with a public link at the moment</span></div>
     <div class="oc-text-muted"></div>
   </div>
 </div>

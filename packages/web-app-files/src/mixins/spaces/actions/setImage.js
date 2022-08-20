@@ -43,7 +43,7 @@ export default {
             return this.space.canEditImage({ user: this.user })
           },
           canBeDefault: false,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-set-space-image-trigger'
         }
       ]

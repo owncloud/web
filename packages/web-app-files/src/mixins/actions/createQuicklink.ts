@@ -25,7 +25,7 @@ export default {
             }
             return canShare(resources[0], this.$store)
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-create-quicklink-trigger'
         }
       ]
