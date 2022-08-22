@@ -48,6 +48,7 @@ Summary
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+* Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 * Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
@@ -412,6 +413,13 @@ Details
    https://github.com/owncloud/web/issues/7181
    https://github.com/owncloud/web/issues/7079
    https://github.com/owncloud/web/pull/7197
+
+* Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
+
+   We've fixed a bug where the image of a space was not showing in the sidebar.
+
+   https://github.com/owncloud/web/issues/7480
+   https://github.com/owncloud/web/pull/7481
 
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 
