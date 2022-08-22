@@ -858,8 +858,6 @@ export default defineComponent({
 #new-file-menu-drop {
   min-width: 230px;
 }
-</style>
-<style lang="scss">
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -868,8 +866,11 @@ export default defineComponent({
   }
 }
 #clipboard-btns {
+  flex-flow: inherit;
+
   :nth-child(1) {
     border-right: 0px !important;
+    white-space: nowrap;
   }
   :nth-child(2) {
     border-left: 0px !important;
