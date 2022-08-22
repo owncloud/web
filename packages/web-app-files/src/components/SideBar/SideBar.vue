@@ -9,13 +9,13 @@
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
-    v-bind="$attrs"
     @beforeDestroy="focusSideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSidebarPanel"
     @close="closeSidebar"
     v-on="$listeners"
+    v-bind="$attrs"
   >
     <template #header>
       <file-info

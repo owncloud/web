@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
+    <div class="oc-width-1-1">
     <app-bar
       :has-bulk-actions="true"
       :breadcrumbs="breadcrumbs"
@@ -70,6 +71,8 @@
         </template>
       </resource-table>
     </template>
+    </div>
+    <side-bar />
   </div>
 </template>
 
@@ -106,6 +109,7 @@ import { Resource } from 'web-client'
 import { useGraphClient } from 'web-client/src/composables'
 import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
+import SideBar from '../components/SideBar/SideBar.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -121,7 +125,8 @@ export default defineComponent({
     ListInfo,
     Pagination,
     ContextActions,
-    KeyboardActions
+    KeyboardActions,
+    SideBar
   },
 
   mixins: [

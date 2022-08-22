@@ -4,18 +4,13 @@
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
     </div>
-    <side-bar />
   </main>
 </template>
 <script lang="ts">
-import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
-  components: {
-    SideBar
-  },
   data: () => ({
     dragareaEnabled: false
   }),

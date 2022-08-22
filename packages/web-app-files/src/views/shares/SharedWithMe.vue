@@ -1,49 +1,52 @@
 <template>
-  <div class="oc-flex oc-flex-column">
-    <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <shared-with-me-section
-        v-if="pendingItems.length > 0"
-        id="files-shared-with-me-pending-section"
-        :title="pendingTitle"
-        :items="pendingItems"
-        :share-status="ShareStatus.pending"
-        :sort-by="pendingSortBy"
-        :sort-dir="pendingSortDir"
-        :sort-handler="pendingHandleSort"
-        :show-more-toggle="true"
-        :resource-clickable="false"
-        :display-thumbnails="false"
-      />
+  <div class="oc-flex">
+    <div class="oc-width-expand oc-flex-column">
+      <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <shared-with-me-section
+          v-if="pendingItems.length > 0"
+          id="files-shared-with-me-pending-section"
+          :title="pendingTitle"
+          :items="pendingItems"
+          :share-status="ShareStatus.pending"
+          :sort-by="pendingSortBy"
+          :sort-dir="pendingSortDir"
+          :sort-handler="pendingHandleSort"
+          :show-more-toggle="true"
+          :resource-clickable="false"
+          :display-thumbnails="false"
+        />
 
-      <shared-with-me-section
-        id="files-shared-with-me-accepted-section"
-        :title="acceptedTitle"
-        :empty-message="acceptedEmptyMessage"
-        :items="acceptedItems"
-        :share-status="ShareStatus.accepted"
-        :sort-by="acceptedSortBy"
-        :sort-dir="acceptedSortDir"
-        :sort-handler="acceptedHandleSort"
-        :resource-clickable="true"
-        :display-thumbnails="displayThumbnails"
-      />
+        <shared-with-me-section
+          id="files-shared-with-me-accepted-section"
+          :title="acceptedTitle"
+          :empty-message="acceptedEmptyMessage"
+          :items="acceptedItems"
+          :share-status="ShareStatus.accepted"
+          :sort-by="acceptedSortBy"
+          :sort-dir="acceptedSortDir"
+          :sort-handler="acceptedHandleSort"
+          :resource-clickable="true"
+          :display-thumbnails="displayThumbnails"
+        />
 
-      <shared-with-me-section
-        id="files-shared-with-me-declined-section"
-        :title="declinedTitle"
-        :empty-message="declinedEmptyMessage"
-        :items="declinedItems"
-        :share-status="ShareStatus.declined"
-        :sort-by="declinedSortBy"
-        :sort-dir="declinedSortDir"
-        :sort-handler="declinedHandleSort"
-        :show-more-toggle="true"
-        :display-thumbnails="false"
-        :resource-clickable="false"
-      />
-    </template>
+        <shared-with-me-section
+          id="files-shared-with-me-declined-section"
+          :title="declinedTitle"
+          :empty-message="declinedEmptyMessage"
+          :items="declinedItems"
+          :share-status="ShareStatus.declined"
+          :sort-by="declinedSortBy"
+          :sort-dir="declinedSortDir"
+          :sort-handler="declinedHandleSort"
+          :show-more-toggle="true"
+          :display-thumbnails="false"
+          :resource-clickable="false"
+        />
+      </template>
+    </div>
+    <side-bar />
   </div>
 </template>
 
@@ -57,12 +60,14 @@ import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import SideBar from '../../components/SideBar/SideBar.vue'
 
 export default defineComponent({
   components: {
     AppBar,
     AppLoadingSpinner,
-    SharedWithMeSection
+    SharedWithMeSection,
+    SideBar
   },
 
   setup() {
