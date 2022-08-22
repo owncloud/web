@@ -49,13 +49,16 @@ export function buildResource(resource): Resource {
   }
 
   const id = resource.fileInfo[DavProperty.FileId]
+  const name = resource.fileInfo[DavProperty.Name]
+    ? resource.fileInfo[DavProperty.Name]
+    : path.basename(resource.name)
 
   return {
     id,
     fileId: resource.fileInfo[DavProperty.FileId],
     storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    name: path.basename(resource.name),
+    name,
     extension: isFolder ? '' : extension,
     path: resourcePath,
     webDavPath: resource.name,
