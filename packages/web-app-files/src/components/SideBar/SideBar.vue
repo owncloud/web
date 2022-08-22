@@ -2,6 +2,7 @@
   <SideBar
     v-if="showSidebar"
     ref="sidebar"
+    class="files-side-bar"
     tabindex="-1"
     :sidebar-active-panel="sidebarActivePanel"
     :available-panels="availablePanels"
@@ -9,13 +10,13 @@
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
+    v-bind="$attrs"
     @beforeDestroy="focusSideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSidebarPanel"
     @close="closeSidebar"
     v-on="$listeners"
-    v-bind="$attrs"
   >
     <template #header>
       <file-info
@@ -260,19 +261,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.sidebar-panel {
-  &__file_info,
-  &__space_info {
-    background-color: var(--oc-color-background-default);
-    padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
-  }
-}
+.files-side-bar {
+  z-index: 3;
 
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
+  .sidebar-panel {
+    &__file_info,
+    &__space_info {
+      background-color: var(--oc-color-background-default);
+      padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
+    }
+  }
+
+  ._clipboard-success-animation {
+    animation-name: _clipboard-success-animation;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
 }
 
 @keyframes _clipboard-success-animation {
