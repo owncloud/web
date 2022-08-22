@@ -219,7 +219,7 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = { ...this.highlightedFile }
         return
       }
 
@@ -250,7 +250,7 @@ export default defineComponent({
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
