@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex">
-    <div class="oc-width-expand oc-flex-column">
+    <files-view-wrapper class="oc-flex-column">
       <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
@@ -45,7 +45,7 @@
           :resource-clickable="false"
         />
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -61,9 +61,11 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     AppLoadingSpinner,
     SharedWithMeSection,

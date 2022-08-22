@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex">
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar :has-shares-navigation="true" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
@@ -46,14 +46,13 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
 
 <script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
@@ -68,17 +67,21 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
-import SideBar from '../../components/SideBar/SideBar.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     ResourceTable,
     AppLoadingSpinner,

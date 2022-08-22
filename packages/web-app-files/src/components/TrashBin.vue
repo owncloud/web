@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex">
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
@@ -45,7 +45,7 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -68,11 +68,13 @@ import { bus } from 'web-pkg/src/instance'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import SideBar from '../components/SideBar/SideBar.vue'
+import FilesViewWrapper from './FilesViewWrapper.vue'
 
 export default defineComponent({
   name: 'TrashBin',
 
   components: {
+    FilesViewWrapper,
     AppBar,
     ResourceTable,
     AppLoadingSpinner,

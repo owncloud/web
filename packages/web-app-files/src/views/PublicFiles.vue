@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar
         :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
@@ -64,7 +64,7 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -98,11 +98,13 @@ import { Resource } from 'web-client'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     CreateAndUpload,
     ResourceTable,

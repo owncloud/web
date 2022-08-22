@@ -1,7 +1,7 @@
 <template>
   <div class="space-overview oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar
         :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
@@ -127,7 +127,7 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -165,11 +165,13 @@ import QuickActions from '../../components/FilesList/QuickActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     SideBar,
     AppBar,
     CreateAndUpload,

@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex">
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
@@ -53,7 +53,7 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -82,11 +82,13 @@ import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import SideBar from '../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     ResourceTable,
     QuickActions,

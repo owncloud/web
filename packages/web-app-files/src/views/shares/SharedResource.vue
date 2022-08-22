@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar
         :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
@@ -71,7 +71,7 @@
           </template>
         </resource-table>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -98,6 +98,9 @@ import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
+import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 // misc
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -111,8 +114,6 @@ import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { useRouteParam, useRouteQuery } from 'web-pkg/src/composables'
-import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
-import SideBar from '../../components/SideBar/SideBar.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -129,7 +130,8 @@ export default defineComponent({
     Pagination,
     ContextActions,
     KeyboardActions,
-    SideBar
+    SideBar,
+    FilesViewWrapper
   },
 
   mixins: [

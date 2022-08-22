@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex">
-    <div class="oc-width-expand">
+    <files-view-wrapper>
       <app-bar
         class="oc-border-b"
         :breadcrumbs="breadcrumbs"
@@ -132,7 +132,7 @@
           </ul>
         </div>
       </template>
-    </div>
+    </files-view-wrapper>
     <side-bar />
   </div>
 </template>
@@ -155,9 +155,11 @@ import { useGraphClient } from 'web-client/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     SideBar,
     AppBar,
     AppLoadingSpinner,
