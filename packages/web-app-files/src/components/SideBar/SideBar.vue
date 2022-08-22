@@ -66,15 +66,14 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
-    // TODO: use getters
-    const showSidebar = computed(() => !store.state.Files.sidebar.closed)
-    const sidebarActivePanel = computed(() => store.state.Files.sidebar.activePanel)
+    const showSidebar = computed(() => !store.getters['Files/sidebar/closed'])
+    const sidebarActivePanel = computed(() => store.getters['Files/sidebar/activePanel'])
 
     const closeSidebar = () => {
       store.dispatch('Files/sidebar/close')
     }
-    const setActiveSidebarPanel = () => {
-      store.dispatch('Files/sidebar/setActivePanel')
+    const setActiveSidebarPanel = (panelName) => {
+      store.dispatch('Files/sidebar/setActivePanel', panelName)
     }
 
     const focusSideBar = (component, event) => {
