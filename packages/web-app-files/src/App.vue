@@ -5,10 +5,18 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, watch } from '@vue/composition-api'
+import { Route } from 'vue-router'
+import { useRoute, useStore } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
+  setup() {
+    const store = useStore<any>()
+    watch(useRoute(), (to: Route, from?: Route) => {
+      store.dispatch('Files/resetFileSelection')
+    })
+  },
   data: () => ({
     dragareaEnabled: false
   }),

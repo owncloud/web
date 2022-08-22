@@ -11,11 +11,11 @@
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
-    @beforeDestroy="focusSideBar"
+    @beforeDestroy="destroySideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
-    @selectPanel="setActiveSidebarPanel"
-    @close="closeSidebar"
+    @selectPanel="setActiveSideBarPanel"
+    @close="closeSideBar"
     v-on="$listeners"
   >
     <template #header>
@@ -42,17 +42,15 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent, watch } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
-  useRoute,
   useStore
 } from 'web-pkg/src/composables'
-import { Route } from 'vue-router'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -69,10 +67,10 @@ export default defineComponent({
     const showSidebar = computed(() => !store.getters['Files/sidebar/closed'])
     const sidebarActivePanel = computed(() => store.getters['Files/sidebar/activePanel'])
 
-    const closeSidebar = () => {
+    const closeSideBar = () => {
       store.dispatch('Files/sidebar/close')
     }
-    const setActiveSidebarPanel = (panelName) => {
+    const setActiveSideBarPanel = (panelName) => {
       store.dispatch('Files/sidebar/setActivePanel', panelName)
     }
 
@@ -84,20 +82,19 @@ export default defineComponent({
       })
     }
 
-    watch(useRoute(), (to: Route, from?: Route) => {
-      store.dispatch('Files/resetFileSelection')
-      if (from?.name !== to.name) {
-        closeSidebar()
-      }
-    })
+    const destroySideBar = (component, event) => {
+      focusSideBar(component, event)
+      closeSideBar()
+    }
 
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       showSidebar,
       sidebarActivePanel,
-      closeSidebar,
-      setActiveSidebarPanel,
+      setActiveSideBarPanel,
+      closeSideBar,
+      destroySideBar,
       focusSideBar
     }
   },
