@@ -156,6 +156,7 @@ import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import { resolveFileNameDuplicate, extractNameWithoutExtension } from '../../helpers/resource'
+import { resolveFileExists, ResolveStrategy } from '../../helpers/resource/copyMove'
 
 export default defineComponent({
   components: {
@@ -678,7 +679,9 @@ export default defineComponent({
       return null
     },
 
-    onFilesSelected(files: File[]) {
+    async onFilesSelected(files: File[]) {
+      /*alert("no")
+      return;*/
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
@@ -686,33 +689,48 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-
+      let resolveStrategy = null
+      let resolveStrategyFolder = null
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
+          console.log(rootFolder)
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            this.showMessage({
-              title: this.$gettextInterpolate(
-                this.$gettext('Folder "%{folder}" already exists.'),
-                { folder: rootFolder },
+            if(resolveStrategy == null || resolveStrategyFolder != rootFolder) {
+              resolveStrategyFolder = rootFolder
+              resolveStrategy = await resolveFileExists(
+                this.createModal,
+                this.hideModal,
+                rootFolder,
+                1,
+                this.$gettext,
+                this.$gettextInterpolate,
                 true
-              ),
-              status: 'danger'
-            })
-            return
+              )
+            }
+            if (resolveStrategy.strategy === ResolveStrategy.SKIP) {
+              continue
+            }
+            if (resolveStrategy.strategy === ResolveStrategy.REPLACE) {
+              
+            }
+            if (resolveStrategy.strategy === ResolveStrategy.KEEP_BOTH) {
+              /*targetName = resolveFileNameDuplicate(resource.name, resource.extension, [
+                ...movedResources,
+                ...targetFolderResources
+              ])
+              resource.name = targetName*/
+            }
           }
-
-          // Folder does not exist, no need to care about files inside -> continue
-          continue
         }
         const exists = this.files.find((f) => f.name === file.name)
         if (exists) {
           conflicts.push(file)
         }
       }
-
+      console.log(uppyResources)
       if (conflicts.length) {
         this.displayOverwriteDialog(uppyResources, conflicts)
       } else {

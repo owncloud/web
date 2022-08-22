@@ -4,7 +4,7 @@ import { join } from 'path'
 import { buildResource } from '../resources'
 import { DavProperties } from 'web-pkg/src/constants'
 
-enum ResolveStrategy {
+export enum ResolveStrategy {
   SKIP,
   REPLACE,
   KEEP_BOTH
@@ -18,7 +18,7 @@ interface FileConflict {
   strategy?: ResolveStrategy
 }
 
-const resolveFileExists = (
+export const resolveFileExists = (
   createModal,
   hideModal,
   resource,
