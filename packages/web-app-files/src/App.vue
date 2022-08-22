@@ -4,21 +4,10 @@
     <div ref="filesListWrapper" tabindex="-1" class="files-list-wrapper oc-width-expand">
       <router-view id="files-view" tabindex="0" />
     </div>
-    <side-bar
-      v-if="showSidebar"
-      ref="filesSidebar"
-      tabindex="-1"
-      :sidebar-active-panel="sidebarActivePanel"
-      @beforeDestroy="focusSideBar"
-      @mounted="focusSideBar"
-      @fileChanged="focusSideBar"
-      @selectPanel="setActiveSidebarPanel"
-      @close="closeSidebar"
-    />
+    <side-bar />
   </main>
 </template>
 <script lang="ts">
-import { mapActions, mapState } from 'vuex'
 import SideBar from './components/SideBar/SideBar.vue'
 import { defineComponent } from '@vue/composition-api'
 import { bus } from 'web-pkg/src/instance'
@@ -30,26 +19,6 @@ export default defineComponent({
   data: () => ({
     dragareaEnabled: false
   }),
-  computed: {
-    ...mapState('Files/sidebar', {
-      sidebarClosed: 'closed',
-      sidebarActivePanel: 'activePanel'
-    }),
-
-    showSidebar() {
-      return !this.sidebarClosed
-    }
-  },
-  watch: {
-    $route: {
-      handler: function (to, from) {
-        this.resetFileSelection()
-        if (from?.name !== to.name) {
-          this.closeSidebar()
-        }
-      }
-    }
-  },
   created() {
     this.$root.$on('upload-end', () => {
       // delay for screen reader virtual buffer
@@ -67,23 +36,11 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['resetFileSelection']),
-    ...mapActions('Files/sidebar', {
-      closeSidebar: 'close',
-      setActiveSidebarPanel: 'setActivePanel'
-    }),
     hideDropzone() {
       this.dragareaEnabled = false
     },
     onDragOver(event) {
       this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
-    },
-    focusSideBar(component, event) {
-      this.focus({
-        from: document.activeElement,
-        to: this.$refs.filesSidebar?.$el,
-        revert: event === 'beforeDestroy'
-      })
     }
   }
 })

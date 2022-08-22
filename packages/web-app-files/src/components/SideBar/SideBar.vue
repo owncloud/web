@@ -1,12 +1,20 @@
 <template>
   <SideBar
+    v-if="showSidebar"
     ref="sidebar"
+    tabindex="-1"
+    :sidebar-active-panel="sidebarActivePanel"
     :available-panels="availablePanels"
     :sidebar-accordions-warning-message="sidebarAccordionsWarningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
+    @beforeDestroy="focusSideBar"
+    @mounted="focusSideBar"
+    @fileChanged="focusSideBar"
+    @selectPanel="setActiveSidebarPanel"
+    @close="closeSidebar"
     v-on="$listeners"
   >
     <template #header>
@@ -33,15 +41,17 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, watch } from '@vue/composition-api'
 
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
+  useRoute,
   useStore
 } from 'web-pkg/src/composables'
+import { Route } from 'vue-router'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -54,9 +64,41 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+
+    // TODO: use getters
+    const showSidebar = computed(() => !store.state.Files.sidebar.closed)
+    const sidebarActivePanel = computed(() => store.state.Files.sidebar.activePanel)
+
+    const closeSidebar = () => {
+      store.dispatch('Files/sidebar/close')
+    }
+    const setActiveSidebarPanel = () => {
+      store.dispatch('Files/sidebar/setActivePanel')
+    }
+
+    const focusSideBar = (component, event) => {
+      component.focus({
+        from: document.activeElement,
+        to: component.sidebar?.$el,
+        revert: event === 'beforeDestroy'
+      })
+    }
+
+    watch(useRoute(), (to: Route, from?: Route) => {
+      store.dispatch('Files/resetFileSelection')
+      if (from?.name !== to.name) {
+        closeSidebar()
+      }
+    })
+
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store })
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      showSidebar,
+      sidebarActivePanel,
+      closeSidebar,
+      setActiveSidebarPanel,
+      focusSideBar
     }
   },
 
@@ -72,7 +114,6 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     ...mapState(['user']),
     availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
@@ -169,7 +210,7 @@ export default defineComponent({
   methods: {
     async fetchFileInfo() {
       if (!this.highlightedFile) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = {}
         return
       }
 
