@@ -44,6 +44,7 @@ Summary
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
+* Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
@@ -378,6 +379,14 @@ Details
 
    https://github.com/owncloud/web/issues/7318
    https://github.com/owncloud/web/pull/7393
+
+* Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
+
+   We've fixed a bug where the "Shared via"-indicator would be empty or not be displayed at all for
+   public links.
+
+   https://github.com/owncloud/web/issues/7478
+   https://github.com/owncloud/web/pull/7479
 
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 
