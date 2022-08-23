@@ -149,8 +149,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
-      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
-      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -222,7 +222,8 @@ export default defineComponent({
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
-          this.hasPublicLinkEditing
+          this.hasPublicLinkEditing,
+          this.hasPublicLinkAliasSupport
         )
       }
 
