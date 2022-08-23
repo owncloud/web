@@ -34,8 +34,9 @@ export function renameResource(resource, newName, newPath) {
 }
 
 export function buildResource(resource): Resource {
+  const name = resource.fileInfo[DavProperty.Name] || path.basename(resource.name)
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile(resource)
+  const extension = extractExtensionFromFile({ ...resource, name })
   let resourcePath
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
@@ -49,9 +50,6 @@ export function buildResource(resource): Resource {
   }
 
   const id = resource.fileInfo[DavProperty.FileId]
-  const name = resource.fileInfo[DavProperty.Name]
-    ? resource.fileInfo[DavProperty.Name]
-    : path.basename(resource.name)
 
   return {
     id,
