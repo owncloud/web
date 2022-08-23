@@ -1,0 +1,6 @@
+Bugfix: Resolve upload existing folder
+
+We've added an conflict dialog when uploading an already existing folder
+
+https://github.com/owncloud/web/pull/7504
+https://github.com/owncloud/web/issues/6996
