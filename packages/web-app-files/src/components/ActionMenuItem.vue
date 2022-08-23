@@ -1,7 +1,7 @@
 <template>
   <li>
-    <component
-      :is="action.componentType"
+    <oc-button
+      :type="action.componentType"
       v-bind="getComponentProps(action, items)"
       :class="[action.class, 'action-menu-item']"
       data-testid="action-handler"
@@ -43,7 +43,7 @@
         class="oc-invisible-sr"
         v-text="$gettext('(Opens in new window)')"
       />
-    </component>
+    </oc-button>
   </li>
 </template>
 
@@ -78,21 +78,24 @@ export default {
   },
   methods: {
     getComponentProps(action, resources) {
-      if (action.componentType === 'router-link' && action.route) {
-        return {
-          to: action.route({ resources })
-        }
-      }
-
-      return {
+      const props = {
         appearance: this.appearance,
         ...(action.isDisabled && { disabled: action.isDisabled() }),
         ...(action.variation && { variation: action.variation })
       }
+
+      if (action.componentType === 'router-link' && action.route) {
+        return {
+          ...props,
+          to: action.route({ resources })
+        }
+      }
+
+      return props
     },
 
     getComponentListeners(action, resources) {
-      if (typeof action.handler !== 'function' || action.componentType !== 'oc-button') {
+      if (typeof action.handler !== 'function' || action.componentType !== 'button') {
         return {}
       }
 
@@ -122,7 +125,7 @@ export default {
 }
 .oc-files-context-action-shortcut {
   justify-content: right !important;
-  font-size: 0.85rem;
+  font-size: var(--oc-font-size-small);
   font-weight: bold !important;
   opacity: 0.7;
 }

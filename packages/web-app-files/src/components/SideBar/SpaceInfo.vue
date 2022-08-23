@@ -37,10 +37,10 @@ export default {
 
   &__body {
     text-align: left;
-    font-size: 0.75rem;
+    font-size: var(--oc-font-size-small);
 
     h3 {
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-medium);
       font-weight: 600;
       margin: 0;
     }

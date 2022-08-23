@@ -231,9 +231,6 @@ export default defineComponent({
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected file')
     },
-    shareDateLabel() {
-      return this.$gettext('Shared')
-    },
     sharedViaLabel() {
       return this.$gettext('Shared via')
     },
@@ -258,7 +255,7 @@ export default defineComponent({
         this.showShares &&
         !this.sharesTreeLoading &&
         this.file.path !== this.sharedParentDir &&
-        this.sharedParentDir !== null
+        this.sharedParentDir
       )
     },
     showShares() {
@@ -363,14 +360,17 @@ export default defineComponent({
       if (sharePathParentOrCurrent === null) {
         return
       }
-      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
+      const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
+        ShareTypes.containsAnyValue(
+          [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
+          [s.shareType]
+        )
       )
-      if (userShares.length === 0) {
+      if (shares.length === 0) {
         return
       }
 
-      this.sharedItem = userShares[0]
+      this.sharedItem = shares[0]
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
       if (this.sharedItem.owner?.additionalInfo) {

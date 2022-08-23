@@ -23,7 +23,7 @@ export default {
 
             return resources[0].canDisable({ user: this.user })
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-disable-trigger'
         }
       ]

@@ -24,6 +24,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
+* Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
@@ -34,6 +35,7 @@ Summary
 * Bugfix - Open file on shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Open Folder in project space context menu: [#7425](https://github.com/owncloud/web/pull/7425)
 * Bugfix - Personal shares leaked into project space: [#7268](https://github.com/owncloud/web/issues/7268)
+* Bugfix - Prevent unnecessary PROPFIND request during upload: [#7486](https://github.com/owncloud/web/issues/7486)
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 * Bugfix - Fix infinite loading spinner on invalid preview links: [#7359](https://github.com/owncloud/web/pull/7359)
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
@@ -42,9 +44,11 @@ Summary
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
+* Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
+* Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 * Bugfix - Hide share actions for space viewers/editors: [#7436](https://github.com/owncloud/web/issues/7436)
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
@@ -80,8 +84,9 @@ Summary
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+* Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
@@ -210,6 +215,13 @@ Details
    https://github.com/owncloud/web/issues/7345
    https://github.com/owncloud/web/pull/7355
 
+* Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
+
+   We've fixed a bug where web was trying to load thumbnails for files that are not supported. Due to
+   configurable values, we avoid unnecessary requests.
+
+   https://github.com/owncloud/web/pull/7474
+
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 
    We fixed a small glitch in views of the files app, where the view would show a state like "Resource
@@ -292,6 +304,14 @@ Details
    https://github.com/owncloud/web/issues/7268
    https://github.com/owncloud/web/pull/7294
 
+* Bugfix - Prevent unnecessary PROPFIND request during upload: [#7486](https://github.com/owncloud/web/issues/7486)
+
+   We've removed the unnecessary PROPFIND request at the start of each upload, increasing upload
+   performance especially in larger folders.
+
+   https://github.com/owncloud/web/issues/7486
+   https://github.com/owncloud/web/pull/7488
+
 * Bugfix - Filename hovers over the image in the preview app: [#7216](https://github.com/owncloud/web/pull/7216)
 
    We've fixed a bug where the filename hovers over the image content in the preview app and the
@@ -361,6 +381,14 @@ Details
    https://github.com/owncloud/web/issues/7318
    https://github.com/owncloud/web/pull/7393
 
+* Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
+
+   We've fixed a bug where the "Shared via"-indicator would be empty or not be displayed at all for
+   public links.
+
+   https://github.com/owncloud/web/issues/7478
+   https://github.com/owncloud/web/pull/7479
+
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 
    We've fixed a bug where resource links in "Shared with others" and "Shared via Link" page
@@ -385,6 +413,13 @@ Details
    https://github.com/owncloud/web/issues/7181
    https://github.com/owncloud/web/issues/7079
    https://github.com/owncloud/web/pull/7197
+
+* Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
+
+   We've fixed a bug where the image of a space was not showing in the sidebar.
+
+   https://github.com/owncloud/web/issues/7480
+   https://github.com/owncloud/web/pull/7481
 
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
 
@@ -652,6 +687,7 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7309
+   https://github.com/owncloud/web/pull/7503
 
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 
@@ -703,6 +739,16 @@ Details
    https://github.com/owncloud/web/issues/7358
    https://github.com/owncloud/web/pull/7364
 
+* Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
+
+   We've streamlined the font sizes and some other size related options to let the web UI appear a
+   bit more condensed. In addition to that we've chosen a new font family for the UI ("Inter") which
+   is embedded into the ownCloud Design System by default now.
+
+   https://github.com/owncloud/web/issues/7333
+   https://github.com/owncloud/web/pull/7363
+   https://github.com/owncloud/owncloud-design-system/pull/2270
+
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 
    We've added support to block certain file extensions from the text-editor app with additional
@@ -712,23 +758,55 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.12: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.12. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.16. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
-   - Bugfix - Remove click event on OcIcon: #2216 - Bugfix - Lazy loading render performance: #2260
-   - Bugfix - Omit special characters in user avatar initials: #2267 - Bugfix - Avatar link icon:
-   #2269 - Bugfix - Remove width shrinking of the ocAvatarItem: #2242 - Change - Remove OcAlert
-   component: #2210 - Change - Remove transition animations: #2210 - Change - Revamp animations:
-   #2210 - Change - OcTable emit event data on row click: #2218 - Enhancement - OcCheckbox add
-   outline: #2218 - Enhancement - Progress bar indeterminate state: #2200 - Enhancement -
-   Redesign notifications: #2210 - Enhancement - Use oc colors for selected background and
-   deselect icon: #2262 - Enhancement - Adjust avatar font weight from bold to normal: #2275 -
-   Enhancement - Add offset property to the drop component: #2276
+   * Bugfix - Omit special characters in user avatar initials:
+   [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
+   Avatar link icon:
+   [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269) * Bugfix -
+   Lazy loading render performance:
+   [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260) * Bugfix -
+   Remove width shrinking of the ocAvatarItem:
+   [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
+   Remove click event on OcIcon:
+   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Change -
+   Redesign contextual helper:
+   [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271) * Change -
+   Remove OcAlert component:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Remove transition animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Revamp animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   OcTable emit event data on row click:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add nestedd drop functionality:
+   [#2238](https://github.com/owncloud/owncloud-design-system/issues/2238) *
+   Enhancement - Add OcInfoDrop:
+   [#2286](https://github.com/owncloud/owncloud-design-system/pull/2286) *
+   Enhancement - Add rounded prop to OcTag:
+   [#2284](https://github.com/owncloud/owncloud-design-system/pull/2284) *
+   Enhancement - Adjust avatar font weight from bold to normal:
+   [#2275](https://github.com/owncloud/owncloud-design-system/pull/2275) *
+   Enhancement - OcCheckbox add outline:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add offset property to the drop component:
+   [#7335](https://github.com/owncloud/web/issues/7335) * Enhancement - Make UI smaller:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - OcSelect dark mode improvements:
+   [#2262](https://github.com/owncloud/owncloud-design-system/pull/2262) *
+   Enhancement - Progress bar indeterminate state:
+   [#2200](https://github.com/owncloud/owncloud-design-system/pull/2200) *
+   Enhancement - Redesign notifications:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) *
+   Enhancement - Use Inter font:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
    https://github.com/owncloud/web/pull/7355
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.12
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.16
 
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 

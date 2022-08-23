@@ -1,4 +1,4 @@
-import { When } from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
@@ -16,11 +16,30 @@ When(
 )
 
 When(
+  '{string} creates a public link for the space using the sidebar panel',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spaceObject = new objects.applicationFiles.Spaces({ page })
+    await spaceObject.createPublicLink()
+  }
+)
+
+When(
   '{string} renames the most recently created public link of resource {string} to {string}',
   async function (this: World, stepUser: string, resource: string, newName: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const linkName = await linkObject.changeName({ resource, newName })
+    expect(newName).toBe(linkName)
+  }
+)
+
+When(
+  '{string} renames the most recently created public link of space to {string}',
+  async function (this: World, stepUser: any, newName: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const linkName = await linkObject.changeName({ newName, space: true })
     expect(newName).toBe(linkName)
   }
 )
@@ -77,5 +96,30 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     await linkObject.delete({ resourceName: resource, name })
+  }
+)
+
+Then(
+  'public link named {string} should be visible to {string}',
+  async function (this: World, linkName: string, stepUser: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const publicLinkUrls = await linkObject.getPublicLinkUrl(linkName)
+    expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
+  }
+)
+
+Then(
+  '{string} {string} be able to edit the public link named {string}',
+  async function (
+    this: World,
+    stepUser: any,
+    shouldOrShouldNot: string,
+    linkName: any
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
+    expect(isVisible).toBe(shouldOrShouldNot !== 'should not')
   }
 )

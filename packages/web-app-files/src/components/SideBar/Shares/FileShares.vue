@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex">
-      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
+      <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
       <oc-contextual-helper
         v-if="helpersEnabled"
         class="oc-pl-xs"
@@ -16,7 +16,7 @@
       v-text="noResharePermsMessage"
     />
     <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-      <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+      <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
     </div>
     <template v-if="hasSharees">
       <ul
@@ -43,7 +43,7 @@
       </div>
     </template>
     <template v-if="showSpaceMembers">
-      <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+      <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
       <ul
         id="space-collaborators-list"
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"

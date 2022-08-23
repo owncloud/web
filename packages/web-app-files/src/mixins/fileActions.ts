@@ -119,7 +119,7 @@ export default {
               return false
             },
             canBeDefault: editor.canBeDefault,
-            componentType: 'oc-button',
+            componentType: 'button',
             class: `oc-files-actions-${kebabCase(
               this.apps.meta[editor.app].name
             ).toLowerCase()}-trigger`
@@ -263,7 +263,7 @@ export default {
           name: app.name,
           icon: app.icon,
           img: app.img,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,

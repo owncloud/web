@@ -109,12 +109,12 @@ export default {
 
 <style lang="scss">
 #oc-topbar {
-  height: 60px;
+  height: 52px;
   position: sticky;
   z-index: 5;
 
   img {
-    max-height: 42px;
+    max-height: 38px;
     image-rendering: auto;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
@@ -126,7 +126,7 @@ export default {
     gap: 30px;
 
     img.oc-logo-image {
-      height: 42px;
+      height: 38px;
     }
   }
   .oc-topbar-right {

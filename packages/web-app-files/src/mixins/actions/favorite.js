@@ -32,7 +32,7 @@ export default {
 
             return this.capabilities?.files?.favorites
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-favorite-trigger'
         }
       ]

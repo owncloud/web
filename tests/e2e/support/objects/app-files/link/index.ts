@@ -1,17 +1,19 @@
 import { Page } from 'playwright'
 import {
-  createLink,
-  createLinkArgs,
-  changeName,
-  changeNameArgs,
   addExpiration,
   addExpirationArgs,
   addPassword,
   addPasswordArgs,
+  changeName,
+  changeNameArgs,
   changeRole,
   changeRoleArgs,
+  createLink,
+  createLinkArgs,
+  deleteLink,
   deleteLinkArgs,
-  deleteLink
+  getLinkEditButtonVisibility,
+  getPublicLinkVisibility
 } from './actions'
 import { LinksEnvironment } from '../../../environment'
 
@@ -78,5 +80,18 @@ export class Link {
       key: args.name
     })
     await this.#page.goto(startUrl)
+  }
+
+  async getPublicLinkUrl(linkName): Promise<string[]> {
+    const linkUrl = this.#linksEnvironment.getLink({ name: linkName })
+    const publicLink = await getPublicLinkVisibility({
+      page: this.#page,
+      linkName
+    })
+    return [linkUrl.url, publicLink]
+  }
+
+  async islinkEditButtonVisibile(linkName): Promise<boolean> {
+    return await getLinkEditButtonVisibility({ page: this.#page, linkName })
   }
 }
