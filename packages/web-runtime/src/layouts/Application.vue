@@ -203,6 +203,7 @@ export default defineComponent({
     position: absolute;
     right: 20px;
     bottom: 20px;
+    z-index: 1040;
 
     @media (max-width: 640px) {
       left: 0;

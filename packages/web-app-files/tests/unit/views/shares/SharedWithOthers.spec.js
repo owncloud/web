@@ -36,7 +36,8 @@ const stubs = {
   'oc-avatars': true,
   'oc-resource-size': true,
   'oc-button': true,
-  'oc-drop': true
+  'oc-drop': true,
+  'side-bar': true
 }
 
 const appLoadingSpinnerStub = 'app-loading-spinner-stub'

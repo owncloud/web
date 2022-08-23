@@ -24,7 +24,7 @@ export default {
   watch: {
     currentPage: {
       handler: function () {
-        document.getElementsByClassName('files-list-wrapper')[0]?.scrollTo(0, 0)
+        document.getElementsByClassName('files-view-wrapper')[0]?.scrollTo(0, 0)
       }
     }
   }

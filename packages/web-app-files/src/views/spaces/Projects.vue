@@ -1,136 +1,139 @@
 <template>
-  <div>
-    <app-bar
-      class="oc-border-b"
-      :breadcrumbs="breadcrumbs"
-      :has-view-options="false"
-      :has-sidebar-toggle="false"
-      :show-actions-on-selection="true"
-    >
-      <template #actions>
-        <create-space v-if="hasCreatePermission" />
-      </template>
-      <template #content>
-        <p v-text="spacesHint" />
-      </template>
-    </app-bar>
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <no-content-message
-        v-if="!spaces.length"
-        id="files-spaces-empty"
-        class="files-empty"
-        icon="layout-grid"
+  <div class="oc-flex">
+    <files-view-wrapper>
+      <app-bar
+        class="oc-border-b"
+        :breadcrumbs="breadcrumbs"
+        :has-view-options="false"
+        :has-sidebar-toggle="false"
+        :show-actions-on-selection="true"
       >
-        <template #message>
-          <span v-translate>You don't have access to any spaces</span>
+        <template #actions>
+          <create-space v-if="hasCreatePermission" />
         </template>
-      </no-content-message>
-      <div v-else class="spaces-list oc-px-m oc-mt-l">
-        <ul
-          class="
-            oc-grid
-            oc-grid-match
-            oc-grid-column-small
-            oc-grid-row-large
-            oc-text-center
-            oc-child-width-1-3@m
-            oc-child-width-1-4@l
-            oc-child-width-1-5@xl
-          "
+        <template #content>
+          <p v-text="spacesHint" />
+        </template>
+      </app-bar>
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <no-content-message
+          v-if="!spaces.length"
+          id="files-spaces-empty"
+          class="files-empty"
+          icon="layout-grid"
         >
-          <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m">
-            <div
-              class="spaces-list-card oc-card oc-card-default oc-rounded"
-              :data-space-id="space.id"
-              :class="getSpaceCardAdditionalClass(space)"
-            >
-              <div class="oc-card-media-top oc-border-b">
-                <component
-                  :is="space.disabled ? 'oc-button' : 'router-link'"
-                  v-bind="getSpaceLinkProps(space)"
-                  v-on="getSpaceLinkListeners(space)"
-                >
-                  <oc-tag
-                    v-if="space.disabled"
-                    class="oc-position-absolute space-disabled-indicator"
-                    type="span"
+          <template #message>
+            <span v-translate>You don't have access to any spaces</span>
+          </template>
+        </no-content-message>
+        <div v-else class="spaces-list oc-px-m oc-mt-l">
+          <ul
+            class="
+              oc-grid
+              oc-grid-match
+              oc-grid-column-small
+              oc-grid-row-large
+              oc-text-center
+              oc-child-width-1-3@m
+              oc-child-width-1-4@l
+              oc-child-width-1-5@xl
+            "
+          >
+            <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m">
+              <div
+                class="spaces-list-card oc-card oc-card-default oc-rounded"
+                :data-space-id="space.id"
+                :class="getSpaceCardAdditionalClass(space)"
+              >
+                <div class="oc-card-media-top oc-border-b">
+                  <component
+                    :is="space.disabled ? 'oc-button' : 'router-link'"
+                    v-bind="getSpaceLinkProps(space)"
+                    v-on="getSpaceLinkListeners(space)"
                   >
-                    <span v-translate>Disabled</span>
-                  </oc-tag>
-                  <img
-                    v-if="imageContentObject[space.id]"
-                    class="space-image oc-rounded-top"
-                    :src="imageContentObject[space.id]['data']"
-                    alt=""
-                  />
-                  <oc-icon
-                    v-else
-                    name="layout-grid"
-                    size="xxlarge"
-                    class="space-default-image oc-px-m oc-py-m"
-                  />
-                </component>
-              </div>
-              <div class="oc-card-body oc-p-s">
-                <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle">
-                    <oc-icon class="oc-mr-s" name="layout-grid" />
-                    <component
-                      :is="space.disabled ? 'oc-button' : 'router-link'"
-                      v-bind="getSpaceLinkProps(space)"
-                      class="space-name oc-text-left"
-                      v-on="getSpaceLinkListeners(space)"
+                    <oc-tag
+                      v-if="space.disabled"
+                      class="oc-position-absolute space-disabled-indicator"
+                      type="span"
                     >
-                      <span v-text="space.name"> </span>
-                    </component>
-                  </div>
-                  <div class="oc-flex oc-flex-middle">
-                    <div>
-                      <oc-button
-                        v-oc-tooltip="$gettext('Show members')"
-                        :aria-label="$gettext('Show members')"
-                        appearance="raw"
-                        @click="openSidebarSharePanel(space)"
-                      >
-                        <oc-icon name="group" />
-                      </oc-button>
-                    </div>
-                    <div>
-                      <oc-button
-                        :id="`space-context-btn-${space.getDomSelector()}`"
-                        v-oc-tooltip="$gettext('Show context menu')"
-                        :aria-label="$gettext('Show context menu')"
-                        appearance="raw"
-                      >
-                        <oc-icon name="more-2" />
-                      </oc-button>
-                      <oc-drop
-                        :drop-id="`space-context-drop-${space.getDomSelector()}`"
-                        :toggle="`#space-context-btn-${space.getDomSelector()}`"
-                        mode="click"
-                        close-on-click
-                        :options="{ delayHide: 0 }"
-                        padding-size="small"
-                        position="bottom-end"
-                      >
-                        <space-context-actions :items="[space]" />
-                      </oc-drop>
-                    </div>
-                  </div>
+                      <span v-translate>Disabled</span>
+                    </oc-tag>
+                    <img
+                      v-if="imageContentObject[space.id]"
+                      class="space-image oc-rounded-top"
+                      :src="imageContentObject[space.id]['data']"
+                      alt=""
+                    />
+                    <oc-icon
+                      v-else
+                      name="layout-grid"
+                      size="xxlarge"
+                      class="space-default-image oc-px-m oc-py-m"
+                    />
+                  </component>
                 </div>
-                <p
-                  v-if="space.description"
-                  class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"
-                >
-                  <small v-text="space.description"></small>
-                </p>
+                <div class="oc-card-body oc-p-s">
+                  <div class="oc-flex oc-flex-between oc-flex-middle">
+                    <div class="oc-flex oc-flex-middle">
+                      <oc-icon class="oc-mr-s" name="layout-grid" />
+                      <component
+                        :is="space.disabled ? 'oc-button' : 'router-link'"
+                        v-bind="getSpaceLinkProps(space)"
+                        class="space-name oc-text-left"
+                        v-on="getSpaceLinkListeners(space)"
+                      >
+                        <span v-text="space.name"> </span>
+                      </component>
+                    </div>
+                    <div class="oc-flex oc-flex-middle">
+                      <div>
+                        <oc-button
+                          v-oc-tooltip="$gettext('Show members')"
+                          :aria-label="$gettext('Show members')"
+                          appearance="raw"
+                          @click="openSidebarSharePanel(space)"
+                        >
+                          <oc-icon name="group" />
+                        </oc-button>
+                      </div>
+                      <div>
+                        <oc-button
+                          :id="`space-context-btn-${space.getDomSelector()}`"
+                          v-oc-tooltip="$gettext('Show context menu')"
+                          :aria-label="$gettext('Show context menu')"
+                          appearance="raw"
+                        >
+                          <oc-icon name="more-2" />
+                        </oc-button>
+                        <oc-drop
+                          :drop-id="`space-context-drop-${space.getDomSelector()}`"
+                          :toggle="`#space-context-btn-${space.getDomSelector()}`"
+                          mode="click"
+                          close-on-click
+                          :options="{ delayHide: 0 }"
+                          padding-size="small"
+                          position="bottom-end"
+                        >
+                          <space-context-actions :items="[space]" />
+                        </oc-drop>
+                      </div>
+                    </div>
+                  </div>
+                  <p
+                    v-if="space.description"
+                    class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"
+                  >
+                    <small v-text="space.description"></small>
+                  </p>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </template>
+            </li>
+          </ul>
+        </div>
+      </template>
+    </files-view-wrapper>
+    <side-bar />
   </div>
 </template>
 
@@ -151,9 +154,13 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import { useGraphClient } from 'web-client/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
+    SideBar,
     AppBar,
     AppLoadingSpinner,
     CreateSpace,

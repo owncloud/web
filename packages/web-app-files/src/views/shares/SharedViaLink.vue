@@ -1,56 +1,58 @@
 <template>
-  <div>
-    <app-bar :has-shares-navigation="true" />
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <no-content-message
-        v-if="isEmpty"
-        id="files-shared-via-link-empty"
-        class="files-empty"
-        icon="link"
-      >
-        <template #message>
-          <span v-translate>There are no resources with a public link at the moment</span>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        id="files-shared-via-link-table"
-        v-model="selectedResourcesIds"
-        class="files-table"
-        :class="{ 'files-table-squashed': !sidebarClosed }"
-        :fields-displayed="['name', 'sharedWith', 'sdate']"
-        :are-thumbnails-displayed="displayThumbnails"
-        :are-paths-displayed="true"
-        :resources="paginatedResources"
-        :target-route="resourceTargetLocation"
-        :header-position="fileListHeaderY"
-        :sort-by="sortBy"
-        :sort-dir="sortDir"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-        @sort="handleSort"
-      >
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-        </template>
-        <template #footer>
-          <pagination :pages="paginationPages" :current-page="paginationPage" />
-          <list-info
-            v-if="paginatedResources.length > 0"
-            class="oc-width-1-1 oc-my-s"
-            :files="totalFilesCount.files"
-            :folders="totalFilesCount.folders"
-          />
-        </template>
-      </resource-table>
-    </template>
+  <div class="oc-flex">
+    <files-view-wrapper>
+      <app-bar :has-shares-navigation="true" />
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <no-content-message
+          v-if="isEmpty"
+          id="files-shared-via-link-empty"
+          class="files-empty"
+          icon="link"
+        >
+          <template #message>
+            <span v-translate>There are no resources with a public link at the moment</span>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-shared-via-link-table"
+          v-model="selectedResourcesIds"
+          class="files-table"
+          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :fields-displayed="['name', 'sharedWith', 'sdate']"
+          :are-thumbnails-displayed="displayThumbnails"
+          :are-paths-displayed="true"
+          :resources="paginatedResources"
+          :target-route="resourceTargetLocation"
+          :header-position="fileListHeaderY"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+          @sort="handleSort"
+        >
+          <template #contextMenu="{ resource }">
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+            />
+          </template>
+        </resource-table>
+      </template>
+    </files-view-wrapper>
+    <side-bar />
   </div>
 </template>
 
 <script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
@@ -65,6 +67,10 @@ import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
@@ -75,13 +81,15 @@ const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,
     ListInfo,
     Pagination,
-    ContextActions
+    ContextActions,
+    SideBar
   },
 
   mixins: [FileActions, MixinMountSideBar, MixinFilesListFilter],
