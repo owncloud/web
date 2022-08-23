@@ -1254,7 +1254,7 @@ def acceptance(ctx):
         "federatedServerNeeded": False,
         "federatedServerVersion": OC10_VERSION,
         "runningOnOCIS": False,
-        "screenShots": False,
+        "screenShots": True,
         "openIdConnect": False,
         "oc10IntegrationAppIncluded": False,
         "skip": False,
