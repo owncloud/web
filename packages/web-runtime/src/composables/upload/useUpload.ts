@@ -183,9 +183,7 @@ const createDirectoryTree = ({
         } else {
           try {
             await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
-          }catch(ex) {
-
-          }
+          } catch (ex) {}
         }
 
         uppyService.publish('uploadSuccess', uppyResource)

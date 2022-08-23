@@ -155,8 +155,11 @@ import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
-import { resolveFileNameDuplicate, extractNameWithoutExtension } from '../../helpers/resource'
-import { resolveFileExists, ResolveStrategy } from '../../helpers/resource/copyMove'
+import {
+  resolveFileExists,
+  ResolveStrategy,
+  resolveFileNameDuplicate
+} from '../../helpers/resource/copyMove'
 
 export default defineComponent({
   components: {
@@ -680,8 +683,6 @@ export default defineComponent({
     },
 
     async onFilesSelected(files: File[]) {
-      /*alert("no")
-      return;*/
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
@@ -695,10 +696,9 @@ export default defineComponent({
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
-          console.log(rootFolder)
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if(resolveStrategy == null || resolveStrategyFolder != rootFolder) {
+            if (resolveStrategy == null || resolveStrategyFolder !== rootFolder) {
               resolveStrategyFolder = rootFolder
               resolveStrategy = await resolveFileExists(
                 this.createModal,
@@ -713,15 +713,16 @@ export default defineComponent({
             if (resolveStrategy.strategy === ResolveStrategy.SKIP) {
               continue
             }
-            if (resolveStrategy.strategy === ResolveStrategy.REPLACE) {
-              
-            }
             if (resolveStrategy.strategy === ResolveStrategy.KEEP_BOTH) {
-              /*targetName = resolveFileNameDuplicate(resource.name, resource.extension, [
-                ...movedResources,
-                ...targetFolderResources
-              ])
-              resource.name = targetName*/
+              const newFolderName = resolveFileNameDuplicate(rootFolder, '', this.files)
+              file.meta.relativeFolder = file.meta.relativeFolder.replace(
+                `/${rootFolder}`,
+                `/${newFolderName}`
+              )
+              file.meta.relativePath = file.meta.relativePath.replace(
+                `/${rootFolder}/`,
+                `/${newFolderName}/`
+              )
             }
           }
         }
