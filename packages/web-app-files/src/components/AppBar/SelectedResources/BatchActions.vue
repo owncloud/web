@@ -1,5 +1,8 @@
 <template>
-  <oc-list class="oc-files-appbar-batch-actions oc-width-1-1">
+  <oc-list
+    class="oc-files-appbar-batch-actions oc-width-1-1"
+    :class="{ 'oc-files-appbar-batch-actions-squashed': !sidebarClosed }"
+  >
     <action-menu-item
       v-for="(action, i) in menuItemsBatchActions"
       :key="`batch-action-${i}`"
@@ -8,12 +11,13 @@
       appearance="outline"
       class="oc-mr-s"
       :shortcut-hint="false"
+      :show-tooltip="!sidebarClosed"
     />
   </oc-list>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 import AcceptShare from '../../../mixins/actions/acceptShare'
 import Copy from '../../../mixins/actions/copy'
@@ -41,6 +45,7 @@ export default {
   ],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     filterParams() {
       return {
@@ -83,6 +88,15 @@ export default {
     align-items: center;
     display: flex;
     gap: var(--oc-space-small);
+  }
+
+  &-squashed {
+    .oc-files-context-action-label {
+      display: none;
+      @media only screen and (min-width: 1280px) {
+        display: inherit;
+      }
+    }
   }
 }
 </style>

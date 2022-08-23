@@ -16,7 +16,6 @@ exports[`AppBar component renders breadcrumbs if given, by default without bread
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -38,7 +37,6 @@ exports[`AppBar component renders breadcrumbs if given, with breadcrumbsContextA
     </div>
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
-        <!---->
         <!---->
       </div>
     </div>
@@ -62,7 +60,6 @@ exports[`AppBar component renders breadcrumbs if given, with content in the cont
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -85,7 +82,6 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <size-info-stub class="oc-visible@l files-app-bar-actions-squashed"></size-info-stub>
         <batch-actions-stub></batch-actions-stub>
       </div>
     </div>
@@ -109,7 +105,6 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -132,7 +127,6 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;"><button class="action-slot">Click</button>
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -154,7 +148,6 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
     </div>
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
-        <!---->
         <!---->
       </div>
     </div>
@@ -179,7 +172,6 @@ exports[`AppBar component renders sharesNavigation if enabled 1`] = `
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -198,7 +190,6 @@ exports[`AppBar component renders viewoptions and sidebartoggle neither if both 
     </div>
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
-        <!---->
         <!---->
       </div>
     </div>
@@ -222,7 +213,6 @@ exports[`AppBar component renders viewoptions and sidebartoggle only sidebartogg
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
         <!---->
-        <!---->
       </div>
     </div>
   </div>
@@ -244,7 +234,6 @@ exports[`AppBar component renders viewoptions and sidebartoggle only viewoptions
     </div>
     <div class="files-app-bar-actions">
       <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px;">
-        <!---->
         <!---->
       </div>
     </div>

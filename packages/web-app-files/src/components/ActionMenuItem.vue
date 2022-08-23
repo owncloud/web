@@ -1,6 +1,7 @@
 <template>
   <li>
     <oc-button
+      v-oc-tooltip="showTooltip ? action.label(filterParams) : ''"
       :type="action.componentType"
       v-bind="getComponentProps(action, items)"
       :class="[action.class, 'action-menu-item']"
@@ -66,6 +67,11 @@ export default {
     shortcutHint: {
       type: Boolean,
       default: true,
+      required: false
+    },
+    showTooltip: {
+      type: Boolean,
+      default: false,
       required: false
     }
   },
