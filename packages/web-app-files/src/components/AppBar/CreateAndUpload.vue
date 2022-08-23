@@ -703,7 +703,7 @@ export default defineComponent({
               resolveStrategy = await resolveFileExists(
                 this.createModal,
                 this.hideModal,
-                rootFolder,
+                { name: rootFolder },
                 1,
                 this.$gettext,
                 this.$gettextInterpolate,
