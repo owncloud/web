@@ -18,6 +18,7 @@ Summary
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
@@ -173,6 +174,14 @@ Details
 
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
+
+* Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
+
+   We've fixed a bug in the text editor where the UUID of a shared resource was being displayed
+   instead of the file name.
+
+   https://github.com/owncloud/web/issues/7292
+   https://github.com/owncloud/web/pull/7516
 
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 
