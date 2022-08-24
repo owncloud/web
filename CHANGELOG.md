@@ -80,6 +80,7 @@ Summary
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
+* Enhancement - Add resource name to the WebDAV properties: [#7485](https://github.com/owncloud/web/pull/7485)
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -709,6 +710,12 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
+
+* Enhancement - Add resource name to the WebDAV properties: [#7485](https://github.com/owncloud/web/pull/7485)
+
+   We've added the resource name to the WebDAV properties.
+
+   https://github.com/owncloud/web/pull/7485
 
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 
