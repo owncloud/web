@@ -15,7 +15,7 @@ export default {
 
       // top reached
       if (resourceElement.getBoundingClientRect().top < topOffset) {
-        const fileListWrapperElement = document.getElementsByClassName('files-list-wrapper')[0]
+        const fileListWrapperElement = document.getElementsByClassName('files-view-wrapper')[0]
         fileListWrapperElement.scrollBy(0, -resourceElement.offsetHeight)
       }
     }

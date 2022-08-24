@@ -35,7 +35,7 @@ export default {
 
             return resources.length > 0
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-restore-trigger'
         }
       ]

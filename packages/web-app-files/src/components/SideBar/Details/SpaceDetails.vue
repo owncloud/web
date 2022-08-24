@@ -75,6 +75,7 @@ import { ImageDimension } from '../../../constants'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -91,13 +92,17 @@ export default defineComponent({
         return
       }
 
-      const webDavPathComponents = ref.space.spaceImageData.webDavUrl.split('/')
+      const webDavPathComponents = decodeURI(ref.space.spaceImageData.webDavUrl).split('/')
+      const idComponent = webDavPathComponents.find((c) => c.startsWith(ref.space.id))
+      if (!idComponent) {
+        return
+      }
       const path = webDavPathComponents
-        .slice(webDavPathComponents.indexOf(ref.space.id) + 1)
+        .slice(webDavPathComponents.indexOf(idComponent) + 1)
         .join('/')
 
       const fileInfo = yield ref.$client.files.fileInfo(
-        buildWebDavSpacesPath(ref.space.id, decodeURIComponent(path))
+        buildWebDavSpacesPath(idComponent, decodeURIComponent(path))
       )
       const resource = buildResource(fileInfo)
 
@@ -105,7 +110,7 @@ export default defineComponent({
         resource,
         isPublic: false,
         dimensions: ImageDimension.Preview,
-        server: ref.configuration.server,
+        server: configurationManager.serverUrl,
         userId: ref.user.id,
         token: unref(accessToken)
       })

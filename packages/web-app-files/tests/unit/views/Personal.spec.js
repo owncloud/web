@@ -54,7 +54,8 @@ const stubs = {
   'resource-table': true,
   'not-found-message': true,
   'quick-actions': true,
-  'list-info': true
+  'list-info': true,
+  'side-bar': true
 }
 
 const resourceForestJpg = {

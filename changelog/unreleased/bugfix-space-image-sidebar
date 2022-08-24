@@ -1,0 +1,6 @@
+Bugfix: Missing space image in sidebar
+
+We've fixed a bug where the image of a space was not showing in the sidebar.
+
+https://github.com/owncloud/web/issues/7480
+https://github.com/owncloud/web/pull/7481

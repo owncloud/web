@@ -14,7 +14,7 @@ export default {
           isEnabled: ({ resources }) => {
             return resources.length === 1
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
         }
       ]

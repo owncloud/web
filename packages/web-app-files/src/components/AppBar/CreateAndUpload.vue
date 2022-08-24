@@ -345,13 +345,7 @@ export default defineComponent({
           }
         }
 
-        let pathFileWasUploadedTo = file.meta.currentFolder
-        if (file.meta.relativeFolder) {
-          pathFileWasUploadedTo += file.meta.relativeFolder
-        }
-
-        const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
-
+        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -788,12 +782,6 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-
-      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
-      if (reloadRequired) {
-        bus.publish('app.files.list.load')
-      }
-
       this.$uppyService.uploadFiles(files)
     },
 
@@ -868,10 +856,8 @@ export default defineComponent({
 }
 #upload-list,
 #new-file-menu-drop {
-  min-width: 250px;
+  min-width: 230px;
 }
-</style>
-<style lang="scss">
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -880,8 +866,11 @@ export default defineComponent({
   }
 }
 #clipboard-btns {
+  flex-flow: inherit;
+
   :nth-child(1) {
     border-right: 0px !important;
+    white-space: nowrap;
   }
   :nth-child(2) {
     border-left: 0px !important;

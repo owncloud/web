@@ -87,6 +87,7 @@ function getMountedWrapper(activeFiles = []) {
     }),
     stubs: {
       'app-bar': true,
+      'side-bar': true,
       translate: true
     }
   })

@@ -28,7 +28,7 @@ export default {
             return resources.length === 0
           },
           isDisabled: () => this.activeFiles.length === 0,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-empty-trash-bin-trigger',
           variation: 'danger'
         }

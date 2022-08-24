@@ -85,6 +85,10 @@ const plugins = [
       {
         src: 'node_modules/owncloud-design-system/dist/system/icons/*',
         dest: 'icons'
+      },
+      {
+        src: 'node_modules/owncloud-design-system/dist/system/fonts/*',
+        dest: 'fonts'
       }
     ],
     watch: false
