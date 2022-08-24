@@ -1,0 +1,6 @@
+Bugfix: Rename "New"-Menu Actions and use dedicated icons
+
+ We've fixed shows list of filetypes, which can be created
+
+ https://github.com/GitStartHQ/client-owncloud-web-slice/pull/63
+ https://github.com/owncloud/web/issues/7463
