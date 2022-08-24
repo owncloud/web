@@ -11,7 +11,7 @@
       appearance="outline"
       class="oc-mr-s"
       :shortcut-hint="false"
-      :show-tooltip="!sidebarClosed"
+      :show-tooltip="true"
     />
   </oc-list>
 </template>
@@ -28,6 +28,7 @@ import DownloadFile from '../../../mixins/actions/downloadFile'
 import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
+import ClearSelection from '../../../mixins/actions/clearSelection'
 
 export default {
   name: 'BatchActions',
@@ -41,7 +42,8 @@ export default {
     DownloadFile,
     EmptyTrashBin,
     Move,
-    Restore
+    Restore,
+    ClearSelection
   ],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
@@ -55,6 +57,7 @@ export default {
 
     menuItemsBatchActions() {
       return [
+        ...this.$_clearSelection_items,
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
         ...this.$_downloadArchive_items,
@@ -86,6 +89,13 @@ export default {
     align-items: center;
     display: flex;
     gap: var(--oc-space-small);
+  }
+
+  .oc-files-context-action-label {
+    display: none;
+    @media only screen and (min-width: 1000px) {
+      display: inherit;
+    }
   }
 
   &-squashed {

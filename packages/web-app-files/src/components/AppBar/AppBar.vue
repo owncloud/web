@@ -34,16 +34,6 @@
       <div class="files-app-bar-actions">
         <div class="oc-flex-1 oc-flex oc-flex-start">
           <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
-          <oc-button
-            v-if="showSelectionInfo"
-            id="files-clear-selection"
-            v-oc-tooltip="clearSelectionLabel"
-            :aria-label="clearSelectionLabel"
-            appearance="outline"
-            @click="RESET_SELECTION"
-          >
-            <oc-icon name="close" />
-          </oc-button>
           <batch-actions v-if="showBatchActions" />
         </div>
       </div>
@@ -93,12 +83,6 @@ export default {
     showContextActions() {
       return last(this.breadcrumbs).allowContextActions
     },
-    showSelectionInfo() {
-      return this.hasBulkActions && this.selectedFiles.length > 0
-    },
-    clearSelectionLabel() {
-      return this.$gettext('Clear selection')
-    },
     showBatchActions() {
       return this.hasBulkActions
     },
@@ -134,11 +118,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', [
-      'SET_HIDDEN_FILES_VISIBILITY',
-      'SET_FILE_EXTENSIONS_VISIBILITY',
-      'RESET_SELECTION'
-    ])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
   }
 }
 </script>
@@ -163,13 +143,6 @@ export default {
 
   #files-breadcrumb {
     min-height: 2rem;
-  }
-
-  #files-clear-selection {
-    margin-right: var(--oc-space-small);
-    @media only screen and (min-width: 1200px) {
-      margin-right: var(--oc-space-medium);
-    }
   }
 }
 </style>
