@@ -191,6 +191,7 @@ export default {
 
     .profile-info-wrapper {
       text-align: left;
+      word-break: break-all;
     }
   }
 
