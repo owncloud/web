@@ -41,12 +41,12 @@ export default defineComponent({
 
   mounted() {
     for(var elementId of this.keybindOnElementIds) {
-      console.log(elementId)
       const element = document.getElementById(elementId)
       if (element) {
         element.addEventListener('keydown', this.handleShortcut, false)
       }
     }
+    document.addEventListener('keydown', this.handlePasteShortcut)
     
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
@@ -68,6 +68,7 @@ export default defineComponent({
           element.removeEventListener('keydown', this.handleShortcut)
         }
       }
+      document.removeEventListener('keydown', this.handlePasteShortcut)
     })
   },
 
@@ -94,6 +95,13 @@ export default defineComponent({
 
       this.handleFileActionsShortcuts(key, ctrl)
       this.handleFileSelectionShortcuts(key, shift, ctrl, event)
+    },
+
+    handlePasteShortcut(event) {
+      const key = event.keyCode || event.which
+      const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
+      const isPasteAction = key === 86
+      if (isPasteAction && ctrl) return this.handlePasteAction()
     },
 
     handleFileActionsShortcuts(key, ctrl) {
