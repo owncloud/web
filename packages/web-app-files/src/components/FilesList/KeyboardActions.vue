@@ -40,14 +40,14 @@ export default defineComponent({
   },
 
   mounted() {
-    for(var elementId of this.keybindOnElementIds) {
+    for (const elementId of this.keybindOnElementIds) {
       const element = document.getElementById(elementId)
       if (element) {
         element.addEventListener('keydown', this.handleShortcut, false)
       }
     }
     document.addEventListener('keydown', this.handlePasteShortcut)
-    
+
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
       'app.files.list.clicked.meta',
@@ -62,7 +62,7 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      for(var elementId of this.keybindOnElementIds) {
+      for (const elementId of this.keybindOnElementIds) {
         const element = document.getElementById(elementId)
         if (element) {
           element.removeEventListener('keydown', this.handleShortcut)
