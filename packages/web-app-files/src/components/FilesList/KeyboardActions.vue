@@ -16,10 +16,10 @@ export default defineComponent({
       type: Array,
       required: true
     },
-    keybindOnElementId: {
-      type: String,
+    keybindOnElementIds: {
+      type: Array,
       required: false,
-      default: 'files-view'
+      default: () => ['files', 'web-nav-sidebar']
     }
   },
   setup() {
@@ -40,10 +40,14 @@ export default defineComponent({
   },
 
   mounted() {
-    const filesList = document.getElementById(this.keybindOnElementId)
-    if (filesList) {
-      filesList.addEventListener('keydown', this.handleShortcut, false)
+    for(var elementId of this.keybindOnElementIds) {
+      console.log(elementId)
+      const element = document.getElementById(elementId)
+      if (element) {
+        element.addEventListener('keydown', this.handleShortcut, false)
+      }
     }
+    
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
       'app.files.list.clicked.meta',
@@ -58,7 +62,12 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      filesList.removeEventListener('keydown', this.handleShortcut)
+      for(var elementId of this.keybindOnElementIds) {
+        const element = document.getElementById(elementId)
+        if (element) {
+          element.removeEventListener('keydown', this.handleShortcut)
+        }
+      }
     })
   },
 
