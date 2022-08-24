@@ -2,7 +2,7 @@
   <trash-bin :breadcrumbs="breadcrumbs" />
 </template>
 
-<script>
+<script lang="ts">
 import { bus } from 'web-pkg/src/instance'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 

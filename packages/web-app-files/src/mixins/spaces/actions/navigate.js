@@ -17,7 +17,7 @@ export default {
             }
             return isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-navigate-trigger'
         }
       ]

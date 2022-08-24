@@ -2,7 +2,7 @@
   <div>
     <h2 class="oc-px-m oc-py-s">
       {{ title }}
-      <span class="oc-text-initial">({{ items.length }})</span>
+      <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
 
     <no-content-message v-if="!items.length" class="files-empty oc-flex-stretch" icon="group">

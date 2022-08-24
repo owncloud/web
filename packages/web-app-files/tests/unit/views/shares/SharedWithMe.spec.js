@@ -13,7 +13,8 @@ const stubs = {
   'oc-pagination': true,
   'oc-spinner': true,
   'context-actions': true,
-  'no-content-message': true
+  'no-content-message': true,
+  'side-bar': true
 }
 
 const selectors = {

@@ -31,7 +31,8 @@ const stubs = {
   'oc-resource': true,
   'context-actions': true,
   pagination: true,
-  'list-info': true
+  'list-info': true,
+  'side-bar': true
 }
 
 const forestJpg = {

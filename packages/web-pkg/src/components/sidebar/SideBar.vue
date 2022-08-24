@@ -351,7 +351,7 @@ export default defineComponent({
       &__title {
         text-align: center;
         color: var(--oc-color-text-default);
-        font-size: 1.2rem;
+        font-size: var(--oc-font-size-large);
         grid-column-start: 2;
       }
 

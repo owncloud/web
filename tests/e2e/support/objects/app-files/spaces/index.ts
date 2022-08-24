@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { SpacesEnvironment } from '../../../environment'
+import { SpacesEnvironment, LinksEnvironment } from '../../../environment'
 import { File } from '../../../types'
 import {
   addSpaceMembers,
@@ -18,7 +18,8 @@ import {
   removeAccessMembersArgs,
   removeAccessSpaceMembers,
   changeSpaceRoleArgs,
-  changeSpaceRole
+  changeSpaceRole,
+  createPublicLinkForSpace
 } from './actions'
 import { inviteMembersArgs } from '../share/actions'
 import { spaceWithSpaceIDExist } from './utils'
@@ -26,10 +27,12 @@ import { spaceWithSpaceIDExist } from './utils'
 export class Spaces {
   #page: Page
   #spacesEnvironment: SpacesEnvironment
+  #linksEnvironment: LinksEnvironment
 
   constructor({ page }: { page: Page }) {
     this.#page = page
     this.#spacesEnvironment = new SpacesEnvironment()
+    this.#linksEnvironment = new LinksEnvironment()
   }
 
   async create({
@@ -107,5 +110,13 @@ export class Spaces {
   async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await changeSpaceImage({ id, resource, page: this.#page })
+  }
+
+  async createPublicLink(): Promise<void> {
+    const url = await createPublicLinkForSpace({ page: this.#page })
+    this.#linksEnvironment.createLink({
+      key: 'Link',
+      link: { name: 'Link', url }
+    })
   }
 }

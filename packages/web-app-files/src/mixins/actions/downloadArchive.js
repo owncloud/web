@@ -54,7 +54,7 @@ export default {
             return !downloadDisabled
           },
           canBeDefault: true,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-download-archive-trigger'
         }
       ]

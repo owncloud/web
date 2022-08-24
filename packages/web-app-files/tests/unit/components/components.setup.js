@@ -72,8 +72,7 @@ export const getStore = function ({
   slogan = null,
   user = null,
   generalThemeName = '',
-  selectedResourcesForMove = null,
-  locationPickerTargetFolder = null
+  selectedResourcesForMove = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -118,8 +117,7 @@ export const getStore = function ({
           currentFolder: currentFolder,
           currentPage: currentPage,
           selectedIds: selectedFiles ? selectedFiles.map((file) => file.id) : [],
-          selectedResourcesForMove: selectedResourcesForMove,
-          locationPickerTargetFolder: locationPickerTargetFolder
+          selectedResourcesForMove: selectedResourcesForMove
         },
         getters: {
           totalFilesCount: () => totalFilesCount,

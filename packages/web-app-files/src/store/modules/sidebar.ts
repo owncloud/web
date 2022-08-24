@@ -4,6 +4,10 @@ export default {
     closed: true,
     activePanel: null
   }),
+  getters: {
+    closed: (state) => state.closed,
+    activePanel: (state) => state.activePanel
+  },
   mutations: {
     SET_CLOSED(state, closed) {
       state.closed = closed
@@ -17,7 +21,7 @@ export default {
       commit('SET_CLOSED', false)
       commit('SET_ACTIVE_PANEL', null)
     },
-    openWithPanel({ commit }, panel) {
+    openWithPanel({ commit }, panel: string) {
       commit('SET_CLOSED', false)
       commit('SET_ACTIVE_PANEL', panel)
     },
@@ -28,7 +32,7 @@ export default {
     toggle({ commit, state }) {
       commit('SET_CLOSED', !state.closed)
     },
-    setActivePanel({ commit }, panel) {
+    setActivePanel({ commit }, panel: string) {
       commit('SET_ACTIVE_PANEL', panel)
     },
     resetActivePanel({ commit }) {

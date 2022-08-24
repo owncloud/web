@@ -79,7 +79,7 @@ export function useAppFileHandling({
   }
 
   const revokeUrl = (url: string) => {
-    if (url.startsWith('blob:')) {
+    if (url && url.startsWith('blob:')) {
       URL.revokeObjectURL(url)
     }
   }

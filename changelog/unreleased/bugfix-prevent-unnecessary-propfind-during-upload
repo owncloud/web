@@ -1,0 +1,6 @@
+Bugfix: Prevent unnecessary PROPFIND request during upload
+
+We've removed the unnecessary PROPFIND request at the start of each upload, increasing upload performance especially in larger folders.
+
+https://github.com/owncloud/web/issues/7486
+https://github.com/owncloud/web/pull/7488

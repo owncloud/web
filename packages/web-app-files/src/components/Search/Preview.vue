@@ -139,11 +139,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.files-search-preview {
-  button {
-    font-size: 0.8rem;
-  }
-}
-</style>

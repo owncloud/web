@@ -550,7 +550,6 @@ export default {
 #upload-info {
   background-color: var(--oc-color-background-secondary);
   width: 400px;
-  z-index: 4;
 
   @media (max-width: 640px) {
     margin: 0 auto;

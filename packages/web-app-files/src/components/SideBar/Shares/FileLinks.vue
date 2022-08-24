@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex">
-      <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
+      <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="linksHeading" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
     <p
@@ -71,7 +71,7 @@
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
       <div class="oc-flex">
-        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+        <h3 class="oc-text-bold oc-m-rm oc-text-medium">
           <span v-text="indirectLinksHeading" />
         </h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
@@ -149,8 +149,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
-      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
-      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -222,7 +222,8 @@ export default defineComponent({
         return LinkShareRoles.filterByBitmask(
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
-          this.hasPublicLinkEditing
+          this.hasPublicLinkEditing,
+          this.hasPublicLinkAliasSupport
         )
       }
 

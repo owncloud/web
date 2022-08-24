@@ -303,7 +303,7 @@ export default {
       padding: 15px 10px;
       cursor: pointer;
       position: relative;
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-small);
 
       border-top-color: var(--oc-color-input-border);
 
@@ -316,7 +316,7 @@ export default {
         background-color: white;
         border: 1px solid var(--oc-color-swatch-passive-hover);
         float: right;
-        font-size: 0.6rem;
+        font-size: var(--oc-font-size-xsmall);
         padding: 0.5rem 1rem;
         position: relative;
         opacity: 0.6;
@@ -372,8 +372,8 @@ export default {
       }
 
       &.preview {
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding-top: var(--oc-space-small);
+        padding-bottom: var(--oc-space-small);
         background-color: var(--oc-color-background-highlight);
 
         &.first {
@@ -389,11 +389,11 @@ export default {
         }
 
         button {
-          font-size: 0.9rem;
+          font-size: var(--oc-font-size-small);
         }
 
         .label {
-          font-size: 0.5rem;
+          font-size: var(--oc-font-size-xsmall);
           padding: 0.1rem 0.2rem;
           opacity: 0.6;
         }

@@ -39,7 +39,7 @@
         </oc-button>
       </div>
     </div>
-    <h2 v-translate class="oc-text-bold oc-text-initial oc-mb">Account Information</h2>
+    <h2 v-translate class="oc-text-bold oc-mb">Account Information</h2>
     <dl class="account-page-info oc-flex oc-flex-wrap">
       <div class="account-page-info-username oc-mb oc-width-1-2@s">
         <dt v-translate class="oc-text-normal oc-text-muted">Username</dt>
