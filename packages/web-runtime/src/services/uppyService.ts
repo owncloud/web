@@ -51,8 +51,7 @@ export class UppyService {
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
       retryDelays: [0, 500, 1000],
-      // @TODO Use uploadDataDuringCreation once https://github.com/tus/tus-js-client/issues/397 is solved
-      uploadDataDuringCreation: false,
+      uploadDataDuringCreation,
       onBeforeRequest
     }
 
