@@ -1,0 +1,5 @@
+Bugfix:Improve Create-FileHandler-LinkNames
+We have add tooltip to give the user a clear idea of what file they will create using the + New button
+
+https://github.com/GitStartHQ/client-owncloud-web-slice/pull/39
+https://github.com/owncloud/web/issues/7076
