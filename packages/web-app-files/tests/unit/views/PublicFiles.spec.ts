@@ -20,7 +20,8 @@ const stubs = {
   'context-actions': true,
   pagination: true,
   'list-info': true,
-  'router-link': RouterLinkStub
+  'router-link': RouterLinkStub,
+  'side-bar': true
 }
 
 const router = {

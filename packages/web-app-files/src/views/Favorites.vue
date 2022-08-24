@@ -1,48 +1,60 @@
 <template>
-  <div>
-    <app-bar />
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <no-content-message v-if="isEmpty" id="files-favorites-empty" class="files-empty" icon="star">
-        <template #message>
-          <span v-translate>There are no resources marked as favorite</span>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        id="files-favorites-table"
-        v-model="selectedResourcesIds"
-        class="files-table"
-        :class="{ 'files-table-squashed': !sidebarClosed }"
-        :are-paths-displayed="true"
-        :are-thumbnails-displayed="displayThumbnails"
-        :resources="paginatedResources"
-        :target-route="resourceTargetLocation"
-        :header-position="fileListHeaderY"
-        :sort-by="sortBy"
-        :sort-dir="sortDir"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-        @sort="handleSort"
-      >
-        <template #quickActions="props">
-          <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
-        </template>
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-        </template>
-        <template #footer>
-          <pagination :pages="paginationPages" :current-page="paginationPage" />
-          <list-info
-            v-if="paginatedResources.length > 0"
-            class="oc-width-1-1 oc-my-s"
-            :files="totalFilesCount.files"
-            :folders="totalFilesCount.folders"
-            :size="totalFilesSize"
-          />
-        </template>
-      </resource-table>
-    </template>
+  <div class="oc-flex">
+    <files-view-wrapper>
+      <app-bar />
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <no-content-message
+          v-if="isEmpty"
+          id="files-favorites-empty"
+          class="files-empty"
+          icon="star"
+        >
+          <template #message>
+            <span v-translate>There are no resources marked as favorite</span>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-favorites-table"
+          v-model="selectedResourcesIds"
+          class="files-table"
+          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :are-paths-displayed="true"
+          :are-thumbnails-displayed="displayThumbnails"
+          :resources="paginatedResources"
+          :target-route="resourceTargetLocation"
+          :header-position="fileListHeaderY"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+          @sort="handleSort"
+        >
+          <template #quickActions="props">
+            <quick-actions
+              class="oc-visible@s"
+              :item="props.resource"
+              :actions="app.quickActions"
+            />
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-table>
+      </template>
+    </files-view-wrapper>
+    <side-bar />
   </div>
 </template>
 
@@ -69,11 +81,14 @@ import { useResourcesViewDefaults } from '../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
+import SideBar from '../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     ResourceTable,
     QuickActions,
@@ -81,7 +96,8 @@ export default defineComponent({
     Pagination,
     NoContentMessage,
     ListInfo,
-    ContextActions
+    ContextActions,
+    SideBar
   },
 
   mixins: [FileActions, MixinMountSideBar, MixinFilesListFilter],

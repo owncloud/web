@@ -67,6 +67,7 @@ function getWrapper() {
     }),
     stubs: {
       'app-bar': true,
+      'side-bar': true,
       'trash-bin': true
     }
   })

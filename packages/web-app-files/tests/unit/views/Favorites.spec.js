@@ -11,7 +11,8 @@ const stubs = {
   'oc-pagination': true,
   'resource-table': true,
   'oc-spinner': true,
-  'context-actions': true
+  'context-actions': true,
+  'side-bar': true
 }
 
 const selectors = {

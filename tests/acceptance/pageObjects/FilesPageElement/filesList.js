@@ -678,7 +678,7 @@ module.exports = {
   },
   elements: {
     filesContainer: {
-      selector: '.files-list-wrapper'
+      selector: '.files-view-wrapper'
     },
     filesAppBar: {
       selector: '#files-app-bar'

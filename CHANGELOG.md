@@ -665,6 +665,7 @@ Details
 
    https://github.com/owncloud/web/issues/6844
    https://github.com/owncloud/web/pull/7133
+   https://github.com/owncloud/web/pull/7505
 
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 

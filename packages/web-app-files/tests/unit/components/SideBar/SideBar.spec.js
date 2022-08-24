@@ -243,7 +243,8 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           currentRoute: createLocationSpaces(currentRouteName),
           resolve: (r) => {
             return { href: r.name }
-          }
+          },
+          afterEach: jest.fn()
         }
       },
       mocks

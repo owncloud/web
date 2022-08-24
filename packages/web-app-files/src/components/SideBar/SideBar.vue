@@ -1,12 +1,21 @@
 <template>
   <SideBar
+    v-if="showSidebar"
     ref="sidebar"
+    class="files-side-bar"
+    tabindex="-1"
+    :sidebar-active-panel="sidebarActivePanel"
     :available-panels="availablePanels"
     :sidebar-accordions-warning-message="sidebarAccordionsWarningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
+    @beforeDestroy="destroySideBar"
+    @mounted="focusSideBar"
+    @fileChanged="focusSideBar"
+    @selectPanel="setActiveSideBarPanel"
+    @close="closeSideBar"
     v-on="$listeners"
   >
     <template #header>
@@ -54,9 +63,39 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+
+    const showSidebar = computed(() => !store.getters['Files/sidebar/closed'])
+    const sidebarActivePanel = computed(() => store.getters['Files/sidebar/activePanel'])
+
+    const closeSideBar = () => {
+      store.dispatch('Files/sidebar/close')
+    }
+    const setActiveSideBarPanel = (panelName) => {
+      store.dispatch('Files/sidebar/setActivePanel', panelName)
+    }
+
+    const focusSideBar = (component, event) => {
+      component.focus({
+        from: document.activeElement,
+        to: component.sidebar?.$el,
+        revert: event === 'beforeDestroy'
+      })
+    }
+
+    const destroySideBar = (component, event) => {
+      focusSideBar(component, event)
+      closeSideBar()
+    }
+
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store })
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      showSidebar,
+      sidebarActivePanel,
+      setActiveSideBarPanel,
+      closeSideBar,
+      destroySideBar,
+      focusSideBar
     }
   },
 
@@ -72,7 +111,6 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     ...mapState(['user']),
     availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
@@ -169,7 +207,7 @@ export default defineComponent({
   methods: {
     async fetchFileInfo() {
       if (!this.highlightedFile) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = {}
         return
       }
 
@@ -178,7 +216,7 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = { ...this.highlightedFile }
         return
       }
 
@@ -209,7 +247,7 @@ export default defineComponent({
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
       } catch (error) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
@@ -219,19 +257,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.sidebar-panel {
-  &__file_info,
-  &__space_info {
-    background-color: var(--oc-color-background-default);
-    padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
-  }
-}
+.files-side-bar {
+  z-index: 3;
 
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
+  .sidebar-panel {
+    &__file_info,
+    &__space_info {
+      background-color: var(--oc-color-background-default);
+      padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
+    }
+  }
+
+  ._clipboard-success-animation {
+    animation-name: _clipboard-success-animation;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
 }
 
 @keyframes _clipboard-success-animation {
