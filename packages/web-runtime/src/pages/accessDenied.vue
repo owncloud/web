@@ -11,7 +11,7 @@
           <span v-translate>Login Error</span>
         </h3>
         <h4 v-translate class="oc-mb-m">Your user session is invalid or has expired.</h4>
-        <div v-translate class="oc-mb-m" @click="performLogout">
+        <div v-translate class="oc-mb-m">
           If you like to login with a different user please proceed to
           <router-link id="exitAnchor" :to="{ name: 'login' }">exit</router-link>
         </div>
@@ -32,7 +32,6 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { mapGetters } from 'vuex'
-import { authService } from '../services/auth'
 export default defineComponent({
   name: 'AccessDeniedPage',
   computed: {
@@ -74,13 +73,6 @@ export default defineComponent({
 
     backgroundImg() {
       return this.configuration.currentTheme.loginPage.backgroundImg
-    }
-  },
-  methods: {
-    performLogout(event) {
-      if (event.target.id === 'exitAnchor') {
-        authService.logoutUser()
-      }
     }
   }
 })
