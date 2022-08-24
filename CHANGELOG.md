@@ -23,7 +23,7 @@ Summary
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
-* Bugfix - Improve keyboard shortcuts copy/cut files: [#7492](https://github.com/owncloud/web/pull/7492)
+* Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
@@ -211,12 +211,11 @@ Details
    https://github.com/owncloud/web/issues/7129
    https://github.com/owncloud/web/pull/7248
 
-* Bugfix - Improve keyboard shortcuts copy/cut files: [#7492](https://github.com/owncloud/web/pull/7492)
+* Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 
-   We've changed the Ctr+X message to 'Cut to Clipboard' from 'Copied to Clipboard'
+   We've changed the Ctrl+X message to 'Cut to Clipboard' from 'Copied to Clipboard'
 
-   Https://github.com/owncloud/web/issues/7455
-
+   https://github.com/owncloud/web/issues/7455
    https://github.com/owncloud/web/pull/7492
 
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
