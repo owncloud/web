@@ -6,7 +6,7 @@ Feature: spaces public link
             | Alice |
             | Brian |
             | Carol |
-            | marie |
+            | Marie |
         And "Admin" assigns following roles to the users
             | id    | role       |
             | Alice | SpaceAdmin |
@@ -26,7 +26,7 @@ Feature: spaces public link
             | user  | role    |
             | Brian | editor  |
             | Carol | viewer  |
-            | marie | manager |
+            | Marie | manager |
         When "Brian" logs in
         And "Brian" navigates to the projects space page
         And "Brian" navigates to the project space "team.1"
@@ -38,3 +38,10 @@ Feature: spaces public link
         And "Marie" navigates to the project space "team.1"
         Then public link named "spaceLink" should be visible to "Marie"
         And "Marie" 'should' be able to edit the public link named "spaceLink"
+        When "Marie" changes the permission of the public link named "spaceLink" to "editor"
+        And "Marie" logs out
+        When "Carol" logs in
+        And "Carol" navigates to the projects space page
+        And "Carol" navigates to the project space "team.1"
+        Then public link named "spaceLink" should be visible to "Carol"
+        And "Carol" logs out

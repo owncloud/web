@@ -123,3 +123,12 @@ Then(
     expect(isVisible).toBe(shouldOrShouldNot !== 'should not')
   }
 )
+
+When(
+  '{string} changes the permission of the public link named {string} to {string}',
+  async function (this: World, stepUser: string, name: string, role: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const newPermission = await linkObject.changeRole({ name, role, space: true })
+  }
+)
