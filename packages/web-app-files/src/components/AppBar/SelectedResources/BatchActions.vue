@@ -75,8 +75,6 @@ export default {
   display: block;
   li {
     float: left !important;
-    margin-top: var(--oc-space-xsmall);
-    margin-bottom: var(--oc-space-xsmall);
   }
 
   @media only screen and (min-width: 1200px) {
