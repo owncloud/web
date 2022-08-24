@@ -234,14 +234,6 @@ export default defineComponent({
             this.highlightedFile.webDavPath,
             DavProperties.Default
           )
-          if (
-            this.hasShareJail &&
-            (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-              (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-                this.highlightedFile.path === '/'))
-          ) {
-            item.name = this.highlightedFile.name
-          }
         }
 
         this.selectedFile = buildResource(item)

@@ -9,7 +9,6 @@ interface PrivatePreviewBlobOptions {
   userId: string
   resource: {
     id: string
-    path: string
     webDavPath: string
     etag?: string
   }
