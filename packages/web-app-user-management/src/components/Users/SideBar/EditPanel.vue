@@ -175,4 +175,7 @@ export default {
   bottom: 0;
   left: 0;
 }
+.oc-mb-s input {
+  color: var(--oc-color-input-text-default);
+}
 </style>

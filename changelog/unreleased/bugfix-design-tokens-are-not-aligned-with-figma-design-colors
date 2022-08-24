@@ -1,0 +1,8 @@
+Bugfix: Fix design tokens are not aligned with Figma Design Colors
+
+We've fixed the design tokens to align with the Figma Design colors
+
+The design tokens in the darkmode did not match the figma design in edit user screen. 
+
+https://github.com/owncloud/web/issues/7373
+https://github.com/GitStartHQ/client-owncloud-web-slice/pull/61
