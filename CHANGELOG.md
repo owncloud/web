@@ -57,6 +57,7 @@ Summary
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
+* Bugfix - Stuck After Session Expired: [#7453](https://github.com/owncloud/web/issues/7453)
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -488,6 +489,15 @@ Details
    We've added the missing storage ID when navigating to a shared parent directory.
 
    https://github.com/owncloud/web/pull/7396
+
+* Bugfix - Stuck After Session Expired: [#7453](https://github.com/owncloud/web/issues/7453)
+
+   We've fixed exit link to redirect to login once session expires
+
+   We've removed the logout click handler and created a new logout component
+
+   https://github.com/owncloud/web/issues/7453
+   https://github.com/owncloud/web/pull/7491
 
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 
