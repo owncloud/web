@@ -6,7 +6,7 @@ NOTIFICATIONS = 3
 ALPINE_GIT = "alpine/git:latest"
 DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
-MINIO_MC = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
+MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
@@ -41,6 +41,7 @@ dir = {
     "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
+    "ocis": "/var/www/owncloud/ocis-build"
 }
 
 config = {
@@ -705,6 +706,38 @@ ocisSpecificTestSuites = [
     "webUIUserJourney",
 ]
 
+# minio mc environment variables
+minio_mc_environment = {
+    "CACHE_BUCKET": {
+        "from_secret": "cache_public_s3_bucket",
+    },
+    "MC_HOST": {
+        "from_secret": "cache_s3_endpoint",
+    },
+    "AWS_ACCESS_KEY_ID": {
+        "from_secret": "cache_s3_access_key",
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+        "from_secret": "cache_s3_secret_key",
+    },
+}
+
+go_step_volumes = [{
+    "name": "server",
+    "path": "/srv/app",
+}, {
+    "name": "gopath",
+    "path": "/go",
+}, {
+    "name": "configs",
+    "path": "/srv/config",
+}]
+
+web_workspace = {
+    "base": dir["base"],
+    "path": config["app"]
+}
+
 def checkTestSuites():
     for testGroupName, test in config["acceptance"].items():
         suites = []
@@ -1189,7 +1222,7 @@ def e2eTests(ctx):
         restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
         installYarn() + \
         setupServerConfigureWeb(logLevel) + \
-        getOcis() + \
+        restoreOcisCache() + \
         ocisService() + \
         getSkeletonFiles() + \
         copyFilesForUpload() + \
@@ -1340,7 +1373,7 @@ def acceptance(ctx):
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
-                            steps += getOcis() + ocisService() + getSkeletonFiles()
+                            steps += restoreOcisCache() + ocisService() + getSkeletonFiles()
 
                         else:
                             # Services and steps required for running tests with oc10
@@ -2156,7 +2189,7 @@ def ocisService():
                 "FRONTEND_SEARCH_MIN_LENGTH": "2",
             },
             "commands": [
-                "cd %s/ocis-build" % dir["base"],
+                "cd %s" % dir["ocis"],
                 "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
@@ -2220,6 +2253,23 @@ def ocisWebService():
             "path": "/srv/config",
         }],
     }]
+
+def checkForExistingOcisCache(ctx):
+    sdk_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
+    return [
+        {
+            "name": "check-for-exisiting-cache",
+            "image": OC_UBUNTU,
+            "environment": minio_mc_environment,
+            "commands": [
+                "curl -o .drone.env %s/.drone.env" % sdk_repo_path,
+                "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % sdk_repo_path,
+                ". ./.drone.env",
+                "bash check-oCIS-cache.sh",
+                "pwd && ls -la",
+            ],
+        },
+    ]
 
 def setupServerConfigureWeb(logLevel):
     return [{
@@ -2385,11 +2435,12 @@ def cacheOcisPipeline(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-ocis",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
+        "workspace": web_workspace,
+        "clone": {
+            "disable": True,
         },
-        "steps": buildOCISCache() +
+        "steps": checkForExistingOcisCache(ctx) +
+                 buildOcis() +
                  cacheOcis() +
                  listRemoteCache(),
         "volumes": [{
@@ -2405,112 +2456,82 @@ def cacheOcisPipeline(ctx):
         },
     }]
 
-def getOcis():
+def restoreOcisCache():
     return [{
-        "name": "get-ocis-from-cache",
+        "name": "restore-ocis-cache",
         "image": MINIO_MC,
-        "failure": "ignore",
-        "environment": {
-            "MC_HOST": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "environment": minio_mc_environment,
         "commands": [
-            "source %s/.drone.env" % dir["web"],
-            "mkdir -p %s/ocis-build" % dir["base"],
+            ". ./.drone.env",
+            "rm -rf %s" % dir["ocis"],
+            "mkdir -p %s" % dir["ocis"],
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID %s/ocis-build/" % dir["base"],
-            "chmod +x %s/ocis-build/ocis" % dir["base"],
+            "mc cp -r -a s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis %s" % dir["ocis"],
         ],
     }]
 
-def buildOCISCache():
+def buildOcis():
+    ocis_repo_url = "https://github.com/owncloud/ocis.git"
     return [
         {
-            "name": "check-for-exisiting-cache",
-            "image": OC_UBUNTU,
+            "name": "clone-ocis",
+            "image": OC_CI_GOLANG,
             "commands": [
-                "bash ./tests/drone/check-for-existing-oCIS-cache.sh",
+                "source .drone.env",
+                "cd $GOPATH/src",
+                "mkdir -p github.com/owncloud",
+                "cd github.com/owncloud",
+                "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
+                "cd ocis",
+                "git checkout $OCIS_COMMITID",
             ],
+            "volumes": go_step_volumes,
         },
         {
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
-            "environment": {
-                "GOPATH": "/go",
-            },
             "commands": [
-                "./tests/drone/build-ocis.sh nodejs",
+                # we cannot use the $GOPATH here because of different base image
+                "cd /go/src/github.com/owncloud/ocis/",
+                "retry -t 3 'make ci-node-generate'",
             ],
-            "volumes": [
-                {
-                    "name": "gopath",
-                    "path": "/go",
-                },
-            ],
+            "volumes": go_step_volumes,
         },
         {
             "name": "build-ocis",
             "image": OC_CI_GOLANG,
             "commands": [
-                "./tests/drone/build-ocis.sh golang",
+                "source .drone.env",
+                "cd $GOPATH/src/github.com/owncloud/ocis/ocis",
+                "retry -t 3 'make build'",
+                "mkdir -p %s/$OCIS_COMMITID" % dir["base"],
+                "cp bin/ocis %s/$OCIS_COMMITID" % dir["base"],
             ],
-            "volumes": [
-                {
-                    "name": "gopath",
-                    "path": "/go",
-                },
-            ],
+            "volumes": go_step_volumes,
         },
     ]
 
 def cacheOcis():
     return [{
-        "name": "upload-ocis-bin",
-        "image": PLUGINS_S3,
-        "pull": "if-not-exists",
-        "settings": {
-            "bucket": "owncloud",
-            "endpoint": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "path_style": True,
-            "source": "%s/ocis-build/**/*" % dir["base"],
-            "strip_prefix": "%s/ocis-build" % dir["base"],
-            "target": "/web/ocis-build/",
-            "access_key": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "secret_key": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "name": "upload-ocis-cache",
+        "image": MINIO_MC,
+        "environment": minio_mc_environment,
+        "commands": [
+            ". ./.drone.env",
+            "pwd && ls -la %s/$OCIS_COMMITID" % dir["base"],
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc cp -r -a %s/$OCIS_COMMITID/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["base"],
+        ],
     }]
 
 def listRemoteCache():
     return [{
-        "name": "list-ocis-bin-cache",
+        "name": "list-remote-cache",
         "image": MINIO_MC,
-        "failure": "ignore",
-        "environment": {
-            "MC_HOST": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "environment": minio_mc_environment,
         "commands": [
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
 
