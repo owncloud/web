@@ -2440,8 +2440,7 @@ def cacheOcisPipeline(ctx):
         },
         "steps": checkForExistingOcisCache(ctx) +
                  buildOcis() +
-                 cacheOcis() +
-                 listRemoteCache(),
+                 cacheOcis(),
         "volumes": [{
             "name": "gopath",
             "temp": {},
@@ -2520,16 +2519,6 @@ def cacheOcis():
             "pwd && ls -la %s/$OCIS_COMMITID" % dir["base"],
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc cp -r -a %s/$OCIS_COMMITID/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["base"],
-        ],
-    }]
-
-def listRemoteCache():
-    return [{
-        "name": "list-remote-cache",
-        "image": MINIO_MC,
-        "environment": minio_mc_environment,
-        "commands": [
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
