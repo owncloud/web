@@ -553,7 +553,12 @@ export default {
       const error = this.errors[item.meta.uploadId]
 
       if (error) {
-        return error
+        switch (error?.originalResponse?.getStatus()) {
+          case 507:
+            return this.$gettext('Quota exceeded')
+          default:
+            return this.$gettext('Unknown error')
+        }
       }
     },
     getUploadItemClass(item) {
