@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 import LoginPage from '../pages/login.vue'
+import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
@@ -39,6 +40,12 @@ export const router = patchRouter(
         name: 'login',
         component: LoginPage,
         meta: { title: $gettext('Login') }
+      },
+      {
+        path: '/logout',
+        name: 'logout',
+        component: LogoutPage,
+        meta: { title: $gettext('Logout') }
       },
       {
         path: '/oidc-callback',
