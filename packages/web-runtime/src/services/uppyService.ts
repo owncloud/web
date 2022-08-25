@@ -171,7 +171,15 @@ export class UppyService {
     this.uppy.on('upload-success', (file) => {
       this.publish('uploadSuccess', file)
     })
-    this.uppy.on('upload-error', (file, error) => {
+    this.uppy.on('upload-error', (file, error: any) => {
+      console.log('ERROR EVENT')
+      console.log(error)
+      console.log(
+        error.originalResponse.onload(() => {
+          console.log(error.originalResponse.getStatus())
+        })
+      )
+      console.log(Object.keys(error))
       this.publish('uploadError', { file, error })
     })
     this.uppy.on('file-removed', () => {

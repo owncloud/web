@@ -32,8 +32,8 @@
         v-else
         class="upload-info-label"
         :class="{
-          'upload-info-danger': errors.length && !uploadsCancelled,
-          'upload-info-success': !errors.length && !uploadsCancelled
+          'upload-info-danger': Object.keys(errors).length && !uploadsCancelled,
+          'upload-info-success': !Object.keys(errors).length && !uploadsCancelled
         }"
       >
         {{ uploadingLabel }}
@@ -155,7 +155,7 @@ export default {
     showInfo: false, // show the overlay?
     infoExpanded: false, // show the info including all uploads?
     uploads: {}, // uploads that are being displayed via "infoExpanded"
-    errors: [], // all failed files
+    errors: {}, // all failed files
     successful: [], // all successful files
     filesInProgressCount: 0, // files (not folders!) that are being processed currently
     totalProgress: 0, // current uploads progress (0-100)
@@ -186,7 +186,7 @@ export default {
       if (this.uploadsCancelled) {
         return this.$gettext('Upload cancelled')
       }
-      if (this.errors.length) {
+      if (Object.keys(this.errors).length) {
         return this.$gettext('Upload failed')
       }
       if (!this.runningUploads) {
@@ -195,15 +195,15 @@ export default {
       return this.$gettext('Preparing upload...')
     },
     uploadingLabel() {
-      if (this.errors.length) {
-        const count = this.successful.length + this.errors.length
+      if (Object.keys(this.errors).length) {
+        const count = this.successful.length + Object.keys(this.errors).length
         return this.$gettextInterpolate(
           this.$ngettext(
             '%{ errors } of %{ uploads } item failed',
             '%{ errors } of %{ uploads } items failed',
             count
           ),
-          { uploads: count, errors: this.errors.length }
+          { uploads: count, errors: Object.keys(this.errors).length }
         )
       }
       return this.$gettextInterpolate(
@@ -298,7 +298,7 @@ export default {
       this.remainingTime = this.getRemainingTime(remainingMilliseconds)
     })
     this.$uppyService.subscribe('uploadError', ({ file, error }) => {
-      if (this.errors.some(({ uploadId }) => file.meta.uploadId === uploadId)) {
+      if (this.errors[file.meta.uploadId]) {
         return
       }
 
@@ -315,7 +315,7 @@ export default {
 
       this.uploads[file.meta.uploadId].targetRoute = file.meta.route
       this.uploads[file.meta.uploadId].status = 'error'
-      this.errors.push({ uploadId: file.meta.uploadId, error })
+      this.errors[file.meta.uploadId] = error
       this.filesInProgressCount -= 1
 
       if (file.meta.topLevelFolderId) {
@@ -419,7 +419,7 @@ export default {
     cleanOverlay() {
       this.uploadsCancelled = false
       this.uploads = {}
-      this.errors = []
+      this.errors = {}
       this.successful = []
       this.filesInProgressCount = 0
       this.runningUploads = 0
@@ -550,20 +550,14 @@ export default {
       }
     },
     getUploadItemMessage(item) {
-      const errorRecord = this.errors.find((error) => error.uploadId === item.meta.uploadId)
-      console.log(errorRecord?.error.originalResponse)
-      console.log(errorRecord?.error.causingError)
-      console.log(errorRecord?.error.originalRequest)
-      console.log(Object.keys(errorRecord.error))
+      const error = this.errors[item.meta.uploadId]
 
-      if (errorRecord) {
+      if (error) {
         return 'Encountered error'
       }
     },
     getUploadItemClass(item) {
-      return this.errors.some((error) => error.uploadId === item.meta.uploadId)
-        ? 'oc-textarea-danger'
-        : 'oc-text-muted'
+      return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
     }
   }
 }
