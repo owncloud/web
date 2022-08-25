@@ -244,6 +244,8 @@ module.exports = {
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementVisible('@fileUploadStatus')
+        .closeFileFolderUploadProgress()
+
       return this
     },
     checkForButtonDisabled: function () {
