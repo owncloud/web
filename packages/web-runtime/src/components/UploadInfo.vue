@@ -130,7 +130,7 @@
           </span>
           <span
             v-if="getUploadItemMessage(item)"
-            class="file_info__message oc-ml-xs oc-text-small"
+            class="upload-info-message oc-ml-xs oc-text-small"
             :class="getUploadItemClass(item)"
             v-text="getUploadItemMessage(item)"
           ></span>

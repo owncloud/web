@@ -136,6 +136,28 @@ describe('UploadInfo component', () => {
       const uploadedItems = wrapper.findAll('.upload-info-items li')
       expect(uploadedItems.length).toBe(2)
     })
+    it('should show a message on the failed uploaded files', () => {
+      const wrapper = getShallowWrapper({
+        showInfo: true,
+        infoExpanded: true,
+        uploads: [
+          { name: 'file', type: 'file', meta: { uploadId: '1' } },
+          { name: 'file2', type: 'file', meta: { uploadId: '2' } },
+          { name: 'file3', type: 'file', meta: { uploadId: '3' } }
+        ],
+        errors: {
+          1: new Error(),
+          2: new Error()
+        }
+      })
+      const info = wrapper.find('.upload-info-items')
+      expect(info.exists()).toBeTruthy()
+
+      const infoMessages = wrapper.findAll('.upload-info-message')
+      expect(infoMessages.length).toBe(2)
+      expect(infoMessages.at(0).text()).toBe('Unknown error')
+      expect(infoMessages.at(0).text()).toBe('Unknown error')
+    })
     it('folder is clickable', () => {
       const wrapper = getShallowWrapper({
         showInfo: true,
