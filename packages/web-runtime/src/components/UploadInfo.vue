@@ -130,7 +130,7 @@
           </span>
           <span
             v-if="getUploadItemMessage(item)"
-            class="oc-ml-xs oc-text-small"
+            class="file_info__message oc-ml-xs oc-text-small"
             :class="getUploadItemClass(item)"
             v-text="getUploadItemMessage(item)"
           ></span>
@@ -553,12 +553,19 @@ export default {
       const error = this.errors[item.meta.uploadId]
 
       if (error) {
+        let errorMessage = this.$gettext('Unknown error')
+        if (error.message.includes('response code: 507')) {
+          errorMessage = this.$gettext('Quota exceeded')
+        }
+        return errorMessage
+
+        /**
         switch (error?.originalResponse?.getStatus()) {
           case 507:
             return this.$gettext('Quota exceeded')
           default:
             return this.$gettext('Unknown error')
-        }
+        }**/
       }
     },
     getUploadItemClass(item) {
