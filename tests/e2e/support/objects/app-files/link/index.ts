@@ -13,7 +13,8 @@ import {
   deleteLink,
   deleteLinkArgs,
   getLinkEditButtonVisibility,
-  getPublicLinkVisibility
+  getPublicLinkVisibility,
+  PublicLinkAndItsEditButtonVisibilityArgs
 } from './actions'
 import { LinksEnvironment } from '../../../environment'
 
@@ -82,11 +83,13 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
-  async getPublicLinkUrl(linkName): Promise<string[]> {
-    const linkUrl = this.#linksEnvironment.getLink({ name: linkName })
+  async getPublicLinkUrl(
+    args: Omit<PublicLinkAndItsEditButtonVisibilityArgs, 'page'>
+  ): Promise<string[]> {
+    const linkUrl = this.#linksEnvironment.getLink({ name: args.linkName })
     const publicLink = await getPublicLinkVisibility({
-      page: this.#page,
-      linkName
+      ...args,
+      page: this.#page
     })
     return [linkUrl.url, publicLink]
   }

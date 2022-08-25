@@ -22,6 +22,7 @@ Feature: spaces public link
             | resource    | type   |
             | spaceFolder | folder |
         And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
+        And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
         And "Alice" adds following users to the project space
             | user  | role    |
             | Brian | editor  |
@@ -39,9 +40,11 @@ Feature: spaces public link
         Then public link named "spaceLink" should be visible to "Marie"
         And "Marie" 'should' be able to edit the public link named "spaceLink"
         When "Marie" changes the permission of the public link named "spaceLink" to "editor"
+        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Marie" 
+        And "Marie" 'should' be able to edit the public link named "folderLink"
         And "Marie" logs out
         When "Carol" logs in
         And "Carol" navigates to the projects space page
         And "Carol" navigates to the project space "team.1"
-        Then public link named "spaceLink" should be visible to "Carol"
+        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Carol"
         And "Carol" logs out

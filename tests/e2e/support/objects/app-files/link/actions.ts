@@ -50,6 +50,8 @@ export type deleteLinkArgs = {
 export type PublicLinkAndItsEditButtonVisibilityArgs = {
   page: Page
   linkName: string
+  resource?: string
+  space?: boolean
 }
 const publicLinkSetRoleButton = `#files-role-%s`
 const linkExpiryDatepicker = '.link-expiry-picker'
@@ -193,9 +195,19 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
 export const getPublicLinkVisibility = async (
   args: PublicLinkAndItsEditButtonVisibilityArgs
 ): Promise<string> => {
-  const { page, linkName } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
+  const { page, linkName, resource, space } = args
+  if (!space) {
+    const resourcePaths = resource.split('/')
+    const resourceName = resourcePaths.pop()
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
+    await sidebar.open({ page: page, resource: resourceName })
+    await sidebar.openPanel({ page: page, name: 'sharing' })
+  } else {
+    await sidebar.open({ page: page })
+    await sidebar.openPanel({ page: page, name: 'space-share' })
+  }
   return await page.locator(util.format(publicLink, linkName)).textContent()
 }
 

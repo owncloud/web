@@ -104,7 +104,17 @@ Then(
   async function (this: World, linkName: string, stepUser: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const publicLinkUrls = await linkObject.getPublicLinkUrl(linkName)
+    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, space: true })
+    expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
+  }
+)
+
+Then(
+  'public link named {string} of the resource {string} should be visible to {string}',
+  async function (this: World, linkName: string, resource: string, stepUser: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, resource })
     expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
   }
 )

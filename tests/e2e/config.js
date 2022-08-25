@@ -25,7 +25,7 @@ exports.config = {
   // cucumber
   retry: process.env.RETRY || 0,
   // playwright
-  slowMo: parseInt(process.env.SLOW_MO) || 100,
+  slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 60,
   headless: process.env.HEADLESS === 'true',
   acceptDownloads: process.env.DOWNLOADS !== 'false',
