@@ -90,43 +90,50 @@
         <li
           v-for="(item, idx) in uploads"
           :key="idx"
-          class="oc-flex oc-flex-middle"
           :class="{
             'oc-mb-s': idx !== Object.keys(uploads).length - 1
           }"
         >
-          <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
-          <oc-icon
-            v-else-if="item.status === 'success'"
-            name="check"
-            variation="success"
-            size="small"
-          />
-          <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
-          <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
-          <div v-else class="oc-flex"><oc-spinner size="small" /></div>
-          <oc-resource
-            v-if="displayFileAsResource(item)"
-            :key="item.path"
-            class="oc-ml-s"
-            :resource="item"
-            :is-path-displayed="true"
-            :is-thumbnail-displayed="displayThumbnails"
-            :is-resource-clickable="isResourceClickable(item)"
-            :parent-folder-name-default="defaultParentFolderName(item)"
-            :folder-link="folderLink(item)"
-            :parent-folder-link="parentFolderLink(item)"
-          />
-          <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
-            <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
-            <oc-resource-name
-              :name="item.name"
-              :extension="item.extension"
-              :type="item.type"
-              full-path=""
-              :is-path-displayed="false"
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
+            <oc-icon
+              v-else-if="item.status === 'success'"
+              name="check"
+              variation="success"
+              size="small"
             />
+            <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
+            <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
+            <div v-else class="oc-flex"><oc-spinner size="small" /></div>
+            <oc-resource
+              v-if="displayFileAsResource(item)"
+              :key="item.path"
+              class="oc-ml-s"
+              :resource="item"
+              :is-path-displayed="true"
+              :is-thumbnail-displayed="displayThumbnails"
+              :is-resource-clickable="isResourceClickable(item)"
+              :parent-folder-name-default="defaultParentFolderName(item)"
+              :folder-link="folderLink(item)"
+              :parent-folder-link="parentFolderLink(item)"
+            />
+            <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
+              <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
+              <oc-resource-name
+                :name="item.name"
+                :extension="item.extension"
+                :type="item.type"
+                full-path=""
+                :is-path-displayed="false"
+              />
+            </span>
           </span>
+          <span
+            v-if="getUploadItemMessage(item)"
+            class="oc-ml-xs oc-text-small"
+            :class="getUploadItemClass(item)"
+            v-text="getUploadItemMessage(item)"
+          ></span>
         </li>
       </ul>
     </div>
@@ -290,8 +297,8 @@ export default {
 
       this.remainingTime = this.getRemainingTime(remainingMilliseconds)
     })
-    this.$uppyService.subscribe('uploadError', (file) => {
-      if (this.errors.includes(file.meta.uploadId)) {
+    this.$uppyService.subscribe('uploadError', ({ file, error }) => {
+      if (this.errors.some(({ uploadId }) => file.meta.uploadId === uploadId)) {
         return
       }
 
@@ -308,7 +315,7 @@ export default {
 
       this.uploads[file.meta.uploadId].targetRoute = file.meta.route
       this.uploads[file.meta.uploadId].status = 'error'
-      this.errors.push(file.meta.uploadId)
+      this.errors.push({ uploadId: file.meta.uploadId, error })
       this.filesInProgressCount -= 1
 
       if (file.meta.topLevelFolderId) {
@@ -541,6 +548,22 @@ export default {
       for (const item of runningUploads) {
         this.uploads[item.meta.uploadId].status = 'cancelled'
       }
+    },
+    getUploadItemMessage(item) {
+      const errorRecord = this.errors.find((error) => error.uploadId === item.meta.uploadId)
+      console.log(errorRecord?.error.originalResponse)
+      console.log(errorRecord?.error.causingError)
+      console.log(errorRecord?.error.originalRequest)
+      console.log(Object.keys(errorRecord.error))
+
+      if (errorRecord) {
+        return 'Encountered error'
+      }
+    },
+    getUploadItemClass(item) {
+      return this.errors.some((error) => error.uploadId === item.meta.uploadId)
+        ? 'oc-textarea-danger'
+        : 'oc-text-muted'
     }
   }
 }

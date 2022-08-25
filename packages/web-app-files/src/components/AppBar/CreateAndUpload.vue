@@ -234,9 +234,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to create new files!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to create new files!')
-      }
       return null
     },
     newButtonAriaLabel() {
@@ -253,9 +250,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to upload!')
-      }
       return null
     },
     uploadButtonAriaLabel() {
@@ -267,7 +261,7 @@ export default defineComponent({
     },
 
     uploadOrFileCreationBlocked() {
-      return !this.canUpload || !this.hasFreeSpace
+      return !this.canUpload
     },
 
     canUpload() {
@@ -275,17 +269,6 @@ export default defineComponent({
         return false
       }
       return this.currentFolder.canUpload({ user: this.user })
-    },
-
-    hasFreeSpace() {
-      return (
-        !this.quota ||
-        this.quota.free > 0 ||
-        (this.currentFolder &&
-          this.currentFolder.permissions &&
-          this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.isPublicLocation
-      )
     }
   },
   methods: {
@@ -720,6 +703,13 @@ export default defineComponent({
 
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
+
+        if (
+          uppyResource.meta.routeName === 'files-spaces-share' ||
+          uppyResource.meta.routeName === 'files-public-files'
+        ) {
+          return acc
+        }
 
         if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
