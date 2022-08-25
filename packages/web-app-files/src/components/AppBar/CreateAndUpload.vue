@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
+  <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-width-1-1">
     <template v-if="createFileActionsAvailable">
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
@@ -11,7 +11,10 @@
           :disabled="uploadOrFileCreationBlocked"
         >
           <oc-icon name="add" />
-          <translate>New</translate>
+          <span
+            :class="{ 'new-file-menu-btn-squashed': showPasteHereButton }"
+            v-text="$gettext('New')"
+          />
         </oc-button>
       </span>
       <oc-drop
@@ -78,7 +81,10 @@
           @click="showCreateResourceModal"
         >
           <oc-icon name="resource-type-folder" />
-          <translate>New folder</translate>
+          <span
+            :class="{ 'new-folder-menu-btn-squashed': showPasteHereButton }"
+            v-text="$gettext('New Folder')"
+          />
         </oc-button>
       </span>
     </template>
@@ -90,7 +96,10 @@
         :disabled="uploadOrFileCreationBlocked"
       >
         <oc-icon name="upload" fill-type="line" />
-        <translate>Upload</translate>
+        <span
+          :class="{ 'upload-menu-btn-squashed': showPasteHereButton }"
+          v-text="$gettext('Upload')"
+        />
       </oc-button>
     </span>
     <oc-drop
@@ -874,6 +883,31 @@ export default defineComponent({
   }
   :nth-child(2) {
     border-left: 0px !important;
+  }
+}
+.create-and-upload-actions {
+  gap: var(--oc-space-small);
+  @media only screen and (min-width: 1000px) {
+    gap: var(--oc-space-medium);
+  }
+}
+.new-file-menu-btn-squashed,
+.new-folder-menu-btn-squashed,
+.upload-menu-btn-squashed {
+  display: none;
+  @media only screen and (min-width: 1000px) {
+    display: inherit;
+  }
+}
+
+.files-app-bar-squashed {
+  .new-file-menu-btn-squashed,
+  .new-folder-menu-btn-squashed,
+  .upload-menu-btn-squashed {
+    display: none;
+    @media only screen and (min-width: 1280px) {
+      display: inherit;
+    }
   }
 }
 </style>

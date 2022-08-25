@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar">
+  <div id="files-app-bar" :class="{ 'files-app-bar-squashed': !sidebarClosed }">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -75,6 +75,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
+    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     pageTitle() {
       const title = this.$route.meta.title
