@@ -36,7 +36,7 @@ export type addPasswordArgs = {
 export type changeRoleArgs = {
   page: Page
   resource?: string
-  name: string
+  linkName: string
   role: string
   space?: boolean
 }
@@ -47,7 +47,7 @@ export type deleteLinkArgs = {
   name: string
 }
 
-export type PublicLinkAndItsEditButtonVisibilityArgs = {
+export type publicLinkAndItsEditButtonVisibilityArgs = {
   page: Page
   linkName: string
   resource?: string
@@ -102,7 +102,7 @@ export const waitForPopupNotPresent = async (page): Promise<void> => {
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
-  const { page, resource, name, role, space } = args
+  const { page, resource, linkName, role, space } = args
   if (!space) {
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
@@ -112,7 +112,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
     await sidebar.open({ page: page, resource: resourceName })
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
-  await page.locator(util.format(publicLinkEditRoleButton, name)).click()
+  await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
@@ -193,7 +193,7 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
 }
 
 export const getPublicLinkVisibility = async (
-  args: PublicLinkAndItsEditButtonVisibilityArgs
+  args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<string> => {
   const { page, linkName, resource, space } = args
   if (!space) {
@@ -212,7 +212,7 @@ export const getPublicLinkVisibility = async (
 }
 
 export const getLinkEditButtonVisibility = async (
-  args: PublicLinkAndItsEditButtonVisibilityArgs
+  args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<boolean> => {
   const { page, linkName } = args
   return await page.locator(util.format(editPublicLinkButton, linkName)).isVisible()

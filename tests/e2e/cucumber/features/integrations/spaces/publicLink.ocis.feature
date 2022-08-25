@@ -28,20 +28,22 @@ Feature: spaces public link
             | Brian | editor  |
             | Carol | viewer  |
             | Marie | manager |
-        When "Brian" logs in
+        And "Alice" logs out
+        And "Brian" logs in
         And "Brian" navigates to the projects space page
         And "Brian" navigates to the project space "team.1"
         Then public link named "spaceLink" should be visible to "Brian"
-        But "Brian" 'should not' be able to edit the public link named "spaceLink"
+        But "Brian" should not be able to edit the public link named "spaceLink"
         And "Brian" logs out
         When "Marie" logs in
         And "Marie" navigates to the projects space page
         And "Marie" navigates to the project space "team.1"
         Then public link named "spaceLink" should be visible to "Marie"
-        And "Marie" 'should' be able to edit the public link named "spaceLink"
-        When "Marie" changes the permission of the public link named "spaceLink" to "editor"
-        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Marie" 
-        And "Marie" 'should' be able to edit the public link named "folderLink"
+        And "Marie" should be able to edit the public link named "spaceLink"
+        When "Marie" edits the public link named "spaceLink" of the space changing role to "editor"
+        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Marie"
+        And "Marie" should be able to edit the public link named "folderLink"
+        When "Marie" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
         And "Marie" logs out
         When "Carol" logs in
         And "Carol" navigates to the projects space page

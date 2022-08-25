@@ -14,7 +14,7 @@ import {
   deleteLinkArgs,
   getLinkEditButtonVisibility,
   getPublicLinkVisibility,
-  PublicLinkAndItsEditButtonVisibilityArgs
+  publicLinkAndItsEditButtonVisibilityArgs
 } from './actions'
 import { LinksEnvironment } from '../../../environment'
 
@@ -84,7 +84,7 @@ export class Link {
   }
 
   async getPublicLinkUrl(
-    args: Omit<PublicLinkAndItsEditButtonVisibilityArgs, 'page'>
+    args: Omit<publicLinkAndItsEditButtonVisibilityArgs, 'page'>
   ): Promise<string[]> {
     const linkUrl = this.#linksEnvironment.getLink({ name: args.linkName })
     const publicLink = await getPublicLinkVisibility({

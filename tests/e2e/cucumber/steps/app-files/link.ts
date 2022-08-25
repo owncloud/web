@@ -79,13 +79,13 @@ When(
   async function (
     this: World,
     stepUser: string,
-    name: any,
+    linkName: any,
     resource: string,
     role: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const actualRole = await linkObject.changeRole({ name, resource, role })
+    const actualRole = await linkObject.changeRole({ linkName, resource, role })
     expect(role).toBe(actualRole.toLowerCase())
   }
 )
@@ -120,7 +120,7 @@ Then(
 )
 
 Then(
-  '{string} {string} be able to edit the public link named {string}',
+  /^"([^"]*)" (should|should not) be able to edit the public link named "([^"]*)"$/,
   async function (
     this: World,
     stepUser: any,
@@ -135,10 +135,11 @@ Then(
 )
 
 When(
-  '{string} changes the permission of the public link named {string} to {string}',
-  async function (this: World, stepUser: string, name: string, role: any): Promise<void> {
+  '{string} edits the public link named {string} of the space changing role to {string}',
+  async function (this: World, stepUser: string, linkName: string, role: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const newPermission = await linkObject.changeRole({ name, role, space: true })
+    const newPermission = await linkObject.changeRole({ linkName, role, space: true })
+    expect(role).toBe(newPermission.toLowerCase())
   }
 )
