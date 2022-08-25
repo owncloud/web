@@ -182,6 +182,7 @@ Details
 
    https://github.com/owncloud/web/issues/7292
    https://github.com/owncloud/web/pull/7516
+   https://github.com/owncloud/web/pull/7518
 
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 
