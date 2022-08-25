@@ -101,7 +101,7 @@ export default {
     }
   }
 }
-.files-app-bar-squashed {
+.files-app-bar-squashed .oc-files-appbar-batch-actions {
   .oc-files-context-action-label {
     display: none;
     @media only screen and (min-width: 1280px) {
