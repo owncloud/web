@@ -58,7 +58,7 @@ export default {
     context.dispatch(
       'showMessage',
       {
-        title: $gettext('Copied to clipboard!'),
+        title: $gettext('Cut to clipboard!'),
         status: 'success'
       },
       { root: true }

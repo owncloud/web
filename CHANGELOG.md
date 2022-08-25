@@ -18,10 +18,12 @@ Summary
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
+* Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
+* Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
@@ -80,6 +82,7 @@ Summary
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
+* Enhancement - Add resource name to the WebDAV properties: [#7485](https://github.com/owncloud/web/pull/7485)
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
@@ -172,6 +175,14 @@ Details
    https://github.com/owncloud/web/pull/7166
    https://github.com/owncloud/web/pull/7173
 
+* Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
+
+   We've fixed a bug in the text editor where the UUID of a shared resource was being displayed
+   instead of the file name.
+
+   https://github.com/owncloud/web/issues/7292
+   https://github.com/owncloud/web/pull/7516
+
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 
    We've fixed a bug where the file size was not updated in the files table or side bar while
@@ -199,6 +210,13 @@ Details
 
    https://github.com/owncloud/web/issues/7129
    https://github.com/owncloud/web/pull/7248
+
+* Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
+
+   We've changed the Ctrl+X message to 'Cut to Clipboard' from 'Copied to Clipboard'
+
+   https://github.com/owncloud/web/issues/7455
+   https://github.com/owncloud/web/pull/7492
 
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 
@@ -709,6 +727,12 @@ Details
 
    https://github.com/owncloud/web/issues/7030
    https://github.com/owncloud/web/pull/7072
+
+* Enhancement - Add resource name to the WebDAV properties: [#7485](https://github.com/owncloud/web/pull/7485)
+
+   We've added the resource name to the WebDAV properties.
+
+   https://github.com/owncloud/web/pull/7485
 
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 
