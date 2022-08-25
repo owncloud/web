@@ -1,4 +1,5 @@
-Bugfix:Improve Create-FileHandler-LinkNames
+Bugfix: Improve Create-FileHandler-LinkNames
+
 We have add tooltip to give the user a clear idea of what file they will create using the + New button
 
 https://github.com/owncloud/web/pull/7489
