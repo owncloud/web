@@ -5,5 +5,4 @@ We've fixed exit link to redirect to login once session expires
 We've removed the logout click handler and created a new logout component
 
 https://github.com/owncloud/web/issues/7453
-
 https://github.com/owncloud/web/pull/7491
