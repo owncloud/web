@@ -41,7 +41,7 @@ dir = {
     "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
-    "ocis": "/var/www/owncloud/ocis-build"
+    "ocis": "/var/www/owncloud/ocis-build",
 }
 
 config = {
@@ -735,7 +735,7 @@ go_step_volumes = [{
 
 web_workspace = {
     "base": dir["base"],
-    "path": config["app"]
+    "path": config["app"],
 }
 
 def checkTestSuites():
@@ -2255,18 +2255,17 @@ def ocisWebService():
     }]
 
 def checkForExistingOcisCache(ctx):
-    sdk_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
+    web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
         {
             "name": "check-for-exisiting-cache",
             "image": OC_UBUNTU,
             "environment": minio_mc_environment,
             "commands": [
-                "curl -o .drone.env %s/.drone.env" % sdk_repo_path,
-                "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % sdk_repo_path,
+                "curl -o .drone.env %s/.drone.env" % web_repo_path,
+                "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
                 ". ./.drone.env",
                 "bash check-oCIS-cache.sh",
-                "pwd && ls -la",
             ],
         },
     ]
