@@ -53,7 +53,7 @@ export class UppyService {
       retryDelays: [0, 500, 1000],
       // @TODO Use uploadDataDuringCreation once https://github.com/tus/tus-js-client/issues/397 is solved
       uploadDataDuringCreation: false,
-      onBeforeRequest,
+      onBeforeRequest
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
