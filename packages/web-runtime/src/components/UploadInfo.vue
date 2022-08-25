@@ -46,7 +46,7 @@
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
         ></oc-button>
         <oc-button
-          v-if="!runningUploads && errors.length"
+          v-if="!runningUploads && Object.keys(errors).length"
           v-oc-tooltip="$gettext('Retry all failed uploads')"
           class="oc-ml-s"
           appearance="raw"
@@ -511,9 +511,9 @@ export default {
       this.infoExpanded = !this.infoExpanded
     },
     retryUploads() {
-      this.filesInProgressCount += this.errors.length
+      this.filesInProgressCount += Object.keys(this.errors).length
       this.runningUploads += 1
-      for (const fileID of this.errors) {
+      for (const fileID of Object.keys(this.errors)) {
         this.uploads[fileID].status = undefined
 
         const topLevelFolderId = this.uploads[fileID].meta.topLevelFolderId
@@ -522,7 +522,7 @@ export default {
           this.uploads[topLevelFolderId].errorCount = 0
         }
       }
-      this.errors = []
+      this.errors = {}
       this.$uppyService.retryAllUploads()
     },
     togglePauseUploads() {
@@ -553,7 +553,7 @@ export default {
       const error = this.errors[item.meta.uploadId]
 
       if (error) {
-        return 'Encountered error'
+        return error
       }
     },
     getUploadItemClass(item) {
