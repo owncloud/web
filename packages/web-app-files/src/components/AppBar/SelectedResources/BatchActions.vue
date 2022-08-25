@@ -8,7 +8,7 @@
       appearance="outline"
       class="oc-mr-s"
       :shortcut-hint="false"
-      :show-tooltip="true"
+      :show-tooltip="showTooltips"
     />
   </oc-list>
 </template>
@@ -42,6 +42,13 @@ export default {
     Restore,
     ClearSelection
   ],
+  props: {
+    showTooltips: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 

@@ -103,6 +103,14 @@ const resourcesFiles = [resourceForestJpg, resourceNotesTxt]
 const resourcesFolders = [resourceDocumentsFolder, resourcePdfsFolder]
 const resources = [...resourcesFiles, ...resourcesFolders]
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 describe('Personal view', () => {
   describe('file move with drag & drop', () => {
     it('should exit if target is also selected', async () => {

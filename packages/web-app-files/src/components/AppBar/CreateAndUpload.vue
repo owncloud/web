@@ -5,16 +5,14 @@
         <oc-button
           id="new-file-menu-btn"
           key="new-file-menu-btn-enabled"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New') : ''"
           :aria-label="newButtonAriaLabel"
           appearance="filled"
           variation="primary"
           :disabled="uploadOrFileCreationBlocked"
         >
           <oc-icon name="add" />
-          <span
-            :class="{ 'new-file-menu-btn-squashed': showPasteHereButton }"
-            v-text="$gettext('New')"
-          />
+          <span v-if="!hideButtonLabels" v-text="$gettext('New')" />
         </oc-button>
       </span>
       <oc-drop
@@ -74,6 +72,7 @@
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-folder-btn"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New Folder') : ''"
           appearance="filled"
           variation="primary"
           :aria-label="newButtonAriaLabel"
@@ -81,10 +80,7 @@
           @click="showCreateResourceModal"
         >
           <oc-icon name="resource-type-folder" />
-          <span
-            :class="{ 'new-folder-menu-btn-squashed': showPasteHereButton }"
-            v-text="$gettext('New Folder')"
-          />
+          <span v-if="!hideButtonLabels" v-text="$gettext('New Folder')" />
         </oc-button>
       </span>
     </template>
@@ -92,14 +88,12 @@
       <oc-button
         id="upload-menu-btn"
         key="upload-menu-btn-enabled"
+        v-oc-tooltip="hideButtonLabels ? $gettext('Upload') : ''"
         :aria-label="uploadButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
       >
         <oc-icon name="upload" fill-type="line" />
-        <span
-          :class="{ 'upload-menu-btn-squashed': showPasteHereButton }"
-          v-text="$gettext('Upload')"
-        />
+        <span v-if="!hideButtonLabels" v-text="$gettext('Upload')" />
       </oc-button>
     </span>
     <oc-drop
@@ -167,6 +161,13 @@ export default defineComponent({
     ResourceUpload
   },
   mixins: [MixinFileActions],
+  props: {
+    limitedScreenSpace: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
@@ -220,6 +221,9 @@ export default defineComponent({
 
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
+    },
+    hideButtonLabels() {
+      return this.limitedScreenSpace && this.showPasteHereButton
     },
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
@@ -889,25 +893,6 @@ export default defineComponent({
   gap: var(--oc-space-small);
   @media only screen and (min-width: 1000px) {
     gap: var(--oc-space-medium);
-  }
-}
-.new-file-menu-btn-squashed,
-.new-folder-menu-btn-squashed,
-.upload-menu-btn-squashed {
-  display: none;
-  @media only screen and (min-width: 1000px) {
-    display: inherit;
-  }
-}
-
-.files-app-bar-squashed {
-  .new-file-menu-btn-squashed,
-  .new-folder-menu-btn-squashed,
-  .upload-menu-btn-squashed {
-    display: none;
-    @media only screen and (min-width: 1280px) {
-      display: inherit;
-    }
   }
 }
 </style>
