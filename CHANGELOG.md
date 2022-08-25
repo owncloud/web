@@ -49,6 +49,7 @@ Summary
 * Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
+* Bugfix - Sidebar for current folder: [#7519](https://github.com/owncloud/web/issues/7519)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
@@ -423,6 +424,14 @@ Details
 
    https://github.com/owncloud/web/issues/7049
    https://github.com/owncloud/web/pull/7228
+
+* Bugfix - Sidebar for current folder: [#7519](https://github.com/owncloud/web/issues/7519)
+
+   We've fixed a bug where the right sidebar for the current folder could not be opened when another
+   resource was selected.
+
+   https://github.com/owncloud/web/issues/7519
+   https://github.com/owncloud/web/pull/7527
 
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 
