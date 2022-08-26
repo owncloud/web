@@ -74,25 +74,23 @@ export default {
     }
   },
   mounted() {
-    const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+    const navBar = document.getElementById('web-nav-sidebar')
     const highlighter = document.getElementById('nav-highlighter')
 
-    if (!highlighter || !navItem) {
+    if (!highlighter || !navBar) {
       return
     }
 
-    const resizeObserver = new ResizeObserver((data) => {
-      const width = data[0].borderBoxSize[0].inlineSize
-      highlighter.style.setProperty('transition-duration', `0.05s`)
-      if (width) {
-        highlighter.style.setProperty('width', `${width}px`)
+    const resizeObserver = new ResizeObserver(() => {
+      const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+      if (!navItem) {
+        return
       }
-    })
-    resizeObserver.observe(navItem)
-    if (navItem.clientWidth) {
+      highlighter.style.setProperty('transition-duration', `0.05s`)
       highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
       highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
-    }
+    })
+    resizeObserver.observe(navBar)
 
     this.$on('beforeDestroy', () => {
       resizeObserver.disconnect()
@@ -149,7 +147,7 @@ export default {
   max-width: 230px !important;
 }
 .oc-app-navigation-collapsed {
-  min-width: 58px !important;
-  max-width: 58px !important;
+  min-width: 62px !important;
+  max-width: 62px !important;
 }
 </style>
