@@ -19,7 +19,7 @@ export default defineComponent({
     keybindOnElementIds: {
       type: Array,
       required: false,
-      default: () => ['files', 'web-nav-sidebar']
+      default: () => ['files-view', 'web-nav-sidebar']
     }
   },
   setup() {
