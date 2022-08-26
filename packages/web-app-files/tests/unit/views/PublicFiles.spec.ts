@@ -48,6 +48,14 @@ const stubSelectors = {
   listInfo: 'list-info-stub'
 }
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 describe('PublicFiles view', () => {
   describe('accentuate new files and folders', () => {
     // eslint-disable-next-line jest/expect-expect

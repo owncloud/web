@@ -406,7 +406,7 @@ module.exports = {
       selector: '.oc-modal-body-input .oc-text-input'
     },
     clearSelectionBtn: {
-      selector: '#files-clear-selection'
+      selector: '.oc-files-actions-clear-selection-trigger'
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'

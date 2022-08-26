@@ -1,0 +1,9 @@
+Bugfix: Fix right sidebar content on small screens
+
+We've fixed the right sidebar content on small screens because some screen sizes caused the content to flow out of the screen. Things that have been done to achieve this:
+
+* Selection info has been removed.
+* Labels of the batch actions will hide on screens <1280px if the sidebar is open.
+
+https://github.com/owncloud/web/issues/7498
+https://github.com/owncloud/web/pull/7508
