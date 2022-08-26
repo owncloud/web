@@ -104,7 +104,7 @@ export default defineComponent({
       const isCutAction = key === 88
       const isTextSelected = window.getSelection().type === 'Range'
 
-      if(isTextSelected) return
+      if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()
