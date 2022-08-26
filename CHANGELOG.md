@@ -22,6 +22,7 @@ Summary
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+* Bugfix - Fix right sidebar content on small screens: [#7498](https://github.com/owncloud/web/issues/7498)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
@@ -207,6 +208,17 @@ Details
    We've fixed file size formatting to respect the language setting of the user.
 
    https://github.com/owncloud/web/pull/7443
+
+* Bugfix - Fix right sidebar content on small screens: [#7498](https://github.com/owncloud/web/issues/7498)
+
+   We've fixed the right sidebar content on small screens because some screen sizes caused the
+   content to flow out of the screen. Things that have been done to achieve this:
+
+   * Selection info has been removed. * Labels of the batch actions will hide on screens <1280px if
+   the sidebar is open.
+
+   https://github.com/owncloud/web/issues/7498
+   https://github.com/owncloud/web/pull/7508
 
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 
