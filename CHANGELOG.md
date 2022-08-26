@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add Droparea again: [#7080](https://github.com/owncloud/web/issues/7080)
+* Bugfix - Allow uploads outside of user's home despite quota being exceeded: [#7522](https://github.com/owncloud/web/pull/7522)
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 * Bugfix - Context menu misplaced when triggered by keyboard navigation: [#7230](https://github.com/owncloud/web/pull/7230)
 * Bugfix - Datetime formatting: [#7443](https://github.com/owncloud/web/pull/7443)
@@ -108,6 +109,16 @@ Details
 
    https://github.com/owncloud/web/issues/7080
    https://github.com/owncloud/web/pull/7251
+
+* Bugfix - Allow uploads outside of user's home despite quota being exceeded: [#7522](https://github.com/owncloud/web/pull/7522)
+
+   We've fixed a bug where a user was not able to upload a file in a share or space when the personal
+   home quota was exceeded. We also show a message in the upload details if an upload to a share fails
+   because the share owner's quota is exceeded.
+
+   https://github.com/owncloud/web/issues/6318
+   https://github.com/owncloud/web/issues/5817
+   https://github.com/owncloud/web/pull/7522
 
 * Bugfix - Batch deleting multiple files: [#7357](https://github.com/owncloud/web/pull/7357)
 
