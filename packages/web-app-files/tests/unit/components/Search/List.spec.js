@@ -126,7 +126,8 @@ function createStore(activeFiles) {
           disablePreviews: true
         }
       }),
-      user: () => user
+      user: () => user,
+      capabilities: () => {}
     },
     modules: {
       Files: {

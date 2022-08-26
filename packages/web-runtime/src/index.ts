@@ -90,7 +90,12 @@ export const renderSuccess = (): void => {
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
+        const httpAuthenticatedClient = clientService.httpAuthenticated(
+          store.getters['runtime/auth/accessToken']
+        )
+
         store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
       }
     },
     {

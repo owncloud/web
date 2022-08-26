@@ -43,6 +43,7 @@
           :key="'quota-select-' + user.id"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
+          :max-quota="spaceQuotas.maxPersonalQuota || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
         />
         <p v-else v-translate class="oc-m-rm">
@@ -66,6 +67,7 @@ import UserInfoBox from './UserInfoBox.vue'
 import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
+import { mapState } from 'vuex'
 
 export default {
   name: 'EditPanel',
@@ -100,6 +102,8 @@ export default {
     }
   },
   computed: {
+    ...mapState('runtime/spaces', ['spaceQuotas']),
+
     userRole() {
       return this.user ? this.userRoles[this.user.id] : null
     },

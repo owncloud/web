@@ -12,6 +12,7 @@
         <quota-select
           :title="$gettext('Space quota')"
           :total-quota="selectedOption"
+          :max-quota="spaceQuotas.maxProjectQuota || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
         />
       </template>
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { useGraphClient } from 'web-client/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 
@@ -51,6 +52,8 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapState('runtime/spaces', ['spaceQuotas']),
+
     confirmButtonDisabled() {
       return this.space.spaceQuota.total === this.selectedOption
     },

@@ -3,11 +3,13 @@ import Vue from 'vue'
 import { set, has } from 'lodash-es'
 
 const state = {
-  spaces: []
+  spaces: [],
+  spaceQuotas: {}
 }
 
 const getters = {
-  spaces: (state) => state.spaces
+  spaces: (state) => state.spaces,
+  spaceQuotas: (state) => state.spaceQuotas
 }
 
 const mutations = {
@@ -57,6 +59,9 @@ const mutations = {
   },
   CLEAR_SPACES(state) {
     state.spaces = []
+  },
+  LOAD_SPACE_QUOTAS(state, spaceQuotas) {
+    state.spaceQuotas = spaceQuotas
   }
 }
 
@@ -69,6 +74,17 @@ const actions = {
 
     const spaces = graphResponse.data.value.map((space) => buildSpace(space))
     context.commit('LOAD_SPACES', spaces)
+  },
+  async loadSpaceQuotas(context, { httpAuthenticatedClient }) {
+    // FIXME: Use graphClient after added to libre-graph-api specs https://github.com/owncloud/libre-graph-api
+    const { data } = await httpAuthenticatedClient.get(
+      `${context.rootGetters.configuration.server}graph/v1.0/drivequotas`
+    )
+    context.commit('LOAD_SPACE_QUOTAS', {
+      maxProjectQuota: data.max_project_quota || 0,
+      maxPersonalQuota: data.max_personal_quota || 0,
+      defaultProjectQuota: data.default_project_quota || 0
+    })
   }
 }
 
