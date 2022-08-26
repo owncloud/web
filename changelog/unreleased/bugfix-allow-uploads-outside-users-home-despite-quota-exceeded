@@ -1,4 +1,4 @@
-Bugfix: Allow uploads outside of user's home despite the quota having been exceeded
+Bugfix: Allow uploads outside of user's home despite quota being exceeded
 
 We've fixed a bug where a user was not able to upload a file in a share or space
 when the personal home quota was exceeded.
