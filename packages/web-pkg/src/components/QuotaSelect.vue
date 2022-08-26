@@ -123,7 +123,7 @@ export default {
     createOption(option) {
       option = option.replace(',', '.')
       const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      if (!optionIsNumberRegex.test(option) || option === '0') {
+      if (option === '0' || !optionIsNumberRegex.test(option)) {
         return {
           displayValue: option,
           error: this.$gettext('Please enter only numbers'),
