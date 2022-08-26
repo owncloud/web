@@ -93,22 +93,18 @@ export default defineComponent({
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const shift = event.shiftKey
 
-      this.handleFileActionsShortcuts(key, ctrl)
       this.handleFileSelectionShortcuts(key, shift, ctrl, event)
     },
 
     handlePasteShortcut(event) {
       const key = event.keyCode || event.which
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
-      const isPasteAction = key === 86
-      if (isPasteAction && ctrl) return this.handlePasteAction()
-    },
-
-    handleFileActionsShortcuts(key, ctrl) {
       const isCopyAction = key === 67
       const isPasteAction = key === 86
       const isCutAction = key === 88
+      const isTextSelected = window.getSelection().type === 'Range'
 
+      if(isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()
