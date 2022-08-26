@@ -26,6 +26,7 @@ Summary
 * Bugfix - Fix right sidebar content on small screens: [#7498](https://github.com/owncloud/web/issues/7498)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
+* Bugfix - Paste action (keyboard) not working in project spaces: [#7510](https://github.com/owncloud/web/issues/7510)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 * Bugfix - Left sidebar when switching apps: [#7526](https://github.com/owncloud/web/issues/7526)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
@@ -244,6 +245,13 @@ Details
 
    https://github.com/owncloud/web/issues/7455
    https://github.com/owncloud/web/pull/7492
+
+* Bugfix - Paste action (keyboard) not working in project spaces: [#7510](https://github.com/owncloud/web/issues/7510)
+
+   We've fixed a bug which caused the user to be unable to paste in project spaces.
+
+   https://github.com/owncloud/web/issues/7510
+   https://github.com/owncloud/web/pull/7514
 
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
 
