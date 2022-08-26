@@ -43,10 +43,10 @@ export default defineComponent({
     for (const elementId of this.keybindOnElementIds) {
       const element = document.getElementById(elementId)
       if (element) {
-        element.addEventListener('keydown', this.handleShortcut, false)
+        element.addEventListener('keydown', this.handleSelectionShortcuts, false)
       }
     }
-    document.addEventListener('keydown', this.handlePasteShortcut)
+    document.addEventListener('keydown', this.handleClipboardShortcuts)
 
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
@@ -65,10 +65,10 @@ export default defineComponent({
       for (const elementId of this.keybindOnElementIds) {
         const element = document.getElementById(elementId)
         if (element) {
-          element.removeEventListener('keydown', this.handleShortcut)
+          element.removeEventListener('keydown', this.handleSelectionShortcuts)
         }
       }
-      document.removeEventListener('keydown', this.handlePasteShortcut)
+      document.removeEventListener('keydown', this.handleClipboardShortcuts)
     })
   },
 
@@ -88,7 +88,7 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
-    handleShortcut(event) {
+    handleSelectionShortcuts(event) {
       const key = event.keyCode || event.which
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const shift = event.shiftKey
@@ -96,7 +96,7 @@ export default defineComponent({
       this.handleFileSelectionShortcuts(key, shift, ctrl, event)
     },
 
-    handlePasteShortcut(event) {
+    handleClipboardShortcuts(event) {
       const key = event.keyCode || event.which
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isCopyAction = key === 67
