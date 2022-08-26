@@ -25,6 +25,7 @@ Summary
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
+* Bugfix - Left sidebar when switching apps: [#7526](https://github.com/owncloud/web/issues/7526)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
@@ -228,6 +229,14 @@ Details
 
    https://github.com/owncloud/web/issues/7343
    https://github.com/owncloud/web/pull/7348
+
+* Bugfix - Left sidebar when switching apps: [#7526](https://github.com/owncloud/web/issues/7526)
+
+   We've fixed a bug where the active state of the left sidebar would glitch visually when
+   switching apps.
+
+   https://github.com/owncloud/web/issues/7526
+   https://github.com/owncloud/web/pull/7529
 
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 
