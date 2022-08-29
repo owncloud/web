@@ -47,14 +47,11 @@ describe('Users view', () => {
         id: '1',
         displayName: 'jan',
         role: { id: '1', displayName: 'admin' },
-        drive: { id: '1', quota: { total: 10000 } }
+        drive: { id: '1', quota: { total: 10000 } },
+        passwordProfile: { password: 'newpassword' }
       }
 
-      const wrapper = getMountedWrapper({
-        mocks: {
-          users: []
-        }
-      })
+      const wrapper = getMountedWrapper()
       const busStub = jest.spyOn(bus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
@@ -288,7 +285,7 @@ function getMountedWrapper({
       return {
         selectedUsers: [
           {
-            id: 1,
+            id: '1',
             memberOf: []
           }
         ],
