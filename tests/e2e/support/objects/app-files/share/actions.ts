@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { User } from '../../../types'
+import { Group, User } from '../../../types'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import util from 'util'
@@ -21,13 +21,13 @@ const removeShareConfirmationButton = '.oc-modal-body-actions-confirm'
 export interface createShareArgs {
   page: Page
   folder: string
-  users: User[]
+  recipients: User[] | Group[]
   role: string
   via: 'SIDEBAR_PANEL' | 'QUICK_ACTION'
 }
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
-  const { page, folder, users, role, via } = args
+  const { page, folder, recipients, role, via } = args
   const folderPaths = folder.split('/')
   const folderName = folderPaths.pop()
 
@@ -46,19 +46,19 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       break
   }
 
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
 export interface createReshareArgs {
   page: Page
   folder: string
-  users: User[]
+  recipients: User[] | Group[]
   role: string
 }
 
 export const createReshare = async (args: createReshareArgs): Promise<void> => {
-  const { page, folder, users, role } = args
+  const { page, folder, recipients, role } = args
   const folderPaths = folder.split('/')
   const folderName = folderPaths.pop()
 
@@ -68,23 +68,23 @@ export const createReshare = async (args: createReshareArgs): Promise<void> => {
   await sidebar.open({ page: page, resource: folderName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
 
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
 export interface inviteMembersArgs {
   page: Page
-  users: User[]
+  recipients: User[] | Group[]
   role: string
 }
 
 export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
-  const { page, role, users } = args
-  for (const user of users) {
+  const { page, role, recipients } = args
+  for (const recipient of recipients) {
     const shareInputLocator = page.locator(invitationInput)
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
-      shareInputLocator.fill(user.id)
+      shareInputLocator.fill(recipient.id)
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
