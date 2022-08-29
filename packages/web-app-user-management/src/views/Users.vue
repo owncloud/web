@@ -76,6 +76,7 @@
 </template>
 
 <script lang="ts">
+import isEqual from 'lodash-es/isEqual'
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
@@ -409,9 +410,27 @@ export default defineComponent({
     },
     async editUser(editUser) {
       try {
-        await this.graphClient.users.editUser(editUser.id, editUser)
+        const actualUser = this.users.find((user) => user.id === editUser.id)
 
-        if (editUser.drive) {
+        const graphEditUserRawObjectExtractor = (user) => {
+          const extractUser = { ...user }
+          delete extractUser.drive
+          delete extractUser.role
+          return extractUser
+        }
+
+        if (
+          !isEqual(
+            graphEditUserRawObjectExtractor(actualUser),
+            graphEditUserRawObjectExtractor(editUser)
+          )
+        )
+          await this.graphClient.users.editUser(
+            editUser.id,
+            graphEditUserRawObjectExtractor(editUser)
+          )
+
+        if (!isEqual(actualUser.drive, editUser.drive)) {
           const updateDriveResponse = await this.graphClient.drives.updateDrive(
             editUser.drive.id,
             { quota: { total: editUser.drive.quota.total } },
@@ -427,25 +446,30 @@ export default defineComponent({
           }
         }
 
-        /**
-         * Setting api calls are just temporary and will be replaced with the graph api,
-         * as the backend supports it.
-         */
-        await axios.post(
-          '/api/v0/settings/assignments-add',
-          {
-            account_uuid: editUser.id,
-            role_id: editUser.role.id
-          },
-          {
-            headers: {
-              authorization: `Bearer ${this.accessToken}`
+        if (!isEqual(actualUser.role, editUser.role)) {
+          /**
+           * Setting api calls are just temporary and will be replaced with the graph api,
+           * as the backend supports it.
+           */
+          await axios.post(
+            '/api/v0/settings/assignments-add',
+            {
+              account_uuid: editUser.id,
+              role_id: editUser.role.id
+            },
+            {
+              headers: {
+                authorization: `Bearer ${this.accessToken}`
+              }
             }
-          }
-        )
+          )
+        }
 
-        const user = this.users.findIndex((user) => user.id === editUser.id)
-        this.$set(this.users, user, editUser)
+        this.$set(
+          this.users,
+          this.users.findIndex((user) => user.id === editUser.id),
+          editUser
+        )
         /**
          * The user object gets actually exchanged, therefore we update the selected users
          */
