@@ -52,8 +52,8 @@
     </div>
     <compare-save-dialog
       class="edit-compare-save-dialog"
-      :original-object="originalObjectUser"
-      :compare-object="compareObjectUser"
+      :original-object="user"
+      :compare-object="editUser"
       :confirm-button-disabled="invalidFormData"
       @revert="revertChanges"
       @confirm="$emit('confirm', editUser)"
@@ -100,12 +100,6 @@ export default {
     }
   },
   computed: {
-    originalObjectUser() {
-      return { ...this.user, passwordProfile: { password: '' } }
-    },
-    compareObjectUser() {
-      return { ...this.editUser }
-    },
     invalidFormData() {
       return Object.values(this.formData)
         .map((v) => !!v.valid)
@@ -118,7 +112,7 @@ export default {
   watch: {
     user: {
       handler: function () {
-        this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
+        this.editUser = cloneDeep(this.user)
       },
       deep: true,
       immediate: true
@@ -128,7 +122,6 @@ export default {
     changeSelectedQuotaOption(option) {
       this.editUser.drive.quota.total = option.value
     },
-
     validateDisplayName() {
       this.formData.displayName.valid = false
 
@@ -141,7 +134,6 @@ export default {
       this.formData.displayName.valid = true
       return true
     },
-
     validateEmail() {
       this.formData.email.valid = false
 
@@ -154,9 +146,8 @@ export default {
       this.formData.email.valid = true
       return true
     },
-
     revertChanges() {
-      this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
+      this.editUser = this.user
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''

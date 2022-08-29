@@ -170,6 +170,7 @@ export default defineComponent({
 
       users.value.forEach((user) => {
         user.memberOf = user.memberOf || []
+        user.passwordProfile = user.passwordProfile || { password: '' }
       })
 
       yield loadGroupsTask.perform()
