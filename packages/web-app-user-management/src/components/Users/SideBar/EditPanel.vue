@@ -100,10 +100,6 @@ export default {
     }
   },
   computed: {
-    userRole() {
-      return this.user ? this.userRoles[this.user.id] : null
-    },
-
     originalObjectUser() {
       return { ...this.user, passwordProfile: { password: '' } }
     },
