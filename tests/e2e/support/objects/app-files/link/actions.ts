@@ -103,15 +103,18 @@ export const waitForPopupNotPresent = async (page): Promise<void> => {
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   const { page, resource, linkName, role, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
   if (!space) {
     const resourcePaths = resource.split('/')
-    const resourceName = resourcePaths.pop()
+    resourceName = resourcePaths.pop()
+    shareType = 'sharing'
     if (resourcePaths.length) {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
-    await sidebar.open({ page: page, resource: resourceName })
-    await sidebar.openPanel({ page: page, name: 'sharing' })
   }
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: shareType })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateDialog).textContent()
@@ -196,18 +199,18 @@ export const getPublicLinkVisibility = async (
   args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<string> => {
   const { page, linkName, resource, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
   if (!space) {
+    shareType = 'sharing'
     const resourcePaths = resource.split('/')
-    const resourceName = resourcePaths.pop()
+    resourceName = resourcePaths.pop()
     if (resourcePaths.length) {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
-    await sidebar.open({ page: page, resource: resourceName })
-    await sidebar.openPanel({ page: page, name: 'sharing' })
-  } else {
-    await sidebar.open({ page: page })
-    await sidebar.openPanel({ page: page, name: 'space-share' })
   }
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: shareType })
   return await page.locator(util.format(publicLink, linkName)).textContent()
 }
 

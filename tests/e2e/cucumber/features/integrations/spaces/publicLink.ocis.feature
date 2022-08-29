@@ -29,7 +29,7 @@ Feature: spaces public link
             | Carol | viewer  |
             | Marie | manager |
         And "Alice" logs out
-        And "Brian" logs in
+        When "Brian" logs in
         And "Brian" navigates to the projects space page
         And "Brian" navigates to the project space "team.1"
         Then public link named "spaceLink" should be visible to "Brian"
@@ -38,15 +38,13 @@ Feature: spaces public link
         When "Marie" logs in
         And "Marie" navigates to the projects space page
         And "Marie" navigates to the project space "team.1"
-        Then public link named "spaceLink" should be visible to "Marie"
-        And "Marie" should be able to edit the public link named "spaceLink"
-        When "Marie" edits the public link named "spaceLink" of the space changing role to "editor"
-        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Marie"
-        And "Marie" should be able to edit the public link named "folderLink"
-        When "Marie" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
+        And "Marie" edits the public link named "spaceLink" of the space changing role to "editor"
+        And "Marie" edits the public link named "folderLink" of resource "spaceFolder" changing role to "editor"
         And "Marie" logs out
         When "Carol" logs in
         And "Carol" navigates to the projects space page
         And "Carol" navigates to the project space "team.1"
-        Then public link named "folderLink" of the resource "spaceFolder" should be visible to "Carol"
+        And public link named "spaceLink" should be visible to "Carol"
+        But "Carol" should not be able to edit the public link named "spaceLink"
+        And public link named "folderLink" of the resource "spaceFolder" should be visible to "Carol"
         And "Carol" logs out
