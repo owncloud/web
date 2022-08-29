@@ -284,5 +284,5 @@ export const createPublicLinkForSpace = async (
   const { page } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  return await createLink({ page: page, space: true })
+  return createLink({ page: page, space: true })
 }

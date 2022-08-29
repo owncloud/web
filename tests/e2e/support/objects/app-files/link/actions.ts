@@ -35,9 +35,10 @@ export type addPasswordArgs = {
 
 export type changeRoleArgs = {
   page: Page
-  resource: string
-  name: string
+  resource?: string
+  linkName: string
   role: string
+  space?: boolean
 }
 
 export type deleteLinkArgs = {
@@ -46,9 +47,11 @@ export type deleteLinkArgs = {
   name: string
 }
 
-export type PublicLinkAndItsEditButtonVisibilityArgs = {
+export type publicLinkAndItsEditButtonVisibilityArgs = {
   page: Page
   linkName: string
+  resource?: string
+  space?: boolean
 }
 const publicLinkSetRoleButton = `#files-role-%s`
 const linkExpiryDatepicker = '.link-expiry-picker'
@@ -99,15 +102,20 @@ export const waitForPopupNotPresent = async (page): Promise<void> => {
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
-  const { page, resource, name, role } = args
-  const resourcePaths = resource.split('/')
-  const resourceName = resourcePaths.pop()
-  if (resourcePaths.length) {
-    await clickResource({ page: page, path: resourcePaths.join('/') })
+  const { page, resource, linkName, role, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
+  if (!space) {
+    const resourcePaths = resource.split('/')
+    resourceName = resourcePaths.pop()
+    shareType = 'sharing'
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
   }
   await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
-  await page.locator(util.format(publicLinkEditRoleButton, name)).click()
+  await sidebar.openPanel({ page: page, name: shareType })
+  await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
@@ -188,16 +196,26 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
 }
 
 export const getPublicLinkVisibility = async (
-  args: PublicLinkAndItsEditButtonVisibilityArgs
+  args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<string> => {
-  const { page, linkName } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
+  const { page, linkName, resource, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
+  if (!space) {
+    shareType = 'sharing'
+    const resourcePaths = resource.split('/')
+    resourceName = resourcePaths.pop()
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
+  }
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: shareType })
   return await page.locator(util.format(publicLink, linkName)).textContent()
 }
 
 export const getLinkEditButtonVisibility = async (
-  args: PublicLinkAndItsEditButtonVisibilityArgs
+  args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<boolean> => {
   const { page, linkName } = args
   return await page.locator(util.format(editPublicLinkButton, linkName)).isVisible()
