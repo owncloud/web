@@ -173,7 +173,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
         },
@@ -186,7 +185,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "retry": False,
@@ -202,7 +200,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "notificationsAppNeeded": True,
@@ -216,7 +213,6 @@ config = {
             "extraEnvironment": {
                 "REMOTE_BACKEND_HOST": "http://federated",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
@@ -234,7 +230,6 @@ config = {
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
@@ -313,7 +308,6 @@ config = {
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
@@ -329,7 +323,6 @@ config = {
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
@@ -408,7 +401,6 @@ config = {
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "375x812",
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
@@ -2414,6 +2406,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
+    environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
