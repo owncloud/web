@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar">
+  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': !sidebarClosed }">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -32,14 +32,13 @@
         </div>
       </div>
       <div class="files-app-bar-actions">
-        <div class="oc-flex-1 oc-flex oc-flex-start" style="gap: 15px">
-          <slot v-if="showActionsOnSelection || selectedFiles.length === 0" name="actions" />
-          <size-info
-            v-if="showSelectionInfo"
-            class="oc-visible@l"
-            :class="{ 'files-app-bar-actions-squashed': !sidebarClosed }"
+        <div class="oc-flex-1 oc-flex oc-flex-start">
+          <slot
+            v-if="showActionsOnSelection || selectedFiles.length === 0"
+            name="actions"
+            :limitedScreenSpace="limitedScreenSpace"
           />
-          <batch-actions v-if="showBatchActions" />
+          <batch-actions v-if="showBatchActions" :show-tooltips="limitedScreenSpace" />
         </div>
       </div>
       <slot name="content" />
@@ -56,7 +55,6 @@ import MixinFileActions from '../../mixins/fileActions'
 import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
-import SizeInfo from './SelectedResources/SizeInfo.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
 
@@ -66,7 +64,6 @@ export default {
     ContextActions,
     SharesNavigation,
     SidebarToggle,
-    SizeInfo,
     ViewOptions
   },
   mixins: [MixinFileActions],
@@ -79,6 +76,12 @@ export default {
     hasViewOptions: { type: Boolean, default: true },
     showActionsOnSelection: { type: Boolean, default: false }
   },
+  data: function () {
+    return {
+      resizeObserver: new ResizeObserver(this.onResize),
+      limitedScreenSpace: false
+    }
+  },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
@@ -88,14 +91,8 @@ export default {
       const title = this.$route.meta.title
       return this.$gettext(title)
     },
-    areDefaultActionsVisible() {
-      return this.selectedFiles.length < 1
-    },
     showContextActions() {
       return last(this.breadcrumbs).allowContextActions
-    },
-    showSelectionInfo() {
-      return this.hasBulkActions && this.selectedFiles.length > 0
     },
     showBatchActions() {
       return this.hasBulkActions
@@ -111,6 +108,12 @@ export default {
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
+  },
+  mounted() {
+    this.resizeObserver.observe(this.$refs.filesAppBar)
+  },
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.filesAppBar)
   },
 
   created() {
@@ -132,7 +135,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
+
+    onResize() {
+      this.limitedScreenSpace = this.sidebarClosed
+        ? window.innerWidth <= 1000
+        : window.innerWidth <= 1280
+    }
   }
 }
 </script>
@@ -153,13 +162,6 @@ export default {
     gap: var(--oc-space-small);
     justify-content: flex-end;
     min-height: 3rem;
-
-    &-squashed {
-      display: none;
-      @media only screen and (min-width: 1400px) {
-        display: inherit;
-      }
-    }
   }
 
   #files-breadcrumb {

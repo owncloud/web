@@ -8,8 +8,8 @@
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
       >
-        <template #actions>
-          <create-and-upload />
+        <template #actions="{ limitedScreenSpace }">
+          <create-and-upload :limited-screen-space="limitedScreenSpace" />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />

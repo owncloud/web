@@ -1,6 +1,7 @@
 <template>
   <li>
     <oc-button
+      v-oc-tooltip="showTooltip || action.hideLabel ? action.label(filterParams) : ''"
       :type="action.componentType"
       v-bind="getComponentProps(action, items)"
       :class="[action.class, 'action-menu-item']"
@@ -29,9 +30,12 @@
         :fill-type="action.iconFillType || 'line'"
         size="medium"
       />
-      <span class="oc-files-context-action-label" data-testid="action-label">{{
-        action.label(filterParams)
-      }}</span>
+      <span
+        v-if="!action.hideLabel"
+        class="oc-files-context-action-label"
+        data-testid="action-label"
+        >{{ action.label(filterParams) }}</span
+      >
       <span
         v-if="action.shortcut && shortcutHint"
         class="oc-files-context-action-shortcut"
@@ -66,6 +70,11 @@ export default {
     shortcutHint: {
       type: Boolean,
       default: true,
+      required: false
+    },
+    showTooltip: {
+      type: Boolean,
+      default: false,
       required: false
     }
   },

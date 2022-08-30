@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 
@@ -36,8 +36,10 @@ export default {
   },
   methods: {
     ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showDetails_trigger() {
+    async $_showDetails_trigger({ resources }) {
+      this.SET_FILE_SELECTION(resources)
       await this.openSidebar()
     }
   }

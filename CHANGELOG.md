@@ -22,9 +22,11 @@ Summary
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 * Bugfix - Files pagination scroll to top: [#7322](https://github.com/owncloud/web/pull/7322)
 * Bugfix - File size formatting: [#7443](https://github.com/owncloud/web/pull/7443)
+* Bugfix - Fix right sidebar content on small screens: [#7498](https://github.com/owncloud/web/issues/7498)
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 * Bugfix - Improve keyboard shortcuts copy/cut files: [#7455](https://github.com/owncloud/web/issues/7455)
 * Bugfix - Left sidebar active navigation item has wrong cursor: [#7348](https://github.com/owncloud/web/pull/7348)
+* Bugfix - Left sidebar when switching apps: [#7526](https://github.com/owncloud/web/issues/7526)
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
@@ -49,6 +51,7 @@ Summary
 * Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
 * Bugfix - Shared with others page apps not working with oc10 as backend: [#7228](https://github.com/owncloud/web/pull/7228)
+* Bugfix - Sidebar for current folder: [#7519](https://github.com/owncloud/web/issues/7519)
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 * Bugfix - Missing space image in sidebar: [#7480](https://github.com/owncloud/web/issues/7480)
 * Bugfix - Respect space quota permission: [#7400](https://github.com/owncloud/web/issues/7400)
@@ -56,6 +59,7 @@ Summary
 * Bugfix - Space sidebar sharing indicators: [#6921](https://github.com/owncloud/web/pull/6921)
 * Bugfix - Missing quick actions in spaces file list: [#7349](https://github.com/owncloud/web/pull/7349)
 * Bugfix - Add storage ID when navigating to a shared parent directory: [#7396](https://github.com/owncloud/web/pull/7396)
+* Bugfix - Stuck After Session Expired: [#7453](https://github.com/owncloud/web/issues/7453)
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 * Bugfix - File list render performance: [#7038](https://github.com/owncloud/web/issues/7038)
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -182,6 +186,7 @@ Details
 
    https://github.com/owncloud/web/issues/7292
    https://github.com/owncloud/web/pull/7516
+   https://github.com/owncloud/web/pull/7518
 
 * Bugfix - File size not updated while restoring file version: [#7469](https://github.com/owncloud/web/pull/7469)
 
@@ -204,6 +209,17 @@ Details
 
    https://github.com/owncloud/web/pull/7443
 
+* Bugfix - Fix right sidebar content on small screens: [#7498](https://github.com/owncloud/web/issues/7498)
+
+   We've fixed the right sidebar content on small screens because some screen sizes caused the
+   content to flow out of the screen. Things that have been done to achieve this:
+
+   * Selection info has been removed. * Labels of the batch actions will hide on screens <1280px if
+   the sidebar is open.
+
+   https://github.com/owncloud/web/issues/7498
+   https://github.com/owncloud/web/pull/7508
+
 * Bugfix - Hide empty trash bin modal on error: [#7248](https://github.com/owncloud/web/pull/7248)
 
    We've fixed a bug where the empty trash bin modal was shown if an error occurred.
@@ -225,6 +241,14 @@ Details
 
    https://github.com/owncloud/web/issues/7343
    https://github.com/owncloud/web/pull/7348
+
+* Bugfix - Left sidebar when switching apps: [#7526](https://github.com/owncloud/web/issues/7526)
+
+   We've fixed a bug where the active state of the left sidebar would glitch visually when
+   switching apps.
+
+   https://github.com/owncloud/web/issues/7526
+   https://github.com/owncloud/web/pull/7529
 
 * Bugfix - Link indicator on "Shared via link"-page: [#7355](https://github.com/owncloud/web/pull/7355)
 
@@ -423,6 +447,14 @@ Details
    https://github.com/owncloud/web/issues/7049
    https://github.com/owncloud/web/pull/7228
 
+* Bugfix - Sidebar for current folder: [#7519](https://github.com/owncloud/web/issues/7519)
+
+   We've fixed a bug where the right sidebar for the current folder could not be opened when another
+   resource was selected.
+
+   https://github.com/owncloud/web/issues/7519
+   https://github.com/owncloud/web/pull/7527
+
 * Bugfix - Create space and access user management permission: [#7197](https://github.com/owncloud/web/pull/7197)
 
    We've fixed a bug, where users with insufficient permissions could access the user management
@@ -478,6 +510,15 @@ Details
    We've added the missing storage ID when navigating to a shared parent directory.
 
    https://github.com/owncloud/web/pull/7396
+
+* Bugfix - Stuck After Session Expired: [#7453](https://github.com/owncloud/web/issues/7453)
+
+   We've fixed exit link to redirect to login once session expires
+
+   We've removed the logout click handler and created a new logout component
+
+   https://github.com/owncloud/web/issues/7453
+   https://github.com/owncloud/web/pull/7491
 
 * Bugfix - Suppress active panel error log: [#7394](https://github.com/owncloud/web/pull/7394)
 

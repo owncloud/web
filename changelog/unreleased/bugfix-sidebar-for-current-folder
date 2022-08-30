@@ -1,0 +1,6 @@
+Bugfix: Sidebar for current folder
+
+We've fixed a bug where the right sidebar for the current folder could not be opened when another resource was selected.
+
+https://github.com/owncloud/web/issues/7519
+https://github.com/owncloud/web/pull/7527

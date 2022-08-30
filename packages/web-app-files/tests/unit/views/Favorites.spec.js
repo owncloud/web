@@ -27,6 +27,14 @@ const listInfoStub = 'list-info-stub'
 
 const defaultActiveFiles = [createFile({ id: '1233' }), createFile({ id: '1234' })]
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 describe('Favorites view', () => {
   describe('loading indicator', () => {
     it('shows only the list-loader during loading', () => {
