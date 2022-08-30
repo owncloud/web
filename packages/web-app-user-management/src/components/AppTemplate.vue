@@ -25,9 +25,10 @@
       </div>
       <side-bar
         v-if="sideBarOpen"
+        :active-panel="sideBarActivePanel"
         :available-panels="sideBarAvailablePanels"
-        :sidebar-active-panel="sideBarActivePanel"
         :loading="false"
+        :open="sideBarOpen"
         @selectPanel="(panel) => $emit('selectPanel', panel)"
         @close="$emit('closeSideBar')"
       >

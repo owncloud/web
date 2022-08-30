@@ -7,6 +7,7 @@
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -35,7 +36,7 @@
           id="files-shared-resource-table"
           v-model="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
           :target-route="resourceTargetLocation"
@@ -72,7 +73,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -85,7 +86,6 @@ import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
-import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 
 // components
 import AppBar from '../../components/AppBar/AppBar.vue'
@@ -138,7 +138,6 @@ export default defineComponent({
     MixinAccessibleBreadcrumb,
     MixinFileActions,
     MixinFilesListScrolling,
-    MixinMountSideBar,
     MixinFilesListFilter
   ],
   setup() {
@@ -164,7 +163,6 @@ export default defineComponent({
   computed: {
     ...mapState(['app']),
     ...mapState('Files', ['files']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters('Files', [
       'highlightedFile',
       'currentFolder',
@@ -284,7 +282,6 @@ export default defineComponent({
 
         if (resource) {
           this.selectedResources = [resource]
-          this.$_mountSideBar_showDefaultPanel(resource)
           this.scrollToResource(resource)
         }
       }

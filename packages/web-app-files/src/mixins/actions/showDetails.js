@@ -1,6 +1,7 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   mixins: [isFilesAppActive],
@@ -35,12 +36,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showDetails_trigger({ resources }) {
+    $_showDetails_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      await this.openSidebar()
+      bus.publish('app.files.sidebar.open')
     }
   }
 }

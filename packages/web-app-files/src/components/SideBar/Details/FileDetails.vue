@@ -165,6 +165,7 @@ import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -404,7 +405,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
-    ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
     async refreshShareDetailsTree() {
       await this.loadSharesTree({
         client: this.$client,
@@ -429,7 +429,7 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      this.setSidebarPanel('versions-item')
+      bus.publish('app.files.sidebar.setActivePanel', 'versions-item')
     },
     async loadData() {
       const calls = []

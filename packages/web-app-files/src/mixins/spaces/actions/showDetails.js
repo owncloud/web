@@ -1,4 +1,5 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   computed: {
@@ -17,7 +18,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebar: 'open', closeSidebar: 'close' }),
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
     $_showDetails_trigger({ resources }) {
@@ -26,7 +26,11 @@ export default {
       }
 
       this.SET_FILE_SELECTION([resources[0]])
-      this.openSidebar()
+      this.$_showDetails_openSideBar()
+    },
+
+    $_showDetails_openSideBar() {
+      bus.publish('app.files.sidebar.open')
     }
   }
 }

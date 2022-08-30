@@ -1,12 +1,13 @@
 <template>
   <SideBar
-    v-if="showSidebar"
+    v-if="open"
     ref="sidebar"
     class="files-side-bar"
     tabindex="-1"
-    :sidebar-active-panel="sidebarActivePanel"
+    :open="open"
+    :active-panel="activePanel"
     :available-panels="availablePanels"
-    :sidebar-accordions-warning-message="sidebarAccordionsWarningMessage"
+    :warning-message="warningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
@@ -22,7 +23,7 @@
       <file-info
         v-if="isSingleResource && !highlightedFileIsSpace"
         class="sidebar-panel__file_info"
-        :is-content-displayed="isContentDisplayed"
+        :is-sub-panel-active="!!activePanel"
       />
       <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
     </template>
@@ -31,10 +32,12 @@
 
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
-import { DavProperties } from 'web-pkg/src/constants'
 import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
+import FileInfo from './FileInfo.vue'
+import SpaceInfo from './SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sidebar/'
 
+import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import {
   isLocationPublicActive,
@@ -43,35 +46,42 @@ import {
   isLocationTrashActive
 } from '../../router'
 import { computed, defineComponent } from '@vue/composition-api'
-
-import FileInfo from './FileInfo.vue'
-import SpaceInfo from './SpaceInfo.vue'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
 
   provide() {
     return {
-      displayedItem: computed(() => this.selectedFile)
+      displayedItem: computed(() => this.selectedFile),
+      activePanel: computed(() => this.activePanel)
+    }
+  },
+
+  props: {
+    open: {
+      type: Boolean,
+      required: true
+    },
+    activePanel: {
+      type: String,
+      default: null
     }
   },
 
   setup() {
     const store = useStore()
 
-    const showSidebar = computed(() => !store.getters['Files/sidebar/closed'])
-    const sidebarActivePanel = computed(() => store.getters['Files/sidebar/activePanel'])
-
     const closeSideBar = () => {
-      store.dispatch('Files/sidebar/close')
+      bus.publish('app.files.sidebar.close')
     }
     const setActiveSideBarPanel = (panelName) => {
-      store.dispatch('Files/sidebar/setActivePanel', panelName)
+      bus.publish('app.files.sidebar.setActivePanel', panelName)
     }
 
     const focusSideBar = (component, event) => {
@@ -84,14 +94,12 @@ export default defineComponent({
 
     const destroySideBar = (component, event) => {
       focusSideBar(component, event)
-      closeSideBar()
+      bus.publish('app.files.sidebar.close')
     }
 
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
-      showSidebar,
-      sidebarActivePanel,
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
@@ -144,7 +152,7 @@ export default defineComponent({
         ? this.isShareAccepted
         : true
     },
-    sidebarAccordionsWarningMessage() {
+    warningMessage() {
       if (!this.isShareAccepted) {
         return this.$gettext('Please, accept this share first to display available actions')
       }

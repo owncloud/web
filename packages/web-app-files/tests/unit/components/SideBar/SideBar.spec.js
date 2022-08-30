@@ -177,6 +177,9 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
     silent: true
   })
   return shallowMount(SideBar, {
+    propsData: {
+      open: true
+    },
     store: new Vuex.Store({
       getters: {
         user: function () {
@@ -207,14 +210,6 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           mutations: {
             SET_HIGHLIGHTED_FILE(state, file) {
               state.highlightedFile = file
-            }
-          },
-          modules: {
-            sidebar: {
-              namespaced: true,
-              state: {
-                activePanel: null
-              }
             }
           }
         },

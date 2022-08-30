@@ -563,7 +563,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', ['openWithPanel']),
     ...mapActions('Files', ['toggleFileSelection']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
@@ -584,10 +583,10 @@ export default defineComponent({
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
-        this.openWithPanel('sharing-item#linkShares')
+        bus.publish('app.files.sidebar.openWithPanel', 'sharing-item#linkShares')
         return
       }
-      this.openWithPanel('sharing-item#peopleShares')
+      bus.publish('app.files.sidebar.openWithPanel', 'sharing-item#peopleShares')
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file)

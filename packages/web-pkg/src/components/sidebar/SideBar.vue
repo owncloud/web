@@ -88,7 +88,7 @@
                 </oc-button>
               </div>
             </template>
-            <p v-else>{{ sidebarAccordionsWarningMessage }}</p>
+            <p v-else>{{ warningMessage }}</p>
           </div>
         </template>
       </div>
@@ -98,7 +98,6 @@
 
 <script lang="ts">
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { mapState } from 'vuex'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Panel } from './types'
 
@@ -107,6 +106,10 @@ let hiddenObserver: VisibilityObserver
 
 export default defineComponent({
   props: {
+    open: {
+      type: Boolean,
+      required: true
+    },
     loading: {
       type: Boolean,
       required: true
@@ -115,14 +118,15 @@ export default defineComponent({
       type: Array as PropType<Panel[]>,
       required: true
     },
-    sidebarActivePanel: {
+    activePanel: {
       type: String,
       required: false,
       default: ''
     },
-    sidebarAccordionsWarningMessage: {
+    warningMessage: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     isContentDisplayed: {
       type: Boolean,
@@ -145,9 +149,8 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     activeAvailablePanelName() {
-      const panelName = this.sidebarActivePanel?.split('#')[0]
+      const panelName = this.activePanel?.split('#')[0]
       if (!panelName) {
         return null
       }
@@ -178,9 +181,11 @@ export default defineComponent({
       },
       immediate: true
     },
-    sidebarClosed: {
-      handler: function (closed) {
-        if (closed) return
+    open: {
+      handler: function (open) {
+        if (!open) {
+          return
+        }
         this.$nextTick(() => {
           this.initVisibilityObserver()
         })

@@ -5,30 +5,36 @@
     :aria-label="toggleSidebarButtonLabel"
     appearance="raw"
     class="oc-my-s oc-p-xs"
-    @click.stop="toggleSidebar"
+    @click.stop="toggleSideBar"
   >
     <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
   </oc-button>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
+  props: {
+    sideBarOpen: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
-
     toggleSidebarButtonLabel() {
-      if (this.sidebarClosed) return this.$gettext('Open sidebar to view details')
-      return this.$gettext('Close sidebar to hide details')
+      if (this.sideBarOpen) return this.$gettext('Close sidebar to hide details')
+      return this.$gettext('Open sidebar to view details')
     },
 
     toggleSidebarButtonIconFillType() {
-      return this.sidebarClosed ? 'line' : 'fill'
+      return this.sideBarOpen ? 'fill' : 'line'
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { toggleSidebar: 'toggle' })
+    toggleSideBar() {
+      bus.publish('app.files.sidebar.toggle')
+    }
   }
 }
 </script>

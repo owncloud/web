@@ -7,6 +7,7 @@
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -128,7 +129,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -375,9 +376,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
-    ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel'
-    }),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -455,7 +453,7 @@ export default defineComponent({
     },
     openSidebarSharePanel() {
       this.selectedResources = [this.space]
-      this.openSidebarWithPanel('space-share-item')
+      bus.publish('app.files.sidebar.openWithPanel', 'space-share-item')
     }
   }
 })

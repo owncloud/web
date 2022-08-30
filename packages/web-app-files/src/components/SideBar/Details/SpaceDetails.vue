@@ -65,7 +65,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, unref } from '@vue/composition-api'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource } from '../../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -76,6 +76,7 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { bus } from 'web-pkg/src/instance'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -247,12 +248,8 @@ export default defineComponent({
     this.loadImageTask.perform(this)
   },
   methods: {
-    ...mapActions('Files/sidebar', {
-      setSidebarPanel: 'setActivePanel',
-      closeSidebar: 'close'
-    }),
     expandSharesPanel() {
-      this.setSidebarPanel('space-share-item')
+      bus.publish('app.files.sidebar.setActivePanel', 'space-share-item')
     }
   }
 })
