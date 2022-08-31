@@ -154,10 +154,12 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
+import { extractExtensionFromFile } from '../../helpers/resource'
 import {
   resolveFileExists,
   ResolveStrategy,
+  ResolveConflict,
   resolveFileNameDuplicate
 } from '../../helpers/resource/copyMove'
 
@@ -690,17 +692,17 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-      let resolveStrategy = null
-      let resolveStrategyFolder = null
+      console.log(this.files)
+      let resolveStrategies = {}
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
+          // Logic for folders, applies to all files inside folder and subfolders
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if (resolveStrategy == null || resolveStrategyFolder !== rootFolder) {
-              resolveStrategyFolder = rootFolder
-              resolveStrategy = await resolveFileExists(
+            if(!(rootFolder in resolveStrategies)) {
+              const resolveStrategy = await resolveFileExists(
                 this.createModal,
                 this.hideModal,
                 { name: rootFolder, isFolder: true },
@@ -709,7 +711,9 @@ export default defineComponent({
                 this.$gettextInterpolate,
                 true
               )
+              resolveStrategies[rootFolder] = resolveStrategy
             }
+            const resolveStrategy = resolveStrategies[rootFolder]
             if (resolveStrategy.strategy === ResolveStrategy.SKIP) {
               continue
             }
@@ -723,16 +727,18 @@ export default defineComponent({
                 `/${rootFolder}/`,
                 `/${newFolderName}/`
               )
+              console.log(newFolderName)
             }
           }
         }
+        // Logic for files
         const exists = this.files.find((f) => f.name === file.name)
         if (exists) {
           conflicts.push(file)
         }
       }
       if (conflicts.length) {
-        this.displayOverwriteDialog(uppyResources, conflicts)
+        await this.displayOverwriteDialog(uppyResources, conflicts)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -815,51 +821,43 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    displayOverwriteDialog(files: UppyResource[], conflicts) {
-      const title = this.$ngettext(
-        'File already exists',
-        'Some files already exist',
-        conflicts.length
-      )
-
-      const isVersioningEnabled = this.isUserContext && this.capabilities?.files?.versioning
-
-      let translatedMsg
-      if (isVersioningEnabled) {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to create a new version for it?',
-          'The following resources already exist: %{resources}. Do you want to create a new version for them?',
-          conflicts.length
+    async displayOverwriteDialog(files: UppyResource[], conflicts) {
+      let count = 0
+      for(const file of files) {
+        const resolveConflict: ResolveConflict = await resolveFileExists(
+          this.createModal,
+          this.hideModal,
+          { name: file.name, isFolder: false },
+          (files.length - count),
+          this.$gettext,
+          this.$gettextInterpolate,
+          false
         )
-      } else {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to overwrite it?',
-          'The following resources already exist: %{resources}. Do you want to overwrite them?',
-          conflicts.length
-        )
-      }
-      const message = this.$gettextInterpolate(translatedMsg, {
-        resources: conflicts.map((f) => `${f.name}`).join(', ')
-      })
-
-      const modal = {
-        variation: isVersioningEnabled ? 'passive' : 'danger',
-        icon: 'upload-cloud',
-        title,
-        message,
-        cancelText: this.$gettext('Cancel'),
-        confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
-        onCancel: () => {
-          this.$uppyService.clearInputs()
-          this.hideModal()
-        },
-        onConfirm: () => {
-          this.hideModal()
+        count += 1
+        if(resolveConflict.doForAllConflicts) {
+          if(resolveConflict.strategy === ResolveStrategy.SKIP) {
+            return
+          }
+          if(resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
+            for(const f of files) {
+              const ext = extractExtensionFromFile({ name: f.name } as Resource)
+              f.name = resolveFileNameDuplicate(f.name, ext, this.files)
+            }
+          }
+          // strategy replace doesn't need a case here
           this.handleUppyFileUpload(files)
+          return
         }
+        if(resolveConflict.strategy === ResolveStrategy.SKIP) {
+          continue
+        }
+        if(resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
+          const ext = extractExtensionFromFile({ name: file.name } as Resource)
+          file.name = resolveFileNameDuplicate(file.name, ext, this.files)
+        }
+        // strategy replace doesn't need a case here
+        this.handleUppyFileUpload([file])
       }
-
-      this.createModal(modal)
     }
   }
 })
