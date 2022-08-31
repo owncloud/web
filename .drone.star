@@ -173,7 +173,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
         },
@@ -186,7 +185,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "retry": False,
@@ -202,7 +200,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "notificationsAppNeeded": True,
@@ -2409,6 +2406,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
+    environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
