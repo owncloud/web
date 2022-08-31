@@ -931,6 +931,7 @@ Details
    https://github.com/owncloud/web/issues/7059
    https://github.com/owncloud/web/pull/7182
    https://github.com/owncloud/web/pull/7530
+   https://github.com/owncloud/web/pull/7538
 
 Changelog for ownCloud Web [5.6.1] (2022-06-22)
 =======================================
