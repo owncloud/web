@@ -54,6 +54,10 @@ config = {
         "master",
     ],
     "yarnlint": True,
+    "e2e": {
+        "earlyFail": True,
+        "skip": False,
+    },
     "acceptance": {
         "webUI": {
             "type": FULL,
@@ -820,7 +824,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1139,12 +1143,28 @@ def unitTests(ctx):
     }]
 
 def e2eTests(ctx):
-    db = "mysql:5.5"
-    logLevel = "2"
-    reportTracing = "false"
+    default = {
+        "skip": True,
+        "earlyFail": False,
+        "db": "mysql:5.5",
+        "logLevel": "2",
+        "reportTracing": "false",
+    }
+
+    params = {}
+    matrix = config["e2e"]
+
+    for item in default:
+        params[item] = matrix[item] if item in matrix else default[item]
+
+    if params["skip"]:
+        return []
+
+    if ("full-ci" in ctx.build.title.lower()):
+        params["earlyFail"] = False
 
     if ("with-tracing" in ctx.build.title.lower()):
-        reportTracing = "true"
+        params["reportTracing"] = "true"
 
     e2e_workspace = {
         "base": dir["base"],
@@ -1170,7 +1190,7 @@ def e2eTests(ctx):
             "HEADLESS": "true",
             "OCIS": "true",
             "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
+            "REPORT_TRACING": params["reportTracing"],
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
@@ -1184,14 +1204,14 @@ def e2eTests(ctx):
             "BASE_URL_OCC": "owncloud",
             "HEADLESS": "true",
             "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
+            "REPORT_TRACING": params["reportTracing"],
         },
         "commands": [
             "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
         ],
     }]
 
-    services = databaseService(db) + owncloudService() + webService()
+    services = databaseService(params["db"]) + owncloudService() + webService()
 
     stepsClassic = \
         skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1199,10 +1219,10 @@ def e2eTests(ctx):
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         installYarn() + \
         buildWebApp() + \
-        installCore(db) + \
+        installCore(params["db"]) + \
         owncloudLog() + \
         setupIntegrationWebApp() + \
-        setupServerAndAppsForIntegrationApp(logLevel) + \
+        setupServerAndAppsForIntegrationApp(params["logLevel"]) + \
         setUpOauth2(True, True) + \
         fixPermissions() + \
         waitForOwncloudService() + \
@@ -1218,7 +1238,7 @@ def e2eTests(ctx):
         restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
         restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
         installYarn() + \
-        setupServerConfigureWeb(logLevel) + \
+        setupServerConfigureWeb(params["logLevel"]) + \
         restoreOcisCache() + \
         ocisService() + \
         getSkeletonFiles() + \
@@ -1227,6 +1247,10 @@ def e2eTests(ctx):
         uploadTracingResult(ctx) + \
         publishTracingResult(ctx, "e2e-tests oCIS") + \
         githubComment("e2e-tests oCIS")
+
+    if (params["earlyFail"]):
+        stepsClassic += buildGithubCommentForBuildStopped("Classic", "e2e") + stopBuild()
+        stepsInfinite += buildGithubCommentForBuildStopped("Infinite", "e2e") + stopBuild()
 
     e2e_trigger = {
         "ref": [
@@ -2608,12 +2632,12 @@ def buildGithubComment(suite):
         },
     }]
 
-def buildGithubCommentForBuildStopped(suite):
+def buildGithubCommentForBuildStopped(suite, testType = "acceptance"):
     return [{
         "name": "build-github-comment-buildStop",
         "image": OC_UBUNTU,
         "commands": [
-            'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
+            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (dir["web"], testType),
         ],
         "when": {
             "status": [
