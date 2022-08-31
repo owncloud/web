@@ -188,7 +188,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces } from '../../router'
+import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
@@ -610,6 +610,23 @@ export default defineComponent({
         ...this.targetRoute.query
       }
 
+      if (resource.shareId) {
+        if (resource.path === '/') {
+          return createLocationShares('files-shares-with-me')
+        }
+
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            ...params,
+            shareName: this.shares.find((share) => share.id === resource.shareId)?.name
+          },
+          query: {
+            ...query,
+            shareId: resource.shareId
+          }
+        })
+      }
+
       const matchingSpace = this.getMatchingSpace(resource.storageId)
 
       if (this.hasProjectSpaces) {
@@ -796,6 +813,14 @@ export default defineComponent({
 
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
+      }
+
+      if (resource.shareId) {
+        if (resource.path === '/') {
+          return this.$gettext('Shared with me')
+        }
+
+        return this.shares.find((share) => share.id === resource.shareId)?.name
       }
 
       return this.$gettext('Personal')

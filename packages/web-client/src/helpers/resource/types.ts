@@ -41,6 +41,7 @@ export interface Resource {
   resourceOwner?: User
   owner?: User[]
   ownerDisplayName?: string
+  shareId?: string
   ownerId?: string
   sharedWith?: string
   shareOwner?: string
