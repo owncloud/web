@@ -70,7 +70,7 @@
 
               <div
                 v-if="panel.default && availablePanels.length > 1"
-                class="sidebar-panel__navigation"
+                class="sidebar-panel__navigation oc-mt-m"
               >
                 <oc-button
                   v-for="panelSelect in availablePanels.filter(
