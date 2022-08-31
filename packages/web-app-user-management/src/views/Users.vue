@@ -77,6 +77,7 @@
 
 <script lang="ts">
 import isEqual from 'lodash-es/isEqual'
+import omit from 'lodash-es/omit'
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
@@ -414,10 +415,7 @@ export default defineComponent({
         const actualUser = this.users.find((user) => user.id === editUser.id)
 
         const graphEditUserRawObjectExtractor = (user) => {
-          const extractUser = { ...user }
-          delete extractUser.drive
-          delete extractUser.role
-          return extractUser
+          return omit(user, ['drive', 'role'])
         }
 
         if (
