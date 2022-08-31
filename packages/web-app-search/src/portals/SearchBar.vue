@@ -261,9 +261,15 @@ export default {
     }
   }
 
+  .oc-search-input::placeholder {
+    color: var(--oc-color-input-text-default);
+    opacity: 0.8;
+  }
+
   .oc-search-input {
     background-color: var(--oc-color-input-bg);
     transition: 0s;
+    color: var(--oc-color-input-text-default);
 
     @media (max-width: 959px) {
       border: none;
@@ -306,6 +312,11 @@ export default {
       font-size: var(--oc-font-size-small);
 
       border-top-color: var(--oc-color-input-border);
+
+      .text {
+        color: var(--oc-color-text-default);
+        opacity: 0.6;
+      }
 
       &.selected,
       &:hover {

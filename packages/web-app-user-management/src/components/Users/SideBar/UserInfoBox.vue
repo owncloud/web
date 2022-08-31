@@ -2,7 +2,7 @@
   <div class="oc-flex user-info oc-mb-l">
     <avatar-image class="oc-mb-m" :width="80" :userid="user.id" :user-name="user.displayName" />
     <span v-text="user.onPremisesSamAccountName"></span>
-    <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
+    <span class="oc-text-default user-info-display-name" v-text="user.displayName"></span>
   </div>
 </template>
 <script>

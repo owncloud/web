@@ -398,7 +398,7 @@ export default defineComponent({
 
 .files-collaborators-permission-checkbox::v-deep {
   .oc-checkbox {
-    border: 2px solid var(--oc-color-background-hover);
+    border: 2px solid var(--oc-color-text-default);
   }
 
   label {

@@ -6,7 +6,7 @@
       :data-test-files="files"
       :data-test-folders="folders"
       :data-test-size="size"
-      class="oc-text-muted"
+      class="oc-color-text-default"
     >
       {{ text }}
     </p>
@@ -75,3 +75,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.oc-text-nowrap p {
+  opacity: 0.6;
+}
+</style>

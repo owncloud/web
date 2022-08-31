@@ -408,4 +408,12 @@ export default defineComponent({
     margin-left: var(--oc-space-medium);
   }
 }
+
+.oc-resource-indicators .parent-folder .text {
+  color: var(--oc-color-text-default);
+  opacity: 0.8;
+}
+.oc-resource-indicators .parent-folder .text:hover {
+  opacity: 1;
+}
 </style>

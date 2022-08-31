@@ -157,3 +157,9 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+#files-shared-with-others-table .oc-resource-indicators .parent-folder .text {
+  color: var(--oc-color-text-default);
+  opacity: 0.8;
+}
+</style>

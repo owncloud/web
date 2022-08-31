@@ -41,7 +41,7 @@
       <div class="oc-flex">
         <oc-button
           appearance="raw"
-          class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
+          class="oc-text-default text-opacity oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
         ></oc-button>
@@ -547,6 +547,10 @@ export default {
 </script>
 
 <style lang="scss">
+.text-opacity {
+  opacity: 0.8;
+}
+
 #upload-info {
   background-color: var(--oc-color-background-secondary);
   width: 400px;

@@ -1,0 +1,5 @@
+Bugfix: Too low contrast on some UI elements
+
+We've fixed the elements with low contrast on some UI elements.
+
+https://github.com/owncloud/web/issues/7353
