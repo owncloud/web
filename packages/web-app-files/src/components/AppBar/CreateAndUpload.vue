@@ -367,7 +367,7 @@ export default defineComponent({
         : this.$gettext('New file') + `.${ext}`
 
       if (this.files.some((f) => f.name === defaultName)) {
-        defaultName = resolveFileNameDuplicate(defaultName, !isFolder ? ext : '', this.files)
+        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
       }
 
       if (!this.areFileExtensionsShown) {

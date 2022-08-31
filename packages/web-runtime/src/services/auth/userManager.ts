@@ -181,7 +181,6 @@ export class UserManager extends OidcUserManager {
       await this.clientService.owncloudSdk.users.getUser(login.id),
       await this.clientService.owncloudSdk.users.getUserGroups(login.id)
     ])
-    console.log(userGroups)
     this.store.commit('SET_USER', {
       id: login.id,
       uuid: graphUser?.data?.id || '',

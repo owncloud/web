@@ -1,8 +1,6 @@
-Enhancement: Propose file name while creating a new file
+Enhancement: Propose unique file name while creating a new file
 
-We've added the possibility while creating a new file or folder to via the 'New' button
-to propose an unused name.
-For example: When a folder with the name 'New folder' already exists, the name New folder (1) will be suggested.
+We're proposing unique file names when creating a new file or folder via the 'New' file menu.
 
 https://github.com/owncloud/web/pull/7555
 https://github.com/owncloud/web/issues/7539
