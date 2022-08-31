@@ -12,6 +12,8 @@ import {
 import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
+import { DavProperties } from 'web-pkg/src/constants'
+import { buildResource } from 'files/src/helpers/resources'
 
 export interface UppyResource {
   id?: string
@@ -124,9 +126,18 @@ const createDirectoryTree = ({
   return async (files: UppyResource[]) => {
     const { owncloudSdk: client } = clientService
     const createdFolders = []
+    
     for (const file of files) {
       const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
+
+      let existingFiles
+      if (unref(isPublicLinkContext)) {
+        existingFiles = await client.publicFiles.list(`${file.meta.webDavBasePath}/`, unref(publicLinkPassword), DavProperties.Default, 'infinity')
+      }
+      existingFiles = await client.files.list(`${file.meta.webDavBasePath}/`, 'infinity', DavProperties.Default)
+      existingFiles = existingFiles.map(buildResource)
+      console.log(existingFiles)
 
       if (!directory || createdFolders.includes(directory)) {
         continue
@@ -181,9 +192,9 @@ const createDirectoryTree = ({
             unref(publicLinkPassword)
           )
         } else {
-          try {
+          if(!existingFiles.some(f => f.path === folderToCreate)) {
             await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
-          } catch (ex) {}
+          }
         }
 
         uppyService.publish('uploadSuccess', uppyResource)
