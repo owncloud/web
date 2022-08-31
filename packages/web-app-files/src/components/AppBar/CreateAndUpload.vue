@@ -692,11 +692,9 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-      console.log(this.files)
       const resolveStrategies = {}
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
-        console.log(file)
         if (relativeFilePath) {
           // Logic for folders, applies to all files inside folder and subfolders
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]

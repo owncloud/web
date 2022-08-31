@@ -137,7 +137,6 @@ const createDirectoryTree = ({
       }
       existingFiles = await client.files.list(`${file.meta.webDavBasePath}/`, 'infinity', DavProperties.Default)
       existingFiles = existingFiles.map(buildResource)
-      console.log(existingFiles)
 
       if (!directory || createdFolders.includes(directory)) {
         continue
