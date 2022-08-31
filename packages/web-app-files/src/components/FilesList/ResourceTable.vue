@@ -611,20 +611,18 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        if (resource.path === '/') {
-          return createLocationShares('files-shares-with-me')
-        }
-
-        return createLocationSpaces('files-spaces-share', {
-          params: {
-            ...params,
-            shareName: this.shares.find((share) => share.id === resource.shareId)?.name
-          },
-          query: {
-            ...query,
-            shareId: resource.shareId
-          }
-        })
+        return resource.path === '/'
+          ? createLocationShares('files-shares-with-me')
+          : createLocationSpaces('files-spaces-share', {
+              params: {
+                ...params,
+                shareName: this.shares.find((share) => share.id === resource.shareId)?.name
+              },
+              query: {
+                ...query,
+                shareId: resource.shareId
+              }
+            })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
