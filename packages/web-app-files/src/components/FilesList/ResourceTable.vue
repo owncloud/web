@@ -593,6 +593,10 @@ export default defineComponent({
       return this.createFolderLink(file.path, file)
     },
     parentFolderLink(file) {
+      if (file.shareId && file.path === '/') {
+        return createLocationShares('files-shares-with-me')
+      }
+
       return this.createFolderLink(path.dirname(file.path), file)
     },
     createFolderLink(path, resource) {
@@ -611,18 +615,16 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        return resource.path === '/'
-          ? createLocationShares('files-shares-with-me')
-          : createLocationSpaces('files-spaces-share', {
-              params: {
-                ...params,
-                shareName: this.shares.find((share) => share.id === resource.shareId)?.name
-              },
-              query: {
-                ...query,
-                shareId: resource.shareId
-              }
-            })
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            ...params,
+            shareName: this.shares.find((share) => share.id === resource.shareId)?.name
+          },
+          query: {
+            ...query,
+            shareId: resource.shareId
+          }
+        })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
