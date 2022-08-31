@@ -693,7 +693,7 @@ export default defineComponent({
         return this.$uppyService.clearInputs()
       }
       console.log(this.files)
-      let resolveStrategies = {}
+      const resolveStrategies = {}
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
@@ -701,7 +701,7 @@ export default defineComponent({
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if(!(rootFolder in resolveStrategies)) {
+            if (!(rootFolder in resolveStrategies)) {
               const resolveStrategy = await resolveFileExists(
                 this.createModal,
                 this.hideModal,
@@ -823,23 +823,23 @@ export default defineComponent({
 
     async displayOverwriteDialog(files: UppyResource[], conflicts) {
       let count = 0
-      for(const file of files) {
+      for (const file of files) {
         const resolveConflict: ResolveConflict = await resolveFileExists(
           this.createModal,
           this.hideModal,
           { name: file.name, isFolder: false },
-          (files.length - count),
+          files.length - count,
           this.$gettext,
           this.$gettextInterpolate,
           false
         )
         count += 1
-        if(resolveConflict.doForAllConflicts) {
-          if(resolveConflict.strategy === ResolveStrategy.SKIP) {
+        if (resolveConflict.doForAllConflicts) {
+          if (resolveConflict.strategy === ResolveStrategy.SKIP) {
             return
           }
-          if(resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
-            for(const f of files) {
+          if (resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
+            for (const f of files) {
               const ext = extractExtensionFromFile({ name: f.name } as Resource)
               f.name = resolveFileNameDuplicate(f.name, ext, this.files)
             }
@@ -848,10 +848,10 @@ export default defineComponent({
           this.handleUppyFileUpload(files)
           return
         }
-        if(resolveConflict.strategy === ResolveStrategy.SKIP) {
+        if (resolveConflict.strategy === ResolveStrategy.SKIP) {
           continue
         }
-        if(resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
+        if (resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
           const ext = extractExtensionFromFile({ name: file.name } as Resource)
           file.name = resolveFileNameDuplicate(file.name, ext, this.files)
         }
