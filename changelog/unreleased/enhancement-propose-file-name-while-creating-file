@@ -1,0 +1,6 @@
+Enhancement: Propose unique file name while creating a new file
+
+We're proposing unique file names when creating a new file or folder via the 'New' file menu.
+
+https://github.com/owncloud/web/pull/7555
+https://github.com/owncloud/web/issues/7539
