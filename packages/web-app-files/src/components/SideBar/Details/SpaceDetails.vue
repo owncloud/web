@@ -77,6 +77,7 @@ import SpaceQuota from '../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sidebar'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -249,7 +250,7 @@ export default defineComponent({
   },
   methods: {
     expandSharesPanel() {
-      bus.publish('app.files.sidebar.setActivePanel', 'space-share-item')
+      bus.publish(SideBarEventTopics.setActivePanel, 'space-share-item')
     }
   }
 })

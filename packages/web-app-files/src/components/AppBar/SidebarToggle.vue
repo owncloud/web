@@ -13,6 +13,7 @@
 
 <script>
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default {
   props: {
@@ -33,7 +34,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      bus.publish('app.files.sidebar.toggle')
+      bus.publish(SideBarEventTopics.toggle)
     }
   }
 }

@@ -166,6 +166,7 @@ import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sidebar'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -429,7 +430,7 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      bus.publish('app.files.sidebar.setActivePanel', 'versions-item')
+      bus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
     },
     async loadData() {
       const calls = []

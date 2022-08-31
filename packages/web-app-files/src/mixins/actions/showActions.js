@@ -1,6 +1,7 @@
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -39,7 +40,7 @@ export default {
         isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? null
           : 'actions-item'
-      bus.publish('app.files.sidebar.openWithPanel', panelName)
+      bus.publish(SideBarEventTopics.openWithPanel, panelName)
     }
   }
 }

@@ -1,5 +1,6 @@
 import { mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sidebar'
 
 export default {
   computed: {
@@ -22,7 +23,7 @@ export default {
 
     $_showMembers_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      bus.publish('app.files.sidebar.openWithPanel', 'space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 }

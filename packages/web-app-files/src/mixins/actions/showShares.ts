@@ -4,6 +4,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -49,7 +50,7 @@ export default {
 
     $_showShares_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      bus.publish('app.files.sidebar.openWithPanel', 'sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     }
   }
 }

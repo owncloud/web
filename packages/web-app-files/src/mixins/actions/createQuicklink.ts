@@ -4,6 +4,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../router'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default {
   computed: {
@@ -42,7 +43,7 @@ export default {
         store
       })
 
-      bus.publish('app.files.sidebar.openWithPanel', 'sharing-item#linkShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
     }
   }
 }

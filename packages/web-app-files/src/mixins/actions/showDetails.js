@@ -2,6 +2,7 @@ import { mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -40,7 +41,7 @@ export default {
 
     $_showDetails_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      bus.publish('app.files.sidebar.open')
+      bus.publish(SideBarEventTopics.open)
     }
   }
 }

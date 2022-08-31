@@ -167,6 +167,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -453,7 +454,7 @@ export default defineComponent({
     },
     openSidebarSharePanel() {
       this.selectedResources = [this.space]
-      bus.publish('app.files.sidebar.openWithPanel', 'space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 })

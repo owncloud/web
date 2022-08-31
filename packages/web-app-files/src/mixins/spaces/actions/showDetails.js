@@ -1,5 +1,6 @@
 import { mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sidebar'
 
 export default {
   computed: {
@@ -30,7 +31,7 @@ export default {
     },
 
     $_showDetails_openSideBar() {
-      bus.publish('app.files.sidebar.open')
+      bus.publish(SideBarEventTopics.open)
     }
   }
 }

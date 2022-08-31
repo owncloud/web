@@ -52,6 +52,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sidebar'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -78,10 +79,10 @@ export default defineComponent({
     const store = useStore()
 
     const closeSideBar = () => {
-      bus.publish('app.files.sidebar.close')
+      bus.publish(SideBarEventTopics.close)
     }
     const setActiveSideBarPanel = (panelName) => {
-      bus.publish('app.files.sidebar.setActivePanel', panelName)
+      bus.publish(SideBarEventTopics.setActivePanel, panelName)
     }
 
     const focusSideBar = (component, event) => {
@@ -94,7 +95,7 @@ export default defineComponent({
 
     const destroySideBar = (component, event) => {
       focusSideBar(component, event)
-      bus.publish('app.files.sidebar.close')
+      bus.publish(SideBarEventTopics.close)
     }
 
     return {

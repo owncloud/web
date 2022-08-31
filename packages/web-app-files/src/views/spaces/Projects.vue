@@ -158,7 +158,7 @@ import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { bus } from 'web-pkg/src/instance'
-import { useSideBar } from '../../composables/sidebar'
+import { SideBarEventTopics, useSideBar } from '../../composables/sidebar'
 
 export default defineComponent({
   components: {
@@ -296,7 +296,7 @@ export default defineComponent({
 
     openSidebarSharePanel(space) {
       this.SET_FILE_SELECTION([space])
-      bus.publish('app.files.sidebar.openWithPanel', 'space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     },
 
     getSpaceLinkProps(space) {

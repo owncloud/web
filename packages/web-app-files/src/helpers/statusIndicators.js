@@ -2,6 +2,7 @@ import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../composables/sidebar'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -100,7 +101,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: (resource, panel) => {
-        bus.publish('app.files.sidebar.openWithPanel', `${panel}#peopleShares`)
+        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
       }
     },
     {
@@ -112,7 +113,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       target: 'sharing-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: (resource, panel) => {
-        bus.publish('app.files.sidebar.openWithPanel', `${panel}#linkShares`)
+        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
       }
     }
   ]
