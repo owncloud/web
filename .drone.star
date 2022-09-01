@@ -54,6 +54,17 @@ config = {
         "master",
     ],
     "yarnlint": True,
+    "e2e": {
+        "oC10": {
+            "db": "mysql:5.5",
+            "earlyFail": True,
+            "skip": False,
+        },
+        "oCIS": {
+            "earlyFail": True,
+            "skip": False,
+        },
+    },
     "acceptance": {
         "webUI": {
             "type": FULL,
@@ -820,7 +831,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1139,13 +1150,6 @@ def unitTests(ctx):
     }]
 
 def e2eTests(ctx):
-    db = "mysql:5.5"
-    logLevel = "2"
-    reportTracing = "false"
-
-    if ("with-tracing" in ctx.build.title.lower()):
-        reportTracing = "true"
-
     e2e_workspace = {
         "base": dir["base"],
         "path": config["app"],
@@ -1162,71 +1166,13 @@ def e2eTests(ctx):
         "temp": {},
     }]
 
-    e2e_test_ocis = [{
-        "name": "e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "BASE_URL_OCIS": "ocis:9200",
-            "HEADLESS": "true",
-            "OCIS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
-        },
-        "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
-        ],
-    }]
-
-    e2e_test_occ = [{
-        "name": "e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "BASE_URL_OCC": "owncloud",
-            "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
-        },
-        "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
-        ],
-    }]
-
-    services = databaseService(db) + owncloudService() + webService()
-
-    stepsClassic = \
-        skipIfUnchanged(ctx, "e2e-tests") + \
-        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
-        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        installYarn() + \
-        buildWebApp() + \
-        installCore(db) + \
-        owncloudLog() + \
-        setupIntegrationWebApp() + \
-        setupServerAndAppsForIntegrationApp(logLevel) + \
-        setUpOauth2(True, True) + \
-        fixPermissions() + \
-        waitForOwncloudService() + \
-        copyFilesForUpload() + \
-        e2e_test_occ + \
-        uploadTracingResult(ctx) + \
-        publishTracingResult(ctx, "e2e-tests oC10") + \
-        githubComment("e2e-tests oC10")
-
-    stepsInfinite = \
-        skipIfUnchanged(ctx, "e2e-tests") + \
-        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
-        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-        installYarn() + \
-        setupServerConfigureWeb(logLevel) + \
-        restoreOcisCache() + \
-        ocisService() + \
-        getSkeletonFiles() + \
-        copyFilesForUpload() + \
-        e2e_test_ocis + \
-        uploadTracingResult(ctx) + \
-        publishTracingResult(ctx, "e2e-tests oCIS") + \
-        githubComment("e2e-tests oCIS")
+    default = {
+        "skip": False,
+        "earlyFail": True,
+        "logLevel": "2",
+        "reportTracing": "false",
+        "db": "mysql:5.5",
+    }
 
     e2e_trigger = {
         "ref": [
@@ -1236,29 +1182,96 @@ def e2eTests(ctx):
         ],
     }
 
-    return [
-        {
+    pipelines = []
+    params = {}
+    matrices = config["e2e"]
+
+    for server, matrix in matrices.items():
+        for item in default:
+            params[item] = matrix[item] if item in matrix else default[item]
+
+        if params["skip"]:
+            continue
+
+        if ("full-ci" in ctx.build.title.lower()):
+            params["earlyFail"] = False
+
+        if ("with-tracing" in ctx.build.title.lower()):
+            params["reportTracing"] = "true"
+
+        environment = {
+            "HEADLESS": "true",
+            "RETRY": "1",
+            "REPORT_TRACING": params["reportTracing"],
+        }
+
+        services = []
+        depends_on = []
+        steps = skipIfUnchanged(ctx, "e2e-tests") + \
+                restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+                restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+                installYarn() + \
+                copyFilesForUpload()
+
+        if server == "oC10":
+            # oC10 specific environment variables
+            environment["BASE_URL_OCC"] = "owncloud"
+
+            # oC10 specific services
+            services = databaseService(params["db"]) + owncloudService() + webService()
+
+            # oC10 specific steps
+            steps += buildWebApp() + \
+                     installCore(params["db"]) + \
+                     owncloudLog() + \
+                     setupIntegrationWebApp() + \
+                     setupServerAndAppsForIntegrationApp(params["logLevel"]) + \
+                     setUpOauth2(True, True) + \
+                     fixPermissions() + \
+                     waitForOwncloudService()
+        else:
+            # oCIS specific environment variables
+            environment["BASE_URL_OCIS"] = "ocis:9200"
+            environment["OCIS"] = "true"
+
+            # oCIS specific dependencies
+            depends_on = ["cache-ocis"]
+
+            # oCIS specific steps
+            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+                     setupServerConfigureWeb(params["logLevel"]) + \
+                     restoreOcisCache() + \
+                     ocisService() + \
+                     getSkeletonFiles()
+
+        steps += [{
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS,
+                     "environment": environment,
+                     "commands": [
+                         "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
+                     ],
+                 }] + \
+                 uploadTracingResult(ctx) + \
+                 publishTracingResult(ctx, "e2e-tests %s" % server)
+        if (params["earlyFail"]):
+            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server == "oCIS" else "e2e-oc10")
+        steps += githubComment("e2e-tests %s" % server)
+        if (params["earlyFail"]):
+            steps += stopBuild()
+
+        pipelines.append({
             "kind": "pipeline",
             "type": "docker",
-            "name": "e2e-tests OC10",
+            "name": "e2e-tests-%s" % server,
             "workspace": e2e_workspace,
-            "steps": stepsClassic,
+            "steps": steps,
             "services": services,
-            "depends_on": [],
+            "depends_on": depends_on,
             "trigger": e2e_trigger,
             "volumes": e2e_volumes,
-        },
-        {
-            "kind": "pipeline",
-            "type": "docker",
-            "name": "e2e-tests oCIS",
-            "workspace": e2e_workspace,
-            "steps": stepsInfinite,
-            "depends_on": ["cache-ocis"],
-            "trigger": e2e_trigger,
-            "volumes": e2e_volumes,
-        },
-    ]
+        })
+    return pipelines
 
 def acceptance(ctx):
     pipelines = []
@@ -2613,7 +2626,7 @@ def buildGithubCommentForBuildStopped(suite):
         "name": "build-github-comment-buildStop",
         "image": OC_UBUNTU,
         "commands": [
-            'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
+            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (suite, dir["web"]),
         ],
         "when": {
             "status": [
