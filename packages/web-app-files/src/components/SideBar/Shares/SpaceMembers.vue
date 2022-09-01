@@ -124,7 +124,8 @@ export default defineComponent({
         client: this.$client,
         graphClient: this.graphClient,
         share: share,
-        path: this.highlightedFile.path
+        path: this.highlightedFile.path,
+        reloadResource: false
       })
         .then(() => {
           this.hideModal()
@@ -141,6 +142,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.error(error)
+          this.hideModal()
           this.showMessage({
             title: this.$gettext('Failed to remove share'),
             status: 'danger'
