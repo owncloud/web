@@ -1205,12 +1205,6 @@ def e2eTests(ctx):
             "REPORT_TRACING": params["reportTracing"],
         }
 
-        if server == "oCIS":
-            environment["BASE_URL_OCIS"] = "ocis:9200"
-            environment["OCIS"] = "true"
-        else:
-            environment["BASE_URL_OCC"] = "owncloud"
-
         services = []
         depends_on = []
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
@@ -1220,7 +1214,13 @@ def e2eTests(ctx):
                 copyFilesForUpload()
 
         if server == "oC10":
+            # oC10 specific environment variables
+            environment["BASE_URL_OCC"] = "owncloud"
+
+            # oC10 specific services
             services = databaseService(params["db"]) + owncloudService() + webService()
+
+            # oC10 specific steps
             steps += buildWebApp() + \
                      installCore(params["db"]) + \
                      owncloudLog() + \
@@ -1230,7 +1230,14 @@ def e2eTests(ctx):
                      fixPermissions() + \
                      waitForOwncloudService()
         else:
+            # oCIS specific environment variables
+            environment["BASE_URL_OCIS"] = "ocis:9200"
+            environment["OCIS"] = "true"
+
+            # oCIS specific dependencies
             depends_on = ["cache-ocis"]
+
+            # oCIS specific steps
             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                      setupServerConfigureWeb(params["logLevel"]) + \
                      restoreOcisCache() + \
@@ -1242,15 +1249,16 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % "oc10" if server == "oCIS" else "ocis",
+                         "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
-                 publishTracingResult(ctx, "e2e-tests %s" % server) + \
-                 githubComment("e2e-tests %s" % server)
-
+                 publishTracingResult(ctx, "e2e-tests %s" % server)
         if (params["earlyFail"]):
-            steps += buildGithubCommentForBuildStopped("Infinite" if server == "oCIS" else "Classic", "e2e") + stopBuild()
+            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server == "oCIS" else "e2e-oc10")
+        steps += githubComment("e2e-tests %s" % server)
+        if (params["earlyFail"]):
+            steps += stopBuild()
 
         pipelines.append({
             "kind": "pipeline",
@@ -2613,12 +2621,12 @@ def buildGithubComment(suite):
         },
     }]
 
-def buildGithubCommentForBuildStopped(suite, testType = "acceptance"):
+def buildGithubCommentForBuildStopped(suite):
     return [{
         "name": "build-github-comment-buildStop",
         "image": OC_UBUNTU,
         "commands": [
-            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (dir["web"], testType),
+            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (suite, dir["web"]),
         ],
         "when": {
             "status": [
