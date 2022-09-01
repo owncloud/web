@@ -98,6 +98,7 @@ Summary
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
@@ -908,6 +909,14 @@ Details
 
    https://github.com/owncloud/web/pull/7355
    https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.16
+
+* Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
+
+   We've updated Uppy to v3.0.1. This allows us to enable the `creation-with-upload` extension,
+   which saves up one request per file during upload.
+
+   https://github.com/owncloud/web/issues/7177
+   https://github.com/owncloud/web/pull/7515
 
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 
