@@ -18,7 +18,7 @@ module.exports = {
     'core-js': '<rootDir>/node_modules/core-js'
   },
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es|@uppy)'],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
