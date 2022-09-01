@@ -2722,13 +2722,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/companion-client@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@uppy/companion-client@npm:3.0.0"
+"@uppy/companion-client@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/companion-client@npm:3.0.1"
   dependencies:
-    "@uppy/utils": ^5.0.0
+    "@uppy/utils": ^5.0.1
     namespace-emitter: ^2.0.1
-  checksum: 8f127e3feb6e9568f50eb39fd6009003b292807d60ee19bcf804015e70eb2cd2e232c42c4b19cc74eee1cff68db53baa7dea0856e0b04d9e522fbdcbfcc9ab6a
+  checksum: d140a434c808c26b14c502472140339bead3f2898285c61dea8c3fadcdffcb00ee33d1d1177c96019e117282c8f28ca14ad8592cf3733a65e70fa1d2db066ea8
   languageName: node
   linkType: hard
 
@@ -2766,29 +2766,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/tus@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@uppy/tus@npm:3.0.0"
+"@uppy/tus@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/tus@npm:3.0.1"
   dependencies:
-    "@uppy/companion-client": ^3.0.0
-    "@uppy/utils": ^5.0.0
+    "@uppy/companion-client": ^3.0.1
+    "@uppy/utils": ^5.0.1
     tus-js-client: ^3.0.0
   peerDependencies:
-    "@uppy/core": ^3.0.0
-  checksum: 6b25dc13c0a3a29edd6de0a08c73f9bf92e98f5e466fdfcfdd5588a1f37dbf1c0e6fb4239b5931eea2bb1c865a1c8d72ff504d12e6b723c9a11fcbed18115c98
+    "@uppy/core": ^3.0.1
+  checksum: f2f018f9d1abb88d2563ef70fc040a27fb2e8c717547969d99639907bf57d28ba621b7ca5e034c3802442633353bcc02bada5ecc06b92af2d802399e90a315f8
   languageName: node
   linkType: hard
 
-"@uppy/utils@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@uppy/utils@npm:5.0.0"
-  dependencies:
-    lodash.throttle: ^4.1.1
-  checksum: c7eb3d2a899928d8eab647b8868a5f57bfe7bf623900f7ba79997803e75bd6ea78cde5190c2fec79a5cd39dba478890d4f2b364b5915c07d0bf24cb177268467
-  languageName: node
-  linkType: hard
-
-"@uppy/utils@npm:^5.0.1":
+"@uppy/utils@npm:^5.0.0, @uppy/utils@npm:^5.0.1":
   version: 5.0.1
   resolution: "@uppy/utils@npm:5.0.1"
   dependencies:
@@ -2797,16 +2788,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/xhr-upload@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@uppy/xhr-upload@npm:3.0.0"
+"@uppy/xhr-upload@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/xhr-upload@npm:3.0.1"
   dependencies:
-    "@uppy/companion-client": ^3.0.0
-    "@uppy/utils": ^5.0.0
+    "@uppy/companion-client": ^3.0.1
+    "@uppy/utils": ^5.0.1
     nanoid: ^4.0.0
   peerDependencies:
-    "@uppy/core": ^3.0.0
-  checksum: 0d722509475f38273356ec5435713ee299eaf4ee77a33f347f4bea29d27b560c0b75fec16919cab22154d51da3bdc24947bd445b136fce6c42dd75b47b8ba01b
+    "@uppy/core": ^3.0.1
+  checksum: eda099ac7a16b50d62da17d912de0d14d6318ca29c3e0f242798ebf5e64ca71bba73faa3bd61eb20c0c3bbada424ed919f65b21c68f8ed9b1a076dacd77da4da
   languageName: node
   linkType: hard
 
@@ -13786,8 +13777,8 @@ __metadata:
     "@types/semver": ^7.3.8
     "@uppy/core": ^3.0.1
     "@uppy/drop-target": ^2.0.0
-    "@uppy/tus": ^3.0.0
-    "@uppy/xhr-upload": ^3.0.0
+    "@uppy/tus": ^3.0.1
+    "@uppy/xhr-upload": ^3.0.1
     "@vue/composition-api": ^1.6.2
     axios: ^0.27.1
     cross-fetch: ^3.0.6
