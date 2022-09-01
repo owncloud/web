@@ -1,3 +1,4 @@
+import { config } from '../../../../config'
 import { Page } from 'playwright'
 import { locatorUtils } from '../../../utils'
 
@@ -50,5 +51,8 @@ export const openPanel = async ({ page, name }: { page: Page; name: string }): P
   const nextPanel = page.locator(`#sidebar-panel-${name}-item`)
 
   await panelSelector.click()
-  await locatorUtils.waitForEvent(nextPanel, 'transitionend')
+  if (config.ocis) {
+    // here is flaky in oc10. need researching
+    await locatorUtils.waitForEvent(nextPanel, 'transitionend')
+  }
 }
