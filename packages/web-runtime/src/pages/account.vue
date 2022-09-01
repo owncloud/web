@@ -126,7 +126,7 @@ export default defineComponent({
       return null
     },
     groupNames() {
-      if (this.user.groups.some((group) => typeof group === 'object')) {
+      if (this.capabilities.spaces?.enabled) {
         return this.user.groups.map((group) => group.displayName).join(', ')
       }
 
