@@ -2732,19 +2732,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/core@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@uppy/core@npm:3.0.0"
+"@uppy/core@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/core@npm:3.0.1"
   dependencies:
     "@transloadit/prettier-bytes": 0.0.9
-    "@uppy/store-default": ^3.0.0
-    "@uppy/utils": ^5.0.0
+    "@uppy/store-default": ^3.0.1
+    "@uppy/utils": ^5.0.1
     lodash.throttle: ^4.1.1
     mime-match: ^1.0.2
     namespace-emitter: ^2.0.1
     nanoid: ^4.0.0
     preact: ^10.5.13
-  checksum: 47bb39c0614423e00e65419d3ff83118e693b9538b1dd149c714aafb7257d7c61eb331ca6e365ab6034b5728997853a72fbc1553d1121f2513d054606f8e6a89
+  checksum: 585d59694ce906cfa79559bd5ff0601327648938db8aacb44334e9f952c9d558a379ee307b155947ad298aea0e944d7b2918e50368a5d9ca962a67c2d268335b
   languageName: node
   linkType: hard
 
@@ -2759,10 +2759,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/store-default@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@uppy/store-default@npm:3.0.0"
-  checksum: ac38483fc1baef1ce9b591b9e6b39abb25c0a00188b2b32ca31cf2a88e356650313cb142f5baf49f8b4ba580e2df4329531b3f423cebaa05e65b0724a6f43ffd
+"@uppy/store-default@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/store-default@npm:3.0.1"
+  checksum: b4d8b63835810556aff9aa0de8bf13806b3301f7b31e36dff1b2c353b6fb6eb50f095335866ca41ff14fbc1f9566a74451e0505666d830b046e2bbc9c61213af
   languageName: node
   linkType: hard
 
@@ -2785,6 +2785,15 @@ __metadata:
   dependencies:
     lodash.throttle: ^4.1.1
   checksum: c7eb3d2a899928d8eab647b8868a5f57bfe7bf623900f7ba79997803e75bd6ea78cde5190c2fec79a5cd39dba478890d4f2b364b5915c07d0bf24cb177268467
+  languageName: node
+  linkType: hard
+
+"@uppy/utils@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@uppy/utils@npm:5.0.1"
+  dependencies:
+    lodash.throttle: ^4.1.1
+  checksum: f7450a7d523a99a2b9e6e6656f0294eba095e22e1f792509debf780f39542e094c6eadb7ed963685267ed991d652c418e98cb7f337ed644df502e68cc3cf788e
   languageName: node
   linkType: hard
 
@@ -13775,7 +13784,7 @@ __metadata:
     "@sentry/integrations": ^6.19.7
     "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
-    "@uppy/core": ^3.0.0
+    "@uppy/core": ^3.0.1
     "@uppy/drop-target": ^2.0.0
     "@uppy/tus": ^3.0.0
     "@uppy/xhr-upload": ^3.0.0

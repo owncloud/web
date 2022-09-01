@@ -8,7 +8,7 @@
     "@popperjs/core": "^2.11.5",
     "@sentry/browser": "^6.19.7",
     "@sentry/integrations": "^6.19.7",
-    "@uppy/core": "^3.0.0",
+    "@uppy/core": "^3.0.1",
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.0.0",
     "@uppy/xhr-upload": "^3.0.0",
