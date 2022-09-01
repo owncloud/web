@@ -8,7 +8,7 @@ import Files from '@/__fixtures__/files'
 import merge from 'lodash-es/merge'
 import { buildResource, renameResource } from '@files/src/helpers/resources'
 
-import InnerSideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
+import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 import { createLocationSpaces } from '../../../../src/router'
 

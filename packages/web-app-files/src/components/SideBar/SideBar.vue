@@ -32,10 +32,10 @@
 
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
-import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
+import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
-import { Panel } from 'web-pkg/src/components/sidebar/'
+import { Panel } from 'web-pkg/src/components/sideBar/'
 
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
