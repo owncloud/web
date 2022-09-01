@@ -80,6 +80,7 @@ Summary
 * Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
 * Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
+* Enhancement - Left sidebar hover effect: [#7540](https://github.com/owncloud/web/issues/7540)
 * Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Re-sharing for ocis: [#7086](https://github.com/owncloud/web/pull/7086)
 * Enhancement - Added a toolbar to pdf-viewer app: [#7201](https://github.com/owncloud/web/pull/7201)
@@ -702,6 +703,13 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7309
+
+* Enhancement - Left sidebar hover effect: [#7540](https://github.com/owncloud/web/issues/7540)
+
+   We've added a hover effect to the left sidebar items.
+
+   https://github.com/owncloud/web/issues/7540
+   https://github.com/owncloud/web/pull/7567
 
 * Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
 
