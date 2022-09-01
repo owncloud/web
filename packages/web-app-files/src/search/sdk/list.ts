@@ -30,8 +30,8 @@ export default class List implements SearchList {
 
     return {
       range,
-      values: results.map((plainResource) => {
-        const resource = buildResource(plainResource)
+      values: results.map((result) => {
+        const resource = buildResource(result)
         return { id: resource.id, data: resource }
       })
     }
