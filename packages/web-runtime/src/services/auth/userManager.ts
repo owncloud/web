@@ -158,8 +158,6 @@ export class UserManager extends OidcUserManager {
     const login = await this.clientService.owncloudSdk.getCurrentUser()
     await this.fetchCapabilities({ accessToken })
 
-    // FIXME: Fetching the user from the graph api can be removed as soon as the uuid is integrated in the OCS api
-    // see https://github.com/owncloud/ocis/issues/3271
     let role, graphUser, userGroups
 
     const user = await this.clientService.owncloudSdk.users.getUser(login.id)
