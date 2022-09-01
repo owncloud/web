@@ -17,6 +17,23 @@ const openForResource = async ({
   await page.locator('.oc-files-actions-show-details-trigger').click()
 }
 
+export const openPanelForResource = async ({
+  page,
+  resource,
+  panel
+}: {
+  page: Page
+  resource: string
+  panel: string
+}): Promise<void> => {
+  await page
+    .locator(
+      `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]`
+    )
+    .click()
+  await page.locator(`.oc-files-actions-show-${panel}-trigger`).click()
+}
+
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator('#files-toggle-sidebar').click()
 }
