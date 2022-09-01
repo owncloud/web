@@ -112,9 +112,9 @@ export default defineComponent({
       const isDownPressed = key === 40
       const isTextSelected = window.getSelection().type === 'Range'
 
-      for(const id of this.forbiddenIds) {
+      for (const id of this.forbiddenIds) {
         const result = document.querySelector(`[id*="${id}"]`)
-        if(result) return
+        if (result) return
       }
 
       if (isTextSelected) return
@@ -132,7 +132,7 @@ export default defineComponent({
       const isEscapePressed = key === 27
       const isSpacePressed = key === 32
       const isAPressed = key === 65
-      
+
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)

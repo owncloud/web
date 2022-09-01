@@ -2,7 +2,7 @@
 
 exports[`Spaces project view space image should show if given 1`] = `
 <div class="space-overview oc-flex">
-  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar"></keyboard-actions-stub>
+  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar" forbiddenids="context-menu-drop,files-share-invite-input"></keyboard-actions-stub>
   <files-view-wrapper-stub>
     <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
     <div>
@@ -41,7 +41,7 @@ exports[`Spaces project view space image should show if given 1`] = `
 
 exports[`Spaces project view space readme should show if given 1`] = `
 <div class="space-overview oc-flex">
-  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar"></keyboard-actions-stub>
+  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar" forbiddenids="context-menu-drop,files-share-invite-input"></keyboard-actions-stub>
   <files-view-wrapper-stub>
     <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
     <div>
