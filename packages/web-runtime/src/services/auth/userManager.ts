@@ -160,8 +160,10 @@ export class UserManager extends OidcUserManager {
 
     // FIXME: Fetching the user from the graph api can be removed as soon as the uuid is integrated in the OCS api
     // see https://github.com/owncloud/ocis/issues/3271
-    let graphUser
-    let role = null
+    let role, graphUser, userGroups
+
+    const user = await this.clientService.owncloudSdk.users.getUser(login.id)
+
     if (this.store.getters.capabilities.spaces?.enabled) {
       const graphClient = this.clientService.graphAuthenticated(
         this.configurationManager.serverUrl,
@@ -176,18 +178,16 @@ export class UserManager extends OidcUserManager {
       this.store.commit('SET_SETTINGS_VALUES', settings)
 
       role = await this.fetchRole({ graphUser, accessToken, roles })
+    } else {
+      userGroups = await this.clientService.owncloudSdk.users.getUserGroups(login.id)
     }
-    const [user, userGroups] = await Promise.all([
-      await this.clientService.owncloudSdk.users.getUser(login.id),
-      await this.clientService.owncloudSdk.users.getUserGroups(login.id)
-    ])
     this.store.commit('SET_USER', {
       id: login.id,
       uuid: graphUser?.data?.id || '',
       username: login.username || login.id,
       displayname: user.displayname || login['display-name'],
       email: login?.email || user?.email || '',
-      groups: userGroups,
+      groups: graphUser?.data?.memberOf || userGroups,
       role,
       language: login?.language
     })

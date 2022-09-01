@@ -67,15 +67,9 @@
         </dd>
       </div>
       <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-        <dt v-translate class="oc-text-normal oc-text-muted" @click="loadGroups">
-          Group memberships
-        </dt>
+        <dt v-translate class="oc-text-normal oc-text-muted">Group memberships</dt>
         <dd data-testid="group-names">
-          <oc-spinner
-            v-if="loadingGroups"
-            :aria-label="$gettext('Loading group membership information')"
-          />
-          <span v-else-if="groupNames">{{ groupNames }}</span>
+          <span v-if="groupNames">{{ groupNames }}</span>
           <span v-else v-translate data-testid="group-names-empty"
             >You are not part of any group</span
           >
@@ -103,8 +97,6 @@ export default defineComponent({
   },
   data() {
     return {
-      loadingGroups: true,
-      groups: [],
       editPasswordModalOpen: false
     }
   },
@@ -134,18 +126,15 @@ export default defineComponent({
       return null
     },
     groupNames() {
-      return this.groups.join(', ')
+      if (this.user.groups.some((group) => typeof group === 'object')) {
+        return this.user.groups.map((group) => group.displayName).join(', ')
+      }
+
+      return this.user.groups.join(', ')
     }
-  },
-  mounted() {
-    this.loadGroups()
   },
   methods: {
     ...mapActions(['showMessage']),
-    async loadGroups() {
-      this.groups = await this.$client.users.getUserGroups(this.user.id)
-      this.loadingGroups = false
-    },
     showEditPasswordModal() {
       this.editPasswordModalOpen = true
     },
