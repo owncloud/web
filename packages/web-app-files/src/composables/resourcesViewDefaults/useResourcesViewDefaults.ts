@@ -10,7 +10,7 @@ import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'
 import { useSort, SortDir } from '../sort/'
-import { useSideBar } from '../sidebar'
+import { useSideBar } from '../sideBar'
 
 import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'

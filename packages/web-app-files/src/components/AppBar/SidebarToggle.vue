@@ -13,7 +13,7 @@
 
 <script>
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../composables/sidebar'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   props: {

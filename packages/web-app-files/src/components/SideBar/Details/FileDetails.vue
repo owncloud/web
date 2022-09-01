@@ -166,7 +166,7 @@ import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../../composables/sidebar'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
   name: 'FileDetails',

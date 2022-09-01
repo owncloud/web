@@ -190,7 +190,7 @@ import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
-import { SideBarEventTopics } from '../../composables/sidebar'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {

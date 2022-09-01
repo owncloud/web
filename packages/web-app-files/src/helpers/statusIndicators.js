@@ -2,7 +2,7 @@ import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../composables/sidebar'
+import { SideBarEventTopics } from '../composables/sideBar'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {

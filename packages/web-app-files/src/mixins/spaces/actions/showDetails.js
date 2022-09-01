@@ -1,6 +1,6 @@
 import { mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../../composables/sidebar'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default {
   computed: {

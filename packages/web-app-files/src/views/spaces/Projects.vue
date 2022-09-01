@@ -158,7 +158,7 @@ import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics, useSideBar } from '../../composables/sidebar'
+import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 
 export default defineComponent({
   components: {

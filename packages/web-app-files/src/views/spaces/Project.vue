@@ -167,7 +167,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import { SideBarEventTopics } from '../../composables/sidebar'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const visibilityObserver = new VisibilityObserver()
 

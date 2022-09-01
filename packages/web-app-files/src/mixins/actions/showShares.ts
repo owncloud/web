@@ -4,7 +4,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../composables/sidebar'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],

@@ -77,7 +77,7 @@ import SpaceQuota from '../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../../composables/sidebar'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
   name: 'SpaceDetails',

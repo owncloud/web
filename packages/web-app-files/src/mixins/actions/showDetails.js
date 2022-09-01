@@ -2,7 +2,7 @@ import { mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
-import { SideBarEventTopics } from '../../composables/sidebar'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
