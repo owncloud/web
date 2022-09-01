@@ -9,7 +9,11 @@
       type="router-link"
       appearance="raw"
       :variation="active ? 'inverse' : 'passive'"
-      :class="['oc-sidebar-nav-item-link', { active: active }]"
+      :class="[
+        'oc-sidebar-nav-item-link',
+        { active: active },
+        { 'oc-background-primary-gradient': active }
+      ]"
       :to="target"
       :data-nav-id="index"
       :data-nav-name="navName"
@@ -126,7 +130,6 @@ export default {
   .text {
     opacity: 1;
     transition: all 0s;
-    transition-delay: 0.1s;
   }
   .text-invisible {
     opacity: 0 !important;
