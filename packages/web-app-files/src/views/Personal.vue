@@ -177,7 +177,7 @@ export default defineComponent({
     breadcrumbs() {
       const personalRouteName = this.hasShareJail
         ? this.$gettext('Personal')
-        : this.$gettext('All files')
+        : this.$gettext('CERNBox')
       return concatBreadcrumbs(
         { text: personalRouteName, to: { path: '/' } },
         ...breadcrumbsFromPath(this.$route, this.$route.params.item)
