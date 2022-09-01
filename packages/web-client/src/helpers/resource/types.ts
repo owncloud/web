@@ -22,6 +22,8 @@ export interface Resource {
   starred?: boolean
   etag?: string
   sharePermissions?: number
+  shareId?: string
+  shareRoot?: string
   shareTypes?: number[]
   privateLink?: string
 
@@ -41,7 +43,6 @@ export interface Resource {
   resourceOwner?: User
   owner?: User[]
   ownerDisplayName?: string
-  shareId?: string
   ownerId?: string
   sharedWith?: string
   shareOwner?: string

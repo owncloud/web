@@ -48,11 +48,7 @@ export default class Preview implements SearchPreview {
       DavProperties.Default
     )
     const resources = results.reduce((acc, plainResource) => {
-      let resourceName = decodeURIComponent(plainResource.name)
-      if (resourceName.startsWith('/dav')) {
-        resourceName = resourceName.slice(4)
-      }
-      const resource = buildResource({ ...plainResource, name: resourceName })
+      const resource = buildResource(plainResource)
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {

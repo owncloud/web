@@ -80,6 +80,7 @@ export function buildResource(resource): Resource {
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
     shareId: resource.fileInfo[DavProperty.ShareId],
+    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
     ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     canUpload: function () {

@@ -599,13 +599,13 @@ export default defineComponent({
 
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(path, resource) {
+    createFolderLink(filePath, resource) {
       if (this.targetRoute === null) {
         return {}
       }
 
       const params = {
-        item: path.replace(/^\//, '') || '/',
+        item: filePath.replace(/^\//, '') || '/',
         ...mapResourceFields(resource, this.targetRouteParamMapping),
         ...this.targetRoute.params
       }
@@ -618,7 +618,7 @@ export default defineComponent({
         return createLocationSpaces('files-spaces-share', {
           params: {
             ...params,
-            shareName: this.shares.find((share) => share.id === resource.shareId)?.name
+            shareName: path.basename(resource.shareRoot)
           },
           query: {
             ...query,
@@ -816,11 +816,9 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        if (resource.path === '/') {
-          return this.$gettext('Shared with me')
-        }
-
-        return this.shares.find((share) => share.id === resource.shareId)?.name
+        return resource.path === '/'
+          ? this.$gettext('Shared with me')
+          : path.basename(resource.shareRoot)
       }
 
       return this.$gettext('Personal')
