@@ -20,6 +20,11 @@ export default defineComponent({
       type: Array,
       required: false,
       default: () => ['files-view', 'web-nav-sidebar']
+    },
+    forbiddenIds: {
+      type: Array,
+      required: false,
+      default: () => ['context-menu-drop', 'files-share-invite-input']
     }
   },
   setup() {
@@ -98,16 +103,27 @@ export default defineComponent({
 
     handleClipboardShortcuts(event) {
       const key = event.keyCode || event.which
+      const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isCopyAction = key === 67
       const isPasteAction = key === 86
       const isCutAction = key === 88
+      const isUpPressed = key === 38
+      const isDownPressed = key === 40
       const isTextSelected = window.getSelection().type === 'Range'
+
+      for(const id of this.forbiddenIds) {
+        const result = document.querySelector(`[id*="${id}"]`)
+        if(result) return
+      }
 
       if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()
+
+      if (isDownPressed && !shift) return this.handleNavigateAction(event)
+      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
     },
 
     handleFileSelectionShortcuts(key, shift, ctrl, event) {
@@ -117,8 +133,8 @@ export default defineComponent({
       const isSpacePressed = key === 32
       const isAPressed = key === 65
 
-      if (isDownPressed && !shift) return this.handleNavigateAction(event)
-      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
+      //if (isDownPressed && !shift) return this.handleNavigateAction(event)
+      //if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)
@@ -139,7 +155,7 @@ export default defineComponent({
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
       this.scrollToResource({ id: nextId })
-      document.getElementById(this.keybindOnElementId).focus()
+      document.getElementById(this.keybindOnElementIds[0]).focus()
     },
 
     handleShiftClickAction(resource) {
