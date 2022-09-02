@@ -24,7 +24,7 @@ export default defineComponent({
     forbiddenIds: {
       type: Array,
       required: false,
-      default: () => ['context-menu-drop', 'files-share-invite-input']
+      default: () => ['context-menu-drop']
     }
   },
   setup() {
@@ -112,16 +112,14 @@ export default defineComponent({
       const isDownPressed = key === 40
       const isTextSelected = window.getSelection().type === 'Range'
 
-      for (const id of this.forbiddenIds) {
-        const result = document.querySelector(`[id*="${id}"]`)
-        if (result) return
-      }
 
       if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()
 
+      const selection = window.getSelection()
+      if(selection.type === "None")
       if (isDownPressed && !shift) return this.handleNavigateAction(event)
       if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
     },
@@ -133,6 +131,13 @@ export default defineComponent({
       const isSpacePressed = key === 32
       const isAPressed = key === 65
 
+      for (const id of this.forbiddenIds) {
+        const result = document.querySelector(`[id*="${id}"]`)
+        if (result) return
+      }
+
+      if (isDownPressed && !shift) return this.handleNavigateAction(event)
+      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)

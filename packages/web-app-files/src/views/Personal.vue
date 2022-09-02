@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex">
+  <div class="oc-flex" v-custom-key-bindings>
     <keyboard-actions :paginated-resources="paginatedResources" />
     <files-view-wrapper>
       <app-bar
@@ -266,7 +266,6 @@ export default defineComponent({
       'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
-
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
