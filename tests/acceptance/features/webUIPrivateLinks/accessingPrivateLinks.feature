@@ -10,16 +10,16 @@ Feature: Access private link
     Given user "Alice" has logged in using the webUI
     When the user copies the private link of the file "lorem.txt" using the webUI
     And the user navigates to the copied private link using the webUI
-    Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "details" details panel should be visible
+    Then file "lorem.txt" should be listed on the webUI
+
 
   @smokeTest @ocisSmokeTest
   Scenario: Access private link before authorisation
     When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page
     When user "Alice" fills in the login form using the webUI
-    Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "details" details panel should be visible
+    Then file "lorem.txt" should be listed on the webUI
+
 
 
   Scenario: Access private link as a collaborator
@@ -28,8 +28,8 @@ Feature: Access private link
     And user "Brian" has logged in using the webUI
     When the user navigates to the private link created by user "Alice" for file "lorem.txt"
     And the private link resolved successfully
-    Then the app-sidebar for file "lorem.txt" should be visible on the webUI
-    And the "details" details panel should be visible
+    Then file "lorem.txt" should be listed on the webUI
+
 
   @issue-3243
   Scenario: Access the private link as an user that does not have permissions to see the file

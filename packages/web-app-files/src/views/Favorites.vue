@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar />
+      <app-bar :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -19,7 +19,7 @@
           id="files-favorites-table"
           v-model="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
@@ -54,7 +54,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -64,7 +64,6 @@ import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../mixins/fileActions'
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
@@ -100,7 +99,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [FileActions, MixinMountSideBar, MixinFilesListFilter],
+  mixins: [FileActions, MixinFilesListFilter],
 
   setup() {
     const store = useStore()
@@ -116,7 +115,6 @@ export default defineComponent({
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount', 'totalFilesSize']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
     ...mapGetters(['user', 'configuration']),
 
     isEmpty() {

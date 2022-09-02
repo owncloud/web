@@ -190,6 +190,7 @@ import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {
@@ -563,7 +564,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', ['openWithPanel']),
     ...mapActions('Files', ['toggleFileSelection']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
@@ -584,10 +584,10 @@ export default defineComponent({
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
-        this.openWithPanel('sharing-item#linkShares')
+        bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
         return
       }
-      this.openWithPanel('sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file)

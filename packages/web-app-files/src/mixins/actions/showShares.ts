@@ -3,6 +3,8 @@ import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -46,9 +48,9 @@ export default {
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showShares_trigger({ resources }) {
+    $_showShares_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      await this.$store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     }
   }
 }

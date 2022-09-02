@@ -7,6 +7,7 @@
         :has-view-options="false"
         :has-sidebar-toggle="false"
         :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />
@@ -133,7 +134,7 @@
         </div>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -156,6 +157,8 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 
 export default defineComponent({
   components: {
@@ -195,7 +198,8 @@ export default defineComponent({
       graphClient,
       loadResourcesTask,
       areResourcesLoading,
-      accessToken
+      accessToken,
+      ...useSideBar()
     }
   },
   data: function () {
@@ -266,9 +270,6 @@ export default defineComponent({
     this.loadResourcesTask.perform(this)
   },
   methods: {
-    ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel'
-    }),
     ...mapActions(['showMessage']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -295,7 +296,7 @@ export default defineComponent({
 
     openSidebarSharePanel(space) {
       this.SET_FILE_SELECTION([space])
-      this.openSidebarWithPanel('space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     },
 
     getSpaceLinkProps(space) {

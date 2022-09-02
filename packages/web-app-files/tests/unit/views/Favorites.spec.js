@@ -80,58 +80,6 @@ describe('Favorites view', () => {
     })
   })
   describe('files table', () => {
-    describe('no file is highlighted', () => {
-      it("don't squash the table", () => {
-        const store = getStore({ sidebarClosed: true })
-        const wrapper = getMountedWrapper({
-          store,
-          loading: false,
-          setup() {
-            return {
-              paginatedResources: defaultActiveFiles
-            }
-          }
-        })
-
-        expect(wrapper.find(selectors.favoritesTable).attributes('class')).not.toContain(
-          'files-table-squashed'
-        )
-        expect(wrapper.find(selectors.favoritesTable).attributes('class')).toContain('files-table')
-      })
-
-      it('don\'t sets the "highlighted" attribute', () => {
-        const wrapper = getMountedWrapper({
-          setup() {
-            return {
-              paginatedResources: defaultActiveFiles
-            }
-          }
-        })
-
-        expect(wrapper.find(selectors.favoritesTable).attributes('highlighted')).toBeFalsy()
-      })
-    })
-
-    describe('a file is highlighted', () => {
-      const store = getStore({
-        highlightedFile: defaultActiveFiles[0]
-      })
-      const wrapper = getMountedWrapper({
-        store,
-        setup() {
-          return {
-            paginatedResources: defaultActiveFiles
-          }
-        }
-      })
-
-      it('squash the table', () => {
-        expect(wrapper.find(selectors.favoritesTable).attributes('class')).toContain(
-          'files-table-squashed'
-        )
-      })
-    })
-
     describe('previews', () => {
       it('displays previews when the "disablePreviews" config is disabled', () => {
         const store = getStore({

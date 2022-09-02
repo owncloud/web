@@ -102,7 +102,6 @@ export const getStore = function ({
   currentPage = null,
   activeFiles = [],
   pages = null,
-  sidebarClosed = false,
   currentFolder = null,
   selectedFiles = [],
   totalFilesCount = null,
@@ -153,6 +152,7 @@ export const getStore = function ({
     },
     modules: {
       Files: {
+        namespaced: true,
         state: {
           resource: null,
           filesPageLimit: 100,
@@ -197,15 +197,6 @@ export const getStore = function ({
         actions: {
           loadIndicators: () => {},
           loadFiles: () => {}
-        },
-        namespaced: true,
-        modules: {
-          sidebar: {
-            state: {
-              closed: sidebarClosed
-            },
-            namespaced: true
-          }
         }
       },
       runtime: {

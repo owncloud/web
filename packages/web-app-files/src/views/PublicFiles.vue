@@ -7,6 +7,7 @@
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -35,7 +36,7 @@
           id="files-public-files-table"
           v-model="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'size', 'mdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
@@ -65,18 +66,17 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 import { useResourcesViewDefaults } from '../composables'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -118,7 +118,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinMountSideBar],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
 
   setup() {
     const store = useStore()
@@ -136,7 +136,6 @@ export default defineComponent({
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     breadcrumbs() {
       const breadcrumbs = breadcrumbsFromPath(this.$route, this.$route.params.item)

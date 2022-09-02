@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Trashbin component when the view is not loading anymore when length of the paginated resources is greater than zero should load the resource table with correct props 1`] = `
-<table class="files-table oc-table oc-table-hover oc-table-sticky files-table-squashed" id="files-trashbin-table">
+<table class="files-table oc-table oc-table-hover oc-table-sticky" id="files-trashbin-table">
   <thead class="oc-thead">
     <tr tabindex="-1" class="oc-table-header-row">
       <th class="oc-th oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-table-header-cell oc-table-header-cell-select oc-pl-m " style="top: 0px;"><span class="oc-table-thead-content"><div class="resource-table-select-all"><span><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" value=""> <label for="resource-table-select-all" class="oc-invisible-sr oc-cursor-pointer">Select all resources</label></span></div></span>

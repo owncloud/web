@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': !sidebarClosed }">
+  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
@@ -74,7 +74,8 @@ export default {
     hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
     hasViewOptions: { type: Boolean, default: true },
-    showActionsOnSelection: { type: Boolean, default: false }
+    showActionsOnSelection: { type: Boolean, default: false },
+    sideBarOpen: { type: Boolean, default: false }
   },
   data: function () {
     return {
@@ -85,7 +86,6 @@ export default {
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
     ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     pageTitle() {
       const title = this.$route.meta.title
@@ -138,9 +138,9 @@ export default {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     onResize() {
-      this.limitedScreenSpace = this.sidebarClosed
-        ? window.innerWidth <= 1000
-        : window.innerWidth <= 1280
+      this.limitedScreenSpace = this.sideBarOpen
+        ? window.innerWidth <= 1280
+        : window.innerWidth <= 1000
     }
   }
 }

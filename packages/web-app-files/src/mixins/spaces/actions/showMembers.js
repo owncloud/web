@@ -1,5 +1,6 @@
-import { openSpaceMembersPanel } from '../../../quickActions'
 import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default {
   computed: {
@@ -22,7 +23,7 @@ export default {
 
     $_showMembers_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      openSpaceMembersPanel({ item: resources[0], client: this.$client, store: this.$store })
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 }
