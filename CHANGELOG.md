@@ -102,6 +102,7 @@ Summary
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
@@ -940,6 +941,14 @@ Details
 
    https://github.com/owncloud/web/issues/7439
    https://github.com/owncloud/web/pull/7476
+
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
+
+   We've adjusted the spacing of the files list options menu to visually match with the other
+   menus.
+
+   https://github.com/owncloud/web/issues/7541
+   https://github.com/owncloud/web/pull/7570
 
 * Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
