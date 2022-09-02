@@ -1,3 +1,4 @@
+import { config } from '../../../../config'
 import { Page } from 'playwright'
 import { locatorUtils } from '../../../utils'
 
@@ -14,6 +15,23 @@ const openForResource = async ({
     )
     .click()
   await page.locator('.oc-files-actions-show-details-trigger').click()
+}
+
+export const openPanelForResource = async ({
+  page,
+  resource,
+  panel
+}: {
+  page: Page
+  resource: string
+  panel: string
+}): Promise<void> => {
+  await page
+    .locator(
+      `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]`
+    )
+    .click()
+  await page.locator(`.oc-files-actions-show-${panel}-trigger`).click()
 }
 
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
@@ -50,5 +68,8 @@ export const openPanel = async ({ page, name }: { page: Page; name: string }): P
   const nextPanel = page.locator(`#sidebar-panel-${name}-item`)
 
   await panelSelector.click()
-  await locatorUtils.waitForEvent(nextPanel, 'transitionend')
+  if (config.ocis) {
+    // here is flaky in oc10. need researching
+    await locatorUtils.waitForEvent(nextPanel, 'transitionend')
+  }
 }

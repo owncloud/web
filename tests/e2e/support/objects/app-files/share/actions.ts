@@ -65,8 +65,7 @@ export const createReshare = async (args: createReshareArgs): Promise<void> => {
   if (folderPaths.length) {
     await clickResource({ page: page, path: folderPaths.join('/') })
   }
-  await sidebar.open({ page: page, resource: folderName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
+  await sidebar.openPanelForResource({ page: page, resource: folderName, panel: 'shares' })
 
   await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
