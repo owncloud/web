@@ -11,15 +11,12 @@ localVue.use(DesignSystem)
 localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 
-const user = { id: 'test' }
-
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const wrapper = getWrapper()
     const ocResource = wrapper.find('oc-resource-stub')
 
     expect(ocResource.exists()).toBeTruthy()
-    console.log(wrapper.vm)
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
   describe('computed folderLink and parentFolderLink', () => {
@@ -112,7 +109,8 @@ function getWrapper({
       name: 'lorem.txt',
       path: '/'
     }
-  }
+  },
+  user = { id: 'test' }
 } = {}) {
   return shallowMount(Preview, {
     localVue,
@@ -141,7 +139,7 @@ function getWrapper({
     }),
     mocks: {
       $route: route,
-      $gettext: jest.fn()
+      $gettext: (text) => text
     },
     propsData: {
       searchResult
