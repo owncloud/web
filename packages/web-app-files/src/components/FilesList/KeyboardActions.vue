@@ -20,11 +20,6 @@ export default defineComponent({
       type: Array,
       required: false,
       default: () => ['files-view', 'web-nav-sidebar']
-    },
-    forbiddenIds: {
-      type: Array,
-      required: false,
-      default: () => ['context-menu-drop']
     }
   },
   setup() {
@@ -111,15 +106,14 @@ export default defineComponent({
       const isUpPressed = key === 38
       const isDownPressed = key === 40
       const isTextSelected = window.getSelection().type === 'Range'
-
+ 
+      const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest("[data-custom-key-bindings='true']")
+      if(customKeyBindings) return
 
       if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()
-
-      const selection = window.getSelection()
-      if(selection.type === "None")
       if (isDownPressed && !shift) return this.handleNavigateAction(event)
       if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
     },
@@ -131,13 +125,10 @@ export default defineComponent({
       const isSpacePressed = key === 32
       const isAPressed = key === 65
 
-      for (const id of this.forbiddenIds) {
-        const result = document.querySelector(`[id*="${id}"]`)
-        if (result) return
-      }
+      
 
-      if (isDownPressed && !shift) return this.handleNavigateAction(event)
-      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
+      /*if (isDownPressed && !shift) return this.handleNavigateAction(event)
+      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)*/
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)

@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex" v-custom-key-bindings>
+  <div class="oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
     <files-view-wrapper>
       <app-bar
