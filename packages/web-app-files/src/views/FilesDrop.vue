@@ -133,7 +133,6 @@ export default defineComponent({
 
     resolvePublicLink() {
       this.loading = true
-
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, DavProperties.PublicLink, '0')
         .then((files) => {
