@@ -9745,9 +9745,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "owncloud-design-system@portal:/Users/paul/repos/owncloud-design-system::locator=root-workspace-0b6124%40workspace%3A."
+"owncloud-design-system@npm:14.0.0-alpha.16":
+  version: 14.0.0-alpha.16
+  resolution: "owncloud-design-system@npm:14.0.0-alpha.16"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9764,8 +9764,9 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
+  checksum: 182d05099f648cf93abe997fcbea15064630be311fce788e467ca33f96a3918dc39c1f31a9d8ca1ce4c30765a799799b18fad88f00d28b236dac271582f6d396
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "owncloud-sdk@npm:~3.0.0-alpha.15":
   version: 3.0.0-alpha.15

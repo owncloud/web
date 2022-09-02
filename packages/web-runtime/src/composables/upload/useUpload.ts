@@ -133,9 +133,9 @@ const createDirectoryTree = ({
 
       let existingFiles
       if (unref(isPublicLinkContext)) {
-        existingFiles = await client.publicFiles.list(`${file.meta.webDavBasePath}/`, unref(publicLinkPassword), DavProperties.Default, 'infinity')
+        existingFiles = await client.publicFiles.list(`${file.meta.webDavBasePath}/`, unref(publicLinkPassword), DavProperties.Default, 1)
       }
-      existingFiles = await client.files.list(`${file.meta.webDavBasePath}/`, 'infinity', DavProperties.Default)
+      existingFiles = await client.files.list(`${file.meta.webDavBasePath}/`, 1, DavProperties.Default)
       existingFiles = existingFiles.map(buildResource)
 
       if (!directory || createdFolders.includes(directory)) {
