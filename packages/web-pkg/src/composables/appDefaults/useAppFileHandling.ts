@@ -13,7 +13,6 @@ interface AppFileHandlingOptions {
   publicLinkPassword: MaybeRef<string>
 }
 
-type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
   getUrlForResource(r: Resource): Promise<string>
   revokeUrl(url: string): void

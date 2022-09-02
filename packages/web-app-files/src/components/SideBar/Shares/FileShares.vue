@@ -320,7 +320,7 @@ export default {
       )
     }
   },
-  async mounted() {
+  mounted() {
     if (this.showSpaceMembers) {
       this.loadSpaceMembersTask.perform()
     }

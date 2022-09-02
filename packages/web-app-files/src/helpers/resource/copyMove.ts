@@ -269,7 +269,7 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
-const clientListFilesInFolder = async (
+const clientListFilesInFolder = (
   client: any,
   webDavPath: string,
   depth: number,
@@ -282,7 +282,7 @@ const clientListFilesInFolder = async (
   return client.files.list(webDavPath, depth, DavProperties.Default)
 }
 
-const clientMoveFilesInFolder = async (
+const clientMoveFilesInFolder = (
   client: any,
   webDavPathSource: string,
   webDavPathTarget: string,
@@ -301,7 +301,7 @@ const clientMoveFilesInFolder = async (
   return client.files.move(webDavPathSource, webDavPathTarget, overwrite)
 }
 
-const clientCopyFilesInFolder = async (
+const clientCopyFilesInFolder = (
   client: any,
   webDavPathSource: string,
   webDavPathTarget: string,
