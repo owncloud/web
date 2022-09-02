@@ -1,0 +1,6 @@
+Enhancement: Adjust spacing of the files list options menu
+
+We've adjusted the spacing of the files list options menu to visually match with the other menus.
+
+https://github.com/owncloud/web/pull/7570
+https://github.com/owncloud/web/issues/7541
