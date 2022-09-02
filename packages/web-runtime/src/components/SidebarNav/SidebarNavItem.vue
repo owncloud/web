@@ -9,11 +9,7 @@
       type="router-link"
       appearance="raw"
       :variation="active ? 'inverse' : 'passive'"
-      :class="[
-        'oc-sidebar-nav-item-link',
-        { active: active },
-        { 'oc-background-primary-gradient': active }
-      ]"
+      :class="['oc-sidebar-nav-item-link', { active: active }]"
       :to="target"
       :data-nav-id="index"
       :data-nav-name="navName"

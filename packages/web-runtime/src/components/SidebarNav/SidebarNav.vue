@@ -142,7 +142,7 @@ export default {
     justify-content: flex-end !important;
   }
 
-  .oc-sidebar-nav li a {
+  .oc-sidebar-nav li a:not(.active) {
     &:hover,
     &:focus {
       text-decoration: none !important;
