@@ -48,9 +48,7 @@ export default {
       hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
-      accessToken: useAccessToken({ store })
+      })
     }
   },
   data() {
@@ -123,7 +121,7 @@ export default {
   },
   methods: {
     createFolderLink(filePath, resource) {
-      if (this.resourceTargetLocation === null || this.resourceTargetLocationSpace === null) {
+      if (this.resourceTargetLocation === null) {
         return {}
       }
 
