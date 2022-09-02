@@ -93,6 +93,7 @@ Summary
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
 * Enhancement - Add resource name to the WebDAV properties: [#7485](https://github.com/owncloud/web/pull/7485)
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
+* Enhancement - Don't open right sidebar from private links: [#7559](https://github.com/owncloud/web/pull/7559)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
@@ -829,6 +830,14 @@ Details
 
    https://github.com/owncloud/web/pull/7371
    https://github.com/owncloud/web/pull/7384
+
+* Enhancement - Don't open right sidebar from private links: [#7559](https://github.com/owncloud/web/pull/7559)
+
+   We've changed the behaviour of the web ui to not open the right sidebar anymore when the URL
+   contains a "scrollTo" option. We still select the file and scroll it into the view, but opening
+   the right sidebar felt very invasive, so we now leave that choice to the user.
+
+   https://github.com/owncloud/web/pull/7559
 
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
 
