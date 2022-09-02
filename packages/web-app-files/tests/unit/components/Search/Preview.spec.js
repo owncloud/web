@@ -33,13 +33,13 @@ describe('Preview component', () => {
   describe('folder and parent folder link', () => {
     it('should be empty if no resource target location given', () => {
       const wrapper = getWrapper({ resourceTargetLocation: null })
-      expect(wrapper.vm.folderLink(searchResult.data)).toEqual({})
-      expect(wrapper.vm.parentFolderLink(searchResult.data)).toEqual({})
+      expect(wrapper.vm.folderLink).toEqual({})
+      expect(wrapper.vm.parentFolderLink).toEqual({})
     })
     it('should use the items storageId for the resource target location if present', () => {
       const wrapper = getWrapper({ resourceTargetLocation: { name: 'some-route' } })
-      expect(wrapper.vm.folderLink(searchResult.data).params.storageId).toEqual(1)
-      expect(wrapper.vm.parentFolderLink(searchResult.data).params.storageId).toEqual(1)
+      expect(wrapper.vm.folderLink.params.storageId).toEqual(1)
+      expect(wrapper.vm.parentFolderLink.params.storageId).toEqual(1)
     })
   })
 
