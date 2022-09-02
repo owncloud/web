@@ -20,12 +20,8 @@ exports[`account page account information displays basic user information 1`] = 
     <dd>some-email</dd>
   </div>
   <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">
-      Group memberships
-    </dt>
-    <dd data-testid="group-names">
-      <oc-spinner-stub aria-label="Loading group membership information"></oc-spinner-stub>
-    </dd>
+    <dt class="oc-text-normal oc-text-muted">Group memberships</dt>
+    <dd data-testid="group-names"><span data-testid="group-names-empty">You are not part of any group</span></dd>
   </div>
 </dl>
 `;
