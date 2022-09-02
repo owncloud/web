@@ -103,6 +103,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
+import { SortDir } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -135,11 +136,18 @@ export default defineComponent({
     },
     sortBy: {
       type: String,
-      required: true
+      required: false,
+      default: undefined
     },
     sortDir: {
       type: String,
-      required: true
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return (
+          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
+        )
+      }
     },
     sortHandler: {
       type: Function,
