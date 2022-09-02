@@ -42,14 +42,14 @@ describe('copyMove', () => {
   ])('should copy and move files if no conflicts exist', async (dataSet) => {
     const client = {
       files: {
-        list: async () => {
+        list: () => {
           return []
         },
         copy: jest.fn(),
         move: jest.fn()
       },
       publicFiles: {
-        list: async () => {
+        list: () => {
           return []
         },
         copy: jest.fn(),

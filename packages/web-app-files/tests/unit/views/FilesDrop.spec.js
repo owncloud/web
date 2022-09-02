@@ -15,7 +15,7 @@ localVue.use(GetTextPlugin, {
 localVue.prototype.$client.publicFiles = {
   PUBLIC_LINK_SHARE_OWNER: 'admin',
   // function is mocked because it should return a promise with a list of resources
-  list: async () => [
+  list: () => [
     {
       getProperty: jest.fn((val) => {
         if (val === DavProperty.PublicLinkPermission) {

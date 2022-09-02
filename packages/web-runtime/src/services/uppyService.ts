@@ -35,16 +35,13 @@ export class UppyService {
   useTus({
     tusMaxChunkSize,
     tusHttpMethodOverride,
-    tusExtension,
     onBeforeRequest
   }: {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
-    tusExtension: string
     onBeforeRequest: () => void
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
-    const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
 
     const tusPluginOptions = {
       chunkSize: chunkSize,

@@ -407,7 +407,7 @@ export default defineComponent({
       const paramsToCreate = this.getParamsForLink(link)
 
       if (this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+        showQuickLinkPasswordModal({ store: this.$store }, (newPassword) => {
           this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
         })
       } else {
@@ -419,7 +419,7 @@ export default defineComponent({
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+        showQuickLinkPasswordModal({ store: this.$store }, (newPassword) => {
           this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
         })
       } else {

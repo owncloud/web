@@ -37,7 +37,7 @@ export default class Provider extends EventBus implements SearchProvider {
     }
   }
 
-  public activate(term: string): void {
+  public activate(): void {
     /* noop */
   }
 

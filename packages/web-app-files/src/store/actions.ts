@@ -64,7 +64,7 @@ export default {
       { root: true }
     )
   },
-  async clearClipboardFiles(context) {
+  clearClipboardFiles(context) {
     context.commit('CLEAR_CLIPBOARD')
   },
   async pasteSelectedFiles(
