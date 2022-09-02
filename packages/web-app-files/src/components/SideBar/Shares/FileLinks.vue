@@ -184,7 +184,7 @@ export default defineComponent({
 
     share() {
       // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['']?.find((s) => s.incoming)
+      return this.sharesTree['/']?.find((s) => s.incoming)
     },
 
     expirationDate() {
