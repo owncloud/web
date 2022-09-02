@@ -185,7 +185,7 @@ export class UserManager extends OidcUserManager {
       username: login.username || login.id,
       displayname: user.displayname || login['display-name'],
       email: login?.email || user?.email || '',
-      groups: graphUser?.data?.memberOf || userGroups,
+      groups: graphUser?.data?.memberOf || userGroups || [],
       role,
       language: login?.language
     })
