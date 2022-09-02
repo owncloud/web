@@ -1,0 +1,5 @@
+Enhancement: Make keybinds global
+
+We've set keybinds globally and introduced a data-attribute to mark elements that need custom keybinds
+
+https://github.com/owncloud/web/pull/7569
