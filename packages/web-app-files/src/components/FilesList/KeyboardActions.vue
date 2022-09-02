@@ -125,10 +125,6 @@ export default defineComponent({
       const isSpacePressed = key === 32
       const isAPressed = key === 65
 
-      
-
-      /*if (isDownPressed && !shift) return this.handleNavigateAction(event)
-      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)*/
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
       if (isDownPressed && shift) return this.handleShiftDownAction(event)

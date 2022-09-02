@@ -3,6 +3,7 @@
     v-if="availableProviders.length"
     id="files-global-search"
     :class="{ 'options-visible': optionsVisible && term }"
+    data-custom-key-bindings=true
   >
     <oc-search-bar
       id="files-global-search-bar"
