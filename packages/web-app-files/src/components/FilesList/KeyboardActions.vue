@@ -40,12 +40,6 @@ export default defineComponent({
   },
 
   mounted() {
-    for (const elementId of this.keybindOnElementIds) {
-      const element = document.getElementById(elementId)
-      if (element) {
-        element.addEventListener('keydown', this.handleSelectionShortcuts, false)
-      }
-    }
     document.addEventListener('keydown', this.handleClipboardShortcuts)
 
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
@@ -88,14 +82,6 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
-    handleSelectionShortcuts(event) {
-      const key = event.keyCode || event.which
-      const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
-      const shift = event.shiftKey
-
-      this.handleFileSelectionShortcuts(key, shift, ctrl, event)
-    },
-
     handleClipboardShortcuts(event) {
       const key = event.keyCode || event.which
       const shift = event.shiftKey
@@ -105,6 +91,9 @@ export default defineComponent({
       const isCutAction = key === 88
       const isUpPressed = key === 38
       const isDownPressed = key === 40
+      const isEscapePressed = key === 27
+      const isSpacePressed = key === 32
+      const isAPressed = key === 65
       const isTextSelected = window.getSelection().type === 'Range'
  
       const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest("[data-custom-key-bindings='true']")
@@ -116,14 +105,6 @@ export default defineComponent({
       if (isCutAction && ctrl) return this.cutSelectedFiles()
       if (isDownPressed && !shift) return this.handleNavigateAction(event)
       if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
-    },
-
-    handleFileSelectionShortcuts(key, shift, ctrl, event) {
-      const isUpPressed = key === 38
-      const isDownPressed = key === 40
-      const isEscapePressed = key === 27
-      const isSpacePressed = key === 32
-      const isAPressed = key === 65
 
       if (isSpacePressed) return this.handleSpaceAction(event)
       if (isEscapePressed) return this.handleEscapeAction()
