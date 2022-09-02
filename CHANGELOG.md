@@ -47,6 +47,7 @@ Summary
 * Bugfix - Print backend version: [#7272](https://github.com/owncloud/web/issues/7272)
 * Bugfix - Quicklinks not shown: [#7424](https://github.com/owncloud/web/pull/7424)
 * Bugfix - Re-fetch quota: [#7415](https://github.com/owncloud/web/pull/7415)
+* Bugfix - Redirect after removing self from space members: [#7534](https://github.com/owncloud/web/issues/7534)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
@@ -423,6 +424,14 @@ Details
    https://github.com/owncloud/web/issues/7389
    https://github.com/owncloud/web/pull/7415
 
+* Bugfix - Redirect after removing self from space members: [#7534](https://github.com/owncloud/web/issues/7534)
+
+   When a user removes themselves from the members of a project space we now properly redirect to
+   the project spaces overviewe page instead of showing an error message.
+
+   https://github.com/owncloud/web/issues/7534
+   https://github.com/owncloud/web/pull/7576
+
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 
    We've fixed a bug where renaming a file or a folder of a shared space wasn't possible.
@@ -712,6 +721,7 @@ Details
 
    https://github.com/owncloud/web/issues/7540
    https://github.com/owncloud/web/pull/7567
+   https://github.com/owncloud/web/pull/7575
 
 * Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
 
