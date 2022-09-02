@@ -1,5 +1,5 @@
 <template>
-  <div id="oc-files-sharing-sidebar" class="oc-position-relative">
+  <div id="oc-files-sharing-sidebar" class="oc-position-relative" data-custom-key-bindings=true>
     <div class="oc-flex">
       <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
