@@ -14,6 +14,7 @@ import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from 'files/src/helpers/resources'
+import { Store } from 'vuex'
 
 export interface UppyResource {
   id?: string
@@ -107,7 +108,8 @@ export function useUpload(options: UploadOptions): UploadResult {
       clientService,
       isPublicLinkContext,
       publicLinkPassword,
-      uppyService: options.uppyService
+      uppyService: options.uppyService,
+      store
     })
   }
 }
@@ -116,27 +118,22 @@ const createDirectoryTree = ({
   clientService,
   isPublicLinkContext,
   publicLinkPassword,
-  uppyService
+  uppyService,
+  store
 }: {
   clientService: ClientService
   isPublicLinkContext: Ref<boolean>
   publicLinkPassword?: Ref<string>
-  uppyService: UppyService
+  uppyService: UppyService,
+  store: Store<any>
 }) => {
   return async (files: UppyResource[]) => {
     const { owncloudSdk: client } = clientService
     const createdFolders = []
-    
+    const existingFiles = store.getters['Files/files']
     for (const file of files) {
       const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
-
-      let existingFiles
-      if (unref(isPublicLinkContext)) {
-        existingFiles = await client.publicFiles.list(`${file.meta.webDavBasePath}/`, unref(publicLinkPassword), DavProperties.Default, 1)
-      }
-      existingFiles = await client.files.list(`${file.meta.webDavBasePath}/`, 1, DavProperties.Default)
-      existingFiles = existingFiles.map(buildResource)
 
       if (!directory || createdFolders.includes(directory)) {
         continue
