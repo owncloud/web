@@ -14,7 +14,7 @@
         </no-content-message>
         <resource-table
           v-else
-          v-model="selectedResources"
+          v-model="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': false }"
           :resources="paginatedResources"
