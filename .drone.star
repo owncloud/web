@@ -1367,7 +1367,6 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
-                        steps += restoreBuildArtifactCache(ctx, "yarn", ".yarn")
                         steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
                         steps += yarnInstallTests()
 
