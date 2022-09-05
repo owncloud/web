@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-width-1-1">
+  <div class="oc-width-1-1 oc-overflow-auto">
     <div
       v-if="$asyncComputed.searchResult.updating"
       class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1 oc-width-1-1"
@@ -37,9 +37,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#search-view {
-  padding: 25px 10px 10px 10px;
-}
-</style>

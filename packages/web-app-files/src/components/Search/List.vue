@@ -1,47 +1,49 @@
 <template>
-  <div class="files-search-result">
-    <app-bar :has-bulk-actions="true" />
-    <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
-      <template #message>
-        <p class="oc-text-muted">
-          <span v-if="!!$route.query.term" v-translate>No resource found</span>
-          <span v-else v-translate>No search term entered</span>
-        </p>
-      </template>
-    </no-content-message>
-    <resource-table
-      v-else
-      v-model="selectedResources"
-      class="files-table"
-      :class="{ 'files-table-squashed': false }"
-      :resources="paginatedResources"
-      :target-route="resourceTargetLocation"
-      :are-paths-displayed="true"
-      :are-thumbnails-displayed="displayThumbnails"
-      :has-actions="true"
-      :is-selectable="false"
-      @fileClick="$_fileActions_triggerDefaultAction"
-      @rowMounted="rowMounted"
-    >
-      <template #contextMenu="{ resource }">
-        <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-      </template>
-      <template #footer>
-        <pagination :pages="paginationPages" :current-page="paginationPage" />
-        <div
-          v-if="searchResultExceedsLimit"
-          class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
-          v-text="searchResultExceedsLimitText"
-        />
-        <list-info
-          v-else-if="paginatedResources.length > 0"
-          class="oc-width-1-1 oc-my-s"
-          :files="totalFilesCount.files"
-          :folders="totalFilesCount.folders"
-          :size="totalFilesSize"
-        />
-      </template>
-    </resource-table>
+  <div class="files-search-result oc-flex">
+    <files-view-wrapper>
+      <app-bar :has-bulk-actions="true" />
+      <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
+        <template #message>
+          <p class="oc-text-muted">
+            <span v-if="!!$route.query.term" v-translate>No resource found</span>
+            <span v-else v-translate>No search term entered</span>
+          </p>
+        </template>
+      </no-content-message>
+      <resource-table
+        v-else
+        v-model="selectedResources"
+        class="files-table"
+        :class="{ 'files-table-squashed': false }"
+        :resources="paginatedResources"
+        :target-route="resourceTargetLocation"
+        :are-paths-displayed="true"
+        :are-thumbnails-displayed="displayThumbnails"
+        :has-actions="true"
+        :is-selectable="false"
+        @fileClick="$_fileActions_triggerDefaultAction"
+        @rowMounted="rowMounted"
+      >
+        <template #contextMenu="{ resource }">
+          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+        </template>
+        <template #footer>
+          <pagination :pages="paginationPages" :current-page="paginationPage" />
+          <div
+            v-if="searchResultExceedsLimit"
+            class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+            v-text="searchResultExceedsLimitText"
+          />
+          <list-info
+            v-else-if="paginatedResources.length > 0"
+            class="oc-width-1-1 oc-my-s"
+            :files="totalFilesCount.files"
+            :folders="totalFilesCount.folders"
+            :size="totalFilesSize"
+          />
+        </template>
+      </resource-table>
+    </files-view-wrapper>
   </div>
 </template>
 
@@ -65,11 +67,20 @@ import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
+import FilesViewWrapper from '../FilesViewWrapper.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
-  components: { AppBar, ContextActions, ListInfo, Pagination, NoContentMessage, ResourceTable },
+  components: {
+    AppBar,
+    ContextActions,
+    ListInfo,
+    Pagination,
+    NoContentMessage,
+    ResourceTable,
+    FilesViewWrapper
+  },
   mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
   props: {
     searchResult: {
