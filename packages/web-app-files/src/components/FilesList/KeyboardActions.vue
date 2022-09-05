@@ -17,11 +17,6 @@ export default defineComponent({
       type: Array,
       required: true
     },
-    keybindOnElementIds: {
-      type: Array,
-      required: false,
-      default: () => ['files-view', 'web-nav-sidebar']
-    }
   },
   setup() {
     const store = useStore()
@@ -77,15 +72,30 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
+    areCustomKeyBindingsEnabled() {
+      const closestSelectionEl = (window.getSelection().focusNode as HTMLElement)
+      if(!closestSelectionEl) return true
+      let customKeyBindings
+      try {
+        customKeyBindings = closestSelectionEl?.closest(
+          "[data-custom-key-bindings='true']"
+        )
+      }catch {
+        customKeyBindings = closestSelectionEl?.parentElement.closest(
+          "[data-custom-key-bindings='true']"
+        )
+      }
+      if (customKeyBindings) return true
+      return false
+    },
+
     handleShortcuts(event) {
       const key = event.keyCode || event.which
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isTextSelected = window.getSelection().type === 'Range'
-      const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest(
-        "[data-custom-key-bindings='true']"
-      )
-      if (customKeyBindings) return
+      
+      if (this.areCustomKeyBindingsEnabled()) return
       if (isTextSelected) return
 
       if (key === keycode('c') && ctrl) return this.copySelectedFiles()
@@ -114,7 +124,6 @@ export default defineComponent({
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
       this.scrollToResource({ id: nextId })
-      document.getElementById(this.keybindOnElementIds[0]).focus()
     },
 
     handleShiftClickAction(resource) {
@@ -212,15 +221,21 @@ export default defineComponent({
       const latestSelectedRow = document.querySelectorAll(
         `[data-item-id='${this.latestSelectedId}']`
       )[0]
-      const nextRow = (
-        previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
-      ) as HTMLElement
+      let nextRow
+      try {
+        nextRow = (
+          previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
+        ) as HTMLElement
+      }catch {
+        return -1
+      }
       if (nextRow === null) return -1
       return nextRow.getAttribute('data-item-id')
     },
 
     getFirstResourceId() {
       const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
+      if(!firstRow) return -1
       return firstRow.getAttribute('data-item-id')
     }
   }
