@@ -49,7 +49,11 @@
               :search-result="searchResultValue"
             />
           </li>
-          <li v-if="showNoMatches" class="oc-text-center oc-text-muted" v-translate>No matches</li>
+          <li
+            v-if="showNoMatches"
+            class="oc-text-center oc-text-muted"
+            v-text="$gettext('No matches')"
+          ></li>
           <li v-if="hasMore" class="oc-text-center oc-text-muted">{{ moreText }}</li>
         </template>
       </ul>
