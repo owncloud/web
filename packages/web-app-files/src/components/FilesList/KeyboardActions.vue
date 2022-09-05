@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import keycode from "keycode"
+import keycode from 'keycode'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
@@ -16,7 +16,7 @@ export default defineComponent({
     paginatedResources: {
       type: Array,
       required: true
-    },
+    }
   },
   setup() {
     const store = useStore()
@@ -73,14 +73,12 @@ export default defineComponent({
     }),
 
     areCustomKeyBindingsEnabled() {
-      const closestSelectionEl = (window.getSelection().focusNode as HTMLElement)
-      if(!closestSelectionEl) return true
+      const closestSelectionEl = window.getSelection().focusNode as HTMLElement
+      if (!closestSelectionEl) return true
       let customKeyBindings
       try {
-        customKeyBindings = closestSelectionEl?.closest(
-          "[data-custom-key-bindings='true']"
-        )
-      }catch {
+        customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings='true']")
+      } catch {
         customKeyBindings = closestSelectionEl?.parentElement.closest(
           "[data-custom-key-bindings='true']"
         )
@@ -94,7 +92,7 @@ export default defineComponent({
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isTextSelected = window.getSelection().type === 'Range'
-      
+
       if (this.areCustomKeyBindingsEnabled()) return
       if (isTextSelected) return
 
@@ -226,7 +224,7 @@ export default defineComponent({
         nextRow = (
           previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
         ) as HTMLElement
-      }catch {
+      } catch {
         return -1
       }
       if (nextRow === null) return -1
@@ -235,7 +233,7 @@ export default defineComponent({
 
     getFirstResourceId() {
       const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
-      if(!firstRow) return -1
+      if (!firstRow) return -1
       return firstRow.getAttribute('data-item-id')
     }
   }
