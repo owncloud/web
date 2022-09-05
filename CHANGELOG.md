@@ -88,6 +88,7 @@ Summary
 * Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Propose unique file name while creating a new file: [#7555](https://github.com/owncloud/web/pull/7555)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+* Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
 * Enhancement - Resolve bookmarked public links with password protection: [#7030](https://github.com/owncloud/web/issues/7030)
@@ -787,6 +788,13 @@ Details
    https://github.com/owncloud/web/pull/7372
    https://github.com/owncloud/web/pull/7402
    https://github.com/owncloud/web/pull/7475
+
+* Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
+
+   We've removed the clickOutside directive because it isn't used anymore
+
+   https://github.com/owncloud/web/issues/7572
+   https://github.com/owncloud/web/pull/7584
 
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 
