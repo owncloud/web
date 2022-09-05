@@ -51,10 +51,13 @@
           </li>
           <li
             v-if="showNoMatches"
+            id="no-matches"
             class="oc-text-center oc-text-muted"
             v-text="$gettext('No matches')"
           ></li>
-          <li v-if="hasMore" class="oc-text-center oc-text-muted">{{ moreText }}</li>
+          <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
+            {{ moreMatchesText }}
+          </li>
         </template>
       </ul>
     </div>
@@ -92,11 +95,11 @@ export default {
       return parseInt(this.searchResult.range?.split('/')[1] || 0)
     },
 
-    hasMore() {
+    showMoreMatches() {
       return this.rangeSupported && this.rangeItems > this.searchResult.values.length
     },
 
-    moreText() {
+    moreMatchesText() {
       const moreCount = this.rangeItems - this.searchResult.values.length
       return this.$gettextInterpolate(this.$gettext('%{moreCount} more items'), {
         moreCount

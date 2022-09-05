@@ -259,7 +259,6 @@ describe('Search Bar portal component', () => {
     expect(providers.at(0).get('.label').element.innerHTML).toBe(dummyProviderOne.label)
     expect(providers.at(1).get('.label').element.innerHTML).toBe(dummyProviderTwo.label)
   })
-  test.todo('shows a loading spinner if the active provider is loading')
   test('shows the preview search result from the active provider only if the provider preview is available', async () => {
     wrapper = getMountedWrapper({
       data: {
@@ -297,6 +296,44 @@ describe('Search Bar portal component', () => {
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('li.preview').length).toBe(2)
+  })
+  test('shows the no matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      values: []
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#no-matches').exists()).toBeTruthy()
+  })
+  test('shows the more matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      range: '/10',
+      values: [
+        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
+        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
+      ]
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#more-matches').exists()).toBeTruthy()
   })
   test('activate a preview by clicking it', async () => {
     wrapper = getMountedWrapper({
@@ -451,6 +488,8 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
       }
     },
     mocks: {
+      $gettextInterpolate: (text) => text,
+      $gettext: (text) => text,
       $route: {
         name: 'old'
       },
