@@ -1056,7 +1056,6 @@ def buildCacheWeb(ctx):
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
                  restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installYarn() +
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
@@ -1211,6 +1210,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installYarn() + \
+                restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 copyFilesForUpload()
 
         if server == "oC10":
@@ -1218,11 +1218,10 @@ def e2eTests(ctx):
             environment["BASE_URL_OCC"] = "owncloud"
 
             # oC10 specific services
-            services = databaseService(params["db"]) + owncloudService() + webService()
+            services = databaseService(params["db"]) + owncloudService()
 
             # oC10 specific steps
-            steps += buildWebApp() + \
-                     installCore(params["db"]) + \
+            steps += installCore(params["db"]) + \
                      owncloudLog() + \
                      setupIntegrationWebApp() + \
                      setupServerAndAppsForIntegrationApp(params["logLevel"]) + \
@@ -1238,8 +1237,7 @@ def e2eTests(ctx):
             depends_on = ["cache-ocis"]
 
             # oCIS specific steps
-            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                     setupServerConfigureWeb(params["logLevel"]) + \
+            steps += setupServerConfigureWeb(params["logLevel"]) + \
                      restoreOcisCache() + \
                      ocisService() + \
                      getSkeletonFiles()
@@ -1369,12 +1367,11 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
-                        steps += restoreBuildArtifactCache(ctx, "yarn", ".yarn")
                         steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
                         steps += yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
-                            steps += installYarn() + buildWebApp()
+                            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                         else:
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                             steps += setupServerConfigureWeb(params["logLevel"])
@@ -1411,7 +1408,10 @@ def acceptance(ctx):
                             else:
                                 ## Configure oc10 and web with oauth2 and web Service
                                 steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
-                                services += webService()
+
+                                ## web service is not required for web-oc10-integration
+                                if not params["oc10IntegrationAppIncluded"]:
+                                    services += webService()
 
                             steps += fixPermissions()
                             steps += waitForOwncloudService()
@@ -1808,27 +1808,15 @@ def lint():
         ],
     }]
 
-def buildWebApp():
-    return [{
-        "name": "build-web-integration-app",
-        "image": OC_CI_NODEJS,
-        "commands": [
-            "yarn build",
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": "/srv/config",
-        }],
-    }]
-
 def setupIntegrationWebApp():
     return [{
         "name": "setup-web-integration-app",
         "image": OC_CI_PHP,
         "commands": [
+            # copy web config
+            "mkdir -p /srv/config",
+            "cp -r %s/tests/drone /srv/config" % dir["web"],
+            # setup web integration app
             "cd %s || exit" % dir["server"],
             "mkdir apps-external/web",
             "cp /srv/config/drone/config-oc10-integration-app-oauth.json config/config.json",
