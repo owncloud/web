@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import keycode from "keycode"
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
@@ -80,33 +81,24 @@ export default defineComponent({
       const key = event.keyCode || event.which
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
-      const isCopyAction = key === 67
-      const isPasteAction = key === 86
-      const isCutAction = key === 88
-      const isUpPressed = key === 38
-      const isDownPressed = key === 40
-      const isEscapePressed = key === 27
-      const isSpacePressed = key === 32
-      const isAPressed = key === 65
       const isTextSelected = window.getSelection().type === 'Range'
-
       const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest(
         "[data-custom-key-bindings='true']"
       )
       if (customKeyBindings) return
-
       if (isTextSelected) return
-      if (isCopyAction && ctrl) return this.copySelectedFiles()
-      if (isPasteAction && ctrl) return this.handlePasteAction()
-      if (isCutAction && ctrl) return this.cutSelectedFiles()
-      if (isDownPressed && !shift) return this.handleNavigateAction(event)
-      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
 
-      if (isSpacePressed) return this.handleSpaceAction(event)
-      if (isEscapePressed) return this.handleEscapeAction()
-      if (isDownPressed && shift) return this.handleShiftDownAction(event)
-      if (isUpPressed && shift) return this.handleShiftUpAction(event)
-      if (isAPressed && ctrl) return this.handleSelectAllAction(event)
+      if (key === keycode('c') && ctrl) return this.copySelectedFiles()
+      if (key === keycode('v') && ctrl) return this.handlePasteAction()
+      if (key === keycode('x') && ctrl) return this.cutSelectedFiles()
+      if (key === keycode('down') && !shift) return this.handleNavigateAction(event)
+      if (key === keycode('up') && !shift) return this.handleNavigateAction(event, true)
+
+      if (key === keycode('space')) return this.handleSpaceAction(event)
+      if (key === keycode('esc')) return this.handleEscapeAction()
+      if (key === keycode('down') && shift) return this.handleShiftDownAction(event)
+      if (key === keycode('up') && shift) return this.handleShiftUpAction(event)
+      if (key === keycode('a') && ctrl) return this.handleSelectAllAction(event)
     },
 
     handleNavigateAction(event, up = false) {
