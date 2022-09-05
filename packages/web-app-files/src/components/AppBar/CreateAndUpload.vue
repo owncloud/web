@@ -155,7 +155,7 @@ import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
-import { extractExtensionFromFile } from '../../helpers/resource'
+import { extractExtensionFromFile, extractNameWithoutExtension } from '../../helpers/resource'
 import {
   resolveFileExists,
   ResolveStrategy,
@@ -822,7 +822,7 @@ export default defineComponent({
 
     async handleUppyFileUpload(files: UppyResource[]) {
       this.$uppyService.publish('uploadStarted')
-      await this.createDirectoryTree(files)
+      await this.createDirectoryTree(files, this.files)
       this.$uppyService.publish('addedForUpload', files)
       this.$uppyService.uploadFiles(files)
     },

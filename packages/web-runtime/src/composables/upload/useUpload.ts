@@ -12,9 +12,7 @@ import {
 import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from 'files/src/helpers/resources'
-import { Store } from 'vuex'
+import { Resource } from 'web-client/src/helpers/resource'
 
 export interface UppyResource {
   id?: string
@@ -46,7 +44,7 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(files: UppyResource[]): void
+  createDirectoryTree(files: UppyResource[], existingFiles: []): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -108,8 +106,7 @@ export function useUpload(options: UploadOptions): UploadResult {
       clientService,
       isPublicLinkContext,
       publicLinkPassword,
-      uppyService: options.uppyService,
-      store
+      uppyService: options.uppyService
     })
   }
 }
@@ -118,19 +115,16 @@ const createDirectoryTree = ({
   clientService,
   isPublicLinkContext,
   publicLinkPassword,
-  uppyService,
-  store
+  uppyService
 }: {
   clientService: ClientService
   isPublicLinkContext: Ref<boolean>
   publicLinkPassword?: Ref<string>
-  uppyService: UppyService,
-  store: Store<any>
+  uppyService: UppyService
 }) => {
-  return async (files: UppyResource[]) => {
+  return async (files: UppyResource[], existingFiles: Resource[]) => {
     const { owncloudSdk: client } = clientService
     const createdFolders = []
-    const existingFiles = store.getters['Files/files']
     for (const file of files) {
       const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
@@ -188,7 +182,7 @@ const createDirectoryTree = ({
             unref(publicLinkPassword)
           )
         } else {
-          if(!existingFiles.some(f => f.path === folderToCreate)) {
+          if (!existingFiles.some((f) => f.path === folderToCreate)) {
             await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
           }
         }
