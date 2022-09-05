@@ -1,4 +1,5 @@
 import { Download, Page } from 'playwright'
+import { expect } from '@playwright/test'
 import util from 'util'
 import { resourceExists, waitForResources } from './utils'
 import path from 'path'
@@ -29,6 +30,13 @@ const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
+const globalSearchInput = '.oc-search-input'
+const searchList =
+  '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
+const globalSearchOptions = '#files-global-search-options'
+const loadingSpinner = '#files-global-search-bar .oc-spinner'
+const filesViewOptionButton = '#files-view-options-btn'
+const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
 
 export const clickResource = async ({
   page,
@@ -370,12 +378,7 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
   return message.trim().toLowerCase()
 }
 
-export interface deleteResourceTrashbinArgs {
-  resource: string
-  page: Page
-}
-
-export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): Promise<string> => {
+export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
   if (!(await resourceCheckbox.isChecked())) {
@@ -417,4 +420,29 @@ export const restoreResourceTrashbin = async (
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
+}
+
+export interface searchResourceGlobalSearchArgs {
+  keyword: string
+  page: Page
+}
+
+export const searchResourceGlobalSearch = async (
+  args: searchResourceGlobalSearchArgs
+): Promise<void> => {
+  const { page, keyword } = args
+  await page.locator(globalSearchInput).fill(keyword)
+  await expect(page.locator(globalSearchOptions)).toBeVisible()
+  await expect(page.locator(loadingSpinner)).not.toBeVisible()
+}
+
+export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {
+  const result = await page.locator(searchList).allInnerTexts()
+  // the result has values like `test\n.txt` so remove new line
+  return result.map((result) => result.replace('\n', ''))
+}
+
+export const showHiddenResources = async (page): Promise<void> => {
+  await page.locator(filesViewOptionButton).click()
+  await page.locator(hiddenFilesToggleButton).click()
 }
