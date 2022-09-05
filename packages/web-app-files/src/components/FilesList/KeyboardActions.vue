@@ -40,7 +40,7 @@ export default defineComponent({
   },
 
   mounted() {
-    document.addEventListener('keydown', this.handleClipboardShortcuts)
+    document.addEventListener('keydown', this.handleShortcuts)
 
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
@@ -56,13 +56,7 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      for (const elementId of this.keybindOnElementIds) {
-        const element = document.getElementById(elementId)
-        if (element) {
-          element.removeEventListener('keydown', this.handleSelectionShortcuts)
-        }
-      }
-      document.removeEventListener('keydown', this.handleClipboardShortcuts)
+      document.removeEventListener('keydown', this.handleShortcuts)
     })
   },
 
@@ -82,7 +76,7 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
-    handleClipboardShortcuts(event) {
+    handleShortcuts(event) {
       const key = event.keyCode || event.which
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
@@ -95,9 +89,11 @@ export default defineComponent({
       const isSpacePressed = key === 32
       const isAPressed = key === 65
       const isTextSelected = window.getSelection().type === 'Range'
- 
-      const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest("[data-custom-key-bindings='true']")
-      if(customKeyBindings) return
+
+      const customKeyBindings = (window.getSelection().focusNode as HTMLElement)?.closest(
+        "[data-custom-key-bindings='true']"
+      )
+      if (customKeyBindings) return
 
       if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()

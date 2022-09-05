@@ -1,5 +1,9 @@
 <template>
-  <div id="new-collaborators-form" data-testid="new-collaborators-form" data-custom-key-bindings=true>
+  <div
+    id="new-collaborators-form"
+    data-testid="new-collaborators-form"
+    data-custom-key-bindings="true"
+  >
     <oc-select
       id="files-share-invite-input"
       ref="ocSharingAutocomplete"
@@ -17,7 +21,7 @@
       @input="resetFocusOnInvite"
     >
       <template #option="option">
-        <autocomplete-item :item="option"/>
+        <autocomplete-item :item="option" />
       </template>
       <template #no-options>
         <translate v-if="resourceIsSpace"> No users found. </translate>
