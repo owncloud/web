@@ -1,0 +1,4 @@
+Enhancement: Remove clickOutside directive
+
+We've removed the clickOutside directive because it isn't used anymore
+
