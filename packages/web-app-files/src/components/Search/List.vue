@@ -1,7 +1,7 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :has-bulk-actions="true" />
+      <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
@@ -47,6 +47,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -72,12 +73,14 @@ import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
     AppBar,
+    SideBar,
     AppLoadingSpinner,
     ContextActions,
     ListInfo,
@@ -147,6 +150,10 @@ export default defineComponent({
   watch: {
     searchResult: {
       handler: function () {
+        if (!this.searchResult) {
+          return
+        }
+
         this.CLEAR_CURRENT_FILES_LIST()
         this.LOAD_FILES({
           currentFolder: null,
