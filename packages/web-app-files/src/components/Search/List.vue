@@ -102,7 +102,7 @@ export default defineComponent({
       return this.searchResult.range
     },
     rangeItems() {
-      return this.searchResult.range?.split('/')[1]
+      return parseInt(this.searchResult.range?.split('/')[1] || 0)
     },
     searchResultExceedsLimit() {
       return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
