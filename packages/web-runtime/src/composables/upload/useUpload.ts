@@ -44,7 +44,7 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(files: UppyResource[], existingFiles: []): void
+  createDirectoryTree(files: UppyResource[], existingFiles: Resource[]): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
