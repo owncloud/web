@@ -2,53 +2,57 @@
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
       <app-bar :has-bulk-actions="true" />
-      <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
-        <template #message>
-          <p class="oc-text-muted">
-            <span v-if="!!$route.query.term" v-translate>No resource found</span>
-            <span v-else v-translate>No search term entered</span>
-          </p>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        v-model="selectedResources"
-        class="files-table"
-        :class="{ 'files-table-squashed': false }"
-        :resources="paginatedResources"
-        :target-route="resourceTargetLocation"
-        :are-paths-displayed="true"
-        :are-thumbnails-displayed="displayThumbnails"
-        :has-actions="true"
-        :is-selectable="false"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-      >
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-        </template>
-        <template #footer>
-          <pagination :pages="paginationPages" :current-page="paginationPage" />
-          <div
-            v-if="searchResultExceedsLimit"
-            class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
-            v-text="searchResultExceedsLimitText"
-          />
-          <list-info
-            v-else-if="paginatedResources.length > 0"
-            class="oc-width-1-1 oc-my-s"
-            :files="totalFilesCount.files"
-            :folders="totalFilesCount.folders"
-            :size="totalFilesSize"
-          />
-        </template>
-      </resource-table>
+      <app-loading-spinner v-if="loading" />
+      <template v-else>
+        <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
+          <template #message>
+            <p class="oc-text-muted">
+              <span v-if="!!$route.query.term" v-translate>No resource found</span>
+              <span v-else v-translate>No search term entered</span>
+            </p>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          v-model="selectedResources"
+          class="files-table"
+          :class="{ 'files-table-squashed': false }"
+          :resources="paginatedResources"
+          :target-route="resourceTargetLocation"
+          :are-paths-displayed="true"
+          :are-thumbnails-displayed="displayThumbnails"
+          :has-actions="true"
+          :is-selectable="false"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+        >
+          <template #contextMenu="{ resource }">
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <div
+              v-if="searchResultExceedsLimit"
+              class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+              v-text="searchResultExceedsLimitText"
+            />
+            <list-info
+              v-else-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-table>
+      </template>
     </files-view-wrapper>
   </div>
 </template>
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
 import { createLocationSpaces } from '../../router'
@@ -74,6 +78,7 @@ const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
   components: {
     AppBar,
+    AppLoadingSpinner,
     ContextActions,
     ListInfo,
     Pagination,
@@ -88,6 +93,10 @@ export default defineComponent({
       default: function () {
         return { range: null, values: [] }
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   setup() {
