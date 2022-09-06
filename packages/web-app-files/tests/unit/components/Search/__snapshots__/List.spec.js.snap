@@ -4,7 +4,7 @@ exports[`List component when no resource is found should show no-content-message
 <div class="files-search-result oc-flex">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
+      <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
       <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
         <div class="oc-icon oc-icon-xxl oc-icon-passive">
           <!---->
@@ -24,7 +24,7 @@ exports[`List component when no search term is entered should show no-content-me
 <div class="files-search-result oc-flex">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
+      <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="" hassidebartoggle="true" hasviewoptions="true"></app-bar-stub>
       <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center files-empty">
         <div class="oc-icon oc-icon-xxl oc-icon-passive">
           <!---->

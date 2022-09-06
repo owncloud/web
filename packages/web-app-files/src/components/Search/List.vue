@@ -1,7 +1,7 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
+      <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
@@ -114,7 +114,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
+    ...mapGetters('Files', ['highlightedFile', 'totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
     },

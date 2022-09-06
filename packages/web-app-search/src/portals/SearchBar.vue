@@ -53,7 +53,7 @@
             v-if="showNoMatches"
             id="no-matches"
             class="oc-text-center oc-text-muted"
-            v-text="$gettext('No matches')"
+            v-text="$gettext('No result')"
           ></li>
           <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
             {{ moreMatchesText }}
@@ -101,9 +101,12 @@ export default {
 
     moreMatchesText() {
       const moreCount = this.rangeItems - this.searchResult.values.length
-      return this.$gettextInterpolate(this.$gettext('%{moreCount} more items'), {
-        moreCount
-      })
+      return this.$gettextInterpolate(
+        this.$ngettext('%{moreCount} more result', '%{moreCount} more results', moreCount),
+        {
+          moreCount
+        }
+      )
     },
 
     showNoMatches() {
