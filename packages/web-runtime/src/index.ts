@@ -32,20 +32,21 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
   await announceStore({ vue: Vue, store, runtimeConfiguration })
-  await initializeApplications({
+  const applications = initializeApplications({
     runtimeConfiguration,
     store,
     supportedLanguages,
     router,
     translations
   })
+  const theme = announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceClientService({ vue: Vue, runtimeConfiguration })
+  await announceClient(runtimeConfiguration)
+  const authService = announceAuthService({ vue: Vue, configurationManager, store, router }) // Requires client
+  await Promise.allSettled([applications, authService, theme])
   announceUppyService({ vue: Vue })
   announcePermissionManager({ vue: Vue, store })
-  await announceClient(runtimeConfiguration)
-  await announceAuthService({ vue: Vue, configurationManager, store, router })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
-  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
 }
 

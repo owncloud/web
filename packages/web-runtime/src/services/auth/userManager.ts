@@ -155,20 +155,22 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchUserInfo(accessToken): Promise<void> {
-    const login = await this.clientService.owncloudSdk.getCurrentUser()
-    await this.fetchCapabilities({ accessToken })
+    const [login] = await Promise.all([
+      this.clientService.owncloudSdk.getCurrentUser(),
+      this.fetchCapabilities({ accessToken })
+    ])
 
-    let role, graphUser, userGroups
+    let user, role, graphUser, userGroups
 
-    const user = await this.clientService.owncloudSdk.users.getUser(login.id)
+    user = this.clientService.owncloudSdk.users.getUser(login.id) // waited bellow
 
     if (this.store.getters.capabilities.spaces?.enabled) {
       const graphClient = this.clientService.graphAuthenticated(
         this.configurationManager.serverUrl,
         accessToken
       )
-      graphUser = await graphClient.users.getMe()
-      const [roles, settings] = await Promise.all([
+      const [graphUser, roles, settings] = await Promise.all([
+        graphClient.users.getMe(),
         this.fetchRoles({ accessToken }),
         this.fetchSettings()
       ])
@@ -179,6 +181,9 @@ export class UserManager extends OidcUserManager {
     } else {
       userGroups = await this.clientService.owncloudSdk.users.getUserGroups(login.id)
     }
+
+    user = await user
+
     this.store.commit('SET_USER', {
       id: login.id,
       uuid: graphUser?.data?.id || '',

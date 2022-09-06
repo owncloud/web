@@ -7,6 +7,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
 import { fetchResources } from '../util'
 import get from 'lodash-es/get'
+import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 
@@ -26,11 +27,20 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
       clientService: { owncloudSdk: client }
     } = context
 
+    const getResourcesAndCurrent = async (
+      resourcePromise: Promise<any>
+    ): Promise<[Resource[], Resource]> => {
+      let resources = await resourcePromise
+      resources = resources.map(buildResource)
+      const currentFolder = resources.shift()
+      return [resources, currentFolder]
+    }
+
     return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        let resources = yield fetchResources(
+        const resourcesPromise = fetchResources(
           client,
           buildWebDavFilesPath(
             router.currentRoute.params.storageId,
@@ -38,14 +48,25 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
           ),
           DavProperties.Default
         )
-        resources = resources.map(buildResource)
 
-        const currentFolder = resources.shift()
+        let currentPath =
+          path || router.currentRoute.params.item ? `/${router.currentRoute.params.item}` : null
+        let resources, currentFolder
+
+        if (!currentPath) {
+          [resources, currentFolder] = yield getResourcesAndCurrent(resourcesPromise)
+          currentPath = currentFolder.path
+        }
+
         const hasShareJail = useCapabilityShareJailEnabled(store)
         yield store.dispatch('Files/loadSharesTree', {
           client,
-          path: currentFolder.path
+          path: currentPath
         })
+
+        if (!resources) {
+          [resources, currentFolder] = yield getResourcesAndCurrent(resourcesPromise)
+        }
 
         for (const file of resources) {
           file.indicators = getIndicators(file, store.state.Files.sharesTree, hasShareJail.value)
