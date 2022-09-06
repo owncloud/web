@@ -1,0 +1,10 @@
+Enhancement: Search improvements
+
+We've improved the search, it will show now if no results according to term was found or if the results exceeds the
+search limit.
+We've also navigate to the last page while clicking the x  in the search input field.
+
+https://github.com/owncloud/web/pull/7586
+https://github.com/owncloud/web/issues/5644
+https://github.com/owncloud/web/issues/7587
+
