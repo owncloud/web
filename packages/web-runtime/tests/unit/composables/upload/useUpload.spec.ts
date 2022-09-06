@@ -61,7 +61,7 @@ describe('useUpload', () => {
       }
     ]
 
-    await wrapper.vm.createDirectoryTree(uppyResources, [])
+    await wrapper.vm.createDirectoryTree(uppyResources)
     expect(createFolderMock).toHaveBeenCalledTimes(4)
   })
 })

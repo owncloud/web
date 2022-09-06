@@ -27,7 +27,7 @@ export const resolveFileExists = (
   $gettext,
   $gettextInterpolate,
   isSingleConflict,
-  suggestMerge=false
+  suggestMerge = false
 ): Promise<ResolveConflict> => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
@@ -43,7 +43,7 @@ export const resolveFileExists = (
         true
       ),
       cancelText: $gettext('Skip'),
-      confirmText: $gettext('Keep both') ,
+      confirmText: $gettext('Keep both'),
       buttonSecondaryText: suggestMerge ? $gettext('Merge') : $gettext('Replace'),
       checkboxLabel: isSingleConflict
         ? ''

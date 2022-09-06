@@ -796,7 +796,7 @@ export default defineComponent({
 
     async handleUppyFileUpload(files: UppyResource[]) {
       this.$uppyService.publish('uploadStarted')
-      await this.createDirectoryTree(files, this.files)
+      await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
       this.$uppyService.uploadFiles(files)
     },

@@ -12,7 +12,6 @@ import {
 import { computed, Ref, unref, watch } from '@vue/composition-api'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
-import { Resource } from 'web-client/src/helpers/resource'
 
 export interface UppyResource {
   id?: string
@@ -44,7 +43,7 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(files: UppyResource[], existingFiles: Resource[]): void
+  createDirectoryTree(files: UppyResource[]): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -122,7 +121,7 @@ const createDirectoryTree = ({
   publicLinkPassword?: Ref<string>
   uppyService: UppyService
 }) => {
-  return async (files: UppyResource[], existingFiles: Resource[]) => {
+  return async (files: UppyResource[]) => {
     const { owncloudSdk: client } = clientService
     const createdFolders = []
     for (const file of files) {
@@ -182,8 +181,10 @@ const createDirectoryTree = ({
             unref(publicLinkPassword)
           )
         } else {
-          if (!existingFiles.some((f) => f.path === folderToCreate)) {
+          try {
             await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          } catch (error) {
+            console.log(error)
           }
         }
 
