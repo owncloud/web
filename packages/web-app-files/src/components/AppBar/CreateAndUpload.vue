@@ -700,7 +700,7 @@ export default defineComponent({
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if (conflicts.some((conflict) => conflict.data === rootFolder)) continue
+            if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
             conflicts.push({
               name: rootFolder,
               type: 'folder'
