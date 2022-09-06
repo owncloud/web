@@ -710,7 +710,7 @@ export default defineComponent({
           }
         }
         // Logic for files
-        const exists = this.files.find((f) => f.name === file.name)
+        const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
         if (exists) {
           conflicts.push({
             data: file,
@@ -890,46 +890,6 @@ export default defineComponent({
       files = files.filter(file => !foldersToSkip.some(folderName => file.meta.relativeFolder.startsWith(`/${folderName}`)))
       if(files.length === 0) return
       this.handleUppyFileUpload(files)
-
-      // problem: folder /abc and /abcd treated the same
-
-      
-      /*let count = 0
-      for (const file of files) {
-        const resolveConflict: ResolveConflict = await resolveFileExists(
-          this.createModal,
-          this.hideModal,
-          { name: file.name, isFolder: false },
-          files.length - count,
-          this.$gettext,
-          this.$gettextInterpolate,
-          false
-        )
-        count += 1
-        if (resolveConflict.doForAllConflicts) {
-          if (resolveConflict.strategy === ResolveStrategy.SKIP) {
-            return
-          }
-          if (resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
-            for (const f of files) {
-              const ext = extractExtensionFromFile({ name: f.name } as Resource)
-              f.name = resolveFileNameDuplicate(f.name, ext, this.files)
-            }
-          }
-          // strategy replace doesn't need a case here
-          this.handleUppyFileUpload(files)
-          return
-        }
-        if (resolveConflict.strategy === ResolveStrategy.SKIP) {
-          continue
-        }
-        if (resolveConflict.strategy === ResolveStrategy.KEEP_BOTH) {
-          const ext = extractExtensionFromFile({ name: file.name } as Resource)
-          file.name = resolveFileNameDuplicate(file.name, ext, this.files)
-        }
-        // strategy replace doesn't need a case here
-        this.handleUppyFileUpload([file])
-      }*/
     }
   }
 })
