@@ -179,6 +179,7 @@ import { stringify } from 'qs'
 import { useService } from 'web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
+import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
 export default defineComponent({
   components: {
@@ -230,6 +231,7 @@ export default defineComponent({
     })
 
     return {
+      ...useScrollTo(),
       ...useUpload({
         uppyService
       }),
@@ -450,6 +452,14 @@ export default defineComponent({
     },
 
     async addNewFolder(folderName) {
+      const resource = await this.addNewFolderInner(folderName)
+      if (resource && resource.id) {
+        this.scrollToResource({
+          id: resource.id
+        })
+      }
+    },
+    async addNewFolderInner(folderName) {
       if (folderName === '') {
         return
       }
@@ -475,6 +485,7 @@ export default defineComponent({
             }
           )
         })
+        return resource
       } catch (error) {
         console.error(error)
         this.showMessage({
