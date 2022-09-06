@@ -162,6 +162,7 @@ import {
   ResolveConflict,
   resolveFileNameDuplicate
 } from '../../helpers/resource/copyMove'
+import { resolve } from 'dns'
 
 export default defineComponent({
   components: {
@@ -685,7 +686,8 @@ export default defineComponent({
     },
 
     async onFilesSelected(files: File[]) {
-      const conflicts = []
+      const fileConflicts = []
+      const folderConflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
 
@@ -700,51 +702,19 @@ export default defineComponent({
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if (!(rootFolder in resolveStrategies)) {
-              const resolveStrategy = await resolveFileExists(
-                this.createModal,
-                this.hideModal,
-                { name: rootFolder, isFolder: true },
-                1,
-                this.$gettext,
-                this.$gettextInterpolate,
-                true
-              )
-              resolveStrategies[rootFolder] = resolveStrategy
-            }
-            const resolveStrategy = resolveStrategies[rootFolder]
-            if (resolveStrategy.strategy === ResolveStrategy.SKIP) {
-              continue
-            }
-            if (resolveStrategy.strategy === ResolveStrategy.KEEP_BOTH) {
-              const newFolderName = resolveFileNameDuplicate(rootFolder, '', this.files)
-
-              file.meta.relativeFolder = file.meta.relativeFolder.replace(
-                `/${rootFolder}`,
-                `/${newFolderName}`
-              )
-              file.meta.relativePath = file.meta.relativePath.replace(
-                `/${rootFolder}/`,
-                `/${newFolderName}/`
-              )
-              file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-                `/${rootFolder}`,
-                `/${newFolderName}`
-              )
-              const data = file.data as any
-              data.relativePath = data.relativePath.replace(`/${rootFolder}/`, `/${newFolderName}/`)
-              file.meta.routeItem = `/${newFolderName}`
-            }
+            if(folderConflicts.includes(rootFolder)) continue
+            folderConflicts.push(rootFolder)
+            continue
           }
         }
         // Logic for files
         const exists = this.files.find((f) => f.name === file.name)
         if (exists) {
-          conflicts.push(file)
+          fileConflicts.push(file)
         }
       }
-      if (conflicts.length) {
-        await this.displayOverwriteDialog(uppyResources, conflicts)
+      if (fileConflicts.length || folderConflicts.length) {
+        await this.displayOverwriteDialog(uppyResources, fileConflicts, folderConflicts)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -827,8 +797,111 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    async displayOverwriteDialog(files: UppyResource[], conflicts) {
+    async displayOverwriteDialog(files: UppyResource[], fileConflicts, folderConflicts) {
       let count = 0
+      const allConflictsCount = fileConflicts.length + folderConflicts.length
+      const resolvedConflicts = []
+      let doForAllConflicts = false
+      let allConflictsStrategy
+      for (const uppyResource of fileConflicts) {
+        if(doForAllConflicts) {
+          resolvedConflicts.push({
+            uppyResource,
+            strategy: allConflictsStrategy
+          })
+          continue
+        }
+        const resolvedConflict: ResolveConflict = await resolveFileExists(
+          this.createModal,
+          this.hideModal,
+          { name: uppyResource.name, isFolder: false } as Resource,
+          allConflictsCount - count,
+          this.$gettext,
+          this.$gettextInterpolate,
+          false
+        )
+        count += 1
+        if(resolvedConflict.doForAllConflicts) {
+          doForAllConflicts = true
+          allConflictsStrategy = resolvedConflict.strategy
+        }
+        resolvedConflicts.push({
+          uppyResource,
+          strategy: resolvedConflict.strategy
+        })
+      }
+      const filesToSkip = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.uppyResource)
+      const filesToOverwrite = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.uppyResource)
+      const filesToKeepBoth = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.uppyResource)
+
+      files = files.filter(e => !filesToSkip.includes(e) && ! filesToKeepBoth.includes(e))
+      for (const uppyResource of filesToKeepBoth) {
+        const extension = extractExtensionFromFile({ name: uppyResource.name } as Resource)
+        uppyResource.name = resolveFileNameDuplicate(uppyResource.name, extension, this.files)
+        files.push(uppyResource)
+      }
+      
+      const resolvedConflictsFolders = []
+      for (const folderName of folderConflicts) {
+        if(doForAllConflicts) {
+          resolvedConflictsFolders.push({
+            name: folderName,
+            strategy: allConflictsStrategy
+          })
+          continue
+        }
+        const resolvedConflict: ResolveConflict = await resolveFileExists(
+          this.createModal,
+          this.hideModal,
+          { name: folderName, isFolder: true } as Resource,
+          allConflictsCount - count,
+          this.$gettext,
+          this.$gettextInterpolate,
+          false
+        )
+        count += 1
+        if(resolvedConflict.doForAllConflicts) {
+          doForAllConflicts = true
+          allConflictsStrategy = resolvedConflict.strategy
+        }
+        resolvedConflictsFolders.push({
+          name: folderName,
+          strategy: resolvedConflict.strategy
+        })
+      }
+      const foldersToSkip = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.name)
+      const foldersToOverwrite = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.name)
+      const foldersToKeepBoth = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.name)
+
+      for(const folder of foldersToKeepBoth) {
+        const filesInFolder = files.filter(e => e.meta.relativeFolder.startsWith(`/${folder}`))
+        for(const file of filesInFolder) {
+          const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
+          file.meta.relativeFolder = file.meta.relativeFolder.replace(
+            `/${folder}`,
+            `/${newFolderName}`
+          )
+          file.meta.relativePath = file.meta.relativePath.replace(
+            `/${folder}/`,
+            `/${newFolderName}/`
+          )
+          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
+            `/${folder}`,
+            `/${newFolderName}`
+          )
+          const data = file.data as any
+          data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
+          file.meta.routeItem = `/${newFolderName}`
+        }
+      }
+      files = files.filter(file => !foldersToSkip.some(folderName => file.meta.relativeFolder.startsWith(`/${folderName}`)))
+      if(files.length === 0) return
+      this.handleUppyFileUpload(files)
+
+      // problem: folder /abc and /abcd treated the same
+
+      
+      /*let count = 0
       for (const file of files) {
         const resolveConflict: ResolveConflict = await resolveFileExists(
           this.createModal,
@@ -863,7 +936,7 @@ export default defineComponent({
         }
         // strategy replace doesn't need a case here
         this.handleUppyFileUpload([file])
-      }
+      }*/
     }
   }
 })
