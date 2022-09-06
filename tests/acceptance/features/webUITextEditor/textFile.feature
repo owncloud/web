@@ -1,4 +1,4 @@
-Feature: create markdown files
+Feature: create markdown files test
   As a user
   I want to create markdown files
   So that I can organize my text data in formatted form
