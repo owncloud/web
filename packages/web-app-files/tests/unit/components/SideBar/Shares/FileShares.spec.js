@@ -10,6 +10,7 @@ import Collaborators from '@/__fixtures__/collaborators'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import * as reactivityComposables from 'web-pkg/src/composables/reactivity'
 import * as routerComposables from 'web-pkg/src/composables/router'
+import { useActiveLocation } from '@files/src/composables/router'
 import FileShares from '@files/src/components/SideBar/Shares/FileShares.vue'
 import { buildSpace } from 'web-client/src/helpers'
 import { clientService } from 'web-pkg/src/services'
@@ -26,6 +27,7 @@ localVue.use(GetTextPlugin, {
 
 jest.mock('web-pkg/src/composables/reactivity')
 jest.mock('web-pkg/src/composables/router')
+jest.mock('@files/src/composables/router')
 
 const user = Users.alice
 const collaborators = [Collaborators[0], Collaborators[1]]
@@ -275,6 +277,7 @@ const storeOptions = (data) => {
 
 function getMountedWrapper(data) {
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  useActiveLocation.mockReturnValue(() => false)
 
   return mount(FileShares, {
     localVue,
@@ -302,6 +305,7 @@ function getMountedWrapper(data) {
 function getShallowMountedWrapper(data, loading = false) {
   reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  useActiveLocation.mockReturnValue(() => false)
 
   return shallowMount(FileShares, {
     localVue,

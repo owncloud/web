@@ -129,6 +129,7 @@ import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { isLocationSpacesActive } from '../../../router'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { useIncomingParentShare } from '../../../composables/parentShare'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -146,6 +147,7 @@ export default defineComponent({
 
     return {
       ...useGraphClient(),
+      ...useIncomingParentShare(),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -182,11 +184,6 @@ export default defineComponent({
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['/']?.find((s) => s.incoming)
-    },
-
     expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
@@ -218,9 +215,9 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
+      if (this.incomingParentShare && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.permissions),
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport
@@ -353,6 +350,9 @@ export default defineComponent({
 
       return this.$route.params.storageId || null
     }
+  },
+  async mounted() {
+    await this.loadIncomingParentShare.perform(this.highlightedFile)
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),

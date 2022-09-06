@@ -274,7 +274,13 @@ function getMountOptions({
     },
     store: getStore(sharesTree),
     localVue,
-    stubs
+    stubs,
+    mocks: {
+      loadIncomingParentShare: {
+        perform: jest.fn()
+      },
+      incomingParentShare: null
+    }
   }
 }
 

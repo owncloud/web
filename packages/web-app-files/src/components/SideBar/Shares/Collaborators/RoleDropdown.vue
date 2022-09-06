@@ -118,6 +118,7 @@ import {
 import * as uuid from 'uuid'
 import { defineComponent } from '@vue/runtime-core'
 import { PropType } from '@vue/composition-api'
+import { useIncomingParentShare } from '../../../../composables/parentShare'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -146,6 +147,9 @@ export default defineComponent({
       type: Boolean,
       required: true
     }
+  },
+  setup() {
+    return { ...useIncomingParentShare() }
   },
   data() {
     return {
@@ -181,10 +185,6 @@ export default defineComponent({
     resourceIsSharable() {
       return this.allowSharePermission && this.resource.canShare()
     },
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['/']?.find((s) => s.incoming)
-    },
     allowCustomSharing() {
       return this.capabilities?.files_sharing?.allow_custom
     },
@@ -193,9 +193,9 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.share?.incoming && this.resourceIsSharable) {
+      if (this.incomingParentShare && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
           this.allowCustomSharing !== false
@@ -205,8 +205,8 @@ export default defineComponent({
       return PeopleShareRoles.list(this.resource.isFolder, this.allowCustomSharing !== false)
     },
     availablePermissions() {
-      if (this.share?.incoming && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(parseInt(this.share.permissions))
+      if (this.incomingParentShare && this.resourceIsSharable) {
+        return SharePermissions.bitmaskToPermissions(parseInt(this.incomingParentShare.permissions))
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },
@@ -223,7 +223,8 @@ export default defineComponent({
     window.removeEventListener('keydown', this.cycleRoles)
   },
 
-  mounted() {
+  async mounted() {
+    await this.loadIncomingParentShare.perform(this.resource)
     this.applyRoleAndPermissions()
     window.addEventListener('keydown', this.cycleRoles)
   },

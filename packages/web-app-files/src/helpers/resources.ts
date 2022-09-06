@@ -70,6 +70,7 @@ export function buildResource(resource): Resource {
     permissions: (resource.fileInfo[DavProperty.Permissions] as string) || '',
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
+    shareId: resource.fileInfo[DavProperty.ShareId],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
     shareTypes: (function () {
       if (resource.fileInfo[DavProperty.ShareTypes]) {

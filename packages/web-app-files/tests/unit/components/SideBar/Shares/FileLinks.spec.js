@@ -212,6 +212,10 @@ describe('FileLinks', () => {
         ...stubs
       },
       mocks: {
+        loadIncomingParentShare: {
+          perform: jest.fn()
+        },
+        incomingParentShare: null,
         $route: {
           params: {}
         },
@@ -230,6 +234,10 @@ describe('FileLinks', () => {
       localVue,
       store: store,
       mocks: {
+        loadIncomingParentShare: {
+          perform: jest.fn()
+        },
+        incomingParentShare: null,
         $route: {
           params: {}
         },
