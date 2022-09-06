@@ -69,10 +69,10 @@ const fileExtensions = () => {
     }
   ]
 
-  const extension_arr = Object.values(extension)
+  const extensionArray = Object.values(extension)
 
   let isPrimaryExtension =
-    window.Vue.$store.getters.extensionConfigByAppId(appData.id).isPrimaryExtension || extension_arr
+    window.Vue.$store.getters.extensionConfigByAppId(appData.id).isPrimaryExtension || extensionArray
   if (typeof isPrimaryExtension === 'string') {
     isPrimaryExtension = [isPrimaryExtension]
   }
