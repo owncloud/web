@@ -16,10 +16,10 @@ export default defineComponent({
       type: Array,
       required: true
     },
-    keybindOnElementId: {
-      type: String,
+    keybindOnElementIds: {
+      type: Array,
       required: false,
-      default: 'files-view'
+      default: () => ['files-view', 'web-nav-sidebar']
     }
   },
   setup() {
@@ -40,10 +40,14 @@ export default defineComponent({
   },
 
   mounted() {
-    const filesList = document.getElementById(this.keybindOnElementId)
-    if (filesList) {
-      filesList.addEventListener('keydown', this.handleShortcut, false)
+    for (const elementId of this.keybindOnElementIds) {
+      const element = document.getElementById(elementId)
+      if (element) {
+        element.addEventListener('keydown', this.handleSelectionShortcuts, false)
+      }
     }
+    document.addEventListener('keydown', this.handleClipboardShortcuts)
+
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
       'app.files.list.clicked.meta',
@@ -58,7 +62,13 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      filesList.removeEventListener('keydown', this.handleShortcut)
+      for (const elementId of this.keybindOnElementIds) {
+        const element = document.getElementById(elementId)
+        if (element) {
+          element.removeEventListener('keydown', this.handleSelectionShortcuts)
+        }
+      }
+      document.removeEventListener('keydown', this.handleClipboardShortcuts)
     })
   },
 
@@ -78,20 +88,23 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
-    handleShortcut(event) {
+    handleSelectionShortcuts(event) {
       const key = event.keyCode || event.which
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const shift = event.shiftKey
 
-      this.handleFileActionsShortcuts(key, ctrl)
       this.handleFileSelectionShortcuts(key, shift, ctrl, event)
     },
 
-    handleFileActionsShortcuts(key, ctrl) {
+    handleClipboardShortcuts(event) {
+      const key = event.keyCode || event.which
+      const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isCopyAction = key === 67
       const isPasteAction = key === 86
       const isCutAction = key === 88
+      const isTextSelected = window.getSelection().type === 'Range'
 
+      if (isTextSelected) return
       if (isCopyAction && ctrl) return this.copySelectedFiles()
       if (isPasteAction && ctrl) return this.handlePasteAction()
       if (isCutAction && ctrl) return this.cutSelectedFiles()

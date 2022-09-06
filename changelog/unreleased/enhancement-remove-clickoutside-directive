@@ -1,0 +1,7 @@
+Enhancement: Remove clickOutside directive
+
+We've removed the clickOutside directive because it isn't used anymore
+
+https://github.com/owncloud/web/pull/7584
+https://github.com/owncloud/web/issues/7572
+

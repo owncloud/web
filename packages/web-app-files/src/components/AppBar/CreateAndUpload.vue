@@ -155,6 +155,7 @@ import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { resolveFileNameDuplicate, extractNameWithoutExtension } from '../../helpers/resource'
 
 export default defineComponent({
   components: {
@@ -247,9 +248,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to create new files!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to create new files!')
-      }
       return null
     },
     newButtonAriaLabel() {
@@ -266,9 +264,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to upload!')
-      }
       return null
     },
     uploadButtonAriaLabel() {
@@ -280,7 +275,7 @@ export default defineComponent({
     },
 
     uploadOrFileCreationBlocked() {
-      return !this.canUpload || !this.hasFreeSpace
+      return !this.canUpload
     },
 
     canUpload() {
@@ -288,17 +283,6 @@ export default defineComponent({
         return false
       }
       return this.currentFolder.canUpload({ user: this.user })
-    },
-
-    hasFreeSpace() {
-      return (
-        !this.quota ||
-        this.quota.free > 0 ||
-        (this.currentFolder &&
-          this.currentFolder.permissions &&
-          this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.isPublicLocation
-      )
     }
   },
   methods: {
@@ -371,15 +355,23 @@ export default defineComponent({
       openAction = null,
       addAppProviderFile = false
     ) {
-      const defaultName = isFolder
-        ? this.$gettext('New folder')
-        : this.$gettext('New file') + (this.areFileExtensionsShown ? `.${ext}` : '')
       const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
           isFolder
             ? this.checkNewFolderName(value)
             : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
         )
+      }
+      let defaultName = isFolder
+        ? this.$gettext('New folder')
+        : this.$gettext('New file') + `.${ext}`
+
+      if (this.files.some((f) => f.name === defaultName)) {
+        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
+      }
+
+      if (!this.areFileExtensionsShown) {
+        defaultName = extractNameWithoutExtension({ name: defaultName, extension: ext } as any)
       }
 
       // Sets action to be executed after creation of the file
@@ -734,6 +726,13 @@ export default defineComponent({
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
+        if (
+          uppyResource.meta.routeName === 'files-spaces-share' ||
+          uppyResource.meta.routeName === 'files-public-files'
+        ) {
+          return acc
+        }
+
         if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
         } else {
@@ -851,26 +850,32 @@ export default defineComponent({
 #create-list {
   li {
     border: 1px solid transparent;
+
     button {
       gap: 10px;
       justify-content: left;
       width: 100%;
     }
   }
+
   .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
+
   .create-list-folder button {
     margin-bottom: 8px;
   }
+
   .create-list-file:nth-child(2) button {
     margin-top: 6px;
   }
 }
+
 #upload-list,
 #new-file-menu-drop {
   min-width: 230px;
 }
+
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -878,6 +883,7 @@ export default defineComponent({
     height: 100% !important;
   }
 }
+
 #clipboard-btns {
   flex-flow: inherit;
 
@@ -885,10 +891,12 @@ export default defineComponent({
     border-right: 0px !important;
     white-space: nowrap;
   }
+
   :nth-child(2) {
     border-left: 0px !important;
   }
 }
+
 .create-and-upload-actions {
   gap: var(--oc-space-small);
   @media only screen and (min-width: 1000px) {

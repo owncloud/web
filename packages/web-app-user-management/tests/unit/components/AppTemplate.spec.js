@@ -56,7 +56,7 @@ describe('AppTemplate', () => {
     })
   })
   describe('sideBarOpen is false', () => {
-    it('should not side bar component', () => {
+    it('should not show side bar component', () => {
       const wrapper = getWrapper({ propsData: { sideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
@@ -81,9 +81,7 @@ describe('AppTemplate', () => {
             sideBarAvailablePanels: [{ app: 'DetailsPanel' }]
           }
         })
-        expect(wrapper.find(stubSelectors.sideBar).props().sidebarActivePanel).toEqual(
-          'DetailsPanel'
-        )
+        expect(wrapper.find(stubSelectors.sideBar).props().activePanel).toEqual('DetailsPanel')
         expect(wrapper.find(stubSelectors.sideBar).props().availablePanels).toEqual([
           { app: 'DetailsPanel' }
         ])

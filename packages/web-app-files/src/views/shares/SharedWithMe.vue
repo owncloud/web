@@ -1,52 +1,62 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper class="oc-flex-column">
-      <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
+      <app-bar
+        :has-shares-navigation="true"
+        :has-bulk-actions="true"
+        :side-bar-open="sideBarOpen"
+      />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <shared-with-me-section
           v-if="pendingItems.length > 0"
           id="files-shared-with-me-pending-section"
-          :title="pendingTitle"
+          :display-thumbnails="false"
+          :file-list-header-y="fileListHeaderY"
           :items="pendingItems"
+          :resource-clickable="false"
           :share-status="ShareStatus.pending"
+          :show-more-toggle="true"
+          :side-bar-open="sideBarOpen"
           :sort-by="pendingSortBy"
           :sort-dir="pendingSortDir"
           :sort-handler="pendingHandleSort"
-          :show-more-toggle="true"
-          :resource-clickable="false"
-          :display-thumbnails="false"
+          :title="pendingTitle"
         />
 
         <shared-with-me-section
           id="files-shared-with-me-accepted-section"
-          :title="acceptedTitle"
+          :display-thumbnails="displayThumbnails"
           :empty-message="acceptedEmptyMessage"
+          :file-list-header-y="fileListHeaderY"
           :items="acceptedItems"
+          :resource-clickable="true"
           :share-status="ShareStatus.accepted"
+          :side-bar-open="sideBarOpen"
           :sort-by="acceptedSortBy"
           :sort-dir="acceptedSortDir"
           :sort-handler="acceptedHandleSort"
-          :resource-clickable="true"
-          :display-thumbnails="displayThumbnails"
+          :title="acceptedTitle"
         />
 
         <shared-with-me-section
           id="files-shared-with-me-declined-section"
-          :title="declinedTitle"
+          :display-thumbnails="false"
           :empty-message="declinedEmptyMessage"
+          :file-list-header-y="fileListHeaderY"
           :items="declinedItems"
+          :resource-clickable="false"
           :share-status="ShareStatus.declined"
+          :show-more-toggle="true"
+          :side-bar-open="sideBarOpen"
           :sort-by="declinedSortBy"
           :sort-dir="declinedSortDir"
           :sort-handler="declinedHandleSort"
-          :show-more-toggle="true"
-          :display-thumbnails="false"
-          :resource-clickable="false"
+          :title="declinedTitle"
         />
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -73,11 +83,17 @@ export default defineComponent({
   },
 
   setup() {
-    const { storeItems, fields, loadResourcesTask, areResourcesLoading } = useResourcesViewDefaults<
-      Resource,
-      any,
-      any[]
-    >()
+    const {
+      areResourcesLoading,
+      fields,
+      fileListHeaderY,
+      loadResourcesTask,
+      selectedResources,
+      selectedResourcesIds,
+      sideBarActivePanel,
+      sideBarOpen,
+      storeItems
+    } = useResourcesViewDefaults<Resource, any, any[]>()
 
     // pending shares
     const pending = computed(() =>
@@ -131,6 +147,11 @@ export default defineComponent({
       // defaults
       loadResourcesTask,
       areResourcesLoading,
+      selectedResources,
+      selectedResourcesIds,
+      fileListHeaderY,
+      sideBarOpen,
+      sideBarActivePanel,
 
       // view specific
       pendingHandleSort,

@@ -7,6 +7,7 @@
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -128,7 +129,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -166,6 +167,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -375,9 +377,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
-    ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel'
-    }),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -455,7 +454,7 @@ export default defineComponent({
     },
     openSidebarSharePanel() {
       this.selectedResources = [this.space]
-      this.openSidebarWithPanel('space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 })

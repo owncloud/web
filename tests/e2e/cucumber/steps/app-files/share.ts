@@ -14,13 +14,17 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { user, resource, role } = stepRow
+      const { resource, recipient, type, role } = stepRow
 
       if (!acc[resource]) {
-        acc[resource] = { users: [], role: '' }
+        acc[resource] = { recipients: [], role: '', type: '' }
       }
 
-      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
+      acc[resource].recipients.push(
+        type === 'group'
+          ? this.usersEnvironment.getGroup({ key: recipient })
+          : this.usersEnvironment.getUser({ key: recipient })
+      )
       acc[resource].role = role
 
       return acc
@@ -29,7 +33,7 @@ When(
     for (const folder of Object.keys(shareInfo)) {
       await shareObject.create({
         folder,
-        users: shareInfo[folder].users,
+        recipients: shareInfo[folder].recipients,
         role: shareInfo[folder].role,
         via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
       })
@@ -43,13 +47,17 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { user, resource, role } = stepRow
+      const { recipient, type, resource, role } = stepRow
 
       if (!acc[resource]) {
-        acc[resource] = { users: [], role: '' }
+        acc[resource] = { recipients: [], role: '', type: '' }
       }
 
-      acc[resource].users.push(this.usersEnvironment.getUser({ key: user }))
+      acc[resource].recipients.push(
+        type === 'group'
+          ? this.usersEnvironment.getGroup({ key: recipient })
+          : this.usersEnvironment.getUser({ key: recipient })
+      )
       acc[resource].role = role
 
       return acc
@@ -58,7 +66,7 @@ When(
     for (const folder of Object.keys(shareInfo)) {
       await shareObject.createReshare({
         folder,
-        users: shareInfo[folder].users,
+        recipients: shareInfo[folder].recipients,
         role: shareInfo[folder].role
       })
     }

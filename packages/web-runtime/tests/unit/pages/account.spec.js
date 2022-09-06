@@ -103,24 +103,16 @@ describe('account page', () => {
     })
 
     describe('group membership', () => {
-      it('shows loading indicator when in loading state', () => {
-        const wrapper = getWrapper()
-        const groupInfoLoading = wrapper.find(selectors.loaderStub)
-        expect(groupInfoLoading.exists()).toBeTruthy()
-      })
       it('displays message if not member of any groups', async () => {
-        const store = getStore()
+        const store = getStore({ user: { groups: [] } })
         const wrapper = getWrapper(store)
-        await wrapper.setData({ loadingGroups: false })
 
         const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
         expect(groupNamesEmpty.exists()).toBeTruthy()
       })
       it('displays group names', async () => {
-        const store = getStore()
+        const store = getStore({ user: { groups: ['one', 'two', 'three'] } })
         const wrapper = getWrapper(store)
-        await wrapper.setData({ loadingGroups: false })
-        await wrapper.setData({ groups: ['one', 'two', 'three'] })
 
         const groupNames = wrapper.find(selectors.groupNames)
         expect(groupNames).toMatchSnapshot()
@@ -184,7 +176,6 @@ function getWrapper(store = getStore()) {
       $route
     },
     stubs: {
-      'oc-spinner': true,
       'oc-button': true,
       'oc-icon': true
     },
@@ -208,7 +199,12 @@ function getStore({
       setModalInputErrorMessage: jest.fn()
     },
     getters: {
-      user: () => user,
+      user: () => {
+        return {
+          groups: [],
+          ...user
+        }
+      },
       configuration: () => ({
         server: server
       }),

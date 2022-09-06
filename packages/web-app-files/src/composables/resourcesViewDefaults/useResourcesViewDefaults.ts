@@ -10,11 +10,13 @@ import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'
 import { useSort, SortDir } from '../sort/'
+import { useSideBar } from '../sideBar'
 
 import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
+import { useSelectedResources } from '../selection'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -37,6 +39,9 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   selectedResources: WritableComputedRef<Resource[]>
   selectedResourcesIds: WritableComputedRef<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
+
+  sideBarOpen: Ref<boolean>
+  sideBarActivePanel: Ref<string>
 }
 
 export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
@@ -72,27 +77,6 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     fileList.accentuateItem(payload.id)
   })
 
-  const selectedResources: WritableComputedRef<Resource[]> = computed({
-    get(): Resource[] {
-      return store.getters['Files/selectedFiles']
-    },
-    set(resources) {
-      store.commit('Files/SET_FILE_SELECTION', resources)
-    }
-  })
-  const selectedResourcesIds: WritableComputedRef<(string | number)[]> = computed({
-    get(): (string | number)[] {
-      return store.state.Files.selectedIds
-    },
-    set(selectedIds) {
-      store.commit('Files/SET_SELECTED_IDS', selectedIds)
-    }
-  })
-
-  const isResourceInSelection = (resource: Resource) => {
-    return unref(selectedResourcesIds).includes(resource.id)
-  }
-
   return {
     fileListHeaderY,
     refreshFileListHeaderPosition,
@@ -106,8 +90,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     handleSort,
     sortBy,
     sortDir,
-    selectedResources,
-    selectedResourcesIds,
-    isResourceInSelection
+    ...useSelectedResources({ store }),
+    ...useSideBar()
   }
 }

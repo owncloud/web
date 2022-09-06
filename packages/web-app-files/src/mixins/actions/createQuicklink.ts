@@ -3,6 +3,8 @@ import { createQuicklink } from '../../helpers/share'
 import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../router'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   computed: {
@@ -41,7 +43,7 @@ export default {
         store
       })
 
-      await store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
     }
   }
 }

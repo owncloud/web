@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :has-shares-navigation="true" />
+      <app-bar :has-shares-navigation="true" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -19,7 +19,7 @@
           id="files-shared-via-link-table"
           v-model="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
@@ -47,7 +47,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -56,7 +56,6 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import FileActions from '../../mixins/fileActions'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
-import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
@@ -92,7 +91,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [FileActions, MixinMountSideBar, MixinFilesListFilter],
+  mixins: [FileActions, MixinFilesListFilter],
 
   setup() {
     const store = useStore()
@@ -110,7 +109,6 @@ export default defineComponent({
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
     ...mapGetters(['configuration']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
