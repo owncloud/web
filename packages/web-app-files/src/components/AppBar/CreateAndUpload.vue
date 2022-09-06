@@ -131,6 +131,7 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
@@ -168,7 +169,7 @@ export default defineComponent({
   components: {
     ResourceUpload
   },
-  mixins: [MixinFileActions],
+  mixins: [MixinFileActions, MixinFilesListScrolling],
   props: {
     limitedScreenSpace: {
       type: Boolean,
@@ -420,70 +421,82 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    async addNewFolder(folderName) {
-      if (folderName === '') {
-        return
-      }
-
-      this.fileFolderCreationLoading = true
-
-      try {
-        let path = pathUtil.join(this.currentPath, folderName)
-        let resource
-
-        if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
+    addNewFolder(folderName) {
+      const addNewFolderInner = async (folderName) => {
+        if (folderName === '') {
+          return
         }
-        resource = buildResource(resource)
 
-        this.UPSERT_RESOURCE(resource)
-        this.hideModal()
+        this.fileFolderCreationLoading = true
 
-        if (this.isPersonalLocation) {
-          this.loadIndicators({
-            client: this.$client,
-            currentFolder: this.currentFolder.path
+        try {
+          let path = pathUtil.join(this.currentPath, folderName)
+          let resource
+
+          if (this.isPersonalLocation) {
+            if (this.hasShareJail) {
+              path = buildWebDavSpacesPath(this.personalDriveId, path || '')
+            } else {
+              path = buildWebDavFilesPath(this.user.id, path)
+            }
+            await this.$client.files.createFolder(path)
+            resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+          } else if (this.isSpacesProjectLocation) {
+            path = buildWebDavSpacesPath(this.$route.params.storageId, path)
+            await this.$client.files.createFolder(path)
+            resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+          } else if (this.isSpacesShareLocation) {
+            path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+            await this.$client.files.createFolder(path)
+            resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+          } else {
+            await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
+            resource = await this.$client.publicFiles.getFileInfo(
+              path,
+              this.publicLinkPassword,
+              DavProperties.PublicLink
+            )
+          }
+          resource = buildResource(resource)
+
+          this.UPSERT_RESOURCE(resource)
+          this.hideModal()
+
+          if (this.isPersonalLocation) {
+            this.loadIndicators({
+              client: this.$client,
+              currentFolder: this.currentFolder.path
+            })
+          }
+
+          this.showMessage({
+            title: this.$gettextInterpolate(
+              this.$gettext('"%{folderName}" was created successfully'),
+              {
+                folderName
+              }
+            )
+          })
+
+          return resource
+        } catch (error) {
+          console.error(error)
+          this.showMessage({
+            title: this.$gettext('Failed to create folder'),
+            status: 'danger'
           })
         }
 
-        this.showMessage({
-          title: this.$gettextInterpolate(
-            this.$gettext('"%{folderName}" was created successfully'),
-            {
-              folderName
-            }
-          )
-        })
-      } catch (error) {
-        console.error(error)
-        this.showMessage({
-          title: this.$gettext('Failed to create folder'),
-          status: 'danger'
-        })
+        this.fileFolderCreationLoading = false
       }
 
-      this.fileFolderCreationLoading = false
+      addNewFolderInner(folderName)
+        .then((r) =>
+          this.scrollToResource({
+            id: r.id
+          })
+        )
+        .catch((error) => console.error(error))
     },
 
     checkNewFolderName(folderName) {
