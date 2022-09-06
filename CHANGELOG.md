@@ -96,6 +96,7 @@ Summary
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 * Enhancement - Don't open right sidebar from private links: [#7559](https://github.com/owncloud/web/pull/7559)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
+* Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
@@ -855,6 +856,16 @@ Details
    https://github.com/owncloud/web/issues/7192
    https://github.com/owncloud/web/pull/7267
    https://github.com/owncloud/web/pull/7306
+
+* Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
+
+   We've improved the search, it will show now if no results according to term was found or if the
+   results exceeds the search limit. We've also navigate to the last page while clicking the x in
+   the search input field.
+
+   https://github.com/owncloud/web/issues/5644
+   https://github.com/owncloud/web/issues/7587
+   https://github.com/owncloud/web/pull/7586
 
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 
