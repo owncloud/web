@@ -126,7 +126,6 @@ export default {
   .text {
     opacity: 1;
     transition: all 0s;
-    transition-delay: 0.1s;
   }
   .text-invisible {
     opacity: 0 !important;

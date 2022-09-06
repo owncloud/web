@@ -141,6 +141,22 @@ export default {
   .toggle-sidebar-button-expanded {
     justify-content: flex-end !important;
   }
+
+  .oc-sidebar-nav li a:not(.active) {
+    &:hover,
+    &:focus {
+      text-decoration: none !important;
+      background-color: var(--oc-color-background-hover);
+      color: var(--oc-color-swatch-passive-default);
+    }
+  }
+
+  .oc-sidebar-nav li a.active {
+    &:focus,
+    &:hover {
+      color: var(--oc-color-swatch-inverse-default);
+    }
+  }
 }
 .oc-app-navigation-expanded {
   min-width: 230px !important;

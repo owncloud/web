@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" />
+      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -20,7 +20,7 @@
           id="files-trashbin-table"
           v-model="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': !sidebarClosed }"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="false"
@@ -46,7 +46,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -56,7 +56,6 @@ import AppBar from './AppBar/AppBar.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
 
 import MixinFilesListFilter from '../mixins/filesListFilter'
-import MixinMountSideBar from '../mixins/sidebar/mountSideBar'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -85,7 +84,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [MixinMountSideBar, MixinFilesListFilter],
+  mixins: [MixinFilesListFilter],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
     noContentMessage: {
@@ -104,7 +103,6 @@ export default defineComponent({
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     isEmpty() {
       return this.paginatedResources.length < 1

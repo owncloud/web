@@ -64,7 +64,7 @@ export default {
       { root: true }
     )
   },
-  async clearClipboardFiles(context) {
+  clearClipboardFiles(context) {
     context.commit('CLEAR_CLIPBOARD')
   },
   async pasteSelectedFiles(
@@ -542,7 +542,7 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, path, storageId }) {
+  deleteShare(context, { client, graphClient, share, path, storageId, reloadResource = true }) {
     const additionalParams: any = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
@@ -554,7 +554,7 @@ export default {
       if (share.shareType !== ShareTypes.space.value) {
         context.dispatch('updateCurrentFileShareTypes')
         context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-      } else {
+      } else if (reloadResource) {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
         return graphClient.drives.getDrive(share.id).then((response) => {

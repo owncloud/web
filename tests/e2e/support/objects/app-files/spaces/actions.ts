@@ -171,10 +171,10 @@ export const changeQuota = async (args: {
 }
 
 export const addSpaceMembers = async (args: inviteMembersArgs): Promise<void> => {
-  const { page, role, users } = args
+  const { page, role, recipients } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
@@ -284,5 +284,5 @@ export const createPublicLinkForSpace = async (
   const { page } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  return await createLink({ page: page, space: true })
+  return createLink({ page: page, space: true })
 }

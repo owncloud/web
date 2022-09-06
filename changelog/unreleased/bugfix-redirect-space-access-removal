@@ -1,0 +1,6 @@
+Bugfix: Redirect after removing self from space members
+
+When a user removes themselves from the members of a project space we now properly redirect to the project spaces overviewe page instead of showing an error message.
+
+https://github.com/owncloud/web/issues/7534
+https://github.com/owncloud/web/pull/7576

@@ -1,0 +1,10 @@
+Bugfix: Allow uploads outside of user's home despite quota being exceeded
+
+We've fixed a bug where a user was not able to upload a file in a share or space
+when the personal home quota was exceeded.
+We also show a message in the upload details if an upload to a share fails because the share owner's
+quota is exceeded.
+
+https://github.com/owncloud/web/pull/7522
+https://github.com/owncloud/web/issues/6318
+https://github.com/owncloud/web/issues/5817

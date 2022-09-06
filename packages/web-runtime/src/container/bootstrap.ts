@@ -305,7 +305,7 @@ export const announceUppyService = ({ vue }: { vue: VueConstructor }): void => {
  * @param store
  * @param router
  */
-export const announceAuthService = async ({
+export const announceAuthService = ({
   vue,
   configurationManager,
   store,
@@ -315,7 +315,7 @@ export const announceAuthService = async ({
   configurationManager: ConfigurationManager
   store: Store<any>
   router: VueRouter
-}): Promise<void> => {
+}): void => {
   authService.initialize(configurationManager, clientService, store, router)
   set(vue, '$authService', authService)
 }

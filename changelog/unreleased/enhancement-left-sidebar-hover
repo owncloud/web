@@ -1,0 +1,7 @@
+Enhancement: Left sidebar hover effect
+
+We've added a hover effect to the left sidebar items.
+
+https://github.com/owncloud/web/issues/7540
+https://github.com/owncloud/web/pull/7567
+https://github.com/owncloud/web/pull/7575

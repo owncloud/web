@@ -1,7 +1,7 @@
 <template>
   <div class="file_info">
     <oc-resource-icon
-      v-if="sidebarActivePanel"
+      v-if="isSubPanelActive"
       :resource="file"
       size="large"
       class="file_info__icon"
@@ -37,9 +37,9 @@ export default {
   },
   inject: ['displayedItem'],
   props: {
-    isContentDisplayed: {
+    isSubPanelActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   setup() {
@@ -50,7 +50,6 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     timeData() {
       const interpolate = (obj) => {
         obj.time = formatDateFromRFC(obj.sourceTime, this.$language.current)

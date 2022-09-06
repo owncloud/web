@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from '@vue/composition-api'
+import { computed, defineComponent, unref, watch } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
@@ -31,6 +31,7 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
+  inject: ['activePanel'],
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
@@ -66,17 +67,16 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingSharesLoading']),
-    ...mapState('Files/sidebar', ['activePanel']),
     ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading'])
   },
   watch: {
     sharesLoading: {
       handler: function () {
-        if (this.loading || !this.activePanel) {
+        if (this.loading || !unref(this.activePanel)) {
           return
         }
         this.$nextTick(() => {
-          const [panelName, ref] = this.activePanel.split('#')
+          const [panelName, ref] = unref(this.activePanel).split('#')
 
           if (!ref || !this.$refs[ref]) {
             return

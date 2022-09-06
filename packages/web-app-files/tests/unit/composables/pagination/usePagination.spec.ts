@@ -1,6 +1,6 @@
 import { ref } from '@vue/composition-api'
-import { createWrapper } from './spec'
 import { usePagination } from '../../../../src/composables'
+import { createComposableWrapper } from '../composables.setup'
 
 jest.unmock('@files/src/composables')
 
@@ -10,7 +10,7 @@ describe('usePagination', () => {
   })
 
   it('calculates the items per page', () => {
-    createWrapper(() => {
+    createComposableWrapper(() => {
       const input = {
         items: ref([1, 2, 3, 4, 5]),
         page: ref(1),
@@ -42,7 +42,7 @@ describe('usePagination', () => {
   })
 
   it('calculates number of pages', () => {
-    createWrapper(() => {
+    createComposableWrapper(() => {
       const input = {
         items: ref([1, 2]),
         page: 1,
@@ -71,7 +71,7 @@ describe('usePagination', () => {
   })
 
   it('handles situations where perPage is falsy (even 0)', () => {
-    createWrapper(() => {
+    createComposableWrapper(() => {
       const input = {
         items: ref([1, 2, 3, 4, 5]),
         page: 1,

@@ -79,13 +79,13 @@ When(
   async function (
     this: World,
     stepUser: string,
-    name: any,
+    linkName: any,
     resource: string,
     role: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const actualRole = await linkObject.changeRole({ name, resource, role })
+    const actualRole = await linkObject.changeRole({ linkName, resource, role })
     expect(role).toBe(actualRole.toLowerCase())
   }
 )
@@ -104,13 +104,23 @@ Then(
   async function (this: World, linkName: string, stepUser: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    const publicLinkUrls = await linkObject.getPublicLinkUrl(linkName)
+    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, space: true })
     expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
   }
 )
 
 Then(
-  '{string} {string} be able to edit the public link named {string}',
+  'public link named {string} of the resource {string} should be visible to {string}',
+  async function (this: World, linkName: string, resource: string, stepUser: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const publicLinkUrls = await linkObject.getPublicLinkUrl({ linkName, resource })
+    expect(publicLinkUrls[0]).toBe(publicLinkUrls[1])
+  }
+)
+
+Then(
+  /^"([^"]*)" (should|should not) be able to edit the public link named "([^"]*)"$/,
   async function (
     this: World,
     stepUser: any,
@@ -121,5 +131,15 @@ Then(
     const linkObject = new objects.applicationFiles.Link({ page })
     const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
     expect(isVisible).toBe(shouldOrShouldNot !== 'should not')
+  }
+)
+
+When(
+  '{string} edits the public link named {string} of the space changing role to {string}',
+  async function (this: World, stepUser: string, linkName: string, role: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const newPermission = await linkObject.changeRole({ linkName, role, space: true })
+    expect(role).toBe(newPermission.toLowerCase())
   }
 )

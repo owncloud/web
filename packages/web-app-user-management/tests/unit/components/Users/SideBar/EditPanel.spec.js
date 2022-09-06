@@ -82,7 +82,13 @@ function getWrapper({ propsData = {} } = {}) {
       $gettextInterpolate: jest.fn()
     },
     propsData: {
-      user: { id: '1', displayName: 'jan', mail: 'jan@owncloud.com', drive: { quota: {} } },
+      user: {
+        id: '1',
+        displayName: 'jan',
+        mail: 'jan@owncloud.com',
+        passwordProfile: { password: '' },
+        drive: { quota: {} }
+      },
       roles: [{ id: '1', displayName: 'admin' }],
       ...propsData
     },
