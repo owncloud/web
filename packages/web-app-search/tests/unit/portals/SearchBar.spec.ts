@@ -52,20 +52,16 @@ afterEach(() => {
 
 describe('Search Bar portal component', () => {
   test('does not render a search field if not all requirements are fulfilled', () => {
-    wrapper = mount(SearchBar, { localVue })
+    wrapper = getMountedWrapper()
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
   test('updates the search term on input', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -74,35 +70,22 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.$data.term).toBe('new')
   })
   test('the active provider get reset on route change', () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          activeProvider: { available: false }
-        }
-      },
-      mocks: {
-        $route: {
-          name: 'old'
-        }
+    wrapper = getMountedWrapper({
+      data: {
+        activeProvider: { available: false }
       }
     })
-
     expect(wrapper.vm.$data.activeProvider).toBeTruthy()
-    ;(wrapper.vm.$options.watch.$route as any).call(wrapper.vm)
+    ;(wrapper.vm.$options.watch.$route.handler as any).call(wrapper.vm, undefined, true)
     expect(wrapper.vm.$data.activeProvider).toBeFalsy()
   })
   test('notifies active provider to update term on input', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -111,16 +94,12 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.updateTerm).toBeCalledWith('new')
   })
   test('hides options on clear', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -130,16 +109,12 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
   })
   test('resets term on clear', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -147,17 +122,28 @@ describe('Search Bar portal component', () => {
     await wrapper.find('.oc-search-clear').trigger('click')
     expect(wrapper.vm.$data.term).toBeFalsy()
   })
+  test('navigates to last route on clear', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    const routerStub = jest.spyOn(wrapper.vm.$router, 'go')
+    await wrapper.find('input').setValue('new')
+    await wrapper.find('.oc-search-clear').trigger('click')
+    expect(routerStub).toHaveBeenCalledWith(-1)
+  })
   test('notifies active provider to reset on clear', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -166,16 +152,12 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.reset).toBeCalledTimes(1)
   })
   test('hides options if no term given', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -184,16 +166,13 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
   })
   test('shows options only if optionsVisible is true and a search term is given', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: false,
-          term: undefined,
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        optionsVisible: false,
+        term: undefined,
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -204,16 +183,12 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find('#files-global-search-options').exists()).toBeTruthy()
   })
   test('lists all available providers', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
         }
       }
     })
@@ -226,16 +201,12 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll('li.provider').length).toBe(2)
   })
   test('marks the active provider as selected', () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderTwo,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderTwo,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -244,15 +215,11 @@ describe('Search Bar portal component', () => {
     expect(providers.at(1).classes()).toContain('selected')
   })
   test('activates the provider by clicking the list item', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -262,16 +229,12 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.activate).toBeCalledWith('old')
   })
   test('shows and truncates the search term on providers list item', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -283,16 +246,12 @@ describe('Search Bar portal component', () => {
     }
   })
   test('provider label is displayed as tag in  provider list item', () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -300,22 +259,17 @@ describe('Search Bar portal component', () => {
     expect(providers.at(0).get('.label').element.innerHTML).toBe(dummyProviderOne.label)
     expect(providers.at(1).get('.label').element.innerHTML).toBe(dummyProviderTwo.label)
   })
-  test.todo('shows a loading spinner if the active provider is loading')
   test('shows the preview search result from the active provider only if the provider preview is available', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: merge({}, dummyProviderOne, {
-            previewSearch: {
-              available: false
-            }
-          }),
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: merge({}, dummyProviderOne, {
+          previewSearch: {
+            available: false
           }
+        }),
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -323,16 +277,12 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.previewSearch.search).toBeCalledTimes(0)
   })
   test('shows the preview search result from the active provider', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -347,17 +297,51 @@ describe('Search Bar portal component', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('li.preview').length).toBe(2)
   })
+  test('shows the no matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      values: []
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#no-matches').exists()).toBeTruthy()
+  })
+  test('shows the more matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      range: '/10',
+      values: [
+        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
+        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
+      ]
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#more-matches').exists()).toBeTruthy()
+  })
   test('activate a preview by clicking it', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -376,16 +360,12 @@ describe('Search Bar portal component', () => {
       data: 'dummyProviderOne - 2'
     })
   })
-  test('sets the search term and input term to the route value on mount', () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      data() {
-        return {
-          optionsVisible: true,
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+  test('sets the search term and input term to the route value on mount', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       },
       mocks: {
@@ -397,21 +377,18 @@ describe('Search Bar portal component', () => {
       }
     })
 
+    await wrapper.vm.$nextTick()
+
     expect(wrapper.vm.$data.term).toBe('routeTerm')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('routeTerm')
   })
   test("ignores events that don't belong to the SearchBar", async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      attachTo: document.body,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -424,17 +401,12 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
   })
   test('providers can be switched by using the arrow up and down keys on keyboard', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      attachTo: document.body,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -452,17 +424,12 @@ describe('Search Bar portal component', () => {
     expect(getClasses(0)).toContain('selected')
   })
   test('hides options on escape key press', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      attachTo: document.body,
-      data() {
-        return {
-          optionsVisible: true,
-          term: 'old',
-          activeProvider: dummyProviderOne,
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -471,15 +438,11 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.$data.optionsVisible).toBeFalsy()
   })
   test('activate provider on enter key press', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      attachTo: document.body,
-      data() {
-        return {
-          term: 'old',
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -494,15 +457,11 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.activate).toBeCalledTimes(1)
   })
   test('activate provider on click', async () => {
-    wrapper = mount(SearchBar, {
-      localVue,
-      attachTo: document.body,
-      data() {
-        return {
-          term: 'old',
-          providerStore: {
-            availableProviders: [dummyProviderOne, dummyProviderTwo]
-          }
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
         }
       }
     })
@@ -517,3 +476,27 @@ describe('Search Bar portal component', () => {
     expect(dummyProviderOne.activate).toBeCalledTimes(1)
   })
 })
+
+function getMountedWrapper({ data = {}, mocks = {} } = {}) {
+  return mount(SearchBar, {
+    localVue,
+    attachTo: document.body,
+    data: () => {
+      return {
+        optionsVisible: true,
+        ...data
+      }
+    },
+    mocks: {
+      $gettextInterpolate: (text) => text,
+      $gettext: (text) => text,
+      $route: {
+        name: 'old'
+      },
+      $router: {
+        go: jest.fn()
+      },
+      ...mocks
+    }
+  })
+}
