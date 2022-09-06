@@ -828,7 +828,8 @@ export default defineComponent({
           allConflictsCount - count,
           this.$gettext,
           this.$gettextInterpolate,
-          false
+          false,
+          isFolder
         )
         count += 1
         if (resolvedConflict.doForAllConflicts) {
@@ -858,10 +859,6 @@ export default defineComponent({
 
       const foldersToSkip = resolvedFolderConflicts
         .filter((e) => e.strategy === ResolveStrategy.SKIP)
-        .map((e) => e.name)
-      // needs a solution how to handle overwrite
-      const foldersToOverwrite = resolvedFolderConflicts
-        .filter((e) => e.strategy === ResolveStrategy.REPLACE)
         .map((e) => e.name)
       const foldersToKeepBoth = resolvedFolderConflicts
         .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)

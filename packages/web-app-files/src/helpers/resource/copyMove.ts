@@ -7,7 +7,8 @@ import { DavProperties } from 'web-pkg/src/constants'
 export enum ResolveStrategy {
   SKIP,
   REPLACE,
-  KEEP_BOTH
+  KEEP_BOTH,
+  MERGE
 }
 export interface ResolveConflict {
   strategy: ResolveStrategy
@@ -25,7 +26,8 @@ export const resolveFileExists = (
   conflictCount,
   $gettext,
   $gettextInterpolate,
-  isSingleConflict
+  isSingleConflict,
+  suggestMerge=false
 ): Promise<ResolveConflict> => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
@@ -41,8 +43,8 @@ export const resolveFileExists = (
         true
       ),
       cancelText: $gettext('Skip'),
-      confirmText: $gettext('Keep both'),
-      buttonSecondaryText: $gettext('Replace'),
+      confirmText: $gettext('Keep both') ,
+      buttonSecondaryText: suggestMerge ? $gettext('Merge') : $gettext('Replace'),
       checkboxLabel: isSingleConflict
         ? ''
         : $gettextInterpolate(
@@ -59,7 +61,7 @@ export const resolveFileExists = (
       },
       onConfirmSecondary: () => {
         hideModal()
-        const strategy = ResolveStrategy.REPLACE
+        const strategy = suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
         resolve({ strategy, doForAllConflicts } as ResolveConflict)
       },
       onConfirm: () => {
