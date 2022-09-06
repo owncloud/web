@@ -162,7 +162,6 @@ import {
   ResolveConflict,
   resolveFileNameDuplicate
 } from '../../helpers/resource/copyMove'
-import { resolve } from 'dns'
 
 export default defineComponent({
   components: {
@@ -701,9 +700,9 @@ export default defineComponent({
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if(conflicts.some(conflict => conflict.data === rootFolder)) continue
+            if (conflicts.some((conflict) => conflict.data === rootFolder)) continue
             conflicts.push({
-              data: rootFolder,
+              name: rootFolder,
               type: 'folder'
             })
             continue
@@ -713,7 +712,7 @@ export default defineComponent({
         const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
         if (exists) {
           conflicts.push({
-            data: file,
+            name: file.name,
             type: 'file'
           })
         }
@@ -809,66 +808,68 @@ export default defineComponent({
       const resolvedFolderConflicts = []
       let doForAllConflicts = false
       let allConflictsStrategy
+
       for (const conflict of conflicts) {
-        if(doForAllConflicts) {
-          if(conflict.type === 'file') {
-            resolvedFileConflicts.push({
-              uppyResource: conflict.data,
-              strategy: allConflictsStrategy,
-            })
-          }else if(conflict.type === 'folder') {
-            resolvedFolderConflicts.push({
-              name: conflict.data,
-              strategy: allConflictsStrategy,
-            })
-          }
+        const isFolder = conflict.type === 'folder'
+        const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
+
+        if (doForAllConflicts) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategy
+          })
           continue
         }
-        const name = conflict.type === 'folder' ? conflict.data : conflict.data.name
+
         const resolvedConflict: ResolveConflict = await resolveFileExists(
           this.createModal,
           this.hideModal,
-          { name, isFolder: conflict.type === 'folder' } as Resource,
+          { name: conflict.name, isFolder } as Resource,
           allConflictsCount - count,
           this.$gettext,
           this.$gettextInterpolate,
           false
         )
         count += 1
-        if(resolvedConflict.doForAllConflicts) {
+        if (resolvedConflict.doForAllConflicts) {
           doForAllConflicts = true
           allConflictsStrategy = resolvedConflict.strategy
         }
-        if(conflict.type === 'file') {
-          resolvedFileConflicts.push({
-            uppyResource: conflict.data,
-            strategy:  resolvedConflict.strategy,
-          })
-        }else if(conflict.type === 'folder') {
-          resolvedFolderConflicts.push({
-            name: conflict.data,
-            strategy: resolvedConflict.strategy,
-          })
-        }
-      }
-      const filesToSkip = resolvedFileConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.uppyResource)
-      const filesToKeepBoth = resolvedFileConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.uppyResource)
 
-      files = files.filter(e => !filesToSkip.includes(e) && ! filesToKeepBoth.includes(e))
-      for (const uppyResource of filesToKeepBoth) {
-        const extension = extractExtensionFromFile({ name: uppyResource.name } as Resource)
-        uppyResource.name = resolveFileNameDuplicate(uppyResource.name, extension, this.files)
-        files.push(uppyResource)
+        conflictArray.push({
+          name: conflict.name,
+          strategy: resolvedConflict.strategy
+        })
       }
-      
-      const foldersToSkip = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.name)
+      const filesToSkip = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+      const filesToKeepBoth = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
+
+      for (const fileName of filesToKeepBoth) {
+        const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
+        const extension = extractExtensionFromFile({ name: fileName } as Resource)
+        file.name = resolveFileNameDuplicate(fileName, extension, this.files)
+      }
+
+      files = files.filter((e) => !filesToSkip.includes(e.name))
+
+      const foldersToSkip = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
       // needs a solution how to handle overwrite
-      const foldersToOverwrite = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.name)
-      const foldersToKeepBoth = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.name)
+      const foldersToOverwrite = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.REPLACE)
+        .map((e) => e.name)
+      const foldersToKeepBoth = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
 
-      for(const folder of foldersToKeepBoth) {
-        const filesInFolder = files.filter(e => e.meta.relativeFolder.startsWith(`/${folder}`))
-        for(const file of filesInFolder) {
+      for (const folder of foldersToKeepBoth) {
+        const filesInFolder = files.filter((e) => e.meta.relativeFolder.startsWith(`/${folder}`))
+        for (const file of filesInFolder) {
           const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
           file.meta.relativeFolder = file.meta.relativeFolder.replace(
             `/${folder}`,
@@ -878,17 +879,17 @@ export default defineComponent({
             `/${folder}/`,
             `/${newFolderName}/`
           )
-          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-            `/${folder}`,
-            `/${newFolderName}`
-          )
+          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
           const data = file.data as any
           data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
           file.meta.routeItem = `/${newFolderName}`
         }
       }
-      files = files.filter(file => !foldersToSkip.some(folderName => file.meta.relativeFolder.startsWith(`/${folderName}`)))
-      if(files.length === 0) return
+      files = files.filter(
+        (file) =>
+          !foldersToSkip.some((folderName) => file.meta.relativeFolder.startsWith(`/${folderName}`))
+      )
+      if (files.length === 0) return
       this.handleUppyFileUpload(files)
     }
   }
