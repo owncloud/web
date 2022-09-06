@@ -686,8 +686,7 @@ export default defineComponent({
     },
 
     async onFilesSelected(files: File[]) {
-      const fileConflicts = []
-      const folderConflicts = []
+      const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
 
@@ -702,19 +701,25 @@ export default defineComponent({
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            if(folderConflicts.includes(rootFolder)) continue
-            folderConflicts.push(rootFolder)
+            if(conflicts.some(conflict => conflict.data === rootFolder)) continue
+            conflicts.push({
+              data: rootFolder,
+              type: 'folder'
+            })
             continue
           }
         }
         // Logic for files
         const exists = this.files.find((f) => f.name === file.name)
         if (exists) {
-          fileConflicts.push(file)
+          conflicts.push({
+            data: file,
+            type: 'file'
+          })
         }
       }
-      if (fileConflicts.length || folderConflicts.length) {
-        await this.displayOverwriteDialog(uppyResources, fileConflicts, folderConflicts)
+      if (conflicts.length) {
+        await this.displayOverwriteDialog(uppyResources, conflicts)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -797,24 +802,33 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    async displayOverwriteDialog(files: UppyResource[], fileConflicts, folderConflicts) {
+    async displayOverwriteDialog(files: UppyResource[], conflicts) {
       let count = 0
-      const allConflictsCount = fileConflicts.length + folderConflicts.length
-      const resolvedConflicts = []
+      const allConflictsCount = conflicts.length
+      const resolvedFileConflicts = []
+      const resolvedFolderConflicts = []
       let doForAllConflicts = false
       let allConflictsStrategy
-      for (const uppyResource of fileConflicts) {
+      for (const conflict of conflicts) {
         if(doForAllConflicts) {
-          resolvedConflicts.push({
-            uppyResource,
-            strategy: allConflictsStrategy
-          })
+          if(conflict.type === 'file') {
+            resolvedFileConflicts.push({
+              uppyResource: conflict.data,
+              strategy: allConflictsStrategy,
+            })
+          }else if(conflict.type === 'folder') {
+            resolvedFolderConflicts.push({
+              name: conflict.data,
+              strategy: allConflictsStrategy,
+            })
+          }
           continue
         }
+        const name = conflict.type === 'folder' ? conflict.data : conflict.data.name
         const resolvedConflict: ResolveConflict = await resolveFileExists(
           this.createModal,
           this.hideModal,
-          { name: uppyResource.name, isFolder: false } as Resource,
+          { name, isFolder: conflict.type === 'folder' } as Resource,
           allConflictsCount - count,
           this.$gettext,
           this.$gettextInterpolate,
@@ -825,14 +839,20 @@ export default defineComponent({
           doForAllConflicts = true
           allConflictsStrategy = resolvedConflict.strategy
         }
-        resolvedConflicts.push({
-          uppyResource,
-          strategy: resolvedConflict.strategy
-        })
+        if(conflict.type === 'file') {
+          resolvedFileConflicts.push({
+            uppyResource: conflict.data,
+            strategy:  resolvedConflict.strategy,
+          })
+        }else if(conflict.type === 'folder') {
+          resolvedFolderConflicts.push({
+            name: conflict.data,
+            strategy: resolvedConflict.strategy,
+          })
+        }
       }
-      const filesToSkip = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.uppyResource)
-      const filesToOverwrite = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.uppyResource)
-      const filesToKeepBoth = resolvedConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.uppyResource)
+      const filesToSkip = resolvedFileConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.uppyResource)
+      const filesToKeepBoth = resolvedFileConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.uppyResource)
 
       files = files.filter(e => !filesToSkip.includes(e) && ! filesToKeepBoth.includes(e))
       for (const uppyResource of filesToKeepBoth) {
@@ -841,37 +861,10 @@ export default defineComponent({
         files.push(uppyResource)
       }
       
-      const resolvedConflictsFolders = []
-      for (const folderName of folderConflicts) {
-        if(doForAllConflicts) {
-          resolvedConflictsFolders.push({
-            name: folderName,
-            strategy: allConflictsStrategy
-          })
-          continue
-        }
-        const resolvedConflict: ResolveConflict = await resolveFileExists(
-          this.createModal,
-          this.hideModal,
-          { name: folderName, isFolder: true } as Resource,
-          allConflictsCount - count,
-          this.$gettext,
-          this.$gettextInterpolate,
-          false
-        )
-        count += 1
-        if(resolvedConflict.doForAllConflicts) {
-          doForAllConflicts = true
-          allConflictsStrategy = resolvedConflict.strategy
-        }
-        resolvedConflictsFolders.push({
-          name: folderName,
-          strategy: resolvedConflict.strategy
-        })
-      }
-      const foldersToSkip = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.name)
-      const foldersToOverwrite = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.name)
-      const foldersToKeepBoth = resolvedConflictsFolders.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.name)
+      const foldersToSkip = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.SKIP).map(e => e.name)
+      // needs a solution how to handle overwrite
+      const foldersToOverwrite = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.REPLACE).map(e => e.name)
+      const foldersToKeepBoth = resolvedFolderConflicts.filter(e => e.strategy === ResolveStrategy.KEEP_BOTH).map(e => e.name)
 
       for(const folder of foldersToKeepBoth) {
         const filesInFolder = files.filter(e => e.meta.relativeFolder.startsWith(`/${folder}`))
