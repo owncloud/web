@@ -157,20 +157,25 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchUserInfo(accessToken): Promise<void> {
-    const login = await this.clientService.owncloudSdk.getCurrentUser()
-    await this.fetchCapabilities({ accessToken })
+    const [login] = await Promise.all([
+      this.clientService.owncloudSdk.getCurrentUser(),
+      this.fetchCapabilities({ accessToken })
+    ])
 
     let role, graphUser, userGroups
 
-    const user = await this.clientService.owncloudSdk.users.getUser(login.id)
+    // start the network request here and let it run in parallel to the next calls,
+    // until awaiting the promise execution further below
+    const userPromise = this.clientService.owncloudSdk.users.getUser(login.id)
 
     if (this.store.getters.capabilities.spaces?.enabled) {
       const graphClient = this.clientService.graphAuthenticated(
         this.configurationManager.serverUrl,
         accessToken
       )
-      graphUser = await graphClient.users.getMe()
-      const [roles, settings] = await Promise.all([
+      let roles, settings
+      ;[graphUser, roles, settings] = await Promise.all([
+        graphClient.users.getMe(),
         this.fetchRoles({ accessToken }),
         this.fetchSettings()
       ])
@@ -181,6 +186,9 @@ export class UserManager extends OidcUserManager {
     } else {
       userGroups = await this.clientService.owncloudSdk.users.getUserGroups(login.id)
     }
+
+    const user = await userPromise
+
     this.store.commit('SET_USER', {
       id: login.id,
       uuid: graphUser?.data?.id || '',

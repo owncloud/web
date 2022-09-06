@@ -47,7 +47,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const store = await announceStore({ runtimeConfiguration })
   announcePermissionManager({ app, store })
 
-  await initializeApplications({
+  const applicationsPromise = await initializeApplications({
     runtimeConfiguration,
     configurationManager,
     store,
@@ -55,13 +55,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     translations
   })
+  const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
+  await Promise.all([applicationsPromise, themePromise])
 
   announceTranslations({ app, availableLanguages: supportedLanguages, translations })
   announceClientService({ app, runtimeConfiguration })
   announceUppyService({ app })
   await announceClient(runtimeConfiguration)
   await announceAuthService({ app, configurationManager, store, router })
-  await announceTheme({ store, app, designSystem, runtimeConfiguration })
   announceDefaults({ store, router })
 
   app.use(router)
