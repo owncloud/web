@@ -717,7 +717,7 @@ export default defineComponent({
         }
       }
       if (conflicts.length) {
-        await this.displayOverwriteDialog(uppyResources, conflicts)
+        await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -800,7 +800,7 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    async displayOverwriteDialog(files: UppyResource[], conflicts) {
+    async displayOverwriteDialog(files: UppyResource[], conflicts, resolveFileExistsMethod) {
       let count = 0
       const allConflictsCount = conflicts.length
       const resolvedFileConflicts = []
@@ -829,7 +829,7 @@ export default defineComponent({
           continue
         }
 
-        const resolvedConflict: ResolveConflict = await resolveFileExists(
+        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
           this.createModal,
           this.hideModal,
           { name: conflict.name, isFolder } as Resource,
@@ -881,7 +881,6 @@ export default defineComponent({
         const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
         for (const file of filesInFolder) {
           const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
-          console.log(newFolderName)
           file.meta.relativeFolder = file.meta.relativeFolder.replace(
             `/${folder}`,
             `/${newFolderName}`

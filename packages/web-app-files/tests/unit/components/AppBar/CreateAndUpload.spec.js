@@ -6,6 +6,7 @@ import GetTextPlugin from 'vue-gettext'
 import stubs from '@/tests/unit/stubs'
 import CreateAndUpload from 'files/src/components/AppBar/CreateAndUpload'
 import { createLocationSpaces } from '../../../../src/router'
+import { ResolveStrategy } from '../../../../src/helpers/resource/copyMove'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -207,6 +208,53 @@ describe('CreateAndUpload component', () => {
       expect(showMessageStub).toHaveBeenCalledTimes(0)
     })
   })
+  describe('upload conflict dialog', () => {
+    it.each([ResolveStrategy.REPLACE, ResolveStrategy.KEEP_BOTH])(
+      'should upload file if user chooses replace or keep both',
+      async (strategy) => {
+        const uppyResourceOne = {
+          name: 'test123',
+          meta: {
+            relativeFolder: ''
+          }
+        }
+        const conflict = {
+          name: uppyResourceOne.name,
+          type: 'file'
+        }
+
+        const store = createStore({ currentFolder }, newFileHandlers)
+        const wrapper = getShallowWrapper(route, store)
+        const handleUppyFileUpload = jest.fn()
+        wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+
+        await wrapper.vm.displayOverwriteDialog([uppyResourceOne], [conflict], () =>
+          Promise.resolve({ strategy: strategy, doForAllConflicts: true })
+        )
+
+        expect(handleUppyFileUpload).toBeCalledTimes(1)
+        expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne])
+      }
+    )
+    it('should not upload file if user chooses skip', async () => {
+      const uppyResourceOne = { name: 'test123' }
+      const conflict = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+
+      await wrapper.vm.displayOverwriteDialog([uppyResourceOne], [conflict], () =>
+        Promise.resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts: true })
+      )
+
+      expect(handleUppyFileUpload).not.toHaveBeenCalled()
+    })
+  })
 })
 
 function getFileHandlerSelector(extension) {
@@ -311,7 +359,8 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
         getters: {
           currentFolder: () => state.currentFolder,
           clipboardResources: () => [],
-          selectedFiles: () => []
+          selectedFiles: () => [],
+          files: () => []
         }
       }
     }
