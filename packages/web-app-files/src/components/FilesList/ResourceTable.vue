@@ -907,13 +907,13 @@ export default defineComponent({
 
 .hoverable-quick-actions.files-table {
   @media (pointer: fine) {
-    tr {
+    tr:not([class*='oc-table-highlighted']) {
       .resource-table-edit-name,
       .resource-table-actions div:first-child {
         visibility: hidden;
       }
     }
-    tr:hover {
+    tr:not([class*='oc-table-highlighted']):hover {
       .resource-table-edit-name,
       .resource-table-actions div:first-child {
         visibility: visible;
