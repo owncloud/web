@@ -1,6 +1,7 @@
 import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
+import stubs from 'tests/unit/stubs'
 import AsyncComputed from 'vue-async-computed'
 import merge from 'lodash-es/merge'
 
@@ -121,21 +122,6 @@ describe('Search Bar portal component', () => {
     await wrapper.find('input').setValue('new')
     await wrapper.find('.oc-search-clear').trigger('click')
     expect(wrapper.vm.$data.term).toBeFalsy()
-  })
-  test('navigates to last route on clear', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    const routerStub = jest.spyOn(wrapper.vm.$router, 'go')
-    await wrapper.find('input').setValue('new')
-    await wrapper.find('.oc-search-clear').trigger('click')
-    expect(routerStub).toHaveBeenCalledWith(-1)
   })
   test('notifies active provider to reset on clear', async () => {
     wrapper = getMountedWrapper({
@@ -497,6 +483,9 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
         go: jest.fn()
       },
       ...mocks
+    },
+    stubs: {
+      ...stubs
     }
   })
 }
