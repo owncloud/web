@@ -89,6 +89,7 @@ Summary
 * Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Propose unique file name while creating a new file: [#7555](https://github.com/owncloud/web/pull/7555)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+* Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -794,6 +795,14 @@ Details
    https://github.com/owncloud/web/pull/7372
    https://github.com/owncloud/web/pull/7402
    https://github.com/owncloud/web/pull/7475
+
+* Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
+
+   We've reduced the pagination options by removing the options to display 1000 and all files.
+   These may be added again later after further improving the files table performance.
+
+   https://github.com/owncloud/web/issues/7038
+   https://github.com/owncloud/web/pull/7597
 
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 
