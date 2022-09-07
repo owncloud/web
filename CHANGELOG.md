@@ -68,6 +68,7 @@ Summary
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Tooltips not shown on disabled create and upload button: [#7376](https://github.com/owncloud/web/pull/7376)
+* Bugfix - Typo when reading public links capabilities: [#7595](https://github.com/owncloud/web/pull/7595)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 * Bugfix - User management app close side bar throws error: [#7445](https://github.com/owncloud/web/pull/7445)
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
@@ -604,6 +605,10 @@ Details
 
    https://github.com/owncloud/web/issues/5937
    https://github.com/owncloud/web/pull/7376
+
+* Bugfix - Typo when reading public links capabilities: [#7595](https://github.com/owncloud/web/pull/7595)
+
+   https://github.com/owncloud/web/pull/7595
 
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 
