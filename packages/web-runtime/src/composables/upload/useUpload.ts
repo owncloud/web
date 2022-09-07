@@ -184,7 +184,7 @@ const createDirectoryTree = ({
           try {
             await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
           } catch (error) {
-            console.log(error)
+            console.error(error)
           }
         }
 

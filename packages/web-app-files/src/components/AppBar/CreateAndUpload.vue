@@ -692,7 +692,6 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-      const resolveStrategies = {}
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
@@ -842,10 +841,10 @@ export default defineComponent({
         )
         count += 1
         if (resolvedConflict.doForAllConflicts) {
-          if(isFolder){
+          if (isFolder) {
             doForAllConflictsFolders = true
             allConflictsStrategyFolders = resolvedConflict.strategy
-          }else {
+          } else {
             doForAllConflicts = true
             allConflictsStrategy = resolvedConflict.strategy
           }
@@ -879,9 +878,10 @@ export default defineComponent({
         .map((e) => e.name)
 
       for (const folder of foldersToKeepBoth) {
-        const filesInFolder = files.filter((e) => e.meta.relativeFolder.startsWith(`/${folder}`))
+        const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
         for (const file of filesInFolder) {
           const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
+          console.log(newFolderName)
           file.meta.relativeFolder = file.meta.relativeFolder.replace(
             `/${folder}`,
             `/${newFolderName}`
@@ -898,7 +898,7 @@ export default defineComponent({
       }
       files = files.filter(
         (file) =>
-          !foldersToSkip.some((folderName) => file.meta.relativeFolder.startsWith(`/${folderName}`))
+          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
       )
       if (files.length === 0) return
       this.handleUppyFileUpload(files)
