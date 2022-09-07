@@ -32,8 +32,12 @@
           <span class="term">{{ term | truncate }}</span>
           <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
         </li>
-        <li v-if="$asyncComputed.searchResult.updating" class="loading spinner">
+        <li
+          v-if="$asyncComputed.searchResult.updating"
+          class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
+        >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
+          <span class="oc-ml-s" v-translate>Searching ...</span>
         </li>
         <template v-if="!$asyncComputed.searchResult.updating">
           <li
@@ -49,14 +53,20 @@
               :search-result="searchResultValue"
             />
           </li>
-          <li
-            v-if="showNoMatches"
-            id="no-matches"
-            class="oc-text-center oc-text-muted"
-            v-text="$gettext('No result')"
-          ></li>
-          <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
-            {{ moreMatchesText }}
+          <li v-if="showNoResults" id="no-matches" class="oc-flex oc-flex-center">
+            {{ $gettext('No results') }}
+          </li>
+          <li v-if="showMoreResults" id="more-results">
+            <router-link
+              id="more-results-link"
+              class="oc-flex oc-text-muted oc-width-1-1"
+              :to="moreResultsLink"
+            >
+              <span id="more-results-text" class="oc-flex oc-flex-center">{{
+                $gettext('Show more')
+              }}</span>
+              <span id="more-results-details" class="oc-flex">{{ moreResultsDetailsText }}</span>
+            </router-link>
           </li>
         </template>
       </ul>
@@ -69,6 +79,7 @@
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
+import { createLocationCommon } from 'files/src/router'
 
 export default {
   name: 'SearchBar',
@@ -95,21 +106,23 @@ export default {
       return parseInt(this.searchResult.range?.split('/')[1] || 0)
     },
 
-    showMoreMatches() {
+    showMoreResults() {
       return this.rangeSupported && this.rangeItems > this.searchResult.values.length
     },
 
-    moreMatchesText() {
-      const moreCount = this.rangeItems - this.searchResult.values.length
-      return this.$gettextInterpolate(
-        this.$ngettext('%{moreCount} more result', '%{moreCount} more results', moreCount),
-        {
-          moreCount
-        }
-      )
+    moreResultsLink() {
+      return createLocationCommon('files-common-search', {
+        query: { term: this.term, provider: this.activeProvider.id }
+      })
     },
 
-    showNoMatches() {
+    moreResultsDetailsText() {
+      return this.$gettextInterpolate(this.$gettext('%{totalResults} total results'), {
+        totalResults: this.rangeItems
+      })
+    },
+
+    showNoResults() {
       return this.searchResult?.values?.length === 0
     },
 
@@ -187,7 +200,6 @@ export default {
     resetProvider() {
       this.optionsVisible = false
       this.availableProviders.forEach((provider) => provider.reset())
-      this.$router.go(-1)
     },
     activateProvider(provider) {
       this.optionsVisible = false
@@ -320,6 +332,16 @@ export default {
   position: absolute;
   width: 450px;
 
+  #more-results-link {
+    text-decoration: none;
+    flex-direction: column;
+  }
+
+  #more-results-details {
+    justify-content: end;
+    font-size: var(--oc-font-size-xsmall);
+  }
+
   @media (max-width: 959px) {
     left: var(--oc-space-medium);
     min-width: 95% !important;
@@ -335,6 +357,7 @@ export default {
     }
 
     li {
+      cursor: pointer;
       padding: 15px 10px;
       position: relative;
       font-size: var(--oc-font-size-small);

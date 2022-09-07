@@ -1,5 +1,10 @@
 <template>
-  <div class="files-search-preview">
+  <component
+    :is="resource.isFolder ? 'router-link' : 'div'"
+    class="files-search-preview oc-flex"
+    v-bind="attrs"
+    v-on="handlers"
+  >
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
@@ -9,7 +14,7 @@
       :is-thumbnail-displayed="displayThumbnails"
       @click="$_fileActions_triggerDefaultAction(resource)"
     />
-  </div>
+  </component>
 </template>
 
 <script lang="ts">
@@ -60,6 +65,20 @@ export default {
     ...mapGetters(['configuration', 'user']),
     ...mapState('runtime/spaces', ['spaces']),
 
+    attrs() {
+      return this.resource.isFolder
+        ? {
+            to: this.folderLink(this.resource)
+          }
+        : {}
+    },
+    handlers() {
+      return this.resource.isFolder
+        ? {}
+        : {
+            click: () => this.$_fileActions_triggerDefaultAction(this.resource)
+          }
+    },
     matchingSpace() {
       return this.spaces.find((space) => space.id === this.resource.storageId)
     },
