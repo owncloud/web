@@ -99,6 +99,9 @@ export default {
     isHomeRoute() {
       return this.$route.fullPath.includes(`/${this.user.id.charAt(0)}/${this.user.id}`)
     },
+    isProjectsRoute() {
+      return this.$route.name === 'files-common-projects'
+    },
     pageTitle() {
       const title = this.$route.meta.title
       return this.$gettext(title)

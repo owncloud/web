@@ -2,7 +2,12 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
-import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
+import {
+  isLocationTrashActive,
+  isLocationSharesActive,
+  isLocationSpacesActive,
+  isLocationCommonActive
+} from '../../router'
 
 export default {
   computed: {
@@ -29,6 +34,12 @@ export default {
             if (
               isLocationSharesActive(this.$router, 'files-shares-with-me') &&
               this.capabilities?.files_sharing?.can_rename === false
+            ) {
+              return false
+            }
+            if (
+              isLocationCommonActive(this.$router, 'files-common-projects-trash') ||
+              isLocationCommonActive(this.$router, 'files-common-projects')
             ) {
               return false
             }

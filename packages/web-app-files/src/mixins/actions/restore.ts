@@ -1,6 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import PQueue from 'p-queue'
-import { isLocationTrashActive } from '../../router'
+import { isLocationTrashActive, isLocationCommonActive } from '../../router'
 import {
   buildWebDavFilesTrashPath,
   buildWebDavFilesPath,
@@ -25,7 +25,8 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               !isLocationTrashActive(this.$router, 'files-trash-personal') &&
-              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+              !isLocationTrashActive(this.$router, 'files-trash-spaces-project') &&
+              !isLocationCommonActive(this.$router, 'files-common-projects-trash')
             ) {
               return false
             }
@@ -52,6 +53,10 @@ export default {
       const failedResources = []
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
+
+      const project = this.$route.query.project
+      const query = project ? { base_path: project } : undefined
+
       resources.forEach((resource) => {
         const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
@@ -63,7 +68,7 @@ export default {
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$client.fileTrash.restore(path, resource.id, restorePath)
+              await this.$client.fileTrash.restore(path, resource.id, restorePath, false, query)
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)

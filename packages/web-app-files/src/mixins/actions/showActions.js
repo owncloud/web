@@ -1,4 +1,4 @@
-import { isLocationTrashActive } from '../../router'
+import { isLocationTrashActive, isLocationCommonActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
@@ -21,6 +21,7 @@ export default {
 
             // we don't have batch actions in the right sidebar, yet.
             // return hardcoded `true` in all cases once we have them.
+            if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) return false
             return resources.length === 1
           },
           componentType: 'button',
@@ -37,7 +38,8 @@ export default {
       // details panel in trashbins.
       const panelName =
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+        isLocationCommonActive(this.$router, 'files-common-projects-trash')
           ? null
           : 'actions-item'
       bus.publish(SideBarEventTopics.openWithPanel, panelName)

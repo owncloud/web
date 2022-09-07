@@ -2,7 +2,7 @@ import quickActions, { canShare } from '../../quickActions'
 import { createQuicklink } from '../../helpers/share'
 import { ShareStatus } from 'web-client/src/helpers/share'
 
-import { isLocationSharesActive } from '../../router'
+import { isLocationSharesActive, isLocationCommonActive  } from '../../router'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
@@ -20,7 +20,10 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+            if (
+              isLocationSharesActive(this.$router, 'files-shares-with-me') ||
+              isLocationCommonActive(this.$router, 'files-common-projects')
+            ) {
               if (resources[0].status !== ShareStatus.accepted) {
                 return false
               }

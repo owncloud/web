@@ -8,6 +8,7 @@ import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import { isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
+import { isLocationCommonActive } from './router'
 
 import { Panel } from '../../web-pkg/src/components/sideBar'
 
@@ -54,6 +55,9 @@ const panelGenerators: (({
       !isLocationTrashActive(router, 'files-trash-personal') &&
       !isLocationTrashActive(router, 'files-trash-spaces-project'),
     get enabled() {
+      if (isLocationCommonActive(router, 'files-common-projects-trash')) {
+        return false
+      }
       return (
         !isLocationTrashActive(router, 'files-trash-personal') &&
         !isLocationTrashActive(router, 'files-trash-spaces-project') &&
@@ -133,6 +137,9 @@ const panelGenerators: (({
       ) {
         return false
       }
+      if (isLocationCommonActive(router, 'files-common-projects-trash')) {
+        return false
+      }
 
       if (capabilities.files_sharing) {
         return capabilities.files_sharing.api_enabled
@@ -170,6 +177,9 @@ const panelGenerators: (({
         isLocationTrashActive(router, 'files-trash-spaces-project') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
+        return false
+      }
+      if (isLocationCommonActive(router, 'files-common-projects-trash')) {
         return false
       }
       return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'

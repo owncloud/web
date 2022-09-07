@@ -29,6 +29,8 @@ import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 import { PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 
+import ProjectTrashin from '../../mixins/actions/projectTrashbin'
+
 export default {
   name: 'ContextActions',
   components: { ContextActionMenu },
@@ -53,7 +55,8 @@ export default {
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,
-    SpaceNavigate
+    SpaceNavigate,
+    ProjectTrashin
   ],
 
   props: {
@@ -122,7 +125,8 @@ export default {
         ...this.$_move_items,
         ...this.$_copy_items,
         ...this.$_emptyTrashBin_items,
-        ...this.$_restore_items
+        ...this.$_restore_items,
+        ...this.$_project_trashbin
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
@@ -157,7 +161,8 @@ export default {
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
-        ...this.$_navigate_space_items
+        ...this.$_navigate_space_items,
+        ...this.$_project_trashbin
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

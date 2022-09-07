@@ -26,6 +26,7 @@ import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
 import ClearSelection from '../../../mixins/actions/clearSelection'
+import ProjectTrashin from '../../../mixins/actions/projectTrashbin'
 
 export default {
   name: 'BatchActions',
@@ -40,7 +41,8 @@ export default {
     EmptyTrashBin,
     Move,
     Restore,
-    ClearSelection
+    ClearSelection,
+    ProjectTrashin
   ],
   props: {
     showTooltips: {
@@ -69,7 +71,8 @@ export default {
         ...this.$_copy_items,
         ...this.$_emptyTrashBin_items,
         ...this.$_delete_items,
-        ...this.$_restore_items
+        ...this.$_restore_items,
+        ...this.$_project_trashbin
       ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   }
