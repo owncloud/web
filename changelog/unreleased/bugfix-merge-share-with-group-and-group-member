@@ -1,0 +1,6 @@
+Bugfix: Merge share with group and group member into one
+
+We've fixed a bug that the share with a group and share of the same resource with a member of this group was shown as 2 shares in "Shared with me" view.
+
+https://github.com/owncloud/web/issues/7582
+https://github.com/owncloud/web/pull/7598
