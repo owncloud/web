@@ -2,7 +2,7 @@ import translations from '../l10n/translations'
 import App from './App.vue'
 import store from './store'
 
-function $gettext(msg) {
+const $dettext = (msg) => {
   return msg
 }
 
@@ -10,6 +10,7 @@ const appData = {
   name: 'External',
   id: 'external'
 }
+
 const routes = [
   {
     path: '/:filePath*',
