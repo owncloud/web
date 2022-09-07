@@ -808,15 +808,24 @@ export default defineComponent({
       const resolvedFolderConflicts = []
       let doForAllConflicts = false
       let allConflictsStrategy
+      let doForAllConflictsFolders = false
+      let allConflictsStrategyFolders
 
       for (const conflict of conflicts) {
         const isFolder = conflict.type === 'folder'
         const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
 
-        if (doForAllConflicts) {
+        if (doForAllConflicts && !isFolder) {
           conflictArray.push({
             name: conflict.name,
             strategy: allConflictsStrategy
+          })
+          continue
+        }
+        if (doForAllConflictsFolders && isFolder) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategyFolders
           })
           continue
         }
@@ -833,8 +842,13 @@ export default defineComponent({
         )
         count += 1
         if (resolvedConflict.doForAllConflicts) {
-          doForAllConflicts = true
-          allConflictsStrategy = resolvedConflict.strategy
+          if(isFolder){
+            doForAllConflictsFolders = true
+            allConflictsStrategyFolders = resolvedConflict.strategy
+          }else {
+            doForAllConflicts = true
+            allConflictsStrategy = resolvedConflict.strategy
+          }
         }
 
         conflictArray.push({
