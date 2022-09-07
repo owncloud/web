@@ -5,10 +5,9 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import isSearchActive from '../helpers/isSearchActive'
 
 export default {
-  mixins: [isFilesAppActive, isSearchActive],
+  mixins: [isFilesAppActive],
   computed: {
     $_downloadFile_items() {
       return [
@@ -22,16 +21,13 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               this.$_isFilesAppActive &&
-              !this.$_isSearchActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
               !isLocationCommonActive(this.$router, 'files-common-search') &&
-              !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-              !isLocationSharesActive(this.$router, 'files-shares-with-others') &&
-              !isLocationSharesActive(this.$router, 'files-shares-via-link')
+              !isLocationSharesActive(this.$router, 'files-shares-with-me')
             ) {
               return false
             }
