@@ -24,6 +24,7 @@ const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
 const deleteButton = 'button.oc-files-actions-delete-trigger'
 const actionConfirmationButton = '.oc-modal-body-actions-confirm'
+const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
@@ -108,7 +109,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
 
   if (createVersion) {
-    await page.locator(actionConfirmationButton).click()
+    await page.locator(actionSecondaryConfirmationButton).click()
     // @TODO check if upload was successful
   }
 
