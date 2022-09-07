@@ -13,12 +13,10 @@ export function useIncomingParentShare() {
   const isSharedWithMeLocation = useActiveLocation(isLocationSharesActive, 'files-shares-with-me')
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
-    console.log('resource', resource)
     let parentShare
     for (const shares of Object.values(unref(sharesTree)) as any) {
       parentShare = shares.find((s) => s.incoming)
       if (parentShare) {
-        console.log('via incoming:', parentShare)
         incomingParentShare.value = parentShare
         return
       }
@@ -26,7 +24,6 @@ export function useIncomingParentShare() {
 
     if (unref(isSharedWithMeLocation)) {
       incomingParentShare.value = resource.share
-      console.log('via share obj', incomingParentShare.value)
       return
     }
 
@@ -34,12 +31,10 @@ export function useIncomingParentShare() {
       const parentShare = yield clientService.owncloudSdk.shares.getShare(resource.shareId)
       if (parentShare) {
         incomingParentShare.value = buildShare(parentShare.shareInfo, resource, true)
-        console.log('via share id', incomingParentShare.value)
         return
       }
     }
 
-    console.log('No parent share')
     incomingParentShare.value = null
   })
 
