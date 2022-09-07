@@ -1,7 +1,7 @@
 import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
-import stubs from 'tests/unit/stubs'
+import stubs from '../../../../../tests/unit/stubs'
 import AsyncComputed from 'vue-async-computed'
 import merge from 'lodash-es/merge'
 
