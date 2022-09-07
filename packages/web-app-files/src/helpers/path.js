@@ -21,7 +21,7 @@ export function getParentPaths(path = '', includeCurrent = false) {
   const paths = []
   const sections = s.split('/')
 
-  if (includeCurrent && s) {
+  if (includeCurrent) {
     paths.push(s)
   }
 
