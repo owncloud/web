@@ -2,7 +2,7 @@ import translations from '../l10n/translations'
 import App from './App.vue'
 import store from './store'
 
-const $dettext = (msg) => {
+const $gettext = (msg) => {
   return msg
 }
 
