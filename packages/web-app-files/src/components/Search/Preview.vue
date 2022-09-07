@@ -1,21 +1,20 @@
 <template>
-  <oc-button
-    :type="resource.isFolder ? 'router-link' : 'button'"
-    justify-content="left"
-    class="files-search-preview oc-flex oc-width-1-1"
-    appearance="raw"
+  <component
+    :is="resource.isFolder ? 'router-link' : 'div'"
+    class="files-search-preview oc-flex"
     v-bind="attrs"
-    v-on="listeners"
+    v-on="handlers"
   >
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :is-resource-clickable="false"
+      :folder-link="folderLink"
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
+      @click="$_fileActions_triggerDefaultAction(resource)"
     />
-  </oc-button>
+  </component>
 </template>
 
 <script lang="ts">
@@ -28,7 +27,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -54,9 +53,7 @@ export default {
       hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
-      accessToken: useAccessToken({ store })
+      })
     }
   },
   data() {
@@ -71,11 +68,11 @@ export default {
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path, this.resource)
+            to: this.folderLink(this.resource)
           }
         : {}
     },
-    listeners() {
+    handlers() {
       return this.resource.isFolder
         ? {}
         : {
@@ -101,6 +98,9 @@ export default {
       }
 
       return this.$gettext('Personal')
+    },
+    folderLink() {
+      return this.createFolderLink(this.resource.path, this.resource)
     },
     parentFolderLink() {
       return this.createFolderLink(path.dirname(this.resource.path), this.resource)

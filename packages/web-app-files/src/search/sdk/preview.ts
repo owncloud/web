@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 
-export const previewSearchLimit = 10
+export const previewSearchLimit = 8
 
 export default class Preview implements SearchPreview {
   public readonly component: Component
