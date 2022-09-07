@@ -38,7 +38,7 @@
             v-model="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
-            :options="[100, 500, 1000, $gettext('All')]"
+            :options="[100, 500]"
             class="files-pagination-size"
           />
         </li>
