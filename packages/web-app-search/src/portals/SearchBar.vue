@@ -37,7 +37,7 @@
           class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
         >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
-          <span class="oc-ml-s" v-translate>Searching ...</span>
+          <span class="oc-ml-s">{{ $gettext('Searching ...') }}</span>
         </li>
         <template v-if="!$asyncComputed.searchResult.updating">
           <li
@@ -53,7 +53,7 @@
               :search-result="searchResultValue"
             />
           </li>
-          <li v-if="showNoResults" id="no-matches" class="oc-flex oc-flex-center">
+          <li v-if="showNoResults" id="no-results" class="oc-flex oc-flex-center">
             {{ $gettext('No results') }}
           </li>
           <li v-if="showMoreResults" id="more-results">
@@ -331,6 +331,10 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 450px;
+
+  #no-results {
+    cursor: default;
+  }
 
   #more-results-link {
     text-decoration: none;
