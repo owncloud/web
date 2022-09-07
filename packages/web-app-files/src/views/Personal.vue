@@ -84,7 +84,6 @@ import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListFilter from '../mixins/filesListFilter'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
@@ -131,12 +130,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [
-    MixinAccessibleBreadcrumb,
-    MixinFileActions,
-    MixinFilesListScrolling,
-    MixinFilesListFilter
-  ],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
   setup() {
     const storageId = useRouteParam('storageId')
     const resourceTargetLocation = computed(() => {

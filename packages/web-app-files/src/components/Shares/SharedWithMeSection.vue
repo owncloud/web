@@ -95,7 +95,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
-import MixinFilesListFilter from '../../mixins/filesListFilter'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -115,7 +114,7 @@ export default defineComponent({
     NoContentMessage
   },
 
-  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare, MixinFilesListFilter],
+  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare],
   props: {
     title: {
       type: String,

@@ -54,9 +54,6 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import AppBar from './AppBar/AppBar.vue'
 import ResourceTable from './FilesList/ResourceTable.vue'
-
-import MixinFilesListFilter from '../mixins/filesListFilter'
-
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from './FilesList/ListInfo.vue'
@@ -84,7 +81,6 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [MixinFilesListFilter],
   props: {
     breadcrumbs: { type: Array, default: () => [] },
     noContentMessage: {
