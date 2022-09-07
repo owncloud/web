@@ -27,6 +27,7 @@ import {
   announcePermissionManager,
   startSentry
 } from './container'
+import { buildSpace } from 'web-client/src/helpers'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -82,7 +83,10 @@ export const renderSuccess = (): void => {
     (state, getters) => {
       return getters['runtime/auth/isUserContextReady']
     },
-    () => {
+    (userContextReady) => {
+      if (!userContextReady) {
+        return
+      }
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
         const clientService = instance.$clientService
@@ -90,8 +94,19 @@ export const renderSuccess = (): void => {
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        return store.dispatch('runtime/spaces/loadSpaces', { graphClient })
       }
+
+      // Spaces feature not available. Create a virtual personal space
+      const user = store.getters.user
+      const space = buildSpace({
+        id: user.id,
+        driveAlias: `personal/${user.id}`,
+        driveType: 'personal',
+        name: user.id
+      })
+      store.commit('runtime/spaces/SET_SPACES', [space])
+      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },
     {
       immediate: true

@@ -6,9 +6,20 @@
         v-if="showSpaceMembers"
         ref="peopleShares"
         class="oc-background-highlight oc-p-m oc-mb-s"
+        :space="space"
       />
-      <file-shares v-else ref="peopleShares" class="oc-background-highlight oc-p-m oc-mb-s" />
-      <file-links v-if="showLinks" ref="linkShares" class="oc-background-highlight oc-p-m" />
+      <file-shares
+        v-else
+        ref="peopleShares"
+        class="oc-background-highlight oc-p-m oc-mb-s"
+        :space="space"
+      />
+      <file-links
+        v-if="showLinks"
+        ref="linkShares"
+        class="oc-background-highlight oc-p-m"
+        :space="space"
+      />
     </template>
   </div>
 </template>
@@ -28,7 +39,11 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
-  inject: ['activePanel', 'displayedItem'],
+  inject: {
+    activePanel: { from: 'activePanel' },
+    displayedItem: { from: 'displayedItem' },
+    displayedSpace: { from: 'displayedSpace' }
+  },
   provide() {
     return {
       incomingParentShare: computed(() => this.incomingParentShare)
@@ -45,6 +60,11 @@ export default defineComponent({
     return {
       ...useIncomingParentShare(),
       sharesLoading
+    }
+  },
+  computed: {
+    space() {
+      return unref(this.displayedSpace)
     }
   },
   watch: {

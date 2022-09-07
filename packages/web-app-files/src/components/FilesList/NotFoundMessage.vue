@@ -55,16 +55,23 @@ import { useRouter, useStore } from 'web-pkg/src/composables'
 
 export default {
   name: 'NotFoundMessage',
-  setup() {
+  props: {
+    space: {
+      type: Object,
+      required: false,
+      default: null
+    }
+  },
+  setup(props) {
     const router = useRouter()
     const store = useStore()
-
+    const isProjectSpace = props.space?.driveType === 'project'
     return {
       showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
-      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal'),
-      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-project'),
-      homeRoute: createLocationSpaces('files-spaces-personal', {
-        params: { item: store.getters.homeFolder }
+      showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
+      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
+      homeRoute: createLocationSpaces('files-spaces-generic', {
+        params: { driveAliasAndItem: 'personal' + store.getters.homeFolder }
       }),
       publicLinkRoute: createLocationPublic('files-public-files', {
         params: { item: router.currentRoute.params?.item?.split('/')[0] }

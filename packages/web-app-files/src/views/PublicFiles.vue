@@ -40,7 +40,7 @@
           :fields-displayed="['name', 'size', 'mdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
-          :target-route="targetRoute"
+          :target-route-callback="resourceTargetRouteCallback"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -99,6 +99,8 @@ import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
+import { Location } from 'vue-router'
+import { createLocationPublic } from '../router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -122,8 +124,12 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      return createLocationPublic('files-public-files', { item: path })
+    }
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
+      resourceTargetRouteCallback,
       publicLinkPassword: usePublicLinkPassword({ store })
     }
   },
@@ -153,10 +159,6 @@ export default defineComponent({
 
     folderNotFound() {
       return this.currentFolder === null
-    },
-
-    targetRoute() {
-      return { name: this.$route.name }
     },
 
     displayThumbnails() {

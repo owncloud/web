@@ -65,7 +65,8 @@ export default defineComponent({
   provide() {
     return {
       displayedItem: computed(() => this.selectedFile),
-      activePanel: computed(() => this.activePanel)
+      activePanel: computed(() => this.activePanel),
+      displayedSpace: computed(() => this.space)
     }
   },
 
@@ -76,6 +77,12 @@ export default defineComponent({
     },
     activePanel: {
       type: String,
+      required: false,
+      default: null
+    },
+    space: {
+      type: Object,
+      required: false,
       default: null
     }
   },

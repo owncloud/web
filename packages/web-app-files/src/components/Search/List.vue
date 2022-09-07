@@ -23,7 +23,6 @@
           class="files-table"
           :class="{ 'files-table-squashed': false }"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :has-actions="true"
@@ -61,7 +60,6 @@ import { useResourcesViewDefaults } from '../../composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
-import { createLocationSpaces } from '../../router'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
@@ -109,11 +107,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      })
+      ...useResourcesViewDefaults<Resource, any, any[]>()
     }
   },
   computed: {

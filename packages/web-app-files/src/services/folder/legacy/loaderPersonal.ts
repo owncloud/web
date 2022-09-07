@@ -9,6 +9,7 @@ import { fetchResources } from '../util'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
+import { Resource } from 'web-client'
 
 export class FolderLoaderLegacyPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
@@ -16,29 +17,25 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSpacesActive(router, 'files-spaces-personal')
+    return isLocationSpacesActive(router, 'files-spaces-generic')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
     const {
       store,
-      router,
       clientService: { owncloudSdk: client }
     } = context
 
-    return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
+    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        let resources = yield fetchResources(
+        const webDavResources = yield fetchResources(
           client,
-          buildWebDavFilesPath(
-            router.currentRoute.params.storageId,
-            path || router.currentRoute.params.item || ''
-          ),
+          buildWebDavFilesPath(space.id, path || ''),
           DavProperties.Default
         )
-        resources = resources.map(buildResource)
+        const resources = webDavResources.map(buildResource)
 
         const currentFolder = resources.shift()
         const hasShareJail = useCapabilityShareJailEnabled(store)
@@ -59,10 +56,6 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
         store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)
       }
-
-      ref.refreshFileListHeaderPosition()
-
-      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
   }
 }

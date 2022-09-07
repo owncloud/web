@@ -23,7 +23,6 @@
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -74,11 +73,9 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
-import { createLocationSpaces } from '../router'
 import { useResourcesViewDefaults } from '../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 
@@ -101,12 +98,8 @@ export default defineComponent({
   mixins: [FileActions],
 
   setup() {
-    const store = useStore()
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      })
+      ...useResourcesViewDefaults<Resource, any, any[]>()
     }
   },
 

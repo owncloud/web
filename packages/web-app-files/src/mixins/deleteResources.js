@@ -162,10 +162,7 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (
-          isLocationSpacesActive(this.$router, 'files-spaces-project') ||
-          isLocationSpacesActive(this.$router, 'files-spaces-personal')
-        ) {
+        if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
           if (this.capabilities?.spaces?.enabled) {
             const accessToken = this.$store.getters['runtime/auth/accessToken']
             const graphClient = clientService.graphAuthenticated(

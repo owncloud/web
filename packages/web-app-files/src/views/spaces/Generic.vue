@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex">
+  <div class="oc-flex oc-width-1-1">
     <keyboard-actions :paginated-resources="paginatedResources" />
     <files-view-wrapper>
       <app-bar
@@ -10,12 +10,16 @@
         :side-bar-open="sideBarOpen"
       >
         <template #actions="{ limitedScreenSpace }">
-          <create-and-upload :limited-screen-space="limitedScreenSpace" />
+          <create-and-upload :space="space" :limited-screen-space="limitedScreenSpace" />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
+        <not-found-message
+          v-if="folderNotFound"
+          :space="space"
+          class="files-not-found oc-height-1-1"
+        />
         <no-content-message
           v-else-if="isEmpty"
           id="files-personal-empty"
@@ -33,13 +37,13 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-personal-table"
+          id="files-space-table"
           v-model="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
+          :target-route-callback="resourceTargetRouteCallback"
           :header-position="fileListHeaderY"
           :drag-drop="true"
           :sort-by="sortBy"
@@ -73,7 +77,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 
@@ -82,51 +86,54 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
-import MixinAccessibleBreadcrumb from '../mixins/accessibleBreadcrumb'
-import MixinFileActions from '../mixins/fileActions'
-import MixinFilesListScrolling from '../mixins/filesListScrolling'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from '../constants'
-import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
+import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
+import MixinFileActions from '../../mixins/fileActions'
+import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 
-import AppBar from '../components/AppBar/AppBar.vue'
-import CreateAndUpload from '../components/AppBar/CreateAndUpload.vue'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
-import QuickActions from '../components/FilesList/QuickActions.vue'
+import AppBar from '../../components/AppBar/AppBar.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import QuickActions from '../../components/FilesList/QuickActions.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import NotFoundMessage from '../components/FilesList/NotFoundMessage.vue'
-import ListInfo from '../components/FilesList/ListInfo.vue'
-import Pagination from '../components/FilesList/Pagination.vue'
-import ContextActions from '../components/FilesList/ContextActions.vue'
-import { createLocationSpaces } from '../router'
-import { useResourcesViewDefaults } from '../composables'
-import { defineComponent, unref, computed } from '@vue/composition-api'
-import { move } from '../helpers/resource'
+
+import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '../../constants'
+import { bus } from 'web-pkg/src/instance'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { createLocationSpaces } from '../../router'
+import { useResourcesViewDefaults } from '../../composables'
+import { computed, defineComponent } from '@vue/composition-api'
+import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
-import { useGraphClient } from 'web-client/src/composables'
-import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
-import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
-import SideBar from '../components/SideBar/SideBar.vue'
-import FilesViewWrapper from '../components/FilesViewWrapper.vue'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { Location } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
+  name: 'GenericSpace',
+
   components: {
-    FilesViewWrapper,
     AppBar,
-    CreateAndUpload,
-    ResourceTable,
-    QuickActions,
     AppLoadingSpinner,
+    ContextActions,
+    CreateAndUpload,
+    FilesViewWrapper,
+    KeyboardActions,
+    ListInfo,
     NoContentMessage,
     NotFoundMessage,
-    ListInfo,
     Pagination,
-    ContextActions,
-    KeyboardActions,
+    QuickActions,
+    ResourceTable,
     SideBar
   },
 
@@ -134,22 +141,30 @@ export default defineComponent({
   props: {
     space: {
       type: Object,
-      required: false
+      required: false,
+      default: null
+    },
+    item: {
+      type: String,
+      required: false,
+      default: null
     }
   },
+
   setup(props) {
-    const storageId = props.space.fileId || useRouteParam('storageId')
-    const resourceTargetLocation = computed(() => {
-      return createLocationSpaces('files-spaces-personal', {
-        params: {
-          storageId: unref(storageId)
-        }
-      })
+    const store = useStore()
+    const personalSpace = computed(() => {
+      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
     })
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      return createLocationSpaces('files-spaces-generic', {
+        params: { driveAliasAndItem: props.space.driveAlias + path }
+      })
+    }
     return {
-      ...useGraphClient(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation,
+      resourceTargetRouteCallback,
+      personalSpace,
       hasShareJail: useCapabilityShareJailEnabled()
     }
   },
@@ -163,6 +178,7 @@ export default defineComponent({
       'totalFilesCount',
       'totalFilesSize'
     ]),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters(['user', 'homeFolder', 'configuration']),
 
     isEmpty() {
@@ -170,11 +186,21 @@ export default defineComponent({
     },
 
     breadcrumbs() {
-      const personalRouteName = this.hasShareJail
-        ? this.$gettext('Personal')
-        : this.$gettext('All files')
+      const rootBreadcrumbsItems = []
+      if (this.hasShareJail) {
+        if (this.space.driveType === 'project') {
+          rootBreadcrumbsItems.push({
+            text: this.$gettext('Spaces'),
+            to: { path: '/files/spaces/projects' }
+          })
+        }
+      }
+      rootBreadcrumbsItems.push({
+        text: this.hasShareJail ? this.space.name : this.$gettext('All files'),
+        to: { name: 'files-spaces-generic', params: { driveAliasAndItem: this.space.driveAlias } }
+      })
       return concatBreadcrumbs(
-        { text: personalRouteName, to: { path: '/' } },
+        ...rootBreadcrumbsItems,
         ...breadcrumbsFromPath(this.$route, this.$route.params.item)
       )
     },
@@ -191,23 +217,18 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        const needsRedirectWithStorageId =
-          to.params.storageId === 'home' || isNil(this.space.fileId)
-        if (needsRedirectWithStorageId) {
-          let storageId = this.user.id
-          if (this.hasShareJail) {
-            const drivesResponse = await this.graphClient.drives.listMyDrives(
-              '',
-              'driveType eq personal'
-            )
-            storageId = drivesResponse.data.value[0].id
-          }
-
+        const needsRedirectToPersonalSpace =
+          ['', 'personal', 'personal/home'].includes(to.params.driveAliasAndItem) ||
+          isNil(this.space?.fileId)
+        if (needsRedirectToPersonalSpace) {
           return (
             this.$router
               .replace({
                 to,
-                params: { ...to.params, storageId, item: to.params.item || this.homeFolder },
+                params: {
+                  ...to.params,
+                  driveAliasAndItem: this.personalSpace.driveAlias + this.homeFolder
+                },
                 query: to.query
               })
               // avoid NavigationDuplicated error in console
@@ -215,31 +236,10 @@ export default defineComponent({
           )
         }
 
-        const needsRedirectToHome =
-          this.homeFolder !== '/' && isNil(to.params.item) && !to.path.endsWith('/')
-        if (needsRedirectToHome) {
-          return this.$router.replace(
-            {
-              name: to.name,
-              params: {
-                ...to.params,
-                item: this.homeFolder
-              },
-              query: to.query
-            },
-            () => {},
-            (e) => {
-              console.error(e)
-            }
-          )
-        }
-
-        const sameRoute = to.name === from?.name && to.params?.storageId === from?.params?.storageId
-        const sameItem = to.params?.item === from?.params?.item
+        const sameRoute = to.name === from?.name
+        const sameItem = to.params?.driveAliasAndItem === from?.params?.driveAliasAndItem
         if (!sameRoute || !sameItem) {
-          await this.loadResourcesTask.perform(this, sameRoute)
-          // this can't be done in the task because the table will be rendered afterwards
-          this.scrollToResourceFromRoute()
+          await this.performLoaderTask(sameRoute)
         }
       },
       immediate: true
@@ -247,8 +247,8 @@ export default defineComponent({
   },
 
   mounted() {
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
+      this.performLoaderTask(true, path)
     })
 
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
@@ -266,6 +266,14 @@ export default defineComponent({
       'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
+
+    async performLoaderTask(sameRoute: boolean, path?: string) {
+      await this.loadResourcesTask.perform(this.space, path || this.item)
+      this.scrollToResourceFromRoute()
+      this.refreshFileListHeaderPosition()
+      this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
+    },
+
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)

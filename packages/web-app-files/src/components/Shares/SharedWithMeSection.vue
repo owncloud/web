@@ -21,9 +21,7 @@
       :are-thumbnails-displayed="displayThumbnails"
       :resources="resourceItems"
       :are-resources-clickable="resourceClickable"
-      :target-route="resourceTargetLocation"
-      :target-route-param-mapping="resourceTargetParamMapping"
-      :target-route-query-mapping="resourceTargetQueryMapping"
+      :target-route-callback="resourceTargetRouteCallback"
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -87,7 +85,7 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { computed, defineComponent, unref } from '@vue/composition-api'
+import { defineComponent, unref } from '@vue/composition-api'
 import debounce from 'lodash-es/debounce'
 import { ImageDimension, ImageType } from '../../constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -103,6 +101,8 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
+import { Resource } from 'web-client'
+import { Location } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -180,24 +180,20 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
-    const resourceTargetLocation = computed(() =>
-      unref(hasShareJail)
-        ? createLocationSpaces('files-spaces-share')
-        : createLocationSpaces('files-spaces-personal', {
-            params: { storageId: store.getters.user.id }
-          })
-    )
-    const resourceTargetParamMapping = computed(() =>
-      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined
-    )
-    const resourceTargetQueryMapping = computed(() =>
-      unref(hasShareJail) ? { id: 'shareId' } : undefined
-    )
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      if (unref(hasShareJail)) {
+        return createLocationSpaces('files-spaces-share', {
+          params: { shareName: resource.name, item: path },
+          query: { shareId: resource.id }
+        })
+      }
+      return createLocationSpaces('files-spaces-generic', {
+        params: { driveAliasAndItem: `personal/${store.getters.user.id}${path}` }
+      })
+    }
 
     return {
-      resourceTargetLocation,
-      resourceTargetParamMapping,
-      resourceTargetQueryMapping,
+      resourceTargetRouteCallback,
       ...useSelectedResources({ store })
     }
   },

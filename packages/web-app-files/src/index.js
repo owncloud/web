@@ -3,15 +3,14 @@ import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
-import Personal from './views/Personal.vue'
 import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
+import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProject from './views/spaces/Project.vue'
-import SpaceTrashbin from './views/spaces/Trashbin.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
-import DriveResolver from './views/spaces/DriveResolver.vue'
+import SpaceTrashbin from './views/spaces/Trashbin.vue'
 import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
@@ -98,7 +97,6 @@ export default {
   routes: buildRoutes({
     App,
     Favorites,
-    Personal,
     FilesDrop,
     PrivateLink,
     PublicFiles,
@@ -108,10 +106,10 @@ export default {
     SharedWithMe,
     SharedWithOthers,
     Spaces: {
+      DriveResolver: SpaceDriveResolver,
       Project: SpaceProject,
       Projects: SpaceProjects,
-      Trashbin: SpaceTrashbin,
-      DriveResolver
+      Trashbin: SpaceTrashbin
     },
     Trashbin
   }),

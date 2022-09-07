@@ -7,12 +7,14 @@ import { sortSpaceMembers } from 'files/src/helpers/space'
 
 const state = {
   spaces: [],
+  spacesInitialized: false,
   spacesLoading: false,
   spaceMembers: []
 }
 
 const getters = {
   spaces: (state) => state.spaces,
+  spacesInitialized: (state) => state.spacesInitialized,
   spacesLoading: (state) => state.spacesLoading,
   spaceMembers: (state) => state.spaceMembers
 }
@@ -21,11 +23,14 @@ const mutations = {
   SET_SPACES(state, spaces) {
     state.spaces = spaces
   },
+  SET_SPACES_INITIALIZED(state, initialized) {
+    state.spacesInitialized = initialized
+  },
   SET_SPACES_LOADING(state, loading) {
     state.spacesLoading = loading
   },
   /**
-   * Updates a single space field. If the space with given id doesn't exist nothing will happen.
+   * Updates a single space field. If the space with given id doesn't exist, nothing will happen.
    *
    * @param state Current state of this store module
    * @param params
@@ -103,6 +108,7 @@ const actions = {
       }
       const spaces = graphResponse.data.value.map((space) => buildSpace(space))
       context.commit('SET_SPACES', spaces)
+      context.commit('SET_SPACES_INITIALIZED', true)
     } finally {
       context.commit('SET_SPACES_LOADING', false)
     }

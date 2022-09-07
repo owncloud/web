@@ -8,8 +8,9 @@ import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
 import { fetchResources } from '../util'
+import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSpacesGeneric implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
@@ -17,39 +18,41 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSpacesActive(router, 'files-spaces-generic')
+    // TODO: as soon as we can check for the generic space route being active we can remove the negative checks again.
+    return (
+      !isLocationSpacesActive(router, 'files-spaces-projects') &&
+      !isLocationSpacesActive(router, 'files-spaces-share') &&
+      isLocationSpacesActive(router, 'files-spaces-generic')
+    )
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, router, clientService } = context
+    const { store, clientService } = context
+    const hasShareJail = useCapabilityShareJailEnabled(store)
 
-    return useTask(function* (signal1, signal2, ref, sameRoute, path = null) {
+    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
         const webDavResources = yield fetchResources(
           clientService.owncloudSdk,
-          buildWebDavSpacesPath(ref.space.fileId, path || router.currentRoute.params.item || ''),
+          buildWebDavSpacesPath(space.fileId, path || ''),
           DavProperties.Default
         )
 
-        let resources: any[]
-        if (!path) {
-          resources = [ref.space, ...webDavResources.slice(1).map(buildResource)]
-        } else {
-          resources = resources.map(buildResource)
-        }
-
+        const resources = path
+          ? webDavResources.map(buildResource)
+          : [space, ...webDavResources.slice(1).map(buildResource)]
         const currentFolder = resources.shift()
-        const hasShareJail = useCapabilityShareJailEnabled(store)
+
         yield store.dispatch('Files/loadSharesTree', {
           client: clientService.owncloudSdk,
           path: currentFolder.path,
-          storageId: ref.space.fileId
+          storageId: space.fileId
         })
 
         for (const file of resources) {
-          file.indicators = getIndicators(file, store.state.Files.sharesTree, hasShareJail.value)
+          file.indicators = getIndicators(file, store.state.Files.sharesTree, unref(hasShareJail))
         }
 
         store.commit('Files/LOAD_FILES', {
@@ -60,10 +63,6 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
         store.commit('Files/SET_CURRENT_FOLDER', null)
         console.error(error)
       }
-
-      // FIXME: should not be part of the loader
-      ref.refreshFileListHeaderPosition()
-      ref.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     }).restartable()
   }
 }

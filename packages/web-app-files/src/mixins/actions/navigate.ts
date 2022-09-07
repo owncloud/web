@@ -76,10 +76,6 @@ export default {
         return createLocationPublic('files-public-files')
       }
 
-      if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        return createLocationSpaces('files-spaces-project')
-      }
-
       if (
         isLocationSpacesActive(this.$router, 'files-spaces-share') ||
         isLocationSharesActive(this.$router, 'files-shares-with-me')
@@ -87,7 +83,7 @@ export default {
         return createLocationSpaces('files-spaces-share')
       }
 
-      return createLocationSpaces('files-spaces-personal')
+      return createLocationSpaces('files-spaces-generic')
     }
   },
   methods: {

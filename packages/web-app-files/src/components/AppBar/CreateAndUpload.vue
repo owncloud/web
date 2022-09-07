@@ -143,26 +143,28 @@ import {
   useStore,
   usePublicLinkPassword,
   useUserContext,
-  usePublicLinkContext
+  usePublicLinkContext,
+  useDriveResolver
 } from 'web-pkg/src/composables'
 
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition-api'
+import { defineComponent, getCurrentInstance, onMounted, ref, unref } from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
-import { extractExtensionFromFile, extractNameWithoutExtension } from '../../helpers/resource'
 import {
+  extractExtensionFromFile,
+  extractNameWithoutExtension,
   resolveFileExists,
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   FileExistsResolver
-} from '../../helpers/resource/copyMove'
+} from '../../helpers/resource'
 
 export default defineComponent({
   components: {
@@ -170,6 +172,7 @@ export default defineComponent({
   },
   mixins: [MixinFileActions],
   props: {
+    space: { type: Object, required: false, default: null },
     limitedScreenSpace: {
       type: Boolean,
       default: false,
@@ -197,6 +200,11 @@ export default defineComponent({
       })
     })
 
+    const getSpaceByDriveAliasAndItem = (driveAliasAndItem: string): Resource => {
+      const { space } = useDriveResolver({ store, driveAliasAndItem: ref(driveAliasAndItem) })
+      return unref(space)
+    }
+
     return {
       ...useUpload({
         uppyService
@@ -204,22 +212,20 @@ export default defineComponent({
       ...useUploadHelpers(),
       ...useRequest(),
       ...useGraphClient(),
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
-      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
       isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
+      isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       isUserContext: useUserContext({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+      isPublicLinkContext: usePublicLinkContext({ store }),
+      getSpaceByDriveAliasAndItem
     }
   },
   data: () => ({
     newFileAction: null,
-    path: '',
-    fileFolderCreationLoading: false
+    path: ''
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
@@ -335,7 +341,7 @@ export default defineComponent({
           return
         }
 
-        if (this.isSpacesProjectLocation || this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation) {
           if (this.hasSpaces) {
             const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
             this.UPDATE_SPACE_FIELD({
@@ -425,26 +431,20 @@ export default defineComponent({
         return
       }
 
-      this.fileFolderCreationLoading = true
-
       try {
         let path = pathUtil.join(this.currentPath, folderName)
         let resource
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+          await this.$client.files.createFolder(path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesGenericLocation) {
           if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
+            path = buildWebDavSpacesPath(this.space.id, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -460,7 +460,7 @@ export default defineComponent({
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -482,8 +482,6 @@ export default defineComponent({
           status: 'danger'
         })
       }
-
-      this.fileFolderCreationLoading = false
     },
 
     checkNewFolderName(folderName) {
@@ -522,26 +520,20 @@ export default defineComponent({
         return
       }
 
-      this.fileFolderCreationLoading = true
-
       try {
         let resource
         let path = pathUtil.join(this.currentPath, fileName)
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+          await this.$client.files.putFileContents(path, '')
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesGenericLocation) {
           if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
+            path = buildWebDavSpacesPath(this.space.id, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -566,7 +558,7 @@ export default defineComponent({
 
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -585,8 +577,6 @@ export default defineComponent({
           status: 'danger'
         })
       }
-
-      this.fileFolderCreationLoading = false
     },
     async addAppProviderFile(fileName) {
       // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
@@ -610,18 +600,15 @@ export default defineComponent({
 
         let resource
         let path = pathUtil.join(this.currentPath, fileName)
-        if (this.isPersonalLocation) {
+        if (this.isSpacesShareLocation) {
+          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
+        } else if (this.isSpacesGenericLocation) {
           if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
+            path = buildWebDavSpacesPath(this.space.id, path || '')
           } else {
             path = buildWebDavFilesPath(this.user.id, path)
           }
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
@@ -635,7 +622,7 @@ export default defineComponent({
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation) {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -737,11 +724,9 @@ export default defineComponent({
           return acc
         }
 
-        if (uppyResource.meta.routeName === 'files-spaces-personal') {
-          targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
-        } else {
-          targetUploadSpace = this.spaces.find(
-            (space) => space.id === uppyResource.meta.routeStorageId
+        if (uppyResource.meta.routeName === 'files-spaces-generic') {
+          targetUploadSpace = this.getSpaceByDriveAliasAndItem(
+            uppyResource.meta.routeDriveAliasAndItem
           )
         }
 

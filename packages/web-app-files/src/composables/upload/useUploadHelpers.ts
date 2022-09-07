@@ -1,27 +1,28 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { buildWebDavFilesPath } from '../../helpers/resources'
-import { User, Graph } from 'web-client'
+import { User } from 'web-client'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
+  useDriveResolver,
   useRoute,
+  useRouteParam,
+  useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { computed, onMounted, ref, Ref, unref } from '@vue/composition-api'
+import { computed, Ref, unref } from '@vue/composition-api'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
 import path from 'path'
-import { useGraphClient } from 'web-client/src/composables'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
   currentPath: Ref<string>
   uploadPath: Ref<string>
-  personalDriveId: Ref<string>
 }
 
 interface inputFileOptions {
@@ -36,48 +37,41 @@ export function useUploadHelpers(): UploadHelpersResult {
   const route = useRoute()
   const hasShareJail = useCapabilityShareJailEnabled()
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
-  const isSpacesProjectLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-project')
+  const isSpacesGenericLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-generic')
   const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
-  const personalDriveId = ref('')
-  const { graphClient } = useGraphClient()
-
-  onMounted(async () => {
-    if (unref(hasShareJail) && !unref(isPublicLocation)) {
-      personalDriveId.value = await getPersonalDriveId(unref(graphClient))
-    }
-  })
+  const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+  const { space, item } = useDriveResolver({ store, driveAliasAndItem })
 
   const currentPath = computed((): string => {
-    const { params } = unref(route)
-    const path = params.item || ''
-    if (path.endsWith('/')) {
-      return path
+    let path
+    if (unref(isSpacesGenericLocation)) {
+      path = unref(item)
+    } else {
+      const { params } = unref(route)
+      path = params.item || ''
     }
-    return path + '/'
+    return (path || '').replace(/\/+$/, '') + '/'
   })
 
   const webDavBasePath = computed((): string => {
-    const { params, query } = unref(route)
-
     if (unref(isPublicLocation)) {
       return unref(currentPath)
     }
 
     if (unref(isSpacesShareLocation)) {
-      return buildWebDavSpacesPath([SHARE_JAIL_ID, query?.shareId].join('!'), unref(currentPath))
+      const shareId = useRouteQuery('shareId')
+      return buildWebDavSpacesPath([SHARE_JAIL_ID, unref(shareId)].join('!'), unref(currentPath))
     }
 
-    if (unref(isSpacesProjectLocation)) {
-      return buildWebDavSpacesPath(params.storageId, unref(currentPath))
-    }
+    if (unref(isSpacesGenericLocation)) {
+      if (!unref(hasShareJail)) {
+        return buildWebDavFilesPath(unref(user)?.id, unref(currentPath))
+      }
 
-    if (unref(hasShareJail)) {
-      return buildWebDavSpacesPath(unref(personalDriveId), unref(currentPath))
+      return buildWebDavSpacesPath(unref(space)?.id, unref(currentPath))
     }
-
-    return buildWebDavFilesPath(unref(user)?.id, unref(currentPath))
   })
 
   const uploadPath = computed((): string => {
@@ -97,17 +91,8 @@ export function useUploadHelpers(): UploadHelpersResult {
       webDavBasePath
     }),
     currentPath,
-    uploadPath,
-    personalDriveId
+    uploadPath
   }
-}
-
-const getPersonalDriveId = async (graphClient: Graph) => {
-  const drivesResponse = await unref(graphClient).drives.listMyDrives('', 'driveType eq personal')
-  if (!drivesResponse.data) {
-    throw new Error('No personal space found')
-  }
-  return drivesResponse.data.value[0].id
 }
 
 const inputFilesToUppyFiles = ({
@@ -167,7 +152,8 @@ const inputFilesToUppyFiles = ({
           routeShareId: (query as any)?.shareId || '',
           routeStorage: (params as any)?.storage || '',
           routeStorageId: (params as any)?.storageId || '',
-          routeParamName: (params as any)?.name || ''
+          routeParamName: (params as any)?.name || '',
+          routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || ''
         }
       })
     }

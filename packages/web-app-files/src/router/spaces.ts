@@ -3,21 +3,26 @@ import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
 type spaceTypes =
-  | 'files-spaces-personal'
-  | 'files-spaces-project'
   | 'files-spaces-projects'
   | 'files-spaces-share'
   | 'files-spaces-generic'
+  // TODO: remove in favour of generic location
+  | 'files-spaces-personal'
+  | 'files-spaces-project'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(name, location)
 
-export const locationSpacesProject = createLocationSpaces('files-spaces-project')
 export const locationSpacesProjects = createLocationSpaces('files-spaces-projects')
-export const locationSpacesPersonal = createLocationSpaces('files-spaces-personal')
 export const locationSpacesShare = createLocationSpaces('files-spaces-share')
 export const locationSpacesGeneric = createLocationSpaces('files-spaces-generic')
 
+// TODO: remove in favour of the generic location
+export const locationSpacesPersonal = createLocationSpaces('files-spaces-personal')
+export const locationSpacesProject = createLocationSpaces('files-spaces-project')
+
+// FIXME: `isLocationSpacesActive('files-spaces-generic') returns true for 'files-spaces-projects' and 'files-space-share' as well
+// TODO: if that's fixed, adjust the `loaderSpaceGeneric#isActive`
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
   locationSpacesProject,
   locationSpacesProjects,
@@ -40,7 +45,8 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         }
       },
       {
-        // FIXME: this is cheating. We rely on shares having a drive alias of `shares/<shareName>` and hardcode it here until we have dynamic routes with drive aliases.
+        // TODO: would be nice to catch this with the generic view as well to reduce code duplication
+        // would require special treatment of shares in the `useDriveResolver` composable
         path: 'shares/:shareName?/:item*',
         name: locationSpacesShare.name,
         component: components.SharedResource,
@@ -56,25 +62,8 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Spaces.DriveResolver,
         meta: {
           patchCleanPath: true,
-          title: $gettext('Space resolver... TBD')
-        }
-      },
-      {
-        path: 'projects/:storageId?/:item*',
-        name: locationSpacesProject.name,
-        component: components.Spaces.Project,
-        meta: {
-          patchCleanPath: true,
-          title: $gettext('Space')
-        }
-      },
-      {
-        path: 'personal/:storageId?/:item*',
-        name: locationSpacesPersonal.name,
-        component: components.Personal,
-        meta: {
-          patchCleanPath: true,
-          title: $gettext('Personal')
+          // FIXME: we'd need to extract the title from the resolved space...
+          title: $gettext('Generic space view... title TBD')
         }
       }
     ]

@@ -66,10 +66,8 @@
 
 <script lang="ts">
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { watch, computed, ref, unref } from '@vue/composition-api'
 import {
   useStore,
-  useRouteParam,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
@@ -91,26 +89,18 @@ export default {
     InviteCollaboratorForm,
     CollaboratorListItem
   },
+  props: {
+    space: {
+      type: Object,
+      required: false,
+      default: null
+    }
+  },
   setup() {
     const store = useStore()
-    const currentSpace = ref(null)
-    const currentStorageId = useRouteParam('storageId')
-    watch(
-      currentStorageId,
-      (storageId) => {
-        currentSpace.value = store.state.runtime.spaces?.spaces?.find(
-          (space) => space.id === storageId
-        )
-      },
-      { immediate: true }
-    )
-    const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
-      currentStorageId,
-      currentSpace,
-      isCurrentSpaceTypeProject,
       sharesListCollapsed,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -227,12 +217,11 @@ export default {
       return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
     },
     currentUserIsMemberOfSpace() {
-      return this.currentSpace?.spaceMemberIds?.includes(this.user.uuid)
+      return this.space?.spaceMemberIds?.includes(this.user.uuid)
     },
     showSpaceMembers() {
       return (
-        this.currentSpace &&
-        this.isCurrentSpaceTypeProject &&
+        this.space?.driveType === 'project' &&
         this.highlightedFile.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
@@ -320,15 +309,14 @@ export default {
         return null
       }
 
-      if (this.sharesTree[parentShare.path]) {
-        if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-          return createLocationSpaces('files-spaces-project', {
-            params: { storageId: this.currentStorageId, item: parentShare.path }
-          })
-        }
-
-        return createLocationSpaces('files-spaces-personal', {
-          params: { storageId: this.currentStorageId, item: parentShare.path }
+      // TODO: this doesn't work on files-spaces-share routes?!
+      if (this.space && this.sharesTree[parentShare.path]) {
+        return createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: [this.space.driveAlias, parentShare.path.split('/')]
+              .filter(Boolean)
+              .join('/')
+          }
         })
       }
 
@@ -338,7 +326,7 @@ export default {
     isShareModifiable(collaborator) {
       if (
         this.currentUserIsMemberOfSpace &&
-        !this.currentSpace?.spaceRoles.manager.includes(this.user.uuid)
+        !this.space?.spaceRoles.manager.includes(this.user.uuid)
       ) {
         return false
       }

@@ -20,10 +20,10 @@ export interface RouteComponents {
   SharedWithOthers: ComponentOptions<Vue>
   SharedViaLink: ComponentOptions<Vue>
   Spaces: {
+    DriveResolver: ComponentOptions<Vue>
     Projects: ComponentOptions<Vue>
     Project: ComponentOptions<Vue>
     Trashbin: ComponentOptions<Vue>
-    DriveResolver: ComponentOptions<Vue>
   }
   Trashbin: ComponentOptions<Vue>
 }

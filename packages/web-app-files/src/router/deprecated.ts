@@ -44,17 +44,17 @@ export const buildRoutes = (): RouteConfig[] =>
     {
       path: '/list',
       redirect: (to) =>
-        createLocationSpaces('files-spaces-personal', {
+        createLocationSpaces('files-spaces-generic', {
           ...to,
-          params: { ...to.params, storageId: 'home' }
+          params: { ...to.params, driveAliasAndItem: 'personal/home' }
         })
     },
     {
       path: '/list/all/:item*',
       redirect: (to) =>
-        createLocationSpaces('files-spaces-personal', {
+        createLocationSpaces('files-spaces-generic', {
           ...to,
-          params: { ...to.params, storageId: 'home' }
+          params: { ...to.params, driveAliasAndItem: 'personal/home' }
         })
     },
     {
@@ -111,7 +111,7 @@ export const isLocationActive = (
 ): boolean => {
   const [first, ...rest] = comparatives.map((c) => {
     const newName = {
-      'files-personal': createLocationSpaces('files-spaces-personal').name,
+      'files-personal': createLocationSpaces('files-spaces-generic').name,
       'files-favorites': createLocationCommon('files-common-favorites').name,
       'files-shared-with-others': createLocationShares('files-shares-with-others').name,
       'files-shared-with-me': createLocationShares('files-shares-with-me').name,

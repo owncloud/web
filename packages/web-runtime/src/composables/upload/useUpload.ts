@@ -35,6 +35,7 @@ export interface UppyResource {
     routeStorage?: string
     routeStorageId?: string
     routeParamName?: string
+    routeDriveAliasAndItem?: string
   }
 }
 

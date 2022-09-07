@@ -192,13 +192,6 @@ import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
-const mapResourceFields = (resource: Resource, mapping = {}) => {
-  return Object.keys(mapping).reduce((result, resourceKey) => {
-    result[mapping[resourceKey]] = resource[resourceKey]
-    return result
-  }, {})
-}
-
 export default defineComponent({
   mixins: [Rename],
   model: {
@@ -265,39 +258,12 @@ export default defineComponent({
       default: true
     },
     /**
-     * Target route path used to build the link when navigating into a resource
+     * Accepts a `path` and a `resource` param and returns a corresponding route object.
      */
-    targetRoute: {
-      type: Object,
+    targetRouteCallback: {
+      type: Function,
       required: false,
-      default: null
-    },
-    /**
-     * Maps resource values to route params. Use `{ resourceFieldName: 'routeParamName' }` as format.
-     *
-     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
-     * to the `fileId` param of the target route.
-     *
-     * Defaults to `{ storageId: 'storageId' } to map the value of the `storageId` field of a resource
-     * to the `storageId` param of the target route.
-     */
-    targetRouteParamMapping: {
-      type: Object,
-      required: false,
-      default: () => ({ storageId: 'storageId' })
-    },
-    /**
-     * Maps resource values to route query options. Use `{ resourceFieldName: 'routeQueryName' }` as format.
-     *
-     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
-     * to the `fileId` query option of the target route.
-     *
-     * Defaults to an empty object because no query options are expected as default.
-     */
-    targetRouteQueryMapping: {
-      type: Object,
-      required: false,
-      default: () => ({})
+      default: undefined
     },
     /**
      * Asserts whether clicking on the resource name triggers any action
@@ -603,50 +569,32 @@ export default defineComponent({
 
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(filePath, resource) {
-      if (this.targetRoute === null) {
-        return {}
-      }
-
-      const params = {
-        item: filePath.replace(/^\//, '') || '/',
-        ...mapResourceFields(resource, this.targetRouteParamMapping),
-        ...this.targetRoute.params
-      }
-      const query = {
-        ...mapResourceFields(resource, this.targetRouteQueryMapping),
-        ...this.targetRoute.query
+    createFolderLink(p, resource) {
+      if (this.targetRouteCallback) {
+        return this.targetRouteCallback(p, resource)
       }
 
       if (resource.shareId) {
         return createLocationSpaces('files-spaces-share', {
           params: {
-            ...params,
-            shareName: path.basename(resource.shareRoot)
+            shareName: path.basename(resource.shareRoot),
+            item: p
           },
           query: {
-            ...query,
             shareId: resource.shareId
           }
         })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
-
-      if (this.hasProjectSpaces) {
-        if (matchingSpace?.driveType === 'project') {
-          return createLocationSpaces('files-spaces-project', {
-            params: { ...params, storageId: matchingSpace?.id || params.storageId },
-            query
-          })
+      if (!matchingSpace) {
+        return {}
+      }
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: [matchingSpace.driveAlias, p.split('/')].filter(Boolean).join('/')
         }
-      }
-
-      return {
-        name: this.targetRoute.name,
-        params: { ...params, storageId: matchingSpace?.id || params.storageId },
-        query
-      }
+      })
     },
     fileDragged(file) {
       this.addSelectedResource(file)

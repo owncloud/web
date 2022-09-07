@@ -280,11 +280,11 @@ export default defineComponent({
       'SET_FILE_SELECTION'
     ]),
 
-    getSpaceProjectRoute({ id, name, disabled }) {
+    getSpaceProjectRoute({ driveAlias, disabled }) {
       return disabled
         ? '#'
-        : createLocationSpaces('files-spaces-project', {
-            params: { storageId: id, name }
+        : createLocationSpaces('files-spaces-generic', {
+            params: { driveAliasAndItem: driveAlias }
           })
     },
 

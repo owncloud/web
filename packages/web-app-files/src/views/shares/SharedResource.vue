@@ -39,7 +39,7 @@
           :class="{ 'files-table-squashed': sideBarOpen }"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
+          :target-route-callback="resourceTargetRouteCallback"
           :header-position="fileListHeaderY"
           :drag-drop="true"
           :sort-by="sortBy"
@@ -113,6 +113,7 @@ import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { useRouteParam, useRouteQuery } from 'web-pkg/src/composables'
+import { Location } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -138,16 +139,15 @@ export default defineComponent({
     const shareId = useRouteQuery('shareId')
     const shareName = useRouteParam('shareName')
     const relativePath = useRouteParam('item', '')
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      return createLocationSpaces('files-spaces-share', {
+        params: { shareName: unref(shareName), item: path },
+        query: { shareId: unref(shareId) }
+      })
+    }
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-share', {
-        params: {
-          shareName: unref(shareName)
-        },
-        query: {
-          shareId: unref(shareId)
-        }
-      }),
+      resourceTargetRouteCallback,
       shareId,
       shareName,
       relativePath

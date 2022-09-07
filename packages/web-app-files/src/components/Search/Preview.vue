@@ -26,13 +26,14 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { createLocationSpaces } from '../../router'
+import { createLocationShares, createLocationSpaces } from '../../router'
 import path from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   mixins: [MixinFileActions],
   props: {
     searchResult: {
@@ -52,16 +53,7 @@ export default {
     const store = useStore()
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
       accessToken: useAccessToken({ store })
-    }
-  },
-  data() {
-    return {
-      resource: undefined
     }
   },
   computed: {
@@ -81,6 +73,9 @@ export default {
         : {
             click: () => this.$_fileActions_triggerDefaultAction(this.resource)
           }
+    },
+    resource() {
+      return this.searchResult.data
     },
     matchingSpace() {
       return this.spaces.find((space) => space.id === this.resource.storageId)
@@ -102,15 +97,18 @@ export default {
 
       return this.$gettext('Personal')
     },
-    parentFolderLink() {
-      return this.createFolderLink(path.dirname(this.resource.path), this.resource)
-    },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    folderLink() {
+      return this.createFolderLink(this.resource.path)
+    },
+    parentFolderLink() {
+      if (this.resource.shareId && this.resource.path === '/') {
+        return createLocationShares('files-shares-with-me')
+      }
+      return this.createFolderLink(path.dirname(this.resource.path))
     }
-  },
-  beforeMount() {
-    this.resource = this.searchResult.data
   },
   mounted() {
     if (!this.displayThumbnails) {
@@ -139,39 +137,31 @@ export default {
     visibilityObserver.disconnect()
   },
   methods: {
-    createFolderLink(filePath, resource) {
-      if (this.resourceTargetLocation === null) {
-        return {}
-      }
-
-      if (resource.shareId) {
+    createFolderLink(p: string) {
+      if (this.resource.shareId) {
         return createLocationSpaces('files-spaces-share', {
           params: {
-            shareName: path.basename(resource.shareRoot)
+            shareName: path.basename(this.resource.shareRoot),
+            item: p
           },
           query: {
-            shareId: resource.shareId
+            shareId: this.resource.shareId
           }
         })
       }
 
-      if (this.matchingSpace?.driveType === 'project') {
-        return createLocationSpaces('files-spaces-project', {
-          params: { storageId: resource.storageId, item: filePath.replace(/^\//, '') || undefined }
-        })
+      if (!this.matchingSpace) {
+        return {}
       }
 
-      return {
-        name: this.resourceTargetLocation.name,
+      return createLocationSpaces('files-spaces-generic', {
         params: {
-          item: filePath.replace(/^\//, '') || undefined,
-          ...this.resourceTargetLocation.params,
-          ...(resource.storageId && { storageId: resource.storageId })
+          driveAliasAndItem: [this.matchingSpace.driveAlias, p.split('/')].filter(Boolean).join('/')
         }
-      }
+      })
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .files-search-preview {

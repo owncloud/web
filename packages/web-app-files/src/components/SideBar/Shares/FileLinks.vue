@@ -26,6 +26,8 @@
         :is-modifiable="canEdit"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
         :link="quicklink"
+        :file="file"
+        :space="space"
         @updateLink="checkLinkToUpdate"
         @removePublicLink="deleteLinkConfirmation"
       />
@@ -57,6 +59,8 @@
           :is-modifiable="canEdit"
           :is-password-enforced="isPasswordEnforcedFor(link)"
           :link="link"
+          :file="file"
+          :space="space"
           @updateLink="checkLinkToUpdate"
           @removePublicLink="deleteLinkConfirmation"
         />
@@ -90,6 +94,8 @@
             :is-folder-share="true"
             :is-modifiable="false"
             :link="link"
+            :file="file"
+            :space="space"
           />
         </li>
       </oc-list>
@@ -107,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import {
@@ -137,7 +143,14 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
-  inject: ['incomingParentShare'],
+  inject: ['displayedItem', 'incomingParentShare'],
+  props: {
+    space: {
+      type: Object,
+      required: false,
+      default: null
+    }
+  },
   setup() {
     const store = useStore()
 
@@ -161,6 +174,10 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
+
+    file() {
+      return unref(this.displayedItem)
+    },
 
     addButtonLabel() {
       return this.$gettext('Add link')

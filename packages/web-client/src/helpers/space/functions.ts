@@ -29,7 +29,7 @@ export function buildSpace(space) {
       }
     }
 
-    if (space.root.deleted) {
+    if (space.root?.deleted) {
       disabled = space.root.deleted?.state === 'trashed'
     }
   }

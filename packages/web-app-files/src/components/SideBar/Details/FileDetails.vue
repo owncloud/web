@@ -146,21 +146,15 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from '@vue/composition-api'
+import { defineComponent, ref, unref } from '@vue/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
+import { createLocationSpaces } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import {
-  useAccessToken,
-  usePublicLinkContext,
-  useRouteParam,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
@@ -170,28 +164,16 @@ import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
   name: 'FileDetails',
-  inject: ['displayedItem'],
+  inject: {
+    displayedItem: { from: 'displayedItem' },
+    displayedSpace: { from: 'displayedSpace' }
+  },
   setup() {
     const sharedParentDir = ref('')
-    const router = useRouter()
     const store = useStore()
-    const currentStorageId = useRouteParam('storageId')
-
-    const sharedParentRoute = computed(() => {
-      if (isLocationSpacesActive(router, 'files-spaces-project')) {
-        return createLocationSpaces('files-spaces-project', {
-          params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
-        })
-      }
-
-      return createLocationSpaces('files-spaces-personal', {
-        params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
-      })
-    })
 
     return {
       sharedParentDir,
-      sharedParentRoute,
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store })
     }
@@ -209,11 +191,17 @@ export default defineComponent({
     timeout: null
   }),
   computed: {
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
     ...mapGetters(['user', 'configuration']),
 
     file() {
       return this.displayedItem.value
+    },
+    matchingSpace() {
+      return (
+        unref(this.displayedSpace) || this.spaces.find((space) => space.id === this.file.storageId)
+      )
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
@@ -259,6 +247,32 @@ export default defineComponent({
         this.file.path !== this.sharedParentDir &&
         this.sharedParentDir
       )
+    },
+    sharedParentRoute() {
+      if (this.file.shareId) {
+        if (this.file.path === '') {
+          return {}
+        }
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            shareName: path.basename(this.file.shareRoot),
+            item: this.file.path
+          },
+          query: {
+            shareId: this.file.shareId
+          }
+        })
+      }
+      if (!this.matchingSpace) {
+        return {}
+      }
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: [this.matchingSpace.driveAlias, this.sharedParentDir.split('/')]
+            .filter(Boolean)
+            .join('/')
+        }
+      })
     },
     showShares() {
       if (this.isPublicLinkContext) {

@@ -24,11 +24,15 @@ export default {
     }
   },
   methods: {
-    $_navigate_space_trigger() {
-      this.$router.push(
-        createLocationSpaces('files-spaces-project', {
+    $_navigate_space_trigger({ resources }) {
+      const driveAlias = resources[0].driveAlias
+      if (!driveAlias) {
+        return
+      }
+      return this.$router.push(
+        createLocationSpaces('files-spaces-generic', {
           params: {
-            storageId: this.$router.currentRoute.params.storageId
+            driveAliasAndItem: driveAlias
           }
         })
       )
