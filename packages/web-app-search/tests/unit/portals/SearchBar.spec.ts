@@ -283,7 +283,7 @@ describe('Search Bar portal component', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('li.preview').length).toBe(2)
   })
-  test('shows the no matches element if search result is empty', async () => {
+  test('shows the no results element if search result is empty', async () => {
     wrapper = getMountedWrapper({
       data: {
         term: 'old',
@@ -298,9 +298,9 @@ describe('Search Bar portal component', () => {
     })
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
-    expect(wrapper.find('#no-matches').exists()).toBeTruthy()
+    expect(wrapper.find('#no-results').exists()).toBeTruthy()
   })
-  test('shows the more matches element if search result is empty', async () => {
+  test('shows the more results element if search result is empty', async () => {
     wrapper = getMountedWrapper({
       data: {
         term: 'old',
@@ -319,7 +319,7 @@ describe('Search Bar portal component', () => {
     })
     await wrapper.find('input').setValue('new')
     await wrapper.vm.$nextTick()
-    expect(wrapper.find('#more-matches').exists()).toBeTruthy()
+    expect(wrapper.find('#more-results').exists()).toBeTruthy()
   })
   test('activate a preview by clicking it', async () => {
     wrapper = getMountedWrapper({
