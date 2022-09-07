@@ -213,7 +213,7 @@ describe('CreateAndUpload component', () => {
       'should upload file if user chooses replace or keep both',
       async (strategy) => {
         const uppyResourceOne = {
-          name: 'test123',
+          name: 'test',
           meta: {
             relativeFolder: ''
           }
@@ -227,17 +227,23 @@ describe('CreateAndUpload component', () => {
         const wrapper = getShallowWrapper(route, store)
         const handleUppyFileUpload = jest.fn()
         wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
-
-        await wrapper.vm.displayOverwriteDialog([uppyResourceOne], [conflict], () =>
-          Promise.resolve({ strategy: strategy, doForAllConflicts: true })
+        const resolveFileConflictMethod = jest.fn(() =>
+          Promise.resolve({ strategy, doForAllConflicts: true })
         )
 
+        await wrapper.vm.displayOverwriteDialog(
+          [uppyResourceOne],
+          [conflict],
+          resolveFileConflictMethod
+        )
+
+        expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
         expect(handleUppyFileUpload).toBeCalledTimes(1)
         expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne])
       }
     )
     it('should not upload file if user chooses skip', async () => {
-      const uppyResourceOne = { name: 'test123' }
+      const uppyResourceOne = { name: 'test' }
       const conflict = {
         name: uppyResourceOne.name,
         type: 'file'
@@ -247,12 +253,78 @@ describe('CreateAndUpload component', () => {
       const wrapper = getShallowWrapper(route, store)
       const handleUppyFileUpload = jest.fn()
       wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
-
-      await wrapper.vm.displayOverwriteDialog([uppyResourceOne], [conflict], () =>
+      const resolveFileConflictMethod = jest.fn(() =>
         Promise.resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts: true })
       )
 
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne],
+        [conflict],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
       expect(handleUppyFileUpload).not.toHaveBeenCalled()
+    })
+    it('should show dialog once if do for all conflicts is ticked', async () => {
+      const uppyResourceOne = { name: 'test' }
+      const uppyResourceTwo = { name: 'test2' }
+      const conflictOne = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+      const conflictTwo = {
+        name: uppyResourceTwo.name,
+        type: 'file'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
+      )
+
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne, uppyResourceTwo],
+        [conflictOne, conflictTwo],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
+    })
+    it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
+      const uppyResourceOne = { name: 'test' }
+      const uppyResourceTwo = { name: 'folder' }
+      const conflictOne = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+      const conflictTwo = {
+        name: uppyResourceTwo.name,
+        type: 'folder'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
+      )
+
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne, uppyResourceTwo],
+        [conflictOne, conflictTwo],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(2)
+      expect(handleUppyFileUpload).toBeCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
     })
   })
 })
