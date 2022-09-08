@@ -3,6 +3,7 @@
     <UserInfoBox :user="user" />
     <div id="user-group-assignment-form" class="oc-background-highlight oc-p-m">
       <oc-select
+        class="oc-mb-s"
         v-model="editUser.memberOf"
         multiple
         :options="groups"
@@ -35,14 +36,14 @@
           </div>
         </template>
       </oc-select>
+      <compare-save-dialog
+        class="edit-compare-save-dialog oc-mb-l"
+        :original-object="user"
+        :compare-object="editUser"
+        @revert="revertChanges"
+        @confirm="$emit('confirm', editUser)"
+      ></compare-save-dialog>
     </div>
-    <compare-save-dialog
-      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
-      :original-object="user"
-      :compare-object="editUser"
-      @revert="revertChanges"
-      @confirm="$emit('confirm', editUser)"
-    ></compare-save-dialog>
   </div>
 </template>
 <script>
@@ -90,12 +91,7 @@ export default {
 <style lang="scss">
 #user-group-assignment-panel {
   #user-group-assignment-form {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
-  .edit-compare-save-dialog {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
   }
 }
 </style>
