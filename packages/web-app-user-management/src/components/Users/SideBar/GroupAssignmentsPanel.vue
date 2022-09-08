@@ -1,7 +1,7 @@
 <template>
-  <div class="oc-mt-xl">
+  <div id="user-group-assignment-panel" class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div class="oc-background-highlight oc-p-m">
+    <div id="user-group-assignment-form" class="oc-background-highlight oc-p-m">
       <oc-select
         v-model="editUser.memberOf"
         multiple
@@ -37,7 +37,7 @@
       </oc-select>
     </div>
     <compare-save-dialog
-      class="edit-compare-save-dialog"
+      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
       :original-object="user"
       :compare-object="editUser"
       @revert="revertChanges"
@@ -86,10 +86,16 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-.edit-compare-save-dialog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+#user-group-assignment-panel {
+  #user-group-assignment-form {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .edit-compare-save-dialog {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 }
 </style>
