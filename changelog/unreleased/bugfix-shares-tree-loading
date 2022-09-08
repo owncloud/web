@@ -1,0 +1,7 @@
+Bugfix: Hide share actions for space viewers/editors
+
+We now make sure that an empty string will never be used as key for the shares tree. This fixes several issues with wrong share permissions being loaded and also improves performance in folders.
+
+https://github.com/owncloud/web/issues/7506
+https://github.com/owncloud/web/issues/7593
+https://github.com/owncloud/web/pull/7580
