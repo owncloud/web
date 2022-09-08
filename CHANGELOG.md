@@ -68,6 +68,7 @@ Summary
 * Bugfix - Access token renewal: [#7030](https://github.com/owncloud/web/issues/7030)
 * Bugfix - Access token renewal during upload: [#7240](https://github.com/owncloud/web/issues/7240)
 * Bugfix - Tooltips not shown on disabled create and upload button: [#7376](https://github.com/owncloud/web/pull/7376)
+* Bugfix - Typo when reading public links capabilities: [#7595](https://github.com/owncloud/web/pull/7595)
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 * Bugfix - User management app close side bar throws error: [#7445](https://github.com/owncloud/web/pull/7445)
 * Bugfix - Users list not loading if user has no role: [#7332](https://github.com/owncloud/web/pull/7332)
@@ -88,6 +89,7 @@ Summary
 * Enhancement - Permissionless (internal) link shares: [#7133](https://github.com/owncloud/web/pull/7133)
 * Enhancement - Propose unique file name while creating a new file: [#7555](https://github.com/owncloud/web/pull/7555)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
+* Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -96,6 +98,7 @@ Summary
 * Enhancement - Use fixed width for the right sidebar: [#7371](https://github.com/owncloud/web/pull/7371)
 * Enhancement - Don't open right sidebar from private links: [#7559](https://github.com/owncloud/web/pull/7559)
 * Enhancement - Search all files announce limit: [#7267](https://github.com/owncloud/web/pull/7267)
+* Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
@@ -604,6 +607,10 @@ Details
    https://github.com/owncloud/web/issues/5937
    https://github.com/owncloud/web/pull/7376
 
+* Bugfix - Typo when reading public links capabilities: [#7595](https://github.com/owncloud/web/pull/7595)
+
+   https://github.com/owncloud/web/pull/7595
+
 * Bugfix - Upload overlay progress bar spacing: [#7297](https://github.com/owncloud/web/pull/7297)
 
    We've fixed spacing issues with the upload overlay progress bar.
@@ -789,6 +796,14 @@ Details
    https://github.com/owncloud/web/pull/7402
    https://github.com/owncloud/web/pull/7475
 
+* Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
+
+   We've reduced the pagination options by removing the options to display 1000 and all files.
+   These may be added again later after further improving the files table performance.
+
+   https://github.com/owncloud/web/issues/7038
+   https://github.com/owncloud/web/pull/7597
+
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 
    We've removed the clickOutside directive because it isn't used anymore
@@ -855,6 +870,16 @@ Details
    https://github.com/owncloud/web/issues/7192
    https://github.com/owncloud/web/pull/7267
    https://github.com/owncloud/web/pull/7306
+
+* Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
+
+   We've improved the search, it will show now if no results according to term was found or if the
+   results exceeds the search limit. We've also navigate to the last page while clicking the x in
+   the search input field.
+
+   https://github.com/owncloud/web/issues/5644
+   https://github.com/owncloud/web/issues/7587
+   https://github.com/owncloud/web/pull/7586
 
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 

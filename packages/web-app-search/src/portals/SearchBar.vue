@@ -49,6 +49,15 @@
               :search-result="searchResultValue"
             />
           </li>
+          <li
+            v-if="showNoMatches"
+            id="no-matches"
+            class="oc-text-center oc-text-muted"
+            v-text="$gettext('No result')"
+          ></li>
+          <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
+            {{ moreMatchesText }}
+          </li>
         </template>
       </ul>
     </div>
@@ -78,6 +87,32 @@ export default {
   },
 
   computed: {
+    rangeSupported() {
+      return this.searchResult.range
+    },
+
+    rangeItems() {
+      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+    },
+
+    showMoreMatches() {
+      return this.rangeSupported && this.rangeItems > this.searchResult.values.length
+    },
+
+    moreMatchesText() {
+      const moreCount = this.rangeItems - this.searchResult.values.length
+      return this.$gettextInterpolate(
+        this.$ngettext('%{moreCount} more result', '%{moreCount} more results', moreCount),
+        {
+          moreCount
+        }
+      )
+    },
+
+    showNoMatches() {
+      return this.searchResult?.values?.length === 0
+    },
+
     availableProviders() {
       return this.providerStore.availableProviders
     },
@@ -88,27 +123,26 @@ export default {
   },
 
   watch: {
-    $route() {
-      if (this.activeProvider && !this.activeProvider.available) {
-        this.activeProvider = undefined
-      }
+    $route: {
+      handler(r, o) {
+        if (!!o && this.activeProvider && !this.activeProvider.available) {
+          this.activeProvider = undefined
+        }
+        this.$nextTick(() => {
+          if (!this.availableProviders.length) {
+            return
+          }
+          const routeTerm = get(r, 'query.term')
+          const input = this.$el.getElementsByTagName('input')[0]
+          if (!input || !routeTerm) {
+            return
+          }
+          this.term = routeTerm
+          input.value = routeTerm
+        })
+      },
+      immediate: true
     }
-  },
-
-  mounted() {
-    if (!this.availableProviders.length) {
-      return
-    }
-
-    const input = this.$el.getElementsByTagName('input')[0]
-    const routeTerm = get(this, '$route.query.term')
-
-    if (!input || !routeTerm) {
-      return
-    }
-
-    this.term = routeTerm
-    input.value = routeTerm
   },
 
   asyncComputed: {
@@ -153,6 +187,7 @@ export default {
     resetProvider() {
       this.optionsVisible = false
       this.availableProviders.forEach((provider) => provider.reset())
+      this.$router.go(-1)
     },
     activateProvider(provider) {
       this.optionsVisible = false
@@ -301,7 +336,6 @@ export default {
 
     li {
       padding: 15px 10px;
-      cursor: pointer;
       position: relative;
       font-size: var(--oc-font-size-small);
 
