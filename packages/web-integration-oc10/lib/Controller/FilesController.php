@@ -77,7 +77,7 @@ class FilesController extends Controller {
 		}
 
 		// check if path permitted
-		$permittedPaths = ["css", "img", "js", "themes", "icons", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
+		$permittedPaths = ["css", "img", "js", "themes", "icons", "fonts", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
 		$found = false;
 		foreach ($permittedPaths as $p) {
 			if (\strpos($path, $p) === 0) {
