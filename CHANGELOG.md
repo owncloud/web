@@ -101,6 +101,7 @@ Summary
 * Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+* Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
 * Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
@@ -893,6 +894,17 @@ Details
 
    https://github.com/owncloud/web/issues/7358
    https://github.com/owncloud/web/pull/7364
+
+* Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
+
+   We've removed the dependency to GuzzleHttp from our oc10 app package. It was used for mime type
+   checking only. Instead we now rely on a mime type checker that is already bundled with oc10 core.
+   IMPORTANT: this enhancement is needed to reach compatibility with oc10.11 and maintain
+   backwards compatibility with oc prior to oc10.11. This would not be easily doable when still
+   relying on GuzzleHttp because its major version was updated from 5 to 7 in oc10.11.
+
+   https://github.com/owncloud/web/pull/7605
+   https://github.com/owncloud/web/pull/5933
 
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 
