@@ -1,13 +1,7 @@
 import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
-
-export async function openNewCollaboratorsPanel(ctx) {
-  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#peopleShares')
-}
-
-export async function openSpaceMembersPanel(ctx) {
-  await ctx.store.dispatch('Files/sidebar/openWithPanel', 'space-share-item')
-}
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from './composables/sideBar'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
@@ -58,7 +52,7 @@ export default {
     id: 'collaborators',
     label: ($gettext) => $gettext('Add people'),
     icon: 'user-add',
-    handler: openNewCollaboratorsPanel,
+    handler: () => bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares'),
     displayed: canShare
   },
   quicklink: {
@@ -73,12 +67,12 @@ export default {
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
           await createQuicklink({ ...ctx, resource: ctx.item, password })
-          await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
+          bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
         })
       }
 
       await createQuicklink({ ...ctx, resource: ctx.item })
-      await ctx.store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#linkShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
     },
     displayed: canShare
   }

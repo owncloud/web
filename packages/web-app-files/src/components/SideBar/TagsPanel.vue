@@ -55,7 +55,7 @@
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 import { defineComponent, ref } from '@vue/composition-api'
-import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { bus } from 'web-pkg/src/instance'
 import { useTask } from 'vue-concurrency'
 import { useRequest, useStore } from 'web-pkg/src/composables'

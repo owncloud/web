@@ -28,7 +28,7 @@ export default {
 
             return resources[0].canEditImage({ user: this.user })
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-upload-space-image-trigger'
         }
       ]

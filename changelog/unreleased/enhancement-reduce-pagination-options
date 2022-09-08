@@ -1,0 +1,7 @@
+Enhancement: Reduce pagination options
+
+We've reduced the pagination options by removing the options to display 1000 and all files. These may be added again later after further improving the files table performance.
+
+https://github.com/owncloud/web/issues/7038
+https://github.com/owncloud/web/pull/7597
+

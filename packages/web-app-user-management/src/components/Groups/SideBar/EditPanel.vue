@@ -1,10 +1,10 @@
 <template>
-  <div v-if="group" class="oc-mt-xl">
+  <div id="group-edit-panel" class="oc-mt-xl">
     <div class="oc-flex group-info oc-mb-l">
       <avatar-image class="oc-mb-m" :width="80" :userid="group.id" :user-name="group.displayName" />
       <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
     </div>
-    <div v-if="editGroup" class="oc-background-highlight oc-p-m">
+    <div id="group-edit-form" class="oc-background-highlight oc-p-m">
       <oc-text-input
         v-model="editGroup.displayName"
         class="oc-mb-s"
@@ -15,7 +15,7 @@
       />
     </div>
     <compare-save-dialog
-      class="edit-compare-save-dialog"
+      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
       :original-object="group"
       :compare-object="editGroup"
       :confirm-button-disabled="invalidFormData"
@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 
 export default {
   name: 'EditPanel',
@@ -53,7 +53,6 @@ export default {
     group() {
       return this.groups.length === 1 ? this.groups[0] : null
     },
-
     invalidFormData() {
       return Object.values(this.formData)
         .map((v) => !!v.valid)
@@ -82,7 +81,6 @@ export default {
       this.formData.displayName.valid = true
       return true
     },
-
     revertChanges() {
       this.editGroup = { ...this.group }
       Object.values(this.formData).forEach((formDataValue) => {
@@ -94,17 +92,21 @@ export default {
 }
 </script>
 <style lang="scss">
-.edit-compare-save-dialog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.group-info {
-  align-items: center;
-  flex-direction: column;
-}
-.group-info-display-name {
-  font-size: 1.5rem;
+#group-edit-panel {
+  #group-edit-form {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .edit-compare-save-dialog {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .group-info {
+    align-items: center;
+    flex-direction: column;
+  }
+  .group-info-display-name {
+    font-size: 1.5rem;
+  }
 }
 </style>

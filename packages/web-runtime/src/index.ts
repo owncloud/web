@@ -82,7 +82,7 @@ export const renderSuccess = (): void => {
     (state, getters) => {
       return getters['runtime/auth/isUserContextReady']
     },
-    async (newValue, oldValue) => {
+    () => {
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
         const clientService = instance.$clientService

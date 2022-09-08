@@ -5,7 +5,6 @@ import WebPlugin from '../plugins/web'
 import Avatar from '../components/Avatar.vue'
 import focusMixin from '../mixins/focusMixin'
 import lifecycleMixin from '../mixins/lifecycleMixin'
-import ClickOutsideDirective from '../directives/clickOutside'
 import VueEvents from 'vue-events'
 import VueScrollTo from 'vue-scrollto'
 import VueResize from 'vue-resize'
@@ -34,8 +33,6 @@ Vue.component('avatar-image', Avatar)
 
 Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)
-
-Vue.directive('click-outside', ClickOutsideDirective)
 
 // externalize Vue - this is not the Vue instance but the class
 window.Vue = Vue

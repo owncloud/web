@@ -1,0 +1,55 @@
+import { onBeforeUnmount, ref, Ref, unref } from '@vue/composition-api'
+import { bus } from 'web-pkg/src/instance'
+import { EventBus } from 'web-pkg/src/event'
+import { SideBarEventTopics } from './eventTopics'
+
+interface SideBarResult {
+  sideBarOpen: Ref<boolean>
+  sideBarActivePanel: Ref<string>
+}
+
+interface SideBarOptions {
+  bus?: EventBus
+}
+
+export const useSideBar = (options?: SideBarOptions): SideBarResult => {
+  const eventBus = options?.bus || bus
+  const sideBarOpen = ref(false)
+  const sideBarActivePanel = ref(null)
+  const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
+    sideBarOpen.value = !unref(sideBarOpen)
+  })
+  const closeSideBarToken = eventBus.subscribe(SideBarEventTopics.close, () => {
+    sideBarOpen.value = false
+    sideBarActivePanel.value = null
+  })
+  const openSideBarToken = eventBus.subscribe(SideBarEventTopics.open, () => {
+    sideBarOpen.value = true
+    sideBarActivePanel.value = null
+  })
+  const openSideBarWithPanelToken = eventBus.subscribe(
+    SideBarEventTopics.openWithPanel,
+    (panelName) => {
+      sideBarOpen.value = true
+      sideBarActivePanel.value = panelName
+    }
+  )
+  const setActiveSideBarPanelToken = eventBus.subscribe(
+    SideBarEventTopics.setActivePanel,
+    (panelName) => {
+      sideBarActivePanel.value = panelName
+    }
+  )
+  onBeforeUnmount(() => {
+    eventBus.unsubscribe(SideBarEventTopics.toggle, toggleSideBarToken)
+    eventBus.unsubscribe(SideBarEventTopics.close, closeSideBarToken)
+    eventBus.unsubscribe(SideBarEventTopics.open, openSideBarToken)
+    eventBus.unsubscribe(SideBarEventTopics.openWithPanel, openSideBarWithPanelToken)
+    eventBus.unsubscribe(SideBarEventTopics.setActivePanel, setActiveSideBarPanelToken)
+  })
+
+  return {
+    sideBarOpen,
+    sideBarActivePanel
+  }
+}

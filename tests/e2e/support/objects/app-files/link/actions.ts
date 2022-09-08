@@ -7,14 +7,16 @@ import { clickResource } from '../resource/actions'
 
 export interface createLinkArgs {
   page: Page
-  resource: string
-  name: string
+  resource?: string
+  name?: string
+  space?: boolean
 }
 
 export type changeNameArgs = {
   page: Page
-  resource: string
+  resource?: string
   newName: string
+  space?: boolean
 }
 
 export type addExpirationArgs = {
@@ -33,9 +35,10 @@ export type addPasswordArgs = {
 
 export type changeRoleArgs = {
   page: Page
-  resource: string
-  name: string
+  resource?: string
+  linkName: string
   role: string
+  space?: boolean
 }
 
 export type deleteLinkArgs = {
@@ -44,6 +47,12 @@ export type deleteLinkArgs = {
   name: string
 }
 
+export type publicLinkAndItsEditButtonVisibilityArgs = {
+  page: Page
+  linkName: string
+  resource?: string
+  space?: boolean
+}
 const publicLinkSetRoleButton = `#files-role-%s`
 const linkExpiryDatepicker = '.link-expiry-picker'
 const publicLinkEditRoleButton =
@@ -72,33 +81,41 @@ const deleteLinkButton =
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
-  const { page, resource } = args
-  const resourcePaths = resource.split('/')
-  const resourceName = resourcePaths.pop()
-  if (resourcePaths.length) {
-    await clickResource({ page: page, path: resourcePaths.join('/') })
+  const { space, page, resource } = args
+  if (!space) {
+    const resourcePaths = resource.split('/')
+    const resourceName = resourcePaths.pop()
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
+    await sidebar.open({ page: page, resource: resourceName })
+    await sidebar.openPanel({ page: page, name: 'sharing' })
   }
-
-  await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(addPublicLinkButton).click()
-  // const message = await page.locator(linkUpdateDialog).textContent()
-  // expect(message.trim()).toBe('Link was created successfully')
-  // const linkId = await page.getAttribute(getMostRecentLink, 'data-testid')
-  // return linkId.replace('files-link-id-', '')
+  await waitForPopupNotPresent(page)
   return await page.locator(util.format(publicLink, 'Link')).textContent()
 }
 
+export const waitForPopupNotPresent = async (page): Promise<void> => {
+  await page.waitForSelector(linkUpdateDialog)
+  await page.waitForSelector(linkUpdateDialog, { state: 'detached', strict: false })
+}
+
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
-  const { page, resource, name, role } = args
-  const resourcePaths = resource.split('/')
-  const resourceName = resourcePaths.pop()
-  if (resourcePaths.length) {
-    await clickResource({ page: page, path: resourcePaths.join('/') })
+  const { page, resource, linkName, role, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
+  if (!space) {
+    const resourcePaths = resource.split('/')
+    resourceName = resourcePaths.pop()
+    shareType = 'sharing'
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
   }
   await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
-  await page.locator(util.format(publicLinkEditRoleButton, name)).click()
+  await sidebar.openPanel({ page: page, name: shareType })
+  await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
   await page.locator(util.format(publicLinkSetRoleButton, role.toLowerCase())).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
@@ -106,14 +123,16 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
 }
 
 export const changeName = async (args: changeNameArgs): Promise<string> => {
-  const { page, resource, newName } = args
-  const resourcePaths = resource.split('/')
-  const resourceName = resourcePaths.pop()
-  if (resourcePaths.length) {
-    await clickResource({ page: page, path: resourcePaths.join('/') })
+  const { page, resource, space, newName } = args
+  if (!space) {
+    const resourcePaths = resource.split('/')
+    const resourceName = resourcePaths.pop()
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
+    await sidebar.open({ page: page, resource: resourceName })
+    await sidebar.openPanel({ page: page, name: 'sharing' })
   }
-  await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, 'Link')).click()
   await page.locator(editPublicLinkRenameButton).click()
   await page.locator(editPublicLinkInput).fill(newName)
@@ -174,4 +193,30 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
   await page.locator(confirmDeleteButton).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was deleted successfully')
+}
+
+export const getPublicLinkVisibility = async (
+  args: publicLinkAndItsEditButtonVisibilityArgs
+): Promise<string> => {
+  const { page, linkName, resource, space } = args
+  let shareType = 'space-share'
+  let resourceName = null
+  if (!space) {
+    shareType = 'sharing'
+    const resourcePaths = resource.split('/')
+    resourceName = resourcePaths.pop()
+    if (resourcePaths.length) {
+      await clickResource({ page: page, path: resourcePaths.join('/') })
+    }
+  }
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: shareType })
+  return await page.locator(util.format(publicLink, linkName)).textContent()
+}
+
+export const getLinkEditButtonVisibility = async (
+  args: publicLinkAndItsEditButtonVisibilityArgs
+): Promise<boolean> => {
+  const { page, linkName } = args
+  return await page.locator(util.format(editPublicLinkButton, linkName)).isVisible()
 }

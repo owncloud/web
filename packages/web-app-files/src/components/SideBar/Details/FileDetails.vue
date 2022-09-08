@@ -176,8 +176,9 @@ import {
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
-import { isUserContext } from 'web-runtime/src/router'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -244,9 +245,6 @@ export default defineComponent({
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected file')
     },
-    shareDateLabel() {
-      return this.$gettext('Shared')
-    },
     sharedViaLabel() {
       return this.$gettext('Shared via')
     },
@@ -271,15 +269,17 @@ export default defineComponent({
         this.showShares &&
         !this.sharesTreeLoading &&
         this.file.path !== this.sharedParentDir &&
-        this.sharedParentDir !== null
+        this.sharedParentDir
       )
     },
     showShares() {
-      return this.hasAnyShares && isUserContext(this.$router, this.$route)
+      if (this.isPublicLinkContext) {
+        return false
+      }
+      return this.hasAnyShares
     },
     detailSharingInformation() {
-      const isFolder = this.file.type === 'folder'
-      if (isFolder) {
+      if (this.file.type === 'folder') {
         return this.$gettext('This folder has been shared.')
       }
       return this.$gettext('This file has been shared.')
@@ -331,10 +331,10 @@ export default defineComponent({
       return this.$gettext('Size')
     },
     showVersions() {
-      if (this.file.type === 'folder') {
+      if (this.file.type === 'folder' || this.isPublicLinkContext) {
         return
       }
-      return this.versions.length > 0 && isUserContext(this.$router, this.$route)
+      return this.versions.length > 0
     },
     versionsLabel() {
       return this.$gettext('Versions')
@@ -369,7 +369,8 @@ export default defineComponent({
   },
   watch: {
     file() {
-      this.loadData().then(this.refreshShareDetailsTree)
+      this.loadData()
+      this.refreshShareDetailsTree()
     },
     sharesTree() {
       // missing early return
@@ -379,14 +380,17 @@ export default defineComponent({
       if (sharePathParentOrCurrent === null) {
         return
       }
-      const userShares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-        ShareTypes.containsAnyValue(ShareTypes.individuals, [s.shareType])
+      const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
+        ShareTypes.containsAnyValue(
+          [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
+          [s.shareType]
+        )
       )
-      if (userShares.length === 0) {
+      if (shares.length === 0) {
         return
       }
 
-      this.sharedItem = userShares[0]
+      this.sharedItem = shares[0]
       this.sharedByName = this.sharedItem.owner?.name
       this.sharedByDisplayName = this.sharedItem.owner?.displayName
       if (this.sharedItem.owner?.additionalInfo) {
@@ -420,7 +424,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
-    ...mapActions('Files/sidebar', { setSidebarPanel: 'setActivePanel' }),
     async refreshShareDetailsTree() {
       await this.loadSharesTree({
         client: this.$client,
@@ -445,12 +448,11 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      this.setSidebarPanel('versions-item')
+      bus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
     },
     async loadData() {
-      this.loading = true
       const calls = []
-      if (this.file.type === 'file' && isUserContext(this.$router, this.$route)) {
+      if (this.file.type === 'file' && !this.isPublicLinkContext) {
         calls.push(this.loadVersions({ client: this.$client, fileId: this.file.id }))
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))

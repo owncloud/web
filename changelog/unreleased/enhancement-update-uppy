@@ -1,0 +1,6 @@
+Enhancement: Update Uppy to v3.0.1
+
+We've updated Uppy to v3.0.1. This allows us to enable the `creation-with-upload` extension, which saves up one request per file during upload.
+
+https://github.com/owncloud/web/issues/7177
+https://github.com/owncloud/web/pull/7515

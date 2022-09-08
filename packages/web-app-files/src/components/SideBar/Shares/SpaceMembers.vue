@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex">
-      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Members</h3>
+      <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
     </div>
     <invite-collaborator-form
@@ -119,33 +119,34 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    $_ocCollaborators_deleteShare(share) {
-      this.deleteShare({
-        client: this.$client,
-        graphClient: this.graphClient,
-        share: share,
-        path: this.highlightedFile.path
-      })
-        .then(() => {
-          this.hideModal()
-          this.showMessage({
-            title: this.$gettext('Share was removed successfully')
-          })
-          // current user was removed from the share.
-          if (share.collaborator.name === this.user.id) {
-            if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-              return this.$router.go()
-            }
-            return this.$router.push(createLocationSpaces('files-spaces-projects'))
+    async $_ocCollaborators_deleteShare(share) {
+      try {
+        await this.deleteShare({
+          client: this.$client,
+          graphClient: this.graphClient,
+          share: share,
+          path: this.highlightedFile.path,
+          reloadResource: false
+        })
+        this.showMessage({
+          title: this.$gettext('Share was removed successfully')
+        })
+        // current user was removed from the share.
+        if (share.collaborator.name === this.user.id) {
+          if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+            return this.$router.go()
           }
+          return this.$router.push(createLocationSpaces('files-spaces-projects'))
+        }
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to remove share'),
+          status: 'danger'
         })
-        .catch((error) => {
-          console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to remove share'),
-            status: 'danger'
-          })
-        })
+      } finally {
+        this.hideModal()
+      }
     }
   }
 })

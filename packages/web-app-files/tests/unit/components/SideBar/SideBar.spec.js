@@ -8,7 +8,7 @@ import Files from '@/__fixtures__/files'
 import merge from 'lodash-es/merge'
 import { buildResource, renameResource } from '@files/src/helpers/resources'
 
-import InnerSideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
+import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 import { createLocationSpaces } from '../../../../src/router'
 
@@ -177,6 +177,9 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
     silent: true
   })
   return shallowMount(SideBar, {
+    propsData: {
+      open: true
+    },
     store: new Vuex.Store({
       getters: {
         user: function () {
@@ -208,14 +211,6 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
             SET_HIGHLIGHTED_FILE(state, file) {
               state.highlightedFile = file
             }
-          },
-          modules: {
-            sidebar: {
-              namespaced: true,
-              state: {
-                activePanel: null
-              }
-            }
           }
         },
         runtime: {
@@ -243,7 +238,8 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           currentRoute: createLocationSpaces(currentRouteName),
           resolve: (r) => {
             return { href: r.name }
-          }
+          },
+          afterEach: jest.fn()
         }
       },
       mocks

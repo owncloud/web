@@ -1,0 +1,6 @@
+Bugfix: Paste action (keyboard) not working in project spaces
+
+We've fixed a bug which caused the user to be unable to paste in project spaces.
+
+https://github.com/owncloud/web/issues/7510
+https://github.com/owncloud/web/pull/7514

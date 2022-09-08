@@ -1,0 +1,5 @@
+Enhancement: Add resource name to the WebDAV properties
+
+We've added the resource name to the WebDAV properties.
+
+https://github.com/owncloud/web/pull/7485

@@ -1,7 +1,7 @@
 <template>
-  <div class="oc-mt-xl">
+  <div id="user-edit-panel" class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div class="oc-background-highlight oc-p-m">
+    <div id="user-edit-form" class="oc-background-highlight oc-p-m">
       <div>
         <oc-text-input
           v-model="editUser.displayName"
@@ -52,9 +52,9 @@
       </div>
     </div>
     <compare-save-dialog
-      class="edit-compare-save-dialog"
-      :original-object="originalObjectUser"
-      :compare-object="compareObjectUser"
+      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
+      :original-object="user"
+      :compare-object="editUser"
       :confirm-button-disabled="invalidFormData"
       @revert="revertChanges"
       @confirm="$emit('confirm', editUser)"
@@ -64,7 +64,7 @@
 <script>
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { mapState } from 'vuex'
@@ -103,17 +103,6 @@ export default {
   },
   computed: {
     ...mapState('runtime/spaces', ['spaceQuotas']),
-
-    userRole() {
-      return this.user ? this.userRoles[this.user.id] : null
-    },
-
-    originalObjectUser() {
-      return { ...this.user, passwordProfile: { password: '' } }
-    },
-    compareObjectUser() {
-      return { ...this.editUser }
-    },
     invalidFormData() {
       return Object.values(this.formData)
         .map((v) => !!v.valid)
@@ -126,7 +115,7 @@ export default {
   watch: {
     user: {
       handler: function () {
-        this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
+        this.editUser = cloneDeep(this.user)
       },
       deep: true,
       immediate: true
@@ -136,7 +125,6 @@ export default {
     changeSelectedQuotaOption(option) {
       this.editUser.drive.quota.total = option.value
     },
-
     validateDisplayName() {
       this.formData.displayName.valid = false
 
@@ -149,7 +137,6 @@ export default {
       this.formData.displayName.valid = true
       return true
     },
-
     validateEmail() {
       this.formData.email.valid = false
 
@@ -162,9 +149,8 @@ export default {
       this.formData.email.valid = true
       return true
     },
-
     revertChanges() {
-      this.editUser = { ...cloneDeep(this.user), ...{ passwordProfile: { password: '' } } }
+      this.editUser = this.user
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''
@@ -173,10 +159,16 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-.edit-compare-save-dialog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+#user-edit-panel {
+  #user-edit-form {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .edit-compare-save-dialog {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 }
 </style>

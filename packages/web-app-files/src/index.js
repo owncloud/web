@@ -136,12 +136,12 @@ export default {
         }
       ])
     )
-    // FIXME: Remove mock data
+    // FIXME: Use capability data only as soon as available
     thumbnailService.initialize(
       get(store, 'getters.capabilities.files.thumbnail', {
         enabled: true,
         version: 'v0.1',
-        supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+        supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
       })
     )
   }

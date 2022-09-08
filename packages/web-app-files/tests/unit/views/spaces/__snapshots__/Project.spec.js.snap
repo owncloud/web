@@ -1,73 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spaces project view space image should show if given 1`] = `
-<div class="space-overview">
-  <keyboard-actions-stub paginatedresources="" keybindonelementid="files-view"></keyboard-actions-stub>
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
-  <div>
-    <div class="oc-px-m oc-mt-m oc-flex">
-      <div class="oc-width-1-4 oc-mr-l"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=" class="space-overview-image oc-cursor-pointer"></div>
-      <div class="oc-width-3-4">
-        <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
-          <div class="oc-flex oc-flex-middle">
-            <h1 class="space-overview-name oc-text-truncate">space</h1>
-            <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
-              <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+<div class="space-overview oc-flex">
+  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar"></keyboard-actions-stub>
+  <files-view-wrapper-stub>
+    <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
+    <div>
+      <div class="oc-px-m oc-mt-m oc-flex">
+        <div class="oc-width-1-4 oc-mr-l"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=" class="space-overview-image oc-cursor-pointer"></div>
+        <div class="oc-width-3-4">
+          <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
+            <div class="oc-flex oc-flex-middle">
+              <h1 class="space-overview-name oc-text-truncate">space</h1>
+              <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
+                <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+              </oc-button-stub>
+              <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]">
+                <space-context-actions-stub items="[object Object]"></space-context-actions-stub>
+              </oc-drop-stub>
+            </div>
+            <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
             </oc-button-stub>
-            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]">
-              <space-context-actions-stub items="[object Object]"></space-context-actions-stub>
-            </oc-drop-stub>
-          </div>
-          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-            <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
-          </oc-button-stub>
-        </div>
-        <!---->
-        <div>
-          <div class="markdown-container">
-            <p>filecontent</p>
           </div>
           <!---->
+          <div>
+            <div class="markdown-container">
+              <p>filecontent</p>
+            </div>
+            <!---->
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+    <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+  </files-view-wrapper-stub>
+  <side-bar-stub></side-bar-stub>
 </div>
 `;
 
 exports[`Spaces project view space readme should show if given 1`] = `
-<div class="space-overview">
-  <keyboard-actions-stub paginatedresources="" keybindonelementid="files-view"></keyboard-actions-stub>
-  <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
-  <div>
-    <div class="oc-px-m oc-mt-m oc-flex">
-      <div class="oc-width-1-4 oc-mr-l"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=" class="space-overview-image oc-cursor-pointer"></div>
-      <div class="oc-width-3-4">
-        <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
-          <div class="oc-flex oc-flex-middle">
-            <h1 class="space-overview-name oc-text-truncate">space</h1>
-            <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
-              <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+<div class="space-overview oc-flex">
+  <keyboard-actions-stub paginatedresources="" keybindonelementids="files-view,web-nav-sidebar"></keyboard-actions-stub>
+  <files-view-wrapper-stub>
+    <app-bar-stub breadcrumbs="" breadcrumbscontextactionsitems="[object Object]" hasbulkactions="true" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true"></app-bar-stub>
+    <div>
+      <div class="oc-px-m oc-mt-m oc-flex">
+        <div class="oc-width-1-4 oc-mr-l"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=" class="space-overview-image oc-cursor-pointer"></div>
+        <div class="oc-width-3-4">
+          <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
+            <div class="oc-flex oc-flex-middle">
+              <h1 class="space-overview-name oc-text-truncate">space</h1>
+              <oc-button-stub type="button" size="medium" arialabel="Show context menu" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="space-context-btn" class="oc-ml-s">
+                <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+              </oc-button-stub>
+              <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]">
+                <space-context-actions-stub items="[object Object]"></space-context-actions-stub>
+              </oc-drop-stub>
+            </div>
+            <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
             </oc-button-stub>
-            <oc-drop-stub dropid="space-context-drop" toggle="#space-context-btn" position="right-start" mode="click" closeonclick="true" paddingsize="small" options="[object Object]">
-              <space-context-actions-stub items="[object Object]"></space-context-actions-stub>
-            </oc-drop-stub>
-          </div>
-          <oc-button-stub type="button" size="medium" arialabel="Open context menu and show members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
-            <oc-icon-stub name="group" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub> <span class="space-overview-people-count oc-text-small">1 member</span>
-          </oc-button-stub>
-        </div>
-        <!---->
-        <div>
-          <div class="markdown-container">
-            <p>filecontent</p>
           </div>
           <!---->
+          <div>
+            <div class="markdown-container">
+              <p>filecontent</p>
+            </div>
+            <!---->
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+    <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+  </files-view-wrapper-stub>
+  <side-bar-stub></side-bar-stub>
 </div>
 `;

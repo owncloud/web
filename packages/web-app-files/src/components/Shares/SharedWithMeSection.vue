@@ -2,7 +2,7 @@
   <div>
     <h2 class="oc-px-m oc-py-s">
       {{ title }}
-      <span class="oc-text-initial">({{ items.length }})</span>
+      <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
 
     <no-content-message v-if="!items.length" class="files-empty oc-flex-stretch" icon="group">
@@ -15,7 +15,7 @@
       v-model="selectedResourcesIds"
       :data-test-share-status="shareStatus"
       class="files-table"
-      :class="{ 'files-table-squashed': !sidebarClosed }"
+      :class="{ 'files-table-squashed': sideBarOpen }"
       :fields-displayed="displayedFields"
       sidebar-closed
       :are-thumbnails-displayed="displayThumbnails"
@@ -91,20 +91,18 @@ import { computed, defineComponent, unref } from '@vue/composition-api'
 import debounce from 'lodash-es/debounce'
 import { ImageDimension, ImageType } from '../../constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
 import MixinFilesListFilter from '../../mixins/filesListFilter'
-import MixinMountSideBar from '../../mixins/sidebar/mountSideBar'
-import { useResourcesViewDefaults } from '../../composables'
-import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import { useSelectedResources } from '../../composables/selection'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -116,13 +114,7 @@ export default defineComponent({
     NoContentMessage
   },
 
-  mixins: [
-    FileActions,
-    MixinAcceptShare,
-    MixinDeclineShare,
-    MixinMountSideBar,
-    MixinFilesListFilter
-  ],
+  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare, MixinFilesListFilter],
   props: {
     title: {
       type: String,
@@ -168,15 +160,17 @@ export default defineComponent({
     displayThumbnails: {
       type: Boolean,
       default: true
+    },
+    sideBarOpen: {
+      type: Boolean,
+      default: false
+    },
+    fileListHeaderY: {
+      type: Number,
+      default: 0
     }
   },
   setup() {
-    const { fileListHeaderY, selectedResourcesIds, selectedResources } = useResourcesViewDefaults<
-      Resource,
-      any,
-      any[]
-    >()
-
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
     const resourceTargetLocation = computed(() =>
@@ -197,9 +191,7 @@ export default defineComponent({
       resourceTargetLocation,
       resourceTargetParamMapping,
       resourceTargetQueryMapping,
-      fileListHeaderY,
-      selectedResources,
-      selectedResourcesIds
+      ...useSelectedResources({ store })
     }
   },
 
@@ -210,7 +202,6 @@ export default defineComponent({
 
   computed: {
     ...mapGetters(['configuration']),
-    ...mapState('Files/sidebar', { sidebarClosed: 'closed' }),
 
     displayedFields() {
       return ['name', 'status', 'owner', 'sdate', 'sharedWith']

@@ -143,7 +143,7 @@ Feature: Share by public link
       | expiration  | +7          |
 
 
-  @issue-ocis-1328 @skipOnOCIS
+  @issue-ocis-1328 @skipOnOCIS @skip
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server

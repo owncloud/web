@@ -39,7 +39,7 @@ export default {
             })
             return !deleteDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
         },
         {
@@ -60,7 +60,7 @@ export default {
             }
             return resources.length > 0
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-delete-permanent-trigger'
         }
       ]

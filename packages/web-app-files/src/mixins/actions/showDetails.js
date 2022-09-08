@@ -1,6 +1,8 @@
-import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -28,17 +30,18 @@ export default {
             }
             return resources.length > 0
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-details-trigger'
         }
       ]
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
-    async $_showDetails_trigger() {
-      await this.openSidebar()
+    $_showDetails_trigger({ resources }) {
+      this.SET_FILE_SELECTION(resources)
+      bus.publish(SideBarEventTopics.open)
     }
   }
 }

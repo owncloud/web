@@ -16,29 +16,29 @@
       toggle="#files-view-options-btn"
       mode="click"
       class="oc-width-auto"
-      padding-size="small"
+      padding-size="medium"
     >
       <oc-list>
-        <li class="files-view-options-list-item">
+        <li class="files-view-options-list-item oc-mb-m">
           <oc-switch
             v-model="hiddenFilesShownModel"
             data-testid="files-switch-hidden-files"
             :label="$gettext('Show hidden files')"
           />
         </li>
-        <li class="files-view-options-list-item">
+        <li class="files-view-options-list-item oc-my-m">
           <oc-switch
             v-model="fileExtensionsShownModel"
             data-testid="files-switch-files-extensions-files"
             :label="$gettext('Show file extensions')"
           />
         </li>
-        <li class="files-view-options-list-item">
+        <li class="files-view-options-list-item oc-mt-m">
           <oc-page-size
             v-model="itemsPerPage"
             data-testid="files-pagination-size"
             :label="$gettext('Items per page')"
-            :options="[100, 500, 1000, $gettext('All')]"
+            :options="[100, 500]"
             class="files-pagination-size"
           />
         </li>

@@ -3,7 +3,7 @@
 exports[`SpaceMembers if currentUser can not share other shares are listed, but creating/editing shares is not possible 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Members" data-current-language="en_US">Members</h3>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en_US">Members</h3>
     <!---->
   </div>
   <!---->
@@ -18,7 +18,7 @@ exports[`SpaceMembers if currentUser can not share other shares are listed, but 
 exports[`SpaceMembers if currentUser can share initially renders add people dialog 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Members" data-current-language="en_US">Members</h3>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en_US">Members</h3>
     <!---->
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Add" invitelabel="Add members" class="oc-my-s"></invite-collaborator-form-stub>
@@ -33,7 +33,7 @@ exports[`SpaceMembers if currentUser can share initially renders add people dial
 exports[`SpaceMembers if currentUser is manager allows role edit of the current user if another user is manager 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Members" data-current-language="en_US">Members</h3>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en_US">Members</h3>
     <!---->
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Add" invitelabel="Add members" class="oc-my-s"></invite-collaborator-form-stub>
@@ -54,7 +54,7 @@ exports[`SpaceMembers if currentUser is manager allows role edit of the current 
 exports[`SpaceMembers if currentUser is manager does not allow role edit of the current user if they are the only manager 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Members" data-current-language="en_US">Members</h3>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en_US">Members</h3>
     <!---->
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Add" invitelabel="Add members" class="oc-my-s"></invite-collaborator-form-stub>
@@ -72,7 +72,7 @@ exports[`SpaceMembers if currentUser is manager does not allow role edit of the 
 exports[`SpaceMembers renders loading spinner while loading 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-m-rm oc-text-initial" data-msgid="Members" data-current-language="en_US">Members</h3>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en_US">Members</h3>
     <!---->
   </div>
   <!---->
