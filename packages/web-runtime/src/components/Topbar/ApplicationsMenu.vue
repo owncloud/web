@@ -24,7 +24,7 @@
       close-on-click
     >
       <oc-list class="applications-list">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
+        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
           <oc-button
             :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
             :type="n.url ? 'a' : 'router-link'"
@@ -34,7 +34,6 @@
             appearance="raw"
             :class="{ 'oc-background-primary-gradient': n.active }"
             :variation="n.active ? 'inverse' : 'passive'"
-            @click="clickApp(n)"
           >
             <span class="icon-box">
               <oc-icon :name="n.icon" />
@@ -49,6 +48,8 @@
 </template>
 
 <script>
+import { clientService } from 'web-pkg/src/services'
+import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -60,7 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'getToken']),
+    ...mapGetters('runtime/auth', ['accessToken']),
 
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
@@ -75,22 +76,17 @@ export default {
   methods: {
     async clickApp(appEntry) {
       // @TODO use id or similar
-      if (appEntry.iconMaterial === 'switch_ui') {
+      if (appEntry.url?.endsWith('/apps/files')) {
         await this.setClassicUIDefault()
       }
     },
     setClassicUIDefault() {
-      const endpoint = new URL(this.configuration.server || window.location.origin)
+      const endpoint = new URL(configurationManager.serverUrl || window.location.origin)
       endpoint.pathname =
         endpoint.pathname.replace(/\/$/, '') + '/index.php/apps/web/settings/default'
-      const headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-      return fetch(endpoint.href, {
-        headers,
-        method: 'POST',
-        body: JSON.stringify({ isDefault: false })
-      })
+
+      const httpClient = clientService.httpAuthenticated(this.accessToken)
+      return httpClient.post(endpoint.href, { isDefault: false })
     }
   }
 }
