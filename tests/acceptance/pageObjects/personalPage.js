@@ -239,8 +239,8 @@ module.exports = {
     },
     confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
-        .waitForElementVisible('@dialogConfirmBtnEnabled')
-        .click('@dialogConfirmBtnEnabled')
+        .waitForElementVisible('@dialogConfirmBtnSecondaryEnabled')
+        .click('@dialogConfirmBtnSecondaryEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementVisible('@fileUploadStatus')
@@ -396,6 +396,9 @@ module.exports = {
     },
     dialogConfirmBtnEnabled: {
       selector: '.oc-modal-body-actions-confirm:enabled'
+    },
+    dialogConfirmBtnSecondaryEnabled: {
+      selector: '.oc-modal-body-actions-secondary:enabled'
     },
     dialogConfirmBtnDisabled: {
       selector: '.oc-modal-body-actions-confirm:disabled'
