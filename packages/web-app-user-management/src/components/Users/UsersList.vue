@@ -1,9 +1,8 @@
 <template>
   <div>
     <oc-text-input
-      id="users-filter"
       v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
+      class="oc-width-1-4 oc-ml-m oc-my-s"
       :label="$gettext('Filter users')"
     />
     <oc-table
@@ -71,8 +70,7 @@
       </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
+          <p class="oc-text-muted">{{ footerText }}</p>
         </div>
       </template>
     </oc-table>
@@ -111,13 +109,9 @@ export default {
     allUsersSelected() {
       return this.users.length === this.selectedUsers.length
     },
-    footerTextTotal() {
+    footerText() {
       const translated = this.$gettext('%{userCount} users in total')
       return this.$gettextInterpolate(translated, { userCount: this.users.length })
-    },
-    footerTextFilter() {
-      const translated = this.$gettext('%{userCount} matching users')
-      return this.$gettextInterpolate(translated, { userCount: this.data.length })
     },
     fields() {
       return [
@@ -233,10 +227,6 @@ export default {
 </script>
 
 <style lang="scss">
-#users-filter {
-  width: 16rem;
-}
-
 .highlight-mark {
   background: yellow;
   color: var(--oc-color-text-muted);

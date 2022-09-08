@@ -1,9 +1,8 @@
 <template>
   <div>
     <oc-text-input
-      id="groups-filter"
       v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
+      class="oc-width-1-4 oc-ml-m oc-my-s"
       :label="$gettext('Filter groups')"
     />
     <oc-table
@@ -61,8 +60,7 @@
       </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
+          <p class="oc-text-muted">{{ footerText }}</p>
         </div>
       </template>
     </oc-table>
@@ -136,13 +134,9 @@ export default {
     allGroupsSelected() {
       return this.groups.length === this.selectedGroups.length
     },
-    footerTextTotal() {
+    footerText() {
       const translated = this.$gettext('%{groupCount} groups in total')
       return this.$gettextInterpolate(translated, { groupCount: this.groups.length })
-    },
-    footerTextFilter() {
-      const translated = this.$gettext('%{groupCount} matching groups')
-      return this.$gettextInterpolate(translated, { groupCount: this.data.length })
     },
     data() {
       const orderedGroups = this.orderBy(this.groups, this.sortBy, this.sortDir === 'desc')
@@ -204,10 +198,6 @@ export default {
 </script>
 
 <style lang="scss">
-#groups-filter {
-  width: 16rem;
-}
-
 .highlight-mark {
   background: yellow;
   color: var(--oc-color-text-muted);

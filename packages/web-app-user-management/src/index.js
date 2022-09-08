@@ -67,5 +67,5 @@ export default {
   appInfo,
   routes,
   translations,
-  navItems
+  navItems,
 }
