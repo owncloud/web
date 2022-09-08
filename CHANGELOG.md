@@ -104,7 +104,7 @@ Summary
 * Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.17: [#7606](https://github.com/owncloud/web/pull/7606)
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
@@ -925,16 +925,18 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.17: [#7606](https://github.com/owncloud/web/pull/7606)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.16. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.17. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
    [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
    Avatar link icon:
    [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269) * Bugfix -
-   Lazy loading render performance:
+   Firefox drag & drop move of folders not possible:
+   [#7495](https://github.com/owncloud/web/issues/7495) * Bugfix - Lazy loading render
+   performance:
    [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260) * Bugfix -
    Remove width shrinking of the ocAvatarItem:
    [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
@@ -958,11 +960,15 @@ Details
    [#2284](https://github.com/owncloud/owncloud-design-system/pull/2284) *
    Enhancement - Adjust avatar font weight from bold to normal:
    [#2275](https://github.com/owncloud/owncloud-design-system/pull/2275) *
+   Enhancement - Align breadcrumb context menu with regular context menu:
+   [#2296](https://github.com/owncloud/owncloud-design-system/pull/2296) *
    Enhancement - OcCheckbox add outline:
    [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
    Enhancement - Add offset property to the drop component:
    [#7335](https://github.com/owncloud/web/issues/7335) * Enhancement - Make UI smaller:
    [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - Oc-card style:
+   [#2306](https://github.com/owncloud/owncloud-design-system/pull/2306) *
    Enhancement - OcSelect dark mode improvements:
    [#2262](https://github.com/owncloud/owncloud-design-system/pull/2262) *
    Enhancement - Progress bar indeterminate state:
@@ -972,8 +978,8 @@ Details
    Enhancement - Use Inter font:
    [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
-   https://github.com/owncloud/web/pull/7355
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.16
+   https://github.com/owncloud/web/pull/7606
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.17
 
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 
