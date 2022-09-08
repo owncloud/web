@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-import keycode from 'keycode'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
@@ -88,7 +87,7 @@ export default defineComponent({
     },
 
     handleShortcuts(event) {
-      const key = event.keyCode || event.which
+      /* const key = event.keyCode || event.which
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isTextSelected = window.getSelection().type === 'Range'
@@ -106,7 +105,7 @@ export default defineComponent({
       if (key === keycode('esc')) return this.handleEscapeAction()
       if (key === keycode('down') && shift) return this.handleShiftDownAction(event)
       if (key === keycode('up') && shift) return this.handleShiftUpAction(event)
-      if (key === keycode('a') && ctrl) return this.handleSelectAllAction(event)
+      if (key === keycode('a') && ctrl) return this.handleSelectAllAction(event) */
     },
 
     handleNavigateAction(event, up = false) {
