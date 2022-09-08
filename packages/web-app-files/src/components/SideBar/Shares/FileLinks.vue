@@ -320,9 +320,6 @@ export default defineComponent({
         return []
       }
 
-      // remove root entry
-      parentPaths.pop()
-
       parentPaths.forEach((parentPath) => {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {

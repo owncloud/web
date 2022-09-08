@@ -203,9 +203,6 @@ export default {
         return []
       }
 
-      // remove root entry
-      parentPaths.pop()
-
       parentPaths.forEach((parentPath) => {
         const shares = this.sharesTree[parentPath]
         if (shares) {
@@ -259,9 +256,6 @@ export default {
       if (parentPaths.length === 0) {
         return []
       }
-
-      // remove root entry
-      parentPaths.pop()
 
       parentPaths.forEach((parentPath) => {
         const shares = this.sharesTree[parentPath]
