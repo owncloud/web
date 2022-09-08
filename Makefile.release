@@ -75,7 +75,7 @@ endif
 .PHONY: ocx-app-config
 ocx-app-config:
 	cp -R packages/web-integration-oc10/appinfo $(dist_dir)
-	cp -R packages/web-integration-oc10/js $(dist_dir)
+	cp packages/web-integration-oc10/js/* $(dist_dir)/js
 	cp -R packages/web-integration-oc10/lib $(dist_dir)
 
 .PHONY: ocx-app-bundle

@@ -77,7 +77,8 @@ services:
       - ./packages/web-integration-oc10/lib:/mnt/data/apps/web/lib
       - ./dist/css:/mnt/data/apps/web/css
       - ./dist/img:/mnt/data/apps/web/img
-      - ./dist/js:/mnt/data/apps/web/js
+      - ./dist/js:/mnt/data/apps/web/js/
+      - ./packages/web-integration-oc10/js/app.js:/mnt/data/apps/web/js/app.js
       - ./dist/themes:/mnt/data/apps/web/themes
       - ./dist/icons:/mnt/data/apps/web/icons
       - ./dist/fonts:/mnt/data/apps/web/fonts

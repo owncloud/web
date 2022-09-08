@@ -36,6 +36,6 @@ class Application extends App {
 	}
 
     public function boot(): void {
-        Util::addscript(Application::APPID, 'app');
+        Util::addScript(Application::APPID, 'app');
     }
 }

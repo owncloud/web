@@ -81,7 +81,7 @@ export default {
       }
     },
     setClassicUIDefault() {
-      const endpoint = new URL(configurationManager.serverUrl || window.location.origin)
+      const endpoint = new URL(configurationManager.serverUrl)
       endpoint.pathname =
         endpoint.pathname.replace(/\/$/, '') + '/index.php/apps/web/settings/default'
 
