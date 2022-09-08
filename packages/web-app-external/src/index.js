@@ -6,51 +6,74 @@ function $gettext(msg) {
   return msg
 }
 
-const appId = 'external'
-
+const appData = {
+  name: 'External',
+  id: 'external'
+}
 const routes = [
   {
     path: '/:filePath*',
     component: App,
-    name: 'External',
+    name: appData.name,
     meta: {
-      title: $gettext('external'),
+      title: $gettext(appData.name),
       auth: false,
       patchCleanPath: true
     }
   }
 ]
 
+const labels = {
+  OpenDocument: 'OpenDocument',
+  OpenSpreadsheet: 'OpenSpreadsheet',
+  OpenPresentation: 'OpenPresentation',
+  MicrosoftWord: 'Microsoft Word',
+  MicrosoftExcel: 'Microsoft Excel',
+  MicrosoftPowerPoint: 'Microsoft PowerPoint'
+}
+
+const extension = {
+  odt: 'odt',
+  docx: 'docx',
+  ods: 'ods',
+  xlsx: 'xlsx',
+  pptx: 'pptx',
+  odp: 'odp'
+}
+
 const fileExtensions = () => {
   const extensions = [
     {
-      extension: 'odt',
-      label: $gettext('OpenDocument')
+      extension: extension.odt,
+      label: $gettext(labels.OpenDocument)
     },
     {
-      extension: 'ods',
-      label: $gettext('OpenSpreadsheet')
+      extension: extension.ods,
+      label: $gettext(labels.OpenSpreadsheet)
     },
     {
-      extension: 'odp',
-      label: $gettext('OpenPresentation')
+      extension: extension.odp,
+      label: $gettext(labels.OpenPresentation)
     },
     {
-      extension: 'docx',
-      label: $gettext('Microsoft Word')
+      extension: extension.docx,
+      label: $gettext(labels.MicrosoftWord)
     },
     {
-      extension: 'xlsx',
-      label: $gettext('Microsoft Excel')
+      extension: extension.xlsx,
+      label: $gettext(labels.MicrosoftExcel)
     },
     {
-      extension: 'pptx',
-      label: $gettext('Microsoft PowerPoint')
+      extension: extension.pptx,
+      label: $gettext(labels.MicrosoftPowerPoint)
     }
   ]
 
-  let isPrimaryExtension = window.Vue.$store.getters.extensionConfigByAppId(appId)
-    .isPrimaryExtension || ['odt', 'ods', 'odp', 'docx', 'xlsx', 'pptx']
+  const extensionArray = Object.values(extension)
+
+  let isPrimaryExtension =
+    window.Vue.$store.getters.extensionConfigByAppId(appData.id).isPrimaryExtension ||
+    extensionArray
   if (typeof isPrimaryExtension === 'string') {
     isPrimaryExtension = [isPrimaryExtension]
   }
@@ -69,17 +92,21 @@ const fileExtensions = () => {
   }, [])
 }
 
+const checkObjectProperty = (object, property) => {
+  return Object.prototype.hasOwnProperty.call(object, property)
+}
+
 const appInfo = {
-  name: $gettext('External'),
-  id: appId,
+  name: $gettext(appData.name),
+  id: appData.id,
   isFileEditor: true,
   extensions: fileExtensions().map((extensionItem) => {
     return {
       extension: extensionItem.extension,
-      ...(Object.prototype.hasOwnProperty.call(extensionItem, 'newFileMenu') && {
+      ...(checkObjectProperty(extensionItem, 'newFileMenu') && {
         newFileMenu: extensionItem.newFileMenu
       }),
-      ...(Object.prototype.hasOwnProperty.call(extensionItem, 'isDefaultExtension') && {
+      ...(checkObjectProperty(extensionItem, 'isDefaultExtension') && {
         isDefaultExtension: extensionItem.isDefaultExtension
       })
     }
