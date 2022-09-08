@@ -50,6 +50,7 @@ Summary
 * Bugfix - Redirect after removing self from space members: [#7534](https://github.com/owncloud/web/issues/7534)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
+* Bugfix - Search share representation: [#7560](https://github.com/owncloud/web/pull/7560)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
 * Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
@@ -452,6 +453,14 @@ Details
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
    https://github.com/owncloud/web/pull/7324
+
+* Bugfix - Search share representation: [#7560](https://github.com/owncloud/web/pull/7560)
+
+   We've fixed a bug, where shares in the search were not displayed correctly and clicking on the
+   respective item did not open the default action or redirect to the correct share route.
+
+   https://github.com/owncloud/web/issues/7043
+   https://github.com/owncloud/web/pull/7560
 
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
 
