@@ -15,7 +15,7 @@
       />
     </div>
     <compare-save-dialog
-      class="edit-compare-save-dialog"
+      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
       :original-object="group"
       :compare-object="editGroup"
       :confirm-button-disabled="invalidFormData"

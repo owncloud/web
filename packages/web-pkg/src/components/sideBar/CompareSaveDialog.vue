@@ -1,5 +1,5 @@
 <template>
-  <div class="compare-save-dialog oc-p-m oc-width-1-1 oc-flex oc-flex-between oc-flex-middle">
+  <div class="compare-save-dialog oc-width-1-1 oc-flex oc-flex-between oc-flex-middle">
     <span v-if="saved" class="state-indicator oc-flex oc-flex-middle">
       <oc-icon variation="success" name="checkbox-circle" />
       <span v-translate class="changes-saved oc-ml-s">Changes saved</span>

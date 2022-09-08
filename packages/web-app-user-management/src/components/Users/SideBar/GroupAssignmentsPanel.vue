@@ -37,7 +37,7 @@
       </oc-select>
     </div>
     <compare-save-dialog
-      class="edit-compare-save-dialog"
+      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
       :original-object="user"
       :compare-object="editUser"
       @revert="revertChanges"
