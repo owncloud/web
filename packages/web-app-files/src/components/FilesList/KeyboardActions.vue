@@ -110,7 +110,7 @@ export default defineComponent({
     },
 
     handleNavigateAction(event, up = false) {
-      // event.preventDefault()
+      event.preventDefault()
       let nextId
       if (!this.latestSelectedId) {
         nextId = this.getFirstResourceId()
@@ -156,7 +156,7 @@ export default defineComponent({
     },
 
     handleSelectAllAction(event) {
-      // event.preventDefault()
+      event.preventDefault()
       this.resetSelectionCursor()
       this.setFileSelection(this.paginatedResources)
     },
