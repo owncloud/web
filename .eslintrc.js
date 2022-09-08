@@ -35,6 +35,7 @@ module.exports = {
     requirejs: false
   },
   plugins: ['jest', 'unused-imports'],
+  ignorePatterns: ['packages/web-integration-oc10/js'],
   overrides: [
     {
       files: ['**/*.vue'],

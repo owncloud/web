@@ -91,6 +91,7 @@ Summary
 * Enhancement - Propose unique file name while creating a new file: [#7555](https://github.com/owncloud/web/pull/7555)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Remember the UI that was last selected via the application switcher: [#6173](https://github.com/owncloud/web/pull/6173)
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -813,6 +814,14 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7597
+
+* Enhancement - Remember the UI that was last selected via the application switcher: [#6173](https://github.com/owncloud/web/pull/6173)
+
+   With this change, ownCloud will remember the UI that was last selected via the application
+   switcher. This only works when using ownCloud 10 as backend.
+
+   https://github.com/owncloud/enterprise/issues/4694
+   https://github.com/owncloud/web/pull/6173
 
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 
