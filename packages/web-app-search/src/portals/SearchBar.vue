@@ -49,6 +49,15 @@
               :search-result="searchResultValue"
             />
           </li>
+          <li
+            v-if="showNoMatches"
+            id="no-matches"
+            class="oc-text-center oc-text-muted"
+            v-text="$gettext('No result')"
+          ></li>
+          <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
+            {{ moreMatchesText }}
+          </li>
         </template>
       </ul>
     </div>
@@ -78,6 +87,32 @@ export default {
   },
 
   computed: {
+    rangeSupported() {
+      return this.searchResult.range
+    },
+
+    rangeItems() {
+      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+    },
+
+    showMoreMatches() {
+      return this.rangeSupported && this.rangeItems > this.searchResult.values.length
+    },
+
+    moreMatchesText() {
+      const moreCount = this.rangeItems - this.searchResult.values.length
+      return this.$gettextInterpolate(
+        this.$ngettext('%{moreCount} more result', '%{moreCount} more results', moreCount),
+        {
+          moreCount
+        }
+      )
+    },
+
+    showNoMatches() {
+      return this.searchResult?.values?.length === 0
+    },
+
     availableProviders() {
       return this.providerStore.availableProviders
     },
@@ -155,6 +190,7 @@ export default {
     resetProvider() {
       this.optionsVisible = false
       this.availableProviders.forEach((provider) => provider.reset())
+      this.$router.go(-1)
     },
     activateProvider(provider) {
       this.optionsVisible = false
@@ -303,9 +339,8 @@ export default {
 
     li {
       padding: 15px 10px;
-      cursor: pointer;
       position: relative;
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-small);
 
       border-top-color: var(--oc-color-input-border);
 
@@ -318,7 +353,7 @@ export default {
         background-color: white;
         border: 1px solid var(--oc-color-swatch-passive-hover);
         float: right;
-        font-size: 0.6rem;
+        font-size: var(--oc-font-size-xsmall);
         padding: 0.5rem 1rem;
         position: relative;
         opacity: 0.6;
@@ -374,8 +409,8 @@ export default {
       }
 
       &.preview {
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding-top: var(--oc-space-small);
+        padding-bottom: var(--oc-space-small);
         background-color: var(--oc-color-background-highlight);
 
         &.first {
@@ -391,11 +426,11 @@ export default {
         }
 
         button {
-          font-size: 0.9rem;
+          font-size: var(--oc-font-size-small);
         }
 
         .label {
-          font-size: 0.5rem;
+          font-size: var(--oc-font-size-xsmall);
           padding: 0.1rem 0.2rem;
           opacity: 0.6;
         }

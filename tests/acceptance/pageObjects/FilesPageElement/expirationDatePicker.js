@@ -158,6 +158,25 @@ module.exports = {
       return disabled
     },
     /**
+     * a function to move the calendar to the given year
+     *
+     * WARN: this function is meant to be used as a script function for executeAsync() command
+     * so it will only run in a browser context
+     *
+     * USAGE: client.executeAsync(moveCalendarYearScript, ['.calendar-id', '2040'])
+     */
+    moveCalendarYearScript: function (selector, dateRange, done) {
+      document
+        .querySelector(selector)
+        .__vue__.$refs.calendar.move(new Date(Date.parse(dateRange)))
+        .then(function () {
+          done(true)
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    },
+    /**
      * sets expiration date on collaborators/public-link shares
      *
      * @param {string} value - provided date in format YYYY-MM-DD, or empty string to unset date
@@ -174,20 +193,17 @@ module.exports = {
       }
       const dateToSet = new Date(Date.parse(value))
       if (shareType === 'link') {
-        client.execute(
-          `document.querySelector('.link-expiry-picker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
-          []
-        )
+        await client.executeAsync(this.moveCalendarYearScript, ['.link-expiry-picker', value])
       } else if (editCollaborator) {
-        client.execute(
-          `document.querySelector('.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
-          []
-        )
+        await client.executeAsync(this.moveCalendarYearScript, [
+          '.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker',
+          value
+        ])
       } else {
-        client.execute(
-          `document.querySelector('.files-recipient-expiration-datepicker').__vue__.$refs.calendar.move(new Date(Date.parse('${value}')))`,
-          []
-        )
+        await client.executeAsync(this.moveCalendarYearScript, [
+          '.files-recipient-expiration-datepicker',
+          value
+        ])
       }
 
       if (shareType === 'collaborator' || shareType === 'link') {

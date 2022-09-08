@@ -1,0 +1,5 @@
+Bugfix: Dragging a file causes no selection
+
+We've fixed a bug that caused no selection when dragging a file.
+
+https://github.com/owncloud/web/pull/7473

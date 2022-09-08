@@ -1,0 +1,7 @@
+Bugfix: File name in text editor
+
+We've fixed a bug in the text editor where the UUID of a shared resource was being displayed instead of the file name.
+
+https://github.com/owncloud/web/pull/7516
+https://github.com/owncloud/web/issues/7292
+https://github.com/owncloud/web/pull/7518

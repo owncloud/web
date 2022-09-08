@@ -210,6 +210,7 @@ function createWrapper(
       capitalizedTimestamp: () => 'ABSOLUTE_TIME'
     },
     mocks: {
+      isPublicLinkContext: publicLinkContext,
       $route: {
         meta: {
           auth: !publicLinkContext

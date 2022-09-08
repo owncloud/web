@@ -59,7 +59,6 @@ export const getStore = function ({
   currentPage = null,
   activeFiles = [],
   pages = null,
-  sidebarClosed = false,
   currentFolder = null,
   selectedFiles = [],
   totalFilesCount = null,
@@ -72,8 +71,7 @@ export const getStore = function ({
   slogan = null,
   user = null,
   generalThemeName = '',
-  selectedResourcesForMove = null,
-  locationPickerTargetFolder = null
+  selectedResourcesForMove = null
 } = {}) {
   return createStore(Vuex.Store, {
     state: {
@@ -109,6 +107,7 @@ export const getStore = function ({
     },
     modules: {
       Files: {
+        namespaced: true,
         state: {
           resource: null,
           filesPageLimit: 100,
@@ -118,8 +117,7 @@ export const getStore = function ({
           currentFolder: currentFolder,
           currentPage: currentPage,
           selectedIds: selectedFiles ? selectedFiles.map((file) => file.id) : [],
-          selectedResourcesForMove: selectedResourcesForMove,
-          locationPickerTargetFolder: locationPickerTargetFolder
+          selectedResourcesForMove: selectedResourcesForMove
         },
         getters: {
           totalFilesCount: () => totalFilesCount,
@@ -152,29 +150,6 @@ export const getStore = function ({
         actions: {
           loadIndicators: () => {},
           loadFiles: () => {}
-        },
-        namespaced: true,
-        modules: {
-          sidebar: {
-            state: {
-              closed: sidebarClosed
-            },
-            namespaced: true
-          },
-          pagination: {
-            state: {
-              currentPage,
-              itemsPerPage: 100
-            },
-            getters: {
-              pages: () => pages
-            },
-            mutations: {
-              SET_ITEMS_PER_PAGE: () => {},
-              UPDATE_CURRENT_PAGE: () => {}
-            },
-            namespaced: true
-          }
         }
       },
       runtime: {

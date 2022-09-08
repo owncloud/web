@@ -23,5 +23,13 @@
       "id": "settings",
       "path": "https://localhost:9200/settings.js"
     }
-  ]
+  ],
+  "options" : {
+    "previewFileMimeTypes" : [
+      "image/gif",
+      "image/png",
+      "image/jpeg",
+      "text/plain"
+    ]
+  }
 }

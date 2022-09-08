@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex">
-      <h3 v-translate class="oc-text-bold oc-m-rm oc-text-initial">Share with people</h3>
+      <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
       <oc-contextual-helper
         v-if="helpersEnabled"
         class="oc-pl-xs"
@@ -16,7 +16,7 @@
       v-text="noResharePermsMessage"
     />
     <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-      <h4 class="oc-text-initial oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+      <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
     </div>
     <template v-if="hasSharees">
       <ul
@@ -28,7 +28,7 @@
         <li v-for="collaborator in displayCollaborators" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
-            :modifiable="!collaborator.indirect"
+            :modifiable="isShareModifiable(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
             @onDelete="$_ocCollaborators_deleteShare_trigger"
           />
@@ -43,7 +43,7 @@
       </div>
     </template>
     <template v-if="showSpaceMembers">
-      <h4 class="oc-text-initial oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+      <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
       <ul
         id="space-collaborators-list"
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
@@ -103,7 +103,9 @@ export default {
     watch(
       currentStorageId,
       (storageId) => {
-        currentSpace.value = store.state.Files.spaces?.find((space) => space.id === storageId)
+        currentSpace.value = store.state.runtime.spaces?.spaces?.find(
+          (space) => space.id === storageId
+        )
       },
       { immediate: true }
     )
@@ -318,7 +320,7 @@ export default {
       )
     }
   },
-  async mounted() {
+  mounted() {
     if (this.showSpaceMembers) {
       this.loadSpaceMembersTask.perform()
     }
@@ -418,6 +420,17 @@ export default {
       }
 
       return null
+    },
+
+    isShareModifiable(collaborator) {
+      if (
+        this.currentUserIsMemberOfSpace &&
+        !this.currentSpace?.spaceRoles.manager.includes(this.user.uuid)
+      ) {
+        return false
+      }
+
+      return !collaborator.indirect
     }
   }
 }

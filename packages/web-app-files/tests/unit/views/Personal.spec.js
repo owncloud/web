@@ -54,7 +54,8 @@ const stubs = {
   'resource-table': true,
   'not-found-message': true,
   'quick-actions': true,
-  'list-info': true
+  'list-info': true,
+  'side-bar': true
 }
 
 const resourceForestJpg = {
@@ -101,6 +102,14 @@ const resourcePdfsFolder = {
 const resourcesFiles = [resourceForestJpg, resourceNotesTxt]
 const resourcesFolders = [resourceDocumentsFolder, resourcePdfsFolder]
 const resources = [...resourcesFiles, ...resourcesFolders]
+
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
 
 describe('Personal view', () => {
   describe('file move with drag & drop', () => {

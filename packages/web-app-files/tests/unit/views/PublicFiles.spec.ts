@@ -20,7 +20,8 @@ const stubs = {
   'context-actions': true,
   pagination: true,
   'list-info': true,
-  'router-link': RouterLinkStub
+  'router-link': RouterLinkStub,
+  'side-bar': true
 }
 
 const router = {
@@ -46,6 +47,14 @@ const stubSelectors = {
   pagination: 'pagination-stub',
   listInfo: 'list-info-stub'
 }
+
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
 
 describe('PublicFiles view', () => {
   describe('accentuate new files and folders', () => {

@@ -45,7 +45,7 @@ export default {
             })
             return !declineDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-decline-share-trigger'
         }
       ]

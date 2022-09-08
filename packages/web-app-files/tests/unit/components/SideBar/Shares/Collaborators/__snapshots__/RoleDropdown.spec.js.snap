@@ -18,7 +18,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-17" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -65,7 +65,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-19" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -112,7 +112,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-21" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -159,7 +159,7 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-27" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -206,7 +206,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-25" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -253,7 +253,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-23" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -300,7 +300,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-7" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -341,7 +341,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
   </oc-list-stub>
 </oc-drop-stub>
 <oc-drop-stub dropid="oc-drop-5" toggle="" position="bottom-start" mode="manual" target="#files-collaborators-role-button-new" paddingsize="remove" class="files-recipient-custom-permissions-drop">
-  <h4 class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
+  <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
   <oc-list-stub>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>

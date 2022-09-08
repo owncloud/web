@@ -1,7 +1,7 @@
 <template>
   <div class="file_info">
     <oc-resource-icon
-      v-if="sidebarActivePanel"
+      v-if="isSubPanelActive"
       :resource="file"
       size="large"
       class="file_info__icon"
@@ -19,7 +19,7 @@
         />
       </h3>
     </div>
-    <private-link-item v-if="privateLinkEnabled" />
+    <private-link-item v-if="privateLinkEnabled" class="oc-ml-s" />
   </div>
 </template>
 
@@ -37,9 +37,9 @@ export default {
   },
   inject: ['displayedItem'],
   props: {
-    isContentDisplayed: {
+    isSubPanelActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   setup() {
@@ -50,7 +50,6 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     timeData() {
       const interpolate = (obj) => {
         obj.time = formatDateFromRFC(obj.sourceTime, this.$language.current)
@@ -106,14 +105,18 @@ export default {
   align-items: center;
   grid-gap: 5px;
 
+  button {
+    white-space: nowrap;
+  }
+
   &__body {
     text-align: left;
-    font-size: 0.75rem;
 
     h3 {
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-medium);
       font-weight: 600;
       margin: 0;
+      word-break: break-all;
     }
   }
 

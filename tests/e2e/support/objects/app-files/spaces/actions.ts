@@ -4,6 +4,7 @@ import { File, User } from '../../../types'
 import util from 'util'
 import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
 import { expect } from '@playwright/test'
+import { createLink } from '../link/actions'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -170,10 +171,10 @@ export const changeQuota = async (args: {
 }
 
 export const addSpaceMembers = async (args: inviteMembersArgs): Promise<void> => {
-  const { page, role, users } = args
+  const { page, role, recipients } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
@@ -272,4 +273,16 @@ export const changeSpaceRole = async (args: changeSpaceRoleArgs): Promise<void> 
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
   await changeShareeRole({ page, users, role })
+}
+
+export interface createPublicLinkForSpaceArgs {
+  page: Page
+}
+export const createPublicLinkForSpace = async (
+  args: createPublicLinkForSpaceArgs
+): Promise<string> => {
+  const { page } = args
+  await sidebar.open({ page: page })
+  await sidebar.openPanel({ page: page, name: 'space-share' })
+  return createLink({ page: page, space: true })
 }

@@ -46,6 +46,9 @@ describe('SharesPanel', () => {
   function getShallowWrapper({ sharesLoading = false } = {}) {
     return shallowMount(SharesPanel, {
       localVue,
+      provide: {
+        activePanel: null
+      },
       store: new Vuex.Store({
         modules: {
           Files: {

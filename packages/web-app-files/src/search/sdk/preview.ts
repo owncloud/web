@@ -9,6 +9,8 @@ import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 
+export const previewSearchLimit = 5
+
 export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly cache: Cache<string, SearchResult>
@@ -42,15 +44,11 @@ export default class Preview implements SearchPreview {
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const { range, results } = await clientService.owncloudSdk.files.search(
       term,
-      5, // todo: add configuration option, other places need that too... needs consolidation
+      previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
-    const resources = results.reduce((acc, plainResource) => {
-      let resourceName = decodeURIComponent(plainResource.name)
-      if (resourceName.startsWith('/dav')) {
-        resourceName = resourceName.slice(4)
-      }
-      const resource = buildResource({ ...plainResource, name: resourceName })
+    const resources = results.reduce((acc, result) => {
+      const resource = buildResource(result)
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {
@@ -59,7 +57,6 @@ export default class Preview implements SearchPreview {
 
       return acc
     }, [])
-
     return this.cache.set(term, { range, values: resources })
   }
 

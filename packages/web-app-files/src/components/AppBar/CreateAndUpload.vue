@@ -1,17 +1,18 @@
 <template>
-  <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
+  <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-width-1-1">
     <template v-if="createFileActionsAvailable">
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-file-menu-btn"
           key="new-file-menu-btn-enabled"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New') : ''"
           :aria-label="newButtonAriaLabel"
           appearance="filled"
           variation="primary"
           :disabled="uploadOrFileCreationBlocked"
         >
           <oc-icon name="add" />
-          <translate>New</translate>
+          <span v-if="!hideButtonLabels" v-text="$gettext('New')" />
         </oc-button>
       </span>
       <oc-drop
@@ -71,6 +72,7 @@
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-folder-btn"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New Folder') : ''"
           appearance="filled"
           variation="primary"
           :aria-label="newButtonAriaLabel"
@@ -78,7 +80,7 @@
           @click="showCreateResourceModal"
         >
           <oc-icon name="resource-type-folder" />
-          <translate>New folder</translate>
+          <span v-if="!hideButtonLabels" v-text="$gettext('New Folder')" />
         </oc-button>
       </span>
     </template>
@@ -86,11 +88,12 @@
       <oc-button
         id="upload-menu-btn"
         key="upload-menu-btn-enabled"
+        v-oc-tooltip="hideButtonLabels ? $gettext('Upload') : ''"
         :aria-label="uploadButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
       >
         <oc-icon name="upload" fill-type="line" />
-        <translate>Upload</translate>
+        <span v-if="!hideButtonLabels" v-text="$gettext('Upload')" />
       </oc-button>
     </span>
     <oc-drop
@@ -152,12 +155,20 @@ import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { resolveFileNameDuplicate, extractNameWithoutExtension } from '../../helpers/resource'
 
 export default defineComponent({
   components: {
     ResourceUpload
   },
   mixins: [MixinFileActions],
+  props: {
+    limitedScreenSpace: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
@@ -212,6 +223,9 @@ export default defineComponent({
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
     },
+    hideButtonLabels() {
+      return this.limitedScreenSpace && this.showPasteHereButton
+    },
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
       const mimeTypes = this.$store.getters['External/mimeTypes']
@@ -234,9 +248,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to create new files!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to create new files!')
-      }
       return null
     },
     newButtonAriaLabel() {
@@ -253,9 +264,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to upload!')
-      }
       return null
     },
     uploadButtonAriaLabel() {
@@ -267,7 +275,7 @@ export default defineComponent({
     },
 
     uploadOrFileCreationBlocked() {
-      return !this.canUpload || !this.hasFreeSpace
+      return !this.canUpload
     },
 
     canUpload() {
@@ -275,17 +283,6 @@ export default defineComponent({
         return false
       }
       return this.currentFolder.canUpload({ user: this.user })
-    },
-
-    hasFreeSpace() {
-      return (
-        !this.quota ||
-        this.quota.free > 0 ||
-        (this.currentFolder &&
-          this.currentFolder.permissions &&
-          this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.isPublicLocation
-      )
     }
   },
   methods: {
@@ -345,13 +342,7 @@ export default defineComponent({
           }
         }
 
-        let pathFileWasUploadedTo = file.meta.currentFolder
-        if (file.meta.relativeFolder) {
-          pathFileWasUploadedTo += file.meta.relativeFolder
-        }
-
-        const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
-
+        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -364,15 +355,23 @@ export default defineComponent({
       openAction = null,
       addAppProviderFile = false
     ) {
-      const defaultName = isFolder
-        ? this.$gettext('New folder')
-        : this.$gettext('New file') + (this.areFileExtensionsShown ? `.${ext}` : '')
       const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
           isFolder
             ? this.checkNewFolderName(value)
             : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
         )
+      }
+      let defaultName = isFolder
+        ? this.$gettext('New folder')
+        : this.$gettext('New file') + `.${ext}`
+
+      if (this.files.some((f) => f.name === defaultName)) {
+        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
+      }
+
+      if (!this.areFileExtensionsShown) {
+        defaultName = extractNameWithoutExtension({ name: defaultName, extension: ext } as any)
       }
 
       // Sets action to be executed after creation of the file
@@ -727,6 +726,13 @@ export default defineComponent({
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
+        if (
+          uppyResource.meta.routeName === 'files-spaces-share' ||
+          uppyResource.meta.routeName === 'files-public-files'
+        ) {
+          return acc
+        }
+
         if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
         } else {
@@ -788,12 +794,6 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-
-      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
-      if (reloadRequired) {
-        bus.publish('app.files.list.load')
-      }
-
       this.$uppyService.uploadFiles(files)
     },
 
@@ -850,28 +850,32 @@ export default defineComponent({
 #create-list {
   li {
     border: 1px solid transparent;
+
     button {
       gap: 10px;
       justify-content: left;
       width: 100%;
     }
   }
+
   .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
+
   .create-list-folder button {
     margin-bottom: 8px;
   }
+
   .create-list-file:nth-child(2) button {
     margin-top: 6px;
   }
 }
+
 #upload-list,
 #new-file-menu-drop {
-  min-width: 250px;
+  min-width: 230px;
 }
-</style>
-<style lang="scss">
+
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -879,12 +883,24 @@ export default defineComponent({
     height: 100% !important;
   }
 }
+
 #clipboard-btns {
+  flex-flow: inherit;
+
   :nth-child(1) {
     border-right: 0px !important;
+    white-space: nowrap;
   }
+
   :nth-child(2) {
     border-left: 0px !important;
+  }
+}
+
+.create-and-upload-actions {
+  gap: var(--oc-space-small);
+  @media only screen and (min-width: 1000px) {
+    gap: var(--oc-space-medium);
   }
 }
 </style>

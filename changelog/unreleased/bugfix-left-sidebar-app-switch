@@ -1,0 +1,6 @@
+Bugfix: Left sidebar when switching apps
+
+We've fixed a bug where the active state of the left sidebar would glitch visually when switching apps.
+
+https://github.com/owncloud/web/issues/7526
+https://github.com/owncloud/web/pull/7529

@@ -30,13 +30,8 @@ export default class List implements SearchList {
 
     return {
       range,
-      values: results.map((plainResource) => {
-        let resourceName = decodeURIComponent(plainResource.name)
-        if (resourceName.startsWith('/dav')) {
-          resourceName = resourceName.slice(4)
-        }
-
-        const resource = buildResource({ ...plainResource, name: resourceName })
+      values: results.map((result) => {
+        const resource = buildResource(result)
         return { id: resource.id, data: resource }
       })
     }

@@ -10,7 +10,7 @@ import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
 import { isLocationSpacesActive, isLocationTrashActive, isLocationPublicActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 
-import { Panel } from '../../web-pkg/src/components/sidebar'
+import { Panel } from '../../web-pkg/src/components/sideBar'
 
 import { Resource, User } from 'web-client'
 import Router from 'vue-router'

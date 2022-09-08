@@ -17,7 +17,7 @@ describe('showDetails', () => {
     it('should trigger the sidebar for one resource', async () => {
       const wrapper = getWrapper()
       const setSelectionStub = jest.spyOn(wrapper.vm, 'SET_FILE_SELECTION')
-      const openSidebarStub = jest.spyOn(wrapper.vm, 'openSidebar')
+      const openSidebarStub = jest.spyOn(wrapper.vm, '$_showDetails_openSideBar')
       await wrapper.vm.$_showDetails_trigger({ resources: [{ id: 1 }] })
 
       expect(setSelectionStub).toHaveBeenCalledTimes(1)
@@ -26,7 +26,7 @@ describe('showDetails', () => {
     it('should not trigger the sidebar without any resource', async () => {
       const wrapper = getWrapper()
       const setSelectionStub = jest.spyOn(wrapper.vm, 'SET_FILE_SELECTION')
-      const openSidebarStub = jest.spyOn(wrapper.vm, 'openSidebar')
+      const openSidebarStub = jest.spyOn(wrapper.vm, '$_showDetails_openSideBar')
       await wrapper.vm.$_showDetails_trigger({ resources: [] })
 
       expect(setSelectionStub).toHaveBeenCalledTimes(0)
@@ -53,15 +53,6 @@ function getWrapper() {
           namespaced: true,
           mutations: {
             SET_FILE_SELECTION: jest.fn()
-          },
-          modules: {
-            sidebar: {
-              namespaced: true,
-              actions: {
-                close: jest.fn(),
-                open: jest.fn()
-              }
-            }
           }
         }
       }

@@ -48,9 +48,10 @@
   </div>
 </template>
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
-import { DavProperty } from 'web-pkg/src/constants'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
+import { buildResource } from '../../../helpers/resources'
 
 export default {
   name: 'FileVersions',
@@ -74,6 +75,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadVersions']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE']),
     currentVersionId(file) {
       const etag = file.name.split('/')
       return etag[etag.length - 1]
@@ -91,6 +93,12 @@ export default {
           this.highlightedFile.path
         )
         .then(() => {
+          this.$client.files
+            .fileInfo(this.highlightedFile.webDavPath, DavProperties.Default)
+            .then((fileInfo) => {
+              const resource = buildResource(fileInfo)
+              this.UPDATE_RESOURCE(resource)
+            })
           this.fetchFileVersions()
         })
     },

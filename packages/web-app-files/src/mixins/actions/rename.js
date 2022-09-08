@@ -50,7 +50,7 @@ export default {
             })
             return !renameDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-rename-trigger'
         }
       ]

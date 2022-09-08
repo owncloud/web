@@ -14,19 +14,22 @@ export const setupAuthGuard = (router: Router) => {
     const authService = (Vue as any).$authService
     await authService.initializeContext(to)
 
-    if (isUserContext(router, to) && !store.getters['runtime/auth/isUserContextReady']) {
-      return next({ path: '/login', query: { redirectUrl: to.fullPath } })
+    if (isPublicLinkContext(router, to)) {
+      if (!store.getters['runtime/auth/isPublicLinkContextReady']) {
+        const publicLinkToken = extractPublicLinkToken(to)
+        return next({
+          name: 'resolvePublicLink',
+          params: { token: publicLinkToken },
+          query: { redirectUrl: to.fullPath }
+        })
+      }
+      return next()
     }
-    if (
-      isPublicLinkContext(router, to) &&
-      !store.getters['runtime/auth/isPublicLinkContextReady']
-    ) {
-      const publicLinkToken = extractPublicLinkToken(to)
-      return next({
-        name: 'resolvePublicLink',
-        params: { token: publicLinkToken },
-        query: { redirectUrl: to.fullPath }
-      })
+    if (isUserContext(router, to)) {
+      if (!store.getters['runtime/auth/isUserContextReady']) {
+        return next({ path: '/login', query: { redirectUrl: to.fullPath } })
+      }
+      return next()
     }
     return next()
   })

@@ -10,7 +10,8 @@ const stubs = {
   'context-actions': true,
   pagination: true,
   'list-info': true,
-  'router-link': true
+  'router-link': true,
+  'side-bar': true
 }
 
 const appLoadingSpinnerStub = 'app-loading-spinner-stub'

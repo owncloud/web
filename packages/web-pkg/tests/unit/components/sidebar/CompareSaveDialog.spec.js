@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import CompareSaveDialog from '../../../../src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from '../../../../src/components/sideBar/CompareSaveDialog.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

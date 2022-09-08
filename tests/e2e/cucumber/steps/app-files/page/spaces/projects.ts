@@ -79,7 +79,7 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     for (const info of stepTable.hashes()) {
       await spacesObject.addMembers({
-        users: [this.usersEnvironment.getUser({ key: info.user })],
+        recipients: [this.usersEnvironment.getUser({ key: info.user })],
         role: info.role
       })
     }

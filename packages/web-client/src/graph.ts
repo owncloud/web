@@ -80,7 +80,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       getUser: (userId: string) =>
         userApiFactory.getUser(userId, new Set<any>([]), new Set<any>(['drive'])),
       createUser: (user: User) => usersApiFactory.createUser(user),
-      getMe: () => meUserApiFactory.meGet(),
+      getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
       changeOwnPassword: (currentPassword, newPassword) =>
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),

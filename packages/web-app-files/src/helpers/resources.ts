@@ -34,8 +34,9 @@ export function renameResource(resource, newName, newPath) {
 }
 
 export function buildResource(resource): Resource {
+  const name = resource.fileInfo[DavProperty.Name] || path.basename(resource.name)
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile(resource)
+  const extension = extractExtensionFromFile({ ...resource, name })
   let resourcePath
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
@@ -55,7 +56,7 @@ export function buildResource(resource): Resource {
     fileId: resource.fileInfo[DavProperty.FileId],
     storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    name: path.basename(resource.name),
+    name,
     extension: isFolder ? '' : extension,
     path: resourcePath,
     webDavPath: resource.name,
@@ -78,8 +79,10 @@ export function buildResource(resource): Resource {
     })(),
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    shareId: resource.fileInfo[DavProperty.ShareId],
+    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     tags: (resource.fileInfo[DavProperty.Tags] || '').split(',').filter(Boolean),
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0

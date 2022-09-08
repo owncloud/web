@@ -39,7 +39,7 @@ export default {
             return resources[0].canDownload()
           },
           canBeDefault: true,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-download-file-trigger'
         }
       ]

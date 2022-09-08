@@ -13,7 +13,6 @@ interface AppFileHandlingOptions {
   publicLinkPassword: MaybeRef<string>
 }
 
-type QueryParameters = Record<string, string>
 export interface AppFileHandlingResult {
   getUrlForResource(r: Resource): Promise<string>
   revokeUrl(url: string): void
@@ -79,7 +78,7 @@ export function useAppFileHandling({
   }
 
   const revokeUrl = (url: string) => {
-    if (url.startsWith('blob:')) {
+    if (url && url.startsWith('blob:')) {
       URL.revokeObjectURL(url)
     }
   }

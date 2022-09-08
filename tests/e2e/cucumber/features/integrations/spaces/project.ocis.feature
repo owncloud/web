@@ -56,8 +56,8 @@ Feature: spaces.personal
 
     # borrowed from share.feature
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | user  | role   |
-      | folder_to_shared | Brian | editor |
+      | resource         | recipient | type | role   |
+      | folder_to_shared | Brian     | user | editor |
 
     # team.2
     And "Alice" navigates to the projects space page

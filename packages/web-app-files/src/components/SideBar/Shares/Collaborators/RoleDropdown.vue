@@ -60,7 +60,7 @@
       padding-size="remove"
     >
       <h4
-        class="oc-text-bold oc-text-initial oc-m-rm oc-px-m oc-pt-m oc-pb-s"
+        class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s"
         v-text="$gettext(customPermissionsRole.label)"
       />
       <oc-list>

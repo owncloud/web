@@ -36,7 +36,7 @@ export default {
             })
             return !acceptDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-accept-share-trigger'
         }
       ]

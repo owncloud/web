@@ -20,8 +20,8 @@ Feature: share
     #Then "Alice" should see the following resource
     #  | folder_to_shared/lorem.txt |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | user  | role   |
-      | folder_to_shared | Brian | editor |
+      | resource         | recipient | type | role   |
+      | folder_to_shared | Brian     | user | editor |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page

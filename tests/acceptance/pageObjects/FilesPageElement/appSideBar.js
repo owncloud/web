@@ -248,7 +248,7 @@ module.exports = {
     },
     panelSelectButtons: {
       selector:
-        '//div[contains(@id, "app-sidebar")]//div[@class="sidebar-panel__navigation"]/button',
+        '//div[contains(@id, "app-sidebar")]//div[contains(@class, "sidebar-panel__navigation")]/button',
       locateStrategy: 'xpath'
     },
     collaboratorsPanel: {

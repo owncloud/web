@@ -23,7 +23,7 @@ export default {
 
             return resources[0].canDisable({ user: this.user })
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-disable-trigger'
         }
       ]
@@ -74,8 +74,11 @@ export default {
           this.showMessage({
             title: this.$gettext('Space was disabled successfully')
           })
+          if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+            return
+          }
           if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-            this.$router.push(createLocationSpaces('files-spaces-projects'))
+            return this.$router.push(createLocationSpaces('files-spaces-projects'))
           }
         })
         .catch((error) => {

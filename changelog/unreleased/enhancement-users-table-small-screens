@@ -1,0 +1,6 @@
+Enhancement: Users table on small screen
+
+We've improved the layout of the users table on small screens.
+
+https://github.com/owncloud/web/pull/7476
+https://github.com/owncloud/web/issues/7439

@@ -2,7 +2,7 @@
 
 source .drone.env
 
-url="https://cache.owncloud.com/owncloud/web/ocis-build/$OCIS_COMMITID/ocis"
+url="https://cache.owncloud.com/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis"
 
 echo "Checking oCIS version - $OCIS_COMMITID in cache."
 echo "Downloading oCIS from '$url'."

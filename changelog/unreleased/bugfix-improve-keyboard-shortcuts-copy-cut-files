@@ -1,0 +1,6 @@
+Bugfix: Improve keyboard shortcuts copy/cut files
+
+We've changed the Ctrl+X message to 'Cut to Clipboard' from 'Copied to Clipboard'
+
+https://github.com/owncloud/web/issues/7455
+https://github.com/owncloud/web/pull/7492

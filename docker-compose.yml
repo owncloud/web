@@ -80,6 +80,7 @@ services:
       - ./dist/js:/mnt/data/apps/web/js
       - ./dist/themes:/mnt/data/apps/web/themes
       - ./dist/icons:/mnt/data/apps/web/icons
+      - ./dist/fonts:/mnt/data/apps/web/fonts
       - ./dist/index.html:/mnt/data/apps/web/index.html
       - ./dist/manifest.json:/mnt/data/apps/web/manifest.json
       - ./dist/oidc-callback.html:/mnt/data/apps/web/oidc-callback.html
@@ -93,7 +94,7 @@ services:
       dockerfile: selenium.Dockerfile
       context: ./dev/docker
       args:
-        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome-debug}
+        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome:104.0-20220812}
     container_name: web_selenium
     ports:
       - 4444:4444
