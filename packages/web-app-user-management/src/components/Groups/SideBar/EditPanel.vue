@@ -13,15 +13,15 @@
         :fix-message-line="true"
         @input="validateDisplayName"
       />
+      <compare-save-dialog
+        class="edit-compare-save-dialog oc-mb-l"
+        :original-object="group"
+        :compare-object="editGroup"
+        :confirm-button-disabled="invalidFormData"
+        @revert="revertChanges"
+        @confirm="$emit('confirm', editGroup)"
+      ></compare-save-dialog>
     </div>
-    <compare-save-dialog
-      class="edit-compare-save-dialog oc-pb-l oc-pt-s oc-px-m"
-      :original-object="group"
-      :compare-object="editGroup"
-      :confirm-button-disabled="invalidFormData"
-      @revert="revertChanges"
-      @confirm="$emit('confirm', editGroup)"
-    ></compare-save-dialog>
   </div>
 </template>
 <script>
