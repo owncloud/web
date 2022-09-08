@@ -79,8 +79,10 @@ export function buildResource(resource): Resource {
     })(),
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    shareId: resource.fileInfo[DavProperty.ShareId],
+    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
