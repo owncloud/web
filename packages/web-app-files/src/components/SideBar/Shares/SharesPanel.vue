@@ -18,7 +18,7 @@ import { computed, defineComponent, unref, watch } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { useDebouncedRef, useStore } from 'web-pkg/src/composables'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 
@@ -85,15 +85,11 @@ export default defineComponent({
           if (!ref || !this.$refs[ref]) {
             return
           }
-
           this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
         })
       },
       immediate: true
     }
-  },
-  methods: {
-    ...mapActions('Files', ['loadCurrentFileOutgoingShares'])
   }
 })
 </script>
