@@ -188,35 +188,6 @@ export default {
       return this.collaborators.length > 0
     },
 
-    /**
-     * Returns all incoming shares, direct and indirect
-     *
-     * @return {Array.<Object>} list of incoming shares
-     */
-    $_allIncomingShares() {
-      // direct incoming shares
-      const allShares = [...this.incomingShares]
-
-      // indirect incoming shares
-      const parentPaths = getParentPaths(this.highlightedFile.path, true)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      parentPaths.forEach((parentPath) => {
-        const shares = this.sharesTree[parentPath]
-        if (shares) {
-          shares.forEach((share) => {
-            if (share.incoming) {
-              allShares.push(share)
-            }
-          })
-        }
-      })
-
-      return allShares
-    },
-
     collaborators() {
       return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
         .sort(this.collaboratorsComparator)
@@ -287,20 +258,6 @@ export default {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
       return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
-    },
-
-    currentUsersPermissions() {
-      if (this.$_allIncomingShares.length > 0) {
-        let permissions = 0
-
-        for (const share of this.$_allIncomingShares) {
-          permissions |= share.permissions
-        }
-
-        return permissions
-      }
-
-      return null
     },
     currentUserIsMemberOfSpace() {
       return this.currentSpace?.spaceMemberIds?.includes(this.user.uuid)

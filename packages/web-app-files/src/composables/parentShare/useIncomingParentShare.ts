@@ -1,7 +1,5 @@
 import { buildShare } from '../../helpers/resources'
 import { useStore } from 'web-pkg/src/composables'
-import { useActiveLocation } from '../router'
-import { isLocationSharesActive } from '../../router'
 import { computed, ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { clientService } from 'web-pkg/src/services'
@@ -10,7 +8,6 @@ export function useIncomingParentShare() {
   const store = useStore()
   const incomingParentShare = ref(null)
   const sharesTree = computed(() => store.state.Files.sharesTree)
-  const isSharedWithMeLocation = useActiveLocation(isLocationSharesActive, 'files-shares-with-me')
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare
@@ -20,11 +17,6 @@ export function useIncomingParentShare() {
         incomingParentShare.value = parentShare
         return
       }
-    }
-
-    if (unref(isSharedWithMeLocation)) {
-      incomingParentShare.value = resource.share
-      return
     }
 
     if (resource.shareId) {

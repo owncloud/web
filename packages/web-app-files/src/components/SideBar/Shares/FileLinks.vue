@@ -129,7 +129,6 @@ import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { isLocationSpacesActive } from '../../../router'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
-import { useIncomingParentShare } from '../../../composables/parentShare'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -138,6 +137,7 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
+  inject: ['incomingParentShare'],
   setup() {
     const store = useStore()
 
@@ -147,7 +147,6 @@ export default defineComponent({
 
     return {
       ...useGraphClient(),
-      ...useIncomingParentShare(),
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -215,9 +214,9 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.incomingParentShare && this.canCreatePublicLinks) {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport
@@ -347,9 +346,6 @@ export default defineComponent({
 
       return this.$route.params.storageId || null
     }
-  },
-  async mounted() {
-    await this.loadIncomingParentShare.perform(this.highlightedFile)
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),

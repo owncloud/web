@@ -18,11 +18,11 @@ import { computed, defineComponent, unref, watch } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { mapActions, mapGetters, mapState } from 'vuex'
-import { dirname } from 'path'
+import { mapGetters, mapState } from 'vuex'
 import { useGraphClient } from 'web-client/src/composables'
 import { useTask } from 'vue-concurrency'
 import { useDebouncedRef, useStore } from 'web-pkg/src/composables'
+import { useIncomingParentShare } from '../../../composables/parentShare'
 
 export default defineComponent({
   name: 'SharesPanel',
@@ -31,7 +31,12 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
-  inject: ['activePanel'],
+  inject: ['activePanel', 'displayedItem'],
+  provide() {
+    return {
+      incomingParentShare: computed(() => this.incomingParentShare)
+    }
+  },
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
@@ -43,7 +48,13 @@ export default defineComponent({
     )
     const incomingSharesLoading = computed(() => store.state.Files.incomingSharesLoading)
     const sharesTreeLoading = computed(() => store.state.Files.sharesTreeLoading)
-    const sharesLoading = useDebouncedRef(true, 250)
+    const sharesLoading = useDebouncedRef(
+      currentFileOutgoingSharesLoading.value ||
+        incomingSharesLoading.value ||
+        sharesTreeLoading.value,
+      250
+    )
+
     watch([currentFileOutgoingSharesLoading, incomingSharesLoading, sharesTreeLoading], () => {
       sharesLoading.value =
         currentFileOutgoingSharesLoading.value ||
@@ -63,7 +74,12 @@ export default defineComponent({
       })
     })
 
-    return { graphClient, loadSpaceMembersTask, sharesLoading }
+    return {
+      ...useIncomingParentShare(),
+      graphClient,
+      loadSpaceMembersTask,
+      sharesLoading
+    }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingSharesLoading']),
@@ -71,7 +87,10 @@ export default defineComponent({
   },
   watch: {
     sharesLoading: {
-      handler: function () {
+      handler: function (sharesLoading) {
+        if (!sharesLoading) {
+          this.loadIncomingParentShare.perform(this.displayedItem.value)
+        }
         if (this.loading || !unref(this.activePanel)) {
           return
         }
@@ -83,48 +102,16 @@ export default defineComponent({
           }
           this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
         })
-      }
+      },
+      immediate: true
     },
     highlightedFile: {
       handler: function (newItem, oldItem) {
-        if (oldItem !== newItem) {
-          this.$_reloadShares()
-
-          if (this.showSpaceMembers) {
-            this.loadSpaceMembersTask.perform(this)
-          }
+        if (oldItem !== newItem && this.showSpaceMembers) {
+          this.loadSpaceMembersTask.perform(this)
         }
       },
       immediate: true
-    }
-  },
-  methods: {
-    ...mapActions('Files', [
-      'loadCurrentFileOutgoingShares',
-      'loadSharesTree',
-      'loadIncomingShares'
-    ]),
-    $_reloadShares() {
-      this.loadCurrentFileOutgoingShares({
-        client: this.$client,
-        graphClient: this.graphClient,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId,
-        resource: this.highlightedFile
-      })
-      this.loadIncomingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId
-      })
-      this.loadSharesTree({
-        client: this.$client,
-        path: this.highlightedFile.path === '' ? '/' : dirname(this.highlightedFile.path),
-        $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId
-      })
     }
   }
 })

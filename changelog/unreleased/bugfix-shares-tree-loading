@@ -1,6 +1,11 @@
-Bugfix: Hide share actions for space viewers/editors
+Bugfix: Shares tree loading
 
-We now make sure that an empty string will never be used as key for the shares tree. This fixes several issues with wrong share permissions being loaded and also improves performance in folders.
+We've improved loading of the shares tree:
+
+* It now happens more globally in the sidebar component instead of in each sidebar panel.
+* Shares won't be loaded for resources without a path anymore.
+
+These changes massively improve the sidebar performance and fix several issues with (re-)share permissions.
 
 https://github.com/owncloud/web/issues/7506
 https://github.com/owncloud/web/issues/7593

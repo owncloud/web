@@ -118,11 +118,11 @@ import {
 import * as uuid from 'uuid'
 import { defineComponent } from '@vue/runtime-core'
 import { PropType } from '@vue/composition-api'
-import { useIncomingParentShare } from '../../../../composables/parentShare'
 
 export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
+  inject: ['incomingParentShare'],
   props: {
     resource: {
       type: Object,
@@ -147,9 +147,6 @@ export default defineComponent({
       type: Boolean,
       required: true
     }
-  },
-  setup() {
-    return { ...useIncomingParentShare() }
   },
   data() {
     return {
@@ -193,9 +190,9 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.incomingParentShare && this.resourceIsSharable) {
+      if (this.incomingParentShare.value && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
           this.allowCustomSharing !== false
@@ -205,8 +202,10 @@ export default defineComponent({
       return PeopleShareRoles.list(this.resource.isFolder, this.allowCustomSharing !== false)
     },
     availablePermissions() {
-      if (this.incomingParentShare && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(parseInt(this.incomingParentShare.permissions))
+      if (this.incomingParentShare.value && this.resourceIsSharable) {
+        return SharePermissions.bitmaskToPermissions(
+          parseInt(this.incomingParentShare.value.permissions)
+        )
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },
@@ -223,8 +222,7 @@ export default defineComponent({
     window.removeEventListener('keydown', this.cycleRoles)
   },
 
-  async mounted() {
-    await this.loadIncomingParentShare.perform(this.resource)
+  mounted() {
     this.applyRoleAndPermissions()
     window.addEventListener('keydown', this.cycleRoles)
   },

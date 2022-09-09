@@ -352,39 +352,40 @@ export default defineComponent({
   watch: {
     file() {
       this.loadData()
-      this.refreshShareDetailsTree()
     },
-    sharesTree() {
-      // missing early return
-      this.sharedItem = null
-      this.shareIndicators = getIndicators(this.file, this.sharesTree)
-      const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
-      if (sharePathParentOrCurrent === null) {
-        return
-      }
-      const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-        ShareTypes.containsAnyValue(
-          [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
-          [s.shareType]
+    sharesTree: {
+      handler() {
+        // missing early return
+        this.sharedItem = null
+        this.shareIndicators = getIndicators(this.file, this.sharesTree)
+        const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
+        if (sharePathParentOrCurrent === null) {
+          return
+        }
+        const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
+          ShareTypes.containsAnyValue(
+            [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
+            [s.shareType]
+          )
         )
-      )
-      if (shares.length === 0) {
-        return
-      }
+        if (shares.length === 0) {
+          return
+        }
 
-      this.sharedItem = shares[0]
-      this.sharedByName = this.sharedItem.owner?.name
-      this.sharedByDisplayName = this.sharedItem.owner?.displayName
-      if (this.sharedItem.owner?.additionalInfo) {
-        this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
-      }
-      this.sharedTime = this.sharedItem.stime
-      this.sharedParentDir = sharePathParentOrCurrent
+        this.sharedItem = shares[0]
+        this.sharedByName = this.sharedItem.owner?.name
+        this.sharedByDisplayName = this.sharedItem.owner?.displayName
+        if (this.sharedItem.owner?.additionalInfo) {
+          this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
+        }
+        this.sharedTime = this.sharedItem.stime
+        this.sharedParentDir = sharePathParentOrCurrent
+      },
+      immediate: true
     }
   },
   mounted() {
     this.loadData()
-    this.refreshShareDetailsTree()
   },
   asyncComputed: {
     preview: {
@@ -405,16 +406,8 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadVersions', 'loadSharesTree']),
-    async refreshShareDetailsTree() {
-      await this.loadSharesTree({
-        client: this.$client,
-        path: this.file.path,
-        $gettext: this.$gettext,
-        storageId: this.file.fileId
-      })
-      this.shareIndicators = getIndicators(this.file, this.sharesTree)
-    },
+    ...mapActions('Files', ['loadPreview', 'loadVersions']),
+
     getParentSharePath(childPath, shares) {
       let currentPath = childPath
       if (!currentPath) {
