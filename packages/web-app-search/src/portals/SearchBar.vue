@@ -326,10 +326,11 @@ export default {
 }
 
 #files-global-search-options {
+  position: fixed;
+  overflow-y: auto;
+  max-height: calc(100% - 52px);
   border: 1px solid var(--oc-color-input-border);
   background-color: var(--oc-color-input-bg);
-  overflow: hidden;
-  position: absolute;
   width: 450px;
 
   #no-results {
