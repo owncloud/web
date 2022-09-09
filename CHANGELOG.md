@@ -108,7 +108,7 @@ Summary
 * Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.17: [#7606](https://github.com/owncloud/web/pull/7606)
+* Enhancement - Update ODS to v14.0.0-alpha.18: [#7626](https://github.com/owncloud/web/pull/7626)
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
@@ -961,9 +961,9 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.17: [#7606](https://github.com/owncloud/web/pull/7606)
+* Enhancement - Update ODS to v14.0.0-alpha.18: [#7626](https://github.com/owncloud/web/pull/7626)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.17. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.18. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
@@ -1014,8 +1014,8 @@ Details
    Enhancement - Use Inter font:
    [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
-   https://github.com/owncloud/web/pull/7606
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.17
+   https://github.com/owncloud/web/pull/7626
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.18
 
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 
