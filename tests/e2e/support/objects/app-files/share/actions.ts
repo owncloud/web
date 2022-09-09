@@ -87,7 +87,7 @@ export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
-    await page.locator(invitationInput).press('Enter')
+    await page.locator('.vs__dropdown-option').click()
 
     await page.locator(filesCollaboratorRolesSelector).click()
     await page.locator(util.format(collaboratorRoleItemSelector, role)).click()
