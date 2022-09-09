@@ -140,6 +140,7 @@ export function aggregateResourceShares(
   allowSharePermission,
   hasShareJail
 ): Resource[] {
+  shares.sort((a, b) => a.path.localeCompare(b.path))
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
@@ -147,7 +148,6 @@ export function aggregateResourceShares(
     )
   }
 
-  shares.sort((a, b) => a.path.localeCompare(b.path))
   const resources = addSharedWithToShares(shares)
   return resources.map((share) =>
     buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
