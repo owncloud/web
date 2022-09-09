@@ -18,9 +18,7 @@ import { computed, defineComponent, unref, watch } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { mapGetters, mapState } from 'vuex'
-import { useGraphClient } from 'web-client/src/composables'
-import { useTask } from 'vue-concurrency'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { useDebouncedRef, useStore } from 'web-pkg/src/composables'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 
@@ -62,27 +60,13 @@ export default defineComponent({
         sharesTreeLoading.value
     })
 
-    const { graphClient } = useGraphClient()
-
-    const loadSpaceMembersTask = useTask(function* (signal, ref) {
-      yield ref.loadCurrentFileOutgoingShares({
-        client: ref.$client,
-        graphClient,
-        path: ref.space.id,
-        storageId: ref.space.id,
-        resource: ref.space
-      })
-    })
-
     return {
       ...useIncomingParentShare(),
-      graphClient,
-      loadSpaceMembersTask,
       sharesLoading
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingSharesLoading']),
+    ...mapGetters('Files', ['currentFileOutgoingSharesLoading']),
     ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading'])
   },
   watch: {
@@ -100,19 +84,15 @@ export default defineComponent({
           if (!ref || !this.$refs[ref]) {
             return
           }
+          console.log('wa',  this.$refs[ref].$el)
           this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
         })
       },
       immediate: true
-    },
-    highlightedFile: {
-      handler: function (newItem, oldItem) {
-        if (oldItem !== newItem && this.showSpaceMembers) {
-          this.loadSpaceMembersTask.perform(this)
-        }
-      },
-      immediate: true
     }
+  },
+  methods: {
+    ...mapActions('Files', ['loadCurrentFileOutgoingShares'])
   }
 })
 </script>

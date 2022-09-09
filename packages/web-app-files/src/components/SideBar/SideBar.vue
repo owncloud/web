@@ -54,6 +54,7 @@ import {
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import _ from 'lodash'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -78,6 +79,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const { graphClient } = useGraphClient()
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -105,7 +107,8 @@ export default defineComponent({
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
-      focusSideBar
+      focusSideBar,
+      graphClient
     }
   },
 
@@ -236,6 +239,7 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
+        this.loadShares()
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -271,7 +275,6 @@ export default defineComponent({
         client: this.$client,
         graphClient: this.graphClient,
         path: this.highlightedFile.path,
-        $gettext: this.$gettext,
         storageId: this.highlightedFile.fileId,
         resource: this.highlightedFile
       })
