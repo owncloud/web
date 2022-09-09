@@ -160,7 +160,8 @@ import {
   resolveFileExists,
   ResolveStrategy,
   ResolveConflict,
-  resolveFileNameDuplicate
+  resolveFileNameDuplicate,
+  FileExistsResolver
 } from '../../helpers/resource/copyMove'
 
 export default defineComponent({
@@ -800,7 +801,11 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    async displayOverwriteDialog(files: UppyResource[], conflicts, resolveFileExistsMethod) {
+    async displayOverwriteDialog(
+      files: UppyResource[],
+      conflicts,
+      resolveFileExistsMethod: FileExistsResolver
+    ) {
       let count = 0
       const allConflictsCount = conflicts.length
       const resolvedFileConflicts = []
@@ -839,7 +844,7 @@ export default defineComponent({
           false,
           isFolder
         )
-        count += 1
+        count++
         if (resolvedConflict.doForAllConflicts) {
           if (isFolder) {
             doForAllConflictsFolders = true
@@ -858,7 +863,20 @@ export default defineComponent({
       const filesToSkip = resolvedFileConflicts
         .filter((e) => e.strategy === ResolveStrategy.SKIP)
         .map((e) => e.name)
+      const foldersToSkip = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+
+      files = files.filter((e) => !filesToSkip.includes(e.name))
+      files = files.filter(
+        (file) =>
+          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
+      )
+
       const filesToKeepBoth = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
+      const foldersToKeepBoth = resolvedFolderConflicts
         .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
         .map((e) => e.name)
 
@@ -867,16 +885,6 @@ export default defineComponent({
         const extension = extractExtensionFromFile({ name: fileName } as Resource)
         file.name = resolveFileNameDuplicate(fileName, extension, this.files)
       }
-
-      files = files.filter((e) => !filesToSkip.includes(e.name))
-
-      const foldersToSkip = resolvedFolderConflicts
-        .filter((e) => e.strategy === ResolveStrategy.SKIP)
-        .map((e) => e.name)
-      const foldersToKeepBoth = resolvedFolderConflicts
-        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
-        .map((e) => e.name)
-
       for (const folder of foldersToKeepBoth) {
         const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
         for (const file of filesInFolder) {
@@ -895,10 +903,7 @@ export default defineComponent({
           file.meta.routeItem = `/${newFolderName}`
         }
       }
-      files = files.filter(
-        (file) =>
-          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
-      )
+
       if (files.length === 0) return
       this.handleUppyFileUpload(files)
     }

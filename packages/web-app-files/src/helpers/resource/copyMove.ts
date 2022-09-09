@@ -19,6 +19,19 @@ interface FileConflict {
   strategy?: ResolveStrategy
 }
 
+export interface FileExistsResolver {
+  (
+    createModal: void,
+    hideModal: void,
+    resource: Resource,
+    conflictCount: number,
+    $gettext: void,
+    $gettextInterpolate: void,
+    isSingleConflict: boolean,
+    suggestMerge: boolean
+  )
+}
+
 export const resolveFileExists = (
   createModal,
   hideModal,
