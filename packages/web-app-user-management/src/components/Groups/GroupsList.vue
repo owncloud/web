@@ -1,8 +1,9 @@
 <template>
   <div>
     <oc-text-input
+      id="groups-filter"
       v-model="filterTerm"
-      class="oc-width-1-4 oc-ml-m oc-my-s"
+      class="oc-ml-m oc-my-s"
       :label="$gettext('Filter groups')"
     />
     <oc-table
@@ -198,6 +199,10 @@ export default {
 </script>
 
 <style lang="scss">
+#groups-filter {
+  width: 16rem;
+}
+
 .highlight-mark {
   background: yellow;
   color: var(--oc-color-text-muted);
