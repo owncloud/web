@@ -72,12 +72,8 @@ class SettingsController extends Controller {
 	public function setWebDefaultConfig() {
 		$value = \filter_var($this->request->getParam('isDefault'), FILTER_VALIDATE_BOOLEAN);
 		$user = $this->userSession->getUser();
-		$configToSet = $value === true ? 'web' : null;
-		if (!$configToSet) {
-			$this->config->deleteUserValue($user->getUID(), 'core', 'defaultapp');
-		} else {
-			$this->config->setUserValue($user->getUID(), 'core', 'defaultapp', $configToSet);
-		}
+		$configToSet = $value === true ? 'web' : 'files';
+		$this->config->setUserValue($user->getUID(), 'core', 'defaultapp', $configToSet);
 
 		return new JSONResponse([]);
 	}
