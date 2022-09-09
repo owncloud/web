@@ -17,6 +17,7 @@ Summary
 * Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
+* Bugfix - Expiration date picker with long language codes: [#7622](https://github.com/owncloud/web/issues/7622)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
@@ -188,6 +189,14 @@ Details
 
    https://github.com/owncloud/web/issues/7146
    https://github.com/owncloud/web/pull/7214
+
+* Bugfix - Expiration date picker with long language codes: [#7622](https://github.com/owncloud/web/issues/7622)
+
+   We've fixed a bug where the expiration date picker in the sharing sidebar wouldn't open if the
+   user selected a language with long language code, e.g. de_DE.
+
+   https://github.com/owncloud/web/issues/7622
+   https://github.com/owncloud/web/pull/7623
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 
