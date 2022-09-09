@@ -19,7 +19,7 @@ export function getParentPaths(path = '', includeCurrent = false) {
   }
 
   const paths = []
-  const sections = s.split('/')
+  const sections = s.split('/').filter(Boolean)
 
   if (includeCurrent) {
     paths.push(s)
@@ -27,10 +27,6 @@ export function getParentPaths(path = '', includeCurrent = false) {
 
   sections.pop()
   while (sections.length > 0) {
-    if (!sections.join('/')) {
-      sections.pop()
-      continue
-    }
     paths.push(sections.join('/'))
     sections.pop()
   }
