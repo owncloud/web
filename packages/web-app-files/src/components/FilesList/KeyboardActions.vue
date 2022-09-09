@@ -16,6 +16,11 @@ export default defineComponent({
     paginatedResources: {
       type: Array,
       required: true
+    },
+    keybindOnElementId: {
+      type: String,
+      required: false,
+      default: 'files-view'
     }
   },
   setup() {
@@ -36,7 +41,11 @@ export default defineComponent({
   },
 
   mounted() {
-    document.addEventListener('keydown', this.handleShortcuts)
+    const element = document.getElementById(this.keybindOnElementId)
+    if (element) {
+      element.addEventListener('keydown', this.handelLocalShortcuts, false)
+    }
+    document.addEventListener('keydown', this.handleGlobalShortcuts)
 
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
@@ -52,7 +61,11 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      document.removeEventListener('keydown', this.handleShortcuts)
+      const element = document.getElementById(this.keybindOnElementId)
+      if (element) {
+        element.removeEventListener('keydown', this.handelLocalShortcuts)
+      }
+      document.removeEventListener('keydown', this.handleGlobalShortcuts)
     })
   },
 
@@ -87,7 +100,12 @@ export default defineComponent({
       return false
     },
 
-    handleShortcuts(event) {
+    handelLocalShortcuts(event) {
+      const key = event.keyCode || event.which
+      if (key === keycode('space')) return this.handleSpaceAction(event)
+    },
+
+    handleGlobalShortcuts(event) {
       const key = event.keyCode || event.which
       const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
@@ -102,7 +120,6 @@ export default defineComponent({
       if (key === keycode('down') && !shift) return this.handleNavigateAction(event)
       if (key === keycode('up') && !shift) return this.handleNavigateAction(event, true)
 
-      if (key === keycode('space')) return this.handleSpaceAction(event)
       if (key === keycode('esc')) return this.handleEscapeAction()
       if (key === keycode('down') && shift) return this.handleShiftDownAction(event)
       if (key === keycode('up') && shift) return this.handleShiftUpAction(event)
@@ -162,7 +179,7 @@ export default defineComponent({
     },
 
     handleSpaceAction(event) {
-      // event.preventDefault()
+      event.preventDefault()
       this.toggleFileSelection({ id: this.latestSelectedId })
     },
 
