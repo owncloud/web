@@ -71,11 +71,12 @@ export default defineComponent({
   },
   watch: {
     sharesLoading: {
-      handler: function (sharesLoading) {
+      handler: function (sharesLoading, old) {
         if (!sharesLoading) {
           this.loadIncomingParentShare.perform(this.displayedItem.value)
         }
-        if (this.loading || !unref(this.activePanel)) {
+        // FIXME: !old can be removed as soon as https://github.com/owncloud/web/issues/7621 has been fixed
+        if (this.loading || !unref(this.activePanel) || !old) {
           return
         }
         this.$nextTick(() => {
@@ -84,7 +85,7 @@ export default defineComponent({
           if (!ref || !this.$refs[ref]) {
             return
           }
-          console.log('wa',  this.$refs[ref].$el)
+
           this.$emit('scrollToElement', { element: this.$refs[ref].$el, panelName })
         })
       },
