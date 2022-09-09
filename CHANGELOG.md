@@ -34,6 +34,7 @@ Summary
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Merge share with group and group member into one: [#7582](https://github.com/owncloud/web/issues/7582)
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - SidebarNavItem icon flickering: [#7309](https://github.com/owncloud/web/pull/7309)
@@ -324,6 +325,14 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Merge share with group and group member into one: [#7582](https://github.com/owncloud/web/issues/7582)
+
+   We've fixed a bug that the share with a group and share of the same resource with a member of this
+   group was shown as 2 shares in "Shared with me" view.
+
+   https://github.com/owncloud/web/issues/7582
+   https://github.com/owncloud/web/pull/7598
 
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 
