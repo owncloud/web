@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 5.7.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.6.1...master
+[5.7.0]: https://github.com/owncloud/web/compare/v5.6.1...v5.7.0
 
 Summary
 -------
@@ -84,6 +84,7 @@ Summary
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
 * Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Left sidebar hover effect: [#7540](https://github.com/owncloud/web/issues/7540)
 * Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
@@ -111,10 +112,9 @@ Summary
 * Enhancement - Update ODS to v14.0.0-alpha.18: [#7626](https://github.com/owncloud/web/pull/7626)
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
-* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
-* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
 -------
@@ -745,6 +745,14 @@ Details
    https://github.com/owncloud/web/issues/7335
    https://github.com/owncloud/web/pull/7365
 
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
+
+   We've adjusted the spacing of the files list options menu to visually match with the other
+   menus.
+
+   https://github.com/owncloud/web/issues/7541
+   https://github.com/owncloud/web/pull/7570
+
 * Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
 
    We've added the option to display relevant keyboard shortcuts in the contextmenu to give
@@ -1034,6 +1042,15 @@ Details
    https://github.com/owncloud/web/pull/7375
    https://github.com/owncloud/web/pull/7377
 
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
+
+   We've added the possibility to change user's quota in the user management app.
+
+   https://github.com/owncloud/web/issues/7059
+   https://github.com/owncloud/web/pull/7182
+   https://github.com/owncloud/web/pull/7530
+   https://github.com/owncloud/web/pull/7538
+
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
    We have added a new quick action in the user management where the user can be assigned to groups.
@@ -1047,23 +1064,6 @@ Details
 
    https://github.com/owncloud/web/issues/7439
    https://github.com/owncloud/web/pull/7476
-
-* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
-
-   We've adjusted the spacing of the files list options menu to visually match with the other
-   menus.
-
-   https://github.com/owncloud/web/issues/7541
-   https://github.com/owncloud/web/pull/7570
-
-* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
-
-   We've added the possibility to change user's quota in the user management app.
-
-   https://github.com/owncloud/web/issues/7059
-   https://github.com/owncloud/web/pull/7182
-   https://github.com/owncloud/web/pull/7530
-   https://github.com/owncloud/web/pull/7538
 
 Changelog for ownCloud Web [5.6.1] (2022-06-22)
 =======================================
