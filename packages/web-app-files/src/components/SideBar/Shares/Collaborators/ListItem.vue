@@ -217,13 +217,6 @@ export default defineComponent({
       return this.$gettextInterpolate(translated, context)
     },
 
-    shareExpirationText() {
-      const translated = this.$gettext('Expires %{ expiryDateRelative }')
-      return this.$gettextInterpolate(translated, {
-        expiryDateRelative: this.expirationDateRelative
-      })
-    },
-
     screenreaderShareExpiration() {
       const translated = this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })')
       return this.$gettextInterpolate(translated, {
@@ -258,11 +251,6 @@ export default defineComponent({
       return this.sharedParentRoute?.params?.item.split('/').pop()
     },
 
-    shareDetailsHelperContent() {
-      return {
-        text: this.$gettext('Invite persons or groups to access this file or folder.')
-      }
-    },
     editDropDownToggleId() {
       return uuid.v4()
     },

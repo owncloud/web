@@ -274,7 +274,10 @@ function getMountOptions({
     },
     store: getStore(sharesTree),
     localVue,
-    stubs
+    stubs,
+    provide: {
+      incomingParentShare: {}
+    }
   }
 }
 

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
@@ -53,6 +53,8 @@ import {
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
+import isEqual from 'lodash-es/isEqual'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -77,6 +79,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const { graphClient } = useGraphClient()
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -104,7 +107,8 @@ export default defineComponent({
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
-      focusSideBar
+      focusSideBar,
+      graphClient
     }
   },
 
@@ -118,7 +122,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapState(['user']),
     availablePanels(): Panel[] {
@@ -197,6 +201,10 @@ export default defineComponent({
         return
       }
 
+      if (oldFile && isEqual(newFile, oldFile)) {
+        return
+      }
+
       this.fetchFileInfo()
     },
 
@@ -214,6 +222,12 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions('Files', [
+      'loadSharesTree',
+      'loadCurrentFileOutgoingShares',
+      'loadIncomingShares'
+    ]),
+
     async fetchFileInfo() {
       if (!this.highlightedFile) {
         this.selectedFile = {}
@@ -225,6 +239,7 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
+        this.loadShares()
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -247,11 +262,38 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
+        this.loadShares()
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
+    },
+
+    loadShares() {
+      this.loadCurrentFileOutgoingShares({
+        client: this.$client,
+        graphClient: this.graphClient,
+        path: this.highlightedFile.path,
+        storageId: this.highlightedFile.fileId,
+        resource: this.highlightedFile
+      })
+      this.loadIncomingShares({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId
+      })
+
+      // shares tree is already being loaded for the current folder (except for root)
+      if (!this.currentFolder || this.currentFolder.path === '/') {
+        this.loadSharesTree({
+          client: this.$client,
+          path: this.highlightedFile.path === '' ? '/' : this.highlightedFile.path,
+          $gettext: this.$gettext,
+          storageId: this.highlightedFile.fileId
+        })
+      }
     }
   }
 })

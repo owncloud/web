@@ -278,6 +278,9 @@ function getMountedWrapper(data) {
 
   return mount(FileShares, {
     localVue,
+    provide: {
+      incomingParentShare: {}
+    },
     setup: () => ({
       currentStorageId: storageId
     }),
@@ -309,6 +312,9 @@ function getShallowMountedWrapper(data, loading = false) {
       currentStorageId: storageId,
       hasResharing: false
     }),
+    provide: {
+      incomingParentShare: {}
+    },
     store: createStore(data),
     stubs: {
       ...stubs,

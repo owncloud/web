@@ -122,6 +122,7 @@ import { PropType } from '@vue/composition-api'
 export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
+  inject: ['incomingParentShare'],
   props: {
     resource: {
       type: Object,
@@ -181,10 +182,6 @@ export default defineComponent({
     resourceIsSharable() {
       return this.allowSharePermission && this.resource.canShare()
     },
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['']?.find((s) => s.incoming)
-    },
     allowCustomSharing() {
       return this.capabilities?.files_sharing?.allow_custom
     },
@@ -193,9 +190,9 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.share?.incoming && this.resourceIsSharable) {
+      if (this.incomingParentShare.value && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
           this.allowCustomSharing !== false
@@ -205,8 +202,10 @@ export default defineComponent({
       return PeopleShareRoles.list(this.resource.isFolder, this.allowCustomSharing !== false)
     },
     availablePermissions() {
-      if (this.share?.incoming && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(parseInt(this.share.permissions))
+      if (this.incomingParentShare.value && this.resourceIsSharable) {
+        return SharePermissions.bitmaskToPermissions(
+          parseInt(this.incomingParentShare.value.permissions)
+        )
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },

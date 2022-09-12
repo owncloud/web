@@ -13,7 +13,7 @@ describe('build an array of parent paths from a provided path', () => {
 
   it('should prepend resulting paths with a "/" if none was given', () => {
     const paths = getParentPaths('a/b/c', false)
-    expect(paths).toEqual(['/a/b', '/a', ''])
+    expect(paths).toEqual(['/a/b', '/a'])
   })
 
   it('should make no difference between "a/b/c" and "/a/b/c" with includeCurrent=false', () => {
@@ -36,11 +36,11 @@ describe('build an array of parent paths from a provided path', () => {
 
   it('should not interpret a trailing slash as yet another path segment', () => {
     const paths = getParentPaths('/a/b/c/', true)
-    expect(paths).toEqual(['/a/b/c', '/a/b', '/a', ''])
+    expect(paths).toEqual(['/a/b/c', '/a/b', '/a'])
   })
 
   it('should include the provided path in the result if includeCurrent=true', () => {
     const paths = getParentPaths('a/b/c', true)
-    expect(paths).toEqual(['/a/b/c', '/a/b', '/a', ''])
+    expect(paths).toEqual(['/a/b/c', '/a/b', '/a'])
   })
 })

@@ -81,13 +81,14 @@ export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
   const { page, role, recipients } = args
   for (const recipient of recipients) {
     const shareInputLocator = page.locator(invitationInput)
+    await shareInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
       shareInputLocator.fill(recipient.id)
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
-    await page.locator(invitationInput).press('Enter')
+    await page.locator('.vs__dropdown-option').click()
 
     await page.locator(filesCollaboratorRolesSelector).click()
     await page.locator(util.format(collaboratorRoleItemSelector, role)).click()
