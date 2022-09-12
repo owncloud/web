@@ -100,7 +100,7 @@ export default defineComponent({
         appOpenUrl +
         `?file_id=${fileId}` +
         `&lang=${this.$language.current}` +
-        (this.applicationName ? `&app_name=${this.applicationName}` : '') 
+        (this.applicationName ? `&app_name=${this.applicationName}` : '')
 
       const response = await this.makeRequest('POST', url)
 
