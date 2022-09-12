@@ -484,8 +484,6 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
       },
       ...mocks
     },
-    stubs: {
-      ...stubs
-    }
+    stubs
   })
 }

@@ -3,12 +3,12 @@
     :is="resource.isFolder ? 'router-link' : 'div'"
     class="files-search-preview oc-flex"
     v-bind="attrs"
-    v-on="handlers"
+    v-on="listeners"
   >
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :folder-link="folderLink"
+      :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
@@ -27,7 +27,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -53,7 +53,9 @@ export default {
       hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
-      })
+      }),
+      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
+      accessToken: useAccessToken({ store })
     }
   },
   data() {
@@ -72,7 +74,7 @@ export default {
           }
         : {}
     },
-    handlers() {
+    listeners() {
       return this.resource.isFolder
         ? {}
         : {
@@ -98,9 +100,6 @@ export default {
       }
 
       return this.$gettext('Personal')
-    },
-    folderLink() {
-      return this.createFolderLink(this.resource.path, this.resource)
     },
     parentFolderLink() {
       return this.createFolderLink(path.dirname(this.resource.path), this.resource)

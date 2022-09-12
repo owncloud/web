@@ -71,7 +71,8 @@
       </template>
       <template #footer>
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerText }}</p>
+          <p class="oc-text-muted">{{ footerTextTotal }}</p>
+          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
         </div>
       </template>
     </oc-table>
@@ -110,9 +111,13 @@ export default {
     allUsersSelected() {
       return this.users.length === this.selectedUsers.length
     },
-    footerText() {
+    footerTextTotal() {
       const translated = this.$gettext('%{userCount} users in total')
       return this.$gettextInterpolate(translated, { userCount: this.users.length })
+    },
+    footerTextFilter() {
+      const translated = this.$gettext('%{userCount} matching users')
+      return this.$gettextInterpolate(translated, { userCount: this.data.length })
     },
     fields() {
       return [
