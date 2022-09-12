@@ -21,6 +21,10 @@ type UppyServiceTopics =
   | 'drag-out'
   | 'drop'
 
+export type uppyHeaders = {
+  [name: string]: string | number
+}
+
 export class UppyService {
   uppy: Uppy
   uploadInputs: HTMLInputElement[] = []
@@ -36,17 +40,20 @@ export class UppyService {
     tusMaxChunkSize,
     tusHttpMethodOverride,
     tusExtension,
-    onBeforeRequest
+    onBeforeRequest,
+    headers
   }: {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
     tusExtension: string
     onBeforeRequest: () => void
+    headers: () => uppyHeaders
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
 
     const tusPluginOptions = {
+      headers,
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
@@ -69,13 +76,7 @@ export class UppyService {
     this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({
-    headers
-  }: {
-    headers: () => {
-      [name: string]: string | number
-    }
-  }) {
+  useXhr({ headers }: { headers: () => uppyHeaders }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',
