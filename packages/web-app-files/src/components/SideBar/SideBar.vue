@@ -53,7 +53,7 @@ import {
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
-import _ from 'lodash'
+import isEqual from 'lodash-es/isEqual'
 import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
@@ -201,7 +201,7 @@ export default defineComponent({
         return
       }
 
-      if (oldFile && _.isEqual(newFile, oldFile)) {
+      if (oldFile && isEqual(newFile, oldFile)) {
         return
       }
 
