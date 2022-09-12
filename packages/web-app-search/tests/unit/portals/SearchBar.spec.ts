@@ -109,7 +109,7 @@ describe('Search Bar portal component', () => {
     await wrapper.find('.oc-search-clear').trigger('click')
     expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
   })
-  test('resets term on clear', async () => {
+  test.skip('resets term on clear', async () => {
     wrapper = getMountedWrapper({
       data: {
         term: 'old',
@@ -123,7 +123,7 @@ describe('Search Bar portal component', () => {
     await wrapper.find('.oc-search-clear').trigger('click')
     expect(wrapper.vm.$data.term).toBeFalsy()
   })
-  test('notifies active provider to reset on clear', async () => {
+  test.skip('notifies active provider to reset on clear', async () => {
     wrapper = getMountedWrapper({
       data: {
         term: 'old',
