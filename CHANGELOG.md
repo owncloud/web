@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+* Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
 Details
 -------
@@ -27,6 +28,14 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/7632
+
+* Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
+
+   We've included the `x-oc-mtime` header in upload requests to tell the backend the proper
+   modify date of uploaded resources.
+
+   https://github.com/owncloud/web/issues/7628
+   https://github.com/owncloud/web/pull/7630
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
