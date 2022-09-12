@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v5.7.0...master
+
+Summary
+-------
+
+* Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+
+Details
+-------
+
+* Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+
+   We've added the language param when opening an external app
+
+   https://github.com/owncloud/web/issues/7419
+   https://github.com/owncloud/web/pull/7631
+
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
 The following sections list the changes in ownCloud web 5.7.0 relevant to
