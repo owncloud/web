@@ -14,12 +14,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref, watch } from '@vue/composition-api'
+import { computed, defineComponent, unref } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 import { mapGetters, mapState } from 'vuex'
-import { useDebouncedRef, useStore } from 'web-pkg/src/composables'
+import { useStore } from 'web-pkg/src/composables'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 
 export default defineComponent({
@@ -44,21 +44,14 @@ export default defineComponent({
     const currentFileOutgoingSharesLoading = computed(
       () => store.getters['Files/currentFileOutgoingSharesLoading']
     )
-    const incomingSharesLoading = computed(() => store.state.Files.incomingSharesLoading)
-    const sharesTreeLoading = computed(() => store.state.Files.sharesTreeLoading)
-    const sharesLoading = useDebouncedRef(
-      currentFileOutgoingSharesLoading.value ||
-        incomingSharesLoading.value ||
-        sharesTreeLoading.value,
-      250
+    const incomingSharesLoading = computed(() => store.getters['Files/incomingSharesLoading'])
+    const sharesTreeLoading = computed(() => store.getters['Files/sharesTreeLoading'])
+    const sharesLoading = computed(
+      () =>
+        unref(currentFileOutgoingSharesLoading) ||
+        unref(incomingSharesLoading) ||
+        unref(sharesTreeLoading)
     )
-
-    watch([currentFileOutgoingSharesLoading, incomingSharesLoading, sharesTreeLoading], () => {
-      sharesLoading.value =
-        currentFileOutgoingSharesLoading.value ||
-        incomingSharesLoading.value ||
-        sharesTreeLoading.value
-    })
 
     return {
       ...useIncomingParentShare(),

@@ -7,7 +7,7 @@ import { clientService } from 'web-pkg/src/services'
 export function useIncomingParentShare() {
   const store = useStore()
   const incomingParentShare = ref(null)
-  const sharesTree = computed(() => store.state.Files.sharesTree)
+  const sharesTree = computed(() => store.getters['Files/sharesTree'])
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare
@@ -20,7 +20,7 @@ export function useIncomingParentShare() {
     }
 
     if (resource.shareId) {
-      const parentShare = yield clientService.owncloudSdk.shares.getShare(resource.shareId)
+      parentShare = yield clientService.owncloudSdk.shares.getShare(resource.shareId)
       if (parentShare) {
         incomingParentShare.value = buildShare(parentShare.shareInfo, resource, true)
         return

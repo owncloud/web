@@ -380,7 +380,6 @@ export default defineComponent({
         }
         this.sharedTime = this.sharedItem.stime
         this.sharedParentDir = sharePathParentOrCurrent
-        this.shareIndicators = getIndicators(this.file, this.sharesTree)
       },
       immediate: true
     }
