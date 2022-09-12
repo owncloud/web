@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
+
+* Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+
+   We've fixed a bug where the sidebar toggle icon would not detect the "open"-state of the
+   sidebar.
+
+   https://github.com/owncloud/web/pull/7632
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
