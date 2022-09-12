@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
@@ -21,6 +22,21 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
+
+* Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
+
+   We've improved loading of the shares tree:
+
+   * It now happens more globally in the sidebar component instead of in each sidebar panel. *
+   Shares won't be loaded for resources without a path anymore.
+
+   These changes massively improve the sidebar performance and fix several issues with
+   (re-)share permissions.
+
+   https://github.com/owncloud/web/issues/7506
+   https://github.com/owncloud/web/issues/7593
+   https://github.com/owncloud/web/issues/7592
+   https://github.com/owncloud/web/pull/7580
 
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 
