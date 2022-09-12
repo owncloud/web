@@ -333,10 +333,6 @@ export default {
   background-color: var(--oc-color-input-bg);
   width: 450px;
 
-  #no-results {
-    cursor: default;
-  }
-
   #more-results-link {
     text-decoration: none;
     flex-direction: column;
@@ -362,7 +358,6 @@ export default {
     }
 
     li {
-      cursor: pointer;
       padding: 15px 10px;
       position: relative;
       font-size: var(--oc-font-size-small);
