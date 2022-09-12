@@ -154,8 +154,15 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
-import { resolveFileNameDuplicate, extractNameWithoutExtension } from '../../helpers/resource'
+import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
+import { extractExtensionFromFile, extractNameWithoutExtension } from '../../helpers/resource'
+import {
+  resolveFileExists,
+  ResolveStrategy,
+  ResolveConflict,
+  resolveFileNameDuplicate,
+  FileExistsResolver
+} from '../../helpers/resource/copyMove'
 
 export default defineComponent({
   components: {
@@ -678,7 +685,7 @@ export default defineComponent({
       return null
     },
 
-    onFilesSelected(files: File[]) {
+    async onFilesSelected(files: File[]) {
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
@@ -686,35 +693,32 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
+          // Logic for folders, applies to all files inside folder and subfolders
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            this.showMessage({
-              title: this.$gettextInterpolate(
-                this.$gettext('Folder "%{folder}" already exists.'),
-                { folder: rootFolder },
-                true
-              ),
-              status: 'danger'
+            if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
+            conflicts.push({
+              name: rootFolder,
+              type: 'folder'
             })
-            return
+            continue
           }
-
-          // Folder does not exist, no need to care about files inside -> continue
-          continue
         }
-        const exists = this.files.find((f) => f.name === file.name)
+        // Logic for files
+        const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
         if (exists) {
-          conflicts.push(file)
+          conflicts.push({
+            name: file.name,
+            type: 'file'
+          })
         }
       }
-
       if (conflicts.length) {
-        this.displayOverwriteDialog(uppyResources, conflicts)
+        await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -797,51 +801,111 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    displayOverwriteDialog(files: UppyResource[], conflicts) {
-      const title = this.$ngettext(
-        'File already exists',
-        'Some files already exist',
-        conflicts.length
+    async displayOverwriteDialog(
+      files: UppyResource[],
+      conflicts,
+      resolveFileExistsMethod: FileExistsResolver
+    ) {
+      let count = 0
+      const allConflictsCount = conflicts.length
+      const resolvedFileConflicts = []
+      const resolvedFolderConflicts = []
+      let doForAllConflicts = false
+      let allConflictsStrategy
+      let doForAllConflictsFolders = false
+      let allConflictsStrategyFolders
+
+      for (const conflict of conflicts) {
+        const isFolder = conflict.type === 'folder'
+        const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
+
+        if (doForAllConflicts && !isFolder) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategy
+          })
+          continue
+        }
+        if (doForAllConflictsFolders && isFolder) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategyFolders
+          })
+          continue
+        }
+
+        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
+          this.createModal,
+          this.hideModal,
+          { name: conflict.name, isFolder } as Resource,
+          allConflictsCount - count,
+          this.$gettext,
+          this.$gettextInterpolate,
+          false,
+          isFolder
+        )
+        count++
+        if (resolvedConflict.doForAllConflicts) {
+          if (isFolder) {
+            doForAllConflictsFolders = true
+            allConflictsStrategyFolders = resolvedConflict.strategy
+          } else {
+            doForAllConflicts = true
+            allConflictsStrategy = resolvedConflict.strategy
+          }
+        }
+
+        conflictArray.push({
+          name: conflict.name,
+          strategy: resolvedConflict.strategy
+        })
+      }
+      const filesToSkip = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+      const foldersToSkip = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+
+      files = files.filter((e) => !filesToSkip.includes(e.name))
+      files = files.filter(
+        (file) =>
+          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
       )
 
-      const isVersioningEnabled = this.isUserContext && this.capabilities?.files?.versioning
+      const filesToKeepBoth = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
+      const foldersToKeepBoth = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
 
-      let translatedMsg
-      if (isVersioningEnabled) {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to create a new version for it?',
-          'The following resources already exist: %{resources}. Do you want to create a new version for them?',
-          conflicts.length
-        )
-      } else {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to overwrite it?',
-          'The following resources already exist: %{resources}. Do you want to overwrite them?',
-          conflicts.length
-        )
+      for (const fileName of filesToKeepBoth) {
+        const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
+        const extension = extractExtensionFromFile({ name: fileName } as Resource)
+        file.name = resolveFileNameDuplicate(fileName, extension, this.files)
       }
-      const message = this.$gettextInterpolate(translatedMsg, {
-        resources: conflicts.map((f) => `${f.name}`).join(', ')
-      })
-
-      const modal = {
-        variation: isVersioningEnabled ? 'passive' : 'danger',
-        icon: 'upload-cloud',
-        title,
-        message,
-        cancelText: this.$gettext('Cancel'),
-        confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
-        onCancel: () => {
-          this.$uppyService.clearInputs()
-          this.hideModal()
-        },
-        onConfirm: () => {
-          this.hideModal()
-          this.handleUppyFileUpload(files)
+      for (const folder of foldersToKeepBoth) {
+        const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
+        for (const file of filesInFolder) {
+          const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
+          file.meta.relativeFolder = file.meta.relativeFolder.replace(
+            `/${folder}`,
+            `/${newFolderName}`
+          )
+          file.meta.relativePath = file.meta.relativePath.replace(
+            `/${folder}/`,
+            `/${newFolderName}/`
+          )
+          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
+          const data = file.data as any
+          data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
+          file.meta.routeItem = `/${newFolderName}`
         }
       }
 
-      this.createModal(modal)
+      if (files.length === 0) return
+      this.handleUppyFileUpload(files)
     }
   }
 })

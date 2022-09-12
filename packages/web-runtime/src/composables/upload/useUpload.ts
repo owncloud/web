@@ -192,7 +192,11 @@ const createDirectoryTree = ({
             unref(publicLinkPassword)
           )
         } else {
-          await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          try {
+            await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          } catch (error) {
+            console.error(error)
+          }
         }
 
         uppyService.publish('uploadSuccess', uppyResource)

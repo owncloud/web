@@ -1,0 +1,6 @@
+Bugfix: Resolve upload existing folder
+
+We've added a conflict dialog which handles name clashes when uploading files and folders.
+
+https://github.com/owncloud/web/pull/7504
+https://github.com/owncloud/web/issues/6996
