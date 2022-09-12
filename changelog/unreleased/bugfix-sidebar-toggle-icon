@@ -1,0 +1,5 @@
+Bugfix: Sidebar toggle icon
+
+We've fixed a bug where the sidebar toggle icon would not detect the "open"-state of the sidebar.
+
+https://github.com/owncloud/web/pull/7632

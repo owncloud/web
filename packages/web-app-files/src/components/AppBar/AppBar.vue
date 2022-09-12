@@ -28,7 +28,7 @@
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
           <view-options v-if="hasViewOptions" />
-          <sidebar-toggle v-if="hasSidebarToggle" />
+          <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
       </div>
       <div class="files-app-bar-actions">
