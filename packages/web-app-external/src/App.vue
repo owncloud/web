@@ -99,7 +99,8 @@ export default defineComponent({
         configUrl +
         appOpenUrl +
         `?file_id=${fileId}` +
-        (this.applicationName ? `&app_name=${this.applicationName}` : '')
+        `&lang=${this.$language.current}` +
+        (this.applicationName ? `&app_name=${this.applicationName}` : '') 
 
       const response = await this.makeRequest('POST', url)
 
