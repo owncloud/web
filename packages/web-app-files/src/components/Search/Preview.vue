@@ -14,7 +14,6 @@
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
-      @click="$_fileActions_triggerDefaultAction(resource)"
     />
   </oc-button>
 </template>
@@ -72,7 +71,7 @@ export default {
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.folderLink(this.resource)
+            to: this.createFolderLink(this.resource.path, this.resource)
           }
         : {}
     },
