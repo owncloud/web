@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
@@ -22,6 +23,13 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
+
+* Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
+
+   We've added a conflict dialog which handles name clashes when uploading files and folders.
+
+   https://github.com/owncloud/web/issues/6996
+   https://github.com/owncloud/web/pull/7504
 
 * Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
 
