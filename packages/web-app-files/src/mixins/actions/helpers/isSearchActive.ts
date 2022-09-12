@@ -1,9 +1,7 @@
-import { useSearchActive } from 'search/src/composables'
-
 export default {
   computed: {
     $_isSearchActive(): boolean {
-      return useSearchActive()
+      return !!document.getElementById('files-global-search-options')
     }
   }
 }
