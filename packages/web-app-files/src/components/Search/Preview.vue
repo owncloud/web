@@ -1,7 +1,9 @@
 <template>
-  <component
-    :is="resource.isFolder ? 'router-link' : 'div'"
-    class="files-search-preview oc-flex"
+  <oc-button
+    :type="resource.isFolder ? 'router-link' : 'button'"
+    justify-content="left"
+    class="files-search-preview oc-flex oc-width-1-1"
+    appearance="raw"
     v-bind="attrs"
     v-on="listeners"
   >
@@ -14,7 +16,7 @@
       :is-thumbnail-displayed="displayThumbnails"
       @click="$_fileActions_triggerDefaultAction(resource)"
     />
-  </component>
+  </oc-button>
 </template>
 
 <script lang="ts">
