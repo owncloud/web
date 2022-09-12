@@ -81,6 +81,7 @@ export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
   const { page, role, recipients } = args
   for (const recipient of recipients) {
     const shareInputLocator = page.locator(invitationInput)
+    await shareInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
       shareInputLocator.fill(recipient.id)
