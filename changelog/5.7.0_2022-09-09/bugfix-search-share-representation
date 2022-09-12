@@ -1,0 +1,8 @@
+Bugfix: Search share representation
+
+We've fixed a bug, where shares in the search were not displayed correctly and clicking on the respective
+item did not open the default action or redirect to the correct share route.
+
+https://github.com/owncloud/web/pull/7560
+https://github.com/owncloud/web/issues/7043
+

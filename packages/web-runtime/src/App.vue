@@ -124,6 +124,9 @@ export default defineComponent({
             languageCode = language
           }
         }
+        if (languageCode?.indexOf('_')) {
+          languageCode = languageCode.split('_')[0]
+        }
         if (languageCode) {
           this.$language.current = languageCode
           document.documentElement.lang = languageCode

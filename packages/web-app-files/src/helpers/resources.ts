@@ -79,8 +79,10 @@ export function buildResource(resource): Resource {
     })(),
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    shareId: resource.fileInfo[DavProperty.ShareId],
+    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
@@ -138,6 +140,7 @@ export function aggregateResourceShares(
   allowSharePermission,
   hasShareJail
 ): Resource[] {
+  shares.sort((a, b) => a.path.localeCompare(b.path))
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
@@ -145,7 +148,6 @@ export function aggregateResourceShares(
     )
   }
 
-  shares.sort((a, b) => a.path.localeCompare(b.path))
   const resources = addSharedWithToShares(shares)
   return resources.map((share) =>
     buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)

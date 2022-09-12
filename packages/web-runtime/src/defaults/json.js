@@ -3,7 +3,11 @@
  * as workaround export it from a js file
  */
 import CoreTranslations from '../../l10n/translations.json'
+import ClientTranslations from 'web-client/l10n/translations.json'
+import PkgTranslations from 'web-pkg/l10n/translations.json'
 import OdsTranslations from 'owncloud-design-system/dist/system/translations.json'
 
 export const coreTranslations = CoreTranslations
+export const clientTranslations = ClientTranslations
+export const pkgTranslations = PkgTranslations
 export const odsTranslations = OdsTranslations

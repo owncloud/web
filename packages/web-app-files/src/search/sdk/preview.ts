@@ -47,12 +47,8 @@ export default class Preview implements SearchPreview {
       previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
-    const resources = results.reduce((acc, plainResource) => {
-      let resourceName = decodeURIComponent(plainResource.name)
-      if (resourceName.startsWith('/dav')) {
-        resourceName = resourceName.slice(4)
-      }
-      const resource = buildResource({ ...plainResource, name: resourceName })
+    const resources = results.reduce((acc, result) => {
+      const resource = buildResource(result)
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {

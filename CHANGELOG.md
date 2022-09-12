@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 5.7.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.6.1...master
+[5.7.0]: https://github.com/owncloud/web/compare/v5.6.1...v5.7.0
 
 Summary
 -------
@@ -17,6 +17,7 @@ Summary
 * Bugfix - Default to user context: [#7437](https://github.com/owncloud/web/pull/7437)
 * Bugfix - Dragging a file causes no selection: [#7473](https://github.com/owncloud/web/pull/7473)
 * Bugfix - Prevent error when pasting with empty clipboard: [#7214](https://github.com/owncloud/web/pull/7214)
+* Bugfix - Expiration date picker with long language codes: [#7622](https://github.com/owncloud/web/issues/7622)
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 * Bugfix - External apps fixes: [#7166](https://github.com/owncloud/web/pull/7166)
 * Bugfix - File name in text editor: [#7516](https://github.com/owncloud/web/pull/7516)
@@ -33,6 +34,7 @@ Summary
 * Bugfix - Load only supported thumbnails (configurable): [#7474](https://github.com/owncloud/web/pull/7474)
 * Bugfix - Loading state in views: [#7325](https://github.com/owncloud/web/pull/7325)
 * Bugfix - Logout deleted user on page reload: [#4677](https://github.com/owncloud/web/issues/4677)
+* Bugfix - Merge share with group and group member into one: [#7582](https://github.com/owncloud/web/issues/7582)
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 * Bugfix - Missing scroll bar in user management app: [#7321](https://github.com/owncloud/web/pull/7321)
 * Bugfix - SidebarNavItem icon flickering: [#7309](https://github.com/owncloud/web/pull/7309)
@@ -50,6 +52,7 @@ Summary
 * Bugfix - Redirect after removing self from space members: [#7534](https://github.com/owncloud/web/issues/7534)
 * Bugfix - Rename shared space resource not possible: [#7379](https://github.com/owncloud/web/pull/7379)
 * Bugfix - Repair navigation highlighter: [#7210](https://github.com/owncloud/web/pull/7210)
+* Bugfix - Search share representation: [#7560](https://github.com/owncloud/web/pull/7560)
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
 * Bugfix - "Shared via"-indicator for links: [#7478](https://github.com/owncloud/web/issues/7478)
 * Bugfix - "Shared with others" and "Shared via Link" resource links not working: [#7308](https://github.com/owncloud/web/pull/7308)
@@ -81,6 +84,7 @@ Summary
 * Enhancement - Add change own password dialog to the account info page: [#7206](https://github.com/owncloud/web/pull/7206)
 * Enhancement - Declined shares are now easily accessible: [#7356](https://github.com/owncloud/web/pull/7356)
 * Enhancement - Drop menu styling in right sidebar: [#7365](https://github.com/owncloud/web/pull/7365)
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
 * Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Left sidebar hover effect: [#7540](https://github.com/owncloud/web/issues/7540)
 * Enhancement - Lowlight cut resources: [#7309](https://github.com/owncloud/web/pull/7309)
@@ -90,6 +94,7 @@ Summary
 * Enhancement - Propose unique file name while creating a new file: [#7555](https://github.com/owncloud/web/pull/7555)
 * Enhancement - Redesign shared with list: [#7252](https://github.com/owncloud/web/pull/7252)
 * Enhancement - Reduce pagination options: [#7038](https://github.com/owncloud/web/issues/7038)
+* Enhancement - Remember the UI that was last selected via the application switcher: [#6173](https://github.com/owncloud/web/pull/6173)
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 * Enhancement - Replace locationpicker with clipboard actions: [#7309](https://github.com/owncloud/web/pull/7309)
 * Enhancement - Reposition notifications: [#7139](https://github.com/owncloud/web/pull/7139)
@@ -101,15 +106,15 @@ Summary
 * Enhancement - Search improvements: [#7586](https://github.com/owncloud/web/pull/7586)
 * Enhancement - Improve performance of share indicators: [#7038](https://github.com/owncloud/web/issues/7038)
 * Enhancement - Sharing panel show label instead of description for links: [#7364](https://github.com/owncloud/web/pull/7364)
+* Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 * Enhancement - Option to block file extensions from text-editor app: [#6661](https://github.com/owncloud/web/issues/6661)
-* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.18: [#7626](https://github.com/owncloud/web/pull/7626)
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 * Enhancement - User management app saved dialog: [#7375](https://github.com/owncloud/web/pull/7375)
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 * Enhancement - Users table on small screen: [#7476](https://github.com/owncloud/web/pull/7476)
-* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
-* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
 
 Details
 -------
@@ -185,6 +190,14 @@ Details
 
    https://github.com/owncloud/web/issues/7146
    https://github.com/owncloud/web/pull/7214
+
+* Bugfix - Expiration date picker with long language codes: [#7622](https://github.com/owncloud/web/issues/7622)
+
+   We've fixed a bug where the expiration date picker in the sharing sidebar wouldn't open if the
+   user selected a language with long language code, e.g. de_DE.
+
+   https://github.com/owncloud/web/issues/7622
+   https://github.com/owncloud/web/pull/7623
 
 * Bugfix - Re-introduce dynamic app name in document title: [#7173](https://github.com/owncloud/web/pull/7173)
 
@@ -312,6 +325,14 @@ Details
    https://github.com/owncloud/web/issues/4564
    https://github.com/owncloud/web/issues/4795
    https://github.com/owncloud/web/pull/7072
+
+* Bugfix - Merge share with group and group member into one: [#7582](https://github.com/owncloud/web/issues/7582)
+
+   We've fixed a bug that the share with a group and share of the same resource with a member of this
+   group was shown as 2 shares in "Shared with me" view.
+
+   https://github.com/owncloud/web/issues/7582
+   https://github.com/owncloud/web/pull/7598
 
 * Bugfix - Missing file icon in details panel: [#7344](https://github.com/owncloud/web/pull/7344)
 
@@ -451,6 +472,14 @@ Details
    https://github.com/owncloud/web/pull/7210
    https://github.com/owncloud/web/pull/7270
    https://github.com/owncloud/web/pull/7324
+
+* Bugfix - Search share representation: [#7560](https://github.com/owncloud/web/pull/7560)
+
+   We've fixed a bug, where shares in the search were not displayed correctly and clicking on the
+   respective item did not open the default action or redirect to the correct share route.
+
+   https://github.com/owncloud/web/issues/7043
+   https://github.com/owncloud/web/pull/7560
 
 * Bugfix - Selected item bottom glue: [#7393](https://github.com/owncloud/web/pull/7393)
 
@@ -716,6 +745,14 @@ Details
    https://github.com/owncloud/web/issues/7335
    https://github.com/owncloud/web/pull/7365
 
+* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
+
+   We've adjusted the spacing of the files list options menu to visually match with the other
+   menus.
+
+   https://github.com/owncloud/web/issues/7541
+   https://github.com/owncloud/web/pull/7570
+
 * Enhancement - Keyboard shortcut indicators in ContextMenu: [#7309](https://github.com/owncloud/web/pull/7309)
 
    We've added the option to display relevant keyboard shortcuts in the contextmenu to give
@@ -803,6 +840,14 @@ Details
 
    https://github.com/owncloud/web/issues/7038
    https://github.com/owncloud/web/pull/7597
+
+* Enhancement - Remember the UI that was last selected via the application switcher: [#6173](https://github.com/owncloud/web/pull/6173)
+
+   With this change, ownCloud will remember the UI that was last selected via the application
+   switcher. This only works when using ownCloud 10 as backend.
+
+   https://github.com/owncloud/enterprise/issues/4694
+   https://github.com/owncloud/web/pull/6173
 
 * Enhancement - Remove clickOutside directive: [#7584](https://github.com/owncloud/web/pull/7584)
 
@@ -894,6 +939,17 @@ Details
    https://github.com/owncloud/web/issues/7358
    https://github.com/owncloud/web/pull/7364
 
+* Enhancement - Simplify mime type checking: [#7605](https://github.com/owncloud/web/pull/7605)
+
+   We've removed the dependency to GuzzleHttp from our oc10 app package. It was used for mime type
+   checking only. Instead we now rely on a mime type checker that is already bundled with oc10 core.
+   IMPORTANT: this enhancement is needed to reach compatibility with oc10.11 and maintain
+   backwards compatibility with oc prior to oc10.11. This would not be easily doable when still
+   relying on GuzzleHttp because its major version was updated from 5 to 7 in oc10.11.
+
+   https://github.com/owncloud/web/pull/7605
+   https://github.com/owncloud/web/pull/5933
+
 * Enhancement - Streamline UI sizings: [#7363](https://github.com/owncloud/web/pull/7363)
 
    We've streamlined the font sizes and some other size related options to let the web UI appear a
@@ -913,16 +969,18 @@ Details
    https://github.com/owncloud/web/issues/6661
    https://github.com/owncloud/web/pull/7174
 
-* Enhancement - Update ODS to v14.0.0-alpha.16: [#7355](https://github.com/owncloud/web/pull/7355)
+* Enhancement - Update ODS to v14.0.0-alpha.18: [#7626](https://github.com/owncloud/web/pull/7626)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.16. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.18. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
    [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
    Avatar link icon:
    [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269) * Bugfix -
-   Lazy loading render performance:
+   Firefox drag & drop move of folders not possible:
+   [#7495](https://github.com/owncloud/web/issues/7495) * Bugfix - Lazy loading render
+   performance:
    [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260) * Bugfix -
    Remove width shrinking of the ocAvatarItem:
    [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
@@ -946,11 +1004,15 @@ Details
    [#2284](https://github.com/owncloud/owncloud-design-system/pull/2284) *
    Enhancement - Adjust avatar font weight from bold to normal:
    [#2275](https://github.com/owncloud/owncloud-design-system/pull/2275) *
+   Enhancement - Align breadcrumb context menu with regular context menu:
+   [#2296](https://github.com/owncloud/owncloud-design-system/pull/2296) *
    Enhancement - OcCheckbox add outline:
    [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
    Enhancement - Add offset property to the drop component:
    [#7335](https://github.com/owncloud/web/issues/7335) * Enhancement - Make UI smaller:
    [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - Oc-card style:
+   [#2306](https://github.com/owncloud/owncloud-design-system/pull/2306) *
    Enhancement - OcSelect dark mode improvements:
    [#2262](https://github.com/owncloud/owncloud-design-system/pull/2262) *
    Enhancement - Progress bar indeterminate state:
@@ -960,8 +1022,8 @@ Details
    Enhancement - Use Inter font:
    [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
-   https://github.com/owncloud/web/pull/7355
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.16
+   https://github.com/owncloud/web/pull/7626
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.18
 
 * Enhancement - Update Uppy to v3.0.1: [#7177](https://github.com/owncloud/web/issues/7177)
 
@@ -980,6 +1042,15 @@ Details
    https://github.com/owncloud/web/pull/7375
    https://github.com/owncloud/web/pull/7377
 
+* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
+
+   We've added the possibility to change user's quota in the user management app.
+
+   https://github.com/owncloud/web/issues/7059
+   https://github.com/owncloud/web/pull/7182
+   https://github.com/owncloud/web/pull/7530
+   https://github.com/owncloud/web/pull/7538
+
 * Enhancement - Introduce group assignments: [#7176](https://github.com/owncloud/web/pull/7176)
 
    We have added a new quick action in the user management where the user can be assigned to groups.
@@ -993,23 +1064,6 @@ Details
 
    https://github.com/owncloud/web/issues/7439
    https://github.com/owncloud/web/pull/7476
-
-* Enhancement - Adjust spacing of the files list options menu: [#7570](https://github.com/owncloud/web/pull/7570)
-
-   We've adjusted the spacing of the files list options menu to visually match with the other
-   menus.
-
-   https://github.com/owncloud/web/issues/7541
-   https://github.com/owncloud/web/pull/7570
-
-* Enhancement - User management app edit quota: [#7182](https://github.com/owncloud/web/pull/7182)
-
-   We've added the possibility to change user's quota in the user management app.
-
-   https://github.com/owncloud/web/issues/7059
-   https://github.com/owncloud/web/pull/7182
-   https://github.com/owncloud/web/pull/7530
-   https://github.com/owncloud/web/pull/7538
 
 Changelog for ownCloud Web [5.6.1] (2022-06-22)
 =======================================

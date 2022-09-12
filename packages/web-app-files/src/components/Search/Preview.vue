@@ -3,8 +3,8 @@
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :folder-link="folderLink(resource)"
-      :parent-folder-link="parentFolderLink(resource)"
+      :folder-link="folderLink"
+      :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
       @click="$_fileActions_triggerDefaultAction(resource)"
@@ -22,7 +22,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -48,9 +48,7 @@ export default {
       hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
-      accessToken: useAccessToken({ store })
+      })
     }
   },
   data() {
@@ -66,6 +64,12 @@ export default {
       return this.spaces.find((space) => space.id === this.resource.storageId)
     },
     defaultParentFolderName() {
+      if (this.resource.shareId) {
+        return this.resource.path === '/'
+          ? this.$gettext('Shared with me')
+          : path.basename(this.resource.shareRoot)
+      }
+
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
       }
@@ -75,6 +79,12 @@ export default {
       }
 
       return this.$gettext('Personal')
+    },
+    folderLink() {
+      return this.createFolderLink(this.resource.path, this.resource)
+    },
+    parentFolderLink() {
+      return this.createFolderLink(path.dirname(this.resource.path), this.resource)
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
@@ -110,29 +120,34 @@ export default {
     visibilityObserver.disconnect()
   },
   methods: {
-    folderLink(file) {
-      return this.createFolderLink(file.path, file.storageId)
-    },
-    parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.storageId)
-    },
-    createFolderLink(path, storageId) {
-      if (this.resourceTargetLocation === null || this.resourceTargetLocationSpace === null) {
+    createFolderLink(filePath, resource) {
+      if (this.resourceTargetLocation === null) {
         return {}
+      }
+
+      if (resource.shareId) {
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            shareName: path.basename(resource.shareRoot)
+          },
+          query: {
+            shareId: resource.shareId
+          }
+        })
       }
 
       if (this.matchingSpace?.driveType === 'project') {
         return createLocationSpaces('files-spaces-project', {
-          params: { storageId, item: path.replace(/^\//, '') || undefined }
+          params: { storageId: resource.storageId, item: filePath.replace(/^\//, '') || undefined }
         })
       }
 
       return {
         name: this.resourceTargetLocation.name,
         params: {
-          item: path.replace(/^\//, '') || undefined,
+          item: filePath.replace(/^\//, '') || undefined,
           ...this.resourceTargetLocation.params,
-          ...(storageId && { storageId })
+          ...(resource.storageId && { storageId: resource.storageId })
         }
       }
     }

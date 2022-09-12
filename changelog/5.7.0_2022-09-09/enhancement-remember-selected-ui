@@ -1,0 +1,6 @@
+Enhancement: Remember the UI that was last selected via the application switcher
+
+With this change, ownCloud will remember the UI that was last selected via the application switcher. This only works when using ownCloud 10 as backend.
+
+https://github.com/owncloud/web/pull/6173
+https://github.com/owncloud/enterprise/issues/4694

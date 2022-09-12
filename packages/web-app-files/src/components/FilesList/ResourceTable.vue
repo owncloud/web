@@ -188,7 +188,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces } from '../../router'
+import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
@@ -593,21 +593,38 @@ export default defineComponent({
       return this.createFolderLink(file.path, file)
     },
     parentFolderLink(file) {
+      if (file.shareId && file.path === '/') {
+        return createLocationShares('files-shares-with-me')
+      }
+
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(path, resource) {
+    createFolderLink(filePath, resource) {
       if (this.targetRoute === null) {
         return {}
       }
 
       const params = {
-        item: path.replace(/^\//, '') || '/',
+        item: filePath.replace(/^\//, '') || '/',
         ...mapResourceFields(resource, this.targetRouteParamMapping),
         ...this.targetRoute.params
       }
       const query = {
         ...mapResourceFields(resource, this.targetRouteQueryMapping),
         ...this.targetRoute.query
+      }
+
+      if (resource.shareId) {
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            ...params,
+            shareName: path.basename(resource.shareRoot)
+          },
+          query: {
+            ...query,
+            shareId: resource.shareId
+          }
+        })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
@@ -796,6 +813,12 @@ export default defineComponent({
 
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
+      }
+
+      if (resource.shareId) {
+        return resource.path === '/'
+          ? this.$gettext('Shared with me')
+          : path.basename(resource.shareRoot)
       }
 
       return this.$gettext('Personal')

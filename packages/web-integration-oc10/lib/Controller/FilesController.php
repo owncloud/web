@@ -21,7 +21,6 @@
 
 namespace OCA\Web\Controller;
 
-use GuzzleHttp\Mimetypes;
 use OC\AppFramework\Http;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -29,7 +28,7 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\DataDisplayResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
+use OCP\Files\IMimeTypeDetector;
 use OCP\IRequest;
 
 /**
@@ -39,27 +38,27 @@ use OCP\IRequest;
  */
 class FilesController extends Controller {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
     /**
      * @var IAppManager
      */
 	private $appManager;
+	/**
+	 * @var IMimeTypeDetector
+	 */
+	private $mimeTypeDetector;
 
     /**
      * FilesController constructor.
      *
      * @param string $appName
      * @param IRequest $request
-     * @param IConfig $config
      * @param IAppManager $appManager
+	 * @param IMimeTypeDetector $mimeTypeDetector
      */
-	public function __construct(string $appName, IRequest $request, IConfig $config, IAppManager  $appManager) {
+	public function __construct(string $appName, IRequest $request, IAppManager  $appManager, IMimeTypeDetector $mimeTypeDetector) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
 		$this->appManager = $appManager;
+		$this->mimeTypeDetector = $mimeTypeDetector;
 	}
 
 	/**
@@ -78,7 +77,7 @@ class FilesController extends Controller {
 		}
 
 		// check if path permitted
-		$permittedPaths = ["css", "img", "js", "themes", "icons", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
+		$permittedPaths = ["css", "img", "js", "themes", "icons", "fonts", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
 		$found = false;
 		foreach ($permittedPaths as $p) {
 			if (\strpos($path, $p) === 0) {
@@ -133,8 +132,7 @@ class FilesController extends Controller {
 	}
 
 	private function getMimeType(string $filename): string {
-		$mimeTypes = Mimetypes::getInstance();
-		return $mimeTypes->fromFilename($filename);
+		return $this->mimeTypeDetector->detectPath($filename);
 	}
 
     private function applyCSPOpenIDConnect(ContentSecurityPolicy $csp): ContentSecurityPolicy {
