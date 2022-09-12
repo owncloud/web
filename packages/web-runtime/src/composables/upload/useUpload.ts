@@ -10,7 +10,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { computed, Ref, unref, watch } from '@vue/composition-api'
-import { UppyService } from '../../services/uppyService'
+import { UppyService, uppyHeaders } from '../../services/uppyService'
 import * as uuid from 'uuid'
 
 export interface UppyResource {
@@ -79,7 +79,18 @@ export function useUpload(options: UploadOptions): UploadResult {
       onBeforeRequest: (req) => {
         req.setHeader('Authorization', unref(headers).Authorization)
       },
-      headers: () => unref(headers),
+      headers: (file) => {
+        const reqHeaders = {
+          'x-oc-mtime': file.data.lastModified / 1000,
+          ...unref(headers)
+        } as uppyHeaders
+
+        if (unref(isTusSupported)) {
+          // Tus includes auth headers before each request
+          delete reqHeaders.Authorization
+        }
+        return reqHeaders
+      },
       ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
