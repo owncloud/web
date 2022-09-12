@@ -16,7 +16,7 @@ import Rename from './actions/rename'
 import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import isSearchActive from './actions/helpers/isSearchActive'
+import isSearchActive from './helpers/isSearchActive'
 
 const actionsMixins = [
   'navigate',

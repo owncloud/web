@@ -5,7 +5,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import isSearchActive from './helpers/isSearchActive'
+import isSearchActive from '../helpers/isSearchActive'
 
 export default {
   mixins: [isFilesAppActive, isSearchActive],
