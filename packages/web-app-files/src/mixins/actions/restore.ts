@@ -4,14 +4,21 @@ import { isLocationTrashActive } from '../../router'
 import {
   buildWebDavFilesTrashPath,
   buildWebDavFilesPath,
-  buildWebDavSpacesTrashPath
+  buildWebDavSpacesTrashPath,
+  buildResource
 } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
-import { buildWebDavSpacesPath, isProjectSpaceResource } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource, isProjectSpaceResource } from 'web-client/src/helpers'
+import { DavProperties } from 'web-pkg/src/constants'
+import {
+  ResolveConflict,
+} from '../../helpers/resource/'
 
 export default {
   computed: {
     ...mapState(['user']),
+    ...mapGetters('Files', ['files']),
+    ...mapState('runtime/spaces', ['spaces']),
     ...mapGetters(['configuration', 'capabilities']),
 
     $_restore_items() {
@@ -52,6 +59,75 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     async $_restore_trigger({ resources }) {
+      //? 1. collect existing parent folders of resource and request each parent folders files. Avoid requesting a path twice
+      //? 1.1 check all resources for conflicts and collect them
+      //? 2: iterate through conflicts and collect resolve strategies
+      //? 3: iterate through conflicts and behave according to strategy
+      
+      //! add restored files to parentFolders object to avoid further conflicts
+      //! 1:
+      const parentFolders = {}
+      const conflicts = []
+      const getWebdavParentFolderFromResource = (resource) => {
+        const parentPath = resource.path.slice(0, resource.path.lastIndexOf(resource.name))
+        return buildWebDavFilesPath(this.user.id, parentPath)
+      }
+      for(const resource of resources) {
+        console.log(resource)
+        const webDavParentPath = getWebdavParentFolderFromResource(resource)
+
+        //? check if parent folder has already been requested
+        let parentResources = []
+        if(webDavParentPath in parentFolders) {
+          parentResources = parentFolders[webDavParentPath]
+        }else {
+          const listResponse = await this.$client.files.list(webDavParentPath, 1, DavProperties.Default)
+          parentResources = listResponse.map((i) => buildResource(i))
+          parentFolders[webDavParentPath] = parentResources
+        }
+        //? Check for naming conflict
+        const hasConflict = parentResources.some(e => e.name === resource.name)
+        if(!hasConflict) continue
+        conflicts.push(resource)
+      }
+
+      //! 2
+      let count = 0
+      const resolvedConflicts = []
+      const allConflictsCount = conflicts.length
+      let doForAllConflicts = false
+      let allConflictsStrategy
+      for(const conflict of conflicts) {
+        const isFolder = conflict.type === 'folder'
+        if (doForAllConflicts) {
+          resolvedConflicts.push({
+            resource: conflict,
+            strategy: allConflictsStrategy
+          })
+          continue
+        }
+        const resolvedConflict: ResolveConflict = await resolveFileExists(
+          this.createModal,
+          this.hideModal,
+          { name: conflict.name, isFolder } as Resource,
+          allConflictsCount - count,
+          this.$gettext,
+          this.$gettextInterpolate,
+          false
+        )
+        count++
+        if (resolvedConflict.doForAllConflicts) {
+          doForAllConflicts = true
+          allConflictsStrategy = resolvedConflict.strategy
+        }
+        resolvedConflicts.push({
+          resource: conflict,
+          strategy: resolvedConflict.strategy
+        })
+      }
+      console.log(resolvedConflicts)
+      return
+
       const restoredResources = []
       const failedResources = []
       const restorePromises = []
