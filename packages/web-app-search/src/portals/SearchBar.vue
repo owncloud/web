@@ -12,7 +12,7 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @clear="resetProvider"
+      @clear="resetProviders"
     />
     <div
       v-if="optionsVisible && term"
@@ -22,52 +22,48 @@
     >
       <ul class="oc-list oc-list-divider">
         <li
-          v-for="provider in availableProviders"
-          :key="provider.id"
-          class="provider"
-          :class="{ selected: activeProvider ? provider.id === activeProvider.id : false }"
-          @click="activateProvider(provider)"
-        >
-          <oc-icon name="search" fill-type="line" accessible-label="Search" />
-          <span class="term">{{ term | truncate }}</span>
-          <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
-        </li>
-        <li
-          v-if="$asyncComputed.searchResult.updating"
+          v-if="$asyncComputed.searchResults.updating"
           class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
         >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
           <span class="oc-ml-s">{{ $gettext('Searching ...') }}</span>
         </li>
-        <template v-if="!$asyncComputed.searchResult.updating">
-          <li
-            v-for="(searchResultValue, idx) in searchResult.values"
-            :key="searchResultValue.id"
-            class="preview"
-            :class="{ first: idx === 0 }"
-            @click="activeProvider.previewSearch.activate(searchResultValue)"
-          >
-            <component
-              :is="activeProvider.previewSearch.component"
-              :provider="activeProvider"
-              :search-result="searchResultValue"
-            />
-          </li>
-          <li v-if="showNoResults" id="no-results" class="oc-flex oc-flex-center">
-            {{ $gettext('No results') }}
-          </li>
-          <li v-if="showMoreResults" id="more-results">
-            <router-link
-              id="more-results-link"
-              class="oc-flex oc-text-muted oc-width-1-1"
-              :to="moreResultsLink"
+        <li v-else-if="showNoResults" id="no-results" class="oc-flex oc-flex-center">
+          {{ $gettext('No results') }}
+        </li>
+        <template v-else>
+          <ul v-for="provider in availableProviders" :key="provider.id" class="provider">
+            <li class="oc-text-truncate oc-flex oc-flex-between">
+              <span>{{ provider.displayName }}</span>
+              <span v-if="showMoreResultsForProvider(provider)" id="more-results">
+                <router-link
+                  id="more-results-link"
+                  class="oc-flex oc-text-muted oc-width-1-1"
+                  :to="getMoreResultsLinkForProvider(provider)"
+                >
+                  <span id="more-results-text" class="oc-flex oc-flex-center">{{
+                    $gettext('Show more')
+                  }}</span>
+                  <span id="more-results-details" class="oc-flex">{{
+                    getMoreResultsDetailsTextForProvider(provider)
+                  }}</span>
+                </router-link>
+              </span>
+            </li>
+            <li
+              v-for="(providerSearchResultValue, idx) in getSearchResultForProvider(provider)
+                .values"
+              :key="providerSearchResultValue.id"
+              class="preview"
+              :class="{ first: idx === 0 }"
             >
-              <span id="more-results-text" class="oc-flex oc-flex-center">{{
-                $gettext('Show more')
-              }}</span>
-              <span id="more-results-details" class="oc-flex">{{ moreResultsDetailsText }}</span>
-            </router-link>
-          </li>
+              <component
+                :is="provider.previewSearch.component"
+                :provider="provider"
+                :search-result="providerSearchResultValue"
+              />
+            </li>
+          </ul>
         </template>
       </ul>
     </div>
@@ -91,45 +87,19 @@ export default {
   data() {
     return {
       term: '',
-      optionsVisible: false,
       activeProvider: undefined,
+      optionsVisible: false,
       providerStore
     }
   },
 
   computed: {
-    rangeSupported() {
-      return this.searchResult.range
-    },
-
-    rangeItems() {
-      return parseInt(this.searchResult.range?.split('/')[1] || 0)
-    },
-
-    showMoreResults() {
-      return this.rangeSupported && this.rangeItems > this.searchResult.values.length
-    },
-
-    moreResultsLink() {
-      return createLocationCommon('files-common-search', {
-        query: { term: this.term, provider: this.activeProvider.id }
-      })
-    },
-
-    moreResultsDetailsText() {
-      return this.$gettextInterpolate(this.$gettext('%{totalResults} total results'), {
-        totalResults: this.rangeItems
-      })
-    },
-
     showNoResults() {
-      return this.searchResult?.values?.length === 0
+      return this.searchResults.every(({ result }) => !result.values.length)
     },
-
     availableProviders() {
       return this.providerStore.availableProviders
     },
-
     searchLabel() {
       return this.$gettext('Enter search term')
     }
@@ -137,10 +107,7 @@ export default {
 
   watch: {
     $route: {
-      handler(r, o) {
-        if (!!o && this.activeProvider && !this.activeProvider.available) {
-          this.activeProvider = undefined
-        }
+      handler(r) {
         this.$nextTick(() => {
           if (!this.availableProviders.length) {
             return
@@ -159,26 +126,22 @@ export default {
   },
 
   asyncComputed: {
-    searchResult: {
+    searchResults: {
       get() {
-        if (!this.optionsVisible) {
-          return { values: [] }
+        if (!this.term || !this.optionsVisible) {
+          return
         }
-
-        if (!this.activeProvider) {
-          return { values: [] }
-        }
-
-        if (!this.activeProvider.previewSearch) {
-          return { values: [] }
-        }
-
-        if (!this.activeProvider.previewSearch.available) {
-          return { values: [] }
-        }
-        return this.activeProvider.previewSearch.search(this.term)
+        return this.availableProviders.reduce(async (acc, provider) => {
+          if (provider.previewSearch?.available) {
+            acc.push({
+              providerId: provider.id,
+              result: await provider.previewSearch.search(this.term)
+            })
+          }
+          return acc
+        }, [])
       },
-      watch: ['term', 'activeProvider', 'optionsVisible']
+      watch: ['term']
     }
   },
 
@@ -187,76 +150,64 @@ export default {
     window.addEventListener('focusin', this.onEvent)
     window.addEventListener('click', this.onEvent)
   },
+
   beforeDestroy() {
     window.removeEventListener('keyup', this.onEvent)
     window.removeEventListener('focusin', this.onEvent)
     window.removeEventListener('click', this.onEvent)
   },
+
   methods: {
     updateTerm(term) {
       this.term = term
-      this.activeProvider.updateTerm(term)
+      this.availableProviders.forEach((provider) => provider.updateTerm(term))
     },
-    resetProvider() {
-      this.optionsVisible = false
+    resetProviders() {
       this.availableProviders.forEach((provider) => provider.reset())
     },
     activateProvider(provider) {
-      this.optionsVisible = false
-      this.activeProvider = provider
       provider.activate(this.term)
     },
     onEvent(event) {
-      if (!this.activeProvider) {
-        this.activeProvider = this.availableProviders[0]
-      }
-
-      const optionsVisibleInitial = this.optionsVisible
       const eventInComponent = this.$el.contains(event.target)
+      const eventInPreviewItem = event.target.closest('.preview') !== null
       const clearEvent = event.target.classList.contains('oc-search-clear')
-      const keyEventUp = event.keyCode === 38
-      const keyEventDown = event.keyCode === 40
-      const keyEventEnter = event.keyCode === 13
       const keyEventEsc = event.keyCode === 27
-      const activeProviderIndex = this.availableProviders.indexOf(this.activeProvider)
 
       event.stopPropagation()
 
       // optionsVisible is set to
       // - false if the event is a clearEvent or keyEventEsc
       // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
-      this.optionsVisible = clearEvent || keyEventEsc ? false : eventInComponent
-      // after that we need to return early if options not visible to prevent side effects on elements that are not related to the search component
-      if (!this.optionsVisible) {
+      this.optionsVisible =
+        clearEvent || keyEventEsc ? false : eventInComponent && !eventInPreviewItem
+    },
+    getSearchResultForProvider(provider) {
+      return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
+    },
+    showMoreResultsForProvider(provider) {
+      const searchResult = this.getSearchResultForProvider(provider)
+      if (!searchResult || !searchResult.range) {
+        return false
+      }
+
+      const rangeItems = parseInt(searchResult.range?.split('/')[1] || 0)
+      return rangeItems > searchResult.values.length
+    },
+    getMoreResultsLinkForProvider(provider) {
+      return createLocationCommon('files-common-search', {
+        query: { term: this.term, provider: provider.id }
+      })
+    },
+    getMoreResultsDetailsTextForProvider(provider) {
+      const searchResult = this.getSearchResultForProvider(provider)
+      if (!searchResult || !searchResult.range) {
         return
       }
-
-      if (keyEventEnter) {
-        this.activateProvider(this.activeProvider)
-        return
-      }
-
-      let nextProviderIndex
-
-      if (
-        (keyEventUp || keyEventDown) &&
-        this.availableProviders.length > 0 &&
-        optionsVisibleInitial
-      ) {
-        const should = keyEventDown
-          ? activeProviderIndex < this.availableProviders.length - 1
-          : activeProviderIndex > 0
-        const firstIndex = keyEventDown ? 0 : this.availableProviders.length - 1
-        const lastIndex = keyEventDown ? activeProviderIndex + 1 : activeProviderIndex - 1
-
-        nextProviderIndex = should ? lastIndex : firstIndex
-      }
-
-      if (isNaN(nextProviderIndex) || nextProviderIndex === activeProviderIndex) {
-        return
-      }
-
-      this.activeProvider = this.availableProviders[nextProviderIndex]
+      const rangeItems = parseInt(searchResult.range?.split('/')[1] || 0)
+      return this.$gettextInterpolate(this.$gettext('%{totalResults} total results'), {
+        totalResults: rangeItems
+      })
     }
   }
 }

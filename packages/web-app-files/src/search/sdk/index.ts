@@ -10,7 +10,7 @@ function $gettext(msg) {
 }
 export default class Provider extends EventBus implements SearchProvider {
   public readonly id: string
-  public readonly label: string
+  public readonly displayName: string
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
   private readonly store: Store<any>
@@ -20,7 +20,7 @@ export default class Provider extends EventBus implements SearchProvider {
     super()
 
     this.id = 'files.sdk'
-    this.label = $gettext('Search all files ↵')
+    this.displayName = $gettext('Files')
     this.previewSearch = new Preview(store, router)
     this.listSearch = new List()
     this.store = store
