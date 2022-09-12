@@ -23,12 +23,7 @@
     >
       <oc-list class="user-menu-list">
         <li>
-          <oc-button
-            id="oc-topbar-account-manage"
-            type="router-link"
-            :to="{ path: '/account' }"
-            appearance="raw"
-          >
+          <oc-button id="oc-topbar-account-manage" class="no-account-actions" appearance="raw">
             <avatar-image :width="32" :userid="userId" :user-name="user.displayname" />
             <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.email }">
               <span v-text="user.displayname" />
@@ -264,6 +259,10 @@ export default {
       align-self: flex-end;
       display: inline-block;
     }
+  }
+
+  .no-account-actions {
+    pointer-events: none;
   }
 }
 </style>
