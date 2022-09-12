@@ -76,11 +76,7 @@ export class UppyService {
     this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({
-    headers
-  }: {
-    headers: () => uppyHeaders
-  }) {
+  useXhr({ headers }: { headers: () => uppyHeaders }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',
