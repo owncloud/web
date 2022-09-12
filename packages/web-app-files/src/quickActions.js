@@ -2,6 +2,7 @@ import { $gettext } from './gettext'
 import { createQuicklink } from './helpers/share'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from './composables/sideBar'
+import { ShareStatus } from 'web-client/src/helpers/share'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
@@ -15,6 +16,17 @@ export function canShare(item, store) {
     return false
   }
   return item.canShare()
+}
+
+export function canHideShare(item) {
+  return (
+    item.isReceivedShare() &&
+    (item.status === ShareStatus.accepted || item.status === ShareStatus.pending)
+  )
+}
+
+export function canUnhideShare(item) {
+  return item.isReceivedShare() && item.status === ShareStatus.declined
 }
 
 export function showQuickLinkPasswordModal(ctx, onConfirm) {
@@ -79,4 +91,22 @@ export default {
     },
     displayed: canShare
   }
+  /* hide: {
+    id: 'hideShare',
+    label: ($gettext) => $gettext('Hide'),
+    icon: 'eye-off',
+    handler: async (ctx) => {
+      await MixinHideShare.methods.$_hideShare_trigger({ resources: [ctx.item] })
+    },
+    displayed: canHideShare
+  },
+  unhide: {
+    id: 'unhideShare',
+    label: ($gettext) => $gettext('Unhide'),
+    icon: 'eye',
+    handler: async (ctx) => {
+      await MixinUnhideShare.methods.$_unhideShare_trigger({ resources: [ctx.item] })
+    },
+    displayed: canUnhideShare
+  } */
 }

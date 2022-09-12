@@ -6,10 +6,10 @@
 import ContextActionMenu from '../ContextActionMenu.vue'
 
 import FileActions from '../../mixins/fileActions'
-import AcceptShare from '../../mixins/actions/acceptShare'
+import unhideShare from '../../mixins/actions/unhideShare'
 import Copy from '../../mixins/actions/copy'
 import CreateQuicklink from '../../mixins/actions/createQuicklink'
-import DeclineShare from '../../mixins/actions/declineShare'
+import hideShare from '../../mixins/actions/hideShare'
 import Delete from '../../mixins/actions/delete'
 import DownloadArchive from '../../mixins/actions/downloadArchive'
 import DownloadFile from '../../mixins/actions/downloadFile'
@@ -36,10 +36,10 @@ export default {
   components: { ContextActionMenu },
   mixins: [
     FileActions,
-    AcceptShare,
+    unhideShare,
     Copy,
     CreateQuicklink,
-    DeclineShare,
+    hideShare,
     Delete,
     DownloadArchive,
     DownloadFile,
@@ -118,8 +118,8 @@ export default {
 
     menuItemsBatchActions() {
       return [
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
+        ...this.$_unhideShare_items,
+        ...this.$_hideShare_items,
         ...this.$_downloadArchive_items,
         ...this.$_delete_items,
         ...this.$_move_items,
@@ -157,8 +157,8 @@ export default {
         ...this.$_paste_items,
         ...this.$_rename_items,
         ...this.$_restore_items,
-        ...this.$_acceptShare_items,
-        ...this.$_declineShare_items,
+        ...this.$_unhideShare_items,
+        ...this.$_hideShare_items,
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
         ...this.$_navigate_space_items,

@@ -89,7 +89,7 @@ export default {
       {
         icon: 'link',
         to: sharesRoutes[locationSharesViaLink.name].path,
-        text: $gettext('Shared via link'),
+        text: $gettext('Shared publicly'),
         active: unref(sharesViaLinkActive)
       }
     ])

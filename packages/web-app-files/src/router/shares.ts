@@ -44,7 +44,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'via-link',
         component: components.SharedViaLink,
         meta: {
-          title: $gettext('Files shared via link')
+          title: $gettext('Files shared publicly')
         }
       }
     ]

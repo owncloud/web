@@ -166,7 +166,7 @@ export default defineComponent({
       return panels
     },
     isShareAccepted() {
-      return this.highlightedFile?.status === 0
+      return this.highlightedFile?.status === 0 || this.highlightedFile?.status === 1
     },
     isContentDisplayed() {
       return isLocationSharesActive(this.$router, 'files-shares-with-me')

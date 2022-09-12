@@ -57,8 +57,8 @@ const shareUserIconDescribedBy = (resource) => {
 
 const shareLinkDescribedBy = (resource) => {
   return isDirectLinkShare(resource)
-    ? $gettext('This item is directly shared via links.')
-    : $gettext('This item is shared via links through one of the parent folders.')
+    ? $gettext('This item is directly shared publicly.')
+    : $gettext('This item is shared publicly through one of the parent folders.')
 }
 
 const shareTypesIndirect = (path, sharesTree) => {

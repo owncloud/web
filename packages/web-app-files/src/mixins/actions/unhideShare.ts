@@ -9,20 +9,20 @@ import get from 'lodash-es/get'
 export default {
   computed: {
     ...mapGetters(['capabilities']),
-    $_acceptShare_hasResharing() {
+    $_unhideShare_hasResharing() {
       return get(this.capabilities, 'files_sharing.resharing', true)
     },
-    $_acceptShare_hasShareJail() {
+    $_unhideShare_hasShareJail() {
       return get(this.capabilities, 'spaces.share_jail', false)
     },
-    $_acceptShare_items() {
+    $_unhideShare_items() {
       return [
         {
-          name: 'accept-share',
-          icon: 'check',
-          handler: this.$_acceptShare_trigger,
+          name: 'unhide-share',
+          icon: 'eye',
+          handler: this.$_unhideShare_trigger,
           label: ({ resources }) =>
-            this.$ngettext('Accept share', 'Accept shares', resources.length),
+            this.$ngettext('Unhide share', 'Unhide shares', resources.length),
           isEnabled: ({ resources }) => {
             if (!isLocationSharesActive(this.$router, 'files-shares-with-me')) {
               return false
@@ -31,13 +31,15 @@ export default {
               return false
             }
 
-            const acceptDisabled = resources.some((resource) => {
-              return resource.status === ShareStatus.accepted
+            const unhideDisabled = resources.some((resource) => {
+              return (
+                resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
+              )
             })
-            return !acceptDisabled
+            return !unhideDisabled
           },
           componentType: 'button',
-          class: 'oc-files-actions-accept-share-trigger'
+          class: 'oc-files-actions-unhide-share-trigger'
         }
       ]
     }
@@ -46,7 +48,7 @@ export default {
     ...mapMutations('Files', ['UPDATE_RESOURCE']),
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['resetFileSelection']),
-    async $_acceptShare_trigger({ resources }) {
+    async $_unhideShare_trigger({ resources }) {
       const errors = []
       const triggerPromises = []
       const triggerQueue = new PQueue({ concurrency: 4 })
@@ -57,8 +59,8 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.accepted,
-                this.$_acceptShare_hasResharing,
-                this.$_acceptShare_hasShareJail,
+                this.$_unhideShare_hasResharing,
+                this.$_unhideShare_hasShareJail,
                 this.$client
               )
               if (share) {
@@ -80,8 +82,8 @@ export default {
 
       this.showMessage({
         title: this.$ngettext(
-          'Failed to accept the selected share.',
-          'Failed to accept selected shares.',
+          'Failed to unhide the selected share.',
+          'Failed to  selected shares.',
           resources.length
         ),
         status: 'danger'

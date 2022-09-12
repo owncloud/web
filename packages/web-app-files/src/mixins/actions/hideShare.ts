@@ -7,21 +7,20 @@ import get from 'lodash-es/get'
 
 export default {
   ...mapGetters(['capabilities']),
-  $_declineShare_hasResharing() {
+  $_hideShare_hasResharing() {
     return get(this.capabilities, 'files_sharing.resharing', true)
   },
-  $_declineShare_hasShareJail() {
+  $_hideShare_hasShareJail() {
     return get(this.capabilities, 'spaces.share_jail', false)
   },
   computed: {
-    $_declineShare_items() {
+    $_hideShare_items() {
       return [
         {
-          name: 'decline-share',
-          icon: 'close',
-          handler: this.$_declineShare_trigger,
-          label: ({ resources }) =>
-            this.$ngettext('Decline share', 'Decline shares', resources.length),
+          name: 'hide-share',
+          icon: 'eye-off',
+          handler: this.$_hideShare_trigger,
+          label: ({ resources }) => this.$ngettext('Hide share', 'Hide shares', resources.length),
           isEnabled: ({ resources }) => {
             if (
               !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
@@ -40,13 +39,13 @@ export default {
               return false
             }
 
-            const declineDisabled = resources.some((resource) => {
+            const hideDisabled = resources.some((resource) => {
               return resource.status === ShareStatus.declined
             })
-            return !declineDisabled
+            return !hideDisabled
           },
           componentType: 'button',
-          class: 'oc-files-actions-decline-share-trigger'
+          class: 'oc-files-actions-hide-share-trigger'
         }
       ]
     }
@@ -55,7 +54,7 @@ export default {
     ...mapMutations('Files', ['UPDATE_RESOURCE']),
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['resetFileSelection']),
-    async $_declineShare_trigger({ resources }) {
+    async $_hideShare_trigger({ resources }) {
       const errors = []
       const triggerPromises = []
       const triggerQueue = new PQueue({ concurrency: 4 })
@@ -66,8 +65,8 @@ export default {
               const share = await triggerShareAction(
                 resource,
                 ShareStatus.declined,
-                this.$_declineShare_hasResharing,
-                this.$_declineShare_hasShareJail,
+                this.$_hideShare_hasResharing,
+                this.$_hideShare_hasShareJail,
                 this.$client
               )
               if (share) {
@@ -88,8 +87,8 @@ export default {
         if (isLocationSpacesActive(this.$router, 'files-spaces-share')) {
           this.showMessage({
             title: this.$ngettext(
-              'The selected share was declined successfully',
-              'The selected shares were declined successfully',
+              'The selected share was hidden successfully',
+              'The selected shares were hidden successfully',
               resources.length
             )
           })
@@ -101,8 +100,8 @@ export default {
 
       this.showMessage({
         title: this.$ngettext(
-          'Failed to decline the selected share',
-          'Failed to decline selected shares',
+          'Failed to hide the selected share',
+          'Failed to hide selected shares',
           resources.length
         ),
         status: 'danger'

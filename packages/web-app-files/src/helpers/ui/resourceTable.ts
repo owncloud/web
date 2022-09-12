@@ -25,7 +25,16 @@ export const determineSortFields = (firstResource): SortField[] => {
       name: 'sharedWith',
       sortable: (sharedWith) => {
         if (sharedWith.length > 0) {
-          return sharedWith[0].displayName
+          // if there is a user name (at least 2 words) in displayName, bring it to the begin of the array
+          const i = sharedWith.findIndex((e) => e.displayName.split(' ').length > 1)
+          if (i > 0) {
+            let sharedWithSorted = [...sharedWith]
+            sharedWithSorted = [...sharedWithSorted.splice(i, 1), sharedWithSorted]
+            return sharedWithSorted.map((e) => e.displayName).join()
+          }   
+          // return sharedWith[0].displayName
+          // consider concatenated displaynames for sorting instead of the first one    
+          return sharedWith.map((e) => e.displayName).join()
         }
         return false
       },
