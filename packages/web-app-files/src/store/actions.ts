@@ -482,7 +482,6 @@ export default {
    * not remove unrelated existing ones.
    */
   loadSharesTree(context, { client, path, storageId }) {
-    console.log('LOAD SH TREE', context.getters.sharesTree)
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
