@@ -251,103 +251,50 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadCurrentFileOutgoingShares(context, { client, graphClient, path, resource, storageId }) {
+  loadSpaceShares(context, { client, graphClient, path, resource, storageId }) {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-    if (resource?.type === 'space') {
-      const promises = []
-      const spaceMembers = []
-      const spaceLinks = []
+    const promises = []
+    const spaceMembers = []
+    const spaceLinks = []
 
-      for (const role of Object.keys(resource.spaceRoles)) {
-        for (const userId of resource.spaceRoles[role]) {
-          promises.push(
-            graphClient.users.getUser(userId).then((resolved) => {
-              spaceMembers.push(buildSpaceShare({ ...resolved.data, role }, resource.id))
-            })
-          )
-        }
-      }
-
-      promises.push(
-        client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
-          for (const element of data) {
-            spaceLinks.push(
-              buildShare(
-                element.shareInfo,
-                context.getters.highlightedFile,
-                !context.rootGetters.isOcis
-              )
-            )
-          }
-        })
-      )
-
-      return Promise.all(promises)
-        .then(() => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [
-            ...sortSpaceMembers(spaceMembers),
-            ...spaceLinks
-          ])
-          context.dispatch('updateCurrentFileShareTypes')
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-        .catch((error) => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-    }
-
-    // see https://owncloud.dev/owncloud-sdk/Shares.html
-    client.shares
-      .getShares(path, { reshares: true, spaceRef: storageId })
-      .then((data) => {
-        context.commit(
-          'CURRENT_FILE_OUTGOING_SHARES_SET',
-          data.map((element) => {
-            return buildShare(
-              element.shareInfo,
-              context.getters.highlightedFile,
-              allowSharePermissions(context.rootGetters)
-            )
+    for (const role of Object.keys(resource.spaceRoles)) {
+      for (const userId of resource.spaceRoles[role]) {
+        promises.push(
+          graphClient.users.getUser(userId).then((resolved) => {
+            spaceMembers.push(buildSpaceShare({ ...resolved.data, role }, resource.id))
           })
         )
-        context.dispatch('updateCurrentFileShareTypes')
+      }
+    }
+
+    promises.push(
+      client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
+        for (const element of data) {
+          spaceLinks.push(
+            buildShare(
+              element.shareInfo,
+              context.getters.highlightedFile,
+              !context.rootGetters.isOcis
+            )
+          )
+        }
+      })
+    )
+
+    return Promise.all(promises)
+      .then(() => {
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [
+          ...sortSpaceMembers(spaceMembers),
+          ...spaceLinks
+        ])
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
       .catch((error) => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
         context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      })
-  },
-  loadIncomingShares(context, payload) {
-    context.commit('INCOMING_SHARES_LOAD', [])
-    context.commit('INCOMING_SHARES_ERROR', null)
-    context.commit('INCOMING_SHARES_LOADING', true)
-
-    // see https://owncloud.dev/owncloud-sdk/Shares.html
-    const client = payload.client
-    const path = payload.path
-    client.shares
-      .getShares(path, { shared_with_me: true })
-      .then((data) => {
-        context.commit(
-          'INCOMING_SHARES_LOAD',
-          data.map((element) => {
-            return buildCollaboratorShare(
-              element.shareInfo,
-              context.getters.highlightedFile,
-              allowSharePermissions(context.rootGetters)
-            )
-          })
-        )
-        context.commit('INCOMING_SHARES_LOADING', false)
-      })
-      .catch((error) => {
-        context.commit('INCOMING_SHARES_ERROR', error.message)
-        context.commit('INCOMING_SHARES_LOADING', false)
       })
   },
   async changeShare(
@@ -586,6 +533,8 @@ export default {
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
     context.dispatch('pruneSharesTreeOutsidePath', path)
+    context.commit('INCOMING_SHARES_LOAD', [])
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
 
     const parentPaths = getParentPaths(path, true)
     const sharesTree = {}
@@ -594,10 +543,15 @@ export default {
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
     parentPaths.forEach((queryPath) => {
-      // skip already cached paths
+      // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath]) {
-        return Promise.resolve()
+        sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => ({
+          ...s,
+          indirect: path !== queryPath
+        }))
+        return
       }
+      const indirect = path !== queryPath
       sharesTree[queryPath] = []
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
@@ -613,14 +567,21 @@ export default {
                     allowSharePermissions(context.rootGetters)
                   ),
                   outgoing: true,
-                  indirect: true
+                  indirect
                 })
               })
+
+              if (!indirect) {
+                context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [...sharesTree[queryPath]])
+                context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+              }
             })
             .catch((error) => {
               console.error('SHARESTREE_ERROR', error)
               context.commit('SHARESTREE_ERROR', error.message)
               context.commit('SHARESTREE_LOADING', false)
+              context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
+              context.commit('INCOMING_SHARES_ERROR', error.message)
             })
         )
       )
@@ -638,14 +599,21 @@ export default {
                     allowSharePermissions(context.rootGetters)
                   ),
                   incoming: true,
-                  indirect: true
+                  indirect
                 })
               })
+
+              if (!indirect) {
+                context.commit('INCOMING_SHARES_LOAD', [...sharesTree[queryPath]])
+                context.commit('INCOMING_SHARES_LOADING', false)
+              }
             })
             .catch((error) => {
               console.error('SHARESTREE_ERROR', error)
               context.commit('SHARESTREE_ERROR', error.message)
               context.commit('SHARESTREE_LOADING', false)
+              context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
+              context.commit('INCOMING_SHARES_ERROR', error.message)
             })
         )
       )

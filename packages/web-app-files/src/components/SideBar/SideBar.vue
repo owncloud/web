@@ -222,11 +222,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadSharesTree',
-      'loadCurrentFileOutgoingShares',
-      'loadIncomingShares'
-    ]),
+    ...mapActions('Files', ['loadSharesTree', 'loadSpaceShares']),
 
     async fetchFileInfo() {
       if (!this.highlightedFile) {
@@ -234,12 +230,21 @@ export default defineComponent({
         return
       }
 
+      if (this.highlightedFileIsSpace) {
+        this.loadSpaceShares({
+          client: this.$client,
+          graphClient: this.graphClient,
+          path: this.highlightedFile.path,
+          storageId: this.highlightedFile.fileId,
+          resource: this.highlightedFile
+        })
+      }
+
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.loadShares()
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -262,38 +267,19 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        this.loadShares()
+        if (this.currentFolder?.path !== this.highlightedFile.path) {
+          this.loadSharesTree({
+            client: this.$client,
+            path: this.highlightedFile.path,
+            $gettext: this.$gettext,
+            storageId: this.highlightedFile.fileId
+          })
+        }
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
-    },
-
-    loadShares() {
-      this.loadCurrentFileOutgoingShares({
-        client: this.$client,
-        graphClient: this.graphClient,
-        path: this.highlightedFile.path,
-        storageId: this.highlightedFile.fileId,
-        resource: this.highlightedFile
-      })
-      this.loadIncomingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId
-      })
-
-      // shares tree is already being loaded for the current folder (except for root)
-      if (!this.currentFolder || this.currentFolder.path === '/') {
-        this.loadSharesTree({
-          client: this.$client,
-          path: this.highlightedFile.path === '' ? '/' : this.highlightedFile.path,
-          $gettext: this.$gettext,
-          storageId: this.highlightedFile.fileId
-        })
-      }
     }
   }
 })

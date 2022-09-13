@@ -233,8 +233,7 @@ export default {
         if (shares) {
           shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              share.key = 'indirect-collaborator-' + share.id
-              allShares.push(share)
+              allShares.push({ ...share, key: 'indirect-collaborator-' + share.id })
             }
           })
         }
