@@ -284,7 +284,6 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           },
           actions: {
             loadIndicators: jest.fn(),
-            loadCurrentFileOutgoingShares: jest.fn(),
             loadSharesTree: jest.fn()
           },
           getters: {

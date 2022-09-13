@@ -77,26 +77,6 @@ describe('vuex store actions', () => {
     jest.clearAllMocks()
   })
 
-  describe('loadCurrentFileOutgoingShares', () => {
-    it.each([
-      { space: spaceMock, expectedCommitCalls: 5, expectedDispatchCalls: 1 },
-      { space: null, expectedCommitCalls: 5, expectedDispatchCalls: 1 }
-    ])('succeeds using action %s', async (dataSet) => {
-      const commitSpy = jest.spyOn(stateMock, 'commit')
-      const dispatchSpy = jest.spyOn(stateMock, 'dispatch')
-
-      await actions.loadCurrentFileOutgoingShares(stateMock, {
-        client: clientMock,
-        graphClient: graphClientMock,
-        path: 'path',
-        resource: dataSet.space
-      })
-
-      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
-      expect(dispatchSpy).toBeCalledTimes(dataSet.expectedDispatchCalls)
-    })
-  })
-
   describe('changeShare', () => {
     it.each([
       { share: spaceShareMock, expectedCommitCalls: 2 },

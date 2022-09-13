@@ -376,7 +376,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',

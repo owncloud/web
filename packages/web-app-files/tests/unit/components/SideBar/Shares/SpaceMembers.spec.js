@@ -28,7 +28,7 @@ const spaceMock = {
   }
 }
 
-const outgoingShares = [
+const spaceMembers = [
   {
     id: '1',
     shareType: ShareTypes.space.value,
@@ -78,7 +78,7 @@ describe('SpaceMembers', () => {
     it('initially renders add people dialog', () => {
       const wrapper = getShallowMountedWrapper({
         user,
-        outgoingCollaborators: [outgoingShares[0]]
+        spaceMembers: [spaceMembers[0]]
       })
       expect(wrapper).toMatchSnapshot()
     })
@@ -88,7 +88,7 @@ describe('SpaceMembers', () => {
     it('other shares are listed, but creating/editing shares is not possible', () => {
       const wrapper = getShallowMountedWrapper({
         user,
-        outgoingCollaborators: [outgoingShares[1]]
+        spaceMembers: [spaceMembers[1]]
       })
       expect(wrapper).toMatchSnapshot()
     })
@@ -98,14 +98,14 @@ describe('SpaceMembers', () => {
     it('allows role edit of the current user if another user is manager', () => {
       const wrapper = getShallowMountedWrapper({
         user,
-        outgoingCollaborators: outgoingShares
+        spaceMembers
       })
       expect(wrapper).toMatchSnapshot()
     })
     it('does not allow role edit of the current user if they are the only manager', () => {
       const wrapper = getShallowMountedWrapper({
         user,
-        outgoingCollaborators: [outgoingShares[0], outgoingShares[1]]
+        spaceMembers: [spaceMembers[0], spaceMembers[1]]
       })
       expect(wrapper).toMatchSnapshot()
     })
@@ -115,7 +115,7 @@ describe('SpaceMembers', () => {
     it('reacts on delete events by collaborator list items', async () => {
       const wrapper = getMountedWrapper({
         user,
-        outgoingCollaborators: outgoingShares
+        spaceMembers
       })
 
       const spyOnCollaboratorDeleteTrigger = jest.spyOn(
@@ -123,7 +123,7 @@ describe('SpaceMembers', () => {
         '$_ocCollaborators_deleteShare_trigger'
       )
       wrapper
-        .find(`div[data-testid="collaborator-user-item-${outgoingShares[0].collaborator.name}"]`)
+        .find(`div[data-testid="collaborator-user-item-${spaceMembers[0].collaborator.name}"]`)
         .vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
@@ -132,7 +132,7 @@ describe('SpaceMembers', () => {
 })
 
 const storeOptions = (data, isInLoadingState) => {
-  const { user, outgoingCollaborators = [] } = data
+  const { user } = data
 
   return {
     actions: {
@@ -148,12 +148,10 @@ const storeOptions = (data, isInLoadingState) => {
         namespaced: true,
         getters: {
           highlightedFile: () => spaceMock,
-          currentFileOutgoingCollaborators: () => outgoingCollaborators,
           currentFileOutgoingSharesLoading: () => isInLoadingState,
           sharesTreeLoading: () => false
         },
         actions: {
-          loadCurrentFileOutgoingShares: jest.fn(),
           deleteShare: jest.fn()
         },
         mutations: {
@@ -196,6 +194,7 @@ const storeOptions = (data, isInLoadingState) => {
 }
 
 function getShallowMountedWrapper(data, loading = false) {
+  const { spaceMembers = [] } = data
   return shallowMount(getComponent(loading), {
     localVue,
     store: createStore(data, loading),
@@ -207,12 +206,14 @@ function getShallowMountedWrapper(data, loading = false) {
     provide: {
       displayedItem: {
         value: spaceMock
-      }
+      },
+      spaceMembers: { value: spaceMembers }
     }
   })
 }
 
 function getMountedWrapper(data, loading = false) {
+  const { spaceMembers = [] } = data
   return mount(getComponent(loading), {
     localVue,
     store: createStore(data, loading),
@@ -238,7 +239,8 @@ function getMountedWrapper(data, loading = false) {
     provide: {
       displayedItem: {
         value: spaceMock
-      }
+      },
+      spaceMembers: { value: spaceMembers }
     }
   })
 }

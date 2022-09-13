@@ -17,8 +17,7 @@ localVue.use(GetTextPlugin, {
 
 const mapActions = {
   addLink: jest.fn(),
-  loadSharesTree: jest.fn(),
-  loadCurrentFileOutgoingShares: jest.fn()
+  loadSharesTree: jest.fn()
 }
 
 const mapMutations = {

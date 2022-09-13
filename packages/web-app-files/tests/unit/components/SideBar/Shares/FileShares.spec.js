@@ -127,18 +127,20 @@ describe('FileShares', () => {
           ]
         }
       })
-      const wrapper = getShallowMountedWrapper({ user, spaces: [spaceMock] })
-
-      await wrapper.vm.loadSpaceMembersTask.last
-      expect(wrapper.vm.spaceMembers.length).toBe(1)
+      const wrapper = getShallowMountedWrapper({
+        user,
+        spaces: [spaceMock],
+        spaceMembers: [{ id: 1 }]
+      })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
     })
     it('does not load space members if no space is given', () => {
       const wrapper = getShallowMountedWrapper({
-        user
+        user,
+        spaceMembers: [{ id: 1 }]
       })
 
-      expect(wrapper.vm.spaceMembers.length).toBe(0)
+      expect(wrapper.find('#space-collaborators-list').exists()).toBeFalsy()
     })
   })
 })
@@ -210,8 +212,6 @@ const storeOptions = (data) => {
           sharesTreeLoading: () => false
         },
         actions: {
-          loadCurrentFileOutgoingShares: jest.fn(),
-          loadIncomingShares: jest.fn(),
           loadSharesTree: jest.fn(),
           deleteShare: jest.fn()
         },
@@ -275,11 +275,13 @@ const storeOptions = (data) => {
 
 function getMountedWrapper(data) {
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  const { spaceMembers = [] } = data
 
   return mount(FileShares, {
     localVue,
     provide: {
-      incomingParentShare: {}
+      incomingParentShare: {},
+      spaceMembers: { value: spaceMembers }
     },
     setup: () => ({
       currentStorageId: storageId
@@ -305,6 +307,7 @@ function getMountedWrapper(data) {
 function getShallowMountedWrapper(data, loading = false) {
   reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  const { spaceMembers = [] } = data
 
   return shallowMount(FileShares, {
     localVue,
@@ -313,7 +316,8 @@ function getShallowMountedWrapper(data, loading = false) {
       hasResharing: false
     }),
     provide: {
-      incomingParentShare: {}
+      incomingParentShare: {},
+      spaceMembers: { value: spaceMembers }
     },
     store: createStore(data),
     stubs: {

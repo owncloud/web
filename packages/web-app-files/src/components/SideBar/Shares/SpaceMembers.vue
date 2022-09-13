@@ -51,7 +51,7 @@ export default defineComponent({
     return { graphClient }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['configuration']),
     ...mapState(['user']),
 
