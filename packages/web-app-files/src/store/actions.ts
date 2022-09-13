@@ -3,13 +3,7 @@ import { dirname } from 'path'
 import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
-import {
-  buildResource,
-  buildShare,
-  buildCollaboratorShare,
-  buildSpaceShare
-} from '../helpers/resources'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 import { move, copy } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -252,46 +246,10 @@ export default {
   },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
-    { client, graphClient, share, permissions, expirationDate, role }
+    { client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
       throw new Error('Nothing changed')
-    }
-
-    if (share.shareType === ShareTypes.space.value) {
-      try {
-        await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
-          permissions,
-          role: role.name
-        })
-      } catch (error) {
-        dispatch(
-          'showMessage',
-          { title: $gettext('Error while editing the share.'), status: 'danger' },
-          { root: true }
-        )
-      }
-
-      const spaceShare = buildSpaceShare(
-        {
-          role: role.name,
-          onPremisesSamAccountName: share.collaborator.name,
-          displayName: share.collaborator.displayName
-        },
-        share.id
-      )
-
-      commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', spaceShare)
-
-      const { data: drive } = await graphClient.drives.getDrive(share.id)
-      const space = buildSpace(drive)
-      commit('UPDATE_RESOURCE_FIELD', {
-        id: share.id,
-        field: 'spaceRoles',
-        value: space.spaceRoles
-      })
-
-      return
     }
 
     try {
@@ -319,18 +277,7 @@ export default {
   },
   addShare(
     context,
-    {
-      client,
-      graphClient,
-      path,
-      shareWith,
-      shareType,
-      permissions,
-      role,
-      expirationDate,
-      storageId,
-      displayName
-    }
+    { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
     if (shareType === ShareTypes.group.value) {
       client.shares
@@ -351,49 +298,6 @@ export default {
           )
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
-        })
-        .catch((e) => {
-          context.dispatch(
-            'showMessage',
-            {
-              title: $gettext('Error while sharing.'),
-              desc: e,
-              status: 'danger'
-            },
-            { root: true }
-          )
-        })
-      return
-    }
-
-    if (shareType === ShareTypes.space.value) {
-      client.shares
-        .shareSpaceWithUser(path, shareWith, storageId, {
-          permissions,
-          role: role.name
-        })
-        .then(() => {
-          const shareObj = {
-            role: role.name,
-            onPremisesSamAccountName: shareWith,
-            displayName
-          }
-
-          context.commit(
-            'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
-            buildSpaceShare(shareObj, storageId)
-          )
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-          return graphClient.drives.getDrive(storageId).then((response) => {
-            const space = buildSpace(response.data)
-            context.commit('UPDATE_RESOURCE_FIELD', {
-              id: storageId,
-              field: 'spaceRoles',
-              value: space.spaceRoles
-            })
-            context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-          })
         })
         .catch((e) => {
           context.dispatch(
@@ -442,31 +346,11 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, path, storageId, reloadResource = true }) {
-    const additionalParams: any = {}
-    if (share.shareType === ShareTypes.space.value) {
-      additionalParams.shareWith = share.collaborator.name
-    }
-
-    return client.shares.deleteShare(share.id, additionalParams).then(() => {
+  deleteShare(context, { client, share, path, storageId }) {
+    return client.shares.deleteShare(share.id, {} as any).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-
-      if (share.shareType !== ShareTypes.space.value) {
-        context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-      } else if (reloadResource) {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-        return graphClient.drives.getDrive(share.id).then((response) => {
-          const space = buildSpace(response.data)
-          context.commit('UPDATE_RESOURCE_FIELD', {
-            id: share.id,
-            field: 'spaceRoles',
-            value: space.spaceRoles
-          })
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-      }
+      context.dispatch('updateCurrentFileShareTypes')
+      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
     })
   },
   /**

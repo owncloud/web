@@ -121,11 +121,8 @@ export default defineComponent({
     return { loadImageTask, spaceImage }
   },
   computed: {
-    ...mapGetters('Files', [
-      'highlightedFile',
-      'currentFileOutgoingCollaborators',
-      'currentFileOutgoingLinks'
-    ]),
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     space() {
       return this.displayedItem.value
@@ -188,7 +185,7 @@ export default defineComponent({
     },
     ownerUsernames() {
       const userId = this.user?.id
-      return this.currentFileOutgoingCollaborators
+      return this.spaceMembers
         .filter((share) => share.role.name === spaceRoleManager.name)
         .map((share) => {
           if (share.collaborator.name === userId) {
@@ -207,7 +204,7 @@ export default defineComponent({
       return this.linkShareCount > 0
     },
     memberShareCount() {
-      return this.currentFileOutgoingCollaborators.length
+      return this.spaceMembers.length
     },
     linkShareCount() {
       return this.currentFileOutgoingLinks.length

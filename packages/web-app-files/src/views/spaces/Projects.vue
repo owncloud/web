@@ -271,6 +271,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['showMessage']),
+    ...mapActions('runtime/spaces', ['loadCurrentSpaceMembers']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
       'LOAD_FILES',
@@ -295,6 +296,7 @@ export default defineComponent({
     },
 
     openSidebarSharePanel(space) {
+      this.loadCurrentSpaceMembers({ graphClient: this.graphClient, space })
       this.SET_FILE_SELECTION([space])
       bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     },

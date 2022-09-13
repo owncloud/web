@@ -29,11 +29,10 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
-  inject: ['activePanel', 'displayedItem', 'spaceMembers'],
+  inject: ['activePanel', 'displayedItem'],
   provide() {
     return {
-      incomingParentShare: computed(() => this.incomingParentShare),
-      spaceMembers: computed(() => this.spaceMembers.value)
+      incomingParentShare: computed(() => this.incomingParentShare)
     }
   },
   props: {

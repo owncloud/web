@@ -91,7 +91,6 @@ export default {
     InviteCollaboratorForm,
     CollaboratorListItem
   },
-  inject: ['spaceMembers'],
   setup() {
     const store = useStore()
     const currentSpace = ref(null)
@@ -121,6 +120,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
@@ -179,14 +179,14 @@ export default {
     },
 
     displaySpaceMembers() {
-      if (this.spaceMembers.value.length > 3 && this.sharesListCollapsed) {
-        return this.spaceMembers.value.slice(0, 3)
+      if (this.spaceMembers.length > 3 && this.sharesListCollapsed) {
+        return this.spaceMembers.slice(0, 3)
       }
-      return this.spaceMembers.value
+      return this.spaceMembers
     },
 
     showShareToggle() {
-      return this.spaceMembers.value.length > 3 || this.collaborators.length > 3
+      return this.spaceMembers.length > 3 || this.collaborators.length > 3
     },
 
     indirectOutgoingShares() {

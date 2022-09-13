@@ -88,7 +88,6 @@ import {
 } from 'web-pkg/src/composables'
 
 import { defineComponent } from '@vue/runtime-core'
-import { useGraphClient } from 'web-client/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -103,7 +102,6 @@ export default defineComponent({
     RecipientContainer,
     ExpirationDatepicker
   },
-  inject: ['spaceMembers'],
   props: {
     saveButtonLabel: {
       type: String,
@@ -119,7 +117,6 @@ export default defineComponent({
 
   setup() {
     return {
-      ...useGraphClient(),
       hasResharing: useCapabilityFilesSharingResharing(),
       hasShareJail: useCapabilityShareJailEnabled()
     }
@@ -140,6 +137,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['configuration', 'user', 'capabilities']),
 
     $_announcementWhenCollaboratorAdded() {
@@ -171,6 +169,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['addShare']),
+    ...mapActions('runtime/spaces', ['addSpaceMember']),
 
     async fetchRecipients(query) {
       try {
@@ -212,15 +211,14 @@ export default defineComponent({
             )
           })
 
-          const exists = [
-            ...this.currentFileOutgoingCollaborators,
-            ...this.spaceMembers.value
-          ].find((existingCollaborator) => {
-            return (
-              collaborator.value.shareWith === existingCollaborator.collaborator.name &&
-              parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
-            )
-          })
+          const exists = [...this.currentFileOutgoingCollaborators, ...this.spaceMembers].find(
+            (existingCollaborator) => {
+              return (
+                collaborator.value.shareWith === existingCollaborator.collaborator.name &&
+                parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
+              )
+            }
+          )
 
           if (selected || exists) {
             return false
@@ -300,9 +298,9 @@ export default defineComponent({
               path = `/${this.highlightedFile.name}`
             }
 
-            this.addShare({
+            const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
+            addMethod({
               client: this.$client,
-              graphClient: this.graphClient,
               path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,

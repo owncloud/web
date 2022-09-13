@@ -17,7 +17,7 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
-        <li v-for="collaborator in members" :key="collaborator.key">
+        <li v-for="collaborator in spaceMembers" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
@@ -45,7 +45,7 @@ export default defineComponent({
     CollaboratorListItem,
     InviteCollaboratorForm
   },
-  inject: ['displayedItem', 'spaceMembers'],
+  inject: ['displayedItem'],
   setup() {
     const { graphClient } = useGraphClient()
     return { graphClient }
@@ -53,6 +53,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
 
     helpersEnabled() {
@@ -64,17 +65,14 @@ export default defineComponent({
     space() {
       return this.displayedItem.value
     },
-    members() {
-      return this.spaceMembers.value
-    },
     hasCollaborators() {
-      return this.members.length > 0
+      return this.spaceMembers.length > 0
     },
     currentUserCanShare() {
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      const currentUserCollaborator = this.members.find(
+      const currentUserCollaborator = this.spaceMembers.find(
         (collaborator) => collaborator.collaborator.name === this.user.id
       )
 
@@ -82,7 +80,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare']),
+    ...mapActions('runtime/spaces', ['deleteSpaceMember']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
     isModifiable(share) {
@@ -95,7 +93,7 @@ export default defineComponent({
       }
 
       // forbid to remove last manager of a space
-      const managers = this.members.filter(
+      const managers = this.spaceMembers.filter(
         (collaborator) => collaborator.role.name === spaceRoleManager.name
       )
       return managers.length > 1
@@ -119,13 +117,7 @@ export default defineComponent({
 
     async $_ocCollaborators_deleteShare(share) {
       try {
-        await this.deleteShare({
-          client: this.$client,
-          graphClient: this.graphClient,
-          share: share,
-          path: this.highlightedFile.path,
-          reloadResource: false
-        })
+        await this.deleteSpaceMember({ client: this.$client, share: share })
         this.showMessage({
           title: this.$gettext('Share was removed successfully')
         })

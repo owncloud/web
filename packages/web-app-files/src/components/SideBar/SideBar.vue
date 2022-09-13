@@ -38,14 +38,14 @@ import SpaceInfo from './SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sideBar/'
 
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource, buildSpaceShare } from '../../helpers/resources'
+import { buildResource } from '../../helpers/resources'
 import {
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent, ref, unref } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
@@ -55,9 +55,6 @@ import {
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
-import { useGraphClient } from 'web-client/src/composables'
-import { useTask } from 'vue-concurrency'
-import { sortSpaceMembers } from '../../helpers/space'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -65,8 +62,7 @@ export default defineComponent({
   provide() {
     return {
       displayedItem: computed(() => this.selectedFile),
-      activePanel: computed(() => this.activePanel),
-      spaceMembers: computed(() => this.spaceMembers)
+      activePanel: computed(() => this.activePanel)
     }
   },
 
@@ -83,7 +79,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const { graphClient } = useGraphClient()
+    const currentStorageId = useRouteParam('storageId')
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -105,29 +101,6 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.close)
     }
 
-    const spaceMembers = ref([])
-    const currentStorageId = useRouteParam('storageId')
-    const loadSpaceMembersTask = useTask(function* (signal, space) {
-      const promises = []
-      const spaceShares = []
-
-      for (const role of Object.keys(space.spaceRoles)) {
-        for (const userId of space.spaceRoles[role]) {
-          promises.push(
-            unref(graphClient)
-              .users.getUser(userId)
-              .then((resolved) => {
-                spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
-              })
-          )
-        }
-      }
-
-      yield Promise.all(promises).then(() => {
-        spaceMembers.value = sortSpaceMembers(spaceShares)
-      })
-    })
-
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
@@ -135,10 +108,7 @@ export default defineComponent({
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      graphClient,
-      currentStorageId,
-      loadSpaceMembersTask,
-      spaceMembers
+      currentStorageId
     }
   },
 
@@ -260,17 +230,6 @@ export default defineComponent({
       if (!this.highlightedFile) {
         this.selectedFile = {}
         return
-      }
-
-      if (
-        this.highlightedFileIsSpace ||
-        isLocationSpacesActive(this.$router, 'files-spaces-project')
-      ) {
-        const space = this.highlightedFileIsSpace
-          ? this.highlightedFile
-          : this.spaces?.spaces?.find((space) => space.id === this.currentStorageId)
-
-        this.loadSpaceMembersTask.perform(space)
       }
 
       if (
