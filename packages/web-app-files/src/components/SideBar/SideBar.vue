@@ -12,13 +12,13 @@
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
+    data-custom-key-bindings="true"
     @beforeDestroy="destroySideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"
     @selectPanel="setActiveSideBarPanel"
     @close="closeSideBar"
     v-on="$listeners"
-    data-custom-key-bindings="true"
   >
     <template #header>
       <file-info
