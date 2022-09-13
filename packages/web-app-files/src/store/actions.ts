@@ -488,44 +488,63 @@ export default {
     context.dispatch('pruneSharesTreeOutsidePath', path)
     context.commit('INCOMING_SHARES_LOAD', [])
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
+    context.commit('SHARESTREE_LOADING', true)
 
     const parentPaths = getParentPaths(path, true)
     const sharesTree = {}
-    const outgoing = []
-    const incoming = []
+    const outgoingShares = []
+    const incomingShares = []
 
-    context.commit('SHARESTREE_LOADING', true)
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
+    const { highlightedFile } = context.getters
+
+    const getShares = (path, indirect, options, outgoing) => {
+      const buildMethod = outgoing ? buildShare : buildCollaboratorShare
+      const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
+      const permissions = allowSharePermissions(context.rootGetters)
+      if (!sharesTree[path]) {
+        sharesTree[path] = []
+      }
+      return client.shares
+        .getShares(path, options)
+        .then((data) => {
+          data.forEach((element) => {
+            sharesTree[path].push({
+              ...buildMethod(element.shareInfo, resource, permissions),
+              outgoing,
+              indirect
+            })
+          })
+
+          if (!indirect) {
+            const arr = outgoing ? outgoingShares : incomingShares
+            arr.push(...sharesTree[path])
+          }
+        })
+        .catch((error) => {
+          console.error('SHARESTREE_ERROR', error)
+          context.commit('SHARESTREE_ERROR', error.message)
+          context.commit('SHARESTREE_LOADING', false)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
+          context.commit('INCOMING_SHARES_ERROR', error.message)
+        })
+    }
 
     if (!path) {
       // space shares
-      const spaceShares = []
       shareQueriesPromises.push(
-        client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
-          for (const element of data) {
-            spaceShares.push(
-              buildShare(
-                element.shareInfo,
-                context.getters.highlightedFile,
-                !context.rootGetters.isOcis
-              )
-            )
-          }
-          sharesTree[''] = spaceShares
-          outgoing.push(...spaceShares)
-        })
+        getShares(path, false, { reshares: true, spaceRef: storageId }, true)
       )
     }
 
     parentPaths.forEach((queryPath) => {
       const indirect = path !== queryPath
-
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath]) {
         sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
           if (!indirect) {
-            const arr = s.outgoing ? outgoing : incoming
+            const arr = s.outgoing ? outgoingShares : incomingShares
             arr.push({ ...s, indirect })
           }
           return { ...s, indirect }
@@ -533,72 +552,16 @@ export default {
         return
       }
 
-      const resource =
-        indirect || !context.getters.highlightedFile
-          ? { type: 'folder' }
-          : context.getters.highlightedFile
-
-      sharesTree[queryPath] = []
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          client.shares
-            .getShares(queryPath, { reshares: true, spaceRef: storageId })
-            .then((data) => {
-              data.forEach((element) => {
-                sharesTree[queryPath].push({
-                  ...buildShare(
-                    element.shareInfo,
-                    resource,
-                    allowSharePermissions(context.rootGetters)
-                  ),
-                  outgoing: true,
-                  indirect
-                })
-              })
-
-              if (!indirect) {
-                outgoing.push(...sharesTree[queryPath])
-              }
-            })
-            .catch((error) => {
-              console.error('SHARESTREE_ERROR', error)
-              context.commit('SHARESTREE_ERROR', error.message)
-              context.commit('SHARESTREE_LOADING', false)
-              context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-              context.commit('INCOMING_SHARES_ERROR', error.message)
-            })
+          getShares(queryPath, indirect, { reshares: true, spaceRef: storageId }, true)
         )
       )
       // query the incoming share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          client.shares
-            .getShares(queryPath, { shared_with_me: true, spaceRef: storageId })
-            .then((data) => {
-              data.forEach((element) => {
-                sharesTree[queryPath].push({
-                  ...buildCollaboratorShare(
-                    element.shareInfo,
-                    resource,
-                    allowSharePermissions(context.rootGetters)
-                  ),
-                  incoming: true,
-                  indirect
-                })
-              })
-
-              if (!indirect) {
-                incoming.push(...sharesTree[queryPath])
-              }
-            })
-            .catch((error) => {
-              console.error('SHARESTREE_ERROR', error)
-              context.commit('SHARESTREE_ERROR', error.message)
-              context.commit('SHARESTREE_LOADING', false)
-              context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-              context.commit('INCOMING_SHARES_ERROR', error.message)
-            })
+          getShares(queryPath, indirect, { shared_with_me: true, spaceRef: storageId }, false)
         )
       )
     })
@@ -606,9 +569,9 @@ export default {
     return Promise.all(shareQueriesPromises).then(() => {
       context.commit('SHARESTREE_ADD', sharesTree)
       context.commit('SHARESTREE_LOADING', false)
-      context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoing)
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoingShares)
       context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      context.commit('INCOMING_SHARES_LOAD', incoming)
+      context.commit('INCOMING_SHARES_LOAD', incomingShares)
       context.commit('INCOMING_SHARES_LOADING', false)
     })
   },
