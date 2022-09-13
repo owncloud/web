@@ -87,6 +87,9 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
       'role-dropdown': true,
       ...stubs
     },
+    provide: {
+      spaceMembers: { value: [] }
+    },
     data() {
       return {
         selectedCollaborators

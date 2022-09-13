@@ -532,6 +532,12 @@ export default {
         })
         return
       }
+
+      const resource =
+        indirect || !context.getters.highlightedFile
+          ? { type: 'folder' }
+          : context.getters.highlightedFile
+
       sharesTree[queryPath] = []
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
@@ -543,7 +549,7 @@ export default {
                 sharesTree[queryPath].push({
                   ...buildShare(
                     element.shareInfo,
-                    { type: 'folder' },
+                    resource,
                     allowSharePermissions(context.rootGetters)
                   ),
                   outgoing: true,
@@ -574,7 +580,7 @@ export default {
                 sharesTree[queryPath].push({
                   ...buildCollaboratorShare(
                     element.shareInfo,
-                    { type: 'folder' },
+                    resource,
                     allowSharePermissions(context.rootGetters)
                   ),
                   incoming: true,
