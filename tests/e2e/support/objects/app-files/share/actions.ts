@@ -179,10 +179,11 @@ export interface removeShareeArgs {
   page: Page
   folder?: string
   users: User[]
+  removeOwnSpaceAccess?: boolean
 }
 
 export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
-  const { page, folder, users } = args
+  const { page, folder, users, removeOwnSpaceAccess } = args
   if (folder) {
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
@@ -209,5 +210,8 @@ export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
       page.locator(util.format(removeShareButton, userColumn)).click(),
       page.locator(removeShareConfirmationButton).click()
     ])
+    if (removeOwnSpaceAccess) {
+      await page.waitForNavigation()
+    }
   }
 }
