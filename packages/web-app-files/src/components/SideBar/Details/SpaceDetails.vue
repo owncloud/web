@@ -121,7 +121,7 @@ export default defineComponent({
     return { loadImageTask, spaceImage }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks']),
+    ...mapGetters('Files', ['currentFileOutgoingLinks']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     space() {

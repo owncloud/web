@@ -360,7 +360,7 @@ export default defineComponent({
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
-    this.loadCurrentSpaceMembers({ graphClient: this.graphClient, space: this.space })
+    this.loadSpaceMembers({ graphClient: this.graphClient, space: this.space })
 
     document.title = `${this.$route.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
     this.$route.params.name = this.space.name
@@ -382,7 +382,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview']),
-    ...mapActions('runtime/spaces', ['loadCurrentSpaceMembers']),
+    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',

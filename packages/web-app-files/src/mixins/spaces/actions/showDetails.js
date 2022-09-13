@@ -1,8 +1,12 @@
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default {
+  setup() {
+    return { ...useGraphClient() }
+  },
   computed: {
     $_showDetails_items() {
       return [
@@ -20,12 +24,14 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
+    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
 
     $_showDetails_trigger({ resources }) {
       if (resources.length !== 1) {
         return
       }
 
+      this.loadSpaceMembers({ graphClient: this.graphClient, space: resources[0] })
       this.SET_FILE_SELECTION([resources[0]])
       this.$_showDetails_openSideBar()
     },

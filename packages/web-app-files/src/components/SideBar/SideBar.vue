@@ -55,6 +55,7 @@ import {
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
+import { useActiveLocation } from '../../composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -102,6 +103,8 @@ export default defineComponent({
     }
 
     return {
+      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
+      isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -206,7 +209,9 @@ export default defineComponent({
         return
       }
 
-      const loadShares = !!oldFile || isLocationSpacesActive(this.$router, 'files-spaces-projects')
+      // FIXME: isSpacesProjectsLocation resolves "true" within a project?!
+      const isSpacesProjectsLocation = this.isSpacesProjectsLocation && !this.currentStorageId
+      const loadShares = !!oldFile || isSpacesProjectsLocation || this.isSharedWithMeLocation
       this.fetchFileInfo(loadShares)
     },
 

@@ -36,7 +36,6 @@ import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCol
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent } from '@vue/composition-api'
-import { useGraphClient } from 'web-client/src/composables'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 
 export default defineComponent({
@@ -46,12 +45,7 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   inject: ['displayedItem'],
-  setup() {
-    const { graphClient } = useGraphClient()
-    return { graphClient }
-  },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
