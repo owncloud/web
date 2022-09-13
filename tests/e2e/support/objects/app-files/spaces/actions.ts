@@ -255,12 +255,13 @@ export const changeSpaceImage = async (args: {
 export interface removeAccessMembersArgs {
   users: User[]
   page: Page
+  removeOwnSpaceAccess?: boolean
 }
 export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
-  const { page, users } = args
+  const { page, users, removeOwnSpaceAccess } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  await removeSharee({ page, users })
+  await removeSharee({ page, users, removeOwnSpaceAccess: removeOwnSpaceAccess })
 }
 
 export interface changeSpaceRoleArgs {

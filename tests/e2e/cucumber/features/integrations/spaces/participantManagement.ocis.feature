@@ -74,4 +74,6 @@ Feature: spaces participant management
     When "Alice" changes the roles of the following users in the project space
       | user  | role    |
       | Carol | manager |
+    And "Alice" as project manager removes their own access to the project space
+    Then "Alice" should not be able to see space "team.1"
     And "Alice" logs out
