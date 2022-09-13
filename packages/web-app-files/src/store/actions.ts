@@ -374,7 +374,7 @@ export default {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('SHARESTREE_LOADING', true)
 
-    const parentPaths = getParentPaths(path, true)
+    const parentPaths = path === '/' ? ['/'] : getParentPaths(path, true)
     const sharesTree = {}
     const outgoingShares = []
     const incomingShares = []
@@ -383,18 +383,18 @@ export default {
     const shareQueriesPromises = []
     const { highlightedFile } = context.getters
 
-    const getShares = (path, indirect, options, outgoing) => {
+    const getShares = (subPath, indirect, options, outgoing) => {
       const buildMethod = outgoing ? buildShare : buildCollaboratorShare
       const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
       const permissions = allowSharePermissions(context.rootGetters)
-      if (!sharesTree[path]) {
-        sharesTree[path] = []
+      if (!sharesTree[subPath]) {
+        sharesTree[subPath] = []
       }
       return client.shares
-        .getShares(path, options)
+        .getShares(subPath, options)
         .then((data) => {
           data.forEach((element) => {
-            sharesTree[path].push({
+            sharesTree[subPath].push({
               ...buildMethod(element.shareInfo, resource, permissions),
               outgoing,
               indirect
@@ -403,7 +403,7 @@ export default {
 
           if (!indirect) {
             const arr = outgoing ? outgoingShares : incomingShares
-            arr.push(...sharesTree[path])
+            arr.push(...sharesTree[subPath])
           }
         })
         .catch((error) => {

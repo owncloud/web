@@ -211,14 +211,15 @@ export default defineComponent({
             )
           })
 
-          const exists = [...this.currentFileOutgoingCollaborators, ...this.spaceMembers].find(
-            (existingCollaborator) => {
-              return (
-                collaborator.value.shareWith === existingCollaborator.collaborator.name &&
-                parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
-              )
-            }
-          )
+          const existingShares = this.resourceIsSpace
+            ? this.spaceMembers
+            : this.currentFileOutgoingCollaborators
+          const exists = existingShares.find((existingCollaborator) => {
+            return (
+              collaborator.value.shareWith === existingCollaborator.collaborator.name &&
+              parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
+            )
+          })
 
           if (selected || exists) {
             return false

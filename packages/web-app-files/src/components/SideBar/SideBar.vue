@@ -281,7 +281,6 @@ export default defineComponent({
       this.loadSharesTree({
         client: this.$client,
         path: this.highlightedFile.path,
-        $gettext: this.$gettext,
         storageId: this.highlightedFile.fileId
       })
     }
