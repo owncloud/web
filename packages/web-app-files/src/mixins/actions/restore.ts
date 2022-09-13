@@ -154,7 +154,7 @@ export default {
         const webDavParentPath = getWebdavParentFolderFromResource(resource)
         const parentResources = parentFolders[webDavParentPath]
         const extension = extractExtensionFromFile({ name: resource.name } as Resource)
-        const resolvedName = resolveFileNameDuplicate(resource.name, extension, parentResources)
+        const resolvedName = resolveFileNameDuplicate(resource.name, extension, [...parentResources, ...resolvedConflicts.map(e => e.resource), ...resolvedResources])
         resource.name = resolvedName
         resource.path = `${parentPath}/${resolvedName}`
         resolvedResources.push(resource)
