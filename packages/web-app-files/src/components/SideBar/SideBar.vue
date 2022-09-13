@@ -152,7 +152,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder', 'sharesTree']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
@@ -236,7 +236,8 @@ export default defineComponent({
         return
       }
 
-      this.fetchFileInfo()
+      const loadShares = !!oldFile || isLocationSpacesActive(this.$router, 'files-spaces-projects')
+      this.fetchFileInfo(loadShares)
     },
 
     highlightedFileThumbnail(thumbnail) {
@@ -249,13 +250,13 @@ export default defineComponent({
   },
   async created() {
     if (!this.areMultipleSelected) {
-      await this.fetchFileInfo()
+      await this.fetchFileInfo(false)
     }
   },
   methods: {
     ...mapActions('Files', ['loadSharesTree']),
 
-    async fetchFileInfo() {
+    async fetchFileInfo(loadShares) {
       if (!this.highlightedFile) {
         this.selectedFile = {}
         return
@@ -277,7 +278,9 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.loadShares()
+        if (loadShares) {
+          this.loadShares()
+        }
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -300,7 +303,9 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        this.loadShares()
+        if (loadShares) {
+          this.loadShares()
+        }
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
