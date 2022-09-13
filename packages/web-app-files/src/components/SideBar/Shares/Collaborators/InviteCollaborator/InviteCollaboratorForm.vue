@@ -103,6 +103,7 @@ export default defineComponent({
     RecipientContainer,
     ExpirationDatepicker
   },
+  inject: ['spaceMembers'],
   props: {
     saveButtonLabel: {
       type: String,
@@ -211,7 +212,10 @@ export default defineComponent({
             )
           })
 
-          const exists = this.currentFileOutgoingCollaborators.find((existingCollaborator) => {
+          const exists = [
+            ...this.currentFileOutgoingCollaborators,
+            ...this.spaceMembers.value
+          ].find((existingCollaborator) => {
             return (
               collaborator.value.shareWith === existingCollaborator.collaborator.name &&
               parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType

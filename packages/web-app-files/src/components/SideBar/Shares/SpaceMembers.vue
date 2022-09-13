@@ -33,7 +33,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
+import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
@@ -45,7 +45,7 @@ export default defineComponent({
     CollaboratorListItem,
     InviteCollaboratorForm
   },
-  inject: ['displayedItem'],
+  inject: ['displayedItem', 'spaceMembers'],
   setup() {
     const { graphClient } = useGraphClient()
     return { graphClient }
@@ -65,9 +65,7 @@ export default defineComponent({
       return this.displayedItem.value
     },
     members() {
-      return this.currentFileOutgoingCollaborators.filter(
-        (share) => share.shareType === ShareTypes.space.value
-      )
+      return this.spaceMembers.value
     },
     hasCollaborators() {
       return this.members.length > 0

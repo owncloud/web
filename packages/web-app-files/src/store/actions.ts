@@ -251,52 +251,6 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadSpaceShares(context, { client, graphClient, path, resource, storageId }) {
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-    const promises = []
-    const spaceMembers = []
-    const spaceLinks = []
-
-    for (const role of Object.keys(resource.spaceRoles)) {
-      for (const userId of resource.spaceRoles[role]) {
-        promises.push(
-          graphClient.users.getUser(userId).then((resolved) => {
-            spaceMembers.push(buildSpaceShare({ ...resolved.data, role }, resource.id))
-          })
-        )
-      }
-    }
-
-    promises.push(
-      client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
-        for (const element of data) {
-          spaceLinks.push(
-            buildShare(
-              element.shareInfo,
-              context.getters.highlightedFile,
-              !context.rootGetters.isOcis
-            )
-          )
-        }
-      })
-    )
-
-    return Promise.all(promises)
-      .then(() => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [
-          ...sortSpaceMembers(spaceMembers),
-          ...spaceLinks
-        ])
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      })
-      .catch((error) => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      })
-  },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
     { client, graphClient, share, permissions, expirationDate, role }
@@ -542,6 +496,28 @@ export default {
     context.commit('SHARESTREE_LOADING', true)
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
+
+    if (!path) {
+      // space shares
+      const spaceShares = []
+      shareQueriesPromises.push(
+        client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
+          for (const element of data) {
+            spaceShares.push(
+              buildShare(
+                element.shareInfo,
+                context.getters.highlightedFile,
+                !context.rootGetters.isOcis
+              )
+            )
+          }
+          sharesTree[''] = spaceShares
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', spaceShares)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+        })
+      )
+    }
+
     parentPaths.forEach((queryPath) => {
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath]) {

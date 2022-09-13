@@ -38,23 +38,26 @@ import SpaceInfo from './SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sideBar/'
 
 import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../helpers/resources'
+import { buildResource, buildSpaceShare } from '../../helpers/resources'
 import {
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, ref, unref } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
+  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useGraphClient } from 'web-client/src/composables'
+import { useTask } from 'vue-concurrency'
+import { sortSpaceMembers } from '../../helpers/space'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -62,7 +65,8 @@ export default defineComponent({
   provide() {
     return {
       displayedItem: computed(() => this.selectedFile),
-      activePanel: computed(() => this.activePanel)
+      activePanel: computed(() => this.activePanel),
+      spaceMembers: computed(() => this.spaceMembers)
     }
   },
 
@@ -101,6 +105,29 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.close)
     }
 
+    const spaceMembers = ref([])
+    const currentStorageId = useRouteParam('storageId')
+    const loadSpaceMembersTask = useTask(function* (signal, space) {
+      const promises = []
+      const spaceShares = []
+
+      for (const role of Object.keys(space.spaceRoles)) {
+        for (const userId of space.spaceRoles[role]) {
+          promises.push(
+            unref(graphClient)
+              .users.getUser(userId)
+              .then((resolved) => {
+                spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
+              })
+          )
+        }
+      }
+
+      yield Promise.all(promises).then(() => {
+        spaceMembers.value = sortSpaceMembers(spaceShares)
+      })
+    })
+
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
@@ -108,7 +135,10 @@ export default defineComponent({
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      graphClient
+      graphClient,
+      currentStorageId,
+      loadSpaceMembersTask,
+      spaceMembers
     }
   },
 
@@ -124,6 +154,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
     availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
@@ -193,6 +224,9 @@ export default defineComponent({
     },
     highlightedFileIsSpace() {
       return this.highlightedFile?.type === 'space'
+    },
+    shouldLoadSharesTree() {
+      return this.currentFolder?.path !== this.highlightedFile.path
     }
   },
   watch: {
@@ -222,7 +256,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadSharesTree', 'loadSpaceShares']),
+    ...mapActions('Files', ['loadSharesTree']),
 
     async fetchFileInfo() {
       if (!this.highlightedFile) {
@@ -230,14 +264,15 @@ export default defineComponent({
         return
       }
 
-      if (this.highlightedFileIsSpace) {
-        this.loadSpaceShares({
-          client: this.$client,
-          graphClient: this.graphClient,
-          path: this.highlightedFile.path,
-          storageId: this.highlightedFile.fileId,
-          resource: this.highlightedFile
-        })
+      if (
+        this.highlightedFileIsSpace ||
+        isLocationSpacesActive(this.$router, 'files-spaces-project')
+      ) {
+        const space = this.highlightedFileIsSpace
+          ? this.highlightedFile
+          : this.spaces?.spaces?.find((space) => space.id === this.currentStorageId)
+
+        this.loadSpaceMembersTask.perform(space)
       }
 
       if (
@@ -245,6 +280,9 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
+        if (this.shouldLoadSharesTree) {
+          this.loadShares()
+        }
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -267,19 +305,23 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        if (this.currentFolder?.path !== this.highlightedFile.path) {
-          this.loadSharesTree({
-            client: this.$client,
-            path: this.highlightedFile.path,
-            $gettext: this.$gettext,
-            storageId: this.highlightedFile.fileId
-          })
+        if (this.shouldLoadSharesTree) {
+          this.loadShares()
         }
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
+    },
+
+    loadShares() {
+      this.loadSharesTree({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId
+      })
     }
   }
 })
