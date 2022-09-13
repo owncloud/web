@@ -152,7 +152,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder', 'sharesTree']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
@@ -224,9 +224,6 @@ export default defineComponent({
     },
     highlightedFileIsSpace() {
       return this.highlightedFile?.type === 'space'
-    },
-    shouldLoadSharesTree() {
-      return this.currentFolder?.path !== this.highlightedFile.path
     }
   },
   watch: {
@@ -280,9 +277,7 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        if (this.shouldLoadSharesTree) {
-          this.loadShares()
-        }
+        this.loadShares()
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -305,9 +300,7 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        if (this.shouldLoadSharesTree) {
-          this.loadShares()
-        }
+        this.loadShares()
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)

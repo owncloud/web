@@ -16,7 +16,6 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
@@ -483,6 +482,7 @@ export default {
    * not remove unrelated existing ones.
    */
   loadSharesTree(context, { client, path, storageId }) {
+    console.log('LOAD SH TREE', context.getters.sharesTree)
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
@@ -492,6 +492,8 @@ export default {
 
     const parentPaths = getParentPaths(path, true)
     const sharesTree = {}
+    const outgoing = []
+    const incoming = []
 
     context.commit('SHARESTREE_LOADING', true)
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
@@ -512,22 +514,25 @@ export default {
             )
           }
           sharesTree[''] = spaceShares
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', spaceShares)
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+          outgoing.push(...spaceShares)
         })
       )
     }
 
     parentPaths.forEach((queryPath) => {
+      const indirect = path !== queryPath
+
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath]) {
-        sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => ({
-          ...s,
-          indirect: path !== queryPath
-        }))
+        sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
+          if (!indirect) {
+            const arr = s.outgoing ? outgoing : incoming
+            arr.push({ ...s, indirect })
+          }
+          return { ...s, indirect }
+        })
         return
       }
-      const indirect = path !== queryPath
       sharesTree[queryPath] = []
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
@@ -548,8 +553,7 @@ export default {
               })
 
               if (!indirect) {
-                context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [...sharesTree[queryPath]])
-                context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+                outgoing.push(...sharesTree[queryPath])
               }
             })
             .catch((error) => {
@@ -580,8 +584,7 @@ export default {
               })
 
               if (!indirect) {
-                context.commit('INCOMING_SHARES_LOAD', [...sharesTree[queryPath]])
-                context.commit('INCOMING_SHARES_LOADING', false)
+                incoming.push(...sharesTree[queryPath])
               }
             })
             .catch((error) => {
@@ -598,6 +601,10 @@ export default {
     return Promise.all(shareQueriesPromises).then(() => {
       context.commit('SHARESTREE_ADD', sharesTree)
       context.commit('SHARESTREE_LOADING', false)
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoing)
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+      context.commit('INCOMING_SHARES_LOAD', incoming)
+      context.commit('INCOMING_SHARES_LOADING', false)
     })
   },
   async loadVersions(context, { client, fileId }) {
