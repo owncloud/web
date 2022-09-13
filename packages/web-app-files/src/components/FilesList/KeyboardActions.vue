@@ -87,7 +87,7 @@ export default defineComponent({
 
     areCustomKeyBindingsEnabled() {
       const closestSelectionEl = window.getSelection().focusNode as HTMLElement
-      if (!closestSelectionEl) return true
+      if (!closestSelectionEl) return false
       let customKeyBindings
       try {
         customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings='true']")

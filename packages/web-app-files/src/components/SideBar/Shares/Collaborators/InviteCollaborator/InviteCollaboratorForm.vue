@@ -2,7 +2,6 @@
   <div
     id="new-collaborators-form"
     data-testid="new-collaborators-form"
-    data-custom-key-bindings="true"
   >
     <oc-select
       id="files-share-invite-input"

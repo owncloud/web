@@ -18,6 +18,7 @@
     @selectPanel="setActiveSideBarPanel"
     @close="closeSideBar"
     v-on="$listeners"
+    data-custom-key-bindings="true"
   >
     <template #header>
       <file-info

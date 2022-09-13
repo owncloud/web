@@ -246,7 +246,6 @@ module.exports = {
      * @returns {*}
      */
     openFileActionsMenu: async function (resource, elementType = 'any') {
-      // here2
       await this.openSideBar(resource, elementType)
       await appSideBar.activatePanel('actions')
       return fileActionsMenu
@@ -260,7 +259,6 @@ module.exports = {
      * @returns {*}
      */
     openSideBar: async function (resource, elementType = 'any') {
-      // here3
       // nothing to do if already open for correct resource
       if (await appSideBar.isSideBarOpenForResource(resource, elementType, false)) {
         return appSideBar
@@ -271,9 +269,7 @@ module.exports = {
       await appSideBar.closeSidebarIfOpen()
 
       // open the sidebar for the resource
-      await new Promise((resolve) => setTimeout(resolve, 2000))
       await this.clickRow(resource, elementType)
-      await new Promise((resolve) => setTimeout(resolve, 2000))
       await this.click('@btnToggleSideBar')
       await this.waitForAnimationToFinish() // wait for the sidebar animation to finish
       return appSideBar
@@ -283,7 +279,6 @@ module.exports = {
      * @param {string} elementType The resource type (file|folder|any)
      */
     clickRow: async function (resource, elementType = 'any') {
-      // here4
       await this.waitForFileVisible(resource, elementType)
       await this.initAjaxCounters()
         .useXpath()
@@ -367,8 +362,6 @@ module.exports = {
       let resourceName = null
       let status = null
       let error = null
-      console.log('!!!!!')
-      console.log(fileSelector)
       await this.getText('xpath', fileSelector, (res) => {
         status = res.status
         const result = res.value
@@ -394,7 +387,6 @@ module.exports = {
      * @returns {string}
      */
     getFileRowSelectorByFileName: function (fileName, elementType = 'any') {
-      // here5
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
       if (elementType === 'any') {
@@ -632,7 +624,6 @@ module.exports = {
     },
 
     copyResource: async function (resource, target) {
-      // here1
       // Trigger copy
       await this.openFileActionsMenu(resource)
       await fileActionsMenu.copy()
