@@ -12,7 +12,6 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @clear="resetProviders"
     />
     <div
       v-if="optionsVisible && term"
@@ -178,13 +177,6 @@ export default {
   methods: {
     updateTerm(term) {
       this.term = term
-      this.availableProviders.forEach((provider) => provider.updateTerm(term))
-    },
-    resetProviders() {
-      this.availableProviders.forEach((provider) => provider.reset())
-    },
-    activateProvider(provider) {
-      provider.activate(this.term)
     },
     onEvent(event) {
       const eventInComponent = this.$el.contains(event.target)

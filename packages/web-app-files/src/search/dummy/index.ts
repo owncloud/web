@@ -25,31 +25,6 @@ export default class Provider extends EventBus implements SearchProvider {
     this.router = router
   }
 
-  public activate(term: string): void {
-    const listRoute = 'files-common-search'
-
-    if (!term && this.router.currentRoute.name !== listRoute) {
-      return
-    }
-
-    this.router
-      .push({
-        name: listRoute,
-        query: { term, provider: this.id }
-      })
-      .catch(() => {
-        // Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current location: "/search/list/files.global?term=a"
-      })
-  }
-
-  public reset(): void {
-    /* not needed */
-  }
-
-  public updateTerm(): void {
-    /* not needed */
-  }
-
   public get available(): boolean {
     return this.store.getters.capabilities?.dav?.reports?.includes('search-files')
   }

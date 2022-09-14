@@ -66,8 +66,4 @@ export default class Preview implements SearchPreview {
   public get available(): boolean {
     return this.router.currentRoute.name !== 'search-provider-list'
   }
-
-  public activate(): void {
-    /* not needed */
-  }
 }
