@@ -32,38 +32,31 @@
           {{ $gettext('No results') }}
         </li>
         <template v-else>
-          <ul v-for="provider in availableProviders" :key="provider.id" class="provider">
-            <li class="oc-text-truncate oc-flex oc-flex-between">
-              <span>{{ provider.displayName }}</span>
-              <span v-if="showMoreResultsForProvider(provider)" id="more-results">
-                <router-link
-                  id="more-results-link"
-                  class="oc-flex oc-text-muted oc-width-1-1"
-                  :to="getMoreResultsLinkForProvider(provider)"
-                >
-                  <span id="more-results-text" class="oc-flex oc-flex-center">{{
-                    $gettext('Show more')
-                  }}</span>
-                  <span id="more-results-details" class="oc-flex">{{
-                    getMoreResultsDetailsTextForProvider(provider)
-                  }}</span>
-                </router-link>
-              </span>
-            </li>
-            <li
-              v-for="(providerSearchResultValue, idx) in getSearchResultForProvider(provider)
-                .values"
-              :key="providerSearchResultValue.id"
-              class="preview"
-              :class="{ first: idx === 0 }"
-            >
-              <component
-                :is="provider.previewSearch.component"
-                :provider="provider"
-                :search-result="providerSearchResultValue"
-              />
-            </li>
-          </ul>
+          <li v-for="provider in availableProviders" :key="provider.id" class="provider">
+            <ul>
+              <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
+                <span>{{ provider.displayName }}</span>
+                <span v-if="showMoreResultsForProvider(provider)">
+                  <router-link :to="getMoreResultsLinkForProvider(provider)">
+                    <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
+                  </router-link>
+                </span>
+              </li>
+              <li
+                v-for="(providerSearchResultValue, idx) in getSearchResultForProvider(provider)
+                  .values"
+                :key="providerSearchResultValue.id"
+                class="preview"
+                :class="{ first: idx === 0 }"
+              >
+                <component
+                  :is="provider.previewSearch.component"
+                  :provider="provider"
+                  :search-result="providerSearchResultValue"
+                />
+              </li>
+            </ul>
+          </li>
         </template>
       </ul>
     </div>
@@ -76,6 +69,7 @@ import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
 import { createLocationCommon } from 'files/src/router'
+import Mark from 'mark.js'
 
 export default {
   name: 'SearchBar',
@@ -89,6 +83,7 @@ export default {
       term: '',
       activeProvider: undefined,
       optionsVisible: false,
+      markInstance: null,
       providerStore
     }
   },
@@ -122,6 +117,18 @@ export default {
         })
       },
       immediate: true
+    },
+
+    searchResults() {
+      this.$nextTick(() => {
+        this.markInstance = new Mark(this.$refs.options)
+        this.markInstance.unmark()
+        this.markInstance.mark(this.term, {
+          element: 'span',
+          className: 'highlight-mark',
+          exclude: ['.provider-details *']
+        })
+      })
     }
   },
 
@@ -174,8 +181,6 @@ export default {
       const clearEvent = event.target.classList.contains('oc-search-clear')
       const keyEventEsc = event.keyCode === 27
 
-      event.stopPropagation()
-
       // optionsVisible is set to
       // - false if the event is a clearEvent or keyEventEsc
       // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
@@ -205,7 +210,7 @@ export default {
         return
       }
       const rangeItems = parseInt(searchResult.range?.split('/')[1] || 0)
-      return this.$gettextInterpolate(this.$gettext('%{totalResults} total results'), {
+      return this.$gettextInterpolate(this.$gettext('Show all %{totalResults} total results'), {
         totalResults: rangeItems
       })
     }
@@ -283,15 +288,11 @@ export default {
   border: 1px solid var(--oc-color-input-border);
   background-color: var(--oc-color-input-bg);
   width: 450px;
+  text-decoration: none;
 
-  #more-results-link {
-    text-decoration: none;
-    flex-direction: column;
-  }
-
-  #more-results-details {
-    justify-content: end;
-    font-size: var(--oc-font-size-xsmall);
+  .highlight-mark {
+    background: yellow;
+    color: var(--oc-color-text-muted);
   }
 
   @media (max-width: 959px) {
@@ -320,25 +321,6 @@ export default {
         background-color: var(--oc-color-input-border);
       }
 
-      .label {
-        background-color: white;
-        border: 1px solid var(--oc-color-swatch-passive-hover);
-        float: right;
-        font-size: var(--oc-font-size-xsmall);
-        padding: 0.5rem 1rem;
-        position: relative;
-        opacity: 0.6;
-        top: -4px;
-
-        @media (max-width: 959px) {
-          float: none;
-          opacity: 1;
-          top: 0.65rem;
-          right: 10px;
-          position: absolute;
-        }
-      }
-
       &.loading {
         padding-top: 20px;
         padding-bottom: 15px;
@@ -348,6 +330,10 @@ export default {
         &.spinner {
           border-top-color: var(--oc-color-input-border);
         }
+      }
+
+      &.provider-details {
+        font-size: var(--oc-font-size-xsmall);
       }
 
       &.provider {
