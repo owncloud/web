@@ -14,6 +14,7 @@ Summary
 * Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
+* Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
 Details
 -------
@@ -69,6 +70,13 @@ Details
    https://github.com/owncloud/web/issues/7628
    https://github.com/owncloud/web/pull/7630
    https://github.com/owncloud/web/pull/7641
+
+* Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
+
+   We've made keybindings global and introduced a data-attribute to mark elements that need
+   custom keybindings
+
+   https://github.com/owncloud/web/pull/7569
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
