@@ -1,0 +1,6 @@
+Bugfix: "Private link"-button alignment
+
+We've fixed the alignment of the "Private link"-button in the sidebar.
+
+https://github.com/owncloud/web/pull/7640
+https://github.com/owncloud/web/issues/7618
