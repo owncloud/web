@@ -192,12 +192,11 @@ export default {
     },
     showMoreResultsForProvider(provider) {
       const searchResult = this.getSearchResultForProvider(provider)
-      if (!searchResult || !searchResult.range) {
+      if (!searchResult || !searchResult.totalResults) {
         return false
       }
 
-      const rangeItems = parseInt(searchResult.range?.split('/')[1] || 0)
-      return rangeItems > searchResult.values.length
+      return searchResult.totalResults > searchResult.values.length
     },
     getMoreResultsLinkForProvider(provider) {
       return createLocationCommon('files-common-search', {
@@ -206,12 +205,11 @@ export default {
     },
     getMoreResultsDetailsTextForProvider(provider) {
       const searchResult = this.getSearchResultForProvider(provider)
-      if (!searchResult || !searchResult.range) {
+      if (!searchResult || !searchResult.totalResults) {
         return
       }
-      const rangeItems = parseInt(searchResult.range?.split('/')[1] || 0)
       return this.$gettextInterpolate(this.$gettext('Show all %{totalResults} total results'), {
-        totalResults: rangeItems
+        totalResults: searchResult.totalResults
       })
     }
   }

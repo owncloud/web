@@ -93,7 +93,7 @@ export default defineComponent({
     searchResult: {
       type: Object,
       default: function () {
-        return { range: null, values: [] }
+        return { totalResults: null, values: [] }
       }
     },
     loading: {
@@ -121,13 +121,13 @@ export default defineComponent({
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
     rangeSupported() {
-      return this.searchResult.range
-    },
-    rangeItems() {
-      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+      return this.searchResult.totalResults
     },
     searchResultExceedsLimit() {
-      return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
+      return (
+        !this.rangeSupported ||
+        (this.searchResult.totalResults && this.searchResult.totalResults > searchLimit)
+      )
     },
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
@@ -138,11 +138,11 @@ export default defineComponent({
       }
 
       const translated = this.$gettext(
-        'Found %{rangeItems}, showing the %{itemCount} best matching results'
+        'Found %{totalResults}, showing the %{itemCount} best matching results'
       )
       return this.$gettextInterpolate(translated, {
         itemCount: this.itemCount,
-        rangeItems: this.rangeItems
+        totalResults: this.searchResult.totalResults
       })
     }
   },

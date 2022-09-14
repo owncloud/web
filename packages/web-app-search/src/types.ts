@@ -4,7 +4,7 @@ export interface SearchResultValue {
 }
 
 export interface SearchResult {
-  range?: string | null
+  totalResults: number | null
   values: SearchResultValue[]
 }
 

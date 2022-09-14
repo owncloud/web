@@ -32,7 +32,7 @@ export default class Preview implements SearchPreview {
   public async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        range: null,
+        totalResults: null,
         values: []
       }
     }
@@ -57,7 +57,10 @@ export default class Preview implements SearchPreview {
 
       return acc
     }, [])
-    return this.cache.set(term, { range, values: resources })
+    return this.cache.set(term, {
+      totalResults: range ? parseInt(range?.split('/')[1]) : null,
+      values: resources
+    })
   }
 
   public get available(): boolean {
