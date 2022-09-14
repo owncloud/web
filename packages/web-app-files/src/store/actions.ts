@@ -386,6 +386,7 @@ export default {
     const getShares = (subPath, indirect, options, outgoing) => {
       const buildMethod = outgoing ? buildShare : buildCollaboratorShare
       const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
+      const arr = outgoing ? outgoingShares : incomingShares
       const permissions = allowSharePermissions(context.rootGetters)
       if (!sharesTree[subPath]) {
         sharesTree[subPath] = []
@@ -394,17 +395,16 @@ export default {
         .getShares(subPath, options)
         .then((data) => {
           data.forEach((element) => {
-            sharesTree[subPath].push({
+            const share = {
               ...buildMethod(element.shareInfo, resource, permissions),
               outgoing,
               indirect
-            })
+            }
+            sharesTree[subPath].push(share)
+            if (!indirect) {
+              arr.push(share)
+            }
           })
-
-          if (!indirect) {
-            const arr = outgoing ? outgoingShares : incomingShares
-            arr.push(...sharesTree[subPath])
-          }
         })
         .catch((error) => {
           console.error('SHARESTREE_ERROR', error)
@@ -424,6 +424,8 @@ export default {
 
     parentPaths.forEach((queryPath) => {
       const indirect = path !== queryPath
+      // FIXME: We need the storageId of each parent resource here
+      const spaceRef = indirect ? null : storageId
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath]) {
         sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
@@ -439,13 +441,13 @@ export default {
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          getShares(queryPath, indirect, { reshares: true, spaceRef: storageId }, true)
+          getShares(queryPath, indirect, { reshares: true, spaceRef }, true)
         )
       )
       // query the incoming share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          getShares(queryPath, indirect, { shared_with_me: true, spaceRef: storageId }, false)
+          getShares(queryPath, indirect, { shared_with_me: true, spaceRef }, false)
         )
       )
     })

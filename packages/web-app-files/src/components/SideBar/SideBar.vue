@@ -105,6 +105,11 @@ export default defineComponent({
     return {
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
+      isSharedWithOthersLocation: useActiveLocation(
+        isLocationSharesActive,
+        'files-shares-with-others'
+      ),
+      isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -211,7 +216,12 @@ export default defineComponent({
 
       // FIXME: isSpacesProjectsLocation resolves "true" within a project?!
       const isSpacesProjectsLocation = this.isSpacesProjectsLocation && !this.currentStorageId
-      const loadShares = !!oldFile || isSpacesProjectsLocation || this.isSharedWithMeLocation
+      const loadShares =
+        !!oldFile ||
+        isSpacesProjectsLocation ||
+        this.isSharedWithMeLocation ||
+        this.isSharedWithOthersLocation ||
+        this.isSharedViaLinkLocation
       this.fetchFileInfo(loadShares)
     },
 
