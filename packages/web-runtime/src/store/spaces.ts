@@ -7,14 +7,12 @@ import { sortSpaceMembers } from 'files/src/helpers/space'
 
 const state = {
   spaces: [],
-  spaceMembers: [],
-  spaceMembersLoading: false
+  spaceMembers: []
 }
 
 const getters = {
   spaces: (state) => state.spaces,
-  spaceMembers: (state) => state.spaceMembers,
-  spaceMembersLoading: (state) => state.spaceMembersLoading
+  spaceMembers: (state) => state.spaceMembers
 }
 
 const mutations = {
@@ -68,9 +66,6 @@ const mutations = {
   LOAD_SPACE_MEMBERS(state, members) {
     state.spaceMembers = members
   },
-  SPACE_MEMBERS_LOADING(state, loading) {
-    state.spaceMembersLoading = loading
-  },
   SPACE_MEMBERS_UPSERT(state, member) {
     const fileIndex = state.spaceMembers.findIndex((s) => {
       return member.id === s.id && member.collaborator.name === s.collaborator.name
@@ -102,7 +97,6 @@ const actions = {
   },
   loadSpaceMembers(context, { graphClient, space }) {
     context.commit('LOAD_SPACE_MEMBERS', [])
-    context.commit('SPACE_MEMBERS_LOADING', true)
     const promises = []
     const spaceShares = []
 
@@ -120,11 +114,9 @@ const actions = {
 
     return Promise.all(promises).then(() => {
       context.commit('LOAD_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
-      context.commit('SPACE_MEMBERS_LOADING', false)
     })
   },
   addSpaceMember(context, { client, path, shareWith, permissions, role, storageId, displayName }) {
-    context.commit('SPACE_MEMBERS_LOADING', true)
     return client.shares
       .shareSpaceWithUser(path, shareWith, storageId, { permissions, role: role.name })
       .then(() => {
@@ -133,7 +125,6 @@ const actions = {
       })
   },
   changeSpaceMember(context, { client, share, permissions, role }) {
-    context.commit('SPACE_MEMBERS_LOADING', true)
     return client.shares
       .shareSpaceWithUser('', share.collaborator.name, share.id, { permissions, role: role.name })
       .then(() => {
@@ -147,16 +138,13 @@ const actions = {
         )
 
         context.commit('SPACE_MEMBERS_UPSERT', spaceShare)
-        context.commit('SPACE_MEMBERS_LOADING', false)
       })
   },
   deleteSpaceMember(context, { client, share }) {
-    context.commit('SPACE_MEMBERS_LOADING', true)
     const additionalParams = { shareWith: share.collaborator.name } as any
 
     return client.shares.deleteShare(share.id, additionalParams).then(() => {
       context.commit('SPACE_MEMBER_REMOVE', share)
-      context.commit('SPACE_MEMBERS_LOADING', false)
     })
   }
 }
