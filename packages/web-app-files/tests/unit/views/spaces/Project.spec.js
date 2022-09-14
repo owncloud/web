@@ -307,6 +307,12 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             },
             spaces: {
               namespaced: true,
+              getters: {
+                spaceMembers: () => [spaceShare]
+              },
+              actions: {
+                loadSpaceMembers: jest.fn()
+              },
               mutations: {
                 UPSERT_SPACE: jest.fn()
               }

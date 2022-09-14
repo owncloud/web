@@ -132,7 +132,7 @@ describe('SpaceMembers', () => {
 })
 
 const storeOptions = (data, isInLoadingState) => {
-  const { user } = data
+  const { user, spaceMembers = [] } = data
 
   return {
     actions: {
@@ -157,6 +157,17 @@ const storeOptions = (data, isInLoadingState) => {
         mutations: {
           SET_HIGHLIGHTED_FILE(state, file) {
             state.highlightedFile = spaceMock
+          }
+        }
+      },
+      runtime: {
+        namespaced: true,
+        modules: {
+          spaces: {
+            namespaced: true,
+            getters: {
+              spaceMembers: () => spaceMembers
+            }
           }
         }
       }
@@ -194,8 +205,7 @@ const storeOptions = (data, isInLoadingState) => {
 }
 
 function getShallowMountedWrapper(data, loading = false) {
-  const { spaceMembers = [] } = data
-  return shallowMount(getComponent(loading), {
+  return shallowMount(SpaceMembers, {
     localVue,
     store: createStore(data, loading),
     stubs: {
@@ -206,15 +216,13 @@ function getShallowMountedWrapper(data, loading = false) {
     provide: {
       displayedItem: {
         value: spaceMock
-      },
-      spaceMembers: { value: spaceMembers }
+      }
     }
   })
 }
 
 function getMountedWrapper(data, loading = false) {
-  const { spaceMembers = [] } = data
-  return mount(getComponent(loading), {
+  return mount(SpaceMembers, {
     localVue,
     store: createStore(data, loading),
     stubs: {
@@ -239,25 +247,11 @@ function getMountedWrapper(data, loading = false) {
     provide: {
       displayedItem: {
         value: spaceMock
-      },
-      spaceMembers: { value: spaceMembers }
+      }
     }
   })
 }
 
 function createStore(data, loading) {
   return new Vuex.Store(storeOptions(data, loading))
-}
-
-function getComponent(loading) {
-  return {
-    ...SpaceMembers,
-    setup: () => ({
-      graphClient: {},
-      loadSharesTask: {
-        isRunning: loading,
-        perform: jest.fn()
-      }
-    })
-  }
 }

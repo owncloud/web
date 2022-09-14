@@ -81,6 +81,17 @@ function createWrapper(spaceResource) {
         }
       },
       modules: {
+        runtime: {
+          namespaced: true,
+          modules: {
+            spaces: {
+              namespaced: true,
+              getters: {
+                spaceMembers: () => [spaceShare]
+              }
+            }
+          }
+        },
         Files: {
           namespaced: true,
           state: {

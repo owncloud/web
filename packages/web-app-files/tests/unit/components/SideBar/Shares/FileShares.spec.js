@@ -185,7 +185,8 @@ const storeOptions = (data) => {
     outgoingCollaborators = [],
     incomingCollaborators = [],
     canShare = true,
-    spaces = []
+    spaces = [],
+    spaceMembers = []
   } = data
   return {
     actions: {
@@ -224,16 +225,18 @@ const storeOptions = (data) => {
       },
       runtime: {
         namespaced: true,
-        state: {
-          spaces: {
-            spaces
-          }
-        },
         modules: {
           auth: {
             namespaced: true,
             getters: {
               accessToken: () => 'GFwHKXdsMgoFwt'
+            }
+          },
+          spaces: {
+            namespaced: true,
+            state: { spaces },
+            getters: {
+              spaceMembers: () => spaceMembers
             }
           }
         }
@@ -275,13 +278,11 @@ const storeOptions = (data) => {
 
 function getMountedWrapper(data) {
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
-  const { spaceMembers = [] } = data
 
   return mount(FileShares, {
     localVue,
     provide: {
-      incomingParentShare: {},
-      spaceMembers: { value: spaceMembers }
+      incomingParentShare: {}
     },
     setup: () => ({
       currentStorageId: storageId
@@ -307,7 +308,6 @@ function getMountedWrapper(data) {
 function getShallowMountedWrapper(data, loading = false) {
   reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
-  const { spaceMembers = [] } = data
 
   return shallowMount(FileShares, {
     localVue,
@@ -316,8 +316,7 @@ function getShallowMountedWrapper(data, loading = false) {
       hasResharing: false
     }),
     provide: {
-      incomingParentShare: {},
-      spaceMembers: { value: spaceMembers }
+      incomingParentShare: {}
     },
     store: createStore(data),
     stubs: {
