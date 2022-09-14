@@ -1,9 +1,6 @@
-import { Registry } from './services'
 import translations from '../l10n/translations'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
-import { FilterSearch } from './search'
-import { bus } from 'web-pkg/src/instance'
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
   return msg
@@ -70,9 +67,5 @@ export default {
   appInfo,
   routes,
   translations,
-  navItems,
-  ready({ router }) {
-    Registry.search = new FilterSearch(router)
-    bus.publish('app.search.register.provider', Registry.search)
-  }
+  navItems
 }
