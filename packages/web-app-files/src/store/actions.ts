@@ -365,7 +365,7 @@ export default {
    * This will add new entries into the shares tree and will
    * not remove unrelated existing ones.
    */
-  loadSharesTree(context, { client, path, storageId }) {
+  loadSharesTree(context, { client, path, storageId, includeRoot = false }) {
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
@@ -374,7 +374,7 @@ export default {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('SHARESTREE_LOADING', true)
 
-    const parentPaths = path === '/' ? ['/'] : getParentPaths(path, true)
+    const parentPaths = path === '/' && includeRoot ? ['/'] : getParentPaths(path, true)
     const sharesTree = {}
     const outgoingShares = []
     const incomingShares = []
