@@ -209,7 +209,6 @@ const storeOptions = (data) => {
             return getResource({ filename: 'testfile', extension: 'jpg', type: 'file', canShare })
           },
           currentFileOutgoingCollaborators: () => outgoingCollaborators,
-          currentFileOutgoingSharesLoading: () => false,
           sharesTreeLoading: () => false
         },
         actions: {

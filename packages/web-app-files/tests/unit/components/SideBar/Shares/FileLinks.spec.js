@@ -141,7 +141,6 @@ describe('FileLinks', () => {
       isFolder: false,
       isReceivedShare: jest.fn()
     },
-    currentFileOutgoingSharesLoading = false,
     sharesTreeLoading = false,
     expireDate = {
       enabled: true,
@@ -193,7 +192,6 @@ describe('FileLinks', () => {
             currentFileOutgoingLinks: function () {
               return links
             },
-            currentFileOutgoingSharesLoading: jest.fn(() => currentFileOutgoingSharesLoading),
             sharesTreeLoading: jest.fn(() => sharesTreeLoading)
           },
           actions: mapActions,

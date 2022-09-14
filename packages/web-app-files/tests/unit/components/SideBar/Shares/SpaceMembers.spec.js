@@ -148,7 +148,6 @@ const storeOptions = (data, isInLoadingState) => {
         namespaced: true,
         getters: {
           highlightedFile: () => spaceMock,
-          currentFileOutgoingSharesLoading: () => isInLoadingState,
           sharesTreeLoading: () => false
         },
         actions: {

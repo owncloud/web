@@ -53,8 +53,7 @@ describe('SharesPanel', () => {
             getters: {
               highlightedFile: (state) => {
                 return state.highlightedFile
-              },
-              currentFileOutgoingSharesLoading: jest.fn()
+              }
             },
             mutations: {
               SET_HIGHLIGHTED_FILE(state, file) {

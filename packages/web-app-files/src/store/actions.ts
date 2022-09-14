@@ -456,9 +456,7 @@ export default {
       context.commit('SHARESTREE_ADD', sharesTree)
       context.commit('SHARESTREE_LOADING', false)
       context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoingShares)
-      context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       context.commit('INCOMING_SHARES_LOAD', incomingShares)
-      context.commit('INCOMING_SHARES_LOADING', false)
     })
   },
   async loadVersions(context, { client, fileId }) {
