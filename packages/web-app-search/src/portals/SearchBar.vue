@@ -134,21 +134,25 @@ export default {
 
   asyncComputed: {
     searchResults: {
-      get() {
+      async get() {
         if (!this.term || !this.optionsVisible) {
-          return
+          return []
         }
-        return this.availableProviders.reduce(async (acc, provider) => {
-          if (provider.previewSearch?.available) {
-            acc.push({
-              providerId: provider.id,
-              result: await provider.previewSearch.search(this.term)
+
+        const searchResult = []
+
+        for (const availableProvider of this.availableProviders) {
+          if (availableProvider.previewSearch?.available) {
+            searchResult.push({
+              providerId: availableProvider.id,
+              result: await availableProvider.previewSearch.search(this.term)
             })
           }
-          return acc
-        }, [])
+        }
+
+        return searchResult
       },
-      watch: ['term']
+      watch: ['term', 'optionsVisible']
     }
   },
 
