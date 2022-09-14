@@ -95,13 +95,16 @@ export default {
           parentResources = listResponse.map((i) => buildResource(i))
           parentFolders[webDavParentPath] = parentResources
         }
-        // ? Check for naming conflict
-        const hasConflict = parentResources.some((e) => e.name === resource.name)
+        // ? Check for naming conflict in parent folder and between resources batch
+        const hasConflict =
+          parentResources.some((e) => e.name === resource.name) ||
+          resources.filter((e) => e.id !== resource.id).some((e) => e.name === resource.name)
         if (!hasConflict) {
           resolvedResources.push(resource)
         } else {
           conflicts.push(resource)
         }
+        console.log(resource)
       }
 
       //! 2
@@ -154,7 +157,11 @@ export default {
         const webDavParentPath = getWebdavParentFolderFromResource(resource)
         const parentResources = parentFolders[webDavParentPath]
         const extension = extractExtensionFromFile({ name: resource.name } as Resource)
-        const resolvedName = resolveFileNameDuplicate(resource.name, extension, [...parentResources, ...resolvedConflicts.map(e => e.resource), ...resolvedResources])
+        const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
+          ...parentResources,
+          ...resolvedConflicts.map((e) => e.resource),
+          ...resolvedResources
+        ])
         resource.name = resolvedName
         resource.path = `${parentPath}/${resolvedName}`
         resolvedResources.push(resource)
