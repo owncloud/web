@@ -187,21 +187,21 @@ export default defineComponent({
 
     breadcrumbs() {
       const rootBreadcrumbsItems = []
-      if (this.hasShareJail) {
-        if (this.space.driveType === 'project') {
-          rootBreadcrumbsItems.push({
-            text: this.$gettext('Spaces'),
-            to: { path: '/files/spaces/projects' }
-          })
-        }
+      if (this.space.driveType === 'project') {
+        rootBreadcrumbsItems.push({
+          text: this.$gettext('Spaces'),
+          to: createLocationSpaces('files-spaces-projects')
+        })
       }
       rootBreadcrumbsItems.push({
         text: this.hasShareJail ? this.space.name : this.$gettext('All files'),
-        to: { name: 'files-spaces-generic', params: { driveAliasAndItem: this.space.driveAlias } }
+        to: createLocationSpaces('files-spaces-generic', {
+          params: { driveAliasAndItem: this.space.driveAlias }
+        })
       })
       return concatBreadcrumbs(
         ...rootBreadcrumbsItems,
-        ...breadcrumbsFromPath(this.$route, this.$route.params.item)
+        ...breadcrumbsFromPath(this.$route, this.item)
       )
     },
 
