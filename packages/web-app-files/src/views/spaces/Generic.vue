@@ -83,7 +83,6 @@
 
 <script lang="ts">
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-import isNil from 'lodash-es/isNil'
 import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
@@ -110,10 +109,10 @@ import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
-import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
@@ -153,10 +152,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const store = useStore()
-    const personalSpace = computed(() => {
-      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
-    })
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       return createLocationSpaces('files-spaces-generic', {
         params: { driveAliasAndItem: props.space.driveAlias + path }
@@ -165,7 +160,6 @@ export default defineComponent({
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetRouteCallback,
-      personalSpace,
       hasShareJail: useCapabilityShareJailEnabled()
     }
   },
@@ -194,12 +188,21 @@ export default defineComponent({
           to: createLocationSpaces('files-spaces-projects')
         })
       }
-      rootBreadcrumbsItems.push({
-        text: this.hasShareJail ? this.space.name : this.$gettext('All files'),
-        to: createLocationSpaces('files-spaces-generic', {
-          params: { driveAliasAndItem: this.space.driveAlias }
+      if (this.space.driveType === 'personal') {
+        rootBreadcrumbsItems.push({
+          text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
+          to: createLocationSpaces('files-spaces-generic', {
+            params: { driveAliasAndItem: this.space.driveAlias }
+          })
         })
-      })
+      } else {
+        rootBreadcrumbsItems.push({
+          text: this.space.name,
+          to: createLocationSpaces('files-spaces-generic', {
+            params: { driveAliasAndItem: this.space.driveAlias }
+          })
+        })
+      }
       return concatBreadcrumbs(
         ...rootBreadcrumbsItems,
         ...breadcrumbsFromPath(this.$route, this.item)
@@ -218,25 +221,6 @@ export default defineComponent({
   watch: {
     $route: {
       handler: async function (to, from) {
-        const needsRedirectToPersonalSpace =
-          ['', 'personal', 'personal/home'].includes(to.params.driveAliasAndItem) ||
-          isNil(this.space?.fileId)
-        if (needsRedirectToPersonalSpace) {
-          return (
-            this.$router
-              .replace({
-                to,
-                params: {
-                  ...to.params,
-                  driveAliasAndItem: this.personalSpace.driveAlias + this.homeFolder
-                },
-                query: to.query
-              })
-              // avoid NavigationDuplicated error in console
-              .catch(() => {})
-          )
-        }
-
         const sameRoute = to.name === from?.name
         const sameItem = to.params?.driveAliasAndItem === from?.params?.driveAliasAndItem
         if (!sameRoute || !sameItem) {
