@@ -60,14 +60,7 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     async $_restore_trigger({ resources }) {
-      resources = [...resources]
-      // ? 1. collect and request existing files in associated parent folders of each resource
-      // ? 1.1 check all resources for conflicts and collect them
-      // ? 2: iterate through conflicts and collect resolve strategies
-      // ? 3: iterate through conflicts and behave according to strategy
-
-      //! add restored files to parentFolders object to avoid further conflicts
-      //! 1:
+      //! collect and request existing files in associated parent folders of each resource
       const parentFolders = {}
       const conflicts = []
       const resolvedResources = []
@@ -107,7 +100,7 @@ export default {
         console.log(resource)
       }
 
-      //! 2
+      //! iterate through conflicts and collect resolve strategies
       let count = 0
       const resolvedConflicts = []
       const allConflictsCount = conflicts.length
@@ -122,14 +115,15 @@ export default {
           })
           continue
         }
+        const remainingConflictCount = allConflictsCount - count
         const resolvedConflict: ResolveConflict = await resolveFileExists(
           this.createModal,
           this.hideModal,
           { name: conflict.name, isFolder } as Resource,
-          allConflictsCount - count,
+          remainingConflictCount,
           this.$gettext,
           this.$gettextInterpolate,
-          false
+          remainingConflictCount <= 1
         )
         count++
         if (resolvedConflict.doForAllConflicts) {
@@ -142,7 +136,7 @@ export default {
         })
       }
 
-      //! 3
+      //! iterate through conflicts and behave according to strategy
       const filesToOverwrite = resolvedConflicts
         .filter((e) => e.strategy === ResolveStrategy.REPLACE)
         .map((e) => e.resource)
