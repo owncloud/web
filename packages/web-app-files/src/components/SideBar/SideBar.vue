@@ -12,6 +12,7 @@
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
+    data-custom-key-bindings="true"
     @beforeDestroy="destroySideBar"
     @mounted="focusSideBar"
     @fileChanged="focusSideBar"

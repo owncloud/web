@@ -260,7 +260,6 @@ export default defineComponent({
       'REMOVE_FILES_FROM_SEARCHED',
       'REMOVE_FILE_SELECTION'
     ]),
-
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
       const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)

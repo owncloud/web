@@ -8482,6 +8482,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"keycode@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "keycode@npm:2.2.1"
+  checksum: 7a5c775b2410a3b6d9c07a415ecb70639187a965be239d2c11c71079cb1ca2f9dede94b86426f3ece475dc8ae3debf2367531bbcafc0af8c82f157d9a4f7e6cb
+  languageName: node
+  linkType: hard
+
 "kind-of@npm:^3.0.2":
   version: 3.2.2
   resolution: "kind-of@npm:3.2.2"
@@ -11844,6 +11851,7 @@ __metadata:
     jest-mock-axios: ^4.5.0
     jest-serializer-vue: ^2.0.2
     join-path: ^1.1.1
+    keycode: ^2.2.1
     license-checker-rseidelsohn: ^3.1.0
     lodash: ^4.17.21
     node-fetch: ^2.6.7
