@@ -465,10 +465,6 @@ export default {
     },
     defaultParentFolderName(file) {
       const { targetRoute } = file
-      // FIXME: use isLocationSpacesActive(), but it currently lies in the files app
-      if (targetRoute?.name === 'files-spaces-project') {
-        return targetRoute.params.name
-      }
       // Root of a share -> use share name
       if (this.hasShareJail && targetRoute?.name === 'files-spaces-share') {
         return targetRoute.params.shareName
@@ -476,6 +472,10 @@ export default {
 
       if (targetRoute?.name === 'files-public-files') {
         return this.$gettext('Public link')
+      }
+
+      if (targetRoute?.name === 'files-spaces-generic') {
+        return targetRoute.params.name
       }
       return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
     },

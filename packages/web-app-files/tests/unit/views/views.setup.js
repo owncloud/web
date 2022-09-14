@@ -66,12 +66,8 @@ export const routes = [
     name: 'files-trash-spaces-project'
   },
   {
-    path: '/files/spaces/personal/home/',
-    name: 'files-spaces-personal'
-  },
-  {
-    path: '/files/spaces/project/',
-    name: 'files-spaces-project'
+    path: '/files/spaces/personal/einstein',
+    name: 'files-spaces-generic'
   },
   {
     path: '/files/spaces/share/',

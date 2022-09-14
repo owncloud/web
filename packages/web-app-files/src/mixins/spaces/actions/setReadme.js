@@ -27,7 +27,7 @@ export default {
             if (!resources[0].mimeType?.startsWith('text/')) {
               return false
             }
-            if (!isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
               return false
             }
 

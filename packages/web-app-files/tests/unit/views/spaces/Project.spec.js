@@ -8,7 +8,7 @@ import SpaceProject from '../../../../src/views/spaces/Project.vue'
 import Vuex from 'vuex'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 import { thumbnailService } from '../../../../src/services'
-import { createLocationSpaces } from '../../../../src/router'
+import { locationSpacesGeneric } from '../../../../src/router/spaces'
 
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
@@ -214,7 +214,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
   const $router = {
     afterEach: jest.fn(),
     currentRoute: {
-      name: createLocationSpaces('files-spaces-project').name,
+      name: locationSpacesGeneric.name,
       query: {},
       params: { storageId: 1 }
     },

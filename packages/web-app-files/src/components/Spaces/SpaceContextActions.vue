@@ -130,10 +130,7 @@ export default {
         ...this.$_uploadImage_items
       ]
 
-      if (
-        isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-        this.$route.params.storageId
-      ) {
+      if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
         fileHandlers.splice(2, 0, ...this.$_editReadmeContent_items)
       }
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))

@@ -2,13 +2,7 @@ import { Location, RouteConfig } from 'vue-router'
 import { RouteComponents } from './router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type spaceTypes =
-  | 'files-spaces-projects'
-  | 'files-spaces-share'
-  | 'files-spaces-generic'
-  // TODO: remove in favour of generic location
-  | 'files-spaces-personal'
-  | 'files-spaces-project'
+type spaceTypes = 'files-spaces-projects' | 'files-spaces-share' | 'files-spaces-generic'
 
 export const createLocationSpaces = (name: spaceTypes, location = {}): Location =>
   createLocation(name, location)
@@ -17,16 +11,10 @@ export const locationSpacesProjects = createLocationSpaces('files-spaces-project
 export const locationSpacesShare = createLocationSpaces('files-spaces-share')
 export const locationSpacesGeneric = createLocationSpaces('files-spaces-generic')
 
-// TODO: remove in favour of the generic location
-export const locationSpacesPersonal = createLocationSpaces('files-spaces-personal')
-export const locationSpacesProject = createLocationSpaces('files-spaces-project')
-
 // FIXME: `isLocationSpacesActive('files-spaces-generic') returns true for 'files-spaces-projects' and 'files-space-share' as well
 // TODO: if that's fixed, adjust the `loaderSpaceGeneric#isActive`
 export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
-  locationSpacesProject,
   locationSpacesProjects,
-  locationSpacesPersonal,
   locationSpacesShare,
   locationSpacesGeneric
 )

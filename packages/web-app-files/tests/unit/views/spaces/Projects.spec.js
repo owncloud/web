@@ -54,7 +54,7 @@ describe('Spaces projects view', () => {
 function getMountedWrapper(activeFiles = []) {
   const routes = [
     {
-      name: 'files-spaces-project',
+      name: 'files-spaces-generic',
       path: '/'
     }
   ]

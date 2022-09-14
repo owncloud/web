@@ -33,7 +33,7 @@ export default {
               return false
             }
 
-            if (!isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
               return false
             }
             if (!this.space) {

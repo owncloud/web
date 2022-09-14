@@ -16,7 +16,7 @@ const selectors = {
   reloadLinkButton: '#files-list-not-found-button-reload-link'
 }
 
-const spacesLocation = createLocationSpaces('files-spaces-personal')
+const spacesLocation = createLocationSpaces('files-spaces-generic')
 
 const store = new Vuex.Store({
   getters: {

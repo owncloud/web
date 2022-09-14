@@ -138,6 +138,7 @@ export default defineComponent({
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
+
   props: {
     space: {
       type: Object,

@@ -31,7 +31,7 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-personal')
+const personalHomeLocation = createLocationSpaces('files-spaces-generic')
 
 const newFileHandlers = [
   {
@@ -79,7 +79,7 @@ describe('CreateAndUpload component', () => {
   const route = {
     name: personalHomeLocation.name,
     params: {
-      item: ''
+      driveAliasAndItem: 'personal/einstein'
     }
   }
 
@@ -177,7 +177,7 @@ describe('CreateAndUpload component', () => {
               size: 1001
             },
             meta: {
-              routeName: 'files-spaces-personal'
+              routeName: 'files-spaces-generic'
             }
           }
         ])

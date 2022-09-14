@@ -7,11 +7,11 @@ import stubs from '@/tests/unit/stubs'
 import Files from '@/__fixtures__/files'
 import merge from 'lodash-es/merge'
 import { buildResource, renameResource } from '@files/src/helpers/resources'
+import { clientService } from 'web-pkg/src/services'
+import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
-import { createLocationSpaces } from '../../../../src/router'
-import { clientService } from 'web-pkg/src/services'
 
 jest.mock('web-pkg/src/observer')
 jest.mock('@files/src/helpers/resources', () => {
@@ -126,7 +126,7 @@ describe('SideBar', () => {
           mocks: {
             $client: { publicFiles: { getFileInfo: mockFileInfo } }
           },
-          currentRouteName: 'files-public-files'
+          currentRoute: createLocationPublic('files-public-files')
         })
         await wrapper.vm.$nextTick()
         await wrapper.vm.$nextTick()
@@ -169,7 +169,12 @@ describe('SideBar', () => {
   })
 })
 
-function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-spaces-personal' }) {
+function createWrapper({
+  item,
+  selectedItems,
+  mocks,
+  currentRoute = createLocationSpaces('files-spaces-generic')
+}) {
   const localVue = createLocalVue()
   localVue.prototype.$clientService = clientService
   localVue.use(Vuex)
@@ -247,7 +252,7 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
     mocks: merge(
       {
         $router: {
-          currentRoute: createLocationSpaces(currentRouteName),
+          currentRoute,
           resolve: (r) => {
             return { href: r.name }
           },

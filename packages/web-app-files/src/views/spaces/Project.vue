@@ -206,8 +206,12 @@ export default defineComponent({
 
     return {
       ...useResourcesViewDefaults(),
+<<<<<<< HEAD
       ...useGraphClient(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
+=======
+      resourceTargetLocation: createLocationSpaces('files-spaces-generic'), // irrelevant, we'll delete this view
+>>>>>>> 17ecc3e91 (fix: remove personal and project space routes from codebase)
       accessToken: useAccessToken({ store })
     }
   },
