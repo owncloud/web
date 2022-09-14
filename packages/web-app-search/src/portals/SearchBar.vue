@@ -223,6 +223,22 @@ export default {
 
 <style lang="scss">
 #files-global-search {
+  .oc-search-input {
+    background-color: var(--oc-color-input-bg);
+    transition: 0s;
+
+    @media (max-width: 959px) {
+      border: none;
+      display: inline;
+    }
+  }
+
+  &.options-visible {
+    .oc-search-input {
+      border: 1px solid var(--oc-color-input-border);
+    }
+  }
+
   #files-global-search-bar {
     width: 452px;
     @media (max-width: 959px) {
@@ -267,61 +283,44 @@ export default {
     }
   }
 
-  .oc-search-input {
+  #files-global-search-options {
+    position: fixed;
+    overflow-y: auto;
+    max-height: calc(100% - 52px);
+    border: 1px solid var(--oc-color-input-border);
     background-color: var(--oc-color-input-bg);
-    transition: 0s;
+    width: 450px;
+    text-decoration: none;
+
+    .highlight-mark {
+      background: yellow;
+      color: var(--oc-color-text-muted);
+    }
 
     @media (max-width: 959px) {
-      border: none;
-      display: inline;
+      left: var(--oc-space-medium);
+      min-width: 95% !important;
+      max-width: 95% !important;
+      top: 60px;
     }
-  }
 
-  &.options-visible {
-    .oc-search-input {
-      border: 1px solid var(--oc-color-input-border);
-    }
-  }
-}
+    ul {
+      li {
+        padding: var(--oc-space-small) var(--oc-space-small);
+        position: relative;
+        font-size: var(--oc-font-size-small);
 
-#files-global-search-options {
-  position: fixed;
-  overflow-y: auto;
-  max-height: calc(100% - 52px);
-  border: 1px solid var(--oc-color-input-border);
-  background-color: var(--oc-color-input-bg);
-  width: 450px;
-  text-decoration: none;
+        &.provider-details {
+          font-size: var(--oc-font-size-xsmall);
+        }
 
-  .highlight-mark {
-    background: yellow;
-    color: var(--oc-color-text-muted);
-  }
+        &.preview {
+          background-color: var(--oc-color-background-highlight);
 
-  @media (max-width: 959px) {
-    left: var(--oc-space-medium);
-    min-width: 95% !important;
-    max-width: 95% !important;
-    top: 60px;
-  }
-
-  ul {
-    li {
-      padding: 15px 10px;
-      position: relative;
-      font-size: var(--oc-font-size-small);
-
-      &.provider-details {
-        font-size: var(--oc-font-size-xsmall);
-      }
-
-      &.preview {
-        padding-top: var(--oc-space-small);
-        padding-bottom: var(--oc-space-small);
-        background-color: var(--oc-color-background-highlight);
-
-        &:hover {
-          background-color: var(--oc-color-input-border);
+          &:hover {
+            background-color: var(--oc-color-input-border);
+            border-radius: 5px;
+          }
         }
       }
     }
