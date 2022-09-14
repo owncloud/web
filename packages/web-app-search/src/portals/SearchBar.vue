@@ -32,7 +32,7 @@
           {{ $gettext('No results') }}
         </li>
         <template v-else>
-          <li v-for="provider in availableProviders" :key="provider.id" class="provider">
+          <li v-for="provider in availableProvidersWithResults" :key="provider.id" class="provider">
             <ul>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span>{{ provider.displayName }}</span>
@@ -94,6 +94,11 @@ export default {
     },
     availableProviders() {
       return this.providerStore.availableProviders
+    },
+    availableProvidersWithResults() {
+      return this.availableProviders.filter(
+        (provider) => this.getSearchResultForProvider(provider).values.length
+      )
     },
     searchLabel() {
       return this.$gettext('Enter search term')
