@@ -40,20 +40,17 @@ export class UppyService {
     tusMaxChunkSize,
     tusHttpMethodOverride,
     tusExtension,
-    onBeforeRequest,
-    headers
+    onBeforeRequest
   }: {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
     tusExtension: string
     onBeforeRequest: () => void
-    headers: () => uppyHeaders
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
 
     const tusPluginOptions = {
-      headers,
       chunkSize: chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod: !!tusHttpMethodOverride,
@@ -180,6 +177,11 @@ export class UppyService {
     })
     this.uppy.on('file-added', (file) => {
       const addedFile = file as unknown as UppyResource
+      if (this.uppy.getPlugin('Tus')) {
+        this.uppy.setFileMeta(addedFile.id, {
+          mtime: (addedFile.data as any).lastModified / 1000
+        })
+      }
       if (this.uppy.getPlugin('XHRUpload')) {
         const escapedName = encodeURIComponent(addedFile.name)
         this.uppy.setFileState(addedFile.id, {
