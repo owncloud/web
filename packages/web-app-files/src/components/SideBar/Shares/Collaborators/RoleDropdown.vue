@@ -170,7 +170,7 @@ export default defineComponent({
     inviteLabel() {
       if (this.selectedRole.hasCustomPermissions) {
         return this.$gettext('Invite with custom permissions')
-      } else if (this.selectedRole.permissions().includes(SharePermissions.deny)) {
+      } else if (this.selectedRole.permissions().includes(SharePermissions.denied)) {
         return this.$gettext('Deny access')
       } else {
         return this.$gettextInterpolate(this.$gettext('Invite as %{ name }'), {
@@ -189,7 +189,7 @@ export default defineComponent({
     },
     availableRoles() {
       if (this.resourceIsSpace) {
-        return SpacePeopleShareRoles.list(this.resource.canDeny())
+        return SpacePeopleShareRoles.list()
       }
 
       if (this.incomingParentShare.value && this.resourceIsSharable) {
