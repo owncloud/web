@@ -32,7 +32,7 @@
           {{ $gettext('No results') }}
         </li>
         <template v-else>
-          <li v-for="provider in availableProvidersWithResults" :key="provider.id" class="provider">
+          <li v-for="provider in displayProviders" :key="provider.id" class="provider">
             <ul>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span>{{ provider.displayName }}</span>
@@ -43,11 +43,9 @@
                 </span>
               </li>
               <li
-                v-for="(providerSearchResultValue, idx) in getSearchResultForProvider(provider)
-                  .values"
+                v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
                 :key="providerSearchResultValue.id"
                 class="preview"
-                :class="{ first: idx === 0 }"
               >
                 <component
                   :is="provider.previewSearch.component"
@@ -95,7 +93,11 @@ export default {
     availableProviders() {
       return this.providerStore.availableProviders
     },
-    availableProvidersWithResults() {
+    displayProviders() {
+      /**
+       * Computed to filter and sort providers that will be displayed
+       * Only show providers which actually hold results
+       */
       return this.availableProviders.filter(
         (provider) => this.getSearchResultForProvider(provider).values.length
       )
@@ -186,15 +188,17 @@ export default {
     },
     onEvent(event) {
       const eventInComponent = this.$el.contains(event.target)
-      const eventInPreviewItem = event.target.closest('.preview') !== null
+      const elementIsInteractive = event.target.tagName === 'a' || event.target.tagName === 'button'
       const clearEvent = event.target.classList.contains('oc-search-clear')
       const keyEventEsc = event.keyCode === 27
+
+      event.stopPropagation()
 
       // optionsVisible is set to
       // - false if the event is a clearEvent or keyEventEsc
       // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
       this.optionsVisible =
-        clearEvent || keyEventEsc ? false : eventInComponent && !eventInPreviewItem
+        clearEvent || keyEventEsc ? false : eventInComponent && !elementIsInteractive
     },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
