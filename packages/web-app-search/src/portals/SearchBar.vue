@@ -32,7 +32,7 @@
         </li>
         <template v-else>
           <li v-for="provider in displayProviders" :key="provider.id" class="provider">
-            <ul>
+            <ul class="oc-list">
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span>{{ provider.displayName }}</span>
                 <span v-if="showMoreResultsForProvider(provider)">
@@ -306,66 +306,13 @@ export default {
   }
 
   ul {
-    &,
-    li {
-      padding: 0;
-      margin: 0;
-    }
-
     li {
       padding: 15px 10px;
       position: relative;
       font-size: var(--oc-font-size-small);
 
-      border-top-color: var(--oc-color-input-border);
-
-      &.selected,
-      &:hover {
-        background-color: var(--oc-color-input-border);
-      }
-
-      &.loading {
-        padding-top: 20px;
-        padding-bottom: 15px;
-        background-color: var(--oc-color-background-muted);
-        text-align: center;
-
-        &.spinner {
-          border-top-color: var(--oc-color-input-border);
-        }
-      }
-
       &.provider-details {
         font-size: var(--oc-font-size-xsmall);
-      }
-
-      &.provider {
-        opacity: 0.6;
-
-        &:first-of-type {
-          border-top: none;
-        }
-
-        .oc-icon,
-        .oc-icon > svg {
-          height: 18px;
-          max-height: 18px;
-          max-width: 18px;
-          width: 18px;
-          margin-right: 8px;
-          opacity: 0.6;
-          vertical-align: middle;
-        }
-
-        &:hover,
-        &.selected {
-          .oc-icon,
-          .oc-icon > svg {
-            opacity: 0.8;
-          }
-
-          opacity: 1;
-        }
       }
 
       &.preview {
@@ -373,26 +320,8 @@ export default {
         padding-bottom: var(--oc-space-small);
         background-color: var(--oc-color-background-highlight);
 
-        &.first {
-          border-top-color: var(--oc-color-input-border);
-        }
-
         &:hover {
           background-color: var(--oc-color-input-border);
-
-          > .label {
-            opacity: 1;
-          }
-        }
-
-        button {
-          font-size: var(--oc-font-size-small);
-        }
-
-        .label {
-          font-size: var(--oc-font-size-xsmall);
-          padding: 0.1rem 0.2rem;
-          opacity: 0.6;
         }
       }
     }
