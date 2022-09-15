@@ -14,6 +14,7 @@ Summary
 * Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
+* Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
 Details
@@ -70,6 +71,15 @@ Details
    https://github.com/owncloud/web/issues/7628
    https://github.com/owncloud/web/pull/7630
    https://github.com/owncloud/web/pull/7641
+
+* Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
+
+   Sub-folders within user- and group-shares can now be denied for certain share receivers if the
+   backend is capable of negative ACLs. Please note that the state of this feature is experimental
+   and needs to be enabled in the backend.
+
+   https://github.com/owncloud/web/issues/7180
+   https://github.com/owncloud/web/pull/7190
 
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
