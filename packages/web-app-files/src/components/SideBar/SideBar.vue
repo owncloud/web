@@ -40,6 +40,7 @@ import { Panel } from 'web-pkg/src/components/sideBar/'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import {
+  isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
@@ -110,6 +111,7 @@ export default defineComponent({
         'files-shares-with-others'
       ),
       isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
+      isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -221,7 +223,8 @@ export default defineComponent({
         isSpacesProjectsLocation ||
         this.isSharedWithMeLocation ||
         this.isSharedWithOthersLocation ||
-        this.isSharedViaLinkLocation
+        this.isSharedViaLinkLocation ||
+        this.isFavoritesLocation
       this.fetchFileInfo(loadShares)
     },
 
