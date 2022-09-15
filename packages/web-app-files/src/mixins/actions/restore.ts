@@ -18,7 +18,6 @@ import { extractExtensionFromFile } from '../../helpers/resource'
 export default {
   computed: {
     ...mapState(['user']),
-    ...mapGetters('Files', ['files']),
     ...mapState('runtime/spaces', ['spaces']),
     ...mapGetters(['configuration', 'capabilities']),
 
@@ -96,7 +95,6 @@ export default {
         } else {
           conflicts.push(resource)
         }
-        console.log(resource)
       }
       return {
         parentFolders,
