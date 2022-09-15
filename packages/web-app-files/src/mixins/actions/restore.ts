@@ -104,7 +104,7 @@ export default {
         resolvedResources
       }
     },
-    async collectRestoreResolveStrategies(conflicts) {
+    async collectRestoreResolveStrategies(conflicts, resolveFileExistsMethod: FileExistsResolver) {
       let count = 0
       const resolvedConflicts = []
       const allConflictsCount = conflicts.length
@@ -120,14 +120,15 @@ export default {
           continue
         }
         const remainingConflictCount = allConflictsCount - count
-        const resolvedConflict: ResolveConflict = await resolveFileExists(
+        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
           this.createModal,
           this.hideModal,
           { name: conflict.name, isFolder } as Resource,
           remainingConflictCount,
           this.$gettext,
           this.$gettextInterpolate,
-          remainingConflictCount <= 1
+          remainingConflictCount <= 1,
+          false
         )
         count++
         if (resolvedConflict.doForAllConflicts) {
@@ -227,7 +228,10 @@ export default {
       )
 
       //! iterate through conflicts and collect resolve strategies
-      const resolvedConflicts = await this.collectRestoreResolveStrategies(conflicts)
+      const resolvedConflicts = await this.collectRestoreResolveStrategies(
+        conflicts,
+        resolveFileExists
+      )
 
       //! iterate through conflicts and behave according to strategy
       const filesToOverwrite = resolvedConflicts

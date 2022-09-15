@@ -2,6 +2,9 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Restore from 'web-app-files/src/mixins/actions/restore.ts'
+import { DavProperties } from 'web-pkg/src/constants'
+import Restore from '@files/src/mixins/actions/restore.ts'
+import { ResolveStrategy } from '../../../../src/helpers/resource/copyMove'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
@@ -51,7 +54,7 @@ describe('restore', () => {
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
-      await wrapper.vm.restoreResources([{ id: '1', path: '1', name: '1' }], [])
+      await wrapper.vm.restoreResources([{ id: '1' }], [])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
       expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(1)
@@ -67,6 +70,43 @@ describe('restore', () => {
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
       expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(0)
+    })
+    it('should request parent folder on collecting restore conflicts', async () => {
+      const wrapper = getWrapper()
+      await wrapper.vm.collectRestoreConflicts([{ id: '1', path: '1', name: '1' }])
+
+      expect(wrapper.vm.$client.files.list).toHaveBeenCalledWith(
+        '/files/alice',
+        1,
+        DavProperties.Default
+      )
+    })
+    it('should find conflict within resources', async () => {
+      const wrapper = getWrapper()
+      const resourceOne = { id: '1', path: '1', name: '1' }
+      const resourceTwo = { id: '2', path: '1', name: '1' }
+      const { conflicts } = await wrapper.vm.collectRestoreConflicts([resourceOne, resourceTwo])
+
+      expect(conflicts).toContain(resourceTwo)
+    })
+    it('should add files without conflict to resolved resources', async () => {
+      const wrapper = getWrapper()
+      const resource = { id: '1', path: '1', name: '1' }
+      const { resolvedResources } = await wrapper.vm.collectRestoreConflicts([resource])
+
+      expect(resolvedResources).toContain(resource)
+    })
+    it('should return resolved conflicts', async () => {
+      const wrapper = getWrapper()
+      const resource = { id: '1', path: '1', name: '1' }
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
+      )
+      const resolved = await wrapper.vm.collectRestoreResolveStrategies(
+        [resource],
+        resolveFileConflictMethod
+      )
+      expect(resolved).toContainEqual({ resource, strategy: ResolveStrategy.REPLACE })
     })
   })
 })
@@ -92,6 +132,11 @@ function getWrapper({
       space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
         ...sdkMock,
+        files: {
+          list: jest.fn().mockImplementation(() => {
+            return Promise.resolve([])
+          })
+        },
         fileTrash: {
           ...sdkMock.files,
           restore: jest.fn().mockImplementation(() => {
