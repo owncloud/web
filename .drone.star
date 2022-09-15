@@ -71,7 +71,6 @@ config = {
             "suites": {
                 "oC10Basic1": [
                     "webUIAccount",
-                    "webUIWebdavLocks",
                 ],
                 "oC10Basic2": [
                     "webUIPrivateLinks",
@@ -272,7 +271,6 @@ config = {
                     "webUISharingAcceptSharesToRoot",
                     "webUITextEditor",
                     "webUIWebdavLockProtection",
-                    "webUIWebdavLocks",
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -366,7 +364,6 @@ config = {
                     "webUITextEditor",
                     "webUISharingInternalUsersBlacklisted",
                     "webUIWebdavLockProtection",
-                    "webUIWebdavLocks",
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -426,7 +423,6 @@ config = {
                     "webUIPrivateLinks",
                     "webUIPreview",
                     "webUIAccount",
-                    "webUIWebdavLocks",
                 ],
                 "webUIWebdavLockProtection": "oCISWebdavLockProtection",
                 "oCISSharingBasic": [
@@ -567,7 +563,6 @@ config = {
                     "webUITextEditor",
                     "webUISharingInternalUsersBlacklisted",
                     "webUIWebdavLockProtection",
-                    "webUIWebdavLocks",
                     "webUIMoveFilesFolders",
                     "webUIResharing1",
                     "webUIResharing2",
@@ -707,7 +702,6 @@ basicTestSuites = [
     "webUITrashbinRestore",
     "webUIUpload",
     "webUIWebdavLockProtection",
-    "webUIWebdavLocks",
 ]
 
 ocisSpecificTestSuites = [

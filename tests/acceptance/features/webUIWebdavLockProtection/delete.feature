@@ -13,46 +13,6 @@ Feature: Locks
     And user "brand-new-user" has created file "lorem.txt" in the server
     And user "brand-new-user" has logged in using the webUI
 
-  @issue-5417
-  Scenario Outline: deleting a locked file
-    Given user "brand-new-user" has locked folder "lorem.txt" setting the following properties in the server
-      | lockscope | <lockscope> |
-    And the user has browsed to the personal page
-    When the user tries to delete folder "lorem.txt" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      """
-      Failed to delete "lorem.txt" - the file is locked
-      """
-    When the user reloads the current page of the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "lorem.txt" should be marked as locked on the webUI
-    And file "lorem.txt" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
-    Examples:
-      | lockscope |
-      | exclusive |
-      | shared    |
-
-  @issue-5417
-  Scenario Outline: deleting a file in a locked folder
-    Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server
-      | lockscope | <lockscope> |
-    And the user has browsed to the personal page
-    And the user has opened folder "simple-folder"
-    When the user tries to delete folder "lorem.txt" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      """
-      Failed to delete "lorem.txt" - the file is locked
-      """
-    When the user reloads the current page of the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    When the user browses to the files page
-    Then folder "simple-folder" should be marked as locked on the webUI
-    And folder "simple-folder" should be marked as locked by user "brand-new-user" in the locks tab of the details panel on the webUI
-    Examples:
-      | lockscope |
-      | exclusive |
-      | shared    |
-
   @issue-ocis-1284
   Scenario Outline: deleting a file in a public share of a locked folder
     Given user "brand-new-user" has locked folder "simple-folder" setting the following properties in the server

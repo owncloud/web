@@ -148,13 +148,9 @@ Feature: Restore deleted files/folders
       """
       Failed to restore "file-to-delete-and-restore"
       """
-    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
     And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
-    #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin whose parent folder is renamed (ocis bug demonstration)
@@ -170,12 +166,8 @@ Feature: Restore deleted files/folders
       """
       Failed to restore "file-to-delete-and-restore"
       """
-    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
-    #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-
 
   @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
@@ -191,12 +183,8 @@ Feature: Restore deleted files/folders
       """
       Failed to restore "file-to-delete-and-restore"
       """
-    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-  #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
-
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin without restoring the parent folder (ocis bug demonstration)
@@ -212,11 +200,7 @@ Feature: Restore deleted files/folders
       """
       Failed to restore "file-to-delete-and-restore"
       """
-    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
-  #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
-
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder

@@ -112,9 +112,6 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin in the server
     And as "Alice" the file with original path "strängé नेपाली folder/lorem.txt" should exist in the trashbin in the server
     And file "lorem.txt" should be listed on the webUI
-#    And file "lorem.txt" with path "./lorem.txt" should be listed in the trashbin on the webUI
-#    And file "lorem.txt" with path "simple-folder/lorem.txt" should be listed in the trashbin on the webUI
-#    And file "lorem.txt" with path "strängé नेपाली folder/lorem.txt" should be listed in the trashbin on the webUI
 
   @issue-1910
   Scenario: trashbin list appears empty when no deleted files exist
