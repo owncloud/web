@@ -361,7 +361,11 @@ export default defineComponent({
         return this.highlightedFile.id
       }
 
-      return this.$route.params.storageId || null
+      if (this.space) {
+        return this.space.id
+      }
+
+      return null
     }
   },
   methods: {

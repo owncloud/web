@@ -8,7 +8,6 @@ import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
-import SpaceProject from './views/spaces/Project.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import SpaceTrashbin from './views/spaces/Trashbin.vue'
 import Trashbin from './views/Trashbin.vue'
@@ -107,7 +106,6 @@ export default {
     SharedWithOthers,
     Spaces: {
       DriveResolver: SpaceDriveResolver,
-      Project: SpaceProject,
       Projects: SpaceProjects,
       Trashbin: SpaceTrashbin
     },

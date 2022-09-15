@@ -51,7 +51,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         meta: {
           patchCleanPath: true,
           // FIXME: we'd need to extract the title from the resolved space...
-          title: $gettext('Generic space view... title TBD')
+          title: $gettext('Space')
         }
       }
     ]

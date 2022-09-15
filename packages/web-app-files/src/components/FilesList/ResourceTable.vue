@@ -352,6 +352,14 @@ export default defineComponent({
           value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
         )
       }
+    },
+    /**
+     * Space resource the provided resources originate from. Not required on meta pages like favorites, search, ...
+     */
+    space: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   setup() {
@@ -753,7 +761,7 @@ export default defineComponent({
       })
     },
     getMatchingSpace(storageId) {
-      return this.spaces.find((space) => space.id === storageId)
+      return this.space || this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {

@@ -24,7 +24,7 @@
 
         <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
           <template #message>
-            <span v-translate>There are no resources in this folder</span>
+            <span v-translate>No resources found</span>
           </template>
           <template #callToAction>
             <span v-translate>
@@ -45,6 +45,7 @@
           :drag-drop="true"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :space="space"
           @fileDropped="fileDropped"
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"

@@ -58,7 +58,7 @@ export default {
     async $_setSpaceImage_trigger({ resources }) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-      const storageId = this.$route.params.storageId
+      const storageId = this.space?.id
       const sourcePath = resources[0].webDavPath
       const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`
 

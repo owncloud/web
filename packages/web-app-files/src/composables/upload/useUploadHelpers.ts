@@ -150,9 +150,9 @@ const inputFilesToUppyFiles = ({
           routeItem: params.item ? `${params.item}/${directory}` : directory,
           routeShareName: (params as any)?.shareName || '',
           routeShareId: (query as any)?.shareId || '',
-          routeStorage: (params as any)?.storage || '',
-          routeStorageId: (params as any)?.storageId || '',
-          routeParamName: (params as any)?.name || '',
+          routeStorage: (params as any)?.storage || '', // TODO: delete?
+          routeStorageId: (params as any)?.storageId || '', // TODO: delete?
+          routeParamName: (params as any)?.name || '', // TODO: delete?
           routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || ''
         }
       })
