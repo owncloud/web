@@ -98,13 +98,14 @@ import Pagination from '../../components/FilesList/Pagination.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
+import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { bus } from 'web-pkg/src/instance'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent } from '@vue/composition-api'
@@ -112,7 +113,6 @@ import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
-import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -120,7 +120,6 @@ export default defineComponent({
   name: 'GenericSpace',
 
   components: {
-    SpaceHeader,
     AppBar,
     AppLoadingSpinner,
     ContextActions,
@@ -133,7 +132,8 @@ export default defineComponent({
     Pagination,
     QuickActions,
     ResourceTable,
-    SideBar
+    SideBar,
+    SpaceHeader
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
@@ -186,22 +186,22 @@ export default defineComponent({
     },
 
     breadcrumbs() {
-      const rootBreadcrumbsItems = []
+      const rootBreadcrumbItems: BreadcrumbItem[] = []
       if (this.space.driveType === 'project') {
-        rootBreadcrumbsItems.push({
+        rootBreadcrumbItems.push({
           text: this.$gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects')
         })
       }
       if (this.space.driveType === 'personal') {
-        rootBreadcrumbsItems.push({
+        rootBreadcrumbItems.push({
           text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
           to: createLocationSpaces('files-spaces-generic', {
             params: { driveAliasAndItem: this.space.driveAlias }
           })
         })
       } else {
-        rootBreadcrumbsItems.push({
+        rootBreadcrumbItems.push({
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
             params: { driveAliasAndItem: this.space.driveAlias }
@@ -209,7 +209,7 @@ export default defineComponent({
         })
       }
       return concatBreadcrumbs(
-        ...rootBreadcrumbsItems,
+        ...rootBreadcrumbItems,
         ...breadcrumbsFromPath(this.$route, this.item)
       )
     },
@@ -240,7 +240,6 @@ export default defineComponent({
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
       this.performLoaderTask(true, path)
     })
-
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
   },
 

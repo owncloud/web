@@ -26,7 +26,7 @@ function getWrapper() {
     mocks: {
       $router: {
         currentRoute: {
-          ...createLocationTrash('files-trash-spaces-project'),
+          ...createLocationTrash('files-trash-generic'),
           meta: {
             title: 'Deleted files'
           }

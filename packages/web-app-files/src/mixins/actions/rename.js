@@ -20,10 +20,7 @@ export default {
           },
           handler: this.$_rename_trigger,
           isEnabled: ({ resources }) => {
-            if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (

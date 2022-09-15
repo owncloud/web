@@ -23,10 +23,7 @@ export default {
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resources }) => {
-            if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (resources.length !== 1) {

@@ -53,8 +53,8 @@ function getWrapper({ invalidLocation = false } = {}) {
     mocks: {
       $router: {
         currentRoute: invalidLocation
-          ? createLocationTrash('files-trash-personal')
-          : createLocationTrash('files-trash-spaces-project', {
+          ? createLocationTrash('files-trash-generic')
+          : createLocationTrash('files-trash-generic', {
               params: { driveAliasAndItem: 'project/mars' }
             }),
         resolve: (r) => {

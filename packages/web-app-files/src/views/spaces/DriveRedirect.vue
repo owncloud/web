@@ -19,6 +19,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: ''
+    },
+    appendHomeFolder: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   setup(props) {
@@ -33,7 +38,7 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
     })
     const homeFolder = computed(() => {
-      return store.getters.homeFolder
+      return props.appendHomeFolder ? store.getters.homeFolder : '/'
     })
     return (
       router

@@ -72,7 +72,7 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {
       $router: {
         currentRoute: invalidLocation
           ? createLocationSpaces('files-spaces-generic')
-          : createLocationTrash('files-trash-personal'),
+          : createLocationTrash('files-trash-generic'),
         resolve: (r) => {
           return { href: r.name }
         }

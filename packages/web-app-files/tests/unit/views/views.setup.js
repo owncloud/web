@@ -58,12 +58,8 @@ export const routes = [
     name: 'files-shares-via-link'
   },
   {
-    path: '/files/trash/personal/',
-    name: 'files-trash-personal'
-  },
-  {
-    path: '/files/trash/spaces/project/',
-    name: 'files-trash-spaces-project'
+    path: '/files/trash/personal/einstein',
+    name: 'files-trash-generic'
   },
   {
     path: '/files/spaces/personal/einstein',

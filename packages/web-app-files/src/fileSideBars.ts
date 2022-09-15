@@ -50,15 +50,10 @@ const panelGenerators: (({
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetails,
-    default:
-      !isLocationTrashActive(router, 'files-trash-personal') &&
-      !isLocationTrashActive(router, 'files-trash-spaces-project'),
+    default: !isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
       return (
-        !isLocationTrashActive(router, 'files-trash-personal') &&
-        !isLocationTrashActive(router, 'files-trash-spaces-project') &&
-        !multipleSelection &&
-        !rootFolder
+        !isLocationTrashActive(router, 'files-trash-generic') && !multipleSelection && !rootFolder
       )
     }
   }),
@@ -87,9 +82,7 @@ const panelGenerators: (({
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: FileActions,
-    default:
-      isLocationTrashActive(router, 'files-trash-personal') ||
-      isLocationTrashActive(router, 'files-trash-spaces-project'),
+    default: isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
       return !multipleSelection && !rootFolder
     }
@@ -127,8 +120,7 @@ const panelGenerators: (({
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
+        isLocationTrashActive(router, 'files-trash-generic') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
         return false
@@ -166,8 +158,7 @@ const panelGenerators: (({
     get enabled() {
       if (multipleSelection || rootFolder) return false
       if (
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
+        isLocationTrashActive(router, 'files-trash-generic') ||
         isLocationPublicActive(router, 'files-public-files')
       ) {
         return false

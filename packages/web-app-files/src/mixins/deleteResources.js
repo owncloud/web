@@ -18,10 +18,7 @@ export default {
     ...mapGetters(['user', 'configuration', 'capabilities']),
 
     $_deleteResources_isInTrashbin() {
-      return (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-      )
+      return isLocationTrashActive(this.$router, 'files-trash-generic')
     },
 
     $_deleteResources_resources() {

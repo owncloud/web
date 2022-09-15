@@ -23,10 +23,7 @@ export default {
           label: () => this.$gettext('Restore'),
           handler: this.$_restore_trigger,
           isEnabled: ({ resources }) => {
-            if (
-              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
-              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (!resources.every((r) => r.canBeRestored())) {
@@ -112,9 +109,7 @@ export default {
       if (this.capabilities?.spaces?.enabled) {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-        const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? this.$route.params.storageId
-          : this.spaces.find((s) => s.driveType === 'personal').id
+        const driveId = this.space.id
         const driveResponse = await graphClient.drives.getDrive(driveId)
         this.UPDATE_SPACE_FIELD({
           id: driveResponse.data.id,

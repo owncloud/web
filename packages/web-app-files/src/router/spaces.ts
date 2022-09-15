@@ -22,6 +22,7 @@ export const isLocationSpacesActive = isLocationActiveDirector<spaceTypes>(
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/spaces',
+    redirect: (to) => createLocationSpaces('files-spaces-generic', to),
     component: components.App,
     children: [
       {

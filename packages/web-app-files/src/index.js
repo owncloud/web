@@ -9,8 +9,6 @@ import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
 import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
-import SpaceTrashbin from './views/spaces/Trashbin.vue'
-import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
@@ -106,10 +104,8 @@ export default {
     SharedWithOthers,
     Spaces: {
       DriveResolver: SpaceDriveResolver,
-      Projects: SpaceProjects,
-      Trashbin: SpaceTrashbin
-    },
-    Trashbin
+      Projects: SpaceProjects
+    }
   }),
   navItems,
   quickActions,

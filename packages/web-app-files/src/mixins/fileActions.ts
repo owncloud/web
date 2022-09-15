@@ -95,8 +95,7 @@ export default {
 
               if (
                 !this.$_isSearchActive &&
-                (isLocationTrashActive(this.$router, 'files-trash-personal') ||
-                  isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+                (isLocationTrashActive(this.$router, 'files-trash-generic') ||
                   (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
                     resources[0].status !== ShareStatus.accepted))
               ) {
@@ -228,10 +227,7 @@ export default {
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
     $_fileActions_loadExternalAppActions(resources) {
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-      ) {
+      if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
         return []
       }
 

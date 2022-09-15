@@ -75,7 +75,7 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/trash-bin',
-      redirect: (to) => createLocationTrash('files-trash-personal', to)
+      redirect: (to) => createLocationTrash('files-trash-generic', to)
     },
     {
       path: '/public/list/:item*',
@@ -115,7 +115,7 @@ export const isLocationActive = (
       'files-favorites': createLocationCommon('files-common-favorites').name,
       'files-shared-with-others': createLocationShares('files-shares-with-others').name,
       'files-shared-with-me': createLocationShares('files-shares-with-me').name,
-      'files-trashbin	': createLocationTrash('files-trash-personal').name,
+      'files-trashbin	': createLocationTrash('files-trash-generic').name,
       'files-public-list': createLocationPublic('files-public-files').name
     }[c.name]
 

@@ -263,8 +263,7 @@ export default defineComponent({
       }
 
       if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+        isLocationTrashActive(this.$router, 'files-trash-generic') ||
         this.highlightedFileIsSpace
       ) {
         if (loadShares) {

@@ -54,10 +54,7 @@ export default {
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            if (
-              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
-              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (this.capabilities?.files?.permanent_deletion === false) {

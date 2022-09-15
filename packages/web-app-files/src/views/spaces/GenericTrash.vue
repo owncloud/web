@@ -11,8 +11,7 @@
           icon="delete-bin-5"
         >
           <template #message>
-            <span v-if="noContentMessage">{{ noContentMessage }}</span>
-            <span v-else v-translate>You have no deleted files</span>
+            <span>{{ noContentMessage }}</span>
           </template>
         </no-content-message>
         <resource-table
@@ -51,48 +50,59 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapMutations, mapState } from 'vuex'
-import AppBar from './AppBar/AppBar.vue'
-import ResourceTable from './FilesList/ResourceTable.vue'
+import { mapGetters, mapState } from 'vuex'
+
+import AppBar from '../../components/AppBar/AppBar.vue'
+import ContextActions from '../../components/FilesList/ContextActions.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import ListInfo from '../../components/FilesList/ListInfo.vue'
+import Pagination from '../../components/FilesList/Pagination.vue'
+import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import ListInfo from './FilesList/ListInfo.vue'
-import Pagination from './FilesList/Pagination.vue'
-import ContextActions from './FilesList/ContextActions.vue'
-import { useResourcesViewDefaults } from '../composables'
+
 import { bus } from 'web-pkg/src/instance'
-import { defineComponent } from '@vue/composition-api'
+import { useResourcesViewDefaults } from '../../composables'
+import { computed, defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
-import SideBar from '../components/SideBar/SideBar.vue'
-import FilesViewWrapper from './FilesViewWrapper.vue'
+import { useCapabilityShareJailEnabled, useTranslations } from 'web-pkg/src/composables'
+import { createLocationTrash } from '../../router'
 
 export default defineComponent({
-  name: 'TrashBin',
+  name: 'GenericTrash',
 
   components: {
-    FilesViewWrapper,
     AppBar,
-    ResourceTable,
     AppLoadingSpinner,
-    NoContentMessage,
-    ListInfo,
-    Pagination,
     ContextActions,
+    FilesViewWrapper,
+    ListInfo,
+    NoContentMessage,
+    Pagination,
+    ResourceTable,
     SideBar
   },
 
   props: {
-    breadcrumbs: { type: Array, default: () => [] },
-    noContentMessage: {
-      type: String,
+    space: {
+      type: Object,
       required: false,
-      default: ''
+      default: null
     }
   },
 
-  setup() {
+  setup(props) {
+    const { $gettext } = useTranslations()
+    const noContentMessage = computed(() => {
+      return props.space.driveType === 'personal'
+        ? $gettext('You have no deleted files')
+        : $gettext('Space has no deleted files')
+    })
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>()
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      hasShareJail: useCapabilityShareJailEnabled(),
+      noContentMessage
     }
   },
 
@@ -102,23 +112,43 @@ export default defineComponent({
 
     isEmpty() {
       return this.paginatedResources.length < 1
+    },
+
+    breadcrumbs() {
+      let currentNodeName = this.space?.name
+      if (this.space.driveType === 'personal') {
+        currentNodeName = this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files')
+      }
+      return [
+        {
+          text: this.$gettext('Deleted files'),
+          to: createLocationTrash('files-trash-generic') // FIXME: UX of clicking `Deleted files` and being redirected to personal trash is wrong.
+        },
+        {
+          allowContextActions: true,
+          text: currentNodeName,
+          onClick: () => bus.publish('app.files.list.load')
+        }
+      ]
     }
   },
 
   created() {
-    this.loadResourcesTask.perform(this)
+    this.performLoaderTask()
 
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path) => {
-      this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
+    const loadResourcesEventToken = bus.subscribe('app.files.list.load', () => {
+      this.performLoaderTask()
     })
-
     this.$on('beforeDestroy', () => {
       bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
   },
 
   methods: {
-    ...mapMutations('Files', ['LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST'])
+    async performLoaderTask() {
+      await this.loadResourcesTask.perform(this.space)
+      this.refreshFileListHeaderPosition()
+    }
   }
 })
 </script>
