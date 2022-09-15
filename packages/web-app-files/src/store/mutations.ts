@@ -116,16 +116,8 @@ export default {
       state.currentFileOutgoingShares.push(share)
     }
   },
-  CURRENT_FILE_OUTGOING_SHARES_ERROR(state, error) {
-    state.currentFileOutgoingShares = []
-    state.currentFileOutgoingSharesError = error
-  },
   INCOMING_SHARES_LOAD(state, shares) {
     state.incomingShares = shares
-  },
-  INCOMING_SHARES_ERROR(state, error) {
-    state.incomingShares = []
-    state.incomingSharesError = error
   },
   SHARESTREE_PRUNE_OUTSIDE_PATH(state, pathToKeep) {
     if (pathToKeep !== '' && pathToKeep !== '/') {

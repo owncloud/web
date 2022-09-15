@@ -410,8 +410,6 @@ export default {
           console.error('SHARESTREE_ERROR', error)
           context.commit('SHARESTREE_ERROR', error.message)
           context.commit('SHARESTREE_LOADING', false)
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-          context.commit('INCOMING_SHARES_ERROR', error.message)
         })
     }
 
@@ -501,14 +499,11 @@ export default {
     })
   },
   removeLink(context, { share, client, path, storageId }) {
-    client.shares
-      .deleteShare(share.id)
-      .then(() => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-        context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-      })
-      .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
+    client.shares.deleteShare(share.id).then(() => {
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+      context.dispatch('updateCurrentFileShareTypes')
+      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+    })
   },
 
   pushResourcesToDeleteList({ commit }, resources) {

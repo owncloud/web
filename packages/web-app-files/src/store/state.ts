@@ -12,13 +12,11 @@ export default {
    * Outgoing shares and links from currently highlighted element
    */
   currentFileOutgoingShares: [],
-  currentFileOutgoingSharesError: null,
 
   /**
    * Incoming shares from currently highlighted element
    */
   incomingShares: [],
-  incomingSharesError: null,
 
   /**
    * Shares from parent folders
