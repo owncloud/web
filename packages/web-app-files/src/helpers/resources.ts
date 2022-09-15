@@ -107,6 +107,9 @@ export function buildResource(resource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
+    canDeny: function () {
+      return this.permissions.indexOf(DavPermission.Deny) >= 0
+    },
     getDomSelector: () => extractDomSelector(id)
   }
 }
@@ -276,6 +279,7 @@ export function buildSharedResource(
   resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
+  resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   resource.getDomSelector = () => extractDomSelector(share.id)
 
   return resource

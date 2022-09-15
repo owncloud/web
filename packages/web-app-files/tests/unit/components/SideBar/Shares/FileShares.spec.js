@@ -173,7 +173,8 @@ function getResource({
     isReceivedShare: () => true,
     canBeDeleted: () => true,
     canRename: () => true,
-    canShare: () => canShare
+    canShare: () => canShare,
+    canDeny: () => false
   }
 }
 
