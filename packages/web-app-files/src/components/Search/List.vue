@@ -73,7 +73,6 @@ import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 
@@ -105,7 +104,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>()
     }

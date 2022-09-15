@@ -20,12 +20,9 @@
           :space="space"
           class="files-not-found oc-height-1-1"
         />
-        <no-content-message
-          v-else-if="isEmpty"
-          id="files-personal-empty"
-          class="files-empty"
-          icon="folder"
-        >
+        <space-header v-else-if="hasSpaceHeader" :space="space" class="oc-px-m oc-mt-m" />
+
+        <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
           <template #message>
             <span v-translate>There are no resources in this folder</span>
           </template>
@@ -109,11 +106,12 @@ import { bus } from 'web-pkg/src/instance'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
+import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -121,6 +119,7 @@ export default defineComponent({
   name: 'GenericSpace',
 
   components: {
+    SpaceHeader,
     AppBar,
     AppLoadingSpinner,
     ContextActions,
@@ -157,10 +156,15 @@ export default defineComponent({
         params: { driveAliasAndItem: props.space.driveAlias + path }
       })
     }
+    const hasSpaceHeader = computed(() => {
+      // for now the space header is only available in the root of a project space.
+      return props.space?.driveType === 'project' && !props.item
+    })
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetRouteCallback,
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      hasSpaceHeader
     }
   },
 

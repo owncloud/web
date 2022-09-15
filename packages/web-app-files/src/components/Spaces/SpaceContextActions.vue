@@ -41,8 +41,9 @@ import ShowMembers from '../../mixins/spaces/actions/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'SpaceContextActions',
   components: { ContextActionMenu, QuotaModal, ReadmeContentModal },
   mixins: [
@@ -162,7 +163,7 @@ export default {
       this.$_editReadmeContent_closeModal()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
