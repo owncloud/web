@@ -51,7 +51,7 @@ describe('restore', () => {
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
-      await wrapper.vm.$_restore_trigger({ resources: [{ id: '1' }] })
+      await wrapper.vm.restoreResources([{ id: '1', path: '1', name: '1' }], [])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
       expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(1)
@@ -63,7 +63,7 @@ describe('restore', () => {
       const wrapper = getWrapper({ resolveClearTrashBin: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
-      await wrapper.vm.$_restore_trigger({ resources: [{ id: '1' }] })
+      await wrapper.vm.restoreResources([{ id: '1' }], [])
 
       expect(showMessageStub).toHaveBeenCalledTimes(1)
       expect(removeFilesFromTrashbinStub).toHaveBeenCalledTimes(0)
