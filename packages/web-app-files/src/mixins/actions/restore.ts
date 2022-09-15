@@ -59,21 +59,20 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    async $_restore_trigger({ resources }) {
-      //! collect and request existing files in associated parent folders of each resource
+    getParentFolderFromResource(resource) {
+      const parentPath = resource.path.slice(0, resource.path.lastIndexOf(resource.name))
+      return parentPath
+    },
+    getWebdavParentFolderFromResource(resource) {
+      const parentPath = this.getParentFolderFromResource(resource)
+      return buildWebDavFilesPath(this.user.id, parentPath)
+    },
+    async collectRestoreConflicts(resources) {
       const parentFolders = {}
       const conflicts = []
       const resolvedResources = []
-      const getParentFolderFromResource = (resource) => {
-        const parentPath = resource.path.slice(0, resource.path.lastIndexOf(resource.name))
-        return parentPath
-      }
-      const getWebdavParentFolderFromResource = (resource) => {
-        const parentPath = getParentFolderFromResource(resource)
-        return buildWebDavFilesPath(this.user.id, parentPath)
-      }
       for (const resource of resources) {
-        const webDavParentPath = getWebdavParentFolderFromResource(resource)
+        const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
 
         // ? check if parent folder has already been requested
         let parentResources = []
@@ -99,8 +98,13 @@ export default {
         }
         console.log(resource)
       }
-
-      //! iterate through conflicts and collect resolve strategies
+      return {
+        parentFolders,
+        conflicts,
+        resolvedResources
+      }
+    },
+    async collectRestoreResolveStrategies(conflicts) {
       let count = 0
       const resolvedConflicts = []
       const allConflictsCount = conflicts.length
@@ -135,37 +139,14 @@ export default {
           strategy: resolvedConflict.strategy
         })
       }
-
-      //! iterate through conflicts and behave according to strategy
-      const filesToOverwrite = resolvedConflicts
-        .filter((e) => e.strategy === ResolveStrategy.REPLACE)
-        .map((e) => e.resource)
-      resolvedResources.push(...filesToOverwrite)
-      const filesToKeepBoth = resolvedConflicts
-        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
-        .map((e) => e.resource)
-
-      for (let resource of filesToKeepBoth) {
-        resource = { ...resource }
-        const parentPath = getParentFolderFromResource(resource)
-        const webDavParentPath = getWebdavParentFolderFromResource(resource)
-        const parentResources = parentFolders[webDavParentPath]
-        const extension = extractExtensionFromFile({ name: resource.name } as Resource)
-        const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
-          ...parentResources,
-          ...resolvedConflicts.map((e) => e.resource),
-          ...resolvedResources
-        ])
-        resource.name = resolvedName
-        resource.path = `${parentPath}/${resolvedName}`
-        resolvedResources.push(resource)
-      }
-
+      return resolvedConflicts
+    },
+    async restoreResources(resources, filesToOverwrite) {
       const restoredResources = []
       const failedResources = []
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
-      resolvedResources.forEach((resource) => {
+      resources.forEach((resource) => {
         const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
           : buildWebDavFilesTrashPath(this.user.id)
@@ -238,6 +219,42 @@ export default {
         const user = await this.$client.users.getUser(this.user.id)
         this.SET_QUOTA(user.quota)
       }
+    },
+    async $_restore_trigger({ resources }) {
+      //! collect and request existing files in associated parent folders of each resource
+      const { parentFolders, conflicts, resolvedResources } = await this.collectRestoreConflicts(
+        resources
+      )
+
+      //! iterate through conflicts and collect resolve strategies
+      const resolvedConflicts = await this.collectRestoreResolveStrategies(conflicts)
+
+      //! iterate through conflicts and behave according to strategy
+      const filesToOverwrite = resolvedConflicts
+        .filter((e) => e.strategy === ResolveStrategy.REPLACE)
+        .map((e) => e.resource)
+      resolvedResources.push(...filesToOverwrite)
+      const filesToKeepBoth = resolvedConflicts
+
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.resource)
+
+      for (let resource of filesToKeepBoth) {
+        resource = { ...resource }
+        const parentPath = this.getParentFolderFromResource(resource)
+        const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
+        const parentResources = parentFolders[webDavParentPath]
+        const extension = extractExtensionFromFile({ name: resource.name } as Resource)
+        const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
+          ...parentResources,
+          ...resolvedConflicts.map((e) => e.resource),
+          ...resolvedResources
+        ])
+        resource.name = resolvedName
+        resource.path = `${parentPath}/${resolvedName}`
+        resolvedResources.push(resource)
+      }
+      this.restoreResources(resolvedResources)
     }
   }
 }
