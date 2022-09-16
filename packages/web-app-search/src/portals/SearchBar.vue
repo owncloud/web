@@ -3,6 +3,7 @@
     v-if="availableProviders.length"
     id="files-global-search"
     :class="{ 'options-visible': optionsVisible && term }"
+    data-custom-key-bindings="true"
   >
     <oc-search-bar
       id="files-global-search-bar"
@@ -32,8 +33,12 @@
           <span class="term">{{ term | truncate }}</span>
           <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
         </li>
-        <li v-if="$asyncComputed.searchResult.updating" class="loading spinner">
+        <li
+          v-if="$asyncComputed.searchResult.updating"
+          class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
+        >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
+          <span class="oc-ml-s">{{ $gettext('Searching ...') }}</span>
         </li>
         <template v-if="!$asyncComputed.searchResult.updating">
           <li
@@ -49,6 +54,21 @@
               :search-result="searchResultValue"
             />
           </li>
+          <li v-if="showNoResults" id="no-results" class="oc-flex oc-flex-center">
+            {{ $gettext('No results') }}
+          </li>
+          <li v-if="showMoreResults" id="more-results">
+            <router-link
+              id="more-results-link"
+              class="oc-flex oc-text-muted oc-width-1-1"
+              :to="moreResultsLink"
+            >
+              <span id="more-results-text" class="oc-flex oc-flex-center">{{
+                $gettext('Show more')
+              }}</span>
+              <span id="more-results-details" class="oc-flex">{{ moreResultsDetailsText }}</span>
+            </router-link>
+          </li>
         </template>
       </ul>
     </div>
@@ -60,6 +80,7 @@
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
+import { createLocationCommon } from 'files/src/router'
 
 export default {
   name: 'SearchBar',
@@ -78,6 +99,34 @@ export default {
   },
 
   computed: {
+    rangeSupported() {
+      return this.searchResult.range
+    },
+
+    rangeItems() {
+      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+    },
+
+    showMoreResults() {
+      return this.rangeSupported && this.rangeItems > this.searchResult.values.length
+    },
+
+    moreResultsLink() {
+      return createLocationCommon('files-common-search', {
+        query: { term: this.term, provider: this.activeProvider.id }
+      })
+    },
+
+    moreResultsDetailsText() {
+      return this.$gettextInterpolate(this.$gettext('%{totalResults} total results'), {
+        totalResults: this.rangeItems
+      })
+    },
+
+    showNoResults() {
+      return this.searchResult?.values?.length === 0
+    },
+
     availableProviders() {
       return this.providerStore.availableProviders
     },
@@ -93,18 +142,15 @@ export default {
         if (!!o && this.activeProvider && !this.activeProvider.available) {
           this.activeProvider = undefined
         }
-
         this.$nextTick(() => {
           if (!this.availableProviders.length) {
             return
           }
-
           const routeTerm = get(r, 'query.term')
           const input = this.$el.getElementsByTagName('input')[0]
           if (!input || !routeTerm) {
             return
           }
-
           this.term = routeTerm
           input.value = routeTerm
         })
@@ -281,11 +327,22 @@ export default {
 }
 
 #files-global-search-options {
+  position: fixed;
+  overflow-y: auto;
+  max-height: calc(100% - 52px);
   border: 1px solid var(--oc-color-input-border);
   background-color: var(--oc-color-input-bg);
-  overflow: hidden;
-  position: absolute;
   width: 450px;
+
+  #more-results-link {
+    text-decoration: none;
+    flex-direction: column;
+  }
+
+  #more-results-details {
+    justify-content: end;
+    font-size: var(--oc-font-size-xsmall);
+  }
 
   @media (max-width: 959px) {
     left: var(--oc-space-medium);
@@ -303,9 +360,8 @@ export default {
 
     li {
       padding: 15px 10px;
-      cursor: pointer;
       position: relative;
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-small);
 
       border-top-color: var(--oc-color-input-border);
 
@@ -318,7 +374,7 @@ export default {
         background-color: white;
         border: 1px solid var(--oc-color-swatch-passive-hover);
         float: right;
-        font-size: 0.6rem;
+        font-size: var(--oc-font-size-xsmall);
         padding: 0.5rem 1rem;
         position: relative;
         opacity: 0.6;
@@ -374,8 +430,8 @@ export default {
       }
 
       &.preview {
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding-top: var(--oc-space-small);
+        padding-bottom: var(--oc-space-small);
         background-color: var(--oc-color-background-highlight);
 
         &.first {
@@ -391,11 +447,11 @@ export default {
         }
 
         button {
-          font-size: 0.9rem;
+          font-size: var(--oc-font-size-small);
         }
 
         .label {
-          font-size: 0.5rem;
+          font-size: var(--oc-font-size-xsmall);
           padding: 0.1rem 0.2rem;
           opacity: 0.6;
         }

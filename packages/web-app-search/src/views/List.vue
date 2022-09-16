@@ -1,15 +1,9 @@
 <template>
-  <div class="oc-width-1-1">
-    <div
-      v-if="$asyncComputed.searchResult.updating"
-      class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1 oc-width-1-1"
-    >
-      <oc-spinner size="large" :aria-hidden="true" aria-label="" />
-    </div>
-    <template v-else>
-      <component :is="listSearch.component" :search-result="searchResult" />
-    </template>
-  </div>
+  <component
+    :is="listSearch.component"
+    :search-result="searchResult"
+    :loading="$asyncComputed.searchResult.updating"
+  />
 </template>
 
 <script>
@@ -37,9 +31,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#search-view {
-  padding: 25px 10px 10px 10px;
-}
-</style>

@@ -5,9 +5,10 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import isSearchActive from '../helpers/isSearchActive'
 
 export default {
-  mixins: [isFilesAppActive],
+  mixins: [isFilesAppActive, isSearchActive],
   computed: {
     $_downloadFile_items() {
       return [
@@ -21,12 +22,16 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               this.$_isFilesAppActive &&
+              !this.$_isSearchActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
-              !isLocationSharesActive(this.$router, 'files-shares-with-me')
+              !isLocationCommonActive(this.$router, 'files-common-search') &&
+              !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+              !isLocationSharesActive(this.$router, 'files-shares-with-others') &&
+              !isLocationSharesActive(this.$router, 'files-shares-via-link')
             ) {
               return false
             }
@@ -39,7 +44,7 @@ export default {
             return resources[0].canDownload()
           },
           canBeDefault: true,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-download-file-trigger'
         }
       ]

@@ -16,7 +16,13 @@
       "shares": {
         "showAllOnLoad": true
       }
-    }
+    },
+    "previewFileMimeTypes": [
+      "image/gif",
+      "image/png",
+      "image/jpeg",
+      "text/plain"
+    ]
   },
   "apps": [
     "files",

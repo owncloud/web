@@ -1,6 +1,11 @@
 import MixinDeleteResources from '../../mixins/deleteResources'
 import { mapState, mapGetters } from 'vuex'
-import { isLocationPublicActive, isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import {
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  isLocationTrashActive,
+  isLocationCommonActive
+} from '../../router'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -19,7 +24,8 @@ export default {
               !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files')
+              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationCommonActive(this.$router, 'files-common-search')
             ) {
               return false
             }
@@ -39,7 +45,7 @@ export default {
             })
             return !deleteDisabled
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-delete-trigger'
         },
         {
@@ -60,7 +66,7 @@ export default {
             }
             return resources.length > 0
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-delete-permanent-trigger'
         }
       ]

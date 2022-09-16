@@ -1,6 +1,8 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { isLocationTrashActive, isLocationPublicActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -13,7 +15,7 @@ export default {
           name: 'show-edit-tags',
           icon: 'price-tag-3',
           label: () => this.$gettext('Add or edit tags'),
-          handler: this.$_showEditTags_trigger,
+          handler: () => bus.publish(SideBarEventTopics.openWithPanel, 'tags-item'),
           // we don't have details in the trashbin, yet.
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
@@ -31,17 +33,10 @@ export default {
             }
             return resources.length === 1 && resources[0].canEditTags()
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-edit-tags-trigger'
         }
       ]
-    }
-  },
-  methods: {
-    ...mapActions('Files/sidebar', { openSidebarWithPanel: 'openWithPanel' }),
-
-    async $_showEditTags_trigger() {
-      await this.openSidebarWithPanel('tags-item')
     }
   }
 }

@@ -2265,10 +2265,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@transloadit/prettier-bytes@npm:0.0.7":
-  version: 0.0.7
-  resolution: "@transloadit/prettier-bytes@npm:0.0.7"
-  checksum: af075e1b2b045cac55d5ab854b5c94273ef7f4bd825f05fe578559465f206d2a1535343b50170252a9efb31ffdc2d6420e64eb32d2faeabeeb8b7d81d5d46ef0
+"@transloadit/prettier-bytes@npm:0.0.9":
+  version: 0.0.9
+  resolution: "@transloadit/prettier-bytes@npm:0.0.9"
+  checksum: efa5a723c41e7bce7ad17d1affe6a43209df857e17dc2b12a7c7bd6d3c921df8298086dbfb62ed740ca3e617d8c7f47485bb311adb637b20f2f75a28b08bac4f
   languageName: node
   linkType: hard
 
@@ -2722,83 +2722,82 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/companion-client@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@uppy/companion-client@npm:2.2.0"
+"@uppy/companion-client@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/companion-client@npm:3.0.1"
   dependencies:
-    "@uppy/utils": ^4.1.0
+    "@uppy/utils": ^5.0.1
     namespace-emitter: ^2.0.1
-  checksum: be8119970bcd947a51932a00378be02db230b21b72468518e419e4671156e7fd4e176f5da52e32684d6248d5fb7a268e922d57b8dcab8ac69d666d73b40686a2
+  checksum: d140a434c808c26b14c502472140339bead3f2898285c61dea8c3fadcdffcb00ee33d1d1177c96019e117282c8f28ca14ad8592cf3733a65e70fa1d2db066ea8
   languageName: node
   linkType: hard
 
-"@uppy/core@npm:^2.2.0":
-  version: 2.3.0
-  resolution: "@uppy/core@npm:2.3.0"
+"@uppy/core@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/core@npm:3.0.1"
   dependencies:
-    "@transloadit/prettier-bytes": 0.0.7
-    "@uppy/store-default": ^2.1.0
-    "@uppy/utils": ^4.1.0
+    "@transloadit/prettier-bytes": 0.0.9
+    "@uppy/store-default": ^3.0.1
+    "@uppy/utils": ^5.0.1
     lodash.throttle: ^4.1.1
     mime-match: ^1.0.2
     namespace-emitter: ^2.0.1
-    nanoid: ^3.1.25
+    nanoid: ^4.0.0
     preact: ^10.5.13
-  checksum: 2c4e28869c99643275f23769534f95e29ae8307c71ef40515f9705290d0b7e1e66e3b9ce5544777ce86969672a7df3b96e171843ceef84b24985ffef323133bf
+  checksum: 585d59694ce906cfa79559bd5ff0601327648938db8aacb44334e9f952c9d558a379ee307b155947ad298aea0e944d7b2918e50368a5d9ca962a67c2d268335b
   languageName: node
   linkType: hard
 
-"@uppy/drop-target@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@uppy/drop-target@npm:1.1.3"
+"@uppy/drop-target@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@uppy/drop-target@npm:2.0.0"
   dependencies:
-    "@uppy/utils": ^4.0.7
+    "@uppy/utils": ^5.0.0
   peerDependencies:
-    "@uppy/core": ^2.1.9
-  checksum: e5fb6c1265d736e28d412ba4f0800b1785dcfa9a225448b9a9f9c43fb9e916ea08cb62c132643a83ee7b4dd57ab9cf892629c2d63fb0b1255900b5be1124eff5
+    "@uppy/core": ^3.0.0
+  checksum: 3edeffb937dca1f47a0d5ba18868938fe312ebca568981278f8448b325e6847c7d95401dba4de00a77ec13b5b76d009b946c4ca64e201ea25a60e6e286b00c6b
   languageName: node
   linkType: hard
 
-"@uppy/store-default@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@uppy/store-default@npm:2.1.0"
-  checksum: 6e5324837cf0d19c45a92d4195d49115a3343f93cb8a2c1becab894938645139fe8a289be0b69f5b9696a3a795ee6b5d210da6de11c2488b0d10cbfe9cf67fc6
+"@uppy/store-default@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/store-default@npm:3.0.1"
+  checksum: b4d8b63835810556aff9aa0de8bf13806b3301f7b31e36dff1b2c353b6fb6eb50f095335866ca41ff14fbc1f9566a74451e0505666d830b046e2bbc9c61213af
   languageName: node
   linkType: hard
 
-"@uppy/tus@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "@uppy/tus@npm:2.4.0"
+"@uppy/tus@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/tus@npm:3.0.1"
   dependencies:
-    "@uppy/companion-client": ^2.2.0
-    "@uppy/utils": ^4.1.0
-    tus-js-client: ^2.1.1
+    "@uppy/companion-client": ^3.0.1
+    "@uppy/utils": ^5.0.1
+    tus-js-client: ^3.0.0
   peerDependencies:
-    "@jest/globals": ^27.4.2
-    "@uppy/core": ^2.3.0
-  checksum: b86fd03283ee4c0c9bb28a6224534ba96fc70dd3156f3932a059f66637944a0d1f1edbf9a2dcfe3119024e7e79bdba833529f6d2a8fd00752841b6eb32361687
+    "@uppy/core": ^3.0.1
+  checksum: f2f018f9d1abb88d2563ef70fc040a27fb2e8c717547969d99639907bf57d28ba621b7ca5e034c3802442633353bcc02bada5ecc06b92af2d802399e90a315f8
   languageName: node
   linkType: hard
 
-"@uppy/utils@npm:^4.0.7, @uppy/utils@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@uppy/utils@npm:4.1.0"
+"@uppy/utils@npm:^5.0.0, @uppy/utils@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@uppy/utils@npm:5.0.1"
   dependencies:
     lodash.throttle: ^4.1.1
-  checksum: ba1bf3a6e347a15901e53fb0252e008772cbb8654e5c21b074684f26d88916addd747bf595db8516f1749d250291554cd6d0eb2bb6f5a3a77da46b929e289824
+  checksum: f7450a7d523a99a2b9e6e6656f0294eba095e22e1f792509debf780f39542e094c6eadb7ed963685267ed991d652c418e98cb7f337ed644df502e68cc3cf788e
   languageName: node
   linkType: hard
 
-"@uppy/xhr-upload@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "@uppy/xhr-upload@npm:2.1.1"
+"@uppy/xhr-upload@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@uppy/xhr-upload@npm:3.0.1"
   dependencies:
-    "@uppy/companion-client": ^2.2.0
-    "@uppy/utils": ^4.1.0
-    nanoid: ^3.1.25
+    "@uppy/companion-client": ^3.0.1
+    "@uppy/utils": ^5.0.1
+    nanoid: ^4.0.0
   peerDependencies:
-    "@uppy/core": ^2.3.0
-  checksum: 0b5f685e29730274193893467fe6f7248c49cff272fb53fae1076b10ae6340903cf330d88ebc9e3922b65f1d25d52b01a88ffa6022a9c977bd48f354aba54fe4
+    "@uppy/core": ^3.0.1
+  checksum: eda099ac7a16b50d62da17d912de0d14d6318ca29c3e0f242798ebf5e64ca71bba73faa3bd61eb20c0c3bbada424ed919f65b21c68f8ed9b1a076dacd77da4da
   languageName: node
   linkType: hard
 
@@ -3949,17 +3948,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-from@npm:^0.1.1":
-  version: 0.1.2
-  resolution: "buffer-from@npm:0.1.2"
-  checksum: 50a1fa5da97d2081b7d945483c8967d3b89a096fa585eb55000bb2100e827c647c9370280ec9bd057da8f9fa5abc1d3b764228851a31fa8a67f659f70c0052d8
-  languageName: node
-  linkType: hard
-
 "buffer-from@npm:^1.0.0":
   version: 1.1.1
   resolution: "buffer-from@npm:1.1.1"
   checksum: ccc53b69736008bff764497367c4d24879ba7122bc619ee499ff47eef3a5b885ca496e87272e7ebffa0bec3804c83f84041c616f6e3318f40624e27c1d80f045
+  languageName: node
+  linkType: hard
+
+"buffer-from@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "buffer-from@npm:1.1.2"
+  checksum: 0448524a562b37d4d7ed9efd91685a5b77a50672c556ea254ac9a6d30e3403a517d8981f10e565db24e8339413b43c97ca2951f10e399c6125a0d8911f5679bb
   languageName: node
   linkType: hard
 
@@ -8256,10 +8255,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-base64@npm:^2.1.9, js-base64@npm:^2.3.2, js-base64@npm:^2.6.1":
+"js-base64@npm:^2.1.9, js-base64@npm:^2.3.2":
   version: 2.6.4
   resolution: "js-base64@npm:2.6.4"
   checksum: 5f4084078d6c46f8529741d110df84b14fac3276b903760c21fa8cc8521370d607325dfe1c1a9fbbeaae1ff8e602665aaeef1362427d8fef704f9e3659472ce8
+  languageName: node
+  linkType: hard
+
+"js-base64@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "js-base64@npm:3.7.2"
+  checksum: 573f28e9a27c3df60096d4d3f551bcb4fcb6d49161cf83396e9bad9b76f94736a70bb70b8808fe834dff2a388f76604ba09d6e153bbf181646e407720139fa5b
   languageName: node
   linkType: hard
 
@@ -8473,6 +8479,13 @@ __metadata:
   version: 3.1.2
   resolution: "jwt-decode@npm:3.1.2"
   checksum: 20a4b072d44ce3479f42d0d2c8d3dabeb353081ba4982e40b83a779f2459a70be26441be6c160bfc8c3c6eadf9f6380a036fbb06ac5406b5674e35d8c4205eeb
+  languageName: node
+  linkType: hard
+
+"keycode@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "keycode@npm:2.2.1"
+  checksum: 7a5c775b2410a3b6d9c07a415ecb70639187a965be239d2c11c71079cb1ca2f9dede94b86426f3ece475dc8ae3debf2367531bbcafc0af8c82f157d9a4f7e6cb
   languageName: node
   linkType: hard
 
@@ -9310,12 +9323,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.25, nanoid@npm:^3.1.32, nanoid@npm:^3.3.1":
+"nanoid@npm:^3.1.32, nanoid@npm:^3.3.1":
   version: 3.3.2
   resolution: "nanoid@npm:3.3.2"
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 376717f0685251fad77850bd84c6b8d57837c71eeb1c05be7c742140cc1835a5a2953562add05166d6dbc8fb65f3fdffa356213037b967a470e1691dc3e7b9cc
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "nanoid@npm:4.0.0"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 7d5946df5c6d383694195b781ae7b5067c149d164ec71e910d6b06676309c3459b68af570b944fb5ecd5065d19df464f05700d141d70bb712ff8ca06642fd8df
   languageName: node
   linkType: hard
 
@@ -9730,9 +9752,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:14.0.0-alpha.14":
-  version: 14.0.0-alpha.14
-  resolution: "owncloud-design-system@npm:14.0.0-alpha.14"
+"owncloud-design-system@npm:14.0.0-alpha.18":
+  version: 14.0.0-alpha.18
+  resolution: "owncloud-design-system@npm:14.0.0-alpha.18"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9749,7 +9771,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: 27cc17c0886431130fcb35c63290524c74e3a2f150f9e5d0b443291f397fecf6db0fe755bc4f32806cc7511a4cdf505652f48c89f7b23264a8501a08c39e6aa5
+  checksum: ce57cd944ffd95cb6ff0dbb74aec603dc9ebe6d732129b4014b739cb961f24121079b01c21f4aeaf9e4acd49f06575ee1f23282a36a349a22eb2ca26471acde1
   languageName: node
   linkType: hard
 
@@ -10932,7 +10954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proper-lockfile@npm:4.1.2":
+"proper-lockfile@npm:4.1.2, proper-lockfile@npm:^4.1.2":
   version: 4.1.2
   resolution: "proper-lockfile@npm:4.1.2"
   dependencies:
@@ -10940,16 +10962,6 @@ __metadata:
     retry: ^0.12.0
     signal-exit: ^3.0.2
   checksum: 00078ee6a61c216a56a6140c7d2a98c6c733b3678503002dc073ab8beca5d50ca271de4c85fca13b9b8ee2ff546c36674d1850509b84a04a5d0363bcb8638939
-  languageName: node
-  linkType: hard
-
-"proper-lockfile@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "proper-lockfile@npm:2.0.1"
-  dependencies:
-    graceful-fs: ^4.1.2
-    retry: ^0.10.0
-  checksum: 3cadc4fb7139e521df5ef63b54693fa26b22ad130728f32e768c4a360791ba3ba294b0ad389388ba91db89e34895ecad16a67a02202302cb7e42216f3c906526
   languageName: node
   linkType: hard
 
@@ -11513,13 +11525,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"retry@npm:^0.10.0":
-  version: 0.10.1
-  resolution: "retry@npm:0.10.1"
-  checksum: 133ef7c2028bcb09544a6fb9bed9f8266fffeaf72c855f73c2918ace9ef2abd7ccba03744564bcd1a8e948ed70518f8970852f46e649f9e3db6fefb0148cda35
-  languageName: node
-  linkType: hard
-
 "retry@npm:^0.12.0":
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
@@ -11846,6 +11851,7 @@ __metadata:
     jest-mock-axios: ^4.5.0
     jest-serializer-vue: ^2.0.2
     join-path: ^1.1.1
+    keycode: ^2.2.1
     license-checker-rseidelsohn: ^3.1.0
     lodash: ^4.17.21
     node-fetch: ^2.6.7
@@ -13130,18 +13136,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tus-js-client@npm:^2.1.1":
-  version: 2.3.1
-  resolution: "tus-js-client@npm:2.3.1"
+"tus-js-client@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "tus-js-client@npm:3.0.0"
   dependencies:
-    buffer-from: ^0.1.1
+    buffer-from: ^1.1.2
     combine-errors: ^3.0.3
     is-stream: ^2.0.0
-    js-base64: ^2.6.1
+    js-base64: ^3.7.2
     lodash.throttle: ^4.1.1
-    proper-lockfile: ^2.0.1
+    proper-lockfile: ^4.1.2
     url-parse: ^1.5.7
-  checksum: 684446bcc3c625e7aed5330f7b42de97ef515e07f7e7dcecd2eac056f9e93c6b0276ef02ac3662e439101f0ce0902ccb96a246262ee1d8e86f3d4027a7aed6dd
+  checksum: dda7921a0d55f3a15535590adb6eb98edfbf6c88dfbcad9bf1013cfa16bc2244fb937ad1d6bc05f34005ee103da31ccbae5ca650d46dc23d6e653946994c9015
   languageName: node
   linkType: hard
 
@@ -13777,10 +13783,10 @@ __metadata:
     "@sentry/integrations": ^6.19.7
     "@types/luxon": ^2.3.1
     "@types/semver": ^7.3.8
-    "@uppy/core": ^2.2.0
-    "@uppy/drop-target": ^1.1.3
-    "@uppy/tus": ^2.4.0
-    "@uppy/xhr-upload": ^2.1.0
+    "@uppy/core": ^3.0.1
+    "@uppy/drop-target": ^2.0.0
+    "@uppy/tus": ^3.0.1
+    "@uppy/xhr-upload": ^3.0.1
     "@vue/composition-api": ^1.6.2
     axios: ^0.27.1
     cross-fetch: ^3.0.6
@@ -13793,7 +13799,7 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
-    owncloud-design-system: 14.0.0-alpha.14
+    owncloud-design-system: 14.0.0-alpha.18
     owncloud-sdk: "owncloud/owncloud-sdk.git#experimental"
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0

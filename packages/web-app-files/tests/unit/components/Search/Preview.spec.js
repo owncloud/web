@@ -11,35 +11,22 @@ localVue.use(DesignSystem)
 localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 
-const searchResult = {
-  id: 1234,
-  data: {
-    storageId: 1,
-    name: 'lorem.txt',
-    path: '/'
-  }
-}
-
-const user = { id: 'test' }
-
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
     const wrapper = getWrapper()
     const ocResource = wrapper.find('oc-resource-stub')
 
     expect(ocResource.exists()).toBeTruthy()
-    expect(ocResource.props().resource).toMatchObject(searchResult.data)
+    expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
-  describe('folder and parent folder link', () => {
+  describe('computed parentFolderLink', () => {
     it('should be empty if no resource target location given', () => {
       const wrapper = getWrapper({ resourceTargetLocation: null })
-      expect(wrapper.vm.folderLink(searchResult.data)).toEqual({})
-      expect(wrapper.vm.parentFolderLink(searchResult.data)).toEqual({})
+      expect(wrapper.vm.parentFolderLink).toEqual({})
     })
     it('should use the items storageId for the resource target location if present', () => {
       const wrapper = getWrapper({ resourceTargetLocation: { name: 'some-route' } })
-      expect(wrapper.vm.folderLink(searchResult.data).params.storageId).toEqual(1)
-      expect(wrapper.vm.parentFolderLink(searchResult.data).params.storageId).toEqual(1)
+      expect(wrapper.vm.parentFolderLink.params.storageId).toEqual('1')
     })
   })
 
@@ -56,7 +43,7 @@ describe('Preview component', () => {
         resourceTargetLocation: null,
         spaces: [
           {
-            id: 1,
+            id: '1',
             driveType: 'project',
             name: 'New space'
           }
@@ -64,7 +51,33 @@ describe('Preview component', () => {
       })
       expect(wrapper.vm.defaultParentFolderName).toEqual('New space')
     })
-    it('should equal "Personal" if resource storage is not representing a project space', () => {
+    it('should equal the share name if resource is representing a file or folder in the root of a share', () => {
+      const wrapper = getWrapper({
+        searchResult: {
+          id: '1',
+          data: {
+            path: '/1/My share',
+            shareRoot: '/My share',
+            shareId: '1'
+          }
+        }
+      })
+      expect(wrapper.vm.defaultParentFolderName).toEqual('My share')
+    })
+    it('should equal the "Shared with me" if resource is representing the root share', () => {
+      const wrapper = getWrapper({
+        searchResult: {
+          id: '1',
+          data: {
+            path: '/',
+            shareRoot: '/My share',
+            shareId: '1'
+          }
+        }
+      })
+      expect(wrapper.vm.defaultParentFolderName).toEqual('Shared with me')
+    })
+    it('should equal "Personal" if resource storage is not representing the personal home', () => {
       const wrapper = getWrapper({
         resourceTargetLocation: null,
         spaces: [
@@ -86,7 +99,16 @@ function getWrapper({
     params: {}
   },
   spaces = [],
-  hasShareJail = true
+  hasShareJail = true,
+  searchResult = {
+    id: '1',
+    data: {
+      storageId: '1',
+      name: 'lorem.txt',
+      path: '/'
+    }
+  },
+  user = { id: 'test' }
 } = {}) {
   return shallowMount(Preview, {
     localVue,
@@ -114,7 +136,8 @@ function getWrapper({
       }
     }),
     mocks: {
-      $route: route
+      $route: route,
+      $gettext: (text) => text
     },
     propsData: {
       searchResult

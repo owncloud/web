@@ -1,0 +1,7 @@
+Bugfix: User management app close side bar throws error
+
+We've fixed a bug, where closing the side bar in the user management app threw an error,
+when a group or user was selected.
+
+https://github.com/owncloud/web/pull/7445
+https://github.com/owncloud/web/pull/7461

@@ -38,8 +38,8 @@ describe('UploadInfo component', () => {
         showInfo: true,
         filesInProgressCount: 0,
         runningUploads: 0,
-        successful: [{ name: 'file', type: 'file' }],
-        errors: []
+        successful: ['1'],
+        errors: {}
       })
       const uploadTitle = wrapper.find('.upload-info-title p').text()
       expect(uploadTitle).toBe('Upload complete')
@@ -60,7 +60,7 @@ describe('UploadInfo component', () => {
         showInfo: true,
         filesInProgressCount: 0,
         runningUploads: 0,
-        errors: [],
+        errors: {},
         successful: [],
         uploadsCancelled: true
       })
@@ -95,11 +95,8 @@ describe('UploadInfo component', () => {
         showInfo: true,
         filesInProgressCount: 0,
         runningUploads: 0,
-        errors: [],
-        successful: [
-          { name: 'file', type: 'file' },
-          { name: 'file2', type: 'file' }
-        ]
+        errors: {},
+        successful: ['1', '2']
       })
       const info = wrapper.find('.upload-info-success').text()
       expect(info).toBe('2 items uploaded')
@@ -110,7 +107,7 @@ describe('UploadInfo component', () => {
         filesInProgressCount: 0,
         runningUploads: 0,
         errors: [{ name: 'file', type: 'file' }],
-        successful: [{ name: 'file2', type: 'file2' }]
+        successful: ['1']
       })
       const info = wrapper.find('.upload-info-danger').text()
       expect(info).toBe('1 of 2 items failed')
@@ -129,8 +126,8 @@ describe('UploadInfo component', () => {
         showInfo: true,
         infoExpanded: true,
         uploads: [
-          { name: 'file', type: 'file' },
-          { name: 'file2', type: 'file' }
+          { name: 'file', type: 'file', meta: { uploadId: '1' } },
+          { name: 'file2', type: 'file', meta: { uploadId: '2' } }
         ]
       })
       const info = wrapper.find('.upload-info-items')
@@ -139,11 +136,42 @@ describe('UploadInfo component', () => {
       const uploadedItems = wrapper.findAll('.upload-info-items li')
       expect(uploadedItems.length).toBe(2)
     })
+    it('should show a message on the failed uploaded files', () => {
+      const wrapper = getShallowWrapper({
+        showInfo: true,
+        infoExpanded: true,
+        uploads: [
+          { name: 'file', type: 'file', meta: { uploadId: '1' } },
+          { name: 'file2', type: 'file', meta: { uploadId: '2' } },
+          { name: 'file3', type: 'file', meta: { uploadId: '3' } }
+        ],
+        errors: {
+          1: new Error(),
+          2: new Error()
+        }
+      })
+      const info = wrapper.find('.upload-info-items')
+      expect(info.exists()).toBeTruthy()
+
+      const infoMessages = wrapper.findAll('.upload-info-message')
+      expect(infoMessages.length).toBe(2)
+      expect(infoMessages.at(0).text()).toBe('Unknown error')
+      expect(infoMessages.at(0).text()).toBe('Unknown error')
+    })
     it('folder is clickable', () => {
       const wrapper = getShallowWrapper({
         showInfo: true,
         infoExpanded: true,
-        uploads: [{ name: 'file', type: 'folder', isFolder: true, targetRoute: {}, path: '' }]
+        uploads: [
+          {
+            name: 'file',
+            type: 'folder',
+            isFolder: true,
+            targetRoute: {},
+            path: '',
+            meta: { uploadId: '1' }
+          }
+        ]
       })
 
       const info = wrapper.find('.upload-info-items')
@@ -185,7 +213,7 @@ function getShallowWrapper({
   filesInProgressCount = 0,
   runningUploads = 0,
   successful = [],
-  errors = [],
+  errors = {},
   uploadsCancelled = false,
   inPreparation = false
 } = {}) {

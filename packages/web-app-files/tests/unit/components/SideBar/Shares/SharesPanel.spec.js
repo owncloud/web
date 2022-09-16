@@ -18,14 +18,6 @@ const ocLoaderStubSelector = 'oc-loader-stub'
 
 jest.mock('web-pkg/src/composables/reactivity')
 describe('SharesPanel', () => {
-  it('reloads shares if highlighted file is changed', async () => {
-    const spyOnReloadShares = jest.spyOn(SharesPanel.methods, '$_reloadShares').mockImplementation()
-    const wrapper = getShallowWrapper()
-    wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', { name: '2' })
-    await wrapper.vm.$nextTick()
-    expect(spyOnReloadShares).toHaveBeenCalledTimes(2)
-  })
-
   describe('when loading is set to true', () => {
     it('should show the oc loader', () => {
       const wrapper = getShallowWrapper({ sharesLoading: true })
@@ -46,6 +38,10 @@ describe('SharesPanel', () => {
   function getShallowWrapper({ sharesLoading = false } = {}) {
     return shallowMount(SharesPanel, {
       localVue,
+      provide: {
+        activePanel: null,
+        displayedItem: {}
+      },
       store: new Vuex.Store({
         modules: {
           Files: {

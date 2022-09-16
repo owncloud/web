@@ -74,25 +74,23 @@ export default {
     }
   },
   mounted() {
-    const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+    const navBar = document.getElementById('web-nav-sidebar')
     const highlighter = document.getElementById('nav-highlighter')
 
-    if (!highlighter || !navItem) {
+    if (!highlighter || !navBar) {
       return
     }
 
-    const resizeObserver = new ResizeObserver((data) => {
-      const width = data[0].borderBoxSize[0].inlineSize
-      highlighter.style.setProperty('transition-duration', `0.05s`)
-      if (width) {
-        highlighter.style.setProperty('width', `${width}px`)
+    const resizeObserver = new ResizeObserver(() => {
+      const navItem = document.getElementsByClassName('oc-sidebar-nav-item-link')[0]
+      if (!navItem) {
+        return
       }
-    })
-    resizeObserver.observe(navItem)
-    if (navItem.clientWidth) {
+      highlighter.style.setProperty('transition-duration', `0.05s`)
       highlighter.style.setProperty('width', `${navItem.clientWidth}px`)
       highlighter.style.setProperty('height', `${navItem.clientHeight}px`)
-    }
+    })
+    resizeObserver.observe(navBar)
 
     this.$on('beforeDestroy', () => {
       resizeObserver.disconnect()
@@ -143,13 +141,29 @@ export default {
   .toggle-sidebar-button-expanded {
     justify-content: flex-end !important;
   }
+
+  .oc-sidebar-nav li a:not(.active) {
+    &:hover,
+    &:focus {
+      text-decoration: none !important;
+      background-color: var(--oc-color-background-hover);
+      color: var(--oc-color-swatch-passive-default);
+    }
+  }
+
+  .oc-sidebar-nav li a.active {
+    &:focus,
+    &:hover {
+      color: var(--oc-color-swatch-inverse-default);
+    }
+  }
 }
 .oc-app-navigation-expanded {
-  min-width: 250px !important;
-  max-width: 250px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
 }
 .oc-app-navigation-collapsed {
-  min-width: 64px !important;
-  max-width: 64px !important;
+  min-width: 62px !important;
+  max-width: 62px !important;
 }
 </style>

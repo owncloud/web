@@ -1,0 +1,7 @@
+Enhancement: Permissionless (internal) link shares
+
+We have added the possibility to create alias link shares for internal usage when the backend is capable of handling them.
+
+https://github.com/owncloud/web/pull/7133
+https://github.com/owncloud/web/pull/7505
+https://github.com/owncloud/web/issues/6844

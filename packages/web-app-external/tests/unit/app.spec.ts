@@ -113,7 +113,7 @@ describe('The app provider extension', () => {
   it('should show a loading spinner while loading', async () => {
     const makeRequest = jest.fn(
       () =>
-        new Promise((resolve, reject) => {
+        new Promise((resolve) => {
           setTimeout(() => {
             resolve({
               ok: true,

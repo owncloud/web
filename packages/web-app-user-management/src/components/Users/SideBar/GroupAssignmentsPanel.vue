@@ -1,9 +1,10 @@
 <template>
-  <div class="oc-mt-xl">
+  <div id="user-group-assignment-panel" class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div class="oc-background-highlight oc-p-m">
+    <div id="user-group-assignment-form" class="oc-background-highlight oc-p-m">
       <oc-select
         v-model="editUser.memberOf"
+        class="oc-mb-s"
         multiple
         :options="groups"
         option-label="displayName"
@@ -35,19 +36,19 @@
           </div>
         </template>
       </oc-select>
+      <compare-save-dialog
+        class="edit-compare-save-dialog oc-mb-l"
+        :original-object="user"
+        :compare-object="editUser"
+        @revert="revertChanges"
+        @confirm="$emit('confirm', editUser)"
+      ></compare-save-dialog>
     </div>
-    <compare-save-dialog
-      class="edit-compare-save-dialog"
-      :original-object="user"
-      :compare-object="editUser"
-      @revert="revertChanges"
-      @confirm="$emit('confirm', editUser)"
-    ></compare-save-dialog>
   </div>
 </template>
 <script>
 import UserInfoBox from './UserInfoBox.vue'
-import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 
 export default {
   name: 'GroupAssignmentsPanel',
@@ -86,10 +87,11 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-.edit-compare-save-dialog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+#user-group-assignment-panel {
+  #user-group-assignment-form {
+    border-radius: 5px;
+  }
 }
 </style>

@@ -2,6 +2,9 @@ import quickActions, { canShare } from '../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -36,15 +39,18 @@ export default {
             }
             return canShare(resources[0], this.$store)
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-shares-trigger'
         }
       ]
     }
   },
   methods: {
-    async $_showShares_trigger({ resources }) {
-      await this.$store.dispatch('Files/sidebar/openWithPanel', 'sharing-item#peopleShares')
+    ...mapMutations('Files', ['SET_FILE_SELECTION']),
+
+    $_showShares_trigger({ resources }) {
+      this.SET_FILE_SELECTION(resources)
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     }
   }
 }

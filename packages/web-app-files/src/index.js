@@ -15,7 +15,7 @@ import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
-import { FilterSearch, SDKSearch } from './search'
+import { SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
 import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
@@ -117,12 +117,10 @@ export default {
   quickActions,
   translations,
   ready({ router, store }) {
-    Registry.filterSearch = new FilterSearch(store, router)
     Registry.sdkSearch = new SDKSearch(store, router)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
-    bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
 
     archiverService.initialize(
@@ -136,12 +134,12 @@ export default {
         }
       ])
     )
-    // FIXME: Remove mock data
+    // FIXME: Use capability data only as soon as available
     thumbnailService.initialize(
       get(store, 'getters.capabilities.files.thumbnail', {
         enabled: true,
         version: 'v0.1',
-        supportedMimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'text/plain']
+        supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
       })
     )
   }

@@ -1,5 +1,5 @@
 import { Page } from 'playwright'
-import { User } from '../../../types'
+import { Group, User } from '../../../types'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import util from 'util'
@@ -21,13 +21,13 @@ const removeShareConfirmationButton = '.oc-modal-body-actions-confirm'
 export interface createShareArgs {
   page: Page
   folder: string
-  users: User[]
+  recipients: User[] | Group[]
   role: string
   via: 'SIDEBAR_PANEL' | 'QUICK_ACTION'
 }
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
-  const { page, folder, users, role, via } = args
+  const { page, folder, recipients, role, via } = args
   const folderPaths = folder.split('/')
   const folderName = folderPaths.pop()
 
@@ -46,49 +46,49 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       break
   }
 
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
 export interface createReshareArgs {
   page: Page
   folder: string
-  users: User[]
+  recipients: User[] | Group[]
   role: string
 }
 
 export const createReshare = async (args: createReshareArgs): Promise<void> => {
-  const { page, folder, users, role } = args
+  const { page, folder, recipients, role } = args
   const folderPaths = folder.split('/')
   const folderName = folderPaths.pop()
 
   if (folderPaths.length) {
     await clickResource({ page: page, path: folderPaths.join('/') })
   }
-  await sidebar.open({ page: page, resource: folderName })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
+  await sidebar.openPanelForResource({ page: page, resource: folderName, panel: 'shares' })
 
-  await inviteMembers({ page, users, role })
+  await inviteMembers({ page, recipients, role })
   await sidebar.close({ page: page })
 }
 
 export interface inviteMembersArgs {
   page: Page
-  users: User[]
+  recipients: User[] | Group[]
   role: string
 }
 
 export const inviteMembers = async (args: inviteMembersArgs): Promise<void> => {
-  const { page, role, users } = args
-  for (const user of users) {
+  const { page, role, recipients } = args
+  for (const recipient of recipients) {
     const shareInputLocator = page.locator(invitationInput)
+    await shareInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('sharees') && resp.status() === 200),
-      shareInputLocator.fill(user.id)
+      shareInputLocator.fill(recipient.id)
     ])
     await shareInputLocator.focus()
     await page.waitForSelector('.vs--open')
-    await page.locator(invitationInput).press('Enter')
+    await page.locator('.vs__dropdown-option').click()
 
     await page.locator(filesCollaboratorRolesSelector).click()
     await page.locator(util.format(collaboratorRoleItemSelector, role)).click()
@@ -179,10 +179,11 @@ export interface removeShareeArgs {
   page: Page
   folder?: string
   users: User[]
+  removeOwnSpaceAccess?: boolean
 }
 
 export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
-  const { page, folder, users } = args
+  const { page, folder, users, removeOwnSpaceAccess } = args
   if (folder) {
     const folderPaths = folder.split('/')
     const folderName = folderPaths.pop()
@@ -209,5 +210,8 @@ export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
       page.locator(util.format(removeShareButton, userColumn)).click(),
       page.locator(removeShareConfirmationButton).click()
     ])
+    if (removeOwnSpaceAccess) {
+      await page.waitForNavigation()
+    }
   }
 }

@@ -1,4 +1,6 @@
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default {
   computed: {
@@ -10,14 +12,13 @@ export default {
           label: () => this.$gettext('Details'),
           handler: this.$_showDetails_trigger,
           isEnabled: ({ resources }) => resources.length === 1,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-details-trigger'
         }
       ]
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebar: 'open', closeSidebar: 'close' }),
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
 
     $_showDetails_trigger({ resources }) {
@@ -26,7 +27,11 @@ export default {
       }
 
       this.SET_FILE_SELECTION([resources[0]])
-      this.openSidebar()
+      this.$_showDetails_openSideBar()
+    },
+
+    $_showDetails_openSideBar() {
+      bus.publish(SideBarEventTopics.open)
     }
   }
 }

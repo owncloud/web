@@ -136,6 +136,7 @@ function createStore(activeFiles) {
           selectedIds: []
         },
         getters: {
+          highlightedFile: () => activeFiles[0],
           activeFiles: () => activeFiles,
           selectedFiles: () => [],
           totalFilesCount: () => ({ files: activeFiles.length, folders: 0 }),

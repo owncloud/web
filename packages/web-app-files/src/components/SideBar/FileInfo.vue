@@ -1,25 +1,27 @@
 <template>
-  <div class="file_info">
-    <oc-resource-icon
-      v-if="sidebarActivePanel"
-      :resource="file"
-      size="large"
-      class="file_info__icon"
-    />
-    <div class="file_info__body oc-text-overflow">
-      <h3 data-testid="files-info-name">
-        <oc-resource-name
-          :name="file.name"
-          :extension="file.extension"
-          :type="file.type"
-          :full-path="file.webDavPath"
-          :is-extension-displayed="areFileExtensionsShown"
-          :is-path-displayed="false"
-          :truncate-name="false"
-        />
-      </h3>
+  <div class="file_info oc-flex oc-flex-between">
+    <div class="oc-flex oc-flex-middle">
+      <oc-resource-icon
+        v-if="isSubPanelActive"
+        :resource="file"
+        size="large"
+        class="file_info__icon oc-mr-s"
+      />
+      <div class="file_info__body oc-text-overflow">
+        <h3 data-testid="files-info-name">
+          <oc-resource-name
+            :name="file.name"
+            :extension="file.extension"
+            :type="file.type"
+            :full-path="file.webDavPath"
+            :is-extension-displayed="areFileExtensionsShown"
+            :is-path-displayed="false"
+            :truncate-name="false"
+          />
+        </h3>
+      </div>
     </div>
-    <private-link-item v-if="privateLinkEnabled" />
+    <private-link-item v-if="privateLinkEnabled" class="oc-ml-s" />
   </div>
 </template>
 
@@ -37,9 +39,9 @@ export default {
   },
   inject: ['displayedItem'],
   props: {
-    isContentDisplayed: {
+    isSubPanelActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   setup() {
@@ -50,7 +52,6 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     timeData() {
       const interpolate = (obj) => {
         obj.time = formatDateFromRFC(obj.sourceTime, this.$language.current)
@@ -101,19 +102,18 @@ export default {
 
 <style lang="scss">
 .file_info {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  grid-gap: 5px;
+  button {
+    white-space: nowrap;
+  }
 
   &__body {
     text-align: left;
-    font-size: 0.75rem;
 
     h3 {
-      font-size: 0.9rem;
+      font-size: var(--oc-font-size-medium);
       font-weight: 600;
       margin: 0;
+      word-break: break-all;
     }
   }
 

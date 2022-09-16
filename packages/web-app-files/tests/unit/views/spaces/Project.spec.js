@@ -230,6 +230,7 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
     localVue,
     stubs: {
       'app-bar': true,
+      'side-bar': true,
       RouterLink: RouterLinkStub
     },
     data: () => {

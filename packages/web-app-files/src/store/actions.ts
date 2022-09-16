@@ -19,6 +19,7 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
+import { thumbnailService } from '../services'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -57,13 +58,13 @@ export default {
     context.dispatch(
       'showMessage',
       {
-        title: $gettext('Copied to clipboard!'),
+        title: $gettext('Cut to clipboard!'),
         status: 'success'
       },
       { root: true }
     )
   },
-  async clearClipboardFiles(context) {
+  clearClipboardFiles(context) {
     context.commit('CLEAR_CLIPBOARD')
   },
   async pasteSelectedFiles(
@@ -350,7 +351,7 @@ export default {
       })
   },
   async changeShare(
-    { commit, getters, rootGetters },
+    { commit, dispatch, getters, rootGetters },
     { client, graphClient, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
@@ -358,10 +359,18 @@ export default {
     }
 
     if (share.shareType === ShareTypes.space.value) {
-      await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
-        permissions,
-        role: role.name
-      })
+      try {
+        await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
+          permissions,
+          role: role.name
+        })
+      } catch (error) {
+        dispatch(
+          'showMessage',
+          { title: $gettext('Error while editing the share.'), status: 'danger' },
+          { root: true }
+        )
+      }
 
       const spaceShare = buildSpaceShare(
         {
@@ -385,20 +394,28 @@ export default {
       return
     }
 
-    const updatedShare = await client.shares.updateShare(share.id, {
-      role: role.name,
-      permissions,
-      expireDate: expirationDate
-    })
+    try {
+      const updatedShare = await client.shares.updateShare(share.id, {
+        role: role.name,
+        permissions,
+        expireDate: expirationDate
+      })
 
-    commit(
-      'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
-      buildCollaboratorShare(
-        updatedShare.shareInfo,
-        getters.highlightedFile,
-        allowSharePermissions(rootGetters)
+      commit(
+        'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
+        buildCollaboratorShare(
+          updatedShare.shareInfo,
+          getters.highlightedFile,
+          allowSharePermissions(rootGetters)
+        )
       )
-    )
+    } catch (error) {
+      dispatch(
+        'showMessage',
+        { title: $gettext('Error while editing the share.'), status: 'danger' },
+        { root: true }
+      )
+    }
   },
   addShare(
     context,
@@ -525,37 +542,32 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, path, storageId }) {
+  deleteShare(context, { client, graphClient, share, path, storageId, reloadResource = true }) {
     const additionalParams: any = {}
     if (share.shareType === ShareTypes.space.value) {
       additionalParams.shareWith = share.collaborator.name
     }
 
-    client.shares
-      .deleteShare(share.id, additionalParams)
-      .then(() => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+    return client.shares.deleteShare(share.id, additionalParams).then(() => {
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
 
-        if (share.shareType !== ShareTypes.space.value) {
-          context.dispatch('updateCurrentFileShareTypes')
-          context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-        } else {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
+      if (share.shareType !== ShareTypes.space.value) {
+        context.dispatch('updateCurrentFileShareTypes')
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+      } else if (reloadResource) {
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-          return graphClient.drives.getDrive(share.id).then((response) => {
-            const space = buildSpace(response.data)
-            context.commit('UPDATE_RESOURCE_FIELD', {
-              id: share.id,
-              field: 'spaceRoles',
-              value: space.spaceRoles
-            })
-            context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+        return graphClient.drives.getDrive(share.id).then((response) => {
+          const space = buildSpace(response.data)
+          context.commit('UPDATE_RESOURCE_FIELD', {
+            id: share.id,
+            field: 'spaceRoles',
+            value: space.spaceRoles
           })
-        }
-      })
-      .catch((e) => {
-        console.error(e)
-      })
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
+        })
+      }
+    })
   },
   /**
    * Prune all branches of the shares tree that are
@@ -738,10 +750,7 @@ export default {
   },
 
   async loadPreview({ commit, rootGetters }, { resource, isPublic, dimensions, type }) {
-    if (
-      rootGetters.previewFileExtensions.length &&
-      !rootGetters.previewFileExtensions.includes(resource.extension.toLowerCase())
-    ) {
+    if (!thumbnailService.available || !thumbnailService.isMimetypeSupported(resource.mimeType)) {
       return
     }
 

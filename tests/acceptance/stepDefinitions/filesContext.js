@@ -213,13 +213,16 @@ When('the user uploads a created file {string} using the webUI', function (eleme
   return client.page.personalPage().uploadFile(uploadPath)
 })
 
-When('the user uploads a created file {string} with overwrite using the webUI', function (element) {
-  const uploadPath = path.join(client.globals.mountedUploadDir, element)
-  return client.page
-    .personalPage()
-    .selectFileForUpload(uploadPath)
-    .then(() => client.page.personalPage().confirmFileOverwrite())
-})
+When(
+  'the user uploads a created file {string} with overwrite using the webUI',
+  async function (file) {
+    const uploadPath = path.join(client.globals.mountedUploadDir, file)
+    await client.page.personalPage().selectFileForUpload(uploadPath)
+    await client.page.personalPage().confirmFileOverwrite()
+
+    return this
+  }
+)
 
 When('the public uploads file/folder {string} in files-drop page', function (element) {
   const rootUploadDir = client.globals.mountedUploadDir

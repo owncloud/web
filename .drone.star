@@ -6,7 +6,7 @@ NOTIFICATIONS = 3
 ALPINE_GIT = "alpine/git:latest"
 DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
-MINIO_MC = "minio/mc:RELEASE.2021-03-23T05-46-11Z"
+MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
@@ -28,8 +28,8 @@ PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
-SELENIUM_STANDALONE_CHROME_DEBUG = "selenium/standalone-chrome-debug:3.141.59"
-SELENIUM_STANDALONE_FIREFOX_DEBUG = "selenium/standalone-firefox-debug:3.141.59"
+SELENIUM_STANDALONE_CHROME = "selenium/standalone-chrome:104.0-20220812"
+SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:latest"
 THEGEEKLAB_DRONE_GITHUB_COMMENT = "thegeeklab/drone-github-comment:1"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
@@ -41,6 +41,7 @@ dir = {
     "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
+    "ocis": "/var/www/owncloud/ocis-build",
 }
 
 config = {
@@ -53,6 +54,17 @@ config = {
         "master",
     ],
     "yarnlint": True,
+    "e2e": {
+        "oC10": {
+            "db": "mysql:5.5",
+            "earlyFail": True,
+            "skip": False,
+        },
+        "oCIS": {
+            "earlyFail": True,
+            "skip": False,
+        },
+    },
     "acceptance": {
         "webUI": {
             "type": FULL,
@@ -172,7 +184,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
         },
@@ -185,7 +196,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "retry": False,
@@ -201,7 +211,6 @@ config = {
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
-                "WEB_UI_CONFIG": "%s/dist/config.json" % dir["web"],
             },
             "screenShots": True,
             "notificationsAppNeeded": True,
@@ -705,6 +714,38 @@ ocisSpecificTestSuites = [
     "webUIUserJourney",
 ]
 
+# minio mc environment variables
+minio_mc_environment = {
+    "CACHE_BUCKET": {
+        "from_secret": "cache_public_s3_bucket",
+    },
+    "MC_HOST": {
+        "from_secret": "cache_s3_endpoint",
+    },
+    "AWS_ACCESS_KEY_ID": {
+        "from_secret": "cache_s3_access_key",
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+        "from_secret": "cache_s3_secret_key",
+    },
+}
+
+go_step_volumes = [{
+    "name": "server",
+    "path": "/srv/app",
+}, {
+    "name": "gopath",
+    "path": "/go",
+}, {
+    "name": "configs",
+    "path": "/srv/config",
+}]
+
+web_workspace = {
+    "base": dir["base"],
+    "path": config["app"],
+}
+
 def checkTestSuites():
     for testGroupName, test in config["acceptance"].items():
         suites = []
@@ -767,10 +808,7 @@ def main(ctx):
 
     pipelines = pipelines + deploys + pipelinesDependsOn(
         [
-            purgeBuildArtifactCache(ctx, "yarn"),
-            purgeBuildArtifactCache(ctx, "playwright"),
-            purgeBuildArtifactCache(ctx, "tests-yarn"),
-            purgeBuildArtifactCache(ctx, "web-dist"),
+            purgeBuildArtifactCache(ctx),
         ],
         pipelines,
     )
@@ -793,7 +831,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines, unit_test_pipelines) + pipelinesDependsOn(acceptance_pipelines, e2e_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + notify()
@@ -1018,7 +1056,6 @@ def buildCacheWeb(ctx):
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
                  restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installYarn() +
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
@@ -1112,13 +1149,6 @@ def unitTests(ctx):
     }]
 
 def e2eTests(ctx):
-    db = "mysql:5.5"
-    logLevel = "2"
-    reportTracing = "false"
-
-    if ("with-tracing" in ctx.build.title.lower()):
-        reportTracing = "true"
-
     e2e_workspace = {
         "base": dir["base"],
         "path": config["app"],
@@ -1135,71 +1165,13 @@ def e2eTests(ctx):
         "temp": {},
     }]
 
-    e2e_test_ocis = [{
-        "name": "e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "BASE_URL_OCIS": "ocis:9200",
-            "HEADLESS": "true",
-            "OCIS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
-        },
-        "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature",
-        ],
-    }]
-
-    e2e_test_occ = [{
-        "name": "e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "BASE_URL_OCC": "owncloud",
-            "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": reportTracing,
-        },
-        "commands": [
-            "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature",
-        ],
-    }]
-
-    services = databaseService(db) + owncloudService() + webService()
-
-    stepsClassic = \
-        skipIfUnchanged(ctx, "e2e-tests") + \
-        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
-        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        installYarn() + \
-        buildWebApp() + \
-        installCore(db) + \
-        owncloudLog() + \
-        setupIntegrationWebApp() + \
-        setupServerAndAppsForIntegrationApp(logLevel) + \
-        setUpOauth2(True, True) + \
-        fixPermissions() + \
-        waitForOwncloudService() + \
-        copyFilesForUpload() + \
-        e2e_test_occ + \
-        uploadTracingResult(ctx) + \
-        publishTracingResult(ctx, "e2e-tests oC10") + \
-        githubComment("e2e-tests oC10")
-
-    stepsInfinite = \
-        skipIfUnchanged(ctx, "e2e-tests") + \
-        restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
-        restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-        restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-        installYarn() + \
-        setupServerConfigureWeb(logLevel) + \
-        getOcis() + \
-        ocisService() + \
-        getSkeletonFiles() + \
-        copyFilesForUpload() + \
-        e2e_test_ocis + \
-        uploadTracingResult(ctx) + \
-        publishTracingResult(ctx, "e2e-tests oCIS") + \
-        githubComment("e2e-tests oCIS")
+    default = {
+        "skip": False,
+        "earlyFail": True,
+        "logLevel": "2",
+        "reportTracing": "false",
+        "db": "mysql:5.5",
+    }
 
     e2e_trigger = {
         "ref": [
@@ -1209,29 +1181,95 @@ def e2eTests(ctx):
         ],
     }
 
-    return [
-        {
+    pipelines = []
+    params = {}
+    matrices = config["e2e"]
+
+    for server, matrix in matrices.items():
+        for item in default:
+            params[item] = matrix[item] if item in matrix else default[item]
+
+        if params["skip"]:
+            continue
+
+        if ("full-ci" in ctx.build.title.lower()):
+            params["earlyFail"] = False
+
+        if ("with-tracing" in ctx.build.title.lower()):
+            params["reportTracing"] = "true"
+
+        environment = {
+            "HEADLESS": "true",
+            "RETRY": "1",
+            "REPORT_TRACING": params["reportTracing"],
+        }
+
+        services = []
+        depends_on = []
+        steps = skipIfUnchanged(ctx, "e2e-tests") + \
+                restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+                restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+                installYarn() + \
+                restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+                copyFilesForUpload()
+
+        if server == "oC10":
+            # oC10 specific environment variables
+            environment["BASE_URL_OCC"] = "owncloud"
+
+            # oC10 specific services
+            services = databaseService(params["db"]) + owncloudService()
+
+            # oC10 specific steps
+            steps += installCore(params["db"]) + \
+                     owncloudLog() + \
+                     setupIntegrationWebApp() + \
+                     setupServerAndAppsForIntegrationApp(params["logLevel"]) + \
+                     setUpOauth2(True, True) + \
+                     fixPermissions() + \
+                     waitForOwncloudService()
+        else:
+            # oCIS specific environment variables
+            environment["BASE_URL_OCIS"] = "ocis:9200"
+            environment["OCIS"] = "true"
+
+            # oCIS specific dependencies
+            depends_on = ["cache-ocis"]
+
+            # oCIS specific steps
+            steps += setupServerConfigureWeb(params["logLevel"]) + \
+                     restoreOcisCache() + \
+                     ocisService() + \
+                     getSkeletonFiles()
+
+        steps += [{
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS,
+                     "environment": environment,
+                     "commands": [
+                         "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
+                     ],
+                 }] + \
+                 uploadTracingResult(ctx) + \
+                 publishTracingResult(ctx, "e2e-tests %s" % server)
+        if (params["earlyFail"]):
+            steps += buildGithubCommentForBuildStopped("e2e-ocis" if server == "oCIS" else "e2e-oc10")
+        steps += githubComment("e2e-tests %s" % server)
+        if (params["earlyFail"]):
+            steps += stopBuild()
+
+        pipelines.append({
             "kind": "pipeline",
             "type": "docker",
-            "name": "e2e-tests OC10",
+            "name": "e2e-tests-%s" % server,
             "workspace": e2e_workspace,
-            "steps": stepsClassic,
+            "steps": steps,
             "services": services,
-            "depends_on": [],
+            "depends_on": depends_on,
             "trigger": e2e_trigger,
             "volumes": e2e_volumes,
-        },
-        {
-            "kind": "pipeline",
-            "type": "docker",
-            "name": "e2e-tests oCIS",
-            "workspace": e2e_workspace,
-            "steps": stepsInfinite,
-            "depends_on": ["cache-ocis"],
-            "trigger": e2e_trigger,
-            "volumes": e2e_volumes,
-        },
-    ]
+        })
+    return pipelines
 
 def acceptance(ctx):
     pipelines = []
@@ -1329,12 +1367,11 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
 
-                        steps += restoreBuildArtifactCache(ctx, "yarn", ".yarn")
                         steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
                         steps += yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
-                            steps += installYarn() + buildWebApp()
+                            steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                         else:
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
                             steps += setupServerConfigureWeb(params["logLevel"])
@@ -1343,7 +1380,7 @@ def acceptance(ctx):
 
                         if (params["runningOnOCIS"]):
                             # Services and steps required for running tests with oCIS
-                            steps += getOcis() + ocisService() + getSkeletonFiles()
+                            steps += restoreOcisCache() + ocisService() + getSkeletonFiles()
 
                         else:
                             # Services and steps required for running tests with oc10
@@ -1371,7 +1408,10 @@ def acceptance(ctx):
                             else:
                                 ## Configure oc10 and web with oauth2 and web Service
                                 steps += setUpOauth2(params["oc10IntegrationAppIncluded"], True)
-                                services += webService()
+
+                                ## web service is not required for web-oc10-integration
+                                if not params["oc10IntegrationAppIncluded"]:
+                                    services += webService()
 
                             steps += fixPermissions()
                             steps += waitForOwncloudService()
@@ -1552,7 +1592,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "chrome":
         return [{
             "name": "selenium",
-            "image": SELENIUM_STANDALONE_CHROME_DEBUG,
+            "image": SELENIUM_STANDALONE_CHROME,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1562,7 +1602,7 @@ def browserService(alternateSuiteName, browser):
     if browser == "firefox":
         return [{
             "name": "selenium",
-            "image": SELENIUM_STANDALONE_FIREFOX_DEBUG,
+            "image": SELENIUM_STANDALONE_FIREFOX,
             "volumes": [{
                 "name": "uploads",
                 "path": "/uploads",
@@ -1768,27 +1808,15 @@ def lint():
         ],
     }]
 
-def buildWebApp():
-    return [{
-        "name": "build-web-integration-app",
-        "image": OC_CI_NODEJS,
-        "commands": [
-            "yarn build",
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": "/srv/config",
-        }],
-    }]
-
 def setupIntegrationWebApp():
     return [{
         "name": "setup-web-integration-app",
         "image": OC_CI_PHP,
         "commands": [
+            # copy web config
+            "mkdir -p /srv/config",
+            "cp -r %s/tests/drone /srv/config" % dir["web"],
+            # setup web integration app
             "cd %s || exit" % dir["server"],
             "mkdir apps-external/web",
             "cp /srv/config/drone/config-oc10-integration-app-oauth.json config/config.json",
@@ -2159,7 +2187,7 @@ def ocisService():
                 "FRONTEND_SEARCH_MIN_LENGTH": "2",
             },
             "commands": [
-                "cd %s/ocis-build" % dir["base"],
+                "cd %s" % dir["ocis"],
                 "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
@@ -2223,6 +2251,22 @@ def ocisWebService():
             "path": "/srv/config",
         }],
     }]
+
+def checkForExistingOcisCache(ctx):
+    web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
+    return [
+        {
+            "name": "check-for-exisiting-cache",
+            "image": OC_UBUNTU,
+            "environment": minio_mc_environment,
+            "commands": [
+                "curl -o .drone.env %s/.drone.env" % web_repo_path,
+                "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
+                ". ./.drone.env",
+                "bash check-oCIS-cache.sh",
+            ],
+        },
+    ]
 
 def setupServerConfigureWeb(logLevel):
     return [{
@@ -2363,6 +2407,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
+    environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2388,13 +2433,13 @@ def cacheOcisPipeline(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-ocis",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
+        "workspace": web_workspace,
+        "clone": {
+            "disable": True,
         },
-        "steps": buildOCISCache() +
-                 cacheOcis() +
-                 listRemoteCache(),
+        "steps": checkForExistingOcisCache(ctx) +
+                 buildOcis() +
+                 cacheOcis(),
         "volumes": [{
             "name": "gopath",
             "temp": {},
@@ -2408,112 +2453,71 @@ def cacheOcisPipeline(ctx):
         },
     }]
 
-def getOcis():
+def restoreOcisCache():
     return [{
-        "name": "get-ocis-from-cache",
+        "name": "restore-ocis-cache",
         "image": MINIO_MC,
-        "failure": "ignore",
-        "environment": {
-            "MC_HOST": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "environment": minio_mc_environment,
         "commands": [
-            "source %s/.drone.env" % dir["web"],
-            "mkdir -p %s/ocis-build" % dir["base"],
+            ". ./.drone.env",
+            "rm -rf %s" % dir["ocis"],
+            "mkdir -p %s" % dir["ocis"],
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID %s/ocis-build/" % dir["base"],
-            "chmod +x %s/ocis-build/ocis" % dir["base"],
+            "mc cp -r -a s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis %s" % dir["ocis"],
         ],
     }]
 
-def buildOCISCache():
+def buildOcis():
+    ocis_repo_url = "https://github.com/owncloud/ocis.git"
     return [
         {
-            "name": "check-for-exisiting-cache",
-            "image": OC_UBUNTU,
+            "name": "clone-ocis",
+            "image": OC_CI_GOLANG,
             "commands": [
-                "bash ./tests/drone/check-for-existing-oCIS-cache.sh",
+                "source .drone.env",
+                "cd $GOPATH/src",
+                "mkdir -p github.com/owncloud",
+                "cd github.com/owncloud",
+                "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
+                "cd ocis",
+                "git checkout $OCIS_COMMITID",
             ],
+            "volumes": go_step_volumes,
         },
         {
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
-            "environment": {
-                "GOPATH": "/go",
-            },
             "commands": [
-                "./tests/drone/build-ocis.sh nodejs",
+                # we cannot use the $GOPATH here because of different base image
+                "cd /go/src/github.com/owncloud/ocis/",
+                "retry -t 3 'make ci-node-generate'",
             ],
-            "volumes": [
-                {
-                    "name": "gopath",
-                    "path": "/go",
-                },
-            ],
+            "volumes": go_step_volumes,
         },
         {
             "name": "build-ocis",
             "image": OC_CI_GOLANG,
             "commands": [
-                "./tests/drone/build-ocis.sh golang",
+                "source .drone.env",
+                "cd $GOPATH/src/github.com/owncloud/ocis/ocis",
+                "retry -t 3 'make build'",
+                "mkdir -p %s/$OCIS_COMMITID" % dir["base"],
+                "cp bin/ocis %s/$OCIS_COMMITID" % dir["base"],
             ],
-            "volumes": [
-                {
-                    "name": "gopath",
-                    "path": "/go",
-                },
-            ],
+            "volumes": go_step_volumes,
         },
     ]
 
 def cacheOcis():
     return [{
-        "name": "upload-ocis-bin",
-        "image": PLUGINS_S3,
-        "pull": "if-not-exists",
-        "settings": {
-            "bucket": "owncloud",
-            "endpoint": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "path_style": True,
-            "source": "%s/ocis-build/**/*" % dir["base"],
-            "strip_prefix": "%s/ocis-build" % dir["base"],
-            "target": "/web/ocis-build/",
-            "access_key": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "secret_key": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
-    }]
-
-def listRemoteCache():
-    return [{
-        "name": "list-ocis-bin-cache",
+        "name": "upload-ocis-cache",
         "image": MINIO_MC,
-        "failure": "ignore",
-        "environment": {
-            "MC_HOST": {
-                "from_secret": "cache_s3_endpoint",
-            },
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_s3_secret_key",
-            },
-        },
+        "environment": minio_mc_environment,
         "commands": [
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY && mc find s3/owncloud/web/ocis-build",
+            ". ./.drone.env",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc cp -r -a %s/$OCIS_COMMITID/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["base"],
+            "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
 
@@ -2610,7 +2614,7 @@ def buildGithubCommentForBuildStopped(suite):
         "name": "build-github-comment-buildStop",
         "image": OC_UBUNTU,
         "commands": [
-            'echo ":boom: The acceptance tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % dir["web"],
+            'echo ":boom: The %s tests pipeline failed. The build has been cancelled.\\n" >> %s/comments.file' % (suite, dir["web"]),
         ],
         "when": {
             "status": [
@@ -2932,7 +2936,7 @@ def skipIfUnchanged(ctx, type):
 
     return []
 
-def genericCache(name, action, mounts, cache_key):
+def genericCache(name, action, mounts, cache_path):
     rebuild = "false"
     restore = "false"
     if action == "rebuild":
@@ -2958,16 +2962,18 @@ def genericCache(name, action, mounts, cache_key):
             "secret_key": {
                 "from_secret": "cache_s3_secret_key",
             },
-            "filename": "%s.tar" % (cache_key),
+            "filename": "%s.tar" % (name),
+            "path": cache_path,
+            "fallback_path": cache_path,
         },
     }
     return step
 
-def genericCachePurge(ctx, name, cache_key):
+def genericCachePurge(flush_path):
     return {
         "kind": "pipeline",
         "type": "docker",
-        "name": "purge_%s" % (name),
+        "name": "purge_build_artifact_cache",
         "platform": {
             "os": "linux",
             "arch": "amd64",
@@ -2983,12 +2989,12 @@ def genericCachePurge(ctx, name, cache_key):
                     "endpoint": {
                         "from_secret": "cache_s3_endpoint",
                     },
-                    "flush": True,
-                    "flush_age": "14",
                     "secret_key": {
                         "from_secret": "cache_s3_secret_key",
                     },
-                    "filename": "%s.tar" % (cache_key),
+                    "flush": True,
+                    "flush_age": 1,
+                    "flush_path": flush_path,
                 },
             },
         ],
@@ -3006,12 +3012,14 @@ def genericCachePurge(ctx, name, cache_key):
     }
 
 def genericBuildArtifactCache(ctx, name, action, path):
-    name = "%s_build_artifact_cache" % (name)
-    cache_key = "%s/%s/%s" % (ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}", name)
     if action == "rebuild" or action == "restore":
-        return genericCache(name, action, [path], cache_key)
+        cache_path = "%s/%s/%s" % ("cache", ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}")
+        name = "%s_build_artifact_cache" % (name)
+        return genericCache(name, action, [path], cache_path)
+
     if action == "purge":
-        return genericCachePurge(ctx, name, cache_key)
+        flush_path = "%s/%s" % ("cache", ctx.repo.slug)
+        return genericCachePurge(flush_path)
     return []
 
 def restoreBuildArtifactCache(ctx, name, path):
@@ -3020,8 +3028,8 @@ def restoreBuildArtifactCache(ctx, name, path):
 def rebuildBuildArtifactCache(ctx, name, path):
     return [genericBuildArtifactCache(ctx, name, "rebuild", path)]
 
-def purgeBuildArtifactCache(ctx, name):
-    return genericBuildArtifactCache(ctx, name, "purge", [])
+def purgeBuildArtifactCache(ctx):
+    return genericBuildArtifactCache(ctx, "", "purge", [])
 
 def pipelineSanityChecks(ctx, pipelines):
     """pipelineSanityChecks helps the CI developers to find errors before running it

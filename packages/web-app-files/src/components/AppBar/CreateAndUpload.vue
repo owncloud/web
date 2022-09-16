@@ -1,17 +1,18 @@
 <template>
-  <div v-if="showActions" class="oc-flex-inline oc-width-1-1" style="gap: 15px">
+  <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-width-1-1">
     <template v-if="createFileActionsAvailable">
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-file-menu-btn"
           key="new-file-menu-btn-enabled"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New') : ''"
           :aria-label="newButtonAriaLabel"
           appearance="filled"
           variation="primary"
           :disabled="uploadOrFileCreationBlocked"
         >
           <oc-icon name="add" />
-          <translate>New</translate>
+          <span v-if="!hideButtonLabels" v-text="$gettext('New')" />
         </oc-button>
       </span>
       <oc-drop
@@ -71,6 +72,7 @@
       <span v-oc-tooltip="newButtonTooltip">
         <oc-button
           id="new-folder-btn"
+          v-oc-tooltip="hideButtonLabels ? $gettext('New Folder') : ''"
           appearance="filled"
           variation="primary"
           :aria-label="newButtonAriaLabel"
@@ -78,7 +80,7 @@
           @click="showCreateResourceModal"
         >
           <oc-icon name="resource-type-folder" />
-          <translate>New folder</translate>
+          <span v-if="!hideButtonLabels" v-text="$gettext('New Folder')" />
         </oc-button>
       </span>
     </template>
@@ -86,11 +88,12 @@
       <oc-button
         id="upload-menu-btn"
         key="upload-menu-btn-enabled"
+        v-oc-tooltip="hideButtonLabels ? $gettext('Upload') : ''"
         :aria-label="uploadButtonAriaLabel"
         :disabled="uploadOrFileCreationBlocked"
       >
         <oc-icon name="upload" fill-type="line" />
-        <translate>Upload</translate>
+        <span v-if="!hideButtonLabels" v-text="$gettext('Upload')" />
       </oc-button>
     </span>
     <oc-drop
@@ -151,13 +154,28 @@ import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
+import { extractExtensionFromFile, extractNameWithoutExtension } from '../../helpers/resource'
+import {
+  resolveFileExists,
+  ResolveStrategy,
+  ResolveConflict,
+  resolveFileNameDuplicate,
+  FileExistsResolver
+} from '../../helpers/resource/copyMove'
 
 export default defineComponent({
   components: {
     ResourceUpload
   },
   mixins: [MixinFileActions],
+  props: {
+    limitedScreenSpace: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
   setup() {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
@@ -212,6 +230,9 @@ export default defineComponent({
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
     },
+    hideButtonLabels() {
+      return this.limitedScreenSpace && this.showPasteHereButton
+    },
     mimetypesAllowedForCreation() {
       // we can't use `mapGetters` here because the External app doesn't exist in all deployments
       const mimeTypes = this.$store.getters['External/mimeTypes']
@@ -234,9 +255,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to create new files!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to create new files!')
-      }
       return null
     },
     newButtonAriaLabel() {
@@ -253,9 +271,6 @@ export default defineComponent({
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (!this.hasFreeSpace) {
-        return this.$gettext('You have not enough space left to upload!')
-      }
       return null
     },
     uploadButtonAriaLabel() {
@@ -267,7 +282,7 @@ export default defineComponent({
     },
 
     uploadOrFileCreationBlocked() {
-      return !this.canUpload || !this.hasFreeSpace
+      return !this.canUpload
     },
 
     canUpload() {
@@ -275,17 +290,6 @@ export default defineComponent({
         return false
       }
       return this.currentFolder.canUpload({ user: this.user })
-    },
-
-    hasFreeSpace() {
-      return (
-        !this.quota ||
-        this.quota.free > 0 ||
-        (this.currentFolder &&
-          this.currentFolder.permissions &&
-          this.currentFolder.permissions.indexOf('M') >= 0) ||
-        this.isPublicLocation
-      )
     }
   },
   methods: {
@@ -345,13 +349,7 @@ export default defineComponent({
           }
         }
 
-        let pathFileWasUploadedTo = file.meta.currentFolder
-        if (file.meta.relativeFolder) {
-          pathFileWasUploadedTo += file.meta.relativeFolder
-        }
-
-        const fileIsInCurrentPath = pathFileWasUploadedTo === this.currentPath
-
+        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -364,15 +362,23 @@ export default defineComponent({
       openAction = null,
       addAppProviderFile = false
     ) {
-      const defaultName = isFolder
-        ? this.$gettext('New folder')
-        : this.$gettext('New file') + (this.areFileExtensionsShown ? `.${ext}` : '')
       const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
           isFolder
             ? this.checkNewFolderName(value)
             : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
         )
+      }
+      let defaultName = isFolder
+        ? this.$gettext('New folder')
+        : this.$gettext('New file') + `.${ext}`
+
+      if (this.files.some((f) => f.name === defaultName)) {
+        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
+      }
+
+      if (!this.areFileExtensionsShown) {
+        defaultName = extractNameWithoutExtension({ name: defaultName, extension: ext } as any)
       }
 
       // Sets action to be executed after creation of the file
@@ -679,7 +685,7 @@ export default defineComponent({
       return null
     },
 
-    onFilesSelected(files: File[]) {
+    async onFilesSelected(files: File[]) {
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
@@ -687,35 +693,32 @@ export default defineComponent({
       if (quotaExceeded) {
         return this.$uppyService.clearInputs()
       }
-
       for (const file of uppyResources) {
         const relativeFilePath = file.meta.relativePath
         if (relativeFilePath) {
+          // Logic for folders, applies to all files inside folder and subfolders
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
           const exists = this.files.find((f) => f.name === rootFolder)
           if (exists) {
-            this.showMessage({
-              title: this.$gettextInterpolate(
-                this.$gettext('Folder "%{folder}" already exists.'),
-                { folder: rootFolder },
-                true
-              ),
-              status: 'danger'
+            if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
+            conflicts.push({
+              name: rootFolder,
+              type: 'folder'
             })
-            return
+            continue
           }
-
-          // Folder does not exist, no need to care about files inside -> continue
-          continue
         }
-        const exists = this.files.find((f) => f.name === file.name)
+        // Logic for files
+        const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
         if (exists) {
-          conflicts.push(file)
+          conflicts.push({
+            name: file.name,
+            type: 'file'
+          })
         }
       }
-
       if (conflicts.length) {
-        this.displayOverwriteDialog(uppyResources, conflicts)
+        await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -726,6 +729,13 @@ export default defineComponent({
 
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
+
+        if (
+          uppyResource.meta.routeName === 'files-spaces-share' ||
+          uppyResource.meta.routeName === 'files-public-files'
+        ) {
+          return acc
+        }
 
         if (uppyResource.meta.routeName === 'files-spaces-personal') {
           targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
@@ -788,60 +798,114 @@ export default defineComponent({
       this.$uppyService.publish('uploadStarted')
       await this.createDirectoryTree(files)
       this.$uppyService.publish('addedForUpload', files)
-
-      const reloadRequired = !!files.find((f) => f.meta.currentFolder === this.currentPath)
-      if (reloadRequired) {
-        bus.publish('app.files.list.load')
-      }
-
       this.$uppyService.uploadFiles(files)
     },
 
-    displayOverwriteDialog(files: UppyResource[], conflicts) {
-      const title = this.$ngettext(
-        'File already exists',
-        'Some files already exist',
-        conflicts.length
+    async displayOverwriteDialog(
+      files: UppyResource[],
+      conflicts,
+      resolveFileExistsMethod: FileExistsResolver
+    ) {
+      let count = 0
+      const allConflictsCount = conflicts.length
+      const resolvedFileConflicts = []
+      const resolvedFolderConflicts = []
+      let doForAllConflicts = false
+      let allConflictsStrategy
+      let doForAllConflictsFolders = false
+      let allConflictsStrategyFolders
+
+      for (const conflict of conflicts) {
+        const isFolder = conflict.type === 'folder'
+        const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
+
+        if (doForAllConflicts && !isFolder) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategy
+          })
+          continue
+        }
+        if (doForAllConflictsFolders && isFolder) {
+          conflictArray.push({
+            name: conflict.name,
+            strategy: allConflictsStrategyFolders
+          })
+          continue
+        }
+
+        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
+          this.createModal,
+          this.hideModal,
+          { name: conflict.name, isFolder } as Resource,
+          allConflictsCount - count,
+          this.$gettext,
+          this.$gettextInterpolate,
+          false,
+          isFolder
+        )
+        count++
+        if (resolvedConflict.doForAllConflicts) {
+          if (isFolder) {
+            doForAllConflictsFolders = true
+            allConflictsStrategyFolders = resolvedConflict.strategy
+          } else {
+            doForAllConflicts = true
+            allConflictsStrategy = resolvedConflict.strategy
+          }
+        }
+
+        conflictArray.push({
+          name: conflict.name,
+          strategy: resolvedConflict.strategy
+        })
+      }
+      const filesToSkip = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+      const foldersToSkip = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.SKIP)
+        .map((e) => e.name)
+
+      files = files.filter((e) => !filesToSkip.includes(e.name))
+      files = files.filter(
+        (file) =>
+          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
       )
 
-      const isVersioningEnabled = this.isUserContext && this.capabilities?.files?.versioning
+      const filesToKeepBoth = resolvedFileConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
+      const foldersToKeepBoth = resolvedFolderConflicts
+        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
+        .map((e) => e.name)
 
-      let translatedMsg
-      if (isVersioningEnabled) {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to create a new version for it?',
-          'The following resources already exist: %{resources}. Do you want to create a new version for them?',
-          conflicts.length
-        )
-      } else {
-        translatedMsg = this.$ngettext(
-          'The following resource already exists: %{resources}. Do you want to overwrite it?',
-          'The following resources already exist: %{resources}. Do you want to overwrite them?',
-          conflicts.length
-        )
+      for (const fileName of filesToKeepBoth) {
+        const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
+        const extension = extractExtensionFromFile({ name: fileName } as Resource)
+        file.name = resolveFileNameDuplicate(fileName, extension, this.files)
       }
-      const message = this.$gettextInterpolate(translatedMsg, {
-        resources: conflicts.map((f) => `${f.name}`).join(', ')
-      })
-
-      const modal = {
-        variation: isVersioningEnabled ? 'passive' : 'danger',
-        icon: 'upload-cloud',
-        title,
-        message,
-        cancelText: this.$gettext('Cancel'),
-        confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
-        onCancel: () => {
-          this.$uppyService.clearInputs()
-          this.hideModal()
-        },
-        onConfirm: () => {
-          this.hideModal()
-          this.handleUppyFileUpload(files)
+      for (const folder of foldersToKeepBoth) {
+        const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
+        for (const file of filesInFolder) {
+          const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
+          file.meta.relativeFolder = file.meta.relativeFolder.replace(
+            `/${folder}`,
+            `/${newFolderName}`
+          )
+          file.meta.relativePath = file.meta.relativePath.replace(
+            `/${folder}/`,
+            `/${newFolderName}/`
+          )
+          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
+          const data = file.data as any
+          data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
+          file.meta.routeItem = `/${newFolderName}`
         }
       }
 
-      this.createModal(modal)
+      if (files.length === 0) return
+      this.handleUppyFileUpload(files)
     }
   }
 })
@@ -850,28 +914,32 @@ export default defineComponent({
 #create-list {
   li {
     border: 1px solid transparent;
+
     button {
       gap: 10px;
       justify-content: left;
       width: 100%;
     }
   }
+
   .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
+
   .create-list-folder button {
     margin-bottom: 8px;
   }
+
   .create-list-file:nth-child(2) button {
     margin-top: 6px;
   }
 }
+
 #upload-list,
 #new-file-menu-drop {
-  min-width: 250px;
+  min-width: 230px;
 }
-</style>
-<style lang="scss">
+
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -879,12 +947,24 @@ export default defineComponent({
     height: 100% !important;
   }
 }
+
 #clipboard-btns {
+  flex-flow: inherit;
+
   :nth-child(1) {
     border-right: 0px !important;
+    white-space: nowrap;
   }
+
   :nth-child(2) {
     border-left: 0px !important;
+  }
+}
+
+.create-and-upload-actions {
+  gap: var(--oc-space-small);
+  @media only screen and (min-width: 1000px) {
+    gap: var(--oc-space-medium);
   }
 }
 </style>

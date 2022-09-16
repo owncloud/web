@@ -1,0 +1,7 @@
+Bugfix: Upload modify time
+
+We've included the `x-oc-mtime` header in upload requests to tell the backend the proper modify date of uploaded resources.
+
+https://github.com/owncloud/web/pull/7630
+https://github.com/owncloud/web/pull/7641
+https://github.com/owncloud/web/issues/7628

@@ -121,12 +121,9 @@ export default {
       return option.selectable !== false
     },
     createOption(option) {
-      if (option === '0') {
-        return
-      }
       option = option.replace(',', '.')
       const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      if (!optionIsNumberRegex.test(option)) {
+      if (option === '0' || !optionIsNumberRegex.test(option)) {
         return {
           displayValue: option,
           error: this.$gettext('Please enter only numbers'),

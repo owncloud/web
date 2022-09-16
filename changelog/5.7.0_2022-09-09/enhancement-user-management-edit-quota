@@ -1,0 +1,9 @@
+Enhancement: User management app edit quota
+
+We've added the possibility to change user's quota in the user management app.
+
+https://github.com/owncloud/web/pull/7182
+https://github.com/owncloud/web/pull/7530
+https://github.com/owncloud/web/pull/7538
+https://github.com/owncloud/web/issues/7059
+

@@ -204,8 +204,9 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationCommon } from '../../router'
+import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const mapResourceFields = (resource: Resource, mapping = {}) => {
   return Object.keys(mapping).reduce((result, resourceKey) => {
@@ -588,8 +589,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', ['openWithPanel']),
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+    ...mapActions('Files', ['toggleFileSelection']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -613,34 +613,51 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] })
     },
     openTagsSidebar() {
-      this.openSidebar()
+      bus.publish(SideBarEventTopics.open)
     },
     openSharingSidebar(file) {
       if (file.share?.shareType === ShareTypes.link.value) {
-        this.openWithPanel('sharing-item#linkShares')
+        bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
         return
       }
-      this.openWithPanel('sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file)
     },
     parentFolderLink(file) {
+      if (file.shareId && file.path === '/') {
+        return createLocationShares('files-shares-with-me')
+      }
+
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(path, resource) {
+    createFolderLink(filePath, resource) {
       if (this.targetRoute === null) {
         return {}
       }
 
       const params = {
-        item: path.replace(/^\//, '') || '/',
+        item: filePath.replace(/^\//, '') || '/',
         ...mapResourceFields(resource, this.targetRouteParamMapping),
         ...this.targetRoute.params
       }
       const query = {
         ...mapResourceFields(resource, this.targetRouteQueryMapping),
         ...this.targetRoute.query
+      }
+
+      if (resource.shareId) {
+        return createLocationSpaces('files-spaces-share', {
+          params: {
+            ...params,
+            shareName: path.basename(resource.shareRoot)
+          },
+          query: {
+            ...query,
+            shareId: resource.shareId
+          }
+        })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
@@ -671,11 +688,8 @@ export default defineComponent({
     },
     addSelectedResource(file) {
       const isSelected = this.isResourceSelected(file)
-      if (isSelected) {
-        this.$emit('select', this.selectedIds)
-      } else {
-        this.$emit('select', this.selectedIds.concat([file]))
-      }
+      if (isSelected) return
+      this.toggleFileSelection(file)
     },
     resetDropPosition(id, event, item) {
       const instance = this.$refs[id].tippy
@@ -834,6 +848,12 @@ export default defineComponent({
         return this.$gettext('All files and folders')
       }
 
+      if (resource.shareId) {
+        return resource.path === '/'
+          ? this.$gettext('Shared with me')
+          : path.basename(resource.shareRoot)
+      }
+
       return this.$gettext('Personal')
     }
   }
@@ -845,6 +865,9 @@ export default defineComponent({
     opacity: 0.6;
   }
   &-resource-wrapper {
+    display: flex;
+    align-items: center;
+
     &-limit-max-width {
       max-width: calc(100% - var(--oc-space-medium));
     }
@@ -864,7 +887,7 @@ export default defineComponent({
   }
   &-edit-name {
     display: inline-flex;
-    vertical-align: super;
+    margin-left: var(--oc-space-xsmall);
     svg {
       fill: var(--oc-color-text-muted);
     }

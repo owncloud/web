@@ -1,5 +1,5 @@
 {
-  "version": "5.6.1",
+  "version": "5.7.0",
   "private": true,
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
@@ -40,6 +40,7 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
+    "keycode": "^2.2.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {

@@ -173,7 +173,8 @@ function getResource({
     isReceivedShare: () => true,
     canBeDeleted: () => true,
     canRename: () => true,
-    canShare: () => canShare
+    canShare: () => canShare,
+    canDeny: () => false
   }
 }
 
@@ -198,8 +199,7 @@ const storeOptions = (data) => {
       Files: {
         state: {
           incomingShares: incomingCollaborators,
-          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] },
-          spaces
+          sharesTree: { [Collaborators[0].path]: [Collaborators[0]] }
         },
         namespaced: true,
         getters: {
@@ -225,6 +225,11 @@ const storeOptions = (data) => {
       },
       runtime: {
         namespaced: true,
+        state: {
+          spaces: {
+            spaces
+          }
+        },
         modules: {
           auth: {
             namespaced: true,
@@ -274,6 +279,9 @@ function getMountedWrapper(data) {
 
   return mount(FileShares, {
     localVue,
+    provide: {
+      incomingParentShare: {}
+    },
     setup: () => ({
       currentStorageId: storageId
     }),
@@ -305,6 +313,9 @@ function getShallowMountedWrapper(data, loading = false) {
       currentStorageId: storageId,
       hasResharing: false
     }),
+    provide: {
+      incomingParentShare: {}
+    },
     store: createStore(data),
     stubs: {
       ...stubs,

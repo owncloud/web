@@ -20,3 +20,4 @@
  */
 
 $app = new OCA\Web\Application();
+$app->boot();

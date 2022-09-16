@@ -29,7 +29,10 @@ export default {
               !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
-              !isLocationSharesActive(this.$router, 'files-shares-with-me')
+              !isLocationCommonActive(this.$router, 'files-common-search') &&
+              !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+              !isLocationSharesActive(this.$router, 'files-shares-with-others') &&
+              !isLocationSharesActive(this.$router, 'files-shares-via-link')
             ) {
               return false
             }
@@ -54,7 +57,7 @@ export default {
             return !downloadDisabled
           },
           canBeDefault: true,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-download-archive-trigger'
         }
       ]

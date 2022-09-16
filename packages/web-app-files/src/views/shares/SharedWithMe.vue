@@ -1,49 +1,62 @@
 <template>
-  <div class="oc-flex oc-flex-column">
-    <app-bar :has-shares-navigation="true" :has-bulk-actions="true" />
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <shared-with-me-section
-        v-if="pendingItems.length > 0"
-        id="files-shared-with-me-pending-section"
-        :title="pendingTitle"
-        :items="pendingItems"
-        :share-status="ShareStatus.pending"
-        :sort-by="pendingSortBy"
-        :sort-dir="pendingSortDir"
-        :sort-handler="pendingHandleSort"
-        :show-more-toggle="true"
-        :resource-clickable="false"
-        :display-thumbnails="false"
+  <div class="oc-flex">
+    <files-view-wrapper class="oc-flex-column">
+      <app-bar
+        :has-shares-navigation="true"
+        :has-bulk-actions="true"
+        :side-bar-open="sideBarOpen"
       />
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <shared-with-me-section
+          v-if="pendingItems.length > 0"
+          id="files-shared-with-me-pending-section"
+          :display-thumbnails="false"
+          :file-list-header-y="fileListHeaderY"
+          :items="pendingItems"
+          :resource-clickable="false"
+          :share-status="ShareStatus.pending"
+          :show-more-toggle="true"
+          :side-bar-open="sideBarOpen"
+          :sort-by="pendingSortBy"
+          :sort-dir="pendingSortDir"
+          :sort-handler="pendingHandleSort"
+          :title="pendingTitle"
+        />
 
-      <shared-with-me-section
-        id="files-shared-with-me-accepted-section"
-        :title="acceptedTitle"
-        :empty-message="acceptedEmptyMessage"
-        :items="acceptedItems"
-        :share-status="ShareStatus.accepted"
-        :sort-by="acceptedSortBy"
-        :sort-dir="acceptedSortDir"
-        :sort-handler="acceptedHandleSort"
-        :resource-clickable="true"
-        :display-thumbnails="displayThumbnails"
-      />
+        <shared-with-me-section
+          id="files-shared-with-me-accepted-section"
+          :display-thumbnails="displayThumbnails"
+          :empty-message="acceptedEmptyMessage"
+          :file-list-header-y="fileListHeaderY"
+          :items="acceptedItems"
+          :resource-clickable="true"
+          :share-status="ShareStatus.accepted"
+          :side-bar-open="sideBarOpen"
+          :sort-by="acceptedSortBy"
+          :sort-dir="acceptedSortDir"
+          :sort-handler="acceptedHandleSort"
+          :title="acceptedTitle"
+        />
 
-      <shared-with-me-section
-        id="files-shared-with-me-declined-section"
-        :title="declinedTitle"
-        :empty-message="declinedEmptyMessage"
-        :items="declinedItems"
-        :share-status="ShareStatus.declined"
-        :sort-by="declinedSortBy"
-        :sort-dir="declinedSortDir"
-        :sort-handler="declinedHandleSort"
-        :show-more-toggle="true"
-        :display-thumbnails="false"
-        :resource-clickable="false"
-      />
-    </template>
+        <shared-with-me-section
+          id="files-shared-with-me-declined-section"
+          :display-thumbnails="false"
+          :empty-message="declinedEmptyMessage"
+          :file-list-header-y="fileListHeaderY"
+          :items="declinedItems"
+          :resource-clickable="false"
+          :share-status="ShareStatus.declined"
+          :show-more-toggle="true"
+          :side-bar-open="sideBarOpen"
+          :sort-by="declinedSortBy"
+          :sort-dir="declinedSortDir"
+          :sort-handler="declinedHandleSort"
+          :title="declinedTitle"
+        />
+      </template>
+    </files-view-wrapper>
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -57,20 +70,30 @@ import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
     AppBar,
     AppLoadingSpinner,
-    SharedWithMeSection
+    SharedWithMeSection,
+    SideBar
   },
 
   setup() {
-    const { storeItems, fields, loadResourcesTask, areResourcesLoading } = useResourcesViewDefaults<
-      Resource,
-      any,
-      any[]
-    >()
+    const {
+      areResourcesLoading,
+      fields,
+      fileListHeaderY,
+      loadResourcesTask,
+      selectedResources,
+      selectedResourcesIds,
+      sideBarActivePanel,
+      sideBarOpen,
+      storeItems
+    } = useResourcesViewDefaults<Resource, any, any[]>()
 
     // pending shares
     const pending = computed(() =>
@@ -124,6 +147,11 @@ export default defineComponent({
       // defaults
       loadResourcesTask,
       areResourcesLoading,
+      selectedResources,
+      selectedResourcesIds,
+      fileListHeaderY,
+      sideBarOpen,
+      sideBarActivePanel,
 
       // view specific
       pendingHandleSort,

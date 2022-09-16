@@ -8,12 +8,14 @@ export abstract class DavPermission {
   static readonly Updateable: string = 'NV'
   static readonly FileUpdateable: string = 'W'
   static readonly FolderCreateable: string = 'CK'
+  static readonly Deny: string = 'Z'
 }
 
 export abstract class DavProperty {
   static readonly Permissions: string = '{http://owncloud.org/ns}permissions'
   static readonly IsFavorite: string = '{http://owncloud.org/ns}favorite'
   static readonly FileId: string = '{http://owncloud.org/ns}fileid'
+  static readonly Name: string = '{http://owncloud.org/ns}name'
   static readonly OwnerId: string = '{http://owncloud.org/ns}owner-id'
   static readonly OwnerDisplayName: string = '{http://owncloud.org/ns}owner-display-name'
   static readonly PrivateLink: string = '{http://owncloud.org/ns}privatelink'
@@ -26,6 +28,8 @@ export abstract class DavProperty {
   static readonly ResourceType: string = '{DAV:}resourcetype'
   static readonly DownloadURL: string = '{http://owncloud.org/ns}downloadURL'
 
+  static readonly ShareId: string = '{http://owncloud.org/ns}shareid'
+  static readonly ShareRoot: string = '{http://owncloud.org/ns}shareroot'
   static readonly ShareTypes: string = '{http://owncloud.org/ns}share-types'
   static readonly SharePermissions: string =
     '{http://open-collaboration-services.org/ns}share-permissions'
@@ -50,8 +54,11 @@ export abstract class DavProperties {
     DavProperty.Permissions,
     DavProperty.IsFavorite,
     DavProperty.FileId,
+    DavProperty.Name,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
+    DavProperty.ShareId,
+    DavProperty.ShareRoot,
     DavProperty.ShareTypes,
     DavProperty.PrivateLink,
     DavProperty.ContentLength,

@@ -90,7 +90,7 @@ const fileActions = {
     icon: 'file-download',
     handler: jest.fn(),
     label: () => 'Download',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-download-file-trigger',
     selector: '.oc-files-actions-download-file-trigger'
   },
@@ -99,7 +99,7 @@ const fileActions = {
     icon: 'file-copy',
     handler: jest.fn(),
     label: () => 'Copy',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-copy-trigger',
     selector: '.oc-files-actions-copy-trigger'
   },
@@ -108,7 +108,7 @@ const fileActions = {
     icon: 'pencil',
     handler: jest.fn(),
     label: () => 'Rename',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-rename-trigger',
     selector: '.oc-files-actions--rename-trigger'
   },
@@ -117,7 +117,7 @@ const fileActions = {
     icon: 'folder-shared',
     handler: jest.fn(),
     label: () => 'Move',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-move-trigger',
     selector: '.oc-files-actions-move-trigger'
   },
@@ -126,7 +126,7 @@ const fileActions = {
     icon: 'delete-bin-5',
     handler: jest.fn(),
     label: () => 'Delete',
-    componentType: 'oc-button',
+    componentType: 'button',
     class: 'oc-files-actions-delete-trigger',
     selector: '.oc-files-actions-delete-trigger'
   },
@@ -134,6 +134,7 @@ const fileActions = {
   'text-editor': {
     handler: jest.fn(),
     label: () => 'Open in Text Editor',
+    componentType: 'button',
     class: 'oc-files-actions-text-editor-trigger',
     selector: '.oc-files-actions-text-editor-trigger',
     opensInNewWindow: true
@@ -141,6 +142,7 @@ const fileActions = {
   'draw-io': {
     handler: jest.fn(),
     label: () => 'Open in DrawIO',
+    componentType: 'button',
     class: 'oc-files-actions-draw-io-trigger',
     selector: '.oc-files-actions-draw-io-trigger',
     opensInNewWindow: true
@@ -148,6 +150,7 @@ const fileActions = {
   preview: {
     handler: jest.fn(),
     label: () => 'Open in Preview',
+    componentType: 'button',
     class: 'oc-files-actions-preview-trigger',
     selector: '.oc-files-actions-preview-trigger'
   },

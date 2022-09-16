@@ -28,7 +28,7 @@ export default {
 
             return !!resources[0].spaceReadmeData
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-edit-readme-content-trigger'
         }
       ]

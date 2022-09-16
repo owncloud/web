@@ -1,0 +1,6 @@
+Bugfix: Load only supported thumbnails (configurable)
+
+We've fixed a bug where web was trying to load thumbnails for files that are not supported.
+Due to configurable values, we avoid unnecessary requests.
+
+https://github.com/owncloud/web/pull/7474

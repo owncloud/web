@@ -1,6 +1,7 @@
-import { mapActions } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -22,24 +23,24 @@ export default {
             // return hardcoded `true` in all cases once we have them.
             return resources.length === 1
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-actions-trigger'
         }
       ]
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebarWithPanel: 'openWithPanel' }),
-
-    async $_showActions_trigger() {
-      // we don't have details in the trashbin, yet.
-      // return hardcoded `actions-item` in all cases once we have them.
-      await this.openSidebarWithPanel(
+    $_showActions_trigger() {
+      // we don't have details in the trashbin, yet. the actions panel is the default
+      // panel at the moment, so we need to use `null` as panel name for trashbins.
+      // unconditionally return hardcoded `actions-item` once we have a dedicated
+      // details panel in trashbins.
+      const panelName =
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
-          isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
           ? null
           : 'actions-item'
-      )
+      bus.publish(SideBarEventTopics.openWithPanel, panelName)
     }
   }
 }

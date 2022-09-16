@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex">
-      <h3 class="oc-text-bold oc-m-rm oc-text-initial" v-text="linksHeading" />
+      <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="linksHeading" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
     <p
@@ -71,7 +71,7 @@
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
       <div class="oc-flex">
-        <h3 class="oc-text-bold oc-m-rm oc-text-initial">
+        <h3 class="oc-text-bold oc-m-rm oc-text-medium">
           <span v-text="indirectLinksHeading" />
         </h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
@@ -137,6 +137,7 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
+  inject: ['incomingParentShare'],
   setup() {
     const store = useStore()
 
@@ -149,8 +150,8 @@ export default defineComponent({
       hasSpaces: useCapabilitySpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
-      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit,
-      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias,
+      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
+      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
       indirectLinkListCollapsed,
       linkListCollapsed
     }
@@ -180,11 +181,6 @@ export default defineComponent({
 
     quicklink() {
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
-    },
-
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['']?.find((s) => s.incoming)
     },
 
     expirationDate() {
@@ -218,11 +214,12 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.highlightedFile.isFolder,
-          this.hasPublicLinkEditing
+          this.hasPublicLinkEditing,
+          this.hasPublicLinkAliasSupport
         )
       }
 
@@ -322,9 +319,6 @@ export default defineComponent({
         return []
       }
 
-      // remove root entry
-      parentPaths.pop()
-
       parentPaths.forEach((parentPath) => {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
@@ -406,7 +400,7 @@ export default defineComponent({
       const paramsToCreate = this.getParamsForLink(link)
 
       if (this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+        showQuickLinkPasswordModal({ store: this.$store }, (newPassword) => {
           this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
         })
       } else {
@@ -418,7 +412,7 @@ export default defineComponent({
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ store: this.$store }, async (newPassword) => {
+        showQuickLinkPasswordModal({ store: this.$store }, (newPassword) => {
           this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
         })
       } else {

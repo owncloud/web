@@ -61,6 +61,8 @@ export abstract class SharePermissions {
 
   static readonly share = new SharePermission('share', SharePermissionBit.Share, $gettext('Share'))
 
+  static readonly denied = new SharePermission('denied', 64, $gettext('Deny'))
+
   static permissionsToBitmask(permissions: SharePermission[]): number {
     return (permissions || []).reduce((b: number, p: SharePermission) => b | p.bit, 0)
   }

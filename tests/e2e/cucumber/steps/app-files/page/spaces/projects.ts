@@ -79,7 +79,7 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     for (const info of stepTable.hashes()) {
       await spacesObject.addMembers({
-        users: [this.usersEnvironment.getUser({ key: info.user })],
+        recipients: [this.usersEnvironment.getUser({ key: info.user })],
         role: info.role
       })
     }
@@ -151,5 +151,17 @@ When(
         role: info.role
       })
     }
+  }
+)
+
+When(
+  '{string} as project manager removes their own access to the project space',
+  async function (this: World, stepUser: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    await spacesObject.removeAccessToMember({
+      users: [this.usersEnvironment.getUser({ key: stepUser })],
+      removeOwnSpaceAccess: true
+    })
   }
 )

@@ -66,11 +66,11 @@ export default defineComponent({
         return LayoutPlain
       }
 
-      if (isUserContext(this.$router, this.$route) && !this.isUserContextReady) {
-        return LayoutLoading
+      if (isPublicLinkContext(this.$router, this.$route)) {
+        return this.isPublicLinkContextReady ? LayoutApplication : LayoutLoading
       }
-      if (isPublicLinkContext(this.$router, this.$route) && !this.isPublicLinkContextReady) {
-        return LayoutLoading
+      if (isUserContext(this.$router, this.$route)) {
+        return this.isUserContextReady ? LayoutApplication : LayoutLoading
       }
 
       return LayoutApplication
@@ -123,6 +123,9 @@ export default defineComponent({
           } else {
             languageCode = language
           }
+        }
+        if (languageCode?.indexOf('_')) {
+          languageCode = languageCode.split('_')[0]
         }
         if (languageCode) {
           this.$language.current = languageCode

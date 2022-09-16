@@ -32,8 +32,8 @@
         v-else
         class="upload-info-label"
         :class="{
-          'upload-info-danger': errors.length && !uploadsCancelled,
-          'upload-info-success': !errors.length && !uploadsCancelled
+          'upload-info-danger': Object.keys(errors).length && !uploadsCancelled,
+          'upload-info-success': !Object.keys(errors).length && !uploadsCancelled
         }"
       >
         {{ uploadingLabel }}
@@ -46,7 +46,7 @@
           v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
         ></oc-button>
         <oc-button
-          v-if="!runningUploads && errors.length"
+          v-if="!runningUploads && Object.keys(errors).length"
           v-oc-tooltip="$gettext('Retry all failed uploads')"
           class="oc-ml-s"
           appearance="raw"
@@ -90,43 +90,50 @@
         <li
           v-for="(item, idx) in uploads"
           :key="idx"
-          class="oc-flex oc-flex-middle"
           :class="{
             'oc-mb-s': idx !== Object.keys(uploads).length - 1
           }"
         >
-          <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
-          <oc-icon
-            v-else-if="item.status === 'success'"
-            name="check"
-            variation="success"
-            size="small"
-          />
-          <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
-          <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
-          <div v-else class="oc-flex"><oc-spinner size="small" /></div>
-          <oc-resource
-            v-if="displayFileAsResource(item)"
-            :key="item.path"
-            class="oc-ml-s"
-            :resource="item"
-            :is-path-displayed="true"
-            :is-thumbnail-displayed="displayThumbnails"
-            :is-resource-clickable="isResourceClickable(item)"
-            :parent-folder-name-default="defaultParentFolderName(item)"
-            :folder-link="folderLink(item)"
-            :parent-folder-link="parentFolderLink(item)"
-          />
-          <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
-            <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
-            <oc-resource-name
-              :name="item.name"
-              :extension="item.extension"
-              :type="item.type"
-              full-path=""
-              :is-path-displayed="false"
+          <span class="oc-flex oc-flex-middle">
+            <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
+            <oc-icon
+              v-else-if="item.status === 'success'"
+              name="check"
+              variation="success"
+              size="small"
             />
+            <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
+            <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
+            <div v-else class="oc-flex"><oc-spinner size="small" /></div>
+            <oc-resource
+              v-if="displayFileAsResource(item)"
+              :key="item.path"
+              class="oc-ml-s"
+              :resource="item"
+              :is-path-displayed="true"
+              :is-thumbnail-displayed="displayThumbnails"
+              :is-resource-clickable="isResourceClickable(item)"
+              :parent-folder-name-default="defaultParentFolderName(item)"
+              :folder-link="folderLink(item)"
+              :parent-folder-link="parentFolderLink(item)"
+            />
+            <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
+              <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
+              <oc-resource-name
+                :name="item.name"
+                :extension="item.extension"
+                :type="item.type"
+                full-path=""
+                :is-path-displayed="false"
+              />
+            </span>
           </span>
+          <span
+            v-if="getUploadItemMessage(item)"
+            class="upload-info-message oc-ml-xs oc-text-small"
+            :class="getUploadItemClass(item)"
+            v-text="getUploadItemMessage(item)"
+          ></span>
         </li>
       </ul>
     </div>
@@ -148,7 +155,7 @@ export default {
     showInfo: false, // show the overlay?
     infoExpanded: false, // show the info including all uploads?
     uploads: {}, // uploads that are being displayed via "infoExpanded"
-    errors: [], // all failed files
+    errors: {}, // all failed files
     successful: [], // all successful files
     filesInProgressCount: 0, // files (not folders!) that are being processed currently
     totalProgress: 0, // current uploads progress (0-100)
@@ -179,7 +186,7 @@ export default {
       if (this.uploadsCancelled) {
         return this.$gettext('Upload cancelled')
       }
-      if (this.errors.length) {
+      if (Object.keys(this.errors).length) {
         return this.$gettext('Upload failed')
       }
       if (!this.runningUploads) {
@@ -188,15 +195,15 @@ export default {
       return this.$gettext('Preparing upload...')
     },
     uploadingLabel() {
-      if (this.errors.length) {
-        const count = this.successful.length + this.errors.length
+      if (Object.keys(this.errors).length) {
+        const count = this.successful.length + Object.keys(this.errors).length
         return this.$gettextInterpolate(
           this.$ngettext(
             '%{ errors } of %{ uploads } item failed',
             '%{ errors } of %{ uploads } items failed',
             count
           ),
-          { uploads: count, errors: this.errors.length }
+          { uploads: count, errors: Object.keys(this.errors).length }
         )
       }
       return this.$gettextInterpolate(
@@ -290,8 +297,8 @@ export default {
 
       this.remainingTime = this.getRemainingTime(remainingMilliseconds)
     })
-    this.$uppyService.subscribe('uploadError', (file) => {
-      if (this.errors.includes(file.meta.uploadId)) {
+    this.$uppyService.subscribe('uploadError', ({ file, error }) => {
+      if (this.errors[file.meta.uploadId]) {
         return
       }
 
@@ -308,7 +315,7 @@ export default {
 
       this.uploads[file.meta.uploadId].targetRoute = file.meta.route
       this.uploads[file.meta.uploadId].status = 'error'
-      this.errors.push(file.meta.uploadId)
+      this.errors[file.meta.uploadId] = error
       this.filesInProgressCount -= 1
 
       if (file.meta.topLevelFolderId) {
@@ -412,7 +419,7 @@ export default {
     cleanOverlay() {
       this.uploadsCancelled = false
       this.uploads = {}
-      this.errors = []
+      this.errors = {}
       this.successful = []
       this.filesInProgressCount = 0
       this.runningUploads = 0
@@ -504,9 +511,9 @@ export default {
       this.infoExpanded = !this.infoExpanded
     },
     retryUploads() {
-      this.filesInProgressCount += this.errors.length
+      this.filesInProgressCount += Object.keys(this.errors).length
       this.runningUploads += 1
-      for (const fileID of this.errors) {
+      for (const fileID of Object.keys(this.errors)) {
         this.uploads[fileID].status = undefined
 
         const topLevelFolderId = this.uploads[fileID].meta.topLevelFolderId
@@ -515,7 +522,7 @@ export default {
           this.uploads[topLevelFolderId].errorCount = 0
         }
       }
-      this.errors = []
+      this.errors = {}
       this.$uppyService.retryAllUploads()
     },
     togglePauseUploads() {
@@ -541,6 +548,30 @@ export default {
       for (const item of runningUploads) {
         this.uploads[item.meta.uploadId].status = 'cancelled'
       }
+    },
+    getUploadItemMessage(item) {
+      const error = this.errors[item.meta.uploadId]
+
+      if (error) {
+        // TODO: Remove code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
+        let errorMessage = this.$gettext('Unknown error')
+        if (error.message.includes('response code: 507')) {
+          errorMessage = this.$gettext('Quota exceeded')
+        }
+        return errorMessage
+
+        /**
+         * TODO: Enable code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
+        switch (error?.originalResponse?.getStatus()) {
+          case 507:
+            return this.$gettext('Quota exceeded')
+          default:
+            return this.$gettext('Unknown error')
+        }**/
+      }
+    },
+    getUploadItemClass(item) {
+      return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
     }
   }
 }
@@ -550,7 +581,6 @@ export default {
 #upload-info {
   background-color: var(--oc-color-background-secondary);
   width: 400px;
-  z-index: 4;
 
   @media (max-width: 640px) {
     margin: 0 auto;

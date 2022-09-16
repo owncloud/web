@@ -1,131 +1,135 @@
 <template>
-  <div class="space-overview">
+  <div class="space-overview oc-flex">
     <keyboard-actions :paginated-resources="paginatedResources" />
-    <app-bar
-      :has-bulk-actions="true"
-      :breadcrumbs="breadcrumbs"
-      :breadcrumbs-context-actions-items="[currentFolder]"
-      :show-actions-on-selection="true"
-    >
-      <template #actions>
-        <create-and-upload />
-      </template>
-    </app-bar>
-    <app-loading-spinner v-if="areResourcesLoading" />
-    <template v-else>
-      <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
-      <div v-else-if="isSpaceRoot">
-        <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': imageContent && !imageExpanded }">
-          <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
-            <img
-              :class="{ expanded: imageExpanded }"
-              class="space-overview-image oc-cursor-pointer"
-              alt=""
-              :src="imageContent"
-              @click="toggleImageExpanded"
-            />
-          </div>
-          <div :class="{ 'oc-width-3-4': imageContent && !imageExpanded }">
-            <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
-              <div class="oc-flex oc-flex-middle">
-                <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
-                <oc-button
-                  :id="`space-context-btn`"
-                  v-oc-tooltip="$gettext('Show context menu')"
-                  :aria-label="$gettext('Show context menu')"
-                  appearance="raw"
-                  class="oc-ml-s"
-                >
-                  <oc-icon name="more-2" />
-                </oc-button>
-                <oc-drop
-                  :drop-id="`space-context-drop`"
-                  :toggle="`#space-context-btn`"
-                  mode="click"
-                  close-on-click
-                  :options="{ delayHide: 0 }"
-                  padding-size="small"
-                  position="right-start"
-                >
-                  <space-context-actions :items="[space]" />
-                </oc-drop>
-              </div>
-              <oc-button
-                v-if="memberCount"
-                :aria-label="$gettext('Open context menu and show members')"
-                appearance="raw"
-                @click="openSidebarSharePanel"
-              >
-                <oc-icon name="group" fill-type="line" size="small" />
-                <span
-                  class="space-overview-people-count oc-text-small"
-                  v-text="memberCountString"
-                ></span>
-              </oc-button>
+    <files-view-wrapper>
+      <app-bar
+        :has-bulk-actions="true"
+        :breadcrumbs="breadcrumbs"
+        :breadcrumbs-context-actions-items="[currentFolder]"
+        :show-actions-on-selection="true"
+        :side-bar-open="sideBarOpen"
+      >
+        <template #actions="{ limitedScreenSpace }">
+          <create-and-upload :limited-screen-space="limitedScreenSpace" />
+        </template>
+      </app-bar>
+      <app-loading-spinner v-if="areResourcesLoading" />
+      <template v-else>
+        <not-found-message v-if="!space.id" class="space-not-found oc-height-1-1" />
+        <div v-else-if="isSpaceRoot">
+          <div class="oc-px-m oc-mt-m" :class="{ 'oc-flex': imageContent && !imageExpanded }">
+            <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
+              <img
+                :class="{ expanded: imageExpanded }"
+                class="space-overview-image oc-cursor-pointer"
+                alt=""
+                :src="imageContent"
+                @click="toggleImageExpanded"
+              />
             </div>
-            <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
-            <div>
-              <!-- eslint-disable vue/no-v-html -->
-              <div
-                ref="markdownContainer"
-                class="markdown-container"
-                v-html="markdownContent"
-              ></div>
-              <!-- eslint-enable -->
-              <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
-                <oc-button appearance="raw" @click="toggleCollapseMarkdown">
-                  <oc-icon :name="markdownCollapseIcon" />
-                  <span>{{ markdownCollapseText }}</span>
+            <div :class="{ 'oc-width-3-4': imageContent && !imageExpanded }">
+              <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
+                <div class="oc-flex oc-flex-middle">
+                  <h1 class="space-overview-name oc-text-truncate">{{ space.name }}</h1>
+                  <oc-button
+                    :id="`space-context-btn`"
+                    v-oc-tooltip="$gettext('Show context menu')"
+                    :aria-label="$gettext('Show context menu')"
+                    appearance="raw"
+                    class="oc-ml-s"
+                  >
+                    <oc-icon name="more-2" />
+                  </oc-button>
+                  <oc-drop
+                    :drop-id="`space-context-drop`"
+                    :toggle="`#space-context-btn`"
+                    mode="click"
+                    close-on-click
+                    :options="{ delayHide: 0 }"
+                    padding-size="small"
+                    position="right-start"
+                  >
+                    <space-context-actions :items="[space]" />
+                  </oc-drop>
+                </div>
+                <oc-button
+                  v-if="memberCount"
+                  :aria-label="$gettext('Open context menu and show members')"
+                  appearance="raw"
+                  @click="openSidebarSharePanel"
+                >
+                  <oc-icon name="group" fill-type="line" size="small" />
+                  <span
+                    class="space-overview-people-count oc-text-small"
+                    v-text="memberCountString"
+                  ></span>
                 </oc-button>
+              </div>
+              <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
+              <div>
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  ref="markdownContainer"
+                  class="markdown-container"
+                  v-html="markdownContent"
+                ></div>
+                <!-- eslint-enable -->
+                <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
+                  <oc-button appearance="raw" @click="toggleCollapseMarkdown">
+                    <oc-icon :name="markdownCollapseIcon" />
+                    <span>{{ markdownCollapseText }}</span>
+                  </oc-button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
-        <template #message>
-          <p v-translate class="oc-text-muted">No resources found</p>
-        </template>
-      </no-content-message>
-      <resource-table
-        v-else
-        id="files-spaces-table"
-        v-model="selectedResourcesIds"
-        class="files-table oc-mt-xl"
-        :resources="paginatedResources"
-        :target-route="resourceTargetLocation"
-        :sort-by="sortBy"
-        :sort-dir="sortDir"
-        :drag-drop="true"
-        @fileDropped="fileDropped"
-        @sort="handleSort"
-        @fileClick="$_fileActions_triggerDefaultAction"
-        @rowMounted="rowMounted"
-      >
-        <template #quickActions="{ resource }">
-          <quick-actions
-            :class="resource.preview"
-            class="oc-visible@s"
-            :item="resource"
-            :actions="app.quickActions"
-          />
-        </template>
-        <template #contextMenu="{ resource }">
-          <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-        </template>
-        <template #footer>
-          <pagination :pages="paginationPages" :current-page="paginationPage" />
-          <list-info
-            v-if="paginatedResources.length > 0"
-            class="oc-width-1-1 oc-my-s"
-            :files="totalFilesCount.files"
-            :folders="totalFilesCount.folders"
-            :size="totalFilesSize"
-          />
-        </template>
-      </resource-table>
-    </template>
+        <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
+          <template #message>
+            <p v-translate class="oc-text-muted">No resources found</p>
+          </template>
+        </no-content-message>
+        <resource-table
+          v-else
+          id="files-spaces-table"
+          v-model="selectedResourcesIds"
+          class="files-table oc-mt-xl"
+          :resources="paginatedResources"
+          :target-route="resourceTargetLocation"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
+          :drag-drop="true"
+          @fileDropped="fileDropped"
+          @sort="handleSort"
+          @fileClick="$_fileActions_triggerDefaultAction"
+          @rowMounted="rowMounted"
+        >
+          <template #quickActions="{ resource }">
+            <quick-actions
+              :class="resource.preview"
+              class="oc-visible@s"
+              :item="resource"
+              :actions="app.quickActions"
+            />
+          </template>
+          <template #contextMenu="{ resource }">
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+          </template>
+          <template #footer>
+            <pagination :pages="paginationPages" :current-page="paginationPage" />
+            <list-info
+              v-if="paginatedResources.length > 0"
+              class="oc-width-1-1 oc-my-s"
+              :files="totalFilesCount.files"
+              :folders="totalFilesCount.folders"
+              :size="totalFilesSize"
+            />
+          </template>
+        </resource-table>
+      </template>
+    </files-view-wrapper>
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -161,11 +165,16 @@ import KeyboardActions from '../../components/FilesList/KeyboardActions.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import SideBar from '../../components/SideBar/SideBar.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    FilesViewWrapper,
+    SideBar,
     AppBar,
     CreateAndUpload,
     NoContentMessage,
@@ -368,9 +377,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
-    ...mapActions('Files/sidebar', {
-      openSidebarWithPanel: 'openWithPanel'
-    }),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',
@@ -448,7 +454,7 @@ export default defineComponent({
     },
     openSidebarSharePanel() {
       this.selectedResources = [this.space]
-      this.openSidebarWithPanel('space-share-item')
+      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 })

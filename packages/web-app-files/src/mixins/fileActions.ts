@@ -17,6 +17,7 @@ import Rename from './actions/rename'
 import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
+import isSearchActive from './helpers/isSearchActive'
 
 const actionsMixins = [
   'navigate',
@@ -49,7 +50,8 @@ export default {
     Navigate,
     Rename,
     Restore,
-    ShowEditTags
+    ShowEditTags,
+    isSearchActive
   ],
   computed: {
     ...mapState(['apps']),
@@ -63,12 +65,6 @@ export default {
     },
 
     $_fileActions_editorActions() {
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-      ) {
-        return []
-      }
       return this.apps.fileEditors
         .map((editor) => {
           return {
@@ -101,8 +97,11 @@ export default {
               }
 
               if (
-                isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-                resources[0].status !== ShareStatus.accepted
+                !this.$_isSearchActive &&
+                (isLocationTrashActive(this.$router, 'files-trash-personal') ||
+                  isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+                  (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+                    resources[0].status !== ShareStatus.accepted))
               ) {
                 return false
               }
@@ -122,7 +121,7 @@ export default {
               return false
             },
             canBeDefault: editor.canBeDefault,
-            componentType: 'oc-button',
+            componentType: 'button',
             class: `oc-files-actions-${kebabCase(
               this.apps.meta[editor.app].name
             ).toLowerCase()}-trigger`
@@ -266,7 +265,7 @@ export default {
           name: app.name,
           icon: app.icon,
           img: app.img,
-          componentType: 'oc-button',
+          componentType: 'button',
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,

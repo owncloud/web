@@ -1,19 +1,30 @@
 <template>
   <SideBar
+    v-if="open"
     ref="sidebar"
+    class="files-side-bar"
+    tabindex="-1"
+    :open="open"
+    :active-panel="activePanel"
     :available-panels="availablePanels"
-    :sidebar-accordions-warning-message="sidebarAccordionsWarningMessage"
+    :warning-message="warningMessage"
     :is-content-displayed="isContentDisplayed"
     :loading="loading"
     :is-header-compact="isSingleResource"
     v-bind="$attrs"
+    data-custom-key-bindings="true"
+    @beforeDestroy="destroySideBar"
+    @mounted="focusSideBar"
+    @fileChanged="focusSideBar"
+    @selectPanel="setActiveSideBarPanel"
+    @close="closeSideBar"
     v-on="$listeners"
   >
     <template #header>
       <file-info
         v-if="isSingleResource && !highlightedFileIsSpace"
         class="sidebar-panel__file_info"
-        :is-content-displayed="isContentDisplayed"
+        :is-sub-panel-active="!!activePanel"
       />
       <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
     </template>
@@ -21,11 +32,13 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
-import { DavProperties } from 'web-pkg/src/constants'
-import SideBar from 'web-pkg/src/components/sidebar/SideBar.vue'
-import { Panel } from 'web-pkg/src/components/sidebar/'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
+import FileInfo from './FileInfo.vue'
+import SpaceInfo from './SpaceInfo.vue'
+import { Panel } from 'web-pkg/src/components/sideBar/'
 
+import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import {
   isLocationPublicActive,
@@ -34,29 +47,69 @@ import {
   isLocationTrashActive
 } from '../../router'
 import { computed, defineComponent } from '@vue/composition-api'
-
-import FileInfo from './FileInfo.vue'
-import SpaceInfo from './SpaceInfo.vue'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../../composables/sideBar'
+import isEqual from 'lodash-es/isEqual'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
 
   provide() {
     return {
-      displayedItem: computed(() => this.selectedFile)
+      displayedItem: computed(() => this.selectedFile),
+      activePanel: computed(() => this.activePanel)
+    }
+  },
+
+  props: {
+    open: {
+      type: Boolean,
+      required: true
+    },
+    activePanel: {
+      type: String,
+      default: null
     }
   },
 
   setup() {
     const store = useStore()
+    const { graphClient } = useGraphClient()
+
+    const closeSideBar = () => {
+      bus.publish(SideBarEventTopics.close)
+    }
+    const setActiveSideBarPanel = (panelName) => {
+      bus.publish(SideBarEventTopics.setActivePanel, panelName)
+    }
+
+    const focusSideBar = (component, event) => {
+      component.focus({
+        from: document.activeElement,
+        to: component.sidebar?.$el,
+        revert: event === 'beforeDestroy'
+      })
+    }
+
+    const destroySideBar = (component, event) => {
+      focusSideBar(component, event)
+      bus.publish(SideBarEventTopics.close)
+    }
+
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store })
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      setActiveSideBarPanel,
+      closeSideBar,
+      destroySideBar,
+      focusSideBar,
+      graphClient
     }
   },
 
@@ -70,9 +123,8 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
-    ...mapState('Files/sidebar', { sidebarActivePanel: 'activePanel' }),
     ...mapState(['user']),
     availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
@@ -106,7 +158,7 @@ export default defineComponent({
         ? this.isShareAccepted
         : true
     },
-    sidebarAccordionsWarningMessage() {
+    warningMessage() {
       if (!this.isShareAccepted) {
         return this.$gettext('Please, accept this share first to display available actions')
       }
@@ -150,6 +202,10 @@ export default defineComponent({
         return
       }
 
+      if (oldFile && isEqual(newFile, oldFile)) {
+        return
+      }
+
       this.fetchFileInfo()
     },
 
@@ -167,9 +223,15 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions('Files', [
+      'loadSharesTree',
+      'loadCurrentFileOutgoingShares',
+      'loadIncomingShares'
+    ]),
+
     async fetchFileInfo() {
       if (!this.highlightedFile) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = {}
         return
       }
 
@@ -178,7 +240,8 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.selectedFile = this.highlightedFile
+        this.loadShares()
+        this.selectedFile = { ...this.highlightedFile }
         return
       }
 
@@ -196,42 +259,65 @@ export default defineComponent({
             this.highlightedFile.webDavPath,
             DavProperties.Default
           )
-          if (
-            this.hasShareJail &&
-            (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-              (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-                this.highlightedFile.path === '/'))
-          ) {
-            item.name = this.highlightedFile.name
-          }
         }
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
+        this.loadShares()
       } catch (error) {
-        this.selectedFile = this.highlightedFile
+        this.selectedFile = { ...this.highlightedFile }
         console.error(error)
       }
       this.loading = false
+    },
+
+    loadShares() {
+      this.loadCurrentFileOutgoingShares({
+        client: this.$client,
+        graphClient: this.graphClient,
+        path: this.highlightedFile.path,
+        storageId: this.highlightedFile.fileId,
+        resource: this.highlightedFile
+      })
+      this.loadIncomingShares({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        storageId: this.highlightedFile.fileId
+      })
+
+      // shares tree is already being loaded for the current folder (except for root)
+      if (!this.currentFolder || this.currentFolder.path === '/') {
+        this.loadSharesTree({
+          client: this.$client,
+          path: this.highlightedFile.path === '' ? '/' : this.highlightedFile.path,
+          $gettext: this.$gettext,
+          storageId: this.highlightedFile.fileId
+        })
+      }
     }
   }
 })
 </script>
 
 <style lang="scss">
-.sidebar-panel {
-  &__file_info,
-  &__space_info {
-    background-color: var(--oc-color-background-default);
-    padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
-  }
-}
+.files-side-bar {
+  z-index: 3;
 
-._clipboard-success-animation {
-  animation-name: _clipboard-success-animation;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
+  .sidebar-panel {
+    &__file_info,
+    &__space_info {
+      background-color: var(--oc-color-background-default);
+      padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
+    }
+  }
+
+  ._clipboard-success-animation {
+    animation-name: _clipboard-success-animation;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
 }
 
 @keyframes _clipboard-success-animation {

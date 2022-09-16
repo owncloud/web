@@ -1,0 +1,6 @@
+Bugfix: Expiration date picker with long language codes
+
+We've fixed a bug where the expiration date picker in the sharing sidebar wouldn't open if the user selected a language with long language code, e.g. de_DE.
+
+https://github.com/owncloud/web/issues/7622
+https://github.com/owncloud/web/pull/7623

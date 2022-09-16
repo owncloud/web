@@ -1,6 +1,8 @@
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { bus } from 'web-pkg/src/instance'
+import { SideBarEventTopics } from '../composables/sideBar'
 
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
@@ -66,9 +68,6 @@ const shareTypesIndirect = (path, sharesTree) => {
     return []
   }
 
-  // remove root entry
-  parentPaths.pop()
-
   const shareTypes = {}
 
   parentPaths.forEach((parentPath) => {
@@ -98,8 +97,8 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       icon: 'group',
       target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
-      handler: async (resource, panel) => {
-        await indicatorHandler(resource, panel, 'peopleShares')
+      handler: (resource, panel) => {
+        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
       }
     },
     {
@@ -110,15 +109,11 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       icon: 'link',
       target: 'sharing-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
-      handler: async (resource, panel) => {
-        await indicatorHandler(resource, panel, 'linkShares')
+      handler: (resource, panel) => {
+        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
       }
     }
   ]
 
   return indicators.filter((indicator) => indicator.visible)
-}
-
-const indicatorHandler = async (resource, panel, ref) => {
-  await window.Vue.$store.dispatch('Files/sidebar/openWithPanel', `${panel}#${ref}`)
 }

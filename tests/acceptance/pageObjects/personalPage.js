@@ -239,11 +239,12 @@ module.exports = {
     },
     confirmFileOverwrite: async function () {
       await this.waitForAnimationToFinish() // wait for transition on the modal to finish
-        .waitForElementVisible('@dialogConfirmBtnEnabled')
-        .click('@dialogConfirmBtnEnabled')
+        .waitForElementVisible('@dialogConfirmBtnSecondaryEnabled')
+        .click('@dialogConfirmBtnSecondaryEnabled')
         .waitForElementNotPresent('@dialog')
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementVisible('@fileUploadStatus')
+        .closeFileFolderUploadProgress()
       return this
     },
     checkForButtonDisabled: function () {
@@ -396,6 +397,9 @@ module.exports = {
     dialogConfirmBtnEnabled: {
       selector: '.oc-modal-body-actions-confirm:enabled'
     },
+    dialogConfirmBtnSecondaryEnabled: {
+      selector: '.oc-modal-body-actions-secondary:enabled'
+    },
     dialogConfirmBtnDisabled: {
       selector: '.oc-modal-body-actions-confirm:disabled'
     },
@@ -406,7 +410,7 @@ module.exports = {
       selector: '.oc-modal-body-input .oc-text-input'
     },
     clearSelectionBtn: {
-      selector: '#files-clear-selection'
+      selector: '.oc-files-actions-clear-selection-trigger'
     },
     dialogBoxInputTextInRed: {
       selector: '.oc-text-input-danger'

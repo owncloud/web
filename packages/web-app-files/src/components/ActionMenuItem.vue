@@ -1,7 +1,8 @@
 <template>
   <li>
-    <component
-      :is="action.componentType"
+    <oc-button
+      v-oc-tooltip="showTooltip || action.hideLabel ? action.label(filterParams) : ''"
+      :type="action.componentType"
       v-bind="getComponentProps(action, items)"
       :class="[action.class, 'action-menu-item']"
       data-testid="action-handler"
@@ -29,9 +30,12 @@
         :fill-type="action.iconFillType || 'line'"
         size="medium"
       />
-      <span class="oc-files-context-action-label" data-testid="action-label">{{
-        action.label(filterParams)
-      }}</span>
+      <span
+        v-if="!action.hideLabel"
+        class="oc-files-context-action-label"
+        data-testid="action-label"
+        >{{ action.label(filterParams) }}</span
+      >
       <span
         v-if="action.shortcut && shortcutHint"
         class="oc-files-context-action-shortcut"
@@ -43,7 +47,7 @@
         class="oc-invisible-sr"
         v-text="$gettext('(Opens in new window)')"
       />
-    </component>
+    </oc-button>
   </li>
 </template>
 
@@ -67,6 +71,11 @@ export default {
       type: Boolean,
       default: true,
       required: false
+    },
+    showTooltip: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   computed: {
@@ -78,21 +87,24 @@ export default {
   },
   methods: {
     getComponentProps(action, resources) {
-      if (action.componentType === 'router-link' && action.route) {
-        return {
-          to: action.route({ resources })
-        }
-      }
-
-      return {
+      const props = {
         appearance: this.appearance,
         ...(action.isDisabled && { disabled: action.isDisabled() }),
         ...(action.variation && { variation: action.variation })
       }
+
+      if (action.componentType === 'router-link' && action.route) {
+        return {
+          ...props,
+          to: action.route({ resources })
+        }
+      }
+
+      return props
     },
 
     getComponentListeners(action, resources) {
-      if (typeof action.handler !== 'function' || action.componentType !== 'oc-button') {
+      if (typeof action.handler !== 'function' || action.componentType !== 'button') {
         return {}
       }
 
@@ -122,7 +134,7 @@ export default {
 }
 .oc-files-context-action-shortcut {
   justify-content: right !important;
-  font-size: 0.85rem;
+  font-size: var(--oc-font-size-small);
   font-weight: bold !important;
   opacity: 0.7;
 }

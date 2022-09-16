@@ -54,8 +54,7 @@ describe('account page', () => {
             server: 'http://server/address/',
             isAccountEditingEnabled: true
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editUrlButton).toMatchSnapshot()
@@ -66,8 +65,7 @@ describe('account page', () => {
             server: 'http://server/address/',
             isAccountEditingEnabled: false
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           expect(editUrlButton.exists()).toBeFalsy()
         })
@@ -78,8 +76,7 @@ describe('account page', () => {
             isAccountEditingEnabled: false,
             getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }])
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editRouteButton).toMatchSnapshot()
         })
@@ -96,31 +93,23 @@ describe('account page', () => {
           email: 'some-email'
         }
       })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       const accountPageInfo = wrapper.find(selectors.accountPageInfo)
       expect(accountPageInfo).toMatchSnapshot()
     })
 
     describe('group membership', () => {
-      it('shows loading indicator when in loading state', () => {
-        const wrapper = getWrapper()
-        const groupInfoLoading = wrapper.find(selectors.loaderStub)
-        expect(groupInfoLoading.exists()).toBeTruthy()
-      })
       it('displays message if not member of any groups', async () => {
-        const store = getStore()
-        const wrapper = getWrapper(store)
-        await wrapper.setData({ loadingGroups: false })
+        const store = getStore({ user: { groups: [] } })
+        const wrapper = getWrapper({ store })
 
         const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
         expect(groupNamesEmpty.exists()).toBeTruthy()
       })
       it('displays group names', async () => {
-        const store = getStore()
-        const wrapper = getWrapper(store)
-        await wrapper.setData({ loadingGroups: false })
-        await wrapper.setData({ groups: ['one', 'two', 'three'] })
+        const store = getStore({ user: { groups: ['one', 'two', 'three'] } })
+        const wrapper = getWrapper({ store })
 
         const groupNames = wrapper.find(selectors.groupNames)
         expect(groupNames).toMatchSnapshot()
@@ -134,7 +123,7 @@ describe('account page', () => {
         return Promise.resolve()
       })
       const store = getStore({ server: 'https://example.com' })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
@@ -148,7 +137,7 @@ describe('account page', () => {
         return Promise.reject(new Error())
       })
       const store = getStore({ server: 'https://example.com' })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       jest.spyOn(console, 'error').mockImplementation(() => {})
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -162,18 +151,18 @@ describe('account page', () => {
   describe('computed method "isChangePasswordEnabled"', () => {
     it('should be true if capability is enabled', () => {
       const store = getStore({ capabilities: { spaces: { enabled: true } } })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
       expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
     })
     it('should be false if capability is not enabled', () => {
       const store = getStore()
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
       expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
     })
   })
 })
 
-function getWrapper(store = getStore()) {
+function getWrapper({ store = getStore(), data = {} } = {}) {
   const component = {
     ...account,
     mounted: jest.fn()
@@ -184,10 +173,10 @@ function getWrapper(store = getStore()) {
       $route
     },
     stubs: {
-      'oc-spinner': true,
       'oc-button': true,
       'oc-icon': true
     },
+    data: () => data,
     store
   }
   return shallowMount(component, opts)
@@ -208,7 +197,12 @@ function getStore({
       setModalInputErrorMessage: jest.fn()
     },
     getters: {
-      user: () => user,
+      user: () => {
+        return {
+          groups: [],
+          ...user
+        }
+      },
       configuration: () => ({
         server: server
       }),

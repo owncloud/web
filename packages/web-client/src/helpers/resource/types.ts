@@ -22,6 +22,8 @@ export interface Resource {
   starred?: boolean
   etag?: string
   sharePermissions?: number
+  shareId?: string
+  shareRoot?: string
   shareTypes?: number[]
   privateLink?: string
   tags?: string[]
@@ -34,6 +36,7 @@ export interface Resource {
   canBeDeleted?(): boolean
   canBeRestored?(): boolean
   canEditTags?(): boolean
+  canDeny?(): boolean
 
   isReceivedShare?(): boolean
   isMounted?(): boolean
