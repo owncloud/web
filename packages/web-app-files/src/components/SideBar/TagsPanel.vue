@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div class="oc-background-highlight oc-p-m">
+  <div id="tags-panel">
+    <div id="tags-form" class="oc-background-highlight oc-p-m">
       <oc-loader v-if="loadAllTagsTask.isRunning" />
       <oc-select
         v-else
         ref="tagSelect"
+        class="oc-mb-s"
         v-model="editAssignedTags"
         multiple
         :options="allTags"
@@ -41,14 +42,14 @@
           </div>
         </template>
       </oc-select>
+      <compare-save-dialog
+        class="edit-compare-save-dialog oc-mb-l"
+        :original-object="{ tags: resource.tags }"
+        :compare-object="{ tags: editAssignedTags }"
+        @revert="revertChanges"
+        @confirm="save"
+      ></compare-save-dialog>
     </div>
-    <compare-save-dialog
-      class="edit-compare-save-dialog"
-      :original-object="{ tags: resource.tags }"
-      :compare-object="{ tags: editAssignedTags }"
-      @revert="revertChanges"
-      @confirm="save"
-    ></compare-save-dialog>
   </div>
 </template>
 
@@ -143,4 +144,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#tags-panel {
+  #tags-form {
+    border-radius: 5px;
+  }
+}
+</style>
