@@ -87,6 +87,7 @@ Details
    custom keybindings
 
    https://github.com/owncloud/web/pull/7569
+   https://github.com/owncloud/web/pull/7648
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
