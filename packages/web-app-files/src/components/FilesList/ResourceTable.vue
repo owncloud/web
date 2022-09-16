@@ -54,7 +54,7 @@
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
-          :is-path-displayed="arePathsDisplayed"
+          :is-path-displayed="getArePathsDisplayed(item)"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="areThumbnailsDisplayed"
           :is-extension-displayed="areFileExtensionsShown"
@@ -583,11 +583,15 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] })
     },
     openSharingSidebar(file) {
-      if (file.share?.shareType === ShareTypes.link.value) {
-        bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
-        return
+      let panelToOpen
+      if (file.type === 'space') {
+        panelToOpen = 'space-share-item'
+      } else if (file.share?.shareType === ShareTypes.link.value) {
+        panelToOpen = 'sharing-item#linkShares'
+      } else {
+        panelToOpen = 'sharing-item#peopleShares'
       }
-      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file)
@@ -822,6 +826,9 @@ export default defineComponent({
       }
 
       return this.$gettext('Personal')
+    },
+    getArePathsDisplayed(resource) {
+      return this.arePathsDisplayed && resource.type !== 'space'
     }
   }
 })

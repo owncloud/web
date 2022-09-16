@@ -10,6 +10,8 @@ import {
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
+import { clientService } from 'web-pkg/src/services'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export class FolderLoaderSharedViaLink implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -33,6 +35,9 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      const accessToken = store.getters['runtime/auth/accessToken']
+      const serverUrl = configurationManager.serverUrl
+      const graphClient = clientService.graphAuthenticated(serverUrl, accessToken)
 
       let resources = yield client.shares.getShares('', {
         share_types: ShareTypes.link.value.toString(),
@@ -41,12 +46,17 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
 
       resources = resources.map((r) => r.shareInfo)
 
+      // FIXME: Wait until spaces are loaded? We already load them in the runtime
+      yield store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+      const spaces = store.getters['runtime/spaces/spaces']
+
       if (resources.length) {
         resources = aggregateResourceShares(
           resources,
           false,
           unref(hasResharing),
-          unref(hasShareJail)
+          unref(hasShareJail),
+          spaces
         )
       }
 
