@@ -102,7 +102,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +6          |
 
-  @issue-ocis-1328 @skipOnOCIS
+  @issue-ocis-1328 @skipOnOCIS @skipOnOC10 # skipped on oc10 due to https://github.com/owncloud/web/issues/7513
   Scenario: user cannot change the expiry date on existing public link to a date past the enforced max expiry date once max expiry date is changed
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16" in the server
