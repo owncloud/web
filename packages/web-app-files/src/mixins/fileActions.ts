@@ -50,7 +50,7 @@ export default {
     Navigate,
     Rename,
     Restore,
-    ShowEditTags
+    ShowEditTags,
     isSearchActive
   ],
   computed: {
