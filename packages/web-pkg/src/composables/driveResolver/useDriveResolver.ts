@@ -20,6 +20,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     ([driveAliasAndItem]) => {
+      if (!driveAliasAndItem) {
+        space.value = null
+        item.value = null
+        return
+      }
       if (unref(space) && driveAliasAndItem.startsWith(unref(space).driveAlias)) {
         item.value = driveAliasAndItem.slice(unref(space).driveAlias.length)
         return

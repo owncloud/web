@@ -14,7 +14,6 @@ export const isLocationTrashActive = isLocationActiveDirector<trashTypes>(locati
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
     path: '/trash',
-    redirect: (to) => createLocationTrash('files-trash-generic', to),
     component: components.App,
     children: [
       {
@@ -22,6 +21,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: ':driveAliasAndItem*',
         component: components.Spaces.DriveResolver,
         meta: {
+          patchCleanPath: true,
           title: $gettext('Deleted files')
         }
       }
