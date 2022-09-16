@@ -95,7 +95,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
-import MixinFilesListFilter from '../../mixins/filesListFilter'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -103,6 +102,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
+import { SortDir } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -114,7 +114,7 @@ export default defineComponent({
     NoContentMessage
   },
 
-  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare, MixinFilesListFilter],
+  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare],
   props: {
     title: {
       type: String,
@@ -135,11 +135,18 @@ export default defineComponent({
     },
     sortBy: {
       type: String,
-      required: true
+      required: false,
+      default: undefined
     },
     sortDir: {
       type: String,
-      required: true
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return (
+          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
+        )
+      }
     },
     sortHandler: {
       type: Function,

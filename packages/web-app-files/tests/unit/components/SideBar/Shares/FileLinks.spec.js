@@ -208,6 +208,9 @@ describe('FileLinks', () => {
     return shallowMount(FileLinks, {
       localVue,
       store: store,
+      provide: {
+        incomingParentShare: {}
+      },
       stubs: {
         ...stubs
       },
@@ -229,6 +232,9 @@ describe('FileLinks', () => {
     return mount(FileLinks, {
       localVue,
       store: store,
+      provide: {
+        incomingParentShare: {}
+      },
       mocks: {
         $route: {
           params: {}

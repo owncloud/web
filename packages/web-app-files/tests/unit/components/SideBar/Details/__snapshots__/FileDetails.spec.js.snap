@@ -126,7 +126,10 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -163,7 +166,10 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -220,7 +226,10 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -257,7 +266,10 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
       <oc-spinner-stub></oc-spinner-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -351,7 +363,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -388,7 +403,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -445,7 +463,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
@@ -482,7 +503,10 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
     <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
-    <!---->
+    <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
+    </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>

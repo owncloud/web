@@ -27,6 +27,10 @@ export function getParentPaths(path = '', includeCurrent = false) {
 
   sections.pop()
   while (sections.length > 0) {
+    if (!sections.join('/')) {
+      sections.pop()
+      continue
+    }
     paths.push(sections.join('/'))
     sections.pop()
   }

@@ -3,8 +3,8 @@
     <UserInfoBox :user="user" />
     <div id="user-group-assignment-form" class="oc-background-highlight oc-p-m">
       <oc-select
-        class="oc-mb-s"
         v-model="editUser.memberOf"
+        class="oc-mb-s"
         multiple
         :options="groups"
         option-label="displayName"

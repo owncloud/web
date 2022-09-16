@@ -79,7 +79,10 @@ export function useUpload(options: UploadOptions): UploadResult {
       onBeforeRequest: (req) => {
         req.setHeader('Authorization', unref(headers).Authorization)
       },
-      headers: () => unref(headers),
+      headers: (file) => ({
+        'x-oc-mtime': file.data.lastModified / 1000,
+        ...unref(headers)
+      }),
       ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
@@ -181,7 +184,11 @@ const createDirectoryTree = ({
             unref(publicLinkPassword)
           )
         } else {
-          await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          try {
+            await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          } catch (error) {
+            console.error(error)
+          }
         }
 
         uppyService.publish('uploadSuccess', uppyResource)

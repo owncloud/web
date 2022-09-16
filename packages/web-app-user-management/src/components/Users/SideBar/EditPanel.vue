@@ -40,8 +40,8 @@
         </div>
         <quota-select
           v-if="showQuota"
-          class="oc-mb-s"
           :key="'quota-select-' + user.id"
+          class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
           :max-quota="spaceQuotas.maxPersonalQuota || 0"

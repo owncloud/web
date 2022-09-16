@@ -8482,6 +8482,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"keycode@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "keycode@npm:2.2.1"
+  checksum: 7a5c775b2410a3b6d9c07a415ecb70639187a965be239d2c11c71079cb1ca2f9dede94b86426f3ece475dc8ae3debf2367531bbcafc0af8c82f157d9a4f7e6cb
+  languageName: node
+  linkType: hard
+
 "kind-of@npm:^3.0.2":
   version: 3.2.2
   resolution: "kind-of@npm:3.2.2"
@@ -9745,9 +9752,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-design-system@npm:14.0.0-alpha.17":
-  version: 14.0.0-alpha.17
-  resolution: "owncloud-design-system@npm:14.0.0-alpha.17"
+"owncloud-design-system@npm:14.0.0-alpha.18":
+  version: 14.0.0-alpha.18
+  resolution: "owncloud-design-system@npm:14.0.0-alpha.18"
   peerDependencies:
     "@popperjs/core": ^2.4.0
     "@vue/composition-api": ^1.4.3
@@ -9764,7 +9771,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-select: ^3.12.0
     webfontloader: ^1.6.28
-  checksum: c8f7bee5adedfeee0b9a45722c7a2e758ea2f09da0485401d64e7822d42eef198e676cbfbbb9e073e193c00a06f866c0e6b8f1564c86c4614b355c9273c73d35
+  checksum: ce57cd944ffd95cb6ff0dbb74aec603dc9ebe6d732129b4014b739cb961f24121079b01c21f4aeaf9e4acd49f06575ee1f23282a36a349a22eb2ca26471acde1
   languageName: node
   linkType: hard
 
@@ -11844,6 +11851,7 @@ __metadata:
     jest-mock-axios: ^4.5.0
     jest-serializer-vue: ^2.0.2
     join-path: ^1.1.1
+    keycode: ^2.2.1
     license-checker-rseidelsohn: ^3.1.0
     lodash: ^4.17.21
     node-fetch: ^2.6.7
@@ -13791,7 +13799,7 @@ __metadata:
     luxon: ^2.4.0
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
-    owncloud-design-system: 14.0.0-alpha.17
+    owncloud-design-system: 14.0.0-alpha.18
     owncloud-sdk: "owncloud/owncloud-sdk.git#experimental"
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0

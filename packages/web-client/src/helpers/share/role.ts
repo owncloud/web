@@ -185,6 +185,14 @@ export const peopleRoleCustomFolder = new CustomShareRole(
     SharePermissions.share
   ]
 )
+export const peopleRoleDenyFolder = new PeopleShareRole(
+  'denied',
+  true,
+  $gettext('No access'),
+  $gettext('no access'),
+  'user-unfollow',
+  [SharePermissions.denied]
+)
 export const linkRoleInternalFile = new LinkShareRole(
   'none',
   false,
@@ -288,7 +296,8 @@ export abstract class SpacePeopleShareRoles {
   }
 
   static getByBitmask(bitmask: number): ShareRole {
-    return this.all.find((r) => r.bitmask(true) === bitmask)
+    return this.all // Retrieve all possible options always, even if deny is not enabled
+      .find((r) => r.bitmask(true) === bitmask)
   }
 }
 
@@ -302,8 +311,11 @@ export abstract class PeopleShareRoles {
 
   static readonly allWithCustom = [...this.all, peopleRoleCustomFile, peopleRoleCustomFolder]
 
-  static list(isFolder: boolean, hasCustom = true): ShareRole[] {
-    return (hasCustom ? this.allWithCustom : this.all).filter((r) => r.folder === isFolder)
+  static list(isFolder: boolean, hasCustom = true, canDeny = false): ShareRole[] {
+    return [
+      ...(hasCustom ? this.allWithCustom : this.all),
+      ...(canDeny ? [peopleRoleDenyFolder] : [])
+    ].filter((r) => r.folder === isFolder)
   }
 
   static custom(isFolder: boolean): ShareRole {
@@ -311,7 +323,7 @@ export abstract class PeopleShareRoles {
   }
 
   static getByBitmask(bitmask: number, isFolder: boolean, allowSharing: boolean): ShareRole {
-    const role = this.allWithCustom
+    const role = [...this.allWithCustom, peopleRoleDenyFolder] // Retrieve all possible options always, even if deny is not enabled
       .filter((r) => !r.hasCustomPermissions)
       .find((r) => r.folder === isFolder && r.bitmask(allowSharing) === bitmask)
     return role || this.custom(isFolder)
@@ -401,7 +413,8 @@ const shareRoleDescriptions = {
   [peopleRoleEditorFolder.bitmask(false)]: $gettext('Upload, edit, delete, download and preview'),
   [peopleRoleEditorFolder.bitmask(true)]: $gettext(
     'Upload, edit, delete, download, preview and share'
-  )
+  ),
+  [peopleRoleDenyFolder.bitmask(false)]: $gettext('Deny access')
 }
 
 /**

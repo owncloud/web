@@ -114,6 +114,9 @@ export function buildResource(resource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
+    canDeny: function () {
+      return this.permissions.indexOf(DavPermission.Deny) >= 0
+    },
     getDomSelector: () => extractDomSelector(id)
   }
 }
@@ -147,6 +150,7 @@ export function aggregateResourceShares(
   allowSharePermission,
   hasShareJail
 ): Resource[] {
+  shares.sort((a, b) => a.path.localeCompare(b.path))
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
@@ -154,7 +158,6 @@ export function aggregateResourceShares(
     )
   }
 
-  shares.sort((a, b) => a.path.localeCompare(b.path))
   const resources = addSharedWithToShares(shares)
   return resources.map((share) =>
     buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
@@ -287,6 +290,7 @@ export function buildSharedResource(
   resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
+  resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   resource.getDomSelector = () => extractDomSelector(share.id)
 
   return resource

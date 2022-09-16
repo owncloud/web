@@ -207,6 +207,51 @@ Then(
     }
   }
 )
+When(
+  '{string} searches {string} using the global search',
+  async function (this: World, stepUser: string, keyword: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.searchResource({ keyword })
+  }
+)
+
+Then(
+  /^following resources (should|should not) be displayed in the search list for user "([^"]*)"?$/,
+  async function (
+    this: World,
+    actionType: string,
+    stepUser: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualList = await resourceObject.getDisplayedResources()
+    for (const info of stepTable.hashes()) {
+      const found = actualList.includes(info.resource)
+      if (actionType === 'should') expect(found).toBe(true)
+      else expect(found).toBe(false)
+    }
+  }
+)
+
+When(
+  '{string} opens folder {string}',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openFolder(resource)
+  }
+)
+
+When(
+  '{string} enables the option to display the hidden file',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.showHiddenFiles()
+  }
+)
 
 export const processDownload = async (
   stepTable: DataTable,

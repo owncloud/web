@@ -137,6 +137,7 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
+  inject: ['incomingParentShare'],
   setup() {
     const store = useStore()
 
@@ -182,11 +183,6 @@ export default defineComponent({
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
     },
 
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['']?.find((s) => s.incoming)
-    },
-
     expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
@@ -218,9 +214,9 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport
@@ -322,9 +318,6 @@ export default defineComponent({
       if (parentPaths.length === 0) {
         return []
       }
-
-      // remove root entry
-      parentPaths.pop()
 
       parentPaths.forEach((parentPath) => {
         const shares = cloneStateObject(this.sharesTree[parentPath])

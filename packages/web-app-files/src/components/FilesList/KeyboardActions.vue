@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import keycode from 'keycode'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
@@ -16,10 +17,10 @@ export default defineComponent({
       type: Array,
       required: true
     },
-    keybindOnElementIds: {
-      type: Array,
+    keybindOnElementId: {
+      type: String,
       required: false,
-      default: () => ['files-view', 'web-nav-sidebar']
+      default: 'files-view'
     }
   },
   setup() {
@@ -40,13 +41,11 @@ export default defineComponent({
   },
 
   mounted() {
-    for (const elementId of this.keybindOnElementIds) {
-      const element = document.getElementById(elementId)
-      if (element) {
-        element.addEventListener('keydown', this.handleSelectionShortcuts, false)
-      }
+    const element = document.getElementById(this.keybindOnElementId)
+    if (element) {
+      element.addEventListener('keydown', this.handelLocalShortcuts, false)
     }
-    document.addEventListener('keydown', this.handleClipboardShortcuts)
+    document.addEventListener('keydown', this.handleGlobalShortcuts)
 
     const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
     const fileListClickedMetaEvent = bus.subscribe(
@@ -62,13 +61,11 @@ export default defineComponent({
       bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
       bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
       bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
-      for (const elementId of this.keybindOnElementIds) {
-        const element = document.getElementById(elementId)
-        if (element) {
-          element.removeEventListener('keydown', this.handleSelectionShortcuts)
-        }
+      const element = document.getElementById(this.keybindOnElementId)
+      if (element) {
+        element.removeEventListener('keydown', this.handelLocalShortcuts)
       }
-      document.removeEventListener('keydown', this.handleClipboardShortcuts)
+      document.removeEventListener('keydown', this.handleGlobalShortcuts)
     })
   },
 
@@ -88,42 +85,45 @@ export default defineComponent({
       addFileSelection: 'ADD_FILE_SELECTION'
     }),
 
-    handleSelectionShortcuts(event) {
-      const key = event.keyCode || event.which
-      const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
-      const shift = event.shiftKey
-
-      this.handleFileSelectionShortcuts(key, shift, ctrl, event)
+    areCustomKeyBindingsEnabled() {
+      const closestSelectionEl = window.getSelection().focusNode as HTMLElement
+      if (!closestSelectionEl) return false
+      let customKeyBindings
+      try {
+        customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings='true']")
+      } catch {
+        customKeyBindings = closestSelectionEl?.parentElement.closest(
+          "[data-custom-key-bindings='true']"
+        )
+      }
+      if (customKeyBindings) return true
+      return false
     },
 
-    handleClipboardShortcuts(event) {
+    handelLocalShortcuts(event) {
       const key = event.keyCode || event.which
+      if (key === keycode('space')) return this.handleSpaceAction(event)
+    },
+
+    handleGlobalShortcuts(event) {
+      const key = event.keyCode || event.which
+      const shift = event.shiftKey
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
-      const isCopyAction = key === 67
-      const isPasteAction = key === 86
-      const isCutAction = key === 88
       const isTextSelected = window.getSelection().type === 'Range'
 
+      if (this.areCustomKeyBindingsEnabled()) return
       if (isTextSelected) return
-      if (isCopyAction && ctrl) return this.copySelectedFiles()
-      if (isPasteAction && ctrl) return this.handlePasteAction()
-      if (isCutAction && ctrl) return this.cutSelectedFiles()
-    },
 
-    handleFileSelectionShortcuts(key, shift, ctrl, event) {
-      const isUpPressed = key === 38
-      const isDownPressed = key === 40
-      const isEscapePressed = key === 27
-      const isSpacePressed = key === 32
-      const isAPressed = key === 65
+      if (key === keycode('c') && ctrl) return this.copySelectedFiles()
+      if (key === keycode('v') && ctrl) return this.handlePasteAction()
+      if (key === keycode('x') && ctrl) return this.cutSelectedFiles()
+      if (key === keycode('down') && !shift) return this.handleNavigateAction(event)
+      if (key === keycode('up') && !shift) return this.handleNavigateAction(event, true)
 
-      if (isDownPressed && !shift) return this.handleNavigateAction(event)
-      if (isUpPressed && !shift) return this.handleNavigateAction(event, true)
-      if (isSpacePressed) return this.handleSpaceAction(event)
-      if (isEscapePressed) return this.handleEscapeAction()
-      if (isDownPressed && shift) return this.handleShiftDownAction(event)
-      if (isUpPressed && shift) return this.handleShiftUpAction(event)
-      if (isAPressed && ctrl) return this.handleSelectAllAction(event)
+      if (key === keycode('esc')) return this.handleEscapeAction()
+      if (key === keycode('down') && shift) return this.handleShiftDownAction(event)
+      if (key === keycode('up') && shift) return this.handleShiftUpAction(event)
+      if (key === keycode('a') && ctrl) return this.handleSelectAllAction(event)
     },
 
     handleNavigateAction(event, up = false) {
@@ -139,7 +139,6 @@ export default defineComponent({
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
       this.scrollToResource({ id: nextId })
-      document.getElementById(this.keybindOnElementId).focus()
     },
 
     handleShiftClickAction(resource) {
@@ -237,15 +236,21 @@ export default defineComponent({
       const latestSelectedRow = document.querySelectorAll(
         `[data-item-id='${this.latestSelectedId}']`
       )[0]
-      const nextRow = (
-        previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
-      ) as HTMLElement
+      let nextRow
+      try {
+        nextRow = (
+          previous ? latestSelectedRow.previousSibling : latestSelectedRow.nextSibling
+        ) as HTMLElement
+      } catch {
+        return -1
+      }
       if (nextRow === null) return -1
       return nextRow.getAttribute('data-item-id')
     },
 
     getFirstResourceId() {
       const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
+      if (!firstRow) return -1
       return firstRow.getAttribute('data-item-id')
     }
   }

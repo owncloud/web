@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v14.0.0-alpha.17
+Enhancement: Update ODS to v14.0.0-alpha.18
 
-We updated the ownCloud Design System to version 14.0.0-alpha.17. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 14.0.0-alpha.18. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 * Bugfix - Omit special characters in user avatar initials: [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070)
 * Bugfix - Avatar link icon: [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269)
@@ -27,5 +27,5 @@ We updated the ownCloud Design System to version 14.0.0-alpha.17. Please refer t
 * Enhancement - Redesign notifications: [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210)
 * Enhancement - Use Inter font: [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270)
 
-https://github.com/owncloud/web/pull/7606
-https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.17
+https://github.com/owncloud/web/pull/7626
+https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.18

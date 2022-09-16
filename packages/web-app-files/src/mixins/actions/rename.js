@@ -73,7 +73,8 @@ export default {
         const parentPaths = getParentPaths(resources[0].path, false).map((path) => {
           return prefix + path
         })
-        parentResources = await this.$client.files.list(parentPaths[0], 1)
+        const parentPathRoot = parentPaths[0] ?? prefix
+        parentResources = await this.$client.files.list(parentPathRoot, 1)
         parentResources = parentResources.map(buildResource)
       }
 

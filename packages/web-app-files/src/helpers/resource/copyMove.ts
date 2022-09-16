@@ -4,10 +4,11 @@ import { join } from 'path'
 import { buildResource } from '../resources'
 import { DavProperties } from 'web-pkg/src/constants'
 
-enum ResolveStrategy {
+export enum ResolveStrategy {
   SKIP,
   REPLACE,
-  KEEP_BOTH
+  KEEP_BOTH,
+  MERGE
 }
 export interface ResolveConflict {
   strategy: ResolveStrategy
@@ -18,14 +19,28 @@ interface FileConflict {
   strategy?: ResolveStrategy
 }
 
-const resolveFileExists = (
+export interface FileExistsResolver {
+  (
+    createModal: void,
+    hideModal: void,
+    resource: Resource,
+    conflictCount: number,
+    $gettext: void,
+    $gettextInterpolate: void,
+    isSingleConflict: boolean,
+    suggestMerge: boolean
+  )
+}
+
+export const resolveFileExists = (
   createModal,
   hideModal,
   resource,
   conflictCount,
   $gettext,
   $gettextInterpolate,
-  isSingleConflict
+  isSingleConflict,
+  suggestMerge = false
 ): Promise<ResolveConflict> => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
@@ -42,7 +57,7 @@ const resolveFileExists = (
       ),
       cancelText: $gettext('Skip'),
       confirmText: $gettext('Keep both'),
-      buttonSecondaryText: $gettext('Replace'),
+      buttonSecondaryText: suggestMerge ? $gettext('Merge') : $gettext('Replace'),
       checkboxLabel: isSingleConflict
         ? ''
         : $gettextInterpolate(
@@ -59,7 +74,7 @@ const resolveFileExists = (
       },
       onConfirmSecondary: () => {
         hideModal()
-        const strategy = ResolveStrategy.REPLACE
+        const strategy = suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
         resolve({ strategy, doForAllConflicts } as ResolveConflict)
       },
       onConfirm: () => {

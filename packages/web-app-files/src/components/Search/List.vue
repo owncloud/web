@@ -67,7 +67,6 @@ import { defineComponent } from '@vue/composition-api'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
-import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
@@ -89,7 +88,7 @@ export default defineComponent({
     ResourceTable,
     FilesViewWrapper
   },
-  mixins: [MixinFileActions, MixinFilesListFilter, MixinFilesListScrolling],
+  mixins: [MixinFileActions, MixinFilesListScrolling],
   props: {
     searchResult: {
       type: Object,
