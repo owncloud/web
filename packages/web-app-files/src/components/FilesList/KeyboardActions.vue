@@ -87,11 +87,7 @@ export default defineComponent({
 
     areCustomKeyBindingsEnabled() {
       const activeElementTag = document.activeElement.tagName
-      if (
-        activeElementTag.toLowerCase() === 'textarea' ||
-        activeElementTag.toLowerCase() === 'input'
-      )
-        return true
+      if (['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase())) return true
       const closestSelectionEl = window.getSelection().focusNode as HTMLElement
       if (!closestSelectionEl) return false
       let customKeyBindings
