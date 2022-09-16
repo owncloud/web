@@ -224,19 +224,15 @@ export default defineComponent({
   },
 
   watch: {
-    $route: {
-      handler: async function (to, from) {
-        const sameRoute = to.name === from?.name
-        const sameItem = to.params?.driveAliasAndItem === from?.params?.driveAliasAndItem
-        if (!sameRoute || !sameItem) {
-          await this.performLoaderTask(sameRoute)
-        }
-      },
-      immediate: true
+    item: {
+      handler: function () {
+        this.performLoaderTask(true)
+      }
     }
   },
 
   mounted() {
+    this.performLoaderTask(false)
     const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
       this.performLoaderTask(true, path)
     })

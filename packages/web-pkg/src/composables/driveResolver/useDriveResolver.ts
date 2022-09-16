@@ -1,6 +1,6 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
-import { computed, Ref, unref } from '@vue/composition-api'
+import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -15,29 +15,31 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       store.getters['runtime/spaces/spacesLoading']
   )
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
-  const space = computed(() => {
-    let matchingSpace = null
-    unref(spaces).forEach((space) => {
-      if (!space.driveAlias) {
-        // TODO: ever the case?!
-        console.warn('stumbled over a space with empty drive alias...', space)
+  const space = ref(null)
+  const item = ref(null)
+  watch(
+    [options.driveAliasAndItem, areSpacesLoading],
+    ([driveAliasAndItem]) => {
+      if (unref(space) && driveAliasAndItem.startsWith(unref(space).driveAlias)) {
+        item.value = driveAliasAndItem.slice(unref(space).driveAlias.length)
         return
       }
-      if (!unref(options.driveAliasAndItem).startsWith(space.driveAlias)) {
-        return
-      }
-      if (!matchingSpace || space.driveAlias.length > matchingSpace.driveAlias.length) {
-        matchingSpace = space
-      }
-    })
-    return matchingSpace
-  })
-  const item = computed(() => {
-    if (!unref(space)) {
-      return unref(options.driveAliasAndItem)
-    }
-    return unref(options.driveAliasAndItem).slice(unref(space).driveAlias.length)
-  })
+      let matchingSpace = null
+      let path = null
+      unref(spaces).forEach((s) => {
+        if (!driveAliasAndItem.startsWith(s.driveAlias)) {
+          return
+        }
+        if (!matchingSpace || s.driveAlias.length > matchingSpace.driveAlias.length) {
+          matchingSpace = s
+          path = driveAliasAndItem.slice(s.driveAlias.length)
+        }
+      })
+      space.value = matchingSpace
+      item.value = path
+    },
+    { immediate: true }
+  )
   return {
     areSpacesLoading,
     space,
