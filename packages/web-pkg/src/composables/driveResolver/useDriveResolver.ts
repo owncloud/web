@@ -16,7 +16,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   )
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const space = computed(() => {
-    // TODO: this needs a virtual space for the logged in user in backends without spaces support
     let matchingSpace = null
     unref(spaces).forEach((space) => {
       if (!space.driveAlias) {

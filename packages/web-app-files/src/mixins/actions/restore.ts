@@ -50,11 +50,12 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
-        const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+        const hasShareJail = this.capabilities?.spaces?.share_jail === true
+        const path = hasShareJail
+          ? buildWebDavSpacesTrashPath(this.space.id)
           : buildWebDavFilesTrashPath(this.user.id)
-        const restorePath = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? buildWebDavSpacesPath(this.$route.params.storageId, resource.path)
+        const restorePath = hasShareJail
+          ? buildWebDavSpacesPath(this.space.id, resource.path)
           : buildWebDavFilesPath(this.user.id, resource.path)
 
         restorePromises.push(

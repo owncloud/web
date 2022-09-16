@@ -2,10 +2,7 @@ import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
 import { createLocation, $gettext, isLocationActiveDirector } from './utils'
 
-type trashTypes =
-  | 'files-trash-generic'
-  // TODO: delete project-space trash routes
-  | 'files-trash-spaces-project'
+type trashTypes = 'files-trash-generic'
 
 export const createLocationTrash = (name: trashTypes, location = {}): Location =>
   createLocation(name, location)

@@ -54,8 +54,9 @@ export default {
       this.createModal(modal)
     },
     $_emptyTrashBin_emptyTrashBin() {
-      const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+      const hasShareJail = this.capabilities?.spaces?.share_jail === true
+      const path = hasShareJail
+        ? buildWebDavSpacesTrashPath(this.space.id)
         : buildWebDavFilesTrashPath(this.user.id)
 
       return this.$client.fileTrash

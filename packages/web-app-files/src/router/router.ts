@@ -22,8 +22,5 @@ export interface RouteComponents {
   Spaces: {
     DriveResolver: ComponentOptions<Vue>
     Projects: ComponentOptions<Vue>
-    Project: ComponentOptions<Vue>
-    Trashbin: ComponentOptions<Vue>
   }
-  Trashbin: ComponentOptions<Vue>
 }
