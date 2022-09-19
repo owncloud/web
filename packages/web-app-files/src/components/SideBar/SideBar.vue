@@ -113,6 +113,7 @@ export default defineComponent({
       ),
       isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
       isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
+      isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -225,6 +226,7 @@ export default defineComponent({
         this.isSharedWithMeLocation ||
         this.isSharedWithOthersLocation ||
         this.isSharedViaLinkLocation ||
+        this.isSearchLocation ||
         this.isFavoritesLocation
       this.fetchFileInfo(loadShares)
     },
@@ -302,6 +304,7 @@ export default defineComponent({
           this.isSharedWithMeLocation ||
           this.isSharedWithOthersLocation ||
           this.isSharedViaLinkLocation ||
+          this.isSearchLocation ||
           this.isFavoritesLocation
         )
       })
