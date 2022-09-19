@@ -65,7 +65,6 @@
 </template>
 
 <script lang="ts">
-import { useTask } from 'vue-concurrency'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { watch, computed, ref, unref } from '@vue/composition-api'
 import {
@@ -78,12 +77,9 @@ import {
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import { buildSpaceShare } from '../../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
-import { useGraphClient } from 'web-client/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
@@ -98,7 +94,6 @@ export default {
   setup() {
     const store = useStore()
     const currentSpace = ref(null)
-    const spaceMembers = ref([])
     const currentStorageId = useRouteParam('storageId')
     watch(
       currentStorageId,
@@ -110,40 +105,12 @@ export default {
       { immediate: true }
     )
     const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
-
-    const { graphClient } = useGraphClient({ store })
-
-    const loadSpaceMembersTask = useTask(function* (signal, ref) {
-      const promises = []
-      const spaceShares = []
-
-      for (const role of Object.keys(unref(currentSpace).spaceRoles)) {
-        for (const userId of unref(currentSpace).spaceRoles[role]) {
-          promises.push(
-            unref(graphClient)
-              .users.getUser(userId)
-              .then((resolved) => {
-                spaceShares.push(
-                  buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id)
-                )
-              })
-          )
-        }
-      }
-
-      yield Promise.all(promises).then(() => {
-        spaceMembers.value = sortSpaceMembers(spaceShares)
-      })
-    })
-
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
 
     return {
       currentStorageId,
       currentSpace,
-      spaceMembers,
       isCurrentSpaceTypeProject,
-      loadSpaceMembersTask,
       sharesListCollapsed,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -153,6 +120,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
@@ -233,8 +201,7 @@ export default {
         if (shares) {
           shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              share.key = 'indirect-collaborator-' + share.id
-              allShares.push(share)
+              allShares.push({ ...share, key: 'indirect-collaborator-' + share.id })
             }
           })
         }
@@ -269,11 +236,6 @@ export default {
         this.highlightedFile.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
-    }
-  },
-  mounted() {
-    if (this.showSpaceMembers) {
-      this.loadSpaceMembersTask.perform()
     }
   },
   methods: {

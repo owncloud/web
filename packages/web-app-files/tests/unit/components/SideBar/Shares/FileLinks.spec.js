@@ -17,8 +17,7 @@ localVue.use(GetTextPlugin, {
 
 const mapActions = {
   addLink: jest.fn(),
-  loadSharesTree: jest.fn(),
-  loadCurrentFileOutgoingShares: jest.fn()
+  loadSharesTree: jest.fn()
 }
 
 const mapMutations = {
@@ -142,7 +141,6 @@ describe('FileLinks', () => {
       isFolder: false,
       isReceivedShare: jest.fn()
     },
-    currentFileOutgoingSharesLoading = false,
     sharesTreeLoading = false,
     expireDate = {
       enabled: true,
@@ -194,7 +192,6 @@ describe('FileLinks', () => {
             currentFileOutgoingLinks: function () {
               return links
             },
-            currentFileOutgoingSharesLoading: jest.fn(() => currentFileOutgoingSharesLoading),
             sharesTreeLoading: jest.fn(() => sharesTreeLoading)
           },
           actions: mapActions,
