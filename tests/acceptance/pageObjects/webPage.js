@@ -14,9 +14,24 @@ module.exports = {
      */
     search: function (searchTerm) {
       return this.initAjaxCounters()
-        .waitForElementVisible('@searchInputFieldLowResolution')
-        .click('@searchInputFieldLowResolution')
-        .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
+        .isVisible(
+          {
+            selector: '@openSearchButton',
+            suppressNotFoundErrors: true
+          },
+          (result) => {
+            if (result.value === true) {
+              this.click('@openSearchButton')
+                .waitForElementVisible('@searchInputFieldLowResolution')
+                .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
+            } else {
+              this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
+                '@searchInputFieldHighResolution',
+                [searchTerm, this.api.Keys.ENTER]
+              )
+            }
+          }
+        )
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
     },
@@ -282,6 +297,10 @@ module.exports = {
     },
     searchLoadingIndicator: {
       selector: '#files-global-search-bar .oc-spinner'
+    },
+    searchGlobalButton: {
+      selector: '//button[.="Search all files ↵"]',
+      locateStrategy: 'xpath'
     },
     openSearchButton: {
       selector: '#files-open-search-btn'
