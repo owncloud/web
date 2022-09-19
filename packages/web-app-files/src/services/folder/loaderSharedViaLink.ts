@@ -45,10 +45,12 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       })
 
       resources = resources.map((r) => r.shareInfo)
-
-      // FIXME: Wait until spaces are loaded? We already load them in the runtime
-      yield store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-      const spaces = store.getters['runtime/spaces/spaces']
+      let spaces = []
+      if (store.getters.capabilities?.spaces?.enabled) {
+        // FIXME: Wait until spaces are loaded? We already load them in the runtime
+        yield store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        spaces = store.getters['runtime/spaces/spaces']
+      }
 
       if (resources.length) {
         resources = aggregateResourceShares(
