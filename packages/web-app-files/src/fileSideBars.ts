@@ -72,7 +72,7 @@ const panelGenerators: (({
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
-    default: highlightedFile?.type === 'space',
+    default: () => true,
     get enabled() {
       return highlightedFile?.type === 'space'
     }

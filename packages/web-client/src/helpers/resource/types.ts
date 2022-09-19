@@ -30,7 +30,7 @@ export interface Resource {
   shareRoot?: string
   shareTypes?: number[]
   privateLink?: string
-  driveType?: 'personal' | 'project' | 'share' | Omit<string, 'personal' | 'project' | 'share'>
+  driveType?: 'personal' | 'project' | 'share' | (string & unknown)
   driveAlias?: string
 
   canCreate?(): boolean
