@@ -11,7 +11,7 @@ Summary
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
-* Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
+* Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
@@ -41,20 +41,26 @@ Details
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7504
 
-* Bugfix - Shares tree loading: [#7506](https://github.com/owncloud/web/issues/7506)
+* Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 
-   We've improved loading of the shares tree:
+   We've improved the loading of shares:
 
-   * It now happens more globally in the sidebar component instead of in each sidebar panel. *
-   Shares won't be loaded for resources without a path anymore.
-
-   These changes massively improve the sidebar performance and fix several issues with
-   (re-)share permissions.
+   * Share loading now happens more globally in the sidebar component instead of in each sidebar
+   panel. * Shares won't be loaded for resources without a path anymore, which massively
+   increases performance. * Several issues with (re-)share permissions have been fixed. *
+   `loadCurrentFileOutgoingShares` and `loadIncomingShares` mutations have been removed.
+   Instead, incoming and outgoing shares are now being loaded via `loadSharesTree()`. This
+   avoids `getShare()` requests from being executed multiple times. * Space member loading has
+   been decoupled from shares loading in store. This reduces fetching of space members to a
+   minimum and improves the structure of the code. * Reactive loading of share indicators in
+   sidebar details panel has been fixed. * Reactive loading of space member count in the spaces
+   overview has been fixed. * Loading of indirect shares within spaces has been fixed.
 
    https://github.com/owncloud/web/issues/7506
    https://github.com/owncloud/web/issues/7593
    https://github.com/owncloud/web/issues/7592
    https://github.com/owncloud/web/pull/7580
+   https://github.com/owncloud/web/pull/7638
 
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 
