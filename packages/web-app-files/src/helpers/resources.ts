@@ -146,7 +146,9 @@ export function aggregateResourceShares(
   spaces = []
 ): Resource[] {
   shares.sort((a, b) => a.path.localeCompare(b.path))
-  shares = addMatchingSpaceToShares(shares, spaces)
+  if (spaces.length) {
+    shares = addMatchingSpaceToShares(shares, spaces)
+  }
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
