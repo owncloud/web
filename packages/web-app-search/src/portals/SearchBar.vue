@@ -12,7 +12,6 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @keyup.enter="onSearchInputEnter"
     />
     <div
       v-if="optionsVisible && term"
@@ -184,6 +183,7 @@ export default {
       const elementIsInteractive = event.target.tagName === 'a' || event.target.tagName === 'button'
       const clearEvent = event.target.classList.contains('oc-search-clear')
       const keyEventEsc = event.keyCode === 27
+      const keyEventEnter = event.keyCode === 13
 
       event.stopPropagation()
 
@@ -191,7 +191,17 @@ export default {
       // - false if the event is a clearEvent or keyEventEsc
       // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
       this.optionsVisible =
-        clearEvent || keyEventEsc ? false : eventInComponent && !elementIsInteractive
+        clearEvent || keyEventEsc
+          ? false
+          : eventInComponent && !elementIsInteractive && !keyEventEnter
+
+      if (keyEventEnter) {
+        this.$router.push(
+          createLocationCommon('files-common-search', {
+            query: { term: this.term, provider: 'files.sdk' }
+          })
+        )
+      }
     },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
@@ -216,13 +226,6 @@ export default {
       return this.$gettextInterpolate(translated, {
         totalResults: searchResult.totalResults
       })
-    },
-    onSearchInputEnter() {
-      this.$router.push(
-        createLocationCommon('files-common-search', {
-          query: { term: this.term, provider: 'files.sdk' }
-        })
-      )
     }
   }
 }
