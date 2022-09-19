@@ -158,11 +158,10 @@ import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/he
 import {
   extractExtensionFromFile,
   extractNameWithoutExtension,
-  resolveFileExists,
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
-  FileExistsResolver
+  ConflictDialog,
 } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -655,7 +654,15 @@ export default defineComponent({
         }
       }
       if (conflicts.length) {
-        await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
+        const conflictDialog = new ConflictDialog(
+          this.createModal,
+          this.hideModal,
+          this.showMessage,
+          this.$gettext,
+          this.$ngettext,
+          this.$gettextInterpolate
+        )
+        await this.displayOverwriteDialog(uppyResources, conflicts, conflictDialog)
       } else {
         await this.handleUppyFileUpload(this.space, this.item, uppyResources)
       }
@@ -735,11 +742,7 @@ export default defineComponent({
       this.$uppyService.uploadFiles(files)
     },
 
-    async displayOverwriteDialog(
-      files: UppyResource[],
-      conflicts,
-      resolveFileExistsMethod: FileExistsResolver
-    ) {
+    async displayOverwriteDialog(files: UppyResource[], conflicts, conflictDialog: ConflictDialog) {
       let count = 0
       const allConflictsCount = conflicts.length
       const resolvedFileConflicts = []
@@ -768,13 +771,9 @@ export default defineComponent({
           continue
         }
 
-        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
-          this.createModal,
-          this.hideModal,
+        const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
           { name: conflict.name, isFolder } as Resource,
           allConflictsCount - count,
-          this.$gettext,
-          this.$gettextInterpolate,
           false,
           isFolder
         )
