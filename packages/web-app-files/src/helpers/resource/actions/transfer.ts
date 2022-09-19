@@ -5,8 +5,9 @@ import { ClientService } from 'web-pkg/src/services'
 import {
   isResourceBeeingMovedToSameLocation,
   resolveFileNameDuplicate
-} from './conflict-handling/conflictUtils'
-import { ConflictDialog, ResolveStrategy } from './conflict-handling/conflictDialog'
+} from '../conflictHandling/conflictUtils'
+import { ConflictDialog } from '../conflictHandling/conflictDialog'
+import { ResolveStrategy } from '../conflictHandling'
 
 export enum TransferType {
   COPY,

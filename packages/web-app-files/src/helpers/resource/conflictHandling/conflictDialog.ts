@@ -1,32 +1,11 @@
 import { join } from 'path'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { ResolveConflict, ResolveStrategy } from '.'
 
-export enum ResolveStrategy {
-  SKIP,
-  REPLACE,
-  KEEP_BOTH,
-  MERGE
-}
-export interface ResolveConflict {
-  strategy: ResolveStrategy
-  doForAllConflicts: boolean
-}
 interface FileConflict {
   resource: Resource
   strategy?: ResolveStrategy
-}
-export interface FileExistsResolver {
-  (
-    createModal: void,
-    hideModal: void,
-    resource: Resource,
-    conflictCount: number,
-    $gettext: void,
-    $gettextInterpolate: void,
-    isSingleConflict: boolean,
-    suggestMerge: boolean
-  )
 }
 
 export class ConflictDialog {
@@ -92,7 +71,7 @@ export class ConflictDialog {
     return resolvedConflicts
   }
 
-  resolveFileExists(
+  async resolveFileExists(
     resource: Resource,
     conflictCount: number,
     isSingleConflict: boolean,
@@ -147,7 +126,7 @@ export class ConflictDialog {
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
-        title: this.$gettext('Move not possible'),
+        title: this.$gettext('Copy here?'),
         message: this.$gettext(
           'Moving files from one space to another is not possible. Do you want to copy instead?'
         ),
