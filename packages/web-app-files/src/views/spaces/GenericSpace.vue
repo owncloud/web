@@ -192,8 +192,7 @@ export default defineComponent({
           text: this.$gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects')
         })
-      }
-      if (this.space.driveType === 'share') {
+      } else if (this.space.driveType === 'share') {
         rootBreadcrumbItems.push(
           {
             text: this.$gettext('Shares'),
@@ -205,23 +204,29 @@ export default defineComponent({
           }
         )
       }
+
+      let spaceBreadcrumbItem
       if (this.space.driveType === 'personal') {
-        rootBreadcrumbItems.push({
+        spaceBreadcrumbItem = {
           text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
           to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias }
+            params: { driveAliasAndItem: this.space.driveAlias },
+            query: this.$route.query
           })
-        })
+        }
       } else {
-        rootBreadcrumbItems.push({
+        spaceBreadcrumbItem = {
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias }
+            params: { driveAliasAndItem: this.space.driveAlias },
+            query: this.$route.query
           })
-        })
+        }
       }
+
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
+        spaceBreadcrumbItem,
         ...breadcrumbsFromPath(this.$route, this.item)
       )
     },
