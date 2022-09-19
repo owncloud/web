@@ -320,7 +320,7 @@ export default {
       }
 
       li {
-        padding: var(--oc-space-small) var(--oc-space-small);
+        padding: var(--oc-space-xsmall) var(--oc-space-small);
         position: relative;
         font-size: var(--oc-font-size-small);
 
