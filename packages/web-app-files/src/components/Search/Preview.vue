@@ -71,7 +71,11 @@ export default defineComponent({
       return this.resource.isFolder
         ? {}
         : {
-            click: () => this.$_fileActions_triggerDefaultAction(this.resource)
+            click: () =>
+              this.$_fileActions_triggerDefaultAction({
+                space: this.matchingSpace,
+                resources: [this.resource]
+              })
           }
     },
     resource() {

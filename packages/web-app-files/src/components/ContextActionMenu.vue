@@ -12,16 +12,19 @@
         :key="`section-${section.name}-action-${actionIndex}`"
         :action="action"
         :items="items"
+        :space="space"
         class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
     </oc-list>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from '@vue/composition-api'
 import ActionMenuItem from './ActionMenuItem.vue'
+import { Resource } from 'web-client'
 
-export default {
+export default defineComponent({
   name: 'ContextActionMenu',
   components: { ActionMenuItem },
   props: {
@@ -32,6 +35,10 @@ export default {
     // items can e.g. be currentFolder (breadcrumbs) or selectedResources (resourceTable)
     items: {
       type: Array,
+      required: true
+    },
+    space: {
+      type: Object as PropType<Resource>,
       required: true
     }
   },
@@ -53,7 +60,7 @@ export default {
       return classes
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <context-action-menu :menu-sections="menuSections" :items="items" />
+  <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
 </template>
 
 <script lang="ts">
@@ -57,13 +57,9 @@ export default {
   ],
 
   props: {
-    /**
-     * Space is needed in action mixins
-     */
     space: {
       type: Object as PropType<Resource>,
-      required: false,
-      default: null
+      required: true
     },
     items: {
       type: Array as PropType<Resource[]>,
@@ -117,6 +113,7 @@ export default {
 
     filterParams() {
       return {
+        space: this.space,
         resources: this.items
       }
     },
@@ -137,7 +134,7 @@ export default {
     menuItemsContext() {
       const fileHandlers = [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources)
+        ...this.$_fileActions_loadExternalAppActions(this.filterParams)
       ]
 
       return [...fileHandlers]

@@ -5,6 +5,7 @@
       :key="`action-${index}`"
       :action="action"
       :items="resources"
+      :space="space"
       class="oc-py-xs"
     />
   </oc-list>
@@ -16,12 +17,15 @@ import ActionMenuItem from '../../ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
 import { defineComponent, unref } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'FileActions',
   components: { ActionMenuItem },
   mixins: [FileActions],
-  inject: ['displayedSpace'],
+  inject: {
+    displayedSpace: { from: 'displayedSpace' }
+  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
 
@@ -30,11 +34,14 @@ export default defineComponent({
     },
 
     actions() {
-      return this.$_fileActions_getAllAvailableActions(this.resources)
+      return this.$_fileActions_getAllAvailableActions({
+        space: this.space,
+        resource: this.resources[0]
+      })
     },
 
     space() {
-      return unref(this.displayedSpace)
+      return unref(this.displayedSpace) as Resource
     }
   }
 })

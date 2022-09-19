@@ -32,7 +32,6 @@ export default defineComponent({
   data: () => ({
     loading: true,
     loadingError: false,
-    filePath: '',
     url: '',
     resource: null
   }),

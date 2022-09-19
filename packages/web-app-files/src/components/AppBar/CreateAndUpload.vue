@@ -299,13 +299,7 @@ export default defineComponent({
       'clearClipboardFiles',
       'pasteSelectedFiles'
     ]),
-    ...mapActions([
-      'openFile',
-      'showMessage',
-      'createModal',
-      'setModalInputErrorMessage',
-      'hideModal'
-    ]),
+    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
@@ -601,7 +595,7 @@ export default defineComponent({
           )
         }
         resource = buildResource(resource)
-        this.$_fileActions_triggerDefaultAction(resource)
+        this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 

@@ -37,8 +37,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         meta: {
           patchCleanPath: true,
           // FIXME: we'd need to extract the title from the resolved space...
-          title: $gettext('Space'),
-          contextQueryItems: ['shareId']
+          title: $gettext('Space')
         }
       }
     ]

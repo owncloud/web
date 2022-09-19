@@ -703,11 +703,12 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
+      const space = this.getMatchingSpace(resource.storageId)
       /**
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      this.$emit('fileClick', resource)
+      this.$emit('fileClick', { space, resources: [resource] })
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {

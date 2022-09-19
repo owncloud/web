@@ -51,6 +51,7 @@ export interface Resource {
   isMounted?(): boolean
 
   getDomSelector?(): string
+  getDriveAliasAndItem?(resource: Resource): string
 
   matchingSpace?: any
 

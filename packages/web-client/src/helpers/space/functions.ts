@@ -1,5 +1,5 @@
 import { User } from '../user'
-import { buildWebDavSpacesPath, extractDomSelector } from '../resource'
+import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
 
 export function buildSpace(space) {
@@ -126,6 +126,9 @@ export function buildSpace(space) {
       return false
     },
     canDeny: () => false,
-    getDomSelector: () => extractDomSelector(space.id)
+    getDomSelector: () => extractDomSelector(space.id),
+    getDriveAliasAndItem({ path }: Resource): string {
+      return `${this.driveAlias}/${path.replace(/^\//, '')}`
+    }
   }
 }
