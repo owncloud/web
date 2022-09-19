@@ -1,9 +1,10 @@
 import { Resource } from 'web-client'
 import { extractNameWithoutExtension } from './index'
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ClientService } from 'web-pkg/src/services'
 import { ClipboardActions } from '../clipboardActions'
+import path from 'path/win32'
 
 export enum ResolveStrategy {
   SKIP,
@@ -31,6 +32,36 @@ export interface FileExistsResolver {
     isSingleConflict: boolean,
     suggestMerge: boolean
   )
+}
+
+export const resolveDoCopyInsteadOfMoveForSpaces = (
+  createModal,
+  hideModal,
+  $gettext
+): Promise<boolean> => {
+  return new Promise<boolean>((resolve) => {
+    const modal = {
+      variation: 'danger',
+      icon: 'alarm-warning',
+      title: $gettext('Move not possible'),
+      message: $gettext(
+        'Moving files from one space to another is not possible. Do you want to copy instead?'
+      ),
+      cancelText: $gettext('Cancel'),
+      confirmText: $gettext('Copy here'),
+      contextualHelperLabel: 'Note: Links and shares of the original file are not copied.',
+      contextualHelperData: { title: 'test' },
+      onCancel: () => {
+        hideModal()
+        resolve(false)
+      },
+      onConfirm: () => {
+        hideModal()
+        resolve(true)
+      }
+    }
+    createModal(modal)
+  })
 }
 
 export const resolveFileExists = (
@@ -232,6 +263,11 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
+
+const isResourceBeeingMovedToSameLocation = (sourceSpace: SpaceResource, resource: Resource, targetSpace: SpaceResource, targetFolder: Resource) => {
+  return sourceSpace.id === targetSpace.id && dirname(resource.path) === targetFolder.path
+}
+
 export const copyMoveResource = async (
   sourceSpace: SpaceResource,
   resourcesToMove: Resource[],
@@ -249,6 +285,15 @@ export const copyMoveResource = async (
   if (hasRecursion(sourceSpace, resourcesToMove, targetSpace, targetFolder)) {
     showRecursionErrorMessage(resourcesToMove, showMessage, $ngettext)
     return []
+  }
+  if (sourceSpace.id != targetSpace.id && clipboardAction === ClipboardActions.Cut) {
+    const doCopyInsteadOfMove = await resolveDoCopyInsteadOfMoveForSpaces(
+      createModal,
+      hideModal,
+      $gettext
+    )
+    if (!doCopyInsteadOfMove) return []
+    clipboardAction = ClipboardActions.Copy
   }
 
   const errors = []
@@ -290,6 +335,7 @@ export const copyMoveResource = async (
       }
     }
     try {
+      if (isResourceBeeingMovedToSameLocation(sourceSpace, resource, targetSpace, targetFolder) && overwriteTarget) continue
       if (clipboardAction === ClipboardActions.Copy) {
         await clientService.webdav.copyFiles(
           sourceSpace,

@@ -1,0 +1,3 @@
+Bugfix: Inhibit move files between spaces
+
+We've inhibited moving files between spaces and will no offer the user to copy instead
