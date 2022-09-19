@@ -4,10 +4,10 @@
       <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="loading" />
       <template v-else>
-        <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
+        <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="search" icon-fill-type="line">
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!$route.query.term" v-translate>No resource found</span>
+              <span v-if="!!$route.query.term" v-translate>No results found</span>
               <span v-else v-translate>No search term entered</span>
             </p>
           </template>
