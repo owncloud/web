@@ -365,7 +365,7 @@ export default {
    * This will add new entries into the shares tree and will
    * not remove unrelated existing ones.
    */
-  loadSharesTree(context, { client, path, storageId, includeRoot = false }) {
+  loadSharesTree(context, { client, path, storageId, includeRoot = false, useCached = true }) {
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
@@ -425,7 +425,8 @@ export default {
       // FIXME: We need the storageId of each parent resource here
       const spaceRef = indirect ? null : storageId
       // no need to fetch cached paths again, only adjust the "indirect" state
-      if (context.getters.sharesTree[queryPath]) {
+      if (context.getters.sharesTree[queryPath] && useCached) {
+        console.log('USE CACHGED FOR:', queryPath)
         sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
           if (!indirect) {
             const arr = s.outgoing ? outgoingShares : incomingShares

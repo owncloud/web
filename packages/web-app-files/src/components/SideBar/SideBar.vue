@@ -296,7 +296,9 @@ export default defineComponent({
         client: this.$client,
         path: this.highlightedFile.path,
         storageId: this.highlightedFile.fileId,
-        includeRoot: true
+        includeRoot: true,
+        // cache must not be used on flat file lists that gather resources form various locations
+        useCached: !(this.isSharedWithOthersLocation || this.isSharedViaLinkLocation)
       })
     }
   }
