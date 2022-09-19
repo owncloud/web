@@ -297,8 +297,7 @@ export default {
     text-decoration: none;
 
     .highlight-mark {
-      background: yellow;
-      color: var(--oc-color-text-muted);
+      font-weight: 600;
     }
 
     @media (max-width: 959px) {
