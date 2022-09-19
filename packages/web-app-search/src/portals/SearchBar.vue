@@ -12,7 +12,7 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @clear="clearTerm"
+      @keyup.enter="onSearchInputEnter"
     />
     <div
       v-if="optionsVisible && term"
@@ -36,7 +36,7 @@
             <ul class="oc-list">
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span>{{ provider.displayName }}</span>
-                <span v-if="showMoreResultsForProvider(provider)">
+                <span>
                   <router-link :to="getMoreResultsLinkForProvider(provider)">
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
@@ -66,7 +66,7 @@
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
-import { createLocationCommon, createLocationSpaces } from 'files/src/router'
+import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
 
 export default {
@@ -179,9 +179,6 @@ export default {
     updateTerm(term) {
       this.term = term
     },
-    clearTerm() {
-      this.$router.push(createLocationSpaces('files-spaces-personal'))
-    },
     onEvent(event) {
       const eventInComponent = this.$el.contains(event.target)
       const elementIsInteractive = event.target.tagName === 'a' || event.target.tagName === 'button'
@@ -199,14 +196,6 @@ export default {
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
     },
-    showMoreResultsForProvider(provider) {
-      const searchResult = this.getSearchResultForProvider(provider)
-      if (!searchResult || !searchResult.totalResults) {
-        return false
-      }
-
-      return searchResult.totalResults > searchResult.values.length
-    },
     getMoreResultsLinkForProvider(provider) {
       return createLocationCommon('files-common-search', {
         query: { term: this.term, provider: provider.id }
@@ -215,11 +204,25 @@ export default {
     getMoreResultsDetailsTextForProvider(provider) {
       const searchResult = this.getSearchResultForProvider(provider)
       if (!searchResult || !searchResult.totalResults) {
-        return
+        return this.$gettext('Show all results')
       }
-      return this.$gettextInterpolate(this.$gettext('Show all %{totalResults} total results'), {
+
+      const translated = this.$ngettext(
+        'Show %{totalResults} results',
+        'Show %{totalResults} result',
+        searchResult.totalResults
+      )
+
+      return this.$gettextInterpolate(translated, {
         totalResults: searchResult.totalResults
       })
+    },
+    onSearchInputEnter() {
+      this.$router.push(
+        createLocationCommon('files-common-search', {
+          query: { term: this.term, provider: 'files.sdk' }
+        })
+      )
     }
   }
 }
@@ -292,7 +295,8 @@ export default {
     overflow-y: auto;
     max-height: calc(100% - 52px);
     border: 1px solid var(--oc-color-input-border);
-    background-color: var(--oc-color-input-bg);
+    background-color: var(--oc-color-background-default);
+    box-shadow: 5px 0 25px rgb(0 0 0 / 30%);
     width: 450px;
     text-decoration: none;
 
@@ -322,7 +326,6 @@ export default {
         }
 
         &.preview {
-          background-color: var(--oc-color-background-highlight);
           min-height: 44px;
 
           &:hover {

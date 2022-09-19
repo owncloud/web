@@ -15,7 +15,7 @@ import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
-import { SDKSearch, DummySearch } from './search'
+import { SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
 import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
@@ -118,12 +118,10 @@ export default {
   translations,
   ready({ router, store }) {
     Registry.sdkSearch = new SDKSearch(store, router)
-    Registry.dummySearch = new DummySearch(store, router)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
     bus.publish('app.search.register.provider', Registry.sdkSearch)
-    bus.publish('app.search.register.provider', Registry.dummySearch)
 
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,
