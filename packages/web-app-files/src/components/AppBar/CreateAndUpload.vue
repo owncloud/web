@@ -128,7 +128,6 @@
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import pathUtil from 'path'
-import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
@@ -151,24 +150,19 @@ import {
   onMounted,
   PropType
 } from '@vue/composition-api'
-import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
+import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { bus } from 'web-pkg/src/instance'
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import {
-  extractExtensionFromFile,
   extractNameWithoutExtension,
-  ResolveStrategy,
-  ResolveConflict,
   resolveFileNameDuplicate,
-  ConflictDialog,
+  ResourcesUpload,
 } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-pkg/src/utils'
 import qs from 'qs'
-import { locationPublicLink } from '../../router/public'
-import { locationSpacesGeneric } from '../../router/spaces'
 
 export default defineComponent({
   components: {
@@ -621,227 +615,25 @@ export default defineComponent({
       return null
     },
 
-    async onFilesSelected(files: File[]) {
-      const conflicts = []
-      const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
-      const quotaExceeded = this.checkQuotaExceeded(uppyResources)
-
-      if (quotaExceeded) {
-        return this.$uppyService.clearInputs()
-      }
-      for (const file of uppyResources) {
-        const relativeFilePath = file.meta.relativePath
-        if (relativeFilePath) {
-          // Logic for folders, applies to all files inside folder and subfolders
-          const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
-          const exists = this.files.find((f) => f.name === rootFolder)
-          if (exists) {
-            if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
-            conflicts.push({
-              name: rootFolder,
-              type: 'folder'
-            })
-            continue
-          }
-        }
-        // Logic for files
-        const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
-        if (exists) {
-          conflicts.push({
-            name: file.name,
-            type: 'file'
-          })
-        }
-      }
-      if (conflicts.length) {
-        const conflictDialog = new ConflictDialog(
-          this.createModal,
-          this.hideModal,
-          this.showMessage,
-          this.$gettext,
-          this.$ngettext,
-          this.$gettextInterpolate
-        )
-        await this.displayOverwriteDialog(uppyResources, conflicts, conflictDialog)
-      } else {
-        await this.handleUppyFileUpload(this.space, this.item, uppyResources)
-      }
-    },
-
-    checkQuotaExceeded(uppyResources: UppyResource[]) {
-      if (!this.hasSpaces) {
-        return false
-      }
-
-      let quotaExceeded = false
-
-      const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
-        let targetUploadSpace
-
-        if (uppyResource.meta.routeName === locationPublicLink.name) {
-          return acc
-        }
-
-        if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
-          targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
-        }
-
-        if (!targetUploadSpace || isShareSpaceResource(targetUploadSpace)) {
-          return acc
-        }
-
-        const matchingMappingRecord = acc.find(
-          (mappingRecord) => mappingRecord.space.id === targetUploadSpace.id
-        )
-
-        if (!matchingMappingRecord) {
-          acc.push({
-            space: targetUploadSpace,
-            uploadSize: uppyResource.data.size
-          })
-          return acc
-        }
-
-        matchingMappingRecord.uploadSize += uppyResource.data.size
-
-        return acc
-      }, [])
-
-      uploadSizeSpaceMapping.forEach(({ space, uploadSize }) => {
-        if (space.spaceQuota.remaining && space.spaceQuota.remaining < uploadSize) {
-          let spaceName = space.name
-
-          if (space.driveType === 'personal') {
-            spaceName = this.$gettext('Personal')
-          }
-
-          const translated = this.$gettext(
-            'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files'
-          )
-
-          this.showMessage({
-            title: this.$gettext('Not enough quota'),
-            desc: this.$gettextInterpolate(translated, {
-              spaceName,
-              missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
-            }),
-            status: 'danger'
-          })
-
-          quotaExceeded = true
-        }
-      })
-
-      return quotaExceeded
-    },
-
-    async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
-      this.$uppyService.publish('uploadStarted')
-      await this.createDirectoryTree(space, currentFolder, files)
-      this.$uppyService.publish('addedForUpload', files)
-      this.$uppyService.uploadFiles(files)
-    },
-
-    async displayOverwriteDialog(files: UppyResource[], conflicts, conflictDialog: ConflictDialog) {
-      let count = 0
-      const allConflictsCount = conflicts.length
-      const resolvedFileConflicts = []
-      const resolvedFolderConflicts = []
-      let doForAllConflicts = false
-      let allConflictsStrategy
-      let doForAllConflictsFolders = false
-      let allConflictsStrategyFolders
-
-      for (const conflict of conflicts) {
-        const isFolder = conflict.type === 'folder'
-        const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
-
-        if (doForAllConflicts && !isFolder) {
-          conflictArray.push({
-            name: conflict.name,
-            strategy: allConflictsStrategy
-          })
-          continue
-        }
-        if (doForAllConflictsFolders && isFolder) {
-          conflictArray.push({
-            name: conflict.name,
-            strategy: allConflictsStrategyFolders
-          })
-          continue
-        }
-
-        const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
-          { name: conflict.name, isFolder } as Resource,
-          allConflictsCount - count,
-          false,
-          isFolder
-        )
-        count++
-        if (resolvedConflict.doForAllConflicts) {
-          if (isFolder) {
-            doForAllConflictsFolders = true
-            allConflictsStrategyFolders = resolvedConflict.strategy
-          } else {
-            doForAllConflicts = true
-            allConflictsStrategy = resolvedConflict.strategy
-          }
-        }
-
-        conflictArray.push({
-          name: conflict.name,
-          strategy: resolvedConflict.strategy
-        })
-      }
-      const filesToSkip = resolvedFileConflicts
-        .filter((e) => e.strategy === ResolveStrategy.SKIP)
-        .map((e) => e.name)
-      const foldersToSkip = resolvedFolderConflicts
-        .filter((e) => e.strategy === ResolveStrategy.SKIP)
-        .map((e) => e.name)
-
-      files = files.filter((e) => !filesToSkip.includes(e.name))
-      files = files.filter(
-        (file) =>
-          !foldersToSkip.some((folderName) => file.meta.relativeFolder.split('/')[1] === folderName)
+    async onFilesSelected(filesToUpload: File[]) {
+      const uploader = new ResourcesUpload(
+        filesToUpload,
+        this.files,
+        this.inputFilesToUppyFiles,
+        this.$uppyService,
+        this.space,
+        this.item,
+        this.spaces,
+        this.hasSpaces,
+        this.createDirectoryTree,
+        this.createModal,
+        this.hideModal,
+        this.showMessage,
+        this.$gettext,
+        this.$ngettext,
+        this.$gettextInterpolate
       )
-
-      const filesToKeepBoth = resolvedFileConflicts
-        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
-        .map((e) => e.name)
-      const foldersToKeepBoth = resolvedFolderConflicts
-        .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
-        .map((e) => e.name)
-
-      for (const fileName of filesToKeepBoth) {
-        const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
-        const extension = extractExtensionFromFile({ name: fileName } as Resource)
-        file.name = resolveFileNameDuplicate(fileName, extension, this.files)
-      }
-      for (const folder of foldersToKeepBoth) {
-        const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
-        for (const file of filesInFolder) {
-          const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
-          file.meta.relativeFolder = file.meta.relativeFolder.replace(
-            new RegExp(`/${folder}` + '$'),
-            `/${newFolderName}`
-          )
-          file.meta.relativePath = file.meta.relativePath.replace(
-            new RegExp(`/${folder}/` + '$'),
-            `/${newFolderName}/`
-          )
-          file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-            new RegExp(`/${folder}` + '$'),
-            `/${newFolderName}`
-          )
-        }
-      }
-
-      if (files.length === 0) {
-        return this.$uppyService.clearInputs()
-      }
-
-      return this.handleUppyFileUpload(this.space, this.item, files)
+      uploader.perform()
     }
   }
 })
