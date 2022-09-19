@@ -16,7 +16,7 @@ const getters = {
 }
 
 const mutations = {
-  LOAD_SPACES(state, spaces) {
+  SET_SPACES(state, spaces) {
     state.spaces = spaces
   },
   /**
@@ -63,10 +63,13 @@ const mutations = {
   CLEAR_SPACES(state) {
     state.spaces = []
   },
-  LOAD_SPACE_MEMBERS(state, members) {
+  CLEAR_SPACE_MEMBERS(state) {
+    state.spaceMembers = []
+  },
+  SET_SPACE_MEMBERS(state, members) {
     state.spaceMembers = members
   },
-  SPACE_MEMBERS_UPSERT(state, member) {
+  UPSERT_SPACE_MEMBERS(state, member) {
     const fileIndex = state.spaceMembers.findIndex((s) => {
       return member.id === s.id && member.collaborator.name === s.collaborator.name
     })
@@ -78,7 +81,7 @@ const mutations = {
       state.spaceMembers.push(member)
     }
   },
-  SPACE_MEMBER_REMOVE(state, member) {
+  REMOVE_SPACE_MEMBER(state, member) {
     state.spaceMembers = state.spaceMembers.filter(
       (s) => member.id === s.id && member.collaborator.name !== s.collaborator.name
     )
@@ -93,10 +96,10 @@ const actions = {
     }
 
     const spaces = graphResponse.data.value.map((space) => buildSpace(space))
-    context.commit('LOAD_SPACES', spaces)
+    context.commit('SET_SPACES', spaces)
   },
   loadSpaceMembers(context, { graphClient, space }) {
-    context.commit('LOAD_SPACE_MEMBERS', [])
+    context.commit('CLEAR_SPACE_MEMBERS')
     const promises = []
     const spaceShares = []
 
@@ -113,7 +116,7 @@ const actions = {
     }
 
     return Promise.all(promises).then(() => {
-      context.commit('LOAD_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
+      context.commit('SET_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
     })
   },
   addSpaceMember(context, { client, path, shareWith, permissions, role, storageId, displayName }) {
@@ -121,7 +124,7 @@ const actions = {
       .shareSpaceWithUser(path, shareWith, storageId, { permissions, role: role.name })
       .then(() => {
         const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
-        context.commit('SPACE_MEMBERS_UPSERT', buildSpaceShare(shareObj, storageId))
+        context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
       })
   },
   changeSpaceMember(context, { client, share, permissions, role }) {
@@ -137,14 +140,14 @@ const actions = {
           share.id
         )
 
-        context.commit('SPACE_MEMBERS_UPSERT', spaceShare)
+        context.commit('UPSERT_SPACE_MEMBERS', spaceShare)
       })
   },
   deleteSpaceMember(context, { client, share }) {
     const additionalParams = { shareWith: share.collaborator.name } as any
 
     return client.shares.deleteShare(share.id, additionalParams).then(() => {
-      context.commit('SPACE_MEMBER_REMOVE', share)
+      context.commit('REMOVE_SPACE_MEMBER', share)
     })
   }
 }
