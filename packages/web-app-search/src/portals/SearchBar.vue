@@ -305,6 +305,10 @@ export default {
     }
 
     ul {
+      li.provider {
+        padding: 0;
+      }
+
       li {
         padding: var(--oc-space-small) var(--oc-space-small);
         position: relative;
@@ -319,7 +323,6 @@ export default {
 
           &:hover {
             background-color: var(--oc-color-input-border);
-            border-radius: 5px;
           }
         }
       }
