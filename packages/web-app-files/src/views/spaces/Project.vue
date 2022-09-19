@@ -198,14 +198,13 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const space = ref({})
-    const { graphClient } = useGraphClient()
 
     return {
       ...useResourcesViewDefaults(),
+      ...useGraphClient(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
       space,
-      accessToken: useAccessToken({ store }),
-      graphClient
+      accessToken: useAccessToken({ store })
     }
   },
   data: function () {
