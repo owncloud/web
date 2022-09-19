@@ -298,7 +298,11 @@ export default defineComponent({
         storageId: this.highlightedFile.fileId,
         includeRoot: true,
         // cache must not be used on flat file lists that gather resources form various locations
-        useCached: !(this.isSharedWithOthersLocation || this.isSharedViaLinkLocation)
+        useCached: !(
+          this.isSharedWithOthersLocation ||
+          this.isSharedViaLinkLocation ||
+          this.isFavoritesLocation
+        )
       })
     }
   }
