@@ -53,6 +53,7 @@ export function buildSpace(space) {
     permissions: '',
     starred: false,
     etag: '',
+    shareId: space.shareId,
     sharePermissions: '',
     shareTypes: (function () {
       return []

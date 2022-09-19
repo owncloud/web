@@ -5,7 +5,6 @@ import {
   createLocationSpaces,
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
@@ -50,14 +49,13 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: ({ resources }) => {
+            const path = this.getPath(resources[0])
+            const driveAliasAndItem = this.getDriveAliasAndItem(resources[0])
             const shareId = this.getShareId(resources[0])
-            const shareName = this.getShareName(resources[0])
-            const { storageId } = resources[0]
             return merge({}, this.routeName, {
               params: {
-                item: resources[0].path,
-                ...(shareName && { shareName }),
-                ...(storageId && { storageId })
+                ...(path && { path }),
+                ...(driveAliasAndItem && { driveAliasAndItem })
               },
               query: {
                 ...(shareId && { shareId })
@@ -73,17 +71,28 @@ export default {
         return createLocationPublic('files-public-files')
       }
 
-      if (
-        isLocationSpacesActive(this.$router, 'files-spaces-share') ||
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return createLocationSpaces('files-spaces-share')
-      }
-
       return createLocationSpaces('files-spaces-generic')
     }
   },
   methods: {
+    getPath(resource) {
+      if (!isLocationPublicActive(this.$router, 'files-public-files')) {
+        return null
+      }
+      return resource.path
+    },
+    getDriveAliasAndItem(resource) {
+      if (
+        this.capabilities?.spaces?.share_jail &&
+        isLocationSharesActive(this.$router, 'files-shares-with-me')
+      ) {
+        return `share/${resource.name}`
+      }
+      if (!this.space) {
+        return null
+      }
+      return this.space.driveAlias + resource.path
+    },
     getShareId(resource) {
       if (this.$route.query?.shareId) {
         return this.$route.query.shareId
@@ -93,18 +102,6 @@ export default {
         isLocationSharesActive(this.$router, 'files-shares-with-me')
       ) {
         return resource.id
-      }
-      return undefined
-    },
-    getShareName(resource) {
-      if (this.$route.params?.shareName) {
-        return this.$route.params.shareName
-      }
-      if (
-        this.capabilities?.spaces?.share_jail &&
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return resource.name
       }
       return undefined
     }

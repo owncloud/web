@@ -583,10 +583,10 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        return createLocationSpaces('files-spaces-share', {
+        const shareName = path.basename(resource.shareRoot)
+        return createLocationSpaces('files-spaces-generic', {
           params: {
-            shareName: path.basename(resource.shareRoot),
-            item: p
+            driveAliasAndItem: `share/${shareName}/${p.replace(/^\/+/, '')}`
           },
           query: {
             shareId: resource.shareId

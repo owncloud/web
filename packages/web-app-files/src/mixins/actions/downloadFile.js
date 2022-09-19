@@ -24,7 +24,6 @@ export default {
               this.$_isFilesAppActive &&
               !this.$_isSearchActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
               !isLocationCommonActive(this.$router, 'files-common-search') &&

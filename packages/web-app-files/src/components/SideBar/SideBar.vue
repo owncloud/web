@@ -47,7 +47,7 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
@@ -58,6 +58,7 @@ import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -81,7 +82,7 @@ export default defineComponent({
       default: null
     },
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: false,
       default: null
     }
@@ -113,7 +114,6 @@ export default defineComponent({
 
     return {
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       isSharedWithOthersLocation: useActiveLocation(
         isLocationSharesActive,
@@ -202,7 +202,7 @@ export default defineComponent({
       if (this.isSharedWithMeLocation || this.isSearchLocation) {
         return !this.highlightedFile
       }
-      if (this.hasShareJail && this.isSpacesShareLocation) {
+      if (this.hasShareJail && this.space?.driveType === 'share') {
         return false
       }
       return !pathSegments.length

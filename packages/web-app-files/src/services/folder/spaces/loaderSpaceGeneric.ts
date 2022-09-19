@@ -6,7 +6,7 @@ import { buildResource } from '../../../helpers/resources'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
 import { fetchResources } from '../util'
@@ -18,12 +18,15 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    // TODO: as soon as we can check for the generic space route being active we can remove the negative checks again.
-    return (
-      !isLocationSpacesActive(router, 'files-spaces-projects') &&
-      !isLocationSpacesActive(router, 'files-spaces-share') &&
-      isLocationSpacesActive(router, 'files-spaces-generic')
-    )
+    // TODO: remove next check when isLocationSpacesActive doesn't return true for generic route when being on projects overview.
+    if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+      return false
+    }
+    if (!isLocationSpacesActive(router, 'files-spaces-generic')) {
+      return false
+    }
+    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+    return !unref(driveAliasAndItem).startsWith('share/')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {

@@ -12,13 +12,13 @@ export interface RouteComponents {
   FilesDrop: ComponentOptions<Vue>
   PrivateLink: ComponentOptions<Vue>
   PublicFiles: ComponentOptions<Vue>
-  Personal: ComponentOptions<Vue>
   SearchResults: ComponentOptions<Vue>
   PublicLink: ComponentOptions<Vue>
-  SharedResource: ComponentOptions<Vue>
-  SharedWithMe: ComponentOptions<Vue>
-  SharedWithOthers: ComponentOptions<Vue>
-  SharedViaLink: ComponentOptions<Vue>
+  Shares: {
+    SharedWithMe: ComponentOptions<Vue>
+    SharedWithOthers: ComponentOptions<Vue>
+    SharedViaLink: ComponentOptions<Vue>
+  }
   Spaces: {
     DriveResolver: ComponentOptions<Vue>
     Projects: ComponentOptions<Vue>

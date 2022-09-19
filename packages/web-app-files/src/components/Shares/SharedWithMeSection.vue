@@ -182,8 +182,8 @@ export default defineComponent({
     const hasShareJail = useCapabilityShareJailEnabled()
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       if (unref(hasShareJail)) {
-        return createLocationSpaces('files-spaces-share', {
-          params: { shareName: resource.name, item: path },
+        return createLocationSpaces('files-spaces-generic', {
+          params: { driveAliasAndItem: `share/${resource.name}/${path.replace(/^\/+/, '')}` },
           query: { shareId: resource.id }
         })
       }

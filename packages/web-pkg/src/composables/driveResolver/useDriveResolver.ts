@@ -1,6 +1,9 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
+import { buildSpace } from 'web-client/src/helpers'
+import { useRouteQuery } from '../router'
+import { SHARE_JAIL_ID } from 'files/src/services/folder'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -9,6 +12,7 @@ interface DriveResolverOptions {
 
 export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const store = options.store || useStore()
+  const shareId = useRouteQuery('shareId')
   const areSpacesLoading = computed(
     () =>
       !store.getters['runtime/spaces/spacesInitialized'] ||
@@ -31,15 +35,27 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       }
       let matchingSpace = null
       let path = null
-      unref(spaces).forEach((s) => {
-        if (!driveAliasAndItem.startsWith(s.driveAlias)) {
-          return
-        }
-        if (!matchingSpace || s.driveAlias.length > matchingSpace.driveAlias.length) {
-          matchingSpace = s
-          path = driveAliasAndItem.slice(s.driveAlias.length)
-        }
-      })
+      if (driveAliasAndItem.startsWith('share/')) {
+        const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
+        matchingSpace = buildSpace({
+          id: [SHARE_JAIL_ID, unref(shareId)].join('!'),
+          driveAlias: `share/${shareName}`,
+          driveType: 'share',
+          name: shareName,
+          shareId
+        })
+        path = item.join('/')
+      } else {
+        unref(spaces).forEach((s) => {
+          if (!driveAliasAndItem.startsWith(s.driveAlias)) {
+            return
+          }
+          if (!matchingSpace || s.driveAlias.length > matchingSpace.driveAlias.length) {
+            matchingSpace = s
+            path = driveAliasAndItem.slice(s.driveAlias.length)
+          }
+        })
+      }
       space.value = matchingSpace
       item.value = path
     },

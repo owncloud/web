@@ -22,7 +22,6 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
               !isLocationPublicActive(this.$router, 'files-public-files') &&
               !isLocationCommonActive(this.$router, 'files-common-search')
             ) {
@@ -33,7 +32,8 @@ export default {
             }
 
             if (
-              isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              this.space?.driveType === 'share' &&
               resources[0].path === '/'
             ) {
               return false

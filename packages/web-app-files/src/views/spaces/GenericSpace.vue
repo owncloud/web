@@ -154,12 +154,13 @@ export default defineComponent({
   setup(props) {
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       return createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: props.space.driveAlias + path }
+        params: { driveAliasAndItem: props.space.driveAlias + path },
+        query: { ...(props.space.driveType === 'share' && { shareId: props.space.shareId }) }
       })
     }
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
-      return props.space?.driveType === 'project' && !props.item
+      return props.space.driveType === 'project' && !props.item
     })
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
@@ -178,8 +179,7 @@ export default defineComponent({
       'totalFilesCount',
       'totalFilesSize'
     ]),
-    ...mapGetters('runtime/spaces', ['spaces']),
-    ...mapGetters(['user', 'homeFolder', 'configuration']),
+    ...mapGetters(['user', 'configuration']),
 
     isEmpty() {
       return this.paginatedResources.length < 1
@@ -192,6 +192,18 @@ export default defineComponent({
           text: this.$gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects')
         })
+      }
+      if (this.space.driveType === 'share') {
+        rootBreadcrumbItems.push(
+          {
+            text: this.$gettext('Shares'),
+            to: { path: '/files/shares' }
+          },
+          {
+            text: this.$gettext('Shared with me'),
+            to: { path: '/files/shares/with-me' }
+          }
+        )
       }
       if (this.space.driveType === 'personal') {
         rootBreadcrumbItems.push({

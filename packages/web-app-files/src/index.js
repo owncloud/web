@@ -3,7 +3,6 @@ import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicFiles from './views/PublicFiles.vue'
-import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
@@ -98,10 +97,11 @@ export default {
     PrivateLink,
     PublicFiles,
     SearchResults,
-    SharedResource,
-    SharedViaLink,
-    SharedWithMe,
-    SharedWithOthers,
+    Shares: {
+      SharedViaLink,
+      SharedWithMe,
+      SharedWithOthers
+    },
     Spaces: {
       DriveResolver: SpaceDriveResolver,
       Projects: SpaceProjects

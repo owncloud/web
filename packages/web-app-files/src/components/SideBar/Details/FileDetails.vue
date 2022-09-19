@@ -253,10 +253,10 @@ export default defineComponent({
         if (this.file.path === '') {
           return {}
         }
-        return createLocationSpaces('files-spaces-share', {
+        const shareName = path.basename(this.file.shareRoot)
+        return createLocationSpaces('files-spaces-generic', {
           params: {
-            shareName: path.basename(this.file.shareRoot),
-            item: this.file.path
+            driveAliasAndItem: `share/${shareName}/${this.file.path.replace(/^\/+/, '')}`
           },
           query: {
             shareId: this.file.shareId

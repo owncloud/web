@@ -3,7 +3,7 @@ import { triggerShareAction } from '../../helpers/share/triggerShareAction'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { isLocationSharesActive } from '../../router'
+import { isLocationSharesActive, isLocationSpacesActive } from '../../router'
 import get from 'lodash-es/get'
 
 export default {
@@ -24,10 +24,22 @@ export default {
           label: ({ resources }) =>
             this.$ngettext('Accept share', 'Accept shares', resources.length),
           isEnabled: ({ resources }) => {
-            if (!isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+            if (
+              !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic')
+            ) {
               return false
             }
             if (resources.length === 0) {
+              return false
+            }
+
+            if (
+              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              (this.space?.driveType !== 'share' ||
+                resources.length > 1 ||
+                resources[0].path !== '/')
+            ) {
               return false
             }
 
@@ -75,6 +87,17 @@ export default {
 
       if (errors.length === 0) {
         this.resetFileSelection()
+
+        if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
+          this.showMessage({
+            title: this.$ngettext(
+              'The selected share was accepted successfully',
+              'The selected shares were accepted successfully',
+              resources.length
+            )
+          })
+        }
+
         return
       }
 

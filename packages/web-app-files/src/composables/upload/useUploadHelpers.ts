@@ -8,13 +8,11 @@ import {
   useDriveResolver,
   useRoute,
   useRouteParam,
-  useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { computed, Ref, unref } from '@vue/composition-api'
-import { SHARE_JAIL_ID } from '../../services/folder'
 import * as uuid from 'uuid'
 import path from 'path'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
@@ -38,7 +36,6 @@ export function useUploadHelpers(): UploadHelpersResult {
   const hasShareJail = useCapabilityShareJailEnabled()
   const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
   const isSpacesGenericLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-generic')
-  const isSpacesShareLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-share')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
@@ -58,11 +55,6 @@ export function useUploadHelpers(): UploadHelpersResult {
   const webDavBasePath = computed((): string => {
     if (unref(isPublicLocation)) {
       return unref(currentPath)
-    }
-
-    if (unref(isSpacesShareLocation)) {
-      const shareId = useRouteQuery('shareId')
-      return buildWebDavSpacesPath([SHARE_JAIL_ID, unref(shareId)].join('!'), unref(currentPath))
     }
 
     if (unref(isSpacesGenericLocation)) {
@@ -148,7 +140,7 @@ const inputFilesToUppyFiles = ({
           topLevelFolderId,
           routeName: name,
           routeItem: params.item ? `${params.item}/${directory}` : directory,
-          routeShareName: (params as any)?.shareName || '',
+          routeShareName: (params as any)?.shareName || '', // TODO: delete?
           routeShareId: (query as any)?.shareId || '',
           routeStorage: (params as any)?.storage || '', // TODO: delete?
           routeStorageId: (params as any)?.storageId || '', // TODO: delete?

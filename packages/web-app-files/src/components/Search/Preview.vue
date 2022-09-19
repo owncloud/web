@@ -139,10 +139,10 @@ export default defineComponent({
   methods: {
     createFolderLink(p: string) {
       if (this.resource.shareId) {
-        return createLocationSpaces('files-spaces-share', {
+        const shareName = path.basename(this.resource.shareRoot)
+        return createLocationSpaces('files-spaces-generic', {
           params: {
-            shareName: path.basename(this.resource.shareRoot),
-            item: p
+            driveAliasAndItem: `share/${shareName}/${p.replace(/^\/+/, '')}`
           },
           query: {
             shareId: this.resource.shareId

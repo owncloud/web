@@ -36,7 +36,8 @@ export default {
             if (
               this.capabilities?.spaces?.share_jail === true &&
               (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-                (isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+                (isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+                  this.space.driveType === 'share' &&
                   resources[0].path === '/'))
             ) {
               return false

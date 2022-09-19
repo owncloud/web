@@ -72,7 +72,7 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
+import { createLocationSpaces } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes } from 'web-client/src/helpers/share'
@@ -204,7 +204,7 @@ export default {
       if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
         return false
       }
-      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      const isShareJail = this.space?.driveType === 'share'
       if (isShareJail && !this.hasResharing) {
         return false
       }

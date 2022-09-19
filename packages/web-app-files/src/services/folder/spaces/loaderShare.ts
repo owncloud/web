@@ -5,11 +5,11 @@ import { isLocationSpacesActive } from '../../../router'
 import { aggregateResourceShares, buildResource } from '../../../helpers/resources'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import { useCapabilityFilesSharingResharing, useRouteParam } from 'web-pkg/src/composables'
 import { DavProperties } from 'web-pkg/src/constants'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { unref } from '@vue/composition-api'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
@@ -19,22 +19,27 @@ export class FolderLoaderSpacesShare implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSpacesActive(router, 'files-spaces-share')
+    // TODO: remove next check when isLocationSpacesActive doesn't return true for generic route when being on projects overview.
+    if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+      return false
+    }
+    if (!isLocationSpacesActive(router, 'files-spaces-generic')) {
+      return false
+    }
+    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+    return unref(driveAliasAndItem).startsWith('share/')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
     const { store, router, clientService } = context
 
-    return useTask(function* (signal1, signal2, ref, shareId, path = null) {
+    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       const hasResharing = useCapabilityFilesSharingResharing(store)
 
       const webDavResponse = yield clientService.owncloudSdk.files.list(
-        buildWebDavSpacesPath(
-          [SHARE_JAIL_ID, shareId].join('!'),
-          path || router.currentRoute.params.item || ''
-        ),
+        buildWebDavSpacesPath(space.id, path || router.currentRoute.params.item || ''),
         1,
         DavProperties.Default
       )
@@ -44,7 +49,7 @@ export class FolderLoaderSpacesShare implements FolderLoader {
 
       // sharing jail root -> load the parent share as current Folder
       if (currentFolder.path === '/') {
-        const parentShare = yield clientService.owncloudSdk.shares.getShare(shareId)
+        const parentShare = yield clientService.owncloudSdk.shares.getShare(space.shareId)
         const aggregatedShares = aggregateResourceShares(
           [parentShare.shareInfo],
           true,

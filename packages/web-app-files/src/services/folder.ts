@@ -58,14 +58,13 @@ export class FolderService {
     const store = useStore()
     const router = useRouter()
     const clientService = useClientService()
-    const loaders = this.loaders
+    const loader = this.loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
+    if (!loader) {
+      console.error('No folder loader found for route')
+      return
+    }
 
     return useTask(function* (...args) {
-      const loader = loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
-      if (!loader) {
-        console.error('No folder loader found for route')
-        return
-      }
       const context = {
         clientService,
         store,
