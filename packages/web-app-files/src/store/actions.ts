@@ -426,7 +426,6 @@ export default {
       const spaceRef = indirect ? null : storageId
       // no need to fetch cached paths again, only adjust the "indirect" state
       if (context.getters.sharesTree[queryPath] && useCached) {
-        console.log('USE CACHGED FOR:', queryPath)
         sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
           if (!indirect) {
             const arr = s.outgoing ? outgoingShares : incomingShares
