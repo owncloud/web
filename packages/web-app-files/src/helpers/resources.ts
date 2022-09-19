@@ -216,8 +216,11 @@ function addSharedWithToShares(shares) {
 function addMatchingSpaceToShares(shares, spaces) {
   const resources = []
   for (const share of shares) {
-    const storageId = extractStorageId(share.item_source)
-    const matchingSpace = spaces.find((s) => s.id === storageId)
+    let matchingSpace
+    if (share.path === '/') {
+      const storageId = extractStorageId(share.item_source)
+      matchingSpace = spaces.find((s) => s.id === storageId && s.driveType === 'project')
+    }
     resources.push({ ...share, matchingSpace })
   }
   return resources
