@@ -12,6 +12,7 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
+      @clear="clearTerm"
     />
     <div
       v-if="optionsVisible && term"
@@ -44,7 +45,7 @@
               <li
                 v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
                 :key="providerSearchResultValue.id"
-                class="preview"
+                class="preview oc-flex oc-flex-middle"
               >
                 <component
                   :is="provider.previewSearch.component"
@@ -65,7 +66,7 @@
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import get from 'lodash-es/get'
-import { createLocationCommon } from 'files/src/router'
+import { createLocationCommon, createLocationSpaces } from 'files/src/router'
 import Mark from 'mark.js'
 
 export default {
@@ -177,6 +178,9 @@ export default {
   methods: {
     updateTerm(term) {
       this.term = term
+    },
+    clearTerm() {
+      this.$router.push(createLocationSpaces('files-spaces-personal'))
     },
     onEvent(event) {
       const eventInComponent = this.$el.contains(event.target)
@@ -320,6 +324,7 @@ export default {
 
         &.preview {
           background-color: var(--oc-color-background-highlight);
+          min-height: 44px;
 
           &:hover {
             background-color: var(--oc-color-input-border);
