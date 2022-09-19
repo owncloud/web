@@ -2,11 +2,6 @@ import { isLocationSpacesActive } from '../../../router'
 import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
-  inject: {
-    currentSpace: {
-      default: null
-    }
-  },
   computed: {
     ...mapState('Files', ['currentFolder']),
     ...mapState('runtime/spaces', ['spaces']),
@@ -42,9 +37,6 @@ export default {
           class: 'oc-files-actions-set-space-readme-trigger'
         }
       ]
-    },
-    space() {
-      return this.currentSpace?.value
     }
   },
   methods: {

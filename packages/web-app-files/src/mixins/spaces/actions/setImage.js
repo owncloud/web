@@ -5,11 +5,6 @@ import { buildResource } from '../../../helpers/resources'
 import { thumbnailService } from '../../../services'
 
 export default {
-  inject: {
-    currentSpace: {
-      default: null
-    }
-  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapState(['user']),
@@ -47,9 +42,6 @@ export default {
           class: 'oc-files-actions-set-space-image-trigger'
         }
       ]
-    },
-    space() {
-      return this.currentSpace?.value
     }
   },
   methods: {

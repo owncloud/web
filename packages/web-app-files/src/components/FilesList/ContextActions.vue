@@ -57,6 +57,14 @@ export default {
   ],
 
   props: {
+    /**
+     * Space is needed in action mixins
+     */
+    space: {
+      type: Object as PropType<Resource>,
+      required: false,
+      default: null
+    },
     items: {
       type: Array as PropType<Resource[]>,
       required: true

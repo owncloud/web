@@ -13,7 +13,7 @@
   </oc-list>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 import AcceptShare from '../../../mixins/actions/acceptShare'
@@ -26,8 +26,10 @@ import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
 import ClearSelection from '../../../mixins/actions/clearSelection'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
-export default {
+export default defineComponent({
   name: 'BatchActions',
   components: { ActionMenuItem },
   mixins: [
@@ -47,6 +49,11 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    space: {
+      type: Object as PropType<Resource>,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -73,7 +80,7 @@ export default {
       ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

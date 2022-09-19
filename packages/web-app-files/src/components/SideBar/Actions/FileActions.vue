@@ -15,12 +15,13 @@ import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, unref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'FileActions',
   components: { ActionMenuItem },
   mixins: [FileActions],
+  inject: ['displayedSpace'],
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
 
@@ -30,6 +31,10 @@ export default defineComponent({
 
     actions() {
       return this.$_fileActions_getAllAvailableActions(this.resources)
+    },
+
+    space() {
+      return unref(this.displayedSpace)
     }
   }
 })

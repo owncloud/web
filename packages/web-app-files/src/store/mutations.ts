@@ -12,9 +12,6 @@ export default {
   SET_CURRENT_FOLDER(state, currentFolder) {
     state.currentFolder = currentFolder
   },
-  SET_CURRENT_SPACE(state, currentSpace) {
-    state.currentSpace = currentSpace
-  },
   CLEAR_FILES(state) {
     state.files = []
   },

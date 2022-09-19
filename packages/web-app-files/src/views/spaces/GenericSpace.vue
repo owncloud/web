@@ -8,6 +8,7 @@
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"
+        :space="space"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :space="space" :limited-screen-space="limitedScreenSpace" />
@@ -60,7 +61,11 @@
             />
           </template>
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions
+              v-if="isResourceInSelection(resource)"
+              :space="space"
+              :items="selectedResources"
+            />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -108,7 +113,7 @@ import { bus } from 'web-pkg/src/instance'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
@@ -140,7 +145,7 @@ export default defineComponent({
 
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: false,
       default: null
     },
@@ -216,6 +221,7 @@ export default defineComponent({
         }
       } else {
         spaceBreadcrumbItem = {
+          allowContextActions: true,
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
             params: { driveAliasAndItem: this.space.driveAlias },

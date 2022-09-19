@@ -1,7 +1,12 @@
 <template>
   <div class="oc-flex oc-width-1-1">
     <files-view-wrapper>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
+      <app-bar
+        :breadcrumbs="breadcrumbs"
+        :has-bulk-actions="true"
+        :side-bar-open="sideBarOpen"
+        :space="space"
+      />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -28,10 +33,15 @@
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :space="space"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions
+              v-if="isResourceInSelection(resource)"
+              :items="selectedResources"
+              :space="space"
+            />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -45,7 +55,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 
@@ -64,7 +74,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { bus } from 'web-pkg/src/instance'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useTranslations } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
@@ -86,7 +96,7 @@ export default defineComponent({
 
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: false,
       default: null
     }
