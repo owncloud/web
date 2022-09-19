@@ -299,6 +299,7 @@ export default defineComponent({
         includeRoot: true,
         // cache must not be used on flat file lists that gather resources form various locations
         useCached: !(
+          this.isSharedWithMeLocation ||
           this.isSharedWithOthersLocation ||
           this.isSharedViaLinkLocation ||
           this.isFavoritesLocation
