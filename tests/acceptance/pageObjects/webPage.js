@@ -14,15 +14,9 @@ module.exports = {
      */
     search: function (searchTerm) {
       return this.initAjaxCounters()
-        .isVisible(
-          { selector: '@searchInputFieldLowResolution', suppressNotFoundErrors: true },
-          () => {
-            this.click('@searchInputFieldLowResolution').setValue(
-              '@searchInputFieldLowResolution',
-              [searchTerm, this.api.Keys.ENTER]
-            )
-          }
-        )
+        .waitForElementVisible('@searchInputFieldLowResolution')
+        .click('@searchInputFieldLowResolution')
+        .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
     },
