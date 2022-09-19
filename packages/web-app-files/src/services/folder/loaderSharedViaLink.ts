@@ -35,9 +35,6 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      const accessToken = store.getters['runtime/auth/accessToken']
-      const serverUrl = configurationManager.serverUrl
-      const graphClient = clientService.graphAuthenticated(serverUrl, accessToken)
 
       let resources = yield client.shares.getShares('', {
         share_types: ShareTypes.link.value.toString(),
@@ -47,6 +44,9 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       resources = resources.map((r) => r.shareInfo)
       let spaces = []
       if (store.getters.capabilities?.spaces?.enabled) {
+        const accessToken = store.getters['runtime/auth/accessToken']
+        const serverUrl = configurationManager.serverUrl
+        const graphClient = clientService.graphAuthenticated(serverUrl, accessToken)
         // FIXME: Wait until spaces are loaded? We already load them in the runtime
         yield store.dispatch('runtime/spaces/loadSpaces', { graphClient })
         spaces = store.getters['runtime/spaces/spaces']
