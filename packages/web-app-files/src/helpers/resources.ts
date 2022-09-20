@@ -118,12 +118,16 @@ export function buildWebDavFilesPath(userId, path) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
+export function buildWebDavPublicPath(publicLinkToken, path) {
+  return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
+}
+
 export function buildWebDavFilesTrashPath(userId, path = '') {
   return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavSpacesTrashPath(storageId, path = '') {
-  return '/' + `/spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
+  return '/' + `spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
