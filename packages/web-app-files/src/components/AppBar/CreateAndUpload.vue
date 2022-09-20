@@ -698,7 +698,7 @@ export default defineComponent({
         return this.$gettext('File name cannot end with whitespace')
       }
 
-      const exists = existingResources.exists(fileName)
+      const exists = existingResources.includes(fileName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
