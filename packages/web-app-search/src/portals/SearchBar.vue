@@ -196,6 +196,10 @@ export default {
           ? false
           : eventInComponent && !elementIsInteractive && !keyEventEnter
 
+      if (!eventInComponent) {
+        return
+      }
+
       if (keyEventEnter) {
         this.$router.push(
           createLocationCommon('files-common-search', {
