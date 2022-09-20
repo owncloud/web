@@ -11,6 +11,7 @@ Summary
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
+* Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
@@ -41,6 +42,13 @@ Details
 
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7504
+
+* Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
+
+   We've fixed a bug where the sidebar for received shares in the search file list was broken.
+
+   https://github.com/owncloud/web/issues/7661
+   https://github.com/owncloud/web/pull/7662
 
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 
