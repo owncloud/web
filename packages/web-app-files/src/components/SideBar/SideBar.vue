@@ -106,6 +106,7 @@ export default defineComponent({
 
     return {
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
+      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       isSharedWithOthersLocation: useActiveLocation(
         isLocationSharesActive,
@@ -114,6 +115,7 @@ export default defineComponent({
       isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
       isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
       isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
+      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -185,15 +187,15 @@ export default defineComponent({
     },
     isRootFolder() {
       const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
-      if (isLocationPublicActive(this.$router, 'files-public-files')) {
+      if (this.isPublicFilesLocation) {
         // root node of a public link has the public link token as path
         // root path `/` like for personal home doesn't exist for public links
         return pathSegments.length === 1
       }
-      if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+      if (this.isSharedWithMeLocation || this.isSearchLocation) {
         return !this.highlightedFile
       }
-      if (this.hasShareJail && isLocationSpacesActive(this.$router, 'files-spaces-share')) {
+      if (this.hasShareJail && this.isSpacesShareLocation) {
         return false
       }
       return !pathSegments.length
