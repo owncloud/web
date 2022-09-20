@@ -136,14 +136,19 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
  * @param {Boolean} allowSharePermission Asserts whether the reshare permission is available
  * @param {Boolean} hasShareJail Asserts whether the share jail is available backend side
+ * @param {Array} spaces A list of spaces the current user has access to
  */
 export function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePermission,
-  hasShareJail
+  hasShareJail,
+  spaces = []
 ): Resource[] {
   shares.sort((a, b) => a.path.localeCompare(b.path))
+  if (spaces.length) {
+    shares = addMatchingSpaceToShares(shares, spaces)
+  }
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
@@ -210,6 +215,19 @@ function addSharedWithToShares(shares) {
   return resources
 }
 
+function addMatchingSpaceToShares(shares, spaces) {
+  const resources = []
+  for (const share of shares) {
+    let matchingSpace
+    if (share.path === '/') {
+      const storageId = extractStorageId(share.item_source)
+      matchingSpace = spaces.find((s) => s.id === storageId && s.driveType === 'project')
+    }
+    resources.push({ ...share, matchingSpace })
+  }
+  return resources
+}
+
 export function buildSharedResource(
   share,
   incomingShares = false,
@@ -217,7 +235,7 @@ export function buildSharedResource(
   hasShareJail = false
 ): Resource {
   const isFolder = share.item_type === 'folder'
-  const resource: Resource = {
+  let resource: Resource = {
     id: share.id,
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
@@ -281,6 +299,10 @@ export function buildSharedResource(
   resource.share = buildShare(share, resource, allowSharePermission)
   resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   resource.getDomSelector = () => extractDomSelector(share.id)
+
+  if (share.matchingSpace) {
+    resource = { ...resource, ...share.matchingSpace }
+  }
 
   return resource
 }
