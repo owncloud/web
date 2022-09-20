@@ -61,6 +61,7 @@ Details
    https://github.com/owncloud/web/issues/7592
    https://github.com/owncloud/web/pull/7580
    https://github.com/owncloud/web/pull/7638
+   https://github.com/owncloud/web/pull/7656
 
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 
