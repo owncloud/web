@@ -146,7 +146,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject, ref } from '@vue/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -161,12 +161,12 @@ import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'FileDetails',
   inject: {
-    displayedItem: { from: 'displayedItem' },
-    displayedSpace: { from: 'displayedSpace' }
+    displayedItem: { from: 'displayedItem' }
   },
   setup() {
     const sharedParentDir = ref('')
@@ -175,7 +175,8 @@ export default defineComponent({
     return {
       sharedParentDir,
       isPublicLinkContext: usePublicLinkContext({ store }),
-      accessToken: useAccessToken({ store })
+      accessToken: useAccessToken({ store }),
+      space: inject<ComputedRef<Resource>>('displayedSpace')
     }
   },
 
@@ -199,9 +200,7 @@ export default defineComponent({
       return this.displayedItem.value
     },
     matchingSpace() {
-      return (
-        unref(this.displayedSpace) || this.spaces.find((space) => space.id === this.file.storageId)
-      )
+      return this.space || this.spaces.find((space) => space.id === this.file.storageId)
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos

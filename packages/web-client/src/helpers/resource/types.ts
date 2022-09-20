@@ -14,8 +14,8 @@ export interface Resource {
   spaceRoles?: any[]
   spaceQuota?: any[]
   spaceMemberIds?: any[]
-  spaceImageData?: any[]
-  spaceReadmeData?: any[]
+  spaceImageData?: any
+  spaceReadmeData?: any
   mimeType?: string
   isFolder?: boolean
   sdate?: string

@@ -221,7 +221,7 @@ export default defineComponent({
         }
       } else {
         spaceBreadcrumbItem = {
-          allowContextActions: true,
+          allowContextActions: !this.hasSpaceHeader,
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
             params: { driveAliasAndItem: this.space.driveAlias },

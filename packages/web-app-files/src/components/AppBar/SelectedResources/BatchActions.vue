@@ -5,6 +5,7 @@
       :key="`batch-action-${i}`"
       :action="action"
       :items="selectedFiles"
+      :space="space"
       appearance="outline"
       class="oc-mr-s"
       :shortcut-hint="false"

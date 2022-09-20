@@ -116,7 +116,7 @@
                           padding-size="small"
                           position="bottom-end"
                         >
-                          <space-context-actions :items="[space]" />
+                          <space-context-actions :items="[space]" :space="space" />
                         </oc-drop>
                       </div>
                     </div>
@@ -134,7 +134,7 @@
         </div>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="highlightedFile" />
   </div>
 </template>
 
@@ -159,6 +159,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
+import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
 
 export default defineComponent({
   components: {
@@ -194,12 +195,12 @@ export default defineComponent({
     })
 
     return {
+      ...useSideBar(),
       spaces,
       graphClient,
       loadResourcesTask,
       areResourcesLoading,
-      accessToken,
-      ...useSideBar()
+      accessToken
     }
   },
   data: function () {
@@ -209,6 +210,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['user']),
+    ...mapGetters('Files', ['highlightedFile']),
     breadcrumbs() {
       return [{ text: this.$gettext('Spaces') }]
     },
@@ -295,7 +297,7 @@ export default defineComponent({
       return ''
     },
 
-    openSidebarSharePanel(space) {
+    openSidebarSharePanel(space: Resource) {
       this.loadSpaceMembers({ graphClient: this.graphClient, space })
       this.SET_FILE_SELECTION([space])
       bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')

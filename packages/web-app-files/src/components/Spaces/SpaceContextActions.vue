@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" />
+    <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ContextActionMenu from '../ContextActionMenu.vue'
 import QuotaModal from './QuotaModal.vue'
 import ReadmeContentModal from './ReadmeContentModal.vue'
@@ -41,7 +41,8 @@ import ShowMembers from '../../mixins/spaces/actions/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -61,6 +62,10 @@ export default defineComponent({
   ],
 
   props: {
+    space: {
+      type: Object as PropType<Resource>,
+      required: true
+    },
     items: {
       type: Array,
       required: true

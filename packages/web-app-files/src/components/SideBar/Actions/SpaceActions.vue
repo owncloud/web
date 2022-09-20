@@ -21,6 +21,7 @@
         :key="`action-${index}`"
         :action="action"
         :items="resources"
+        :space="space"
         class="oc-py-xs"
       />
     </oc-list>
@@ -42,7 +43,8 @@ import EditQuota from '../../../mixins/spaces/actions/editQuota'
 import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
-import { defineComponent } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'SpaceActions',
@@ -58,6 +60,11 @@ export default defineComponent({
     UploadImage,
     EditQuota
   ],
+  setup() {
+    return {
+      space: inject<ComputedRef<Resource>>('displayedSpace')
+    }
+  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     resources() {

@@ -31,7 +31,7 @@
             padding-size="small"
             position="right-start"
           >
-            <space-context-actions :items="[space]" />
+            <space-context-actions :items="[space]" :space="space" />
           </oc-drop>
         </div>
         <oc-button
@@ -66,6 +66,7 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
+  PropType,
   ref,
   unref,
   watch
@@ -88,6 +89,8 @@ import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
+import { useGraphClient } from 'web-client/src/composables'
+import { Resource } from 'web-client'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -99,7 +102,7 @@ export default defineComponent({
   },
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: true
     }
   },
@@ -113,6 +116,7 @@ export default defineComponent({
     const store = useStore()
     const userId = computed(() => store.getters.user?.id)
     const accessToken = useAccessToken({ store })
+    const { graphClient } = useGraphClient({ store })
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -172,7 +176,7 @@ export default defineComponent({
         }
         const decodedUri = decodeURI(data.webDavUrl)
         const webDavPathComponents = decodedUri.split('/')
-        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id))
+        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id as string))
         if (!idComponent) {
           return
         }
@@ -209,7 +213,7 @@ export default defineComponent({
         }
         const decodedUri = decodeURI(props.space.spaceImageData.webDavUrl)
         const webDavPathComponents = decodedUri.split('/')
-        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id))
+        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id as string))
         if (!idComponent) {
           return
         }
@@ -235,7 +239,7 @@ export default defineComponent({
     )
 
     const memberCount = computed(() => {
-      return props.space.spaceMemberIds.length
+      return store.getters['runtime/spaces/spaceMembers'].length
     })
     const memberCountString = computed(() => {
       const translated = $ngettext('%{count} member', '%{count} members', unref(memberCount))
@@ -244,6 +248,13 @@ export default defineComponent({
         count: unref(memberCount)
       })
     })
+    const loadMembers = () => {
+      store.dispatch('runtime/spaces/loadSpaceMembers', {
+        graphClient: unref(graphClient),
+        space: props.space
+      })
+    }
+    onMounted(loadMembers)
 
     const openSideBarSharePanel = () => {
       store.commit('Files/SET_SELECTED_IDS', [])
