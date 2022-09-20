@@ -234,7 +234,8 @@ describe('CreateAndUpload component', () => {
         await wrapper.vm.displayOverwriteDialog(
           [uppyResourceOne],
           [conflict],
-          resolveFileConflictMethod
+          resolveFileConflictMethod,
+          []
         )
 
         expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)

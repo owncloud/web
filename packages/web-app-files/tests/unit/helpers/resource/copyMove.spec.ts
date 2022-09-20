@@ -31,7 +31,11 @@ describe('copyMove', () => {
     { name: 'b.png', extension: 'png', expectName: 'b (2).png', existing: [{ name: 'b (1).png' }] }
   ])('should name duplicate file correctly', (dataSet) => {
     const existing = dataSet.existing ? [...resourcesToMove, ...dataSet.existing] : resourcesToMove
-    const result = Resource.resolveFileNameDuplicate(dataSet.name, dataSet.extension, existing)
+    const result = Resource.resolveFileNameDuplicate(
+      dataSet.name,
+      dataSet.extension,
+      existing.map((r) => r.name)
+    )
     expect(result).toEqual(dataSet.expectName)
   })
   it.each([

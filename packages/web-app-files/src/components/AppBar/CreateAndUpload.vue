@@ -832,9 +832,9 @@ export default defineComponent({
 
     async displayOverwriteDialog(
       files: UppyResource[],
-      conflicts,
+      conflicts: { name: string; type: string }[],
       resolveFileExistsMethod: FileExistsResolver,
-      existingNames
+      existingNames: string[]
     ) {
       let count = 0
       const allConflictsCount = conflicts.length
