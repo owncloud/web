@@ -59,8 +59,7 @@ export default {
     ...mapMutations(['SET_QUOTA']),
 
     getParentFolderFromResource(resource) {
-      const parentPath = resource.path.slice(0, resource.path.lastIndexOf(resource.name))
-      return parentPath
+      return resource.path.slice(0, resource.path.lastIndexOf(resource.name))
     },
     getWebdavParentFolderFromResource(resource) {
       const parentPath = this.getParentFolderFromResource(resource)
@@ -256,7 +255,7 @@ export default {
         resource.path = `${parentPath}/${resolvedName}`
         resolvedResources.push(resource)
       }
-      this.restoreResources(resolvedResources)
+      this.restoreResources(resolvedResources, filesToOverwrite)
     }
   }
 }
