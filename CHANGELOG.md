@@ -13,6 +13,7 @@ Summary
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+* Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
@@ -69,6 +70,14 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/7632
+
+* Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
+
+   Spaces on the "Shared via link"-page are now being displayed correctly. Also, the sidebar for
+   those has been fixed.
+
+   https://github.com/owncloud/web/issues/7103
+   https://github.com/owncloud/web/pull/7651
 
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
