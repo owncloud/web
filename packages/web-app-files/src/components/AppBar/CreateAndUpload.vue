@@ -127,7 +127,7 @@
 
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import pathUtil from 'path'
+import pathUtil, { basename } from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
@@ -223,7 +223,7 @@ export default defineComponent({
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
-    ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'clipboardResources']),
+    ...mapGetters('Files', ['currentFolder', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
@@ -310,6 +310,44 @@ export default defineComponent({
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
+    getWebDavPath(path) {
+      if (this.isPersonalLocation) {
+        if (this.hasShareJail) {
+          return buildWebDavSpacesPath(this.personalDriveId, path || '')
+        }
+        return buildWebDavFilesPath(this.user.id, path)
+      }
+      if (this.isSpacesProjectLocation) {
+        return buildWebDavSpacesPath(this.$route.params.storageId, path)
+      }
+      if (this.isSpacesShareLocation) {
+        return buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
+      }
+      return path
+    },
+
+    async getExistingResourceNames() {
+      const webDavPath = this.getWebDavPath(this.currentPath)
+      const davProperties = [DavProperty.FileId, DavProperty.Name]
+      let resources
+      if (this.isPersonalLocation) {
+        resources = await this.$client.files.list(webDavPath, 1, davProperties)
+      } else if (this.isSpacesProjectLocation) {
+        resources = await this.$client.files.list(webDavPath, 1, davProperties)
+      } else if (this.isSpacesShareLocation) {
+        resources = await this.$client.files.list(webDavPath, 1, davProperties)
+      } else {
+        resources = await this.$client.publicFiles.list(
+          webDavPath,
+          this.publicLinkPassword,
+          DavProperties.PublicLink,
+          1
+        )
+      }
+
+      return resources.map((r) => r.fileInfo[DavProperty.Name] || basename(r.name)).slice(1)
+    },
+
     pasteFilesHere() {
       this.pasteSelectedFiles({
         client: this.$client,
@@ -356,25 +394,30 @@ export default defineComponent({
       }
     },
 
-    showCreateResourceModal(
+    async showCreateResourceModal(
       isFolder = true,
       ext = 'txt',
       openAction = null,
       addAppProviderFile = false
     ) {
+      const existingNames = await this.getExistingResourceNames()
+
       const checkInputValue = (value) => {
         this.setModalInputErrorMessage(
           isFolder
-            ? this.checkNewFolderName(value)
-            : this.checkNewFileName(this.areFileExtensionsShown ? value : `${value}.${ext}`)
+            ? this.checkNewFolderName(value, existingNames)
+            : this.checkNewFileName(
+                this.areFileExtensionsShown ? value : `${value}.${ext}`,
+                existingNames
+              )
         )
       }
       let defaultName = isFolder
         ? this.$gettext('New folder')
         : this.$gettext('New file') + `.${ext}`
 
-      if (this.files.some((f) => f.name === defaultName)) {
-        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, this.files)
+      if (existingNames.some((f) => f.name === defaultName)) {
+        defaultName = resolveFileNameDuplicate(defaultName, isFolder ? '' : ext, existingNames)
       }
 
       if (!this.areFileExtensionsShown) {
@@ -398,9 +441,10 @@ export default defineComponent({
         inputValue: defaultName,
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         inputError: isFolder
-          ? this.checkNewFolderName(defaultName)
+          ? this.checkNewFolderName(defaultName, existingNames)
           : this.checkNewFileName(
-              this.areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`
+              this.areFileExtensionsShown ? defaultName : `${defaultName}.${ext}`,
+              existingNames
             ),
         inputSelectionRange,
         onCancel: this.hideModal,
@@ -428,23 +472,16 @@ export default defineComponent({
       this.fileFolderCreationLoading = true
 
       try {
-        let path = pathUtil.join(this.currentPath, folderName)
+        const path = this.getWebDavPath(pathUtil.join(this.currentPath, folderName))
         let resource
 
         if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.createFolder(path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -486,7 +523,7 @@ export default defineComponent({
       this.fileFolderCreationLoading = false
     },
 
-    checkNewFolderName(folderName) {
+    checkNewFolderName(folderName, existingNames) {
       if (folderName === '') {
         return this.$gettext('Folder name cannot be empty')
       }
@@ -507,7 +544,7 @@ export default defineComponent({
         return this.$gettext('Folder name cannot end with whitespace')
       }
 
-      const exists = this.files.find((file) => file.name === folderName)
+      const exists = existingNames.includes(folderName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
@@ -526,22 +563,15 @@ export default defineComponent({
 
       try {
         let resource
-        let path = pathUtil.join(this.currentPath, fileName)
+        const path = this.getWebDavPath(pathUtil.join(this.currentPath, fileName))
 
         if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           await this.$client.files.putFileContents(path, '')
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
@@ -609,19 +639,12 @@ export default defineComponent({
         }
 
         let resource
-        let path = pathUtil.join(this.currentPath, fileName)
+        const path = this.getWebDavPath(pathUtil.join(this.currentPath, fileName))
         if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
           resource = await this.$client.files.fileInfo(path, DavProperties.Default)
         } else {
           resource = await this.$client.publicFiles.getFileInfo(
@@ -654,7 +677,7 @@ export default defineComponent({
         })
       }
     },
-    checkNewFileName(fileName) {
+    checkNewFileName(fileName, existingResources) {
       if (fileName === '') {
         return this.$gettext('File name cannot be empty')
       }
@@ -675,7 +698,7 @@ export default defineComponent({
         return this.$gettext('File name cannot end with whitespace')
       }
 
-      const exists = this.files.find((file) => file.name === fileName)
+      const exists = existingResources.exists(fileName)
 
       if (exists) {
         const translated = this.$gettext('%{name} already exists')
@@ -686,6 +709,7 @@ export default defineComponent({
     },
 
     async onFilesSelected(files: File[]) {
+      const existingNames = await this.getExistingResourceNames()
       const conflicts = []
       const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(files)
       const quotaExceeded = this.checkQuotaExceeded(uppyResources)
@@ -698,7 +722,7 @@ export default defineComponent({
         if (relativeFilePath) {
           // Logic for folders, applies to all files inside folder and subfolders
           const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
-          const exists = this.files.find((f) => f.name === rootFolder)
+          const exists = existingNames.includes(rootFolder)
           if (exists) {
             if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
             conflicts.push({
@@ -709,7 +733,7 @@ export default defineComponent({
           }
         }
         // Logic for files
-        const exists = this.files.find((f) => f.name === file.name && !file.meta.relativeFolder)
+        const exists = existingNames.includes(file.name) && !file.meta.relativeFolder
         if (exists) {
           conflicts.push({
             name: file.name,
@@ -718,7 +742,12 @@ export default defineComponent({
         }
       }
       if (conflicts.length) {
-        await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
+        await this.displayOverwriteDialog(
+          uppyResources,
+          conflicts,
+          resolveFileExists,
+          existingNames
+        )
       } else {
         this.handleUppyFileUpload(uppyResources)
       }
@@ -804,7 +833,8 @@ export default defineComponent({
     async displayOverwriteDialog(
       files: UppyResource[],
       conflicts,
-      resolveFileExistsMethod: FileExistsResolver
+      resolveFileExistsMethod: FileExistsResolver,
+      existingNames
     ) {
       let count = 0
       const allConflictsCount = conflicts.length
@@ -883,12 +913,12 @@ export default defineComponent({
       for (const fileName of filesToKeepBoth) {
         const file = files.find((e) => e.name === fileName && !e.meta.relativeFolder)
         const extension = extractExtensionFromFile({ name: fileName } as Resource)
-        file.name = resolveFileNameDuplicate(fileName, extension, this.files)
+        file.name = resolveFileNameDuplicate(fileName, extension, existingNames)
       }
       for (const folder of foldersToKeepBoth) {
         const filesInFolder = files.filter((e) => e.meta.relativeFolder.split('/')[1] === folder)
         for (const file of filesInFolder) {
-          const newFolderName = resolveFileNameDuplicate(folder, '', this.files)
+          const newFolderName = resolveFileNameDuplicate(folder, '', existingNames)
           file.meta.relativeFolder = file.meta.relativeFolder.replace(
             `/${folder}`,
             `/${newFolderName}`

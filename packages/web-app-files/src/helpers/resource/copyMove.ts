@@ -271,7 +271,7 @@ export const copy = (
   )
 }
 
-export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
+export const resolveFileNameDuplicate = (name, extension, existingNames, iteration = 1) => {
   let potentialName
   if (extension.length === 0) {
     potentialName = `${name} (${iteration})`
@@ -279,9 +279,9 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
     const nameWithoutExtension = extractNameWithoutExtension({ name, extension } as Resource)
     potentialName = `${nameWithoutExtension} (${iteration}).${extension}`
   }
-  const hasConflict = existingFiles.some((f) => f.name === potentialName)
+  const hasConflict = existingNames.includes(potentialName)
   if (!hasConflict) return potentialName
-  return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
+  return resolveFileNameDuplicate(name, extension, existingNames, iteration + 1)
 }
 
 const clientListFilesInFolder = (
@@ -394,8 +394,8 @@ const copyMoveResource = async (
       }
       if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
         targetName = resolveFileNameDuplicate(resource.name, resource.extension, [
-          ...movedResources,
-          ...targetFolderResources
+          ...movedResources.map((r) => r.name),
+          ...targetFolderResources.map((r) => r.name)
         ])
         resource.name = targetName
       }
