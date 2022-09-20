@@ -13,7 +13,7 @@ export enum TransferType {
   COPY,
   MOVE
 }
-export class CopyMove extends ConflictDialog {
+export class ResourceTransfer extends ConflictDialog {
   constructor(
     private sourceSpace: SpaceResource,
     private resourcesToMove: Resource[],

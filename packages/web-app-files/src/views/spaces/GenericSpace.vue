@@ -118,7 +118,7 @@ import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../he
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
-import { CopyMove, TransferType } from '../../helpers/resource'
+import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
@@ -305,7 +305,7 @@ export default defineComponent({
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
       if (targetFolder.type !== 'folder') return
-      const copyMove = new CopyMove(
+      const copyMove = new ResourceTransfer(
         this.space,
         selected,
         this.space,

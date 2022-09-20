@@ -4,7 +4,7 @@ import { dirname } from 'path'
 import { getParentPaths } from '../helpers/path'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { CopyMove, TransferType } from '../helpers/resource'
+import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
@@ -76,7 +76,7 @@ export default {
       upsertResource
     }
   ) {
-    const copyMove = new CopyMove(
+    const copyMove = new ResourceTransfer(
       context.state.clipboardSpace,
       context.state.clipboardResources,
       targetSpace,
