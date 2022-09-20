@@ -51,7 +51,7 @@ afterEach(() => {
   wrapper.destroy()
 })
 
-describe('Search Bar portal component', () => {
+describe.skip('Search Bar portal component', () => {
   test('does not render a search field if not all requirements are fulfilled', () => {
     wrapper = getMountedWrapper()
     expect(wrapper.element.innerHTML).toBeFalsy()

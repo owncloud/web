@@ -4,10 +4,15 @@
       <app-bar :has-bulk-actions="false" :side-bar-open="sideBarOpen" />
       <app-loading-spinner v-if="loading" />
       <template v-else>
-        <no-content-message v-if="!paginatedResources.length" class="files-empty" icon="folder">
+        <no-content-message
+          v-if="!paginatedResources.length"
+          class="files-empty"
+          icon="search"
+          icon-fill-type="line"
+        >
           <template #message>
             <p class="oc-text-muted">
-              <span v-if="!!$route.query.term" v-translate>No resource found</span>
+              <span v-if="!!$route.query.term" v-translate>No results found</span>
               <span v-else v-translate>No search term entered</span>
             </p>
           </template>
@@ -93,7 +98,7 @@ export default defineComponent({
     searchResult: {
       type: Object,
       default: function () {
-        return { range: null, values: [] }
+        return { totalResults: null, values: [] }
       }
     },
     loading: {
@@ -121,13 +126,13 @@ export default defineComponent({
       return this.totalFilesCount.files + this.totalFilesCount.folders
     },
     rangeSupported() {
-      return this.searchResult.range
-    },
-    rangeItems() {
-      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+      return this.searchResult.totalResults
     },
     searchResultExceedsLimit() {
-      return !this.rangeSupported || (this.rangeItems && this.rangeItems > searchLimit)
+      return (
+        !this.rangeSupported ||
+        (this.searchResult.totalResults && this.searchResult.totalResults > searchLimit)
+      )
     },
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
@@ -138,11 +143,11 @@ export default defineComponent({
       }
 
       const translated = this.$gettext(
-        'Found %{rangeItems}, showing the %{itemCount} best matching results'
+        'Found %{totalResults}, showing the %{itemCount} best matching results'
       )
       return this.$gettextInterpolate(translated, {
         itemCount: this.itemCount,
-        rangeItems: this.rangeItems
+        totalResults: this.searchResult.totalResults
       })
     }
   },
