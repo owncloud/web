@@ -71,6 +71,7 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
+    activeFor: [{ path: `/${appInfo.id}/spaces/project` }], // for projects overview and any project space.
     enabled(capabilities) {
       return capabilities.spaces && capabilities.spaces.projects === true
     }
