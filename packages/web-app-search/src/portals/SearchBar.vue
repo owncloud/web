@@ -45,6 +45,10 @@
               <li
                 v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
                 :key="providerSearchResultValue.id"
+                :data-search-id="providerSearchResultValue.id"
+                :class="{
+                  active: isPreviewElementActive(providerSearchResultValue.id)
+                }"
                 class="preview oc-flex oc-flex-middle"
               >
                 <component
@@ -72,6 +76,8 @@ import Mark from 'mark.js'
 export default {
   name: 'SearchBar',
 
+  indexC: -1,
+
   filters: {
     truncate
   },
@@ -82,6 +88,7 @@ export default {
       activeProvider: undefined,
       optionsVisible: false,
       markInstance: null,
+      activePreviewIndex: null,
       providerStore
     }
   },
@@ -127,6 +134,8 @@ export default {
     },
 
     searchResults() {
+      this.activePreviewIndex = null
+
       this.$nextTick(() => {
         this.markInstance = new Mark(this.$refs.options)
         this.markInstance.unmark()
@@ -180,11 +189,14 @@ export default {
       this.term = term
     },
     onEvent(event) {
+      const previewElementsCount = this.$el.querySelectorAll('.preview').length
       const eventInComponent = this.$el.contains(event.target)
       const elementIsInteractive = event.target.tagName === 'a' || event.target.tagName === 'button'
       const clearEvent = event.target.classList.contains('oc-search-clear')
       const keyEventEsc = event.keyCode === 27
       const keyEventEnter = event.keyCode === 13
+      const keyEventUp = event.keyCode === 38
+      const keyEventDown = event.keyCode === 40
 
       event.stopPropagation()
 
@@ -200,12 +212,32 @@ export default {
         return
       }
 
-      if (keyEventEnter) {
+      if (keyEventEnter && this.term && this.activePreviewIndex === null) {
         this.$router.push(
           createLocationCommon('files-common-search', {
             query: { term: this.term, provider: 'files.sdk' }
           })
         )
+      }
+
+      if (keyEventUp && previewElementsCount) {
+        if (this.activePreviewIndex === null) {
+          this.activePreviewIndex = previewElementsCount - 1
+        } else {
+          this.activePreviewIndex =
+            this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
+        }
+      }
+
+      if (keyEventDown && previewElementsCount) {
+        if (this.activePreviewIndex === null) {
+          this.activePreviewIndex = 0
+        } else {
+          this.activePreviewIndex =
+            this.activePreviewIndex === previewElementsCount - 1
+              ? null
+              : this.activePreviewIndex + 1
+        }
       }
     },
     getSearchResultForProvider(provider) {
@@ -231,6 +263,10 @@ export default {
       return this.$gettextInterpolate(translated, {
         totalResults: searchResult.totalResults
       })
+    },
+    isPreviewElementActive(searchId) {
+      const previewElements = this.$el.querySelectorAll('.preview')
+      return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
     }
   }
 }
@@ -336,7 +372,8 @@ export default {
         &.preview {
           min-height: 44px;
 
-          &:hover {
+          &:hover,
+          &.active {
             background-color: var(--oc-color-input-border);
           }
         }
