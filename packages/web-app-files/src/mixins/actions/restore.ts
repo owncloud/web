@@ -83,12 +83,16 @@ export default {
             DavProperties.Default
           )
           parentResources = listResponse.map((i) => buildResource(i))
+          const resourceParentPath = `/${this.getParentFolderFromResource(resource)}`
+          parentResources = parentResources.filter(
+            (e) => this.getParentFolderFromResource(e) === resourceParentPath
+          )
           parentFolders[webDavParentPath] = parentResources
         }
         // ? Check for naming conflict in parent folder and between resources batch
         const hasConflict =
           parentResources.some((e) => e.name === resource.name) ||
-          resources.filter((e) => e.id !== resource.id).some((e) => e.name === resource.name)
+          resources.filter((e) => e.id !== resource.id).some((e) => e.path === resource.path)
         if (!hasConflict) {
           resolvedResources.push(resource)
         } else {
