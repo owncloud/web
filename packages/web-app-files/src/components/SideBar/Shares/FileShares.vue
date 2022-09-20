@@ -82,6 +82,7 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
+import { computed } from '@vue/composition-api'
 
 export default {
   name: 'FileShares',
@@ -99,9 +100,21 @@ export default {
   setup() {
     const store = useStore()
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const currentUserIsMemberOfSpace = computed(() => {
+      const userId = store.getters.user?.uuid
+      if (!userId) {
+        return false
+      }
+      // TODO: remove log statement
+      store.getters['runtime/spaces/spaceMembers'].forEach((member) => {
+        console.log('space member', member)
+      })
+      return store.getters['runtime/spaces/spaceMembers'].some((member) => member.id === userId)
+    })
 
     return {
       sharesListCollapsed,
+      currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing()
@@ -215,9 +228,6 @@ export default {
       const translatedFile = this.$gettext("You don't have permission to share this file.")
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
       return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
-    },
-    currentUserIsMemberOfSpace() {
-      return this.space?.spaceMemberIds?.includes(this.user.uuid)
     },
     showSpaceMembers() {
       return (

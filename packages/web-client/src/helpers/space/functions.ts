@@ -65,7 +65,6 @@ export function buildSpace(space) {
     disabled,
     spaceQuota: space.quota,
     spaceRoles,
-    spaceMemberIds: Object.values(spaceRoles).reduce((arr, ids) => arr.concat(ids), []),
     spaceImageData,
     spaceReadmeData,
     canUpload: function ({ user }: { user?: User } = {}) {

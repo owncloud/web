@@ -1,21 +1,24 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { buildWebDavFilesPath } from '../../helpers/resources'
-import { User } from 'web-client'
+import { Resource, User } from 'web-client'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
-  useDriveResolver,
   useRoute,
-  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../router'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { computed, Ref, unref } from '@vue/composition-api'
+import { computed, ComputedRef, Ref, unref } from '@vue/composition-api'
 import * as uuid from 'uuid'
 import path from 'path'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+
+interface UploadHelpersOptions {
+  space?: ComputedRef<Resource>
+  currentPath?: ComputedRef<string>
+}
 
 interface UploadHelpersResult {
   inputFilesToUppyFiles(inputFileOptions): UppyResource[]
@@ -30,7 +33,7 @@ interface inputFileOptions {
   webDavBasePath: Ref<string>
 }
 
-export function useUploadHelpers(): UploadHelpersResult {
+export function useUploadHelpers(options: UploadHelpersOptions = {}): UploadHelpersResult {
   const store = useStore()
   const route = useRoute()
   const hasShareJail = useCapabilityShareJailEnabled()
@@ -38,13 +41,11 @@ export function useUploadHelpers(): UploadHelpersResult {
   const isSpacesGenericLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-generic')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)
-  const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const { space, item } = useDriveResolver({ store, driveAliasAndItem })
 
   const currentPath = computed((): string => {
     let path
     if (unref(isSpacesGenericLocation)) {
-      path = unref(item)
+      path = unref(options.currentPath)
     } else {
       const { params } = unref(route)
       path = params.item || ''
@@ -62,7 +63,7 @@ export function useUploadHelpers(): UploadHelpersResult {
         return buildWebDavFilesPath(unref(user)?.id, unref(currentPath))
       }
 
-      return buildWebDavSpacesPath(unref(space)?.id, unref(currentPath))
+      return buildWebDavSpacesPath(unref(options.space)?.id, unref(currentPath))
     }
   })
 

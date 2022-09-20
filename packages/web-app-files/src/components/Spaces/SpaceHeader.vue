@@ -248,13 +248,6 @@ export default defineComponent({
         count: unref(memberCount)
       })
     })
-    const loadMembers = () => {
-      store.dispatch('runtime/spaces/loadSpaceMembers', {
-        graphClient: unref(graphClient),
-        space: props.space
-      })
-    }
-    onMounted(loadMembers)
 
     const openSideBarSharePanel = () => {
       store.commit('Files/SET_SELECTED_IDS', [])

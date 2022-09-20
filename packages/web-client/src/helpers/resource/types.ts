@@ -13,7 +13,6 @@ export interface Resource {
   status?: number
   spaceRoles?: any[]
   spaceQuota?: any[]
-  spaceMemberIds?: any[]
   spaceImageData?: any
   spaceReadmeData?: any
   mimeType?: string

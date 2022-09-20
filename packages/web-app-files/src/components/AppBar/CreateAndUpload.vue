@@ -149,7 +149,13 @@ import {
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted, PropType } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  PropType
+} from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { bus } from 'web-pkg/src/instance'
@@ -175,13 +181,18 @@ export default defineComponent({
       required: false,
       default: null
     },
+    item: {
+      type: String,
+      required: false,
+      default: null
+    },
     limitedScreenSpace: {
       type: Boolean,
       default: false,
       required: false
     }
   },
-  setup() {
+  setup(props) {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
     const store = useStore()
@@ -206,7 +217,10 @@ export default defineComponent({
       ...useUpload({
         uppyService
       }),
-      ...useUploadHelpers(),
+      ...useUploadHelpers({
+        space: computed(() => props.space),
+        currentPath: computed(() => props.item)
+      }),
       ...useRequest(),
       ...useGraphClient(),
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),

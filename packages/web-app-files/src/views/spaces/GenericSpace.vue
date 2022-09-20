@@ -11,7 +11,11 @@
         :space="space"
       >
         <template #actions="{ limitedScreenSpace }">
-          <create-and-upload :space="space" :limited-screen-space="limitedScreenSpace" />
+          <create-and-upload
+            :space="space"
+            :item="item"
+            :limited-screen-space="limitedScreenSpace"
+          />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />

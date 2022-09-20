@@ -4,6 +4,7 @@ import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
 import { buildSpace } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
+import { useGraphClient } from 'web-client/src/composables'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -18,6 +19,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       !store.getters['runtime/spaces/spacesInitialized'] ||
       store.getters['runtime/spaces/spacesLoading']
   )
+  const { graphClient } = useGraphClient({ store })
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const space = ref(null)
   const item = ref(null)
@@ -58,6 +60,19 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       }
       space.value = matchingSpace
       item.value = path
+    },
+    { immediate: true }
+  )
+  watch(
+    space,
+    (s) => {
+      if (!s) {
+        return
+      }
+      return store.dispatch('runtime/spaces/loadSpaceMembers', {
+        graphClient: unref(graphClient),
+        space: s
+      })
     },
     { immediate: true }
   )
