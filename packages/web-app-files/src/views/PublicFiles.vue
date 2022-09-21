@@ -8,6 +8,7 @@
         :breadcrumbs-context-actions-items="[currentFolder]"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"
+        :space="space"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -45,13 +46,14 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :drag-drop="true"
+          :space="space"
           @fileDropped="fileDropped"
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" :space="space" />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -66,7 +68,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space"/>
   </div>
 </template>
 
@@ -95,12 +97,14 @@ import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
 import { defineComponent } from '@vue/composition-api'
 import { move } from '../helpers/resource'
 import { Resource } from 'web-client'
-import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
+import { usePublicLinkPassword, usePublicLinkToken, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { Location } from 'vue-router'
 import { createLocationPublic } from '../router'
+import { buildSpace } from 'web-client/src/helpers'
+import { computed, unref } from '@vue/composition-api'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -127,10 +131,26 @@ export default defineComponent({
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       return createLocationPublic('files-public-files', { item: path })
     }
+
+    const publicLinkToken = usePublicLinkToken({store})
+
+    const driveAlias = computed(() => {
+      return `public/${unref(publicLinkToken)}`
+    })
+
+    const space = computed(() => {
+      return buildSpace({
+        id: unref(publicLinkToken),
+        driveAlias,
+        driveType: 'public'
+      })
+    })
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetRouteCallback,
-      publicLinkPassword: usePublicLinkPassword({ store })
+      publicLinkPassword: usePublicLinkPassword({ store }),
+      space
     }
   },
 
