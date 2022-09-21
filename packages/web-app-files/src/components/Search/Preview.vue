@@ -173,3 +173,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.files-search-preview {
+  font-size: inherit;
+}
+</style>

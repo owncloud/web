@@ -12,7 +12,7 @@ export function useIncomingParentShare() {
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare
     for (const shares of Object.values(unref(sharesTree)) as any) {
-      parentShare = shares.find((s) => s.incoming)
+      parentShare = shares.find((s) => !s.outgoing)
       if (parentShare) {
         incomingParentShare.value = parentShare
         return

@@ -12,6 +12,10 @@ export interface Resource {
   type?: string
   status?: number
   spaceRoles?: any[]
+  spaceQuota?: any[]
+  spaceMemberIds?: any[]
+  spaceImageData?: any[]
+  spaceReadmeData?: any[]
   mimeType?: string
   isFolder?: boolean
   sdate?: string
@@ -37,11 +41,18 @@ export interface Resource {
   canBeRestored?(): boolean
   canEditTags?(): boolean
   canDeny?(): boolean
+  canEditDescription?(): boolean
+  canRestore?(): boolean
+  canDisable?(): boolean
+  canEditImage?(): boolean
+  canEditReadme?(): boolean
 
   isReceivedShare?(): boolean
   isMounted?(): boolean
 
   getDomSelector?(): string
+
+  matchingSpace?: any
 
   resourceOwner?: User
   owner?: User[]

@@ -88,7 +88,6 @@ import {
 } from 'web-pkg/src/composables'
 
 import { defineComponent } from '@vue/runtime-core'
-import { useGraphClient } from 'web-client/src/composables'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -118,7 +117,6 @@ export default defineComponent({
 
   setup() {
     return {
-      ...useGraphClient(),
       hasResharing: useCapabilityFilesSharingResharing(),
       hasShareJail: useCapabilityShareJailEnabled()
     }
@@ -139,6 +137,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['configuration', 'user', 'capabilities']),
 
     $_announcementWhenCollaboratorAdded() {
@@ -170,6 +169,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['addShare']),
+    ...mapActions('runtime/spaces', ['addSpaceMember']),
 
     async fetchRecipients(query) {
       try {
@@ -211,7 +211,10 @@ export default defineComponent({
             )
           })
 
-          const exists = this.currentFileOutgoingCollaborators.find((existingCollaborator) => {
+          const existingShares = this.resourceIsSpace
+            ? this.spaceMembers
+            : this.currentFileOutgoingCollaborators
+          const exists = existingShares.find((existingCollaborator) => {
             return (
               collaborator.value.shareWith === existingCollaborator.collaborator.name &&
               parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
@@ -296,9 +299,9 @@ export default defineComponent({
               path = `/${this.highlightedFile.name}`
             }
 
-            this.addShare({
+            const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
+            addMethod({
               client: this.$client,
-              graphClient: this.graphClient,
               path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,

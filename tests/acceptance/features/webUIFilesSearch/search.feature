@@ -49,7 +49,7 @@ Feature: Search
   @issue-980
   Scenario: search in sub folder
     When the user opens folder "simple-folder" using the webUI
-    And the user searches globally for "lorem" using the webUI
+    And the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     #And file "lorem.txt" with path "/" should be listed in the search results in the other folders section on the webUI
@@ -134,7 +134,7 @@ Feature: Search
     And the user opens folder "simple-folder" directly on the webUI
     And the user uploads file "simple.odt" using the webUI
     And the user browses to the files page
-    And the user searches globally for "simple" using the webUI
+    And the user searches for "simple" using the webUI
     Then file "simple.pdf" should be listed on the webUI
     And file "simple-folder/simple.odt" should be listed on the webUI
 

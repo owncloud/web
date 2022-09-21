@@ -18,7 +18,6 @@ import { computed, defineComponent, unref } from '@vue/composition-api'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { mapGetters, mapState } from 'vuex'
 import { useStore } from 'web-pkg/src/composables'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 
@@ -41,26 +40,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const currentFileOutgoingSharesLoading = computed(
-      () => store.getters['Files/currentFileOutgoingSharesLoading']
-    )
-    const incomingSharesLoading = computed(() => store.getters['Files/incomingSharesLoading'])
-    const sharesTreeLoading = computed(() => store.getters['Files/sharesTreeLoading'])
-    const sharesLoading = computed(
-      () =>
-        unref(currentFileOutgoingSharesLoading) ||
-        unref(incomingSharesLoading) ||
-        unref(sharesTreeLoading)
-    )
+    const sharesLoading = computed(() => store.getters['Files/sharesTreeLoading'])
 
     return {
       ...useIncomingParentShare(),
       sharesLoading
     }
-  },
-  computed: {
-    ...mapGetters('Files', ['currentFileOutgoingSharesLoading']),
-    ...mapState('Files', ['incomingSharesLoading', 'sharesTreeLoading'])
   },
   watch: {
     sharesLoading: {

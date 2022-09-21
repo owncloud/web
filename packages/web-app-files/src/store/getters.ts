@@ -49,9 +49,6 @@ export default {
       return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [share.shareType])
     })
   },
-  currentFileOutgoingSharesLoading: (state) => {
-    return state.currentFileOutgoingSharesLoading
-  },
   sharesTree: (state) => state.sharesTree,
   sharesTreeLoading: (state) => state.sharesTreeLoading,
   quota: (state) => {

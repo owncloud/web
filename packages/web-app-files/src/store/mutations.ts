@@ -3,7 +3,6 @@ import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
-import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -101,27 +100,14 @@ export default {
     state.currentFileOutgoingShares = shares
   },
   CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
-    if (share.shareType === ShareTypes.space.value) {
-      state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
-        (s) => share.id === s.id && share.collaborator.name !== s.collaborator.name
-      )
-      return
-    }
     state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
       (s) => share.id !== s.id
     )
   },
   CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, share) {
-    let fileIndex
-    if (share.shareType === ShareTypes.space.value) {
-      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-        return share.id === s.id && share.collaborator.name === s.collaborator.name
-      })
-    } else {
-      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-        return s.id === share.id
-      })
-    }
+    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
+      return s.id === share.id
+    })
 
     if (fileIndex >= 0) {
       Vue.set(state.currentFileOutgoingShares, fileIndex, share)
@@ -130,22 +116,8 @@ export default {
       state.currentFileOutgoingShares.push(share)
     }
   },
-  CURRENT_FILE_OUTGOING_SHARES_ERROR(state, error) {
-    state.currentFileOutgoingShares = []
-    state.currentFileOutgoingSharesError = error
-  },
-  CURRENT_FILE_OUTGOING_SHARES_LOADING(state, loading) {
-    state.currentFileOutgoingSharesLoading = loading
-  },
   INCOMING_SHARES_LOAD(state, shares) {
     state.incomingShares = shares
-  },
-  INCOMING_SHARES_ERROR(state, error) {
-    state.incomingShares = []
-    state.incomingSharesError = error
-  },
-  INCOMING_SHARES_LOADING(state, loading) {
-    state.incomingSharesLoading = loading
   },
   SHARESTREE_PRUNE_OUTSIDE_PATH(state, pathToKeep) {
     if (pathToKeep !== '' && pathToKeep !== '/') {

@@ -108,7 +108,7 @@ function getWrapper(searchTerm = '', files = []) {
     localVue,
     propsData: {
       searchResult: {
-        range: 'rows 0-100/100',
+        totalResults: 100,
         values: getSearchResults(files)
       }
     },

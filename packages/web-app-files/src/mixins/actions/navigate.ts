@@ -37,7 +37,7 @@ export default {
               return false
             }
 
-            if (!resources[0].isFolder) {
+            if (!resources[0].isFolder || resources[0].type === 'space') {
               return false
             }
 

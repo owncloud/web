@@ -33,7 +33,7 @@ exports[`Spaces project view space image should show if given 1`] = `
         </div>
       </div>
     </div>
-    <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+    <no-content-message-stub icon="folder" iconfilltype="fill" id="files-space-empty" class="files-empty"></no-content-message-stub>
   </files-view-wrapper-stub>
   <side-bar-stub></side-bar-stub>
 </div>
@@ -72,7 +72,7 @@ exports[`Spaces project view space readme should show if given 1`] = `
         </div>
       </div>
     </div>
-    <no-content-message-stub icon="folder" id="files-space-empty" class="files-empty"></no-content-message-stub>
+    <no-content-message-stub icon="folder" iconfilltype="fill" id="files-space-empty" class="files-empty"></no-content-message-stub>
   </files-view-wrapper-stub>
   <side-bar-stub></side-bar-stub>
 </div>

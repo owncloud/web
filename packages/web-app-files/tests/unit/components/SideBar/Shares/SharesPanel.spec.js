@@ -40,7 +40,8 @@ describe('SharesPanel', () => {
       localVue,
       provide: {
         activePanel: null,
-        displayedItem: {}
+        displayedItem: {},
+        spaceMembers: { value: [] }
       },
       store: new Vuex.Store({
         modules: {
@@ -52,8 +53,7 @@ describe('SharesPanel', () => {
             getters: {
               highlightedFile: (state) => {
                 return state.highlightedFile
-              },
-              currentFileOutgoingSharesLoading: jest.fn()
+              }
             },
             mutations: {
               SET_HIGHLIGHTED_FILE(state, file) {

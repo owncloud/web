@@ -1,6 +1,5 @@
 import actions from '../../../src/store/actions'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
-import { buildSpace } from 'web-client/src/helpers'
 
 const stateMock = {
   commit: jest.fn(),
@@ -36,40 +35,9 @@ const clientMock = {
   }
 }
 
-const graphClientMock = {
-  drives: {
-    getDrive: () => {
-      return Promise.resolve({ data: spaceMock })
-    }
-  },
-  users: {
-    getUser: () => {
-      return Promise.resolve({})
-    }
-  }
-}
 const shareMock = {
   id: '1',
   shareType: ShareTypes.user.value
-}
-
-const spaceMock = buildSpace({
-  type: 'space',
-  name: ' space',
-  id: '1',
-  root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
-})
-
-const spaceShareMock = {
-  id: '1',
-  shareType: ShareTypes.space.value,
-  collaborator: {
-    onPremisesSamAccountName: 'Alice',
-    displayName: 'alice'
-  },
-  role: {
-    name: spaceRoleManager.name
-  }
 }
 
 describe('vuex store actions', () => {
@@ -77,82 +45,50 @@ describe('vuex store actions', () => {
     jest.clearAllMocks()
   })
 
-  describe('loadCurrentFileOutgoingShares', () => {
-    it.each([
-      { space: spaceMock, expectedCommitCalls: 5, expectedDispatchCalls: 1 },
-      { space: null, expectedCommitCalls: 5, expectedDispatchCalls: 1 }
-    ])('succeeds using action %s', async (dataSet) => {
-      const commitSpy = jest.spyOn(stateMock, 'commit')
-      const dispatchSpy = jest.spyOn(stateMock, 'dispatch')
-
-      await actions.loadCurrentFileOutgoingShares(stateMock, {
-        client: clientMock,
-        graphClient: graphClientMock,
-        path: 'path',
-        resource: dataSet.space
-      })
-
-      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
-      expect(dispatchSpy).toBeCalledTimes(dataSet.expectedDispatchCalls)
-    })
-  })
-
   describe('changeShare', () => {
-    it.each([
-      { share: spaceShareMock, expectedCommitCalls: 2 },
-      { share: shareMock, expectedCommitCalls: 1 }
-    ])('succeeds using action %s', async (dataSet) => {
+    it('succeeds using action %s', async () => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
 
       await actions.changeShare(stateMock, {
         client: clientMock,
-        graphClient: graphClientMock,
-        share: dataSet.share,
+        share: shareMock,
         permissions: spaceRoleManager.bitmask(false),
         role: spaceRoleManager,
         expirationDate: null
       })
 
-      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
+      expect(commitSpy).toBeCalledTimes(1)
     })
   })
 
   describe('addShare', () => {
-    it.each([
-      { shareType: spaceShareMock.shareType, storageId: spaceMock.id, expectedCommitCalls: 2 },
-      { shareType: shareMock.shareType, storageId: null, expectedCommitCalls: 1 }
-    ])('succeeds using action %s', async (dataSet) => {
+    it('succeeds using action %s', async () => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
 
       await actions.addShare(stateMock, {
         client: clientMock,
-        graphClient: graphClientMock,
-        shareType: dataSet.shareType,
-        storageId: dataSet.storageId,
+        shareType: shareMock.shareType,
+        storageId: null,
         permissions: spaceRoleManager.bitmask(false),
         role: spaceRoleManager,
         expirationDate: null
       })
 
-      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
+      expect(commitSpy).toBeCalledTimes(1)
     })
   })
 
   describe('deleteShare', () => {
-    it.each([
-      { share: spaceShareMock, storageId: spaceMock.id, expectedCommitCalls: 4 },
-      { share: shareMock, storageId: null, expectedCommitCalls: 1 }
-    ])('succeeds using action %s', async (dataSet) => {
+    it('succeeds using action %s', async () => {
       const commitSpy = jest.spyOn(stateMock, 'commit')
 
       await actions.deleteShare(stateMock, {
         client: clientMock,
-        graphClient: graphClientMock,
-        share: dataSet.share,
+        share: shareMock,
         resource: {}
       })
 
-      expect(commitSpy).toBeCalledTimes(dataSet.expectedCommitCalls)
+      expect(commitSpy).toBeCalledTimes(1)
     })
   })
 })

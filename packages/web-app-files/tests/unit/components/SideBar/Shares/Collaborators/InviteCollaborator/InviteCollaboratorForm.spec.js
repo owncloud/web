@@ -59,9 +59,9 @@ describe('InviteCollaboratorForm', () => {
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
-      { storageId: undefined, highlightedFile: folderMock },
-      { storageId: undefined, highlightedFile: spaceMock },
-      { storageId: 1, highlightedFile: folderMock }
+      { storageId: undefined, highlightedFile: folderMock, addMethod: 'addShare' },
+      { storageId: undefined, highlightedFile: spaceMock, addMethod: 'addSpaceMember' },
+      { storageId: 1, highlightedFile: folderMock, addMethod: 'addShare' }
     ])('calls the "addShare" action', async (dataSet) => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
@@ -71,7 +71,7 @@ describe('InviteCollaboratorForm', () => {
         storageId: dataSet.storageId,
         highlightedFile: dataSet.highlightedFile
       })
-      const addShareSpy = jest.spyOn(wrapper.vm, 'addShare')
+      const addShareSpy = jest.spyOn(wrapper.vm, dataSet.addMethod)
       await wrapper.vm.share()
       expect(addShareSpy).toBeCalled()
     })
@@ -117,6 +117,12 @@ function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = f
               namespaced: true,
               getters: {
                 accessToken: () => 'GFwHKXdsMgoFwt'
+              }
+            },
+            spaces: {
+              namespaced: true,
+              actions: {
+                addSpaceMember: jest.fn()
               }
             }
           }

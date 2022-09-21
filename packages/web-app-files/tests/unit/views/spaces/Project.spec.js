@@ -284,7 +284,6 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
           },
           actions: {
             loadIndicators: jest.fn(),
-            loadCurrentFileOutgoingShares: jest.fn(),
             loadSharesTree: jest.fn()
           },
           getters: {
@@ -308,6 +307,12 @@ function getMountedWrapper(spaceResources = [], spaceItem = null, imageContent =
             },
             spaces: {
               namespaced: true,
+              getters: {
+                spaceMembers: () => [spaceShare]
+              },
+              actions: {
+                loadSpaceMembers: jest.fn()
+              },
               mutations: {
                 UPSERT_SPACE: jest.fn()
               }

@@ -41,6 +41,7 @@ import { Panel } from 'web-pkg/src/components/sideBar/'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import {
+  isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
@@ -50,12 +51,13 @@ import { computed, defineComponent } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
   usePublicLinkPassword,
+  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
-import { useGraphClient } from 'web-client/src/composables'
+import { useActiveLocation } from '../../composables'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -80,7 +82,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const { graphClient } = useGraphClient()
+    const currentStorageId = useRouteParam('storageId')
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -103,13 +105,24 @@ export default defineComponent({
     }
 
     return {
+      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
+      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
+      isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
+      isSharedWithOthersLocation: useActiveLocation(
+        isLocationSharesActive,
+        'files-shares-with-others'
+      ),
+      isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
+      isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
+      isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
+      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      graphClient
+      currentStorageId
     }
   },
 
@@ -125,6 +138,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
     availablePanels(): Panel[] {
       const { panels } = this.fileSideBars.reduce(
@@ -173,15 +187,15 @@ export default defineComponent({
     },
     isRootFolder() {
       const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
-      if (isLocationPublicActive(this.$router, 'files-public-files')) {
+      if (this.isPublicFilesLocation) {
         // root node of a public link has the public link token as path
         // root path `/` like for personal home doesn't exist for public links
         return pathSegments.length === 1
       }
-      if (isLocationSharesActive(this.$router, 'files-shares-with-me')) {
+      if (this.isSharedWithMeLocation || this.isSearchLocation) {
         return !this.highlightedFile
       }
-      if (this.hasShareJail && isLocationSpacesActive(this.$router, 'files-spaces-share')) {
+      if (this.hasShareJail && this.isSpacesShareLocation) {
         return false
       }
       return !pathSegments.length
@@ -206,7 +220,17 @@ export default defineComponent({
         return
       }
 
-      this.fetchFileInfo()
+      // FIXME: isSpacesProjectsLocation resolves "true" within a project?!
+      const isSpacesProjectsLocation = this.isSpacesProjectsLocation && !this.currentStorageId
+      const loadShares =
+        !!oldFile ||
+        isSpacesProjectsLocation ||
+        this.isSharedWithMeLocation ||
+        this.isSharedWithOthersLocation ||
+        this.isSharedViaLinkLocation ||
+        this.isSearchLocation ||
+        this.isFavoritesLocation
+      this.fetchFileInfo(loadShares)
     },
 
     highlightedFileThumbnail(thumbnail) {
@@ -219,17 +243,13 @@ export default defineComponent({
   },
   async created() {
     if (!this.areMultipleSelected) {
-      await this.fetchFileInfo()
+      await this.fetchFileInfo(false)
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadSharesTree',
-      'loadCurrentFileOutgoingShares',
-      'loadIncomingShares'
-    ]),
+    ...mapActions('Files', ['loadSharesTree']),
 
-    async fetchFileInfo() {
+    async fetchFileInfo(loadShares) {
       if (!this.highlightedFile) {
         this.selectedFile = {}
         return
@@ -240,7 +260,9 @@ export default defineComponent({
         isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
         this.highlightedFileIsSpace
       ) {
-        this.loadShares()
+        if (loadShares) {
+          this.loadShares()
+        }
         this.selectedFile = { ...this.highlightedFile }
         return
       }
@@ -263,7 +285,9 @@ export default defineComponent({
 
         this.selectedFile = buildResource(item)
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        this.loadShares()
+        if (loadShares) {
+          this.loadShares()
+        }
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
@@ -272,29 +296,20 @@ export default defineComponent({
     },
 
     loadShares() {
-      this.loadCurrentFileOutgoingShares({
+      this.loadSharesTree({
         client: this.$client,
-        graphClient: this.graphClient,
         path: this.highlightedFile.path,
         storageId: this.highlightedFile.fileId,
-        resource: this.highlightedFile
+        includeRoot: true,
+        // cache must not be used on flat file lists that gather resources form various locations
+        useCached: !(
+          this.isSharedWithMeLocation ||
+          this.isSharedWithOthersLocation ||
+          this.isSharedViaLinkLocation ||
+          this.isSearchLocation ||
+          this.isFavoritesLocation
+        )
       })
-      this.loadIncomingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        storageId: this.highlightedFile.fileId
-      })
-
-      // shares tree is already being loaded for the current folder (except for root)
-      if (!this.currentFolder || this.currentFolder.path === '/') {
-        this.loadSharesTree({
-          client: this.$client,
-          path: this.highlightedFile.path === '' ? '/' : this.highlightedFile.path,
-          $gettext: this.$gettext,
-          storageId: this.highlightedFile.fileId
-        })
-      }
     }
   }
 })
