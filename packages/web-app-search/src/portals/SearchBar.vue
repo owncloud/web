@@ -121,16 +121,13 @@ export default {
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
-        if (this.$refs.optionsDrop) {
-          return
-          this.markInstance = new Mark(this.$refs.optionsDrop)
-          this.markInstance.unmark()
-          this.markInstance.mark(this.term, {
-            element: 'span',
-            className: 'highlight-mark',
-            exclude: ['.provider-details *']
-          })
-        }
+        this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
+        this.markInstance.unmark()
+        this.markInstance.mark(this.term, {
+          element: 'span',
+          className: 'highlight-mark',
+          exclude: ['.provider-details *']
+        })
       })
     },
     $route: {
@@ -210,7 +207,8 @@ export default {
       }
     },
     onKeyUpUp() {
-      const previewElementsCount = this.$el.querySelectorAll('.preview').length
+      const previewElements = this.$el.querySelectorAll('.preview')
+      const previewElementsCount = previewElements.length
 
       if (!previewElementsCount) {
         return
@@ -221,9 +219,14 @@ export default {
       } else {
         this.activePreviewIndex = this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
       }
+
+      if (this.activePreviewIndex !== null) {
+        this.$refs.optionsDrop.$el.scrollTo(0, 0)
+      }
     },
     onKeyUpDown() {
-      const previewElementsCount = this.$el.querySelectorAll('.preview').length
+      const previewElements = this.$el.querySelectorAll('.preview')
+      const previewElementsCount = previewElements.length
 
       if (!previewElementsCount) {
         return
@@ -234,6 +237,10 @@ export default {
       } else {
         this.activePreviewIndex =
           this.activePreviewIndex === previewElementsCount - 1 ? null : this.activePreviewIndex + 1
+      }
+
+      if (this.activePreviewIndex !== null) {
+        this.$refs.optionsDrop.$el.scrollTo(0, 300)
       }
     },
     updateTerm(term) {
