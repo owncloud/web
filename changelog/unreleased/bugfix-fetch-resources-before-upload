@@ -1,0 +1,6 @@
+Bugfix: Fetch resources before uploading/creating resources
+
+We now fetch resources before uploading or creating resources to ensure the conflict modal shows if a resource already exists on the server side.
+
+https://github.com/owncloud/web/pull/7664
+https://github.com/owncloud/web/issues/3262
