@@ -42,7 +42,7 @@ export function buildSpace(space): SpaceResource {
     description: space.description,
     extension: '',
     path: '',
-    webDavPath: buildWebDavSpacesPath(space.id, ''),
+    webDavPath: space.webDavPath || buildWebDavSpacesPath(space.id, ''),
     driveAlias: space.driveAlias,
     driveType: space.driveType,
     type: 'space',

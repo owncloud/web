@@ -20,7 +20,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const { graphClient } = useGraphClient({ store })
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const space = ref(null)
-  const item = ref(null)
+  const item: Ref<string> = ref(null)
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     ([driveAliasAndItem]) => {

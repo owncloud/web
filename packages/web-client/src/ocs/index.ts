@@ -14,7 +14,7 @@ export const ocs = (baseURI: string, axiosClient: AxiosInstance): OCS => {
 
   const capabilitiesFactory = GetCapabilitiesFactory(ocsV1BaseURI, axiosClient)
 
-  return <OCS>{
+  return {
     getCapabilities: () => {
       return capabilitiesFactory.getCapabilities()
     }

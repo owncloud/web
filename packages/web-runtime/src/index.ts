@@ -28,6 +28,7 @@ import {
   startSentry
 } from './container'
 import { buildSpace } from 'web-client/src/helpers'
+import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -103,7 +104,8 @@ export const renderSuccess = (): void => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: user.id
+        name: user.id,
+        webDavPath: `/files/${user.id}`
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
@@ -125,7 +127,8 @@ export const renderSuccess = (): void => {
       const space = buildSpace({
         id: publicLinkToken,
         driveAlias: `public/${publicLinkToken}`,
-        driveType: 'public'
+        driveType: 'public',
+        webDavPath: buildWebDavPublicPath(publicLinkToken, '')
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)

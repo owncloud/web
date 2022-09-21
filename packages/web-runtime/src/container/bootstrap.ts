@@ -20,6 +20,7 @@ import { UppyService } from '../services/uppyService'
 import { init as SentryInit } from '@sentry/browser'
 import { Vue as SentryVueIntegration } from '@sentry/integrations'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
+import { webdav } from 'web-client/src/webdav'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -268,6 +269,7 @@ export const announceClientService = ({
   vue.prototype.$client = sdk
   vue.prototype.$clientService = clientService
   vue.prototype.$clientService.owncloudSdk = sdk
+  vue.prototype.$clientService.webdav = webdav(sdk)
 }
 
 /**

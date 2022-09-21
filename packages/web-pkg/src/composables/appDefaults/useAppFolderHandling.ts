@@ -17,7 +17,6 @@ interface AppFolderHandlingOptions {
   store: Store<any>
   currentRoute: Ref<Route>
   clientService?: ClientService
-  isPublicLinkContext: MaybeRef<boolean>
   publicLinkPassword: MaybeRef<string>
 }
 
@@ -31,8 +30,7 @@ export interface AppFolderHandlingResult {
 export function useAppFolderHandling({
   store,
   currentRoute,
-  clientService: { owncloudSdk: client },
-  isPublicLinkContext,
+  clientService: { owncloudSdk: client, webdav },
   publicLinkPassword
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
@@ -40,7 +38,7 @@ export function useAppFolderHandling({
     return store.getters['Files/activeFiles']
   })
 
-  const loadFolder = async (absoluteDirPath: string) => {
+  const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
     if (store.getters.activeFile && store.getters.activeFile.path !== '') {
       return
     }
@@ -48,18 +46,15 @@ export function useAppFolderHandling({
     isFolderLoading.value = true
     store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
     try {
-      // TODO: when we move the webdav implementation to web-client we don't want to split
-      // webdav file management into public/authenticated context anymore. full webdav path should be sufficient for that.
-      const promise = unref(isPublicLinkContext)
-        ? client.publicFiles.list(
-            absoluteDirPath.replace(/^\/public-files/, ''),
-            unref(publicLinkPassword),
-            DavProperties.PublicLink
-          )
-        : client.files.list(absoluteDirPath, 1, DavProperties.Default)
-      let resources = await promise
+      context = unref(context)
+      const space = unref(context.space)
+      const path = dirname(unref(context.item))
 
-      resources = resources.map(buildResource)
+      const resources = await webdav.listFiles(space, {
+        path,
+        publicLinkPassword: unref(publicLinkPassword)
+      })
+
       store.commit('Files/LOAD_FILES', {
         currentFolder: resources[0],
         files: resources.slice(1)
@@ -72,12 +67,6 @@ export function useAppFolderHandling({
       console.error(error)
     }
     isFolderLoading.value = false
-  }
-
-  const loadFolderForFileContext = (context: MaybeRef<FileContext>) => {
-    const { path } = unref(context)
-    const absoluteDirPath = dirname(unref(path))
-    return loadFolder(absoluteDirPath)
   }
 
   return {

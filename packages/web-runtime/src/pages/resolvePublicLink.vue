@@ -77,7 +77,7 @@ import { ref, unref, computed, defineComponent } from "@vue/composition-api";
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const { owncloudSdk } = useClientService()
+    const { owncloudSdk, webdav } = useClientService()
     const token = useRouteParam('token')
     const password = ref('')
     const isPasswordRequiredTask = useTask(function* (signal) {

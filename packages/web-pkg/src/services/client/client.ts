@@ -3,6 +3,7 @@ import { client, Graph, OCS } from 'web-client'
 import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
+import { WebDAV } from 'web-client/src/webdav'
 
 export type OwnCloudSdk = any
 interface OcClient {
@@ -37,6 +38,8 @@ export class ClientService {
   private ocPublicLinkContextClient: OcClient
 
   private owncloudSdkClient: OwnCloudSdk
+
+  private webdavClient: WebDAV
 
   public httpAuthenticated(token: string): HttpClient {
     if (!this.httpAuthenticatedClient || this.httpAuthenticatedClient.token !== token) {
@@ -115,6 +118,14 @@ export class ClientService {
 
   public set owncloudSdk(owncloudSdk: OwnCloudSdk) {
     this.owncloudSdkClient = owncloudSdk
+  }
+
+  public get webdav(): WebDAV {
+    return this.webdavClient
+  }
+
+  public set webdav(webdav: WebDAV) {
+    this.webdavClient = webdav
   }
 }
 

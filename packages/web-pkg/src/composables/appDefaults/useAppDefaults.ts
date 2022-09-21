@@ -77,6 +77,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       path,
       driveAliasAndItem: unref(driveAliasAndItem),
       space: unref(space),
+      item: unref(item),
       fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)
@@ -105,7 +106,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       clientService,
       store,
       currentRoute,
-      isPublicLinkContext,
       publicLinkPassword
     }),
     ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
