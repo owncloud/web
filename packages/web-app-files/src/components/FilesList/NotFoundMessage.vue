@@ -54,12 +54,13 @@ import {
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'NotFoundMessage',
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

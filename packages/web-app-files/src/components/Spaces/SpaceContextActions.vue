@@ -43,6 +43,7 @@ import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SpaceContextActions',
@@ -63,7 +64,7 @@ export default defineComponent({
 
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: true
     },
     items: {

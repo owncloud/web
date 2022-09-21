@@ -65,6 +65,7 @@ import ViewOptions from './ViewOptions.vue'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -91,7 +92,7 @@ export default defineComponent({
     showActionsOnSelection: { type: Boolean, default: false },
     sideBarOpen: { type: Boolean, default: false },
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

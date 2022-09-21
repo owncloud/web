@@ -159,7 +159,7 @@ import {
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, Resource, SpaceResource } from 'web-client/src/helpers'
 import {
   extractExtensionFromFile,
   extractNameWithoutExtension,
@@ -177,7 +177,7 @@ export default defineComponent({
   mixins: [MixinFileActions],
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     },

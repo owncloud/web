@@ -122,6 +122,7 @@ import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
+import { SpaceResource } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -149,7 +150,7 @@ export default defineComponent({
 
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     },

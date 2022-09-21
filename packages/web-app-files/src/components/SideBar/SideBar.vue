@@ -59,6 +59,7 @@ import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -82,7 +83,7 @@ export default defineComponent({
       default: null
     },
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

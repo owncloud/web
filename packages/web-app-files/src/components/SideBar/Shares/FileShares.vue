@@ -84,6 +84,7 @@ import {
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'FileShares',
@@ -93,7 +94,7 @@ export default defineComponent({
   },
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

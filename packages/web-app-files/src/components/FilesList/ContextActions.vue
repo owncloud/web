@@ -28,6 +28,7 @@ import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 import { PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   name: 'ContextActions',
@@ -58,7 +59,7 @@ export default {
 
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: true
     },
     items: {

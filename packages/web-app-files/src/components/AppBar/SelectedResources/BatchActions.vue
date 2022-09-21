@@ -29,6 +29,7 @@ import Restore from '../../../mixins/actions/restore'
 import ClearSelection from '../../../mixins/actions/clearSelection'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'BatchActions',
@@ -52,7 +53,7 @@ export default defineComponent({
       required: false
     },
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

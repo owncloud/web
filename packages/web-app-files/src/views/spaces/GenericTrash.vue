@@ -78,6 +78,7 @@ import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useTranslations } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -96,7 +97,7 @@ export default defineComponent({
 
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

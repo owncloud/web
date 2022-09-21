@@ -11,7 +11,9 @@ export interface Resource {
   downloadURL?: string
   type?: string
   status?: number
-  spaceRoles?: any[]
+  spaceRoles?: {
+    [k: string]: any[];
+  }
   spaceQuota?: any[]
   spaceImageData?: any
   spaceReadmeData?: any
@@ -20,15 +22,17 @@ export interface Resource {
   sdate?: string
   mdate?: string
   indicators?: any[]
-  size?: number
+  size?: number | string // FIXME
   permissions?: string
   starred?: boolean
   etag?: string
-  sharePermissions?: number
+  sharePermissions?: number | string // FIXME
   shareId?: string
   shareRoot?: string
   shareTypes?: number[]
   privateLink?: string
+  description?: string
+  disabled?: boolean
   driveType?: 'personal' | 'project' | 'share' | (string & unknown)
   driveAlias?: string
 
@@ -50,7 +54,6 @@ export interface Resource {
   isMounted?(): boolean
 
   getDomSelector?(): string
-  getDriveAliasAndItem?(resource: Resource): string
 
   matchingSpace?: any
 
@@ -66,4 +69,28 @@ export interface Resource {
   share?: any
 
   ddate?: string
+}
+
+export interface SpaceResource extends Resource {
+  getDriveAliasAndItem?(resource: Resource): string
+}
+
+export interface PersonalSpaceResource extends SpaceResource {}
+export const isPersonalSpaceResource = (resource: Resource): resource is PersonalSpaceResource => {
+  return resource.driveType === 'personal'
+}
+
+export interface ProjectSpaceResource extends SpaceResource {}
+export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
+  return resource.driveType === 'project'
+}
+
+export interface ShareSpaceResource extends SpaceResource {}
+export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
+  return resource.driveType === 'share'
+}
+
+export interface PublicSpaceResource extends SpaceResource {}
+export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
+  return resource.driveType === 'public'
 }

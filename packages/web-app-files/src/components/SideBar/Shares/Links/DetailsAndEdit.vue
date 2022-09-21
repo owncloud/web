@@ -187,6 +187,7 @@ import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -340,7 +341,7 @@ export default defineComponent({
     viaRouterParams() {
       const viaPath = this.link.path
       const matchingSpace = (this.space ||
-        this.spaces.find((space) => space.id === this.file.storageId)) as Resource
+        this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
       if (!matchingSpace) {
         return {}
       }

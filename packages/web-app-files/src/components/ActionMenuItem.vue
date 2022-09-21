@@ -54,6 +54,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'ActionMenuItem',
@@ -67,7 +68,7 @@ export default defineComponent({
       required: true
     },
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: true
     },
     appearance: {

@@ -71,7 +71,7 @@ import {
   unref,
   watch
 } from '@vue/composition-api'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
 import { buildResource } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers'
 import {
@@ -102,7 +102,7 @@ export default defineComponent({
   },
   props: {
     space: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource>,
       required: true
     }
   },

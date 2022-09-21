@@ -18,6 +18,7 @@ import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import isSearchActive from './helpers/isSearchActive'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 const actionsMixins = [
   'navigate',
@@ -37,7 +38,7 @@ export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
 
 export type FileActionOptions = {
-  space: Resource
+  space: SpaceResource
   resources: Resource[]
 }
 

@@ -1,8 +1,8 @@
 import { User } from '../user'
-import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
+import { buildWebDavSpacesPath, extractDomSelector, Resource, SpaceResource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
 
-export function buildSpace(space) {
+export function buildSpace(space): SpaceResource {
   let spaceImageData, spaceReadmeData
   let disabled = false
   const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map((role) => [role.name, []]))
