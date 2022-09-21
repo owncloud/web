@@ -409,7 +409,6 @@ export default {
         .catch((error) => {
           console.error('SHARESTREE_ERROR', error)
           context.commit('SHARESTREE_ERROR', error.message)
-          context.commit('SHARESTREE_LOADING', false)
         })
     }
 
