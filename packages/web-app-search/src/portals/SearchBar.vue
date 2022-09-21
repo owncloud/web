@@ -253,6 +253,12 @@ export default {
     },
     updateTerm(term) {
       this.term = term
+
+      if (!this.term) {
+        return this.$refs.optionsDrop.hide()
+      }
+
+      return this.$refs.optionsDrop.show()
     },
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
