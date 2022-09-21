@@ -356,10 +356,7 @@ export default {
     }
 
     @media (max-width: 959px) {
-      left: var(--oc-space-medium);
-      min-width: 95% !important;
-      max-width: 95% !important;
-      top: 60px;
+      width: 93vw !important;
     }
 
     ul {

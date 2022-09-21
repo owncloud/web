@@ -36,8 +36,13 @@ export default defineComponent({
     url: '',
     resource: null
   }),
-  created() {
-    this.loadPdf(this.currentFileContext)
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.loadPdf(this.currentFileContext)
+      },
+      immediate: true
+    }
   },
   beforeDestroy() {
     this.unloadPdf()
