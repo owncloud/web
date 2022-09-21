@@ -111,9 +111,7 @@ import { mapGetters } from 'vuex'
 import {
   useAccessToken,
   useAppDefaults,
-  useDriveResolver,
   usePublicLinkContext,
-  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import Preview from './index'
@@ -128,14 +126,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
     return {
       ...useAppDefaults({
         applicationId: 'preview'
-      }),
-      ...useDriveResolver({
-        store,
-        driveAliasAndItem
       }),
       accessToken: useAccessToken({ store }),
       isPublicLinkContext: usePublicLinkContext({ store })
@@ -236,7 +229,7 @@ export default defineComponent({
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
-    this.setActiveFile(this.currentFileContext.path)
+    this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
   },
 
@@ -249,9 +242,12 @@ export default defineComponent({
   },
 
   methods: {
-    setActiveFile(webDavPath) {
+    setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
-        if (this.filteredFiles[i].webDavPath === webDavPath) {
+        if (
+          this.currentFileContext.space?.getDriveAliasAndItem(this.filteredFiles[i]) ===
+          driveAliasAndItem
+        ) {
           this.activeIndex = i
           return
         }
@@ -264,12 +260,14 @@ export default defineComponent({
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
-      this.setActiveFile(result.route.params.filePath)
+      this.setActiveFile(result.route.params.driveAliasAndItem)
     },
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeFilteredFile.webDavPath
+      this.$route.params.driveAliasAndItem = this.currentFileContext.space?.getDriveAliasAndItem(
+        this.activeFilteredFile
+      )
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 

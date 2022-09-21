@@ -3,6 +3,7 @@ import { LocationParams, LocationQuery } from '../router'
 import { Resource } from 'web-client'
 export interface FileContext {
   path: MaybeRef<string>
+  driveAliasAndItem: MaybeRef<string>
   space: MaybeRef<Resource>
   fileName: MaybeRef<string>
   routeName: MaybeRef<string>

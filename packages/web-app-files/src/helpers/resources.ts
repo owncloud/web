@@ -114,12 +114,12 @@ export function buildResource(resource): Resource {
   }
 }
 
-export function buildWebDavFilesPath(userId, path) {
-  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
 export function buildWebDavPublicPath(publicLinkToken, path) {
   return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
+}
+
+export function buildWebDavFilesPath(userId, path) {
+  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavFilesTrashPath(userId, path = '') {

@@ -41,7 +41,7 @@ export function useAppFolderHandling({
   })
 
   const loadFolder = async (absoluteDirPath: string) => {
-    if (store.getters.activeFile.path !== '') {
+    if (store.getters.activeFile && store.getters.activeFile.path !== '') {
       return
     }
 

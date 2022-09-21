@@ -5,6 +5,7 @@ import { buildSpace } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
 import { useGraphClient } from 'web-client/src/composables'
+import { useSpacesLoading } from './useSpacesLoading'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -13,12 +14,8 @@ interface DriveResolverOptions {
 
 export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const store = options.store || useStore()
+  const { areSpacesLoading } = useSpacesLoading({ store })
   const shareId = useRouteQuery('shareId')
-  const areSpacesLoading = computed(
-    () =>
-      !store.getters['runtime/spaces/spacesInitialized'] ||
-      store.getters['runtime/spaces/spacesLoading']
-  )
   const { graphClient } = useGraphClient({ store })
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
   const space = ref(null)
@@ -77,7 +74,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
     { immediate: true }
   )
   return {
-    areSpacesLoading,
     space,
     item
   }

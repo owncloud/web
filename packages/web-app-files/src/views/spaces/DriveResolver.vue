@@ -1,8 +1,7 @@
 <template>
   <div class="oc-flex oc-width-1-1">
-    <app-loading-spinner v-if="areSpacesLoading" />
     <drive-redirect
-      v-else-if="!space"
+      v-if="!space"
       :drive-alias-and-item="driveAliasAndItem"
       :append-home-folder="isSpaceRoute"
     />
@@ -12,7 +11,6 @@
 </template>
 
 <script lang="ts">
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import DriveRedirect from './DriveRedirect.vue'
 import GenericSpace from './GenericSpace.vue'
 import GenericTrash from './GenericTrash.vue'
@@ -25,7 +23,6 @@ import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 export default defineComponent({
   components: {
     DriveRedirect,
-    AppLoadingSpinner,
     GenericSpace,
     GenericTrash
   },
