@@ -20,8 +20,9 @@ const getters = {
 }
 
 const mutations = {
-  SET_SPACES(state, spaces) {
-    state.spaces = spaces
+  // TODO: we might want to avoid duplicates at some point
+  ADD_SPACES(state, spaces) {
+    state.spaces = [...state.spaces, ...spaces]
   },
   SET_SPACES_INITIALIZED(state, initialized) {
     state.spacesInitialized = initialized
@@ -107,7 +108,7 @@ const actions = {
         return
       }
       const spaces = graphResponse.data.value.map((space) => buildSpace(space))
-      context.commit('SET_SPACES', spaces)
+      context.commit('ADD_SPACES', spaces)
       context.commit('SET_SPACES_INITIALIZED', true)
     } finally {
       context.commit('SET_SPACES_LOADING', false)

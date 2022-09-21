@@ -106,10 +106,6 @@ export default defineComponent({
       if (!userId) {
         return false
       }
-      // TODO: remove log statement
-      store.getters['runtime/spaces/spaceMembers'].forEach((member) => {
-        console.log('space member', member)
-      })
       return store.getters['runtime/spaces/spaceMembers'].some((member) => member.id === userId)
     })
 

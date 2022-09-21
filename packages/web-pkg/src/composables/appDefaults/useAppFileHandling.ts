@@ -38,16 +38,8 @@ export function useAppFileHandling({
 
     let signed = true
     if (!downloadURL && !inlineDisposition) {
-      // TODO: check whether we can fix the resource to always contain public-files in the webDavPath
-      let urlPath
-      if (unref(isPublicLinkContext)) {
-        urlPath = ['public-files', webDavPath].join('/')
-      } else {
-        urlPath = webDavPath
-      }
-
       // compute unsigned url
-      downloadURL = client.files.getFileUrl(urlPath)
+      downloadURL = client.files.getFileUrl(webDavPath)
 
       // sign url
       if (unref(isUrlSigningSupported)) {

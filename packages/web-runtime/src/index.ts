@@ -105,7 +105,29 @@ export const renderSuccess = (): void => {
         driveType: 'personal',
         name: user.id
       })
-      store.commit('runtime/spaces/SET_SPACES', [space])
+      store.commit('runtime/spaces/ADD_SPACES', [space])
+      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
+    },
+    {
+      immediate: true
+    }
+  )
+  store.watch(
+    (state, getters) => {
+      return getters['runtime/auth/isPublicLinkContextReady']
+    },
+    (publicLinkContextReady) => {
+      if (!publicLinkContextReady) {
+        return
+      }
+      // Create virtual space for public link
+      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const space = buildSpace({
+        id: publicLinkToken,
+        driveAlias: `public/${publicLinkToken}`,
+        driveType: 'public'
+      })
+      store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },
     {

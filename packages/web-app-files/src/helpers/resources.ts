@@ -36,11 +36,17 @@ export function renameResource(resource, newName, newPath) {
 export function buildResource(resource): Resource {
   const name = resource.fileInfo[DavProperty.Name] || path.basename(resource.name)
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
+  const isPublicLink = Object.prototype.hasOwnProperty.call(
+    resource.fileInfo,
+    DavProperty.PublicLinkItemType
+  )
   const extension = extractExtensionFromFile({ ...resource, name })
   let resourcePath
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
     resourcePath = resource.name.split('/').slice(3).join('/')
+  } else if (isPublicLink) {
+    resourcePath = resource.name.split('/').slice(2).join('/')
   } else {
     resourcePath = resource.name
   }

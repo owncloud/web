@@ -5,6 +5,7 @@ import { buildSpace } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
 import { useGraphClient } from 'web-client/src/composables'
+import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 
 interface DriveResolverOptions {
@@ -34,7 +35,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       }
       let matchingSpace = null
       let path = null
-      if (driveAliasAndItem.startsWith('share/')) {
+      if (driveAliasAndItem.startsWith('public/')) {
+        const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
+        matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
+        path = item.join('/')
+      } else if (driveAliasAndItem.startsWith('share/')) {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = buildSpace({
           id: [SHARE_JAIL_ID, unref(shareId)].join('!'),
@@ -62,8 +67,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   )
   watch(
     space,
-    (s) => {
-      if (!s) {
+    (s: Resource) => {
+      if (!s || ['public', 'share', 'personal'].includes(s.driveType)) {
         return
       }
       return store.dispatch('runtime/spaces/loadSpaceMembers', {

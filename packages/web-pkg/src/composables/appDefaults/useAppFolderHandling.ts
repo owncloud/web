@@ -48,9 +48,11 @@ export function useAppFolderHandling({
     isFolderLoading.value = true
     store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
     try {
+      // TODO: when we move the webdav implementation to web-client we don't want to split
+      // webdav file management into public/authenticated context anymore. full webdav path should be sufficient for that.
       const promise = unref(isPublicLinkContext)
         ? client.publicFiles.list(
-            absoluteDirPath,
+            absoluteDirPath.replace(/^\/public-files/, ''),
             unref(publicLinkPassword),
             DavProperties.PublicLink
           )
