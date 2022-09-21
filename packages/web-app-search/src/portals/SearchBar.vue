@@ -76,6 +76,7 @@ import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
+import keycode from 'keycode'
 
 export default {
   name: 'SearchBar',
@@ -175,10 +176,10 @@ export default {
 
   methods: {
     onKeyUp(event) {
-      const keyEventEsc = event.keyCode === 27
-      const keyEventEnter = event.keyCode === 13
-      const keyEventUp = event.keyCode === 38
-      const keyEventDown = event.keyCode === 40
+      const keyEventEsc = keycode.isEventKey(event, 'esc')
+      const keyEventEnter = keycode.isEventKey(event, 'enter')
+      const keyEventUp = keycode.isEventKey(event, 'up')
+      const keyEventDown = keycode.isEventKey(event, 'down')
 
       // Navigation events will be handled elsewhere
       if (keyEventEsc || keyEventEnter || keyEventUp || keyEventDown) {
