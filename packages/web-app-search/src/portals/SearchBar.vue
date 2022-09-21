@@ -207,8 +207,7 @@ export default {
       }
     },
     onKeyUpUp() {
-      const previewElements = this.$el.querySelectorAll('.preview')
-      const previewElementsCount = previewElements.length
+      const previewElementsCount = this.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -220,13 +219,10 @@ export default {
         this.activePreviewIndex = this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
       }
 
-      if (this.activePreviewIndex !== null) {
-        this.$refs.optionsDrop.$el.scrollTo(0, 0)
-      }
+      this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
-      const previewElements = this.$el.querySelectorAll('.preview')
-      const previewElementsCount = previewElements.length
+      const previewElementsCount = this.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -239,9 +235,18 @@ export default {
           this.activePreviewIndex === previewElementsCount - 1 ? null : this.activePreviewIndex + 1
       }
 
-      if (this.activePreviewIndex !== null) {
-        this.$refs.optionsDrop.$el.scrollTo(0, 300)
-      }
+      this.scrollToActivePreviewOption()
+    },
+    scrollToActivePreviewOption() {
+      const previewElements = this.$el.querySelectorAll('.preview')
+
+      this.$refs.optionsDrop.$el.scrollTo(
+        0,
+        this.activePreviewIndex === null
+          ? 0
+          : previewElements[this.activePreviewIndex].getBoundingClientRect().y -
+              previewElements[this.activePreviewIndex].getBoundingClientRect().height
+      )
     },
     updateTerm(term) {
       this.term = term
