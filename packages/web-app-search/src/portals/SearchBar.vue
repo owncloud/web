@@ -203,11 +203,13 @@ export default {
       }
 
       if (this.activePreviewIndex !== null) {
-        this.$el.querySelectorAll('.preview')[this.activePreviewIndex].firstChild.click()
+        this.$refs.optionsDrop.$el
+          .querySelectorAll('.preview')
+          [this.activePreviewIndex].firstChild.click()
       }
     },
     onKeyUpUp() {
-      const previewElementsCount = this.$el.querySelectorAll('.preview').length
+      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -222,7 +224,7 @@ export default {
       this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
-      const previewElementsCount = this.$el.querySelectorAll('.preview').length
+      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
         return
@@ -238,7 +240,7 @@ export default {
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
-      const previewElements = this.$el.querySelectorAll('.preview')
+      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
 
       this.$refs.optionsDrop.$el.scrollTo(
         0,
@@ -276,7 +278,7 @@ export default {
       })
     },
     isPreviewElementActive(searchId) {
-      const previewElements = this.$el.querySelectorAll('.preview')
+      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
       return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
     }
   }
