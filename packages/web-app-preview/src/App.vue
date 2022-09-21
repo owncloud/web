@@ -340,6 +340,7 @@ export default defineComponent({
       this.direction = 'rtl'
       if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
+        this.updateLocalHistory()
         return
       }
       this.activeIndex++
@@ -353,6 +354,7 @@ export default defineComponent({
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
         this.activeIndex = this.filteredFiles.length - 1
+        this.updateLocalHistory()
         return
       }
       this.activeIndex--
