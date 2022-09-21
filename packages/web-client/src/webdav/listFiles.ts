@@ -18,7 +18,6 @@ export const GetListFilesFactory = (sdk: OwnCloudSdk) => {
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
         // At first we tried to do this in buildResource but only the public link resource itself knows it's a public link
         resources.forEach(resource => {
-          console.log('resources', resource)
           resource.name = resource.name.split('/').slice(2).join('/')
         })
       } else {
