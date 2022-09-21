@@ -8,8 +8,8 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @click.native="term && $refs.drop.show()"
-      @keyup.native.esc="$refs.drop.hide()"
+      @click.native="term && $refs.optionsDrop.show()"
+      @keyup.native.esc="$refs.optionsDrop.hide()"
       @keyup.native.up="onKeyUpUp"
       @keyup.native.down="onKeyUpDown"
       @keyup.native.enter="onKeyUpEnter"
@@ -17,7 +17,7 @@
     />
     <oc-drop
       id="files-global-search-options"
-      ref="drop"
+      ref="optionsDrop"
       mode="manual"
       target="#files-global-search-bar"
     >
@@ -40,7 +40,7 @@
                 <span>
                   <router-link
                     :to="getMoreResultsLinkForProvider(provider)"
-                    @click.native="$refs.drop.hide()"
+                    @click.native="$refs.optionsDrop.hide()"
                   >
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
@@ -59,7 +59,7 @@
                   :is="provider.previewSearch.component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
-                  @click.native="$refs.drop.hide()"
+                  @click.native="$refs.optionsDrop.hide()"
                 />
               </li>
             </oc-list>
@@ -121,14 +121,34 @@ export default {
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
-        this.markInstance = new Mark(this.$refs.options)
-        this.markInstance.unmark()
-        this.markInstance.mark(this.term, {
-          element: 'span',
-          className: 'highlight-mark',
-          exclude: ['.provider-details *']
-        })
+        if (this.$refs.optionsDrop) {
+          return
+          this.markInstance = new Mark(this.$refs.optionsDrop)
+          this.markInstance.unmark()
+          this.markInstance.mark(this.term, {
+            element: 'span',
+            className: 'highlight-mark',
+            exclude: ['.provider-details *']
+          })
+        }
       })
+    },
+    $route: {
+      handler(r) {
+        this.$nextTick(() => {
+          if (!this.availableProviders.length) {
+            return
+          }
+          const routeTerm = r.query.term
+          const input = this.$el.getElementsByTagName('input')[0]
+          if (!input || !routeTerm) {
+            return
+          }
+          this.term = routeTerm
+          input.value = routeTerm
+        })
+      },
+      immediate: true
     }
   },
 
@@ -169,12 +189,14 @@ export default {
       }
 
       if (!this.term) {
-        return this.$refs.drop.hide()
+        return this.$refs.optionsDrop.hide()
       }
 
-      return this.$refs.drop.show()
+      return this.$refs.optionsDrop.show()
     },
     onKeyUpEnter() {
+      this.$refs.optionsDrop.hide()
+
       if (this.term && this.activePreviewIndex === null) {
         this.$router.push(
           createLocationCommon('files-common-search', {
@@ -186,9 +208,6 @@ export default {
       if (this.activePreviewIndex !== null) {
         this.$el.querySelectorAll('.preview')[this.activePreviewIndex].firstChild.click()
       }
-
-      this.$refs.drop.hide()
-      console.log(this.$refs.drop)
     },
     onKeyUpUp() {
       const previewElementsCount = this.$el.querySelectorAll('.preview').length
@@ -310,12 +329,12 @@ export default {
 
   #files-global-search-options {
     width: 450px;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
     text-decoration: none;
 
     .oc-card {
       padding: 0 !important;
-      overflow-y: auto;
-      max-height: calc(100% - 52px);
     }
 
     .highlight-mark {
