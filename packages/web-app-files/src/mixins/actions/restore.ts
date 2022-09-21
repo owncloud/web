@@ -71,6 +71,7 @@ export default {
       const resolvedResources = []
       for (const resource of resources) {
         const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
+        console.log(resource)
 
         // ? check if parent folder has already been requested
         let parentResources = []
@@ -142,6 +143,38 @@ export default {
         })
       }
       return resolvedConflicts
+    },
+    async restoreFolderStructure(resource) {
+      /*const createdFolders = []
+      const folders = resource.path.split('/')
+      let createdSubFolders = ''
+      for (const subFolder of folders) {
+        if (!subFolder) {
+          continue
+        }
+
+        const folderToCreate = `${createdSubFolders}/${subFolder}`
+        if (createdFolders.includes(folderToCreate)) {
+          createdSubFolders += `/${subFolder}`
+          createdFolders.push(createdSubFolders)
+          continue
+        }
+
+        let uploadId
+        if (!createdSubFolders) {
+          uploadId = file.meta.topLevelFolderId
+        } else {
+          uploadId = uuid.v4()
+        }
+
+        try {
+          await this.client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+        } catch (error) {
+          console.error(error)
+        }
+        createdSubFolders += `/${subFolder}`
+        createdFolders.push(createdSubFolders)
+      }*/
     },
     async restoreResources(resources, filesToOverwrite) {
       const restoredResources = []
