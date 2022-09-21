@@ -13,7 +13,6 @@
       @keyup.native.up="onKeyUpUp"
       @keyup.native.down="onKeyUpDown"
       @keyup.native.enter="onKeyUpEnter"
-      @keyup.native="onKeyUp"
     />
     <oc-drop
       id="files-global-search-options"
@@ -76,7 +75,6 @@ import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
-import keycode from 'keycode'
 
 export default {
   name: 'SearchBar',
@@ -175,23 +173,6 @@ export default {
   },
 
   methods: {
-    onKeyUp(event) {
-      const keyEventEsc = keycode.isEventKey(event, 'esc')
-      const keyEventEnter = keycode.isEventKey(event, 'enter')
-      const keyEventUp = keycode.isEventKey(event, 'up')
-      const keyEventDown = keycode.isEventKey(event, 'down')
-
-      // Navigation events will be handled elsewhere
-      if (keyEventEsc || keyEventEnter || keyEventUp || keyEventDown) {
-        return
-      }
-
-      if (!this.term) {
-        return this.$refs.optionsDrop.hide()
-      }
-
-      return this.$refs.optionsDrop.show()
-    },
     onKeyUpEnter() {
       this.$refs.optionsDrop.hide()
 
