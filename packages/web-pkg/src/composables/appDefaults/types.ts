@@ -1,7 +1,9 @@
 import { MaybeRef } from '../../utils'
 import { LocationParams, LocationQuery } from '../router'
+import { Resource } from 'web-client'
 export interface FileContext {
   path: MaybeRef<string>
+  space: MaybeRef<Resource>
   fileName: MaybeRef<string>
   routeName: MaybeRef<string>
   routeParams: MaybeRef<LocationParams>

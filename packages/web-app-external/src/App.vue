@@ -39,6 +39,7 @@ import LoadingScreen from './components/LoadingScreen.vue'
 import { computed, unref } from '@vue/composition-api'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/runtime-core'
+import { DavProperty } from 'web-pkg/src/constants'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -90,7 +91,8 @@ export default defineComponent({
     this.loading = true
     try {
       const filePath = this.currentFileContext.path
-      const fileId = this.fileId || (await this.getFileResource(filePath)).fileId
+      const fileId =
+        this.fileId || (await this.getFileResource(filePath, [DavProperty.FileId])).fileId
 
       // fetch iframe params for app and file
       const configUrl = this.configuration.server

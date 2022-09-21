@@ -82,9 +82,10 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
-export default {
+export default defineComponent({
   name: 'FileShares',
   components: {
     InviteCollaboratorForm,
@@ -92,7 +93,7 @@ export default {
   },
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: false,
       default: null
     }
@@ -323,9 +324,9 @@ export default {
       if (this.space && this.sharesTree[parentShare.path]) {
         return createLocationSpaces('files-spaces-generic', {
           params: {
-            driveAliasAndItem: [this.space.driveAlias, parentShare.path.split('/')]
-              .filter(Boolean)
-              .join('/')
+            driveAliasAndItem: this.space.getDriveAliasAndItem({
+              path: parentShare.path
+            } as Resource)
           }
         })
       }
@@ -344,7 +345,7 @@ export default {
       return !collaborator.indirect
     }
   }
-}
+})
 </script>
 
 <style>

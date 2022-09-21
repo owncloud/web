@@ -30,6 +30,7 @@ import { createLocationShares, createLocationSpaces } from '../../router'
 import path from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
+import { buildSpace, Resource } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -143,10 +144,12 @@ export default defineComponent({
   methods: {
     createFolderLink(p: string) {
       if (this.resource.shareId) {
-        const shareName = path.basename(this.resource.shareRoot)
+        const space = buildSpace({
+          driveAlias: `share/${path.basename(this.resource.shareRoot)}`
+        })
         return createLocationSpaces('files-spaces-generic', {
           params: {
-            driveAliasAndItem: `share/${shareName}/${p.replace(/^\/+/, '')}`
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
           },
           query: {
             shareId: this.resource.shareId
@@ -160,7 +163,7 @@ export default defineComponent({
 
       return createLocationSpaces('files-spaces-generic', {
         params: {
-          driveAliasAndItem: [this.matchingSpace.driveAlias, p.split('/')].filter(Boolean).join('/')
+          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
         }
       })
     }

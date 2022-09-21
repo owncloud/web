@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
   createLocationPublic,
   createLocationSpaces,
@@ -52,12 +52,14 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { useRouter, useStore } from 'web-pkg/src/composables'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
 
-export default {
+export default defineComponent({
   name: 'NotFoundMessage',
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: false,
       default: null
     }
@@ -71,7 +73,11 @@ export default {
       showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
       homeRoute: createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: 'personal' + store.getters.homeFolder }
+        params: {
+          driveAliasAndItem: props.space.getDriveAliasAndItem({
+            path: store.getters.homeFolder
+          } as Resource)
+        }
       }),
       publicLinkRoute: createLocationPublic('files-public-files', {
         params: { item: router.currentRoute.params?.item?.split('/')[0] }
@@ -79,5 +85,5 @@ export default {
       spacesRoute: createLocationSpaces('files-spaces-projects')
     }
   }
-}
+})
 </script>

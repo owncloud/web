@@ -8,6 +8,7 @@
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'DriveRedirect',
@@ -46,9 +47,9 @@ export default defineComponent({
           ...unref(route),
           params: {
             ...unref(route).params,
-            driveAliasAndItem:
-              unref(personalSpace).driveAlias +
-              (needsRedirectToPersonalHome ? unref(homeFolder) : '')
+            driveAliasAndItem: unref(personalSpace).getDriveAliasAndItem({
+              path: needsRedirectToPersonalHome ? unref(homeFolder) : ''
+            } as Resource)
           }
         })
         // avoid NavigationDuplicated error in console

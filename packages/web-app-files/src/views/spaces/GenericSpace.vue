@@ -163,7 +163,7 @@ export default defineComponent({
   setup(props) {
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       return createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: props.space.driveAlias + path },
+        params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) },
         query: { ...(props.space.driveType === 'share' && { shareId: props.space.shareId }) }
       })
     }

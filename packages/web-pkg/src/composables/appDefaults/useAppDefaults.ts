@@ -75,6 +75,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
 
     return {
       path,
+      space,
       fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)

@@ -60,7 +60,7 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/shares`
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }],
+    activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
     enabled(capabilities) {
       return capabilities.files_sharing?.api_enabled !== false
     }
@@ -71,7 +71,7 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/project` }], // for projects overview and any project space.
+    activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
     enabled(capabilities) {
       return capabilities.spaces && capabilities.spaces.projects === true
     }

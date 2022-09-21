@@ -111,7 +111,9 @@ import { mapGetters } from 'vuex'
 import {
   useAccessToken,
   useAppDefaults,
+  useDriveResolver,
   usePublicLinkContext,
+  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import Preview from './index'
@@ -126,9 +128,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
     return {
       ...useAppDefaults({
         applicationId: 'preview'
+      }),
+      ...useDriveResolver({
+        store,
+        driveAliasAndItem
       }),
       accessToken: useAccessToken({ store }),
       isPublicLinkContext: usePublicLinkContext({ store })
@@ -199,9 +206,6 @@ export default defineComponent({
           return 3840
       }
     },
-    rawMediaUrl() {
-      return this.getUrlForResource(this.activeFilteredFile)
-    },
 
     isActiveFileTypeImage() {
       return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
@@ -245,9 +249,9 @@ export default defineComponent({
   },
 
   methods: {
-    setActiveFile(filePath) {
+    setActiveFile(webDavPath) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
-        if (this.filteredFiles[i].webDavPath === filePath) {
+        if (this.filteredFiles[i].webDavPath === webDavPath) {
           this.activeIndex = i
           return
         }

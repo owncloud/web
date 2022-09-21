@@ -162,6 +162,7 @@ import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
+import { buildSpace } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -252,10 +253,12 @@ export default defineComponent({
         if (this.file.path === '') {
           return {}
         }
-        const shareName = path.basename(this.file.shareRoot)
+        const space = buildSpace({
+          driveAlias: `share/${path.basename(this.file.shareRoot)}`
+        })
         return createLocationSpaces('files-spaces-generic', {
           params: {
-            driveAliasAndItem: `share/${shareName}/${this.file.path.replace(/^\/+/, '')}`
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: this.file.path } as Resource)
           },
           query: {
             shareId: this.file.shareId
@@ -267,9 +270,9 @@ export default defineComponent({
       }
       return createLocationSpaces('files-spaces-generic', {
         params: {
-          driveAliasAndItem: [this.matchingSpace.driveAlias, this.sharedParentDir.split('/')]
-            .filter(Boolean)
-            .join('/')
+          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({
+            path: this.sharedParentDir
+          } as Resource)
         }
       })
     },

@@ -149,7 +149,8 @@ export default {
           driveAliasAndItem,
           filePath,
           fileId,
-          mode
+          mode,
+          ...(this.$route.query.shareId && { shareId: this.$route.query.shareId })
         })
       }
 
@@ -176,8 +177,6 @@ export default {
     },
 
     $_fileActions__routeOpts(app, driveAliasAndItem: string, filePath, fileId, mode) {
-      const route = this.$route
-
       return {
         name: app.routeName || app.app,
         params: {
@@ -186,7 +185,10 @@ export default {
           fileId,
           mode
         },
-        query: routeToContextQuery(route)
+        query: {
+          ...(this.$route.query.shareId && { shareId: this.$route.query.shareId }),
+          ...routeToContextQuery(this.$route)
+        }
       }
     },
 

@@ -191,6 +191,7 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
+import { buildSpace } from 'web-client/src/helpers'
 
 export default defineComponent({
   mixins: [Rename],
@@ -583,10 +584,12 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        const shareName = path.basename(resource.shareRoot)
+        const space = buildSpace({
+          driveAlias: `share/${path.basename(resource.shareRoot)}`
+        })
         return createLocationSpaces('files-spaces-generic', {
           params: {
-            driveAliasAndItem: `share/${shareName}/${p.replace(/^\/+/, '')}`
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
           },
           query: {
             shareId: resource.shareId
@@ -600,7 +603,7 @@ export default defineComponent({
       }
       return createLocationSpaces('files-spaces-generic', {
         params: {
-          driveAliasAndItem: [matchingSpace.driveAlias, p.split('/')].filter(Boolean).join('/')
+          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
         }
       })
     },
@@ -761,7 +764,7 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId) {
+    getMatchingSpace(storageId): Resource {
       return this.space || this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {

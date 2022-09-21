@@ -186,6 +186,7 @@ import { createLocationSpaces } from '../../../../router'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import { Resource } from 'web-client'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -338,15 +339,15 @@ export default defineComponent({
 
     viaRouterParams() {
       const viaPath = this.link.path
-      const matchingSpace =
-        this.space || this.spaces.find((space) => space.id === this.file.storageId)
+      const matchingSpace = (this.space ||
+        this.spaces.find((space) => space.id === this.file.storageId)) as Resource
       if (!matchingSpace) {
         return {}
       }
 
       return createLocationSpaces('files-spaces-generic', {
         params: {
-          driveAliasAndItem: matchingSpace.driveAlias + viaPath
+          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: viaPath } as Resource)
         }
       })
     },
