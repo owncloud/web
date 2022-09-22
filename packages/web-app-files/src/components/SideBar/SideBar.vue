@@ -58,7 +58,6 @@ import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

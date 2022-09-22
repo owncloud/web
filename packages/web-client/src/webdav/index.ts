@@ -22,6 +22,6 @@ export const webdav = (sdk: OwnCloudSdk): WebDAV => {
   return {
     getFileInfo,
     listFiles,
-    createFolder,
+    createFolder
   }
 }

@@ -22,7 +22,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api'
 import ActionMenuItem from './ActionMenuItem.vue'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

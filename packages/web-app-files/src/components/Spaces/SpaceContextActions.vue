@@ -42,7 +42,6 @@ import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

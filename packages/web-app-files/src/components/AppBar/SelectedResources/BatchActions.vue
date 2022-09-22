@@ -28,7 +28,6 @@ import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
 import ClearSelection from '../../../mixins/actions/clearSelection'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

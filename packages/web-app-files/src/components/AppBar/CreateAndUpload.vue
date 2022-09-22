@@ -435,8 +435,10 @@ export default defineComponent({
       }
 
       try {
-        let path = pathUtil.join(this.currentPath, folderName)
-        let resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, { path })
+        const path = pathUtil.join(this.currentPath, folderName)
+        const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
+          path
+        })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 

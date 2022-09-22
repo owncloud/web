@@ -5,7 +5,10 @@ import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
 
 export const ListFilesFactory = (sdk: OwnCloudSdk) => {
   return {
-    async listFiles(space: SpaceResource, { path, depth = 1 }: { path?: string, depth?: number }): Promise<Resource[]> {
+    async listFiles(
+      space: SpaceResource,
+      { path, depth = 1 }: { path?: string; depth?: number }
+    ): Promise<Resource[]> {
       let resources: Resource[]
       if (isPublicSpaceResource(space)) {
         resources = await sdk.publicFiles.list(

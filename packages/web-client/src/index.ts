@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
-import { WebDAV } from './webdav'
 
 export { Graph } from './graph'
 export { OCS } from './ocs'

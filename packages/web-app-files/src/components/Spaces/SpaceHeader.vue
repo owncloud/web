@@ -90,7 +90,6 @@ import SpaceContextActions from './SpaceContextActions.vue'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { useGraphClient } from 'web-client/src/composables'
-import { Resource } from 'web-client'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
