@@ -9,17 +9,22 @@ export const PutFileContentsFactory = (
   return {
     async putFileContents(
       space: SpaceResource,
-      { path, content = '' }: { path?: string; content?: string }
+      {
+        path,
+        content = '',
+        ...options
+      }: { path?: string; content?: string; previousEntityTag?: string }
     ): Promise<FileResource> {
       if (isPublicSpaceResource(space)) {
         await sdk.publicFiles.putFileContents(
           '',
           `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
           space.publicLinkPassword,
-          content
+          content,
+          options
         )
       } else {
-        await sdk.files.putFileContents(`${space.webDavPath}/${path || ''}`, content)
+        await sdk.files.putFileContents(`${space.webDavPath}/${path || ''}`, content, options)
       }
 
       return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FileResource>

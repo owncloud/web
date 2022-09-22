@@ -116,11 +116,11 @@ export default defineComponent({
     }).restartable()
 
     const saveFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
       try {
-        const putFileContentsResponse = yield putFileContents(unref(filePath), newContent, {
+        const putFileContentsResponse = yield putFileContents(currentFileContext, {
+          content: newContent,
           previousEntityTag: unref(currentETag)
         })
         serverContent.value = newContent

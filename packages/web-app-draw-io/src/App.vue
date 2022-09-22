@@ -13,15 +13,16 @@
     />
   </main>
 </template>
-<script>
+<script lang="ts">
 import { mapActions } from 'vuex'
 import { basename } from 'path'
 import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'DrawIoEditor',
   setup() {
     return {
@@ -180,7 +181,8 @@ export default {
         })
     },
     save(payload, auto = false) {
-      this.putFileContents(this.filePath, payload.xml, {
+      this.putFileContents(this.currentFileContext, {
+        content: payload.xml,
         previousEntityTag: this.currentETag
       })
         .then((resp) => {
@@ -228,7 +230,7 @@ export default {
       return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
     }
   }
-}
+})
 </script>
 <style scoped>
 #drawio-editor {

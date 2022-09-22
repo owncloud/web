@@ -6,6 +6,8 @@ import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
 import { buildResource } from 'files/src/helpers/resources'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
+import { FileContext } from './types'
+import { FileResource } from 'web-client/src/helpers'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
@@ -19,11 +21,14 @@ export interface AppFileHandlingResult {
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
   getFileContents(filePath: string, options: Record<string, any>): Promise<any>
-  putFileContents(filePath: string, content: string, options: Record<string, any>): Promise<any>
+  putFileContents(
+    fileContext: MaybeRef<FileContext>,
+    putFileOptions: { content?: string } & Record<string, any>
+  ): Promise<FileResource>
 }
 
 export function useAppFileHandling({
-  clientService: { owncloudSdk: client },
+  clientService: { owncloudSdk: client, webdav },
   isPublicLinkContext,
   publicLinkPassword
 }: AppFileHandlingOptions): AppFileHandlingResult {
@@ -121,21 +126,13 @@ export function useAppFileHandling({
   }
 
   const putFileContents = (
-    filePath: string,
-    content: string,
-    putFileOptions: Record<string, any>
+    fileContext: MaybeRef<FileContext>,
+    options: { content?: string } & Record<string, any>
   ) => {
-    if (unref(isPublicLinkContext)) {
-      return client.publicFiles.putFileContents(
-        '',
-        filePath,
-        unref(publicLinkPassword),
-        content,
-        putFileOptions
-      )
-    } else {
-      return client.files.putFileContents(filePath, content, putFileOptions)
-    }
+    return webdav.putFileContents(unref(unref(fileContext).space), {
+      path: unref(unref(fileContext).item),
+      ...options
+    })
   }
 
   return {
