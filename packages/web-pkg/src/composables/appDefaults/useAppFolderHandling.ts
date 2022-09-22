@@ -5,8 +5,6 @@ import { dirname } from 'path'
 import { ClientService } from '../../services'
 import { MaybeRef } from '../../utils'
 
-import { DavProperties } from '../../constants'
-import { buildResource } from '../../../../web-app-files/src/helpers/resources'
 import { Resource } from 'web-client'
 
 import { FileContext } from './types'
@@ -17,7 +15,6 @@ interface AppFolderHandlingOptions {
   store: Store<any>
   currentRoute: Ref<Route>
   clientService?: ClientService
-  publicLinkPassword: MaybeRef<string>
 }
 
 export interface AppFolderHandlingResult {
@@ -30,8 +27,7 @@ export interface AppFolderHandlingResult {
 export function useAppFolderHandling({
   store,
   currentRoute,
-  clientService: { owncloudSdk: client, webdav },
-  publicLinkPassword
+  clientService: { webdav }
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
   const activeFiles = computed(() => {
@@ -51,8 +47,7 @@ export function useAppFolderHandling({
       const path = dirname(unref(context.item))
 
       const resources = await webdav.listFiles(space, {
-        path,
-        publicLinkPassword: unref(publicLinkPassword)
+        path
       })
 
       store.commit('Files/LOAD_FILES', {

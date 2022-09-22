@@ -12,7 +12,7 @@ export interface Resource {
   type?: string
   status?: number
   spaceRoles?: {
-    [k: string]: any[];
+    [k: string]: any[]
   }
   spaceQuota?: any[]
   spaceImageData?: any
@@ -106,6 +106,7 @@ export const isShareSpaceResource = (resource: Resource): resource is ShareSpace
 
 export interface PublicSpaceResource extends SpaceResource {
   __publicSpaceResource?: any
+  publicLinkPassword?: string
 }
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
   return resource.driveType === 'public'

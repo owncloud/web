@@ -105,8 +105,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     ...useAppFolderHandling({
       clientService,
       store,
-      currentRoute,
-      publicLinkPassword
+      currentRoute
     }),
     ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
   }

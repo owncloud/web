@@ -27,7 +27,7 @@ import {
   announcePermissionManager,
   startSentry
 } from './container'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, isPublicSpaceResource, Resource } from 'web-client/src/helpers'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
@@ -124,17 +124,36 @@ export const renderSuccess = (): void => {
       }
       // Create virtual space for public link
       const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildSpace({
         id: publicLinkToken,
         driveAlias: `public/${publicLinkToken}`,
         driveType: 'public',
-        webDavPath: buildWebDavPublicPath(publicLinkToken, '')
+        webDavPath: buildWebDavPublicPath(publicLinkToken, ''),
+        ...(publicLinkPassword && { publicLinkPassword })
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },
     {
       immediate: true
+    }
+  )
+  store.watch(
+    // only needed if a public link gets re-resolved with a changed password prop (changed or removed).
+    // don't need to set { immediate: true } on the watcher.
+    (state, getters) => {
+      return getters['runtime/auth/publicLinkPassword']
+    },
+    (publicLinkPassword: string | undefined) => {
+      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const space = store.getters['runtime/spaces/spaces'].find((space: Resource) => {
+        return isPublicSpaceResource(space) && space.id === publicLinkToken
+      })
+      if (!space) {
+        return
+      }
+      space.publicLinkPassword = publicLinkPassword
     }
   )
 }
