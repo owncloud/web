@@ -5,7 +5,6 @@ import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
 import { buildResource } from 'files/src/helpers/resources'
-import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { FileContext } from './types'
 import { FileResource } from 'web-client/src/helpers'
 
@@ -16,11 +15,12 @@ interface AppFileHandlingOptions {
 }
 
 export interface AppFileHandlingResult {
-  getUrlForResource(r: Resource): Promise<string>
-  revokeUrl(url: string): void
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
-  getFileContents(filePath: string, options: Record<string, any>): Promise<any>
+  getFileContents(
+    fileContext: MaybeRef<FileContext>,
+    options?: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
+  ): Promise<any>
   putFileContents(
     fileContext: MaybeRef<FileContext>,
     putFileOptions: { content?: string } & Record<string, any>
@@ -32,78 +32,21 @@ export function useAppFileHandling({
   isPublicLinkContext,
   publicLinkPassword
 }: AppFileHandlingOptions): AppFileHandlingResult {
-  const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
-
-  const getUrlForResource = async (
-    { webDavPath, downloadURL }: Resource,
-    options: { disposition?: 'inline' | 'attachment'; signUrlTimeout?: number } = {}
-  ) => {
-    const signUrlTimeout = options.signUrlTimeout || 86400
-    const inlineDisposition = (options.disposition || 'attachment') === 'inline'
-
-    let signed = true
-    if (!downloadURL && !inlineDisposition) {
-      // compute unsigned url
-      downloadURL = client.files.getFileUrl(webDavPath)
-
-      // sign url
-      if (unref(isUrlSigningSupported)) {
-        downloadURL = await client.signUrl(downloadURL, signUrlTimeout)
-      } else {
-        signed = false
-      }
-    }
-
-    // FIXME: re-introduce query parameters
-    // They are not supported by getFileContents() and as we don't need them right now, I'm disabling the feature completely for now
-    //
-    // // Since the pre-signed url contains query parameters and the caller of this method
-    // // can also provide query parameters we have to combine them.
-    // const queryStr = qs.stringify(options.query || null)
-    // const [url, signedQuery] = downloadURL.split('?')
-    // const combinedQuery = [queryStr, signedQuery].filter(Boolean).join('&')
-    // downloadURL = [url, combinedQuery].filter(Boolean).join('?')
-
-    if (!signed || inlineDisposition) {
-      const response = await getFileContents(webDavPath, {
-        responseType: 'blob'
-      })
-      downloadURL = URL.createObjectURL(response.body)
-    }
-
-    return downloadURL
-  }
-
-  const revokeUrl = (url: string) => {
-    if (url && url.startsWith('blob:')) {
-      URL.revokeObjectURL(url)
-    }
-  }
 
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk
-  const getFileContents = async (filePath: string, options: Record<string, any>) => {
-    if (unref(isPublicLinkContext)) {
-      const res = await client.publicFiles.download('', filePath, unref(publicLinkPassword))
-      res.statusCode = res.status
-
-      const responseType = ['arrayBuffer', 'blob', 'text'].includes(options?.responseType)
-        ? options.responseType
-        : 'text'
-      return {
-        response: res,
-        body: await res[responseType](),
-        headers: {
-          ETag: res.headers.get('etag'),
-          'OC-FileId': res.headers.get('oc-fileid')
-        }
-      }
-    } else {
-      return client.files.getFileContents(filePath, {
-        resolveWithResponseObject: true,
-        noCache: true,
+  const getFileContents = async (
+    fileContext: MaybeRef<FileContext>,
+    options: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
+  ) => {
+    return webdav.getFileContents(
+      unref(unref(fileContext).space),
+      {
+        path: unref(unref(fileContext).item)
+      },
+      {
         ...options
-      })
-    }
+      }
+    )
   }
 
   const getFileInfo = async (filePath: string, davProperties: DavProperties) => {
@@ -136,9 +79,9 @@ export function useAppFileHandling({
   }
 
   return {
-    getFileContents,
     getUrlForResource,
     revokeUrl,
+    getFileContents,
     getFileInfo,
     getFileResource,
     putFileContents

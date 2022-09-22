@@ -71,12 +71,10 @@ import {
   unref,
   watch
 } from '@vue/composition-api'
-import { buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
-import { buildResource } from '../../helpers/resources'
+import { SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers'
 import {
   useAccessToken,
-  useAppFileHandling,
   useClientService,
   useStore,
   useTranslations
@@ -89,7 +87,6 @@ import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
-import { useGraphClient } from 'web-client/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -107,15 +104,10 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext, $ngettext, $gettextInterpolate } = useTranslations()
-    const { getFileContents, getFileInfo } = useAppFileHandling({
-      clientService: useClientService(),
-      isPublicLinkContext: false,
-      publicLinkPassword: ''
-    })
+    const { getFileContents, getFileInfo } = useClientService().webdav
     const store = useStore()
     const userId = computed(() => store.getters.user?.id)
     const accessToken = useAccessToken({ store })
-    const { graphClient } = useGraphClient({ store })
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -183,10 +175,10 @@ export default defineComponent({
           .slice(webDavPathComponents.indexOf(idComponent) + 1)
           .join('/')
 
-        const fileContentsResponse = await getFileContents(
-          buildWebDavSpacesPath(idComponent, decodeURIComponent(path)),
-          {}
-        )
+        const fileContentsResponse = await getFileContents(props.space, {
+          path: decodeURIComponent(path)
+        })
+
         unobserveMarkdownContainerResize()
         const parsedMarkdown = marked.parse(fileContentsResponse.body)
         // Sanitize markdown content to prevent XSS vulnerabilities
@@ -220,11 +212,9 @@ export default defineComponent({
           .slice(webDavPathComponents.indexOf(idComponent) + 1)
           .join('/')
 
-        const fileInfo = await getFileInfo(
-          buildWebDavSpacesPath(idComponent, decodeURIComponent(path)),
-          undefined
-        )
-        const resource = buildResource(fileInfo)
+        const resource = await getFileInfo(props.space, {
+          path: decodeURIComponent(path)
+        })
         imageContent.value = await loadPreview({
           resource,
           isPublic: false,

@@ -1,9 +1,9 @@
 import { buildResource } from 'files/src/helpers/resources'
 import { DavProperties } from 'web-pkg/src/constants'
-import { OwnCloudSdk } from 'web-pkg/src/services'
 import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
+import { WebDavOptions } from './types'
 
-export const ListFilesFactory = (sdk: OwnCloudSdk) => {
+export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
   return {
     async listFiles(
       space: SpaceResource,

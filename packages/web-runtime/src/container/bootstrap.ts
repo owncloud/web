@@ -269,7 +269,9 @@ export const announceClientService = ({
   vue.prototype.$client = sdk
   vue.prototype.$clientService = clientService
   vue.prototype.$clientService.owncloudSdk = sdk
-  vue.prototype.$clientService.webdav = webdav(sdk)
+  vue.prototype.$clientService.webdav = webdav({
+    sdk
+  })
 }
 
 /**

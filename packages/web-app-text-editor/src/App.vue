@@ -110,7 +110,7 @@ export default defineComponent({
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )
 
-      const fileContentsResponse = yield getFileContents(unref(filePath), {})
+      const fileContentsResponse = yield getFileContents(currentFileContext)
       serverContent.value = currentContent.value = fileContentsResponse.body
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()

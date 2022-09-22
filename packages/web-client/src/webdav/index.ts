@@ -1,30 +1,32 @@
-import { OwnCloudSdk } from 'web-pkg/src/services'
 import { ListFilesFactory } from './listFiles'
 import { GetFileInfoFactory } from './getFileInfo'
 import { CreateFolderFactory } from './createFolder'
 import { PutFileContentsFactory } from './putFileContents'
+import { GetFileContentsFactory } from './getFileContents'
+import { WebDAV, WebDavOptions } from './types'
+import { GetFileUrlFactory } from './getFileUrl'
 
-export interface WebDAV {
-  getFileInfo: ReturnType<typeof GetFileInfoFactory>['getFileInfo']
-  listFiles: ReturnType<typeof ListFilesFactory>['listFiles']
-  createFolder: ReturnType<typeof CreateFolderFactory>['createFolder']
-  putFileContents: ReturnType<typeof PutFileContentsFactory>['putFileContents']
-}
+export * from './types'
 
-export const webdav = (sdk: OwnCloudSdk): WebDAV => {
-  const listFilesFactory = ListFilesFactory(sdk)
+export const webdav = (options: WebDavOptions): WebDAV => {
+  const listFilesFactory = ListFilesFactory(options)
   const { listFiles } = listFilesFactory
 
-  const getFileInfoFactory = GetFileInfoFactory(listFilesFactory, sdk)
+  const getFileInfoFactory = GetFileInfoFactory(listFilesFactory, options)
   const { getFileInfo } = getFileInfoFactory
 
-  const { createFolder } = CreateFolderFactory(getFileInfoFactory, sdk)
-  const { putFileContents } = PutFileContentsFactory(getFileInfoFactory, sdk)
+  const { createFolder } = CreateFolderFactory(getFileInfoFactory, options)
+  const getFileContentsFactory = GetFileContentsFactory(options)
+  const { getFileContents } = getFileContentsFactory
+  const { putFileContents } = PutFileContentsFactory(getFileInfoFactory, options)
+
+  const { getFileUrl, revokeUrl } = GetFileUrlFactory(getFileContentsFactory, options)
 
   return {
     createFolder,
     getFileInfo,
     listFiles,
+    getFileContents,
     putFileContents
   }
 }

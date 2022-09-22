@@ -1,11 +1,11 @@
 import { DavProperties } from 'web-pkg/src/constants'
-import { OwnCloudSdk } from 'web-pkg/src/services'
 import { FolderResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
+import { WebDavOptions } from './types'
 
 export const CreateFolderFactory = (
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  sdk: OwnCloudSdk
+  { sdk }: WebDavOptions
 ) => {
   return {
     async createFolder(space: SpaceResource, { path }: { path?: string }): Promise<FolderResource> {

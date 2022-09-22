@@ -123,7 +123,7 @@ export default defineComponent({
         })
     },
     load() {
-      this.getFileContents(this.filePath)
+      this.getFileContents(this.currentFileContext)
         .then((resp) => {
           this.currentETag = resp.headers.ETag
           this.$refs.drawIoEditor.contentWindow.postMessage(

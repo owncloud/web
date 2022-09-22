@@ -1,10 +1,10 @@
-import { OwnCloudSdk } from 'web-pkg/src/services'
 import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
+import { WebDavOptions } from './types'
 
 export const PutFileContentsFactory = (
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  sdk: OwnCloudSdk
+  { sdk }: WebDavOptions
 ) => {
   return {
     async putFileContents(
