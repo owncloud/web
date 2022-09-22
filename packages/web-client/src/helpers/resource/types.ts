@@ -105,9 +105,12 @@ export const isShareSpaceResource = (resource: Resource): resource is ShareSpace
 }
 
 export interface PublicSpaceResource extends SpaceResource {
-  __publicSpaceResource?: any
   publicLinkPassword?: string
 }
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
   return resource.driveType === 'public'
+}
+
+export interface FolderResource extends SpaceResource {
+  __folderResource?: any
 }

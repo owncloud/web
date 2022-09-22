@@ -169,6 +169,7 @@ import {
   resolveFileNameDuplicate,
   FileExistsResolver
 } from '../../helpers/resource'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   components: {
@@ -435,26 +436,7 @@ export default defineComponent({
 
       try {
         let path = pathUtil.join(this.currentPath, folderName)
-        let resource
-
-        if (this.isSpacesGenericLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.space.id, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-        resource = buildResource(resource)
-
+        let resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, { path })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 

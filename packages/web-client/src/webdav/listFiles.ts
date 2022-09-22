@@ -5,14 +5,14 @@ import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
 
 export const ListFilesFactory = (sdk: OwnCloudSdk) => {
   return {
-    async listFiles(space: SpaceResource, { path }: { path?: string }): Promise<Resource[]> {
+    async listFiles(space: SpaceResource, { path, depth = 1 }: { path?: string, depth?: number }): Promise<Resource[]> {
       let resources: Resource[]
       if (isPublicSpaceResource(space)) {
         resources = await sdk.publicFiles.list(
-          `${space.webDavPath}/${path || ''}`.replace(/^\/public-files/, ''),
+          `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
           space.publicLinkPassword,
           DavProperties.PublicLink,
-          '1'
+          `${depth}`
         )
 
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
@@ -23,7 +23,7 @@ export const ListFilesFactory = (sdk: OwnCloudSdk) => {
       } else {
         resources = await sdk.files.list(
           `${space.webDavPath}/${path || ''}`,
-          '1',
+          `${depth}`,
           DavProperties.Default
         )
       }
