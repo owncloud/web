@@ -146,7 +146,7 @@ import {
   usePublicLinkContext
 } from 'web-pkg/src/composables'
 
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { DavProperties } from 'web-pkg/src/constants'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
 import {
@@ -503,32 +503,22 @@ export default defineComponent({
       }
 
       try {
-        let resource
-        let path = pathUtil.join(this.currentPath, fileName)
+        const path = pathUtil.join(this.currentPath, fileName)
+        const resource = await (this.$clientService.webdav as WebDAV).putFileContents(this.space, {
+          path
+        })
 
-        if (this.isSpacesGenericLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.space.id, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.putFileContents('', path, this.publicLinkPassword, '')
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-
-        this.UPSERT_RESOURCE(buildResource(resource))
+        this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
-          const fileId = resource.fileInfo[DavProperty.FileId]
+          const fileId = resource.fileId
 
-          this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
+          this.$_fileActions_openEditor(
+            this.newFileAction,
+            this.space.getDriveAliasAndItem(resource),
+            fileId,
+            EDITOR_MODE_CREATE
+          )
           this.hideModal()
 
           return

@@ -114,3 +114,7 @@ export const isPublicSpaceResource = (resource: Resource): resource is PublicSpa
 export interface FolderResource extends SpaceResource {
   __folderResource?: any
 }
+
+export interface FileResource extends Resource {
+  __fileResource?: any
+}
