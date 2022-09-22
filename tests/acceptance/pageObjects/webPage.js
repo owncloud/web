@@ -303,7 +303,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     openSearchButton: {
-      selector: '#files-open-search-btn'
+      selector: '.mobile-search-btn'
     },
     userMenuButton: {
       selector: '#_userMenuButton'
