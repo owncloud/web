@@ -6,9 +6,9 @@ import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
 export const GetFileInfoFactory = (sdk: OwnCloudSdk) => {
   return {
     async getFileInfo(space: SpaceResource, { path }: { path?: string }): Promise<Resource> {
-      let resource: Resource
+      let resources: Resource[]
       if (isPublicSpaceResource(space)) {
-        resource = await sdk.publicFiles.list(
+        resources = await sdk.publicFiles.list(
           `${space.webDavPath}/${path || ''}`.replace(/^\/public-files/, ''),
           space.publicLinkPassword,
           DavProperties.PublicLink,
@@ -17,16 +17,18 @@ export const GetFileInfoFactory = (sdk: OwnCloudSdk) => {
 
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
         // At first we tried to do this in buildResource but only the public link root resource knows it's a public link
-        resource.name = resource.name.split('/').slice(2).join('/')
+        resources.forEach((resource) => {
+          resource.name = resource.name.split('/').slice(2).join('/')
+        })
       } else {
-        resource = await sdk.files.list(
+        resources = await sdk.files.list(
           `${space.webDavPath}/${path || ''}`,
           '0',
           DavProperties.Default
         )
       }
 
-      return buildResource(resource)
+      return buildResource(resources[0])
     }
   }
 }
