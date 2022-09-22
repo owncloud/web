@@ -9,11 +9,7 @@
   </main>
 </template>
 <script lang="ts">
-import {
-  useAppDefaults,
-  useCapabilityCoreSupportUrlSigning,
-  useClientService
-} from 'web-pkg/src/composables'
+import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
@@ -27,18 +23,10 @@ export default defineComponent({
     AppTopBar
   },
   setup() {
-    const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
-    const {
-      webdav: { getFileUrl, revokeUrl }
-    } = useClientService()
-
     return {
       ...useAppDefaults({
         applicationId: 'pdf-viewer'
-      }),
-      getFileUrl,
-      revokeUrl,
-      isUrlSigningSupported
+      })
     }
   },
   data: () => ({
@@ -64,9 +52,8 @@ export default defineComponent({
       try {
         this.loading = true
         this.resource = await this.getFileResource(fileContext.path)
-        this.url = await this.getFileUrl(fileContext.space, this.resource, {
-          disposition: 'inline',
-          isUrlSigningEnabled: this.isUrlSigningSupported
+        this.url = await this.getUrlForResource(fileContext.space, this.resource, {
+          disposition: 'inline'
         })
       } catch (e) {
         this.loadingError = true

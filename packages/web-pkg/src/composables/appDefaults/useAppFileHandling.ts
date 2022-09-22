@@ -6,7 +6,9 @@ import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
 import { buildResource } from 'files/src/helpers/resources'
 import { FileContext } from './types'
-import { FileResource } from 'web-client/src/helpers'
+import { FileResource, SpaceResource } from 'web-client/src/helpers'
+import { useCapabilityCoreSupportUrlSigning } from '../capability'
+import { useClientService } from '../clientService'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
@@ -15,6 +17,8 @@ interface AppFileHandlingOptions {
 }
 
 export interface AppFileHandlingResult {
+  getUrlForResource(space: SpaceResource, resource: Resource): Promise<string>
+  revokeUrl(url: string): void
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
   getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
   getFileContents(
@@ -32,6 +36,18 @@ export function useAppFileHandling({
   isPublicLinkContext,
   publicLinkPassword
 }: AppFileHandlingOptions): AppFileHandlingResult {
+  const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
+  const {
+    webdav: { getFileUrl, revokeUrl }
+  } = useClientService()
+
+  const getUrlForResource = (space: SpaceResource, resource: Resource, options?: any) => {
+    return getFileUrl(space, resource, {
+      isUrlSigningEnabled: unref(isUrlSigningSupported),
+      ...options
+    })
+  }
+
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk
   const getFileContents = async (
     fileContext: MaybeRef<FileContext>,
@@ -78,6 +94,8 @@ export function useAppFileHandling({
   }
 
   return {
+    getUrlForResource,
+    revokeUrl,
     getFileContents,
     getFileInfo,
     getFileResource,

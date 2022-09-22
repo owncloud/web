@@ -111,16 +111,11 @@ import { mapGetters } from 'vuex'
 import {
   useAccessToken,
   useAppDefaults,
-  useCapabilityCoreSupportUrlSigning,
-  useClientService,
   usePublicLinkContext,
   useStore
 } from 'web-pkg/src/composables'
 import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { Resource } from 'web-client'
-import { unref } from '@vue/composition-api'
-import { SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 
@@ -131,22 +126,13 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
-    const {
-      webdav: { getFileUrl }
-    } = useClientService()
-
-    const getUrlForResource = (space: SpaceResource, resource: Resource) => {
-      return getFileUrl(space, resource, { isUrlSigningEnabled: unref(isUrlSigningSupported) })
-    }
 
     return {
       ...useAppDefaults({
         applicationId: 'preview'
       }),
       accessToken: useAccessToken({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store }),
-      getUrlForResource
+      isPublicLinkContext: usePublicLinkContext({ store })
     }
   },
   data() {
