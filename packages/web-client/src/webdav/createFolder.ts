@@ -8,7 +8,6 @@ import { GetFileInfoFactory } from './getFileInfo'
 export const CreateFolderFactory = (getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>, sdk: OwnCloudSdk) => {
   return {
     async createFolder(space: SpaceResource, { path }: { path?: string }): Promise<FolderResource> {
-      let resource: Resource[]
       if (isPublicSpaceResource(space)) {
         await sdk.publicFiles.createFolder(
             `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
