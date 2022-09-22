@@ -25,6 +25,8 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   return {
     createFolder,
     getFileInfo,
+    getFileUrl,
+    revokeUrl,
     listFiles,
     getFileContents,
     putFileContents

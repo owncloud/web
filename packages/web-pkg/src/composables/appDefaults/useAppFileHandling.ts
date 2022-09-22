@@ -32,7 +32,6 @@ export function useAppFileHandling({
   isPublicLinkContext,
   publicLinkPassword
 }: AppFileHandlingOptions): AppFileHandlingResult {
-
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk
   const getFileContents = async (
     fileContext: MaybeRef<FileContext>,
@@ -79,8 +78,6 @@ export function useAppFileHandling({
   }
 
   return {
-    getUrlForResource,
-    revokeUrl,
     getFileContents,
     getFileInfo,
     getFileResource,

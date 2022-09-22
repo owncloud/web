@@ -15,20 +15,30 @@
 </template>
 <script lang="ts">
 import { mapActions } from 'vuex'
-import { basename } from 'path'
 import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import { useAppDefaults } from 'web-pkg/src/composables'
-import { defineComponent } from '@vue/composition-api'
+import {
+  useAppDefaults,
+  useCapabilityCoreSupportUrlSigning,
+  useClientService
+} from 'web-pkg/src/composables'
+import { defineComponent, unref } from '@vue/composition-api'
+import { basename } from 'path'
 
 export default defineComponent({
   name: 'DrawIoEditor',
   setup() {
+    const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
+    const {
+      webdav: { getFileUrl }
+    } = useClientService()
     return {
       ...useAppDefaults({
         applicationId: 'draw-io'
-      })
+      }),
+      isUrlSigningSupported,
+      getFileUrl
     }
   },
   data: () => ({
@@ -139,8 +149,14 @@ export default defineComponent({
           this.errorPopup(error)
         })
     },
-    importVisio() {
-      const url = this.getFileUrl(this.filePath)
+    async importVisio() {
+      const url = await this.getFileUrl(
+        this.currentFileContext.space,
+        { path: unref(this.currentFileContext.item) },
+        {
+          isUrlSigningEnabled: this.isUrlSigningSupported
+        }
+      )
 
       const getDescription = () =>
         this.$gettextInterpolate(
