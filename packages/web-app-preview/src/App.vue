@@ -225,21 +225,15 @@ export default defineComponent({
       if (o !== n) {
         this.loadMedium()
       }
-    },
-
-    currentFileContext: {
-      handler: async function () {
-        await this.loadFolderForFileContext(this.currentFileContext)
-        this.setActiveFile(this.currentFileContext.path)
-        this.$refs.preview.focus()
-      },
-      immediate: true
     }
   },
 
-  mounted() {
+  async mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
+    await this.loadFolderForFileContext(this.currentFileContext)
+    this.setActiveFile(this.currentFileContext.path)
+    this.$refs.preview.focus()
   },
 
   beforeDestroy() {

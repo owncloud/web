@@ -39,6 +39,7 @@ export default defineComponent({
   watch: {
     currentFileContext: {
       handler: function () {
+        this.unloadPdf()
         this.loadPdf(this.currentFileContext)
       },
       immediate: true
