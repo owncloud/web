@@ -18,12 +18,8 @@ import { mapActions } from 'vuex'
 import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
-import {
-  useAppDefaults,
-  useCapabilityCoreSupportUrlSigning,
-  useClientService
-} from 'web-pkg/src/composables'
-import { defineComponent, unref } from '@vue/composition-api'
+import { useAppDefaults } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
 import { basename } from 'path'
 
 export default defineComponent({
@@ -159,7 +155,7 @@ export default defineComponent({
       this.getFileContents(this.currentFileContext, {
         responseType: 'arrayBuffer'
       })
-      .then((resp) => {
+        .then((resp) => {
           // Not setting `currentETag` on imports allows to create new files
           // otherwise the ETag comparison fails with a 412 during the autosave/save event
           // this.currentETag = resp.headers.get('etag')
