@@ -1,6 +1,18 @@
 import { User } from '../user'
-import { buildWebDavSpacesPath, extractDomSelector, Resource, SpaceResource } from '../resource'
+import {
+  buildWebDavSpacesPath,
+  extractDomSelector,
+  PublicSpaceResource,
+  Resource,
+  SpaceResource
+} from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
+
+export function buildPublicSpaceResource(space): PublicSpaceResource {
+  const s = buildSpace(space) as PublicSpaceResource
+  s.publicLinkPassword = space.publicLinkPassword
+  return s
+}
 
 export function buildSpace(space): SpaceResource {
   let spaceImageData, spaceReadmeData

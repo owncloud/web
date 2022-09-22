@@ -27,7 +27,12 @@ import {
   announcePermissionManager,
   startSentry
 } from './container'
-import { buildSpace, isPublicSpaceResource, Resource } from 'web-client/src/helpers'
+import {
+  buildPublicSpaceResource,
+  buildSpace,
+  isPublicSpaceResource,
+  Resource
+} from 'web-client/src/helpers'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
@@ -125,7 +130,7 @@ export const renderSuccess = (): void => {
       // Create virtual space for public link
       const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
-      const space = buildSpace({
+      const space = buildPublicSpaceResource({
         id: publicLinkToken,
         driveAlias: `public/${publicLinkToken}`,
         driveType: 'public',

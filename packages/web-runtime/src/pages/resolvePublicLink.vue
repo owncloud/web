@@ -73,7 +73,7 @@ import {
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from "@vue/composition-api";
-import { buildSpace } from "web-client/src/helpers";
+import { buildPublicSpaceResource } from "web-client/src/helpers";
 import { buildWebDavPublicPath } from "files/src/helpers/resources";
 
 export default defineComponent({
@@ -82,7 +82,7 @@ export default defineComponent({
     const { webdav } = useClientService()
     const token = useRouteParam('token')
     const password = ref('')
-    const publicLinkSpace = computed(() => buildSpace({
+    const publicLinkSpace = computed(() => buildPublicSpaceResource({
       id: unref(token),
       driveAlias: `public/${unref(token)}`,
       driveType: 'public',
