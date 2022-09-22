@@ -29,16 +29,10 @@ import { basename } from 'path'
 export default defineComponent({
   name: 'DrawIoEditor',
   setup() {
-    const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
-    const {
-      webdav: { getFileUrl }
-    } = useClientService()
     return {
       ...useAppDefaults({
         applicationId: 'draw-io'
-      }),
-      isUrlSigningSupported,
-      getFileUrl
+      })
     }
   },
   data: () => ({
@@ -150,14 +144,6 @@ export default defineComponent({
         })
     },
     async importVisio() {
-      const url = await this.getFileUrl(
-        this.currentFileContext.space,
-        { path: unref(this.currentFileContext.item) },
-        {
-          isUrlSigningEnabled: this.isUrlSigningSupported
-        }
-      )
-
       const getDescription = () =>
         this.$gettextInterpolate(
           this.$gettext('The diagram will open as a new .drawio file: %{file}'),
@@ -170,12 +156,14 @@ export default defineComponent({
         title: this.$gettext('Diagram imported'),
         desc: getDescription()
       })
-      this.makeRequest('GET', url)
-        .then((resp) => {
+      this.getFileContents(this.currentFileContext, {
+        responseType: 'arrayBuffer'
+      })
+      .then((resp) => {
           // Not setting `currentETag` on imports allows to create new files
           // otherwise the ETag comparison fails with a 412 during the autosave/save event
           // this.currentETag = resp.headers.get('etag')
-          return resp.arrayBuffer()
+          return resp.body
         })
         .then((arrayBuffer) => {
           const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
