@@ -61,7 +61,7 @@
 
 <script type="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from "web-pkg/src/constants";
+import { DavProperty } from "web-pkg/src/constants";
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from "../services/auth";
 
@@ -73,16 +73,25 @@ import {
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from "@vue/composition-api";
+import { buildSpace } from "web-client/src/helpers";
+import { buildWebDavPublicPath } from "files/src/helpers/resources";
 
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const { owncloudSdk, webdav } = useClientService()
+    const { webdav } = useClientService()
     const token = useRouteParam('token')
     const password = ref('')
-    const isPasswordRequiredTask = useTask(function* (signal) {
+    const publicLinkSpace = computed(() => buildSpace({
+      id: unref(token),
+      driveAlias: `public/${unref(token)}`,
+      driveType: 'public',
+      webDavPath: buildWebDavPublicPath(unref(token), ''),
+      ...(unref(password) && { publicLinkPassword: unref(password) })
+    }))
+    const isPasswordRequiredTask = useTask(function* () {
       try {
-        yield owncloudSdk.publicFiles.list(unref(token), '', DavProperties.PublicLink, '0')
+        yield webdav.getFileInfo({ ...unref(publicLinkSpace), publicLinkPassword: null })
         return false
       } catch (error) {
         if (error.statusCode === 401) {
@@ -91,14 +100,8 @@ export default defineComponent({
         throw error
       }
     })
-    const loadPublicLinkTask = useTask(function* (signal) {
-      const files = yield owncloudSdk.publicFiles.list(
-        unref(token),
-        unref(password),
-        DavProperties.PublicLink,
-        '0'
-      )
-      return files[0]
+    const loadPublicLinkTask = useTask(function* () {
+      return yield webdav.getFileInfo(unref(publicLinkSpace))
     })
     const wrongPassword = computed(() => {
       if (loadPublicLinkTask.isError) {
