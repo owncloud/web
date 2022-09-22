@@ -1,14 +1,11 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource, buildWebDavFilesPath } from '../../../helpers/resources'
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
-import { fetchResources } from '../util'
 import get from 'lodash-es/get'
 import { getIndicators } from '../../../helpers/statusIndicators'
-import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export class FolderLoaderLegacyPersonal implements FolderLoader {
   public isEnabled(store: Store<any>): boolean {
@@ -22,19 +19,14 @@ export class FolderLoaderLegacyPersonal implements FolderLoader {
   public getTask(context: TaskContext): FolderLoaderTask {
     const {
       store,
-      clientService: { owncloudSdk: client }
+      clientService: { owncloudSdk: client, webdav }
     } = context
 
-    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
+    return useTask(function* (signal1, signal2, space: SpaceResource, path: string = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        const webDavResources = yield fetchResources(
-          client,
-          buildWebDavFilesPath(space.id, path || ''),
-          DavProperties.Default
-        )
-        const resources = webDavResources.map(buildResource)
+        const resources = yield webdav.listFiles(space, { path })
 
         const currentFolder = resources.shift()
         yield store.dispatch('Files/loadSharesTree', {

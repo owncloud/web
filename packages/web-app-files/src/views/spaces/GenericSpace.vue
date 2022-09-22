@@ -115,14 +115,14 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import { bus } from 'web-pkg/src/instance'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
-import { createLocationSpaces } from '../../router'
+import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { move } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -163,6 +163,11 @@ export default defineComponent({
 
   setup(props) {
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      if (isPublicSpaceResource(props.space)) {
+        return createLocationPublic('files-public-files', {
+          params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) }
+        })
+      }
       return createLocationSpaces('files-spaces-generic', {
         params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) },
         query: { ...(props.space.driveType === 'share' && { shareId: props.space.shareId }) }
@@ -222,6 +227,13 @@ export default defineComponent({
           to: createLocationSpaces('files-spaces-generic', {
             params: { driveAliasAndItem: this.space.driveAlias },
             query: this.$route.query
+          })
+        }
+      } else if (isPublicSpaceResource(this.space)) {
+        spaceBreadcrumbItem = {
+          text: this.$gettext('Public link'),
+          to: createLocationPublic('files-public-files', {
+            params: { driveAliasAndItem: this.space.driveAlias }
           })
         }
       } else {

@@ -11,7 +11,6 @@ export interface RouteComponents {
   Favorites: ComponentOptions<Vue>
   FilesDrop: ComponentOptions<Vue>
   PrivateLink: ComponentOptions<Vue>
-  PublicFiles: ComponentOptions<Vue>
   SearchResults: ComponentOptions<Vue>
   PublicLink: ComponentOptions<Vue>
   Shares: {

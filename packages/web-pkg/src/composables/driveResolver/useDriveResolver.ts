@@ -1,7 +1,7 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
 import { useGraphClient } from 'web-client/src/composables'
@@ -19,7 +19,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const shareId = useRouteQuery('shareId')
   const { graphClient } = useGraphClient({ store })
   const spaces = computed(() => store.getters['runtime/spaces/spaces'])
-  const space = ref(null)
+  const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
   watch(
     [options.driveAliasAndItem, areSpacesLoading],

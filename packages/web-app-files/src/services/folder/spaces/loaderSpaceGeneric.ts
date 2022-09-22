@@ -2,14 +2,11 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSpacesActive } from '../../../router'
-import { buildResource } from '../../../helpers/resources'
-import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
-import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
-import { fetchResources } from '../util'
+import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from '@vue/composition-api'
 
 export class FolderLoaderSpacesGeneric implements FolderLoader {
@@ -30,26 +27,24 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, clientService } = context
+    const {
+      store,
+      clientService: { owncloudSdk: client, webdav }
+    } = context
     const hasShareJail = useCapabilityShareJailEnabled(store)
 
-    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
+    return useTask(function* (signal1, signal2, space: SpaceResource, path: string = null) {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        const webDavResources = yield fetchResources(
-          clientService.owncloudSdk,
-          buildWebDavSpacesPath(space.fileId, path || ''),
-          DavProperties.Default
-        )
-
-        const resources = path
-          ? webDavResources.map(buildResource)
-          : [space, ...webDavResources.slice(1).map(buildResource)]
-        const currentFolder = resources.shift()
+        const resources = yield webdav.listFiles(space, { path })
+        let currentFolder = resources.shift()
+        if (!path) {
+          currentFolder = space
+        }
 
         yield store.dispatch('Files/loadSharesTree', {
-          client: clientService.owncloudSdk,
+          client,
           path: currentFolder.path,
           storageId: space.fileId
         })

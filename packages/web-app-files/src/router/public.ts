@@ -25,8 +25,8 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     children: [
       {
         name: locationPublicFiles.name,
-        path: 'show/:item*',
-        component: components.PublicFiles,
+        path: 'show/:driveAliasAndItem*',
+        component: components.Spaces.DriveResolver,
         meta: {
           auth: false,
           title: $gettext('Public files'),

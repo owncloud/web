@@ -158,7 +158,7 @@ export default defineComponent({
         return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
       }
 
-      return this.$router.push({ name: 'files-public-files', params: { item: this.token } })
+      return this.$router.push({ name: 'files-public-files', params: { driveAliasAndItem: `public/${this.token}` } })
     }
   }
 })
