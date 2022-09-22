@@ -256,8 +256,8 @@ export default {
       }
 
       const translated = this.$ngettext(
-        'Show %{totalResults} results',
         'Show %{totalResults} result',
+        'Show %{totalResults} results',
         searchResult.totalResults
       )
 
@@ -366,7 +366,7 @@ export default {
 
           &:hover,
           &.active {
-            background-color: var(--oc-color-input-border);
+            background-color: var(--oc-color-background-highlight);
           }
         }
       }
