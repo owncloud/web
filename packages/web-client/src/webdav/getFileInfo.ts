@@ -9,20 +9,14 @@ export const GetFileInfoFactory = (
   return {
     async getFileInfo(
       space: SpaceResource,
-      { path }: { path?: string },
+      resource?: { path?: string },
       options?: ListFilesOptions
     ): Promise<Resource> {
       return (
-        await listFilesFactory.listFiles(
-          space,
-          {
-            path
-          },
-          {
-            depth: 0,
-            ...options
-          }
-        )
+        await listFilesFactory.listFiles(space, resource, {
+          depth: 0,
+          ...options
+        })
       )[0]
     }
   }

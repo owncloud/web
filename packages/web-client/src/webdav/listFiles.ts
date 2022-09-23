@@ -1,6 +1,11 @@
 import { buildResource } from 'files/src/helpers/resources'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
-import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
+import {
+  buildPublicSpaceResource,
+  isPublicSpaceResource,
+  Resource,
+  SpaceResource
+} from '../helpers'
 import { WebDavOptions } from './types'
 
 export type ListFilesOptions = {
@@ -12,32 +17,36 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
   return {
     async listFiles(
       space: SpaceResource,
-      { path }: { path?: string },
+      { path }: { path?: string } = {},
       { depth = 1, davProperties }: ListFilesOptions = {}
     ): Promise<Resource[]> {
-      let resources: Resource[]
+      let webDavResources: any[]
       if (isPublicSpaceResource(space)) {
-        resources = await sdk.publicFiles.list(
+        webDavResources = await sdk.publicFiles.list(
           `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
           space.publicLinkPassword,
-          davProperties || [DavProperties.PublicLink],
+          davProperties || DavProperties.PublicLink,
           `${depth}`
         )
 
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
         // At first we tried to do this in buildResource but only the public link root resource knows it's a public link
-        resources.forEach((resource) => {
+        webDavResources.forEach((resource) => {
           resource.name = resource.name.split('/').slice(2).join('/')
         })
-      } else {
-        resources = await sdk.files.list(
-          `${space.webDavPath}/${path || ''}`,
-          `${depth}`,
-          davProperties || DavProperties.Default
-        )
+        if (!path) {
+          const [rootFolder, ...children] = webDavResources
+          return [buildPublicSpaceResource(rootFolder), ...children.map(buildResource)]
+        }
+        return webDavResources.map(buildResource)
       }
 
-      return resources.map(buildResource)
+      webDavResources = await sdk.files.list(
+        `${space.webDavPath}/${path || ''}`,
+        `${depth}`,
+        davProperties || DavProperties.Default
+      )
+      return webDavResources.map(buildResource)
     }
   }
 }

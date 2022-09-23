@@ -79,39 +79,7 @@ export interface Resource {
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
-export interface SpaceResource extends Resource {
-  getDriveAliasAndItem?(resource: Resource): string
-}
-
-export interface PersonalSpaceResource extends SpaceResource {
-  __personalSpaceResource?: any
-}
-export const isPersonalSpaceResource = (resource: Resource): resource is PersonalSpaceResource => {
-  return resource.driveType === 'personal'
-}
-
-export interface ProjectSpaceResource extends SpaceResource {
-  __projectSpaceResource?: any
-}
-export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
-  return resource.driveType === 'project'
-}
-
-export interface ShareSpaceResource extends SpaceResource {
-  __shareSpaceResource?: any
-}
-export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
-  return resource.driveType === 'share'
-}
-
-export interface PublicSpaceResource extends SpaceResource {
-  publicLinkPassword?: string
-}
-export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
-  return resource.driveType === 'public'
-}
-
-export interface FolderResource extends SpaceResource {
+export interface FolderResource extends Resource {
   __folderResource?: any
 }
 

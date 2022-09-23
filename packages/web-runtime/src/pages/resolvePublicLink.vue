@@ -61,7 +61,6 @@
 
 <script type="ts">
 import { mapGetters } from 'vuex'
-import { DavProperty } from "web-pkg/src/constants";
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from "../services/auth";
 
@@ -73,7 +72,7 @@ import {
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from "@vue/composition-api";
-import { buildPublicSpaceResource } from "web-client/src/helpers";
+import { buildPublicSpaceResource, isPublicSpaceResource } from "web-client/src/helpers";
 import { buildWebDavPublicPath } from "files/src/helpers/resources";
 
 export default defineComponent({
@@ -101,7 +100,13 @@ export default defineComponent({
       }
     })
     const loadPublicLinkTask = useTask(function* () {
-      return yield webdav.getFileInfo(unref(publicLinkSpace))
+      const resource = yield webdav.getFileInfo(unref(publicLinkSpace))
+      if (!isPublicSpaceResource(resource)) {
+        const e = new Error("resolved resource has wrong type")
+        e.resource = resource
+        throw e
+      }
+      return resource
     })
     const wrongPassword = computed(() => {
       if (loadPublicLinkTask.isError) {
@@ -146,6 +151,8 @@ export default defineComponent({
     async resolvePublicLink(passwordRequired) {
       const publicLink = await this.loadPublicLinkTask.perform()
       if (this.loadPublicLinkTask.isError) {
+        const e = this.loadPublicLinkTask.last.error
+        console.error(e, e.resource)
         return
       }
 
@@ -157,7 +164,7 @@ export default defineComponent({
         return this.$router.push({ path: redirectUrl })
       }
 
-      if (parseInt(publicLink.fileInfo[DavProperty.PublicLinkPermission]) === SharePermissionBit.Create) {
+      if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
         return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
       }
 

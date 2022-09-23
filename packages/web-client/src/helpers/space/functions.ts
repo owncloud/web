@@ -1,16 +1,22 @@
 import { User } from '../user'
-import {
-  buildWebDavSpacesPath,
-  extractDomSelector,
-  PublicSpaceResource,
-  Resource,
-  SpaceResource
-} from '../resource'
+import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
+import { PublicSpaceResource, SpaceResource } from './types'
+import { DavProperty } from 'web-pkg/src/constants'
 
 export function buildPublicSpaceResource(space): PublicSpaceResource {
+  const publicLinkItemType = space.fileInfo?.[DavProperty.PublicLinkItemType]
+  const publicLinkPermission = space.fileInfo?.[DavProperty.PublicLinkPermission]
+  const publicLinkExpiration = space.fileInfo?.[DavProperty.PublicLinkExpiration]
+  const publicLinkShareDate = space.fileInfo?.[DavProperty.PublicLinkShareDate]
+  const publicLinkShareOwner = space.fileInfo?.[DavProperty.PublicLinkShareOwner]
   return Object.assign(buildSpace(space), {
-    publicLinkPassword: space.publicLinkPassword
+    publicLinkPassword: space.publicLinkPassword,
+    ...(publicLinkItemType && { publicLinkItemType }),
+    ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
+    ...(publicLinkExpiration && { publicLinkExpiration }),
+    ...(publicLinkShareDate && { publicLinkShareDate }),
+    ...(publicLinkShareOwner && { publicLinkShareOwner })
   })
 }
 
