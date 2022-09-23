@@ -15,7 +15,10 @@
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
-    <nav class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
+    <nav
+      class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs"
+      :aria-label="$gettext('Sidebar navigation menu')"
+    >
       <oc-list>
         <div
           v-show="isAnyNavItemActive"
