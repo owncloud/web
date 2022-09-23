@@ -98,9 +98,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
     ...useAppFileHandling({
-      clientService,
-      isPublicLinkContext,
-      publicLinkPassword
+      clientService
     }),
     ...useAppFolderHandling({
       clientService,

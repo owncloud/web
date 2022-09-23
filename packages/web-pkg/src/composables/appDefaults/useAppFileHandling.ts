@@ -11,8 +11,6 @@ import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
-  isPublicLinkContext: MaybeRef<boolean>
-  publicLinkPassword: MaybeRef<string>
 }
 
 export interface AppFileHandlingResult {
@@ -30,9 +28,7 @@ export interface AppFileHandlingResult {
 }
 
 export function useAppFileHandling({
-  clientService: { owncloudSdk: client, webdav },
-  isPublicLinkContext,
-  publicLinkPassword
+  clientService: { webdav }
 }: AppFileHandlingOptions): AppFileHandlingResult {
   const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
   const {
