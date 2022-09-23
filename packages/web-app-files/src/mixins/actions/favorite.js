@@ -30,6 +30,10 @@ export default {
               return false
             }
 
+            if (this.$route.query.contextRouteName === 'files-public-files') {
+              return false
+            }
+
             return this.capabilities?.files?.favorites
           },
           componentType: 'button',

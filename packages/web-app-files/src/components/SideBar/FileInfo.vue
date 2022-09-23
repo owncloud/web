@@ -42,6 +42,10 @@ export default {
     isSubPanelActive: {
       type: Boolean,
       default: true
+    },
+    displayedItem: {
+      type: Object,
+      default: false
     }
   },
   setup() {

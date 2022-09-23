@@ -1,6 +1,6 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
-    <app-top-bar :resource="resource" @close="closeApp">
+    <app-top-bar :resource="resource">
       <template #right>
         <oc-button
           v-if="!isLoading"

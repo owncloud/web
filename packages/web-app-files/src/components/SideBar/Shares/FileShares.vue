@@ -298,6 +298,11 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.showSpaceMembers) {
+      this.loadSpaceMembersTask.perform()
+    }
+  },
   methods: {
     ...mapActions('Files', ['deleteShare']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),

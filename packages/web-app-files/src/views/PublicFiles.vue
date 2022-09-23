@@ -3,11 +3,13 @@
     <keyboard-actions :paginated-resources="paginatedResources" />
     <files-view-wrapper>
       <app-bar
-        :has-bulk-actions="true"
+        :has-bulk-actions="!fileWithoutApp"
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
-        :show-actions-on-selection="true"
+        :show-actions-on-selection="!fileWithoutApp"
         :side-bar-open="sideBarOpen"
+        :has-sidebar-toggle="!fileWithoutApp"
+        :has-view-options="!fileWithoutApp"
       >
         <template #actions="{ limitedScreenSpace }">
           <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -31,39 +33,44 @@
             </span>
           </template>
         </no-content-message>
-        <resource-table
-          v-else
-          id="files-public-files-table"
-          v-model="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': sideBarOpen }"
-          :fields-displayed="['name', 'size', 'mdate']"
-          :are-thumbnails-displayed="displayThumbnails"
-          :resources="paginatedResources"
-          :target-route="targetRoute"
-          :header-position="fileListHeaderY"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          :drag-drop="true"
-          @fileDropped="fileDropped"
-          @fileClick="$_fileActions_triggerDefaultAction"
-          @rowMounted="rowMounted"
-          @sort="handleSort"
-        >
-          <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-          </template>
-          <template #footer>
-            <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
-            />
-          </template>
-        </resource-table>
+        <div v-else>
+          <div v-if="isSingleFile() && fileWithoutAppView">
+            <single-shared-file :file="fileWithoutApp" />
+          </div>
+          <resource-table
+            v-else
+            id="files-public-files-table"
+            v-model="selectedResourcesIds"
+            class="files-table"
+            :class="{ 'files-table-squashed': sideBarOpen }"
+            :fields-displayed="['name', 'size', 'mdate']"
+            :are-thumbnails-displayed="displayThumbnails"
+            :resources="paginatedResources"
+            :target-route="targetRoute"
+            :header-position="fileListHeaderY"
+            :sort-by="sortBy"
+            :sort-dir="sortDir"
+            :drag-drop="true"
+            @fileDropped="fileDropped"
+            @fileClick="$_fileActions_triggerDefaultAction"
+            @rowMounted="rowMounted"
+            @sort="handleSort"
+          >
+            <template #contextMenu="{ resource }">
+              <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            </template>
+            <template #footer>
+              <pagination :pages="paginationPages" :current-page="paginationPage" />
+              <list-info
+                v-if="paginatedResources.length > 0"
+                class="oc-width-1-1 oc-my-s"
+                :files="totalFilesCount.files"
+                :folders="totalFilesCount.folders"
+                :size="totalFilesSize"
+              />
+            </template>
+          </resource-table>
+        </div>
       </template>
     </files-view-wrapper>
     <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
@@ -82,6 +89,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
 import { bus } from 'web-pkg/src/instance'
+import { computed, defineComponent } from '@vue/composition-api'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -92,13 +100,16 @@ import ListInfo from '../components/FilesList/ListInfo.vue'
 import Pagination from '../components/FilesList/Pagination.vue'
 import ContextActions from '../components/FilesList/ContextActions.vue'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../helpers/breadcrumbs'
-import { defineComponent } from '@vue/composition-api'
 import { move } from '../helpers/resource'
 import { Resource } from 'web-client'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
+import FileDetails from '../components/SideBar/Details/FileDetails.vue'
+import FileActions from '../components/SideBar/Actions/FileActions.vue'
+import FileInfo from '../components/SideBar/FileInfo.vue'
+import SingleSharedFile from './SingleSharedFile.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -115,11 +126,14 @@ export default defineComponent({
     NotFoundMessage,
     ContextActions,
     KeyboardActions,
-    SideBar
+    SideBar,
+    FileDetails,
+    FileActions,
+    FileInfo,
+    SingleSharedFile
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
-
   setup() {
     const store = useStore()
     return {
@@ -136,6 +150,10 @@ export default defineComponent({
       'totalFilesSize'
     ]),
     ...mapGetters(['configuration']),
+
+    fileWithoutAppView() {
+      return this.paginatedResources.length === 1 && this.paginatedResources[0].isFolder === false
+    },
 
     breadcrumbs() {
       const breadcrumbs = breadcrumbsFromPath(this.$route, this.$route.params.item)
@@ -161,6 +179,9 @@ export default defineComponent({
 
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    openPublicLinkSingleFiles() {
+      return this.configuration?.options?.openPublicLinkSingleFiles
     }
   },
 
@@ -185,6 +206,21 @@ export default defineComponent({
       this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
+    this.fileWithoutApp = null
+
+    this.$watch('paginatedResources', (to) => {
+      if (this.isSingleFile()) {
+        if (
+          !this.$route.query.scrollTo &&
+          this.$_fileActions_getDefaultAction(to[0]).label() !== 'Download'
+        )
+          this.$_fileActions_triggerDefaultAction(this.paginatedResources[0], true)
+
+        this.SET_FILE_SELECTION(this.paginatedResources)
+        this.fileWithoutApp = computed(() => this.paginatedResources[0])
+      } else this.fileWithoutApp = null
+    })
+
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
   },
 
@@ -196,8 +232,19 @@ export default defineComponent({
       'CLEAR_CURRENT_FILES_LIST',
       'REMOVE_FILES',
       'REMOVE_FILES_FROM_SEARCHED',
-      'REMOVE_FILE_SELECTION'
+      'REMOVE_FILE_SELECTION',
+      'SET_FILE_SELECTION'
     ]),
+
+    isSingleFile() {
+      if (
+        this.paginatedResources.length === 1 &&
+        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
+      ) {
+        return true
+      }
+      return false
+    },
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]

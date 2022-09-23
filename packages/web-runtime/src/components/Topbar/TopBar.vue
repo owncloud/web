@@ -9,6 +9,7 @@
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
+      <open-file-bar v-if="openResource" :resource="openResource" @close="closeAppFile" />
     </div>
     <div class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import NavigationMixin from '../../mixins/navigationMixin'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
@@ -33,6 +34,8 @@ import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import Tours from './Tours/Tours.vue'
+import OpenFileBar from './OpenFileBar.vue'
+import { useAppDefaults } from 'web-pkg/src/composables'
 
 export default {
   components: {
@@ -41,7 +44,8 @@ export default {
     Notifications,
     ThemeSwitcher,
     UserMenu,
-    Tours
+    Tours,
+    OpenFileBar
   },
   mixins: [NavigationMixin],
   props: {
@@ -56,8 +60,22 @@ export default {
       default: () => []
     }
   },
+  setup() {
+    return {
+      ...useAppDefaults({
+        applicationId: 'files'
+      })
+    }
+  },
+  data: function () {
+    return {
+      openResource: null
+    }
+  },
+
   computed: {
     ...mapGetters(['configuration', 'user']),
+    ...mapGetters('Files', ['openedFile']),
 
     activeRoutePath() {
       return this.$router.resolve(this.$route).location.path
@@ -105,6 +123,36 @@ export default {
 
     isUserMenuEnabled() {
       return this.user?.id
+    }
+  },
+  created() {
+    this.filePath = this.currentFileContext.path
+    if (this.user.id !== this.currentFileContext.fileName) this.getOpenResource(this.filePath)
+  },
+
+  mounted() {
+    this.$watch('currentFileContext.path', (to, from) => {
+      if (to) {
+        if (to !== from) {
+          this.openResource = null
+          if (this.user.id !== this.currentFileContext.fileName) this.getOpenResource(to)
+        }
+      }
+    })
+  },
+  methods: {
+    ...mapActions('Files', ['setOpenedFile']),
+    closeAppFile() {
+      this.openResource = null
+      this.closeApp()
+    },
+    async getOpenResource(path) {
+      try {
+        this.loading = true
+        this.openResource = await this.getFileResource(path)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }

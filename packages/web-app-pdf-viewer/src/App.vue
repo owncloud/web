@@ -1,6 +1,5 @@
 <template>
   <main>
-    <app-top-bar :resource="resource" @close="closeApp" />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" />
     <div v-else class="oc-height-1-1">

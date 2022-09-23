@@ -45,8 +45,7 @@ import {
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
-  isLocationTrashActive,
-  isLocationCommonActive
+  isLocationTrashActive
 } from '../../router'
 import { computed, defineComponent } from '@vue/composition-api'
 import {

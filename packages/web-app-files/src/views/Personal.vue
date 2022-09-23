@@ -5,11 +5,13 @@
       <keyboard-actions :paginated-resources="paginatedResources" />
       <files-view-wrapper>
         <app-bar
-          :has-bulk-actions="true"
+          :has-bulk-actions="!fileWithoutApp"
           :breadcrumbs="breadcrumbs"
           :breadcrumbs-context-actions-items="[currentFolder]"
-          :show-actions-on-selection="true"
+          :show-actions-on-selection="!fileWithoutApp"
           :side-bar-open="sideBarOpen"
+          :has-sidebar-toggle="!fileWithoutApp"
+          :has-view-options="!fileWithoutApp"
         >
           <template #actions="{ limitedScreenSpace }">
             <create-and-upload :limited-screen-space="limitedScreenSpace" />
@@ -17,62 +19,70 @@
         </app-bar>
         <app-loading-spinner v-if="areResourcesLoading" />
         <template v-else>
-          <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
-          <no-content-message
-            v-else-if="isEmpty"
-            id="files-personal-empty"
-            class="files-empty"
-            icon="folder"
-          >
-            <template #message>
-              <span v-translate>There are no resources in this folder</span>
-            </template>
-            <template #callToAction>
-              <span v-translate>
-                Drag files and folders here or use the "New" or "Upload" buttons to add files
-              </span>
-            </template>
-          </no-content-message>
-          <resource-table
-            v-else
-            id="files-personal-table"
-            v-model="selectedResourcesIds"
-            class="files-table"
-            :class="{ 'files-table-squashed': sideBarOpen }"
-            :are-thumbnails-displayed="displayThumbnails"
-            :resources="paginatedResources"
-            :target-route="resourceTargetLocation"
-            :header-position="fileListHeaderY"
-            :drag-drop="true"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            @fileDropped="fileDropped"
-            @fileClick="$_fileActions_triggerDefaultAction"
-            @rowMounted="rowMounted"
-            @sort="handleSort"
-          >
-            <template #quickActions="{ resource }">
-              <quick-actions
-                :class="resource.preview"
-                class="oc-visible@s"
-                :item="resource"
-                :actions="app.quickActions"
-              />
-            </template>
-            <template #contextMenu="{ resource }">
-              <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
-            </template>
-            <template #footer>
-              <pagination :pages="paginationPages" :current-page="paginationPage" />
-              <list-info
-                v-if="paginatedResources.length > 0"
-                class="oc-width-1-1 oc-my-s"
-                :files="totalFilesCount.files"
-                :folders="totalFilesCount.folders"
-                :size="totalFilesSize"
-              />
-            </template>
-          </resource-table>
+          <div v-if="isSingleFile() && fileWithoutApp">
+            <single-shared-file :file="fileWithoutApp" />
+          </div>
+          <div v-else>
+            <not-found-message v-if="folderNotFound" class="files-not-found oc-height-1-1" />
+            <no-content-message
+              v-else-if="isEmpty"
+              id="files-personal-empty"
+              class="files-empty"
+              icon="folder"
+            >
+              <template #message>
+                <span v-translate>There are no resources in this folder</span>
+              </template>
+              <template #callToAction>
+                <span v-translate>
+                  Drag files and folders here or use the "New" or "Upload" buttons to add files
+                </span>
+              </template>
+            </no-content-message>
+            <resource-table
+              v-else
+              id="files-personal-table"
+              v-model="selectedResourcesIds"
+              class="files-table"
+              :class="{ 'files-table-squashed': sideBarOpen }"
+              :are-thumbnails-displayed="displayThumbnails"
+              :resources="paginatedResources"
+              :target-route="resourceTargetLocation"
+              :header-position="fileListHeaderY"
+              :drag-drop="true"
+              :sort-by="sortBy"
+              :sort-dir="sortDir"
+              @fileDropped="fileDropped"
+              @fileClick="$_fileActions_triggerDefaultAction"
+              @rowMounted="rowMounted"
+              @sort="handleSort"
+            >
+              <template #quickActions="{ resource }">
+                <quick-actions
+                  :class="resource.preview"
+                  class="oc-visible@s"
+                  :item="resource"
+                  :actions="app.quickActions"
+                />
+              </template>
+              <template #contextMenu="{ resource }">
+                <context-actions
+                  v-if="isResourceInSelection(resource)"
+                  :items="selectedResources"
+                />
+              </template>
+              <template #footer>
+                <pagination :pages="paginationPages" :current-page="paginationPage" />
+                <list-info
+                  v-if="paginatedResources.length > 0"
+                  class="oc-width-1-1 oc-my-s"
+                  :files="totalFilesCount.files"
+                  :folders="totalFilesCount.folders"
+                  :size="totalFilesSize"
+                />
+              </template>
+            </resource-table>
+          </div>
         </template>
       </files-view-wrapper>
       <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
@@ -114,6 +124,7 @@ import { useCapabilityShareJailEnabled, useRouteParam } from 'web-pkg/src/compos
 import KeyboardActions from '../components/FilesList/KeyboardActions.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
+import SingleSharedFile from './SingleSharedFile.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -132,7 +143,8 @@ export default defineComponent({
     ContextActions,
     KeyboardActions,
     SideBar,
-    Home
+    Home,
+    SingleSharedFile
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
@@ -257,6 +269,21 @@ export default defineComponent({
       this.loadResourcesTask.perform(this, this.$route.params.item === path, path)
     })
 
+    this.fileWithoutApp = null
+
+    this.$watch('paginatedResources', (to) => {
+      if (this.isSingleFile()) {
+        if (
+          !this.$route.query.scrollTo &&
+          this.$_fileActions_getDefaultAction(to[0]).label() !== 'Download'
+        )
+          this.$_fileActions_triggerDefaultAction(this.paginatedResources[0], true)
+
+        this.SET_FILE_SELECTION(this.paginatedResources)
+        this.fileWithoutApp = computed(() => this.paginatedResources[0])
+      } else this.fileWithoutApp = null
+    })
+
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
   },
 
@@ -270,8 +297,19 @@ export default defineComponent({
     ...mapMutations('Files', [
       'REMOVE_FILES',
       'REMOVE_FILES_FROM_SEARCHED',
-      'REMOVE_FILE_SELECTION'
+      'REMOVE_FILE_SELECTION',
+      'SET_FILE_SELECTION'
     ]),
+
+    isSingleFile() {
+      if (
+        this.paginatedResources.length === 1 &&
+        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
+      ) {
+        return true
+      }
+      return false
+    },
 
     onNewProjectButtonClick() {
       window.open(

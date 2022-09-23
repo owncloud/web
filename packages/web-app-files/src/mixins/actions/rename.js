@@ -50,6 +50,12 @@ export default {
             if (resources[0].path === this.homeFolder) {
               return false
             }
+
+            // if share file is single file shared
+            if (this.$route?.query?.contextRouteParams || this.$route?.query.sharelink) {
+              return false
+            }
+
             // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again
             if (
               this.capabilities?.spaces?.share_jail === true &&

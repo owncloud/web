@@ -24,7 +24,8 @@ export function useAppDocumentTitle({
   const appMeta = useAppMeta({ applicationId, store })
 
   const title = computed(() => {
-    const fileName = basename(unref(unref(currentFileContext).fileName))
+    let fileName = basename(unref(unref(currentFileContext).fileName))
+    if (fileName === 'undefined') fileName = ''
     const meta = unref(unref(appMeta).applicationMeta)
 
     return [

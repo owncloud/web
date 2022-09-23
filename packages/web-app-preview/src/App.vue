@@ -8,7 +8,7 @@
     @keydown.esc="closeApp"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar :resource="activeFilteredFile" @close="closeApp">
+    <app-top-bar :resource="activeFilteredFile">
       <template #right>
         <oc-button
           v-if="!isFileContentError"

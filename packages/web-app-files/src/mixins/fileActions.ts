@@ -81,12 +81,13 @@ export default {
               iconFillType: this.apps.meta[editor.app].iconFillType
             }),
             img: this.apps.meta[editor.app].img,
-            handler: ({ resources }) =>
+            handler: ({ resources, sameTab }) =>
               this.$_fileActions_openEditor(
                 editor,
                 resources[0].webDavPath,
                 resources[0].id,
-                EDITOR_MODE_EDIT
+                EDITOR_MODE_EDIT,
+                sameTab
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
@@ -162,7 +163,7 @@ export default {
       }
     },
 
-    $_fileActions_openEditor(editor, filePath, fileId, mode) {
+    $_fileActions_openEditor(editor, filePath, fileId, mode, sameTab) {
       filePath = this.getCernPath(filePath)
       if (editor.handler) {
         return editor.handler({
@@ -180,8 +181,7 @@ export default {
       })
 
       const routeOpts = this.$_fileActions__routeOpts(editor, filePath, fileId, mode)
-
-      if (editor.newTab) {
+      if (editor.newTab && !sameTab) {
         const path = this.$router.resolve(routeOpts).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
@@ -198,12 +198,12 @@ export default {
     // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
     // returns the _first_ action from actions array which we now construct from
     // available mime-types coming from the app-provider and existing actions
-    $_fileActions_triggerDefaultAction(resource) {
-      const action = this.$_fileActions_getDefaultAction(resource)
-      action.handler({ resources: [resource], ...action.handlerData })
+    $_fileActions_triggerDefaultAction(resource, sameTab) {
+      const action = this.$_fileActions_getDefaultAction(resource, sameTab) 
+      action.handler({ resources: [resource], ...action.handlerData, sameTab: sameTab })
     },
 
-    $_fileActions_getDefaultAction(resource) {
+    $_fileActions_getDefaultAction(resource, sameTab) {
       const resources = [resource]
       const filterCallback = (action) =>
         action.canBeDefault && action.isEnabled({ resources, parent: this.currentFolder })
@@ -216,8 +216,10 @@ export default {
 
       // second priority: `/app/open` endpoint of app provider if available
       // FIXME: files app should not know anything about the `external apps` app
-      const externalAppsActions =
-        this.$_fileActions_loadExternalAppActions(resources).filter(filterCallback)
+      const externalAppsActions = this.$_fileActions_loadExternalAppActions(
+        resources,
+        sameTab
+      ).filter(filterCallback)
       if (externalAppsActions.length) {
         return externalAppsActions[0]
       }
@@ -239,7 +241,7 @@ export default {
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-    $_fileActions_loadExternalAppActions(resources) {
+    $_fileActions_loadExternalAppActions(resources, sameTab) {
       if (
         isLocationTrashActive(this.$router, 'files-trash-personal') ||
         isLocationTrashActive(this.$router, 'files-trash-spaces-project')
@@ -279,13 +281,13 @@ export default {
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,
           handler: () =>
-            this.$_fileActions_openLink(app.name, this.getCernPath(webDavPath), fileId),
+            this.$_fileActions_openLink(app.name, this.getCernPath(webDavPath), fileId, sameTab),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
     },
 
-    $_fileActions_openLink(app, filePath, fileId) {
+    $_fileActions_openLink(app, filePath, fileId, sameTab) {
       const routeOpts = this.$_fileActions__routeOpts(
         {
           routeName: 'external-apps'
@@ -302,7 +304,7 @@ export default {
       }
 
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(this.$router.resolve(routeOpts).href, '_blank')
+      window.open(this.$router.resolve(routeOpts).href, sameTab ? '_self' : '_blank')
     }
   }
 }

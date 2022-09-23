@@ -200,6 +200,12 @@ import pathMappings from '../../../helpers/path/pathMappings'
 export default defineComponent({
   name: 'FileDetails',
   inject: ['displayedItem'],
+  props: {
+    displayedItem: {
+      type: Object,
+      default: null
+    }
+  },
   setup() {
     const sharedParentDir = ref('')
     const router = useRouter()
