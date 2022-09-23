@@ -111,16 +111,18 @@ export default defineComponent({
         '*'
       )
     },
-    checkPermissions() {
-      this.getFileInfo(this.filePath, [DavProperty.Permissions])
-        .then((v) => {
-          this.isReadOnly =
-            v.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
-          this.loading = false
+    async checkPermissions() {
+      try {
+        const resource = await this.getFileResource(this.currentFileContext, {
+          davProperties: [DavProperty.Permissions]
         })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
+        this.isReadOnly = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
+          (p) => (resource.permissions || '').indexOf(p) > -1
+        )
+        this.loading = false
+      } catch (error) {
+        this.errorPopup(error)
+      }
     },
     load() {
       this.getFileContents(this.currentFileContext)
