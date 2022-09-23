@@ -140,9 +140,7 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilitySpacesEnabled,
   useStore,
-  usePublicLinkPassword,
-  useUserContext,
-  usePublicLinkContext
+  useUserContext
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
@@ -225,9 +223,7 @@ export default defineComponent({
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store }),
-      isUserContext: useUserContext({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+      isUserContext: useUserContext({ store })
     }
   },
   data: () => ({
@@ -318,15 +314,14 @@ export default defineComponent({
 
     pasteFilesHere() {
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext: this.isPublicLinkContext,
-        publicLinkPassword: this.publicLinkPassword,
         upsertResource: this.UPSERT_RESOURCE
       }).then(() => {
         ;(document.activeElement as HTMLElement).blur()

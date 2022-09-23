@@ -1,11 +1,10 @@
 import PQueue from 'p-queue'
 import { dirname } from 'path'
-import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { move, copy } from '../helpers/resource'
+import { copyMoveResource } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
@@ -13,6 +12,8 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
+import { SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -33,8 +34,8 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  copySelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
     context.dispatch(
       'showMessage',
@@ -45,8 +46,8 @@ export default {
       { root: true }
     )
   },
-  cutSelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  cutSelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
     context.dispatch(
       'showMessage',
@@ -63,66 +64,44 @@ export default {
   async pasteSelectedFiles(
     context,
     {
-      client,
+      targetSpace,
+      clientService,
       createModal,
       hideModal,
       showMessage,
       $gettext,
       $gettextInterpolate,
       $ngettext,
-      isPublicLinkContext,
-      publicLinkPassword,
       upsertResource
     }
   ) {
     let movedResources = []
-    if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResources = await move(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
-    if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResources = await copy(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
+    movedResources = await copyMoveResource(
+      context.state.clipboardSpace,
+      context.state.clipboardResources,
+      targetSpace,
+      context.state.currentFolder,
+      clientService,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      context.state.clipboardAction
+    )
     context.commit('CLEAR_CLIPBOARD')
-    const loadMovedResource = async (resource) => {
-      let loadedResource
-      if (isPublicLinkContext) {
-        loadedResource = await client.publicFiles.getFileInfo(
-          resource.webDavPath,
-          publicLinkPassword,
-          DavProperties.PublicLink
-        )
-      } else {
-        loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
-      }
-      upsertResource(buildResource(loadedResource))
-    }
     const loadingResources = []
     for (const resource of movedResources) {
-      loadingResources.push(loadMovedResource(resource))
+      loadingResources.push(
+        (async () => {
+          const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+            targetSpace,
+            resource
+          )
+          upsertResource(movedResource)
+        })()
+      )
     }
     await Promise.all(loadingResources)
   },

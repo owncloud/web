@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-width-1-1">
-    <keyboard-actions :paginated-resources="paginatedResources" />
+    <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
         :has-bulk-actions="true"
@@ -118,11 +118,12 @@ import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../he
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
-import { move } from '../../helpers/resource'
+import { copyMoveResource } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { ClipboardActions } from '../../helpers/clipboardActions'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -301,21 +302,23 @@ export default defineComponent({
 
     async fileDropped(fileIdTarget) {
       const selected = [...this.selectedResources]
-      const targetInfo = this.paginatedResources.find((e) => e.id === fileIdTarget)
+      const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
       if (isTargetSelected) return
-      if (targetInfo.type !== 'folder') return
-      const movedResources = await move(
+      if (targetFolder.type !== 'folder') return
+      const movedResources = await copyMoveResource(
+        this.space,
         selected,
-        targetInfo,
-        this.$client,
+        this.space,
+        targetFolder,
+        this.$clientService,
         this.createModal,
         this.hideModal,
         this.showMessage,
         this.$gettext,
         this.$gettextInterpolate,
         this.$ngettext,
-        false
+        ClipboardActions.Cut
       )
       for (const resource of movedResources) {
         this.REMOVE_FILES([resource])

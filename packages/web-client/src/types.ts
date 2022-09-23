@@ -8,6 +8,8 @@ export type OwnCloudSdk = {
     putFileContents(...args): any
     getFavoriteFiles(...args): any
     search(...args): any
+    copy(...args): any
+    move(...args): any
   }
   fileTrash: {
     list(...args): any
@@ -20,6 +22,8 @@ export type OwnCloudSdk = {
     getFileInfo(...args): any
     getFileUrl(...args): any
     putFileContents(...args): any
+    copy(...args): any
+    move(...args): any
   }
   settings: {
     getSettingsValues(...args): any

@@ -191,7 +191,7 @@ export default defineComponent({
           query: { shareId: resource.id }
         })
       }
-      const personalSpace = store.getters['runtime/space/spaces'].find(
+      const personalSpace = store.getters['runtime/spaces/spaces'].find(
         (space) => space.driveType === 'personal'
       )
       return createLocationSpaces('files-spaces-generic', {

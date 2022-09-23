@@ -4,6 +4,7 @@ export default {
   filesSearched: null,
   selectedIds: [],
   latestSelectedId: null,
+  clipboardSpace: null,
   clipboardResources: [],
   clipboardAction: null,
   versions: [],

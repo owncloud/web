@@ -56,24 +56,19 @@ export default {
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['pasteSelectedFiles']),
-    ...mapMutations('Files', {
-      upsertResource: 'UPSERT_RESOURCE'
-    }),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     $_paste_trigger() {
-      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
-      const publicLinkPassword = this.$store.getters['runtime/auth/publicLinkPassword']
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext,
-        publicLinkPassword,
-        upsertResource: this.upsertResource
+        upsertResource: this.UPSERT_RESOURCE
       })
     }
   }

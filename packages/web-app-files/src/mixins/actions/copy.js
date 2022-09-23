@@ -55,7 +55,7 @@ export default {
     ...mapActions('Files', ['copySelectedFiles']),
 
     $_copy_trigger() {
-      this.copySelectedFiles()
+      this.copySelectedFiles({ space: this.space })
     }
   }
 }

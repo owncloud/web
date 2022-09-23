@@ -5,6 +5,8 @@ import { GetFileInfoFactory } from './getFileInfo'
 import { GetFileUrlFactory } from './getFileUrl'
 import { ListFilesFactory } from './listFiles'
 import { PutFileContentsFactory } from './putFileContents'
+import { CopyFilesFactory } from './copyFiles'
+import { MoveFilesFactory } from './moveFiles'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
@@ -18,4 +20,6 @@ export interface WebDAV {
   createFolder: ReturnType<typeof CreateFolderFactory>['createFolder']
   getFileContents: ReturnType<typeof GetFileContentsFactory>['getFileContents']
   putFileContents: ReturnType<typeof PutFileContentsFactory>['putFileContents']
+  copyFiles: ReturnType<typeof CopyFilesFactory>['copyFiles']
+  moveFiles: ReturnType<typeof MoveFilesFactory>['moveFiles']
 }

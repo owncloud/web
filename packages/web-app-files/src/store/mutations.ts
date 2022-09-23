@@ -3,6 +3,7 @@ import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -29,10 +30,12 @@ export default {
     state.filesSearched = null
   },
   CLEAR_CLIPBOARD(state) {
+    state.clipboardSpace = null
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state) {
+  CLIPBOARD_SELECTED(state, { space }: { space: SpaceResource }) {
+    state.clipboardSpace = space
     state.clipboardResources = state.files.filter((f) => {
       return state.selectedIds.some((id) => f.id === id)
     })
