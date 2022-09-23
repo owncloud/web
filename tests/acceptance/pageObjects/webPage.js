@@ -22,8 +22,8 @@ module.exports = {
           (result) => {
             if (result.value === true) {
               this.click('@openSearchButton')
-                .waitForElementVisible('@searchInputFieldLowResolution')
-                .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
+                .waitForElementVisible('@searchInputFieldHighResolution')
+                .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
             } else {
               this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
                 '@searchInputFieldHighResolution',
