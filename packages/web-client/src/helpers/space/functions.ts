@@ -11,6 +11,7 @@ export function buildPublicSpaceResource(space): PublicSpaceResource {
   const publicLinkShareDate = space.fileInfo?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = space.fileInfo?.[DavProperty.PublicLinkShareOwner]
   return Object.assign(buildSpace(space), {
+    driveType: 'public',
     publicLinkPassword: space.publicLinkPassword,
     ...(publicLinkItemType && { publicLinkItemType }),
     ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
