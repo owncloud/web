@@ -93,7 +93,7 @@ export default defineComponent({
       const fileId =
         this.fileId ||
         (
-          await this.getFileResource(this.currentFileContext, {
+          await this.getFileInfo(this.currentFileContext, {
             davProperties: [DavProperty.FileId]
           })
         ).fileId

@@ -3,7 +3,6 @@ import { unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
-import { DavProperties } from '../../constants'
 import { FileContext } from './types'
 import { FileResource, SpaceResource } from 'web-client/src/helpers'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
@@ -19,8 +18,7 @@ interface AppFileHandlingOptions {
 export interface AppFileHandlingResult {
   getUrlForResource(space: SpaceResource, resource: Resource): Promise<string>
   revokeUrl(url: string): void
-  getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
-  getFileResource(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
+  getFileInfo(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
   getFileContents(
     fileContext: MaybeRef<FileContext>,
     options?: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
@@ -64,18 +62,7 @@ export function useAppFileHandling({
     )
   }
 
-  const getFileInfo = async (filePath: string, davProperties: DavProperties) => {
-    if (unref(isPublicLinkContext)) {
-      return await client.publicFiles.getFileInfo(
-        filePath,
-        unref(publicLinkPassword),
-        davProperties
-      )
-    }
-    return client.files.fileInfo(filePath, davProperties)
-  }
-
-  const getFileResource = async (
+  const getFileInfo = async (
     fileContext: MaybeRef<FileContext>,
     options: ListFilesOptions = {}
   ): Promise<Resource> => {
@@ -103,7 +90,6 @@ export function useAppFileHandling({
     revokeUrl,
     getFileContents,
     getFileInfo,
-    getFileResource,
     putFileContents
   }
 }
