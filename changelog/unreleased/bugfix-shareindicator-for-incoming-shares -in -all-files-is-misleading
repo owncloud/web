@@ -3,3 +3,4 @@ Bugfix: Shareindicator for incoming shares in "All files" is misleading
 We've changed the shareindicator tooltip from "show invited people" to "Shared with you, show details"
 
 https://github.com/owncloud/web/issues/7625
+https://github.com/owncloud/web/pull/7686
