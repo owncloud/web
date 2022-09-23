@@ -132,9 +132,6 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        driveAlias: `public/${publicLinkToken}`,
-        driveType: 'public',
-        webDavPath: buildWebDavPublicPath(publicLinkToken, ''),
         ...(publicLinkPassword && { publicLinkPassword })
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])

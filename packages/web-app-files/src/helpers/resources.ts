@@ -114,7 +114,7 @@ export function buildResource(resource): Resource {
   }
 }
 
-export function buildWebDavPublicPath(publicLinkToken, path) {
+export function buildWebDavPublicPath(publicLinkToken, path = '') {
   return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
 }
 
