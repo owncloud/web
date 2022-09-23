@@ -27,6 +27,7 @@ import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
+import VirusScan from '../../mixins/actions/virusScan'
 import { PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 
@@ -55,7 +56,8 @@ export default {
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,
-    SpaceNavigate
+    SpaceNavigate,
+    VirusScan
   ],
 
   props: {
@@ -160,7 +162,8 @@ export default {
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
-        ...this.$_navigate_space_items
+        ...this.$_navigate_space_items,
+        ...this.$_virus_scan_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
