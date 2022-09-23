@@ -9,9 +9,9 @@ import {
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
 
 export function buildPublicSpaceResource(space): PublicSpaceResource {
-  const s = buildSpace(space) as PublicSpaceResource
-  s.publicLinkPassword = space.publicLinkPassword
-  return s
+  return Object.assign(buildSpace(space), {
+    publicLinkPassword: space.publicLinkPassword
+  })
 }
 
 export function buildSpace(space): SpaceResource {
