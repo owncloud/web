@@ -100,12 +100,9 @@ export default defineComponent({
     const resource: Ref<Resource> = ref()
 
     const loadFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
-
-      resource.value = yield getFileResource(unref(filePath), [
-        DavProperty.Permissions,
-        DavProperty.Name
-      ])
+      resource.value = yield getFileResource(currentFileContext, {
+        davProperties: [DavProperty.Permissions, DavProperty.Name]
+      })
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )

@@ -1,5 +1,5 @@
 import { Resource, SpaceResource } from '../helpers'
-import { ListFilesFactory } from './listFiles'
+import { ListFilesFactory, ListFilesOptions } from './listFiles'
 import { WebDavOptions } from './types'
 
 export const GetFileInfoFactory = (
@@ -7,12 +7,22 @@ export const GetFileInfoFactory = (
   { sdk }: WebDavOptions
 ) => {
   return {
-    async getFileInfo(space: SpaceResource, { path }: { path?: string }): Promise<Resource> {
+    async getFileInfo(
+      space: SpaceResource,
+      { path }: { path?: string },
+      options?: ListFilesOptions
+    ): Promise<Resource> {
       return (
-        await listFilesFactory.listFiles(space, {
-          path,
-          depth: 0
-        })
+        await listFilesFactory.listFiles(
+          space,
+          {
+            path
+          },
+          {
+            depth: 0,
+            ...options
+          }
+        )
       )[0]
     }
   }

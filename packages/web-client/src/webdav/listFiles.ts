@@ -1,20 +1,26 @@
 import { buildResource } from 'files/src/helpers/resources'
-import { DavProperties } from 'web-pkg/src/constants'
+import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import { isPublicSpaceResource, Resource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
+
+export type ListFilesOptions = {
+  depth?: number
+  davProperties?: DavProperty[]
+}
 
 export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
   return {
     async listFiles(
       space: SpaceResource,
-      { path, depth = 1 }: { path?: string; depth?: number }
+      { path }: { path?: string },
+      { depth = 1, davProperties }: ListFilesOptions = {}
     ): Promise<Resource[]> {
       let resources: Resource[]
       if (isPublicSpaceResource(space)) {
         resources = await sdk.publicFiles.list(
           `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
           space.publicLinkPassword,
-          DavProperties.PublicLink,
+          [DavProperties.PublicLink].concat(davProperties),
           `${depth}`
         )
 
@@ -27,7 +33,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         resources = await sdk.files.list(
           `${space.webDavPath}/${path || ''}`,
           `${depth}`,
-          DavProperties.Default
+          davProperties || DavProperties.Default
         )
       }
 

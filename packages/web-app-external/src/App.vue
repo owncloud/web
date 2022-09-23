@@ -90,9 +90,13 @@ export default defineComponent({
   async created() {
     this.loading = true
     try {
-      const filePath = this.currentFileContext.path
       const fileId =
-        this.fileId || (await this.getFileResource(filePath, [DavProperty.FileId])).fileId
+        this.fileId ||
+        (
+          await this.getFileResource(this.currentFileContext, {
+            davProperties: [DavProperty.FileId]
+          })
+        ).fileId
 
       // fetch iframe params for app and file
       const configUrl = this.configuration.server

@@ -51,7 +51,7 @@ export default defineComponent({
     async loadPdf(fileContext) {
       try {
         this.loading = true
-        this.resource = await this.getFileResource(fileContext.path)
+        this.resource = await this.getFileResource(fileContext)
         this.url = await this.getUrlForResource(fileContext.space, this.resource, {
           disposition: 'inline'
         })

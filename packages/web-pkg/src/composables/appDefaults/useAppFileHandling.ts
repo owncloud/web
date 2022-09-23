@@ -4,11 +4,11 @@ import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { DavProperties } from '../../constants'
-import { buildResource } from 'files/src/helpers/resources'
 import { FileContext } from './types'
 import { FileResource, SpaceResource } from 'web-client/src/helpers'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { useClientService } from '../clientService'
+import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
@@ -20,7 +20,7 @@ export interface AppFileHandlingResult {
   getUrlForResource(space: SpaceResource, resource: Resource): Promise<string>
   revokeUrl(url: string): void
   getFileInfo(filePath: string, davProperties: DavProperties): Promise<any>
-  getFileResource(filePath: string, davProperties: DavProperties): Promise<Resource>
+  getFileResource(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
   getFileContents(
     fileContext: MaybeRef<FileContext>,
     options?: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
@@ -76,11 +76,16 @@ export function useAppFileHandling({
   }
 
   const getFileResource = async (
-    filePath: string,
-    davProperties: DavProperties = DavProperties.Default
+    fileContext: MaybeRef<FileContext>,
+    options: ListFilesOptions = {}
   ): Promise<Resource> => {
-    const fileInfo = await getFileInfo(filePath, davProperties)
-    return buildResource(fileInfo)
+    return webdav.getFileInfo(
+      unref(unref(fileContext).space),
+      {
+        path: unref(unref(fileContext).item)
+      },
+      options
+    )
   }
 
   const putFileContents = (
