@@ -181,7 +181,8 @@ export default {
       })
 
       const routeOpts = this.$_fileActions__routeOpts(editor, filePath, fileId, mode)
-      if (editor.newTab && !sameTab) {
+
+      if (!sameTab && editor.app !== 'preview') {
         const path = this.$router.resolve(routeOpts).href
         const target = `${editor.routeName}-${filePath}`
         const win = window.open(path, target)
@@ -199,7 +200,7 @@ export default {
     // returns the _first_ action from actions array which we now construct from
     // available mime-types coming from the app-provider and existing actions
     $_fileActions_triggerDefaultAction(resource, sameTab) {
-      const action = this.$_fileActions_getDefaultAction(resource, sameTab) 
+      const action = this.$_fileActions_getDefaultAction(resource, sameTab)
       action.handler({ resources: [resource], ...action.handlerData, sameTab: sameTab })
     },
 
