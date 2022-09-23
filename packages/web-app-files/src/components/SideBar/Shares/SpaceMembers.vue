@@ -35,9 +35,9 @@ import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes, spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { useGraphClient } from 'web-client/src/composables'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -47,14 +47,9 @@ export default defineComponent({
   },
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
-    }
-  },
-  setup() {
-    return {
-      ...useGraphClient()
     }
   },
   computed: {

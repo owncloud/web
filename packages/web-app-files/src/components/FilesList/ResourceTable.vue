@@ -184,7 +184,7 @@ import {
 } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { extractDomSelector } from 'web-client/src/helpers/resource'
+import { extractDomSelector, SpaceResource } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
@@ -358,7 +358,7 @@ export default defineComponent({
      * Space resource the provided resources originate from. Not required on meta pages like favorites, search, ...
      */
     space: {
-      type: Object,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

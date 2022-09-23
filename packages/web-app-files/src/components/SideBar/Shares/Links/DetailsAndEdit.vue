@@ -188,6 +188,7 @@ import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { PropType } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -226,7 +227,7 @@ export default defineComponent({
       required: true
     },
     space: {
-      type: Object,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }

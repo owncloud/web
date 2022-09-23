@@ -113,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, unref } from '@vue/composition-api'
+import { defineComponent, PropType, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import {
@@ -134,6 +134,7 @@ import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -145,7 +146,7 @@ export default defineComponent({
   inject: ['displayedItem', 'incomingParentShare'],
   props: {
     space: {
-      type: Object,
+      type: Object as PropType<SpaceResource>,
       required: false,
       default: null
     }
