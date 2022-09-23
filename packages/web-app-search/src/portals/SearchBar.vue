@@ -1,5 +1,11 @@
 <template>
-  <div v-if="availableProviders.length" id="files-global-search" data-custom-key-bindings="true">
+  <div
+    v-if="availableProviders.length"
+    id="files-global-search"
+    ref="searchBar"
+    class="oc-flex"
+    data-custom-key-bindings="true"
+  >
     <oc-search-bar
       id="files-global-search-bar"
       ref="search"
@@ -7,6 +13,9 @@
       :type-ahead="true"
       :placeholder="searchLabel"
       :button-hidden="true"
+      :show-cancel-button="showCancelButton"
+      cancel-button-variation="inverse"
+      :cancel-handler="cancelSearch"
       @input="updateTerm"
       @click.native="term && $refs.optionsDrop.show()"
       @keyup.native.esc="$refs.optionsDrop.hide()"
@@ -14,6 +23,15 @@
       @keyup.native.down="onKeyUpDown"
       @keyup.native.enter="onKeyUpEnter"
     />
+    <oc-button
+      v-oc-tooltip="$gettext('Display search bar')"
+      :aria-label="$gettext('Click to display and focus the search bar')"
+      class="mobile-search-btn oc-mr-s"
+      appearance="raw"
+      @click="showSearchBar"
+    >
+      <oc-icon name="search" variation="inverse" fill-type="line"></oc-icon>
+    </oc-button>
     <oc-drop
       id="files-global-search-options"
       ref="optionsDrop"
@@ -85,6 +103,8 @@ export default {
 
   data() {
     return {
+      resizeObserver: new ResizeObserver(this.onResize),
+      showCancelButton: false,
       term: '',
       activeProvider: undefined,
       optionsVisible: false,
@@ -170,6 +190,14 @@ export default {
       },
       watch: ['term']
     }
+  },
+
+  mounted() {
+    this.resizeObserver.observe(this.$refs.searchBar)
+  },
+
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.searchBar)
   },
 
   methods: {
@@ -268,6 +296,24 @@ export default {
     isPreviewElementActive(searchId) {
       const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
       return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
+    },
+    showSearchBar() {
+      document.getElementById('files-global-search-bar').style.visibility = 'visible'
+      document.getElementsByClassName('oc-search-input')[0].focus()
+      this.showCancelButton = true
+    },
+    cancelSearch() {
+      document.getElementById('files-global-search-bar').style.visibility = 'hidden'
+      this.showCancelButton = false
+    },
+    onResize() {
+      const searchBarEl = document.getElementById('files-global-search-bar')
+      if (window.innerWidth > 639) {
+        searchBarEl.style.visibility = 'visible'
+        this.showCancelButton = false
+      } else {
+        searchBarEl.style.visibility = 'hidden'
+      }
     }
   }
 }
@@ -275,11 +321,18 @@ export default {
 
 <style lang="scss">
 #files-global-search {
+  .mobile-search-btn {
+    display: none;
+    @media (max-width: 639px) {
+      display: inline-flex;
+    }
+  }
+
   .oc-search-input {
     background-color: var(--oc-color-input-bg);
     transition: 0s;
 
-    @media (max-width: 959px) {
+    @media (max-width: 639px) {
       border: none;
       display: inline;
     }
@@ -288,42 +341,29 @@ export default {
   #files-global-search-bar {
     width: 452px;
     @media (max-width: 959px) {
-      min-width: 2.5rem;
-      width: 2.5rem;
-      background-color: var(--oc-color-swatch-brand-default);
+      width: 300px;
+    }
 
-      input,
-      .oc-width-expand {
-        width: 2.5rem;
-      }
+    @media (max-width: 639px) {
+      visibility: hidden;
+      background-color: var(--oc-color-swatch-brand-default);
+      position: absolute;
+      height: 48px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 0;
+      width: 95vw !important;
 
       .oc-search-input-icon {
-        padding: 0 var(--oc-space-large);
+        padding: 0 var(--oc-space-xlarge);
       }
 
-      .oc-search-clear {
-        right: var(--oc-space-medium);
-      }
-
-      &:focus-within {
-        position: absolute;
-        height: 60px;
-        left: var(--oc-space-medium);
-        margin: 0 auto;
-        top: 0;
-        width: 100vw !important;
-
-        .oc-search-input-icon {
-          padding: 0 var(--oc-space-xlarge);
-        }
-      }
-
-      &:focus-within input,
+      input,
       input:not(:placeholder-shown) {
         background-color: var(--oc-color-input-bg);
         border: 1px solid var(--oc-color-input-border);
         z-index: var(--oc-z-index-modal);
-        width: 95%;
         margin: 0 auto;
       }
     }
@@ -343,7 +383,11 @@ export default {
       font-weight: 600;
     }
 
-    @media (max-width: 959px) {
+    @media (max-width: 969px) {
+      width: 300px;
+    }
+
+    @media (max-width: 639px) {
       width: 93vw !important;
     }
 
