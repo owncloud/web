@@ -113,7 +113,7 @@ export default defineComponent({
     },
     async checkPermissions() {
       try {
-        const resource = await this.getFileResource(this.currentFileContext, {
+        const resource = await this.getFileInfo(this.currentFileContext, {
           davProperties: [DavProperty.Permissions]
         })
         this.isReadOnly = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
