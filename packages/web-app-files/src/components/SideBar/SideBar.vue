@@ -50,6 +50,7 @@ import {
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
+  useClientService,
   usePublicLinkPassword,
   useRouteParam,
   useStore
@@ -59,6 +60,7 @@ import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
 import { SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -112,6 +114,8 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.close)
     }
 
+    const { webdav } = useClientService()
+
     return {
       isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
@@ -129,7 +133,8 @@ export default defineComponent({
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      currentStorageId
+      currentStorageId,
+      webdav
     }
   },
 
@@ -275,21 +280,9 @@ export default defineComponent({
 
       this.loading = true
       try {
-        let item
-        if (isLocationPublicActive(this.$router, 'files-public-files')) {
-          item = await this.$client.publicFiles.getFileInfo(
-            this.highlightedFile.webDavPath,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        } else {
-          item = await this.$client.files.fileInfo(
-            this.highlightedFile.webDavPath,
-            DavProperties.Default
-          )
-        }
-
-        this.selectedFile = buildResource(item)
+        // FIXME: currently when opening a file in an app and navigating back (to a public link at least)
+        // this is triggered but this.highlightedFile is null ... seems wrong to trigger this request?!
+        this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, { path: this.highlightedFile.path })
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
         if (loadShares) {
           this.loadShares()
