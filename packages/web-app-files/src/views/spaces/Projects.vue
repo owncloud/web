@@ -2,18 +2,14 @@
   <div class="oc-flex">
     <files-view-wrapper>
       <app-bar
-        class="oc-border-b"
         :breadcrumbs="breadcrumbs"
         :has-view-options="false"
-        :has-sidebar-toggle="false"
+        :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" />
-        </template>
-        <template #content>
-          <p v-text="spacesHint" />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -29,19 +25,8 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
-          <ul
-            class="
-              oc-grid
-              oc-grid-match
-              oc-grid-column-small
-              oc-grid-row-large
-              oc-text-center
-              oc-child-width-1-3@m
-              oc-child-width-1-4@l
-              oc-child-width-1-5@xl
-            "
-          >
-            <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m">
+          <oc-list class="oc-flex">
+            <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m oc-mr-m">
               <div
                 class="spaces-list-card oc-card oc-card-default oc-rounded"
                 :data-space-id="space.id"
@@ -95,7 +80,7 @@
                           appearance="raw"
                           @click="openSidebarSharePanel(space)"
                         >
-                          <oc-icon name="group" />
+                          <oc-icon name="group" fill-type="line" />
                         </oc-button>
                       </div>
                       <div>
@@ -130,7 +115,7 @@
                 </div>
               </div>
             </li>
-          </ul>
+          </oc-list>
         </div>
       </template>
     </files-view-wrapper>
@@ -214,10 +199,12 @@ export default defineComponent({
     ...mapGetters(['user']),
     ...mapGetters('Files', ['highlightedFile']),
     breadcrumbs() {
-      return [{ text: this.$gettext('Spaces') }]
-    },
-    spacesHint() {
-      return this.$gettext('Store your project related files in Spaces for seamless collaboration.')
+      return [
+        {
+          text: this.$gettext('Spaces'),
+          onClick: () => this.loadResourcesTask.perform(this)
+        }
+      ]
     },
     hasCreatePermission() {
       return this.$permissionManager.hasSpaceManagement()
@@ -334,9 +321,18 @@ export default defineComponent({
 }
 
 .spaces-list {
+  ul {
+    flex-wrap: wrap;
+  }
+
+  li {
+    width: 252px;
+  }
+
   &-card {
     box-shadow: none !important;
     background-color: var(--oc-color-background-highlight) !important;
+    height: 100%;
   }
 
   &-card.state-trashed {

@@ -4,9 +4,8 @@
     key="new-space-menu-btn-enabled"
     v-oc-tooltip="$gettext('Create a new space')"
     :aria-label="$gettext('Create a new space')"
-    appearance="raw"
-    variation="inverse"
-    class="oc-background-primary-gradient oc-px-s oc-text-nowrap oc-py-s"
+    appearance="filled"
+    variation="primary"
     @click="showCreateSpaceModal"
   >
     <oc-icon name="add" />
@@ -76,14 +75,7 @@ export default defineComponent({
 
           this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
             this.$client.files
-              .putFileContents(
-                `spaces/${space.id}/.space/readme.md`,
-                `### 👋 ${this.$gettext('Hello!')}\r\n${this.$gettext(
-                  'Add a description to welcome the members of the Space.'
-                )}\r\n${this.$gettext(
-                  'Use markdown to format your text. [More info]'
-                )}(https://www.markdownguide.org/basic-syntax/)`
-              )
+              .putFileContents('Here you can add a description for this Space.')
               .then((markdown) => {
                 this.graphClient.drives
                   .updateDrive(
