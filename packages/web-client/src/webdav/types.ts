@@ -1,4 +1,4 @@
-import { OwnCloudSdk } from 'web-pkg/src/services'
+import { OwnCloudSdk } from '../types'
 import { CreateFolderFactory } from './createFolder'
 import { GetFileContentsFactory } from './getFileContents'
 import { GetFileInfoFactory } from './getFileInfo'
