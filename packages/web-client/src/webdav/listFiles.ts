@@ -20,7 +20,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         resources = await sdk.publicFiles.list(
           `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
           space.publicLinkPassword,
-          [DavProperties.PublicLink].concat(davProperties),
+          davProperties || [DavProperties.PublicLink],
           `${depth}`
         )
 
