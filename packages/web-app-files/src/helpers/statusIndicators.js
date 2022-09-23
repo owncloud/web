@@ -92,7 +92,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
     {
       id: `files-sharing-${resource.getDomSelector()}`,
       accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
-      label: $gettext('Show invited people'),
+      label: $gettext('Shared with you, show details'),
       visible: isUserShare(resource, sharesTree, hasShareJail),
       icon: 'group',
       target: 'sharing-item',
