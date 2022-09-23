@@ -1,8 +1,11 @@
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
 import { buildResource } from '../../helpers/resources'
 import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
+import { Resource } from 'web-client'
+import { dirname, join } from 'path'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default {
   computed: {
@@ -62,7 +65,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapActions('Files', ['renameFile']),
+    ...mapMutations('Files', ['RENAME_FILE']),
 
     async $_rename_trigger({ resources }) {
       let parentResources
@@ -184,45 +187,41 @@ export default {
       this.setModalInputErrorMessage(null)
     },
 
-    $_rename_renameResource(resource, newName) {
+    async $_rename_renameResource(resource: Resource, newName: string) {
       this.toggleModalConfirmButton()
-      const sameResource = isSameResource(resource, this.currentFolder)
 
-      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
-      this.renameFile({
-        client: this.$client,
-        file: resource,
-        newValue: newName,
-        isPublicLinkContext,
-        isSameResource: sameResource
-      })
-        .then(() => {
-          this.hideModal()
-
-          if (sameResource) {
-            const newPath = resource.path.slice(1, resource.path.lastIndexOf('/') + 1)
-            this.$router.push({
-              params: {
-                item: '/' + newPath + newName || '/'
-              },
-              query: this.$route.query
-            })
-          }
+      try {
+        const newPath = join(dirname(resource.path), newName)
+        await (this.$clientService.webdav as WebDAV).moveFiles(this.space, resource, this.space, {
+          path: newPath
         })
-        .catch((error) => {
-          this.toggleModalConfirmButton()
-          let translated = this.$gettext('Failed to rename "%{file}" to "%{newName}"')
-          if (error.statusCode === 423) {
-            translated = this.$gettext(
-              'Failed to rename "%{file}" to "%{newName}" - the file is locked'
-            )
-          }
-          const title = this.$gettextInterpolate(translated, { file: resource.name, newName }, true)
-          this.showMessage({
-            title,
-            status: 'danger'
+        this.hideModal()
+
+        if (isSameResource(resource, this.currentFolder)) {
+          return this.$router.push({
+            params: {
+              driveAliasAndItem: this.space.getDriveAliasAndItem({ path: newPath } as Resource)
+            },
+            query: this.$route.query
           })
+        }
+
+        this.RENAME_FILE({ space: this.space, resource, newPath })
+      } catch (error) {
+        console.error(error)
+        this.toggleModalConfirmButton()
+        let translated = this.$gettext('Failed to rename "%{file}" to "%{newName}"')
+        if (error.statusCode === 423) {
+          translated = this.$gettext(
+            'Failed to rename "%{file}" to "%{newName}" - the file is locked'
+          )
+        }
+        const title = this.$gettextInterpolate(translated, { file: resource.name, newName }, true)
+        this.showMessage({
+          title,
+          status: 'danger'
         })
+      }
     }
   }
 }

@@ -86,13 +86,13 @@ export default {
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
   },
-  RENAME_FILE(state, { file, newValue, newPath }) {
+  RENAME_FILE(state, { space, resource, newPath }) {
     const resources = [...state.files]
     const fileIndex = resources.findIndex((f) => {
-      return f.id === file.id
+      return f.id === resource.id
     })
 
-    renameResource(resources[fileIndex], newValue, newPath)
+    renameResource(space, resources[fileIndex], newPath)
 
     state.files = resources
   },

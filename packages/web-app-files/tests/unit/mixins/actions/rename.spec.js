@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import rename from '@files/src/mixins/actions/rename.js'
+import rename from '@files/src/mixins/actions/rename.ts'
 import { createLocationSpaces } from '../../../../src/router'
 
 const localVue = createLocalVue()

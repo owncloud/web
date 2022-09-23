@@ -189,29 +189,6 @@ export default {
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
   },
-  renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
-    if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
-      if (isPublicLinkContext) {
-        return client.publicFiles
-          .move(
-            file.webDavPath,
-            newPath + newValue,
-            context.rootGetters['runtime/auth/publicLinkPassword']
-          )
-          .then(() => {
-            if (!isSameResource) {
-              context.commit('RENAME_FILE', { file, newValue, newPath })
-            }
-          })
-      }
-      return client.files.move(file.webDavPath, newPath + newValue).then(() => {
-        if (!isSameResource) {
-          context.commit('RENAME_FILE', { file, newValue, newPath })
-        }
-      })
-    }
-  },
   updateCurrentFileShareTypes({ state, getters, commit }) {
     const highlighted = getters.highlightedFile
     if (!highlighted) {
