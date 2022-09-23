@@ -16,13 +16,10 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { usePublicLinkPassword, usePublicLinkContext, useRequest } from '../authContext'
+import { usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
-import { useCapabilityShareJailEnabled } from '../capability'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
-import { buildWebDavFilesPath, buildWebDavPublicPath } from 'files/src/helpers/resources'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -50,24 +47,16 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const applicationId = options.applicationId
 
   const isPublicLinkContext = usePublicLinkContext({ store })
-  const publicLinkPassword = usePublicLinkPassword({ store })
 
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const { space, item } = useDriveResolver({
     store,
     driveAliasAndItem
   })
-  const hasShareJail = useCapabilityShareJailEnabled(store)
   const currentFileContext = computed((): FileContext => {
     let path
     if (unref(space)) {
-      if (unref(space).driveType === 'public') {
-        path = buildWebDavPublicPath(unref(space).id, unref(item))
-      } else if (unref(hasShareJail)) {
-        path = buildWebDavSpacesPath(unref(space).id, unref(item))
-      } else {
-        path = buildWebDavFilesPath(unref(space).id, unref(item))
-      }
+      path = `${unref(space).webDavPath}/${unref(item).replace(/^\//, '')}`
     } else {
       // deprecated.
       path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`

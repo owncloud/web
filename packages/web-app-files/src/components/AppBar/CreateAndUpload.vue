@@ -131,7 +131,6 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 import { useGraphClient } from 'web-client/src/composables'
@@ -146,8 +145,6 @@ import {
   usePublicLinkContext
 } from 'web-pkg/src/composables'
 
-import { DavProperties } from 'web-pkg/src/constants'
-
 import ResourceUpload from './Upload/ResourceUpload.vue'
 import {
   computed,
@@ -159,7 +156,7 @@ import {
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath, Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import {
   extractExtensionFromFile,
   extractNameWithoutExtension,
@@ -566,23 +563,10 @@ export default defineComponent({
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        let resource
-        let path = pathUtil.join(this.currentPath, fileName)
-        if (this.isSpacesGenericLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.space.id, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-        resource = buildResource(resource)
+        const path = pathUtil.join(this.currentPath, fileName) || ''
+        const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
+          path
+        })
         this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
