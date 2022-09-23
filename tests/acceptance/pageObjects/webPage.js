@@ -12,24 +12,7 @@ module.exports = {
      *
      * @param {string} searchTerm
      */
-    search: function (searchTerm, global = false) {
-      if (global === true) {
-        return this.initAjaxCounters()
-          .isVisible({ selector: '@openSearchButton', suppressNotFoundErrors: true }, (result) => {
-            if (result.value === true) {
-              this.click('@openSearchButton')
-                .waitForElementVisible('@searchInputFieldLowResolution')
-                .setValue('@searchInputFieldLowResolution', [searchTerm])
-                .click('@searchGlobalButton')
-            } else {
-              this.waitForElementVisible('@searchInputFieldHighResolution')
-                .setValue('@searchInputFieldHighResolution', [searchTerm])
-                .click('@searchGlobalButton')
-            }
-          })
-          .waitForElementNotVisible('@searchLoadingIndicator')
-          .waitForOutstandingAjaxCalls()
-      }
+    search: function (searchTerm) {
       return this.initAjaxCounters()
         .isVisible(
           {

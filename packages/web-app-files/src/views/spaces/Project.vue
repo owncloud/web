@@ -168,6 +168,7 @@ import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { SideBarEventTopics } from '../../composables/sideBar'
+import { useGraphClient } from 'web-client/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -200,6 +201,7 @@ export default defineComponent({
 
     return {
       ...useResourcesViewDefaults(),
+      ...useGraphClient(),
       resourceTargetLocation: createLocationSpaces('files-spaces-project'),
       space,
       accessToken: useAccessToken({ store })
@@ -224,6 +226,7 @@ export default defineComponent({
       'totalFilesSize'
     ]),
     ...mapGetters(['user', 'configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['app']),
 
     breadcrumbs() {
@@ -259,7 +262,7 @@ export default defineComponent({
       return !this.configuration?.options?.disablePreviews
     },
     memberCount() {
-      return this.space.spaceMemberIds.length
+      return this.spaceMembers.length
     },
     memberCountString() {
       const translated = this.$ngettext('%{count} member', '%{count} members', this.memberCount)
@@ -356,6 +359,7 @@ export default defineComponent({
   },
   async mounted() {
     await this.loadResourcesTask.perform(this, false, this.$route.params.item || '')
+    this.loadSpaceMembers({ graphClient: this.graphClient, space: this.space })
 
     document.title = `${this.$route.meta.title} - ${this.space.name} - ${this.configuration.currentTheme.general.name}`
     this.$route.params.name = this.space.name
@@ -376,7 +380,8 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['loadIndicators', 'loadPreview', 'loadCurrentFileOutgoingShares']),
+    ...mapActions('Files', ['loadIndicators', 'loadPreview']),
+    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
     ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
     ...mapMutations('Files', [
       'SET_CURRENT_FOLDER',

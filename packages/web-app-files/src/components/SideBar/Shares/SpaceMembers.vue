@@ -17,7 +17,7 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
-        <li v-for="collaborator in members" :key="collaborator.key">
+        <li v-for="collaborator in spaceMembers" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
@@ -33,10 +33,9 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
+import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent } from '@vue/composition-api'
-import { useGraphClient } from 'web-client/src/composables'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 
 export default defineComponent({
@@ -46,13 +45,9 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   inject: ['displayedItem'],
-  setup() {
-    const { graphClient } = useGraphClient()
-    return { graphClient }
-  },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
 
     helpersEnabled() {
@@ -64,19 +59,14 @@ export default defineComponent({
     space() {
       return this.displayedItem.value
     },
-    members() {
-      return this.currentFileOutgoingCollaborators.filter(
-        (share) => share.shareType === ShareTypes.space.value
-      )
-    },
     hasCollaborators() {
-      return this.members.length > 0
+      return this.spaceMembers.length > 0
     },
     currentUserCanShare() {
       return this.currentUserIsManager
     },
     currentUserIsManager() {
-      const currentUserCollaborator = this.members.find(
+      const currentUserCollaborator = this.spaceMembers.find(
         (collaborator) => collaborator.collaborator.name === this.user.id
       )
 
@@ -84,7 +74,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare']),
+    ...mapActions('runtime/spaces', ['deleteSpaceMember']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
     isModifiable(share) {
@@ -97,7 +87,7 @@ export default defineComponent({
       }
 
       // forbid to remove last manager of a space
-      const managers = this.members.filter(
+      const managers = this.spaceMembers.filter(
         (collaborator) => collaborator.role.name === spaceRoleManager.name
       )
       return managers.length > 1
@@ -121,13 +111,7 @@ export default defineComponent({
 
     async $_ocCollaborators_deleteShare(share) {
       try {
-        await this.deleteShare({
-          client: this.$client,
-          graphClient: this.graphClient,
-          share: share,
-          path: this.highlightedFile.path,
-          reloadResource: false
-        })
+        await this.deleteSpaceMember({ client: this.$client, share: share })
         this.showMessage({
           title: this.$gettext('Share was removed successfully')
         })

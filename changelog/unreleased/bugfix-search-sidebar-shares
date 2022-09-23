@@ -1,0 +1,6 @@
+Bugfix: Sidebar for received shares in search file list
+
+We've fixed a bug where the sidebar for received shares in the search file list was broken.
+
+https://github.com/owncloud/web/pull/7662
+https://github.com/owncloud/web/issues/7661

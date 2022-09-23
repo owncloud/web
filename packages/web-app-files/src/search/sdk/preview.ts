@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 
-export const previewSearchLimit = 10
+export const previewSearchLimit = 8
 
 export default class Preview implements SearchPreview {
   public readonly component: Component
@@ -28,11 +28,11 @@ export default class Preview implements SearchPreview {
   // we need to change the architecture of oc-sdk to be able to use cancelTokens
   // every search requests hammers the backend even if it's not needed anymore..
   // for now we worked around it by using a cache mechanism and make use of debouncing
-  @debounce(500)
+  @debounce(100)
   public async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        range: null,
+        totalResults: null,
         values: []
       }
     }
@@ -57,14 +57,13 @@ export default class Preview implements SearchPreview {
 
       return acc
     }, [])
-    return this.cache.set(term, { range, values: resources })
+    return this.cache.set(term, {
+      totalResults: range ? parseInt(range?.split('/')[1]) : null,
+      values: resources
+    })
   }
 
   public get available(): boolean {
     return this.router.currentRoute.name !== 'search-provider-list'
-  }
-
-  public activate(): void {
-    /* not needed */
   }
 }

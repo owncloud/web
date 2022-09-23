@@ -238,8 +238,7 @@ export default {
 }
 
 .highlight-mark {
-  background: yellow;
-  color: var(--oc-color-text-muted);
+  font-weight: 600;
 }
 
 .users-table {

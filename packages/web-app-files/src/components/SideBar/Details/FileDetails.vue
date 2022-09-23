@@ -165,7 +165,6 @@ import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
 import { createLocationSpaces, isLocationSpacesActive, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-
 import {
   useAccessToken,
   usePublicLinkContext,
@@ -221,7 +220,7 @@ export default defineComponent({
     timeout: null
   }),
   computed: {
-    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading']),
+    ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
     ...mapGetters(['user', 'configuration', 'capabilities']),
 
     file() {
@@ -375,7 +374,7 @@ export default defineComponent({
       handler() {
         // missing early return
         this.sharedItem = null
-        this.shareIndicators = getIndicators(this.file, this.sharesTree)
+        this.shareIndicators = getIndicators(this.highlightedFile, this.sharesTree)
         const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
         if (sharePathParentOrCurrent === null) {
           return

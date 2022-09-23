@@ -111,7 +111,6 @@ import { SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { defineComponent } from '@vue/composition-api'
-import { useGraphClient } from 'web-client/src/composables'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 
@@ -137,7 +136,6 @@ export default defineComponent({
   },
   setup() {
     return {
-      ...useGraphClient(),
       hasResharing: useCapabilityFilesSharingResharing()
     }
   },
@@ -321,6 +319,7 @@ export default defineComponent({
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('Files', ['changeShare']),
+    ...mapActions('runtime/spaces', ['changeSpaceMember']),
 
     removeShare() {
       this.$emit('onDelete', this.share)
@@ -360,12 +359,10 @@ export default defineComponent({
     saveShareChanges({ role, permissions, expirationDate }) {
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
-        : SharePermissions.permissionsToBitmask(
-            role.permissions(this.hasResharing || this.shareType === ShareTypes.space)
-          )
-      this.changeShare({
+        : SharePermissions.permissionsToBitmask(role.permissions(this.hasResharing || this.isSpace))
+      const changeMethod = this.isSpace ? this.changeSpaceMember : this.changeShare
+      changeMethod({
         client: this.$client,
-        graphClient: this.graphClient,
         share: this.share,
         permissions: bitmask,
         expirationDate: expirationDate || '',
