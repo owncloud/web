@@ -163,7 +163,7 @@ export default {
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
         ...this.$_navigate_space_items,
-        ...this.$_virus_scan
+        ...this.$_virus_scan_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

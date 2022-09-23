@@ -3,7 +3,7 @@ import { isLocationSpacesActive } from '../../router'
 
 export default {
   computed: {
-    $_virus_scan() {
+    $_virus_scan_items() {
       return [
         {
           name: 'virus-scan',
@@ -45,7 +45,10 @@ export default {
     async $_virus_scan_trigger({ resources }) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const httpClient = clientService.httpAuthenticated(accessToken)
-      await httpClient.get(`/remote.php/dav/postprocessing/virusscan/${resources[0].fileId}`)
+      const { server } = this.$store.getters.configuration
+      await httpClient.get(
+        `${server}remote.php/dav/postprocessing/virusscan/${resources[0].fileId}`
+      )
     }
   }
 }
