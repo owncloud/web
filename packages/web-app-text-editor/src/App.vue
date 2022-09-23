@@ -45,7 +45,7 @@
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
-import { computed, onMounted, onBeforeUnmount, ref, unref, Ref } from '@vue/composition-api'
+import { computed, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from '@vue/composition-api'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
@@ -114,7 +114,6 @@ export default defineComponent({
       serverContent.value = currentContent.value = fileContentsResponse.body
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
-    loadFileTask.perform()
 
     const saveFileTask = useTask(function* () {
       const filePath = unref(currentFileContext).path
@@ -146,6 +145,14 @@ export default defineComponent({
         }
       }
     }).restartable()
+
+    watch(
+      currentFileContext,
+      () => {
+        loadFileTask.perform()
+      },
+      { immediate: true }
+    )
 
     const renderedMarkdown = computed(() => {
       return unref(currentContent) && showPreview
