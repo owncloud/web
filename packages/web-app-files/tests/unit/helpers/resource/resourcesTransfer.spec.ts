@@ -143,7 +143,7 @@ describe('resourcesTransfer', () => {
       }
     )
   })
-  it('should show message if conflict exists', async () => {
+  it.only('should show message if conflict exists', async () => {
     const targetFolderItems = [
       {
         id: 'a',
@@ -171,5 +171,6 @@ describe('resourcesTransfer', () => {
     await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetFolder, targetFolderItems)
 
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
+    console.log('test')
   })
 })
