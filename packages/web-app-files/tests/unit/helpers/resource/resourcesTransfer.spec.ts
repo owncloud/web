@@ -143,7 +143,7 @@ describe('resourcesTransfer', () => {
       }
     )
   })
-  it.only('should show message if conflict exists', async () => {
+  it('should show message if conflict exists', async () => {
     const targetFolderItems = [
       {
         id: 'a',
