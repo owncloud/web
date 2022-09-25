@@ -143,8 +143,7 @@ describe('resourcesTransfer', () => {
       }
     )
   })
-  fit('should show message if conflict exists', async () => {
-    
+  it('should show message if conflict exists', async () => {
     const targetFolderItems = [
       {
         id: 'a',
@@ -153,13 +152,24 @@ describe('resourcesTransfer', () => {
         name: '/target/a'
       }
     ]
-    const resourcesTransfer = new ResourcesTransfer(resourcesToMove, targetFolder, null, null, "",jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
+    const resourcesTransfer = new ResourcesTransfer(
+      resourcesToMove,
+      targetFolder,
+      null,
+      null,
+      '',
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn()
+    )
     resourcesTransfer.resolveFileExists = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ strategy: 0 } as ResolveConflict))
     await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetFolder, targetFolderItems)
-    
+
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
-    console.log("test")
   })
 })

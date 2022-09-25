@@ -174,7 +174,6 @@ export class ResourcesUpload extends ConflictDialog {
         data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
       }
     }
-
     if (files.length === 0) return
     this.handleUppyFileUpload(this.space, this.currentFolder, files)
   }
