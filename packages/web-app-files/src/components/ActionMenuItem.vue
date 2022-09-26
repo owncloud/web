@@ -68,7 +68,8 @@ export default defineComponent({
     },
     space: {
       type: Object as PropType<SpaceResource>,
-      required: true
+      required: false,
+      default: null
     },
     appearance: {
       type: String,

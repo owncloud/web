@@ -32,7 +32,11 @@
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions
+              v-if="isResourceInSelection(resource)"
+              :items="selectedResources"
+              :space="getSpace(resource)"
+            />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -46,7 +50,11 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar
+      :open="sideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedResourceSpace"
+    />
   </div>
 </template>
 
@@ -71,6 +79,8 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { useStore } from 'web-pkg/src/composables'
+import { SpaceResource } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -90,8 +100,14 @@ export default defineComponent({
   mixins: [FileActions],
 
   setup() {
+    const store = useStore()
+    const getSpace = (resource: Resource): SpaceResource => {
+      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
+    }
+
     return {
-      ...useResourcesViewDefaults<Resource, any, any[]>()
+      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      getSpace
     }
   },
 

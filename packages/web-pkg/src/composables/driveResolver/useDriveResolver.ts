@@ -1,12 +1,12 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
-import { buildSpace, SpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
-import { SHARE_JAIL_ID } from 'files/src/services/folder'
 import { useGraphClient } from 'web-client/src/composables'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
+import { queryItemAsString } from '../appDefaults'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -41,12 +41,9 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         path = item.join('/')
       } else if (driveAliasAndItem.startsWith('share/')) {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
-        matchingSpace = buildSpace({
-          id: [SHARE_JAIL_ID, unref(shareId)].join('!'),
-          driveAlias: `share/${shareName}`,
-          driveType: 'share',
-          name: shareName,
-          shareId
+        matchingSpace = buildShareSpaceResource({
+          shareId: queryItemAsString(unref(shareId)),
+          shareName: unref(shareName)
         })
         path = item.join('/')
       } else {

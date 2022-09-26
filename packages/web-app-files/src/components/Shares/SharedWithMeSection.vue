@@ -55,8 +55,12 @@
           </oc-button>
         </div>
       </template>
-      <template #contextMenu>
-        <context-actions :items="selectedResources" />
+      <template #contextMenu="{ resource }">
+        <context-actions
+          v-if="isResourceInSelection(resource)"
+          :items="selectedResources"
+          :space="createShareSpace(resource)"
+        />
       </template>
       <template #footer>
         <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
@@ -103,7 +107,7 @@ import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
 import { Resource } from 'web-client'
 import { Location } from 'vue-router'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildShareSpaceResource, buildSpace } from 'web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -272,6 +276,9 @@ export default defineComponent({
     },
     toggleShowMore() {
       this.showMore = !this.showMore
+    },
+    createShareSpace(resource) {
+      return buildShareSpaceResource({ shareId: resource.shareId, shareName: resource.name })
     }
   }
 })

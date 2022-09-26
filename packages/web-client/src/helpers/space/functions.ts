@@ -1,9 +1,11 @@
 import { User } from '../user'
 import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
-import { PublicSpaceResource, SpaceResource } from './types'
+import { PublicSpaceResource, ShareSpaceResource, SpaceResource } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
+import { SHARE_JAIL_ID } from 'files/src/services/folder'
+import { unref } from '@vue/composition-api'
 
 export function buildPublicSpaceResource(space): PublicSpaceResource {
   const publicLinkPassword = space.publicLinkPassword
@@ -24,6 +26,22 @@ export function buildPublicSpaceResource(space): PublicSpaceResource {
     ...(publicLinkExpiration && { publicLinkExpiration }),
     ...(publicLinkShareDate && { publicLinkShareDate }),
     ...(publicLinkShareOwner && { publicLinkShareOwner })
+  })
+}
+
+export function buildShareSpaceResource({
+  shareId,
+  shareName
+}: {
+  shareId: string
+  shareName: string
+}): ShareSpaceResource {
+  return buildSpace({
+    id: [SHARE_JAIL_ID, unref(shareId)].join('!'),
+    driveAlias: `share/${shareName}`,
+    driveType: 'share',
+    name: shareName,
+    shareId
   })
 }
 
