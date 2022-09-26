@@ -75,7 +75,10 @@ export default defineComponent({
 
           this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
             this.$client.files
-              .putFileContents('Here you can add a description for this Space.')
+              .putFileContents(
+                `spaces/${space.id}/.space/readme.md`,
+                'Here you can add a description for this Space.'
+              )
               .then((markdown) => {
                 this.graphClient.drives
                   .updateDrive(
