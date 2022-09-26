@@ -33,7 +33,6 @@ import {
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
-import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)

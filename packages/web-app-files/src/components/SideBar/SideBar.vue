@@ -50,7 +50,6 @@ import {
   useCapabilityShareJailEnabled,
   useClientService,
   usePublicLinkPassword,
-  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
@@ -90,7 +89,6 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
-    const currentStorageId = useRouteParam('storageId')
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -131,7 +129,6 @@ export default defineComponent({
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      currentStorageId,
       webdav
     }
   },
@@ -230,11 +227,9 @@ export default defineComponent({
         return
       }
 
-      // FIXME: isSpacesProjectsLocation resolves "true" within a project?!
-      const isSpacesProjectsLocation = this.isSpacesProjectsLocation && !this.currentStorageId
       const loadShares =
         !!oldFile ||
-        isSpacesProjectsLocation ||
+        this.isSpacesProjectsLocation ||
         this.isSharedWithMeLocation ||
         this.isSharedWithOthersLocation ||
         this.isSharedViaLinkLocation ||
