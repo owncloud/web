@@ -3,7 +3,6 @@ import { sidebar } from '../utils'
 import { File, User } from '../../../types'
 import util from 'util'
 import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
-import { expect } from '@playwright/test'
 import { createLink } from '../link/actions'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
@@ -23,9 +22,7 @@ const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger'
 const spaceContextButton = '#space-context-btn'
-const spaceHeaderImg = '.space-header-image'
 
-export let spaceImageId = ''
 /**/
 
 export interface createSpaceArgs {
@@ -244,11 +241,6 @@ export const changeSpaceImage = async (args: {
     ),
     fileChooser.setFiles(resource.path)
   ])
-
-  const img = await page.locator(spaceHeaderImg)
-  const src = await img.evaluate((e) => (e as HTMLImageElement).src)
-  expect(src).not.toBe(spaceImageId)
-  spaceImageId = src
 
   await sidebar.close({ page: page })
 }
