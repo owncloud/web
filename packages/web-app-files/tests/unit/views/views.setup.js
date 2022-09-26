@@ -66,8 +66,8 @@ export const routes = [
     name: 'files-spaces-generic'
   },
   {
-    path: '/files/public/files/',
-    name: 'files-public-files'
+    path: '/files/link/',
+    name: 'files-public-link'
   },
   {
     path: '/files/common/favorites/',

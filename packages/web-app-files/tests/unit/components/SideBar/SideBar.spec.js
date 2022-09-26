@@ -126,7 +126,7 @@ describe('SideBar', () => {
           mocks: {
             $client: { publicFiles: { getFileInfo: mockFileInfo } }
           },
-          currentRoute: createLocationPublic('files-public-files')
+          currentRoute: createLocationPublic('files-public-link')
         })
         await wrapper.vm.$nextTick()
         await wrapper.vm.$nextTick()

@@ -70,7 +70,7 @@ export default defineComponent({
     const store = useStore()
     const isProjectSpace = props.space?.driveType === 'project'
     return {
-      showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
+      showPublicLinkButton: isLocationPublicActive(router, 'files-public-link'),
       showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
       homeRoute: createLocationSpaces('files-spaces-generic', {
@@ -80,7 +80,7 @@ export default defineComponent({
           } as Resource)
         }
       }),
-      publicLinkRoute: createLocationPublic('files-public-files', {
+      publicLinkRoute: createLocationPublic('files-public-link', {
         params: { item: router.currentRoute.params?.item?.split('/')[0] }
       }),
       spacesRoute: createLocationSpaces('files-spaces-projects')

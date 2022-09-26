@@ -30,7 +30,7 @@ export default {
             if (this.clipboardResources.length === 0) return false
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -39,7 +39,7 @@ export default {
               return false
             }
 
-            if (isLocationPublicActive(this.$router, 'files-public-files')) {
+            if (isLocationPublicActive(this.$router, 'files-public-link')) {
               return this.currentFolder.canCreate()
             }
 

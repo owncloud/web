@@ -67,8 +67,8 @@ export default {
       ]
     },
     routeName() {
-      if (isLocationPublicActive(this.$router, 'files-public-files')) {
-        return createLocationPublic('files-public-files')
+      if (isLocationPublicActive(this.$router, 'files-public-link')) {
+        return createLocationPublic('files-public-link')
       }
 
       return createLocationSpaces('files-spaces-generic')
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     getPath(resource) {
-      if (!isLocationPublicActive(this.$router, 'files-public-files')) {
+      if (!isLocationPublicActive(this.$router, 'files-public-link')) {
         return null
       }
       return resource.path

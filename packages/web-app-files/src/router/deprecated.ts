@@ -82,7 +82,7 @@ export const buildRoutes = (): RouteConfig[] =>
       meta: {
         auth: false
       },
-      redirect: (to) => createLocationPublic('files-public-files', to)
+      redirect: (to) => createLocationPublic('files-public-link', to)
     },
     {
       path: '/private-link/:fileId',
@@ -116,7 +116,7 @@ export const isLocationActive = (
       'files-shared-with-others': createLocationShares('files-shares-with-others').name,
       'files-shared-with-me': createLocationShares('files-shares-with-me').name,
       'files-trashbin	': createLocationTrash('files-trash-generic').name,
-      'files-public-list': createLocationPublic('files-public-files').name
+      'files-public-list': createLocationPublic('files-public-link').name
     }[c.name]
 
     if (newName) {

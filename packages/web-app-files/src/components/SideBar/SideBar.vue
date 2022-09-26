@@ -38,8 +38,6 @@ import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sideBar/'
 
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../helpers/resources'
 import {
   isLocationCommonActive,
   isLocationPublicActive,
@@ -126,7 +124,7 @@ export default defineComponent({
       isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
       isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
       isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
-      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
+      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -282,7 +280,9 @@ export default defineComponent({
       try {
         // FIXME: currently when opening a file in an app and navigating back (to a public link at least)
         // this is triggered but this.highlightedFile is null ... seems wrong to trigger this request?!
-        this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, { path: this.highlightedFile.path })
+        this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, {
+          path: this.highlightedFile.path
+        })
         this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
         if (loadShares) {
           this.loadShares()

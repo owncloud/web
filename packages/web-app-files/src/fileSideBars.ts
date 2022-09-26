@@ -121,7 +121,7 @@ const panelGenerators: (({
       if (multipleSelection || rootFolder) return false
       if (
         isLocationTrashActive(router, 'files-trash-generic') ||
-        isLocationPublicActive(router, 'files-public-files')
+        isLocationPublicActive(router, 'files-public-link')
       ) {
         return false
       }
@@ -159,7 +159,7 @@ const panelGenerators: (({
       if (multipleSelection || rootFolder) return false
       if (
         isLocationTrashActive(router, 'files-trash-generic') ||
-        isLocationPublicActive(router, 'files-public-files')
+        isLocationPublicActive(router, 'files-public-link')
       ) {
         return false
       }

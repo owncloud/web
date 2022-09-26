@@ -82,9 +82,9 @@ describe('NotFoundMessage', () => {
 })
 
 function publicLocation(item) {
-  return createLocationPublic('files-public-files', {
+  return createLocationPublic('files-public-link', {
     params: {
-      item: item
+      driveAliasAndItem: `public/${item}`
     }
   })
 }

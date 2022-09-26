@@ -165,7 +165,7 @@ export default defineComponent({
   setup(props) {
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       if (isPublicSpaceResource(props.space)) {
-        return createLocationPublic('files-public-files', {
+        return createLocationPublic('files-public-link', {
           params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) }
         })
       }
@@ -233,7 +233,7 @@ export default defineComponent({
       } else if (isPublicSpaceResource(this.space)) {
         spaceBreadcrumbItem = {
           text: this.$gettext('Public link'),
-          to: createLocationPublic('files-public-files', {
+          to: createLocationPublic('files-public-link', {
             params: { driveAliasAndItem: this.space.driveAlias }
           })
         }

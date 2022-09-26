@@ -14,7 +14,7 @@ export class FolderLoaderPublicFiles implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationPublicActive(router, 'files-public-files')
+    return isLocationPublicActive(router, 'files-public-link')
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {

@@ -29,7 +29,7 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false

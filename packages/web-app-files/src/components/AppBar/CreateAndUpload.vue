@@ -219,7 +219,7 @@ export default defineComponent({
       }),
       ...useRequest(),
       ...useGraphClient(),
-      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
+      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
@@ -661,7 +661,7 @@ export default defineComponent({
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
-        if (uppyResource.meta.routeName === 'files-public-files') {
+        if (uppyResource.meta.routeName === 'files-public-link') {
           return acc
         }
 

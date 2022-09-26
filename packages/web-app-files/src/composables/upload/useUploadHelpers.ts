@@ -37,7 +37,7 @@ export function useUploadHelpers(options: UploadHelpersOptions = {}): UploadHelp
   const store = useStore()
   const route = useRoute()
   const hasShareJail = useCapabilityShareJailEnabled()
-  const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-files')
+  const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
   const isSpacesGenericLocation = useActiveLocation(isLocationSpacesActive, 'files-spaces-generic')
   const clientService = useClientService()
   const user = computed((): User => store.getters.user)

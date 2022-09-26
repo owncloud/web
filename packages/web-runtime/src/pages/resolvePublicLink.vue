@@ -165,10 +165,10 @@ export default defineComponent({
       }
 
       if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
-        return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
+        return this.$router.push({ name: 'files-public-upload', params: { token: this.token } })
       }
 
-      return this.$router.push({ name: 'files-public-files', params: { driveAliasAndItem: `public/${this.token}` } })
+      return this.$router.push({ name: 'files-public-link', params: { driveAliasAndItem: `public/${this.token}` } })
     }
   }
 })

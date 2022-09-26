@@ -25,7 +25,7 @@ export default {
             if (
               this.$_isFilesAppActive &&
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
               !isLocationCommonActive(this.$router, 'files-common-search') &&
               !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
@@ -74,7 +74,7 @@ export default {
       await archiverService
         .triggerDownload({
           ...fileOptions,
-          ...(isLocationPublicActive(this.$router, 'files-public-files') && {
+          ...(isLocationPublicActive(this.$router, 'files-public-link') && {
             publicToken: this.$route.params.item.split('/')[0]
           })
         })

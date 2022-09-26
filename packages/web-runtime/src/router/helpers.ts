@@ -64,7 +64,7 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
     return false
   }
 
-  const publicLinkRouteNames = ['files-public-files', 'files-public-drop']
+  const publicLinkRouteNames = ['files-public-link', 'files-public-upload']
   if (publicLinkRouteNames.includes(to.name)) {
     return true
   }

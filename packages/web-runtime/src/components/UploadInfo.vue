@@ -353,7 +353,8 @@ export default {
 
       this.uploads[file.meta.uploadId] = file
 
-      if (file.meta.route?.name === 'files-public-files') {
+      if (file.meta.route?.name === 'files-public-link') {
+        // FIXME: token from space?!
         // Strip token to not display it in the overlay
         const strippedTokenPath = file.meta.currentFolder.split('/').slice(1).join('/')
         this.uploads[file.meta.uploadId].path = `${strippedTokenPath}${file.name}`
@@ -467,10 +468,11 @@ export default {
       const { targetRoute } = file
       // Root of a share -> use share name
       if (this.hasShareJail && targetRoute?.name === 'files-spaces-share') {
+        // FIXME: possible to use name from "virtual share space"? Not in store...
         return targetRoute.params.shareName
       }
 
-      if (targetRoute?.name === 'files-public-files') {
+      if (targetRoute?.name === 'files-public-link') {
         return this.$gettext('Public link')
       }
 
@@ -501,7 +503,8 @@ export default {
         route.params.item = strippedPath
       }
 
-      if (route.name === 'files-public-files') {
+      if (route.name === 'files-public-link') {
+        // FIXME: params.item doesn't exist anymore! use space if possible...
         route.params.item = targetRoute.params.item
       }
 

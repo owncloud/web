@@ -28,7 +28,7 @@ const router = {
   push: jest.fn(),
   afterEach: jest.fn(),
   currentRoute: {
-    ...createLocationPublic('files-public-files'),
+    ...createLocationPublic('files-public-link'),
     query: {}
   },
   resolve: (r) => {
