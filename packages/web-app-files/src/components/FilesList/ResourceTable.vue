@@ -190,7 +190,8 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
-import { buildSpace, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   mixins: [Rename],
@@ -583,8 +584,10 @@ export default defineComponent({
       }
 
       if (resource.shareId) {
-        const space = buildSpace({
-          driveAlias: `share/${path.basename(resource.shareRoot)}`
+        const space = buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: path.basename(resource.shareRoot),
+          serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces('files-spaces-generic', {
           params: {

@@ -9,9 +9,11 @@ import {
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
-import { computed, Ref, unref, watch } from '@vue/composition-api'
+import { computed, unref, watch } from '@vue/composition-api'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
+import { SpaceResource } from 'web-client/src/helpers'
+import { join } from 'path'
 
 export interface UppyResource {
   id?: string
@@ -20,22 +22,22 @@ export interface UppyResource {
   type: string
   data: Blob
   meta: {
-    // must only contain primitive types because the properties can't be serialized otherwise!
-    currentFolder: string
+    // IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
+    // current space & folder
+    spaceId: string | number
+    driveAlias: string
+    driveType: string
+    currentFolder: string // current folder path during upload initiation
+    // upload data
     relativeFolder: string
     relativePath: string
     tusEndpoint: string
-    webDavBasePath: string
     uploadId: string
     topLevelFolderId?: string
+    // route data
     routeName?: string
-    routeItem?: string
-    routeShareName?: string
-    routeShareId?: string
-    routeStorage?: string
-    routeStorageId?: string
-    routeParamName?: string
     routeDriveAliasAndItem?: string
+    routeShareId?: string
   }
 }
 
@@ -44,7 +46,7 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(files: UppyResource[]): void
+  createDirectoryTree(space: SpaceResource, currentPath: string, files: UppyResource[]): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -107,8 +109,6 @@ export function useUpload(options: UploadOptions): UploadResult {
   return {
     createDirectoryTree: createDirectoryTree({
       clientService,
-      isPublicLinkContext,
-      publicLinkPassword,
       uppyService: options.uppyService
     })
   }
@@ -116,20 +116,15 @@ export function useUpload(options: UploadOptions): UploadResult {
 
 const createDirectoryTree = ({
   clientService,
-  isPublicLinkContext,
-  publicLinkPassword,
   uppyService
 }: {
   clientService: ClientService
-  isPublicLinkContext: Ref<boolean>
-  publicLinkPassword?: Ref<string>
   uppyService: UppyService
 }) => {
-  return async (files: UppyResource[]) => {
-    const { owncloudSdk: client } = clientService
+  return async (space: SpaceResource, currentFolder: string, files: UppyResource[]) => {
+    const { webdav } = clientService
     const createdFolders = []
     for (const file of files) {
-      const currentFolder = file.meta.currentFolder
       const directory = file.meta.relativeFolder
 
       if (!directory || createdFolders.includes(directory)) {
@@ -150,46 +145,34 @@ const createDirectoryTree = ({
           continue
         }
 
-        let uploadId
-        if (!createdSubFolders) {
-          uploadId = file.meta.topLevelFolderId
-        } else {
-          uploadId = uuid.v4()
-        }
-
+        const uploadId = createdSubFolders ? uuid.v4() : file.meta.topLevelFolderId
         const uppyResource = {
           id: uuid.v4(),
           name: subFolder,
           isFolder: true,
           type: 'folder',
           meta: {
+            // current space & folder
+            spaceId: space.id,
+            driveAlias: space.driveAlias,
+            driveType: space.driveType,
+            currentFolder,
+            // upload data
             relativeFolder: createdSubFolders,
-            currentFolder: file.meta.currentFolder,
             uploadId,
+            // route data
             routeName: file.meta.routeName,
-            routeItem: file.meta.routeItem,
-            routeShareName: file.meta.routeShareName,
-            routeShareId: file.meta.routeShareId,
-            routeStorage: file.meta.routeStorage,
-            routeStorageId: file.meta.routeStorageId,
-            routeParamName: file.meta.routeParamName
+            routeDriveAliasAndItem: file.meta.routeDriveAliasAndItem,
+            routeShareId: file.meta.routeShareId
           }
         }
 
         uppyService.publish('addedForUpload', [uppyResource])
 
-        if (unref(isPublicLinkContext)) {
-          await client.publicFiles.createFolder(
-            currentFolder,
-            folderToCreate,
-            unref(publicLinkPassword)
-          )
-        } else {
-          try {
-            await client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
-          } catch (error) {
-            console.error(error)
-          }
+        try {
+          await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
+        } catch (error) {
+          console.error(error)
         }
 
         uppyService.publish('uploadSuccess', uppyResource)

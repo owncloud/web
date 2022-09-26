@@ -4,6 +4,7 @@ import { set, has } from 'lodash-es'
 import { unref } from '@vue/composition-api'
 import { buildSpaceShare } from 'files/src/helpers/resources'
 import { sortSpaceMembers } from 'files/src/helpers/space'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const state = {
   spaces: [],
@@ -107,7 +108,9 @@ const actions = {
       if (!graphResponse.data) {
         return
       }
-      const spaces = graphResponse.data.value.map((space) => buildSpace(space))
+      const spaces = graphResponse.data.value.map((space) =>
+        buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+      )
       context.commit('ADD_SPACES', spaces)
       context.commit('SET_SPACES_INITIALIZED', true)
     } finally {

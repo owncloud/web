@@ -107,7 +107,8 @@ import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
 import { Resource } from 'web-client'
 import { Location } from 'vue-router'
-import { buildShareSpaceResource, buildSpace } from 'web-client/src/helpers'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -187,8 +188,10 @@ export default defineComponent({
     const hasShareJail = useCapabilityShareJailEnabled()
     const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       if (unref(hasShareJail)) {
-        const space = buildSpace({
-          driveAlias: `share/${resource.name}`
+        const space = buildShareSpaceResource({
+          shareId: resource.id,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces('files-spaces-generic', {
           params: { driveAliasAndItem: space.getDriveAliasAndItem({ path } as Resource) },
@@ -278,7 +281,11 @@ export default defineComponent({
       this.showMore = !this.showMore
     },
     createShareSpace(resource) {
-      return buildShareSpaceResource({ shareId: resource.shareId, shareName: resource.name })
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     }
   }
 })

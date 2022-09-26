@@ -39,7 +39,8 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
 
         const resources = yield webdav.listFiles(space, { path })
         let currentFolder = resources.shift()
-        if (!path) {
+        // FIXME / technical debt: at some point we want to use the space as current folder for all drive types. but somehow broken for personal spaces...
+        if (path === '/' && space.driveType !== 'personal') {
           currentFolder = space
         }
 

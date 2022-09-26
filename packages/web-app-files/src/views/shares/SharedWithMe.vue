@@ -73,6 +73,7 @@ import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   components: {
@@ -149,7 +150,11 @@ export default defineComponent({
         return null
       }
       const resource = unref(selectedResources)[0]
-      return buildShareSpaceResource({ shareId: resource.shareId, shareName: resource.name })
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     })
 
     return {

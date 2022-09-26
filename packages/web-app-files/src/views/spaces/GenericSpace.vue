@@ -176,7 +176,7 @@ export default defineComponent({
     }
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
-      return props.space.driveType === 'project' && !props.item
+      return props.space.driveType === 'project' && props.item === '/'
     })
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),

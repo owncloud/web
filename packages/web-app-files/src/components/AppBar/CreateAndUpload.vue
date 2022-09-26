@@ -174,8 +174,7 @@ export default defineComponent({
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
+      required: true
     },
     item: {
       type: String,
@@ -215,7 +214,7 @@ export default defineComponent({
       }),
       ...useUploadHelpers({
         space: computed(() => props.space),
-        currentPath: computed(() => props.item)
+        currentFolder: computed(() => props.item)
       }),
       ...useRequest(),
       ...useGraphClient(),
@@ -227,8 +226,7 @@ export default defineComponent({
     }
   },
   data: () => ({
-    newFileAction: null,
-    path: ''
+    newFileAction: null
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
@@ -336,9 +334,9 @@ export default defineComponent({
           return
         }
 
-        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
+        if (['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
-            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.spaceId)
             this.UPDATE_SPACE_FIELD({
               id: driveResponse.data.id,
               field: 'spaceQuota',
@@ -350,7 +348,8 @@ export default defineComponent({
           }
         }
 
-        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
+        const fileIsInCurrentPath =
+          file.meta.spaceId === this.space.id && file.meta.currentFolder === this.item
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -427,7 +426,7 @@ export default defineComponent({
       }
 
       try {
-        const path = pathUtil.join(this.currentPath, folderName)
+        const path = pathUtil.join(this.item, folderName)
         const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
           path
         })
@@ -495,7 +494,7 @@ export default defineComponent({
       }
 
       try {
-        const path = pathUtil.join(this.currentPath, fileName)
+        const path = pathUtil.join(this.item, fileName)
         const resource = await (this.$clientService.webdav as WebDAV).putFileContents(this.space, {
           path
         })
@@ -558,7 +557,7 @@ export default defineComponent({
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        const path = pathUtil.join(this.currentPath, fileName) || ''
+        const path = pathUtil.join(this.item, fileName) || ''
         const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
           path
         })
@@ -651,7 +650,7 @@ export default defineComponent({
       if (conflicts.length) {
         await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
       } else {
-        this.handleUppyFileUpload(uppyResources)
+        await this.handleUppyFileUpload(this.space, this.item, uppyResources)
       }
     },
 
@@ -718,9 +717,9 @@ export default defineComponent({
       return quotaExceeded
     },
 
-    async handleUppyFileUpload(files: UppyResource[]) {
+    async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
       this.$uppyService.publish('uploadStarted')
-      await this.createDirectoryTree(files)
+      await this.createDirectoryTree(space, currentFolder, files)
       this.$uppyService.publish('addedForUpload', files)
       this.$uppyService.uploadFiles(files)
     },
@@ -824,12 +823,11 @@ export default defineComponent({
           file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
           const data = file.data as any
           data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
-          file.meta.routeItem = `/${newFolderName}`
         }
       }
 
       if (files.length === 0) return
-      this.handleUppyFileUpload(files)
+      return this.handleUppyFileUpload(this.space, this.item, files)
     }
   }
 })

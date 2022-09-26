@@ -9,17 +9,18 @@ export const CreateFolderFactory = (
 ) => {
   return {
     async createFolder(space: SpaceResource, { path }: { path?: string }): Promise<FolderResource> {
+      const p = (path || '').replace(/\/+$/, '')
       if (isPublicSpaceResource(space)) {
         await sdk.publicFiles.createFolder(
-          `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
+          `${space.webDavPath.replace(/^\/public-files/, '')}/${p}`,
           null,
           space.publicLinkPassword
         )
       } else {
-        await sdk.files.createFolder(`${space.webDavPath}/${path || ''}`, DavProperties.Default)
+        await sdk.files.createFolder(`${space.webDavPath}/${p}`, DavProperties.Default)
       }
 
-      return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FolderResource>
+      return getFileInfoFactory.getFileInfo(space, { path: p })
     }
   }
 }

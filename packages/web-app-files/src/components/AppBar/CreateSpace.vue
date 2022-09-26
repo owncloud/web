@@ -20,6 +20,7 @@ import { mapActions, mapMutations } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
 import { buildSpace } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   setup() {
@@ -69,7 +70,7 @@ export default defineComponent({
         .createDrive({ name }, {})
         .then(({ data: space }) => {
           this.hideModal()
-          const resource = buildSpace(space)
+          const resource = buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
           this.UPSERT_RESOURCE(resource)
           this.UPSERT_SPACE(resource)
 

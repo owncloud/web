@@ -162,7 +162,8 @@ import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -253,8 +254,10 @@ export default defineComponent({
         if (this.file.path === '') {
           return {}
         }
-        const space = buildSpace({
-          driveAlias: `share/${path.basename(this.file.shareRoot)}`
+        const space = buildShareSpaceResource({
+          shareId: this.file.shareId,
+          shareName: path.basename(this.file.shareRoot),
+          serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces('files-spaces-generic', {
           params: {

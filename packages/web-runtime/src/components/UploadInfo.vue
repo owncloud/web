@@ -352,15 +352,7 @@ export default {
       }
 
       this.uploads[file.meta.uploadId] = file
-
-      if (file.meta.route?.name === 'files-public-link') {
-        // FIXME: token from space?!
-        // Strip token to not display it in the overlay
-        const strippedTokenPath = file.meta.currentFolder.split('/').slice(1).join('/')
-        this.uploads[file.meta.uploadId].path = `${strippedTokenPath}${file.name}`
-      } else {
-        this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
-      }
+      this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
       this.uploads[file.meta.uploadId].targetRoute = this.buildRouteFromUppyResource(file)
 
       if (!file.isFolder) {
@@ -452,15 +444,11 @@ export default {
 
       return {
         name: resource.meta.routeName,
+        params: {
+          driveAliasAndItem: resource.meta.routeDriveAliasAndItem
+        },
         query: {
           shareId: resource.meta.routeShareId
-        },
-        params: {
-          item: resource.meta.routeItem,
-          shareName: resource.meta.routeShareName,
-          storage: resource.meta.routeStorage,
-          storageId: resource.meta.routeStorageId,
-          name: resource.meta.routeParamName
         }
       }
     },

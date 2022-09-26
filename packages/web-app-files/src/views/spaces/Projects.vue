@@ -187,7 +187,9 @@ export default defineComponent({
       )
       let loadedSpaces = response.data?.value || []
 
-      loadedSpaces = loadedSpaces.map(buildSpace)
+      loadedSpaces = loadedSpaces.map((s) =>
+        buildSpace({ ...s, serverUrl: configurationManager.serverUrl })
+      )
       ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
     })
     const areResourcesLoading = computed(() => {

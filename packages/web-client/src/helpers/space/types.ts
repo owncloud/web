@@ -9,7 +9,9 @@
 import { Resource } from '../resource'
 
 export interface SpaceResource extends Resource {
-  getDriveAliasAndItem?(resource: Resource): string
+  webDavUrl: string
+  getWebDavUrl(resource: Resource): string
+  getDriveAliasAndItem(resource: Resource): string
 }
 
 export interface PersonalSpaceResource extends SpaceResource {

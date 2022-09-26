@@ -7,6 +7,7 @@ import { useGraphClient } from 'web-client/src/composables'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
+import { configurationManager } from '../../configuration'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -30,7 +31,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         return
       }
       if (unref(space) && driveAliasAndItem.startsWith(unref(space).driveAlias)) {
-        item.value = driveAliasAndItem.slice(unref(space).driveAlias.length)
+        item.value =
+          (driveAliasAndItem.slice(unref(space).driveAlias.length) || '').replace(/\/+$/, '') + '/'
         return
       }
       let matchingSpace = null
@@ -43,7 +45,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = buildShareSpaceResource({
           shareId: queryItemAsString(unref(shareId)),
-          shareName: unref(shareName)
+          shareName: unref(shareName),
+          serverUrl: configurationManager.serverUrl
         })
         path = item.join('/')
       } else {
@@ -58,7 +61,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         })
       }
       space.value = matchingSpace
-      item.value = path
+      item.value = (path || '').replace(/\/+$/, '') + '/'
     },
     { immediate: true }
   )

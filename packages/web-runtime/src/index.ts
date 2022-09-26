@@ -109,7 +109,8 @@ export const renderSuccess = (): void => {
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
         name: user.id,
-        webDavPath: `/files/${user.id}`
+        webDavPath: `/files/${user.id}`,
+        serverUrl: configurationManager.serverUrl
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
@@ -131,7 +132,8 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        ...(publicLinkPassword && { publicLinkPassword })
+        ...(publicLinkPassword && { publicLinkPassword }),
+        serverUrl: configurationManager.serverUrl
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)

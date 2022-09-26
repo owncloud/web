@@ -5,21 +5,20 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
-import { unref } from '@vue/composition-api'
 
-export function buildPublicSpaceResource(space): PublicSpaceResource {
-  const publicLinkPassword = space.publicLinkPassword
+export function buildPublicSpaceResource(data): PublicSpaceResource {
+  const publicLinkPassword = data.publicLinkPassword
 
-  const publicLinkItemType = space.fileInfo?.[DavProperty.PublicLinkItemType]
-  const publicLinkPermission = space.fileInfo?.[DavProperty.PublicLinkPermission]
-  const publicLinkExpiration = space.fileInfo?.[DavProperty.PublicLinkExpiration]
-  const publicLinkShareDate = space.fileInfo?.[DavProperty.PublicLinkShareDate]
-  const publicLinkShareOwner = space.fileInfo?.[DavProperty.PublicLinkShareOwner]
+  const publicLinkItemType = data.fileInfo?.[DavProperty.PublicLinkItemType]
+  const publicLinkPermission = data.fileInfo?.[DavProperty.PublicLinkPermission]
+  const publicLinkExpiration = data.fileInfo?.[DavProperty.PublicLinkExpiration]
+  const publicLinkShareDate = data.fileInfo?.[DavProperty.PublicLinkShareDate]
+  const publicLinkShareOwner = data.fileInfo?.[DavProperty.PublicLinkShareOwner]
 
-  return Object.assign(buildSpace(space), {
+  return Object.assign(buildSpace(data), {
     driveType: 'public',
-    driveAlias: `public/${space.id}`,
-    webDavPath: buildWebDavPublicPath(space.id),
+    driveAlias: `public/${data.id}`,
+    webDavPath: buildWebDavPublicPath(data.id),
     ...(publicLinkPassword && { publicLinkPassword }),
     ...(publicLinkItemType && { publicLinkItemType }),
     ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
@@ -31,28 +30,31 @@ export function buildPublicSpaceResource(space): PublicSpaceResource {
 
 export function buildShareSpaceResource({
   shareId,
-  shareName
+  shareName,
+  serverUrl
 }: {
-  shareId: string
+  shareId: string | number
   shareName: string
+  serverUrl: string
 }): ShareSpaceResource {
   return buildSpace({
-    id: [SHARE_JAIL_ID, unref(shareId)].join('!'),
+    id: [SHARE_JAIL_ID, shareId].join('!'),
     driveAlias: `share/${shareName}`,
     driveType: 'share',
     name: shareName,
-    shareId
+    shareId,
+    serverUrl
   })
 }
 
-export function buildSpace(space): SpaceResource {
+export function buildSpace(data): SpaceResource {
   let spaceImageData, spaceReadmeData
   let disabled = false
   const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map((role) => [role.name, []]))
 
-  if (space.special) {
-    spaceImageData = space.special.find((el) => el.specialFolder.name === 'image')
-    spaceReadmeData = space.special.find((el) => el.specialFolder.name === 'readme')
+  if (data.special) {
+    spaceImageData = data.special.find((el) => el.specialFolder.name === 'image')
+    spaceReadmeData = data.special.find((el) => el.specialFolder.name === 'readme')
 
     if (spaceImageData) {
       spaceImageData.webDavUrl = decodeURI(spaceImageData.webDavUrl)
@@ -63,8 +65,8 @@ export function buildSpace(space): SpaceResource {
     }
   }
 
-  if (space.root?.permissions) {
-    for (const permission of space.root.permissions) {
+  if (data.root?.permissions) {
+    for (const permission of data.root.permissions) {
       for (const role of SpacePeopleShareRoles.list()) {
         if (permission.roles.includes(role.name)) {
           spaceRoles[role.name].push(...permission.grantedTo.map((el) => el.user.id))
@@ -72,31 +74,36 @@ export function buildSpace(space): SpaceResource {
       }
     }
 
-    if (space.root?.deleted) {
-      disabled = space.root.deleted?.state === 'trashed'
+    if (data.root?.deleted) {
+      disabled = data.root.deleted?.state === 'trashed'
     }
   }
+
+  const webDavPath = (data.webDavPath || buildWebDavSpacesPath(data.id, '')).replace(/\/+$/, '')
+  const webDavUrl = data.serverUrl + `remote.php/dav` + webDavPath
+
   return {
-    id: space.id,
-    fileId: space.id,
-    storageId: space.id,
+    id: data.id,
+    fileId: data.id,
+    storageId: data.id,
     mimeType: '',
-    name: space.name,
-    description: space.description,
+    name: data.name,
+    description: data.description,
     extension: '',
     path: '',
-    webDavPath: space.webDavPath || buildWebDavSpacesPath(space.id, ''),
-    driveAlias: space.driveAlias,
-    driveType: space.driveType,
+    webDavUrl,
+    webDavPath,
+    driveAlias: data.driveAlias,
+    driveType: data.driveType,
     type: 'space',
     isFolder: true,
-    mdate: space.lastModifiedDateTime,
+    mdate: data.lastModifiedDateTime,
     size: '',
     indicators: [],
     permissions: '',
     starred: false,
     etag: '',
-    shareId: space.shareId,
+    shareId: data.shareId,
     sharePermissions: '',
     shareTypes: (function () {
       return []
@@ -104,9 +111,9 @@ export function buildSpace(space): SpaceResource {
     privateLink: '',
     downloadURL: '',
     ownerDisplayName: '',
-    ownerId: space.owner?.user?.id,
+    ownerId: data.owner?.user?.id,
     disabled,
-    spaceQuota: space.quota,
+    spaceQuota: data.quota,
     spaceRoles,
     spaceImageData,
     spaceReadmeData,
@@ -168,9 +175,12 @@ export function buildSpace(space): SpaceResource {
       return false
     },
     canDeny: () => false,
-    getDomSelector: () => extractDomSelector(space.id),
+    getDomSelector: () => extractDomSelector(data.id),
     getDriveAliasAndItem({ path }: Resource): string {
       return `${this.driveAlias}/${path.replace(/^\//, '')}`
+    },
+    getWebDavUrl(resource: Resource): string {
+      return this.webDavUrl + resource.path
     }
   }
 }
