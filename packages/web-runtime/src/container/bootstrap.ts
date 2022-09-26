@@ -231,11 +231,11 @@ export const announceTheme = async ({
  *
  * @param runtimeConfiguration
  */
-export const announceCustomizations = async ({
+export const announceCustomizations = ({
   runtimeConfiguration
 }: {
   runtimeConfiguration?: RuntimeConfiguration
-}): Promise<void> => {
+}): void => {
   const { scripts = [], styles = [] } = runtimeConfiguration
 
   scripts.forEach(({ src = '', async = false }) => {
