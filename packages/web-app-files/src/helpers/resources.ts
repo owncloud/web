@@ -150,9 +150,16 @@ export function aggregateResourceShares(
   }
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
-    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
-      buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
-    )
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) => {
+      const resource = buildSharedResource(
+        share,
+        incomingShares,
+        allowSharePermission,
+        hasShareJail
+      )
+      resource.shareId = share.id
+      return resource
+    })
   }
 
   const resources = addSharedWithToShares(shares)

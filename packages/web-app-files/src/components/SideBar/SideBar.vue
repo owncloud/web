@@ -268,8 +268,6 @@ export default defineComponent({
 
       this.loading = true
       try {
-        // FIXME: currently when opening a file in an app and navigating back (to a public link at least)
-        // this is triggered but this.highlightedFile is null ... seems wrong to trigger this request?!
         this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, {
           path: this.highlightedFile.path
         })
