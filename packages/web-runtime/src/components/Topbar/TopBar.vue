@@ -15,6 +15,7 @@
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
       <theme-switcher v-if="darkThemeAvailable" />
+      <activities-link v-if="isActivitiesLinkEnabled" />
       <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       <notifications v-if="isNotificationBellEnabled" />
       <user-menu v-if="isUserMenuEnabled" :applications-list="userMenuItems" />
@@ -30,12 +31,14 @@ import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
+import ActivitiesLink from './ActivitiesLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 
 export default {
   components: {
     ApplicationsMenu,
     FeedbackLink,
+    ActivitiesLink,
     Notifications,
     ThemeSwitcher,
     UserMenu
@@ -81,6 +84,10 @@ export default {
 
     isFeedbackLinkEnabled() {
       return !this.configuration?.options?.disableFeedbackLink
+    },
+
+    isActivitiesLinkEnabled() {
+      return !this.configuration?.options?.disableActivitiesLink
     },
 
     feedbackLinkOptions() {
