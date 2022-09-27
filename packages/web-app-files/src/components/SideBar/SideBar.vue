@@ -194,11 +194,6 @@ export default defineComponent({
     },
     isRootFolder() {
       const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
-      if (this.isPublicFilesLocation) {
-        // root node of a public link has the public link token as path
-        // root path `/` like for personal home doesn't exist for public links
-        return pathSegments.length === 1
-      }
       if (this.isSharedWithMeLocation || this.isSearchLocation) {
         return !this.highlightedFile
       }
