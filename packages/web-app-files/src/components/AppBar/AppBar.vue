@@ -165,7 +165,7 @@ export default {
   }
 
   #files-breadcrumb {
-    min-height: 2rem;
+    min-height: 52px;
   }
 }
 </style>
