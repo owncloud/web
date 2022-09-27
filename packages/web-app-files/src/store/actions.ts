@@ -139,9 +139,8 @@ export default {
     const promises = []
     const removedFiles = []
     for (const file of files) {
-      let p = null
-      p = clientService.webdav.deleteFile(space, file)
-      const promise = p
+      const promise = clientService.webdav
+        .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
         })
