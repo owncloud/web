@@ -1,7 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
 import { getParentPaths } from '../../helpers/path'
-import { buildResource } from '../../helpers/resources'
 import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
@@ -76,8 +75,10 @@ export default {
           return prefix + path
         })
         const parentPathRoot = parentPaths[0] ?? prefix
-        parentResources = await this.$client.files.list(parentPathRoot, 1)
-        parentResources = parentResources.map(buildResource)
+        parentResources = await (this.$clientService.webdav as WebDAV).listFiles(
+          space || this.space,
+          { path: parentPathRoot }
+        )
       }
 
       const confirmAction = (newName) => {
