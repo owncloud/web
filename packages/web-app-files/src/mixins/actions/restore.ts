@@ -12,7 +12,6 @@ import { buildWebDavSpacesPath } from 'web-client/src/helpers'
 export default {
   computed: {
     ...mapState(['user']),
-    ...mapState('runtime/spaces', ['spaces']),
     ...mapGetters(['configuration', 'capabilities']),
 
     $_restore_items() {

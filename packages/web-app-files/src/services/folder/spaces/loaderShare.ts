@@ -2,14 +2,13 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSpacesActive } from '../../../router'
-import { aggregateResourceShares, buildResource } from '../../../helpers/resources'
+import { aggregateResourceShares } from '../../../helpers/resources'
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { useCapabilityFilesSharingResharing, useRouteParam } from 'web-pkg/src/composables'
-import { DavProperties } from 'web-pkg/src/constants'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { unref } from '@vue/composition-api'
-import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
@@ -33,18 +32,12 @@ export class FolderLoaderSpacesShare implements FolderLoader {
   public getTask(context: TaskContext): FolderLoaderTask {
     const { store, router, clientService } = context
 
-    return useTask(function* (signal1, signal2, space: Resource, path: string = null) {
+    return useTask(function* (signal1, signal2, space: SpaceResource, path: string = null) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       const hasResharing = useCapabilityFilesSharingResharing(store)
 
-      const webDavResponse = yield clientService.owncloudSdk.files.list(
-        buildWebDavSpacesPath(space.id, path || router.currentRoute.params.item || ''),
-        1,
-        DavProperties.Default
-      )
-
-      const resources = webDavResponse.map(buildResource)
+      const resources = yield clientService.webdav.listFiles(space, { path })
       let currentFolder = resources.shift()
 
       // sharing jail root -> load the parent share as current Folder

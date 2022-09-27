@@ -148,18 +148,18 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
-import { buildResource } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   components: {
@@ -225,10 +225,10 @@ export default defineComponent({
   },
   watch: {
     spaces: {
-      handler: function (val) {
+      handler: async function (val) {
         if (!val) return
 
-        for (const space of this.spaces) {
+        for (const space of this.spaces as SpaceResource[]) {
           if (!space.spaceImageData) {
             continue
           }
@@ -239,7 +239,7 @@ export default defineComponent({
 
           const decodedUri = decodeURI(space.spaceImageData.webDavUrl)
           const webDavPathComponents = decodedUri.split('/')
-          const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id))
+          const idComponent = webDavPathComponents.find((c) => c.startsWith(`${space.id}`))
           if (!idComponent) {
             return
           }
@@ -247,24 +247,20 @@ export default defineComponent({
             .slice(webDavPathComponents.indexOf(idComponent) + 1)
             .join('/')
 
-          this.$client.files
-            .fileInfo(buildWebDavSpacesPath(idComponent, decodeURIComponent(path)))
-            .then((fileInfo) => {
-              const resource = buildResource(fileInfo)
-              loadPreview({
-                resource,
-                isPublic: false,
-                dimensions: ImageDimension.Preview,
-                server: configurationManager.serverUrl,
-                userId: this.user.id,
-                token: this.accessToken
-              }).then((imageBlob) => {
-                this.$set(this.imageContentObject, space.id, {
-                  fileId: space.spaceImageData.id,
-                  data: imageBlob
-                })
-              })
+          const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(space, { path })
+          loadPreview({
+            resource,
+            isPublic: false,
+            dimensions: ImageDimension.Preview,
+            server: configurationManager.serverUrl,
+            userId: this.user.id,
+            token: this.accessToken
+          }).then((imageBlob) => {
+            this.$set(this.imageContentObject, space.id, {
+              fileId: space.spaceImageData.id,
+              data: imageBlob
             })
+          })
         }
       },
       deep: true
