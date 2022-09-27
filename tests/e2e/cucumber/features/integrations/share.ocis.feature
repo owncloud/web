@@ -1,11 +1,10 @@
 Feature: share
 
   Background:
-    Given "Admin" disables share auto accepting
-    And "Admin" creates following users
+    Given "Admin" creates following users
       | id    |
       | Alice |
-      | Brian | 
+      | Brian |
 
   Scenario: folder
     When "Alice" logs in
@@ -65,7 +64,6 @@ Feature: share
       | resource            | recipient | type | role   |
       | shareToBrian.txt    | Brian     | user | editor |
       | shareToBrian.md     | Brian     | user | editor |
-      | shareToBrian.drawio | Brian     | user | editor |
       | testavatar.jpeg     | Brian     | user | viewer |
       | simple.pdf          | Brian     | user | viewer |
     And "Alice" logs out
@@ -84,7 +82,7 @@ Feature: share
       | shareToBrian.txt | new content        |
       | shareToBrian.md  | new readme content |
     And "Brian" opens the following file in mediaviewer
-      | resource   |
+      | resource        |
       | testavatar.jpeg |
     And "Brian" opens the following file in pdfviewer
       | resource   |

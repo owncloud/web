@@ -44,7 +44,7 @@ const globalSearchOptions = '#files-global-search-options'
 const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
-const previewImage = `//main[@id="preview"]//div[contains(@class,"preview-player")]//img`
+const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 
 export const clickResource = async ({
   page,
