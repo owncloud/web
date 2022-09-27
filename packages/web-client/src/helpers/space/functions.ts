@@ -98,7 +98,7 @@ export function buildSpace(data): SpaceResource {
     name: data.name,
     description: data.description,
     extension: '',
-    path: '',
+    path: '/',
     webDavUrl,
     webDavPath,
     driveAlias: data.driveAlias,
