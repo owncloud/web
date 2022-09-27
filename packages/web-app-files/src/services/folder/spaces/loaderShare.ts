@@ -64,7 +64,8 @@ export class FolderLoaderSpacesShare implements FolderLoader {
         yield store.dispatch('Files/loadSharesTree', {
           client: clientService.owncloudSdk,
           path: currentFolder.path,
-          storageId: currentFolder.fileId
+          storageId: currentFolder.fileId,
+          includeRoot: currentFolder.path === '/'
         })
 
         for (const file of resources) {
