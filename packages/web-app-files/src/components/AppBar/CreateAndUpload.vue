@@ -334,7 +334,7 @@ export default defineComponent({
           return
         }
 
-        if (['public', 'share'].includes(file.meta.driveType)) {
+        if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
             const driveResponse = await this.graphClient.drives.getDrive(file.meta.spaceId)
             this.UPDATE_SPACE_FIELD({
