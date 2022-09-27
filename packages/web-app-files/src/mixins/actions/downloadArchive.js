@@ -75,7 +75,7 @@ export default {
         .triggerDownload({
           ...fileOptions,
           ...(isLocationPublicActive(this.$router, 'files-public-link') && {
-            publicToken: this.$route.params.item.split('/')[0]
+            publicToken: this.$route.params.driveAliasAndItem.split('/')[1]
           })
         })
         .catch((e) => {
