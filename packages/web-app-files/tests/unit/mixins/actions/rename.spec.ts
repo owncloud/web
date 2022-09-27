@@ -1,20 +1,20 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import rename from '@files/src/mixins/actions/rename.ts'
+import rename from 'files/src/mixins/actions/rename'
 import { createLocationSpaces } from '../../../../src/router'
+import { webdav, WebDAV } from 'web-client/src/webdav'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const currentFolder = {
   id: 1,
-  path: '/folder',
-  webDavPath: '/files/admin/folder'
+  path: '/folder'
 }
 
-const Component = {
-  render() {},
+const Component: any = {
+  template: '<div></div>',
   mixins: [rename]
 }
 
@@ -96,11 +96,7 @@ describe('rename', () => {
 
   describe('method "$_rename_renameResource"', () => {
     it('should call the rename action on a resource in the file list', async () => {
-      const promise = new Promise((resolve) => {
-        resolve()
-      })
-
-      const wrapper = getWrapper(promise)
+      const wrapper = getWrapper()
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const resource = { id: 2, path: '/folder', webDavPath: '/files/admin/folder' }
       wrapper.vm.$_rename_renameResource(resource, 'new name')
@@ -112,11 +108,7 @@ describe('rename', () => {
     })
 
     it('should call the rename action on the current folder', async () => {
-      const promise = new Promise((resolve) => {
-        resolve()
-      })
-
-      const wrapper = getWrapper(promise)
+      const wrapper = getWrapper()
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
       await wrapper.vm.$nextTick()
@@ -126,11 +118,11 @@ describe('rename', () => {
     })
 
     it('should handle errors properly', async () => {
-      const promise = new Promise((resolve, reject) => {
-        reject(new Error())
-      })
+      const wrapper = getWrapper()
+      console.log(wrapper.vm.$clientService.webdav.moveFiles)
+      const webdav = wrapper.vm.$clientService.webdav as jest.Mocked<WebDAV>
+      webdav.moveFiles.mockRejectedValueOnce(new Error())
 
-      const wrapper = getWrapper(promise)
       const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const spyShowMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
@@ -142,7 +134,7 @@ describe('rename', () => {
   })
 })
 
-function getWrapper(renameFilePromise) {
+function getWrapper() {
   return mount(Component, {
     localVue,
     mocks: {
@@ -152,12 +144,11 @@ function getWrapper(renameFilePromise) {
           return { href: r.name }
         }
       },
-      $client: {
-        files: { find: jest.fn(() => [{ name: 'file1', path: '/file1' }]), list: jest.fn(() => []) }
+      $clientService: {
+        webdav: jest.mocked<WebDAV>(webdav({ sdk: null }))
       },
       $gettextInterpolate: jest.fn(),
-      $gettext: jest.fn(),
-      flatFileList: false
+      $gettext: jest.fn()
     },
     store: createStore(Vuex.Store, {
       getters: {
@@ -172,22 +163,8 @@ function getWrapper(renameFilePromise) {
             currentFolder: () => currentFolder,
             files: () => [{ name: 'file1', path: '/file1' }]
           },
-          actions: {
-            renameFile: jest.fn(() => {
-              return renameFilePromise
-            })
-          }
-        },
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                accessToken: () => '',
-                isPublicLinkContextReady: () => false
-              }
-            }
+          mutations: {
+            RENAME_FILE: jest.fn()
           }
         }
       },
