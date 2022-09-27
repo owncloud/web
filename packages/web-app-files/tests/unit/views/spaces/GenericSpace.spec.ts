@@ -1,3 +1,7 @@
+describe('GenericSpace view', () => {
+  it.todo('write new unit tests for GenericSpace view...')
+})
+
 // import GetTextPlugin from 'vue-gettext'
 // import { RouterLinkStub, shallowMount } from '@vue/test-utils'
 // import { localVue } from '../views.setup'

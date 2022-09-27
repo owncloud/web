@@ -1,3 +1,7 @@
+describe('GenericTrash view', () => {
+  it.todo('write new unit tests for GenericTrash view...')
+})
+
 // import Vuex from 'vuex'
 // import { mount, createLocalVue } from '@vue/test-utils'
 // import Trashbin from '@files/src/views/spaces/Trashbin.vue'
