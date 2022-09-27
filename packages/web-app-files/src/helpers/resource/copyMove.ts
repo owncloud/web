@@ -146,9 +146,7 @@ export const resolveAllConflicts = async (
 }
 
 const hasRecursion = (resourcesToMove: Resource[], targetResource: Resource): boolean => {
-  return resourcesToMove.some((resource: Resource) =>
-    targetResource.webDavPath.endsWith(resource.webDavPath)
-  )
+  return resourcesToMove.some((resource: Resource) => targetResource.path.endsWith(resource.path))
 }
 
 const showRecursionErrorMessage = (movedResources, showMessage, $ngettext) => {

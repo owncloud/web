@@ -1,170 +1,179 @@
-import * as Resource from '../../../../src/helpers/resource'
+import { ClipboardActions } from '../../../../src/helpers/clipboardActions'
+import { mockDeep, mockReset } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg/src/services'
+import { buildSpace, Resource } from 'web-client/src/helpers'
+import {
+  copyMoveResource,
+  resolveAllConflicts,
+  ResolveConflict,
+  resolveFileNameDuplicate,
+  ResolveStrategy
+} from '../../../../src/helpers/resource'
 
+const clientServiceMock = mockDeep<ClientService>()
 let resourcesToMove
+let sourceSpace
+let targetSpace
 let targetFolder
 
 describe('copyMove', () => {
   beforeEach(() => {
+    mockReset(clientServiceMock)
     resourcesToMove = [
       {
         id: 'a',
         name: 'a',
-        webDavPath: '/a'
+        path: '/a'
       },
       {
         id: 'b',
         name: 'b',
-        webDavPath: '/b'
+        path: '/b'
       }
     ]
+    const spaceOptions = {
+      id: 'c42c9504-2c19-44fd-87cc-b4fc20ecbb54'
+    }
+    sourceSpace = buildSpace(spaceOptions)
+    targetSpace = buildSpace(spaceOptions)
     targetFolder = {
       id: 'target',
-      path: 'target',
-      webDavPath: '/target'
-    }
-  })
-  it.each([
-    { name: 'a', extension: '', expectName: 'a (1)' },
-    { name: 'a', extension: '', expectName: 'a (2)', existing: [{ name: 'a (1)' }] },
-    { name: 'a (1)', extension: '', expectName: 'a (1) (1)' },
-    { name: 'b.png', extension: 'png', expectName: 'b (1).png' },
-    { name: 'b.png', extension: 'png', expectName: 'b (2).png', existing: [{ name: 'b (1).png' }] }
-  ])('should name duplicate file correctly', (dataSet) => {
-    const existing = dataSet.existing ? [...resourcesToMove, ...dataSet.existing] : resourcesToMove
-    const result = Resource.resolveFileNameDuplicate(dataSet.name, dataSet.extension, existing)
-    expect(result).toEqual(dataSet.expectName)
-  })
-  it.each([
-    { action: 'copy', publicFiles: true },
-    { action: 'move', publicFiles: true },
-    { action: 'copy', publicFiles: false },
-    { action: 'move', publicFiles: false }
-  ])('should copy and move files if no conflicts exist', async (dataSet) => {
-    const client = {
-      files: {
-        list: () => {
-          return []
-        },
-        copy: jest.fn(),
-        move: jest.fn()
-      },
-      publicFiles: {
-        list: () => {
-          return []
-        },
-        copy: jest.fn(),
-        move: jest.fn()
-      }
-    }
-    if (dataSet.action === 'copy') {
-      await Resource.copy(
-        resourcesToMove,
-        targetFolder,
-        client,
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        dataSet.publicFiles,
-        ''
-      )
-      if (dataSet.publicFiles) {
-        expect(client.publicFiles.copy).toHaveBeenCalledWith('/a', '/target/a', '', false) // eslint-disable-line
-        expect(client.publicFiles.copy).toHaveBeenCalledWith('/b', '/target/b', '', false) // eslint-disable-line
-      } else {
-        expect(client.files.copy).toHaveBeenCalledWith('/a', '/target/a', false) // eslint-disable-line
-        expect(client.files.copy).toHaveBeenCalledWith('/b', '/target/b', false) // eslint-disable-line
-      }
-    }
-    if (dataSet.action === 'move') {
-      await Resource.move(
-        resourcesToMove,
-        targetFolder,
-        client,
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
-        dataSet.publicFiles,
-        ''
-      )
-      if (dataSet.publicFiles) {
-        expect(client.publicFiles.move).toHaveBeenCalledWith('/a', '/target/a', '', false) // eslint-disable-line
-        expect(client.publicFiles.move).toHaveBeenCalledWith('/b', '/target/b', '', false) // eslint-disable-line
-      } else {
-        expect(client.files.move).toHaveBeenCalledWith('/a', '/target/a', false) // eslint-disable-line
-        expect(client.files.move).toHaveBeenCalledWith('/b', '/target/b', false) // eslint-disable-line
-      }
+      path: '/target',
+      webDavPath: '/some/prefix/target'
     }
   })
 
-  it('should prevent recursive paste', async () => {
-    const result = await Resource.copy(
-      resourcesToMove,
-      resourcesToMove[0],
-      {},
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      false,
-      ''
-    )
-    expect(result.length).toBe(0)
+  describe('resolveFileNameDuplicate', () => {
+    it.each([
+      { name: 'a', extension: '', expectName: 'a (1)' },
+      { name: 'a', extension: '', expectName: 'a (2)', existing: [{ name: 'a (1)' }] },
+      { name: 'a (1)', extension: '', expectName: 'a (1) (1)' },
+      { name: 'b.png', extension: 'png', expectName: 'b (1).png' },
+      {
+        name: 'b.png',
+        extension: 'png',
+        expectName: 'b (2).png',
+        existing: [{ name: 'b (1).png' }]
+      }
+    ])('should name duplicate file correctly', (dataSet) => {
+      const existing = dataSet.existing
+        ? [...resourcesToMove, ...dataSet.existing]
+        : resourcesToMove
+      const result = resolveFileNameDuplicate(dataSet.name, dataSet.extension, existing)
+      expect(result).toEqual(dataSet.expectName)
+    })
   })
 
-  it('should not show message if no conflict exists', async () => {
-    const targetFolderItems = [
-      {
-        id: 'c',
-        path: 'target/c',
-        webDavPath: '/target/c',
-        name: '/target/c'
+  describe('copyMoveResource without conflicts', () => {
+    it.each([{ action: ClipboardActions.Copy }, { action: ClipboardActions.Cut }])(
+      'should copy / move files without renaming them if no conflicts exist',
+      async ({ action }: { action: 'cut' | 'copy' }) => {
+        clientServiceMock.webdav.listFiles.mockReturnValueOnce(
+          new Promise((resolve) => resolve([] as Resource[]))
+        )
+
+        const movedResources = await copyMoveResource(
+          sourceSpace,
+          resourcesToMove,
+          targetSpace,
+          targetFolder,
+          clientServiceMock,
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          action
+        )
+
+        const fn =
+          action === ClipboardActions.Copy
+            ? clientServiceMock.webdav.copyFiles
+            : clientServiceMock.webdav.moveFiles
+        expect(fn).toHaveBeenCalledTimes(resourcesToMove.length)
+        expect(movedResources.length).toBe(resourcesToMove.length)
+
+        for (let i = 0; i < resourcesToMove.length; i++) {
+          const input = resourcesToMove[i]
+          const output = movedResources[i]
+          expect(input.name).toBe(output.name)
+        }
       }
-    ]
-    const resolveFileExistsMethod = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve({ strategy: 0 } as Resource.ResolveConflict))
-    await Resource.resolveAllConflicts(
-      resourcesToMove,
-      targetFolder,
-      targetFolderItems,
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      resolveFileExistsMethod
     )
-    expect(resolveFileExistsMethod).not.toHaveBeenCalled()
+
+    it('should prevent recursive paste', async () => {
+      const movedResources = await copyMoveResource(
+        sourceSpace,
+        resourcesToMove,
+        targetSpace,
+        resourcesToMove[0],
+        clientServiceMock,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        ClipboardActions.Copy
+      )
+      expect(clientServiceMock.webdav.copyFiles).not.toBeCalled()
+      expect(movedResources.length).toBe(0)
+    })
   })
-  it('should show message if conflict exists', async () => {
-    const targetFolderItems = [
-      {
-        id: 'a',
-        path: 'target/a',
-        webDavPath: '/target/a',
-        name: '/target/a'
-      }
-    ]
-    const resolveFileExistsMethod = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve({ strategy: 0 } as Resource.ResolveConflict))
-    await Resource.resolveAllConflicts(
-      resourcesToMove,
-      targetFolder,
-      targetFolderItems,
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      jest.fn(),
-      resolveFileExistsMethod
-    )
-    expect(resolveFileExistsMethod).toHaveBeenCalled()
+
+  describe('resolveAllConflicts', () => {
+    it('should not show message if no conflict exists', async () => {
+      const targetFolderResources = [
+        {
+          id: 'c',
+          path: 'target/c',
+          name: '/target/c'
+        }
+      ]
+      const resolveFileExistsMethod = jest
+        .fn()
+        .mockImplementation(() =>
+          Promise.resolve({ strategy: ResolveStrategy.SKIP } as ResolveConflict)
+        )
+      await resolveAllConflicts(
+        resourcesToMove,
+        targetSpace,
+        targetFolder,
+        targetFolderResources,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        resolveFileExistsMethod
+      )
+      expect(resolveFileExistsMethod).not.toHaveBeenCalled()
+    })
+
+    it('should show message if conflict exists', async () => {
+      const targetFolderResources = [
+        {
+          id: 'a',
+          path: '/target/a'
+        }
+      ]
+      const resolveFileExistsMethod = jest
+        .fn()
+        .mockImplementation(() =>
+          Promise.resolve({ strategy: ResolveStrategy.SKIP } as ResolveConflict)
+        )
+      await resolveAllConflicts(
+        resourcesToMove,
+        targetSpace,
+        targetFolder,
+        targetFolderResources,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        resolveFileExistsMethod
+      )
+      expect(resolveFileExistsMethod).toHaveBeenCalled()
+    })
   })
 })
