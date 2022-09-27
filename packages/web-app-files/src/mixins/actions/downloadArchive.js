@@ -8,6 +8,7 @@ import isFilesAppActive from './helpers/isFilesAppActive'
 import path from 'path'
 import first from 'lodash-es/first'
 import { archiverService } from '../../services'
+import { isPublicSpaceResource } from 'web-client/src/helpers'
 
 export default {
   mixins: [isFilesAppActive],
@@ -74,8 +75,8 @@ export default {
       await archiverService
         .triggerDownload({
           ...fileOptions,
-          ...(isLocationPublicActive(this.$router, 'files-public-link') && {
-            publicToken: this.$route.params.driveAliasAndItem.split('/')[1]
+          ...(isPublicSpaceResource(this.space) && {
+            publicToken: this.space.id
           })
         })
         .catch((e) => {
