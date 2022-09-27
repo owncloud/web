@@ -25,6 +25,7 @@ export interface UppyResource {
     // IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
     // current space & folder
     spaceId: string | number
+    spaceName: string
     driveAlias: string
     driveType: string
     currentFolder: string // current folder path during upload initiation
@@ -154,6 +155,7 @@ const createDirectoryTree = ({
           meta: {
             // current space & folder
             spaceId: space.id,
+            spaceName: space.name,
             driveAlias: space.driveAlias,
             driveType: space.driveType,
             currentFolder,

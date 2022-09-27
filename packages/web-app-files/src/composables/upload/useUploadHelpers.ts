@@ -69,6 +69,7 @@ const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions
         meta: {
           // current path & space
           spaceId: unref(space).id,
+          spaceName: unref(space).name,
           driveAlias: unref(space).driveAlias,
           driveType: unref(space).driveType,
           currentFolder: unref(currentFolder),
