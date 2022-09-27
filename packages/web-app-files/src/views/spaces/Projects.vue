@@ -26,7 +26,11 @@
         </no-content-message>
         <div v-else class="spaces-list oc-px-m oc-mt-l">
           <oc-list class="oc-flex">
-            <li v-for="space in spaces" :key="space.getDomSelector()" class="oc-mb-m oc-mr-m">
+            <li
+              v-for="space in spaces"
+              :key="space.getDomSelector()"
+              class="spaces-list-item oc-mb-m oc-mr-m"
+            >
               <div
                 class="spaces-list-card oc-card oc-card-default oc-rounded"
                 :data-space-id="space.id"
@@ -317,7 +321,7 @@ export default defineComponent({
 
 <style lang="scss">
 #files-spaces-empty {
-  height: 50vh;
+  height: 75vh;
 }
 
 .spaces-list {
@@ -325,7 +329,7 @@ export default defineComponent({
     flex-wrap: wrap;
   }
 
-  li {
+  &-item {
     width: 252px;
   }
 
