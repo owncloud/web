@@ -40,8 +40,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .timeline {
-  $margin-after: 1.5rem;
-  margin: 2rem;
+  margin: var(--oc-space-large);
 
   &__item {
     display: flex;
@@ -49,7 +48,7 @@ export default defineComponent({
     overflow: hidden;
 
     &:not(:last-child) {
-      margin-bottom: $margin-after;
+      margin-bottom: var(--oc-space-medium);
 
       &:before {
         border-left: var(--oc-color-background-highlight) 4px dashed;
@@ -64,25 +63,24 @@ export default defineComponent({
 
   &__content {
     flex: 1 1 auto;
-    padding-left: 2rem;
+    padding-left: var(--oc-space-large);
   }
 }
 
 .card {
-  $shared-padding: 20px;
   background-color: var(--oc-color-background-highlight);
   border-radius: 5px;
-  margin-top: 1.2rem;
+  margin-top: var(--oc-space-medium);
 
   &__header {
-    padding: $shared-padding;
+    padding: var(--oc-space-medium);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 
     & > * {
       &:not(:last-child) {
-        margin-right: 5px;
+        margin-right: var(--oc-space-small);
       }
     }
 
@@ -92,7 +90,7 @@ export default defineComponent({
   }
 
   &__body {
-    padding: $shared-padding;
+    padding: var(--oc-space-medium);
     border-top: var(--oc-color-background-default) 1px solid;
   }
 }
