@@ -103,11 +103,13 @@ export default defineComponent({
     const store = useStore()
     const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     const currentUserIsMemberOfSpace = computed(() => {
-      const userId = store.getters.user?.uuid
+      const userId = store.getters.user?.id
       if (!userId) {
         return false
       }
-      return store.getters['runtime/spaces/spaceMembers'].some((member) => member.id === userId)
+      return store.getters['runtime/spaces/spaceMembers'].some(
+        (member) => member.collaborator?.name === userId
+      )
     })
 
     return {
