@@ -33,7 +33,7 @@ export interface Resource {
   privateLink?: string
   description?: string
   disabled?: boolean
-  driveType?: 'personal' | 'project' | 'share' | (string & unknown)
+  driveType?: 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   driveAlias?: string
 
   canCreate?(): boolean

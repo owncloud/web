@@ -75,13 +75,17 @@ export default defineComponent({
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
       homeRoute: createLocationSpaces('files-spaces-generic', {
         params: {
-          driveAliasAndItem: props.space.getDriveAliasAndItem({
+          driveAliasAndItem: props.space?.getDriveAliasAndItem({
             path: store.getters.homeFolder
           } as Resource)
         }
       }),
       publicLinkRoute: createLocationPublic('files-public-link', {
-        params: { item: router.currentRoute.params?.item?.split('/')[0] }
+        params: {
+          driveAliasAndItem: props.space?.getDriveAliasAndItem({
+            path: ''
+          } as Resource)
+        }
       }),
       spacesRoute: createLocationSpaces('files-spaces-projects')
     }

@@ -5,6 +5,10 @@ import stubs from '../../../../../../tests/unit/stubs/index.js'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
+import { PublicSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
+import { MockProxy, mock } from 'jest-mock-extended'
+import { createStore } from 'vuex-extensions'
+import { join } from 'path'
 
 const localVue = createLocalVue()
 localVue.use(CompositionAPI)
@@ -17,20 +21,22 @@ const selectors = {
 }
 
 const spacesLocation = createLocationSpaces('files-spaces-generic')
-
-const store = new Vuex.Store({
-  getters: {
-    homeFolder: () => {
-      return 'home'
-    }
-  }
-})
+const publicLocation = createLocationPublic('files-public-link')
 
 describe('NotFoundMessage', () => {
   describe('when user on personal route', () => {
-    const wrapper = getWrapper(spacesLocation)
+    let space: MockProxy<SpaceResource>
+    beforeEach(() => {
+      space = mock<SpaceResource>({
+        driveType: 'personal'
+      })
+      space.getDriveAliasAndItem.mockImplementation((resource) =>
+        join('personal/admin', resource.path)
+      )
+    })
 
     it('should show home button', () => {
+      const wrapper = getWrapper(space, spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.exists()).toBeTruthy()
@@ -39,24 +45,36 @@ describe('NotFoundMessage', () => {
     })
 
     it('should not show reload public link button', () => {
+      const wrapper = getWrapper(space, spacesLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.exists()).toBeFalsy()
     })
 
     it('should have property route to home', () => {
-      const wrapper = getMountedWrapper(spacesLocation)
+      const wrapper = getMountedWrapper(space, spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.props().to.name).toBe(spacesLocation.name)
-      expect(homeButton.props().to.params.item).toBe('home')
+      expect(homeButton.props().to.params.driveAliasAndItem).toBe(
+        space.getDriveAliasAndItem({ path: 'home' } as Resource)
+      )
     })
   })
 
   describe('when user on public link route', () => {
-    const wrapper = getWrapper(publicLocation('parent'))
+    let space: MockProxy<PublicSpaceResource>
+    beforeEach(() => {
+      space = mock<PublicSpaceResource>({
+        driveType: 'public'
+      })
+      space.getDriveAliasAndItem.mockImplementation((resource) =>
+        join('public/1234', resource.path)
+      )
+    })
 
     it('should show reload link button', () => {
+      const wrapper = getWrapper(space, publicLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.exists()).toBeTruthy()
@@ -65,34 +83,34 @@ describe('NotFoundMessage', () => {
     })
 
     it('should not show home button', () => {
+      const wrapper = getWrapper(space, publicLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.exists()).toBeFalsy()
     })
 
     it('should have property route to files public list', () => {
-      const location = publicLocation('parent/sub')
-      const wrapper = getMountedWrapper(location)
+      const wrapper = getMountedWrapper(space, publicLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
-      expect(reloadLinkButton.props().to.name).toBe(location.name)
-      expect(reloadLinkButton.props().to.params.item).toBe('parent')
+      expect(reloadLinkButton.props().to.name).toBe(publicLocation.name)
+      expect(reloadLinkButton.props().to.params.driveAliasAndItem).toBe(
+        space.getDriveAliasAndItem({ path: '' } as Resource)
+      )
     })
   })
 })
 
-function publicLocation(item) {
-  return createLocationPublic('files-public-link', {
-    params: {
-      driveAliasAndItem: `public/${item}`
-    }
-  })
-}
-
-function getMountOpts(route) {
+function getMountOpts(space, route) {
   return {
     localVue,
-    store: store,
+    store: createStore(Vuex.Store, {
+      getters: {
+        homeFolder: () => {
+          return 'home'
+        }
+      }
+    }),
     stubs: stubs,
     mocks: {
       $route: route,
@@ -104,18 +122,19 @@ function getMountOpts(route) {
         },
         currentRoute: route
       }
-    }
+    },
+    propsData: { space }
   }
 }
 
-function getMountedWrapper(route) {
+function getMountedWrapper(space, route) {
   return mount(NotFoundMessage, {
-    ...getMountOpts(route)
+    ...getMountOpts(space, route)
   })
 }
 
-function getWrapper(route) {
+function getWrapper(space, route) {
   return shallowMount(NotFoundMessage, {
-    ...getMountOpts(route)
+    ...getMountOpts(space, route)
   })
 }
