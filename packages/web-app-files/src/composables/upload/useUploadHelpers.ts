@@ -54,7 +54,7 @@ const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions
 
       let topLevelFolderId
       if (relativeFilePath) {
-        const topLevelDirectory = relativeFilePath.replace(/^\/+/, '').split('/')[0]
+        const topLevelDirectory = relativeFilePath.split('/').filter(Boolean)[0]
         if (!topLevelFolderIds[topLevelDirectory]) {
           topLevelFolderIds[topLevelDirectory] = uuid.v4()
         }

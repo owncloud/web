@@ -165,6 +165,8 @@ import {
   FileExistsResolver
 } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
+import { configurationManager } from 'web-pkg/src/configuration'
+import urlJoin from 'proper-url-join'
 
 export default defineComponent({
   components: {
@@ -543,13 +545,16 @@ export default defineComponent({
         return
       }
       try {
-        const parent = this.currentFolder.fileId
-        const configUrl = this.configuration.server
-        const appNewUrl = this.capabilities.files.app_providers[0].new_url.replace(/^\/+/, '')
-        const url =
-          configUrl +
-          appNewUrl +
-          `?parent_container_id=${parent}&filename=${encodeURIComponent(fileName)}`
+        const url = urlJoin(
+          configurationManager.serverUrl,
+          this.capabilities.files.app_providers[0].new_url,
+          {
+            query: {
+              parent_container_id: this.currentFolder.fileId,
+              filename: fileName
+            }
+          }
+        )
 
         const response = await this.makeRequest('POST', url)
 

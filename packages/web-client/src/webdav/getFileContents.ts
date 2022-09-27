@@ -1,3 +1,4 @@
+import urlJoin from 'proper-url-join'
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 
@@ -20,7 +21,7 @@ export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
       if (isPublicSpaceResource(space)) {
         const res = await sdk.publicFiles.download(
           '',
-          `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
+          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
           space.publicLinkPassword
         )
         res.statusCode = res.status
@@ -34,7 +35,7 @@ export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
         }
       }
 
-      return sdk.files.getFileContents(`${space.webDavPath}/${path || ''}`, {
+      return sdk.files.getFileContents(urlJoin(space.webDavPath, path), {
         resolveWithResponseObject: true,
         noCache: true,
         responseType

@@ -2515,6 +2515,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/proper-url-join@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@types/proper-url-join@npm:2.1.1"
+  dependencies:
+    query-string: ^6.3.0
+  checksum: a3efe6003d1b94b990a00e3a8cd2dcbd7b8f87a6c872f4b8f0e8c8f6a9df1fd3f104cef3f05a08fdd58e90d60f0e2c1fcc6619a8dc6c59396d2cea0ba99f2887
+  languageName: node
+  linkType: hard
+
 "@types/q@npm:^1.5.1":
   version: 1.5.4
   resolution: "@types/q@npm:1.5.4"
@@ -6339,6 +6348,13 @@ __metadata:
   dependencies:
     to-regex-range: ^5.0.1
   checksum: cc283f4e65b504259e64fd969bcf4def4eb08d85565e906b7d36516e87819db52029a76b6363d0f02d0d532f0033c9603b9e2d943d56ee3b0d4f7ad3328ff917
+  languageName: node
+  linkType: hard
+
+"filter-obj@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "filter-obj@npm:1.1.0"
+  checksum: cf2104a7c45ff48e7f505b78a3991c8f7f30f28bd8106ef582721f321f1c6277f7751aacd5d83026cb079d9d5091082f588d14a72e7c5d720ece79118fa61e10
   languageName: node
   linkType: hard
 
@@ -10965,6 +10981,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proper-url-join@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "proper-url-join@npm:2.1.1"
+  dependencies:
+    query-string: ^6.3.0
+  checksum: dca82709cdae3d7207a043f62bfbb52c13ddc07cfa76ccabd954ddc9e1138a9afe5465055903da9cecee5a10dcb0173c709a9fd3294ed21bba3afd44a81ce145
+  languageName: node
+  linkType: hard
+
 "proto-list@npm:~1.2.1":
   version: 1.2.4
   resolution: "proto-list@npm:1.2.4"
@@ -11167,6 +11192,18 @@ __metadata:
     invariant: 2.2.2
     lodash: ^4.17.15
   checksum: fc8cd9067782032e52685cccc76f4cc5e23baad26b3922a789e026bebec630698e5086ef2f0d6840d2284a254358aa666b48e0f4af2d39d46ea19db93b016351
+  languageName: node
+  linkType: hard
+
+"query-string@npm:^6.3.0":
+  version: 6.14.1
+  resolution: "query-string@npm:6.14.1"
+  dependencies:
+    decode-uri-component: ^0.2.0
+    filter-obj: ^1.1.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: f2c7347578fa0f3fd4eaace506470cb4e9dc52d409a7ddbd613f614b9a594d750877e193b5d5e843c7477b3b295b857ec328903c943957adc41a3efb6c929449
   languageName: node
   linkType: hard
 
@@ -12364,6 +12401,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"split-on-first@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "split-on-first@npm:1.1.0"
+  checksum: 16ff85b54ddcf17f9147210a4022529b343edbcbea4ce977c8f30e38408b8d6e0f25f92cd35b86a524d4797f455e29ab89eb8db787f3c10708e0b47ebf528d30
+  languageName: node
+  linkType: hard
+
 "split2@npm:^4.0.0":
   version: 4.1.0
   resolution: "split2@npm:4.1.0"
@@ -12451,6 +12495,13 @@ __metadata:
   version: 1.0.1
   resolution: "stream-shift@npm:1.0.1"
   checksum: 59b82b44b29ec3699b5519a49b3cedcc6db58c72fb40c04e005525dfdcab1c75c4e0c180b923c380f204bed78211b9bad8faecc7b93dece4d004c3f6ec75737b
+  languageName: node
+  linkType: hard
+
+"strict-uri-encode@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "strict-uri-encode@npm:2.0.0"
+  checksum: eaac4cf978b6fbd480f1092cab8b233c9b949bcabfc9b598dd79a758f7243c28765ef7639c876fa72940dac687181b35486ea01ff7df3e65ce3848c64822c581
   languageName: node
   linkType: hard
 
@@ -13368,13 +13419,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-join@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "url-join@npm:5.0.0"
-  checksum: 5921384a8ad4395b49ce4b50aa26efbc429cebe0bc8b3660ad693dd12fd859747b5369be0443e60e53a7850b2bc9d7d0687bcb94386662b40e743596bbf38101
-  languageName: node
-  linkType: hard
-
 "url-parse@npm:^1.5.10, url-parse@npm:^1.5.7":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
@@ -13771,7 +13815,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web-client@workspace:packages/web-client"
   dependencies:
-    url-join: ^5.0.0
+    "@types/proper-url-join": ^2.1.1
+    proper-url-join: ^2.1.1
   languageName: unknown
   linkType: soft
 

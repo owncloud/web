@@ -20,6 +20,7 @@ import { usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
+import urlJoin from 'proper-url-join'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -56,7 +57,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const currentFileContext = computed((): FileContext => {
     let path
     if (unref(space)) {
-      path = `${unref(space).webDavPath}/${unref(item).replace(/^\//, '')}`
+      path = urlJoin(unref(space).webDavPath, unref(item))
     } else {
       // deprecated.
       path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`

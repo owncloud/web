@@ -40,6 +40,8 @@ import { computed, unref } from '@vue/composition-api'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/runtime-core'
 import { DavProperty } from 'web-pkg/src/constants'
+import urlJoin from 'proper-url-join'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -69,7 +71,7 @@ export default defineComponent({
     formParameters: {}
   }),
   computed: {
-    ...mapGetters(['capabilities', 'configuration']),
+    ...mapGetters(['capabilities']),
 
     pageTitle() {
       const translated = this.$gettext('"%{appName}" app page')
@@ -99,14 +101,17 @@ export default defineComponent({
         ).fileId
 
       // fetch iframe params for app and file
-      const configUrl = this.configuration.server
-      const appOpenUrl = this.capabilities.files.app_providers[0].open_url.replace(/^\/+/, '')
-      const url =
-        configUrl +
-        appOpenUrl +
-        `?file_id=${fileId}` +
-        `&lang=${this.$language.current}` +
-        (this.applicationName ? `&app_name=${this.applicationName}` : '')
+      const url = urlJoin(
+        configurationManager.serverUrl,
+        this.capabilities.files.app_providers[0].open_url,
+        {
+          query: {
+            file_id: fileId,
+            lang: this.$language.current,
+            ...(this.applicationName && { app_name: this.applicationName })
+          }
+        }
+      )
 
       const response = await this.makeRequest('POST', url)
 

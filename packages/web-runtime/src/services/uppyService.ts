@@ -5,6 +5,7 @@ import { bus } from 'web-pkg/src/instance'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
+import urlJoin from 'proper-url-join'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -186,7 +187,7 @@ export class UppyService {
         const escapedName = encodeURIComponent(addedFile.name)
         this.uppy.setFileState(addedFile.id, {
           xhrUpload: {
-            endpoint: `${addedFile.meta.tusEndpoint.replace(/\/+$/, '')}/${escapedName}`
+            endpoint: urlJoin(addedFile.meta.tusEndpoint, escapedName)
           }
         })
       }

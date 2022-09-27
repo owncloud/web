@@ -2,7 +2,7 @@ import { DavProperties } from 'web-pkg/src/constants'
 import { FolderResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
-import urlJoin from 'url-join'
+import urlJoin from 'proper-url-join'
 
 export const CreateFolderFactory = (
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,

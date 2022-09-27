@@ -51,6 +51,7 @@
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
+import urlJoin from 'proper-url-join'
 
 export default {
   props: {
@@ -81,12 +82,9 @@ export default {
       }
     },
     setClassicUIDefault() {
-      const endpoint = new URL(configurationManager.serverUrl)
-      endpoint.pathname =
-        endpoint.pathname.replace(/\/$/, '') + '/index.php/apps/web/settings/default'
-
+      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
       const httpClient = clientService.httpAuthenticated(this.accessToken)
-      return httpClient.post(endpoint.href, { isDefault: false })
+      return httpClient.post(url, { isDefault: false })
     }
   }
 }

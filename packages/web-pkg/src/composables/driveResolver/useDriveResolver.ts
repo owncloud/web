@@ -8,6 +8,7 @@ import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { configurationManager } from '../../configuration'
+import urlJoin from 'proper-url-join'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -31,8 +32,9 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         return
       }
       if (unref(space) && driveAliasAndItem.startsWith(unref(space).driveAlias)) {
-        item.value =
-          (driveAliasAndItem.slice(unref(space).driveAlias.length) || '').replace(/\/+$/, '') + '/'
+        item.value = urlJoin(driveAliasAndItem.slice(unref(space).driveAlias.length), {
+          leadingSlash: true
+        })
         return
       }
       let matchingSpace = null
@@ -61,7 +63,9 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         })
       }
       space.value = matchingSpace
-      item.value = (path || '').replace(/\/+$/, '') + '/'
+      item.value = urlJoin(path, {
+        leadingSlash: true
+      })
     },
     { immediate: true }
   )

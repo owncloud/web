@@ -5,6 +5,7 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
+import urlJoin from 'proper-url-join'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
@@ -79,8 +80,10 @@ export function buildSpace(data): SpaceResource {
     }
   }
 
-  const webDavPath = (data.webDavPath || buildWebDavSpacesPath(data.id, '')).replace(/\/+$/, '')
-  const webDavUrl = data.serverUrl + `remote.php/dav` + webDavPath
+  const webDavPath = urlJoin(data.webDavPath || buildWebDavSpacesPath(data.id), {
+    leadingSlash: true
+  })
+  const webDavUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavPath)
 
   return {
     id: data.id,
@@ -177,10 +180,12 @@ export function buildSpace(data): SpaceResource {
     canDeny: () => false,
     getDomSelector: () => extractDomSelector(data.id),
     getDriveAliasAndItem({ path }: Resource): string {
-      return `${this.driveAlias}/${path.replace(/^\//, '')}`
+      return urlJoin(this.driveAlias, path, {
+        leadingSlash: false
+      })
     },
     getWebDavUrl(resource: Resource): string {
-      return this.webDavUrl + resource.path
+      return urlJoin(this.webDavUrl, resource.path)
     }
   }
 }

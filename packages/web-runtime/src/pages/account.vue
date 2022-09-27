@@ -84,6 +84,8 @@ import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
+import urlJoin from 'proper-url-join'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'Personal',
@@ -101,7 +103,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'apps', 'capabilities']),
+    ...mapGetters(['user', 'getNavItemsByExtension', 'apps', 'capabilities']),
     isAccountEditingEnabled() {
       return !this.apps.settings
     },
@@ -116,7 +118,7 @@ export default defineComponent({
       if (!this.isAccountEditingEnabled) {
         return null
       }
-      return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'
+      return urlJoin(configurationManager.serverUrl, '/index.php/settings/personal')
     },
     editRoute() {
       const navItems = this.getNavItemsByExtension('settings')

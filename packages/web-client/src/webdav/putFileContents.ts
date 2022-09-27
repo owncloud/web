@@ -1,3 +1,4 @@
+import urlJoin from 'proper-url-join'
 import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
@@ -18,13 +19,13 @@ export const PutFileContentsFactory = (
       if (isPublicSpaceResource(space)) {
         await sdk.publicFiles.putFileContents(
           '',
-          `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
+          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
           space.publicLinkPassword,
           content,
           options
         )
       } else {
-        await sdk.files.putFileContents(`${space.webDavPath}/${path || ''}`, content, options)
+        await sdk.files.putFileContents(urlJoin(space.webDavPath, path), content, options)
       }
 
       return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FileResource>

@@ -9,6 +9,7 @@
     "generate-openapi": "rm -rf src/generated && docker run --rm -v \"${PWD}/src:/local\" openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/owncloud/libre-graph-api/main/api/openapi-spec/v0.0.yaml  -g typescript-axios -o /local/generated"
   },
   "dependencies": {
-    "url-join": "^5.0.0"
+    "@types/proper-url-join": "^2.1.1",
+    "proper-url-join": "^2.1.1"
   }
 }
