@@ -2,10 +2,10 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import rename from 'files/src/mixins/actions/rename'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src/services'
+import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
-import Router, { RawLocation, Route } from 'vue-router'
+import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from '../../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -47,7 +47,8 @@ describe('rename', () => {
 
   describe('method "$_rename_checkNewName"', () => {
     it('should not show an error with a valid name', () => {
-      const { wrapper } = getWrapper()
+      const { wrapper, storeOptions } = getWrapper()
+      storeOptions.modules.Files.getters.files.mockReturnValue([{ name: 'file1', path: '/file1' }])
       const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
       wrapper.vm.$_rename_checkNewName({ name: 'currentName', path: '/currentName' }, 'newName')
       expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
@@ -139,47 +140,22 @@ describe('rename', () => {
 
 function getWrapper() {
   const mocks = {
-    $router: mockDeep<Router>(),
-    $route: mock<Route>(),
-    $clientService: mockDeep<ClientService>(),
-    space: mockDeep<SpaceResource>(),
-    $gettextInterpolate: jest.fn(),
-    $gettext: jest.fn()
+    ...defaultComponentMocks,
+    space: mockDeep<SpaceResource>()
   }
 
-  mocks.$router.resolve.mockImplementation((to: RawLocation) => ({ href: (to as any).name } as any))
+  const storeOptions = {
+    ...defaultStoreMockOptions
+  }
 
+  const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks,
+    storeOptions,
     wrapper: mount(Component, {
       localVue,
       mocks,
-      store: createStore(Vuex.Store, {
-        getters: {
-          capabilities: () => {
-            return {}
-          }
-        },
-        modules: {
-          Files: {
-            namespaced: true,
-            getters: {
-              currentFolder: () => currentFolder,
-              files: () => [{ name: 'file1', path: '/file1' }]
-            },
-            mutations: {
-              RENAME_FILE: jest.fn()
-            }
-          }
-        },
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          toggleModalConfirmButton: jest.fn(),
-          showMessage: jest.fn(),
-          setModalInputErrorMessage: jest.fn()
-        }
-      })
+      store
     })
   }
 }
