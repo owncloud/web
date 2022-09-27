@@ -1,6 +1,5 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
-import { getParentPaths } from '../../helpers/path'
 import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
@@ -70,14 +69,10 @@ export default {
     async $_rename_trigger({ resources }, space?: SpaceResource) {
       let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
-        const prefix = resources[0].webDavPath.slice(0, -resources[0].path.length)
-        const parentPaths = getParentPaths(resources[0].path, false).map((path) => {
-          return prefix + path
-        })
-        const parentPathRoot = parentPaths[0] ?? prefix
+        const parentPath = dirname(this.currentFolder)
         parentResources = await (this.$clientService.webdav as WebDAV).listFiles(
           space || this.space,
-          { path: parentPathRoot }
+          { path: parentPath }
         )
       }
 
