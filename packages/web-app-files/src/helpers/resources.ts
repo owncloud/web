@@ -459,7 +459,7 @@ export function buildDeletedResource(resource): Resource {
     ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: urlJoin('/', resource.fileInfo[DavProperty.TrashbinOriginalLocation]),
+    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
     indicators: [],
     canUpload: () => false,
