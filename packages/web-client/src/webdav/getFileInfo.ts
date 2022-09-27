@@ -4,7 +4,7 @@ import { WebDavOptions } from './types'
 
 export const GetFileInfoFactory = (
   listFilesFactory: ReturnType<typeof ListFilesFactory>,
-   options?: WebDavOptions
+  options?: WebDavOptions
 ) => {
   return {
     async getFileInfo(

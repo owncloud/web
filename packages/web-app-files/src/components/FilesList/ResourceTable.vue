@@ -555,7 +555,7 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] })
+      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item.storageId))
     },
     openSharingSidebar(file) {
       let panelToOpen
@@ -766,7 +766,7 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId): Resource {
+    getMatchingSpace(storageId): SpaceResource {
       return this.space || this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {

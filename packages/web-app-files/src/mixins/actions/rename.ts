@@ -6,6 +6,7 @@ import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive }
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   computed: {
@@ -67,7 +68,7 @@ export default {
     ]),
     ...mapMutations('Files', ['RENAME_FILE']),
 
-    async $_rename_trigger({ resources }) {
+    async $_rename_trigger({ resources }, space?: SpaceResource) {
       let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
         const prefix = resources[0].webDavPath.slice(0, -resources[0].path.length)
@@ -84,7 +85,7 @@ export default {
           newName = `${newName}.${resources[0].extension}`
         }
 
-        this.$_rename_renameResource(resources[0], newName)
+        this.$_rename_renameResource(resources[0], newName, space)
       }
       const checkName = (newName) => {
         if (!this.areFileExtensionsShown) {
@@ -187,12 +188,13 @@ export default {
       this.setModalInputErrorMessage(null)
     },
 
-    async $_rename_renameResource(resource: Resource, newName: string) {
+    async $_rename_renameResource(resource: Resource, newName: string, space?: SpaceResource) {
       this.toggleModalConfirmButton()
 
       try {
+        space = space || this.space
         const newPath = join(dirname(resource.path), newName)
-        await (this.$clientService.webdav as WebDAV).moveFiles(this.space, resource, this.space, {
+        await (this.$clientService.webdav as WebDAV).moveFiles(space, resource, space, {
           path: newPath
         })
         this.hideModal()
@@ -206,7 +208,7 @@ export default {
           })
         }
 
-        this.RENAME_FILE({ space: this.space, resource, newPath })
+        this.RENAME_FILE({ space, resource, newPath })
       } catch (error) {
         console.error(error)
         this.toggleModalConfirmButton()
