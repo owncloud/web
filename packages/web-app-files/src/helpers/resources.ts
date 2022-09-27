@@ -18,6 +18,7 @@ import { extractExtensionFromFile, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
 import { SHARE_JAIL_ID } from '../services/folder'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import urlJoin from 'proper-url-join'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
   resource.name = basename(newPath)
@@ -458,7 +459,7 @@ export function buildDeletedResource(resource): Resource {
     ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
+    path: urlJoin('/', resource.fileInfo[DavProperty.TrashbinOriginalLocation]),
     id,
     indicators: [],
     canUpload: () => false,
