@@ -58,11 +58,11 @@ config = {
         "oC10": {
             "db": "mysql:5.5",
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
         },
         "oCIS": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
         },
     },
     "acceptance": {
@@ -186,6 +186,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
             },
             "screenShots": True,
+            "skip": True,
         },
         # These suites have all or most of their scenarios expected to fail.
         # Eliminate wasted CI time by not retrying the failing scenarios.
@@ -199,6 +200,7 @@ config = {
             },
             "screenShots": True,
             "retry": False,
+            "skip": True,
         },
         "webUINotification": {
             "type": NOTIFICATIONS,
@@ -214,6 +216,7 @@ config = {
             },
             "screenShots": True,
             "notificationsAppNeeded": True,
+            "skip": True,
         },
         "webUIFederation": {
             "type": FEDERATED,
@@ -228,6 +231,7 @@ config = {
             "notificationsAppNeeded": True,
             "federatedServerNeeded": True,
             "federatedServerVersion": OC10_VERSION,
+            "skip": True,
         },
         "webUI-XGA-Notifications": {
             "type": NOTIFICATIONS,
@@ -242,6 +246,7 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
+            "skip": True,
             "notificationsAppNeeded": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
@@ -320,9 +325,11 @@ config = {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md" % dir["web"],
                 "SCREEN_RESOLUTION": "768x1024",
             },
+            "skip": True,
             "filterTags": "@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-Notifications-iPhone": {
+            "skip": True,
             "type": NOTIFICATIONS,
             "suites": {
                 "oC10iPhoneNotifications": [
@@ -339,6 +346,7 @@ config = {
             "filterTags": "@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10 and not @notToImplementOnOC10",
         },
         "webUI-iPhone": {
+            "skip": True,
             "type": FULL,
             "suites": {
                 "oC10iPhone1": [
@@ -421,91 +429,9 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISBasic": [
-                    "webUINotifications",
-                    "webUIPrivateLinks",
-                    "webUIPreview",
-                    "webUIAccount",
-                    "webUIWebdavLocks",
-                ],
-                "webUIWebdavLockProtection": "oCISWebdavLockProtection",
-                "oCISSharingBasic": [
-                    "webUISharingAcceptShares",
-                    "webUIRestrictSharing",
-                    "webUISharingNotifications",
-                ],
-                "webUIFavorites": "oCISFavorites",
-                "oCISFiles1": [
-                    "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                    "webUIFilesCopy",
-                    "webUITextEditor",
-                ],
                 "oCISFiles2": [
-                    "webUIFilesList",
-                    "webUIFilesDetails",
                     "webUIFilesSearch",
                     "webUIFilesActionMenu",
-                ],
-                "oCISFiles3": [
-                    "webUIRenameFiles",
-                    "webUILogin",
-                ],
-                "oCISFiles4": [
-                    "webUIFiles",
-                    "webUIRenameFolders",
-                ],
-                "oCISSharingInternal1": [
-                    "webUISharingInternalGroups",
-                    "webUISharingInternalGroupsEdgeCases",
-                ],
-                "oCISSharingInternal2": [
-                    "webUISharingInternalUsers",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingInternalUsersCollaborator",
-                ],
-                "oCISSharingInternal3": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingExpirationDate",
-                    "webUISharingInternalUsersShareWithPage",
-                    "webUIResharing1",
-                    "webUIOperationsWithFolderShares",
-                ],
-                "oCISSharingAutocompletion": [
-                    "webUISharingAutocompletion",
-                ],
-                "oCISSharingPerm1": [
-                    "webUISharingPermissionsUsers",
-                    "webUISharingFilePermissionsGroups",
-                ],
-                "oCISSharingPerm2": [
-                    "webUISharingFolderPermissionsGroups",
-                    "webUISharingFolderAdvancedPermissionsGroups",
-                ],
-                "oCISSharingPerm3": [
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                ],
-                "oCISSharingAndUpload": [
-                    "webUIResharing2",
-                    "webUIUpload",
-                ],
-                "oCISSharingPublic1": [
-                    "webUISharingPublicBasic",
-                    "webUISharingPublicExpire",
-                ],
-                "oCISSharingPublic2": [
-                    "webUISharingPublicDifferentRoles",
-                    "webUISharingPublicManagement",
-                ],
-                "oCISTrashbinUploadMoveJourney": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
-                    "webUITrashbinRestore",
-                    "webUIMoveFilesFolders",
-                    "webUIUserJourney",
                 ],
             },
             "extraEnvironment": {

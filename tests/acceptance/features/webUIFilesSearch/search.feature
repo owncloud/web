@@ -124,6 +124,7 @@ Feature: Search
 
   Scenario: Search for a file after name is changed
     When the user renames file "lorem.txt" to "torem.txt" using the webUI
+    And the user has reloaded the current page of the webUI
     And the user searches for "torem" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "torem.txt" should be listed on the webUI

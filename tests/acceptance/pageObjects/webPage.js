@@ -25,10 +25,9 @@ module.exports = {
                 .waitForElementVisible('@searchInputFieldHighResolution')
                 .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
             } else {
-              this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
-                '@searchInputFieldHighResolution',
-                [searchTerm, this.api.Keys.ENTER]
-              )
+              this.waitForElementVisible('@searchInputFieldHighResolution')
+                .click('@searchInputFieldHighResolution')
+                .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
             }
           }
         )
@@ -288,7 +287,7 @@ module.exports = {
       selector: '.oc-modal .oc-text-input-message'
     },
     searchInputFieldHighResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[1]',
+      selector: '(//input[contains(@class, "oc-search-input")])',
       locateStrategy: 'xpath'
     },
     searchInputFieldLowResolution: {
