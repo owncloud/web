@@ -160,7 +160,10 @@ export default {
         this.toggleModalConfirmButton()
 
         // Load quota
-        if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
+        if (
+          isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+          this.space?.driveType !== 'share'
+        ) {
           if (this.capabilities?.spaces?.enabled) {
             const accessToken = this.$store.getters['runtime/auth/accessToken']
             const graphClient = clientService.graphAuthenticated(
