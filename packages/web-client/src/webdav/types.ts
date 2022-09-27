@@ -7,6 +7,7 @@ import { ListFilesFactory } from './listFiles'
 import { PutFileContentsFactory } from './putFileContents'
 import { CopyFilesFactory } from './copyFiles'
 import { MoveFilesFactory } from './moveFiles'
+import { DeleteFileFactory } from './deleteFile'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
@@ -22,4 +23,5 @@ export interface WebDAV {
   putFileContents: ReturnType<typeof PutFileContentsFactory>['putFileContents']
   copyFiles: ReturnType<typeof CopyFilesFactory>['copyFiles']
   moveFiles: ReturnType<typeof MoveFilesFactory>['moveFiles']
+  deleteFile: ReturnType<typeof DeleteFileFactory>['deleteFile']
 }

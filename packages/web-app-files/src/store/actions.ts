@@ -12,8 +12,9 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
+import { ClientService } from 'web-pkg/src/services'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -126,20 +127,20 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
+  deleteFiles(
+    context,
+    {
+      space,
+      files,
+      clientService,
+      firstRun = true
+    }: { space: SpaceResource; files: Resource[]; clientService: ClientService; firstRun: boolean }
+  ) {
     const promises = []
     const removedFiles = []
     for (const file of files) {
       let p = null
-      if (isPublicLinkContext) {
-        p = client.publicFiles.delete(
-          file.path,
-          null,
-          context.rootGetters['runtime/auth/publicLinkPassword']
-        )
-      } else {
-        p = client.files.delete(file.webDavPath)
-      }
+      p = clientService.webdav.deleteFile(space, file)
       const promise = p
         .then(() => {
           removedFiles.push(file)
@@ -149,9 +150,9 @@ export default {
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
+                space,
                 files: [file],
-                client,
-                isPublicLinkContext,
+                clientService,
                 firstRun: false
               })
             }

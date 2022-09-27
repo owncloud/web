@@ -5,6 +5,7 @@ import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helper
 import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { clientService } from 'web-pkg/src/services'
+import urlJoin from 'proper-url-join'
 
 export default {
   data: () => ({
@@ -148,11 +149,10 @@ export default {
     },
 
     $_deleteResources_filesList_delete() {
-      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
       this.deleteFiles({
-        client: this.$client,
+        space: this.space,
         files: this.$_deleteResources_resources,
-        isPublicLinkContext,
+        clientService: this.$clientService,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
       }).then(async () => {
@@ -196,7 +196,7 @@ export default {
         if (parentFolderPath !== undefined) {
           this.$router.push({
             params: {
-              driveAliasAndItem: `${this.space?.driveAlias}${parentFolderPath}`
+              driveAliasAndItem: urlJoin(this.space.driveAlias, parentFolderPath)
             }
           })
         }

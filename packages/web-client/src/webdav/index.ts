@@ -7,6 +7,7 @@ import { GetFileUrlFactory } from './getFileUrl'
 import { ListFilesFactory } from './listFiles'
 import { MoveFilesFactory } from './moveFiles'
 import { PutFileContentsFactory } from './putFileContents'
+import { DeleteFileFactory } from './deleteFile'
 
 export * from './types'
 
@@ -27,9 +28,12 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   const { copyFiles } = CopyFilesFactory(options)
   const { moveFiles } = MoveFilesFactory(options)
 
+  const { deleteFile } = DeleteFileFactory(options)
+
   return {
     copyFiles,
     createFolder,
+    deleteFile,
     getFileContents,
     getFileInfo,
     getFileUrl,

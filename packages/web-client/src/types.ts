@@ -10,12 +10,14 @@ export type OwnCloudSdk = {
     search(...args): any
     copy(...args): any
     move(...args): any
+    delete(...args): any
   }
   fileTrash: {
     list(...args): any
   }
   publicFiles: {
     createFolder(...args): any
+    delete(...args): any
     download(...args): any
     list(...args): any
     getFileContents(...args): any
