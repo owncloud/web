@@ -16,19 +16,22 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkShareDate = data.fileInfo?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = data.fileInfo?.[DavProperty.PublicLinkShareOwner]
 
-  return Object.assign(buildSpace({
-    ...data,
-    driveType: 'public',
-    driveAlias: `public/${data.id}`,
-    webDavPath: buildWebDavPublicPath(data.id)
-  }), {
-    ...(publicLinkPassword && { publicLinkPassword }),
-    ...(publicLinkItemType && { publicLinkItemType }),
-    ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
-    ...(publicLinkExpiration && { publicLinkExpiration }),
-    ...(publicLinkShareDate && { publicLinkShareDate }),
-    ...(publicLinkShareOwner && { publicLinkShareOwner })
-  })
+  return Object.assign(
+    buildSpace({
+      ...data,
+      driveType: 'public',
+      driveAlias: `public/${data.id}`,
+      webDavPath: buildWebDavPublicPath(data.id)
+    }),
+    {
+      ...(publicLinkPassword && { publicLinkPassword }),
+      ...(publicLinkItemType && { publicLinkItemType }),
+      ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
+      ...(publicLinkExpiration && { publicLinkExpiration }),
+      ...(publicLinkShareDate && { publicLinkShareDate }),
+      ...(publicLinkShareOwner && { publicLinkShareOwner })
+    }
+  )
 }
 
 export function buildShareSpaceResource({
