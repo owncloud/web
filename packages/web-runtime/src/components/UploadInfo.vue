@@ -434,7 +434,7 @@ export default defineComponent({
       return file.isFolder === true
     },
     folderLink(file) {
-      if(!file.isFolder) {
+      if (!file.isFolder) {
         return {}
       }
       return {
@@ -464,9 +464,11 @@ export default defineComponent({
       }
     },
     defaultParentFolderName(file) {
-      const { targetRoute, meta: { spaceName, driveType } } = file
+      const {
+        meta: { spaceName, driveType }
+      } = file
 
-      if(!this.hasShareJail) {
+      if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
       }
 
