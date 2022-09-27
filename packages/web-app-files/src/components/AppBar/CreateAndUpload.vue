@@ -154,7 +154,7 @@ import {
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { bus } from 'web-pkg/src/instance'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import {
   extractExtensionFromFile,
   extractNameWithoutExtension,
@@ -167,6 +167,8 @@ import {
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
 import urlJoin from 'proper-url-join'
+import { locationPublicLink } from '../../router/public'
+import { locationSpacesGeneric } from '../../router/spaces'
 
 export default defineComponent({
   components: {
@@ -234,6 +236,7 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'clipboardResources']),
     ...mapState('Files', ['areFileExtensionsShown']),
+    ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
@@ -660,20 +663,24 @@ export default defineComponent({
     },
 
     checkQuotaExceeded(uppyResources: UppyResource[]) {
+      if (!this.hasSpaces) {
+        return false
+      }
+
       let quotaExceeded = false
 
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
-        if (uppyResource.meta.routeName === 'files-public-link') {
+        if (uppyResource.meta.routeName === locationPublicLink.name) {
           return acc
         }
 
-        if (uppyResource.meta.routeName === 'files-spaces-generic') {
-          targetUploadSpace = this.space
+        if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
+          targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
         }
 
-        if (!targetUploadSpace || targetUploadSpace.driveType === 'share') {
+        if (!targetUploadSpace || isShareSpaceResource(targetUploadSpace)) {
           return acc
         }
 

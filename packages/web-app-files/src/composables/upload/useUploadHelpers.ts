@@ -5,6 +5,7 @@ import { ComputedRef, Ref, unref } from '@vue/composition-api'
 import * as uuid from 'uuid'
 import path from 'path'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import urlJoin from 'proper-url-join'
 
 interface UploadHelpersOptions {
   space: ComputedRef<SpaceResource>
@@ -50,7 +51,7 @@ const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions
 
       // Build tus endpoint to dynamically set it on file upload.
       // Looks something like: https://localhost:9200/remote.php/dav/files/admin
-      const tusEndpoint = trimmedUploadPath + directory
+      const tusEndpoint = urlJoin(trimmedUploadPath, directory)
 
       let topLevelFolderId
       if (relativeFilePath) {
