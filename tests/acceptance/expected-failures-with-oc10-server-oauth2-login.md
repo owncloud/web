@@ -134,7 +134,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFiles/browseDirectlyToDetailsTab.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/browseDirectlyToDetailsTab.feature#L42)
 
 ### [reshared share that is shared with a group the sharer is part of shows twice on "Share with me" page](https://github.com/owncloud/web/issues/2512)
--   [webUISharingAcceptShares/acceptShares.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L32)
+-   [webUISharingAcceptShares/acceptShares.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L31)
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 - [webUIUpload/upload.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L42)
