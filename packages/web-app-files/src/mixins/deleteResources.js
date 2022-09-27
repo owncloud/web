@@ -187,14 +187,13 @@ export default {
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
           const resourcePath = this.resourcesToDelete[0].path
-          const lastSlash = resourcePath.lastIndexOf('/')
-          parentFolderPath = resourcePath.slice(0, lastSlash !== -1 ? lastSlash : 0)
+          parentFolderPath = resourcePath.substr(0, resourcePath.lastIndexOf('/') + 1)
         }
 
         if (parentFolderPath !== undefined) {
           this.$router.push({
             params: {
-              item: parentFolderPath
+              driveAliasAndItem: `${this.space?.driveAlias}${parentFolderPath}`
             }
           })
         }
