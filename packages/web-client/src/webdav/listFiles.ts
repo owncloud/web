@@ -7,6 +7,7 @@ import {
   SpaceResource
 } from '../helpers'
 import { WebDavOptions } from './types'
+import urlJoin from 'url-join'
 
 export type ListFilesOptions = {
   depth?: number
@@ -23,7 +24,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       let webDavResources: any[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await sdk.publicFiles.list(
-          `${space.webDavPath.replace(/^\/public-files/, '')}/${path || ''}`,
+          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
           space.publicLinkPassword,
           davProperties || DavProperties.PublicLink,
           `${depth}`
@@ -42,7 +43,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       }
 
       webDavResources = await sdk.files.list(
-        `${space.webDavPath}/${path || ''}`,
+        urlJoin(space.webDavPath, path),
         `${depth}`,
         davProperties || DavProperties.Default
       )
