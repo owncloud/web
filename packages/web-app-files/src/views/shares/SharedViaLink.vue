@@ -80,7 +80,8 @@ import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
-import { SpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -102,7 +103,17 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const getSpace = (resource: Resource): SpaceResource => {
-      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
+      const storageId = resource.storageId
+      const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+      if (space) {
+        return space
+      }
+
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     }
 
     return {

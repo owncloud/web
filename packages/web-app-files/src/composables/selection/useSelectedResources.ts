@@ -2,7 +2,8 @@ import { computed, ComputedRef, unref, WritableComputedRef } from '@vue/composit
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
-import { SpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 interface SelectedResourcesResult {
   selectedResources: WritableComputedRef<Resource[]>
@@ -45,8 +46,18 @@ export const useSelectedResources = (
     if (unref(selectedResources).length !== 1) {
       return null
     }
-    const storageId = unref(selectedResources)[0].storageId
-    return store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+    const resource = unref(selectedResources)[0]
+    const storageId = resource.storageId
+    const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+    if (space) {
+      return space
+    }
+
+    return buildShareSpaceResource({
+      shareId: resource.shareId,
+      shareName: resource.name,
+      serverUrl: configurationManager.serverUrl
+    })
   })
 
   return {
