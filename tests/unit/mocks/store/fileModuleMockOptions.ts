@@ -8,6 +8,9 @@ export const fileModuleMockOptions = {
     mutations: {
       SET_FILE_SELECTION: jest.fn(),
       RENAME_FILE: jest.fn()
+    },
+    actions: {
+      deleteFiles: jest.fn()
     }
   }
 }

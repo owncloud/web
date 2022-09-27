@@ -37,31 +37,29 @@ describe('rename', () => {
 
   describe('method "$_rename_trigger"', () => {
     it('should trigger the rename modal window', async () => {
-      const { wrapper } = getWrapper()
-      const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
+      const { storeOptions, wrapper } = getWrapper()
       const resources = [currentFolder]
       await wrapper.vm.$_rename_trigger({ resources }, currentFolder.path)
-      expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('method "$_rename_checkNewName"', () => {
-    it('should not show an error with a valid name', () => {
-      const { wrapper, storeOptions } = getWrapper()
+    it('should not show an error if new name not taken', () => {
+      const { storeOptions, wrapper } = getWrapper()
       storeOptions.modules.Files.getters.files.mockReturnValue([{ name: 'file1', path: '/file1' }])
-      const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
       wrapper.vm.$_rename_checkNewName({ name: 'currentName', path: '/currentName' }, 'newName')
-      expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
+      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(null)
     })
 
-    it('should not show an error if resource name already exists but in different folder', () => {
-      const { wrapper } = getWrapper()
-      const spyErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+    it('should not show an error if new name already exists but in different folder', () => {
+      const { storeOptions, wrapper } = getWrapper()
+      storeOptions.modules.Files.getters.files.mockReturnValue([{ name: 'file1', path: '/file1' }])
       wrapper.vm.$_rename_checkNewName(
         { name: 'currentName', path: '/favorites/currentName' },
         'file1'
       )
-      expect(spyErrorMessageStub).toHaveBeenCalledWith(null)
+      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(null)
     })
 
     it.each([
@@ -86,54 +84,49 @@ describe('rename', () => {
         message: 'The name "%{name}" is already taken'
       }
     ])('should detect name errors and display error messages accordingly', (inputData) => {
-      const { wrapper } = getWrapper()
-      const spyGetTextStub = jest.spyOn(wrapper.vm, '$gettext')
+      const { mocks, wrapper } = getWrapper()
       wrapper.vm.$_rename_checkNewName(
         { name: inputData.currentName, path: `/${inputData.currentName}` },
         inputData.newName,
         inputData.parentResources
       )
-      expect(spyGetTextStub).toHaveBeenCalledWith(inputData.message)
+      expect(mocks.$gettext).toHaveBeenCalledWith(inputData.message)
     })
   })
 
   describe('method "$_rename_renameResource"', () => {
     it('should call the rename action on a resource in the file list', async () => {
-      const { wrapper } = getWrapper()
-      const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
+      const { storeOptions, wrapper } = getWrapper()
       const resource = { id: 2, path: '/folder', webDavPath: '/files/admin/folder' }
       wrapper.vm.$_rename_renameResource(resource, 'new name')
       await wrapper.vm.$nextTick()
 
       // fixme: why wrapper.vm.$router.length?
       // expect(wrapper.vm.$router.length).toBeGreaterThanOrEqual(0)
-      expect(spyHideModalStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
     })
 
     it('should call the rename action on the current folder', async () => {
-      const { wrapper } = getWrapper()
-      const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
+      const { storeOptions, wrapper } = getWrapper()
       wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
       await wrapper.vm.$nextTick()
       // fixme: why wrapper.vm.$router.length?
       // expect(wrapper.vm.$router.length).toBeGreaterThanOrEqual(1)
-      expect(spyHideModalStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
     })
 
     it('should handle errors properly', async () => {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       jest.spyOn(console, 'error').mockImplementation(() => {})
 
-      const { mocks, wrapper } = getWrapper()
+      const { mocks, storeOptions, wrapper } = getWrapper()
       mocks.$clientService.webdav.moveFiles.mockRejectedValueOnce(new Error())
 
-      const spyHideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
-      const spyShowMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       wrapper.vm.$_rename_renameResource(currentFolder, 'new name')
       await wrapper.vm.$nextTick()
       await wrapper.vm.$nextTick()
-      expect(spyHideModalStub).toHaveBeenCalledTimes(0)
-      expect(spyShowMessageStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(0)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
     })
   })
 })

@@ -1,4 +1,4 @@
-import MixinDeleteResources from '../../mixins/deleteResources'
+import MixinDeleteResources from '../deleteResources'
 import { mapState, mapGetters } from 'vuex'
 import {
   isLocationPublicActive,

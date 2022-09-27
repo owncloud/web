@@ -15,7 +15,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', ['selectedFiles', 'currentFolder']),
     ...mapGetters(['user', 'configuration', 'capabilities']),
 
     $_deleteResources_isInTrashbin() {
