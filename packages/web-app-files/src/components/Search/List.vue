@@ -83,8 +83,9 @@ import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -116,6 +117,13 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const getSpace = (resource: Resource): SpaceResource => {
+      if (resource.shareId) {
+        return buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      }
       return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
     }
     return {

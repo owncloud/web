@@ -104,6 +104,7 @@ export default defineComponent({
     const store = useStore()
     const getSpace = (resource: Resource): SpaceResource => {
       const storageId = resource.storageId
+      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
       const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
       if (space) {
         return space
