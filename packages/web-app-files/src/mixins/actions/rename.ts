@@ -155,16 +155,12 @@ export default {
         return this.setModalInputErrorMessage(this.$gettext('The name cannot end with whitespace'))
       }
 
-      if (!this.flatFileList) {
-        const exists = this.files.find((file) => file.path === newPath && resource.name !== newName)
-
-        if (exists) {
-          const translated = this.$gettext('The name "%{name}" is already taken')
-
-          return this.setModalInputErrorMessage(
-            this.$gettextInterpolate(translated, { name: newName }, true)
-          )
-        }
+      const exists = this.files.find((file) => file.path === newPath && resource.name !== newName)
+      if (exists) {
+        const translated = this.$gettext('The name "%{name}" is already taken')
+        return this.setModalInputErrorMessage(
+          this.$gettextInterpolate(translated, { name: newName }, true)
+        )
       }
 
       if (parentResources) {
