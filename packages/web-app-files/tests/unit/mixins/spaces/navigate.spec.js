@@ -53,7 +53,7 @@ function getWrapper({ invalidLocation = false } = {}) {
     mocks: {
       $router: {
         currentRoute: invalidLocation
-          ? createLocationTrash('files-trash-generic')
+          ? createLocationSpaces('files-spaces-generic')
           : createLocationTrash('files-trash-generic', {
               params: { driveAliasAndItem: 'project/mars' }
             }),
@@ -62,7 +62,11 @@ function getWrapper({ invalidLocation = false } = {}) {
         },
         push: jest.fn()
       },
-      $gettext: jest.fn()
+      $gettext: jest.fn(),
+      space: {
+        driveAlias: 'project/mars',
+        driveType: 'project'
+      }
     },
     store: createStore(Vuex.Store, {
       actions: {
