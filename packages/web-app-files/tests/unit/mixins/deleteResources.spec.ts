@@ -44,7 +44,7 @@ describe('deleteResources', () => {
 
 function getWrapper(currentFolder, resourcesToDelete) {
   const mocks = {
-    ...defaultComponentMocks,
+    ...defaultComponentMocks(),
     space: mockDeep<SpaceResource>()
   }
 

@@ -240,7 +240,7 @@ describe('Favorites view', () => {
 
 function getMountedWrapper({ mocks }) {
   const defaultMocks = {
-    ...defaultComponentMocks,
+    ...defaultComponentMocks(),
     sideBarOpen: false,
     ...(mocks && mocks)
   }

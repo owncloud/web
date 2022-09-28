@@ -40,7 +40,7 @@ describe('showDetails', () => {
 
 function getWrapper() {
   const mocks = {
-    ...defaultComponentMocks
+    ...defaultComponentMocks()
   }
 
   const store = createStore(Vuex.Store, defaultStoreMockOptions)

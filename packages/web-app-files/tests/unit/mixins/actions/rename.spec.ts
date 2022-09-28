@@ -133,7 +133,7 @@ describe('rename', () => {
 
 function getWrapper() {
   const mocks = {
-    ...defaultComponentMocks,
+    ...defaultComponentMocks(),
     space: mockDeep<SpaceResource>()
   }
 
