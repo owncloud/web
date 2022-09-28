@@ -34,74 +34,75 @@
 //
 // const user = { id: 'test' }
 //
-// describe('List component', () => {
-//   afterEach(() => {
-//     jest.clearAllMocks()
-//   })
-//
-//   describe.each(['no search term is entered', 'no resource is found'])('when %s', (message) => {
-//     let wrapper
-//     beforeEach(() => {
-//       if (message === 'no search term is entered') {
-//         wrapper = getWrapper()
-//       } else {
-//         wrapper = getWrapper('epsum.txt')
-//       }
-//     })
-//
-//     it('should show no-content-message component', () => {
-//       const noContentMessage = wrapper.find(selectors.noContentMessage)
-//
-//       expect(noContentMessage.exists()).toBeTruthy()
-//       expect(wrapper).toMatchSnapshot()
-//     })
-//     it('should not show files table', () => {
-//       const filesTable = wrapper.find(selectors.filesTable)
-//       const listInfo = wrapper.find(selectors.listInfo)
-//
-//       expect(filesTable.exists()).toBeFalsy()
-//       expect(listInfo.exists()).toBeFalsy()
-//     })
-//   })
-//
-//   describe('when resources are found', () => {
-//     const spyTriggerDefaultAction = jest
-//       .spyOn(List.mixins[0].methods, '$_fileActions_triggerDefaultAction')
-//       .mockImplementation()
-//     const spyRowMounted = jest.spyOn(List.methods, 'rowMounted')
-//
-//     let wrapper
-//     beforeEach(() => {
-//       wrapper = getWrapper('lorem', files)
-//     })
-//
-//     it('should not show no-content-message component', () => {
-//       const noContentMessage = wrapper.find(selectors.noContentMessage)
-//
-//       expect(noContentMessage.exists()).toBeFalsy()
-//     })
-//     it('should set correct props on list-info component', () => {
-//       const listInfo = wrapper.find(selectors.listInfo)
-//
-//       expect(listInfo.exists()).toBeTruthy()
-//       expect(listInfo.props().files).toEqual(files.length)
-//       expect(listInfo.props().folders).toEqual(0)
-//       expect(listInfo.props().size).toEqual(getTotalSize(files))
-//     })
-//     it('should trigger the default action when a "fileClick" event gets emitted', async () => {
-//       const filesTable = wrapper.find(selectors.filesTable)
-//
-//       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(0)
-//
-//       await filesTable.vm.$emit('fileClick')
-//
-//       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
-//     })
-//     it('should lazily load previews when a "rowMounted" event gets emitted', () => {
-//       expect(spyRowMounted).toHaveBeenCalledTimes(files.length)
-//     })
-//   })
-// })
+describe('List component', () => {
+  it.todo('Refactor tests')
+  //   afterEach(() => {
+  //     jest.clearAllMocks()
+  //   })
+  //
+  //   describe.each(['no search term is entered', 'no resource is found'])('when %s', (message) => {
+  //     let wrapper
+  //     beforeEach(() => {
+  //       if (message === 'no search term is entered') {
+  //         wrapper = getWrapper()
+  //       } else {
+  //         wrapper = getWrapper('epsum.txt')
+  //       }
+  //     })
+  //
+  //     it('should show no-content-message component', () => {
+  //       const noContentMessage = wrapper.find(selectors.noContentMessage)
+  //
+  //       expect(noContentMessage.exists()).toBeTruthy()
+  //       expect(wrapper).toMatchSnapshot()
+  //     })
+  //     it('should not show files table', () => {
+  //       const filesTable = wrapper.find(selectors.filesTable)
+  //       const listInfo = wrapper.find(selectors.listInfo)
+  //
+  //       expect(filesTable.exists()).toBeFalsy()
+  //       expect(listInfo.exists()).toBeFalsy()
+  //     })
+  //   })
+  //
+  //   describe('when resources are found', () => {
+  //     const spyTriggerDefaultAction = jest
+  //       .spyOn(List.mixins[0].methods, '$_fileActions_triggerDefaultAction')
+  //       .mockImplementation()
+  //     const spyRowMounted = jest.spyOn(List.methods, 'rowMounted')
+  //
+  //     let wrapper
+  //     beforeEach(() => {
+  //       wrapper = getWrapper('lorem', files)
+  //     })
+  //
+  //     it('should not show no-content-message component', () => {
+  //       const noContentMessage = wrapper.find(selectors.noContentMessage)
+  //
+  //       expect(noContentMessage.exists()).toBeFalsy()
+  //     })
+  //     it('should set correct props on list-info component', () => {
+  //       const listInfo = wrapper.find(selectors.listInfo)
+  //
+  //       expect(listInfo.exists()).toBeTruthy()
+  //       expect(listInfo.props().files).toEqual(files.length)
+  //       expect(listInfo.props().folders).toEqual(0)
+  //       expect(listInfo.props().size).toEqual(getTotalSize(files))
+  //     })
+  //     it('should trigger the default action when a "fileClick" event gets emitted', async () => {
+  //       const filesTable = wrapper.find(selectors.filesTable)
+  //
+  //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(0)
+  //
+  //       await filesTable.vm.$emit('fileClick')
+  //
+  //       expect(spyTriggerDefaultAction).toHaveBeenCalledTimes(1)
+  //     })
+  //     it('should lazily load previews when a "rowMounted" event gets emitted', () => {
+  //       expect(spyRowMounted).toHaveBeenCalledTimes(files.length)
+  //     })
+  //   })
+})
 //
 // function getWrapper(searchTerm = '', files = []) {
 //   return mount(List, {
