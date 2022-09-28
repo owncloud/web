@@ -32,6 +32,7 @@ const providerContacts = {
 }
 
 const selectors = {
+  noResults: '#no-results',
   searchInput: 'input',
   searchInputClear: '.oc-search-clear',
   providerListItem: '.provider',
@@ -67,17 +68,12 @@ afterEach(() => {
   wrapper.destroy()
 })
 
-const delay = (ms) => {
-  // eslint-disable-next-line promise/param-names
-  return new Promise((res) => setTimeout(res, ms))
-}
-
 describe('Search Bar portal component', () => {
   test('does not render a search field if not all requirements are fulfilled', () => {
     wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
-  test('updates the search term on input', async () => {
+  test('updates the search term on input', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('alice')
     expect(wrapper.vm.$data.term).toBe('alice')
@@ -96,7 +92,7 @@ describe('Search Bar portal component', () => {
     })
     wrapper.find(selectors.searchInput).setValue('nothing found')
     await flushPromises()
-    expect(wrapper.find('#no-results')).toBeTruthy()
+    expect(wrapper.find(selectors.noResults)).toBeTruthy()
   })
   test('displays all available providers', async () => {
     wrapper = getMountedWrapper()
