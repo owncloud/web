@@ -125,7 +125,7 @@ describe('setImage', () => {
         })
       ).toBe(false)
     })
-    it.only('should be true when the mimeType is image', () => {
+    it('should be true when the mimeType is image', () => {
       const spaceMock = {
         id: '1',
         quota: {},
@@ -140,7 +140,6 @@ describe('setImage', () => {
           resources: [{ id: 1, mimeType: 'image/png' }]
         })
       ).toBe(true)
-
     })
     it('should be false when the current user is a viewer', () => {
       const spaceMock = {
@@ -200,7 +199,7 @@ describe('setImage', () => {
       expect(showMessageStub).toHaveBeenCalledTimes(1)
     })
 
-    /*FIXME: Reintroduce with latest copyMove bugfix
+    /* FIXME: Reintroduce with latest copyMove bugfix
     it('should not copy the image if source and destination path are the same', async () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
@@ -215,6 +214,6 @@ describe('setImage', () => {
         ]
       })
       expect(wrapper.vm.$client.files.copy).toBeCalledTimes(0)
-    })*/
+    }) */
   })
 })

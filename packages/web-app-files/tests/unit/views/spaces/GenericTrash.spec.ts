@@ -287,4 +287,4 @@ describe('Trashbin component', () => {
       selectedFiles
     })
   }
-})*/
+}) */

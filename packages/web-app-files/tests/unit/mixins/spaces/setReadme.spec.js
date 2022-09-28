@@ -114,7 +114,7 @@ describe('setReadme', () => {
         })
       ).toBe(false)
     })
-    it.only('should be true when the mimeType is "text/plain"', () => {
+    it('should be true when the mimeType is "text/plain"', () => {
       const spaceMock = {
         id: '1',
         root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
