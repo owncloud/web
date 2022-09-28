@@ -145,8 +145,16 @@ export const resolveAllConflicts = async (
   return resolvedConflicts
 }
 
-const hasRecursion = (resourcesToMove: Resource[], targetResource: Resource): boolean => {
-  return resourcesToMove.some((resource: Resource) => targetResource.path.endsWith(resource.path))
+const hasRecursion = (
+  sourceSpace: SpaceResource,
+  resourcesToMove: Resource[],
+  targetSpace: SpaceResource,
+  targetResource: Resource
+): boolean => {
+  if (sourceSpace.id !== targetSpace.id) {
+    return false
+  }
+  return resourcesToMove.some((resource: Resource) => targetResource.path === resource.path)
 }
 
 const showRecursionErrorMessage = (movedResources, showMessage, $ngettext) => {
@@ -238,7 +246,7 @@ export const copyMoveResource = async (
   $ngettext,
   clipboardAction: 'cut' | 'copy'
 ): Promise<Resource[]> => {
-  if (hasRecursion(resourcesToMove, targetFolder)) {
+  if (hasRecursion(sourceSpace, resourcesToMove, targetSpace, targetFolder)) {
     showRecursionErrorMessage(resourcesToMove, showMessage, $ngettext)
     return []
   }
