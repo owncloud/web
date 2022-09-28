@@ -43,13 +43,17 @@ export default {
         return
       }
 
+      const message = this.$gettextInterpolate(
+        this.$gettext('If you enable the space "%{spaceName}", it can be accessed again.'),
+        { spaceName: resources[0].name }
+      )
       const modal = {
         variation: 'passive',
-        title: this.$gettext('Restore space') + ' ' + resources[0].name,
+        title: this.$gettext('Enable Space?'),
         cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Restore'),
+        confirmText: this.$gettext('Enable'),
         icon: 'alarm-warning',
-        message: this.$gettext('Are you sure you want to restore this space?'),
+        message,
         hasInput: false,
         onCancel: this.hideModal,
         onConfirm: () => this.$_restore_restoreSpace(resources[0].id)
