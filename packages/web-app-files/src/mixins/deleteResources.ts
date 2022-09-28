@@ -5,7 +5,7 @@ import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helper
 import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { clientService } from 'web-pkg/src/services'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export default {
   data: () => ({

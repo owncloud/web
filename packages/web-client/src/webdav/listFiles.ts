@@ -7,7 +7,7 @@ import {
   SpaceResource
 } from '../helpers'
 import { WebDavOptions } from './types'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export type ListFilesOptions = {
   depth?: number

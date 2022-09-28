@@ -8,7 +8,7 @@ import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { configurationManager } from '../../configuration'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 interface DriveResolverOptions {
   store?: Store<any>

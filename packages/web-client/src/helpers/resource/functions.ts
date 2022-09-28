@@ -1,4 +1,4 @@
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
   return urlJoin('spaces', storageId, path, {

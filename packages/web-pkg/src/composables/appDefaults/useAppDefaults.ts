@@ -20,7 +20,7 @@ import { usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:

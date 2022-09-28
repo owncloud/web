@@ -166,7 +166,8 @@ import {
 } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
+import qs from 'qs'
 import { locationPublicLink } from '../../router/public'
 import { locationSpacesGeneric } from '../../router/spaces'
 
@@ -548,17 +549,15 @@ export default defineComponent({
         return
       }
       try {
-        const url = urlJoin(
+        const baseUrl = urlJoin(
           configurationManager.serverUrl,
-          this.capabilities.files.app_providers[0].new_url,
-          {
-            query: {
-              parent_container_id: this.currentFolder.fileId,
-              filename: fileName
-            }
-          }
+          this.capabilities.files.app_providers[0].new_url
         )
-
+        const query = qs.stringify({
+          parent_container_id: this.currentFolder.fileId,
+          filename: fileName
+        })
+        const url = `${baseUrl}?${query}`
         const response = await this.makeRequest('POST', url)
 
         if (response.status !== 200) {

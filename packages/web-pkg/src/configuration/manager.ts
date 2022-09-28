@@ -1,6 +1,6 @@
 import { OAuth2Configuration, OIDCConfiguration, RuntimeConfiguration } from './types'
 import isNil from 'lodash-es/isNil'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export interface RawConfig {
   server: string

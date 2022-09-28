@@ -145,7 +145,7 @@ import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
 import { UppyResource } from '../composables/upload'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export default defineComponent({
   setup() {

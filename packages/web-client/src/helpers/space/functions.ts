@@ -5,7 +5,7 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import { SHARE_JAIL_ID } from 'files/src/services/folder'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword

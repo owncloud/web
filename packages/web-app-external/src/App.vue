@@ -40,7 +40,8 @@ import { computed, unref } from '@vue/composition-api'
 import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/runtime-core'
 import { DavProperty } from 'web-pkg/src/constants'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
+import qs from 'qs'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
@@ -101,18 +102,16 @@ export default defineComponent({
         ).fileId
 
       // fetch iframe params for app and file
-      const url = urlJoin(
+      const baseUrl = urlJoin(
         configurationManager.serverUrl,
-        this.capabilities.files.app_providers[0].open_url,
-        {
-          query: {
-            file_id: fileId,
-            lang: this.$language.current,
-            ...(this.applicationName && { app_name: this.applicationName })
-          }
-        }
+        this.capabilities.files.app_providers[0].open_url
       )
-
+      const query = qs.stringify({
+        file_id: fileId,
+        lang: this.$language.current,
+        ...(this.applicationName && { app_name: this.applicationName })
+      })
+      const url = `${baseUrl}?${query}`
       const response = await this.makeRequest('POST', url)
 
       if (response.status !== 200) {

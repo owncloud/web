@@ -1,5 +1,4 @@
-// this test asserts certain behaviors of proper-url-join to be the same as when we introduced it as dependency
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 describe('proper-url-join', () => {
   it.each([
@@ -14,17 +13,7 @@ describe('proper-url-join', () => {
     [[undefined, { leadingSlash: true }], '/'],
     [['/', 2], '/2'],
     [['//', '/fol//der//', '//file'], '/fol/der/file'],
-    [
-      [
-        '',
-        {
-          query: {
-            foo: 'bar baz'
-          }
-        }
-      ],
-      '/?foo=bar%20baz'
-    ]
+    [['?&@'], '/?&@']
   ])('joins %s as %s', (args: any, expected: string) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

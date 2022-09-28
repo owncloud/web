@@ -5,7 +5,7 @@ import { bus } from 'web-pkg/src/instance'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'

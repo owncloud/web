@@ -5,7 +5,7 @@ import { ComputedRef, Ref, unref } from '@vue/composition-api'
 import * as uuid from 'uuid'
 import path from 'path'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 interface UploadHelpersOptions {
   space: ComputedRef<SpaceResource>

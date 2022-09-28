@@ -18,7 +18,7 @@ import { extractExtensionFromFile, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
 import { SHARE_JAIL_ID } from '../services/folder'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
   resource.name = basename(newPath)

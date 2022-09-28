@@ -1,7 +1,7 @@
 import { major, rcompare } from 'semver'
 import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 /**
  * Archiver struct within the capabilities as defined in reva

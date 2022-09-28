@@ -10993,15 +10993,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proper-url-join@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "proper-url-join@npm:2.1.1"
-  dependencies:
-    query-string: ^6.3.0
-  checksum: dca82709cdae3d7207a043f62bfbb52c13ddc07cfa76ccabd954ddc9e1138a9afe5465055903da9cecee5a10dcb0173c709a9fd3294ed21bba3afd44a81ce145
-  languageName: node
-  linkType: hard
-
 "proto-list@npm:~1.2.1":
   version: 1.2.4
   resolution: "proto-list@npm:1.2.4"
@@ -13838,7 +13829,6 @@ __metadata:
   resolution: "web-client@workspace:packages/web-client"
   dependencies:
     "@types/proper-url-join": ^2.1.1
-    proper-url-join: ^2.1.1
   languageName: unknown
   linkType: soft
 

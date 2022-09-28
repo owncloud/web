@@ -1,4 +1,4 @@
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 
 /**
  * Return all absolute parent paths.

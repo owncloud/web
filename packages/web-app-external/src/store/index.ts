@@ -1,5 +1,5 @@
 import { Commit } from 'vuex'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 interface AppProvider {

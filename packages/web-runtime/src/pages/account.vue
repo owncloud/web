@@ -84,7 +84,7 @@ import { mapActions, mapGetters } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
-import urlJoin from 'proper-url-join'
+import { urlJoin } from 'web-pkg/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
