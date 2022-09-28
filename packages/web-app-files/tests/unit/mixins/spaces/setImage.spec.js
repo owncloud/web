@@ -37,17 +37,13 @@ describe('setImage', () => {
           }
         },
         $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
+          currentRoute: createLocationSpaces('files-spaces-generic'),
           resolve: (r) => {
             return { href: r.name }
           }
         },
-        $gettext: jest.fn()
-      },
-      provide: {
-        currentSpace: {
-          value: space
-        }
+        $gettext: jest.fn(),
+        space
       },
       store: createStore(Vuex.Store, {
         actions: {
@@ -129,7 +125,7 @@ describe('setImage', () => {
         })
       ).toBe(false)
     })
-    it('should be true when the mimeType is image', () => {
+    it.only('should be true when the mimeType is image', () => {
       const spaceMock = {
         id: '1',
         quota: {},
@@ -144,6 +140,7 @@ describe('setImage', () => {
           resources: [{ id: 1, mimeType: 'image/png' }]
         })
       ).toBe(true)
+
     })
     it('should be false when the current user is a viewer', () => {
       const spaceMock = {
