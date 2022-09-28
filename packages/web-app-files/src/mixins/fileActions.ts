@@ -94,7 +94,8 @@ export default {
                 options.space.getDriveAliasAndItem(options.resources[0]),
                 options.resources[0].webDavPath,
                 options.resources[0].id,
-                EDITOR_MODE_EDIT
+                EDITOR_MODE_EDIT,
+                options.space.shareId
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
@@ -142,7 +143,7 @@ export default {
   },
 
   methods: {
-    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode) {
+    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
       if (editor.handler) {
         return editor.handler({
           config: this.configuration,
@@ -151,7 +152,7 @@ export default {
           filePath,
           fileId,
           mode,
-          ...(this.$route.query.shareId && { shareId: this.$route.query.shareId })
+          ...(shareId && { shareId })
         })
       }
 
@@ -160,7 +161,8 @@ export default {
         driveAliasAndItem,
         filePath,
         fileId,
-        mode
+        mode,
+        shareId
       )
 
       if (editor.newTab) {
@@ -177,7 +179,7 @@ export default {
       this.$router.push(routeOpts)
     },
 
-    $_fileActions__routeOpts(app, driveAliasAndItem: string, filePath, fileId, mode) {
+    $_fileActions__routeOpts(app, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
       return {
         name: app.routeName || app.app,
         params: {
@@ -187,7 +189,7 @@ export default {
           mode
         },
         query: {
-          ...(this.$route.query.shareId && { shareId: this.$route.query.shareId }),
+          ...(shareId && { shareId }),
           ...routeToContextQuery(this.$route)
         }
       }
@@ -280,13 +282,19 @@ export default {
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,
           handler: () =>
-            this.$_fileActions_openExternalApp(app.name, driveAliasAndItem, webDavPath, fileId),
+            this.$_fileActions_openExternalApp(
+              app.name,
+              driveAliasAndItem,
+              webDavPath,
+              fileId,
+              options.space.shareId
+            ),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
     },
 
-    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId) {
+    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId, shareId) {
       const routeOpts = this.$_fileActions__routeOpts(
         {
           routeName: 'external-apps'
@@ -294,7 +302,8 @@ export default {
         driveAliasAndItem,
         filePath,
         undefined,
-        undefined
+        undefined,
+        shareId
       )
 
       routeOpts.query = {

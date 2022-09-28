@@ -50,10 +50,17 @@ export function useAppFolderHandling({
         path
       })
 
-      store.commit('Files/LOAD_FILES', {
-        currentFolder: resources[0],
-        files: resources.slice(1)
-      })
+      if (resources[0].type === 'file') {
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resources[0],
+          files: [resources[0]]
+        })
+      } else {
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resources[0],
+          files: resources.slice(1)
+        })
+      }
     } catch (error) {
       if (error.statusCode === 401) {
         return authService.handleAuthError(unref(currentRoute))

@@ -708,7 +708,17 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      const space = this.getMatchingSpace(resource.storageId)
+      let space
+      if (resource.shareId) {
+        space = buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      } else {
+        space = this.getMatchingSpace(resource.storageId)
+      }
+
       /**
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
