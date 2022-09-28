@@ -1,20 +1,10 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import UploadInfo from '../../../src/components/UploadInfo.vue'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetTextPlugin from 'vue-gettext'
 import { defaultComponentMocks } from '../../../../../tests/unit/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from '../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
 import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from '../../../../../tests/unit/localVue/defaultLocalVue'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
 
 const selectors = {
   overlay: '#upload-info',
@@ -228,13 +218,14 @@ function getShallowWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
+  const localVue = defaultLocalVue()
   const store = createStore(Vuex.Store, storeOptions)
 
   return {
     mocks,
     storeOptions,
     wrapper: shallowMount(UploadInfo, {
-      localVue: defaultLocalVue(),
+      localVue,
       store,
       mocks,
       data() {

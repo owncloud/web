@@ -5,7 +5,7 @@ import Favorites from '../../../src/views/Favorites.vue'
 import { defaultStoreMockOptions } from '../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from '../../../../../tests/unit/mocks/defaultComponentMocks'
 import { createStore } from 'vuex-extensions'
-import { defaultLocalVueViews } from '../../../../../tests/unit/localVue/defaultLocalVue'
+import { defaultLocalVue } from '../../../../../tests/unit/localVue/defaultLocalVue'
 import Vuex from 'vuex'
 
 const stubs = {
@@ -247,12 +247,13 @@ function getMountedWrapper({ mocks }) {
   const storeOptions = {
     ...defaultStoreMockOptions
   }
+  const localVue = defaultLocalVue({ compositionApi: false })
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(Favorites, {
-      localVue: defaultLocalVueViews({ compositionApi: false }),
+      localVue,
       mocks: defaultMocks,
       store,
       stubs
