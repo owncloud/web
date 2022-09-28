@@ -5,7 +5,6 @@ import { resourceExists, waitForResources } from './utils'
 import path from 'path'
 import { File } from '../../../types'
 import { sidebar } from '../utils'
-import { urlJoin } from 'web-pkg/src/utils'
 
 const downloadButtonSideBar = '#oc-files-actions-sidebar .oc-files-actions-download-file-trigger'
 const downloadButtonBatchActionSingleFile = '.oc-files-actions-download-file-trigger'
@@ -453,7 +452,9 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
 
 export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, urlJoin(resource)))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
   await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
@@ -480,7 +481,9 @@ export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, urlJoin(resource)))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
