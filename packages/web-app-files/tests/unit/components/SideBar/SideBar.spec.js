@@ -49,7 +49,7 @@ describe('SideBar', () => {
       createWrapper({
         item: simpleOwnFolder,
         selectedItems: [simpleOwnFolder],
-        mocks: { $client: { files: { fileInfo: mockFileInfo } } }
+        fileFetchMethod: mockFileInfo
       })
 
       expect(mockFileInfo).toHaveBeenCalledTimes(1)
@@ -76,7 +76,12 @@ describe('SideBar', () => {
       expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
 
       // and again if the file is renamed
-      const renamedResource = renameResource(Object.assign({}, resource), 'foobar.png', '')
+      const renamedResource = renameResource(
+        { webDavPath: '' },
+        Object.assign({}, resource),
+        'foobar.png',
+        ''
+      )
       wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', Object.assign(renamedResource))
       await wrapper.vm.$nextTick()
       expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(3)
@@ -104,7 +109,7 @@ describe('SideBar', () => {
         [
           'shows in root node',
           {
-            path: '/publicLinkToken',
+            path: '',
             noSelectionExpected: true
           }
         ],
@@ -173,6 +178,7 @@ function createWrapper({
   item,
   selectedItems,
   mocks,
+  fileFetchMethod = () => ({}),
   currentRoute = createLocationSpaces('files-spaces-generic')
 }) {
   const localVue = createLocalVue()
@@ -248,6 +254,11 @@ function createWrapper({
     },
     directives: {
       'click-outside': jest.fn()
+    },
+    setup: () => {
+      return {
+        webdav: { getFileInfo: fileFetchMethod }
+      }
     },
     mocks: merge(
       {
