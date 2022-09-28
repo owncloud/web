@@ -49,7 +49,7 @@ describe('rename', () => {
       const { storeOptions, wrapper } = getWrapper()
       storeOptions.modules.Files.getters.files.mockReturnValue([{ name: 'file1', path: '/file1' }])
       wrapper.vm.$_rename_checkNewName({ name: 'currentName', path: '/currentName' }, 'newName')
-      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(null)
+      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(expect.anything(), null)
     })
 
     it('should not show an error if new name already exists but in different folder', () => {
@@ -59,7 +59,7 @@ describe('rename', () => {
         { name: 'currentName', path: '/favorites/currentName' },
         'file1'
       )
-      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(null)
+      expect(storeOptions.actions.setModalInputErrorMessage).toHaveBeenCalledWith(expect.anything(), null)
     })
 
     it.each([
