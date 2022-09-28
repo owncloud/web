@@ -165,7 +165,7 @@ describe('setImage', () => {
         return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
       })
 
-      const wrapper = getWrapper()
+      const wrapper = getWrapper({ id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceImage_trigger({
         resources: [
@@ -185,7 +185,7 @@ describe('setImage', () => {
         return Promise.reject(new Error())
       })
 
-      const wrapper = getWrapper()
+      const wrapper = getWrapper({ id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceImage_trigger({
         resources: [

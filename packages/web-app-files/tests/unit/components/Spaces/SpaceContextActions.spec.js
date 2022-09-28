@@ -41,7 +41,8 @@ function getWrapper(space) {
       }
     },
     propsData: {
-      items: [space]
+      items: [space],
+      space: space
     }
   })
 }

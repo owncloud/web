@@ -41,6 +41,7 @@ describe('SharesPanel', () => {
       provide: {
         activePanel: null,
         displayedItem: {},
+        displayedSpace: {},
         spaceMembers: { value: [] }
       },
       store: new Vuex.Store({
