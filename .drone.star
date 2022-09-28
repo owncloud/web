@@ -4,7 +4,7 @@ FEDERATED = 2
 NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
-DEEPDRIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
+DEEPDIVER_DOCKER_ORACLE_XE_11G = "deepdiver/docker-oracle-xe-11g:latest"
 DRONE_CLI_ALPINE = "drone/cli:alpine"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
@@ -667,7 +667,6 @@ basicTestSuites = [
     "webUIFilesList",
     "webUIFilesSearch",
     "webUILogin",
-    "webUITextEditor",
     "webUIMoveFilesFolders",
     "webUIOperationsWithFolderShares",
     "webUIPreview",
@@ -679,6 +678,7 @@ basicTestSuites = [
     "webUIRestrictSharing",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
+    "webUISharingExpirationDate",
     "webUISharingFilePermissionMultipleUsers",
     "webUISharingFilePermissionsGroups",
     "webUISharingFolderAdvancedPermissionMultipleUsers",
@@ -691,7 +691,6 @@ basicTestSuites = [
     "webUISharingInternalUsers",
     "webUISharingInternalUsersBlacklisted",
     "webUISharingInternalUsersCollaborator",
-    "webUISharingExpirationDate",
     "webUISharingInternalUsersShareWithPage",
     "webUISharingInternalUsersSharingIndicator",
     "webUISharingPermissionsUsers",
@@ -699,6 +698,7 @@ basicTestSuites = [
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicExpire",
     "webUISharingPublicManagement",
+    "webUITextEditor",
     "webUITrashbinDelete",
     "webUITrashbinFilesFolders",
     "webUITrashbinRestore",
@@ -1573,7 +1573,7 @@ def databaseService(db):
     if dbName == "oracle":
         return [{
             "name": dbName,
-            "image": DEEPDRIVER_DOCKER_ORACLE_XE_11G,
+            "image": DEEPDIVER_DOCKER_ORACLE_XE_11G,
             "environment": {
                 "ORACLE_USER": getDbUsername(db),
                 "ORACLE_PASSWORD": getDbPassword(db),
@@ -2252,7 +2252,7 @@ def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
         {
-            "name": "check-for-exisiting-cache",
+            "name": "check-for-existing-cache",
             "image": OC_UBUNTU,
             "environment": minio_mc_environment,
             "commands": [
