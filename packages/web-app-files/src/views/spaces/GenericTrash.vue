@@ -4,8 +4,7 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :has-bulk-actions="true"
-        :side-bar-open="false"
-        :has-sidebar-toggle="false"
+        :side-bar-open="sideBarOpen"
         :space="space"
       />
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -25,6 +24,7 @@
           id="files-trashbin-table"
           v-model="selectedResourcesIds"
           class="files-table"
+          :class="{ 'files-table-squashed': sideBarOpen }"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="false"
@@ -55,6 +55,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 
@@ -67,6 +68,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
@@ -89,7 +91,8 @@ export default defineComponent({
     ListInfo,
     NoContentMessage,
     Pagination,
-    ResourceTable
+    ResourceTable,
+    SideBar
   },
 
   props: {
