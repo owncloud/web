@@ -1,4 +1,4 @@
-import { fileModuleMockOptions } from './fileModuleMockOptions'
+import { filesModuleMockOptions } from './filesModuleMockOptions'
 import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 
 export const defaultStoreMockOptions = {
@@ -6,7 +6,7 @@ export const defaultStoreMockOptions = {
     capabilities: jest.fn().mockImplementation(() => ({}))
   },
   modules: {
-    ...fileModuleMockOptions,
+    ...filesModuleMockOptions,
     ...runtimeModuleMockOptions
   },
   actions: {
