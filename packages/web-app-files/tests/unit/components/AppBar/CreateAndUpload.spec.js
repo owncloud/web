@@ -177,6 +177,7 @@ describe('CreateAndUpload component', () => {
               size: 1001
             },
             meta: {
+              spaceId: '1',
               routeName: 'files-spaces-generic'
             }
           }
@@ -239,7 +240,7 @@ describe('CreateAndUpload component', () => {
 
         expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
         expect(handleUppyFileUpload).toBeCalledTimes(1)
-        expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne])
+        expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [uppyResourceOne])
       }
     )
     it('should not upload file if user chooses skip', async () => {
@@ -294,7 +295,10 @@ describe('CreateAndUpload component', () => {
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
       expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
+      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+        uppyResourceOne,
+        uppyResourceTwo
+      ])
     })
     it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
       const uppyResourceOne = { name: 'test' }
@@ -324,7 +328,10 @@ describe('CreateAndUpload component', () => {
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(2)
       expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
+      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+        uppyResourceOne,
+        uppyResourceTwo
+      ])
     })
   })
 })
@@ -352,10 +359,14 @@ function getWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     stubs: {
       ...stubs,
@@ -377,10 +388,14 @@ function getShallowWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     store
   })
