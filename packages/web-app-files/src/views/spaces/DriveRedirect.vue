@@ -9,6 +9,11 @@ import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { Resource } from 'web-client'
+import { urlJoin } from 'web-pkg/src/utils'
+
+// 'personal/home' is used as personal drive alias from static contexts
+// (i.e. places where we can't load the actual personal space)
+const fakePersonalDriveAlias = 'personal/home'
 
 export default defineComponent({
   name: 'DriveRedirect',
@@ -28,19 +33,26 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const needsRedirectToPersonalHome = ['', 'personal', 'personal/home'].includes(
-      props.driveAliasAndItem
-    )
-
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+
     const personalSpace = computed(() => {
       return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
     })
-    const homeFolder = computed(() => {
-      return props.appendHomeFolder ? store.getters.homeFolder : '/'
+    const itemPath = computed(() => {
+      if (!props.appendHomeFolder) {
+        return ''
+      }
+      const item = props.driveAliasAndItem.startsWith(fakePersonalDriveAlias)
+        ? urlJoin(props.driveAliasAndItem.slice(fakePersonalDriveAlias.length))
+        : '/'
+      if (item !== '/') {
+        return item
+      }
+      return store.getters.homeFolder
     })
+
     return (
       router
         .replace({
@@ -48,7 +60,7 @@ export default defineComponent({
           params: {
             ...unref(route).params,
             driveAliasAndItem: unref(personalSpace).getDriveAliasAndItem({
-              path: needsRedirectToPersonalHome ? unref(homeFolder) : ''
+              path: unref(itemPath)
             } as Resource)
           }
         })

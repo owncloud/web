@@ -6,6 +6,7 @@ import { createLocationOperations } from './operations'
 import { createLocationPublic } from './public'
 import { isLocationActive as isLocationActiveNoCompat } from './utils'
 import { createLocationTrash } from './trash'
+import { urlJoin } from 'web-pkg/src/utils'
 
 /**
  * all route configs created by buildRoutes are deprecated,
@@ -54,8 +55,14 @@ export const buildRoutes = (): RouteConfig[] =>
       redirect: (to) =>
         createLocationSpaces('files-spaces-generic', {
           ...to,
-          params: { ...to.params, driveAliasAndItem: 'personal/home' }
-        })
+          params: {
+            ...to.params,
+            driveAliasAndItem: urlJoin('personal/home', to.params.item, { leadingSlash: false })
+          }
+        }),
+      meta: {
+        patchCleanPath: true
+      }
     },
     {
       path: '/list/favorites',
