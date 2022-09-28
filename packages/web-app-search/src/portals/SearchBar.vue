@@ -58,6 +58,7 @@
               >
                 <component
                   :is="provider.previewSearch.component"
+                  class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
                   @click.native="$refs.optionsDrop.hide()"

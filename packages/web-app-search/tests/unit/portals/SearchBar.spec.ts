@@ -36,7 +36,8 @@ const selectors = {
   providerListItem: '.provider',
   providerDisplayName: '.provider .display-name',
   providerMoreResultsLink: '.provider .more-results',
-  optionsHidden: '.tippy-box[data-state="hidden"]'
+  optionsHidden: '.tippy-box[data-state="hidden"]',
+  optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
 beforeEach(() => {
@@ -65,7 +66,10 @@ afterEach(() => {
   wrapper.destroy()
 })
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+const delay = (ms) => {
+  // eslint-disable-next-line promise/param-names
+  return new Promise((res) => setTimeout(res, ms))
+}
 
 describe('Search Bar portal component', () => {
   test('does not render a search field if not all requirements are fulfilled', () => {
@@ -123,6 +127,15 @@ describe('Search Bar portal component', () => {
     wrapper.find(selectors.searchInput).setValue('albert')
     await delay(1000)
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
+  })
+  test.skip('hides options on preview item click', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await delay(1000)
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    console.log(wrapper.html())
+    wrapper.findAll('.preview-component').at(0).trigger('click')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on escape key press', async () => {
     wrapper = getMountedWrapper()
@@ -187,6 +200,7 @@ describe('Search Bar portal component', () => {
         query: { term: 'albert', provider: 'files.sdk' }
       })
     )
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
     wrapper = getMountedWrapper()
