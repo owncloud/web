@@ -47,7 +47,8 @@ export class FolderLoaderSpacesGeneric implements FolderLoader {
         yield store.dispatch('Files/loadSharesTree', {
           client,
           path: currentFolder.path,
-          storageId: currentFolder.fileId
+          storageId: currentFolder.fileId,
+          includeRoot: space.driveType === 'project' && currentFolder.path === '/'
         })
 
         for (const file of resources) {
