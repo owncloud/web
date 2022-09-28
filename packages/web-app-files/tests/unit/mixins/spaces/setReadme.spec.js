@@ -38,12 +38,13 @@ describe('setReadme', () => {
           params: { storageId: 1 }
         },
         $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
+          currentRoute: createLocationSpaces('files-spaces-generic'),
           resolve: (r) => {
             return { href: r.name }
           }
         },
-        $gettext: jest.fn()
+        $gettext: jest.fn(),
+        space
       },
       provide: {
         currentSpace: {
@@ -113,7 +114,7 @@ describe('setReadme', () => {
         })
       ).toBe(false)
     })
-    it('should be true when the mimeType is "text/plain"', () => {
+    it.only('should be true when the mimeType is "text/plain"', () => {
       const spaceMock = {
         id: '1',
         root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
