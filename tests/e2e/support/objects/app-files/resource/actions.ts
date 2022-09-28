@@ -141,7 +141,7 @@ export const createResource = async (args: createResourceArgs): Promise<void> =>
           ])
           await drawioTab.waitForLoadState()
           await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
-          await drawioTab.waitForURL('**/draw-io/spaces/**')
+          await drawioTab.waitForURL('**/draw-io/personal/**')
           await drawioTab.close()
           break
         }
