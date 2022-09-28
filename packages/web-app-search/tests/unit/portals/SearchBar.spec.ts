@@ -3,6 +3,7 @@ import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import AsyncComputed from 'vue-async-computed'
 import { createLocationCommon } from 'files/src/router'
+import flushPromises from 'flush-promises'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -94,13 +95,13 @@ describe('Search Bar portal component', () => {
       }
     })
     wrapper.find(selectors.searchInput).setValue('nothing found')
-    await delay(1000)
+    await flushPromises()
     expect(wrapper.find('#no-results')).toBeTruthy()
   })
   test('displays all available providers', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(2)
   })
   test('only displays provider list item if search results are attached', async () => {
@@ -111,13 +112,13 @@ describe('Search Bar portal component', () => {
       }
     })
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(1)
   })
   test('displays the provider name in the provider list item', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     const providerDisplayNameItems = wrapper.findAll(selectors.providerDisplayName)
     expect(providerDisplayNameItems.at(0).text()).toEqual('Files')
     expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
@@ -125,13 +126,13 @@ describe('Search Bar portal component', () => {
   test('displays the more results link for the available providers', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
   })
   test.skip('hides options on preview item click', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     console.log(wrapper.html())
     wrapper.findAll('.preview-component').at(0).trigger('click')
@@ -140,21 +141,21 @@ describe('Search Bar portal component', () => {
   test('hides options on escape key press', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.esc')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on clear', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options if no search term is given', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     wrapper.find(selectors.searchInput).setValue('')
     await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
@@ -162,7 +163,7 @@ describe('Search Bar portal component', () => {
   test('resets search term on clear', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.vm.$data.term).toBeFalsy()
   })
@@ -184,7 +185,7 @@ describe('Search Bar portal component', () => {
   test.skip('sets active preview item via keyboard navigation', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    await delay(1000)
+    await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.down')
     wrapper.find(selectors.searchInput).trigger('keyup.down')
   })
@@ -192,7 +193,7 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
-    await delay(1000)
+    await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).toHaveBeenCalledTimes(1)
     expect(spyRouterPushStub).toHaveBeenCalledWith(
@@ -206,7 +207,7 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('')
     const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
-    await delay(1000)
+    await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).toHaveBeenCalledTimes(0)
   })
