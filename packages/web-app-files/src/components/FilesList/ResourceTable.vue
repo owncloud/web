@@ -708,15 +708,13 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space
-      if (resource.shareId) {
+      let space = this.getMatchingSpace(resource.storageId)
+      if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
           shareName: resource.name,
           serverUrl: configurationManager.serverUrl
         })
-      } else {
-        space = this.getMatchingSpace(resource.storageId)
       }
 
       /**

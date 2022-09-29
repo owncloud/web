@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import ResourceTable from '../FilesList/ResourceTable.vue'
-import { defineComponent, unref } from '@vue/composition-api'
+import { computed, defineComponent, unref } from '@vue/composition-api'
 import debounce from 'lodash-es/debounce'
 import { ImageDimension, ImageType } from '../../constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
@@ -206,9 +206,15 @@ export default defineComponent({
       })
     }
 
+    const personalSpace = computed(() => {
+      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
+    })
+
     return {
       resourceTargetRouteCallback,
-      ...useSelectedResources({ store })
+      ...useSelectedResources({ store }),
+      hasShareJail: useCapabilityShareJailEnabled(),
+      personalSpace
     }
   },
 
@@ -281,6 +287,9 @@ export default defineComponent({
       this.showMore = !this.showMore
     },
     createShareSpace(resource) {
+      if (!this.hasShareJail) {
+        return this.personalSpace
+      }
       return buildShareSpaceResource({
         shareId: resource.shareId,
         shareName: resource.name,
