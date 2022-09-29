@@ -19,7 +19,9 @@ Summary
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
+* Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
+* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
 Details
@@ -129,6 +131,18 @@ Details
    https://github.com/owncloud/web/issues/7180
    https://github.com/owncloud/web/pull/7190
 
+* Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
+
+   We've polished the overall design, especially spacings and the spaces-views.
+
+   https://github.com/owncloud/web/issues/6705
+   https://github.com/owncloud/web/issues/7676
+   https://github.com/owncloud/web/issues/7525
+   https://github.com/owncloud/web/issues/7693
+   https://github.com/owncloud/web/issues/7694
+   https://github.com/owncloud/web/issues/7685
+   https://github.com/owncloud/web/pull/7684
+
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
    We've made keybindings global and introduced a data-attribute to mark elements that need
@@ -136,6 +150,68 @@ Details
 
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
+
+* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
+
+   We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer to the full
+   changelog in the ODS release (linked) for more details. Summary:
+
+   * Bugfix - Omit special characters in user avatar initials:
+   [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
+   Avatar link icon:
+   [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269) * Bugfix -
+   Firefox drag & drop move of folders not possible:
+   [#7495](https://github.com/owncloud/web/issues/7495) * Bugfix - Lazy loading render
+   performance:
+   [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260) * Bugfix -
+   Remove width shrinking of the ocAvatarItem:
+   [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
+   Remove click event on OcIcon:
+   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Change -
+   Redesign contextual helper:
+   [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271) * Change -
+   Remove OcAlert component:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Remove transition animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   Revamp animations:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) * Change -
+   OcTable emit event data on row click:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add nestedd drop functionality:
+   [#2238](https://github.com/owncloud/owncloud-design-system/issues/2238) *
+   Enhancement - Add OcInfoDrop:
+   [#2286](https://github.com/owncloud/owncloud-design-system/pull/2286) *
+   Enhancement - Add rounded prop to OcTag:
+   [#2284](https://github.com/owncloud/owncloud-design-system/pull/2284) *
+   Enhancement - Adjust avatar font weight from bold to normal:
+   [#2275](https://github.com/owncloud/owncloud-design-system/pull/2275) *
+   Enhancement - Align breadcrumb context menu with regular context menu:
+   [#2296](https://github.com/owncloud/owncloud-design-system/pull/2296) *
+   Enhancement - OcCheckbox add outline:
+   [#2218](https://github.com/owncloud/owncloud-design-system/pull/2218) *
+   Enhancement - Add offset property to the drop component:
+   [#7335](https://github.com/owncloud/web/issues/7335) * Enhancement - Make UI smaller:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - Oc-card style:
+   [#2306](https://github.com/owncloud/owncloud-design-system/pull/2306) *
+   Enhancement - OcSelect dark mode improvements:
+   [#2262](https://github.com/owncloud/owncloud-design-system/pull/2262) *
+   Enhancement - Progress bar indeterminate state:
+   [#2200](https://github.com/owncloud/owncloud-design-system/pull/2200) *
+   Enhancement - Redesign notifications:
+   [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210) *
+   Enhancement - Use Inter font:
+   [#2270](https://github.com/owncloud/owncloud-design-system/pull/2270) *
+   Enhancement - Button text align left:
+   [#2323](https://github.com/owncloud/owncloud-design-system/pull/2323) *
+   Enhancement - "Cancel"-button and -handler in OcSearchBar:
+   [#2328](https://github.com/owncloud/owncloud-design-system/pull/2328) *
+   Enhancement - Adjust breadcrumb spacing:
+   [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329)
+
+   https://github.com/owncloud/web/pull/7684
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.20
 
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
