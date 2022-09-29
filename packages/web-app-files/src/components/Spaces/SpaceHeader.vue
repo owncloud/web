@@ -1,18 +1,21 @@
 <template>
-  <div class="space-header" :class="{ 'oc-flex': imageContent && !imageExpanded }">
-    <div v-if="imageContent" :class="{ 'oc-width-1-4 oc-mr-l': !imageExpanded }">
+  <div class="space-header oc-p-m" :class="{ 'oc-flex': !imageExpanded }">
+    <div class="space-header-image" :class="{ 'space-header-image-expanded': imageExpanded }">
       <img
-        :class="{ expanded: imageExpanded }"
-        class="space-header-image oc-cursor-pointer"
+        v-if="hasImage"
+        class="oc-cursor-pointer"
         alt=""
         :src="imageContent"
         @click="toggleImageExpanded"
       />
+      <div v-else class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
+        <oc-icon name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
+      </div>
     </div>
-    <div :class="{ 'oc-width-3-4': imageContent && !imageExpanded }">
+    <div class="space-header-infos">
       <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
-        <div class="oc-flex oc-flex-middle">
-          <h1 class="space-header-name oc-text-truncate">{{ space.name }}</h1>
+        <div class="oc-flex oc-flex-middle space-header-infos-heading">
+          <h1 class="space-header-name">{{ space.name }}</h1>
           <oc-button
             :id="`space-context-btn`"
             v-oc-tooltip="$gettext('Show context menu')"
@@ -44,7 +47,7 @@
           <span class="space-header-people-count oc-text-small" v-text="memberCountString"></span>
         </oc-button>
       </div>
-      <p v-if="space.description" class="oc-mt-rm">{{ space.description }}</p>
+      <p v-if="space.description" class="oc-mt-rm oc-text-bold">{{ space.description }}</p>
       <div>
         <!-- eslint-disable vue/no-v-html -->
         <div ref="markdownContainerRef" class="markdown-container" v-html="markdownContent"></div>
@@ -226,6 +229,9 @@ export default defineComponent({
       },
       { deep: true, immediate: true }
     )
+    const hasImage = computed(() => {
+      return props.space?.spaceImageData
+    })
 
     const memberCount = computed(() => {
       return store.getters['runtime/spaces/spaceMembers'].length
@@ -254,6 +260,7 @@ export default defineComponent({
       imageContent,
       imageExpanded,
       toggleImageExpanded,
+      hasImage,
       memberCount,
       memberCountString,
       openSideBarSharePanel
@@ -265,15 +272,33 @@ export default defineComponent({
 <style lang="scss">
 .space-header {
   &-image {
-    border-radius: 10px;
-    width: 100%;
+    width: 280px;
+    min-width: 280px;
     aspect-ratio: 16 / 9;
-    object-fit: cover;
+    margin-right: var(--oc-space-large);
+    max-height: 158px;
+    &-default {
+      background-color: var(--oc-color-background-highlight);
+      height: 100%;
+      border-radius: 10px;
+    }
+    &-expanded {
+      width: 100%;
+      margin: 0;
+      max-height: 100%;
+      max-width: 100%;
+    }
+    img {
+      border-radius: 10px;
+      width: 100%;
+    }
   }
 
-  &-image.expanded {
-    max-height: 100%;
-    max-width: 100%;
+  &-infos {
+    flex: 1;
+    &-heading {
+      max-width: 100%;
+    }
   }
 
   &-name {
