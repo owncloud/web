@@ -896,8 +896,5 @@ export default defineComponent({
 
 .create-and-upload-actions {
   gap: var(--oc-space-small);
-  @media only screen and (min-width: 1000px) {
-    gap: var(--oc-space-medium);
-  }
 }
 </style>

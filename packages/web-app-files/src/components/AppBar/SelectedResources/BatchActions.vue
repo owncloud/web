@@ -99,7 +99,6 @@ export default defineComponent({
 
     align-items: center;
     display: flex;
-    gap: var(--oc-space-small);
   }
 
   .oc-files-context-action-label {

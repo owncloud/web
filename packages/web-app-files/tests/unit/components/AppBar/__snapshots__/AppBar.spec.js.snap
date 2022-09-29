@@ -13,7 +13,7 @@ exports[`AppBar component renders breadcrumbs if given, by default without bread
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -35,7 +35,7 @@ exports[`AppBar component renders breadcrumbs if given, with breadcrumbsContextA
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -57,7 +57,7 @@ exports[`AppBar component renders breadcrumbs if given, with content in the cont
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -79,7 +79,7 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
         <batch-actions-stub></batch-actions-stub>
@@ -102,7 +102,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -124,7 +124,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start"><button class="action-slot">Click</button>
         <!---->
       </div>
@@ -146,7 +146,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -169,7 +169,7 @@ exports[`AppBar component renders sharesNavigation if enabled 1`] = `
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -188,7 +188,7 @@ exports[`AppBar component renders viewoptions and sidebartoggle neither if both 
       <!---->
       <!---->
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -210,7 +210,7 @@ exports[`AppBar component renders viewoptions and sidebartoggle only sidebartogg
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>
@@ -232,7 +232,7 @@ exports[`AppBar component renders viewoptions and sidebartoggle only viewoptions
         <!---->
       </div>
     </div>
-    <div class="files-app-bar-actions">
+    <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
       </div>

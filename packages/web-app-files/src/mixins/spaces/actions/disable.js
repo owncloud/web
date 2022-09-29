@@ -44,13 +44,19 @@ export default {
         return
       }
 
+      const message = this.$gettextInterpolate(
+        this.$gettext(
+          'If you disable the space "%{spaceName}", it can no longer be accessed. Only Space managers will still have access. Note: No files will be deleted from the server.'
+        ),
+        { spaceName: resources[0].name }
+      )
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
-        title: this.$gettext('Disable space') + ' ' + resources[0].name,
+        title: this.$gettext('Disable Space?'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Disable'),
-        message: this.$gettext('Are you sure you want to disable this space?'),
+        message,
         hasInput: false,
         onCancel: this.hideModal,
         onConfirm: () => this.$_disable_disableSpace(resources[0].id)

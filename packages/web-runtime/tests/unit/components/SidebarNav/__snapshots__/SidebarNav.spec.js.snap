@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OcSidebarNav renders navItems into a list 1`] = `
-<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-py-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
+<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-pb-s oc-pt-m oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
     <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
+  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
       <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
       <sidebar-nav-item-stub name="Personal" index="00000000000000000000000000000000" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
@@ -16,10 +16,10 @@ exports[`OcSidebarNav renders navItems into a list 1`] = `
 `;
 
 exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
-<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-py-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
+<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-pb-s oc-pt-m oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s">
     <oc-icon-stub name="arrow-drop-left" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
+  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
       <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
       <sidebar-nav-item-stub name="Personal" index="00000000000000000000000000000000" active="true" target="/files/list/all" icon="folder" filltype="fill"></sidebar-nav-item-stub>
@@ -31,10 +31,10 @@ exports[`OcSidebarNav toggles back into open state upon button click 1`] = `
 `;
 
 exports[`OcSidebarNav toggles into closed state upon button click 1`] = `
-<div id="web-nav-sidebar" class="oc-app-navigation-collapsed"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-py-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-collapsed">
+<div id="web-nav-sidebar" class="oc-app-navigation-collapsed"><button aria-label="Toggle sidebar" type="button" class="toggle-sidebar-button oc-pb-s oc-pt-m oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-collapsed">
     <oc-icon-stub name="arrow-drop-right" filltype="line" accessiblelabel="" type="span" size="large" variation="passive" color=""></oc-icon-stub>
   </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-my-m oc-px-xs">
+  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
     <oc-list-stub>
       <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient"></div>
       <sidebar-nav-item-stub name="Personal" index="00000000000000000000000000000000" active="true" target="/files/list/all" icon="folder" filltype="fill" collapsed="true"></sidebar-nav-item-stub>

@@ -57,7 +57,7 @@ module.exports = {
       locateStrategy: 'css selector'
     },
     linkName: {
-      selector: '//li[@class="oc-breadcrumb-list-item"]//span[text()="%s"]'
+      selector: '//li[contains(@class, "oc-breadcrumb-list-item")]//span[text()="%s"]'
     }
   }
 }

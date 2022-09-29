@@ -117,7 +117,8 @@ function getWrapper() {
           return { href: r.name }
         }
       },
-      $gettext: jest.fn()
+      $gettext: jest.fn(),
+      $gettextInterpolate: jest.fn()
     },
     store: createStore(Vuex.Store, {
       actions: {

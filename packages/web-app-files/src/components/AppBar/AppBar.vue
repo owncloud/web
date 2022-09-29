@@ -32,7 +32,7 @@
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
       </div>
-      <div class="files-app-bar-actions">
+      <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start">
           <slot
             v-if="showActionsOnSelection || selectedFiles.length === 0"
