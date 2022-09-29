@@ -4,9 +4,8 @@ import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import fileSideBars from '@files/src/fileSideBars'
 import stubs from '@/tests/unit/stubs'
-import Files from '@/__fixtures__/files'
 import merge from 'lodash-es/merge'
-import { buildResource, renameResource } from '@files/src/helpers/resources'
+import { buildResource } from '@files/src/helpers/resources'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
@@ -22,84 +21,11 @@ jest.mock('@files/src/helpers/resources', () => {
   }
 })
 
-const simpleOwnFolder = {
-  type: 'folder',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
-  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
-  size: '740'
-}
-
 const selectors = {
   noSelectionInfoPanel: 'noselection-stub'
 }
 
 describe('SideBar', () => {
-  describe('file info', () => {
-    beforeEach(() => {
-      buildResource.mockImplementation((item) => item)
-    })
-    afterEach(() => {
-      jest.clearAllMocks()
-    })
-    it('fetches file info if 1 item is selected', () => {
-      const mockFileInfo = jest.fn()
-      mockFileInfo.mockReturnValueOnce(Files['/'][1])
-
-      createWrapper({
-        item: simpleOwnFolder,
-        selectedItems: [simpleOwnFolder],
-        fileFetchMethod: mockFileInfo
-      })
-
-      expect(mockFileInfo).toHaveBeenCalledTimes(1)
-    })
-
-    it('fetches file info if the selected item changes', async () => {
-      const spyOnFetchFileInfo = jest
-        .spyOn(SideBar.methods, 'fetchFileInfo')
-        .mockImplementation(jest.fn)
-
-      const wrapper = createWrapper({
-        item: simpleOwnFolder,
-        selectedItems: [simpleOwnFolder]
-      })
-
-      // fetchFileInfo is called once in created()
-      expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(1)
-
-      // it should be called again when a different file is loaded
-      const resource = Files['/'][4]
-      resource.path = `${resource.name}`
-      wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', resource)
-      await wrapper.vm.$nextTick()
-      expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
-
-      // and again if the file is renamed
-      const renamedResource = renameResource(
-        { webDavPath: '' },
-        Object.assign({}, resource),
-        'foobar.png',
-        ''
-      )
-      wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', Object.assign(renamedResource))
-      await wrapper.vm.$nextTick()
-      expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(3)
-    })
-
-    it('does not fetch file info if multiple items are selected', () => {
-      const mockFileInfo = jest.fn().mockReturnValue({})
-
-      createWrapper({
-        item: simpleOwnFolder,
-        selectedItems: [simpleOwnFolder, simpleOwnFolder],
-        mocks: { $client: { files: { fileInfo: mockFileInfo } } }
-      })
-
-      expect(mockFileInfo).not.toHaveBeenCalled()
-    })
-  })
-
   describe('no selection info panel', () => {
     afterEach(() => {
       jest.clearAllMocks()
@@ -221,8 +147,7 @@ function createWrapper({
           },
           getters: {
             highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => selectedItems,
-            currentFolder: () => simpleOwnFolder
+            selectedFiles: () => selectedItems
           },
           mutations: {
             SET_HIGHLIGHTED_FILE(state, file) {
