@@ -8,11 +8,8 @@ import {
 } from '../conflictHandling/conflictUtils'
 import { ConflictDialog } from '../conflictHandling/conflictDialog'
 import { ResolveStrategy } from '../conflictHandling'
+import { TransferType } from '.'
 
-export enum TransferType {
-  COPY,
-  MOVE
-}
 export class ResourceTransfer extends ConflictDialog {
   constructor(
     private sourceSpace: SpaceResource,
