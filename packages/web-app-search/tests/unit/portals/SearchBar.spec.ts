@@ -17,7 +17,12 @@ const providerFiles = {
   available: true,
   previewSearch: {
     available: true,
-    search: jest.fn()
+    search: jest.fn(),
+    component: localVue.component('ProviderFilesPreview', {
+      render(createElement) {
+        return createElement('div')
+      }
+    })
   }
 }
 
@@ -28,7 +33,12 @@ const providerContacts = {
   previewSearch: {
     available: true,
     search: jest.fn()
-  }
+  },
+  component: localVue.component('ProviderContactsPreview', {
+    render(createElement) {
+      return createElement('div')
+    }
+  })
 }
 
 const selectors = {
@@ -125,12 +135,11 @@ describe('Search Bar portal component', () => {
     await flushPromises()
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
   })
-  test.skip('hides options on preview item click', async () => {
+  test('hides options on preview item click', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
-    console.log(wrapper.html())
     wrapper.findAll('.preview-component').at(0).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
@@ -138,6 +147,7 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.find(selectors.searchInput).trigger('keyup.esc')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
@@ -145,6 +155,7 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
@@ -152,6 +163,7 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.find(selectors.searchInput).setValue('')
     await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
