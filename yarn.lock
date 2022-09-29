@@ -6500,6 +6500,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flush-promises@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "flush-promises@npm:1.0.2"
+  checksum: 4451bfb21a11e64b8359c496cc875f7279a62c17e0cd3dba4adea83c098bb4497cdd8685d04dec46926d268e21e61b8d76cc92eedf396e18df8e501c9e9eb772
+  languageName: node
+  linkType: hard
+
 "focus-trap-vue@npm:^1.1.1":
   version: 1.1.1
   resolution: "focus-trap-vue@npm:1.1.1"
@@ -11952,6 +11959,7 @@ __metadata:
     eslint-plugin-unused-imports: ^2.0.0
     eslint-plugin-vue: ^7.13.0
     eslint-plugin-vuejs-accessibility: ^0.7.1
+    flush-promises: ^1.0.2
     focus-trap: ^6.9.0
     focus-trap-vue: ^1.1.1
     git-repo-info: ^2.1.1

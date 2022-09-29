@@ -90,6 +90,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^7.13.0",
     "eslint-plugin-vuejs-accessibility": "^0.7.1",
+    "flush-promises": "^1.0.2",
     "focus-trap": "^6.9.0",
     "focus-trap-vue": "^1.1.1",
     "git-repo-info": "^2.1.1",
