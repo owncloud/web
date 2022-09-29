@@ -59,10 +59,7 @@ export const buildRoutes = (): RouteConfig[] =>
             ...to.params,
             driveAliasAndItem: urlJoin('personal/home', to.params.item, { leadingSlash: false })
           }
-        }),
-      meta: {
-        patchCleanPath: true
-      }
+        })
     },
     {
       path: '/list/favorites',
