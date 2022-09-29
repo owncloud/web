@@ -17,12 +17,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'SpaceInfo',
-  inject: ['displayedItem'],
   computed: {
+    ...mapGetters('Files', ['highlightedFile']),
+
     space() {
-      return this.displayedItem.value
+      return this.highlightedFile
     }
   }
 }

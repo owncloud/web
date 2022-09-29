@@ -143,7 +143,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
@@ -202,79 +202,56 @@ export default defineComponent({
       }
       return !pathSegments.length
     },
-    highlightedFileThumbnail() {
-      return this.highlightedFile?.thumbnail
-    },
-    highlightedFileFavorite() {
-      return this.highlightedFile?.starred
-    },
     highlightedFileIsSpace() {
       return this.highlightedFile?.type === 'space'
     }
   },
   watch: {
-    highlightedFile(newFile, oldFile) {
-      if (!this.isSingleResource) {
-        return
-      }
+    highlightedFile: {
+      handler(newFile, oldFile) {
+        const noChanges = oldFile && isEqual(newFile, oldFile)
+        if (!this.isSingleResource || !this.highlightedFile || noChanges) {
+          return
+        }
 
-      if (oldFile && isEqual(newFile, oldFile)) {
-        return
-      }
-
-      const loadShares =
-        !!oldFile ||
-        this.isSpacesProjectsLocation ||
-        this.isSharedWithMeLocation ||
-        this.isSharedWithOthersLocation ||
-        this.isSharedViaLinkLocation ||
-        this.isSearchLocation ||
-        this.isFavoritesLocation
-      this.fetchFileInfo(loadShares)
-    },
-
-    highlightedFileThumbnail(thumbnail) {
-      this.$set(this.selectedFile, 'thumbnail', thumbnail)
-    },
-
-    highlightedFileFavorite(starred) {
-      this.$set(this.selectedFile, 'starred', starred)
-    }
-  },
-  async created() {
-    if (!this.areMultipleSelected) {
-      await this.fetchFileInfo(false)
+        const loadShares =
+          !!oldFile ||
+          this.isSpacesProjectsLocation ||
+          this.isSharedWithMeLocation ||
+          this.isSharedWithOthersLocation ||
+          this.isSharedViaLinkLocation ||
+          this.isSearchLocation ||
+          this.isFavoritesLocation
+        this.fetchFileInfo(loadShares)
+      },
+      deep: true
     }
   },
   methods: {
     ...mapActions('Files', ['loadSharesTree']),
 
     async fetchFileInfo(loadShares) {
-      if (!this.highlightedFile) {
-        this.selectedFile = {}
-        return
-      }
-
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-generic') ||
-        this.highlightedFileIsSpace
-      ) {
-        if (loadShares) {
-          this.loadShares()
-        }
-        this.selectedFile = { ...this.highlightedFile }
-        return
-      }
-
       this.loading = true
+      const highlightedFileIsShare =
+        this.isSharedWithMeLocation ||
+        this.isSharedWithOthersLocation ||
+        this.isSharedViaLinkLocation
+
+      if (loadShares) {
+        this.loadShares()
+      }
+
+      if (!highlightedFileIsShare) {
+        this.selectedFile = { ...this.highlightedFile }
+        this.loading = false
+        return
+      }
+
+      // shared resources look different, hence we need to fetch the actual resource here
       try {
         this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, {
           path: this.highlightedFile.path
         })
-        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        if (loadShares) {
-          this.loadShares()
-        }
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)
