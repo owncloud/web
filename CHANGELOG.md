@@ -16,8 +16,10 @@ Summary
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
+* Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
+* Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
 Details
 -------
@@ -97,6 +99,19 @@ Details
    https://github.com/owncloud/web/pull/7630
    https://github.com/owncloud/web/pull/7641
 
+* Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+
+   We changed the URL format to not use storageIds in the URL path anymore to identify spaces, but
+   instead use drive aliases of spaces in the URL path.
+
+   BREAKING CHANGE for users: this breaks existing bookmarks - they won't resolve anymore.
+   BREAKING CHANGE for developers: the appDefaults composables from web-pkg now work with drive
+   aliases, concatenated with relative item paths, instead of webdav paths. If you use the
+   appDefaults composables in your application it's likely that your code needs to be adapted.
+
+   https://github.com/owncloud/web/issues/6648
+   https://github.com/owncloud/web/pull/7430
+
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 
    Sub-folders within user- and group-shares can now be denied for certain share receivers if the
@@ -113,6 +128,14 @@ Details
 
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
+
+* Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
+
+   Only relevant for developers: We've added webdav support to the `web-client` package. This
+   wraps the existing webdav requests from ownCloud SDK but handles the differentiation of
+   public link and user-specific webdav requests internally.
+
+   https://github.com/owncloud/web/pull/7430
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
