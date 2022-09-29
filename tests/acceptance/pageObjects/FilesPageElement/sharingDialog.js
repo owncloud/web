@@ -301,7 +301,10 @@ module.exports = {
         }
       }
 
-      await this.click('@customPermissionsConfirmBtn')
+      await this.initAjaxCounters()
+        .click('@customPermissionsConfirmBtn')
+        .waitForOutstandingAjaxCalls()
+        .waitForAnimationToFinish() // wait for confirm dialog to settle down
     },
     /**
      * Toggle the checkbox to set a certain permission for a share
