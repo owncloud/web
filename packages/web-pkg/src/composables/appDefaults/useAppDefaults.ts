@@ -60,7 +60,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       path = urlJoin(unref(space).webDavPath, unref(item))
     } else {
       // deprecated.
-      path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`
+      path = urlJoin(unref(currentRoute).params.filePath)
     }
 
     return {
