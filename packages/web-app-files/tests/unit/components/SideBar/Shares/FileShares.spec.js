@@ -108,7 +108,7 @@ describe('FileShares', () => {
     afterEach(() => {
       mockAxios.reset()
     })
-    it('loads space members if a space is given', async () => {
+    it('loads space members if a space is given', () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({
           data: { role: spaceRoleManager.name }

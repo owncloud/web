@@ -8,6 +8,7 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
+      @clear="onClear"
       @click.native="term && $refs.optionsDrop.show()"
       @keyup.native.esc="$refs.optionsDrop.hide()"
       @keyup.native.up="onKeyUpUp"
@@ -35,9 +36,10 @@
           <li v-for="provider in displayProviders" :key="provider.id" class="provider">
             <oc-list>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
-                <span>{{ provider.displayName }}</span>
+                <span class="display-name">{{ provider.displayName }}</span>
                 <span>
                   <router-link
+                    class="more-results"
                     :to="getMoreResultsLinkForProvider(provider)"
                     @click.native="$refs.optionsDrop.hide()"
                   >
@@ -56,6 +58,7 @@
               >
                 <component
                   :is="provider.previewSearch.component"
+                  class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
                   @click.native="$refs.optionsDrop.hide()"
@@ -120,13 +123,15 @@ export default {
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
-        this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
-        this.markInstance.unmark()
-        this.markInstance.mark(this.term, {
-          element: 'span',
-          className: 'highlight-mark',
-          exclude: ['.provider-details *']
-        })
+        if (this.$refs.optionsDrop) {
+          this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
+          this.markInstance.unmark()
+          this.markInstance.mark(this.term, {
+            element: 'span',
+            className: 'highlight-mark',
+            exclude: ['.provider-details *']
+          })
+        }
       })
     },
     $route: {
@@ -135,7 +140,7 @@ export default {
           if (!this.availableProviders.length) {
             return
           }
-          const routeTerm = r.query.term
+          const routeTerm = r?.query?.term
           const input = this.$el.getElementsByTagName('input')[0]
           if (!input || !routeTerm) {
             return
@@ -155,24 +160,28 @@ export default {
           return []
         }
 
-        const searchResult = []
+        const searchResults = []
 
         for (const availableProvider of this.availableProviders) {
           if (availableProvider.previewSearch?.available) {
-            searchResult.push({
+            searchResults.push({
               providerId: availableProvider.id,
               result: await availableProvider.previewSearch.search(this.term)
             })
           }
         }
 
-        return searchResult
+        return searchResults
       },
       watch: ['term']
     }
   },
 
   methods: {
+    onClear() {
+      this.term = ''
+      this.$refs.optionsDrop.hide()
+    },
     onKeyUpEnter() {
       this.$refs.optionsDrop.hide()
 
@@ -222,6 +231,10 @@ export default {
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
+      if (typeof this.$refs.optionsDrop.$el.scrollTo !== 'function') {
+        return
+      }
+
       const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
 
       this.$refs.optionsDrop.$el.scrollTo(
