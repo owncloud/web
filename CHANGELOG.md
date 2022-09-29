@@ -17,6 +17,7 @@ Summary
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+* Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
@@ -111,6 +112,13 @@ Details
 
    https://github.com/owncloud/web/issues/6648
    https://github.com/owncloud/web/pull/7430
+
+* Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
+
+   We've changed the custom permission wording from 'update' to 'edit'
+
+   https://github.com/owncloud/web/issues/7703
+   https://github.com/owncloud/web/pull/7709
 
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 
