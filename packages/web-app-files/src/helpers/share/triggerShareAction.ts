@@ -1,4 +1,4 @@
-import { buildSharedResource } from '../resources'
+import { aggregateResourceShares } from '../resources'
 import { ShareStatus } from 'web-client/src/helpers/share/status'
 
 export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {
@@ -24,7 +24,7 @@ export async function triggerShareAction(resource, status, hasReSharing, hasShar
     response = await response.json()
     if (response.ocs.data.length > 0) {
       const share = response.ocs.data[0]
-      return buildSharedResource(share, true, hasReSharing, hasShareJail)
+      return aggregateResourceShares([share], true, hasReSharing, hasShareJail)[0]
     }
   }
 
