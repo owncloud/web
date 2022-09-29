@@ -20,6 +20,7 @@ import { defineComponent } from '@vue/composition-api'
 import { useGraphClient } from 'web-client/src/composables'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   setup() {
@@ -64,54 +65,46 @@ export default defineComponent({
       return this.setModalInputErrorMessage(null)
     },
 
-    addNewSpace(name) {
-      return this.graphClient.drives
-        .createDrive({ name }, {})
-        .then(({ data: space }) => {
-          this.hideModal()
-          const resource = buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
-          this.UPSERT_RESOURCE(resource)
-          this.UPSERT_SPACE(resource)
+    async addNewSpace(name) {
+      try {
+        const { data: space } = await this.graphClient.drives.createDrive({ name }, {})
+        this.hideModal()
+        const resource = buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+        this.UPSERT_RESOURCE(resource)
+        this.UPSERT_SPACE(resource)
 
-          this.$client.files.createFolder(`spaces/${space.id}/.space`).then(() => {
-            this.$client.files
-              .putFileContents(
-                `spaces/${space.id}/.space/readme.md`,
-                'Here you can add a description for this Space.'
-              )
-              .then((markdown) => {
-                this.graphClient.drives
-                  .updateDrive(
-                    space.id,
-                    {
-                      special: [
-                        {
-                          specialFolder: {
-                            name: 'readme'
-                          },
-                          id: markdown['OC-FileId']
-                        }
-                      ]
-                    },
-                    {}
-                  )
-                  .then(({ data }) => {
-                    this.UPDATE_RESOURCE_FIELD({
-                      id: space.id,
-                      field: 'spaceReadmeData',
-                      value: data.special.find((special) => special.specialFolder.name === 'readme')
-                    })
-                  })
-              })
-          })
+        await (this.$clientService.webdav as WebDAV).createFolder(resource, { path: '.space' })
+        const markdown = await (this.$clientService.webdav as WebDAV).putFileContents(resource, {
+          path: '.space/readme.md',
+          content: this.$gettext('Here you can add a description for this Space.')
         })
-        .catch((error) => {
-          console.error(error)
-          this.showMessage({
-            title: this.$gettext('Creating space failed…'),
-            status: 'danger'
-          })
+
+        const { data: updatedSpace } = await this.graphClient.drives.updateDrive(
+          space.id,
+          {
+            special: [
+              {
+                specialFolder: {
+                  name: 'readme'
+                },
+                id: markdown.id as string
+              }
+            ]
+          },
+          {}
+        )
+        this.UPDATE_RESOURCE_FIELD({
+          id: space.id,
+          field: 'spaceReadmeData',
+          value: updatedSpace.special.find((special) => special.specialFolder.name === 'readme')
         })
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Creating space failed…'),
+          status: 'danger'
+        })
+      }
     }
   }
 })
