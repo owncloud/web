@@ -41,7 +41,7 @@ export abstract class SharePermissions {
   )
 
   static readonly read = new SharePermission('read', SharePermissionBit.Read, $gettext('Read'))
-  static readonly update = new SharePermission('edit', SharePermissionBit.Update, $gettext('Edit'))
+  static readonly update = new SharePermission('update', SharePermissionBit.Update, $gettext('Edit'))
 
   static readonly create = new SharePermission(
     'create',
