@@ -157,7 +157,7 @@ import { SpaceResource } from 'web-client/src/helpers'
 import {
   extractNameWithoutExtension,
   resolveFileNameDuplicate,
-  ResourcesUpload,
+  ResourcesUpload
 } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'

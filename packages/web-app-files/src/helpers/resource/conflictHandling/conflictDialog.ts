@@ -26,7 +26,7 @@ export class ConflictDialog {
     resourcesToMove: Resource[],
     targetSpace: SpaceResource,
     targetFolder: Resource,
-    targetFolderResources: Resource[],
+    targetFolderResources: Resource[]
   ) {
     // Collect all conflicting resources
     const allConflicts = []

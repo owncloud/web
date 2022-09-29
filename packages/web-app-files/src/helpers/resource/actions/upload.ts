@@ -165,10 +165,7 @@ export class ResourcesUpload extends ConflictDialog {
           `/${folder}`,
           `/${newFolderName}`
         )
-        file.meta.relativePath = file.meta.relativePath.replace(
-          `/${folder}/`,
-          `/${newFolderName}/`
-        )
+        file.meta.relativePath = file.meta.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
         file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
         const data = file.data as any
         data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)

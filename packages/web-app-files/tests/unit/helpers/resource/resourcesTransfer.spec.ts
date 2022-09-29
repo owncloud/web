@@ -58,7 +58,14 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
-      clientServiceMock,jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
+      clientServiceMock,
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn()
+    )
     const result = await resourcesTransfer.perform(TransferType.COPY)
     expect(result.length).toBe(0)
   })
@@ -75,7 +82,14 @@ describe('resourcesTransfer', () => {
           resourcesToMove,
           targetSpace,
           targetFolder,
-          clientServiceMock,jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
+          clientServiceMock,
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn()
+        )
         const movedResources = await resourcesTransfer.perform(action)
 
         const fn =
@@ -107,11 +121,23 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
-      clientServiceMock,jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
+      clientServiceMock,
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn(),
+      jest.fn()
+    )
     resourcesTransfer.resolveFileExists = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ strategy: 0 } as ResolveConflict))
-    await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetSpace, targetFolder, targetFolderItems)
+    await resourcesTransfer.resolveAllConflicts(
+      resourcesToMove,
+      targetSpace,
+      targetFolder,
+      targetFolderItems
+    )
 
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
     console.log('test')

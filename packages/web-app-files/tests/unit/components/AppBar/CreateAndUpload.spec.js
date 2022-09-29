@@ -345,9 +345,10 @@ describe('CreateAndUpload component', () => {
         jest.fn()
       )
       resourcesUpload.handleUppyFileUpload = jest.fn()
-      resourcesUpload.resolveFileExists = jest.fn(() =>
+      const resolveFileConflictMethod = jest.fn(() =>
         Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
       )
+      resourcesUpload.resolveFileExists = resolveFileConflictMethod
 
       await resourcesUpload.displayOverwriteDialog(
         [uppyResourceOne, uppyResourceTwo],
@@ -355,8 +356,8 @@ describe('CreateAndUpload component', () => {
       )
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(undefined, null, [
         uppyResourceOne,
         uppyResourceTwo
       ])
@@ -400,9 +401,9 @@ describe('CreateAndUpload component', () => {
         [conflictOne, conflictTwo]
       )
 
-      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(2)
-      expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+      expect(resourcesUpload.resolveFileExists).toHaveBeenCalledTimes(2)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(undefined, null, [
         uppyResourceOne,
         uppyResourceTwo
       ])

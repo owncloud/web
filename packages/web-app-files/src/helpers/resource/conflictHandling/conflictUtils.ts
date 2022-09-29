@@ -15,6 +15,11 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
-export const isResourceBeeingMovedToSameLocation = (sourceSpace: SpaceResource, resource: Resource, targetSpace: SpaceResource, targetFolder: Resource) => {
+export const isResourceBeeingMovedToSameLocation = (
+  sourceSpace: SpaceResource,
+  resource: Resource,
+  targetSpace: SpaceResource,
+  targetFolder: Resource
+) => {
   return sourceSpace.id === targetSpace.id && dirname(resource.path) === targetFolder.path
 }

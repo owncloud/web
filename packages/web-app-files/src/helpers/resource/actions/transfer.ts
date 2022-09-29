@@ -27,11 +27,13 @@ export class ResourceTransfer extends ConflictDialog {
     super(createModal, hideModal, showMessage, $gettext, $ngettext, $gettextInterpolate)
   }
 
-  hasRecursion(): boolean  {
+  hasRecursion(): boolean {
     if (this.sourceSpace.id !== this.targetSpace.id) {
       return false
     }
-    return this.resourcesToMove.some((resource: Resource) => this.targetFolder.path === resource.path)
+    return this.resourcesToMove.some(
+      (resource: Resource) => this.targetFolder.path === resource.path
+    )
   }
 
   showRecursionErrorMessage() {
@@ -66,7 +68,7 @@ export class ResourceTransfer extends ConflictDialog {
       })
       return
     }
-    let title = this.$gettextInterpolate(
+    const title = this.$gettextInterpolate(
       transferType === TransferType.COPY
         ? this.$gettext('Failed to copy %{count} resources')
         : this.$gettext('Failed to move %{count} resources'),
@@ -78,28 +80,32 @@ export class ResourceTransfer extends ConflictDialog {
       status: 'danger'
     })
   }
+
   async perform(transferType: TransferType): Promise<Resource[]> {
     if (this.hasRecursion()) {
       this.showRecursionErrorMessage()
       return []
     }
-    if (this.sourceSpace.id != this.targetSpace.id && transferType === TransferType.MOVE) {
+    if (this.sourceSpace.id !== this.targetSpace.id && transferType === TransferType.MOVE) {
       const doCopyInsteadOfMove = await this.resolveDoCopyInsteadOfMoveForSpaces()
       if (!doCopyInsteadOfMove) return []
       transferType = TransferType.COPY
     }
-  
+
     const errors = []
-    const targetFolderResources = await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
-  
+    const targetFolderResources = await this.clientService.webdav.listFiles(
+      this.targetSpace,
+      this.targetFolder
+    )
+
     const resolvedConflicts = await this.resolveAllConflicts(
       this.resourcesToMove,
       this.targetSpace,
       this.targetFolder,
-      targetFolderResources,
+      targetFolderResources
     )
     const movedResources: Resource[] = []
-  
+
     for (let resource of this.resourcesToMove) {
       // shallow copy of resources to prevent modifing existing rows
       resource = { ...resource }
@@ -107,7 +113,9 @@ export class ResourceTransfer extends ConflictDialog {
       let targetName = resource.name
       let overwriteTarget = false
       if (hasConflict) {
-        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)?.strategy
+        const resolveStrategy = resolvedConflicts.find(
+          (e) => e.resource.id === resource.id
+        )?.strategy
         if (resolveStrategy === ResolveStrategy.SKIP) {
           continue
         }
@@ -123,7 +131,16 @@ export class ResourceTransfer extends ConflictDialog {
         }
       }
       try {
-        if (isResourceBeeingMovedToSameLocation(this.sourceSpace, resource, this.targetSpace, this.targetFolder) && overwriteTarget) continue
+        if (
+          isResourceBeeingMovedToSameLocation(
+            this.sourceSpace,
+            resource,
+            this.targetSpace,
+            this.targetFolder
+          ) &&
+          overwriteTarget
+        )
+          continue
         if (transferType === TransferType.COPY) {
           await this.clientService.webdav.copyFiles(
             this.sourceSpace,
@@ -150,11 +167,7 @@ export class ResourceTransfer extends ConflictDialog {
         errors.push(error)
       }
     }
-    this.showResultMessage(
-      errors,
-      movedResources,
-      transferType
-    )
+    this.showResultMessage(errors, movedResources, transferType)
     return movedResources
   }
 }
