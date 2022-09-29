@@ -143,7 +143,15 @@ describe('Search Bar portal component', () => {
     wrapper.findAll('.preview-component').at(0).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
-  test('hides options on escape key press', async () => {
+  test('hides options on key press enter', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    wrapper.find(selectors.searchInput).trigger('keyup.enter')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  })
+  test('hides options on key press escape', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
@@ -209,7 +217,6 @@ describe('Search Bar portal component', () => {
         query: { term: 'albert', provider: 'files.sdk' }
       })
     )
-    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
     wrapper = getMountedWrapper()
