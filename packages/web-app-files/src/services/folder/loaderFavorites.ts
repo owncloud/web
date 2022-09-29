@@ -4,12 +4,10 @@ import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-pkg/src/constants'
 import { buildResource } from '../../helpers/resources'
 import { isLocationCommonActive } from '../../router'
-import { Store } from 'vuex'
-import get from 'lodash-es/get'
 
 export class FolderLoaderFavorites implements FolderLoader {
-  public isEnabled(store: Store<any>): boolean {
-    return get(store, 'getters.capabilities.files.favorites', true)
+  public isEnabled(): boolean {
+    return true
   }
 
   public isActive(router: Router): boolean {
@@ -27,7 +25,14 @@ export class FolderLoaderFavorites implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
       let resources = yield client.files.getFavoriteFiles(DavProperties.Default)
-      resources = resources.map(buildResource)
+      resources = resources.map((f) => {
+        const resource = buildResource(f)
+        // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+        if (!resource.storageId) {
+          resource.storageId = store.getters.user.id
+        }
+        return resource
+      })
       store.commit('Files/LOAD_FILES', {
         currentFolder: null,
         files: resources

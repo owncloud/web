@@ -38,12 +38,13 @@ describe('setReadme', () => {
           params: { storageId: 1 }
         },
         $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
+          currentRoute: createLocationSpaces('files-spaces-generic'),
           resolve: (r) => {
             return { href: r.name }
           }
         },
-        $gettext: jest.fn()
+        $gettext: jest.fn(),
+        space
       },
       provide: {
         currentSpace: {

@@ -17,8 +17,6 @@ export default {
   clipboardAction: (state) => {
     return state.clipboardAction
   },
-  // a flat file list has no current folder nor parent
-  flatFileList: (state) => !!state.currentFolder === false,
   activeFiles: (state, getters) => {
     let files = [].concat(getters.filesAll)
 

@@ -131,7 +131,6 @@ import pathUtil from 'path'
 import filesize from 'filesize'
 
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
-import { buildResource, buildWebDavFilesPath } from '../../helpers/resources'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
 import { useGraphClient } from 'web-client/src/composables'
@@ -141,28 +140,36 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilitySpacesEnabled,
   useStore,
-  usePublicLinkPassword,
-  useUserContext,
-  usePublicLinkContext
+  useUserContext
 } from 'web-pkg/src/composables'
 
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
-
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import { defineComponent, getCurrentInstance, onMounted } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  PropType
+} from '@vue/composition-api'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
-import { SHARE_JAIL_ID } from '../../services/folder'
 import { bus } from 'web-pkg/src/instance'
-import { buildWebDavSpacesPath, Resource } from 'web-client/src/helpers'
-import { extractExtensionFromFile, extractNameWithoutExtension } from '../../helpers/resource'
+import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import {
+  extractExtensionFromFile,
+  extractNameWithoutExtension,
   resolveFileExists,
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   FileExistsResolver
-} from '../../helpers/resource/copyMove'
+} from '../../helpers/resource'
+import { WebDAV } from 'web-client/src/webdav'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { urlJoin } from 'web-pkg/src/utils'
+import qs from 'qs'
+import { locationPublicLink } from '../../router/public'
+import { locationSpacesGeneric } from '../../router/spaces'
 
 export default defineComponent({
   components: {
@@ -170,13 +177,22 @@ export default defineComponent({
   },
   mixins: [MixinFileActions],
   props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
+    },
+    item: {
+      type: String,
+      required: false,
+      default: null
+    },
     limitedScreenSpace: {
       type: Boolean,
       default: false,
       required: false
     }
   },
-  setup() {
+  setup(props) {
     const instance = getCurrentInstance().proxy
     const uppyService = instance.$uppyService
     const store = useStore()
@@ -201,31 +217,27 @@ export default defineComponent({
       ...useUpload({
         uppyService
       }),
-      ...useUploadHelpers(),
+      ...useUploadHelpers({
+        space: computed(() => props.space),
+        currentFolder: computed(() => props.item)
+      }),
       ...useRequest(),
       ...useGraphClient(),
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal'),
-      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
-      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesProjectLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-project'),
-      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
+      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
+      isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
-      publicLinkPassword: usePublicLinkPassword({ store }),
-      isUserContext: useUserContext({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+      isUserContext: useUserContext({ store })
     }
   },
   data: () => ({
-    newFileAction: null,
-    path: '',
-    fileFolderCreationLoading: false
+    newFileAction: null
   }),
   computed: {
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
     ...mapGetters('Files', ['files', 'currentFolder', 'selectedFiles', 'clipboardResources']),
-    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState('Files', ['areFileExtensionsShown']),
+    ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
@@ -299,28 +311,21 @@ export default defineComponent({
       'clearClipboardFiles',
       'pasteSelectedFiles'
     ]),
-    ...mapActions([
-      'openFile',
-      'showMessage',
-      'createModal',
-      'setModalInputErrorMessage',
-      'hideModal'
-    ]),
+    ...mapActions(['showMessage', 'createModal', 'setModalInputErrorMessage', 'hideModal']),
     ...mapMutations('Files', ['UPSERT_RESOURCE']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
     pasteFilesHere() {
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext: this.isPublicLinkContext,
-        publicLinkPassword: this.publicLinkPassword,
         upsertResource: this.UPSERT_RESOURCE
       }).then(() => {
         ;(document.activeElement as HTMLElement).blur()
@@ -335,9 +340,9 @@ export default defineComponent({
           return
         }
 
-        if (this.isSpacesProjectLocation || this.isPersonalLocation) {
+        if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
-            const driveResponse = await this.graphClient.drives.getDrive(file.meta.routeStorageId)
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.spaceId)
             this.UPDATE_SPACE_FIELD({
               id: driveResponse.data.id,
               field: 'spaceQuota',
@@ -349,7 +354,8 @@ export default defineComponent({
           }
         }
 
-        const fileIsInCurrentPath = file.meta.currentFolder === this.currentPath
+        const fileIsInCurrentPath =
+          file.meta.spaceId === this.space.id && file.meta.currentFolder === this.item
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -425,42 +431,15 @@ export default defineComponent({
         return
       }
 
-      this.fileFolderCreationLoading = true
-
       try {
-        let path = pathUtil.join(this.currentPath, folderName)
-        let resource
-
-        if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
-          await this.$client.files.createFolder(path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-        resource = buildResource(resource)
-
+        const path = pathUtil.join(this.item, folderName)
+        const resource = await (this.$clientService.webdav as WebDAV).createFolder(this.space, {
+          path
+        })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -482,8 +461,6 @@ export default defineComponent({
           status: 'danger'
         })
       }
-
-      this.fileFolderCreationLoading = false
     },
 
     checkNewFolderName(folderName) {
@@ -522,43 +499,23 @@ export default defineComponent({
         return
       }
 
-      this.fileFolderCreationLoading = true
-
       try {
-        let resource
-        let path = pathUtil.join(this.currentPath, fileName)
+        const path = pathUtil.join(this.item, fileName)
+        const resource = await (this.$clientService.webdav as WebDAV).putFileContents(this.space, {
+          path
+        })
 
-        if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
-          await this.$client.files.putFileContents(path, '')
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          await this.$client.publicFiles.putFileContents('', path, this.publicLinkPassword, '')
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-
-        this.UPSERT_RESOURCE(buildResource(resource))
+        this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
-          const fileId = resource.fileInfo[DavProperty.FileId]
+          const fileId = resource.fileId
 
-          this.$_fileActions_openEditor(this.newFileAction, path, fileId, EDITOR_MODE_CREATE)
+          this.$_fileActions_openEditor(
+            this.newFileAction,
+            this.space.getDriveAliasAndItem(resource),
+            fileId,
+            EDITOR_MODE_CREATE
+          )
           this.hideModal()
 
           return
@@ -566,7 +523,7 @@ export default defineComponent({
 
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -585,8 +542,6 @@ export default defineComponent({
           status: 'danger'
         })
       }
-
-      this.fileFolderCreationLoading = false
     },
     async addAppProviderFile(fileName) {
       // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
@@ -594,48 +549,30 @@ export default defineComponent({
         return
       }
       try {
-        const parent = this.currentFolder.fileId
-        const configUrl = this.configuration.server
-        const appNewUrl = this.capabilities.files.app_providers[0].new_url.replace(/^\/+/, '')
-        const url =
-          configUrl +
-          appNewUrl +
-          `?parent_container_id=${parent}&filename=${encodeURIComponent(fileName)}`
-
+        const baseUrl = urlJoin(
+          configurationManager.serverUrl,
+          this.capabilities.files.app_providers[0].new_url
+        )
+        const query = qs.stringify({
+          parent_container_id: this.currentFolder.fileId,
+          filename: fileName
+        })
+        const url = `${baseUrl}?${query}`
         const response = await this.makeRequest('POST', url)
 
         if (response.status !== 200) {
           throw new Error(`An error has occurred: ${response.status}`)
         }
 
-        let resource
-        let path = pathUtil.join(this.currentPath, fileName)
-        if (this.isPersonalLocation) {
-          if (this.hasShareJail) {
-            path = buildWebDavSpacesPath(this.personalDriveId, path || '')
-          } else {
-            path = buildWebDavFilesPath(this.user.id, path)
-          }
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesProjectLocation) {
-          path = buildWebDavSpacesPath(this.$route.params.storageId, path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else if (this.isSpacesShareLocation) {
-          path = buildWebDavSpacesPath([SHARE_JAIL_ID, this.$route.query.shareId].join('!'), path)
-          resource = await this.$client.files.fileInfo(path, DavProperties.Default)
-        } else {
-          resource = await this.$client.publicFiles.getFileInfo(
-            path,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        }
-        resource = buildResource(resource)
-        this.$_fileActions_triggerDefaultAction(resource)
+        const path = pathUtil.join(this.item, fileName) || ''
+        const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(this.space, {
+          path
+        })
+        this.$_fileActions_triggerDefaultAction({ space: this.space, resources: [resource] })
         this.UPSERT_RESOURCE(resource)
         this.hideModal()
 
-        if (this.isPersonalLocation) {
+        if (this.isSpacesGenericLocation && this.space.driveType !== 'share') {
           this.loadIndicators({
             client: this.$client,
             currentFolder: this.currentFolder.path
@@ -720,32 +657,29 @@ export default defineComponent({
       if (conflicts.length) {
         await this.displayOverwriteDialog(uppyResources, conflicts, resolveFileExists)
       } else {
-        this.handleUppyFileUpload(uppyResources)
+        await this.handleUppyFileUpload(this.space, this.item, uppyResources)
       }
     },
 
     checkQuotaExceeded(uppyResources: UppyResource[]) {
+      if (!this.hasSpaces) {
+        return false
+      }
+
       let quotaExceeded = false
 
       const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
         let targetUploadSpace
 
-        if (
-          uppyResource.meta.routeName === 'files-spaces-share' ||
-          uppyResource.meta.routeName === 'files-public-files'
-        ) {
+        if (uppyResource.meta.routeName === locationPublicLink.name) {
           return acc
         }
 
-        if (uppyResource.meta.routeName === 'files-spaces-personal') {
-          targetUploadSpace = this.spaces.find((space) => space.driveType === 'personal')
-        } else {
-          targetUploadSpace = this.spaces.find(
-            (space) => space.id === uppyResource.meta.routeStorageId
-          )
+        if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
+          targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
         }
 
-        if (!targetUploadSpace) {
+        if (!targetUploadSpace || isShareSpaceResource(targetUploadSpace)) {
           return acc
         }
 
@@ -794,9 +728,9 @@ export default defineComponent({
       return quotaExceeded
     },
 
-    async handleUppyFileUpload(files: UppyResource[]) {
+    async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
       this.$uppyService.publish('uploadStarted')
-      await this.createDirectoryTree(files)
+      await this.createDirectoryTree(space, currentFolder, files)
       this.$uppyService.publish('addedForUpload', files)
       this.$uppyService.uploadFiles(files)
     },
@@ -900,12 +834,11 @@ export default defineComponent({
           file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
           const data = file.data as any
           data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
-          file.meta.routeItem = `/${newFolderName}`
         }
       }
 
       if (files.length === 0) return
-      this.handleUppyFileUpload(files)
+      return this.handleUppyFileUpload(this.space, this.item, files)
     }
   }
 })

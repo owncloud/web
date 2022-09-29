@@ -23,7 +23,7 @@ const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger'
 const spaceContextButton = '#space-context-btn'
-const spaceOverviewImg = '.space-overview-image'
+const spaceHeaderImg = '.space-header-image'
 
 export let spaceImageId = ''
 /**/
@@ -245,7 +245,7 @@ export const changeSpaceImage = async (args: {
     fileChooser.setFiles(resource.path)
   ])
 
-  const img = await page.locator(spaceOverviewImg)
+  const img = await page.locator(spaceHeaderImg)
   const src = await img.evaluate((e) => (e as HTMLImageElement).src)
   expect(src).not.toBe(spaceImageId)
   spaceImageId = src

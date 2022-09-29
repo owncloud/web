@@ -35,11 +35,9 @@ export default {
       // panel at the moment, so we need to use `null` as panel name for trashbins.
       // unconditionally return hardcoded `actions-item` once we have a dedicated
       // details panel in trashbins.
-      const panelName =
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-          ? null
-          : 'actions-item'
+      const panelName = isLocationTrashActive(this.$router, 'files-trash-generic')
+        ? null
+        : 'actions-item'
       bus.publish(SideBarEventTopics.openWithPanel, panelName)
     }
   }

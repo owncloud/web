@@ -77,7 +77,7 @@ export default {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
             return
           }
-          if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+          if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
             return this.$router.push(createLocationSpaces('files-spaces-projects'))
           }
         })

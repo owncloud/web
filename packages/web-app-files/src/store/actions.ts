@@ -1,11 +1,10 @@
 import PQueue from 'p-queue'
 import { dirname } from 'path'
-import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
 import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { move, copy } from '../helpers/resource'
+import { copyMoveResource } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
@@ -13,6 +12,9 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
+import { ClientService } from 'web-pkg/src/services'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -33,8 +35,8 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  copySelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
     context.dispatch(
       'showMessage',
@@ -45,8 +47,8 @@ export default {
       { root: true }
     )
   },
-  cutSelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  cutSelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
     context.dispatch(
       'showMessage',
@@ -63,66 +65,44 @@ export default {
   async pasteSelectedFiles(
     context,
     {
-      client,
+      targetSpace,
+      clientService,
       createModal,
       hideModal,
       showMessage,
       $gettext,
       $gettextInterpolate,
       $ngettext,
-      isPublicLinkContext,
-      publicLinkPassword,
       upsertResource
     }
   ) {
     let movedResources = []
-    if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResources = await move(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
-    if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResources = await copy(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
+    movedResources = await copyMoveResource(
+      context.state.clipboardSpace,
+      context.state.clipboardResources,
+      targetSpace,
+      context.state.currentFolder,
+      clientService,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      context.state.clipboardAction
+    )
     context.commit('CLEAR_CLIPBOARD')
-    const loadMovedResource = async (resource) => {
-      let loadedResource
-      if (isPublicLinkContext) {
-        loadedResource = await client.publicFiles.getFileInfo(
-          resource.webDavPath,
-          publicLinkPassword,
-          DavProperties.PublicLink
-        )
-      } else {
-        loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
-      }
-      upsertResource(buildResource(loadedResource))
-    }
     const loadingResources = []
     for (const resource of movedResources) {
-      loadingResources.push(loadMovedResource(resource))
+      loadingResources.push(
+        (async () => {
+          const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+            targetSpace,
+            resource
+          )
+          upsertResource(movedResource)
+        })()
+      )
     }
     await Promise.all(loadingResources)
   },
@@ -147,21 +127,20 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
+  deleteFiles(
+    context,
+    {
+      space,
+      files,
+      clientService,
+      firstRun = true
+    }: { space: SpaceResource; files: Resource[]; clientService: ClientService; firstRun: boolean }
+  ) {
     const promises = []
     const removedFiles = []
     for (const file of files) {
-      let p = null
-      if (isPublicLinkContext) {
-        p = client.publicFiles.delete(
-          file.path,
-          null,
-          context.rootGetters['runtime/auth/publicLinkPassword']
-        )
-      } else {
-        p = client.files.delete(file.webDavPath)
-      }
-      const promise = p
+      const promise = clientService.webdav
+        .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
         })
@@ -170,9 +149,9 @@ export default {
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
+                space,
                 files: [file],
-                client,
-                isPublicLinkContext,
+                clientService,
                 firstRun: false
               })
             }
@@ -209,29 +188,6 @@ export default {
     context.commit('REMOVE_FILES', files)
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
-  },
-  renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
-    if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
-      if (isPublicLinkContext) {
-        return client.publicFiles
-          .move(
-            file.webDavPath,
-            newPath + newValue,
-            context.rootGetters['runtime/auth/publicLinkPassword']
-          )
-          .then(() => {
-            if (!isSameResource) {
-              context.commit('RENAME_FILE', { file, newValue, newPath })
-            }
-          })
-      }
-      return client.files.move(file.webDavPath, newPath + newValue).then(() => {
-        if (!isSameResource) {
-          context.commit('RENAME_FILE', { file, newValue, newPath })
-        }
-      })
-    }
   },
   updateCurrentFileShareTypes({ state, getters, commit }) {
     const highlighted = getters.highlightedFile

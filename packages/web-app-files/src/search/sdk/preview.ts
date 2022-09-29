@@ -49,6 +49,10 @@ export default class Preview implements SearchPreview {
     )
     const resources = results.reduce((acc, result) => {
       const resource = buildResource(result)
+      // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+      if (!resource.storageId) {
+        resource.storageId = this.store.getters.user.id
+      }
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {

@@ -5,6 +5,7 @@
       :key="`batch-action-${i}`"
       :action="action"
       :items="selectedFiles"
+      :space="space"
       appearance="outline"
       class="oc-mr-s"
       :shortcut-hint="false"
@@ -13,7 +14,7 @@
   </oc-list>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 import AcceptShare from '../../../mixins/actions/acceptShare'
@@ -26,8 +27,10 @@ import EmptyTrashBin from '../../../mixins/actions/emptyTrashBin'
 import Move from '../../../mixins/actions/move'
 import Restore from '../../../mixins/actions/restore'
 import ClearSelection from '../../../mixins/actions/clearSelection'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'BatchActions',
   components: { ActionMenuItem },
   mixins: [
@@ -47,6 +50,11 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -73,7 +81,7 @@ export default {
       ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

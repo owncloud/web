@@ -11,25 +11,30 @@ export interface Resource {
   downloadURL?: string
   type?: string
   status?: number
-  spaceRoles?: any[]
+  spaceRoles?: {
+    [k: string]: any[]
+  }
   spaceQuota?: any[]
-  spaceMemberIds?: any[]
-  spaceImageData?: any[]
-  spaceReadmeData?: any[]
+  spaceImageData?: any
+  spaceReadmeData?: any
   mimeType?: string
   isFolder?: boolean
   sdate?: string
   mdate?: string
   indicators?: any[]
-  size?: number
+  size?: number | string // FIXME
   permissions?: string
   starred?: boolean
   etag?: string
-  sharePermissions?: number
+  sharePermissions?: number | string // FIXME
   shareId?: string
   shareRoot?: string
   shareTypes?: number[]
   privateLink?: string
+  description?: string
+  disabled?: boolean
+  driveType?: 'personal' | 'project' | 'share' | 'public' | (string & unknown)
+  driveAlias?: string
 
   canCreate?(): boolean
   canUpload?(): boolean
@@ -64,4 +69,20 @@ export interface Resource {
   share?: any
 
   ddate?: string
+}
+
+// These interfaces have empty (unused) __${type}SpaceResource properties which are only
+// there to make the types differ, in order to make TypeScript type narrowing work correctly
+// With empty types TypeScript does not accept this code
+// ```
+//   if(isPublicSpaceResource(resource)) { console.log(resource.id) } else { console.log(resource.id) }
+// ```
+// because in the else block resource gets the type never. If this is changed in a later TypeScript version
+// or all types get different members, the underscored props can be removed.
+export interface FolderResource extends Resource {
+  __folderResource?: any
+}
+
+export interface FileResource extends Resource {
+  __fileResource?: any
 }

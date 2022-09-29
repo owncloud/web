@@ -117,7 +117,7 @@ Feature: Search
     Then folder "not deleted folder" should be listed on the webUI
     And folder "deleted folder" should not be listed on the webUI
 
-
+  @skipOnOCIS
   Scenario: Search for favorited folder in favorites page
     Given user "Alice" has created folder "favorite folder" in the server
     And user "Alice" has created folder "not favorite folder" in the server

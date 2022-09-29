@@ -5,8 +5,6 @@ import { dirname } from 'path'
 import { ClientService } from '../../services'
 import { MaybeRef } from '../../utils'
 
-import { DavProperties } from '../../constants'
-import { buildResource } from '../../../../web-app-files/src/helpers/resources'
 import { Resource } from 'web-client'
 
 import { FileContext } from './types'
@@ -17,8 +15,6 @@ interface AppFolderHandlingOptions {
   store: Store<any>
   currentRoute: Ref<Route>
   clientService?: ClientService
-  isPublicLinkContext: MaybeRef<boolean>
-  publicLinkPassword: MaybeRef<string>
 }
 
 export interface AppFolderHandlingResult {
@@ -31,37 +27,40 @@ export interface AppFolderHandlingResult {
 export function useAppFolderHandling({
   store,
   currentRoute,
-  clientService: { owncloudSdk: client },
-  isPublicLinkContext,
-  publicLinkPassword
+  clientService: { webdav }
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
   const activeFiles = computed(() => {
     return store.getters['Files/activeFiles']
   })
 
-  const loadFolder = async (absoluteDirPath: string) => {
-    if (store.getters.activeFile.path !== '') {
+  const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
+    if (store.getters.activeFile && store.getters.activeFile.path !== '') {
       return
     }
 
     isFolderLoading.value = true
     store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
     try {
-      const promise = unref(isPublicLinkContext)
-        ? client.publicFiles.list(
-            absoluteDirPath,
-            unref(publicLinkPassword),
-            DavProperties.PublicLink
-          )
-        : client.files.list(absoluteDirPath, 1, DavProperties.Default)
-      let resources = await promise
+      context = unref(context)
+      const space = unref(context.space)
+      const path = dirname(unref(context.item))
 
-      resources = resources.map(buildResource)
-      store.commit('Files/LOAD_FILES', {
-        currentFolder: resources[0],
-        files: resources.slice(1)
+      const resources = await webdav.listFiles(space, {
+        path
       })
+
+      if (resources[0].type === 'file') {
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resources[0],
+          files: [resources[0]]
+        })
+      } else {
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resources[0],
+          files: resources.slice(1)
+        })
+      }
     } catch (error) {
       if (error.statusCode === 401) {
         return authService.handleAuthError(unref(currentRoute))
@@ -70,12 +69,6 @@ export function useAppFolderHandling({
       console.error(error)
     }
     isFolderLoading.value = false
-  }
-
-  const loadFolderForFileContext = (context: MaybeRef<FileContext>) => {
-    const { path } = unref(context)
-    const absoluteDirPath = dirname(unref(path))
-    return loadFolder(absoluteDirPath)
   }
 
   return {

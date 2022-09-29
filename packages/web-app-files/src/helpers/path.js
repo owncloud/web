@@ -1,3 +1,5 @@
+import { urlJoin } from 'web-pkg/src/utils'
+
 /**
  * Return all absolute parent paths.
  *
@@ -13,7 +15,9 @@
 export function getParentPaths(path = '', includeCurrent = false) {
   // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string).
   // then reintroduce the leading slash, because we know that we need it.
-  const s = '/' + path.replace(/^\/+/, '').replace(/\/+$/, '')
+  const s = urlJoin(path, {
+    leadingSlash: true
+  })
   if (s === '/') {
     return []
   }

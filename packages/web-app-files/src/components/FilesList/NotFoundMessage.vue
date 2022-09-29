@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
   createLocationPublic,
   createLocationSpaces,
@@ -52,25 +52,43 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { useRouter, useStore } from 'web-pkg/src/composables'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'NotFoundMessage',
-  setup() {
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
+  },
+  setup(props) {
     const router = useRouter()
     const store = useStore()
-
+    const isProjectSpace = props.space?.driveType === 'project'
     return {
-      showPublicLinkButton: isLocationPublicActive(router, 'files-public-files'),
-      showHomeButton: isLocationSpacesActive(router, 'files-spaces-personal'),
-      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-project'),
-      homeRoute: createLocationSpaces('files-spaces-personal', {
-        params: { item: store.getters.homeFolder }
+      showPublicLinkButton: isLocationPublicActive(router, 'files-public-link'),
+      showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
+      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
+      homeRoute: createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: props.space?.getDriveAliasAndItem({
+            path: store.getters.homeFolder
+          } as Resource)
+        }
       }),
-      publicLinkRoute: createLocationPublic('files-public-files', {
-        params: { item: router.currentRoute.params?.item?.split('/')[0] }
+      publicLinkRoute: createLocationPublic('files-public-link', {
+        params: {
+          driveAliasAndItem: props.space?.getDriveAliasAndItem({
+            path: ''
+          } as Resource)
+        }
       }),
       spacesRoute: createLocationSpaces('files-spaces-projects')
     }
   }
-}
+})
 </script>

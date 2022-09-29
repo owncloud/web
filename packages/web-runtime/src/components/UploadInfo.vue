@@ -140,12 +140,14 @@
   </div>
 </template>
 
-<script>
-import path from 'path'
+<script lang="ts">
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
+import { UppyResource } from '../composables/upload'
+import { urlJoin } from 'web-pkg/src/utils'
 
-export default {
+export default defineComponent({
   setup() {
     return {
       hasShareJail: useCapabilityShareJailEnabled()
@@ -287,7 +289,7 @@ export default {
       this.bytesUploaded += byteIncrease
       this.filesInEstimation[file.meta.uploadId] = progress.bytesUploaded
 
-      const timeElapsed = new Date() - this.timeStarted
+      const timeElapsed = +new Date() - this.timeStarted
       const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
       if (progressPercent === 0) {
         return
@@ -310,7 +312,7 @@ export default {
       if (file.meta.relativePath) {
         this.uploads[file.meta.uploadId].path = file.meta.relativePath
       } else {
-        this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
+        this.uploads[file.meta.uploadId].path = urlJoin(file.meta.currentFolder, file.name)
       }
 
       this.uploads[file.meta.uploadId].targetRoute = file.meta.route
@@ -352,14 +354,7 @@ export default {
       }
 
       this.uploads[file.meta.uploadId] = file
-
-      if (file.meta.route?.name === 'files-public-files') {
-        // Strip token to not display it in the overlay
-        const strippedTokenPath = file.meta.currentFolder.split('/').slice(1).join('/')
-        this.uploads[file.meta.uploadId].path = `${strippedTokenPath}${file.name}`
-      } else {
-        this.uploads[file.meta.uploadId].path = `${file.meta.currentFolder}${file.name}`
-      }
+      this.uploads[file.meta.uploadId].path = urlJoin(file.meta.currentFolder, file.name)
       this.uploads[file.meta.uploadId].targetRoute = this.buildRouteFromUppyResource(file)
 
       if (!file.isFolder) {
@@ -439,10 +434,19 @@ export default {
       return file.isFolder === true
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file.targetRoute)
+      if (!file.isFolder) {
+        return {}
+      }
+      return {
+        ...file.targetRoute,
+        params: {
+          ...file.targetRoute.params,
+          driveAliasAndItem: urlJoin(file.targetRoute.params.driveAliasAndItem, file.name)
+        }
+      }
     },
-    parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.targetRoute)
+    parentFolderLink(file: any) {
+      return file.targetRoute
     },
     buildRouteFromUppyResource(resource) {
       if (!resource.meta.routeName) {
@@ -451,61 +455,32 @@ export default {
 
       return {
         name: resource.meta.routeName,
-        query: {
-          shareId: resource.meta.routeShareId
-        },
         params: {
-          item: resource.meta.routeItem,
-          shareName: resource.meta.routeShareName,
-          storage: resource.meta.routeStorage,
-          storageId: resource.meta.routeStorageId,
-          name: resource.meta.routeParamName
+          driveAliasAndItem: resource.meta.routeDriveAliasAndItem
+        },
+        query: {
+          ...(resource.meta.routeShareId && { shareId: resource.meta.routeShareId })
         }
       }
     },
     defaultParentFolderName(file) {
-      const { targetRoute } = file
-      // FIXME: use isLocationSpacesActive(), but it currently lies in the files app
-      if (targetRoute?.name === 'files-spaces-project') {
-        return targetRoute.params.name
-      }
-      // Root of a share -> use share name
-      if (this.hasShareJail && targetRoute?.name === 'files-spaces-share') {
-        return targetRoute.params.shareName
+      const {
+        meta: { spaceName, driveType }
+      } = file
+
+      if (!this.hasShareJail) {
+        return this.$gettext('All files and folders')
       }
 
-      if (targetRoute?.name === 'files-public-files') {
+      if (driveType === 'personal') {
+        return this.$gettext('Personal')
+      }
+
+      if (driveType === 'public') {
         return this.$gettext('Public link')
       }
-      return this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files and folders')
-    },
-    createFolderLink(path, targetRoute) {
-      if (!targetRoute) {
-        return {}
-      }
 
-      const strippedPath = path.replace(/^\//, '')
-      const route = {
-        name: targetRoute.name,
-        query: targetRoute.query,
-        params: {
-          ...(targetRoute.params?.storageId &&
-            path && { storageId: targetRoute.params?.storageId }),
-          ...(targetRoute.params?.storage && { storage: targetRoute.params?.storage }),
-          ...(targetRoute.params?.shareName && { shareName: targetRoute.params?.shareName })
-        }
-      }
-
-      if (strippedPath) {
-        route.params = { ...targetRoute.params }
-        route.params.item = strippedPath
-      }
-
-      if (route.name === 'files-public-files') {
-        route.params.item = targetRoute.params.item
-      }
-
-      return route
+      return spaceName
     },
     toggleInfo() {
       this.infoExpanded = !this.infoExpanded
@@ -542,10 +517,10 @@ export default {
       this.resetProgress()
       this.$uppyService.cancelAllUploads()
       const runningUploads = Object.values(this.uploads).filter(
-        (u) => u.status !== 'success' && u.status !== 'error'
+        (u: any) => u.status !== 'success' && u.status !== 'error'
       )
 
-      for (const item of runningUploads) {
+      for (const item of runningUploads as UppyResource[]) {
         this.uploads[item.meta.uploadId].status = 'cancelled'
       }
     },
@@ -574,7 +549,7 @@ export default {
       return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

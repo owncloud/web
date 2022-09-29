@@ -6,9 +6,9 @@
 import keycode from 'keycode'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@vue/composition-api'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
-import { usePublicLinkContext, usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   mixins: [MixinFilesListScrolling],
@@ -21,13 +21,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'files-view'
-    }
-  },
-  setup() {
-    const store = useStore()
-    return {
-      publicLinkPassword: usePublicLinkPassword({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
     }
   },
   data: () => {
@@ -116,9 +113,9 @@ export default defineComponent({
       if (this.areCustomKeyBindingsEnabled()) return
       if (isTextSelected) return
 
-      if (key === keycode('c') && ctrl) return this.copySelectedFiles()
+      if (key === keycode('c') && ctrl) return this.copySelectedFiles({ space: this.space })
       if (key === keycode('v') && ctrl) return this.handlePasteAction()
-      if (key === keycode('x') && ctrl) return this.cutSelectedFiles()
+      if (key === keycode('x') && ctrl) return this.cutSelectedFiles({ space: this.space })
       if (key === keycode('down') && !shift) return this.handleNavigateAction(event)
       if (key === keycode('up') && !shift) return this.handleNavigateAction(event, true)
 
@@ -217,15 +214,14 @@ export default defineComponent({
 
     handlePasteAction() {
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext: this.isPublicLinkContext,
-        publicLinkPassword: this.publicLinkPassword,
         upsertResource: this.upsertResource
       })
     },

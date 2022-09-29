@@ -141,7 +141,7 @@ export const createResource = async (args: createResourceArgs): Promise<void> =>
           ])
           await drawioTab.waitForLoadState()
           await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
-          await drawioTab.waitForURL('**/draw-io/spaces/**')
+          await drawioTab.waitForURL('**/draw-io/personal/**')
           await drawioTab.close()
           break
         }
@@ -452,7 +452,10 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
 
 export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -478,7 +481,9 @@ export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }

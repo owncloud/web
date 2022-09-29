@@ -15,10 +15,7 @@ export default {
           label: () => this.$gettext('Empty trash bin'),
           handler: this.$_emptyTrashBin_trigger,
           isEnabled: ({ resources }) => {
-            if (
-              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
-              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (this.capabilities?.files?.permanent_deletion === false) {
@@ -57,8 +54,9 @@ export default {
       this.createModal(modal)
     },
     $_emptyTrashBin_emptyTrashBin() {
-      const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-        ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+      const hasShareJail = this.capabilities?.spaces?.share_jail === true
+      const path = hasShareJail
+        ? buildWebDavSpacesTrashPath(this.space.id)
         : buildWebDavFilesTrashPath(this.user.id)
 
       return this.$client.fileTrash

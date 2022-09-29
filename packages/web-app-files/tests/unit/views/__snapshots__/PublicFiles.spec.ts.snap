@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`PublicFiles view when the view is not loading anymore when length of the paginated resources is greater than zero should load the resource table with the correct props 1`] = `<resource-table-stub resources="[object Object],[object Object],[object Object]" resourcedomselector="[Function]" selectedids="" hasactions="true" targetroute="[object Object]" targetrouteparammapping="[object Object]" targetroutequerymapping="[object Object]" areresourcesclickable="true" headerposition="0" isselectable="true" paddingx="small" dragdrop="true" hover="true" fieldsdisplayed="name,size,mdate" sortdir="desc" id="files-public-files-table" class="files-table"></resource-table-stub>`;

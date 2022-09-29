@@ -206,7 +206,10 @@ describe('FileLinks', () => {
       localVue,
       store: store,
       provide: {
-        incomingParentShare: {}
+        incomingParentShare: {},
+        displayedItem: {
+          value: null
+        }
       },
       stubs: {
         ...stubs
@@ -230,7 +233,10 @@ describe('FileLinks', () => {
       localVue,
       store: store,
       provide: {
-        incomingParentShare: {}
+        incomingParentShare: {},
+        displayedItem: {
+          value: null
+        }
       },
       mocks: {
         $route: {

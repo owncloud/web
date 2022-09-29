@@ -10,7 +10,7 @@ const appInfo = {
 const routes = [
   {
     name: 'apps',
-    path: '/:filePath*',
+    path: '/:driveAliasAndItem*',
     component: App,
     meta: {
       auth: false,

@@ -26,11 +26,8 @@
 </template>
 
 <script>
-import { isLocationSpacesActive, isLocationTrashActive } from '../../router'
 import { mapGetters, mapState } from 'vuex'
 import PrivateLinkItem from './PrivateLinkItem.vue'
-import { useActiveLocation } from '../../composables'
-import { formatDateFromRFC, formatRelativeDateFromRFC } from 'web-pkg/src/helpers'
 
 export default {
   name: 'FileInfo',
@@ -44,53 +41,12 @@ export default {
       default: true
     }
   },
-  setup() {
-    return {
-      isPersonalLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-personal')
-    }
-  },
   computed: {
     ...mapGetters(['capabilities']),
     ...mapState('Files', ['areFileExtensionsShown']),
-    timeData() {
-      const interpolate = (obj) => {
-        obj.time = formatDateFromRFC(obj.sourceTime, this.$language.current)
-        obj.timeRelative = formatRelativeDateFromRFC(obj.sourceTime, this.$language.current)
-
-        obj.infoString = this.$gettextInterpolate(obj.infoString, obj)
-        obj.ariaLabel = this.$gettextInterpolate(obj.ariaLabel, obj)
-        return obj
-      }
-
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-      ) {
-        return interpolate({
-          sourceTime: this.file.ddate,
-          infoString: this.$pgettext('inline info about deletion date', 'deleted %{timeRelative}'),
-          ariaLabel: this.$pgettext(
-            'aria label for inline info about deletion date',
-            'deleted %{timeRelative} (%{time})'
-          )
-        })
-      }
-
-      return interpolate({
-        sourceTime: this.file.mdate,
-        infoString: this.$pgettext(
-          'inline info about last modification date',
-          'modified %{timeRelative}'
-        ),
-        ariaLabel: this.$pgettext(
-          'aria label for inline info about last modification date',
-          'modified %{timeRelative} (%{time})'
-        )
-      })
-    },
 
     privateLinkEnabled() {
-      return this.isPersonalLocation && this.capabilities.files.privateLinks
+      return this.capabilities.files.privateLinks && this.file.privateLink
     },
 
     file() {
