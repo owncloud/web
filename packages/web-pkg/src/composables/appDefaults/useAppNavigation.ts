@@ -30,7 +30,7 @@ export const routeToContextQuery = (location: Location): LocationQuery => {
   const { params, query } = location
 
   const contextQuery = {}
-  const contextQueryItems = ['shareId'].concat(
+  const contextQueryItems = ['fileId', 'shareId'].concat(
     (location as any).meta?.contextQueryItems || []
   ) as string[]
   for (const queryItem of contextQueryItems) {
