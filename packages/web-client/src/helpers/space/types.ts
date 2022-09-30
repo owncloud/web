@@ -9,6 +9,7 @@
 import { Resource } from '../resource'
 
 export interface SpaceResource extends Resource {
+  disabled?: boolean
   webDavUrl: string
   getWebDavUrl(resource: Resource): string
   getDriveAliasAndItem(resource: Resource): string
