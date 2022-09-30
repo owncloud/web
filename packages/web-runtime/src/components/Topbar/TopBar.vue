@@ -113,6 +113,12 @@ export default {
   position: sticky;
   z-index: 5;
 
+  .portal-wrapper {
+    @media (max-width: 639px) {
+      margin-left: auto;
+    }
+  }
+
   img {
     max-height: 38px;
     image-rendering: auto;
