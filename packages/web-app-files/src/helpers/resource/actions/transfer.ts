@@ -68,13 +68,22 @@ export class ResourceTransfer extends ConflictDialog {
       })
       return
     }
-    const title = this.$gettextInterpolate(
+    let title = this.$gettextInterpolate(
       transferType === TransferType.COPY
         ? this.$gettext('Failed to copy %{count} resources')
         : this.$gettext('Failed to move %{count} resources'),
       { count: errors.length },
       true
     )
+    if (errors.length === 1) {
+      title = this.$gettextInterpolate(
+        transferType === TransferType.COPY
+          ? this.$gettext('Failed to copy "%{name}"')
+          : this.$gettext('Failed to move "%{name}"'),
+        { name: errors[0]?.resourceName },
+        true
+      )
+    }
     this.showMessage({
       title,
       status: 'danger'
