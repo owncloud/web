@@ -48,8 +48,7 @@ Feature: Search
     Then following resources should be displayed in the search list for user "Alice"
       | resource          |
       | new-lorem.txt     |
-#  enable these steps after issue https://github.com/owncloud/web/issues/7629 is fixed
- #     | new-lorem-big.txt |
+      | new-lorem-big.txt |
     But following resources should not be displayed in the search list for user "Alice"
       | resource          |
       | PARENT            |
@@ -60,8 +59,7 @@ Feature: Search
       | resource          |
       | folder            |
       | FolDer            |
- #  enable these steps after issue https://github.com/owncloud/web/issues/7629 is fixed
- #     | folder_from_brian |
+      | folder_from_brian |
     But following resources should not be displayed in the search list for user "Alice"
       | resource          |
       | new-lorem.txt     |
