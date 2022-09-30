@@ -175,10 +175,13 @@ describe('CreateAndUpload component', () => {
         [],
         [],
         null,
+        null,
+        null,
         wrapper.vm.spaces,
-        null,
-        null,
-        null,
+        true,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
         showMessageStub,
         jest.fn(),
         jest.fn(),
@@ -279,7 +282,9 @@ describe('CreateAndUpload component', () => {
 
         expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
         expect(handleUppyFileUpload).toBeCalledTimes(1)
-        expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [uppyResourceOne])
+        expect(handleUppyFileUpload).toBeCalledWith(expect.anything(), expect.anything(), [
+          uppyResourceOne
+        ])
       }
     )
     it('should not upload file if user chooses skip', async () => {
@@ -357,10 +362,11 @@ describe('CreateAndUpload component', () => {
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
       expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(undefined, null, [
-        uppyResourceOne,
-        uppyResourceTwo
-      ])
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+        expect.anything(),
+        expect.anything(),
+        [uppyResourceOne, uppyResourceTwo]
+      )
     })
     it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
       const uppyResourceOne = { name: 'test' }
@@ -403,10 +409,11 @@ describe('CreateAndUpload component', () => {
 
       expect(resourcesUpload.resolveFileExists).toHaveBeenCalledTimes(2)
       expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(undefined, null, [
-        uppyResourceOne,
-        uppyResourceTwo
-      ])
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+        expect.anything(),
+        expect.anything(),
+        [uppyResourceOne, uppyResourceTwo]
+      )
     })
   })
 })
