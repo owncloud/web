@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
@@ -33,6 +34,16 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
+
+* Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
+
+   * Fixed "Keep both" and "Skip" options in Firefox * Fixed "Keep both" and "Skip" options when
+   uploading via the "Upload"-menu * Fixed broken "Upload"-menu after skipping all files (= no
+   files uploaded) * Fixed issues when uploading a folder into another folder which has or starts
+   with the same name
+
+   https://github.com/owncloud/web/issues/7680
+   https://github.com/owncloud/web/pull/7724
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
