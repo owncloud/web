@@ -123,6 +123,8 @@ import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { createFileRouteOptions } from '../../router/utils'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -162,16 +164,12 @@ export default defineComponent({
   },
 
   setup(props) {
-    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
+      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
-        return createLocationPublic('files-public-link', {
-          params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) }
-        })
+        return createLocationPublic('files-public-link', { params, query })
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) },
-        query: { ...(props.space.driveType === 'share' && { shareId: props.space.shareId }) }
-      })
+      return createLocationSpaces('files-spaces-generic', { params, query })
     }
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
@@ -221,19 +219,24 @@ export default defineComponent({
       }
 
       let spaceBreadcrumbItem
+      const { params, query } = createFileRouteOptions(this.space, { fileId: this.space.id })
       if (this.space.driveType === 'personal') {
         spaceBreadcrumbItem = {
           text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
           to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias },
-            query: this.$route.query
+            params,
+            query: {
+              ...this.$route.query,
+              ...query
+            }
           })
         }
       } else if (isPublicSpaceResource(this.space)) {
         spaceBreadcrumbItem = {
           text: this.$gettext('Public link'),
           to: createLocationPublic('files-public-link', {
-            params: { driveAliasAndItem: this.space.driveAlias }
+            params,
+            query
           })
         }
       } else {
@@ -241,8 +244,11 @@ export default defineComponent({
           allowContextActions: !this.hasSpaceHeader,
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias },
-            query: this.$route.query
+            params,
+            query: {
+              ...this.$route.query,
+              ...query
+            }
           })
         }
       }
@@ -250,6 +256,7 @@ export default defineComponent({
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
+        // FIXME: needs file ids for each parent folder path
         ...breadcrumbsFromPath(this.$route, this.item)
       )
     },

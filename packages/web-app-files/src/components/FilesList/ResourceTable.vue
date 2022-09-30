@@ -176,7 +176,7 @@ import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
-import * as path from 'path'
+import * as pathUtil from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -192,6 +192,8 @@ import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from '../../router/utils'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 
 export default defineComponent({
   mixins: [Rename],
@@ -573,45 +575,42 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file)
+      return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
     },
     parentFolderLink(file) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
 
-      return this.createFolderLink(path.dirname(file.path), file)
+      return this.createFolderLink({
+        path: pathUtil.dirname(file.path),
+        ...(file.parentFolderId && { fileId: file.parentFolderId }),
+        resource: file
+      })
     },
-    createFolderLink(p, resource) {
+    createFolderLink(options: CreateTargetRouteOptions) {
       if (this.targetRouteCallback) {
-        return this.targetRouteCallback(p, resource)
+        return this.targetRouteCallback(options)
       }
 
+      const { path, fileId, resource } = options
+      let space
       if (resource.shareId) {
-        const space = buildShareSpaceResource({
+        space = buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: path.basename(resource.shareRoot),
+          shareName: pathUtil.basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
-          },
-          query: {
-            shareId: resource.shareId
-          }
-        })
+      } else {
+        space = this.getMatchingSpace(resource.storageId)
       }
-
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (!matchingSpace) {
+      if (!space) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(space, { path, fileId })
+      )
     },
     fileDragged(file) {
       this.addSelectedResource(file)
@@ -802,7 +801,7 @@ export default defineComponent({
       if (resource.shareId) {
         return resource.path === '/'
           ? this.$gettext('Shared with me')
-          : path.basename(resource.shareRoot)
+          : pathUtil.basename(resource.shareRoot)
       }
 
       return this.$gettext('Personal')

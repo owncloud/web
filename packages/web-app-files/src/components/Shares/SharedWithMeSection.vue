@@ -105,10 +105,11 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
-import { Resource } from 'web-client'
 import { Location } from 'vue-router'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from '../../router/utils'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -186,24 +187,29 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
-    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+    const resourceTargetRouteCallback = ({
+      path,
+      fileId,
+      resource
+    }: CreateTargetRouteOptions): Location => {
       if (unref(hasShareJail)) {
         const space = buildShareSpaceResource({
           shareId: resource.id,
           shareName: resource.name,
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: { driveAliasAndItem: space.getDriveAliasAndItem({ path } as Resource) },
-          query: { shareId: resource.id }
-        })
+        return createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(space, { path, fileId })
+        )
       }
       const personalSpace = store.getters['runtime/spaces/spaces'].find(
         (space) => space.driveType === 'personal'
       )
-      return createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: personalSpace.getDriveAliasAndItem({ path } as Resource) }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(personalSpace, { path, fileId })
+      )
     }
 
     const personalSpace = computed(() => {
