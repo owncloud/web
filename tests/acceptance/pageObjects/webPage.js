@@ -12,7 +12,9 @@ module.exports = {
      *
      * @param {string} searchTerm
      */
-    search: function (searchTerm) {
+    search: async function (searchTerm) {
+      // wait for search indexing to be finished
+      await this.pause(1000)
       return this.initAjaxCounters()
         .isVisible(
           {
@@ -22,13 +24,13 @@ module.exports = {
           (result) => {
             if (result.value === true) {
               this.click('@openSearchButton')
-                .waitForElementVisible('@searchInputFieldHighResolution')
-                .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
+                .waitForElementVisible('@searchInputField')
+                .setValue('@searchInputField', [searchTerm, this.api.Keys.ENTER])
             } else {
-              this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
-                '@searchInputFieldHighResolution',
-                [searchTerm, this.api.Keys.ENTER]
-              )
+              this.waitForElementVisible('@searchInputField').setValue('@searchInputField', [
+                searchTerm,
+                this.api.Keys.ENTER
+              ])
             }
           }
         )
@@ -287,12 +289,8 @@ module.exports = {
     ocDialogPromptAlert: {
       selector: '.oc-modal .oc-text-input-message'
     },
-    searchInputFieldHighResolution: {
+    searchInputField: {
       selector: '(//input[contains(@class, "oc-search-input")])[1]',
-      locateStrategy: 'xpath'
-    },
-    searchInputFieldLowResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[2]',
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {
