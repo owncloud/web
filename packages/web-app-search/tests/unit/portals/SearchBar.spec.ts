@@ -55,6 +55,12 @@ const selectors = {
 beforeEach(() => {
   jest.resetAllMocks()
 
+  window.ResizeObserver = jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
   providerFiles.previewSearch.search.mockImplementation(() => {
     return {
       values: [
