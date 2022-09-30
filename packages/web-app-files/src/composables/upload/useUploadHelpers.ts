@@ -32,6 +32,19 @@ export function useUploadHelpers(options: UploadHelpersOptions): UploadHelpersRe
   }
 }
 
+/**
+ * Get the relative path of the file when the file was inside a directory on the client computer.
+ * @param file
+ */
+const getRelativeFilePath = (file: File): string | undefined => {
+  const relativePath = file.webkitRelativePath || (file as any).relativePath
+  if (!relativePath) {
+    return undefined
+  }
+
+  return urlJoin(relativePath)
+}
+
 const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions) => {
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
@@ -41,8 +54,7 @@ const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions
     const topLevelFolderIds = {}
 
     for (const file of files) {
-      // Get the relative path of the file when the file was inside a directory on the client computer
-      const relativeFilePath = file.webkitRelativePath || (file as any).relativePath || null
+      const relativeFilePath = getRelativeFilePath(file)
       // Directory without filename
       const directory =
         !relativeFilePath || path.dirname(relativeFilePath) === '.'
