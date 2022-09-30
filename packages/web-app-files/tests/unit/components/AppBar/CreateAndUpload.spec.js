@@ -389,7 +389,10 @@ function getShallowWrapper(route = {}, store = {}) {
         }
       },
       isUserContext: jest.fn(() => false),
-      hasSpaces: true
+      hasSpaces: true,
+      $uppyService: {
+        clearInputs: jest.fn()
+      }
     },
     propsData: {
       currentPath: ''
