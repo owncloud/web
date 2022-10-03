@@ -103,6 +103,13 @@ export default {
       return [
         ...result,
         {
+          title: this.$gettext('Notify via mail'),
+          method: this.notifyUser,
+          enabled: true,
+          icon: 'mail',
+          class: 'notify-via-mail'
+        },
+        {
           title: this.$gettext('Remove share'),
           method: this.removeShare,
           class: 'remove-share',
@@ -253,6 +260,9 @@ export default {
     },
     showAccessDetails() {
       this.$emit('showAccessDetails')
+    },
+    notifyUser() {
+      this.$emit('notify')
     }
   }
 }

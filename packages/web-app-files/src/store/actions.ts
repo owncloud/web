@@ -280,7 +280,7 @@ export default {
     { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
     if (shareType === ShareTypes.group.value) {
-      client.shares
+      return client.shares
         .shareFileWithGroup(path, shareWith, {
           permissions,
           role: role.name,
@@ -298,6 +298,7 @@ export default {
           )
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
+          return share
         })
         .catch((e) => {
           context.dispatch(
@@ -310,11 +311,10 @@ export default {
             { root: true }
           )
         })
-      return
     }
 
     const remoteShare = shareType === ShareTypes.remote.value
-    client.shares
+    return client.shares
       .shareFileWithUser(path, shareWith, {
         remoteUser: remoteShare,
         permissions,
@@ -333,6 +333,7 @@ export default {
         )
         context.dispatch('updateCurrentFileShareTypes')
         context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+        return share
       })
       .catch((e) => {
         context.dispatch(

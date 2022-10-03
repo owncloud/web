@@ -45,6 +45,7 @@
         :share-types="selectedCollaborators.map((c) => c.value.shareType)"
         @optionChange="collaboratorExpiryChanged"
       />
+      <oc-checkbox v-model="notifyEnabled" :value="false" label="Notify via mail" />
       <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
         <oc-spinner :aria-label="$gettext('Creating share')" size="small" />
         <span v-translate :aria-hidden="true" v-text="saveButtonLabel" />
@@ -132,7 +133,9 @@ export default defineComponent({
       customPermissions: null,
       saving: false,
       expirationDate: null,
-      searchQuery: ''
+      searchQuery: '',
+      notifyEnabled: false,
+      formData: new URLSearchParams()
     }
   },
   computed: {
@@ -284,9 +287,11 @@ export default defineComponent({
 
       const saveQueue = new PQueue({ concurrency: 4 })
       const savePromises = []
-      this.selectedCollaborators.forEach((collaborator) => {
+
+      this.selectedCollaborators.forEach((collaborator, i) => {
         savePromises.push(
           saveQueue.add(() => {
+            const collaborators = this.selectedCollaborators
             const bitmask = this.selectedRole.hasCustomPermissions
               ? SharePermissions.permissionsToBitmask(this.customPermissions)
               : SharePermissions.permissionsToBitmask(
@@ -311,14 +316,56 @@ export default defineComponent({
               role: this.selectedRole,
               expirationDate: this.expirationDate,
               storageId: this.highlightedFile.fileId || this.highlightedFile.id
+            }).then((share) => {
+              if (this.notifyEnabled && share?.shareInfo?.id) {
+                this.formData.append('id', share.shareInfo.id)
+                if (Array.from(this.formData.keys()).length === collaborators.length) {
+                  this.notify()
+                  this.formData = new URLSearchParams()
+                }
+              }
             })
           })
         )
       })
-
       await Promise.all(savePromises)
+
       this.selectedCollaborators = []
       this.saving = false
+    },
+
+    async notify() {
+      const url = `/mailer`
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + accessToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+      headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: this.formData.toString()
+      })
+      if (!response.ok) {
+        this.showMessage({
+          title: this.$gettext('An error occurred'),
+          desc: this.$gettext('Email notification could not be sent '),
+          status: 'danger'
+        })
+      } else {
+        const recipients = await response.json()
+        if (recipients.recipients)
+          this.showMessage({
+            title: this.$gettext('Success'),
+            desc: this.$gettext(
+              `Email notification was sent to ${JSON.stringify(recipients.recipients)
+                .replace(/[[\]]/g, '')
+                .replaceAll('"', '')}`
+            ),
+            status: 'success'
+          })
+      }
     },
 
     resetFocusOnInvite() {
