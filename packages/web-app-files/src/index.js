@@ -2,20 +2,15 @@ import App from './App.vue'
 import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
 import PrivateLink from './views/PrivateLink.vue'
-import PublicFiles from './views/PublicFiles.vue'
-import Personal from './views/Personal.vue'
-import SharedResource from './views/shares/SharedResource.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
-import SpaceProject from './views/spaces/Project.vue'
-import SpaceTrashbin from './views/spaces/Trashbin.vue'
+import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
-import Trashbin from './views/Trashbin.vue'
 import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
-import { FilterSearch, SDKSearch } from './search'
+import { SDKSearch } from './search'
 import { bus } from 'web-pkg/src/instance'
 import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
@@ -64,7 +59,7 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/shares`
     },
-    activeFor: [{ path: `/${appInfo.id}/spaces/shares` }],
+    activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
     enabled(capabilities) {
       return capabilities.files_sharing?.api_enabled !== false
     }
@@ -75,6 +70,7 @@ const navItems = [
     route: {
       path: `/${appInfo.id}/spaces/projects`
     },
+    activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
     enabled(capabilities) {
       return capabilities.spaces && capabilities.spaces.projects === true
     }
@@ -97,32 +93,27 @@ export default {
   routes: buildRoutes({
     App,
     Favorites,
-    Personal,
     FilesDrop,
     PrivateLink,
-    PublicFiles,
     SearchResults,
-    SharedResource,
-    SharedViaLink,
-    SharedWithMe,
-    SharedWithOthers,
-    Spaces: {
-      Project: SpaceProject,
-      Projects: SpaceProjects,
-      Trashbin: SpaceTrashbin
+    Shares: {
+      SharedViaLink,
+      SharedWithMe,
+      SharedWithOthers
     },
-    Trashbin
+    Spaces: {
+      DriveResolver: SpaceDriveResolver,
+      Projects: SpaceProjects
+    }
   }),
   navItems,
   quickActions,
   translations,
   ready({ router, store }) {
-    Registry.filterSearch = new FilterSearch(store, router)
     Registry.sdkSearch = new SDKSearch(store, router)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
-    bus.publish('app.search.register.provider', Registry.filterSearch)
     bus.publish('app.search.register.provider', Registry.sdkSearch)
 
     archiverService.initialize(

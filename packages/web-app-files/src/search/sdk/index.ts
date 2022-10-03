@@ -10,7 +10,7 @@ function $gettext(msg) {
 }
 export default class Provider extends EventBus implements SearchProvider {
   public readonly id: string
-  public readonly label: string
+  public readonly displayName: string
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
   private readonly store: Store<any>
@@ -20,36 +20,11 @@ export default class Provider extends EventBus implements SearchProvider {
     super()
 
     this.id = 'files.sdk'
-    this.label = $gettext('Search all files ↵')
+    this.displayName = $gettext('Files')
     this.previewSearch = new Preview(store, router)
-    this.listSearch = new List()
+    this.listSearch = new List(store)
     this.store = store
     this.router = router
-  }
-
-  public activate(term: string): void {
-    const listRoute = 'files-common-search'
-
-    if (!term && this.router.currentRoute.name !== listRoute) {
-      return
-    }
-
-    this.router
-      .push({
-        name: listRoute,
-        query: { term, provider: this.id }
-      })
-      .catch(() => {
-        // Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current location: "/search/list/files.global?term=a"
-      })
-  }
-
-  public reset(): void {
-    /* not needed */
-  }
-
-  public updateTerm(): void {
-    /* not needed */
   }
 
   public get available(): boolean {

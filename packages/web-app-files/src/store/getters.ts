@@ -17,8 +17,6 @@ export default {
   clipboardAction: (state) => {
     return state.clipboardAction
   },
-  // a flat file list has no current folder nor parent
-  flatFileList: (state) => !!state.currentFolder === false,
   activeFiles: (state, getters) => {
     let files = [].concat(getters.filesAll)
 
@@ -48,9 +46,6 @@ export default {
     return state.currentFileOutgoingShares.filter((share) => {
       return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [share.shareType])
     })
-  },
-  currentFileOutgoingSharesLoading: (state) => {
-    return state.currentFileOutgoingSharesLoading
   },
   sharesTree: (state) => state.sharesTree,
   sharesTreeLoading: (state) => state.sharesTreeLoading,

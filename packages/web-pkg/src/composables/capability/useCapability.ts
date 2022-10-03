@@ -53,10 +53,10 @@ export const useCapabilityFilesTusExtension = createCapabilityComposable<string>
   ''
 )
 export const useCapabilityFilesSharingPublicCanEdit = createCapabilityComposable(
-  'files.files_sharing.public.can_edit',
+  'files_sharing.public.can_edit',
   false
 )
 export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
-  'files.files_sharing.public.alias',
+  'files_sharing.public.alias',
   false
 )

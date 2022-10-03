@@ -1,5 +1,5 @@
 import orderBy from 'lodash-es/orderBy'
-import path from 'path'
+import path, { basename, join } from 'path'
 import { DateTime } from 'luxon'
 import { getIndicators } from './statusIndicators'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
@@ -16,20 +16,15 @@ import {
 } from 'web-client/src/helpers/share'
 import { extractExtensionFromFile, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
-import { Resource } from 'web-client'
 import { SHARE_JAIL_ID } from '../services/folder'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { urlJoin } from 'web-pkg/src/utils'
 
-export function renameResource(resource, newName, newPath) {
-  let resourcePath = '/' + newPath + newName
-  if (resourcePath.startsWith('/files') || resourcePath.startsWith('/space')) {
-    resourcePath = resourcePath.split('/').splice(3).join('/')
-  }
-
-  resource.name = newName
-  resource.path = '/' + resourcePath
-  resource.webDavPath = '/' + newPath + newName
+export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
+  resource.name = basename(newPath)
+  resource.path = newPath
+  resource.webDavPath = join(space.webDavPath, newPath)
   resource.extension = extractExtensionFromFile(resource)
-
   return resource
 }
 
@@ -79,8 +74,10 @@ export function buildResource(resource): Resource {
     })(),
     privateLink: resource.fileInfo[DavProperty.PrivateLink],
     downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
+    shareId: resource.fileInfo[DavProperty.ShareId],
+    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
     ownerId: resource.fileInfo[DavProperty.OwnerId],
+    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
@@ -105,8 +102,15 @@ export function buildResource(resource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
+    canDeny: function () {
+      return this.permissions.indexOf(DavPermission.Deny) >= 0
+    },
     getDomSelector: () => extractDomSelector(id)
   }
+}
+
+export function buildWebDavPublicPath(publicLinkToken, path = '') {
+  return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavFilesPath(userId, path) {
@@ -118,7 +122,7 @@ export function buildWebDavFilesTrashPath(userId, path = '') {
 }
 
 export function buildWebDavSpacesTrashPath(storageId, path = '') {
-  return '/' + `/spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
+  return '/' + `spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -131,21 +135,33 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
  * @param {Boolean} allowSharePermission Asserts whether the reshare permission is available
  * @param {Boolean} hasShareJail Asserts whether the share jail is available backend side
+ * @param {Array} spaces A list of spaces the current user has access to
  */
 export function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePermission,
-  hasShareJail
+  hasShareJail,
+  spaces = []
 ): Resource[] {
+  shares.sort((a, b) => a.path.localeCompare(b.path))
+  if (spaces.length) {
+    shares = addMatchingSpaceToShares(shares, spaces)
+  }
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
-    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
-      buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
-    )
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) => {
+      const resource = buildSharedResource(
+        share,
+        incomingShares,
+        allowSharePermission,
+        hasShareJail
+      )
+      resource.shareId = share.id
+      return resource
+    })
   }
 
-  shares.sort((a, b) => a.path.localeCompare(b.path))
   const resources = addSharedWithToShares(shares)
   return resources.map((share) =>
     buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
@@ -205,6 +221,19 @@ function addSharedWithToShares(shares) {
   return resources
 }
 
+function addMatchingSpaceToShares(shares, spaces) {
+  const resources = []
+  for (const share of shares) {
+    let matchingSpace
+    if (share.path === '/') {
+      const storageId = extractStorageId(share.item_source)
+      matchingSpace = spaces.find((s) => s.id === storageId && s.driveType === 'project')
+    }
+    resources.push({ ...share, matchingSpace })
+  }
+  return resources
+}
+
 export function buildSharedResource(
   share,
   incomingShares = false,
@@ -212,7 +241,7 @@ export function buildSharedResource(
   hasShareJail = false
 ): Resource {
   const isFolder = share.item_type === 'folder'
-  const resource: Resource = {
+  let resource: Resource = {
     id: share.id,
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
@@ -274,7 +303,12 @@ export function buildSharedResource(
   resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
   resource.share = buildShare(share, resource, allowSharePermission)
+  resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   resource.getDomSelector = () => extractDomSelector(share.id)
+
+  if (share.matchingSpace) {
+    resource = { ...resource, ...share.matchingSpace }
+  }
 
   return resource
 }
@@ -432,7 +466,7 @@ export function buildDeletedResource(resource): Resource {
     ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
+    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
     indicators: [],
     canUpload: () => false,

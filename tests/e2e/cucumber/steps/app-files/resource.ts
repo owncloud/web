@@ -12,11 +12,7 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      if (info.type !== 'folder') {
-        throw new Error('resource creation is currently only supported for folders ')
-      }
-
-      await resourceObject.create({ name: info.resource, type: info.type })
+      await resourceObject.create({ name: info.resource, type: info.type, content: info.content })
     }
   }
 )
@@ -207,6 +203,51 @@ Then(
     }
   }
 )
+When(
+  '{string} searches {string} using the global search',
+  async function (this: World, stepUser: string, keyword: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.searchResource({ keyword })
+  }
+)
+
+Then(
+  /^following resources (should|should not) be displayed in the search list for user "([^"]*)"?$/,
+  async function (
+    this: World,
+    actionType: string,
+    stepUser: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualList = await resourceObject.getDisplayedResources()
+    for (const info of stepTable.hashes()) {
+      const found = actualList.includes(info.resource)
+      if (actionType === 'should') expect(found).toBe(true)
+      else expect(found).toBe(false)
+    }
+  }
+)
+
+When(
+  '{string} opens folder {string}',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openFolder(resource)
+  }
+)
+
+When(
+  '{string} enables the option to display the hidden file',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.showHiddenFiles()
+  }
+)
 
 export const processDownload = async (
   stepTable: DataTable,
@@ -264,3 +305,36 @@ export const processDownload = async (
     }
   }
 }
+
+When(
+  '{string} edits the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.editResourse({ name: info.resource, content: info.content })
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" opens the following file(s)? in (mediaviewer|pdfviewer)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.openFileInViewer({
+        name: info.resource,
+        actionType: actionType === 'mediaviewer' ? 'mediaviewer' : 'pdfviewer'
+      })
+    }
+  }
+)

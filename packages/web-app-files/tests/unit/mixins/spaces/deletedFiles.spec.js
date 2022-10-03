@@ -35,16 +35,17 @@ describe('delete', () => {
   describe('method "$_deletedFiles_trigger"', () => {
     it('should trigger route change', async () => {
       const spaceMock = {
-        id: '1'
+        id: '1',
+        driveAlias: 'project/mars'
       }
 
       const wrapper = getWrapper()
       await wrapper.vm.$_deletedFiles_trigger({ resources: [buildSpace(spaceMock)] })
 
       expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
-        createLocationTrash('files-trash-spaces-project', {
+        createLocationTrash('files-trash-generic', {
           params: {
-            storageId: spaceMock.id
+            driveAliasAndItem: spaceMock.driveAlias
           }
         })
       )

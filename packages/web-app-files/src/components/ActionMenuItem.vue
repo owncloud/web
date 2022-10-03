@@ -3,11 +3,11 @@
     <oc-button
       v-oc-tooltip="showTooltip || action.hideLabel ? action.label(filterParams) : ''"
       :type="action.componentType"
-      v-bind="getComponentProps(action, items)"
+      v-bind="componentProps"
       :class="[action.class, 'action-menu-item']"
       data-testid="action-handler"
       size="small"
-      v-on="getComponentListeners(action, items)"
+      v-on="componentListeners"
     >
       <oc-img
         v-if="action.img"
@@ -17,7 +17,7 @@
         class="oc-icon oc-icon-m"
       />
       <oc-img
-        v-else-if="hasExternalImageIcon(action)"
+        v-else-if="hasExternalImageIcon"
         data-testid="action-img"
         :src="action.icon"
         alt=""
@@ -51,8 +51,11 @@
   </li>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from '@vue/composition-api'
+import { SpaceResource } from 'web-client/src/helpers'
+
+export default defineComponent({
   name: 'ActionMenuItem',
   props: {
     action: {
@@ -62,6 +65,11 @@ export default {
     items: {
       type: Array,
       required: true
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     },
     appearance: {
       type: String,
@@ -81,35 +89,40 @@ export default {
   computed: {
     filterParams() {
       return {
+        space: this.space,
         resources: this.items
       }
-    }
-  },
-  methods: {
-    getComponentProps(action, resources) {
+    },
+    hasExternalImageIcon() {
+      return this.action.icon && /^https?:\/\//i.test(this.action.icon)
+    },
+    componentProps() {
       const props = {
         appearance: this.appearance,
-        ...(action.isDisabled && { disabled: action.isDisabled() }),
-        ...(action.variation && { variation: action.variation })
+        ...(this.action.isDisabled && { disabled: this.action.isDisabled() }),
+        ...(this.action.variation && { variation: this.action.variation })
       }
 
-      if (action.componentType === 'router-link' && action.route) {
+      if (this.action.componentType === 'router-link' && this.action.route) {
         return {
           ...props,
-          to: action.route({ resources })
+          to: this.action.route(this.filterParams)
         }
       }
 
       return props
     },
-
-    getComponentListeners(action, resources) {
-      if (typeof action.handler !== 'function' || action.componentType !== 'button') {
+    componentListeners() {
+      if (typeof this.action.handler !== 'function' || this.action.componentType !== 'button') {
         return {}
       }
 
-      const callback = () => action.handler({ resources, ...action.handlerData })
-      if (action.keepOpen) {
+      const callback = () =>
+        this.action.handler({
+          ...this.filterParams,
+          ...this.action.handlerData
+        })
+      if (this.action.keepOpen) {
         return {
           click: (event) => {
             event.stopPropagation()
@@ -120,13 +133,9 @@ export default {
       return {
         click: callback
       }
-    },
-
-    hasExternalImageIcon(action) {
-      return action.icon && /^https?:\/\//i.test(action.icon)
     }
   }
-}
+})
 </script>
 <style lang="scss">
 .action-menu-item {

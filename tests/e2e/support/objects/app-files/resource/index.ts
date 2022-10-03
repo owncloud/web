@@ -5,7 +5,6 @@ import {
   deleteResource,
   deleteResourceArgs,
   deleteResourceTrashbin,
-  deleteResourceTrashbinArgs,
   downloadResources,
   downloadResourcesArgs,
   downloadResourceVersion,
@@ -20,7 +19,16 @@ import {
   uploadResource,
   uploadResourceArgs,
   restoreResourceTrashbinArgs,
-  restoreResourceTrashbin
+  restoreResourceTrashbin,
+  searchResourceGlobalSearch,
+  searchResourceGlobalSearchArgs,
+  getDisplayedResourcesFromSearch,
+  clickResource,
+  showHiddenResources,
+  editResources,
+  editResourcesArgs,
+  openFileInViewer,
+  openFileInViewerArgs
 } from './actions'
 
 export class Resource {
@@ -100,7 +108,7 @@ export class Resource {
     return await emptyTrashBinResources(this.#page)
   }
 
-  async deleteTrashBin(args: Omit<deleteResourceTrashbinArgs, 'page'>): Promise<string> {
+  async deleteTrashBin(args: Omit<deleteResourceArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const message = await deleteResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
@@ -112,5 +120,29 @@ export class Resource {
     const message = await restoreResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
+  }
+
+  async searchResource(args: Omit<searchResourceGlobalSearchArgs, 'page'>): Promise<void> {
+    await searchResourceGlobalSearch({ ...args, page: this.#page })
+  }
+
+  getDisplayedResources(): Promise<string[]> {
+    return getDisplayedResourcesFromSearch(this.#page)
+  }
+
+  async openFolder(resource): Promise<void> {
+    await clickResource({ page: this.#page, path: resource })
+  }
+
+  async showHiddenFiles(): Promise<void> {
+    await showHiddenResources(this.#page)
+  }
+
+  async editResourse(args: Omit<editResourcesArgs, 'page'>): Promise<void> {
+    await editResources({ ...args, page: this.#page })
+  }
+
+  async openFileInViewer(args: Omit<openFileInViewerArgs, 'page'>): Promise<void> {
+    await openFileInViewer({ ...args, page: this.#page })
   }
 }

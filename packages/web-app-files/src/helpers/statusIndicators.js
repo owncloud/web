@@ -68,9 +68,6 @@ const shareTypesIndirect = (path, sharesTree) => {
     return []
   }
 
-  // remove root entry
-  parentPaths.pop()
-
   const shareTypes = {}
 
   parentPaths.forEach((parentPath) => {

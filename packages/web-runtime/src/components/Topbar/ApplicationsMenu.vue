@@ -24,7 +24,7 @@
       close-on-click
     >
       <oc-list class="applications-list">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
+        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
           <oc-button
             :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
             :type="n.url ? 'a' : 'router-link'"
@@ -48,6 +48,11 @@
 </template>
 
 <script>
+import { clientService } from 'web-pkg/src/services'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { mapGetters } from 'vuex'
+import { urlJoin } from 'web-pkg/src/utils'
+
 export default {
   props: {
     applicationsList: {
@@ -57,6 +62,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('runtime/auth', ['accessToken']),
+
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
     }
@@ -66,6 +73,19 @@ export default {
       onHidden: () => this.$refs.menubutton.$el.focus(),
       onShown: () => this.$refs.menu.$el.querySelector('a:first-of-type').focus()
     })
+  },
+  methods: {
+    async clickApp(appEntry) {
+      // @TODO use id or similar
+      if (appEntry.url?.endsWith('/apps/files')) {
+        await this.setClassicUIDefault()
+      }
+    },
+    setClassicUIDefault() {
+      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
+      const httpClient = clientService.httpAuthenticated(this.accessToken)
+      return httpClient.post(url, { isDefault: false })
+    }
   }
 }
 </script>

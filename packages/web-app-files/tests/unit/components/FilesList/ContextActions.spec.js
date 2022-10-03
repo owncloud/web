@@ -206,6 +206,7 @@ function getWrapper(route, { filename, extension, type = '', mimeType }, availab
       }
     },
     propsData: {
+      space: { id: 1 },
       items: [
         {
           id: 'a93f8adf==',

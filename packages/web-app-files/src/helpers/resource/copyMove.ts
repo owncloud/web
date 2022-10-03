@@ -1,13 +1,15 @@
 import { Resource } from 'web-client'
 import { extractNameWithoutExtension } from './index'
 import { join } from 'path'
-import { buildResource } from '../resources'
-import { DavProperties } from 'web-pkg/src/constants'
+import { SpaceResource } from 'web-client/src/helpers'
+import { ClientService } from 'web-pkg/src/services'
+import { ClipboardActions } from '../clipboardActions'
 
-enum ResolveStrategy {
+export enum ResolveStrategy {
   SKIP,
   REPLACE,
-  KEEP_BOTH
+  KEEP_BOTH,
+  MERGE
 }
 export interface ResolveConflict {
   strategy: ResolveStrategy
@@ -18,14 +20,28 @@ interface FileConflict {
   strategy?: ResolveStrategy
 }
 
-const resolveFileExists = (
+export interface FileExistsResolver {
+  (
+    createModal: void,
+    hideModal: void,
+    resource: Resource,
+    conflictCount: number,
+    $gettext: void,
+    $gettextInterpolate: void,
+    isSingleConflict: boolean,
+    suggestMerge: boolean
+  )
+}
+
+export const resolveFileExists = (
   createModal,
   hideModal,
   resource,
   conflictCount,
   $gettext,
   $gettextInterpolate,
-  isSingleConflict
+  isSingleConflict,
+  suggestMerge = false
 ): Promise<ResolveConflict> => {
   return new Promise<ResolveConflict>((resolve) => {
     let doForAllConflicts = false
@@ -42,7 +58,7 @@ const resolveFileExists = (
       ),
       cancelText: $gettext('Skip'),
       confirmText: $gettext('Keep both'),
-      buttonSecondaryText: $gettext('Replace'),
+      buttonSecondaryText: suggestMerge ? $gettext('Merge') : $gettext('Replace'),
       checkboxLabel: isSingleConflict
         ? ''
         : $gettextInterpolate(
@@ -59,7 +75,7 @@ const resolveFileExists = (
       },
       onConfirmSecondary: () => {
         hideModal()
-        const strategy = ResolveStrategy.REPLACE
+        const strategy = suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
         resolve({ strategy, doForAllConflicts } as ResolveConflict)
       },
       onConfirm: () => {
@@ -72,25 +88,21 @@ const resolveFileExists = (
 }
 
 export const resolveAllConflicts = async (
-  resourcesToMove,
-  targetFolder,
-  targetFolderItems,
+  resourcesToMove: Resource[],
+  targetSpace: SpaceResource,
+  targetFolder: Resource,
+  targetFolderResources: Resource[],
   createModal,
   hideModal,
   $gettext,
   $gettextInterpolate,
   resolveFileExistsMethod
 ) => {
-  const targetPath = targetFolder.path
-  const index = targetFolder.webDavPath.lastIndexOf(targetPath)
-  const webDavPrefix =
-    targetPath === '/' ? targetFolder.webDavPath : targetFolder.webDavPath.substring(0, index)
-
   // Collect all conflicting resources
   const allConflicts = []
   for (const resource of resourcesToMove) {
-    const potentialTargetWebDavPath = join(webDavPrefix, targetFolder.path, resource.name)
-    const exists = targetFolderItems.some((e) => e.name === potentialTargetWebDavPath)
+    const targetFilePath = join(targetFolder.path, resource.name)
+    const exists = targetFolderResources.some((r) => r.path === targetFilePath)
     if (exists) {
       allConflicts.push({
         resource,
@@ -133,10 +145,16 @@ export const resolveAllConflicts = async (
   return resolvedConflicts
 }
 
-const hasRecursion = (resourcesToMove: Resource[], targetResource: Resource): boolean => {
-  return resourcesToMove.some((resource: Resource) =>
-    targetResource.webDavPath.endsWith(resource.webDavPath)
-  )
+const hasRecursion = (
+  sourceSpace: SpaceResource,
+  resourcesToMove: Resource[],
+  targetSpace: SpaceResource,
+  targetResource: Resource
+): boolean => {
+  if (sourceSpace.id !== targetSpace.id) {
+    return false
+  }
+  return resourcesToMove.some((resource: Resource) => targetResource.path === resource.path)
 }
 
 const showRecursionErrorMessage = (movedResources, showMessage, $ngettext) => {
@@ -156,21 +174,22 @@ const showResultMessage = (
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  copy = true
+  clipboardAction: 'cut' | 'copy'
 ) => {
   if (errors.length === 0) {
     const count = movedResources.length
-    const ntitle = copy
-      ? $ngettext(
-          '%{count} item was copied successfully',
-          '%{count} items were copied successfully',
-          count
-        )
-      : $ngettext(
-          '%{count} item was moved successfully',
-          '%{count} items were moved successfully',
-          count
-        )
+    const ntitle =
+      clipboardAction === ClipboardActions.Copy
+        ? $ngettext(
+            '%{count} item was copied successfully',
+            '%{count} items were copied successfully',
+            count
+          )
+        : $ngettext(
+            '%{count} item was moved successfully',
+            '%{count} items were moved successfully',
+            count
+          )
     const title = $gettextInterpolate(ntitle, { count }, true)
     showMessage({
       title,
@@ -179,7 +198,7 @@ const showResultMessage = (
     return
   }
   let title = $gettextInterpolate(
-    copy
+    clipboardAction === ClipboardActions.Copy
       ? $gettext('Failed to copy %{count} resources')
       : $gettext('Failed to move %{count} resources'),
     { count: errors.length },
@@ -187,7 +206,9 @@ const showResultMessage = (
   )
   if (errors.length === 1) {
     title = $gettextInterpolate(
-      copy ? $gettext('Failed to copy "%{name}"') : $gettext('Failed to move "%{name}"'),
+      clipboardAction === ClipboardActions.Copy
+        ? $gettext('Failed to copy "%{name}"')
+        : $gettext('Failed to move "%{name}"'),
       { name: errors[0]?.resourceName },
       true
     )
@@ -196,64 +217,6 @@ const showResultMessage = (
     title,
     status: 'danger'
   })
-}
-
-export const move = (
-  resourcesToMove,
-  targetFolder,
-  client,
-  createModal,
-  hideModal,
-  showMessage,
-  $gettext,
-  $gettextInterpolate,
-  $ngettext,
-  isPublicLinkContext: boolean,
-  publicLinkPassword: string | null = null
-): Promise<Resource[]> => {
-  return copyMoveResource(
-    resourcesToMove,
-    targetFolder,
-    client,
-    createModal,
-    hideModal,
-    showMessage,
-    $gettext,
-    $gettextInterpolate,
-    $ngettext,
-    isPublicLinkContext,
-    publicLinkPassword,
-    false
-  )
-}
-
-export const copy = (
-  resourcesToMove,
-  targetFolder,
-  client,
-  createModal,
-  hideModal,
-  showMessage,
-  $gettext,
-  $gettextInterpolate,
-  $ngettext,
-  isPublicLinkContext: boolean,
-  publicLinkPassword: string | null = null
-): Promise<Resource[]> => {
-  return copyMoveResource(
-    resourcesToMove,
-    targetFolder,
-    client,
-    createModal,
-    hideModal,
-    showMessage,
-    $gettext,
-    $gettextInterpolate,
-    $ngettext,
-    isPublicLinkContext,
-    publicLinkPassword,
-    true
-  )
 }
 
 export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
@@ -269,92 +232,33 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 
-const clientListFilesInFolder = (
-  client: any,
-  webDavPath: string,
-  depth: number,
-  isPublicLinkContext: boolean,
-  publicLinkPassword: string
-) => {
-  if (isPublicLinkContext) {
-    return client.publicFiles.list(webDavPath, publicLinkPassword, DavProperties.Default, depth)
-  }
-  return client.files.list(webDavPath, depth, DavProperties.Default)
-}
-
-const clientMoveFilesInFolder = (
-  client: any,
-  webDavPathSource: string,
-  webDavPathTarget: string,
-  overwrite: boolean,
-  isPublicLinkContext: boolean,
-  publicLinkPassword: string
-) => {
-  if (isPublicLinkContext) {
-    return client.publicFiles.move(
-      webDavPathSource,
-      webDavPathTarget,
-      publicLinkPassword,
-      overwrite
-    )
-  }
-  return client.files.move(webDavPathSource, webDavPathTarget, overwrite)
-}
-
-const clientCopyFilesInFolder = (
-  client: any,
-  webDavPathSource: string,
-  webDavPathTarget: string,
-  overwrite: boolean,
-  isPublicLinkContext: boolean,
-  publicLinkPassword: string
-) => {
-  if (isPublicLinkContext) {
-    return client.publicFiles.copy(
-      webDavPathSource,
-      webDavPathTarget,
-      publicLinkPassword,
-      overwrite
-    )
-  }
-  return client.files.copy(webDavPathSource, webDavPathTarget, overwrite)
-}
-
-const copyMoveResource = async (
-  resourcesToMove,
-  targetFolder,
-  client,
+export const copyMoveResource = async (
+  sourceSpace: SpaceResource,
+  resourcesToMove: Resource[],
+  targetSpace: SpaceResource,
+  targetFolder: Resource,
+  clientService: ClientService,
   createModal,
   hideModal,
   showMessage,
   $gettext,
   $gettextInterpolate,
   $ngettext,
-  isPublicLinkContext,
-  publicLinkPassword,
-  copy = false
+  clipboardAction: 'cut' | 'copy'
 ): Promise<Resource[]> => {
-  if (hasRecursion(resourcesToMove, targetFolder)) {
+  if (hasRecursion(sourceSpace, resourcesToMove, targetSpace, targetFolder)) {
     showRecursionErrorMessage(resourcesToMove, showMessage, $ngettext)
     return []
   }
 
   const errors = []
-  // if we implement MERGE, we need to use 'infinity' instead of 1
-  // const targetFolderItems = await client.files.list(targetFolder.webDavPath, 1)
-  const targetFolderItems = await clientListFilesInFolder(
-    client,
-    targetFolder.webDavPath,
-    1,
-    isPublicLinkContext,
-    publicLinkPassword
-  )
-  const targetFolderResources = targetFolderItems.map((i) => buildResource(i))
+  const targetFolderResources = await clientService.webdav.listFiles(targetSpace, targetFolder)
 
   const resolvedConflicts = await resolveAllConflicts(
     resourcesToMove,
+    targetSpace,
     targetFolder,
-    targetFolderItems,
+    targetFolderResources,
     createModal,
     hideModal,
     $gettext,
@@ -386,24 +290,21 @@ const copyMoveResource = async (
       }
     }
     try {
-      const webDavPathTarget = join(targetFolder.webDavPath, targetName)
-      if (copy) {
-        await clientCopyFilesInFolder(
-          client,
-          resource.webDavPath,
-          webDavPathTarget,
-          overwriteTarget,
-          isPublicLinkContext,
-          publicLinkPassword
+      if (clipboardAction === ClipboardActions.Copy) {
+        await clientService.webdav.copyFiles(
+          sourceSpace,
+          resource,
+          targetSpace,
+          { path: join(targetFolder.path, targetName) },
+          { overwrite: overwriteTarget }
         )
-      } else {
-        await clientMoveFilesInFolder(
-          client,
-          resource.webDavPath,
-          webDavPathTarget,
-          overwriteTarget,
-          isPublicLinkContext,
-          publicLinkPassword
+      } else if (clipboardAction === ClipboardActions.Cut) {
+        await clientService.webdav.moveFiles(
+          sourceSpace,
+          resource,
+          targetSpace,
+          { path: join(targetFolder.path, targetName) },
+          { overwrite: overwriteTarget }
         )
       }
       resource.path = join(targetFolder.path, resource.name)
@@ -422,7 +323,7 @@ const copyMoveResource = async (
     $gettext,
     $gettextInterpolate,
     $ngettext,
-    copy
+    clipboardAction
   )
   return movedResources
 }

@@ -52,16 +52,14 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
           false,
           unref(hasResharing),
           unref(hasShareJail)
-        )
+        ).map((resource) => {
+          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+          if (!resource.storageId) {
+            resource.storageId = store.getters.user.id
+          }
+          return resource
+        })
       }
-
-      /*
-       * FIXME: After the issue https://github.com/owncloud/ocis/issues/3592 has been solved,
-       * it shouldn't be necessary to filter the shares by shareOwner.
-       * therefore the code down below can be removed.
-       */
-      const user = store.state.user
-      resources = resources.filter((r) => r.shareOwner === user.id)
 
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: resources })
     })

@@ -1,7 +1,7 @@
 <template>
-  <div class="oc-mt-xl">
+  <div id="user-edit-panel" class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div class="oc-background-highlight oc-p-m">
+    <div id="user-edit-form" class="oc-background-highlight oc-p-m">
       <div>
         <oc-text-input
           v-model="editUser.displayName"
@@ -41,6 +41,7 @@
         <quota-select
           v-if="showQuota"
           :key="'quota-select-' + user.id"
+          class="oc-mb-s"
           :title="$gettext('Personal quota')"
           :total-quota="editUser.drive.quota.total || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
@@ -49,15 +50,15 @@
           To set an individual quota, the user needs to have logged in once.
         </p>
       </div>
+      <compare-save-dialog
+        class="edit-compare-save-dialog oc-mb-l"
+        :original-object="user"
+        :compare-object="editUser"
+        :confirm-button-disabled="invalidFormData"
+        @revert="revertChanges"
+        @confirm="$emit('confirm', editUser)"
+      ></compare-save-dialog>
     </div>
-    <compare-save-dialog
-      class="edit-compare-save-dialog"
-      :original-object="user"
-      :compare-object="editUser"
-      :confirm-button-disabled="invalidFormData"
-      @revert="revertChanges"
-      @confirm="$emit('confirm', editUser)"
-    ></compare-save-dialog>
   </div>
 </template>
 <script>
@@ -156,10 +157,11 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-.edit-compare-save-dialog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+#user-edit-panel {
+  #user-edit-form {
+    border-radius: 5px;
+  }
 }
 </style>

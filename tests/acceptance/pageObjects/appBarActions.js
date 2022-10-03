@@ -34,7 +34,7 @@ module.exports = {
   elements: {
     batchActionButton: {
       selector:
-        '//div[@class="files-app-bar-actions"]//button/descendant-or-self::*[contains(text(),"%s")]',
+        '//div[contains(@class, "files-app-bar-actions")]//button/descendant-or-self::*[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     sharesSubPageButton: {

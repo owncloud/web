@@ -3,7 +3,6 @@ import { sidebar } from '../utils'
 import { File, User } from '../../../types'
 import util from 'util'
 import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
-import { expect } from '@playwright/test'
 import { createLink } from '../link/actions'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
@@ -23,9 +22,7 @@ const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger'
 const spaceContextButton = '#space-context-btn'
-const spaceOverviewImg = '.space-overview-image'
 
-export let spaceImageId = ''
 /**/
 
 export interface createSpaceArgs {
@@ -245,22 +242,18 @@ export const changeSpaceImage = async (args: {
     fileChooser.setFiles(resource.path)
   ])
 
-  const img = await page.locator(spaceOverviewImg)
-  const src = await img.evaluate((e) => (e as HTMLImageElement).src)
-  expect(src).not.toBe(spaceImageId)
-  spaceImageId = src
-
   await sidebar.close({ page: page })
 }
 export interface removeAccessMembersArgs {
   users: User[]
   page: Page
+  removeOwnSpaceAccess?: boolean
 }
 export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
-  const { page, users } = args
+  const { page, users, removeOwnSpaceAccess } = args
   await sidebar.open({ page: page })
   await sidebar.openPanel({ page: page, name: 'space-share' })
-  await removeSharee({ page, users })
+  await removeSharee({ page, users, removeOwnSpaceAccess: removeOwnSpaceAccess })
 }
 
 export interface changeSpaceRoleArgs {

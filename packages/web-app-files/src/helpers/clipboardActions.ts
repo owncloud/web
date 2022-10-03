@@ -1,4 +1,4 @@
 export abstract class ClipboardActions {
-  static readonly Cut: string = 'cut'
-  static readonly Copy: string = 'copy'
+  static readonly Cut = 'cut'
+  static readonly Copy = 'copy'
 }

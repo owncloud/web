@@ -1,21 +1,38 @@
 import { buildSpace } from 'web-client/src/helpers'
 import Vue from 'vue'
 import { set, has } from 'lodash-es'
+import { unref } from '@vue/composition-api'
+import { buildSpaceShare } from 'files/src/helpers/resources'
+import { sortSpaceMembers } from 'files/src/helpers/space'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const state = {
-  spaces: []
+  spaces: [],
+  spacesInitialized: false,
+  spacesLoading: false,
+  spaceMembers: []
 }
 
 const getters = {
-  spaces: (state) => state.spaces
+  spaces: (state) => state.spaces,
+  spacesInitialized: (state) => state.spacesInitialized,
+  spacesLoading: (state) => state.spacesLoading,
+  spaceMembers: (state) => state.spaceMembers
 }
 
 const mutations = {
-  LOAD_SPACES(state, spaces) {
-    state.spaces = spaces
+  // TODO: we might want to avoid duplicates at some point
+  ADD_SPACES(state, spaces) {
+    state.spaces = [...state.spaces, ...spaces]
+  },
+  SET_SPACES_INITIALIZED(state, initialized) {
+    state.spacesInitialized = initialized
+  },
+  SET_SPACES_LOADING(state, loading) {
+    state.spacesLoading = loading
   },
   /**
-   * Updates a single space field. If the space with given id doesn't exist nothing will happen.
+   * Updates a single space field. If the space with given id doesn't exist, nothing will happen.
    *
    * @param state Current state of this store module
    * @param params
@@ -57,18 +74,100 @@ const mutations = {
   },
   CLEAR_SPACES(state) {
     state.spaces = []
+  },
+  CLEAR_SPACE_MEMBERS(state) {
+    state.spaceMembers = []
+  },
+  SET_SPACE_MEMBERS(state, members) {
+    state.spaceMembers = members
+  },
+  UPSERT_SPACE_MEMBERS(state, member) {
+    const fileIndex = state.spaceMembers.findIndex((s) => {
+      return member.id === s.id && member.collaborator.name === s.collaborator.name
+    })
+
+    if (fileIndex >= 0) {
+      Vue.set(state.spaceMembers, fileIndex, member)
+    } else {
+      // share was not present in the list while updating, add it instead
+      state.spaceMembers.push(member)
+    }
+  },
+  REMOVE_SPACE_MEMBER(state, member) {
+    state.spaceMembers = state.spaceMembers.filter(
+      (s) => member.id === s.id && member.collaborator.name !== s.collaborator.name
+    )
   }
 }
 
 const actions = {
   async loadSpaces(context, { graphClient }) {
-    const graphResponse = await graphClient.drives.listMyDrives()
-    if (!graphResponse.data) {
-      return
+    context.commit('SET_SPACES_LOADING', true)
+    try {
+      const graphResponse = await graphClient.drives.listMyDrives()
+      if (!graphResponse.data) {
+        return
+      }
+      const spaces = graphResponse.data.value.map((space) =>
+        buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+      )
+      context.commit('ADD_SPACES', spaces)
+      context.commit('SET_SPACES_INITIALIZED', true)
+    } finally {
+      context.commit('SET_SPACES_LOADING', false)
+    }
+  },
+  loadSpaceMembers(context, { graphClient, space }) {
+    context.commit('CLEAR_SPACE_MEMBERS')
+    const promises = []
+    const spaceShares = []
+
+    for (const role of Object.keys(space.spaceRoles)) {
+      for (const userId of space.spaceRoles[role]) {
+        promises.push(
+          unref(graphClient)
+            .users.getUser(userId)
+            .then((resolved) => {
+              spaceShares.push(buildSpaceShare({ ...resolved.data, role }, space.id))
+            })
+        )
+      }
     }
 
-    const spaces = graphResponse.data.value.map((space) => buildSpace(space))
-    context.commit('LOAD_SPACES', spaces)
+    return Promise.all(promises).then(() => {
+      context.commit('SET_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
+    })
+  },
+  addSpaceMember(context, { client, path, shareWith, permissions, role, storageId, displayName }) {
+    return client.shares
+      .shareSpaceWithUser(path, shareWith, storageId, { permissions, role: role.name })
+      .then(() => {
+        const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
+        context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
+      })
+  },
+  changeSpaceMember(context, { client, share, permissions, role }) {
+    return client.shares
+      .shareSpaceWithUser('', share.collaborator.name, share.id, { permissions, role: role.name })
+      .then(() => {
+        const spaceShare = buildSpaceShare(
+          {
+            role: role.name,
+            onPremisesSamAccountName: share.collaborator.name,
+            displayName: share.collaborator.displayName
+          },
+          share.id
+        )
+
+        context.commit('UPSERT_SPACE_MEMBERS', spaceShare)
+      })
+  },
+  deleteSpaceMember(context, { client, share }) {
+    const additionalParams = { shareWith: share.collaborator.name } as any
+
+    return client.shares.deleteShare(share.id, additionalParams).then(() => {
+      context.commit('REMOVE_SPACE_MEMBER', share)
+    })
   }
 }
 

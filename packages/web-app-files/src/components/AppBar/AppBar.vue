@@ -21,6 +21,7 @@
           <template #contextMenu>
             <context-actions
               v-if="showContextActions"
+              :space="space"
               :items="breadcrumbsContextActionsItems.filter(Boolean)"
             />
           </template>
@@ -28,17 +29,21 @@
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
           <view-options v-if="hasViewOptions" />
-          <sidebar-toggle v-if="hasSidebarToggle" />
+          <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
       </div>
-      <div class="files-app-bar-actions">
+      <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start">
           <slot
             v-if="showActionsOnSelection || selectedFiles.length === 0"
             name="actions"
             :limitedScreenSpace="limitedScreenSpace"
           />
-          <batch-actions v-if="showBatchActions" :show-tooltips="limitedScreenSpace" />
+          <batch-actions
+            v-if="showBatchActions"
+            :show-tooltips="limitedScreenSpace"
+            :space="space"
+          />
         </div>
       </div>
       <slot name="content" />
@@ -46,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import last from 'lodash-es/last'
 
@@ -57,8 +62,12 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
+import { BreadcrumbItem } from '../../helpers/breadcrumbs'
+import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   components: {
     BatchActions,
     ContextActions,
@@ -68,14 +77,25 @@ export default {
   },
   mixins: [MixinFileActions],
   props: {
-    breadcrumbs: { type: Array, default: () => [] },
-    breadcrumbsContextActionsItems: { type: Array, default: () => [] },
+    breadcrumbs: {
+      type: Array as PropType<BreadcrumbItem[]>,
+      default: () => []
+    },
+    breadcrumbsContextActionsItems: {
+      type: Array as PropType<Resource[]>,
+      default: () => []
+    },
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
     hasViewOptions: { type: Boolean, default: true },
     showActionsOnSelection: { type: Boolean, default: false },
-    sideBarOpen: { type: Boolean, default: false }
+    sideBarOpen: { type: Boolean, default: false },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
   },
   data: function () {
     return {
@@ -92,7 +112,7 @@ export default {
       return this.$gettext(title)
     },
     showContextActions() {
-      return last(this.breadcrumbs).allowContextActions
+      return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
     showBatchActions() {
       return this.hasBulkActions
@@ -143,7 +163,7 @@ export default {
         : window.innerWidth <= 1000
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

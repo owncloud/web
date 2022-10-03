@@ -212,7 +212,7 @@ describe('ResourceTable', () => {
     it('emits fileClick upon clicking on a resource name', () => {
       wrapper.find('.oc-tbody-tr-forest .oc-resource-name').trigger('click')
 
-      expect(wrapper.emitted().fileClick[0][0].name).toMatch('forest.jpg')
+      expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
     })
   })
 
@@ -285,6 +285,17 @@ function getMountedWrapper(options = {}) {
               state: {
                 spaces: []
               }
+            },
+            runtime: {
+              namespaced: true,
+              modules: {
+                spaces: {
+                  namespaced: true,
+                  state: {
+                    spaces: []
+                  }
+                }
+              }
             }
           }
         }),
@@ -294,7 +305,10 @@ function getMountedWrapper(options = {}) {
           slots: {
             status: "<div class='status-slot'>Hello world!</div>"
           },
-          hover: false
+          hover: false,
+          space: {
+            getDriveAliasAndItem: jest.fn()
+          }
         },
         stubs: {
           'router-link': true

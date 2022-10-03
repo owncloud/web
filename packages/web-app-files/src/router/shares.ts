@@ -26,7 +26,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       {
         name: locationSharesWithMe.name,
         path: 'with-me',
-        component: components.SharedWithMe,
+        component: components.Shares.SharedWithMe,
         meta: {
           title: $gettext('Files shared with me')
         }
@@ -34,7 +34,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       {
         name: locationSharesWithOthers.name,
         path: 'with-others',
-        component: components.SharedWithOthers,
+        component: components.Shares.SharedWithOthers,
         meta: {
           title: $gettext('Files shared with others')
         }
@@ -42,7 +42,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
       {
         name: locationSharesViaLink.name,
         path: 'via-link',
-        component: components.SharedViaLink,
+        component: components.Shares.SharedViaLink,
         meta: {
           title: $gettext('Files shared via link')
         }

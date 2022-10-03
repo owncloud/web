@@ -26,7 +26,6 @@
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -35,7 +34,11 @@
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions
+              v-if="isResourceInSelection(resource)"
+              :items="selectedResources"
+              :space="getSpace(resource)"
+            />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -49,7 +52,11 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar
+      :open="sideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedResourceSpace"
+    />
   </div>
 </template>
 
@@ -57,7 +64,6 @@
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import FileActions from '../../mixins/fileActions'
-import MixinFilesListFilter from '../../mixins/filesListFilter'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
@@ -72,11 +78,12 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
-import { createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -93,16 +100,28 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [FileActions, MixinFilesListFilter],
+  mixins: [FileActions],
 
   setup() {
     const store = useStore()
+    const getSpace = (resource: Resource): SpaceResource => {
+      const storageId = resource.storageId
+      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
+      const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+      if (space) {
+        return space
+      }
+
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
+    }
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      })
+      getSpace
     }
   },
 

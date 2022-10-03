@@ -36,7 +36,7 @@ import { ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',
-  redirect: (to) => createLocationSpaces('files-spaces-personal', to)
+  redirect: (to) => createLocationSpaces('files-spaces-generic', to)
 }
 
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [

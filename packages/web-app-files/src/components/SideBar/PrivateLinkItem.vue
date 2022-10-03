@@ -21,6 +21,7 @@
 <script>
 import { mapActions } from 'vuex'
 import copyToClipboard from 'copy-to-clipboard'
+import { unref } from '@vue/composition-api'
 
 export default {
   name: 'PrivateLinkItem',
@@ -40,7 +41,7 @@ export default {
   methods: {
     ...mapActions(['showMessage']),
     copyPrivateLinkToClipboard() {
-      copyToClipboard(this.displayedItem.value.privateLink)
+      copyToClipboard(unref(this.displayedItem).privateLink)
       this.clipboardSuccessHandler()
       this.showMessage({
         title: this.$gettext('Private link copied'),

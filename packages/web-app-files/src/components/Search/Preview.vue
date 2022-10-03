@@ -1,15 +1,21 @@
 <template>
-  <div class="files-search-preview">
+  <oc-button
+    :type="resource.isFolder ? 'router-link' : 'button'"
+    justify-content="left"
+    class="files-search-preview oc-flex oc-width-1-1"
+    appearance="raw"
+    v-bind="attrs"
+    v-on="listeners"
+  >
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :folder-link="folderLink(resource)"
-      :parent-folder-link="parentFolderLink(resource)"
+      :is-resource-clickable="false"
+      :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
-      @click="$_fileActions_triggerDefaultAction(resource)"
     />
-  </div>
+  </oc-button>
 </template>
 
 <script lang="ts">
@@ -20,13 +26,16 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { createLocationSpaces } from '../../router'
+import { createLocationShares, createLocationSpaces } from '../../router'
 import path from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
+import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
-export default {
+export default defineComponent({
   mixins: [MixinFileActions],
   props: {
     searchResult: {
@@ -46,26 +55,44 @@ export default {
     const store = useStore()
     return {
       hasShareJail: useCapabilityShareJailEnabled(),
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
       accessToken: useAccessToken({ store })
-    }
-  },
-  data() {
-    return {
-      resource: undefined
     }
   },
   computed: {
     ...mapGetters(['configuration', 'user']),
     ...mapState('runtime/spaces', ['spaces']),
 
+    attrs() {
+      return this.resource.isFolder
+        ? {
+            to: this.createFolderLink(this.resource.path, this.resource)
+          }
+        : {}
+    },
+    listeners() {
+      return this.resource.isFolder
+        ? {}
+        : {
+            click: () =>
+              this.$_fileActions_triggerDefaultAction({
+                space: this.matchingSpace,
+                resources: [this.resource]
+              })
+          }
+    },
+    resource() {
+      return this.searchResult.data
+    },
     matchingSpace() {
       return this.spaces.find((space) => space.id === this.resource.storageId)
     },
     defaultParentFolderName() {
+      if (this.resource.shareId) {
+        return this.resource.path === '/'
+          ? this.$gettext('Shared with me')
+          : path.basename(this.resource.shareRoot)
+      }
+
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
       }
@@ -78,10 +105,16 @@ export default {
     },
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+    folderLink() {
+      return this.createFolderLink(this.resource.path)
+    },
+    parentFolderLink() {
+      if (this.resource.shareId && this.resource.path === '/') {
+        return createLocationShares('files-shares-with-me')
+      }
+      return this.createFolderLink(path.dirname(this.resource.path))
     }
-  },
-  beforeMount() {
-    this.resource = this.searchResult.data
   },
   mounted() {
     if (!this.displayThumbnails) {
@@ -110,32 +143,38 @@ export default {
     visibilityObserver.disconnect()
   },
   methods: {
-    folderLink(file) {
-      return this.createFolderLink(file.path, file.storageId)
-    },
-    parentFolderLink(file) {
-      return this.createFolderLink(path.dirname(file.path), file.storageId)
-    },
-    createFolderLink(path, storageId) {
-      if (this.resourceTargetLocation === null || this.resourceTargetLocationSpace === null) {
-        return {}
-      }
-
-      if (this.matchingSpace?.driveType === 'project') {
-        return createLocationSpaces('files-spaces-project', {
-          params: { storageId, item: path.replace(/^\//, '') || undefined }
+    createFolderLink(p: string) {
+      if (this.resource.shareId) {
+        const space = buildShareSpaceResource({
+          shareId: this.resource.shareId,
+          shareName: path.basename(this.resource.shareRoot),
+          serverUrl: configurationManager.serverUrl
+        })
+        return createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
+          },
+          query: {
+            shareId: this.resource.shareId
+          }
         })
       }
 
-      return {
-        name: this.resourceTargetLocation.name,
-        params: {
-          item: path.replace(/^\//, '') || undefined,
-          ...this.resourceTargetLocation.params,
-          ...(storageId && { storageId })
-        }
+      if (!this.matchingSpace) {
+        return {}
       }
+
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
+        }
+      })
     }
   }
-}
+})
 </script>
+<style lang="scss">
+.files-search-preview {
+  font-size: inherit;
+}
+</style>

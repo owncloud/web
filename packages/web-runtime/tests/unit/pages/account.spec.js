@@ -49,37 +49,34 @@ describe('account page', () => {
 
     describe('edit buttons', () => {
       describe('edit url button', () => {
-        it('should be displayed if not running with ocis', async () => {
+        it('should be displayed if not running with ocis', () => {
           const store = getStore({
             server: 'http://server/address/',
             isAccountEditingEnabled: true
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editUrlButton).toMatchSnapshot()
           expect(editRouteButton.exists()).toBeFalsy()
         })
-        it('should not be displayed if running with ocis', async () => {
+        it('should not be displayed if running with ocis', () => {
           const store = getStore({
             server: 'http://server/address/',
             isAccountEditingEnabled: false
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           expect(editUrlButton.exists()).toBeFalsy()
         })
       })
       describe('edit route button', () => {
-        it('should be displayed if running with ocis and has navItems', async () => {
+        it('should be displayed if running with ocis and has navItems', () => {
           const store = getStore({
             isAccountEditingEnabled: false,
             getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }])
           })
-          const wrapper = getWrapper(store)
-          await wrapper.setData({ loadingGroups: false })
+          const wrapper = getWrapper({ store, data: { loadingGroups: false } })
           const editRouteButton = wrapper.find(selectors.editRouteButton)
           expect(editRouteButton).toMatchSnapshot()
         })
@@ -96,23 +93,23 @@ describe('account page', () => {
           email: 'some-email'
         }
       })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       const accountPageInfo = wrapper.find(selectors.accountPageInfo)
       expect(accountPageInfo).toMatchSnapshot()
     })
 
     describe('group membership', () => {
-      it('displays message if not member of any groups', async () => {
+      it('displays message if not member of any groups', () => {
         const store = getStore({ user: { groups: [] } })
-        const wrapper = getWrapper(store)
+        const wrapper = getWrapper({ store })
 
         const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
         expect(groupNamesEmpty.exists()).toBeTruthy()
       })
-      it('displays group names', async () => {
+      it('displays group names', () => {
         const store = getStore({ user: { groups: ['one', 'two', 'three'] } })
-        const wrapper = getWrapper(store)
+        const wrapper = getWrapper({ store })
 
         const groupNames = wrapper.find(selectors.groupNames)
         expect(groupNames).toMatchSnapshot()
@@ -126,7 +123,7 @@ describe('account page', () => {
         return Promise.resolve()
       })
       const store = getStore({ server: 'https://example.com' })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
@@ -140,7 +137,7 @@ describe('account page', () => {
         return Promise.reject(new Error())
       })
       const store = getStore({ server: 'https://example.com' })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
 
       jest.spyOn(console, 'error').mockImplementation(() => {})
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -154,18 +151,18 @@ describe('account page', () => {
   describe('computed method "isChangePasswordEnabled"', () => {
     it('should be true if capability is enabled', () => {
       const store = getStore({ capabilities: { spaces: { enabled: true } } })
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
       expect(wrapper.vm.isChangePasswordEnabled).toBeTruthy()
     })
     it('should be false if capability is not enabled', () => {
       const store = getStore()
-      const wrapper = getWrapper(store)
+      const wrapper = getWrapper({ store })
       expect(wrapper.vm.isChangePasswordEnabled).toBeFalsy()
     })
   })
 })
 
-function getWrapper(store = getStore()) {
+function getWrapper({ store = getStore(), data = {} } = {}) {
   const component = {
     ...account,
     mounted: jest.fn()
@@ -179,6 +176,7 @@ function getWrapper(store = getStore()) {
       'oc-button': true,
       'oc-icon': true
     },
+    data: () => data,
     store
   }
   return shallowMount(component, opts)

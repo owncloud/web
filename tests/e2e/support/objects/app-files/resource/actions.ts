@@ -1,4 +1,5 @@
 import { Download, Page } from 'playwright'
+import { expect } from '@playwright/test'
 import util from 'util'
 import { resourceExists, waitForResources } from './utils'
 import path from 'path'
@@ -14,7 +15,13 @@ const fileRow = '//ancestor::tr'
 const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
-const folderNameInput = '.oc-modal input'
+const createNewTxtFileButton = '.new-file-btn-txt'
+const createNewMdFileButton = '.new-file-btn-md'
+const createNewDrawioFileButton = '.new-file-btn-drawio'
+const saveTextFileInEditorButton = '#text-editor-controls-save'
+const closeTextEditorOrViewerButton = '#app-top-bar-close'
+const textEditorInput = '#text-editor-input'
+const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
@@ -24,11 +31,20 @@ const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
 const deleteButton = 'button.oc-files-actions-delete-trigger'
 const actionConfirmationButton = '.oc-modal-body-actions-confirm'
+const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
 const restoreResourceButton = '.oc-files-actions-restore-trigger'
+const globalSearchInput = '.oc-search-input'
+const searchList =
+  '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
+const globalSearchOptions = '#files-global-search-options'
+const loadingSpinner = '#files-global-search-options .loading'
+const filesViewOptionButton = '#files-view-options-btn'
+const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
+const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 
 export const clickResource = async ({
   page,
@@ -41,7 +57,6 @@ export const clickResource = async ({
   for (const name of paths) {
     const resource = await page.locator(util.format(resourceNameSelector, name))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
-
     await Promise.all([
       resource.click(),
       page.waitForResponse(
@@ -60,33 +75,98 @@ export const clickResource = async ({
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder'
+  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile'
+  content?: string
 }
 
 export const createResource = async (args: createResourceArgs): Promise<void> => {
-  const { page, name } = args
+  const { page, name, type, content } = args
   const paths = name.split('/')
 
   for (const resource of paths) {
-    const folderExists = await resourceExists({
+    const resourcesExists = await resourceExists({
       page: page,
       name: resource
     })
 
-    if (!folderExists) {
+    if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-      await page.locator(createNewFolderButton).click()
-      await page.locator(folderNameInput).fill(resource)
-      await Promise.all([
-        page.waitForResponse(
-          (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
-        ),
-        page.locator(actionConfirmationButton).click()
-      ])
-    }
 
-    await clickResource({ page, path: resource })
+      switch (type) {
+        case 'folder': {
+          await page.locator(createNewFolderButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          break
+        }
+        case 'txtFile': {
+          await page.locator(createNewTxtFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await editTextDocument({ page, content: content })
+          break
+        }
+        case 'mdFile': {
+          await page.locator(createNewMdFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await editTextDocument({ page, content: content })
+          break
+        }
+        case 'drawioFile': {
+          await page.locator(createNewDrawioFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+
+          const [drawioTab] = await Promise.all([
+            page.waitForEvent('popup'),
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await drawioTab.waitForLoadState()
+          await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
+          await drawioTab.waitForURL('**/draw-io/personal/**')
+          await drawioTab.close()
+          break
+        }
+      }
+    }
+    if (type === 'folder') {
+      await clickResource({ page, path: resource })
+    }
   }
+}
+
+export const editTextDocument = async ({
+  page,
+  content
+}: {
+  page: Page
+  content: string
+}): Promise<void> => {
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
+    page.locator(textEditorInput).fill(content),
+    page.locator(saveTextFileInEditorButton).click()
+  ])
+
+  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
 }
 
 /**/
@@ -108,7 +188,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
   await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
 
   if (createVersion) {
-    await page.locator(actionConfirmationButton).click()
+    await page.locator(actionSecondaryConfirmationButton).click()
     // @TODO check if upload was successful
   }
 
@@ -370,14 +450,12 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
   return message.trim().toLowerCase()
 }
 
-export interface deleteResourceTrashbinArgs {
-  resource: string
-  page: Page
-}
-
-export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): Promise<string> => {
+export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -403,7 +481,9 @@ export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -417,4 +497,75 @@ export const restoreResourceTrashbin = async (
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
+}
+
+export interface searchResourceGlobalSearchArgs {
+  keyword: string
+  page: Page
+}
+
+export const searchResourceGlobalSearch = async (
+  args: searchResourceGlobalSearchArgs
+): Promise<void> => {
+  const { page, keyword } = args
+  await page.locator(globalSearchInput).fill(keyword)
+  await expect(page.locator(globalSearchOptions)).toBeVisible()
+  await expect(page.locator(loadingSpinner)).not.toBeVisible()
+}
+
+export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {
+  const result = await page.locator(searchList).allInnerTexts()
+  // the result has values like `test\n.txt` so remove new line
+  return result.map((result) => result.replace('\n', ''))
+}
+
+export const showHiddenResources = async (page): Promise<void> => {
+  await page.locator(filesViewOptionButton).click()
+  await page.locator(hiddenFilesToggleButton).click()
+}
+
+export interface editResourcesArgs {
+  page: Page
+  name: string
+  content: string
+}
+
+export const editResources = async (args: editResourcesArgs): Promise<void> => {
+  const { page, name, content } = args
+  await page.locator(util.format(resourceNameSelector, name)).click()
+  await editTextDocument({ page, content: content })
+}
+
+export interface openFileInViewerArgs {
+  page: Page
+  name: string
+  actionType: 'mediaviewer' | 'pdfviewer'
+}
+
+export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
+  const { page, name, actionType } = args
+
+  if (actionType === 'mediaviewer') {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('preview') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+      ),
+      page.locator(util.format(resourceNameSelector, name)).click()
+    ])
+
+    // in case of error <img> doesn't contain src="blob:https://url"
+    expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
+  } else {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+      ),
+      page.locator(util.format(resourceNameSelector, name)).click()
+    ])
+  }
+
+  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
 }

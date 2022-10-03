@@ -108,7 +108,7 @@ describe('FileShares', () => {
     afterEach(() => {
       mockAxios.reset()
     })
-    it('loads space members if a space is given', async () => {
+    it('loads space members if a space is given', () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({
           data: { role: spaceRoleManager.name }
@@ -127,18 +127,21 @@ describe('FileShares', () => {
           ]
         }
       })
-      const wrapper = getShallowMountedWrapper({ user, spaces: [spaceMock] })
-
-      await wrapper.vm.loadSpaceMembersTask.last
-      expect(wrapper.vm.spaceMembers.length).toBe(1)
+      const wrapper = getShallowMountedWrapper({
+        user,
+        spaces: [spaceMock],
+        spaceMembers: [{ id: 1 }],
+        currentUserIsMemberOfSpace: true
+      })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
     })
     it('does not load space members if no space is given', () => {
       const wrapper = getShallowMountedWrapper({
-        user
+        user,
+        spaceMembers: [{ id: 1 }]
       })
 
-      expect(wrapper.vm.spaceMembers.length).toBe(0)
+      expect(wrapper.find('#space-collaborators-list').exists()).toBeFalsy()
     })
   })
 })
@@ -173,7 +176,8 @@ function getResource({
     isReceivedShare: () => true,
     canBeDeleted: () => true,
     canRename: () => true,
-    canShare: () => canShare
+    canShare: () => canShare,
+    canDeny: () => false
   }
 }
 
@@ -183,7 +187,8 @@ const storeOptions = (data) => {
     outgoingCollaborators = [],
     incomingCollaborators = [],
     canShare = true,
-    spaces = []
+    spaces = [],
+    spaceMembers = []
   } = data
   return {
     actions: {
@@ -206,12 +211,9 @@ const storeOptions = (data) => {
             return getResource({ filename: 'testfile', extension: 'jpg', type: 'file', canShare })
           },
           currentFileOutgoingCollaborators: () => outgoingCollaborators,
-          currentFileOutgoingSharesLoading: () => false,
           sharesTreeLoading: () => false
         },
         actions: {
-          loadCurrentFileOutgoingShares: jest.fn(),
-          loadIncomingShares: jest.fn(),
           loadSharesTree: jest.fn(),
           deleteShare: jest.fn()
         },
@@ -224,16 +226,18 @@ const storeOptions = (data) => {
       },
       runtime: {
         namespaced: true,
-        state: {
-          spaces: {
-            spaces
-          }
-        },
         modules: {
           auth: {
             namespaced: true,
             getters: {
               accessToken: () => 'GFwHKXdsMgoFwt'
+            }
+          },
+          spaces: {
+            namespaced: true,
+            state: { spaces },
+            getters: {
+              spaceMembers: () => spaceMembers
             }
           }
         }
@@ -278,6 +282,9 @@ function getMountedWrapper(data) {
 
   return mount(FileShares, {
     localVue,
+    provide: {
+      incomingParentShare: {}
+    },
     setup: () => ({
       currentStorageId: storageId
     }),
@@ -302,17 +309,25 @@ function getMountedWrapper(data) {
 function getShallowMountedWrapper(data, loading = false) {
   reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  const { spaces = [], currentUserIsMemberOfSpace } = data
 
   return shallowMount(FileShares, {
     localVue,
     setup: () => ({
       currentStorageId: storageId,
-      hasResharing: false
+      hasResharing: false,
+      currentUserIsMemberOfSpace
     }),
+    provide: {
+      incomingParentShare: {}
+    },
     store: createStore(data),
     stubs: {
       ...stubs,
       'oc-button': true
+    },
+    propsData: {
+      space: spaces.length ? spaces[0] : null
     },
     mocks: {
       $router: {

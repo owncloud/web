@@ -4,6 +4,7 @@ export default {
   filesSearched: null,
   selectedIds: [],
   latestSelectedId: null,
+  clipboardSpace: null,
   clipboardResources: [],
   clipboardAction: null,
   versions: [],
@@ -12,15 +13,11 @@ export default {
    * Outgoing shares and links from currently highlighted element
    */
   currentFileOutgoingShares: [],
-  currentFileOutgoingSharesError: null,
-  currentFileOutgoingSharesLoading: false,
 
   /**
    * Incoming shares from currently highlighted element
    */
   incomingShares: [],
-  incomingSharesError: null,
-  incomingSharesLoading: false,
 
   /**
    * Shares from parent folders

@@ -1,6 +1,11 @@
-import MixinDeleteResources from '../../mixins/deleteResources'
+import MixinDeleteResources from '../deleteResources'
 import { mapState, mapGetters } from 'vuex'
-import { isLocationPublicActive, isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import {
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  isLocationTrashActive,
+  isLocationCommonActive
+} from '../../router'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -16,10 +21,9 @@ export default {
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files')
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
+              !isLocationCommonActive(this.$router, 'files-common-search')
             ) {
               return false
             }
@@ -28,7 +32,8 @@ export default {
             }
 
             if (
-              isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              this.space?.driveType === 'share' &&
               resources[0].path === '/'
             ) {
               return false
@@ -49,10 +54,7 @@ export default {
           label: () => this.$gettext('Delete'),
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
-            if (
-              !isLocationTrashActive(this.$router, 'files-trash-personal') &&
-              !isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (this.capabilities?.files?.permanent_deletion === false) {

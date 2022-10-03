@@ -65,86 +65,56 @@
 </template>
 
 <script lang="ts">
-import { useTask } from 'vue-concurrency'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { watch, computed, ref, unref } from '@vue/composition-api'
 import {
   useStore,
-  useRouteParam,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
+import { createLocationSpaces } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
-import { buildSpaceShare } from '../../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { sortSpaceMembers } from '../../../helpers/space'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
-import { useGraphClient } from 'web-client/src/composables'
 import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'FileShares',
   components: {
     InviteCollaboratorForm,
     CollaboratorListItem
   },
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
+  },
   setup() {
     const store = useStore()
-    const currentSpace = ref(null)
-    const spaceMembers = ref([])
-    const currentStorageId = useRouteParam('storageId')
-    watch(
-      currentStorageId,
-      (storageId) => {
-        currentSpace.value = store.state.runtime.spaces?.spaces?.find(
-          (space) => space.id === storageId
-        )
-      },
-      { immediate: true }
-    )
-    const isCurrentSpaceTypeProject = computed(() => unref(currentSpace)?.driveType === 'project')
-
-    const { graphClient } = useGraphClient({ store })
-
-    const loadSpaceMembersTask = useTask(function* (signal, ref) {
-      const promises = []
-      const spaceShares = []
-
-      for (const role of Object.keys(unref(currentSpace).spaceRoles)) {
-        for (const userId of unref(currentSpace).spaceRoles[role]) {
-          promises.push(
-            unref(graphClient)
-              .users.getUser(userId)
-              .then((resolved) => {
-                spaceShares.push(
-                  buildSpaceShare({ ...resolved.data, role }, unref(currentSpace).id)
-                )
-              })
-          )
-        }
+    const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const currentUserIsMemberOfSpace = computed(() => {
+      const userId = store.getters.user?.id
+      if (!userId) {
+        return false
       }
-
-      yield Promise.all(promises).then(() => {
-        spaceMembers.value = sortSpaceMembers(spaceShares)
-      })
+      return store.getters['runtime/spaces/spaceMembers'].some(
+        (member) => member.collaborator?.name === userId
+      )
     })
 
-    const sharesListCollapsed = !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-
     return {
-      currentStorageId,
-      currentSpace,
-      spaceMembers,
-      isCurrentSpaceTypeProject,
-      loadSpaceMembersTask,
       sharesListCollapsed,
+      currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing()
@@ -153,6 +123,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingCollaborators']),
     ...mapGetters(['configuration']),
+    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState('Files', ['incomingShares', 'sharesTree']),
     ...mapState(['user']),
 
@@ -186,38 +157,6 @@ export default {
 
     hasSharees() {
       return this.collaborators.length > 0
-    },
-
-    /**
-     * Returns all incoming shares, direct and indirect
-     *
-     * @return {Array.<Object>} list of incoming shares
-     */
-    $_allIncomingShares() {
-      // direct incoming shares
-      const allShares = [...this.incomingShares]
-
-      // indirect incoming shares
-      const parentPaths = getParentPaths(this.highlightedFile.path, true)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      // remove root entry
-      parentPaths.pop()
-
-      parentPaths.forEach((parentPath) => {
-        const shares = this.sharesTree[parentPath]
-        if (shares) {
-          shares.forEach((share) => {
-            if (share.incoming) {
-              allShares.push(share)
-            }
-          })
-        }
-      })
-
-      return allShares
     },
 
     collaborators() {
@@ -260,16 +199,12 @@ export default {
         return []
       }
 
-      // remove root entry
-      parentPaths.pop()
-
       parentPaths.forEach((parentPath) => {
         const shares = this.sharesTree[parentPath]
         if (shares) {
           shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              share.key = 'indirect-collaborator-' + share.id
-              allShares.push(share)
+              allShares.push({ ...share, key: 'indirect-collaborator-' + share.id })
             }
           })
         }
@@ -282,7 +217,7 @@ export default {
       if (this.highlightedFile.isReceivedShare() && !this.hasResharing) {
         return false
       }
-      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      const isShareJail = this.space?.driveType === 'share'
       if (isShareJail && !this.hasResharing) {
         return false
       }
@@ -294,35 +229,12 @@ export default {
       const translatedFolder = this.$gettext("You don't have permission to share this folder.")
       return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
     },
-
-    currentUsersPermissions() {
-      if (this.$_allIncomingShares.length > 0) {
-        let permissions = 0
-
-        for (const share of this.$_allIncomingShares) {
-          permissions |= share.permissions
-        }
-
-        return permissions
-      }
-
-      return null
-    },
-    currentUserIsMemberOfSpace() {
-      return this.currentSpace?.spaceMemberIds?.includes(this.user.uuid)
-    },
     showSpaceMembers() {
       return (
-        this.currentSpace &&
-        this.isCurrentSpaceTypeProject &&
+        this.space?.driveType === 'project' &&
         this.highlightedFile.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
-    }
-  },
-  mounted() {
-    if (this.showSpaceMembers) {
-      this.loadSpaceMembersTask.perform()
     }
   },
   methods: {
@@ -407,15 +319,14 @@ export default {
         return null
       }
 
-      if (this.sharesTree[parentShare.path]) {
-        if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-          return createLocationSpaces('files-spaces-project', {
-            params: { storageId: this.currentStorageId, item: parentShare.path }
-          })
-        }
-
-        return createLocationSpaces('files-spaces-personal', {
-          params: { storageId: this.currentStorageId, item: parentShare.path }
+      // TODO: this doesn't work on files-spaces-share routes?!
+      if (this.space && this.sharesTree[parentShare.path]) {
+        return createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: this.space.getDriveAliasAndItem({
+              path: parentShare.path
+            } as Resource)
+          }
         })
       }
 
@@ -425,7 +336,7 @@ export default {
     isShareModifiable(collaborator) {
       if (
         this.currentUserIsMemberOfSpace &&
-        !this.currentSpace?.spaceRoles.manager.includes(this.user.uuid)
+        !this.space?.spaceRoles.manager.includes(this.user.uuid)
       ) {
         return false
       }
@@ -433,7 +344,7 @@ export default {
       return !collaborator.indirect
     }
   }
-}
+})
 </script>
 
 <style>

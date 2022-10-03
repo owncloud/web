@@ -8,6 +8,7 @@ export abstract class DavPermission {
   static readonly Updateable: string = 'NV'
   static readonly FileUpdateable: string = 'W'
   static readonly FolderCreateable: string = 'CK'
+  static readonly Deny: string = 'Z'
 }
 
 export abstract class DavProperty {
@@ -26,6 +27,8 @@ export abstract class DavProperty {
   static readonly ResourceType: string = '{DAV:}resourcetype'
   static readonly DownloadURL: string = '{http://owncloud.org/ns}downloadURL'
 
+  static readonly ShareId: string = '{http://owncloud.org/ns}shareid'
+  static readonly ShareRoot: string = '{http://owncloud.org/ns}shareroot'
   static readonly ShareTypes: string = '{http://owncloud.org/ns}share-types'
   static readonly SharePermissions: string =
     '{http://open-collaboration-services.org/ns}share-permissions'
@@ -53,6 +56,8 @@ export abstract class DavProperties {
     DavProperty.Name,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
+    DavProperty.ShareId,
+    DavProperty.ShareRoot,
     DavProperty.ShareTypes,
     DavProperty.PrivateLink,
     DavProperty.ContentLength,

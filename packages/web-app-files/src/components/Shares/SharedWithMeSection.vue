@@ -21,9 +21,7 @@
       :are-thumbnails-displayed="displayThumbnails"
       :resources="resourceItems"
       :are-resources-clickable="resourceClickable"
-      :target-route="resourceTargetLocation"
-      :target-route-param-mapping="resourceTargetParamMapping"
-      :target-route-query-mapping="resourceTargetQueryMapping"
+      :target-route-callback="resourceTargetRouteCallback"
       :header-position="fileListHeaderY"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -57,8 +55,12 @@
           </oc-button>
         </div>
       </template>
-      <template #contextMenu>
-        <context-actions :items="selectedResources" />
+      <template #contextMenu="{ resource }">
+        <context-actions
+          v-if="isResourceInSelection(resource)"
+          :items="selectedResources"
+          :space="createShareSpace(resource)"
+        />
       </template>
       <template #footer>
         <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
@@ -95,7 +97,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileActions from '../../mixins/fileActions'
 import MixinAcceptShare from '../../mixins/actions/acceptShare'
 import MixinDeclineShare from '../../mixins/actions/declineShare'
-import MixinFilesListFilter from '../../mixins/filesListFilter'
 import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { createLocationSpaces } from '../../router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -103,6 +104,11 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
+import { SortDir } from '../../composables'
+import { Resource } from 'web-client'
+import { Location } from 'vue-router'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -114,7 +120,7 @@ export default defineComponent({
     NoContentMessage
   },
 
-  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare, MixinFilesListFilter],
+  mixins: [FileActions, MixinAcceptShare, MixinDeclineShare],
   props: {
     title: {
       type: String,
@@ -135,11 +141,18 @@ export default defineComponent({
     },
     sortBy: {
       type: String,
-      required: true
+      required: false,
+      default: undefined
     },
     sortDir: {
       type: String,
-      required: true
+      required: false,
+      default: undefined,
+      validator: (value: string) => {
+        return (
+          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
+        )
+      }
     },
     sortHandler: {
       type: Function,
@@ -173,25 +186,35 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
-    const resourceTargetLocation = computed(() =>
-      unref(hasShareJail)
-        ? createLocationSpaces('files-spaces-share')
-        : createLocationSpaces('files-spaces-personal', {
-            params: { storageId: store.getters.user.id }
-          })
-    )
-    const resourceTargetParamMapping = computed(() =>
-      unref(hasShareJail) ? { name: 'shareName', path: 'item' } : undefined
-    )
-    const resourceTargetQueryMapping = computed(() =>
-      unref(hasShareJail) ? { id: 'shareId' } : undefined
-    )
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+      if (unref(hasShareJail)) {
+        const space = buildShareSpaceResource({
+          shareId: resource.id,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+        return createLocationSpaces('files-spaces-generic', {
+          params: { driveAliasAndItem: space.getDriveAliasAndItem({ path } as Resource) },
+          query: { shareId: resource.id }
+        })
+      }
+      const personalSpace = store.getters['runtime/spaces/spaces'].find(
+        (space) => space.driveType === 'personal'
+      )
+      return createLocationSpaces('files-spaces-generic', {
+        params: { driveAliasAndItem: personalSpace.getDriveAliasAndItem({ path } as Resource) }
+      })
+    }
+
+    const personalSpace = computed(() => {
+      return store.getters['runtime/spaces/spaces'].find((space) => space.driveType === 'personal')
+    })
 
     return {
-      resourceTargetLocation,
-      resourceTargetParamMapping,
-      resourceTargetQueryMapping,
-      ...useSelectedResources({ store })
+      resourceTargetRouteCallback,
+      ...useSelectedResources({ store }),
+      hasShareJail: useCapabilityShareJailEnabled(),
+      personalSpace
     }
   },
 
@@ -262,6 +285,16 @@ export default defineComponent({
     },
     toggleShowMore() {
       this.showMore = !this.showMore
+    },
+    createShareSpace(resource) {
+      if (!this.hasShareJail) {
+        return this.personalSpace
+      }
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     }
   }
 })

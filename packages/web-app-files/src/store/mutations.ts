@@ -3,7 +3,7 @@ import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
 import { renameResource } from '../helpers/resources'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -12,9 +12,6 @@ export default {
   },
   SET_CURRENT_FOLDER(state, currentFolder) {
     state.currentFolder = currentFolder
-  },
-  SET_CURRENT_SPACE(state, currentSpace) {
-    state.currentSpace = currentSpace
   },
   CLEAR_FILES(state) {
     state.files = []
@@ -33,10 +30,12 @@ export default {
     state.filesSearched = null
   },
   CLEAR_CLIPBOARD(state) {
+    state.clipboardSpace = null
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state) {
+  CLIPBOARD_SELECTED(state, { space }: { space: SpaceResource }) {
+    state.clipboardSpace = space
     state.clipboardResources = state.files.filter((f) => {
       return state.selectedIds.some((id) => f.id === id)
     })
@@ -87,13 +86,13 @@ export default {
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
   },
-  RENAME_FILE(state, { file, newValue, newPath }) {
+  RENAME_FILE(state, { space, resource, newPath }) {
     const resources = [...state.files]
     const fileIndex = resources.findIndex((f) => {
-      return f.id === file.id
+      return f.id === resource.id
     })
 
-    renameResource(resources[fileIndex], newValue, newPath)
+    renameResource(space, resources[fileIndex], newPath)
 
     state.files = resources
   },
@@ -101,27 +100,14 @@ export default {
     state.currentFileOutgoingShares = shares
   },
   CURRENT_FILE_OUTGOING_SHARES_REMOVE(state, share) {
-    if (share.shareType === ShareTypes.space.value) {
-      state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
-        (s) => share.id === s.id && share.collaborator.name !== s.collaborator.name
-      )
-      return
-    }
     state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(
       (s) => share.id !== s.id
     )
   },
   CURRENT_FILE_OUTGOING_SHARES_UPSERT(state, share) {
-    let fileIndex
-    if (share.shareType === ShareTypes.space.value) {
-      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-        return share.id === s.id && share.collaborator.name === s.collaborator.name
-      })
-    } else {
-      fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-        return s.id === share.id
-      })
-    }
+    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
+      return s.id === share.id
+    })
 
     if (fileIndex >= 0) {
       Vue.set(state.currentFileOutgoingShares, fileIndex, share)
@@ -130,22 +116,8 @@ export default {
       state.currentFileOutgoingShares.push(share)
     }
   },
-  CURRENT_FILE_OUTGOING_SHARES_ERROR(state, error) {
-    state.currentFileOutgoingShares = []
-    state.currentFileOutgoingSharesError = error
-  },
-  CURRENT_FILE_OUTGOING_SHARES_LOADING(state, loading) {
-    state.currentFileOutgoingSharesLoading = loading
-  },
   INCOMING_SHARES_LOAD(state, shares) {
     state.incomingShares = shares
-  },
-  INCOMING_SHARES_ERROR(state, error) {
-    state.incomingShares = []
-    state.incomingSharesError = error
-  },
-  INCOMING_SHARES_LOADING(state, loading) {
-    state.incomingSharesLoading = loading
   },
   SHARESTREE_PRUNE_OUTSIDE_PATH(state, pathToKeep) {
     if (pathToKeep !== '' && pathToKeep !== '/') {

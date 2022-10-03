@@ -4,20 +4,23 @@ import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
 import { Component } from 'vue'
 import { DavProperties } from 'web-pkg/src/constants'
+import { Store } from 'vuex'
 
 export const searchLimit = 200
 
 export default class List implements SearchList {
   public readonly component: Component
+  private readonly store: Store<any>
 
-  constructor() {
+  constructor(store: Store<any>) {
     this.component = ListComponent
+    this.store = store
   }
 
   async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        range: null,
+        totalResults: null,
         values: []
       }
     }
@@ -29,14 +32,13 @@ export default class List implements SearchList {
     )
 
     return {
-      range,
-      values: results.map((plainResource) => {
-        let resourceName = decodeURIComponent(plainResource.name)
-        if (resourceName.startsWith('/dav')) {
-          resourceName = resourceName.slice(4)
+      totalResults: range ? parseInt(range?.split('/')[1]) : null,
+      values: results.map((result) => {
+        const resource = buildResource(result)
+        // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+        if (!resource.storageId) {
+          resource.storageId = this.store.getters.user.id
         }
-
-        const resource = buildResource({ ...plainResource, name: resourceName })
         return { id: resource.id, data: resource }
       })
     }

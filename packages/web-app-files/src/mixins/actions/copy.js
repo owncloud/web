@@ -27,10 +27,8 @@ export default {
             this.$pgettext('Action in the files list row to initiate copying resources', 'Copy'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -39,7 +37,7 @@ export default {
               return false
             }
 
-            if (isLocationPublicActive(this.$router, 'files-public-files')) {
+            if (isLocationPublicActive(this.$router, 'files-public-link')) {
               return this.currentFolder.canCreate()
             }
 
@@ -57,7 +55,7 @@ export default {
     ...mapActions('Files', ['copySelectedFiles']),
 
     $_copy_trigger() {
-      this.copySelectedFiles()
+      this.copySelectedFiles({ space: this.space })
     }
   }
 }

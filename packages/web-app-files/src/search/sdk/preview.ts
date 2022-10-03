@@ -9,6 +9,8 @@ import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
 import { Store } from 'vuex'
 
+export const previewSearchLimit = 8
+
 export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly cache: Cache<string, SearchResult>
@@ -26,11 +28,11 @@ export default class Preview implements SearchPreview {
   // we need to change the architecture of oc-sdk to be able to use cancelTokens
   // every search requests hammers the backend even if it's not needed anymore..
   // for now we worked around it by using a cache mechanism and make use of debouncing
-  @debounce(500)
+  @debounce(100)
   public async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        range: null,
+        totalResults: null,
         values: []
       }
     }
@@ -42,15 +44,15 @@ export default class Preview implements SearchPreview {
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const { range, results } = await clientService.owncloudSdk.files.search(
       term,
-      5, // todo: add configuration option, other places need that too... needs consolidation
+      previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
       DavProperties.Default
     )
-    const resources = results.reduce((acc, plainResource) => {
-      let resourceName = decodeURIComponent(plainResource.name)
-      if (resourceName.startsWith('/dav')) {
-        resourceName = resourceName.slice(4)
+    const resources = results.reduce((acc, result) => {
+      const resource = buildResource(result)
+      // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+      if (!resource.storageId) {
+        resource.storageId = this.store.getters.user.id
       }
-      const resource = buildResource({ ...plainResource, name: resourceName })
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {
@@ -59,15 +61,13 @@ export default class Preview implements SearchPreview {
 
       return acc
     }, [])
-
-    return this.cache.set(term, { range, values: resources })
+    return this.cache.set(term, {
+      totalResults: range ? parseInt(range?.split('/')[1]) : null,
+      values: resources
+    })
   }
 
   public get available(): boolean {
     return this.router.currentRoute.name !== 'search-provider-list'
-  }
-
-  public activate(): void {
-    /* not needed */
   }
 }
