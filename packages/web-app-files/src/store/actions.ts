@@ -283,6 +283,7 @@ export default {
         })
         context.dispatch('updateCurrentFileShareTypes')
         context.commit('LOAD_INDICATORS', path)
+        return share
       })
       .catch((e) => {
         context.dispatch(

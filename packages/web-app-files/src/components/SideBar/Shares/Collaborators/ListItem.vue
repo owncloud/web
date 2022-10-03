@@ -87,6 +87,7 @@
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
           @show-access-details="showAccessDetails"
+          @notify="notify"
         />
         <oc-info-drop
           ref="accessDetailsDrop"
@@ -326,6 +327,38 @@ export default defineComponent({
       this.$emit('onDelete', this.share)
     },
 
+    async notify() {
+      const url = `/mailer`
+      const accessToken = this.$store.getters['runtime/auth/accessToken']
+      const headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + accessToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+      headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+
+      const formData = new URLSearchParams()
+
+      formData.append('id', this.share.id)
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: formData.toString()
+      })
+      if (!response.ok) {
+        this.showMessage({
+          title: this.$gettext('An error occurred'),
+          desc: this.$gettext('Email notification could not be sent'),
+          status: 'danger'
+        })
+      } else {
+        const recipients = await response.json()
+        if (recipients.recipients)
+          this.showMessage({
+            title: this.$gettext('Success'),
+            desc: this.$gettext(`Email notification was sent to ${recipients.recipients[0]}`),
+            status: 'success'
+          })
+      }
+    },
     showAccessDetails() {
       this.$refs.accessDetailsDrop.$refs.drop.show()
     },
