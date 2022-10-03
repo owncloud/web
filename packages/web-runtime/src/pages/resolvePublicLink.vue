@@ -61,7 +61,6 @@
 
 <script type="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from "web-pkg/src/constants";
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from "../services/auth";
 
@@ -73,16 +72,25 @@ import {
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from "@vue/composition-api";
+import { buildPublicSpaceResource, isPublicSpaceResource } from "web-client/src/helpers";
+import { buildWebDavPublicPath } from "files/src/helpers/resources";
 
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const { owncloudSdk } = useClientService()
+    const { webdav } = useClientService()
     const token = useRouteParam('token')
     const password = ref('')
-    const isPasswordRequiredTask = useTask(function* (signal) {
+    const publicLinkSpace = computed(() => buildPublicSpaceResource({
+      id: unref(token),
+      driveAlias: `public/${unref(token)}`,
+      driveType: 'public',
+      webDavPath: buildWebDavPublicPath(unref(token), ''),
+      ...(unref(password) && { publicLinkPassword: unref(password) })
+    }))
+    const isPasswordRequiredTask = useTask(function* () {
       try {
-        yield owncloudSdk.publicFiles.list(unref(token), '', DavProperties.PublicLink, '0')
+        yield webdav.getFileInfo({ ...unref(publicLinkSpace), publicLinkPassword: null })
         return false
       } catch (error) {
         if (error.statusCode === 401) {
@@ -91,14 +99,14 @@ export default defineComponent({
         throw error
       }
     })
-    const loadPublicLinkTask = useTask(function* (signal) {
-      const files = yield owncloudSdk.publicFiles.list(
-        unref(token),
-        unref(password),
-        DavProperties.PublicLink,
-        '0'
-      )
-      return files[0]
+    const loadPublicLinkTask = useTask(function* () {
+      const resource = yield webdav.getFileInfo(unref(publicLinkSpace))
+      if (!isPublicSpaceResource(resource)) {
+        const e = new Error("resolved resource has wrong type")
+        e.resource = resource
+        throw e
+      }
+      return resource
     })
     const wrongPassword = computed(() => {
       if (loadPublicLinkTask.isError) {
@@ -143,6 +151,8 @@ export default defineComponent({
     async resolvePublicLink(passwordRequired) {
       const publicLink = await this.loadPublicLinkTask.perform()
       if (this.loadPublicLinkTask.isError) {
+        const e = this.loadPublicLinkTask.last.error
+        console.error(e, e.resource)
         return
       }
 
@@ -154,11 +164,11 @@ export default defineComponent({
         return this.$router.push({ path: redirectUrl })
       }
 
-      if (parseInt(publicLink.fileInfo[DavProperty.PublicLinkPermission]) === SharePermissionBit.Create) {
-        return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
+      if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
+        return this.$router.push({ name: 'files-public-upload', params: { token: this.token } })
       }
 
-      return this.$router.push({ name: 'files-public-files', params: { item: this.token } })
+      return this.$router.push({ name: 'files-public-link', params: { driveAliasAndItem: `public/${this.token}` } })
     }
   }
 })

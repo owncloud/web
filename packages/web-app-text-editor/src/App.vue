@@ -45,7 +45,7 @@
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
-import { computed, onMounted, onBeforeUnmount, ref, unref, Ref } from '@vue/composition-api'
+import { computed, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from '@vue/composition-api'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
@@ -86,13 +86,8 @@ export default defineComponent({
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const {
-      applicationConfig,
-      currentFileContext,
-      getFileResource,
-      getFileContents,
-      putFileContents
-    } = defaults
+    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents } =
+      defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()
@@ -100,28 +95,24 @@ export default defineComponent({
     const resource: Ref<Resource> = ref()
 
     const loadFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
-
-      resource.value = yield getFileResource(unref(filePath), [
-        DavProperty.Permissions,
-        DavProperty.Name
-      ])
+      resource.value = yield getFileInfo(currentFileContext, {
+        davProperties: [DavProperty.Permissions, DavProperty.Name]
+      })
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )
 
-      const fileContentsResponse = yield getFileContents(unref(filePath), {})
+      const fileContentsResponse = yield getFileContents(currentFileContext)
       serverContent.value = currentContent.value = fileContentsResponse.body
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
-    loadFileTask.perform()
 
     const saveFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
       try {
-        const putFileContentsResponse = yield putFileContents(unref(filePath), newContent, {
+        const putFileContentsResponse = yield putFileContents(currentFileContext, {
+          content: newContent,
           previousEntityTag: unref(currentETag)
         })
         serverContent.value = newContent
@@ -146,6 +137,14 @@ export default defineComponent({
         }
       }
     }).restartable()
+
+    watch(
+      currentFileContext,
+      () => {
+        loadFileTask.perform()
+      },
+      { immediate: true }
+    )
 
     const renderedMarkdown = computed(() => {
       return unref(currentContent) && showPreview

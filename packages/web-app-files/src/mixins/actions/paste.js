@@ -29,10 +29,8 @@ export default {
           isEnabled: ({ resources }) => {
             if (this.clipboardResources.length === 0) return false
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -41,7 +39,7 @@ export default {
               return false
             }
 
-            if (isLocationPublicActive(this.$router, 'files-public-files')) {
+            if (isLocationPublicActive(this.$router, 'files-public-link')) {
               return this.currentFolder.canCreate()
             }
 
@@ -58,24 +56,19 @@ export default {
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['pasteSelectedFiles']),
-    ...mapMutations('Files', {
-      upsertResource: 'UPSERT_RESOURCE'
-    }),
+    ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     $_paste_trigger() {
-      const isPublicLinkContext = this.$store.getters['runtime/auth/isPublicLinkContextReady']
-      const publicLinkPassword = this.$store.getters['runtime/auth/publicLinkPassword']
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext,
-        publicLinkPassword,
-        upsertResource: this.upsertResource
+        upsertResource: this.UPSERT_RESOURCE
       })
     }
   }

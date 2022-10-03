@@ -54,7 +54,7 @@
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
-          :is-path-displayed="arePathsDisplayed"
+          :is-path-displayed="getArePathsDisplayed(item)"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
           :is-thumbnail-displayed="areThumbnailsDisplayed"
           :is-extension-displayed="areFileExtensionsShown"
@@ -184,20 +184,14 @@ import {
 } from 'web-pkg/src/composables'
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
-
-const mapResourceFields = (resource: Resource, mapping = {}) => {
-  return Object.keys(mapping).reduce((result, resourceKey) => {
-    result[mapping[resourceKey]] = resource[resourceKey]
-    return result
-  }, {})
-}
+import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   mixins: [Rename],
@@ -265,39 +259,12 @@ export default defineComponent({
       default: true
     },
     /**
-     * Target route path used to build the link when navigating into a resource
+     * Accepts a `path` and a `resource` param and returns a corresponding route object.
      */
-    targetRoute: {
-      type: Object,
+    targetRouteCallback: {
+      type: Function,
       required: false,
-      default: null
-    },
-    /**
-     * Maps resource values to route params. Use `{ resourceFieldName: 'routeParamName' }` as format.
-     *
-     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
-     * to the `fileId` param of the target route.
-     *
-     * Defaults to `{ storageId: 'storageId' } to map the value of the `storageId` field of a resource
-     * to the `storageId` param of the target route.
-     */
-    targetRouteParamMapping: {
-      type: Object,
-      required: false,
-      default: () => ({ storageId: 'storageId' })
-    },
-    /**
-     * Maps resource values to route query options. Use `{ resourceFieldName: 'routeQueryName' }` as format.
-     *
-     * An example would be `{ id: 'fileId' }` to map the value of the `id` field of a resource
-     * to the `fileId` query option of the target route.
-     *
-     * Defaults to an empty object because no query options are expected as default.
-     */
-    targetRouteQueryMapping: {
-      type: Object,
-      required: false,
-      default: () => ({})
+      default: undefined
     },
     /**
      * Asserts whether clicking on the resource name triggers any action
@@ -386,6 +353,14 @@ export default defineComponent({
           value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
         )
       }
+    },
+    /**
+     * Space resource the provided resources originate from. Not required on meta pages like favorites, search, ...
+     */
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     }
   },
   setup() {
@@ -580,14 +555,18 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] })
+      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item.storageId))
     },
     openSharingSidebar(file) {
-      if (file.share?.shareType === ShareTypes.link.value) {
-        bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
-        return
+      let panelToOpen
+      if (file.type === 'space') {
+        panelToOpen = 'space-share-item'
+      } else if (file.share?.shareType === ShareTypes.link.value) {
+        panelToOpen = 'sharing-item#linkShares'
+      } else {
+        panelToOpen = 'sharing-item#peopleShares'
       }
-      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
+      bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
       return this.createFolderLink(file.path, file)
@@ -599,50 +578,36 @@ export default defineComponent({
 
       return this.createFolderLink(path.dirname(file.path), file)
     },
-    createFolderLink(filePath, resource) {
-      if (this.targetRoute === null) {
-        return {}
-      }
-
-      const params = {
-        item: filePath.replace(/^\//, '') || '/',
-        ...mapResourceFields(resource, this.targetRouteParamMapping),
-        ...this.targetRoute.params
-      }
-      const query = {
-        ...mapResourceFields(resource, this.targetRouteQueryMapping),
-        ...this.targetRoute.query
+    createFolderLink(p, resource) {
+      if (this.targetRouteCallback) {
+        return this.targetRouteCallback(p, resource)
       }
 
       if (resource.shareId) {
-        return createLocationSpaces('files-spaces-share', {
+        const space = buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: path.basename(resource.shareRoot),
+          serverUrl: configurationManager.serverUrl
+        })
+        return createLocationSpaces('files-spaces-generic', {
           params: {
-            ...params,
-            shareName: path.basename(resource.shareRoot)
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
           },
           query: {
-            ...query,
             shareId: resource.shareId
           }
         })
       }
 
       const matchingSpace = this.getMatchingSpace(resource.storageId)
-
-      if (this.hasProjectSpaces) {
-        if (matchingSpace?.driveType === 'project') {
-          return createLocationSpaces('files-spaces-project', {
-            params: { ...params, storageId: matchingSpace?.id || params.storageId },
-            query
-          })
+      if (!matchingSpace) {
+        return {}
+      }
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
         }
-      }
-
-      return {
-        name: this.targetRoute.name,
-        params: { ...params, storageId: matchingSpace?.id || params.storageId },
-        query
-      }
+      })
     },
     fileDragged(file) {
       this.addSelectedResource(file)
@@ -743,11 +708,20 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
+      let space = this.getMatchingSpace(resource.storageId)
+      if (!space) {
+        space = buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      }
+
       /**
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      this.$emit('fileClick', resource)
+      this.$emit('fileClick', { space, resources: [resource] })
     },
     isResourceClickable(resourceId) {
       if (!this.areResourcesClickable) {
@@ -800,8 +774,8 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId) {
-      return this.spaces.find((space) => space.id === storageId)
+    getMatchingSpace(storageId): SpaceResource {
+      return this.space || this.spaces.find((space) => space.id === storageId)
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
@@ -822,6 +796,9 @@ export default defineComponent({
       }
 
       return this.$gettext('Personal')
+    },
+    getArePathsDisplayed(resource) {
+      return this.arePathsDisplayed && resource.type !== 'space'
     }
   }
 })

@@ -6,6 +6,7 @@ import GetTextPlugin from 'vue-gettext'
 import stubs from '@/tests/unit/stubs'
 import CreateAndUpload from 'files/src/components/AppBar/CreateAndUpload'
 import { createLocationSpaces } from '../../../../src/router'
+import { ResolveStrategy } from '../../../../src/helpers/resource/copyMove'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,7 +31,7 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-personal')
+const personalHomeLocation = createLocationSpaces('files-spaces-generic')
 
 const newFileHandlers = [
   {
@@ -78,7 +79,7 @@ describe('CreateAndUpload component', () => {
   const route = {
     name: personalHomeLocation.name,
     params: {
-      item: ''
+      driveAliasAndItem: 'personal/einstein'
     }
   }
 
@@ -176,7 +177,8 @@ describe('CreateAndUpload component', () => {
               size: 1001
             },
             meta: {
-              routeName: 'files-spaces-personal'
+              spaceId: '1',
+              routeName: 'files-spaces-generic'
             }
           }
         ])
@@ -207,6 +209,131 @@ describe('CreateAndUpload component', () => {
       expect(showMessageStub).toHaveBeenCalledTimes(0)
     })
   })
+  describe('upload conflict dialog', () => {
+    it.each([ResolveStrategy.REPLACE, ResolveStrategy.KEEP_BOTH])(
+      'should upload file if user chooses replace or keep both',
+      async (strategy) => {
+        const uppyResourceOne = {
+          name: 'test',
+          meta: {
+            relativeFolder: ''
+          }
+        }
+        const conflict = {
+          name: uppyResourceOne.name,
+          type: 'file'
+        }
+
+        const store = createStore({ currentFolder }, newFileHandlers)
+        const wrapper = getShallowWrapper(route, store)
+        const handleUppyFileUpload = jest.fn()
+        wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+        const resolveFileConflictMethod = jest.fn(() =>
+          Promise.resolve({ strategy, doForAllConflicts: true })
+        )
+
+        await wrapper.vm.displayOverwriteDialog(
+          [uppyResourceOne],
+          [conflict],
+          resolveFileConflictMethod
+        )
+
+        expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
+        expect(handleUppyFileUpload).toBeCalledTimes(1)
+        expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [uppyResourceOne])
+      }
+    )
+    it('should not upload file if user chooses skip', async () => {
+      const uppyResourceOne = { name: 'test' }
+      const conflict = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts: true })
+      )
+
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne],
+        [conflict],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
+      expect(handleUppyFileUpload).not.toHaveBeenCalled()
+    })
+    it('should show dialog once if do for all conflicts is ticked', async () => {
+      const uppyResourceOne = { name: 'test' }
+      const uppyResourceTwo = { name: 'test2' }
+      const conflictOne = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+      const conflictTwo = {
+        name: uppyResourceTwo.name,
+        type: 'file'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
+      )
+
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne, uppyResourceTwo],
+        [conflictOne, conflictTwo],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+        uppyResourceOne,
+        uppyResourceTwo
+      ])
+    })
+    it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
+      const uppyResourceOne = { name: 'test' }
+      const uppyResourceTwo = { name: 'folder' }
+      const conflictOne = {
+        name: uppyResourceOne.name,
+        type: 'file'
+      }
+      const conflictTwo = {
+        name: uppyResourceTwo.name,
+        type: 'folder'
+      }
+
+      const store = createStore({ currentFolder }, newFileHandlers)
+      const wrapper = getShallowWrapper(route, store)
+      const handleUppyFileUpload = jest.fn()
+      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resolveFileConflictMethod = jest.fn(() =>
+        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
+      )
+
+      await wrapper.vm.displayOverwriteDialog(
+        [uppyResourceOne, uppyResourceTwo],
+        [conflictOne, conflictTwo],
+        resolveFileConflictMethod
+      )
+
+      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(2)
+      expect(handleUppyFileUpload).toBeCalledTimes(1)
+      expect(handleUppyFileUpload).toBeCalledWith(undefined, null, [
+        uppyResourceOne,
+        uppyResourceTwo
+      ])
+    })
+  })
 })
 
 function getFileHandlerSelector(extension) {
@@ -232,10 +359,14 @@ function getWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     stubs: {
       ...stubs,
@@ -257,10 +388,17 @@ function getShallowWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true,
+      $uppyService: {
+        clearInputs: jest.fn()
+      }
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     store
   })
@@ -311,7 +449,8 @@ function createStore(state = { currentFolder: {} }, fileHandlers = []) {
         getters: {
           currentFolder: () => state.currentFolder,
           clipboardResources: () => [],
-          selectedFiles: () => []
+          selectedFiles: () => [],
+          files: () => []
         }
       }
     }

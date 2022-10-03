@@ -1,0 +1,7 @@
+Enhancement: Deny subfolders inside share
+
+Sub-folders within user- and group-shares can now be denied for certain share receivers if the backend is capable of negative ACLs.
+Please note that the state of this feature is experimental and needs to be enabled in the backend.
+
+https://github.com/owncloud/web/pull/7190
+https://github.com/owncloud/web/issues/7180

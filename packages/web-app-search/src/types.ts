@@ -4,7 +4,7 @@ export interface SearchResultValue {
 }
 
 export interface SearchResult {
-  range?: string | null
+  totalResults: number | null
   values: SearchResultValue[]
 }
 
@@ -16,8 +16,6 @@ export interface SearchList {
 
 export interface SearchPreview extends SearchList {
   available: boolean
-
-  activate(searchResult: SearchResultValue): void
 }
 
 export interface SearchProvider {
@@ -27,10 +25,4 @@ export interface SearchProvider {
 
   previewSearch?: SearchPreview
   listSearch?: SearchList
-
-  reset(): void
-
-  activate(term: string)
-
-  updateTerm(term: string)
 }

@@ -32,12 +32,17 @@ export default defineComponent({
   data: () => ({
     loading: true,
     loadingError: false,
-    filePath: '',
     url: '',
     resource: null
   }),
-  created() {
-    this.loadPdf(this.currentFileContext)
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.unloadPdf()
+        this.loadPdf(this.currentFileContext)
+      },
+      immediate: true
+    }
   },
   beforeDestroy() {
     this.unloadPdf()
@@ -46,8 +51,8 @@ export default defineComponent({
     async loadPdf(fileContext) {
       try {
         this.loading = true
-        this.resource = await this.getFileResource(fileContext.path)
-        this.url = await this.getUrlForResource(this.resource, {
+        this.resource = await this.getFileInfo(fileContext)
+        this.url = await this.getUrlForResource(fileContext.space, this.resource, {
           disposition: 'inline'
         })
       } catch (e) {

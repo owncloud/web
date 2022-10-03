@@ -1,5 +1,6 @@
 import { OAuth2Configuration, OIDCConfiguration, RuntimeConfiguration } from './types'
 import isNil from 'lodash-es/isNil'
+import { urlJoin } from 'web-pkg/src/utils'
 
 export interface RawConfig {
   server: string
@@ -25,7 +26,10 @@ export class ConfigurationManager {
   }
 
   set serverUrl(url: string) {
-    this.runtimeConfiguration.serverUrl = (url || window.location.origin).replace(/\/+$/, '') + '/'
+    // actually the trailing slash should not be needed if urlJoin is used everywhere to build urls
+    this.runtimeConfiguration.serverUrl = urlJoin(url || window.location.origin, {
+      trailingSlash: true
+    })
   }
 
   get serverUrl(): string {

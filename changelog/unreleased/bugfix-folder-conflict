@@ -1,0 +1,9 @@
+Bugfix: Folder conflict dialog
+
+* Fixed "Keep both" and "Skip" options in Firefox
+* Fixed "Keep both" and "Skip" options when uploading via the "Upload"-menu
+* Fixed broken "Upload"-menu after skipping all files (= no files uploaded)
+* Fixed issues when uploading a folder into another folder which has or starts with the same name
+
+https://github.com/owncloud/web/pull/7724
+https://github.com/owncloud/web/issues/7680

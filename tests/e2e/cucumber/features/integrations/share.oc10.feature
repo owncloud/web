@@ -1,7 +1,7 @@
 Feature: share
 
   Background:
-    And "admin" sets the default folder for received shares to "Shares"
+    Given "admin" sets the default folder for received shares to "Shares"
     And "Admin" disables share auto accepting
 
   Scenario: folder

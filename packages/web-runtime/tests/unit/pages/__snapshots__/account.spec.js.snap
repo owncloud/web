@@ -36,7 +36,7 @@ exports[`account page header section edit buttons edit route button should be di
 `;
 
 exports[`account page header section edit buttons edit url button should be displayed if not running with ocis 1`] = `
-<oc-button-stub variation="primary" type="a" href="http://server/address/index.php/settings/personal" data-testid="account-page-edit-url-btn">
+<oc-button-stub variation="primary" type="a" href="/index.php/settings/personal" data-testid="account-page-edit-url-btn">
   <oc-icon-stub name="edit"></oc-icon-stub>
   <translate-stub tag="span">Edit</translate-stub>
 </oc-button-stub>

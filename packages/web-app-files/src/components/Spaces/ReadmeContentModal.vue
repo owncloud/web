@@ -59,25 +59,18 @@ export default {
   async mounted() {
     const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
     const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')
-    this.readmeContent = await this.$client.files.getFileContents(path)
+    this.readmeContent = await this.$client.files.getFileContents(decodeURI(path))
   },
   methods: {
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    setReadmeContent() {
-      const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
-      const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')
 
-      this.$client.files.getFileContents(path).then((readmeContent) => {
-        this.readmeContent = readmeContent
-      })
-    },
     editReadme() {
       const webDavPathComponents = this.space.spaceReadmeData.webDavUrl.split('/')
       const path = webDavPathComponents.slice(webDavPathComponents.indexOf('dav') + 1).join('/')
 
       return this.$client.files
-        .putFileContents(path, this.readmeContent)
+        .putFileContents(decodeURI(path), this.readmeContent)
         .then((readmeMetaData) => {
           this.cancel()
           this.UPDATE_RESOURCE_FIELD({

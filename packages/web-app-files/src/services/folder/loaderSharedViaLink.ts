@@ -40,14 +40,21 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       })
 
       resources = resources.map((r) => r.shareInfo)
-
+      const spaces = store.getters['runtime/spaces/spaces']
       if (resources.length) {
         resources = aggregateResourceShares(
           resources,
           false,
           unref(hasResharing),
-          unref(hasShareJail)
-        )
+          unref(hasShareJail),
+          spaces
+        ).map((resource) => {
+          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+          if (!resource.storageId) {
+            resource.storageId = store.getters.user.id
+          }
+          return resource
+        })
       }
 
       store.commit('Files/LOAD_FILES', {

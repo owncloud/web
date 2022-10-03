@@ -93,6 +93,21 @@ export default defineComponent({
   top: 0;
 }
 
+#files-toggle-sidebar {
+  vertical-align: middle;
+  border: 3px solid transparent;
+  &:hover {
+    background-color: var(--oc-color-background-hover);
+    border-radius: 3px;
+  }
+}
+
+.user-management-app-bar-actions {
+  align-items: center;
+  display: flex;
+  min-height: 3rem;
+}
+
 #user-management-wrapper {
   overflow-y: auto;
 }

@@ -28,9 +28,10 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 import copyToClipboard from 'copy-to-clipboard'
 
-export default {
+export default defineComponent({
   name: 'NameAndCopy',
   props: {
     link: {
@@ -81,7 +82,7 @@ export default {
       }, 550)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

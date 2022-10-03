@@ -1,25 +1,20 @@
 import PQueue from 'p-queue'
 import { dirname } from 'path'
-import { DavProperties } from 'web-pkg/src/constants'
 
 import { getParentPaths } from '../helpers/path'
-import {
-  buildResource,
-  buildShare,
-  buildCollaboratorShare,
-  buildSpaceShare
-} from '../helpers/resources'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-import { move, copy } from '../helpers/resource'
+import { copyMoveResource } from '../helpers/resource'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { sortSpaceMembers } from '../helpers/space'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
+import { ClientService } from 'web-pkg/src/services'
 
 const allowSharePermissions = (getters) => {
   return get(getters, `capabilities.files_sharing.resharing`, true)
@@ -40,8 +35,8 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  copySelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
     context.dispatch(
       'showMessage',
@@ -52,8 +47,8 @@ export default {
       { root: true }
     )
   },
-  cutSelectedFiles(context) {
-    context.commit('CLIPBOARD_SELECTED')
+  cutSelectedFiles(context, options: { space: SpaceResource }) {
+    context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
     context.dispatch(
       'showMessage',
@@ -70,66 +65,44 @@ export default {
   async pasteSelectedFiles(
     context,
     {
-      client,
+      targetSpace,
+      clientService,
       createModal,
       hideModal,
       showMessage,
       $gettext,
       $gettextInterpolate,
       $ngettext,
-      isPublicLinkContext,
-      publicLinkPassword,
       upsertResource
     }
   ) {
     let movedResources = []
-    if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResources = await move(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
-    if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResources = await copy(
-        context.state.clipboardResources,
-        context.state.currentFolder,
-        client,
-        createModal,
-        hideModal,
-        showMessage,
-        $gettext,
-        $gettextInterpolate,
-        $ngettext,
-        isPublicLinkContext,
-        publicLinkPassword
-      )
-    }
+    movedResources = await copyMoveResource(
+      context.state.clipboardSpace,
+      context.state.clipboardResources,
+      targetSpace,
+      context.state.currentFolder,
+      clientService,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      context.state.clipboardAction
+    )
     context.commit('CLEAR_CLIPBOARD')
-    const loadMovedResource = async (resource) => {
-      let loadedResource
-      if (isPublicLinkContext) {
-        loadedResource = await client.publicFiles.getFileInfo(
-          resource.webDavPath,
-          publicLinkPassword,
-          DavProperties.PublicLink
-        )
-      } else {
-        loadedResource = await client.files.fileInfo(resource.webDavPath, DavProperties.Default)
-      }
-      upsertResource(buildResource(loadedResource))
-    }
     const loadingResources = []
     for (const resource of movedResources) {
-      loadingResources.push(loadMovedResource(resource))
+      loadingResources.push(
+        (async () => {
+          const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+            targetSpace,
+            resource
+          )
+          upsertResource(movedResource)
+        })()
+      )
     }
     await Promise.all(loadingResources)
   },
@@ -154,21 +127,20 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, isPublicLinkContext, firstRun = true }) {
+  deleteFiles(
+    context,
+    {
+      space,
+      files,
+      clientService,
+      firstRun = true
+    }: { space: SpaceResource; files: Resource[]; clientService: ClientService; firstRun: boolean }
+  ) {
     const promises = []
     const removedFiles = []
     for (const file of files) {
-      let p = null
-      if (isPublicLinkContext) {
-        p = client.publicFiles.delete(
-          file.path,
-          null,
-          context.rootGetters['runtime/auth/publicLinkPassword']
-        )
-      } else {
-        p = client.files.delete(file.webDavPath)
-      }
-      const promise = p
+      const promise = clientService.webdav
+        .deleteFile(space, file)
         .then(() => {
           removedFiles.push(file)
         })
@@ -177,9 +149,9 @@ export default {
           if (error.statusCode === 423) {
             if (firstRun) {
               return context.dispatch('deleteFiles', {
+                space,
                 files: [file],
-                client,
-                isPublicLinkContext,
+                clientService,
                 firstRun: false
               })
             }
@@ -217,29 +189,6 @@ export default {
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
   },
-  renameFile(context, { file, newValue, client, isPublicLinkContext, isSameResource }) {
-    if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      const newPath = file.webDavPath.slice(1, file.webDavPath.lastIndexOf('/') + 1)
-      if (isPublicLinkContext) {
-        return client.publicFiles
-          .move(
-            file.webDavPath,
-            newPath + newValue,
-            context.rootGetters['runtime/auth/publicLinkPassword']
-          )
-          .then(() => {
-            if (!isSameResource) {
-              context.commit('RENAME_FILE', { file, newValue, newPath })
-            }
-          })
-      }
-      return client.files.move(file.webDavPath, newPath + newValue).then(() => {
-        if (!isSameResource) {
-          context.commit('RENAME_FILE', { file, newValue, newPath })
-        }
-      })
-    }
-  },
   updateCurrentFileShareTypes({ state, getters, commit }) {
     const highlighted = getters.highlightedFile
     if (!highlighted) {
@@ -251,147 +200,12 @@ export default {
       value: computeShareTypes(state.currentFileOutgoingShares)
     })
   },
-  loadCurrentFileOutgoingShares(context, { client, graphClient, path, resource, storageId }) {
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
-    context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-    if (resource?.type === 'space') {
-      const promises = []
-      const spaceMembers = []
-      const spaceLinks = []
-
-      for (const role of Object.keys(resource.spaceRoles)) {
-        for (const userId of resource.spaceRoles[role]) {
-          promises.push(
-            graphClient.users.getUser(userId).then((resolved) => {
-              spaceMembers.push(buildSpaceShare({ ...resolved.data, role }, resource.id))
-            })
-          )
-        }
-      }
-
-      promises.push(
-        client.shares.getShares(path, { reshares: true, spaceRef: storageId }).then((data) => {
-          for (const element of data) {
-            spaceLinks.push(
-              buildShare(
-                element.shareInfo,
-                context.getters.highlightedFile,
-                !context.rootGetters.isOcis
-              )
-            )
-          }
-        })
-      )
-
-      return Promise.all(promises)
-        .then(() => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [
-            ...sortSpaceMembers(spaceMembers),
-            ...spaceLinks
-          ])
-          context.dispatch('updateCurrentFileShareTypes')
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-        .catch((error) => {
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-    }
-
-    // see https://owncloud.dev/owncloud-sdk/Shares.html
-    client.shares
-      .getShares(path, { reshares: true, spaceRef: storageId })
-      .then((data) => {
-        context.commit(
-          'CURRENT_FILE_OUTGOING_SHARES_SET',
-          data.map((element) => {
-            return buildShare(
-              element.shareInfo,
-              context.getters.highlightedFile,
-              allowSharePermissions(context.rootGetters)
-            )
-          })
-        )
-        context.dispatch('updateCurrentFileShareTypes')
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      })
-      .catch((error) => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-      })
-  },
-  loadIncomingShares(context, payload) {
-    context.commit('INCOMING_SHARES_LOAD', [])
-    context.commit('INCOMING_SHARES_ERROR', null)
-    context.commit('INCOMING_SHARES_LOADING', true)
-
-    // see https://owncloud.dev/owncloud-sdk/Shares.html
-    const client = payload.client
-    const path = payload.path
-    client.shares
-      .getShares(path, { shared_with_me: true })
-      .then((data) => {
-        context.commit(
-          'INCOMING_SHARES_LOAD',
-          data.map((element) => {
-            return buildCollaboratorShare(
-              element.shareInfo,
-              context.getters.highlightedFile,
-              allowSharePermissions(context.rootGetters)
-            )
-          })
-        )
-        context.commit('INCOMING_SHARES_LOADING', false)
-      })
-      .catch((error) => {
-        context.commit('INCOMING_SHARES_ERROR', error.message)
-        context.commit('INCOMING_SHARES_LOADING', false)
-      })
-  },
   async changeShare(
     { commit, dispatch, getters, rootGetters },
-    { client, graphClient, share, permissions, expirationDate, role }
+    { client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
       throw new Error('Nothing changed')
-    }
-
-    if (share.shareType === ShareTypes.space.value) {
-      try {
-        await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
-          permissions,
-          role: role.name
-        })
-      } catch (error) {
-        dispatch(
-          'showMessage',
-          { title: $gettext('Error while editing the share.'), status: 'danger' },
-          { root: true }
-        )
-      }
-
-      const spaceShare = buildSpaceShare(
-        {
-          role: role.name,
-          onPremisesSamAccountName: share.collaborator.name,
-          displayName: share.collaborator.displayName
-        },
-        share.id
-      )
-
-      commit('CURRENT_FILE_OUTGOING_SHARES_UPSERT', spaceShare)
-
-      const { data: drive } = await graphClient.drives.getDrive(share.id)
-      const space = buildSpace(drive)
-      commit('UPDATE_RESOURCE_FIELD', {
-        id: share.id,
-        field: 'spaceRoles',
-        value: space.spaceRoles
-      })
-
-      return
     }
 
     try {
@@ -419,18 +233,7 @@ export default {
   },
   addShare(
     context,
-    {
-      client,
-      graphClient,
-      path,
-      shareWith,
-      shareType,
-      permissions,
-      role,
-      expirationDate,
-      storageId,
-      displayName
-    }
+    { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
     if (shareType === ShareTypes.group.value) {
       client.shares
@@ -451,49 +254,6 @@ export default {
           )
           context.dispatch('updateCurrentFileShareTypes')
           context.dispatch('loadIndicators', { client, currentFolder: path })
-        })
-        .catch((e) => {
-          context.dispatch(
-            'showMessage',
-            {
-              title: $gettext('Error while sharing.'),
-              desc: e,
-              status: 'danger'
-            },
-            { root: true }
-          )
-        })
-      return
-    }
-
-    if (shareType === ShareTypes.space.value) {
-      client.shares
-        .shareSpaceWithUser(path, shareWith, storageId, {
-          permissions,
-          role: role.name
-        })
-        .then(() => {
-          const shareObj = {
-            role: role.name,
-            onPremisesSamAccountName: shareWith,
-            displayName
-          }
-
-          context.commit(
-            'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
-            buildSpaceShare(shareObj, storageId)
-          )
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-          return graphClient.drives.getDrive(storageId).then((response) => {
-            const space = buildSpace(response.data)
-            context.commit('UPDATE_RESOURCE_FIELD', {
-              id: storageId,
-              field: 'spaceRoles',
-              value: space.spaceRoles
-            })
-            context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-          })
         })
         .catch((e) => {
           context.dispatch(
@@ -542,31 +302,11 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, graphClient, share, path, storageId, reloadResource = true }) {
-    const additionalParams: any = {}
-    if (share.shareType === ShareTypes.space.value) {
-      additionalParams.shareWith = share.collaborator.name
-    }
-
-    return client.shares.deleteShare(share.id, additionalParams).then(() => {
+  deleteShare(context, { client, share, path, storageId }) {
+    return client.shares.deleteShare(share.id, {} as any).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-
-      if (share.shareType !== ShareTypes.space.value) {
-        context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-      } else if (reloadResource) {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
-
-        return graphClient.drives.getDrive(share.id).then((response) => {
-          const space = buildSpace(response.data)
-          context.commit('UPDATE_RESOURCE_FIELD', {
-            id: share.id,
-            field: 'spaceRoles',
-            value: space.spaceRoles
-          })
-          context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
-        })
-      }
+      context.dispatch('updateCurrentFileShareTypes')
+      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
     })
   },
   /**
@@ -581,72 +321,86 @@ export default {
    * This will add new entries into the shares tree and will
    * not remove unrelated existing ones.
    */
-  loadSharesTree(context, { client, path, storageId }) {
+  loadSharesTree(context, { client, path, storageId, includeRoot = false, useCached = true }) {
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
     context.dispatch('pruneSharesTreeOutsidePath', path)
-
-    const parentPaths = getParentPaths(path, true)
-    const sharesTree = {}
-
+    context.commit('INCOMING_SHARES_LOAD', [])
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
     context.commit('SHARESTREE_LOADING', true)
+
+    const parentPaths = path === '/' && includeRoot ? ['/'] : getParentPaths(path, true)
+    const sharesTree = {}
+    const outgoingShares = []
+    const incomingShares = []
+
     const shareQueriesQueue = new PQueue({ concurrency: 2 })
     const shareQueriesPromises = []
-    parentPaths.forEach((queryPath) => {
-      // skip already cached paths
-      if (context.getters.sharesTree[queryPath]) {
-        return Promise.resolve()
+    const { highlightedFile } = context.getters
+
+    const getShares = (subPath, indirect, options, outgoing) => {
+      const buildMethod = outgoing ? buildShare : buildCollaboratorShare
+      const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
+      const arr = outgoing ? outgoingShares : incomingShares
+      const permissions = allowSharePermissions(context.rootGetters)
+      if (!sharesTree[subPath]) {
+        sharesTree[subPath] = []
       }
-      sharesTree[queryPath] = []
+      return client.shares
+        .getShares(subPath, options)
+        .then((data) => {
+          data.forEach((element) => {
+            const share = {
+              ...buildMethod(element.shareInfo, resource, permissions),
+              outgoing,
+              indirect
+            }
+            sharesTree[subPath].push(share)
+            if (!indirect) {
+              arr.push(share)
+            }
+          })
+        })
+        .catch((error) => {
+          console.error('SHARESTREE_ERROR', error)
+          context.commit('SHARESTREE_ERROR', error.message)
+        })
+    }
+
+    if (!path) {
+      // space shares
+      shareQueriesPromises.push(
+        getShares(path, false, { reshares: true, spaceRef: storageId }, true)
+      )
+    }
+
+    parentPaths.forEach((queryPath) => {
+      const indirect = path !== queryPath
+      // FIXME: We need the storageId of each parent resource here
+      const spaceRef = indirect ? null : storageId
+      // no need to fetch cached paths again, only adjust the "indirect" state
+      if (context.getters.sharesTree[queryPath] && useCached) {
+        sharesTree[queryPath] = context.getters.sharesTree[queryPath].map((s) => {
+          if (!indirect) {
+            const arr = s.outgoing ? outgoingShares : incomingShares
+            arr.push({ ...s, indirect })
+          }
+          return { ...s, indirect }
+        })
+        return
+      }
+
       // query the outgoing share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          client.shares
-            .getShares(queryPath, { reshares: true, spaceRef: storageId })
-            .then((data) => {
-              data.forEach((element) => {
-                sharesTree[queryPath].push({
-                  ...buildShare(
-                    element.shareInfo,
-                    { type: 'folder' },
-                    allowSharePermissions(context.rootGetters)
-                  ),
-                  outgoing: true,
-                  indirect: true
-                })
-              })
-            })
-            .catch((error) => {
-              console.error('SHARESTREE_ERROR', error)
-              context.commit('SHARESTREE_ERROR', error.message)
-              context.commit('SHARESTREE_LOADING', false)
-            })
+          getShares(queryPath, indirect, { reshares: true, spaceRef }, true)
         )
       )
       // query the incoming share information for each of the parent paths
       shareQueriesPromises.push(
         shareQueriesQueue.add(() =>
-          client.shares
-            .getShares(queryPath, { shared_with_me: true, spaceRef: storageId })
-            .then((data) => {
-              data.forEach((element) => {
-                sharesTree[queryPath].push({
-                  ...buildCollaboratorShare(
-                    element.shareInfo,
-                    { type: 'folder' },
-                    allowSharePermissions(context.rootGetters)
-                  ),
-                  incoming: true,
-                  indirect: true
-                })
-              })
-            })
-            .catch((error) => {
-              console.error('SHARESTREE_ERROR', error)
-              context.commit('SHARESTREE_ERROR', error.message)
-              context.commit('SHARESTREE_LOADING', false)
-            })
+          getShares(queryPath, indirect, { shared_with_me: true, spaceRef }, false)
         )
       )
     })
@@ -654,6 +408,8 @@ export default {
     return Promise.all(shareQueriesPromises).then(() => {
       context.commit('SHARESTREE_ADD', sharesTree)
       context.commit('SHARESTREE_LOADING', false)
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', outgoingShares)
+      context.commit('INCOMING_SHARES_LOAD', incomingShares)
     })
   },
   async loadVersions(context, { client, fileId }) {
@@ -698,14 +454,11 @@ export default {
     })
   },
   removeLink(context, { share, client, path, storageId }) {
-    client.shares
-      .deleteShare(share.id)
-      .then(() => {
-        context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
-        context.dispatch('updateCurrentFileShareTypes')
-        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
-      })
-      .catch((e) => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
+    client.shares.deleteShare(share.id).then(() => {
+      context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+      context.dispatch('updateCurrentFileShareTypes')
+      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+    })
   },
 
   pushResourcesToDeleteList({ commit }, resources) {

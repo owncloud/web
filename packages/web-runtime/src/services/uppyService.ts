@@ -5,6 +5,7 @@ import { bus } from 'web-pkg/src/instance'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
+import { urlJoin } from 'web-pkg/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -20,6 +21,10 @@ type UppyServiceTopics =
   | 'drag-over'
   | 'drag-out'
   | 'drop'
+
+export type uppyHeaders = {
+  [name: string]: string | number
+}
 
 export class UppyService {
   uppy: Uppy
@@ -69,13 +74,7 @@ export class UppyService {
     this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({
-    headers
-  }: {
-    headers: () => {
-      [name: string]: string | number
-    }
-  }) {
+  useXhr({ headers }: { headers: () => uppyHeaders }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',
@@ -179,11 +178,16 @@ export class UppyService {
     })
     this.uppy.on('file-added', (file) => {
       const addedFile = file as unknown as UppyResource
+      if (this.uppy.getPlugin('Tus')) {
+        this.uppy.setFileMeta(addedFile.id, {
+          mtime: (addedFile.data as any).lastModified / 1000
+        })
+      }
       if (this.uppy.getPlugin('XHRUpload')) {
         const escapedName = encodeURIComponent(addedFile.name)
         this.uppy.setFileState(addedFile.id, {
           xhrUpload: {
-            endpoint: `${addedFile.meta.tusEndpoint.replace(/\/+$/, '')}/${escapedName}`
+            endpoint: urlJoin(addedFile.meta.tusEndpoint, escapedName)
           }
         })
       }

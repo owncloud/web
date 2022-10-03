@@ -8,7 +8,7 @@ beforeEach(() => {
 })
 
 const clientService = new ClientService()
-clientService.owncloudSdk = {}
+clientService.owncloudSdk = {} as any
 
 const defaultOptions = {
   clientService,

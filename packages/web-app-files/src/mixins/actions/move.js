@@ -28,10 +28,8 @@ export default {
             this.$pgettext('Action in the files list row to initiate cutting resources', 'Cut'),
           isEnabled: ({ resources }) => {
             if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites')
             ) {
               return false
@@ -58,7 +56,7 @@ export default {
   methods: {
     ...mapActions('Files', ['cutSelectedFiles']),
     $_move_trigger() {
-      this.cutSelectedFiles()
+      this.cutSelectedFiles({ space: this.space })
     }
   }
 }

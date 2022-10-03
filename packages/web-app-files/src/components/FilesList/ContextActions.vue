@@ -1,5 +1,5 @@
 <template>
-  <context-action-menu :menu-sections="menuSections" :items="items" />
+  <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
 </template>
 
 <script lang="ts">
@@ -28,6 +28,7 @@ import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
 import { PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   name: 'ContextActions',
@@ -57,6 +58,10 @@ export default {
   ],
 
   props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
+    },
     items: {
       type: Array as PropType<Resource[]>,
       required: true
@@ -109,6 +114,7 @@ export default {
 
     filterParams() {
       return {
+        space: this.space,
         resources: this.items
       }
     },
@@ -129,7 +135,7 @@ export default {
     menuItemsContext() {
       const fileHandlers = [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(this.filterParams.resources)
+        ...this.$_fileActions_loadExternalAppActions(this.filterParams)
       ]
 
       return [...fileHandlers]

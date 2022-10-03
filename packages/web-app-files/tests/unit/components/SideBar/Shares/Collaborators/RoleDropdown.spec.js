@@ -274,7 +274,10 @@ function getMountOptions({
     },
     store: getStore(sharesTree),
     localVue,
-    stubs
+    stubs,
+    provide: {
+      incomingParentShare: {}
+    }
   }
 }
 
@@ -302,6 +305,7 @@ function getResource({
     shareTypes: [],
     downloadURL: '',
     isReceivedShare: () => isReceivedShare,
-    canShare: () => true
+    canShare: () => true,
+    canDeny: () => false
   }
 }

@@ -1,0 +1,20 @@
+Bugfix: Shares loading
+
+We've improved the loading of shares:
+
+* Share loading now happens more globally in the sidebar component instead of in each sidebar panel.
+* Shares won't be loaded for resources without a path anymore, which massively increases performance.
+* Several issues with (re-)share permissions have been fixed.
+* `loadCurrentFileOutgoingShares` and `loadIncomingShares` mutations have been removed. Instead, incoming and outgoing shares are now being loaded via `loadSharesTree()`. This avoids `getShare()` requests from being executed multiple times.
+* Space member loading has been decoupled from shares loading in store. This reduces fetching of space members to a minimum and improves the structure of the code.
+* Reactive loading of share indicators in sidebar details panel has been fixed.
+* Reactive loading of space member count in the spaces overview has been fixed.
+* Loading of indirect shares within spaces has been fixed.
+
+https://github.com/owncloud/web/issues/7506
+https://github.com/owncloud/web/issues/7593
+https://github.com/owncloud/web/issues/7592
+https://github.com/owncloud/web/pull/7580
+https://github.com/owncloud/web/pull/7638
+https://github.com/owncloud/web/pull/7656
+https://github.com/owncloud/web/pull/7668

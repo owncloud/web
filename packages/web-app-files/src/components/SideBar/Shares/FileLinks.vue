@@ -26,6 +26,8 @@
         :is-modifiable="canEdit"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
         :link="quicklink"
+        :file="file"
+        :space="space"
         @updateLink="checkLinkToUpdate"
         @removePublicLink="deleteLinkConfirmation"
       />
@@ -57,6 +59,8 @@
           :is-modifiable="canEdit"
           :is-password-enforced="isPasswordEnforcedFor(link)"
           :link="link"
+          :file="file"
+          :space="space"
           @updateLink="checkLinkToUpdate"
           @removePublicLink="deleteLinkConfirmation"
         />
@@ -90,6 +94,8 @@
             :is-folder-share="true"
             :is-modifiable="false"
             :link="link"
+            :file="file"
+            :space="space"
           />
         </li>
       </oc-list>
@@ -107,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import {
@@ -127,8 +133,8 @@ import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
-import { isLocationSpacesActive } from '../../../router'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -136,6 +142,14 @@ export default defineComponent({
     CreateQuickLink,
     DetailsAndEdit,
     NameAndCopy
+  },
+  inject: ['displayedItem', 'incomingParentShare'],
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
   },
   setup() {
     const store = useStore()
@@ -161,6 +175,10 @@ export default defineComponent({
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
 
+    file() {
+      return unref(this.displayedItem)
+    },
+
     addButtonLabel() {
       return this.$gettext('Add link')
     },
@@ -180,11 +198,6 @@ export default defineComponent({
 
     quicklink() {
       return this.currentFileOutgoingLinks.find((link) => link.quicklink === true)
-    },
-
-    share() {
-      // the root share has an empty key in the shares tree. That's the reason why we retrieve the share by an empty key here
-      return this.sharesTree['']?.find((s) => s.incoming)
     },
 
     expirationDate() {
@@ -218,9 +231,9 @@ export default defineComponent({
     },
 
     availableRoleOptions() {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          parseInt(this.incomingParentShare.value.permissions),
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport
@@ -260,7 +273,7 @@ export default defineComponent({
         return false
       }
 
-      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      const isShareJail = this.space?.driveType === 'share'
       if (isShareJail && !this.hasResharing) {
         return false
       }
@@ -323,9 +336,6 @@ export default defineComponent({
         return []
       }
 
-      // remove root entry
-      parentPaths.pop()
-
       parentPaths.forEach((parentPath) => {
         const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
@@ -351,7 +361,11 @@ export default defineComponent({
         return this.highlightedFile.id
       }
 
-      return this.$route.params.storageId || null
+      if (this.space) {
+        return this.space.id
+      }
+
+      return null
     }
   },
   methods: {

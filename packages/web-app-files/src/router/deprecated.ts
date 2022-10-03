@@ -6,6 +6,7 @@ import { createLocationOperations } from './operations'
 import { createLocationPublic } from './public'
 import { isLocationActive as isLocationActiveNoCompat } from './utils'
 import { createLocationTrash } from './trash'
+import { urlJoin } from 'web-pkg/src/utils'
 
 /**
  * all route configs created by buildRoutes are deprecated,
@@ -44,17 +45,20 @@ export const buildRoutes = (): RouteConfig[] =>
     {
       path: '/list',
       redirect: (to) =>
-        createLocationSpaces('files-spaces-personal', {
+        createLocationSpaces('files-spaces-generic', {
           ...to,
-          params: { ...to.params, storageId: 'home' }
+          params: { ...to.params, driveAliasAndItem: 'personal/home' }
         })
     },
     {
       path: '/list/all/:item*',
       redirect: (to) =>
-        createLocationSpaces('files-spaces-personal', {
+        createLocationSpaces('files-spaces-generic', {
           ...to,
-          params: { ...to.params, storageId: 'home' }
+          params: {
+            ...to.params,
+            driveAliasAndItem: urlJoin('personal/home', to.params.item, { leadingSlash: false })
+          }
         })
     },
     {
@@ -75,14 +79,14 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/trash-bin',
-      redirect: (to) => createLocationTrash('files-trash-personal', to)
+      redirect: (to) => createLocationTrash('files-trash-generic', to)
     },
     {
       path: '/public/list/:item*',
       meta: {
         auth: false
       },
-      redirect: (to) => createLocationPublic('files-public-files', to)
+      redirect: (to) => createLocationPublic('files-public-link', to)
     },
     {
       path: '/private-link/:fileId',
@@ -111,12 +115,12 @@ export const isLocationActive = (
 ): boolean => {
   const [first, ...rest] = comparatives.map((c) => {
     const newName = {
-      'files-personal': createLocationSpaces('files-spaces-personal').name,
+      'files-personal': createLocationSpaces('files-spaces-generic').name,
       'files-favorites': createLocationCommon('files-common-favorites').name,
       'files-shared-with-others': createLocationShares('files-shares-with-others').name,
       'files-shared-with-me': createLocationShares('files-shares-with-me').name,
-      'files-trashbin	': createLocationTrash('files-trash-personal').name,
-      'files-public-list': createLocationPublic('files-public-files').name
+      'files-trashbin	': createLocationTrash('files-trash-generic').name,
+      'files-public-list': createLocationPublic('files-public-link').name
     }[c.name]
 
     if (newName) {

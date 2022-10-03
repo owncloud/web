@@ -2,13 +2,11 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 
 import Preview from '@files/src/components/Search/Preview.vue'
-import VueCompositionAPI from '@vue/composition-api'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
-localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 
 describe('Preview component', () => {
@@ -19,16 +17,27 @@ describe('Preview component', () => {
     expect(ocResource.exists()).toBeTruthy()
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
-  describe('computed folderLink and parentFolderLink', () => {
+  describe('computed parentFolderLink', () => {
     it('should be empty if no resource target location given', () => {
       const wrapper = getWrapper({ resourceTargetLocation: null })
-      expect(wrapper.vm.folderLink).toEqual({})
       expect(wrapper.vm.parentFolderLink).toEqual({})
     })
     it('should use the items storageId for the resource target location if present', () => {
-      const wrapper = getWrapper({ resourceTargetLocation: { name: 'some-route' } })
-      expect(wrapper.vm.folderLink.params.storageId).toEqual('1')
-      expect(wrapper.vm.parentFolderLink.params.storageId).toEqual('1')
+      const driveAliasAndItem = '1'
+      const wrapper = getWrapper({
+        resourceTargetLocation: {
+          name: 'some-route'
+        },
+        spaces: [
+          {
+            id: '1',
+            driveType: 'project',
+            name: 'New space',
+            getDriveAliasAndItem: () => driveAliasAndItem
+          }
+        ]
+      })
+      expect(wrapper.vm.parentFolderLink.params.driveAliasAndItem).toEqual(driveAliasAndItem)
     })
   })
 
@@ -47,7 +56,8 @@ describe('Preview component', () => {
           {
             id: '1',
             driveType: 'project',
-            name: 'New space'
+            name: 'New space',
+            getDriveAliasAndItem: jest.fn()
           }
         ]
       })
@@ -139,7 +149,8 @@ function getWrapper({
     }),
     mocks: {
       $route: route,
-      $gettext: (text) => text
+      $gettext: (text) => text,
+      hasShareJail
     },
     propsData: {
       searchResult
@@ -147,12 +158,6 @@ function getWrapper({
     stubs: {
       'oc-progress': true,
       'oc-resource': true
-    },
-    setup: () => {
-      return {
-        resourceTargetLocation,
-        hasShareJail
-      }
     }
   })
 }

@@ -28,24 +28,18 @@ describe('PrivateLinkItem', () => {
   })
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
     const spyShowMessage = jest.spyOn(mapActions, 'showMessage')
-    const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
+    jest.spyOn(window, 'prompt').mockImplementation()
 
     const store = createStore()
     const wrapper = getWrapper(store)
 
     expect(spyShowMessage).not.toHaveBeenCalled()
-    expect(windowSpy).not.toHaveBeenCalled()
 
     await wrapper.trigger('click')
 
     expect(wrapper).toMatchSnapshot()
 
     expect(spyShowMessage).toHaveBeenCalledTimes(1)
-    expect(windowSpy).toHaveBeenCalledTimes(1)
-    expect(windowSpy).toHaveBeenCalledWith(
-      'Copy to clipboard: Ctrl+C, Enter',
-      'https://example.com/fake-private-link'
-    )
 
     jest.advanceTimersByTime(550)
 

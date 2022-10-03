@@ -1,0 +1,6 @@
+Bugfix: Add language param opening external app
+
+We've added the language param when opening an external app
+
+https://github.com/owncloud/web/issues/7419
+https://github.com/owncloud/web/pull/7631

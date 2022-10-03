@@ -7,10 +7,11 @@ import stubs from '@/tests/unit/stubs'
 import Files from '@/__fixtures__/files'
 import merge from 'lodash-es/merge'
 import { buildResource, renameResource } from '@files/src/helpers/resources'
+import { clientService } from 'web-pkg/src/services'
+import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
-import { createLocationSpaces } from '../../../../src/router'
 
 jest.mock('web-pkg/src/observer')
 jest.mock('@files/src/helpers/resources', () => {
@@ -48,7 +49,7 @@ describe('SideBar', () => {
       createWrapper({
         item: simpleOwnFolder,
         selectedItems: [simpleOwnFolder],
-        mocks: { $client: { files: { fileInfo: mockFileInfo } } }
+        fileFetchMethod: mockFileInfo
       })
 
       expect(mockFileInfo).toHaveBeenCalledTimes(1)
@@ -75,7 +76,12 @@ describe('SideBar', () => {
       expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(2)
 
       // and again if the file is renamed
-      const renamedResource = renameResource(Object.assign({}, resource), 'foobar.png', '')
+      const renamedResource = renameResource(
+        { webDavPath: '' },
+        Object.assign({}, resource),
+        'foobar.png',
+        ''
+      )
       wrapper.vm.$store.commit('Files/SET_HIGHLIGHTED_FILE', Object.assign(renamedResource))
       await wrapper.vm.$nextTick()
       expect(spyOnFetchFileInfo).toHaveBeenCalledTimes(3)
@@ -103,7 +109,7 @@ describe('SideBar', () => {
         [
           'shows in root node',
           {
-            path: '/publicLinkToken',
+            path: '',
             noSelectionExpected: true
           }
         ],
@@ -125,7 +131,7 @@ describe('SideBar', () => {
           mocks: {
             $client: { publicFiles: { getFileInfo: mockFileInfo } }
           },
-          currentRouteName: 'files-public-files'
+          currentRoute: createLocationPublic('files-public-link')
         })
         await wrapper.vm.$nextTick()
         await wrapper.vm.$nextTick()
@@ -168,8 +174,15 @@ describe('SideBar', () => {
   })
 })
 
-function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-spaces-personal' }) {
+function createWrapper({
+  item,
+  selectedItems,
+  mocks,
+  fileFetchMethod = () => ({}),
+  currentRoute = createLocationSpaces('files-spaces-generic')
+}) {
   const localVue = createLocalVue()
+  localVue.prototype.$clientService = clientService
   localVue.use(Vuex)
   localVue.use(VueCompositionAPI)
   localVue.use(GetTextPlugin, {
@@ -190,6 +203,9 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
             api_enabled: true,
             public: { enabled: true }
           }
+        }),
+        configuration: () => ({
+          server: 'https://example.com'
         })
       },
       modules: {
@@ -205,12 +221,19 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           },
           getters: {
             highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => selectedItems
+            selectedFiles: () => selectedItems,
+            currentFolder: () => simpleOwnFolder
           },
           mutations: {
             SET_HIGHLIGHTED_FILE(state, file) {
               state.highlightedFile = file
             }
+          },
+          actions: {
+            loadCurrentFileOutgoingShares: jest.fn(),
+            loadIncomingShares: jest.fn(),
+            loadSharesTree: jest.fn(),
+            deleteShare: jest.fn()
           }
         },
         runtime: {
@@ -232,10 +255,15 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
     directives: {
       'click-outside': jest.fn()
     },
+    setup: () => {
+      return {
+        webdav: { getFileInfo: fileFetchMethod }
+      }
+    },
     mocks: merge(
       {
         $router: {
-          currentRoute: createLocationSpaces(currentRouteName),
+          currentRoute,
           resolve: (r) => {
             return { href: r.name }
           },

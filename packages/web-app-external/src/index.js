@@ -13,6 +13,7 @@ const appData = {
 const routes = [
   {
     path: '/:filePath*',
+    name: 'apps',
     component: App,
     name: appData.name,
     meta: {

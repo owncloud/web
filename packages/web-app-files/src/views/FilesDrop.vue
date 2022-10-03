@@ -140,8 +140,8 @@ export default defineComponent({
           const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
           if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
             this.$router.replace(
-              createLocationPublic('files-public-files', {
-                params: { item: this.publicLinkToken }
+              createLocationPublic('files-public-link', {
+                params: { driveAliasAndItem: `public/${this.publicLinkToken}` }
               })
             )
             return
