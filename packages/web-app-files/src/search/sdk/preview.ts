@@ -25,10 +25,6 @@ export default class Preview implements SearchPreview {
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
   }
 
-  // we need to change the architecture of oc-sdk to be able to use cancelTokens
-  // every search requests hammers the backend even if it's not needed anymore..
-  // for now we worked around it by using a cache mechanism and make use of debouncing
-  @debounce(100)
   public async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
