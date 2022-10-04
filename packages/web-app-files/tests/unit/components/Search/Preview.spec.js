@@ -19,13 +19,15 @@ describe('Preview component', () => {
     expect(ocResource.exists()).toBeTruthy()
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
-  describe('computed parentFolderLink', () => {
+  describe('computed folderLink and parentFolderLink', () => {
     it('should be empty if no resource target location given', () => {
       const wrapper = getWrapper({ resourceTargetLocation: null })
+      expect(wrapper.vm.folderLink).toEqual({})
       expect(wrapper.vm.parentFolderLink).toEqual({})
     })
     it('should use the items storageId for the resource target location if present', () => {
       const wrapper = getWrapper({ resourceTargetLocation: { name: 'some-route' } })
+      expect(wrapper.vm.folderLink.params.storageId).toEqual('1')
       expect(wrapper.vm.parentFolderLink.params.storageId).toEqual('1')
     })
   })

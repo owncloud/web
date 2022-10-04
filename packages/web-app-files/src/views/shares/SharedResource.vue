@@ -84,6 +84,7 @@ import debounce from 'lodash-es/debounce'
 // mixins
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
+import MixinFilesListFilter from '../../mixins/filesListFilter'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 
 // components
@@ -133,7 +134,12 @@ export default defineComponent({
     FilesViewWrapper
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
+  mixins: [
+    MixinAccessibleBreadcrumb,
+    MixinFileActions,
+    MixinFilesListScrolling,
+    MixinFilesListFilter
+  ],
   setup() {
     const shareId = useRouteQuery('shareId')
     const shareName = useRouteParam('shareName')

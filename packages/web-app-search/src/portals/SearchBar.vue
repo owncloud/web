@@ -1,5 +1,9 @@
 <template>
-  <div v-if="availableProviders.length" id="files-global-search" data-custom-key-bindings="true">
+  <div
+    v-if="availableProviders.length"
+    id="files-global-search"
+    :class="{ 'options-visible': optionsVisible && term }"
+  >
     <oc-search-bar
       id="files-global-search-bar"
       ref="search"
@@ -8,67 +12,55 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       @input="updateTerm"
-      @clear="onClear"
-      @click.native="term && $refs.optionsDrop.show()"
-      @keyup.native.esc="$refs.optionsDrop.hide()"
-      @keyup.native.up="onKeyUpUp"
-      @keyup.native.down="onKeyUpDown"
-      @keyup.native.enter="onKeyUpEnter"
+      @clear="resetProvider"
     />
-    <oc-drop
+    <div
+      v-if="optionsVisible && term"
       id="files-global-search-options"
-      ref="optionsDrop"
-      mode="manual"
-      target="#files-global-search-bar"
+      ref="options"
+      class="oc-mt-s oc-rounded"
     >
-      <oc-list class="oc-list-divider">
+      <ul class="oc-list oc-list-divider">
         <li
-          v-if="$asyncComputed.searchResults.updating"
-          class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
+          v-for="provider in availableProviders"
+          :key="provider.id"
+          class="provider"
+          :class="{ selected: activeProvider ? provider.id === activeProvider.id : false }"
+          @click="activateProvider(provider)"
         >
+          <oc-icon name="search" fill-type="line" accessible-label="Search" />
+          <span class="term">{{ term | truncate }}</span>
+          <button v-if="provider.label" class="label oc-rounded">{{ provider.label }}</button>
+        </li>
+        <li v-if="$asyncComputed.searchResult.updating" class="loading spinner">
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
-          <span class="oc-ml-s">{{ $gettext('Searching ...') }}</span>
         </li>
-        <li v-else-if="showNoResults" id="no-results" class="oc-flex oc-flex-center">
-          {{ $gettext('No results') }}
-        </li>
-        <template v-else>
-          <li v-for="provider in displayProviders" :key="provider.id" class="provider">
-            <oc-list>
-              <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
-                <span class="display-name">{{ provider.displayName }}</span>
-                <span>
-                  <router-link
-                    class="more-results"
-                    :to="getMoreResultsLinkForProvider(provider)"
-                    @click.native="$refs.optionsDrop.hide()"
-                  >
-                    <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
-                  </router-link>
-                </span>
-              </li>
-              <li
-                v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
-                :key="providerSearchResultValue.id"
-                :data-search-id="providerSearchResultValue.id"
-                :class="{
-                  active: isPreviewElementActive(providerSearchResultValue.id)
-                }"
-                class="preview oc-flex oc-flex-middle"
-              >
-                <component
-                  :is="provider.previewSearch.component"
-                  class="preview-component"
-                  :provider="provider"
-                  :search-result="providerSearchResultValue"
-                  @click.native="$refs.optionsDrop.hide()"
-                />
-              </li>
-            </oc-list>
+        <template v-if="!$asyncComputed.searchResult.updating">
+          <li
+            v-for="(searchResultValue, idx) in searchResult.values"
+            :key="searchResultValue.id"
+            class="preview"
+            :class="{ first: idx === 0 }"
+            @click="activeProvider.previewSearch.activate(searchResultValue)"
+          >
+            <component
+              :is="activeProvider.previewSearch.component"
+              :provider="activeProvider"
+              :search-result="searchResultValue"
+            />
+          </li>
+          <li
+            v-if="showNoMatches"
+            id="no-matches"
+            class="oc-text-center oc-text-muted"
+            v-text="$gettext('No result')"
+          ></li>
+          <li v-if="showMoreMatches" id="more-matches" class="oc-text-center oc-text-muted">
+            {{ moreMatchesText }}
           </li>
         </template>
-      </oc-list>
-    </oc-drop>
+      </ul>
+    </div>
   </div>
   <div v-else><!-- no search provider available --></div>
 </template>
@@ -76,8 +68,7 @@
 <script>
 import { providerStore } from '../service'
 import truncate from 'lodash-es/truncate'
-import { createLocationCommon } from 'files/src/router'
-import Mark from 'mark.js'
+import get from 'lodash-es/get'
 
 export default {
   name: 'SearchBar',
@@ -89,58 +80,59 @@ export default {
   data() {
     return {
       term: '',
-      activeProvider: undefined,
       optionsVisible: false,
-      markInstance: null,
-      activePreviewIndex: null,
+      activeProvider: undefined,
       providerStore
     }
   },
 
   computed: {
-    showNoResults() {
-      return this.searchResults.every(({ result }) => !result.values.length)
+    rangeSupported() {
+      return this.searchResult.range
     },
+
+    rangeItems() {
+      return parseInt(this.searchResult.range?.split('/')[1] || 0)
+    },
+
+    showMoreMatches() {
+      return this.rangeSupported && this.rangeItems > this.searchResult.values.length
+    },
+
+    moreMatchesText() {
+      const moreCount = this.rangeItems - this.searchResult.values.length
+      return this.$gettextInterpolate(
+        this.$ngettext('%{moreCount} more result', '%{moreCount} more results', moreCount),
+        {
+          moreCount
+        }
+      )
+    },
+
+    showNoMatches() {
+      return this.searchResult?.values?.length === 0
+    },
+
     availableProviders() {
       return this.providerStore.availableProviders
     },
-    displayProviders() {
-      /**
-       * Computed to filter and sort providers that will be displayed
-       * Only show providers which actually hold results
-       */
-      return this.availableProviders.filter(
-        (provider) => this.getSearchResultForProvider(provider).values.length
-      )
-    },
+
     searchLabel() {
       return this.$gettext('Enter search term')
     }
   },
 
   watch: {
-    searchResults() {
-      this.activePreviewIndex = null
-
-      this.$nextTick(() => {
-        if (this.$refs.optionsDrop) {
-          this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
-          this.markInstance.unmark()
-          this.markInstance.mark(this.term, {
-            element: 'span',
-            className: 'highlight-mark',
-            exclude: ['.provider-details *']
-          })
-        }
-      })
-    },
     $route: {
-      handler(r) {
+      handler(r, o) {
+        if (!!o && this.activeProvider && !this.activeProvider.available) {
+          this.activeProvider = undefined
+        }
         this.$nextTick(() => {
           if (!this.availableProviders.length) {
             return
           }
-          const routeTerm = r?.query?.term
+          const routeTerm = get(r, 'query.term')
           const input = this.$el.getElementsByTagName('input')[0]
           if (!input || !routeTerm) {
             return
@@ -154,133 +146,105 @@ export default {
   },
 
   asyncComputed: {
-    searchResults: {
-      async get() {
-        if (!this.term) {
-          return []
+    searchResult: {
+      get() {
+        if (!this.optionsVisible) {
+          return { values: [] }
         }
 
-        const searchResults = []
-
-        for (const availableProvider of this.availableProviders) {
-          if (availableProvider.previewSearch?.available) {
-            searchResults.push({
-              providerId: availableProvider.id,
-              result: await availableProvider.previewSearch.search(this.term)
-            })
-          }
+        if (!this.activeProvider) {
+          return { values: [] }
         }
 
-        return searchResults
+        if (!this.activeProvider.previewSearch) {
+          return { values: [] }
+        }
+
+        if (!this.activeProvider.previewSearch.available) {
+          return { values: [] }
+        }
+        return this.activeProvider.previewSearch.search(this.term)
       },
-      watch: ['term']
+      watch: ['term', 'activeProvider', 'optionsVisible']
     }
   },
 
+  created() {
+    window.addEventListener('keyup', this.onEvent)
+    window.addEventListener('focusin', this.onEvent)
+    window.addEventListener('click', this.onEvent)
+  },
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.onEvent)
+    window.removeEventListener('focusin', this.onEvent)
+    window.removeEventListener('click', this.onEvent)
+  },
   methods: {
-    onClear() {
-      this.term = ''
-      this.$refs.optionsDrop.hide()
-    },
-    onKeyUpEnter() {
-      this.$refs.optionsDrop.hide()
-
-      if (this.term && this.activePreviewIndex === null) {
-        this.$router.push(
-          createLocationCommon('files-common-search', {
-            query: { term: this.term, provider: 'files.sdk' }
-          })
-        )
-      }
-
-      if (this.activePreviewIndex !== null) {
-        this.$refs.optionsDrop.$el
-          .querySelectorAll('.preview')
-          [this.activePreviewIndex].firstChild.click()
-      }
-    },
-    onKeyUpUp() {
-      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = previewElementsCount - 1
-      } else {
-        this.activePreviewIndex = this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
-      }
-
-      this.scrollToActivePreviewOption()
-    },
-    onKeyUpDown() {
-      const previewElementsCount = this.$refs.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = 0
-      } else {
-        this.activePreviewIndex =
-          this.activePreviewIndex === previewElementsCount - 1 ? null : this.activePreviewIndex + 1
-      }
-
-      this.scrollToActivePreviewOption()
-    },
-    scrollToActivePreviewOption() {
-      if (typeof this.$refs.optionsDrop.$el.scrollTo !== 'function') {
-        return
-      }
-
-      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
-
-      this.$refs.optionsDrop.$el.scrollTo(
-        0,
-        this.activePreviewIndex === null
-          ? 0
-          : previewElements[this.activePreviewIndex].getBoundingClientRect().y -
-              previewElements[this.activePreviewIndex].getBoundingClientRect().height
-      )
-    },
     updateTerm(term) {
       this.term = term
-
-      if (!this.term) {
-        return this.$refs.optionsDrop.hide()
+      this.activeProvider.updateTerm(term)
+    },
+    resetProvider() {
+      this.optionsVisible = false
+      this.availableProviders.forEach((provider) => provider.reset())
+      this.$router.go(-1)
+    },
+    activateProvider(provider) {
+      this.optionsVisible = false
+      this.activeProvider = provider
+      provider.activate(this.term)
+    },
+    onEvent(event) {
+      if (!this.activeProvider) {
+        this.activeProvider = this.availableProviders[0]
       }
 
-      return this.$refs.optionsDrop.show()
-    },
-    getSearchResultForProvider(provider) {
-      return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
-    },
-    getMoreResultsLinkForProvider(provider) {
-      return createLocationCommon('files-common-search', {
-        query: { term: this.term, provider: provider.id }
-      })
-    },
-    getMoreResultsDetailsTextForProvider(provider) {
-      const searchResult = this.getSearchResultForProvider(provider)
-      if (!searchResult || !searchResult.totalResults) {
-        return this.$gettext('Show all results')
+      const optionsVisibleInitial = this.optionsVisible
+      const eventInComponent = this.$el.contains(event.target)
+      const clearEvent = event.target.classList.contains('oc-search-clear')
+      const keyEventUp = event.keyCode === 38
+      const keyEventDown = event.keyCode === 40
+      const keyEventEnter = event.keyCode === 13
+      const keyEventEsc = event.keyCode === 27
+      const activeProviderIndex = this.availableProviders.indexOf(this.activeProvider)
+
+      event.stopPropagation()
+
+      // optionsVisible is set to
+      // - false if the event is a clearEvent or keyEventEsc
+      // - or as fallback to eventInComponent which detects if the given event is in or outside the search component
+      this.optionsVisible = clearEvent || keyEventEsc ? false : eventInComponent
+      // after that we need to return early if options not visible to prevent side effects on elements that are not related to the search component
+      if (!this.optionsVisible) {
+        return
       }
 
-      const translated = this.$ngettext(
-        'Show %{totalResults} result',
-        'Show %{totalResults} results',
-        searchResult.totalResults
-      )
+      if (keyEventEnter) {
+        this.activateProvider(this.activeProvider)
+        return
+      }
 
-      return this.$gettextInterpolate(translated, {
-        totalResults: searchResult.totalResults
-      })
-    },
-    isPreviewElementActive(searchId) {
-      const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
-      return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
+      let nextProviderIndex
+
+      if (
+        (keyEventUp || keyEventDown) &&
+        this.availableProviders.length > 0 &&
+        optionsVisibleInitial
+      ) {
+        const should = keyEventDown
+          ? activeProviderIndex < this.availableProviders.length - 1
+          : activeProviderIndex > 0
+        const firstIndex = keyEventDown ? 0 : this.availableProviders.length - 1
+        const lastIndex = keyEventDown ? activeProviderIndex + 1 : activeProviderIndex - 1
+
+        nextProviderIndex = should ? lastIndex : firstIndex
+      }
+
+      if (isNaN(nextProviderIndex) || nextProviderIndex === activeProviderIndex) {
+        return
+      }
+
+      this.activeProvider = this.availableProviders[nextProviderIndex]
     }
   }
 }
@@ -288,16 +252,6 @@ export default {
 
 <style lang="scss">
 #files-global-search {
-  .oc-search-input {
-    background-color: var(--oc-color-input-bg);
-    transition: 0s;
-
-    @media (max-width: 959px) {
-      border: none;
-      display: inline;
-    }
-  }
-
   #files-global-search-bar {
     width: 452px;
     @media (max-width: 959px) {
@@ -342,45 +296,140 @@ export default {
     }
   }
 
-  #files-global-search-options {
-    width: 450px;
-    overflow-y: auto;
-    max-height: calc(100vh - 60px);
-    text-decoration: none;
-
-    .oc-card {
-      padding: 0 !important;
-    }
-
-    .highlight-mark {
-      font-weight: 600;
-    }
+  .oc-search-input {
+    background-color: var(--oc-color-input-bg);
+    transition: 0s;
 
     @media (max-width: 959px) {
-      width: 93vw !important;
+      border: none;
+      display: inline;
+    }
+  }
+
+  &.options-visible {
+    .oc-search-input {
+      border: 1px solid var(--oc-color-input-border);
+    }
+  }
+}
+
+#files-global-search-options {
+  border: 1px solid var(--oc-color-input-border);
+  background-color: var(--oc-color-input-bg);
+  overflow: hidden;
+  position: absolute;
+  width: 450px;
+
+  @media (max-width: 959px) {
+    left: var(--oc-space-medium);
+    min-width: 95% !important;
+    max-width: 95% !important;
+    top: 60px;
+  }
+
+  ul {
+    &,
+    li {
+      padding: 0;
+      margin: 0;
     }
 
-    ul {
-      li.provider {
-        padding: 0;
+    li {
+      padding: 15px 10px;
+      position: relative;
+      font-size: var(--oc-font-size-small);
+
+      border-top-color: var(--oc-color-input-border);
+
+      &.selected,
+      &:hover {
+        background-color: var(--oc-color-input-border);
       }
 
-      li {
-        padding: var(--oc-space-xsmall) var(--oc-space-small);
+      .label {
+        background-color: white;
+        border: 1px solid var(--oc-color-swatch-passive-hover);
+        float: right;
+        font-size: var(--oc-font-size-xsmall);
+        padding: 0.5rem 1rem;
         position: relative;
-        font-size: var(--oc-font-size-small);
+        opacity: 0.6;
+        top: -4px;
 
-        &.provider-details {
-          font-size: var(--oc-font-size-xsmall);
+        @media (max-width: 959px) {
+          float: none;
+          opacity: 1;
+          top: 0.65rem;
+          right: 10px;
+          position: absolute;
+        }
+      }
+
+      &.loading {
+        padding-top: 20px;
+        padding-bottom: 15px;
+        background-color: var(--oc-color-background-muted);
+        text-align: center;
+
+        &.spinner {
+          border-top-color: var(--oc-color-input-border);
+        }
+      }
+
+      &.provider {
+        opacity: 0.6;
+
+        &:first-of-type {
+          border-top: none;
         }
 
-        &.preview {
-          min-height: 44px;
+        .oc-icon,
+        .oc-icon > svg {
+          height: 18px;
+          max-height: 18px;
+          max-width: 18px;
+          width: 18px;
+          margin-right: 8px;
+          opacity: 0.6;
+          vertical-align: middle;
+        }
 
-          &:hover,
-          &.active {
-            background-color: var(--oc-color-background-highlight);
+        &:hover,
+        &.selected {
+          .oc-icon,
+          .oc-icon > svg {
+            opacity: 0.8;
           }
+
+          opacity: 1;
+        }
+      }
+
+      &.preview {
+        padding-top: var(--oc-space-small);
+        padding-bottom: var(--oc-space-small);
+        background-color: var(--oc-color-background-highlight);
+
+        &.first {
+          border-top-color: var(--oc-color-input-border);
+        }
+
+        &:hover {
+          background-color: var(--oc-color-input-border);
+
+          > .label {
+            opacity: 1;
+          }
+        }
+
+        button {
+          font-size: var(--oc-font-size-small);
+        }
+
+        .label {
+          font-size: var(--oc-font-size-xsmall);
+          padding: 0.1rem 0.2rem;
+          opacity: 0.6;
         }
       }
     }

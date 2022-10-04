@@ -17,7 +17,7 @@ export default class List implements SearchList {
   async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
-        totalResults: null,
+        range: null,
         values: []
       }
     }
@@ -29,7 +29,7 @@ export default class List implements SearchList {
     )
 
     return {
-      totalResults: range ? parseInt(range?.split('/')[1]) : null,
+      range,
       values: results.map((result) => {
         const resource = buildResource(result)
         return { id: resource.id, data: resource }

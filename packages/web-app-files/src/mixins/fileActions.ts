@@ -16,7 +16,6 @@ import Rename from './actions/rename'
 import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import isSearchActive from './helpers/isSearchActive'
 
 const actionsMixins = [
   'navigate',
@@ -47,8 +46,7 @@ export default {
     Move,
     Navigate,
     Rename,
-    Restore,
-    isSearchActive
+    Restore
   ],
   computed: {
     ...mapState(['apps']),
@@ -62,6 +60,12 @@ export default {
     },
 
     $_fileActions_editorActions() {
+      if (
+        isLocationTrashActive(this.$router, 'files-trash-personal') ||
+        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+      ) {
+        return []
+      }
       return this.apps.fileEditors
         .map((editor) => {
           return {
@@ -96,11 +100,8 @@ export default {
               if (isLocationCommonActive(this.$router, 'files-common-projects-trash')) return false
 
               if (
-                !this.$_isSearchActive &&
-                (isLocationTrashActive(this.$router, 'files-trash-personal') ||
-                  isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
-                  (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-                    resources[0].status === ShareStatus.declined))
+                isLocationSharesActive(this.$router, 'files-shares-with-me') &&
+                resources[0].status === ShareStatus.declined
               ) {
                 return false
               }

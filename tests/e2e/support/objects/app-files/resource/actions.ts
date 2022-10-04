@@ -41,7 +41,7 @@ const globalSearchInput = '.oc-search-input'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
-const loadingSpinner = '#files-global-search-options .loading'
+const loadingSpinner = '#files-global-search-bar .oc-spinner'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'

@@ -63,6 +63,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import ResourceTable from '../components/FilesList/ResourceTable.vue'
 
 import FileActions from '../mixins/fileActions'
+import MixinFilesListFilter from '../mixins/filesListFilter'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../constants'
 import debounce from 'lodash-es/debounce'
@@ -98,7 +99,7 @@ export default defineComponent({
     SideBar
   },
 
-  mixins: [FileActions],
+  mixins: [FileActions, MixinFilesListFilter],
 
   setup() {
     const store = useStore()

@@ -83,10 +83,101 @@ describe('Search Bar portal component', () => {
     wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
-  test('updates the search term on input', () => {
-    wrapper = getMountedWrapper()
-    wrapper.find(selectors.searchInput).setValue('alice')
-    expect(wrapper.vm.$data.term).toBe('alice')
+  test('updates the search term on input', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    expect(wrapper.vm.$data.term).toBe('old')
+    await wrapper.find('input').setValue('new')
+    expect(wrapper.vm.$data.term).toBe('new')
+  })
+  test('the active provider get reset on route change', () => {
+    wrapper = getMountedWrapper({
+      data: {
+        activeProvider: { available: false }
+      }
+    })
+    expect(wrapper.vm.$data.activeProvider).toBeTruthy()
+    ;(wrapper.vm.$options.watch.$route.handler as any).call(wrapper.vm, undefined, true)
+    expect(wrapper.vm.$data.activeProvider).toBeFalsy()
+  })
+  test('notifies active provider to update term on input', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    await wrapper.find('input').setValue('new')
+    expect(dummyProviderOne.updateTerm).toBeCalledTimes(1)
+    expect(dummyProviderOne.updateTerm).toBeCalledWith('new')
+  })
+  test('hides options on clear', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    expect(wrapper.find('#files-global-search-options').exists()).toBeTruthy()
+    await wrapper.find('input').setValue('new')
+    await wrapper.find('.oc-search-clear').trigger('click')
+    expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
+  })
+  test('resets term on clear', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.find('.oc-search-clear').trigger('click')
+    expect(wrapper.vm.$data.term).toBeFalsy()
+  })
+  test('navigates to last route on clear', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    const routerStub = jest.spyOn(wrapper.vm.$router, 'go')
+    await wrapper.find('input').setValue('new')
+    await wrapper.find('.oc-search-clear').trigger('click')
+    expect(routerStub).toHaveBeenCalledWith(-1)
+  })
+  test('notifies active provider to reset on clear', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne]
+        }
+      }
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.find('.oc-search-clear').trigger('click')
+    expect(dummyProviderOne.reset).toBeCalledTimes(1)
   })
   test('shows message if no results are available', async () => {
     wrapper = getMountedWrapper()
@@ -159,22 +250,43 @@ describe('Search Bar portal component', () => {
     wrapper.find(selectors.searchInput).trigger('keyup.esc')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
-  test('hides options on clear', async () => {
-    wrapper = getMountedWrapper()
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  test('shows the no matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      values: []
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#no-matches').exists()).toBeTruthy()
   })
-  test('hides options if no search term is given', async () => {
-    wrapper = getMountedWrapper()
-    wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
-    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
-    wrapper.find(selectors.searchInput).setValue('')
-    await wrapper.find(selectors.searchInputClear).trigger('click')
-    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  test('shows the more matches element if search result is empty', async () => {
+    wrapper = getMountedWrapper({
+      data: {
+        term: 'old',
+        activeProvider: dummyProviderOne,
+        providerStore: {
+          availableProviders: [dummyProviderOne, dummyProviderTwo]
+        }
+      }
+    })
+    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
+      range: '/10',
+      values: [
+        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
+        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
+      ]
+    })
+    await wrapper.find('input').setValue('new')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('#more-matches').exists()).toBeTruthy()
   })
   test('resets search term on clear', async () => {
     wrapper = getMountedWrapper()
@@ -251,9 +363,6 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
         push: jest.fn()
       },
       ...mocks
-    },
-    stubs: {
-      'router-link': true
     }
   })
 }

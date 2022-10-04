@@ -1,85 +1,78 @@
 <template>
-  <div>
-    <oc-text-input
-      id="users-filter"
-      v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
-      :label="$gettext('Filter users')"
-    />
-    <oc-table
-      ref="table"
-      class="users-table"
-      :sort-by="sortBy"
-      :sort-dir="sortDir"
-      :fields="fields"
-      :data="data"
-      :highlighted="highlighted"
-      :sticky="true"
-      :header-position="headerPosition"
-      @sort="handleSort"
-    >
-      <template #selectHeader>
-        <oc-checkbox
-          size="large"
-          class="oc-ml-s"
-          :label="$gettext('Select all users')"
-          :value="allUsersSelected"
-          hide-label
-          @input="$emit('toggleSelectAllUsers')"
-        />
-      </template>
-      <template #select="{ item }">
-        <oc-checkbox
-          class="oc-ml-s"
-          size="large"
-          :value="selectedUsers"
-          :option="item"
-          :label="getSelectUserLabel(item)"
-          hide-label
-          @input="$emit('toggleSelectUser', item)"
-        />
-      </template>
-      <template #avatar="{ item }">
-        <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
-      </template>
-      <template #role="{ item }">
-        <template v-if="item.role">{{ item.role.displayName }}</template>
-      </template>
-      <template #actions="{ item }">
-        <oc-button
-          v-oc-tooltip="$gettext('Details')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
-        >
-          <oc-icon name="information" fill-type="line" /></oc-button
-        ><oc-button
-          v-oc-tooltip="$gettext('Group assignments')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
-        >
-          <oc-icon name="group-2" fill-type="line" /></oc-button
-        ><oc-button
-          v-oc-tooltip="$gettext('Edit')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs"
-          @click="$emit('showPanel', { user: item, panel: 'EditPanel' })"
-        >
-          <oc-icon name="pencil" fill-type="line" />
-        </oc-button>
-      </template>
-      <template #footer>
-        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
-        </div>
-      </template>
-    </oc-table>
-  </div>
+  <oc-table
+    ref="table"
+    class="users-table"
+    :sort-by="sortBy"
+    :sort-dir="sortDir"
+    :fields="fields"
+    :data="data"
+    :highlighted="highlighted"
+    :sticky="true"
+    :header-position="headerPosition"
+    @sort="handleSort"
+  >
+    <template #selectHeader>
+      <oc-checkbox
+        size="large"
+        class="oc-ml-s"
+        :label="$gettext('Select all users')"
+        :value="allUsersSelected"
+        hide-label
+        @input="$emit('toggleSelectAllUsers')"
+      />
+    </template>
+    <template #select="{ item }">
+      <oc-checkbox
+        class="oc-ml-s"
+        size="large"
+        :value="selectedUsers"
+        :option="item"
+        :label="getSelectUserLabel(item)"
+        hide-label
+        @input="$emit('toggleSelectUser', item)"
+      />
+    </template>
+    <template #avatar="{ item }">
+      <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
+    </template>
+    <template #role="{ item }">
+      <template v-if="item.role">{{ item.role.displayName }}</template>
+    </template>
+    <template #actions="{ item }">
+      <oc-button
+        v-oc-tooltip="$gettext('Details')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('showPanel', { user: item, panel: 'DetailsPanel' })"
+      >
+        <oc-icon name="information" fill-type="line" /></oc-button
+      ><oc-button
+        v-oc-tooltip="$gettext('Group assignments')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('showPanel', { user: item, panel: 'GroupAssignmentsPanel' })"
+      >
+        <oc-icon name="group-2" fill-type="line" /></oc-button
+      ><oc-button
+        v-oc-tooltip="$gettext('Edit')"
+        appearance="raw"
+        class="oc-mr-xs quick-action-button oc-p-xs"
+        @click="$emit('showPanel', { user: item, panel: 'EditPanel' })"
+      >
+        <oc-icon name="pencil" fill-type="line" />
+      </oc-button>
+    </template>
+    <template #footer>
+      <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+        <p class="oc-text-muted">{{ footerText }}</p>
+      </div>
+    </template>
+  </oc-table>
 </template>
 
 <script>
+import { onBeforeUnmount, ref } from '@vue/composition-api'
+import { Registry } from '../../services'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 
@@ -99,25 +92,29 @@ export default {
       required: true
     }
   },
+  setup() {
+    const searchTerm = ref('')
+    const token = Registry.search.subscribe('updateTerm', ({ term }) => (searchTerm.value = term))
+    onBeforeUnmount(() => Registry.search.unsubscribe('updateTerm', token))
+
+    return {
+      searchTerm
+    }
+  },
   data() {
     return {
       sortBy: 'onPremisesSamAccountName',
       sortDir: 'asc',
-      markInstance: null,
-      filterTerm: ''
+      markInstance: null
     }
   },
   computed: {
     allUsersSelected() {
       return this.users.length === this.selectedUsers.length
     },
-    footerTextTotal() {
+    footerText() {
       const translated = this.$gettext('%{userCount} users in total')
       return this.$gettextInterpolate(translated, { userCount: this.users.length })
-    },
-    footerTextFilter() {
-      const translated = this.$gettext('%{userCount} matching users')
-      return this.$gettextInterpolate(translated, { userCount: this.data.length })
     },
     fields() {
       return [
@@ -166,19 +163,19 @@ export default {
     },
     data() {
       const orderedUsers = this.orderBy(this.users, this.sortBy, this.sortDir === 'desc')
-      return this.filter(orderedUsers, this.filterTerm)
+      return this.filter(orderedUsers, this.searchTerm)
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
     }
   },
   watch: {
-    filterTerm() {
+    searchTerm() {
       if (!this.markInstance) {
         return
       }
       this.markInstance.unmark()
-      this.markInstance.mark(this.filterTerm, {
+      this.markInstance.mark(this.searchTerm, {
         element: 'span',
         className: 'highlight-mark',
         exclude: ['th *', 'tfoot *']
@@ -191,8 +188,8 @@ export default {
     })
   },
   methods: {
-    filter(users, filterTerm) {
-      if (!(filterTerm || '').trim()) {
+    filter(users, searchTerm) {
+      if (!(searchTerm || '').trim()) {
         return users
       }
       const usersSearchEngine = new Fuse(users, {
@@ -202,7 +199,7 @@ export default {
         keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
       })
 
-      return usersSearchEngine.search(filterTerm).map((r) => r.item)
+      return usersSearchEngine.search(searchTerm).map((r) => r.item)
     },
     orderBy(list, prop, desc) {
       return [...list].sort((user1, user2) => {
@@ -233,10 +230,6 @@ export default {
 </script>
 
 <style lang="scss">
-#users-filter {
-  width: 16rem;
-}
-
 .highlight-mark {
   font-weight: 600;
 }

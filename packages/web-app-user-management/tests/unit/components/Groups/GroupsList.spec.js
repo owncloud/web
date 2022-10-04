@@ -68,7 +68,6 @@ function getMountedWrapper({ propsData = {} } = {}) {
       'avatar-image': true,
       'oc-checkbox': true,
       'oc-button': true,
-      'oc-text-input': true,
       'oc-table': { template: '<div></div>' }
     }
   })

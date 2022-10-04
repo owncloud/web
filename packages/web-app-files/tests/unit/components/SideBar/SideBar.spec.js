@@ -11,7 +11,6 @@ import { buildResource, renameResource } from '@files/src/helpers/resources'
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from '@files/src/components/SideBar/SideBar.vue'
 import { createLocationSpaces } from '../../../../src/router'
-import { clientService } from 'web-pkg/src/services'
 
 jest.mock('web-pkg/src/observer')
 jest.mock('@files/src/helpers/resources', () => {
@@ -171,7 +170,6 @@ describe('SideBar', () => {
 
 function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-spaces-personal' }) {
   const localVue = createLocalVue()
-  localVue.prototype.$clientService = clientService
   localVue.use(Vuex)
   localVue.use(VueCompositionAPI)
   localVue.use(GetTextPlugin, {
@@ -192,9 +190,6 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
             api_enabled: true,
             public: { enabled: true }
           }
-        }),
-        configuration: () => ({
-          server: 'https://example.com'
         })
       },
       modules: {
@@ -210,19 +205,12 @@ function createWrapper({ item, selectedItems, mocks, currentRouteName = 'files-s
           },
           getters: {
             highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => selectedItems,
-            currentFolder: () => simpleOwnFolder
+            selectedFiles: () => selectedItems
           },
           mutations: {
             SET_HIGHLIGHTED_FILE(state, file) {
               state.highlightedFile = file
             }
-          },
-          actions: {
-            loadCurrentFileOutgoingShares: jest.fn(),
-            loadIncomingShares: jest.fn(),
-            loadSharesTree: jest.fn(),
-            deleteShare: jest.fn()
           }
         },
         runtime: {

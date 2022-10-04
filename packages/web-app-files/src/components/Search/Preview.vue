@@ -1,21 +1,15 @@
 <template>
-  <oc-button
-    :type="resource.isFolder ? 'router-link' : 'button'"
-    justify-content="left"
-    class="files-search-preview oc-flex oc-width-1-1"
-    appearance="raw"
-    v-bind="attrs"
-    v-on="listeners"
-  >
+  <div class="files-search-preview">
     <oc-resource
       :resource="resource"
       :is-path-displayed="true"
-      :is-resource-clickable="false"
+      :folder-link="folderLink"
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
+      @click="$_fileActions_triggerDefaultAction(resource)"
     />
-  </oc-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -28,7 +22,7 @@ import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationSpaces } from '../../router'
 import path from 'path'
-import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -54,9 +48,7 @@ export default {
       hasShareJail: useCapabilityShareJailEnabled(),
       resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
         params: { storageId: store.getters.user.id }
-      }),
-      resourceTargetLocationSpace: createLocationSpaces('files-spaces-project'),
-      accessToken: useAccessToken({ store })
+      })
     }
   },
   data() {
@@ -68,20 +60,6 @@ export default {
     ...mapGetters(['configuration', 'user']),
     ...mapState('runtime/spaces', ['spaces']),
 
-    attrs() {
-      return this.resource.isFolder
-        ? {
-            to: this.createFolderLink(this.resource.path, this.resource)
-          }
-        : {}
-    },
-    listeners() {
-      return this.resource.isFolder
-        ? {}
-        : {
-            click: () => this.$_fileActions_triggerDefaultAction(this.resource)
-          }
-    },
     matchingSpace() {
       return this.spaces.find((space) => space.id === this.resource.storageId)
     },
@@ -101,6 +79,9 @@ export default {
       }
 
       return this.$gettext('Personal')
+    },
+    folderLink() {
+      return this.createFolderLink(this.resource.path, this.resource)
     },
     parentFolderLink() {
       return this.createFolderLink(path.dirname(this.resource.path), this.resource)
