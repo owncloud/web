@@ -410,7 +410,13 @@ function _fixAdditionalInfo(data) {
 export function buildCollaboratorShare(s, file, allowSharePermission): Share {
   const share: Share = {
     shareType: parseInt(s.share_type),
-    id: s.id
+    id: s.id,
+    itemSource: s.item_source,
+    file: {
+      parent: s.file_parent,
+      source: s.file_source,
+      target: s.file_target
+    }
   }
   if (
     ShareTypes.containsAnyValue(
