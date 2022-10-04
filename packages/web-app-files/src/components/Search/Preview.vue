@@ -67,7 +67,7 @@ export default defineComponent({
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path, this.resource)
+            to: this.createFolderLink(this.resource.path)
           }
         : {}
     },
