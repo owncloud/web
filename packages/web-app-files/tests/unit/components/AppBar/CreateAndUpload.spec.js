@@ -300,7 +300,9 @@ describe('CreateAndUpload component', () => {
         [],
         [],
         [],
-        null,
+        {
+          clearInputs: jest.fn()
+        },
         wrapper.vm.spaces,
         jest.fn(),
         jest.fn(),
