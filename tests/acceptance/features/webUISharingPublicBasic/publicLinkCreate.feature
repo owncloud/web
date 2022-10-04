@@ -175,7 +175,7 @@ Feature: Create public link shares
       | name        | Quicklink      |
     And the following success message should be displayed on the webUI
       """
-      Quicklink copied into your clipboard
+      The quicklink has been copied to your clipboard.
       """
 
   # This test is skipped in OCIS as the sharing jail has been implemented

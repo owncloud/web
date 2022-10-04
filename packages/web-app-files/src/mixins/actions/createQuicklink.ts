@@ -40,7 +40,8 @@ export default {
       await createQuicklink({
         resource,
         storageId: this.space?.id || resource?.fileId || resource?.id,
-        store
+        store,
+        $gettext: this.$gettext
       })
 
       bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
