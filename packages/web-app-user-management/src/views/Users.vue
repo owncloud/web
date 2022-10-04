@@ -425,11 +425,12 @@ export default defineComponent({
             graphEditUserRawObjectExtractor(actualUser),
             graphEditUserRawObjectExtractor(editUser)
           )
-        )
+        ) {
           await this.graphClient.users.editUser(
             editUser.id,
             graphEditUserRawObjectExtractor(editUser)
           )
+        }
 
         if (!isEqual(actualUser.drive, editUser.drive)) {
           const updateDriveResponse = await this.graphClient.drives.updateDrive(

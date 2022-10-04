@@ -118,12 +118,11 @@ import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../he
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
-import { copyMoveResource } from '../../helpers/resource'
+import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { ClipboardActions } from '../../helpers/clipboardActions'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -304,9 +303,13 @@ export default defineComponent({
       const selected = [...this.selectedResources]
       const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
-      if (isTargetSelected) return
-      if (targetFolder.type !== 'folder') return
-      const movedResources = await copyMoveResource(
+      if (isTargetSelected) {
+        return
+      }
+      if (targetFolder.type !== 'folder') {
+        return
+      }
+      const copyMove = new ResourceTransfer(
         this.space,
         selected,
         this.space,
@@ -316,10 +319,10 @@ export default defineComponent({
         this.hideModal,
         this.showMessage,
         this.$gettext,
-        this.$gettextInterpolate,
         this.$ngettext,
-        ClipboardActions.Cut
+        this.$gettextInterpolate
       )
+      const movedResources = await copyMove.perform(TransferType.MOVE)
       for (const resource of movedResources) {
         this.REMOVE_FILES([resource])
         this.REMOVE_FILES_FROM_SEARCHED([resource])

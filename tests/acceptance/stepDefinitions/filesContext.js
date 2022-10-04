@@ -1263,7 +1263,9 @@ When(
       .catch((error) => {
         // while copying resource, after clicking the "Paste here" button, the button should disappear but if it doesn't
         // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
-        if (error.message !== 'ElementPresentError') throw error
+        if (error.message !== 'ElementPresentError') {
+          throw error
+        }
       })
   }
 )

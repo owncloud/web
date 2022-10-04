@@ -118,7 +118,9 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || rootFolder) {
+        return false
+      }
       if (
         isLocationTrashActive(router, 'files-trash-generic') ||
         isLocationPublicActive(router, 'files-public-link')
@@ -156,7 +158,9 @@ const panelGenerators: (({
     title: $gettext('Versions'),
     component: FileVersions,
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || rootFolder) {
+        return false
+      }
       if (
         isLocationTrashActive(router, 'files-trash-generic') ||
         isLocationPublicActive(router, 'files-public-link')

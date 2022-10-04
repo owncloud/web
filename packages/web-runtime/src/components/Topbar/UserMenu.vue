@@ -149,8 +149,12 @@ export default {
     },
 
     quotaProgressVariant() {
-      if ((this.quotaUsagePercent || 0) < 80) return 'primary'
-      if ((this.quotaUsagePercent || 0) < 90) return 'warning'
+      if ((this.quotaUsagePercent || 0) < 80) {
+        return 'primary'
+      }
+      if ((this.quotaUsagePercent || 0) < 90) {
+        return 'warning'
+      }
       return 'danger'
     }
   },

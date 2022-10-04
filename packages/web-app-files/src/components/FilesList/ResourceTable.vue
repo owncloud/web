@@ -493,7 +493,9 @@ export default defineComponent({
         ]
           .filter((field) => {
             const hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
-            if (!this.fieldsDisplayed) return hasField
+            if (!this.fieldsDisplayed) {
+              return hasField
+            }
             return hasField && this.fieldsDisplayed.includes(field.name)
           })
           .map((field) => {
@@ -544,7 +546,9 @@ export default defineComponent({
       return this.selectedIds.includes(item.id)
     },
     isResourceCut(resource) {
-      if (this.clipboardAction !== ClipboardActions.Cut) return false
+      if (this.clipboardAction !== ClipboardActions.Cut) {
+        return false
+      }
       return this.clipboardResources.some((r) => r.id === resource.id)
     },
     isLatestSelectedItem(item) {
@@ -620,12 +624,16 @@ export default defineComponent({
     },
     addSelectedResource(file) {
       const isSelected = this.isResourceSelected(file)
-      if (isSelected) return
+      if (isSelected) {
+        return
+      }
       this.toggleFileSelection(file)
     },
     resetDropPosition(id, event, item) {
       const instance = this.$refs[id].tippy
-      if (instance === undefined) return
+      if (instance === undefined) {
+        return
+      }
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
@@ -634,7 +642,9 @@ export default defineComponent({
     showContextMenu(row, event, item) {
       event.preventDefault()
       const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
-      if (instance === undefined) return
+      if (instance === undefined) {
+        return
+      }
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }

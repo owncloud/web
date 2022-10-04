@@ -24,7 +24,9 @@ export default {
   },
   computed: {
     toggleSidebarButtonLabel() {
-      if (this.sideBarOpen) return this.$gettext('Close sidebar to hide details')
+      if (this.sideBarOpen) {
+        return this.$gettext('Close sidebar to hide details')
+      }
       return this.$gettext('Open sidebar to view details')
     },
 

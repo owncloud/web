@@ -217,7 +217,9 @@ export default defineComponent({
   watch: {
     spaces: {
       handler: async function (val) {
-        if (!val) return
+        if (!val) {
+          return
+        }
 
         for (const space of this.spaces as SpaceResource[]) {
           if (!space.spaceImageData) {

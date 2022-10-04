@@ -27,7 +27,9 @@ export default {
             this.$pgettext('Action in the files list row to initiate pasting resources', 'Paste'),
           shortcut: this.getPasteShortcutString,
           isEnabled: ({ resources }) => {
-            if (this.clipboardResources.length === 0) return false
+            if (this.clipboardResources.length === 0) {
+              return false
+            }
             if (
               !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
               !isLocationPublicActive(this.$router, 'files-public-link') &&

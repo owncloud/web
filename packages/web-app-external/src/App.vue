@@ -132,7 +132,9 @@ export default defineComponent({
 
       this.appUrl = response.data.app_url
       this.method = response.data.method
-      if (response.data.form_parameters) this.formParameters = response.data.form_parameters
+      if (response.data.form_parameters) {
+        this.formParameters = response.data.form_parameters
+      }
 
       if (this.method === 'POST' && this.formParameters) {
         this.$nextTick(() => this.$refs.subm.click())
