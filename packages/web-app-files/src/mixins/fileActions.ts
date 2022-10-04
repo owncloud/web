@@ -19,6 +19,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import isSearchActive from './helpers/isSearchActive'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const actionsMixins = [
   'navigate',
@@ -190,6 +191,7 @@ export default {
         },
         query: {
           ...(shareId && { shareId }),
+          ...(fileId && configurationManager.options.routing.idBased && { fileId }),
           ...routeToContextQuery(this.$route)
         }
       }
