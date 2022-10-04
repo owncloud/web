@@ -28,8 +28,7 @@ module.exports = {
     'no-new': 'off',
     'jest/no-standalone-expect': 'off',
     'node/no-callback-literal': 'off',
-    'unused-imports/no-unused-imports': 'error',
-    'no-useless-constructor': 0
+    'unused-imports/no-unused-imports': 'error'
   },
   globals: {
     require: false,

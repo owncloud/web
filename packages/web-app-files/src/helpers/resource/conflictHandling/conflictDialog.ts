@@ -9,6 +9,7 @@ interface FileConflict {
 }
 
 export class ConflictDialog {
+  /* eslint-disable */
   constructor(
     protected createModal: (modal: object) => void,
     protected hideModal: () => void,

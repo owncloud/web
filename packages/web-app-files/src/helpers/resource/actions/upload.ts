@@ -162,13 +162,17 @@ export class ResourcesUpload extends ConflictDialog {
       for (const file of filesInFolder) {
         const newFolderName = resolveFileNameDuplicate(folder, '', this.currentFiles)
         file.meta.relativeFolder = file.meta.relativeFolder.replace(
-          `/${folder}`,
+          new RegExp(`/${folder}` + '$'),
           `/${newFolderName}`
         )
-        file.meta.relativePath = file.meta.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
-        file.meta.tusEndpoint = file.meta.tusEndpoint.replace(`/${folder}`, `/${newFolderName}`)
-        const data = file.data as any
-        data.relativePath = data.relativePath.replace(`/${folder}/`, `/${newFolderName}/`)
+        file.meta.relativePath = file.meta.relativePath.replace(
+          new RegExp(`/${folder}/` + '$'),
+          `/${newFolderName}/`
+        )
+        file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
+          new RegExp(`/${folder}` + '$'),
+          `/${newFolderName}`
+        )
       }
     }
     if (files.length === 0) return
