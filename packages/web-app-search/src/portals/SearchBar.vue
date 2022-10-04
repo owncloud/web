@@ -105,7 +105,7 @@ export default {
       }
 
       context.loading = false
-    }, 100)
+    }, 200)
 
     return {
       debouncedSearch
