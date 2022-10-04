@@ -75,42 +75,12 @@
 
 <script>
 import { providerStore } from '../service'
-import truncate from 'lodash-es/truncate'
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
 
 export default {
   name: 'SearchBar',
-
-  filters: {
-    truncate
-  },
-  setup() {
-    const debouncedSearch = debounce(async (context) => {
-      context.searchResults = []
-      if (!context.term) {
-        return
-      }
-
-      context.loading = true
-
-      for (const availableProvider of context.availableProviders) {
-        if (availableProvider.previewSearch?.available) {
-          context.searchResults.push({
-            providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(context.term)
-          })
-        }
-      }
-
-      context.loading = false
-    }, 200)
-
-    return {
-      debouncedSearch
-    }
-  },
 
   data() {
     return {
@@ -119,11 +89,13 @@ export default {
       optionsVisible: false,
       markInstance: null,
       activePreviewIndex: null,
+      debouncedSearch: undefined,
       providerStore,
       loading: false,
       searchResults: []
     }
   },
+
   computed: {
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
@@ -183,7 +155,30 @@ export default {
     }
   },
 
+  created() {
+    this.debouncedSearch = debounce(this.search, 100)
+  },
+
   methods: {
+    async search() {
+      this.searchResults = []
+      if (!this.term) {
+        return
+      }
+
+      this.loading = true
+
+      for (const availableProvider of this.availableProviders) {
+        if (availableProvider.previewSearch?.available) {
+          this.searchResults.push({
+            providerId: availableProvider.id,
+            result: await availableProvider.previewSearch.search(this.term)
+          })
+        }
+      }
+
+      this.loading = false
+    },
     onClear() {
       this.term = ''
       this.$refs.optionsDrop.hide()

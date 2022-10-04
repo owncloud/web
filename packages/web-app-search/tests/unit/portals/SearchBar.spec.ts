@@ -52,6 +52,8 @@ const selectors = {
   optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
+jest.mock('lodash-es/debounce', () => (fn) => fn)
+
 beforeEach(() => {
   jest.resetAllMocks()
 
