@@ -16,6 +16,7 @@ Summary
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
+* Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
@@ -103,6 +104,13 @@ Details
 
    https://github.com/owncloud/web/issues/7103
    https://github.com/owncloud/web/pull/7651
+
+* Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
+
+   We've fixed a bug where updated data for a space would not show up in the UI before reloading.
+
+   https://github.com/owncloud/web/issues/7521
+   https://github.com/owncloud/web/pull/7546
 
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
