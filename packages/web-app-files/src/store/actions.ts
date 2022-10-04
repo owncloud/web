@@ -176,20 +176,17 @@ export default {
       promises.push(promise)
     }
     return Promise.all(promises).then(() => {
-      context.dispatch('sidebar/close')
       context.commit('REMOVE_FILES', removedFiles)
       context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
       context.commit('RESET_SELECTION')
     })
   },
-  async clearTrashBin(context) {
-    await context.dispatch('sidebar/close')
+  clearTrashBin(context) {
     context.commit('CLEAR_FILES')
     context.commit('RESET_SELECTION')
     context.commit('CLEAR_FILES_SEARCHED')
   },
-  async removeFilesFromTrashbin(context, files) {
-    await context.dispatch('sidebar/close')
+  removeFilesFromTrashbin(context, files) {
     context.commit('REMOVE_FILES', files)
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
