@@ -4,6 +4,7 @@ import { User } from '../user'
 export interface Resource {
   id: number | string
   fileId?: string
+  parentFolderId?: string
   storageId?: string
   name?: string
   path: string
