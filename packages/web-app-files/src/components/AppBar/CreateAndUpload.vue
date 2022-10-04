@@ -501,12 +501,11 @@ export default defineComponent({
         this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
-          const fileId = resource.fileId
-
           this.$_fileActions_openEditor(
             this.newFileAction,
             this.space.getDriveAliasAndItem(resource),
-            fileId,
+            resource.webDavPath,
+            resource.fileId,
             EDITOR_MODE_CREATE
           )
           this.hideModal()
