@@ -84,7 +84,16 @@ export default defineComponent({
       return this.searchResult.data
     },
     matchingSpace() {
-      return this.spaces.find((space) => space.id === this.resource.storageId)
+      const space = this.spaces.find((space) => space.id === this.resource.storageId)
+      if (space) {
+        return space
+      }
+
+      return buildShareSpaceResource({
+        shareId: this.resource.shareId,
+        shareName: this.resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     },
     defaultParentFolderName() {
       if (this.resource.shareId) {
@@ -160,7 +169,7 @@ export default defineComponent({
         })
       }
 
-      if (!this.matchingSpace) {
+      if (!this.matchinmatchinmatchinmatchingSpace) {
         return {}
       }
 
