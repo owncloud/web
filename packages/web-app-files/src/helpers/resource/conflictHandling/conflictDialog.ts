@@ -9,7 +9,7 @@ interface FileConflict {
 }
 
 export class ConflictDialog {
-  /* eslint-disable */
+  /* eslint-disable no-useless-constructor */
   constructor(
     protected createModal: (modal: object) => void,
     protected hideModal: () => void,
@@ -65,7 +65,9 @@ export class ConflictDialog {
       count += 1
 
       // User checked 'do for all x conflicts'
-      if (!result.doForAllConflicts) continue
+      if (!result.doForAllConflicts) {
+        continue
+      }
       doForAllConflicts = true
       doForAllConflictsStrategy = result.strategy
     }
@@ -129,14 +131,10 @@ export class ConflictDialog {
         icon: 'alarm-warning',
         title: this.$gettext('Copy here?'),
         message: this.$gettext(
-          'Moving files from one space to another is not possible. Do you want to copy instead?'
+          'Moving files from one space to another is not possible. Do you want to copy instead? Note: Links and shares of the original file are not copied.'
         ),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Copy here'),
-        contextualHelperLabel: this.$gettext(
-          'Note: Links and shares of the original file are not copied.'
-        ),
-        contextualHelperData: { title: 'test' },
         onCancel: () => {
           this.hideModal()
           resolve(false)

@@ -140,6 +140,5 @@ describe('resourcesTransfer', () => {
     )
 
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
-    console.log('test')
   })
 })

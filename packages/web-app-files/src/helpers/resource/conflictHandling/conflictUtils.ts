@@ -11,7 +11,9 @@ export const resolveFileNameDuplicate = (name, extension, existingFiles, iterati
     potentialName = `${nameWithoutExtension} (${iteration}).${extension}`
   }
   const hasConflict = existingFiles.some((f) => f.name === potentialName)
-  if (!hasConflict) return potentialName
+  if (!hasConflict) {
+    return potentialName
+  }
   return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
 }
 

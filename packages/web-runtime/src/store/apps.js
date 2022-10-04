@@ -70,7 +70,9 @@ const mutations = {
       state.customFilesListIndicators = indicators
     }
 
-    if (!appInfo.id) return
+    if (!appInfo.id) {
+      return
+    }
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
     const app = {

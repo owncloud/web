@@ -50,7 +50,9 @@ export default {
   watch: {
     'space.spaceQuota': {
       handler: function (val) {
-        if (!val) return
+        if (!val) {
+          return
+        }
         this.setOptions()
       },
       deep: true

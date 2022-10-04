@@ -45,7 +45,9 @@ module.exports = {
               visibleElementID = ELEMENT
             }
           })
-          if (visibleElementID !== null) break
+          if (visibleElementID !== null) {
+            break
+          }
         }
       })
       return visibleElementID
@@ -125,7 +127,9 @@ module.exports = {
           : receiver
       }
 
-      if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
+      if (remoteShare) {
+        sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
+      }
       const autocompleteUser = client.globals.ocis ? receiver : sharee
 
       // We need waitForElementPresent here.

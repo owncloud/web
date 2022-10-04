@@ -3,11 +3,11 @@ import { join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ClientService } from 'web-pkg/src/services'
 import {
+  ConflictDialog,
+  ResolveStrategy,
   isResourceBeeingMovedToSameLocation,
   resolveFileNameDuplicate
-} from '../conflictHandling/conflictUtils'
-import { ConflictDialog } from '../conflictHandling/conflictDialog'
-import { ResolveStrategy } from '../conflictHandling'
+} from '../conflictHandling'
 import { TransferType } from '.'
 
 export class ResourceTransfer extends ConflictDialog {
@@ -97,7 +97,9 @@ export class ResourceTransfer extends ConflictDialog {
     }
     if (this.sourceSpace.id !== this.targetSpace.id && transferType === TransferType.MOVE) {
       const doCopyInsteadOfMove = await this.resolveDoCopyInsteadOfMoveForSpaces()
-      if (!doCopyInsteadOfMove) return []
+      if (!doCopyInsteadOfMove) {
+        return []
+      }
       transferType = TransferType.COPY
     }
 
@@ -148,8 +150,9 @@ export class ResourceTransfer extends ConflictDialog {
             this.targetFolder
           ) &&
           overwriteTarget
-        )
+        ) {
           continue
+        }
         if (transferType === TransferType.COPY) {
           await this.clientService.webdav.copyFiles(
             this.sourceSpace,

@@ -48,7 +48,9 @@ export class ResourcesUpload extends ConflictDialog {
         const rootFolder = relativeFilePath.replace(/^\/+/, '').split('/')[0]
         const exists = this.currentFiles.find((f) => f.name === rootFolder)
         if (exists) {
-          if (conflicts.some((conflict) => conflict.name === rootFolder)) continue
+          if (conflicts.some((conflict) => conflict.name === rootFolder)) {
+            continue
+          }
           conflicts.push({
             name: rootFolder,
             type: 'folder'
@@ -175,7 +177,9 @@ export class ResourcesUpload extends ConflictDialog {
         )
       }
     }
-    if (files.length === 0) return
+    if (files.length === 0) {
+      return
+    }
     this.handleUppyFileUpload(this.space, this.currentFolder, files)
   }
 

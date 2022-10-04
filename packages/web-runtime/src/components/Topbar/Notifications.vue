@@ -98,7 +98,9 @@ export default {
 
               if (path) {
                 const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
-                if (itemPath === currentPath) bus.publish('app.files.list.load')
+                if (itemPath === currentPath) {
+                  bus.publish('app.files.list.load')
+                }
               }
             })
           })

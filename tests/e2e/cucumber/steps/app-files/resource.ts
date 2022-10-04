@@ -225,8 +225,11 @@ Then(
     const actualList = await resourceObject.getDisplayedResources()
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
-      if (actionType === 'should') expect(found).toBe(true)
-      else expect(found).toBe(false)
+      if (actionType === 'should') {
+        expect(found).toBe(true)
+      } else {
+        expect(found).toBe(false)
+      }
     }
   }
 )

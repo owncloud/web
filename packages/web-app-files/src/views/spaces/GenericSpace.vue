@@ -303,8 +303,12 @@ export default defineComponent({
       const selected = [...this.selectedResources]
       const targetFolder = this.paginatedResources.find((e) => e.id === fileIdTarget)
       const isTargetSelected = selected.some((e) => e.id === fileIdTarget)
-      if (isTargetSelected) return
-      if (targetFolder.type !== 'folder') return
+      if (isTargetSelected) {
+        return
+      }
+      if (targetFolder.type !== 'folder') {
+        return
+      }
       const copyMove = new ResourceTransfer(
         this.space,
         selected,
