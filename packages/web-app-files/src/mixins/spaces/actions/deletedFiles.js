@@ -1,4 +1,5 @@
 import { createLocationTrash } from '../../../router'
+import { createFileRouteOptions } from '../../../router/utils'
 
 export default {
   computed: {
@@ -23,11 +24,10 @@ export default {
   methods: {
     $_deletedFiles_trigger({ resources }) {
       this.$router.push(
-        createLocationTrash('files-trash-generic', {
-          params: {
-            driveAliasAndItem: resources[0].driveAlias
-          }
-        })
+        createLocationTrash(
+          'files-trash-generic',
+          createFileRouteOptions(this.space, { fileId: this.space.id })
+        )
       )
     }
   }
