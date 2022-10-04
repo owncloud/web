@@ -5,6 +5,7 @@ import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { SpaceResource } from 'web-client/src/helpers'
+import { createFileRouteOptions } from '../../router/utils'
 
 export default {
   computed: {
@@ -192,12 +193,12 @@ export default {
         this.hideModal()
 
         if (isSameResource(resource, this.currentFolder)) {
-          return this.$router.push({
-            params: {
-              driveAliasAndItem: this.space.getDriveAliasAndItem({ path: newPath } as Resource)
-            },
-            query: this.$route.query
-          })
+          return this.$router.push(
+            createFileRouteOptions(this.space, {
+              path: newPath,
+              fileId: resource.fileId
+            })
+          )
         }
 
         this.RENAME_FILE({ space, resource, newPath })
