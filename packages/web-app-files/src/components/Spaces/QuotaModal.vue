@@ -65,6 +65,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     changeSelectedQuotaOption(option) {
@@ -76,6 +77,11 @@ export default defineComponent({
         .then(({ data }) => {
           this.cancel()
           this.UPDATE_SPACE_FIELD({
+            id: this.space.id,
+            field: 'spaceQuota',
+            value: data.quota
+          })
+          this.UPDATE_RESOURCE_FIELD({
             id: this.space.id,
             field: 'spaceQuota',
             value: data.quota
