@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
@@ -37,6 +38,14 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
+
+* Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
+
+   We've fixed a bug where the translation for the "Copy Quicklink"-notification was not
+   working.
+
+   https://github.com/owncloud/web/issues/7720
+   https://github.com/owncloud/web/pull/7731
 
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 
