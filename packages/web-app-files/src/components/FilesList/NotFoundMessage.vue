@@ -53,8 +53,8 @@ import {
 } from '../../router'
 import { useRouter, useStore } from 'web-pkg/src/composables'
 import { defineComponent, PropType } from '@vue/composition-api'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
+import { createFileRouteOptions } from '../../router/utils'
 
 export default defineComponent({
   name: 'NotFoundMessage',
@@ -73,20 +73,14 @@ export default defineComponent({
       showPublicLinkButton: isLocationPublicActive(router, 'files-public-link'),
       showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
-      homeRoute: createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: props.space?.getDriveAliasAndItem({
-            path: store.getters.homeFolder
-          } as Resource)
-        }
-      }),
-      publicLinkRoute: createLocationPublic('files-public-link', {
-        params: {
-          driveAliasAndItem: props.space?.getDriveAliasAndItem({
-            path: ''
-          } as Resource)
-        }
-      }),
+      homeRoute: createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(props.space, { fileId: props.space?.fileId })
+      ),
+      publicLinkRoute: createLocationPublic(
+        'files-public-link',
+        createFileRouteOptions(props.space, {})
+      ),
       spacesRoute: createLocationSpaces('files-spaces-projects')
     }
   }
