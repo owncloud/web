@@ -9,7 +9,9 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
+* Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
+* Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
@@ -36,6 +38,14 @@ Details
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
 
+* Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
+
+   We've disabled copy/move if the file is moved/copied in the exact same location as before and
+   the user selects overwrite. Previously this caused an network error.
+
+   https://github.com/owncloud/web/issues/6892
+   https://github.com/owncloud/web/pull/7652
+
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 
    * Fixed "Keep both" and "Skip" options in Firefox * Fixed "Keep both" and "Skip" options when
@@ -45,6 +55,13 @@ Details
 
    https://github.com/owncloud/web/issues/7680
    https://github.com/owncloud/web/pull/7724
+
+* Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
+
+   We've inhibited moving files between spaces and will offer the user to copy instead.
+
+   https://github.com/owncloud/web/issues/6892
+   https://github.com/owncloud/web/pull/7652
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
