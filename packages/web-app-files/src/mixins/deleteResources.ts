@@ -185,20 +185,15 @@ export default {
           }
         }
 
-        let parentFolderPath
-        let parentFolderId
         if (
           this.resourcesToDelete.length &&
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
-          const resourcePath = this.resourcesToDelete[0].path
-          parentFolderPath = dirname(resourcePath)
-          parentFolderId = this.resourcesToDelete[0].parentFolderId
-        }
-
-        if (parentFolderPath !== undefined) {
-          this.$router.push(
-            createFileRouteOptions(this.space, { path: parentFolderPath, fileId: parentFolderId })
+          return this.$router.push(
+            createFileRouteOptions(this.space, {
+              path: dirname(this.resourcesToDelete[0].path),
+              fileId: this.resourcesToDelete[0].parentFolderId
+            })
           )
         }
       })
