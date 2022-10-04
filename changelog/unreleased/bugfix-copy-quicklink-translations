@@ -1,0 +1,6 @@
+Bugfix: "Copy Quicklink"-translations
+
+We've fixed a bug where the translation for the "Copy Quicklink"-notification was not working.
+
+https://github.com/owncloud/web/pull/7731
+https://github.com/owncloud/web/issues/7720
