@@ -94,7 +94,7 @@ export default {
                 editor,
                 options.space.getDriveAliasAndItem(options.resources[0]),
                 options.resources[0].webDavPath,
-                options.resources[0].id,
+                options.resources[0].fileId,
                 EDITOR_MODE_EDIT,
                 options.space.shareId
               ),
