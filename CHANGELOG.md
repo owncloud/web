@@ -14,6 +14,7 @@ Summary
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
+* Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
@@ -78,6 +79,14 @@ Details
 
    https://github.com/owncloud/web/issues/7618
    https://github.com/owncloud/web/pull/7640
+
+* Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
+
+   We've removed the "close sidebar"-calls when deleting a resource as the mutations are not
+   available as well as not needed anymore.
+
+   https://github.com/owncloud/web/issues/7699
+   https://github.com/owncloud/web/pull/7733
 
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 
