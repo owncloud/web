@@ -75,9 +75,11 @@
 
 <script>
 import { providerStore } from '../service'
+
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'SearchBar',
@@ -95,7 +97,6 @@ export default {
       searchResults: []
     }
   },
-
   computed: {
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
@@ -154,9 +155,16 @@ export default {
       immediate: true
     }
   },
-
   created() {
-    this.debouncedSearch = debounce(this.search, 100)
+    this.debouncedSearch = debounce(this.search, 200)
+
+    const hideOptionsDropEvent = bus.subscribe('app.search.options-drop.hide', () => {
+      this.$refs.optionsDrop.hide()
+    })
+
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
+    })
   },
 
   methods: {
