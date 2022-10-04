@@ -178,7 +178,7 @@ export class ResourcesUpload extends ConflictDialog {
       }
     }
     if (files.length === 0) {
-      return
+      return this.$uppyService.clearInputs()
     }
     this.handleUppyFileUpload(this.space, this.currentFolder, files)
   }
