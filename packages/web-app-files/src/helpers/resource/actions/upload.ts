@@ -20,6 +20,7 @@ export class ResourcesUpload extends ConflictDialog {
     private $uppyService: any,
     private space: SpaceResource,
     private currentFolder: string,
+    private currentFolderId: string | number,
     private spaces: SpaceResource[],
     private hasSpaces: boolean,
     private createDirectoryTree: any,

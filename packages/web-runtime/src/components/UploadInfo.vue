@@ -146,6 +146,8 @@ import { mapGetters } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
 import { UppyResource } from '../composables/upload'
 import { urlJoin } from 'web-pkg/src/utils'
+import { isUndefined } from 'lodash-es'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   setup() {
@@ -449,17 +451,20 @@ export default defineComponent({
       return file.targetRoute
     },
     buildRouteFromUppyResource(resource) {
-      if (!resource.meta.routeName) {
+      const { routeName, routeShareId, routeDriveAliasAndItem, fileId } = resource.meta
+      if (!routeName) {
         return null
       }
 
       return {
-        name: resource.meta.routeName,
+        name: routeName,
         params: {
-          driveAliasAndItem: resource.meta.routeDriveAliasAndItem
+          driveAliasAndItem: routeDriveAliasAndItem
         },
         query: {
-          ...(resource.meta.routeShareId && { shareId: resource.meta.routeShareId })
+          ...(routeShareId && { shareId: routeShareId }),
+          ...(configurationManager.options.routing.idBased &&
+            !isUndefined(fileId) && { fileId: `${fileId}` })
         }
       }
     },

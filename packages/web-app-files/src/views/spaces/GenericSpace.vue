@@ -14,6 +14,7 @@
           <create-and-upload
             :space="space"
             :item="item"
+            :item-id="itemId"
             :limited-screen-space="limitedScreenSpace"
           />
         </template>
@@ -158,6 +159,11 @@ export default defineComponent({
     },
     item: {
       type: String,
+      required: false,
+      default: null
+    },
+    itemId: {
+      type: [String, Number],
       required: false,
       default: null
     }

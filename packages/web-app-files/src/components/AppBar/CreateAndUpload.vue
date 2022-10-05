@@ -183,6 +183,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
       required: false
+    },
+    itemId: {
+      type: [String, Number],
+      required: false,
+      default: null
     }
   },
   setup(props) {
@@ -212,7 +217,8 @@ export default defineComponent({
       }),
       ...useUploadHelpers({
         space: computed(() => props.space),
-        currentFolder: computed(() => props.item)
+        currentFolder: computed(() => props.item),
+        currentFolderId: computed(() => props.itemId)
       }),
       ...useRequest(),
       ...useGraphClient(),
@@ -333,9 +339,10 @@ export default defineComponent({
           return
         }
 
+        const { spaceId, currentFolder, currentFolderId } = file.meta
         if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
-            const driveResponse = await this.graphClient.drives.getDrive(file.meta.spaceId)
+            const driveResponse = await this.graphClient.drives.getDrive(spaceId)
             this.UPDATE_SPACE_FIELD({
               id: driveResponse.data.id,
               field: 'spaceQuota',
@@ -347,8 +354,10 @@ export default defineComponent({
           }
         }
 
-        const fileIsInCurrentPath =
-          file.meta.spaceId === this.space.id && file.meta.currentFolder === this.item
+        const sameFolder = this.itemId
+          ? currentFolderId === this.itemId
+          : currentFolder === this.item
+        const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -614,7 +623,7 @@ export default defineComponent({
       return null
     },
 
-    async onFilesSelected(filesToUpload: File[]) {
+    onFilesSelected(filesToUpload: File[]) {
       const uploader = new ResourcesUpload(
         filesToUpload,
         this.files,
@@ -622,6 +631,7 @@ export default defineComponent({
         this.$uppyService,
         this.space,
         this.item,
+        this.itemId,
         this.spaces,
         this.hasSpaces,
         this.createDirectoryTree,

@@ -5,8 +5,8 @@
       :drive-alias-and-item="driveAliasAndItem"
       :append-home-folder="isSpaceRoute"
     />
-    <generic-trash v-else-if="isTrashRoute" :space="space" />
-    <generic-space v-else :space="space" :item="item" />
+    <generic-trash v-else-if="isTrashRoute" :space="space" :item-id="itemId" />
+    <generic-space v-else :space="space" :item="item" :item-id="itemId" />
   </div>
 </template>
 

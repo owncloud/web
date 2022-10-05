@@ -29,6 +29,8 @@ export interface UppyResource {
     driveAlias: string
     driveType: string
     currentFolder: string // current folder path during upload initiation
+    currentFolderId?: string | number
+    fileId?: string | number
     // upload data
     relativeFolder: string
     relativePath: string
@@ -171,13 +173,17 @@ const createDirectoryTree = ({
 
         uppyService.publish('addedForUpload', [uppyResource])
 
+        let folder
         try {
-          await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
+          folder = await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
         } catch (error) {
           console.error(error)
         }
 
-        uppyService.publish('uploadSuccess', uppyResource)
+        uppyService.publish('uploadSuccess', {
+          ...uppyResource,
+          meta: { ...uppyResource.meta, fileId: folder?.fileId }
+        })
 
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)
