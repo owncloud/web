@@ -19,6 +19,7 @@ Summary
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
+* Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
@@ -121,6 +122,13 @@ Details
 
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7504
+
+* Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
+
+   We've fixed the display of the search bar on small screens.
+
+   https://github.com/owncloud/web/issues/7617
+   https://github.com/owncloud/web/pull/7675
 
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 
