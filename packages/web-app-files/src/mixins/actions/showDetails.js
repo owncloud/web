@@ -1,10 +1,15 @@
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default {
+  setup() {
+    return { ...useGraphClient() }
+  },
   mixins: [isFilesAppActive],
   computed: {
     $_showDetails_items() {
@@ -35,8 +40,13 @@ export default {
   },
   methods: {
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
+    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
 
     $_showDetails_trigger({ resources }) {
+      if (resources.length === 1 && isProjectSpaceResource(resources[0])) {
+        this.loadSpaceMembers({ graphClient: this.graphClient, space: resources[0] })
+      }
+
       this.SET_FILE_SELECTION(resources)
       bus.publish(SideBarEventTopics.open)
     }
