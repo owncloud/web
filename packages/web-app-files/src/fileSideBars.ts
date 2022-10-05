@@ -57,24 +57,24 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ multipleSelection, rootFolder }) => ({
+  ({ multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'details-multiple-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetailsMultiple,
     default: () => true,
     get enabled() {
-      return multipleSelection && !rootFolder
+      return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
     }
   }),
-  ({ highlightedFile }) => ({
+  ({ multipleSelection, highlightedFile }) => ({
     app: 'details-space-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
     default: () => true,
     get enabled() {
-      return highlightedFile?.type === 'space'
+      return highlightedFile?.type === 'space' && !multipleSelection
     }
   }),
   ({ router, multipleSelection, rootFolder }) => ({
@@ -87,12 +87,15 @@ const panelGenerators: (({
       return !multipleSelection && !rootFolder
     }
   }),
-  ({ highlightedFile, user }) => ({
+  ({ multipleSelection, highlightedFile, user }) => ({
     app: 'space-actions-item',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: SpaceActions,
     get enabled() {
+      if (multipleSelection) {
+        return false
+      }
       if (highlightedFile?.type !== 'space') {
         return false
       }
@@ -134,7 +137,7 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ highlightedFile, capabilities }) => ({
+  ({ multipleSelection, highlightedFile, capabilities }) => ({
     app: 'space-share-item',
     icon: 'group',
     title: $gettext('Members'),
@@ -149,7 +152,7 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      return highlightedFile?.type === 'space'
+      return highlightedFile?.type === 'space' && !multipleSelection
     }
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({

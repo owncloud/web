@@ -16,6 +16,10 @@
           <th scope="col" class="oc-pr-s" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
+        <tr data-testid="spacesCount">
+          <th scope="col" class="oc-pr-s" v-text="spacesText" />
+          <td v-text="spacesCount" />
+        </tr>
         <tr data-testid="size">
           <th scope="col" class="oc-pr-s" v-text="sizeText" />
           <td v-text="sizeValue" />
@@ -67,6 +71,12 @@ export default defineComponent({
     },
     foldersText() {
       return this.$gettext('Folders')
+    },
+    spacesCount() {
+      return this.selectedFiles.filter((i) => i.type === 'space').length
+    },
+    spacesText() {
+      return this.$gettext('Spaces')
     },
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected files')
