@@ -79,7 +79,7 @@ export class ResourcesUpload extends ConflictDialog {
 
   async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
     this.$uppyService.publish('uploadStarted')
-    await this.createDirectoryTree(space, currentFolder, files)
+    await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
     this.$uppyService.publish('addedForUpload', files)
     this.$uppyService.uploadFiles(files)
   }

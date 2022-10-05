@@ -49,7 +49,12 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(space: SpaceResource, currentPath: string, files: UppyResource[]): void
+  createDirectoryTree(
+    space: SpaceResource,
+    currentPath: string,
+    files: UppyResource[],
+    currentFolderId?: string | number
+  ): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -124,7 +129,12 @@ const createDirectoryTree = ({
   clientService: ClientService
   uppyService: UppyService
 }) => {
-  return async (space: SpaceResource, currentFolder: string, files: UppyResource[]) => {
+  return async (
+    space: SpaceResource,
+    currentFolder: string,
+    files: UppyResource[],
+    currentFolderId?: string | number
+  ) => {
     const { webdav } = clientService
     const createdFolders = []
     for (const file of files) {
@@ -161,6 +171,7 @@ const createDirectoryTree = ({
             driveAlias: space.driveAlias,
             driveType: space.driveType,
             currentFolder,
+            currentFolderId,
             // upload data
             relativeFolder: createdSubFolders,
             uploadId,

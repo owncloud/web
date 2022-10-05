@@ -443,28 +443,38 @@ export default defineComponent({
         ...file.targetRoute,
         params: {
           ...file.targetRoute.params,
-          driveAliasAndItem: urlJoin(file.targetRoute.params.driveAliasAndItem, file.name)
+          driveAliasAndItem: urlJoin(file.targetRoute.params.driveAliasAndItem, file.name, {
+            leadingSlash: false
+          })
+        },
+        query: {
+          ...file.targetRoute.query,
+          ...(configurationManager.options.routing.idBased &&
+            !isUndefined(file.meta.fileId) && { fileId: file.meta.fileId })
         }
       }
     },
     parentFolderLink(file: any) {
-      return file.targetRoute
+      return {
+        ...file.targetRoute,
+        query: {
+          ...file.targetRoute.query,
+          ...(configurationManager.options.routing.idBased &&
+            !isUndefined(file.meta.currentFolderId) && { fileId: file.meta.currentFolderId })
+        }
+      }
     },
     buildRouteFromUppyResource(resource) {
-      const { routeName, routeShareId, routeDriveAliasAndItem, fileId } = resource.meta
-      if (!routeName) {
+      if (!resource.meta.routeName) {
         return null
       }
-
       return {
-        name: routeName,
+        name: resource.meta.routeName,
         params: {
-          driveAliasAndItem: routeDriveAliasAndItem
+          driveAliasAndItem: resource.meta.routeDriveAliasAndItem
         },
         query: {
-          ...(routeShareId && { shareId: routeShareId }),
-          ...(configurationManager.options.routing.idBased &&
-            !isUndefined(fileId) && { fileId: `${fileId}` })
+          ...(resource.meta.routeShareId && { shareId: resource.meta.routeShareId })
         }
       }
     },
