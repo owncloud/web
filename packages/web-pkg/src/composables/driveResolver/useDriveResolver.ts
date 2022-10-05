@@ -106,6 +106,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   )
   return {
     space,
-    item
+    item,
+    itemId: fileId
   }
 }
