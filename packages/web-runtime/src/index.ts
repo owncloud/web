@@ -7,8 +7,8 @@ import {
   Vue
 } from './defaults'
 
-import {router} from './router'
-import {configurationManager} from 'web-pkg/src/configuration'
+import { router } from './router'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 import {
   announceConfiguration,
@@ -38,7 +38,7 @@ import {
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
-  await announceStore({vue: Vue, store, runtimeConfiguration})
+  await announceStore({ vue: Vue, store, runtimeConfiguration })
   await initializeApplications({
     runtimeConfiguration,
     store,
@@ -46,15 +46,15 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
     router,
     translations
   })
-  announceClientService({vue: Vue, runtimeConfiguration})
-  announceUppyService({vue: Vue})
-  announcePermissionManager({vue: Vue, store})
+  announceClientService({ vue: Vue, runtimeConfiguration })
+  announceUppyService({ vue: Vue })
+  announcePermissionManager({ vue: Vue, store })
   await announceClient(runtimeConfiguration)
-  await announceAuthService({vue: Vue, configurationManager, store, router})
-  announceTranslations({vue: Vue, supportedLanguages, translations})
-  await announceTheme({store, vue: Vue, designSystem, runtimeConfiguration})
-  announceCustomizations({runtimeConfiguration})
-  announceDefaults({store, router})
+  await announceAuthService({ vue: Vue, configurationManager, store, router })
+  announceTranslations({ vue: Vue, supportedLanguages, translations })
+  await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  announceCustomizations({ runtimeConfiguration })
+  announceDefaults({ store, router })
 }
 
 export const renderSuccess = (): void => {
@@ -78,8 +78,8 @@ export const renderSuccess = (): void => {
       if (!newValue || newValue === oldValue) {
         return
       }
-      announceVersions({store})
-      await announceApplicationsReady({applications})
+      announceVersions({ store })
+      await announceApplicationsReady({ applications })
     },
     {
       immediate: true
@@ -105,8 +105,9 @@ export const renderSuccess = (): void => {
           store.getters['runtime/auth/accessToken']
         )
 
-        store.dispatch('runtime/spaces/loadSpaces', {graphClient})
-        store.dispatch('runtime/spaces/loadSpaceQuotas', {httpAuthenticatedClient})
+        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
+        return
       }
 
       // Spaces feature not available. Create a virtual personal space
@@ -139,7 +140,7 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        ...(publicLinkPassword && {publicLinkPassword}),
+        ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })
       store.commit('runtime/spaces/ADD_SPACES', [space])
@@ -169,9 +170,9 @@ export const renderSuccess = (): void => {
 }
 
 export const renderFailure = async (err: Error): Promise<void> => {
-  announceVersions({store})
-  await announceTranslations({vue: Vue, supportedLanguages, translations})
-  await announceTheme({store, vue: Vue, designSystem})
+  announceVersions({ store })
+  await announceTranslations({ vue: Vue, supportedLanguages, translations })
+  await announceTheme({ store, vue: Vue, designSystem })
   console.error(err)
   new Vue({
     el: '#owncloud',
