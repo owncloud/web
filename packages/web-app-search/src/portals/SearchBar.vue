@@ -323,11 +323,18 @@ export default {
     onResize() {
       const searchBarEl = document.getElementById('files-global-search-bar')
       const optionDropVisible = !!document.querySelector('.tippy-box[data-state="visible"]')
+
       if (window.innerWidth > 639) {
         searchBarEl.style.visibility = 'visible'
         this.showCancelButton = false
-      } else if (!optionDropVisible) {
-        searchBarEl.style.visibility = 'hidden'
+      } else {
+        if (optionDropVisible) {
+          searchBarEl.style.visibility = 'visible'
+          this.showCancelButton = true
+        } else {
+          searchBarEl.style.visibility = 'hidden'
+          this.showCancelButton = false
+        }
       }
     }
   }
