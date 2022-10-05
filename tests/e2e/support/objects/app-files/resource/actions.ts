@@ -508,13 +508,18 @@ export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
   const { page, keyword } = args
-  await page.locator(globalSearchInput).fill(keyword)
+  await page.pause()
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+    page.locator(globalSearchInput).fill(keyword)
+  ])
   await expect(page.locator(globalSearchOptions)).toBeVisible()
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 }
 
 export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {
   const result = await page.locator(searchList).allInnerTexts()
+  console.log(result)
   // the result has values like `test\n.txt` so remove new line
   return result.map((result) => result.replace('\n', ''))
 }
