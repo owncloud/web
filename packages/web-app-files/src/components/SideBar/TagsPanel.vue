@@ -5,8 +5,8 @@
       <oc-select
         v-else
         ref="tagSelect"
-        class="oc-mb-s"
         v-model="editAssignedTags"
+        class="oc-mb-s"
         multiple
         :options="allTags"
         taggable

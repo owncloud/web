@@ -19,7 +19,7 @@ const getters = {
   spaceMembers: (state) => state.spaceMembers,
   spaceQuotas: (state) => state.spaceQuotas,
   spacesInitialized: (state) => state.spacesInitialized,
-  spacesLoading: (state) => state.spacesLoading,
+  spacesLoading: (state) => state.spacesLoading
 }
 
 const mutations = {
