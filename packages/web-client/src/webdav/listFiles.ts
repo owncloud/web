@@ -18,7 +18,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
   return {
     async listFiles(
       space: SpaceResource,
-      { path }: { path?: string } = {},
+      { path, fileId }: { path?: string; fileId?: string | number } = {},
       { depth = 1, davProperties }: ListFilesOptions = {}
     ): Promise<Resource[]> {
       let webDavResources: any[]
@@ -42,12 +42,20 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         return webDavResources.map(buildResource)
       }
 
-      webDavResources = await sdk.files.list(
-        urlJoin(space.webDavPath, path),
-        `${depth}`,
-        davProperties || DavProperties.Default
-      )
-      return webDavResources.map(buildResource)
+      try {
+        webDavResources = await sdk.files.list(
+          urlJoin(space.webDavPath, path),
+          `${depth}`,
+          davProperties || DavProperties.Default
+        )
+        return webDavResources.map(buildResource)
+      } catch (e) {
+        if (e.statusCode === 404 && fileId) {
+          const correctPath = await sdk.files.getPathForFileId(fileId)
+          return this.listFiles(space, { path: correctPath }, { depth, davProperties })
+        }
+        throw e
+      }
     }
   }
 }

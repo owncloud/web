@@ -286,9 +286,12 @@ export default defineComponent({
 
   mounted() {
     this.performLoaderTask(false)
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
-      this.performLoaderTask(true, path)
-    })
+    const loadResourcesEventToken = bus.subscribe(
+      'app.files.list.load',
+      (path?: string, fileId?: string | number) => {
+        this.performLoaderTask(true, path, fileId)
+      }
+    )
     this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
   },
 
@@ -305,8 +308,8 @@ export default defineComponent({
       'REMOVE_FILE_SELECTION'
     ]),
 
-    async performLoaderTask(sameRoute: boolean, path?: string) {
-      await this.loadResourcesTask.perform(this.space, path || this.item)
+    async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
+      await this.loadResourcesTask.perform(this.space, path || this.item, fileId || this.itemId)
       this.scrollToResourceFromRoute()
       this.refreshFileListHeaderPosition()
       this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
