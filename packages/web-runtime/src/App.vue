@@ -36,7 +36,7 @@
       @beforeDestroy="focusModal"
     >
       <template v-if="modal.customContent" #content>
-        <p v-html="modal.customContent"></p>
+        <div v-html="modal.customContent"></div>
       </template>
     </oc-modal>
   </div>
