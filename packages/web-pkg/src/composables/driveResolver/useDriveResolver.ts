@@ -19,11 +19,16 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const store = options.store || useStore()
   const { areSpacesLoading } = useSpacesLoading({ store })
   const shareId = useRouteQuery('shareId')
-  const fileId = useRouteQuery('fileId')
+  const fileIdQueryItem = useRouteQuery('fileId')
+  const fileId = computed(() => {
+    return queryItemAsString(unref(fileIdQueryItem))
+  })
+
   const { graphClient } = useGraphClient({ store })
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
+
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     ([driveAliasAndItem]) => {
@@ -60,7 +65,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       } else {
         if (unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
-            return queryItemAsString(unref(fileId)).startsWith(`${s.id}`)
+            return unref(fileId).startsWith(`${s.id}`)
           })
         } else {
           matchingSpace = unref(spaces).find((s) => {
