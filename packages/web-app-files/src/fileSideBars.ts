@@ -143,14 +143,15 @@ const panelGenerators: (({
     component: TagsPanel,
     componentAttrs: {},
     get enabled() {
-      if (!capabilities?.files?.tags || multipleSelection || rootFolder) return false
-      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags())
+      if (!capabilities?.files?.tags || multipleSelection || rootFolder) {
         return false
-      return !(
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
-      )
+      }
+
+      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags()) {
+        return false
+      }
+
+      return !isLocationTrashActive(router, 'files-trash-generic')
     }
   }),
   ({ highlightedFile, capabilities }) => ({
