@@ -508,7 +508,10 @@ export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
   const { page, keyword } = args
-  await page.locator(globalSearchInput).fill(keyword)
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+    page.locator(globalSearchInput).fill(keyword)
+  ])
   await expect(page.locator(globalSearchOptions)).toBeVisible()
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 }

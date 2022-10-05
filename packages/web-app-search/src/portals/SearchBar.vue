@@ -23,7 +23,7 @@
     >
       <oc-list class="oc-list-divider">
         <li
-          v-if="$asyncComputed.searchResults.updating"
+          v-if="loading"
           class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
         >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
@@ -75,16 +75,14 @@
 
 <script>
 import { providerStore } from '../service'
-import truncate from 'lodash-es/truncate'
+
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
+import debounce from 'lodash-es/debounce'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'SearchBar',
-
-  filters: {
-    truncate
-  },
 
   data() {
     return {
@@ -93,10 +91,12 @@ export default {
       optionsVisible: false,
       markInstance: null,
       activePreviewIndex: null,
-      providerStore
+      debouncedSearch: undefined,
+      providerStore,
+      loading: false,
+      searchResults: []
     }
   },
-
   computed: {
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
@@ -119,6 +119,9 @@ export default {
   },
 
   watch: {
+    term() {
+      this.debouncedSearch(this)
+    },
     searchResults() {
       this.activePreviewIndex = null
 
@@ -152,32 +155,38 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.debouncedSearch = debounce(this.search, 200)
 
-  asyncComputed: {
-    searchResults: {
-      async get() {
-        if (!this.term) {
-          return []
-        }
+    const hideOptionsDropEvent = bus.subscribe('app.search.options-drop.hide', () => {
+      this.$refs.optionsDrop.hide()
+    })
 
-        const searchResults = []
-
-        for (const availableProvider of this.availableProviders) {
-          if (availableProvider.previewSearch?.available) {
-            searchResults.push({
-              providerId: availableProvider.id,
-              result: await availableProvider.previewSearch.search(this.term)
-            })
-          }
-        }
-
-        return searchResults
-      },
-      watch: ['term']
-    }
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
+    })
   },
 
   methods: {
+    async search() {
+      this.searchResults = []
+      if (!this.term) {
+        return
+      }
+
+      this.loading = true
+
+      for (const availableProvider of this.availableProviders) {
+        if (availableProvider.previewSearch?.available) {
+          this.searchResults.push({
+            providerId: availableProvider.id,
+            result: await availableProvider.previewSearch.search(this.term)
+          })
+        }
+      }
+
+      this.loading = false
+    },
     onClear() {
       this.term = ''
       this.$refs.optionsDrop.hide()
