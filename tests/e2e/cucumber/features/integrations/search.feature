@@ -84,7 +84,7 @@ Feature: Search
       | child     |
       | child-one |
     When "Alice" opens folder "child-one"
-    And "Alice" searches "child" using the global search
+    And "Alice" searches "child-two" using the global search
     Then following resources should be displayed in the search list for user "Alice"
       | resource  |
       | child-two |
