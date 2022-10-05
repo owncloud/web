@@ -11,6 +11,7 @@ Summary
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
@@ -55,6 +56,14 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
+
+* Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
+
+   We've fixed a bug where the file name would not update reactively in the sidebar after changing
+   it.
+
+   https://github.com/owncloud/web/issues/7713
+   https://github.com/owncloud/web/pull/7734
 
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 
