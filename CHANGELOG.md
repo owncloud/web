@@ -11,6 +11,7 @@ Summary
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
@@ -56,6 +57,14 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
+
+* Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+
+   We've fixed a bug where existing quicklinks would disappear when performing the "Create
+   quicklink"-action.
+
+   https://github.com/owncloud/web/issues/7736
+   https://github.com/owncloud/web/pull/7740
 
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 
