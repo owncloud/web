@@ -27,7 +27,8 @@ const state = {
   onCheckboxValueChanged: emptyReturn,
   onConfirmSecondary: emptyReturn,
   contextualHelperLabel: '',
-  contextualHelperData: {}
+  contextualHelperData: {},
+  customContent: ''
 }
 
 const actions = {
@@ -75,6 +76,7 @@ const mutations = {
     state.onConfirmSecondary = modal.onConfirmSecondary || emptyReturn
     state.contextualHelperLabel = modal.contextualHelperLabel
     state.contextualHelperData = modal.contextualHelperData
+    state.customContent = modal.customContent || ''
   },
 
   HIDE_MODAL(state) {

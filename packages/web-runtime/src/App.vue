@@ -34,7 +34,11 @@
       @confirm-secondary="modal.onConfirmSecondary"
       @mounted="focusModal"
       @beforeDestroy="focusModal"
-    />
+    >
+      <template v-if="modal.customContent" #content>
+        <div v-html="modal.customContent"></div>
+      </template>
+    </oc-modal>
   </div>
 </template>
 <script lang="ts">

@@ -130,9 +130,8 @@ export class ConflictDialog {
         variation: 'danger',
         icon: 'alarm-warning',
         title: this.$gettext('Copy here?'),
-        message: this.$gettext(
-          'Moving files from one space to another is not possible. Do you want to copy instead? Note: Links and shares of the original file are not copied.'
-        ),
+        customContent:
+          '<p>Moving files from one space to another is not possible. Do you want to copy instead?</p><p>Note: Links and shares of the original file are not copied.</p>',
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Copy here'),
         onCancel: () => {
