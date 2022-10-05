@@ -2,31 +2,31 @@ import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type shareTypes = 'files-public-files' | 'files-public-drop'
+type shareTypes = 'files-public-link' | 'files-public-upload'
 
 export const createLocationPublic = (name: shareTypes, location = {}): Location =>
   createLocation(name, location)
 
-export const locationPublicFiles = createLocationPublic('files-public-files')
-export const locationPublicDrop = createLocationPublic('files-public-drop')
+export const locationPublicLink = createLocationPublic('files-public-link')
+export const locationPublicUpload = createLocationPublic('files-public-upload')
 
 export const isLocationPublicActive = isLocationActiveDirector<shareTypes>(
-  locationPublicFiles,
-  locationPublicDrop
+  locationPublicLink,
+  locationPublicUpload
 )
 
 export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   {
-    path: '/public',
+    path: '/link',
     component: components.App,
     meta: {
       auth: false
     },
     children: [
       {
-        name: locationPublicFiles.name,
-        path: 'show/:item*',
-        component: components.PublicFiles,
+        name: locationPublicLink.name,
+        path: ':driveAliasAndItem*',
+        component: components.Spaces.DriveResolver,
         meta: {
           auth: false,
           title: $gettext('Public files'),
@@ -36,9 +36,21 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
     ]
   },
   {
-    name: locationPublicDrop.name,
-    path: '/public/drop/:token?',
-    component: components.FilesDrop,
-    meta: { auth: false, title: $gettext('Public file upload') }
+    path: '/upload',
+    component: components.App,
+    meta: {
+      auth: false
+    },
+    children: [
+      {
+        name: locationPublicUpload.name,
+        path: ':token?',
+        component: components.FilesDrop,
+        meta: {
+          auth: false,
+          title: $gettext('Public file upload')
+        }
+      }
+    ]
   }
 ]

@@ -246,7 +246,7 @@ export default defineComponent({
     },
 
     sharedParentDir() {
-      return this.sharedParentRoute?.params?.item.split('/').pop()
+      return this.sharedParentRoute?.params?.driveAliasAndItem.split('/').pop()
     },
 
     editDropDownToggleId() {

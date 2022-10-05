@@ -108,7 +108,7 @@ describe('FileShares', () => {
     afterEach(() => {
       mockAxios.reset()
     })
-    it('loads space members if a space is given', async () => {
+    it('loads space members if a space is given', () => {
       mockAxios.request.mockImplementationOnce(() => {
         return Promise.resolve({
           data: { role: spaceRoleManager.name }
@@ -130,7 +130,8 @@ describe('FileShares', () => {
       const wrapper = getShallowMountedWrapper({
         user,
         spaces: [spaceMock],
-        spaceMembers: [{ id: 1 }]
+        spaceMembers: [{ id: 1 }],
+        currentUserIsMemberOfSpace: true
       })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
     })
@@ -308,12 +309,14 @@ function getMountedWrapper(data) {
 function getShallowMountedWrapper(data, loading = false) {
   reactivityComposables.useDebouncedRef.mockImplementationOnce(() => loading)
   routerComposables.useRouteParam.mockReturnValue(() => storageId)
+  const { spaces = [], currentUserIsMemberOfSpace } = data
 
   return shallowMount(FileShares, {
     localVue,
     setup: () => ({
       currentStorageId: storageId,
-      hasResharing: false
+      hasResharing: false,
+      currentUserIsMemberOfSpace
     }),
     provide: {
       incomingParentShare: {}
@@ -322,6 +325,9 @@ function getShallowMountedWrapper(data, loading = false) {
     stubs: {
       ...stubs,
       'oc-button': true
+    },
+    propsData: {
+      space: spaces.length ? spaces[0] : null
     },
     mocks: {
       $router: {

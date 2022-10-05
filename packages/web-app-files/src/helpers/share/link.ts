@@ -4,29 +4,26 @@ import { Store } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
 import copyToClipboard from 'copy-to-clipboard'
 
-const $gettext = (str) => {
-  return str
-}
-
 interface CreateQuicklink {
   store: Store<any>
   storageId?: any
   resource: any
   password?: string
+  $gettext: (string) => string
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
+  const { resource, store, password, $gettext } = args
   const params: { [key: string]: unknown } = {
     name: $gettext('Quicklink'),
     permissions: 1,
     quicklink: true
   }
 
-  if (args.password) {
-    params.password = args.password
+  if (password) {
+    params.password = password
   }
 
-  const { resource, store } = args
   const expirationDate = store.state.user.capabilities.files_sharing.public.expire_date
 
   if (expirationDate.enforced) {
@@ -51,7 +48,7 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
   copyToClipboard(link.url)
 
   await store.dispatch('showMessage', {
-    title: $gettext('Quicklink copied into your clipboard')
+    title: $gettext('The quicklink has been copied to your clipboard.')
   })
 
   return link

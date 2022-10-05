@@ -1,5 +1,7 @@
 <template>
-  <div class="oc-height-1-1 oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center">
+  <div
+    class="no-content-message oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center"
+  >
     <oc-icon :name="icon" type="div" size="xxlarge" :fill-type="iconFillType" />
     <div class="oc-text-muted oc-text-xlarge">
       <slot name="message" />
@@ -26,3 +28,8 @@ export default {
   }
 }
 </script>
+<style>
+.no-content-message {
+  height: 75vh;
+}
+</style>

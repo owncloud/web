@@ -157,54 +157,39 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject, ref } from '@vue/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import path from 'path'
-import { createLocationSpaces, isLocationSpacesActive, createLocationCommon } from '../../../router'
+import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import {
-  useAccessToken,
-  usePublicLinkContext,
-  useRouteParam,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../../composables/sideBar'
+import { Resource } from 'web-client'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   name: 'FileDetails',
-  inject: ['displayedItem'],
+  inject: {
+    displayedItem: { from: 'displayedItem' }
+  },
   setup() {
     const sharedParentDir = ref('')
-    const router = useRouter()
     const store = useStore()
-    const currentStorageId = useRouteParam('storageId')
-
-    const sharedParentRoute = computed(() => {
-      if (isLocationSpacesActive(router, 'files-spaces-project')) {
-        return createLocationSpaces('files-spaces-project', {
-          params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
-        })
-      }
-
-      return createLocationSpaces('files-spaces-personal', {
-        params: { storageId: unref(currentStorageId), item: unref(sharedParentDir) }
-      })
-    })
 
     return {
       sharedParentDir,
-      sharedParentRoute,
       isPublicLinkContext: usePublicLinkContext({ store }),
-      accessToken: useAccessToken({ store })
+      accessToken: useAccessToken({ store }),
+      space: inject<ComputedRef<Resource>>('displayedSpace')
     }
   },
 
@@ -220,11 +205,15 @@ export default defineComponent({
     timeout: null
   }),
   computed: {
+    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
     ...mapGetters(['user', 'configuration', 'capabilities']),
 
     file() {
       return this.displayedItem.value
+    },
+    matchingSpace() {
+      return this.space || this.spaces.find((space) => space.id === this.file.storageId)
     },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
@@ -270,6 +259,36 @@ export default defineComponent({
         this.file.path !== this.sharedParentDir &&
         this.sharedParentDir
       )
+    },
+    sharedParentRoute() {
+      if (this.file.shareId) {
+        if (this.file.path === '') {
+          return {}
+        }
+        const space = buildShareSpaceResource({
+          shareId: this.file.shareId,
+          shareName: path.basename(this.file.shareRoot),
+          serverUrl: configurationManager.serverUrl
+        })
+        return createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: space.getDriveAliasAndItem({ path: this.file.path } as Resource)
+          },
+          query: {
+            shareId: this.file.shareId
+          }
+        })
+      }
+      if (!this.matchingSpace) {
+        return {}
+      }
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({
+            path: this.sharedParentDir
+          } as Resource)
+        }
+      })
     },
     showShares() {
       if (this.isPublicLinkContext) {

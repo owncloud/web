@@ -131,21 +131,6 @@ Feature: deleting files and folders
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @issue-5017 @systemtags-app-required
-  Scenario: delete files from tags page
-    Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created a "normal" tag with name "lorem" in the server
-    And user "Alice" has added tag "lorem" to file "/lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    When the user browses to the tags page
-    And the user searches for tag "lorem" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    When the user deletes file "lorem.txt" using the webUI
-    Then as "Alice" file "lorem.txt" should not exist in the server
-    And file "lorem.txt" should not be listed on the webUI
-    When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-
 
   Scenario: delete a file on a public share
     Given user "Alice" has created folder "simple-folder" in the server

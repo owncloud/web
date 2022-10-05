@@ -1,5 +1,5 @@
 import orderBy from 'lodash-es/orderBy'
-import path from 'path'
+import path, { basename, join } from 'path'
 import { DateTime } from 'luxon'
 import { getIndicators } from './statusIndicators'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
@@ -16,20 +16,15 @@ import {
 } from 'web-client/src/helpers/share'
 import { extractExtensionFromFile, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
-import { Resource } from 'web-client'
 import { SHARE_JAIL_ID } from '../services/folder'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { urlJoin } from 'web-pkg/src/utils'
 
-export function renameResource(resource, newName, newPath) {
-  let resourcePath = '/' + newPath + newName
-  if (resourcePath.startsWith('/files') || resourcePath.startsWith('/space')) {
-    resourcePath = resourcePath.split('/').splice(3).join('/')
-  }
-
-  resource.name = newName
-  resource.path = '/' + resourcePath
-  resource.webDavPath = '/' + newPath + newName
+export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
+  resource.name = basename(newPath)
+  resource.path = newPath
+  resource.webDavPath = join(space.webDavPath, newPath)
   resource.extension = extractExtensionFromFile(resource)
-
   return resource
 }
 
@@ -121,6 +116,10 @@ export function buildResource(resource): Resource {
   }
 }
 
+export function buildWebDavPublicPath(publicLinkToken, path = '') {
+  return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
+}
+
 export function buildWebDavFilesPath(userId, path) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
@@ -130,7 +129,7 @@ export function buildWebDavFilesTrashPath(userId, path = '') {
 }
 
 export function buildWebDavSpacesTrashPath(storageId, path = '') {
-  return '/' + `/spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
+  return '/' + `spaces/trash-bin/${storageId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function attachIndicators(resource, sharesTree) {
@@ -158,9 +157,16 @@ export function aggregateResourceShares(
   }
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
-    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) =>
-      buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
-    )
+    return orderBy(shares, ['file_target', 'permissions'], ['asc', 'desc']).map((share) => {
+      const resource = buildSharedResource(
+        share,
+        incomingShares,
+        allowSharePermission,
+        hasShareJail
+      )
+      resource.shareId = share.id
+      return resource
+    })
   }
 
   const resources = addSharedWithToShares(shares)
@@ -471,7 +477,7 @@ export function buildDeletedResource(resource): Resource {
     ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
+    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
     indicators: [],
     canUpload: () => false,

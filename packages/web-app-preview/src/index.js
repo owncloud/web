@@ -10,7 +10,7 @@ const appId = 'preview'
 
 const routes = [
   {
-    path: '/:filePath*',
+    path: '/:driveAliasAndItem*',
     component: App,
     name: 'media',
     meta: {

@@ -1,0 +1,9 @@
+Change: Drive aliases in URLs
+
+We changed the URL format to not use storageIds in the URL path anymore to identify spaces, but instead use drive aliases of spaces in the URL path.
+
+BREAKING CHANGE for users: this breaks existing bookmarks - they won't resolve anymore.
+BREAKING CHANGE for developers: the appDefaults composables from web-pkg now work with drive aliases, concatenated with relative item paths, instead of webdav paths. If you use the appDefaults composables in your application it's likely that your code needs to be adapted.
+
+https://github.com/owncloud/web/issues/6648
+https://github.com/owncloud/web/pull/7430

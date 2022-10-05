@@ -7,7 +7,7 @@ jest.unmock('axios')
 const $client = new OwnCloud()
 
 jest.mock('../../../../src/helpers/resources', () => ({
-  buildSharedResource: jest.fn((share) => share)
+  aggregateResourceShares: jest.fn(([shares]) => [shares])
 }))
 
 describe('method triggerShareAction', () => {

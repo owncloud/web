@@ -52,8 +52,6 @@ Feature: Shares in share-with pages
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-others page
     Then file "lorem.txt" should be listed on the webUI
-  #    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
-  #    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
 
   Scenario: send share shows up on shared-with-others page

@@ -84,12 +84,16 @@ export default {
   },
   watch: {
     active(active) {
-      if (!active) return
+      if (!active) {
+        return
+      }
       this.animateHighlightPosition(this.index)
     }
   },
   mounted() {
-    if (!this.active) return
+    if (!this.active) {
+      return
+    }
     this.animateHighlightPosition(this.index)
   },
   methods: {

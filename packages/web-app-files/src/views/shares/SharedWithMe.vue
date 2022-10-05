@@ -56,7 +56,7 @@
         />
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="selectedShareSpace" />
   </div>
 </template>
 
@@ -72,6 +72,9 @@ import { computed, defineComponent, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
@@ -143,6 +146,26 @@ export default defineComponent({
       sortDirQueryName: 'declined-sort-dir'
     })
 
+    const store = useStore()
+    const hasShareJail = useCapabilityShareJailEnabled()
+    const selectedShareSpace = computed(() => {
+      if (unref(selectedResources).length !== 1) {
+        return null
+      }
+      const resource = unref(selectedResources)[0]
+      if (!unref(hasShareJail)) {
+        return store.getters['runtime/spaces/spaces'].find(
+          (space) => space.driveType === 'personal'
+        )
+      }
+
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
+    })
+
     return {
       // defaults
       loadResourcesTask,
@@ -152,6 +175,7 @@ export default defineComponent({
       fileListHeaderY,
       sideBarOpen,
       sideBarActivePanel,
+      selectedShareSpace,
 
       // view specific
       pendingHandleSort,

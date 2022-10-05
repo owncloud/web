@@ -5,11 +5,6 @@ import { buildResource } from '../../../helpers/resources'
 import { thumbnailService } from '../../../services'
 
 export default {
-  inject: {
-    currentSpace: {
-      default: null
-    }
-  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapState(['user']),
@@ -33,7 +28,7 @@ export default {
               return false
             }
 
-            if (!isLocationSpacesActive(this.$router, 'files-spaces-project')) {
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
               return false
             }
             if (!this.space) {
@@ -47,9 +42,6 @@ export default {
           class: 'oc-files-actions-set-space-image-trigger'
         }
       ]
-    },
-    space() {
-      return this.currentSpace?.value
     }
   },
   methods: {
@@ -58,7 +50,7 @@ export default {
     async $_setSpaceImage_trigger({ resources }) {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-      const storageId = this.$route.params.storageId
+      const storageId = this.space?.id
       const sourcePath = resources[0].webDavPath
       const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`
 

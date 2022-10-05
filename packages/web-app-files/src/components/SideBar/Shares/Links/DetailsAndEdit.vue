@@ -181,11 +181,14 @@
 <script lang="ts">
 import { basename } from 'path'
 import { DateTime } from 'luxon'
-import { mapActions } from 'vuex'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
+import { mapActions, mapGetters } from 'vuex'
+import { createLocationSpaces } from '../../../../router'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
+import { PropType } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -218,6 +221,15 @@ export default defineComponent({
     link: {
       type: Object,
       required: true
+    },
+    file: {
+      type: Object,
+      required: true
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -226,6 +238,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapGetters('runtime/spaces', ['spaces']),
     currentLinkRoleDescription() {
       return LinkShareRoles.getByBitmask(
         parseInt(this.link.permissions),
@@ -328,17 +341,15 @@ export default defineComponent({
 
     viaRouterParams() {
       const viaPath = this.link.path
-      const locationName = isLocationSpacesActive(this.$router, 'files-spaces-project')
-        ? 'files-spaces-project'
-        : 'files-spaces-personal'
+      const matchingSpace = (this.space ||
+        this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
+      if (!matchingSpace) {
+        return {}
+      }
 
-      return createLocationSpaces(locationName, {
+      return createLocationSpaces('files-spaces-generic', {
         params: {
-          item: viaPath || '/',
-          storageId: this.$route.params.storageId
-        },
-        query: {
-          scrollTo: basename(viaPath)
+          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: viaPath } as Resource)
         }
       })
     },

@@ -9,13 +9,16 @@
     <oc-button
       appearance="raw"
       :class="toggleSidebarButtonClass"
-      class="toggle-sidebar-button oc-py-s"
+      class="toggle-sidebar-button oc-pb-s oc-pt-m"
       :aria-label="$gettext('Toggle sidebar')"
       @click="toggleSidebarButtonClick"
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
-    <nav class="oc-sidebar-nav oc-my-m oc-px-xs" :aria-label="$gettext('Sidebar navigation menu')">
+    <nav
+      class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs"
+      :aria-label="$gettext('Sidebar navigation menu')"
+    >
       <oc-list>
         <div
           v-show="isAnyNavItemActive"

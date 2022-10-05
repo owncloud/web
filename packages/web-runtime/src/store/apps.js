@@ -1,8 +1,4 @@
 const state = {
-  file: {
-    path: '',
-    edit: false
-  },
   fileEditors: [],
   fileEditorConfigs: {},
   newFileHandlers: [],
@@ -12,27 +8,6 @@ const state = {
 }
 
 const actions = {
-  // TODO move to app scope!
-  /**
-   * Open a file via webdav
-   * @param {object} payload - filePath & client reference
-   */
-  openFile(context, payload) {
-    return new Promise((resolve, reject) => {
-      // TODO fix js-owncloud-client & change payload to filePath
-      const filePath = payload.filePath
-      context.commit('FETCH_FILE', filePath)
-      // TODO fix js-owncloud-client & use global client
-      const client = payload.client || false
-      if (client) {
-        client.files.getFileContents(filePath).then(resolve).catch(reject)
-      } else {
-        // if no client is given, implicit resolve without fetching the file...
-        // useful for images
-        resolve()
-      }
-    })
-  },
   registerApp({ commit }, app) {
     commit('REGISTER_APP', app)
   },
@@ -95,7 +70,9 @@ const mutations = {
       state.customFilesListIndicators = indicators
     }
 
-    if (!appInfo.id) return
+    if (!appInfo.id) {
+      return
+    }
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
     const app = {
@@ -108,10 +85,6 @@ const mutations = {
     }
     state.meta[app.id] = app
   },
-  FETCH_FILE(state, filePath) {
-    state.file.path = filePath
-  },
-
   LOAD_EXTENSION_CONFIG(state, { id, config }) {
     const fileEditorConfigs = { ...state.fileEditorConfigs }
     fileEditorConfigs[id] = config
@@ -125,9 +98,6 @@ const getters = {
   },
   apps: (state) => {
     return state.meta
-  },
-  activeFile: (state) => {
-    return state.file
   },
   newFileHandlers: (state) => {
     return state.newFileHandlers

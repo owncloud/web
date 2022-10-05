@@ -26,11 +26,8 @@ Feature: Sharing files and folders with internal groups
     And group "<group>" should be listed as "Viewer" in the collaborators list for file "testavatar.jpg" on the webUI
     When the user re-logs in as "Alice" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    # When the user opens the share dialog for file "simple-folder" using the webUI
-    # Then user "Carol King" should be listed as "Owner" in the collaborators list on the webUI
     And file "testavatar.jpg" should be listed on the webUI
     When the user opens the share dialog for file "testavatar.jpg" using the webUI
-    # Then user "Carol King" should be listed as "Owner" in the collaborators list on the webUI
     Examples:
       | group     |
       | ?\?@#%@,; |

@@ -170,7 +170,6 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user has reloaded the current page of the webUI
     When the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
-    And file "lorem.txt" should not be listed in the files page on the webUI
 
 
   Scenario: test resharing folder with "Viewer" role

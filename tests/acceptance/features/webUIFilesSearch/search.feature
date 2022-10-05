@@ -28,11 +28,6 @@ Feature: Search
     When the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
-    #And file "lorem.txt" with path "/simple-folder" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem-big.txt" with path "/simple-folder" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem.txt" with path "/0" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem-big.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
 
   @issue-980
   Scenario: search for folders
@@ -40,11 +35,7 @@ Feature: Search
     Then folder "simple-folder" should be listed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
     And file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
-    #And folder "simple-empty-folder" with path "/'single'quotes" should be listed in the search results in the other folders section on the webUI
-    #And file "zzzz-must-be-last-file-in-folder.txt" with path "/simple-folder" should be listed in the search results in the other folders section on the webUI
-    #And file "zzzz-must-be-last-file-in-folder.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
     But file "lorem.txt" should not be listed on the webUI
-    #And file "lorem.txt" should not be listed in the search results in the other folders section on the webUI
 
   @issue-980
   Scenario: search in sub folder
@@ -52,44 +43,6 @@ Feature: Search
     And the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
-    #And file "lorem.txt" with path "/" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem-big.txt" with path "/" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem.txt" with path "/0" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
-    #And file "lorem-big.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
-    #But file "lorem.txt" with path "/simple-folder" should not be listed in the search results in the other folders section on the webUI
-
-  @issue-5017 @systemtags-app-required
-  Scenario: search for a file using a tag
-    Given user "Alice" has created a "normal" tag with name "ipsum"
-    And user "Alice" has added tag "ipsum" to file "/lorem.txt"
-    When the user browses to the tags page
-    And the user searches for tag "ipsum" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-
-  @issue-5017 @systemtags-app-required
-  Scenario: search for a file with multiple tags
-    Given user "Alice" has created a "normal" tag with name "lorem"
-    And user "Alice" has created a "normal" tag with name "ipsum"
-    And user "Alice" has added tag "lorem" to file "/lorem.txt"
-    And user "Alice" has added tag "lorem" to file "/testimage.jpg"
-    And user "Alice" has added tag "ipsum" to file "/lorem.txt"
-    When the user browses to the tags page
-    And the user searches for tag "lorem" using the webUI
-    And the user searches for tag "ipsum" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "testimage.jpg" should not be listed on the webUI
-
-  @issue-5017 @systemtags-app-required
-  Scenario: search for a file with tags
-    Given user "Alice" has created a "normal" tag with name "lorem"
-    And user "Alice" has added tag "lorem" to file "/lorem.txt"
-    And user "Alice" has added tag "lorem" to file "/simple-folder/lorem.txt"
-    When the user browses to the tags page
-    And the user searches for tag "lorem" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "lorem.txt" with path "" should be listed in the tags page on the webUI
-    And file "lorem.txt" with path "/simple-folder" should be listed in the tags page on the webUI
 
 
   Scenario: Search for a shared file
@@ -164,7 +117,7 @@ Feature: Search
     Then folder "not deleted folder" should be listed on the webUI
     And folder "deleted folder" should not be listed on the webUI
 
-
+  @skipOnOCIS
   Scenario: Search for favorited folder in favorites page
     Given user "Alice" has created folder "favorite folder" in the server
     And user "Alice" has created folder "not favorite folder" in the server

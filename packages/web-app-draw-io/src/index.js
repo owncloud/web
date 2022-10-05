@@ -4,7 +4,7 @@ import App from './App.vue'
 const routes = [
   {
     name: 'draw-io',
-    path: '/:filePath*',
+    path: '/:driveAliasAndItem*',
     component: App,
     meta: {
       auth: false,

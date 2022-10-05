@@ -24,7 +24,11 @@ import {
   searchResourceGlobalSearchArgs,
   getDisplayedResourcesFromSearch,
   clickResource,
-  showHiddenResources
+  showHiddenResources,
+  editResources,
+  editResourcesArgs,
+  openFileInViewer,
+  openFileInViewerArgs
 } from './actions'
 
 export class Resource {
@@ -132,5 +136,13 @@ export class Resource {
 
   async showHiddenFiles(): Promise<void> {
     await showHiddenResources(this.#page)
+  }
+
+  async editResourse(args: Omit<editResourcesArgs, 'page'>): Promise<void> {
+    await editResources({ ...args, page: this.#page })
+  }
+
+  async openFileInViewer(args: Omit<openFileInViewerArgs, 'page'>): Promise<void> {
+    await openFileInViewer({ ...args, page: this.#page })
   }
 }

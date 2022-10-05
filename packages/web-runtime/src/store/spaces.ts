@@ -4,9 +4,12 @@ import { set, has } from 'lodash-es'
 import { unref } from '@vue/composition-api'
 import { buildSpaceShare } from 'files/src/helpers/resources'
 import { sortSpaceMembers } from 'files/src/helpers/space'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const state = {
   spaces: [],
+  spacesInitialized: false,
+  spacesLoading: false,
   spaceMembers: [],
   spaceQuotas: {}
 }
@@ -14,15 +17,24 @@ const state = {
 const getters = {
   spaces: (state) => state.spaces,
   spaceMembers: (state) => state.spaceMembers,
-  spaceQuotas: (state) => state.spaceQuotas
+  spaceQuotas: (state) => state.spaceQuotas,
+  spacesInitialized: (state) => state.spacesInitialized,
+  spacesLoading: (state) => state.spacesLoading,
 }
 
 const mutations = {
-  SET_SPACES(state, spaces) {
-    state.spaces = spaces
+  // TODO: we might want to avoid duplicates at some point
+  ADD_SPACES(state, spaces) {
+    state.spaces = [...state.spaces, ...spaces]
+  },
+  SET_SPACES_INITIALIZED(state, initialized) {
+    state.spacesInitialized = initialized
+  },
+  SET_SPACES_LOADING(state, loading) {
+    state.spacesLoading = loading
   },
   /**
-   * Updates a single space field. If the space with given id doesn't exist nothing will happen.
+   * Updates a single space field. If the space with given id doesn't exist, nothing will happen.
    *
    * @param state Current state of this store module
    * @param params
@@ -95,13 +107,20 @@ const mutations = {
 
 const actions = {
   async loadSpaces(context, { graphClient }) {
-    const graphResponse = await graphClient.drives.listMyDrives()
-    if (!graphResponse.data) {
-      return
+    context.commit('SET_SPACES_LOADING', true)
+    try {
+      const graphResponse = await graphClient.drives.listMyDrives()
+      if (!graphResponse.data) {
+        return
+      }
+      const spaces = graphResponse.data.value.map((space) =>
+        buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+      )
+      context.commit('ADD_SPACES', spaces)
+      context.commit('SET_SPACES_INITIALIZED', true)
+    } finally {
+      context.commit('SET_SPACES_LOADING', false)
     }
-
-    const spaces = graphResponse.data.value.map((space) => buildSpace(space))
-    context.commit('SET_SPACES', spaces)
   },
   loadSpaceMembers(context, { graphClient, space }) {
     context.commit('CLEAR_SPACE_MEMBERS')

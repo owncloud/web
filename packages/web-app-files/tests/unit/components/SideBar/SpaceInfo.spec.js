@@ -4,6 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import stubs from '@/tests/unit/stubs'
 
 import SpaceInfo from '@files/src/components/SideBar/SpaceInfo.vue'
+import Vuex from 'vuex'
 
 const spaceMock = {
   type: 'space',
@@ -16,6 +17,7 @@ const spaceMock = {
 }
 
 const localVue = createLocalVue()
+localVue.use(Vuex)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -48,6 +50,21 @@ describe('SpaceInfo', () => {
 
 function createWrapper(spaceResource) {
   return shallowMount(SpaceInfo, {
+    store: new Vuex.Store({
+      modules: {
+        Files: {
+          namespaced: true,
+          state: {
+            highlightedFile: spaceResource
+          },
+          getters: {
+            highlightedFile: (state) => {
+              return state.highlightedFile
+            }
+          }
+        }
+      }
+    }),
     localVue,
     stubs: {
       ...stubs,
@@ -61,11 +78,6 @@ function createWrapper(spaceResource) {
           formatRelativeDateFromRFC
         }
       }
-    ],
-    provide: {
-      displayedItem: {
-        value: spaceResource
-      }
-    }
+    ]
   })
 }
