@@ -1,0 +1,6 @@
+Bugfix: Disappearing quicklink in sidebar
+
+We've fixed a bug where existing quicklinks would disappear when performing the "Create quicklink"-action.
+
+https://github.com/owncloud/web/pull/7740
+https://github.com/owncloud/web/issues/7736
