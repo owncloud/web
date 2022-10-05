@@ -98,6 +98,7 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
+   https://github.com/owncloud/web/pull/7735
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
@@ -230,6 +231,7 @@ Details
 
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
+   https://github.com/owncloud/web/pull/7735
 
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 
