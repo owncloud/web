@@ -85,7 +85,10 @@ export default defineComponent({
     areCustomKeyBindingsEnabled() {
       const activeElementTag = document.activeElement.tagName
       const type = document.activeElement.getAttribute('type')
-      if (['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase()) && type !== 'checkbox') {
+      if (
+        ['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase()) &&
+        type !== 'checkbox'
+      ) {
         return true
       }
       const closestSelectionEl = window.getSelection().focusNode as HTMLElement
