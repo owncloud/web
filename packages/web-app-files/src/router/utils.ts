@@ -118,7 +118,7 @@ export const createFileRouteOptions = (
   const config = options?.configurationManager || configurationManager
   return {
     params: {
-      driveAliasAndItem: space.getDriveAliasAndItem({ path: target.path } as Resource)
+      driveAliasAndItem: space.getDriveAliasAndItem({ path: target.path || '' } as Resource)
     },
     query: {
       ...(isShareSpaceResource(space) && { shareId: space.shareId }),

@@ -51,7 +51,7 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
-import { useRouter, useStore } from 'web-pkg/src/composables'
+import { useRouter } from 'web-pkg/src/composables'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from '../../router/utils'
@@ -67,16 +67,16 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
-    const store = useStore()
     const isProjectSpace = props.space?.driveType === 'project'
     return {
       showPublicLinkButton: isLocationPublicActive(router, 'files-public-link'),
       showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
       showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
-      homeRoute: createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(props.space, { fileId: props.space?.fileId })
-      ),
+      homeRoute: createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: 'personal'
+        }
+      }),
       publicLinkRoute: createLocationPublic(
         'files-public-link',
         createFileRouteOptions(props.space, {})
