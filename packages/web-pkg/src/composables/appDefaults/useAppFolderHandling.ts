@@ -10,6 +10,9 @@ import { Resource } from 'web-client'
 import { FileContext } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { Route } from 'vue-router'
+import { useAppFileHandling } from './useAppFileHandling'
+import { DavProperty } from '../../constants'
+import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
@@ -27,12 +30,15 @@ export interface AppFolderHandlingResult {
 export function useAppFolderHandling({
   store,
   currentRoute,
-  clientService: { webdav }
+  clientService
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
   const activeFiles = computed(() => {
     return store.getters['Files/activeFiles']
   })
+  const { webdav } = clientService
+  const { replaceInvalidFileRoute } = useFileRouteReplace()
+  const { getFileInfo } = useAppFileHandling({ clientService })
 
   const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
     if (store.getters.activeFile && store.getters.activeFile.path !== '') {
@@ -44,12 +50,18 @@ export function useAppFolderHandling({
     try {
       context = unref(context)
       const space = unref(context.space)
-      const path = dirname(unref(context.item))
-      const fileId = unref(context.itemId)
 
+      const pathResource = await getFileInfo(context, { davProperties: [DavProperty.Name] })
+      replaceInvalidFileRoute({
+        space,
+        resource: pathResource,
+        path: unref(context.item),
+        fileId: unref(context.itemId)
+      })
+
+      const path = dirname(pathResource.path)
       const resources = await webdav.listFiles(space, {
-        path,
-        fileId
+        path
       })
 
       if (resources[0].type === 'file') {

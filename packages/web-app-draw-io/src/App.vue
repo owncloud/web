@@ -240,7 +240,7 @@ export default defineComponent({
       },
       immediate: true
     }
-  },
+  }
 })
 </script>
 <style scoped>
