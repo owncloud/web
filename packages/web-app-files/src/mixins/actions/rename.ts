@@ -1,10 +1,10 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
-import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
+import { isLocationTrashActive, isLocationSharesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
@@ -33,16 +33,6 @@ export default {
               return false
             }
             if (resources.length !== 1) {
-              return false
-            }
-            // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again
-            if (
-              this.capabilities?.spaces?.share_jail === true &&
-              (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-                (isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-                  this.space.driveType === 'share' &&
-                  resources[0].path === '/'))
-            ) {
               return false
             }
 
@@ -193,6 +183,18 @@ export default {
         this.hideModal()
 
         if (isSameResource(resource, this.currentFolder)) {
+          if (isShareSpaceResource(space)) {
+            space.driveAlias = `share/${newName}`
+            space.name = newName
+
+            return this.$router.push(
+              createFileRouteOptions(space, {
+                path: '',
+                fileId: resource.fileId
+              })
+            )
+          }
+
           return this.$router.push(
             createFileRouteOptions(this.space, {
               path: newPath,
