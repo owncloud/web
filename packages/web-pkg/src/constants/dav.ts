@@ -15,6 +15,7 @@ export abstract class DavProperty {
   static readonly Permissions: string = '{http://owncloud.org/ns}permissions'
   static readonly IsFavorite: string = '{http://owncloud.org/ns}favorite'
   static readonly FileId: string = '{http://owncloud.org/ns}fileid'
+  static readonly FileParent: string = '{http://owncloud.org/ns}file-parent'
   static readonly Name: string = '{http://owncloud.org/ns}name'
   static readonly OwnerId: string = '{http://owncloud.org/ns}owner-id'
   static readonly OwnerDisplayName: string = '{http://owncloud.org/ns}owner-display-name'
@@ -53,6 +54,7 @@ export abstract class DavProperties {
     DavProperty.Permissions,
     DavProperty.IsFavorite,
     DavProperty.FileId,
+    DavProperty.FileParent,
     DavProperty.Name,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
@@ -83,6 +85,7 @@ export abstract class DavProperties {
     DavProperty.TrashbinOriginalLocation,
     DavProperty.TrashbinOriginalFilename,
     DavProperty.TrashbinDeletedDate,
-    DavProperty.Permissions
+    DavProperty.Permissions,
+    DavProperty.FileParent
   ]
 }
