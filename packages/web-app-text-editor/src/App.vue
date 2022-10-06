@@ -102,7 +102,7 @@ export default defineComponent({
 
     const loadFileTask = useTask(function* () {
       resource.value = yield getFileInfo(currentFileContext, {
-        davProperties: [DavProperty.Permissions, DavProperty.Name]
+        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
       })
       validateRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
