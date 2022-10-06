@@ -54,7 +54,7 @@ import {
 import { useRouter } from 'web-pkg/src/composables'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'NotFoundMessage',

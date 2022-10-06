@@ -9,7 +9,7 @@ import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { urlJoin } from 'web-pkg/src/utils'
-import { createFileRouteOptions } from '../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 // 'personal/home' is used as personal drive alias from static contexts
 // (i.e. places where we can't load the actual personal space)

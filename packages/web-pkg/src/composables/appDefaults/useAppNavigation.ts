@@ -5,8 +5,7 @@ import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
 import { LocationQuery, LocationParams } from '../router'
 import { Resource } from 'web-client'
-import { createFileRouteOptions } from 'files/src/router/utils'
-import { configurationManager } from '../../configuration'
+import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
 interface AppNavigationOptions {
   router: VueRouter
@@ -86,25 +85,15 @@ export function useAppNavigation({
     })
   }
 
+  const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
   const validateRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
     const ctx = unref(context)
-    if (ctx.item !== resource.path || (ctx.itemId && ctx.itemId !== resource.fileId)) {
-      const routeOptions = createFileRouteOptions(unref(ctx.space), resource, {
-        configurationManager
-      })
-      const oldRoute = router.currentRoute
-      const newRoute = Object.assign({}, oldRoute, {
-        params: {
-          ...oldRoute.params,
-          ...routeOptions.params
-        },
-        query: {
-          ...oldRoute.query,
-          ...routeOptions.query
-        }
-      })
-      return router.replace(newRoute)
-    }
+    return replaceInvalidFileRoute({
+      space: unref(ctx.space),
+      resource,
+      path: unref(ctx.item),
+      fileId: unref(ctx.itemId)
+    })
   }
 
   const closeApp = () => {

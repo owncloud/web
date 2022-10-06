@@ -5,7 +5,7 @@ import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {

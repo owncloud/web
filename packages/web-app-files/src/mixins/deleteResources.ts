@@ -6,7 +6,7 @@ import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { clientService } from 'web-pkg/src/services'
 import { dirname } from 'path'
-import { createFileRouteOptions } from '../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   data: () => ({

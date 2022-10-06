@@ -31,10 +31,10 @@ import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
-import { createFileRouteOptions } from '../../router/utils'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { bus } from 'web-pkg/src/instance'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
 

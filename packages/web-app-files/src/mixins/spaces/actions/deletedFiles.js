@@ -1,5 +1,5 @@
 import { createLocationTrash } from '../../../router'
-import { createFileRouteOptions } from '../../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {

@@ -8,7 +8,7 @@ import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from '@vue/composition-api'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
-import { createFileRouteOptions } from '../../router/utils'
+import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -32,6 +32,7 @@ export class FolderLoaderSpace implements FolderLoader {
       router,
       clientService: { owncloudSdk: client, webdav }
     } = context
+    const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasShareJail = useCapabilityShareJailEnabled(store)
     const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -48,21 +49,7 @@ export class FolderLoaderSpace implements FolderLoader {
 
         const resources = yield webdav.listFiles(space, { path, fileId })
         let currentFolder = resources.shift()
-        if (currentFolder.path !== path || (fileId && currentFolder.fileId !== fileId)) {
-          const routeOptions = createFileRouteOptions(space, currentFolder)
-          const oldRoute = router.currentRoute
-          const newRoute = Object.assign({}, oldRoute, {
-            params: {
-              ...oldRoute.params,
-              ...routeOptions.params
-            },
-            query: {
-              ...oldRoute.query,
-              ...routeOptions.query
-            }
-          })
-          return router.replace(newRoute)
-        }
+        replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
 
         if (path === '/' && !['personal', 'share', 'public'].includes(space.driveType)) {
           // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.

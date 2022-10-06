@@ -118,8 +118,8 @@ import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from 'files/src/router/utils'
 import { unref } from '@vue/composition-api'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'Preview',

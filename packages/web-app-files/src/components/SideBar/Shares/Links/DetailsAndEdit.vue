@@ -188,7 +188,7 @@ import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { SpaceResource } from 'web-client/src/helpers'
 import { PropType } from '@vue/composition-api'
-import { createFileRouteOptions } from '../../../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'DetailsAndEdit',

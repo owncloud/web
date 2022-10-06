@@ -192,8 +192,8 @@ import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from '../../router/utils'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   mixins: [Rename],

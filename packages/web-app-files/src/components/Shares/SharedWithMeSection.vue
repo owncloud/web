@@ -108,8 +108,8 @@ import { SortDir } from '../../composables'
 import { Location } from 'vue-router'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from '../../router/utils'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
 

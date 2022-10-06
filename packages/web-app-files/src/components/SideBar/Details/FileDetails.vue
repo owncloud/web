@@ -164,7 +164,7 @@ import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from '../../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileDetails',

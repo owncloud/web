@@ -84,7 +84,7 @@ import {
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '../../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileShares',

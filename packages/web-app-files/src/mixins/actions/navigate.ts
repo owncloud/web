@@ -11,7 +11,7 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { createFileRouteOptions } from '../../router/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {

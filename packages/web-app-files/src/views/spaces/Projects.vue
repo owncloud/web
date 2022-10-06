@@ -148,8 +148,8 @@ import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
 import { WebDAV } from 'web-client/src/webdav'
-import { createLocationSpaces } from '../../router/spaces'
-import { createFileRouteOptions } from '../../router/utils'
+import { createLocationSpaces } from '../../router'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   components: {

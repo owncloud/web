@@ -124,9 +124,9 @@ import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
 import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '../../router/utils'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { FolderLoaderOptions } from '../../services/folder'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
 
