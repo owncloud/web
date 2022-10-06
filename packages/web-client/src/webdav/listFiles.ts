@@ -42,17 +42,25 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         return webDavResources.map(buildResource)
       }
 
+      const listFilesCorrectedPath = async () => {
+        const correctPath = await sdk.files.getPathForFileId(fileId)
+        return this.listFiles(space, { path: correctPath }, { depth, davProperties })
+      }
+
       try {
         webDavResources = await sdk.files.list(
           urlJoin(space.webDavPath, path),
           `${depth}`,
           davProperties || DavProperties.Default
         )
-        return webDavResources.map(buildResource)
+        const resources = webDavResources.map(buildResource)
+        if (fileId && fileId !== resources[0].fileId) {
+          return listFilesCorrectedPath()
+        }
+        return resources
       } catch (e) {
         if (e.statusCode === 404 && fileId) {
-          const correctPath = await sdk.files.getPathForFileId(fileId)
-          return this.listFiles(space, { path: correctPath }, { depth, davProperties })
+          return listFilesCorrectedPath()
         }
         throw e
       }
