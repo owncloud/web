@@ -4,6 +4,9 @@ import VueRouter, { Location } from 'vue-router'
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
 import { LocationQuery, LocationParams } from '../router'
+import { Resource } from 'web-client'
+import { createFileRouteOptions } from 'files/src/router/utils'
+import { configurationManager } from '../../configuration'
 
 interface AppNavigationOptions {
   router: VueRouter
@@ -12,6 +15,7 @@ interface AppNavigationOptions {
 
 export interface AppNavigationResult {
   closeApp(): void
+  validateRoute(context: MaybeRef<FileContext>, resource: Resource): void
 }
 
 export const contextRouteNameKey = 'contextRouteName'
@@ -82,11 +86,17 @@ export function useAppNavigation({
     })
   }
 
+  const validateRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
+    console.log('validateRoute', context, resource)
+    // createFileRouteOptions(unref(unref(context).space), resource, { configurationManager })
+  }
+
   const closeApp = () => {
     return navigateToContext(currentFileContext)
   }
 
   return {
+    validateRoute,
     closeApp
   }
 }

@@ -86,7 +86,7 @@ export default defineComponent({
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents } =
+    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents, validateRoute } =
       defaults
     const serverContent = ref()
     const currentContent = ref()
@@ -98,6 +98,7 @@ export default defineComponent({
       resource.value = yield getFileInfo(currentFileContext, {
         davProperties: [DavProperty.Permissions, DavProperty.Name]
       })
+      validateRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )

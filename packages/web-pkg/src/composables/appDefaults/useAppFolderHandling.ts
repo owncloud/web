@@ -45,9 +45,11 @@ export function useAppFolderHandling({
       context = unref(context)
       const space = unref(context.space)
       const path = dirname(unref(context.item))
+      const fileId = unref(context.itemId)
 
       const resources = await webdav.listFiles(space, {
-        path
+        path,
+        fileId
       })
 
       if (resources[0].type === 'file') {

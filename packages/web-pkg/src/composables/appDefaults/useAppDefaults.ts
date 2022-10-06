@@ -50,7 +50,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const isPublicLinkContext = usePublicLinkContext({ store })
 
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const { space, item } = useDriveResolver({
+  const { space, item, itemId } = useDriveResolver({
     store,
     driveAliasAndItem
   })
@@ -68,6 +68,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       driveAliasAndItem: unref(driveAliasAndItem),
       space: unref(space),
       item: unref(item),
+      itemId: unref(itemId),
       fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)
