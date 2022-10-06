@@ -64,7 +64,6 @@ export default defineComponent({
   created() {
     this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
-    this.checkPermissions()
     window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
         const payload = JSON.parse(event.data)
@@ -126,6 +125,7 @@ export default defineComponent({
       }
     },
     load() {
+      this.checkPermissions()
       this.getFileContents(this.currentFileContext)
         .then((resp) => {
           this.currentETag = resp.headers.ETag
@@ -232,7 +232,15 @@ export default defineComponent({
     getTimestamp() {
       return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
     }
-  }
+  },
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.load()
+      },
+      immediate: true
+    }
+  },
 })
 </script>
 <style scoped>
