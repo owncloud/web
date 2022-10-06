@@ -53,7 +53,7 @@ export class FolderLoaderSpace implements FolderLoader {
           currentFolder = space
         }
 
-        if (options.shareIndicators) {
+        if (options.loadShares) {
           yield store.dispatch('Files/loadSharesTree', {
             client,
             path: currentFolder.path,

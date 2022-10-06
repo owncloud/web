@@ -310,7 +310,7 @@ export default defineComponent({
     ]),
 
     async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
-      const options: FolderLoaderOptions = { shareIndicators: !isPublicSpaceResource(this.space) }
+      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(this.space) }
       await this.loadResourcesTask.perform(
         this.space,
         path || this.item,
