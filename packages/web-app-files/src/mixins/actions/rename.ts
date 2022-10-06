@@ -193,9 +193,15 @@ export default {
         this.hideModal()
 
         if (isSameResource(resource, this.currentFolder)) {
+          let driveAliasAndItem = this.space.getDriveAliasAndItem({ path: newPath } as Resource)
+
+          if (hasShareJail && resource.isReceivedShare()) {
+            driveAliasAndItem = `share/${newName}`
+          }
+
           return this.$router.push({
             params: {
-              driveAliasAndItem: this.space.getDriveAliasAndItem({ path: newPath } as Resource)
+              driveAliasAndItem
             },
             query: this.$route.query
           })
