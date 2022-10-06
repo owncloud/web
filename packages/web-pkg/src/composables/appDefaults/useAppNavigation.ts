@@ -87,8 +87,23 @@ export function useAppNavigation({
   }
 
   const validateRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
-    console.log('validateRoute', context, resource)
-    // createFileRouteOptions(unref(unref(context).space), resource, { configurationManager })
+    const ctx = unref(context)
+    if (ctx.item !== resource.path || ctx.itemId !== resource.fileId) {
+        const routeOptions = createFileRouteOptions(unref(ctx.space), resource, { configurationManager })
+        const oldRoute = router.currentRoute
+        const newRoute = Object.assign({}, oldRoute, {
+          params: {
+            ...oldRoute.params,
+            ...routeOptions.params
+          },
+          query: {
+            ...oldRoute.query,
+            ...routeOptions.query
+          }
+        })
+        router.push(newRoute)
+        throw new Error('route will change')
+    }
   }
 
   const closeApp = () => {

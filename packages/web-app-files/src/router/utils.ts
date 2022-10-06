@@ -1,6 +1,7 @@
 import VueRouter, { Location } from 'vue-router'
 import merge from 'lodash-es/merge'
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource } from 'web-client/src/helpers/space/types'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager, ConfigurationManager } from 'web-pkg/src/configuration'
 import { isUndefined } from 'lodash-es'
 import { LocationParams, LocationQuery } from 'web-pkg/src/composables'
