@@ -16,7 +16,7 @@
           <th scope="col" class="oc-pr-s" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
-        <tr data-testid="spacesCount">
+        <tr v-if="showSpaceCount" data-testid="spacesCount">
           <th scope="col" class="oc-pr-s" v-text="spacesText" />
           <td v-text="spacesCount" />
         </tr>
@@ -35,6 +35,9 @@ import { formatFileSize } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileDetailsMultiple',
+  props: {
+    showSpaceCount: { type: Boolean, default: false }
+  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     selectedFilesCount() {

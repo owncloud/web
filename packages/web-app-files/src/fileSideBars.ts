@@ -6,7 +6,12 @@ import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
-import { isLocationTrashActive, isLocationPublicActive } from './router'
+import {
+  isLocationTrashActive,
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  isLocationSharesActive
+} from './router'
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 
 import { Panel } from '../../web-pkg/src/components/sideBar'
@@ -57,11 +62,20 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ multipleSelection, rootFolder, highlightedFile }) => ({
+  ({ multipleSelection, rootFolder, highlightedFile, router }) => ({
     app: 'details-multiple-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetailsMultiple,
+    componentAttrs: {
+      get showSpaceCount() {
+        return (
+          !isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !isLocationSharesActive(router, 'files-shares-with-me') &&
+          !isLocationTrashActive(router, 'files-trash-generic')
+        )
+      }
+    },
     default: () => true,
     get enabled() {
       return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
