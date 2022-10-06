@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import { isLocationTrashActive } from '../../router'
+import { isLocationPublicActive, isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
@@ -24,7 +24,10 @@ export default {
               return false
             }
 
-            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
+            if (
+              isLocationTrashActive(this.$router, 'files-trash-generic') ||
+              isLocationPublicActive(this.$router, 'files-public-link')
+            ) {
               return false
             }
             return resources.length === 1 && resources[0].canEditTags()

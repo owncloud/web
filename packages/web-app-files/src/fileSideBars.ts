@@ -151,7 +151,10 @@ const panelGenerators: (({
         return false
       }
 
-      return !isLocationTrashActive(router, 'files-trash-generic')
+      return !(
+        isLocationTrashActive(router, 'files-trash-generic') ||
+        isLocationPublicActive(router, 'files-public-link')
+      )
     }
   }),
   ({ highlightedFile, capabilities }) => ({

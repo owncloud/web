@@ -19,10 +19,7 @@ export default {
               return false
             }
 
-            if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-projects')
-            ) {
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
               return false
             }
 
