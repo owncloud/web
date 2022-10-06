@@ -122,7 +122,7 @@ export const createFileRouteOptions = (
     },
     query: {
       ...(isShareSpaceResource(space) && { shareId: space.shareId }),
-      ...(config.options.routing.idBased &&
+      ...(config?.options?.routing?.idBased &&
         !isUndefined(target.fileId) && { fileId: `${target.fileId}` })
     }
   }

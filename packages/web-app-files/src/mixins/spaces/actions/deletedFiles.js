@@ -22,8 +22,8 @@ export default {
     }
   },
   methods: {
-    $_deletedFiles_trigger({ resources }) {
-      this.$router.push(
+    $_deletedFiles_trigger() {
+      return this.$router.push(
         createLocationTrash(
           'files-trash-generic',
           createFileRouteOptions(this.space, { fileId: this.space.id })
