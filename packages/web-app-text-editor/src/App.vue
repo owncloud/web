@@ -86,8 +86,14 @@ export default defineComponent({
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents, validateRoute } =
-      defaults
+    const {
+      applicationConfig,
+      currentFileContext,
+      getFileInfo,
+      getFileContents,
+      putFileContents,
+      validateRoute
+    } = defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()

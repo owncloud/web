@@ -264,7 +264,10 @@ export default defineComponent({
 
     // update route and url
     updateLocalHistory() {
-      const routeOptions = createFileRouteOptions(unref(this.currentFileContext.space), this.activeFilteredFile)
+      const routeOptions = createFileRouteOptions(
+        unref(this.currentFileContext.space),
+        this.activeFilteredFile
+      )
       Object.assign(this.$route, {
         params: {
           ...this.$route.params,
