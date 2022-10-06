@@ -6,7 +6,12 @@ import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
-import { isLocationTrashActive, isLocationPublicActive } from './router'
+import {
+  isLocationTrashActive,
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  isLocationSharesActive
+} from './router'
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 
 import { Panel } from '../../web-pkg/src/components/sideBar'
@@ -57,24 +62,33 @@ const panelGenerators: (({
       )
     }
   }),
-  ({ multipleSelection, rootFolder }) => ({
+  ({ multipleSelection, rootFolder, highlightedFile, router }) => ({
     app: 'details-multiple-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetailsMultiple,
+    componentAttrs: {
+      get showSpaceCount() {
+        return (
+          !isLocationSpacesActive(router, 'files-spaces-generic') &&
+          !isLocationSharesActive(router, 'files-shares-with-me') &&
+          !isLocationTrashActive(router, 'files-trash-generic')
+        )
+      }
+    },
     default: () => true,
     get enabled() {
-      return multipleSelection && !rootFolder
+      return multipleSelection && (!rootFolder || highlightedFile?.type === 'space')
     }
   }),
-  ({ highlightedFile }) => ({
+  ({ multipleSelection, highlightedFile }) => ({
     app: 'details-space-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
     default: () => true,
     get enabled() {
-      return highlightedFile?.type === 'space'
+      return highlightedFile?.type === 'space' && !multipleSelection
     }
   }),
   ({ router, multipleSelection, rootFolder }) => ({
@@ -87,12 +101,15 @@ const panelGenerators: (({
       return !multipleSelection && !rootFolder
     }
   }),
-  ({ highlightedFile, user }) => ({
+  ({ multipleSelection, highlightedFile, user }) => ({
     app: 'space-actions-item',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: SpaceActions,
     get enabled() {
+      if (multipleSelection) {
+        return false
+      }
       if (highlightedFile?.type !== 'space') {
         return false
       }
@@ -134,7 +151,7 @@ const panelGenerators: (({
       return false
     }
   }),
-  ({ highlightedFile, capabilities }) => ({
+  ({ multipleSelection, highlightedFile, capabilities }) => ({
     app: 'space-share-item',
     icon: 'group',
     title: $gettext('Members'),
@@ -149,7 +166,7 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      return highlightedFile?.type === 'space'
+      return highlightedFile?.type === 'space' && !multipleSelection
     }
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({

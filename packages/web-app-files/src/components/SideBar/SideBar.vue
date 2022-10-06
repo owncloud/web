@@ -26,7 +26,10 @@
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
-      <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
+      <space-info
+        v-if="isSingleResource && highlightedFileIsSpace"
+        class="sidebar-panel__space_info"
+      />
     </template>
   </SideBar>
 </template>
