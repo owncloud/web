@@ -126,6 +126,7 @@ import { Location } from 'vue-router'
 import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from '../../router/utils'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { FolderLoaderOptions } from '../../services/folder'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -309,7 +310,13 @@ export default defineComponent({
     ]),
 
     async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
-      await this.loadResourcesTask.perform(this.space, path || this.item, fileId || this.itemId)
+      const options: FolderLoaderOptions = { shareIndicators: !isPublicSpaceResource(this.space) }
+      await this.loadResourcesTask.perform(
+        this.space,
+        path || this.item,
+        fileId || this.itemId,
+        options
+      )
       this.scrollToResourceFromRoute()
       this.refreshFileListHeaderPosition()
       this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)

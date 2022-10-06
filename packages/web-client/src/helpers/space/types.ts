@@ -8,6 +8,8 @@
 // or all types get different members, the underscored props can be removed.
 import { Resource } from '../resource'
 
+export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
+
 export interface SpaceResource extends Resource {
   disabled?: boolean
   webDavUrl: string

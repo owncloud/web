@@ -1,10 +1,9 @@
 import { User } from '../user'
 import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
-import { PublicSpaceResource, ShareSpaceResource, SpaceResource } from './types'
+import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
-import { SHARE_JAIL_ID } from 'files/src/services/folder'
 import { urlJoin } from 'web-pkg/src/utils'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
