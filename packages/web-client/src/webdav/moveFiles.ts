@@ -12,7 +12,6 @@ export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
       options?: { overwrite?: boolean; hasShareJail?: boolean; shareJailId?: string }
     ): Promise<void> {
       if (options?.hasShareJail && isShareSpaceResource(sourceSpace)) {
-        console.log('WOOP')
         return sdk.files.move(
           `${sourceSpace.webDavPath}/${sourcePath || ''}`,
           `/spaces/${options?.shareJailId}!${options?.shareJailId}/${targetPath || ''}`,
