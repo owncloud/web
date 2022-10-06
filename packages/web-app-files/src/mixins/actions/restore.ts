@@ -11,7 +11,10 @@ import { clientService } from 'web-pkg/src/services'
 import { buildWebDavSpacesPath, Resource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { DavProperties } from 'web-pkg/src/constants'
 import {
+  ResolveStrategy,
   ResolveConflict,
+  resolveFileNameDuplicate,
+  ConflictDialog
 } from '../../helpers/resource/'
 import { extractExtensionFromFile } from '../../helpers/resource'
 
@@ -70,6 +73,7 @@ export default {
       const conflicts = []
       const resolvedResources = []
       for (const resource of resources) {
+        debugger
         const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
         console.log(resource)
 
@@ -84,7 +88,7 @@ export default {
             DavProperties.Default
           )
           parentResources = listResponse.map((i) => buildResource(i))
-          const resourceParentPath = `/${this.getParentFolderFromResource(resource)}`
+          const resourceParentPath = this.getParentFolderFromResource(resource)
           parentResources = parentResources.filter(
             (e) => this.getParentFolderFromResource(e) === resourceParentPath
           )
@@ -106,7 +110,7 @@ export default {
         resolvedResources
       }
     },
-    async collectRestoreResolveStrategies(conflicts, resolveFileExistsMethod: FileExistsResolver) {
+    async collectRestoreResolveStrategies(conflicts) {
       let count = 0
       const resolvedConflicts = []
       const allConflictsCount = conflicts.length
@@ -122,13 +126,17 @@ export default {
           continue
         }
         const remainingConflictCount = allConflictsCount - count
-        const resolvedConflict: ResolveConflict = await resolveFileExistsMethod(
+        const conflictDialog = new ConflictDialog(
           this.createModal,
           this.hideModal,
+          this.showMessage,
+          this.$gettext,
+          this.$ngettext,
+          this.$gettextInterpolate
+        )
+        const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
           { name: conflict.name, isFolder } as Resource,
           remainingConflictCount,
-          this.$gettext,
-          this.$gettextInterpolate,
           remainingConflictCount <= 1,
           false
         )
@@ -145,7 +153,7 @@ export default {
       return resolvedConflicts
     },
     async restoreFolderStructure(resource) {
-      /*const createdFolders = []
+      /* const createdFolders = []
       const folders = resource.path.split('/')
       let createdSubFolders = ''
       for (const subFolder of folders) {
@@ -174,7 +182,7 @@ export default {
         }
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)
-      }*/
+      } */
     },
     async restoreResources(resources, filesToOverwrite) {
       const restoredResources = []
@@ -182,10 +190,10 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
-        const path = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        const path = isLocationTrashActive(this.$router, 'files-trash-generic')
           ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
           : buildWebDavFilesTrashPath(this.user.id)
-        const restorePath = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        const restorePath = isLocationTrashActive(this.$router, 'files-trash-generic')
           ? buildWebDavSpacesPath(this.$route.params.storageId, resource.path)
           : buildWebDavFilesPath(this.user.id, resource.path)
         const overwrite = filesToOverwrite.includes(resource)
@@ -241,7 +249,7 @@ export default {
       if (this.capabilities?.spaces?.enabled) {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-        const driveId = isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+        const driveId = isLocationTrashActive(this.$router, 'files-trash-generic')
           ? this.$route.params.storageId
           : this.spaces.find((s) => s.driveType === 'personal').id
         const driveResponse = await graphClient.drives.getDrive(driveId)
@@ -262,10 +270,7 @@ export default {
       )
 
       //! iterate through conflicts and collect resolve strategies
-      const resolvedConflicts = await this.collectRestoreResolveStrategies(
-        conflicts,
-        resolveFileExists
-      )
+      const resolvedConflicts = await this.collectRestoreResolveStrategies(conflicts)
 
       //! iterate through conflicts and behave according to strategy
       const filesToOverwrite = resolvedConflicts
