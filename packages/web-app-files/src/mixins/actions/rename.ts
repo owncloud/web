@@ -5,6 +5,7 @@ import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { SpaceResource } from 'web-client/src/helpers'
+import { SHARE_JAIL_ID } from 'files/src/services/folder'
 
 export default {
   computed: {
@@ -32,16 +33,6 @@ export default {
               return false
             }
             if (resources.length !== 1) {
-              return false
-            }
-            // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again
-            if (
-              this.capabilities?.spaces?.share_jail === true &&
-              (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-                (isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-                  this.space.driveType === 'share' &&
-                  resources[0].path === '/'))
-            ) {
               return false
             }
 
@@ -184,11 +175,21 @@ export default {
       this.toggleModalConfirmButton()
 
       try {
+        const hasShareJail = this.capabilities?.spaces?.share_jail === true
         space = space || this.space
         const newPath = join(dirname(resource.path), newName)
-        await (this.$clientService.webdav as WebDAV).moveFiles(space, resource, space, {
-          path: newPath
-        })
+        await (this.$clientService.webdav as WebDAV).moveFiles(
+          space,
+          resource,
+          space,
+          {
+            path: newPath
+          },
+          {
+            hasShareJail,
+            shareJailId: SHARE_JAIL_ID
+          }
+        )
         this.hideModal()
 
         if (isSameResource(resource, this.currentFolder)) {

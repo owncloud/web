@@ -1,5 +1,5 @@
 import { urlJoin } from 'web-pkg/src/utils'
-import { isPublicSpaceResource, SpaceResource } from '../helpers'
+import { isPublicSpaceResource, isShareSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 
 export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
@@ -9,8 +9,16 @@ export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
       { path: sourcePath },
       targetSpace: SpaceResource,
       { path: targetPath },
-      options?: { overwrite?: boolean }
+      options?: { overwrite?: boolean; hasShareJail?: boolean; shareJailId?: string }
     ): Promise<void> {
+      if (options?.hasShareJail && isShareSpaceResource(sourceSpace)) {
+        console.log('WOOP')
+        return sdk.files.move(
+          `${sourceSpace.webDavPath}/${sourcePath || ''}`,
+          `/spaces/${options?.shareJailId}!${options?.shareJailId}/${targetPath || ''}`,
+          options?.overwrite || false
+        )
+      }
       if (isPublicSpaceResource(sourceSpace)) {
         return sdk.publicFiles.move(
           urlJoin(sourceSpace.webDavPath.replace(/^\/public-files/, ''), sourcePath),
