@@ -51,15 +51,10 @@ const panelGenerators: (({
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetails,
-    default:
-      !isLocationTrashActive(router, 'files-trash-personal') &&
-      !isLocationTrashActive(router, 'files-trash-spaces-project'),
+    default: !isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
       return (
-        !isLocationTrashActive(router, 'files-trash-personal') &&
-        !isLocationTrashActive(router, 'files-trash-spaces-project') &&
-        !multipleSelection &&
-        !rootFolder
+        !isLocationTrashActive(router, 'files-trash-generic') && !multipleSelection && !rootFolder
       )
     }
   }),
@@ -78,7 +73,7 @@ const panelGenerators: (({
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
-    default: highlightedFile?.type === 'space',
+    default: () => true,
     get enabled() {
       return highlightedFile?.type === 'space'
     }
@@ -88,9 +83,7 @@ const panelGenerators: (({
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: FileActions,
-    default:
-      isLocationTrashActive(router, 'files-trash-personal') ||
-      isLocationTrashActive(router, 'files-trash-spaces-project'),
+    default: isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
       return !multipleSelection && !rootFolder
     }
@@ -126,11 +119,12 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || rootFolder) {
+        return false
+      }
       if (
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
+        isLocationTrashActive(router, 'files-trash-generic') ||
+        isLocationPublicActive(router, 'files-public-link')
       ) {
         return false
       }
@@ -149,13 +143,17 @@ const panelGenerators: (({
     component: TagsPanel,
     componentAttrs: {},
     get enabled() {
-      if (!capabilities?.files?.tags || multipleSelection || rootFolder) return false
-      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags())
+      if (!capabilities?.files?.tags || multipleSelection || rootFolder) {
         return false
+      }
+
+      if (typeof highlightedFile.canEditTags !== 'function' || !highlightedFile.canEditTags()) {
+        return false
+      }
+
       return !(
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
+        isLocationTrashActive(router, 'files-trash-generic') ||
+        isLocationPublicActive(router, 'files-public-link')
       )
     }
   }),
@@ -183,11 +181,12 @@ const panelGenerators: (({
     title: $gettext('Versions'),
     component: FileVersions,
     get enabled() {
-      if (multipleSelection || rootFolder) return false
+      if (multipleSelection || rootFolder) {
+        return false
+      }
       if (
-        isLocationTrashActive(router, 'files-trash-personal') ||
-        isLocationTrashActive(router, 'files-trash-spaces-project') ||
-        isLocationPublicActive(router, 'files-public-files')
+        isLocationTrashActive(router, 'files-trash-generic') ||
+        isLocationPublicActive(router, 'files-public-link')
       ) {
         return false
       }

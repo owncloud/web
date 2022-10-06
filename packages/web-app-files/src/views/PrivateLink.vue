@@ -61,21 +61,21 @@ export default {
       let resource = await this.$client.files.fileInfo(resourcePath, DavProperties.Default)
       resource = buildResource(resource)
 
-      const params = {
-        storageId: this.$store.getters.user.id
-      }
+      const driveAliasAndItem = ['personal', this.$store.getters.user.id]
       const query = {}
       if (resource.isFolder) {
         // if folder: route directly into it
-        params.item = resource.path || ''
+        driveAliasAndItem.push(...[(resource.path || '').split('/').filter(Boolean)])
       } else {
         // if file: route into parent and highlight file
-        params.item = path.dirname(resource.path)
+        driveAliasAndItem.push(...[path.dirname(resource.path).split('/').filter(Boolean)])
         query.scrollTo = resource.name
       }
       this.$router.push(
-        createLocationSpaces('files-spaces-personal', {
-          params,
+        createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: driveAliasAndItem.join('/')
+          },
           query
         })
       )

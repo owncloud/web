@@ -23,10 +23,7 @@ export default {
               return false
             }
 
-            if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (resources.length !== 1) {

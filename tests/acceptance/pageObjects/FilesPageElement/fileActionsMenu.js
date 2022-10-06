@@ -40,8 +40,10 @@ module.exports = {
      * @returns {*}
      */
     performFileAction: async function (action) {
+      this.initAjaxCounters()
       const fileActionBtnSelectorXpath = this.getActionSelector(action)
-      return await this.click('xpath', fileActionBtnSelectorXpath)
+      await this.click('xpath', fileActionBtnSelectorXpath)
+      return await this.waitForAjaxCallsToStartAndFinish()
     },
     /**
      * returns the disabled state of given action

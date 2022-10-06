@@ -38,7 +38,7 @@ exports[`FileShares if there are collaborators present correctly passes the shar
   </div>
   <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
     <li>
-      <collaborator-list-item-stub share="[object Object]" sharedparentroute="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
     </li>
   </ul>
   <!---->

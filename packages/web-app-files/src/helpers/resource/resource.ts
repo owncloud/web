@@ -11,14 +11,18 @@ export const extractStorageId = (id?: string): string => {
 export const extractNameWithoutExtension = (resource?: Resource): string => {
   const extension = resource.extension || ''
   const name = resource.name || ''
-  if (!extension.length) return name
+  if (!extension.length) {
+    return name
+  }
   const extensionIndexInName = name.lastIndexOf(`.${extension}`)
   return name.substring(0, extensionIndexInName)
 }
 
 export const extractExtensionFromFile = (resource: Resource): string => {
   const name = resource.name
-  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) return ''
+  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) {
+    return ''
+  }
 
   const parts = name.split('.')
   if (parts.length > 2) {
@@ -30,6 +34,8 @@ export const extractExtensionFromFile = (resource: Resource): string => {
     }
   }
   // Fallback if file extension is unknown or no extension
-  if (parts.length < 2) return ''
+  if (parts.length < 2) {
+    return ''
+  }
   return parts[parts.length - 1]
 }

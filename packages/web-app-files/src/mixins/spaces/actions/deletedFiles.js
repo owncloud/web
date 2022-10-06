@@ -23,9 +23,9 @@ export default {
   methods: {
     $_deletedFiles_trigger({ resources }) {
       this.$router.push(
-        createLocationTrash('files-trash-spaces-project', {
+        createLocationTrash('files-trash-generic', {
           params: {
-            storageId: resources[0].id
+            driveAliasAndItem: resources[0].driveAlias
           }
         })
       )

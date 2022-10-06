@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import { isLocationTrashActive, isLocationPublicActive } from '../../router'
+import { isLocationPublicActive, isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
@@ -25,9 +25,8 @@ export default {
             }
 
             if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
-              isLocationPublicActive(this.$router, 'files-public-files')
+              isLocationTrashActive(this.$router, 'files-trash-generic') ||
+              isLocationPublicActive(this.$router, 'files-public-link')
             ) {
               return false
             }

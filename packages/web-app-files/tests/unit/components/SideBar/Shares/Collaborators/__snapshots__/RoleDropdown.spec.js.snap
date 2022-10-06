@@ -24,7 +24,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -71,7 +71,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -118,7 +118,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -165,7 +165,7 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -212,7 +212,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -259,7 +259,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -306,7 +306,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
@@ -347,7 +347,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-read" disabled="true" value="[object Object],[object Object]" option="[object Object]" label="Read" size="large" data-testid="files-collaborators-permission-read" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
-      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Update" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
+      <oc-checkbox-stub id="files-collaborators-permission-update" value="[object Object],[object Object]" option="[object Object]" label="Edit" size="large" data-testid="files-collaborators-permission-update" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
     <li class="oc-my-s oc-px-m">
       <oc-checkbox-stub id="files-collaborators-permission-create" value="[object Object],[object Object]" option="[object Object]" label="Create" size="large" data-testid="files-collaborators-permission-create" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>

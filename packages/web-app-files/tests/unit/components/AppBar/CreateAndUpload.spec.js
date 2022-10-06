@@ -6,7 +6,7 @@ import GetTextPlugin from 'vue-gettext'
 import stubs from '@/tests/unit/stubs'
 import CreateAndUpload from 'files/src/components/AppBar/CreateAndUpload'
 import { createLocationSpaces } from '../../../../src/router'
-import { ResolveStrategy } from '../../../../src/helpers/resource/copyMove'
+import { ResolveStrategy, ResourcesUpload } from '../../../../src/helpers/resource'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -31,7 +31,7 @@ const elSelector = {
   newDrawioFileBtn: '.new-file-btn-drawio'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-personal')
+const personalHomeLocation = createLocationSpaces('files-spaces-generic')
 
 const newFileHandlers = [
   {
@@ -79,7 +79,7 @@ describe('CreateAndUpload component', () => {
   const route = {
     name: personalHomeLocation.name,
     params: {
-      item: ''
+      driveAliasAndItem: 'personal/einstein'
     }
   }
 
@@ -170,14 +170,32 @@ describe('CreateAndUpload component', () => {
       const store = createStore({ currentFolder }, newFileHandlers)
       const wrapper = getShallowWrapper(route, store)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const resourcesUpload = new ResourcesUpload(
+        [],
+        [],
+        [],
+        null,
+        null,
+        null,
+        wrapper.vm.spaces,
+        true,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        showMessageStub,
+        jest.fn(),
+        jest.fn(),
+        jest.fn()
+      )
       expect(
-        wrapper.vm.checkQuotaExceeded([
+        resourcesUpload.checkQuotaExceeded([
           {
             data: {
               size: 1001
             },
             meta: {
-              routeName: 'files-spaces-personal'
+              spaceId: '1',
+              routeName: 'files-spaces-generic'
             }
           }
         ])
@@ -189,8 +207,22 @@ describe('CreateAndUpload component', () => {
       const store = createStore({ currentFolder }, newFileHandlers)
       const wrapper = getShallowWrapper(route, store)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const resourcesUpload = new ResourcesUpload(
+        [],
+        [],
+        [],
+        null,
+        wrapper.vm.spaces,
+        null,
+        null,
+        null,
+        showMessageStub,
+        jest.fn(),
+        jest.fn(),
+        jest.fn()
+      )
       expect(
-        wrapper.vm.checkQuotaExceeded([
+        resourcesUpload.checkQuotaExceeded([
           {
             data: {
               size: 999
@@ -226,20 +258,33 @@ describe('CreateAndUpload component', () => {
         const store = createStore({ currentFolder }, newFileHandlers)
         const wrapper = getShallowWrapper(route, store)
         const handleUppyFileUpload = jest.fn()
-        wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+        const resourcesUpload = new ResourcesUpload(
+          [],
+          [],
+          [],
+          null,
+          wrapper.vm.spaces,
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn(),
+          jest.fn()
+        )
+        resourcesUpload.handleUppyFileUpload = handleUppyFileUpload
         const resolveFileConflictMethod = jest.fn(() =>
           Promise.resolve({ strategy, doForAllConflicts: true })
         )
+        resourcesUpload.resolveFileExists = resolveFileConflictMethod
 
-        await wrapper.vm.displayOverwriteDialog(
-          [uppyResourceOne],
-          [conflict],
-          resolveFileConflictMethod
-        )
+        await resourcesUpload.displayOverwriteDialog([uppyResourceOne], [conflict])
 
         expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
         expect(handleUppyFileUpload).toBeCalledTimes(1)
-        expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne])
+        expect(handleUppyFileUpload).toBeCalledWith(expect.anything(), expect.anything(), [
+          uppyResourceOne
+        ])
       }
     )
     it('should not upload file if user chooses skip', async () => {
@@ -251,20 +296,32 @@ describe('CreateAndUpload component', () => {
 
       const store = createStore({ currentFolder }, newFileHandlers)
       const wrapper = getShallowWrapper(route, store)
-      const handleUppyFileUpload = jest.fn()
-      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resourcesUpload = new ResourcesUpload(
+        [],
+        [],
+        [],
+        {
+          clearInputs: jest.fn()
+        },
+        wrapper.vm.spaces,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn()
+      )
+      resourcesUpload.handleUppyFileUpload = jest.fn()
       const resolveFileConflictMethod = jest.fn(() =>
         Promise.resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts: true })
       )
+      resourcesUpload.resolveFileExists = resolveFileConflictMethod
 
-      await wrapper.vm.displayOverwriteDialog(
-        [uppyResourceOne],
-        [conflict],
-        resolveFileConflictMethod
-      )
+      await resourcesUpload.displayOverwriteDialog([uppyResourceOne], [conflict])
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
-      expect(handleUppyFileUpload).not.toHaveBeenCalled()
+      expect(resourcesUpload.handleUppyFileUpload).not.toHaveBeenCalled()
     })
     it('should show dialog once if do for all conflicts is ticked', async () => {
       const uppyResourceOne = { name: 'test' }
@@ -280,28 +337,46 @@ describe('CreateAndUpload component', () => {
 
       const store = createStore({ currentFolder }, newFileHandlers)
       const wrapper = getShallowWrapper(route, store)
-      const handleUppyFileUpload = jest.fn()
-      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
+      const resourcesUpload = new ResourcesUpload(
+        [],
+        [],
+        [],
+        null,
+        wrapper.vm.spaces,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn()
+      )
+      resourcesUpload.handleUppyFileUpload = jest.fn()
       const resolveFileConflictMethod = jest.fn(() =>
         Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
       )
+      resourcesUpload.resolveFileExists = resolveFileConflictMethod
 
-      await wrapper.vm.displayOverwriteDialog(
+      await resourcesUpload.displayOverwriteDialog(
         [uppyResourceOne, uppyResourceTwo],
-        [conflictOne, conflictTwo],
-        resolveFileConflictMethod
+        [conflictOne, conflictTwo]
       )
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+        expect.anything(),
+        expect.anything(),
+        [uppyResourceOne, uppyResourceTwo]
+      )
     })
     it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
       const uppyResourceOne = { name: 'test' }
       const uppyResourceTwo = { name: 'folder' }
       const conflictOne = {
         name: uppyResourceOne.name,
-        type: 'file'
+        type: 'file',
+        meta: { relativeFolder: '/' }
       }
       const conflictTwo = {
         name: uppyResourceTwo.name,
@@ -310,21 +385,37 @@ describe('CreateAndUpload component', () => {
 
       const store = createStore({ currentFolder }, newFileHandlers)
       const wrapper = getShallowWrapper(route, store)
-      const handleUppyFileUpload = jest.fn()
-      wrapper.vm.handleUppyFileUpload = handleUppyFileUpload
-      const resolveFileConflictMethod = jest.fn(() =>
+      const resourcesUpload = new ResourcesUpload(
+        [],
+        [],
+        [],
+        null,
+        wrapper.vm.spaces,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        jest.fn()
+      )
+      resourcesUpload.handleUppyFileUpload = jest.fn()
+      resourcesUpload.resolveFileExists = jest.fn(() =>
         Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
       )
 
-      await wrapper.vm.displayOverwriteDialog(
+      await resourcesUpload.displayOverwriteDialog(
         [uppyResourceOne, uppyResourceTwo],
-        [conflictOne, conflictTwo],
-        resolveFileConflictMethod
+        [conflictOne, conflictTwo]
       )
 
-      expect(resolveFileConflictMethod).toHaveBeenCalledTimes(2)
-      expect(handleUppyFileUpload).toBeCalledTimes(1)
-      expect(handleUppyFileUpload).toBeCalledWith([uppyResourceOne, uppyResourceTwo])
+      expect(resourcesUpload.resolveFileExists).toHaveBeenCalledTimes(2)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+        expect.anything(),
+        expect.anything(),
+        [uppyResourceOne, uppyResourceTwo]
+      )
     })
   })
 })
@@ -352,10 +443,14 @@ function getWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     stubs: {
       ...stubs,
@@ -377,10 +472,17 @@ function getShallowWrapper(route = {}, store = {}) {
           return { href: r.name }
         }
       },
-      isUserContext: jest.fn(() => false)
+      isUserContext: jest.fn(() => false),
+      hasSpaces: true,
+      $uppyService: {
+        clearInputs: jest.fn()
+      }
     },
     propsData: {
       currentPath: ''
+    },
+    props: {
+      space: {}
     },
     store
   })

@@ -1,12 +1,15 @@
-import { computed, unref, WritableComputedRef } from '@vue/composition-api'
+import { computed, ComputedRef, unref, WritableComputedRef } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 interface SelectedResourcesResult {
   selectedResources: WritableComputedRef<Resource[]>
   selectedResourcesIds: WritableComputedRef<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
+  selectedResourceSpace?: ComputedRef<SpaceResource>
 }
 
 interface SelectedResourcesOptions {
@@ -39,9 +42,29 @@ export const useSelectedResources = (
     return unref(selectedResourcesIds).includes(resource.id)
   }
 
+  const selectedResourceSpace = computed(() => {
+    if (unref(selectedResources).length !== 1) {
+      return null
+    }
+    const resource = unref(selectedResources)[0]
+    const storageId = resource.storageId
+    // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
+    const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
+    if (space) {
+      return space
+    }
+
+    return buildShareSpaceResource({
+      shareId: resource.shareId,
+      shareName: resource.name,
+      serverUrl: configurationManager.serverUrl
+    })
+  })
+
   return {
     selectedResources,
     selectedResourcesIds,
-    isResourceInSelection
+    isResourceInSelection,
+    selectedResourceSpace
   }
 }

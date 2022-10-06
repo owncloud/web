@@ -1,0 +1,6 @@
+Enhancement: Edit custom permissions wording
+
+We've changed the custom permission wording from 'update' to 'edit'
+
+https://github.com/owncloud/web/pull/7709
+https://github.com/owncloud/web/issues/7703

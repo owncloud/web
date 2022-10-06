@@ -65,26 +65,6 @@ Feature: File Upload
     Then file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-must-be-last-file-in-folder.txt" in the server should be the same as the content of local file "zzzz-must-be-last-file-in-folder.txt"
 
-  @issue-5106
-  Scenario: keep new and existing file
-    When the user uploads file "'single'quotes.txt" keeping both new and existing files using the webUI
-    Then file "'single'quotes.txt" should be listed on the webUI
-    And the content of "'single'quotes.txt" should not have changed in the server
-    And file "'single'quotes (2).txt" should be listed on the webUI
-    And as "Alice" the content of "'single'quotes (2).txt" in the server should be the same as the content of local file "'single'quotes.txt"
-
-    When the user uploads file "strängé filename (duplicate #2 &).txt" keeping both new and existing files using the webUI
-    Then file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
-    And the content of "strängé filename (duplicate #2 &).txt" should not have changed in the server
-    And file "strängé filename (duplicate #2 &) (2).txt" should be listed on the webUI
-    And as "Alice" the content of "strängé filename (duplicate #2 &) (2).txt" in the server should be the same as the content of local file "strängé filename (duplicate #2 &).txt"
-
-    When the user uploads file "zzzz-must-be-last-file-in-folder.txt" keeping both new and existing files using the webUI
-    Then file "zzzz-must-be-last-file-in-folder.txt" should be listed on the webUI
-    And the content of "zzzz-must-be-last-file-in-folder.txt" should not have changed in the server
-    And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
-    And as "Alice" the content of "zzzz-must-be-last-file-in-folder (2).txt" in the server should be the same as the content of local file "zzzz-must-be-last-file-in-folder.txt"
-
 
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally in the middleware

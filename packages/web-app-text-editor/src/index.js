@@ -10,7 +10,7 @@ const appId = 'text-editor'
 
 const routes = [
   {
-    path: '/:filePath*',
+    path: '/:driveAliasAndItem*',
     component: App,
     name: 'text-editor',
     meta: {

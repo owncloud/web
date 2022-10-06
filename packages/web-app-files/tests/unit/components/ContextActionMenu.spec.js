@@ -26,6 +26,7 @@ describe('ContextActionMenu component', () => {
 function getShallowWrapper(menuSections, items = []) {
   return shallowMount(ContextActionMenu, {
     localVue,
+    props: { space: {} },
     propsData: {
       menuSections,
       items

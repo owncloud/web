@@ -23,10 +23,8 @@ export default {
             if (
               this.$_isFilesAppActive &&
               !this.$_isSearchActive &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              !isLocationPublicActive(this.$router, 'files-public-files') &&
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              !isLocationPublicActive(this.$router, 'files-public-link') &&
               !isLocationCommonActive(this.$router, 'files-common-favorites') &&
               !isLocationCommonActive(this.$router, 'files-common-search') &&
               !isLocationSharesActive(this.$router, 'files-shares-with-me') &&

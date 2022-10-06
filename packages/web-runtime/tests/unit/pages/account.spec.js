@@ -49,7 +49,7 @@ describe('account page', () => {
 
     describe('edit buttons', () => {
       describe('edit url button', () => {
-        it('should be displayed if not running with ocis', async () => {
+        it('should be displayed if not running with ocis', () => {
           const store = getStore({
             server: 'http://server/address/',
             isAccountEditingEnabled: true
@@ -60,7 +60,7 @@ describe('account page', () => {
           expect(editUrlButton).toMatchSnapshot()
           expect(editRouteButton.exists()).toBeFalsy()
         })
-        it('should not be displayed if running with ocis', async () => {
+        it('should not be displayed if running with ocis', () => {
           const store = getStore({
             server: 'http://server/address/',
             isAccountEditingEnabled: false
@@ -71,7 +71,7 @@ describe('account page', () => {
         })
       })
       describe('edit route button', () => {
-        it('should be displayed if running with ocis and has navItems', async () => {
+        it('should be displayed if running with ocis and has navItems', () => {
           const store = getStore({
             isAccountEditingEnabled: false,
             getNavItemsByExtension: jest.fn(() => [{ route: 'some-route' }])
@@ -100,14 +100,14 @@ describe('account page', () => {
     })
 
     describe('group membership', () => {
-      it('displays message if not member of any groups', async () => {
+      it('displays message if not member of any groups', () => {
         const store = getStore({ user: { groups: [] } })
         const wrapper = getWrapper({ store })
 
         const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
         expect(groupNamesEmpty.exists()).toBeTruthy()
       })
-      it('displays group names', async () => {
+      it('displays group names', () => {
         const store = getStore({ user: { groups: ['one', 'two', 'three'] } })
         const wrapper = getWrapper({ store })
 

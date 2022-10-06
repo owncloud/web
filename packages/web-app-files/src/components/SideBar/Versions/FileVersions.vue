@@ -49,12 +49,19 @@
 </template>
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { DavProperty } from 'web-pkg/src/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
-import { buildResource } from '../../../helpers/resources'
+import { WebDAV } from 'web-client/src/webdav'
+import { inject } from '@vue/composition-api'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   name: 'FileVersions',
+  setup() {
+    return {
+      space: inject<SpaceResource>('displayedSpace')
+    }
+  },
   data: () => ({
     loading: false,
     DavProperty
@@ -92,14 +99,13 @@ export default {
           this.currentVersionId(file),
           this.highlightedFile.path
         )
-        .then(() => {
-          this.$client.files
-            .fileInfo(this.highlightedFile.webDavPath, DavProperties.Default)
-            .then((fileInfo) => {
-              const resource = buildResource(fileInfo)
-              this.UPDATE_RESOURCE(resource)
-            })
-          this.fetchFileVersions()
+        .then(async () => {
+          const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
+            this.space,
+            this.highlightedFile
+          )
+          this.UPDATE_RESOURCE(resource)
+          return this.fetchFileVersions()
         })
     },
     downloadVersion(file) {

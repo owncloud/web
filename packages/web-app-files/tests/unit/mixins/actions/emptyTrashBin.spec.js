@@ -71,8 +71,8 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {
     mocks: {
       $router: {
         currentRoute: invalidLocation
-          ? createLocationSpaces('files-spaces-personal')
-          : createLocationTrash('files-trash-personal'),
+          ? createLocationSpaces('files-spaces-generic')
+          : createLocationTrash('files-trash-generic'),
         resolve: (r) => {
           return { href: r.name }
         }

@@ -28,7 +28,9 @@ module.exports = {
     'no-new': 'off',
     'jest/no-standalone-expect': 'off',
     'node/no-callback-literal': 'off',
-    'unused-imports/no-unused-imports': 'error'
+    'unused-imports/no-unused-imports': 'error',
+    'nonblock-statement-body-position': ['error', 'below'],
+    'curly': 'error'
   },
   globals: {
     require: false,

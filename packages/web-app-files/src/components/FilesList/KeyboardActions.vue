@@ -6,9 +6,9 @@
 import keycode from 'keycode'
 import { bus } from 'web-pkg/src/instance'
 import { mapActions, mapState, mapMutations } from 'vuex'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@vue/composition-api'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
-import { usePublicLinkContext, usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   mixins: [MixinFilesListScrolling],
@@ -21,13 +21,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'files-view'
-    }
-  },
-  setup() {
-    const store = useStore()
-    return {
-      publicLinkPassword: usePublicLinkPassword({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
     }
   },
   data: () => {
@@ -87,9 +84,13 @@ export default defineComponent({
 
     areCustomKeyBindingsEnabled() {
       const activeElementTag = document.activeElement.tagName
-      if (['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase())) return true
+      if (['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase())) {
+        return true
+      }
       const closestSelectionEl = window.getSelection().focusNode as HTMLElement
-      if (!closestSelectionEl) return false
+      if (!closestSelectionEl) {
+        return false
+      }
       let customKeyBindings
       try {
         customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings='true']")
@@ -98,13 +99,17 @@ export default defineComponent({
           "[data-custom-key-bindings='true']"
         )
       }
-      if (customKeyBindings) return true
+      if (customKeyBindings) {
+        return true
+      }
       return false
     },
 
     handelLocalShortcuts(event) {
       const key = event.keyCode || event.which
-      if (key === keycode('space')) return this.handleSpaceAction(event)
+      if (key === keycode('space')) {
+        return this.handleSpaceAction(event)
+      }
     },
 
     handleGlobalShortcuts(event) {
@@ -113,19 +118,41 @@ export default defineComponent({
       const ctrl = window.navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey
       const isTextSelected = window.getSelection().type === 'Range'
 
-      if (this.areCustomKeyBindingsEnabled()) return
-      if (isTextSelected) return
+      if (this.areCustomKeyBindingsEnabled()) {
+        return
+      }
+      if (isTextSelected) {
+        return
+      }
 
-      if (key === keycode('c') && ctrl) return this.copySelectedFiles()
-      if (key === keycode('v') && ctrl) return this.handlePasteAction()
-      if (key === keycode('x') && ctrl) return this.cutSelectedFiles()
-      if (key === keycode('down') && !shift) return this.handleNavigateAction(event)
-      if (key === keycode('up') && !shift) return this.handleNavigateAction(event, true)
+      if (key === keycode('c') && ctrl) {
+        return this.copySelectedFiles({ space: this.space })
+      }
+      if (key === keycode('v') && ctrl) {
+        return this.handlePasteAction()
+      }
+      if (key === keycode('x') && ctrl) {
+        return this.cutSelectedFiles({ space: this.space })
+      }
+      if (key === keycode('down') && !shift) {
+        return this.handleNavigateAction(event)
+      }
+      if (key === keycode('up') && !shift) {
+        return this.handleNavigateAction(event, true)
+      }
 
-      if (key === keycode('esc')) return this.handleEscapeAction()
-      if (key === keycode('down') && shift) return this.handleShiftDownAction(event)
-      if (key === keycode('up') && shift) return this.handleShiftUpAction(event)
-      if (key === keycode('a') && ctrl) return this.handleSelectAllAction(event)
+      if (key === keycode('esc')) {
+        return this.handleEscapeAction()
+      }
+      if (key === keycode('down') && shift) {
+        return this.handleShiftDownAction(event)
+      }
+      if (key === keycode('up') && shift) {
+        return this.handleShiftUpAction(event)
+      }
+      if (key === keycode('a') && ctrl) {
+        return this.handleSelectAllAction(event)
+      }
     },
 
     handleNavigateAction(event, up = false) {
@@ -136,7 +163,9 @@ export default defineComponent({
       } else {
         nextId = this.getNextResourceId(up)
       }
-      if (nextId === -1) return
+      if (nextId === -1) {
+        return
+      }
       this.resetSelectionCursor()
       this.resetFileSelection()
       this.addFileSelection({ id: nextId })
@@ -187,7 +216,9 @@ export default defineComponent({
 
     handleShiftUpAction() {
       const nextResourceId = this.getNextResourceId(true)
-      if (nextResourceId === -1) return
+      if (nextResourceId === -1) {
+        return
+      }
       if (this.selectionCursor > 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -202,7 +233,9 @@ export default defineComponent({
 
     handleShiftDownAction() {
       const nextResourceId = this.getNextResourceId()
-      if (nextResourceId === -1) return
+      if (nextResourceId === -1) {
+        return
+      }
       if (this.selectionCursor < 0) {
         // deselect
         this.toggleFileSelection({ id: this.latestSelectedId })
@@ -217,15 +250,14 @@ export default defineComponent({
 
     handlePasteAction() {
       this.pasteSelectedFiles({
-        client: this.$client,
+        targetSpace: this.space,
+        clientService: this.$clientService,
         createModal: this.createModal,
         hideModal: this.hideModal,
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
         $ngettext: this.$ngettext,
-        isPublicLinkContext: this.isPublicLinkContext,
-        publicLinkPassword: this.publicLinkPassword,
         upsertResource: this.upsertResource
       })
     },
@@ -246,13 +278,17 @@ export default defineComponent({
       } catch {
         return -1
       }
-      if (nextRow === null) return -1
+      if (nextRow === null) {
+        return -1
+      }
       return nextRow.getAttribute('data-item-id')
     },
 
     getFirstResourceId() {
       const firstRow = document.getElementsByClassName('oc-tbody-tr')[0]
-      if (!firstRow) return -1
+      if (!firstRow) {
+        return -1
+      }
       return firstRow.getAttribute('data-item-id')
     }
   }

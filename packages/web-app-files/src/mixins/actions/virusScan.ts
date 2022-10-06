@@ -19,15 +19,13 @@ export default {
               return false
             }
 
-            if (
-              !isLocationSpacesActive(this.$router, 'files-spaces-personal') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-project')
-            ) {
+            if (!isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
               return false
             }
 
             if (
-              isLocationSpacesActive(this.$router, 'files-spaces-share') &&
+              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              this.space?.driveType === 'share' &&
               resources[0].path === '/'
             ) {
               return false

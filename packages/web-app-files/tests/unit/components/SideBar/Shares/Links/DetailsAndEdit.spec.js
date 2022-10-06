@@ -59,6 +59,7 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
     directives: {
       'oc-tooltip': jest.fn()
     },
+    props: { file: {} },
     stubs: {
       ...stubs,
       'oc-datepicker': true

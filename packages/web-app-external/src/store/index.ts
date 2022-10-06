@@ -1,4 +1,6 @@
 import { Commit } from 'vuex'
+import { urlJoin } from 'web-pkg/src/utils'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 interface AppProvider {
   icon: string
@@ -32,9 +34,11 @@ const actions = {
     if (!rootGetters.capabilities.files.app_providers[0]?.enabled) {
       return
     }
-    const serverUrl = rootGetters.configuration.server
-    const appList = rootGetters.capabilities.files.app_providers[0].apps_url
-    const url = serverUrl + appList.replace('/app', 'app')
+
+    const url = urlJoin(
+      configurationManager.serverUrl,
+      rootGetters.capabilities.files.app_providers[0].apps_url
+    )
 
     const response = await fetch(url)
 

@@ -34,11 +34,15 @@ module.exports.command = async function (...args) {
     if (typeof params.suppressNotFoundErrors === 'boolean') {
       params.suppressNotFoundErrors = args[0].suppressNotFoundErrors
     }
-    if (args[1]) params.callback = args[1]
+    if (args[1]) {
+      params.callback = args[1]
+    }
   } else {
     params.locateStrategy = args[0]
     params.selector = args[1]
-    if (args[2]) params.callback = args[2]
+    if (args[2]) {
+      params.callback = args[2]
+    }
   }
 
   if (!['css selector', 'xpath'].includes(params.locateStrategy)) {
@@ -68,7 +72,9 @@ module.exports.command = async function (...args) {
       }
       for (const { ELEMENT } of res.value) {
         await this.elementIdDisplayed(ELEMENT, ({ value }) => (result.isVisible = value === true))
-        if (result.isVisible) break
+        if (result.isVisible) {
+          break
+        }
       }
     })
     elapsedTime = new Date()

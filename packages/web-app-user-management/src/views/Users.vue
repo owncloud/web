@@ -12,28 +12,30 @@
       @toggleSideBar="toggleSideBar"
     >
       <template #topbarActions>
-        <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
-          <span v-text="selectedUsersText" />
-          <oc-button
-            id="files-clear-selection"
-            v-oc-tooltip="$gettext('Clear selection')"
-            :aria-label="$gettext('Clear selection')"
-            class="oc-ml-m"
-            appearance="outline"
-            @click="unselectAllUsers"
-          >
-            <oc-icon name="close" />
-          </oc-button>
-          <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
-            <oc-icon name="delete-bin" />
-            <translate>Delete</translate>
-          </oc-button>
-        </div>
-        <div v-else>
-          <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
-            <oc-icon name="add" />
-            <translate>New user</translate>
-          </oc-button>
+        <div class="user-management-app-bar-actions oc-mt-xs">
+          <div v-if="selectedUsers.length" class="oc-flex oc-flex-middle">
+            <span v-text="selectedUsersText" />
+            <oc-button
+              id="files-clear-selection"
+              v-oc-tooltip="$gettext('Clear selection')"
+              :aria-label="$gettext('Clear selection')"
+              class="oc-ml-m"
+              appearance="outline"
+              @click="unselectAllUsers"
+            >
+              <oc-icon name="close" />
+            </oc-button>
+            <oc-button appearance="outline" class="oc-ml-m" @click="toggleDeleteUserModal">
+              <oc-icon name="delete-bin" />
+              <translate>Delete</translate>
+            </oc-button>
+          </div>
+          <div v-else>
+            <oc-button variation="primary" appearance="filled" @click="toggleCreateUserModal">
+              <oc-icon name="add" />
+              <translate>New user</translate>
+            </oc-button>
+          </div>
         </div>
       </template>
       <template #mainContent>
@@ -423,11 +425,12 @@ export default defineComponent({
             graphEditUserRawObjectExtractor(actualUser),
             graphEditUserRawObjectExtractor(editUser)
           )
-        )
+        ) {
           await this.graphClient.users.editUser(
             editUser.id,
             graphEditUserRawObjectExtractor(editUser)
           )
+        }
 
         if (!isEqual(actualUser.drive, editUser.drive)) {
           const updateDriveResponse = await this.graphClient.drives.updateDrive(

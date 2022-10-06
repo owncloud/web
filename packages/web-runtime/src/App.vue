@@ -25,6 +25,8 @@
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
       :checkbox-label="modal.checkboxLabel"
+      :contextual-helper-label="modal.contextualHelperLabel"
+      :contextual-helper-data="modal.contextualHelperData"
       @cancel="modal.onCancel"
       @confirm="modal.onConfirm"
       @input="modal.onInput"

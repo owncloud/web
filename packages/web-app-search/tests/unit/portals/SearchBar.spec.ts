@@ -1,9 +1,9 @@
 import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
-import stubs from '../../../../../tests/unit/stubs'
 import AsyncComputed from 'vue-async-computed'
-import merge from 'lodash-es/merge'
+import { createLocationCommon } from 'files/src/router'
+import flushPromises from 'flush-promises'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
@@ -11,38 +11,65 @@ localVue.use(AsyncComputed)
 
 let wrapper: Wrapper<any>
 
-const dummyProviderOne = {
-  id: 'dummy.one',
-  label: 'dummy.one.label',
+const providerFiles = {
+  id: 'files',
+  displayName: 'Files',
   available: true,
-  reset: jest.fn(),
-  updateTerm: jest.fn(),
-  activate: jest.fn(),
   previewSearch: {
     available: true,
     search: jest.fn(),
-    activate: jest.fn()
+    component: localVue.component('ProviderFilesPreview', {
+      render(createElement) {
+        return createElement('div')
+      }
+    })
   }
 }
 
-const dummyProviderTwo = {
-  id: 'dummy.two',
-  label: 'dummy.two.label',
+const providerContacts = {
+  id: 'contacts',
+  displayName: 'Contacts',
   available: true,
-  reset: jest.fn(),
-  updateTerm: jest.fn(),
-  activate: jest.fn()
+  previewSearch: {
+    available: true,
+    search: jest.fn()
+  },
+  component: localVue.component('ProviderContactsPreview', {
+    render(createElement) {
+      return createElement('div')
+    }
+  })
 }
 
-const searchEventOptions = {
-  path: [{ id: 'files-global-search-bar' }]
+const selectors = {
+  noResults: '#no-results',
+  searchInput: 'input',
+  searchInputClear: '.oc-search-clear',
+  providerListItem: '.provider',
+  providerDisplayName: '.provider .display-name',
+  providerMoreResultsLink: '.provider .more-results',
+  optionsHidden: '.tippy-box[data-state="hidden"]',
+  optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
 beforeEach(() => {
   jest.resetAllMocks()
-  dummyProviderOne.previewSearch.search.mockImplementation(() => {
+
+  providerFiles.previewSearch.search.mockImplementation(() => {
     return {
-      values: []
+      values: [
+        { id: 'f1', data: 'albert.txt' },
+        { id: 'f2', data: 'marie.txt' }
+      ]
+    }
+  })
+
+  providerContacts.previewSearch.search.mockImplementation(() => {
+    return {
+      values: [
+        { id: 'c1', data: 'albert' },
+        { id: 'c2', data: 'marie' }
+      ]
     }
   })
 })
@@ -51,415 +78,153 @@ afterEach(() => {
   wrapper.destroy()
 })
 
-describe.skip('Search Bar portal component', () => {
+describe('Search Bar portal component', () => {
   test('does not render a search field if not all requirements are fulfilled', () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
-  test('updates the search term on input', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    expect(wrapper.vm.$data.term).toBe('old')
-    await wrapper.find('input').setValue('new')
-    expect(wrapper.vm.$data.term).toBe('new')
+  test('updates the search term on input', () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('alice')
+    expect(wrapper.vm.$data.term).toBe('alice')
   })
-  test('the active provider get reset on route change', () => {
-    wrapper = getMountedWrapper({
-      data: {
-        activeProvider: { available: false }
+  test('shows message if no results are available', async () => {
+    wrapper = getMountedWrapper()
+    providerFiles.previewSearch.search.mockImplementationOnce(() => {
+      return {
+        values: []
       }
     })
-    expect(wrapper.vm.$data.activeProvider).toBeTruthy()
-    ;(wrapper.vm.$options.watch.$route.handler as any).call(wrapper.vm, undefined, true)
-    expect(wrapper.vm.$data.activeProvider).toBeFalsy()
+    providerContacts.previewSearch.search.mockImplementationOnce(() => {
+      return {
+        values: []
+      }
+    })
+    wrapper.find(selectors.searchInput).setValue('nothing found')
+    await flushPromises()
+    expect(wrapper.find(selectors.noResults)).toBeTruthy()
   })
-  test('notifies active provider to update term on input', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
+  test('displays all available providers', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.providerListItem).length).toEqual(2)
+  })
+  test('only displays provider list item if search results are attached', async () => {
+    wrapper = getMountedWrapper()
+    providerContacts.previewSearch.search.mockImplementation(() => {
+      return {
+        values: []
       }
     })
-    await wrapper.find('input').setValue('new')
-    expect(dummyProviderOne.updateTerm).toBeCalledTimes(1)
-    expect(dummyProviderOne.updateTerm).toBeCalledWith('new')
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.providerListItem).length).toEqual(1)
+  })
+  test('displays the provider name in the provider list item', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    const providerDisplayNameItems = wrapper.findAll(selectors.providerDisplayName)
+    expect(providerDisplayNameItems.at(0).text()).toEqual('Files')
+    expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
+  })
+  test('displays the more results link for the available providers', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
+  })
+  test('hides options on preview item click', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    wrapper.findAll('.preview-component').at(0).trigger('click')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  })
+  test('hides options on key press enter', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    wrapper.find(selectors.searchInput).trigger('keyup.enter')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  })
+  test('hides options on key press escape', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    wrapper.find(selectors.searchInput).trigger('keyup.esc')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on clear', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    expect(wrapper.find('#files-global-search-options').exists()).toBeTruthy()
-    await wrapper.find('input').setValue('new')
-    await wrapper.find('.oc-search-clear').trigger('click')
-    expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    await wrapper.find(selectors.searchInputClear).trigger('click')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
-  test.skip('resets term on clear', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    await wrapper.find('input').setValue('new')
-    await wrapper.find('.oc-search-clear').trigger('click')
+  test('hides options if no search term is given', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
+    wrapper.find(selectors.searchInput).setValue('')
+    await wrapper.find(selectors.searchInputClear).trigger('click')
+    expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
+  })
+  test('resets search term on clear', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    await wrapper.find(selectors.searchInputClear).trigger('click')
     expect(wrapper.vm.$data.term).toBeFalsy()
   })
-  test.skip('notifies active provider to reset on clear', async () => {
+  test('sets the search term according to route value on mount', async () => {
     wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    await wrapper.find('input').setValue('new')
-    await wrapper.find('.oc-search-clear').trigger('click')
-    expect(dummyProviderOne.reset).toBeCalledTimes(1)
-  })
-  test('hides options if no term given', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    expect(wrapper.find('#files-global-search-options').exists()).toBeTruthy()
-    await wrapper.find('input').setValue('')
-    expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
-  })
-  test('shows options only if optionsVisible is true and a search term is given', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        optionsVisible: false,
-        term: undefined,
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
-    await wrapper.setData({ optionsVisible: true })
-    expect(wrapper.find('#files-global-search-options').exists()).toBeFalsy()
-    await wrapper.setData({ term: 'defined' })
-    expect(wrapper.find('#files-global-search-options').exists()).toBeTruthy()
-  })
-  test('lists all available providers', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne]
-        }
-      }
-    })
-    expect(wrapper.findAll('li.provider').length).toBe(1)
-    await wrapper.setData({
-      providerStore: {
-        availableProviders: [dummyProviderOne, dummyProviderTwo]
-      }
-    })
-    expect(wrapper.findAll('li.provider').length).toBe(2)
-  })
-  test('marks the active provider as selected', () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderTwo,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const providers = wrapper.findAll('li.provider')
-    expect(providers.at(0).classes()).not.toContain('selected')
-    expect(providers.at(1).classes()).toContain('selected')
-  })
-  test('activates the provider by clicking the list item', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const providers = wrapper.findAll('li.provider')
-    await providers.at(0).trigger('click')
-    expect(dummyProviderOne.activate).toBeCalledTimes(1)
-    expect(dummyProviderOne.activate).toBeCalledWith('old')
-  })
-  test('shows and truncates the search term on providers list item', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const providers = wrapper.findAll('li.provider')
-    expect(providers.length).toBe(2)
-    await wrapper.find('input').setValue('oldoldoldoldoldoldoldoldoldoldo')
-    for (let i = 0; i < providers.length; i++) {
-      expect(providers.at(i).get('.term').element.innerHTML).toBe('oldoldoldoldoldoldoldoldold...')
-    }
-  })
-  test('provider label is displayed as tag in  provider list item', () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const providers = wrapper.findAll('li.provider')
-    expect(providers.at(0).get('.label').element.innerHTML).toBe(dummyProviderOne.label)
-    expect(providers.at(1).get('.label').element.innerHTML).toBe(dummyProviderTwo.label)
-  })
-  test('shows the preview search result from the active provider only if the provider preview is available', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: merge({}, dummyProviderOne, {
-          previewSearch: {
-            available: false
-          }
-        }),
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    await wrapper.find('input').setValue('new')
-    expect(dummyProviderOne.previewSearch.search).toBeCalledTimes(0)
-  })
-  test('shows the preview search result from the active provider', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
-      values: [
-        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
-        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
-      ]
-    })
-    expect(wrapper.findAll('li.preview').length).toBe(0)
-    await wrapper.find('input').setValue('new')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.findAll('li.preview').length).toBe(2)
-  })
-  test('shows the no results element if search result is empty', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
-      values: []
-    })
-    await wrapper.find('input').setValue('new')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.find('#no-results').exists()).toBeTruthy()
-  })
-  test('shows the more results element if search result is empty', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
-      range: '/10',
-      values: [
-        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
-        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
-      ]
-    })
-    await wrapper.find('input').setValue('new')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.find('#more-results').exists()).toBeTruthy()
-  })
-  test('activate a preview by clicking it', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    dummyProviderOne.previewSearch.search.mockReturnValueOnce({
-      values: [
-        { id: 'dummyProviderOne.1', data: 'dummyProviderOne - 1' },
-        { id: 'dummyProviderOne.2', data: 'dummyProviderOne - 2' }
-      ]
-    })
-    await wrapper.find('input').setValue('new')
-    await wrapper.vm.$nextTick()
-    await wrapper.findAll('li.preview').at(1).trigger('click')
-    expect(dummyProviderOne.previewSearch.activate).toBeCalledTimes(1)
-    expect(dummyProviderOne.previewSearch.activate).toBeCalledWith({
-      id: 'dummyProviderOne.2',
-      data: 'dummyProviderOne - 2'
-    })
-  })
-  test('sets the search term and input term to the route value on mount', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      },
       mocks: {
         $route: {
           query: {
-            term: 'routeTerm'
+            term: 'alice'
           }
         }
       }
     })
 
     await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.$data.term).toBe('routeTerm')
-    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('routeTerm')
+    expect(wrapper.vm.$data.term).toBe('alice')
+    expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
-  test("ignores events that don't belong to the SearchBar", async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const options = { path: [] }
-    await wrapper.trigger('keyup.a', options)
-    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
-    await wrapper.trigger('click', options)
-    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
-    await wrapper.trigger('focusin', options)
-    expect(wrapper.find('.files-global-search-options').exists()).toBeFalsy()
+  test.skip('sets active preview item via keyboard navigation', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    wrapper.find(selectors.searchInput).trigger('keyup.down')
+    wrapper.find(selectors.searchInput).trigger('keyup.down')
   })
-  test('providers can be switched by using the arrow up and down keys on keyboard', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    const getClasses = (at: number) => wrapper.findAll('.provider').at(at).element.classList
-    await wrapper.trigger('keyup.up', searchEventOptions)
-    expect(getClasses(1)).toContain('selected')
-
-    await wrapper.trigger('keyup.up', searchEventOptions)
-    expect(getClasses(0)).toContain('selected')
-
-    await wrapper.trigger('keyup.down', searchEventOptions)
-    expect(getClasses(1)).toContain('selected')
-
-    await wrapper.trigger('keyup.down', searchEventOptions)
-    expect(getClasses(0)).toContain('selected')
+  test('navigates to files-common-search route on key press enter if search term is given', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('albert')
+    const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
+    await flushPromises()
+    wrapper.find(selectors.searchInput).trigger('keyup.enter')
+    expect(spyRouterPushStub).toHaveBeenCalledTimes(1)
+    expect(spyRouterPushStub).toHaveBeenCalledWith(
+      createLocationCommon('files-common-search', {
+        query: { term: 'albert', provider: 'files.sdk' }
+      })
+    )
   })
-  test('hides options on escape key press', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        activeProvider: dummyProviderOne,
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await wrapper.trigger('keyup.esc', searchEventOptions)
-    expect(wrapper.vm.$data.optionsVisible).toBeFalsy()
-  })
-  test('activate provider on enter key press', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    await wrapper.trigger('click', searchEventOptions)
-    await wrapper.find('input').setValue('new')
-
-    const providers = wrapper.findAll('li.provider')
-    expect(providers.at(0).classes()).toContain('selected')
-    expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await wrapper.trigger('keyup.enter', searchEventOptions)
-    expect(dummyProviderOne.activate).toBeCalledWith('new')
-    expect(dummyProviderOne.activate).toBeCalledTimes(1)
-  })
-  test('activate provider on click', async () => {
-    wrapper = getMountedWrapper({
-      data: {
-        term: 'old',
-        providerStore: {
-          availableProviders: [dummyProviderOne, dummyProviderTwo]
-        }
-      }
-    })
-    await wrapper.trigger('click', searchEventOptions)
-    await wrapper.find('input').setValue('new')
-
-    const providers = wrapper.findAll('li.provider')
-    expect(providers.at(0).classes()).toContain('selected')
-    expect(wrapper.vm.$data.optionsVisible).toBeTruthy()
-    await providers.at(0).trigger('click', searchEventOptions)
-    expect(dummyProviderOne.activate).toBeCalledWith('new')
-    expect(dummyProviderOne.activate).toBeCalledTimes(1)
+  test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
+    wrapper = getMountedWrapper()
+    wrapper.find(selectors.searchInput).setValue('')
+    const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
+    await flushPromises()
+    wrapper.find(selectors.searchInput).trigger('keyup.enter')
+    expect(spyRouterPushStub).toHaveBeenCalledTimes(0)
   })
 })
 
@@ -469,7 +234,9 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
     attachTo: document.body,
     data: () => {
       return {
-        optionsVisible: true,
+        providerStore: {
+          availableProviders: [providerFiles, providerContacts]
+        },
         ...data
       }
     },
@@ -477,13 +244,16 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
       $gettextInterpolate: (text) => text,
       $gettext: (text) => text,
       $route: {
-        name: 'old'
+        name: ''
       },
       $router: {
-        go: jest.fn()
+        go: jest.fn(),
+        push: jest.fn()
       },
       ...mocks
     },
-    stubs
+    stubs: {
+      'router-link': true
+    }
   })
 }
