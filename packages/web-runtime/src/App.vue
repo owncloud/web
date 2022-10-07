@@ -50,6 +50,7 @@ import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
 import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
+import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 
 export default defineComponent({
   components: {
