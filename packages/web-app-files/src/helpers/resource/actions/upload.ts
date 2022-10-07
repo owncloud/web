@@ -111,11 +111,11 @@ export class ResourcesUpload extends ConflictDialog {
         })
         continue
       }
-
+      const conflictsLeft = allConflictsCount - count
       const resolvedConflict: ResolveConflict = await this.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
-        allConflictsCount - count,
-        false,
+        conflictsLeft,
+        conflictsLeft === 1,
         isFolder
       )
       count++

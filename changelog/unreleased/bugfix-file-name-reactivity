@@ -1,0 +1,6 @@
+Bugfix: File name reactivity
+
+We've fixed a bug where the file name would not update reactively in the sidebar after changing it.
+
+https://github.com/owncloud/web/pull/7734
+https://github.com/owncloud/web/issues/7713

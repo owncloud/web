@@ -11,11 +11,16 @@ Summary
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
+* Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+* Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
+* Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
+* Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
@@ -56,6 +61,29 @@ Details
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
 
+* Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
+
+   We've disabled shares loading on public and trash locations as it's not needed.
+
+   https://github.com/owncloud/web/issues/7667
+   https://github.com/owncloud/web/pull/7739
+
+* Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+
+   We've fixed a bug where existing quicklinks would disappear when performing the "Create
+   quicklink"-action.
+
+   https://github.com/owncloud/web/issues/7736
+   https://github.com/owncloud/web/pull/7740
+
+* Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
+
+   We've fixed a bug where the file name would not update reactively in the sidebar after changing
+   it.
+
+   https://github.com/owncloud/web/issues/7713
+   https://github.com/owncloud/web/pull/7734
+
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 
    * Fixed "Keep both" and "Skip" options in Firefox * Fixed "Keep both" and "Skip" options when
@@ -72,6 +100,7 @@ Details
 
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
+   https://github.com/owncloud/web/pull/7735
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
@@ -79,6 +108,14 @@ Details
 
    https://github.com/owncloud/web/issues/7618
    https://github.com/owncloud/web/pull/7640
+
+* Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
+
+   We've fixed a bug where the file list would not update after removing the last share or link.
+   Also, we now prevent the shares tree from being loaded again if the removed share was not the last
+   one.
+
+   https://github.com/owncloud/web/pull/7748
 
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 
@@ -94,6 +131,13 @@ Details
 
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7504
+
+* Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
+
+   We've fixed the display of the search bar on small screens.
+
+   https://github.com/owncloud/web/issues/7617
+   https://github.com/owncloud/web/pull/7675
 
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 
@@ -138,7 +182,9 @@ Details
    those has been fixed.
 
    https://github.com/owncloud/web/issues/7103
+   https://github.com/owncloud/web/issues/7741
    https://github.com/owncloud/web/pull/7651
+   https://github.com/owncloud/web/pull/7742
 
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 
@@ -204,6 +250,7 @@ Details
 
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
+   https://github.com/owncloud/web/pull/7735
 
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 
