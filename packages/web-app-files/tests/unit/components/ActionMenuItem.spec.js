@@ -51,7 +51,7 @@ describe('ActionMenuItem component', () => {
       expect(button.exists()).toBeTruthy()
       expect(button.element.tagName).toBe('BUTTON')
       await button.trigger('click')
-      expect(spyHandler).toBeCalled()
+      expect(spyHandler).toHaveBeenCalled()
     })
   })
   describe('component is of type router-link', () => {
