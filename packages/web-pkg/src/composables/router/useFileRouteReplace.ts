@@ -1,7 +1,7 @@
 import { useRouter } from './useRouter'
 import { useConfigurationManager } from '../configuration'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '../../helpers/router'
+import { createFileRouteOptions, mergeFileRouteOptions } from '../../helpers/router'
 import Router from 'vue-router'
 import { ConfigurationManager } from '../../configuration'
 
@@ -32,21 +32,13 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
       return false
     }
 
-    const routeOptions = createFileRouteOptions(space, resource, {
-      configurationManager
-    })
-    const oldRoute = router.currentRoute
-    const newRoute = Object.assign({}, oldRoute, {
-      params: {
-        ...oldRoute.params,
-        ...routeOptions.params
-      },
-      query: {
-        ...oldRoute.query,
-        ...routeOptions.query
-      }
-    })
-    router.replace(newRoute)
+    const routeOptions = mergeFileRouteOptions(
+      router.currentRoute,
+      createFileRouteOptions(space, resource, {
+        configurationManager
+      })
+    )
+    router.replace(routeOptions)
     return true
   }
 
