@@ -140,7 +140,9 @@ describe('rename', () => {
 function getWrapper() {
   const mocks = {
     ...defaultComponentMocks(),
-    space: mockDeep<SpaceResource>()
+    space: mockDeep<SpaceResource>({
+      webDavPath: 'irrelevant'
+    })
   }
 
   const storeOptions = {

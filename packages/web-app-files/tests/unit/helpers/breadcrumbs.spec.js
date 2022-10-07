@@ -4,7 +4,11 @@ describe('builds an array of breadcrumbitems', () => {
   it('from a path', () => {
     const breadCrumbs = breadcrumbsFromPath({ path: '/files/spaces/personal/home/test' }, '/test')
     expect(breadCrumbs).toEqual([
-      { allowContextActions: true, text: 'test', to: { path: '/files/spaces/personal/home/test' } }
+      {
+        allowContextActions: true,
+        text: 'test',
+        to: { path: '/files/spaces/personal/home/test', query: {} }
+      }
     ])
   })
 
