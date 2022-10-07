@@ -24,7 +24,7 @@ export default {
     }
   },
   watch: {
-    $route: {
+    '$route.query': {
       handler: function () {
         this.$nextTick(() => {
           this.debouncedSearch()
