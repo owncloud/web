@@ -80,12 +80,16 @@ export default {
         if (webDavParentPath in parentFolders) {
           parentResources = parentFolders[webDavParentPath]
         } else {
-          const listResponse = await this.$client.files.list(
-            webDavParentPath,
-            1,
-            DavProperties.Default
-          )
-          parentResources = listResponse.map((i) => buildResource(i))
+          try {
+            const listResponse = await this.$client.files.list(
+              webDavParentPath,
+              1,
+              DavProperties.Default
+            )
+            parentResources = listResponse.map((i) => buildResource(i))
+          } catch (error) {
+            await this.restoreFolderStructure(resource)
+          }
           const resourceParentPath = this.getParentFolderFromResource(resource)
           parentResources = parentResources.filter(
             (e) => this.getParentFolderFromResource(e) === resourceParentPath
@@ -151,8 +155,11 @@ export default {
       return resolvedConflicts
     },
     async restoreFolderStructure(resource) {
-      /* const createdFolders = []
-      const folders = resource.path.split('/')
+      const { webdav } = clientService
+      const createdFolders = []
+      const directory = this.getParentFolderFromResource(resource)
+
+      const folders = directory.split('/')
       let createdSubFolders = ''
       for (const subFolder of folders) {
         if (!subFolder) {
@@ -166,21 +173,15 @@ export default {
           continue
         }
 
-        let uploadId
-        if (!createdSubFolders) {
-          uploadId = file.meta.topLevelFolderId
-        } else {
-          uploadId = uuid.v4()
-        }
-
         try {
-          await this.client.files.createFolder(`${file.meta.webDavBasePath}/${folderToCreate}`)
+          await webdav.createFolder(this.space, { path: folderToCreate })
         } catch (error) {
           console.error(error)
         }
+
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)
-      } */
+      }
     },
     async restoreResources(resources, filesToOverwrite) {
       const restoredResources = []
