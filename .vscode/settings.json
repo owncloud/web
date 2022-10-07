@@ -10,6 +10,7 @@
   "eslint.alwaysShowStatus": false,
   "eslint.format.enable": true,
   "eslint.packageManager": "yarn",
+  "jest.jestCommandLine": "yarn test:unit",
   "npm.packageManager": "yarn",
   "typescript.format.enable": false
 }
