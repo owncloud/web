@@ -30,6 +30,13 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
           `${depth}`
         )
 
+        // FIXME: This is a workaround for https://github.com/owncloud/ocis/issues/4758
+        if(webDavResources.length === 1) {
+          webDavResources[0].name = urlJoin(space.id, path, {
+            leadingSlashes: true
+          })
+        }
+
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
         // At first we tried to do this in buildResource but only the public link root resource knows it's a public link
         webDavResources.forEach((resource) => {
