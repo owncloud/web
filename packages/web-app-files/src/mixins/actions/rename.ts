@@ -6,6 +6,7 @@ import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { renameResource } from '../../helpers/resources'
 
 export default {
   computed: {
@@ -55,7 +56,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['RENAME_FILE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_CURRENT_FOLDER']),
 
     async $_rename_trigger({ resources }, space?: SpaceResource) {
       let parentResources
@@ -182,11 +183,15 @@ export default {
         })
         this.hideModal()
 
-        if (isSameResource(resource, this.currentFolder)) {
-          if (isShareSpaceResource(space)) {
-            space.driveAlias = `share/${newName}`
-            space.name = newName
+        const isCurrentFolder = isSameResource(resource, this.currentFolder)
 
+        if (isShareSpaceResource(space) && resource.isReceivedShare()) {
+          space.rename(newName)
+
+          if (isCurrentFolder) {
+            const currentFolder = { ...this.currentFolder } as Resource
+            currentFolder.name = newName
+            this.SET_CURRENT_FOLDER(currentFolder)
             return this.$router.push(
               createFileRouteOptions(space, {
                 path: '',
@@ -195,6 +200,16 @@ export default {
             )
           }
 
+          const sharedResource = { ...resource }
+          sharedResource.name = newName
+          this.UPSERT_RESOURCE(sharedResource)
+          return
+        }
+
+        if (isCurrentFolder) {
+          const currentFolder = { ...this.currentFolder } as Resource
+          renameResource(space, currentFolder, newPath)
+          this.SET_CURRENT_FOLDER(currentFolder)
           return this.$router.push(
             createFileRouteOptions(this.space, {
               path: newPath,
@@ -202,8 +217,9 @@ export default {
             })
           )
         }
-
-        this.RENAME_FILE({ space, resource, newPath })
+        const fileResource = { ...resource } as Resource
+        renameResource(space, fileResource, newPath)
+        this.UPSERT_RESOURCE(fileResource)
       } catch (error) {
         console.error(error)
         this.toggleModalConfirmButton()

@@ -2,13 +2,18 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import Router from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
-import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled,
+  useCapabilitySpacesEnabled
+} from 'web-pkg/src/composables'
 import { getIndicators } from '../../helpers/statusIndicators'
 import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from '@vue/composition-api'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
+import { aggregateResourceShares } from '../../helpers/resources'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -34,6 +39,7 @@ export class FolderLoaderSpace implements FolderLoader {
     } = context
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasShareJail = useCapabilityShareJailEnabled(store)
+    const hasResharing = useCapabilityFilesSharingResharing(store)
     const hasSpaces = useCapabilitySpacesEnabled(store)
 
     return useTask(function* (
@@ -51,9 +57,20 @@ export class FolderLoaderSpace implements FolderLoader {
         let currentFolder = resources.shift()
         replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
 
-        if (path === '/' && !['personal', 'share', 'public'].includes(space.driveType)) {
-          // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
-          currentFolder = space
+        if (path === '/') {
+          if (space.driveType === 'share') {
+            const parentShare = yield client.shares.getShare(space.shareId)
+            const aggregatedShares = aggregateResourceShares(
+              [parentShare.shareInfo],
+              true,
+              unref(hasResharing),
+              true
+            )
+            currentFolder = aggregatedShares[0]
+          } else if (!['personal', 'public'].includes(space.driveType)) {
+            // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
+            currentFolder = space
+          }
         }
 
         if (options.loadShares) {

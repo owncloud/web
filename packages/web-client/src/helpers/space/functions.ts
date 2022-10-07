@@ -42,14 +42,19 @@ export function buildShareSpaceResource({
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
-  return buildSpace({
+  const space = buildSpace({
     id: [SHARE_JAIL_ID, shareId].join('!'),
     driveAlias: `share/${shareName}`,
     driveType: 'share',
     name: shareName,
     shareId,
     serverUrl
-  })
+  }) as ShareSpaceResource
+  space.rename = (newName: string) => {
+    space.driveAlias = `share/${newName}`
+    space.name = newName
+  }
+  return space
 }
 
 export function buildSpace(data): SpaceResource {

@@ -33,6 +33,7 @@ export const isProjectSpaceResource = (resource: Resource): resource is ProjectS
 
 export interface ShareSpaceResource extends SpaceResource {
   __shareSpaceResource?: any
+  rename(newName: string): void
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
   return resource.driveType === 'share'
