@@ -14,7 +14,7 @@ interface AppNavigationOptions {
 
 export interface AppNavigationResult {
   closeApp(): void
-  validateRoute(context: MaybeRef<FileContext>, resource: Resource): void
+  replaceInvalidFileRoute(context: MaybeRef<FileContext>, resource: Resource): void
 }
 
 export const contextRouteNameKey = 'contextRouteName'
@@ -86,7 +86,7 @@ export function useAppNavigation({
   }
 
   const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
-  const validateRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
+  const replaceInvalidFileRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
     const ctx = unref(context)
     return replaceInvalidFileRoute({
       space: unref(ctx.space),
@@ -101,7 +101,7 @@ export function useAppNavigation({
   }
 
   return {
-    validateRoute,
+    replaceInvalidFileRoute,
     closeApp
   }
 }

@@ -92,7 +92,7 @@ export default defineComponent({
       getFileInfo,
       getFileContents,
       putFileContents,
-      validateRoute
+      replaceInvalidFileRoute
     } = defaults
     const serverContent = ref()
     const currentContent = ref()
@@ -104,7 +104,7 @@ export default defineComponent({
       resource.value = yield getFileInfo(currentFileContext, {
         davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
       })
-      validateRoute(currentFileContext, unref(resource))
+      replaceInvalidFileRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )
