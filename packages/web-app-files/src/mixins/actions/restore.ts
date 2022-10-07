@@ -73,9 +73,7 @@ export default {
       const conflicts = []
       const resolvedResources = []
       for (const resource of resources) {
-        debugger
         const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
-        console.log(resource)
 
         // ? check if parent folder has already been requested
         let parentResources = []
@@ -190,11 +188,12 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
-        const path = isLocationTrashActive(this.$router, 'files-trash-generic')
-          ? buildWebDavSpacesTrashPath(this.$route.params.storageId)
+        const hasShareJail = this.capabilities?.spaces?.share_jail === true
+        const path = hasShareJail
+          ? buildWebDavSpacesTrashPath(this.space.id)
           : buildWebDavFilesTrashPath(this.user.id)
-        const restorePath = isLocationTrashActive(this.$router, 'files-trash-generic')
-          ? buildWebDavSpacesPath(this.$route.params.storageId, resource.path)
+        const restorePath = hasShareJail
+          ? buildWebDavSpacesPath(this.space.id, resource.path)
           : buildWebDavFilesPath(this.user.id, resource.path)
         const overwrite = filesToOverwrite.includes(resource)
 
@@ -249,9 +248,7 @@ export default {
       if (this.capabilities?.spaces?.enabled) {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-        const driveId = isLocationTrashActive(this.$router, 'files-trash-generic')
-          ? this.$route.params.storageId
-          : this.spaces.find((s) => s.driveType === 'personal').id
+        const driveId = this.space.id
         const driveResponse = await graphClient.drives.getDrive(driveId)
         this.UPDATE_SPACE_FIELD({
           id: driveResponse.data.id,
@@ -294,7 +291,7 @@ export default {
           ...resolvedResources
         ])
         resource.name = resolvedName
-        resource.path = `${parentPath}/${resolvedName}`
+        resource.path = `${parentPath}${resolvedName}`
         resolvedResources.push(resource)
       }
       this.restoreResources(resolvedResources, filesToOverwrite)
