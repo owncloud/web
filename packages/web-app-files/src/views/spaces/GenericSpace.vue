@@ -123,10 +123,17 @@ import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
-import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { FolderLoaderOptions } from '../../services/folder'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import omit from 'lodash-es/omit'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -207,12 +214,12 @@ export default defineComponent({
 
     breadcrumbs() {
       const rootBreadcrumbItems: BreadcrumbItem[] = []
-      if (this.space.driveType === 'project') {
+      if (isProjectSpaceResource(this.space)) {
         rootBreadcrumbItems.push({
           text: this.$gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects')
         })
-      } else if (this.space.driveType === 'share') {
+      } else if (isShareSpaceResource(this.space)) {
         rootBreadcrumbItems.push(
           {
             text: this.$gettext('Shares'),
@@ -226,16 +233,23 @@ export default defineComponent({
       }
 
       let spaceBreadcrumbItem
-      const { params, query } = createFileRouteOptions(this.space, { fileId: this.space.id })
-      if (this.space.driveType === 'personal') {
+      let { params, query } = createFileRouteOptions(this.space, { fileId: this.space.id })
+      query = { ...this.$route.query, ...query }
+      if (isPersonalSpaceResource(this.space)) {
         spaceBreadcrumbItem = {
           text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
           to: createLocationSpaces('files-spaces-generic', {
             params,
-            query: {
-              ...this.$route.query,
-              ...query
-            }
+            query
+          })
+        }
+      } else if (isShareSpaceResource(this.space)) {
+        spaceBreadcrumbItem = {
+          allowContextActions: true,
+          text: this.space.name,
+          to: createLocationSpaces('files-spaces-generic', {
+            params,
+            query: omit(query, 'fileId')
           })
         }
       } else if (isPublicSpaceResource(this.space)) {
@@ -252,10 +266,7 @@ export default defineComponent({
           text: this.space.name,
           to: createLocationSpaces('files-spaces-generic', {
             params,
-            query: {
-              ...this.$route.query,
-              ...query
-            }
+            query
           })
         }
       }
