@@ -85,7 +85,9 @@ export function useAppNavigation({
     })
   }
 
-  const { replaceInvalidFileRoute: replaceInvalidFileRouteGeneric } = useFileRouteReplace({ router })
+  const { replaceInvalidFileRoute: replaceInvalidFileRouteGeneric } = useFileRouteReplace({
+    router
+  })
   const replaceInvalidFileRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
     const ctx = unref(context)
     return replaceInvalidFileRouteGeneric({
