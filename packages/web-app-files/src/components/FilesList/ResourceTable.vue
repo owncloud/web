@@ -911,6 +911,7 @@ export default defineComponent({
   &-tag-more {
     cursor: pointer;
     border: 0 !important;
+    vertical-align: text-bottom;
   }
   &-edit-name {
     display: inline-flex;
