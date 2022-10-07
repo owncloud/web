@@ -115,7 +115,7 @@
 <script lang="ts">
 import { defineComponent, PropType, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
   useStore,
   useCapabilitySpacesEnabled,
@@ -135,6 +135,7 @@ import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
 import { SpaceResource } from 'web-client/src/helpers'
+import { isLocationSharesActive } from '../../../router'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -371,6 +372,7 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
@@ -565,26 +567,32 @@ export default defineComponent({
       if (this.hasShareJail && path === '/') {
         path = `/${resource.name}`
       }
-      // removeLink currently fetches all shares from the backend in order to reload the shares indicators
-      // TODO: Check if to-removed link is last link share and only reload if it's the last link
-      await this.removeLink({
-        client,
-        share,
-        path,
-        storageId: resource.fileId
-      })
-        .then(
-          this.showMessage({
-            title: this.$gettext('Link was deleted successfully')
-          })
-        )
-        .catch((e) => {
-          console.error(e)
-          this.showMessage({
-            title: this.$gettext('Failed to delete link'),
-            status: 'danger'
-          })
+
+      const lastLinkId =
+        this.currentFileOutgoingLinks.length === 1 ? this.currentFileOutgoingLinks[0].id : undefined
+
+      try {
+        await this.removeLink({
+          client,
+          share,
+          path,
+          storageId: resource.fileId,
+          loadIndicators: !!lastLinkId
         })
+        this.showMessage({
+          title: this.$gettext('Link was deleted successfully')
+        })
+
+        if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
+          this.REMOVE_FILES([{ id: lastLinkId }])
+        }
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to delete link'),
+          status: 'danger'
+        })
+      }
     }
   }
 })

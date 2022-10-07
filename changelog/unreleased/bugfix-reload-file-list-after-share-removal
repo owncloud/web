@@ -1,0 +1,5 @@
+Bugfix: Reload file list after last share removal
+
+We've fixed a bug where the file list would not update after removing the last share or link. Also, we now prevent the shares tree from being loaded again if the removed share was not the last one.
+
+https://github.com/owncloud/web/pull/7748
