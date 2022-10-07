@@ -65,14 +65,14 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
   useStore,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing
 } from 'web-pkg/src/composables'
-import { createLocationSpaces } from '../../../router'
+import { createLocationSpaces, isLocationSharesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
 import { getParentPaths } from '../../../helpers/path'
 import { ShareTypes } from 'web-client/src/helpers/share'
@@ -240,6 +240,8 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['deleteShare']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
+    ...mapMutations('Files', ['REMOVE_FILES']),
+
     toggleShareesListCollapsed() {
       this.sharesListCollapsed = !this.sharesListCollapsed
     },
@@ -288,31 +290,41 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    $_ocCollaborators_deleteShare(share) {
+    async $_ocCollaborators_deleteShare(share) {
       let path = this.highlightedFile.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
         path = `/${this.highlightedFile.name}`
       }
-      this.deleteShare({
-        client: this.$client,
-        share: share,
-        path,
-        storageId: this.highlightedFile.fileId
-      })
-        .then(() => {
-          this.hideModal()
-          this.showMessage({
-            title: this.$gettext('Share was removed successfully')
-          })
+
+      const lastShareId =
+        this.currentFileOutgoingCollaborators.length === 1
+          ? this.currentFileOutgoingCollaborators[0].id
+          : undefined
+
+      try {
+        await this.deleteShare({
+          client: this.$client,
+          share: share,
+          path,
+          storageId: this.highlightedFile.fileId,
+          loadIndicators: !!lastShareId
         })
-        .catch((error) => {
-          console.error(error)
-          this.showMessage({
-            title: this.$gettext('Failed to remove share'),
-            status: 'danger'
-          })
+
+        this.hideModal()
+        this.showMessage({
+          title: this.$gettext('Share was removed successfully')
         })
+        if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-with-others')) {
+          this.REMOVE_FILES([{ id: lastShareId }])
+        }
+      } catch (error) {
+        console.error(error)
+        this.showMessage({
+          title: this.$gettext('Failed to remove share'),
+          status: 'danger'
+        })
+      }
     },
     getSharedParentRoute(parentShare) {
       if (!parentShare.indirect) {

@@ -304,11 +304,14 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, share, path, storageId }) {
+  deleteShare(context, { client, share, path, storageId, loadIndicators = false }) {
     return client.shares.deleteShare(share.id, {} as any).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+
+      if (loadIndicators) {
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+      }
     })
   },
   /**
@@ -455,11 +458,14 @@ export default {
         })
     })
   },
-  removeLink(context, { share, client, path, storageId }) {
-    client.shares.deleteShare(share.id).then(() => {
+  removeLink(context, { share, client, path, storageId, loadIndicators = false }) {
+    return client.shares.deleteShare(share.id).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+
+      if (loadIndicators) {
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+      }
     })
   },
 
