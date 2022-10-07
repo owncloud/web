@@ -16,7 +16,7 @@ export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
       { path: targetPath },
       options?: { overwrite?: boolean }
     ): Promise<void> {
-      if (isShareSpaceResource(sourceSpace)) {
+      if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {
         return sdk.files.move(
           `${sourceSpace.webDavPath}/${sourcePath || ''}`,
           `/spaces/${SHARE_JAIL_ID}!${SHARE_JAIL_ID}/${targetPath || ''}`,
