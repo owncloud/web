@@ -4,7 +4,6 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Restore from 'web-app-files/src/mixins/actions/restore.ts'
 import { DavProperties } from 'web-pkg/src/constants'
 import Restore from '@files/src/mixins/actions/restore.ts'
-import { ResolveStrategy } from '../../../../src/helpers/resource/copyMove'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'
@@ -96,18 +95,6 @@ describe('restore', () => {
 
       expect(resolvedResources).toContain(resource)
     })
-    it('should return resolved conflicts', async () => {
-      const wrapper = getWrapper()
-      const resource = { id: '1', path: '1', name: '1' }
-      const resolveFileConflictMethod = jest.fn(() =>
-        Promise.resolve({ strategy: ResolveStrategy.REPLACE, doForAllConflicts: true })
-      )
-      const resolved = await wrapper.vm.collectRestoreResolveStrategies(
-        [resource],
-        resolveFileConflictMethod
-      )
-      expect(resolved).toContainEqual({ resource, strategy: ResolveStrategy.REPLACE })
-    })
   })
 })
 
@@ -130,6 +117,7 @@ function getWrapper({
       $gettext: jest.fn(),
       $gettextInterpolate: jest.fn(),
       space: { driveType, isEditor: () => false, isManager: () => false },
+      createModal: jest.fn(),
       $client: {
         ...sdkMock,
         files: {
