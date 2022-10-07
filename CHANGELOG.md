@@ -17,6 +17,7 @@ Summary
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
+* Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
@@ -107,6 +108,14 @@ Details
 
    https://github.com/owncloud/web/issues/7618
    https://github.com/owncloud/web/pull/7640
+
+* Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
+
+   We've fixed a bug where the file list would not update after removing the last share or link.
+   Also, we now prevent the shares tree from being loaded again if the removed share was not the last
+   one.
+
+   https://github.com/owncloud/web/pull/7748
 
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 
