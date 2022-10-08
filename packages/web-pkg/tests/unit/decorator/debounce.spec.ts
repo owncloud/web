@@ -19,10 +19,10 @@ describe('Debounce', () => {
       sample.resolve()
     }
 
-    expect(hammered).toBeCalledTimes(0)
+    expect(hammered).toHaveBeenCalledTimes(0)
 
     jest.runAllTimers()
 
-    expect(hammered).toBeCalledTimes(1)
+    expect(hammered).toHaveBeenCalledTimes(1)
   })
 })

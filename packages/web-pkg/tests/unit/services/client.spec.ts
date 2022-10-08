@@ -14,11 +14,11 @@ describe('client', () => {
           headers: { Authorization: 'Bearer token', 'X-Requested-With': 'XMLHttpRequest' }
         })
       )
-      expect(mockAxios.create).toBeCalledTimes(1)
+      expect(mockAxios.create).toHaveBeenCalledTimes(1)
       clientService.httpAuthenticated('token')
-      expect(mockAxios.create).toBeCalledTimes(1)
+      expect(mockAxios.create).toHaveBeenCalledTimes(1)
       clientService.httpAuthenticated('new')
-      expect(mockAxios.create).toBeCalledTimes(2)
+      expect(mockAxios.create).toHaveBeenCalledTimes(2)
     })
 
     test('httpUnAuthenticated', () => {
@@ -29,13 +29,13 @@ describe('client', () => {
           headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
       )
-      expect(mockAxios.create).toBeCalledTimes(1)
+      expect(mockAxios.create).toHaveBeenCalledTimes(1)
       client = clientService.httpUnAuthenticated
       expect(client).toBeInstanceOf(HttpClient)
-      expect(mockAxios.create).toBeCalledTimes(1)
+      expect(mockAxios.create).toHaveBeenCalledTimes(1)
       client = clientService.httpUnAuthenticated
       expect(client).toBeInstanceOf(HttpClient)
-      expect(mockAxios.create).toBeCalledTimes(1)
+      expect(mockAxios.create).toHaveBeenCalledTimes(1)
     })
   })
 })

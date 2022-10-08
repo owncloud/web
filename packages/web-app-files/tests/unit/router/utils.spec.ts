@@ -57,7 +57,7 @@ describe('utils', () => {
       }
 
       const isFilesLocationActive = isLocationActiveDirector({ name: 'foo' }, { name: 'bar' })
-      expect(() => isFilesLocationActive(fakeRouter as VueRouter, 'unknown')).toThrowError()
+      expect(() => isFilesLocationActive(fakeRouter as VueRouter, 'unknown')).toThrow()
     })
   })
 

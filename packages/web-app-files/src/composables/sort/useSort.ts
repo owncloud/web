@@ -82,7 +82,7 @@ function createSortByQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
   return useRouteQueryPersisted({
     name: unref(options.sortByQueryName) || SortConstants.sortByQueryName,
     defaultValue: unref(firstSortableField(unref(options.fields))?.name),
-    routeName: unref(options.routeName || useRouteName())
+    routeName: unref(options.routeName) || unref(useRouteName())
   })
 }
 
@@ -94,7 +94,7 @@ function createSortDirQueryRef<T>(options: SortOptions<T>): Ref<QueryValue> {
   return useRouteQueryPersisted({
     name: unref(options.sortDirQueryName) || SortConstants.sortDirQueryName,
     defaultValue: unref(firstSortableField(unref(options.fields))?.sortDir),
-    routeName: unref(options.routeName || useRouteName())
+    routeName: unref(options.routeName) || unref(useRouteName())
   })
 }
 
