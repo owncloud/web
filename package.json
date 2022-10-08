@@ -8,6 +8,7 @@
     "packages/babel-preset",
     "packages/eslint-config",
     "packages/prettier-config",
+    "packages/tsconfig",
     "packages/web-app-draw-io",
     "packages/web-app-external",
     "packages/web-app-files",

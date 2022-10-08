@@ -1973,6 +1973,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ownclouders/tsconfig@workspace:packages/tsconfig":
+  version: 0.0.0-use.local
+  resolution: "@ownclouders/tsconfig@workspace:packages/tsconfig"
+  languageName: unknown
+  linkType: soft
+
 "@playwright/test@npm:^1.27.0":
   version: 1.27.0
   resolution: "@playwright/test@npm:1.27.0"
