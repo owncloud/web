@@ -28,7 +28,7 @@ import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import path from 'path'
+import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
 import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
@@ -101,7 +101,7 @@ export default defineComponent({
       if (this.resource.shareId) {
         return this.resource.path === '/'
           ? this.$gettext('Shared with me')
-          : path.basename(this.resource.shareRoot)
+          : basename(this.resource.shareRoot)
       }
 
       if (!this.hasShareJail) {
@@ -124,7 +124,7 @@ export default defineComponent({
       if (this.resource.shareId && this.resource.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
-      return this.createFolderLink(path.dirname(this.resource.path))
+      return this.createFolderLink(dirname(this.resource.path))
     }
   },
   mounted() {
@@ -161,7 +161,7 @@ export default defineComponent({
       if (this.resource.shareId) {
         const space = buildShareSpaceResource({
           shareId: this.resource.shareId,
-          shareName: path.basename(this.resource.shareRoot),
+          shareName: basename(this.resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces('files-spaces-generic', {

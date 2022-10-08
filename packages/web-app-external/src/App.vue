@@ -41,7 +41,7 @@ import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/co
 import { defineComponent } from '@vue/runtime-core'
 import { DavProperty } from 'web-pkg/src/constants'
 import { urlJoin } from 'web-pkg/src/utils'
-import qs from 'qs'
+import { stringify } from 'qs'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
@@ -106,7 +106,7 @@ export default defineComponent({
         configurationManager.serverUrl,
         this.capabilities.files.app_providers[0].open_url
       )
-      const query = qs.stringify({
+      const query = stringify({
         file_id: fileId,
         lang: this.$language.current,
         ...(this.applicationName && { app_name: this.applicationName })
