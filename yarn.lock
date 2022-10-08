@@ -1934,6 +1934,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ownclouders/babel-preset@workspace:packages/babel-preset":
+  version: 0.0.0-use.local
+  resolution: "@ownclouders/babel-preset@workspace:packages/babel-preset"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.16.7
+  languageName: unknown
+  linkType: soft
+
 "@ownclouders/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@ownclouders/eslint-config@workspace:packages/eslint-config"
