@@ -27,7 +27,6 @@
   "apps": [
     "files",
     "text-editor",
-    "preview",
     "pdf-viewer",
     "search",
     "external",
