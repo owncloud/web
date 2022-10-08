@@ -1,0 +1,6 @@
+Bugfix: Disable shares loading on public and trash locations
+
+We've disabled shares loading on public and trash locations as it's not needed.
+
+https://github.com/owncloud/web/pull/7739
+https://github.com/owncloud/web/issues/7667

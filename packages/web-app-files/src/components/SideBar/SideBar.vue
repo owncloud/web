@@ -26,7 +26,10 @@
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
-      <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
+      <space-info
+        v-if="isSingleResource && highlightedFileIsSpace"
+        class="sidebar-panel__space_info"
+      />
     </template>
   </SideBar>
 </template>
@@ -42,7 +45,7 @@ import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive
+  isLocationTrashActive
 } from '../../router'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
 import {
@@ -112,7 +115,6 @@ export default defineComponent({
     const { webdav } = useClientService()
 
     return {
-      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       isSharedWithOthersLocation: useActiveLocation(
         isLocationSharesActive,
@@ -122,6 +124,7 @@ export default defineComponent({
       isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
       isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
       isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
+      isTrashLocation: useActiveLocation(isLocationTrashActive, 'files-trash-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
@@ -142,7 +145,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile', 'selectedFiles', 'currentFolder']),
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapState(['user']),
@@ -203,6 +206,9 @@ export default defineComponent({
     },
     highlightedFileIsSpace() {
       return this.highlightedFile?.type === 'space'
+    },
+    sharesLoadingDisabledOnCurrentRoute() {
+      return this.isPublicFilesLocation || this.isTrashLocation
     }
   },
   watch: {
@@ -214,13 +220,7 @@ export default defineComponent({
         }
 
         const loadShares =
-          !!oldFile ||
-          this.isSpacesProjectsLocation ||
-          this.isSharedWithMeLocation ||
-          this.isSharedWithOthersLocation ||
-          this.isSharedViaLinkLocation ||
-          this.isSearchLocation ||
-          this.isFavoritesLocation
+          !this.sharesLoadingDisabledOnCurrentRoute && (!!oldFile || !this.currentFolder)
         this.fetchFileInfo(loadShares)
       },
       deep: true

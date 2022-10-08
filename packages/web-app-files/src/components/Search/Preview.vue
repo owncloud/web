@@ -14,6 +14,7 @@
       :parent-folder-link="parentFolderLink"
       :parent-folder-name-default="defaultParentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
+      @parentFolderClicked="parentFolderClicked"
     />
   </oc-button>
 </template>
@@ -32,6 +33,7 @@ import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg
 import { defineComponent } from '@vue/composition-api'
 import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { bus } from 'web-pkg/src/instance'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -65,7 +67,7 @@ export default defineComponent({
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path, this.resource)
+            to: this.createFolderLink(this.resource.path)
           }
         : {}
     },
@@ -84,7 +86,16 @@ export default defineComponent({
       return this.searchResult.data
     },
     matchingSpace() {
-      return this.spaces.find((space) => space.id === this.resource.storageId)
+      const space = this.spaces.find((space) => space.id === this.resource.storageId)
+      if (space) {
+        return space
+      }
+
+      return buildShareSpaceResource({
+        shareId: this.resource.shareId,
+        shareName: this.resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     },
     defaultParentFolderName() {
       if (this.resource.shareId) {
@@ -143,6 +154,9 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
+    parentFolderClicked() {
+      bus.publish('app.search.options-drop.hide')
+    },
     createFolderLink(p: string) {
       if (this.resource.shareId) {
         const space = buildShareSpaceResource({

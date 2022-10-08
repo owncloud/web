@@ -34,7 +34,6 @@ export default {
   components: {
     PrivateLinkItem
   },
-  inject: ['displayedItem'],
   props: {
     isSubPanelActive: {
       type: Boolean,
@@ -43,6 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters(['capabilities']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapState('Files', ['areFileExtensionsShown']),
 
     privateLinkEnabled() {
@@ -50,7 +50,7 @@ export default {
     },
 
     file() {
-      return this.displayedItem.value
+      return this.highlightedFile
     }
   }
 }
