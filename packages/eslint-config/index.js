@@ -13,8 +13,8 @@ module.exports = {
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: {
-      "js": "@babel/eslint-parser",
-      "ts": "@typescript-eslint/parser",
+      js: '@babel/eslint-parser',
+      ts: '@typescript-eslint/parser'
     },
     requireConfigFile: false,
     sourceType: 'module'
@@ -30,7 +30,7 @@ module.exports = {
     'node/no-callback-literal': 'off',
     'unused-imports/no-unused-imports': 'error',
     'nonblock-statement-body-position': ['error', 'below'],
-    'curly': 'error'
+    curly: 'error'
   },
   globals: {
     require: false,

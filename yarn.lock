@@ -1934,6 +1934,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ownclouders/eslint-config@workspace:packages/eslint-config":
+  version: 0.0.0-use.local
+  resolution: "@ownclouders/eslint-config@workspace:packages/eslint-config"
+  dependencies:
+    "@babel/eslint-parser": ^7.19.1
+    "@typescript-eslint/eslint-plugin": ^5.39.0
+    "@typescript-eslint/parser": ^5.39.0
+    eslint-config-prettier: ^6.10.0
+    eslint-config-standard: ^16.0.3
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-jest: ^27.1.1
+    eslint-plugin-node: ^11.1.0
+    eslint-plugin-prettier: ^4.0.0
+    eslint-plugin-promise: ^5.2.0
+    eslint-plugin-unused-imports: ^2.0.0
+    eslint-plugin-vue: ^7.13.0
+    eslint-plugin-vuejs-accessibility: ^0.7.1
+    typescript: ^4.8.4
+  peerDependencies:
+    eslint: ^7.32.0
+  languageName: unknown
+  linkType: soft
+
 "@playwright/test@npm:^1.27.0":
   version: 1.27.0
   resolution: "@playwright/test@npm:1.27.0"
@@ -11607,7 +11630,6 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@babel/core": ^7.17.5
-    "@babel/eslint-parser": ^7.19.1
     "@babel/polyfill": ^7.12.1
     "@babel/preset-env": ^7.17.10
     "@babel/register": ^7.17.7
@@ -11628,8 +11650,6 @@ __metadata:
     "@types/lodash-es": ^4.17.6
     "@types/node": ^16.10.3
     "@types/node-fetch": ^2.6.0
-    "@typescript-eslint/eslint-plugin": ^5.39.0
-    "@typescript-eslint/parser": ^5.39.0
     "@vue/runtime-dom": ^3.2.36
     "@vue/test-utils": ^1.3.0
     autoprefixer: ^10.4.2
@@ -11641,16 +11661,6 @@ __metadata:
     depcheck: ^1.4.3
     ejs: ^3.1.5
     eslint: ^7.32.0
-    eslint-config-prettier: ^6.10.0
-    eslint-config-standard: ^16.0.3
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-jest: ^27.1.1
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-prettier: ^4.0.0
-    eslint-plugin-promise: ^5.2.0
-    eslint-plugin-unused-imports: ^2.0.0
-    eslint-plugin-vue: ^7.13.0
-    eslint-plugin-vuejs-accessibility: ^0.7.1
     flush-promises: ^1.0.2
     focus-trap: ^6.9.0
     focus-trap-vue: ^1.1.1
