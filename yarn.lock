@@ -11633,9 +11633,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.52.7":
-  version: 2.52.7
-  resolution: "rollup@npm:2.52.7"
+"rollup@npm:^2.79.1":
+  version: 2.79.1
+  resolution: "rollup@npm:2.79.1"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -11643,7 +11643,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 92629c518c234f5f02249ed225fdb8c0bc25039ee91e3713107bf3b859344b81d986cbad71d793b6a973d852a495c2e5352c9d628eae992818036c0b45ea843c
+  checksum: 6a2bf167b3587d4df709b37d149ad0300692cc5deb510f89ac7bdc77c8738c9546ae3de9322b0968e1ed2b0e984571f5f55aae28fa7de4cfcb1bc5402a4e2be6
   languageName: node
   linkType: hard
 
@@ -11706,7 +11706,7 @@ __metadata:
     react: ^17.0.2
     regenerator-runtime: ^0.13.7
     requirejs: ^2.3.6
-    rollup: ^2.52.7
+    rollup: ^2.79.1
     rollup-plugin-babel: ^4.4.0
     rollup-plugin-delete: ^2.0.0
     rollup-plugin-gzip: ^2.5.0
