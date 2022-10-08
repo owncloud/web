@@ -6,6 +6,7 @@
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "workspaces": [
     "packages/eslint-config",
+    "packages/prettier-config",
     "packages/web-app-draw-io",
     "packages/web-app-external",
     "packages/web-app-files",
@@ -96,7 +97,6 @@
     "pino-pretty": "^7.6.0",
     "playwright": "^1.26.1",
     "postcss": "^8.3.6",
-    "prettier": "^2.3.2",
     "react": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
     "requirejs": "^2.3.6",

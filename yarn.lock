@@ -1957,6 +1957,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ownclouders/prettier-config@workspace:packages/prettier-config":
+  version: 0.0.0-use.local
+  resolution: "@ownclouders/prettier-config@workspace:packages/prettier-config"
+  dependencies:
+    prettier: ^2.3.2
+  languageName: unknown
+  linkType: soft
+
 "@playwright/test@npm:^1.27.0":
   version: 1.27.0
   resolution: "@playwright/test@npm:1.27.0"
@@ -11681,7 +11689,6 @@ __metadata:
     pino-pretty: ^7.6.0
     playwright: ^1.26.1
     postcss: ^8.3.6
-    prettier: ^2.3.2
     react: ^17.0.2
     regenerator-runtime: ^0.13.7
     requirejs: ^2.3.6
