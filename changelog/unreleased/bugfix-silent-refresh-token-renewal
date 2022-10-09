@@ -1,0 +1,6 @@
+Bugfix: Try to obtain refresh token before the error case
+
+We've added a fallback strategy to try to revive the refresh token one more last time.
+This is for the rare case where the application is running in the background and the browsers throttles the token refresh mechanism.
+
+https://github.com/owncloud/web/pull/7756
