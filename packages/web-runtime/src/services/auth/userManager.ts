@@ -75,6 +75,7 @@ export class UserManager extends OidcUserManager {
       })
     }
 
+    Log.setLogger(console)
     Log.setLevel(Log.INFO)
 
     super(openIdConfig)

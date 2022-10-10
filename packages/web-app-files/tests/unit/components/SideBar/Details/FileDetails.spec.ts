@@ -150,7 +150,7 @@ describe('Details SideBar Panel', () => {
 function createWrapper(
   testResource,
   testVersions = [],
-  testPreview,
+  testPreview = undefined,
   publicLinkContext = false,
   runningOnEos = false
 ) {
@@ -166,8 +166,7 @@ function createWrapper(
               runningOnEos
             }
           }
-        },
-        capabilities: () => {}
+        }
       },
       modules: {
         Files: {

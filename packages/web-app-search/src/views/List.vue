@@ -1,13 +1,10 @@
 <template>
-  <component
-    :is="listSearch.component"
-    :search-result="searchResult"
-    :loading="$asyncComputed.searchResult.updating"
-  />
+  <component :is="listSearch.component" :search-result="searchResult" :loading="loading" />
 </template>
 
 <script>
 import { providerStore } from '../service'
+import debounce from 'lodash-es/debounce'
 
 export default {
   data() {
@@ -17,16 +14,33 @@ export default {
     )
     // abort and return if no provider is found
     return {
+      loading: false,
+      debouncedSearch: undefined,
+      searchResult: {
+        values: [],
+        totalResults: null
+      },
       listSearch
     }
   },
-
-  asyncComputed: {
-    searchResult: {
-      get() {
-        return this.listSearch.search(this.$route.query.term)
+  watch: {
+    '$route.query': {
+      handler: function () {
+        this.$nextTick(() => {
+          this.debouncedSearch()
+        })
       },
-      watch: ['$route.query.term', '$route.query.provider']
+      immediate: true
+    }
+  },
+  created() {
+    this.debouncedSearch = debounce(this.search, 10)
+  },
+  methods: {
+    async search() {
+      this.loading = true
+      this.searchResult = await this.listSearch.search(this.$route.query.term || '')
+      this.loading = false
     }
   }
 }

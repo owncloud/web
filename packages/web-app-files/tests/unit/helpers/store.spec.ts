@@ -20,6 +20,6 @@ describe('cloneStateObject', () => {
   it('throws an error when "undefined" is cloned', () => {
     expect(() => {
       cloneStateObject(undefined)
-    }).toThrowError('cloneStateObject: cannot clone "undefined"')
+    }).toThrow('cloneStateObject: cannot clone "undefined"')
   })
 })

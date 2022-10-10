@@ -24,6 +24,7 @@ Summary
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+* Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
@@ -176,6 +177,14 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/7632
+
+* Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
+
+   We've added a fallback strategy to try to revive the refresh token one more last time. This is for
+   the rare case where the application is running in the background and the browsers throttles the
+   token refresh mechanism.
+
+   https://github.com/owncloud/web/pull/7756
 
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 

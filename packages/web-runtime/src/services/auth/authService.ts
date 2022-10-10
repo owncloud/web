@@ -59,13 +59,38 @@ export class AuthService {
         configurationManager: this.configurationManager,
         store: this.store
       })
-      this.userManager.events.addAccessTokenExpired(async (...args) => {
-        console.error('AccessToken Expired：', ...args)
-        await this.handleAuthError(this.router.currentRoute)
+
+      this.userManager.events.addAccessTokenExpired((...args): void => {
+        const handleExpirationError = () => {
+          console.error('AccessToken Expired：', ...args)
+          this.handleAuthError(this.router.currentRoute)
+        }
+
+        /**
+         * Retry silent token renewal
+         *
+         * in cases where the application runs in the background (different tab, different window) the AccessTokenExpired event gets called
+         * even if the application is still able to obtain a new token.
+         *
+         * The main reason for this is the browser throttling in combination with `oidc-client-ts` 'Timer' class which uses 'setInterval' to notify / refresh all necessary parties.
+         * In those cases the internal clock gets out of sync and the auth library emits that event.
+         *
+         * For a better understanding why this happens and the interval execution gets throttled please read:
+         * https://developer.chrome.com/blog/timer-throttling-in-chrome-88/
+         *
+         * in cases where 'automaticSilentRenew' is enabled we try to obtain a new token one more time before we really start the authError flow.
+         */
+        if (this.userManager.settings.automaticSilentRenew) {
+          this.userManager.signinSilent().catch(handleExpirationError)
+        } else {
+          handleExpirationError()
+        }
       })
+
       this.userManager.events.addAccessTokenExpiring((...args) => {
         console.debug('AccessToken Expiring：', ...args)
       })
+
       this.userManager.events.addUserLoaded(async (user) => {
         console.debug(
           `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
@@ -77,6 +102,7 @@ export class AuthService {
           await this.handleAuthError(this.router.currentRoute)
         }
       })
+
       this.userManager.events.addUserUnloaded(async () => {
         console.log('user unloaded…')
         await this.resetStateAfterUserLogout()

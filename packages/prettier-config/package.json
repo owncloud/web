@@ -1,0 +1,10 @@
+{
+  "name": "@ownclouders/prettier-config",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "prettier": "^2.3.2"
+  }
+}

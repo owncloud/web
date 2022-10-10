@@ -162,7 +162,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
-import path from 'path'
+import { basename, dirname } from 'path'
 import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
@@ -267,7 +267,7 @@ export default defineComponent({
         }
         const space = buildShareSpaceResource({
           shareId: this.file.shareId,
-          shareName: path.basename(this.file.shareRoot),
+          shareName: basename(this.file.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
         return createLocationSpaces('files-spaces-generic', {
@@ -454,7 +454,7 @@ export default defineComponent({
         if (share !== undefined && share[0] !== undefined) {
           return currentPath
         }
-        currentPath = path.dirname(currentPath)
+        currentPath = dirname(currentPath)
       }
       return null
     },
