@@ -176,7 +176,6 @@ import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
-import * as pathUtil from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -194,6 +193,7 @@ import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-
 import { configurationManager } from 'web-pkg/src/configuration'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { basename, dirname } from 'path'
 
 export default defineComponent({
   mixins: [Rename],
@@ -583,7 +583,7 @@ export default defineComponent({
       }
 
       return this.createFolderLink({
-        path: pathUtil.dirname(file.path),
+        path: dirname(file.path),
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
       })
@@ -598,7 +598,7 @@ export default defineComponent({
       if (resource.shareId) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: pathUtil.basename(resource.shareRoot),
+          shareName: basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
       } else {
@@ -809,7 +809,7 @@ export default defineComponent({
       if (resource.shareId) {
         return resource.path === '/'
           ? this.$gettext('Shared with me')
-          : pathUtil.basename(resource.shareRoot)
+          : basename(resource.shareRoot)
       }
 
       return this.$gettext('Personal')

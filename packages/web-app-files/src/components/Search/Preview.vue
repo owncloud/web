@@ -94,7 +94,7 @@ export default defineComponent({
 
       return buildShareSpaceResource({
         shareId: this.resource.shareId,
-        shareName: this.resource.name,
+        shareName: basename(this.resource.shareRoot),
         serverUrl: configurationManager.serverUrl
       })
     },
