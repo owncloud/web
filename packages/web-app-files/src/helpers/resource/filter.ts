@@ -5,7 +5,7 @@ export const filterResources = (resources: unknown[], term: string, limit?: numb
     includeScore: true,
     useExtendedSearch: true,
     threshold: 0.3,
-    keys: ['name', 'type', 'icon', 'extension', 'tags']
+    keys: ['name', 'type', 'icon', 'extension']
   })
 
   return (engine.search(term, { limit }) as any[]).map((result: any) => result.item)
