@@ -90,6 +90,11 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [restoring a file from "Deleted files" (trashbin) is not possible if the original folder does not exist any-more](https://github.com/owncloud/web/issues/1753)
 -   [webUITrashbinRestore/trashbinRestore.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L138)
 
+### [trashbin folder structure recreated on restore](https://github.com/owncloud/web/pull/7635)
+- [webUITrashbinRestore/trashbinRestore.feature:156](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L156)
+- [webUITrashbinRestore/trashbinRestore.feature:190](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L190)
+
+
 ### [Conflict / overwrite issues with TUS](https://github.com/owncloud/ocis/issues/1294)
 -   [webUIUpload/uploadFileGreaterThanQuotaSize.feature:12](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadFileGreaterThanQuotaSize.feature#L12)
 
