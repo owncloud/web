@@ -4,12 +4,10 @@ import { isLocationTrashActive } from '../../router'
 import {
   buildWebDavFilesTrashPath,
   buildWebDavFilesPath,
-  buildWebDavSpacesTrashPath,
-  buildResource
+  buildWebDavSpacesTrashPath
 } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
 import { buildWebDavSpacesPath, Resource, isProjectSpaceResource } from 'web-client/src/helpers'
-import { DavProperties } from 'web-pkg/src/constants'
 import {
   ResolveStrategy,
   ResolveConflict,
