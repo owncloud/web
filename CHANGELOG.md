@@ -9,7 +9,6 @@ Summary
 -------
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
-* Bugfix - Align counter for undisplayed tags: [#7708](https://github.com/owncloud/web/issues/7708)
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
@@ -37,7 +36,6 @@ Summary
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 * Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
-* Enhancement - Add Tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
@@ -50,14 +48,6 @@ Details
 
    https://github.com/owncloud/web/issues/7419
    https://github.com/owncloud/web/pull/7631
-
-* Bugfix - Align counter for undisplayed tags: [#7708](https://github.com/owncloud/web/issues/7708)
-
-   The counter for tags that don't fit on the screen (and get displayed as e.g. "+1") was not
-   aligned, which has been fixed.
-
-   https://github.com/owncloud/web/issues/7708
-   https://github.com/owncloud/web/pulls/7754
 
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
 
@@ -304,19 +294,6 @@ Details
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
    https://github.com/owncloud/web/pull/7735
-
-* Enhancement - Add Tag support: [#7388](https://github.com/owncloud/web/pull/7388)
-
-   Managing files via tags is now possible in web, the feature is experimental and will be only
-   available through a dedicated experimental web build. Beside that the web version is
-   experimental, it also needs a special experimental ocis version.
-
-   Creating Tags, tagging resources and search for tags now is possible and can be used as an
-   alternative way of working and organizing resources.
-
-   https://github.com/owncloud/web/pull/7388
-   https://github.com/owncloud/web/pull/7385
-   https://github.com/owncloud/web/pull/7442
 
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 
