@@ -18,16 +18,9 @@ describe('Preview component', () => {
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
   describe('computed parentFolderLink', () => {
-    it('should be empty if no resource target location given', () => {
-      const wrapper = getWrapper({ resourceTargetLocation: null })
-      expect(wrapper.vm.parentFolderLink).toEqual({})
-    })
     it('should use the items storageId for the resource target location if present', () => {
       const driveAliasAndItem = '1'
       const wrapper = getWrapper({
-        resourceTargetLocation: {
-          name: 'some-route'
-        },
         spaces: [
           {
             id: '1',
@@ -44,14 +37,12 @@ describe('Preview component', () => {
   describe('computed method "defaultParentFolderName"', () => {
     it('should equal "All files and folders" if spaces capability is not present', () => {
       const wrapper = getWrapper({
-        resourceTargetLocation: null,
         hasShareJail: false
       })
       expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
     })
     it('should equal the space name if resource storage is representing a project space', () => {
       const wrapper = getWrapper({
-        resourceTargetLocation: null,
         spaces: [
           {
             id: '1',
@@ -91,7 +82,6 @@ describe('Preview component', () => {
     })
     it('should equal "Personal" if resource storage is not representing the personal home', () => {
       const wrapper = getWrapper({
-        resourceTargetLocation: null,
         spaces: [
           {
             id: 1,
@@ -105,7 +95,6 @@ describe('Preview component', () => {
 })
 
 function getWrapper({
-  resourceTargetLocation = {},
   route = {
     query: {},
     params: {}

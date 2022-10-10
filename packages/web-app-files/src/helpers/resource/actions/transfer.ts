@@ -49,6 +49,9 @@ export class ResourceTransfer extends ConflictDialog {
   showResultMessage(errors, movedResources: Array<Resource>, transferType: TransferType) {
     if (errors.length === 0) {
       const count = movedResources.length
+      if (count === 0) {
+        return
+      }
       const ntitle =
         transferType === TransferType.COPY
           ? this.$ngettext(

@@ -18,10 +18,7 @@ const state = {
   currentTheme: {
     general: {
       name: '',
-      slogan: '',
-      helpDeskText: '',
-      helpDeskLink: '',
-      helpDeskLinkText: 'ownCloud Central'
+      slogan: ''
     },
     logo: {
       topbar: '',

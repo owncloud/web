@@ -304,11 +304,14 @@ export default {
         )
       })
   },
-  deleteShare(context, { client, share, path, storageId }) {
+  deleteShare(context, { client, share, path, storageId, loadIndicators = false }) {
     return client.shares.deleteShare(share.id, {} as any).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+
+      if (loadIndicators) {
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+      }
     })
   },
   /**
@@ -455,11 +458,14 @@ export default {
         })
     })
   },
-  removeLink(context, { share, client, path, storageId }) {
-    client.shares.deleteShare(share.id).then(() => {
+  removeLink(context, { share, client, path, storageId, loadIndicators = false }) {
+    return client.shares.deleteShare(share.id).then(() => {
       context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
       context.dispatch('updateCurrentFileShareTypes')
-      context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+
+      if (loadIndicators) {
+        context.dispatch('loadIndicators', { client, currentFolder: path, storageId })
+      }
     })
   },
 
@@ -471,7 +477,12 @@ export default {
     // kind of bruteforce for now: remove the shares for the current folder and children, reload shares tree for the current folder.
     // TODO: when we refactor the shares tree we want to modify shares tree nodes incrementally during adding and removing shares, not loading everything new from the backend.
     commit('SHARESTREE_PRUNE_OUTSIDE_PATH', dirname(currentFolder))
-    await dispatch('loadSharesTree', { client, path: currentFolder, storageId })
+    await dispatch('loadSharesTree', {
+      client,
+      path: currentFolder,
+      storageId,
+      includeRoot: currentFolder === '/'
+    })
     commit('LOAD_INDICATORS', currentFolder)
   },
 

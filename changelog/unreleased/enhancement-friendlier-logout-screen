@@ -1,0 +1,6 @@
+Enhancement: Friendlier logout screen
+
+We have updated the message and layout of the logout screen to make it a more pleasant user experience.
+
+https://github.com/owncloud/web/pull/7747
+https://github.com/owncloud/web/issues/7744

@@ -33,6 +33,9 @@ function getWrapper(space) {
     localVue,
     store: createStore(),
     mocks: {
+      $route: {
+        path: '/files'
+      },
       $router: {
         currentRoute: createLocationSpaces('some-route'),
         resolve: (r) => {
