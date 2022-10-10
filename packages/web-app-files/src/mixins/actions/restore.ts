@@ -81,12 +81,10 @@ export default {
           parentResources = parentFolders[webDavParentPath]
         } else {
           try {
-            const listResponse = await this.$client.files.list(
-              webDavParentPath,
-              1,
-              DavProperties.Default
+            parentResources = await this.$clientService.webdav.listFiles(
+              this.space,
+              webDavParentPath
             )
-            parentResources = listResponse.map((i) => buildResource(i))
           } catch (error) {
             await this.restoreFolderStructure(resource)
           }
