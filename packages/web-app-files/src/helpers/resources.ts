@@ -357,8 +357,9 @@ export function buildSpaceShare(s, storageId): Share {
 
 function _buildLink(link): Share {
   let description = ''
+  const permissions = parseInt(link.permissions)
 
-  const role = LinkShareRoles.getByBitmask(parseInt(link.permissions), link.item_type === 'folder')
+  const role = LinkShareRoles.getByBitmask(permissions, link.item_type === 'folder')
   if (role) {
     description = role.label
   }
@@ -382,7 +383,7 @@ function _buildLink(link): Share {
     token: link.token as string,
     url: link.url,
     path: link.path,
-    permissions: link.permissions,
+    permissions,
     description,
     quicklink,
     stime: link.stime,

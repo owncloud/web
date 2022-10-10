@@ -1,0 +1,6 @@
+Enhancement: Resolve alias links
+
+Alias links can now be resolved successfully.
+
+https://github.com/owncloud/web/pull/7405
+https://github.com/owncloud/web/issues/7304

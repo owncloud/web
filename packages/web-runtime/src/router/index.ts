@@ -6,6 +6,7 @@ import LoginPage from '../pages/login.vue'
 import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
+import ResolveAliasLinkPage from '../pages/resolveAliasLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 
@@ -70,6 +71,12 @@ export const router = patchRouter(
         name: 'resolvePublicLink',
         component: ResolvePublicLinkPage,
         meta: { title: $gettext('Public link') }
+      },
+      {
+        path: '/alias/:token',
+        name: 'resolveAliasLink',
+        component: ResolveAliasLinkPage,
+        meta: { title: $gettext('Private link') }
       },
       {
         path: '/access-denied',
