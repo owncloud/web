@@ -175,6 +175,7 @@ import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -183,10 +184,12 @@ export default defineComponent({
   },
   setup() {
     const sharedParentDir = ref('')
+    const sharedParentFileId = ref('')
     const store = useStore()
 
     return {
       sharedParentDir,
+      sharedParentFileId,
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace')
@@ -270,25 +273,21 @@ export default defineComponent({
           shareName: basename(this.file.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: this.file.path } as Resource)
-          },
-          query: {
-            shareId: this.file.shareId
-          }
-        })
+        return createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(space, { path: this.file.path, fileId: this.file.fileId })
+        )
       }
       if (!this.matchingSpace) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({
-            path: this.sharedParentDir
-          } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(this.matchingSpace, {
+          path: this.sharedParentDir,
+          fileId: this.sharedParentFileId
+        })
+      )
     },
     showShares() {
       if (this.isPublicLinkContext) {
@@ -416,6 +415,7 @@ export default defineComponent({
         }
         this.sharedTime = this.sharedItem.stime
         this.sharedParentDir = sharePathParentOrCurrent
+        this.sharedParentFileId = shares[0].file?.source
       },
       immediate: true
     }

@@ -7,7 +7,6 @@ import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessag
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 import { PublicSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { MockProxy, mock } from 'jest-mock-extended'
-import { createStore } from 'vuex-extensions'
 import { join } from 'path'
 
 const localVue = createLocalVue()
@@ -30,9 +29,6 @@ describe('NotFoundMessage', () => {
       space = mock<SpaceResource>({
         driveType: 'personal'
       })
-      space.getDriveAliasAndItem.mockImplementation((resource) =>
-        join('personal/admin', resource.path)
-      )
     })
 
     it('should show home button', () => {
@@ -51,14 +47,12 @@ describe('NotFoundMessage', () => {
       expect(reloadLinkButton.exists()).toBeFalsy()
     })
 
-    it('should have property route to home', () => {
+    it('should have property route to personal space', () => {
       const wrapper = getMountedWrapper(space, spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.props().to.name).toBe(spacesLocation.name)
-      expect(homeButton.props().to.params.driveAliasAndItem).toBe(
-        space.getDriveAliasAndItem({ path: 'home' } as Resource)
-      )
+      expect(homeButton.props().to.params.driveAliasAndItem).toBe('personal')
     })
   })
 
@@ -104,13 +98,6 @@ describe('NotFoundMessage', () => {
 function getMountOpts(space, route) {
   return {
     localVue,
-    store: createStore(Vuex.Store, {
-      getters: {
-        homeFolder: () => {
-          return 'home'
-        }
-      }
-    }),
     stubs: stubs,
     mocks: {
       $route: route,

@@ -8,7 +8,10 @@
 // or all types get different members, the underscored props can be removed.
 import { Resource } from '../resource'
 
+export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
+
 export interface SpaceResource extends Resource {
+  disabled?: boolean
   webDavUrl: string
   getWebDavUrl(resource: Resource): string
   getDriveAliasAndItem(resource: Resource): string
@@ -30,6 +33,7 @@ export const isProjectSpaceResource = (resource: Resource): resource is ProjectS
 
 export interface ShareSpaceResource extends SpaceResource {
   __shareSpaceResource?: any
+  rename(newName: string): void
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
   return resource.driveType === 'share'

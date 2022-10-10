@@ -40,7 +40,8 @@ describe('navigate', () => {
         createLocationSpaces('files-spaces-generic', {
           params: {
             driveAliasAndItem: resource.driveAlias
-          }
+          },
+          query: {}
         })
       )
     })
@@ -64,8 +65,8 @@ function getWrapper({ invalidLocation = false } = {}) {
       },
       $gettext: jest.fn(),
       space: {
-        driveAlias: 'project/mars',
-        driveType: 'project'
+        driveType: 'project',
+        getDriveAliasAndItem: () => 'project/mars'
       }
     },
     store: createStore(Vuex.Store, {

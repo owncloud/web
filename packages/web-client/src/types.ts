@@ -7,6 +7,7 @@ export type OwnCloudSdk = {
     getFileContents(...args): any
     putFileContents(...args): any
     getFavoriteFiles(...args): any
+    getPathForFileId(fileId: string | number): Promise<string>
     search(...args): any
     copy(...args): any
     move(...args): any

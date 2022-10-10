@@ -2,7 +2,6 @@ import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
-import { renameResource } from '../helpers/resources'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
@@ -85,16 +84,6 @@ export default {
   },
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
-  },
-  RENAME_FILE(state, { space, resource, newPath }) {
-    const resources = [...state.files]
-    const fileIndex = resources.findIndex((f) => {
-      return f.id === resource.id
-    })
-
-    renameResource(space, resources[fileIndex], newPath)
-
-    state.files = resources
   },
   CURRENT_FILE_OUTGOING_SHARES_SET(state, shares) {
     state.currentFileOutgoingShares = shares

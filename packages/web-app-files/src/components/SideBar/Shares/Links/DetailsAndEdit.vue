@@ -186,9 +186,9 @@ import { createLocationSpaces } from '../../../../router'
 import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
-import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { PropType } from '@vue/composition-api'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -340,18 +340,19 @@ export default defineComponent({
     },
 
     viaRouterParams() {
-      const viaPath = this.link.path
       const matchingSpace = (this.space ||
         this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
       if (!matchingSpace) {
         return {}
       }
 
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: viaPath } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(matchingSpace, {
+          path: this.link.path,
+          fileId: this.link.file.source
+        })
+      )
     },
 
     localExpirationDate() {

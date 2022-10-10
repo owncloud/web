@@ -192,7 +192,6 @@ import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
-import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -208,6 +207,9 @@ import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { basename, dirname } from 'path'
 
 export default defineComponent({
   mixins: [Rename],
@@ -589,7 +591,7 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item.storageId))
+      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
     },
     openTagsSidebar() {
       bus.publish(SideBarEventTopics.open)
@@ -606,45 +608,42 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file)
+      return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
     },
     parentFolderLink(file) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
 
-      return this.createFolderLink(path.dirname(file.path), file)
+      return this.createFolderLink({
+        path: dirname(file.path),
+        ...(file.parentFolderId && { fileId: file.parentFolderId }),
+        resource: file
+      })
     },
-    createFolderLink(p, resource) {
+    createFolderLink(options: CreateTargetRouteOptions) {
       if (this.targetRouteCallback) {
-        return this.targetRouteCallback(p, resource)
+        return this.targetRouteCallback(options)
       }
 
+      const { path, fileId, resource } = options
+      let space
       if (resource.shareId) {
-        const space = buildShareSpaceResource({
+        space = buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: path.basename(resource.shareRoot),
+          shareName: basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
-          },
-          query: {
-            shareId: resource.shareId
-          }
-        })
+      } else {
+        space = this.getMatchingSpace(resource)
       }
-
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (!matchingSpace) {
+      if (!space) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(space, { path, fileId })
+      )
     },
     fileDragged(file) {
       this.addSelectedResource(file)
@@ -751,7 +750,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource.storageId)
+      let space = this.getMatchingSpace(resource)
       if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
@@ -817,12 +816,20 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId): SpaceResource {
-      return this.space || this.spaces.find((space) => space.id === storageId)
+    getMatchingSpace(resource: Resource): SpaceResource {
+      return (
+        this.space ||
+        this.spaces.find((space) => space.id === resource.storageId) ||
+        buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      )
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -835,7 +842,7 @@ export default defineComponent({
       if (resource.shareId) {
         return resource.path === '/'
           ? this.$gettext('Shared with me')
-          : path.basename(resource.shareRoot)
+          : basename(resource.shareRoot)
       }
 
       return this.$gettext('Personal')
