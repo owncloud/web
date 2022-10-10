@@ -3938,10 +3938,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caf@npm:^9.0.0":
-  version: 9.1.0
-  resolution: "caf@npm:9.1.0"
-  checksum: 16c2985b73019b5e61681c37ee033aebdaf38c2fb16b4d17bf91382b1687441321e25529285914168de0e6eba0c446f77793d4ec820114dde8117231488dee5a
+"caf@npm:^13.1.1":
+  version: 13.1.1
+  resolution: "caf@npm:13.1.1"
+  checksum: f65f6c1ec51a84af3f014a785d4426befaffea909404f0f4f3e981969793e23df8b2f8fd5bbb880363abd5e234e0cf8ddd46f0f378aec530530cdc4967d67972
   languageName: node
   linkType: hard
 
@@ -13414,12 +13414,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-concurrency@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "vue-concurrency@npm:2.2.1"
+"vue-concurrency@npm:^3.0.0-7":
+  version: 3.0.0-7
+  resolution: "vue-concurrency@npm:3.0.0-7"
   dependencies:
-    caf: ^9.0.0
-  checksum: 989500bb3d3c3b79ed92a6522e176b87483d05f19a054ecdef78b8b8c3a0f543a536c3bd31cd7aaa03c2507ca38609316ee04f22355dd50fcef88c850fd49e6d
+    caf: ^13.1.1
+  checksum: 78339dcdf973251c9569b5b3592eb6336b27c49a434f8ade32263e769b7a3a17d742d0c6c09964e94eb104afa868eebea8d306b76cd73d0d98a2a4b56a8f80e5
   languageName: node
   linkType: hard
 
@@ -13680,7 +13680,7 @@ __metadata:
     v-calendar: ^2.3.2
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
-    vue-concurrency: ^2.2.1
+    vue-concurrency: ^3.0.0-7
     vue-events: ^3.1.0
     vue-gettext: ^2.1.5
     vue-inline-svg: ^2.0.0
