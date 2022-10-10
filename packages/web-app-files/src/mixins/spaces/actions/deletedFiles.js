@@ -26,7 +26,7 @@ export default {
       return this.$router.push(
         createLocationTrash(
           'files-trash-generic',
-          createFileRouteOptions(this.space, { fileId: this.space.id })
+          createFileRouteOptions(this.space, { fileId: this.space.fileId })
         )
       )
     }

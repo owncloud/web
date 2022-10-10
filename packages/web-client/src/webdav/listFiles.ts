@@ -62,6 +62,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         )
         const resources = webDavResources.map(buildResource)
         if (fileId && fileId !== resources[0].fileId) {
+          console.log('nono', path, fileId, resources[0].fileId)
           return listFilesCorrectedPath()
         }
         return resources

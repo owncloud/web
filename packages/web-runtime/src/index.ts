@@ -33,6 +33,7 @@ import {
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -88,13 +89,14 @@ export const renderSuccess = (): void => {
     (state, getters) => {
       return getters['runtime/auth/isUserContextReady']
     },
-    (userContextReady) => {
+    async (userContextReady) => {
       if (!userContextReady) {
         return
       }
+      const clientService = instance.$clientService
+
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
-        const clientService = instance.$clientService
         const graphClient = clientService.graphAuthenticated(
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
@@ -112,6 +114,10 @@ export const renderSuccess = (): void => {
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
+      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(space, {
+        path: ''
+      })
+      space.fileId = personalHomeInfo.fileId
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },

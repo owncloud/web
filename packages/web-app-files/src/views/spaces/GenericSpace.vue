@@ -233,7 +233,7 @@ export default defineComponent({
       }
 
       let spaceBreadcrumbItem
-      let { params, query } = createFileRouteOptions(this.space, { fileId: this.space.id })
+      let { params, query } = createFileRouteOptions(this.space, { fileId: this.space.fileId })
       query = { ...this.$route.query, ...query }
       if (isPersonalSpaceResource(this.space)) {
         spaceBreadcrumbItem = {

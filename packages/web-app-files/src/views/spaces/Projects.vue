@@ -279,7 +279,7 @@ export default defineComponent({
         ? '#'
         : createLocationSpaces(
             'files-spaces-generic',
-            createFileRouteOptions(space, { path: '', fileId: space.id })
+            createFileRouteOptions(space, { path: '', fileId: space.fileId })
           )
     },
 

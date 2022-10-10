@@ -35,7 +35,7 @@ export default {
       return this.$router.push(
         createLocationSpaces(
           'files-spaces-generic',
-          createFileRouteOptions(this.space, { fileId: this.space.id })
+          createFileRouteOptions(this.space, { fileId: this.space.fileId })
         )
       )
     }

@@ -54,8 +54,7 @@ export default defineComponent({
     })
 
     const { params, query } = createFileRouteOptions(unref(personalSpace), {
-      path: unref(itemPath),
-      ...(['', '/'].includes(unref(itemPath)) && { fileId: unref(personalSpace).id })
+      path: unref(itemPath)
     })
 
     return (
