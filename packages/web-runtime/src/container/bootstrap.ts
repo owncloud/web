@@ -228,6 +228,34 @@ export const announceTheme = async ({
 }
 
 /**
+ * announce customizations is used to hook into the spa app and inject custom css and js resources.
+ *
+ * @param runtimeConfiguration
+ */
+export const announceCustomizations = ({
+  runtimeConfiguration
+}: {
+  runtimeConfiguration?: RuntimeConfiguration
+}): void => {
+  const { scripts = [], styles = [] } = runtimeConfiguration
+
+  scripts.forEach(({ src = '', async = false }) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.async = async
+    document.head.appendChild(script)
+  })
+
+  styles.forEach(({ href = '' }) => {
+    const link = document.createElement('link')
+    link.href = href
+    link.type = 'text/css'
+    link.rel = 'stylesheet'
+    document.head.appendChild(link)
+  })
+}
+
+/**
  * announce runtime translations by injecting them into the getTextPlugin
  *
  * @param vue

@@ -35,6 +35,7 @@ export interface Resource {
   disabled?: boolean
   driveType?: 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   driveAlias?: string
+  tags?: string[]
 
   canCreate?(): boolean
   canUpload?(): boolean
@@ -43,6 +44,7 @@ export interface Resource {
   canRename?(): boolean
   canBeDeleted?(): boolean
   canBeRestored?(): boolean
+  canEditTags?(): boolean
   canDeny?(): boolean
   canEditDescription?(): boolean
   canRestore?(): boolean

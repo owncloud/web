@@ -25,7 +25,7 @@
     "marked": "^4.0.12",
     "oidc-client-ts": "^2.0.5",
     "owncloud-design-system": "14.0.0-alpha.22",
-    "owncloud-sdk": "~3.0.0-alpha.15",
+    "owncloud-sdk": "owncloud/owncloud-sdk.git#experimental",
     "p-queue": "^6.6.2",
     "popper-max-size-modifier": "^0.2.0",
     "portal-vue": "^2.1.7",

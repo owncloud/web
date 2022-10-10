@@ -11,6 +11,7 @@ import DownloadArchive from './actions/downloadArchive'
 import DownloadFile from './actions/downloadFile'
 import Favorite from './actions/favorite'
 import Move from './actions/move'
+import ShowEditTags from './actions/showEditTags'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
@@ -28,6 +29,7 @@ const actionsMixins = [
   'copy',
   'move',
   'rename',
+  'showEditTags',
   'restore',
   'delete',
   'acceptShare',
@@ -55,6 +57,7 @@ export default {
     Navigate,
     Rename,
     Restore,
+    ShowEditTags,
     isSearchActive
   ],
   computed: {
