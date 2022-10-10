@@ -33,7 +33,9 @@ Summary
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
+* Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Add Tag support: [#7388](https://github.com/owncloud/web/pull/7388)
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
@@ -263,6 +265,14 @@ Details
    https://github.com/owncloud/web/issues/7685
    https://github.com/owncloud/web/pull/7684
 
+* Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
+
+   As a receiver the user can rename a share which will only take effect for the respective user but
+   won't change the name for the sharee or other share receivers.
+
+   https://github.com/owncloud/web/issues/6247
+   https://github.com/owncloud/web/pull/7725
+
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 
    We have updated the message and layout of the logout screen to make it a more pleasant user
@@ -270,6 +280,21 @@ Details
 
    https://github.com/owncloud/web/issues/7744
    https://github.com/owncloud/web/pull/7747
+
+* Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
+
+   We now include fileIds in the URL query to be able to - resolve files and spaces correctly and -
+   resolve the correct relative path of a file if it was changed (this might be the case for
+   bookmarks) The fileIds in the URL can be disabled by setting `options.routing.idBased` to
+   `false` in the `config.json`.
+
+   Note: It's recommended to keep the default of fileIds being used in routing. Otherwise it's not
+   possible to resolve spaces with name clashes correctly.
+
+   https://github.com/owncloud/web/issues/6247
+   https://github.com/owncloud/web/issues/7714
+   https://github.com/owncloud/web/issues/7715
+   https://github.com/owncloud/web/pull/7725
 
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
