@@ -1,0 +1,6 @@
+Bugfix: Align counter for undisplayed tags
+
+The counter for tags that don't fit on the screen (and get displayed as e.g. "+1") was not aligned, which has been fixed.
+
+https://github.com/owncloud/web/issues/7708
+https://github.com/owncloud/web/pulls/7754
