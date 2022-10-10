@@ -65,7 +65,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
       } else {
         if (unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
-            return unref(fileId).startsWith(`${s.id}`)
+            return unref(fileId).startsWith(`${s.fileId}`)
           })
         } else {
           matchingSpace = unref(spaces).find((s) => {
