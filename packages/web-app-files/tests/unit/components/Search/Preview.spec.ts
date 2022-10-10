@@ -110,7 +110,7 @@ function getWrapper({
     }
   },
   user = { id: 'test' }
-} = {}) {
+}: any = {}) {
   return shallowMount(Preview, {
     localVue,
     store: createStore(Vuex.Store, {

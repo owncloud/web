@@ -8,14 +8,14 @@ describe('HttpClient', () => {
     const client = new HttpClient()
     client[m]('url')
     mockAxios.mockResponse({ data: undefined })
-    expect(mockAxios[m]).toBeCalledTimes(1)
+    expect(mockAxios[m]).toHaveBeenCalledTimes(1)
   })
 
   test('request', () => {
     const client = new HttpClient()
     client.request({ method: 'get' })
     mockAxios.mockResponse({ data: undefined })
-    expect(mockAxios.request).toBeCalledTimes(1)
+    expect(mockAxios.request).toHaveBeenCalledTimes(1)
   })
 
   // eslint-disable-next-line jest/no-done-callback

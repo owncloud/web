@@ -1,0 +1,20 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
+  },
+  "eslint.alwaysShowStatus": false,
+  "eslint.format.enable": true,
+  "eslint.packageManager": "yarn",
+  "jest.autoRun": {
+    "watch": false,
+    "onStartup": true
+  },
+  "jest.jestCommandLine": "yarn test:unit",
+  "npm.packageManager": "yarn",
+  "typescript.format.enable": false
+}

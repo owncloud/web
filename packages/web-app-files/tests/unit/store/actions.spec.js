@@ -57,7 +57,7 @@ describe('vuex store actions', () => {
         expirationDate: null
       })
 
-      expect(commitSpy).toBeCalledTimes(1)
+      expect(commitSpy).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -74,7 +74,7 @@ describe('vuex store actions', () => {
         expirationDate: null
       })
 
-      expect(commitSpy).toBeCalledTimes(1)
+      expect(commitSpy).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -88,7 +88,7 @@ describe('vuex store actions', () => {
         resource: {}
       })
 
-      expect(commitSpy).toBeCalledTimes(1)
+      expect(commitSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

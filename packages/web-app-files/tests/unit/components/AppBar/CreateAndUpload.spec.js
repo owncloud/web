@@ -281,8 +281,8 @@ describe('CreateAndUpload component', () => {
         await resourcesUpload.displayOverwriteDialog([uppyResourceOne], [conflict])
 
         expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
-        expect(handleUppyFileUpload).toBeCalledTimes(1)
-        expect(handleUppyFileUpload).toBeCalledWith(expect.anything(), expect.anything(), [
+        expect(handleUppyFileUpload).toHaveBeenCalledTimes(1)
+        expect(handleUppyFileUpload).toHaveBeenCalledWith(expect.anything(), expect.anything(), [
           uppyResourceOne
         ])
       }
@@ -363,8 +363,8 @@ describe('CreateAndUpload component', () => {
       )
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+      expect(resourcesUpload.handleUppyFileUpload).toHaveBeenCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toHaveBeenCalledWith(
         expect.anything(),
         expect.anything(),
         [uppyResourceOne, uppyResourceTwo]
@@ -410,8 +410,8 @@ describe('CreateAndUpload component', () => {
       )
 
       expect(resourcesUpload.resolveFileExists).toHaveBeenCalledTimes(2)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledTimes(1)
-      expect(resourcesUpload.handleUppyFileUpload).toBeCalledWith(
+      expect(resourcesUpload.handleUppyFileUpload).toHaveBeenCalledTimes(1)
+      expect(resourcesUpload.handleUppyFileUpload).toHaveBeenCalledWith(
         expect.anything(),
         expect.anything(),
         [uppyResourceOne, uppyResourceTwo]

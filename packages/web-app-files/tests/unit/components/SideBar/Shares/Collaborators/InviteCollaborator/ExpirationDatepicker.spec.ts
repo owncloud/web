@@ -126,31 +126,31 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     const checker = jest.fn()
     wrapper.vm.$on('optionChange', checker as any)
 
-    expect(checker).toBeCalledTimes(0)
+    expect(checker).toHaveBeenCalledTimes(0)
 
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
     await nextTick()
-    expect(checker).toBeCalledTimes(1)
+    expect(checker).toHaveBeenCalledTimes(1)
     expect(DateTime.fromISO(checker.mock.calls[0][0].expirationDate).toISODate()).toBe(
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     )
 
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     await nextTick()
-    expect(checker).toBeCalledTimes(2)
+    expect(checker).toHaveBeenCalledTimes(2)
     expect(DateTime.fromISO(checker.mock.calls[1][0].expirationDate).toISODate()).toBe(
       DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
     )
 
     await wrapper.setProps({ shareTypes: [] })
     await nextTick()
-    expect(checker).toBeCalledTimes(3)
+    expect(checker).toHaveBeenCalledTimes(3)
     expect(checker.mock.calls[2][0].expirationDate).toBe(null)
 
     const manualDate = DateTime.now().plus({ days: 5 })
     wrapper.setData({ dateCurrent: manualDate.toJSDate() })
     await nextTick()
-    expect(checker).toBeCalledTimes(4)
+    expect(checker).toHaveBeenCalledTimes(4)
     expect(DateTime.fromISO(checker.mock.calls[3][0].expirationDate).toISODate()).toBe(
       manualDate.toISODate()
     )
@@ -158,7 +158,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     wrapper.setData({ dateCurrent: null })
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value, ShareTypes.group.value] })
     await nextTick()
-    expect(checker).toBeCalledTimes(5)
+    expect(checker).toHaveBeenCalledTimes(5)
     expect(DateTime.fromISO(checker.mock.calls[4][0].expirationDate).toISODate()).toBe(
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     )

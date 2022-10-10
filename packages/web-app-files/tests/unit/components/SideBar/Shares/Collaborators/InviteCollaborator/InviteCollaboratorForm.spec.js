@@ -73,7 +73,7 @@ describe('InviteCollaboratorForm', () => {
       })
       const addShareSpy = jest.spyOn(wrapper.vm, dataSet.addMethod)
       await wrapper.vm.share()
-      expect(addShareSpy).toBeCalled()
+      expect(addShareSpy).toHaveBeenCalled()
     })
     it.todo('resets focus upon selecting an invitee')
   })

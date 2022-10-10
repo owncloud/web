@@ -3,7 +3,7 @@ version: "3.7"
 
 services:
   traefik:
-    image: traefik:v2.5
+    image: traefik:v2.9.1
     networks:
       ocis-net:
         aliases:
@@ -11,7 +11,6 @@ services:
           - ${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
           - ${COLLABORA_DOMAIN:-collabora.owncloud.test}
           - ${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}
-          - ${CODIMD_DOMAIN:-codimd.owncloud.test}
     command:
       - "--log.level=${TRAEFIK_LOG_LEVEL:-ERROR}"
       # letsencrypt configuration
@@ -107,8 +106,8 @@ services:
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}/favicon.ico
       APP_PROVIDER_WOPI_APP_URL: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}
       APP_PROVIDER_WOPI_INSECURE: "${INSECURE:-false}"
-      APP_PROVIDER_WOPI_WOPI_SERVER_IOP_SECRET: ${WOPI_IOP_SECRET:-LoremIpsum123}
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
+      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
     volumes:
       - ocis-config:/etc/ocis
     logging:
@@ -133,33 +132,29 @@ services:
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
       APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}
       APP_PROVIDER_WOPI_INSECURE: "${INSECURE:-false}"
-      APP_PROVIDER_WOPI_WOPI_SERVER_IOP_SECRET: ${WOPI_IOP_SECRET:-LoremIpsum123}
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
+      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
     volumes:
       - ./config/ocis-appdriver-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
       - ocis-config:/etc/ocis
     logging:
       driver: "local"
     restart: always
-
   wopiserver:
-    image: cs3org/wopiserver:${WOPISERVER_DOCKER_TAG:-latest}
+    image: cs3org/wopiserver:${WOPISERVER_DOCKER_TAG:-v9.1.1}
     networks:
       ocis-net:
     entrypoint:
-      - /bin/bash
+      - /bin/sh
       - /entrypoint-override.sh
     environment:
       WOPISERVER_INSECURE: "${INSECURE:-false}"
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
-      IOPSECRET: ${WOPI_IOP_SECRET:-LoremIpsum123}
       WOPISERVER_DOMAIN: ${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
-      COLLABORA_DOMAIN: ${COLLABORA_DOMAIN:-collabora.owncloud.test}
     volumes:
       - ./config/wopiserver/entrypoint-override.sh:/entrypoint-override.sh
       - ./config/wopiserver/wopiserver.conf.dist:/etc/wopi/wopiserver.conf.dist
       - wopi-data:/var/wopi_local_storage
-      - wopi-logs:/var/log/wopi
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wopiserver.entrypoints=https"
@@ -172,7 +167,7 @@ services:
     restart: always
 
   collabora:
-    image: collabora/code:21.11.5.3.1
+    image: collabora/code:22.05.6.3.1
     networks:
       ocis-net:
     environment:
@@ -195,7 +190,7 @@ services:
     restart: always
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.1
+    image: onlyoffice/documentserver:7.2
     networks:
       ocis-net:
     environment:
@@ -220,7 +215,6 @@ volumes:
   ocis-config:
   ocis-data:
   wopi-data:
-  wopi-logs:
 
 networks:
   ocis-net:

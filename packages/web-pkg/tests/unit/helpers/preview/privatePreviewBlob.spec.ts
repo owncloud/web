@@ -22,8 +22,8 @@ describe('privatePreviewBlob', () => {
     const privatePreviewBlobPromise = privatePreviewBlob(defaultOptions)
     mockAxios.mockResponse({ data: 'data' })
     await privatePreviewBlobPromise
-    await expect(mockAxios.get).toBeCalledTimes(1)
-    await expect(window.URL.createObjectURL).toBeCalledTimes(1)
+    await expect(mockAxios.get).toHaveBeenCalledTimes(1)
+    await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
   })
 
@@ -35,8 +35,8 @@ describe('privatePreviewBlob', () => {
     )
     mockAxios.mockResponse({ data: 'data' })
     await privatePreviewBlobPromise
-    await expect(mockAxios.get).toBeCalledTimes(1)
-    await expect(window.URL.createObjectURL).toBeCalledTimes(1)
+    await expect(mockAxios.get).toHaveBeenCalledTimes(1)
+    await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
 
     privatePreviewBlobPromise = privatePreviewBlob(
@@ -44,8 +44,8 @@ describe('privatePreviewBlob', () => {
       true
     )
     await privatePreviewBlobPromise
-    await expect(mockAxios.get).toBeCalledTimes(1)
-    await expect(window.URL.createObjectURL).toBeCalledTimes(1)
+    await expect(mockAxios.get).toHaveBeenCalledTimes(1)
+    await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
 
     privatePreviewBlobPromise = privatePreviewBlob(
@@ -54,8 +54,8 @@ describe('privatePreviewBlob', () => {
     )
     mockAxios.mockResponse({ data: 'data' })
     await privatePreviewBlobPromise
-    await expect(mockAxios.get).toBeCalledTimes(2)
-    await expect(window.URL.createObjectURL).toBeCalledTimes(2)
+    await expect(mockAxios.get).toHaveBeenCalledTimes(2)
+    await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(2)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
 
     privatePreviewBlobPromise = privatePreviewBlob(
@@ -64,8 +64,8 @@ describe('privatePreviewBlob', () => {
     )
     mockAxios.mockResponse({ data: 'data' })
     await privatePreviewBlobPromise
-    await expect(mockAxios.get).toBeCalledTimes(3)
-    await expect(window.URL.createObjectURL).toBeCalledTimes(3)
+    await expect(mockAxios.get).toHaveBeenCalledTimes(3)
+    await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(3)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
   })
 })
