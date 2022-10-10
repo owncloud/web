@@ -1,6 +1,5 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import { createStore } from 'vuex-extensions'
 import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue'
 
 const localVue = createLocalVue()
@@ -75,21 +74,6 @@ describe('EditPanel', () => {
 function getWrapper({ propsData = {} } = {}) {
   return mount(EditPanel, {
     localVue,
-    store: createStore(Vuex.Store, {
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            spaces: {
-              namespaced: true,
-              state: {
-                spaceQuotas: {}
-              }
-            }
-          }
-        }
-      }
-    }),
     directives: {
       translate: jest.fn()
     },
