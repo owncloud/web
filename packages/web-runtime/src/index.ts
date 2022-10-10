@@ -34,6 +34,7 @@ import {
   Resource
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
+import { DavProperty } from 'web-pkg/src/constants'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -114,9 +115,13 @@ export const renderSuccess = (): void => {
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
-      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(space, {
-        path: ''
-      })
+      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(
+        space,
+        {
+          path: ''
+        },
+        { davProperties: [DavProperty.FileId] }
+      )
       space.fileId = personalHomeInfo.fileId
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)

@@ -9,6 +9,7 @@ import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { configurationManager } from '../../configuration'
 import { urlJoin } from 'web-pkg/src/utils'
+import { useCapabilitySpacesEnabled } from '../capability'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -23,6 +24,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
   const fileId = computed(() => {
     return queryItemAsString(unref(fileIdQueryItem))
   })
+  const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const { graphClient } = useGraphClient({ store })
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
@@ -63,7 +65,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}) => {
         })
         path = item.join('/')
       } else {
-        if (unref(fileId)) {
+        if (unref(hasSpaces) && unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
             return unref(fileId).startsWith(`${s.fileId}`)
           })

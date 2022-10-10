@@ -11,8 +11,8 @@ import { FileContext } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { Route } from 'vue-router'
 import { useAppFileHandling } from './useAppFileHandling'
-import { DavProperty } from '../../constants'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
+import { DavProperty } from '../../constants'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
@@ -51,7 +51,9 @@ export function useAppFolderHandling({
       context = unref(context)
       const space = unref(context.space)
 
-      const pathResource = await getFileInfo(context, { davProperties: [DavProperty.Name] })
+      const pathResource = await getFileInfo(context, {
+        davProperties: [DavProperty.FileId]
+      })
       replaceInvalidFileRoute({
         space,
         resource: pathResource,
