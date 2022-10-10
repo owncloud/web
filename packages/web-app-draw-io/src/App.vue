@@ -61,6 +61,14 @@ export default defineComponent({
       return `${this.config.url}?${query}`
     }
   },
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.load()
+      },
+      immediate: true
+    }
+  },
   created() {
     this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
@@ -124,25 +132,26 @@ export default defineComponent({
         this.errorPopup(error)
       }
     },
-    load() {
-      this.checkPermissions()
-      this.getFileContents(this.currentFileContext)
-        .then((resp) => {
-          this.currentETag = resp.headers.ETag
-          this.$refs.drawIoEditor.contentWindow.postMessage(
-            JSON.stringify({
-              action: 'load',
-              xml: resp.body,
-              autosave: this.config.autosave
-            }),
-            '*'
-          )
-        })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
+    async loadFileContent() {
+      try {
+        const response = await this.getFileContents(this.currentFileContext)
+        this.currentETag = response.headers.ETag
+        this.$refs.drawIoEditor.contentWindow.postMessage(
+          JSON.stringify({
+            action: 'load',
+            xml: response.body,
+            autosave: this.config.autosave
+          }),
+          '*'
+        )
+      } catch (error) {
+        this.errorPopup(error)
+      }
     },
-    async importVisio() {
+    async load() {
+      await Promise.all([this.checkPermissions(), this.loadFileContent()])
+    },
+    importVisio() {
       const getDescription = () =>
         this.$gettextInterpolate(
           this.$gettext('The diagram will open as a new .drawio file: %{file}'),
@@ -231,14 +240,6 @@ export default defineComponent({
     },
     getTimestamp() {
       return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
-    }
-  },
-  watch: {
-    currentFileContext: {
-      handler: function () {
-        this.load()
-      },
-      immediate: true
     }
   }
 })
