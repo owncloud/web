@@ -175,7 +175,7 @@ export default defineComponent({
   methods: {
     async resolvePublicLink(passwordRequired) {
       if (this.tokenInfo?.alias_link) {
-        return this.$router.push({ name: `resolveAliasLink`, params: { token: this.token }})
+        return this.$router.push({ name: 'resolvePrivateLink', params: { fileId: this.tokenInfo.id }})
       }
 
       const publicLink = await this.loadPublicLinkTask.perform()

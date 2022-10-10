@@ -584,7 +584,7 @@ export default defineComponent({
           parseInt(this.share.permissions),
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
-          true,
+          this.hasPublicLinkAliasSupport,
           !!link.password
         )
       }
@@ -592,7 +592,7 @@ export default defineComponent({
       return LinkShareRoles.list(
         this.highlightedFile.isFolder,
         this.hasPublicLinkEditing,
-        true,
+        this.hasPublicLinkAliasSupport,
         !!link.password
       )
     }

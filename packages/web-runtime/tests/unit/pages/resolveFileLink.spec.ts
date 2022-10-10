@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import { getRouter, getStore, localVue } from './views.setup'
-import PrivateLink from '@files/src/views/PrivateLink.vue'
+import resolveFileLink from '../../../src/pages/resolveFileLink.vue'
 import fileFixtures from '../../../../../__fixtures__/files'
 
 localVue.prototype.$client.files = {
@@ -81,7 +81,7 @@ describe('PrivateLink view', () => {
 })
 
 function getShallowWrapper(loading = false, getPathForFileIdMock = jest.fn()) {
-  return shallowMount(PrivateLink, {
+  return shallowMount(resolveFileLink, {
     localVue,
     store: createStore(),
     mocks: {
