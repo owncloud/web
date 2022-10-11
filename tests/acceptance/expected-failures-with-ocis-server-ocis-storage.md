@@ -179,6 +179,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [PROPFIND to sub-folder of a shared resources with same name gives 404](https://github.com/owncloud/ocis/issues/3859)
 -   [webUISharingAcceptShares/acceptShares.feature:244](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L244)
-
-### [Preview action is listed twice for images/videos/mp3](https://github.com/owncloud/ocis/issues/4771)
--   [webUIFilesActionMenu/fileFolderActionMenu.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/fileFolderActionMenu.feature#L14)
