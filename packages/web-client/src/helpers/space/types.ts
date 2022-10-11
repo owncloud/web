@@ -10,9 +10,21 @@ import { Resource } from '../resource'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
+export interface SpaceResourceRemoteItem {
+  id: string
+  name: string
+}
+
+export interface SpaceResourceRoot {
+  id: string
+  remoteItem: SpaceResourceRemoteItem
+  webDavUrl: string
+}
+
 export interface SpaceResource extends Resource {
   disabled?: boolean
   webDavUrl: string
+  root: SpaceResourceRoot
   getWebDavUrl(resource: Resource): string
   getDriveAliasAndItem(resource: Resource): string
 }
@@ -37,6 +49,15 @@ export interface ShareSpaceResource extends SpaceResource {
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
   return resource.driveType === 'share'
+}
+
+export interface MountPointSpaceResource extends SpaceResource {
+  __mountPointSpaceResource?: any
+}
+export const isMountPointSpaceResource = (
+  resource: Resource
+): resource is MountPointSpaceResource => {
+  return resource.driveType === 'mountpoint'
 }
 
 export interface PublicSpaceResource extends SpaceResource {

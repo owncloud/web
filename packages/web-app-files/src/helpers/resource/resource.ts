@@ -1,11 +1,19 @@
 import { Resource } from 'web-client'
 import fileExtensions from '../extensions/fileExtensions'
 
-export const extractStorageId = (id?: string): string => {
+const extractIdSegment = (id: string, index: number): string => {
   if (!id || typeof id !== 'string') {
     return ''
   }
-  return id.indexOf('!') >= 0 ? id.split('!')[0] : ''
+  return id.indexOf('!') >= 0 ? id.split('!')[index] : ''
+}
+
+export const extractStorageId = (id?: string): string => {
+  return extractIdSegment(id, 0)
+}
+
+export const extractNodeId = (id?: string): string => {
+  return extractIdSegment(id, 1)
 }
 
 export const extractNameWithoutExtension = (resource?: Resource): string => {

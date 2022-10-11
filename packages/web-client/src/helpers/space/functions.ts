@@ -5,6 +5,7 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID }
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import { urlJoin } from 'web-pkg/src/utils'
+import { extractNodeId } from 'files/src/helpers/resource'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
@@ -94,7 +95,7 @@ export function buildSpace(data): SpaceResource {
   })
   const webDavUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavPath)
 
-  return {
+  const s = {
     id: data.id,
     fileId: data.id,
     storageId: data.id,
@@ -125,6 +126,7 @@ export function buildSpace(data): SpaceResource {
     ownerDisplayName: '',
     ownerId: data.owner?.user?.id,
     disabled,
+    root: data.root,
     spaceQuota: data.quota,
     spaceRoles,
     spaceImageData,
@@ -197,4 +199,10 @@ export function buildSpace(data): SpaceResource {
       return urlJoin(this.webDavUrl, resource.path)
     }
   }
+  Object.defineProperty(s, 'nodeId', {
+    get() {
+      return extractNodeId(this.id)
+    }
+  })
+  return s
 }
