@@ -2,7 +2,6 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Restore from 'web-app-files/src/mixins/actions/restore.ts'
-import { DavProperties } from 'web-pkg/src/constants'
 import Restore from '@files/src/mixins/actions/restore.ts'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
@@ -74,10 +73,9 @@ describe('restore', () => {
       const wrapper = getWrapper()
       await wrapper.vm.collectRestoreConflicts([{ id: '1', path: '1', name: '1' }])
 
-      expect(wrapper.vm.$client.files.list).toHaveBeenCalledWith(
-        '/files/alice',
-        1,
-        DavProperties.Default
+      expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(
+        undefined,
+        '/files/alice'
       )
     })
     it('should find conflict within resources', async () => {
@@ -118,6 +116,13 @@ function getWrapper({
       $gettextInterpolate: jest.fn(),
       space: { driveType, isEditor: () => false, isManager: () => false },
       createModal: jest.fn(),
+      $clientService: {
+        webdav: {
+          listFiles: jest.fn().mockImplementation(() => {
+            return []
+          })
+        }
+      },
       $client: {
         ...sdkMock,
         files: {
