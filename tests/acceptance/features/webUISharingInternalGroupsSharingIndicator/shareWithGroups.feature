@@ -38,7 +38,7 @@ Feature: Sharing files and folders with internal groups
       | fileName   | expectedIndicators |
       | inside.txt | user-indirect      |
 
-  @issue-2060 @issue-6894
+  @skipOnOCIS @issue-2060 @issue-6894
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
@@ -57,7 +57,7 @@ Feature: Sharing files and folders with internal groups
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060
+  @skipOnOCIS @issue-2060
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
@@ -76,7 +76,7 @@ Feature: Sharing files and folders with internal groups
       | simple-empty-folder | user-direct        |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060
+  @skipOnOCIS @issue-2060
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server

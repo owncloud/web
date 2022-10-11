@@ -76,7 +76,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-4167 @issue-6894
+  @skipOnOCIS @issue-4167 @issue-6894
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
@@ -96,7 +96,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-4167
+  @skipOnOCIS @issue-4167
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
@@ -117,7 +117,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-direct        |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060 @issue-4167 @ocis-issue-891
+  @skipOnOCIS @issue-2060 @issue-4167 @ocis-issue-891
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
     And user "Alice" has created file "/simple-folder/lorem.txt" in the server

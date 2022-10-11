@@ -60,7 +60,7 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060
+  @skipOnOCIS @issue-2060
   Scenario: sharing indicators public link from reshare
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
@@ -77,7 +77,7 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060
+  @skipOnOCIS @issue-2060
   Scenario: sharing indicators public link from child of reshare
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Alice" has created folder "/simple-folder/sub-folder" in the server
@@ -94,7 +94,7 @@ Feature: Public link share indicator
       | sub-folder   | link-direct,user-indirect |
       | textfile.txt | user-indirect             |
 
-  @issue-2060
+  @skipOnOCIS @issue-2060
   Scenario: no sharing indicator visible in file list from public link
     Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
