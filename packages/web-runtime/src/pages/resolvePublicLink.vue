@@ -105,7 +105,7 @@ export default defineComponent({
     }))
     const isPasswordRequiredTask = useTask(function* (signal, ref) {
       if (!isEmpty(ref.tokenInfo)) {
-        return ref.tokenInfo.password_protected === 'true'
+        return ref.tokenInfo.password_protected
       }
       try {
         yield webdav.getFileInfo({ ...unref(publicLinkSpace), publicLinkPassword: null })

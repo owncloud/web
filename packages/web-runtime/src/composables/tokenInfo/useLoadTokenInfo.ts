@@ -8,14 +8,23 @@ export function useLoadTokenInfo(token) {
   const isUserContext = useUserContext({ store })
 
   const loadTokenInfoTask = useTask(function* () {
+    let tokenInfo
+
     try {
       if (unref(isUserContext)) {
-        return yield owncloudSdk.shares.getProtectedTokenInfo(token)
+        tokenInfo = yield owncloudSdk.shares.getProtectedTokenInfo(token)
       } else {
-        return yield owncloudSdk.shares.getUnprotectedTokenInfo(token)
+        tokenInfo = yield owncloudSdk.shares.getUnprotectedTokenInfo(token)
       }
-    } catch (e) {} // backend doesn't support the token info endpoint
-    return {}
+    } catch (e) {
+      // backend doesn't support the token info endpoint
+      return {}
+    }
+    return {
+      ...tokenInfo,
+      alias_link: tokenInfo.alias_link === 'true',
+      password_protected: tokenInfo.password_protected === 'true'
+    }
   })
 
   return { loadTokenInfoTask }
