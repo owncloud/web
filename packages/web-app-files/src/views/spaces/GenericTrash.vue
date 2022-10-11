@@ -34,6 +34,7 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :space="space"
+          :has-actions="showActions"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
@@ -78,7 +79,7 @@ import { computed, defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useTranslations } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -125,6 +126,7 @@ export default defineComponent({
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
+    ...mapGetters(['user']),
 
     isEmpty() {
       return this.paginatedResources.length < 1
@@ -148,6 +150,11 @@ export default defineComponent({
           onClick: () => bus.publish('app.files.list.load')
         }
       ]
+    },
+
+    showActions() {
+      const { manager, editor } = this.space?.spaceRoles
+      return !isProjectSpaceResource(this.space) || [...manager, ...editor].includes(this.user.uuid)
     }
   },
 
