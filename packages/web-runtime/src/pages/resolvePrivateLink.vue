@@ -61,7 +61,7 @@ import { urlJoin } from 'web-pkg/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
-  name: 'ResolveFileLink',
+  name: 'ResolvePrivateLink',
   setup() {
     const store = useStore()
     const router = useRouter()
@@ -76,10 +76,10 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      resolveFileLinkTask.perform(queryItemAsString(unref(id)))
+      resolvePrivateLinkTask.perform(queryItemAsString(unref(id)))
     })
 
-    const resolveFileLinkTask = useTask(function* (signal, id) {
+    const resolvePrivateLinkTask = useTask(function* (signal, id) {
       let path, resource
       let matchingSpace = getMatchingSpace(id)
       if (matchingSpace) {
@@ -161,12 +161,12 @@ export default defineComponent({
     }
 
     const loading = computed(() => {
-      return !resolveFileLinkTask.last || resolveFileLinkTask.isRunning
+      return !resolvePrivateLinkTask.last || resolvePrivateLinkTask.isRunning
     })
 
     const errorMessage = computed(() => {
-      if (resolveFileLinkTask.isError) {
-        return resolveFileLinkTask.last.error
+      if (resolvePrivateLinkTask.isError) {
+        return resolvePrivateLinkTask.last.error
       }
       return null
     })
