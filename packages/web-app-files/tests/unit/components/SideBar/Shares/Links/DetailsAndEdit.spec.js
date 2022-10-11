@@ -19,7 +19,7 @@ const availableRoleOptions = LinkShareRoles.list(false, true, true)
 const exampleLink = {
   name: 'Example link',
   url: 'https://some-url.com/abc',
-  permissions: '1'
+  permissions: 1
 }
 
 describe('DetailsAndEdit component', () => {
