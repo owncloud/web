@@ -2,7 +2,6 @@ import VueRouter, { RouteConfig, Route, Location, RouteMeta } from 'vue-router'
 import { createLocationSpaces } from './spaces'
 import { createLocationShares } from './shares'
 import { createLocationCommon } from './common'
-import { createLocationOperations } from './operations'
 import { createLocationPublic } from './public'
 import { isLocationActive as isLocationActiveNoCompat } from './utils'
 import { createLocationTrash } from './trash'
@@ -90,10 +89,7 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/private-link/:fileId',
-      meta: {
-        auth: false
-      },
-      redirect: (to) => createLocationOperations('files-operations-resolver-private-link', to)
+      redirect: (to) => ({ name: 'resolvePrivateLink', params: { fileId: to.params.fileId } })
     },
     {
       path: '/public-link/:token',

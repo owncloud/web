@@ -1,0 +1,7 @@
+Enhancement: Resolve private links
+
+Private links can now be resolved.
+Note: Private links to shares in oCIS can not be resolved as of now. This will follow in a subsequent PR.
+
+https://github.com/owncloud/web/pull/7405
+https://github.com/owncloud/web/issues/7707
