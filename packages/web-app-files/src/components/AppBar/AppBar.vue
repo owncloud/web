@@ -37,7 +37,7 @@
           <slot
             v-if="showActionsOnSelection || selectedFiles.length === 0"
             name="actions"
-            :limitedScreenSpace="limitedScreenSpace"
+            :limited-screen-space="limitedScreenSpace"
           />
           <batch-actions
             v-if="showBatchActions"

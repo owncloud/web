@@ -41,7 +41,11 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.vue'],
-      extends: ['plugin:vue/recommended', 'prettier/vue']
+      extends: ['plugin:vue/recommended', 'prettier/vue'],
+      rules: {
+        'vue/multi-word-component-names': 'warn',
+        'vue/no-v-text-v-html-on-component': 'warn'
+      }
     },
     {
       files: ['**/*.ts'],
