@@ -35,7 +35,9 @@ Summary
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 * Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
+* Enhancement - Resolve internal links: [#7405](https://github.com/owncloud/web/pull/7405)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
+* Enhancement - Resolve private links: [#7405](https://github.com/owncloud/web/pull/7405)
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
@@ -286,6 +288,15 @@ Details
    https://github.com/owncloud/web/issues/7715
    https://github.com/owncloud/web/pull/7725
 
+* Enhancement - Resolve internal links: [#7405](https://github.com/owncloud/web/pull/7405)
+
+   Public links with the role "internal" can now be resolved. Note: Internal links to shares can
+   not be resolved as of now. This will follow in a subsequent PR.
+
+   https://github.com/owncloud/web/issues/7304
+   https://github.com/owncloud/web/issues/6844
+   https://github.com/owncloud/web/pull/7405
+
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 
    We've made keybindings global and introduced a data-attribute to mark elements that need
@@ -294,6 +305,14 @@ Details
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
    https://github.com/owncloud/web/pull/7735
+
+* Enhancement - Resolve private links: [#7405](https://github.com/owncloud/web/pull/7405)
+
+   Private links can now be resolved. Note: Private links to shares in oCIS can not be resolved as of
+   now. This will follow in a subsequent PR.
+
+   https://github.com/owncloud/web/issues/7707
+   https://github.com/owncloud/web/pull/7405
 
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 
