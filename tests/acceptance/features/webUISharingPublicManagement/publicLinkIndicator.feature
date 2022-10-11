@@ -60,6 +60,9 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
+
+  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS @issue-2060
   Scenario: sharing indicators public link from reshare
     Given user "Brian" has been created with default attributes and without skeleton files in the server
@@ -77,6 +80,8 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
+  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS @issue-2060
   Scenario: sharing indicators public link from child of reshare
     Given user "Brian" has been created with default attributes and without skeleton files in the server
@@ -94,6 +99,8 @@ Feature: Public link share indicator
       | sub-folder   | link-direct,user-indirect |
       | textfile.txt | user-indirect             |
 
+  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
+  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS @issue-2060
   Scenario: no sharing indicator visible in file list from public link
     Given user "Brian" has been created with default attributes and without skeleton files in the server
