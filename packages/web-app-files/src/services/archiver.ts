@@ -1,7 +1,6 @@
 import { major, rcompare } from 'semver'
 import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
-
 /**
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
@@ -79,7 +78,11 @@ export class ArchiverService {
         '&access_token=' +
         (window.Vue as any).$store.getters['runtime/auth/accessToken']
     }
+    const publicLinkPassword = (window.Vue as any).$store.getters['runtime/auth/publicLinkPassword']
+    if (publicLinkPassword) document.cookie = `password=${publicLinkPassword}; max-age=10; path=/`
     window.location = url
+    if (publicLinkPassword) document.cookie = 'password=;max-age=0'
+
     return url
   }
 
