@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from '../services/auth'
@@ -84,7 +84,11 @@ import {
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from '@vue/composition-api'
-import { buildPublicSpaceResource, isPublicSpaceResource } from 'web-client/src/helpers'
+import {
+  buildPublicSpaceResource,
+  isPublicSpaceResource,
+  PublicSpaceResource
+} from 'web-client/src/helpers'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import isEmpty from 'lodash-es/isEmpty'
 import { useLoadTokenInfo } from '../composables/tokenInfo'
@@ -109,7 +113,11 @@ export default defineComponent({
         return ref.tokenInfo.password_protected
       }
       try {
-        yield webdav.getFileInfo({ ...unref(publicLinkSpace), publicLinkPassword: null })
+        let space: PublicSpaceResource = {
+          ...unref(publicLinkSpace),
+          publicLinkPassword: null
+        }
+        yield webdav.getFileInfo(space)
         return false
       } catch (error) {
         if (error.statusCode === 401) {
@@ -121,7 +129,7 @@ export default defineComponent({
     const loadPublicLinkTask = useTask(function* () {
       const resource = yield webdav.getFileInfo(unref(publicLinkSpace))
       if (!isPublicSpaceResource(resource)) {
-        const e = new Error('resolved resource has wrong type')
+        const e: any = new Error('resolved resource has wrong type')
         e.resource = resource
         throw e
       }
