@@ -75,7 +75,7 @@ describe('restore', () => {
 
       expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(
         undefined,
-        '/files/alice'
+        {'path': ''}
       )
     })
     it('should find conflict within resources', async () => {
