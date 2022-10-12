@@ -20,6 +20,7 @@ Summary
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
+* Bugfix - Routing for re-shares: [#7771](https://github.com/owncloud/web/pull/7771)
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
@@ -137,6 +138,14 @@ Details
 
    https://github.com/owncloud/web/issues/6996
    https://github.com/owncloud/web/pull/7504
+
+* Bugfix - Routing for re-shares: [#7771](https://github.com/owncloud/web/pull/7771)
+
+   We've fixed a bug where routing into re-shares and their parent folders from the "Shared with
+   others/via link" page was broken.
+
+   https://github.com/owncloud/web/issues/7347
+   https://github.com/owncloud/web/pull/7771
 
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 
