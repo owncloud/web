@@ -252,7 +252,7 @@ export default defineComponent({
       return this.displayedItem.value
     },
     runningOnEos() {
-      return !!this.configuration?.options?.runningOnEos
+      return true //! !this.configuration?.options?.runningOnEos
     },
     cernFeatures() {
       return !!this.configuration?.options?.cernFeatures
@@ -263,7 +263,8 @@ export default defineComponent({
         this.ownerDisplayName ||
         this.showSize ||
         this.showShares ||
-        this.showVersions
+        this.showVersions ||
+        (this.file.path && this.runningOnEos)
       )
     },
     noContentText() {

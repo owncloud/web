@@ -131,7 +131,7 @@ export default {
         ...this.$_copy_items,
         ...this.$_emptyTrashBin_items,
         ...this.$_restore_items,
-        ...this.$_project_trashbin
+        ...this.$_projectTrashbin_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
@@ -167,7 +167,7 @@ export default {
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
         ...this.$_navigate_space_items,
-        ...this.$_project_trashbin
+        ...this.$_projectTrashbin_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 

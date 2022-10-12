@@ -6,9 +6,8 @@ import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
 import SpaceDetails from './components/SideBar/Details/SpaceDetails.vue'
-import { isLocationTrashActive, isLocationPublicActive } from './router'
+import { isLocationTrashActive, isLocationPublicActive, isLocationCommonActive } from './router'
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
-import { isLocationCommonActive } from './router'
 
 import { Panel } from '../../web-pkg/src/components/sideBar'
 
@@ -137,7 +136,10 @@ const panelGenerators: (({
       ) {
         return false
       }
-      if (isLocationCommonActive(router, 'files-common-projects-trash')) {
+      if (
+        isLocationCommonActive(router, 'files-common-projects-trash') ||
+        isLocationCommonActive(router, 'files-common-projects')
+      ) {
         return false
       }
 

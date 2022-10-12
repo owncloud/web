@@ -3,7 +3,7 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('Files', ['currentFolder']),
-    $_project_trashbin() {
+    $_projectTrashbin_items() {
       return [
         {
           name: 'project-trashbin',

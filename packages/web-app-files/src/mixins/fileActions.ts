@@ -14,6 +14,7 @@ import Move from './actions/move'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
+import ProjectTrashbin from './actions/projectTrashbin'
 import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
 
@@ -28,7 +29,8 @@ const actionsMixins = [
   'restore',
   'delete',
   'unhideShare',
-  'hideShare'
+  'hideShare',
+  'projectTrashbin'
 ]
 
 export const EDITOR_MODE_EDIT = 'edit'
@@ -46,7 +48,8 @@ export default {
     Move,
     Navigate,
     Rename,
-    Restore
+    Restore,
+    ProjectTrashbin
   ],
   computed: {
     ...mapState(['apps']),

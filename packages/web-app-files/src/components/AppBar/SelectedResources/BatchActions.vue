@@ -72,7 +72,7 @@ export default {
         ...this.$_emptyTrashBin_items,
         ...this.$_delete_items,
         ...this.$_restore_items,
-        ...this.$_project_trashbin
+        ...this.$_projectTrashbin_items
       ].filter((item) => item.isEnabled({ resources: this.selectedFiles }))
     }
   }
