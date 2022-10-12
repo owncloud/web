@@ -13,7 +13,6 @@ exports[`Top Bar component Displays applications menu 1`] = `
   </div>
   <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
     <theme-switcher-stub></theme-switcher-stub>
-    <activities-link-stub></activities-link-stub>
     <feedback-link-stub></feedback-link-stub>
     <!---->
     <user-menu-stub applicationslist="[object Object],[object Object],[object Object]"></user-menu-stub>

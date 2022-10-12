@@ -29,6 +29,8 @@ export interface UppyResource {
     driveAlias: string
     driveType: string
     currentFolder: string // current folder path during upload initiation
+    currentFolderId?: string | number
+    fileId?: string | number
     // upload data
     relativeFolder: string
     relativePath: string
@@ -47,7 +49,12 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(space: SpaceResource, currentPath: string, files: UppyResource[]): void
+  createDirectoryTree(
+    space: SpaceResource,
+    currentPath: string,
+    files: UppyResource[],
+    currentFolderId?: string | number
+  ): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -122,7 +129,12 @@ const createDirectoryTree = ({
   clientService: ClientService
   uppyService: UppyService
 }) => {
-  return async (space: SpaceResource, currentFolder: string, files: UppyResource[]) => {
+  return async (
+    space: SpaceResource,
+    currentFolder: string,
+    files: UppyResource[],
+    currentFolderId?: string | number
+  ) => {
     const { webdav } = clientService
     const createdFolders = []
     for (const file of files) {
@@ -159,6 +171,7 @@ const createDirectoryTree = ({
             driveAlias: space.driveAlias,
             driveType: space.driveType,
             currentFolder,
+            currentFolderId,
             // upload data
             relativeFolder: createdSubFolders,
             uploadId,
@@ -171,13 +184,17 @@ const createDirectoryTree = ({
 
         uppyService.publish('addedForUpload', [uppyResource])
 
+        let folder
         try {
-          await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
+          folder = await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
         } catch (error) {
           console.error(error)
         }
 
-        uppyService.publish('uploadSuccess', uppyResource)
+        uppyService.publish('uploadSuccess', {
+          ...uppyResource,
+          meta: { ...uppyResource.meta, fileId: folder?.fileId }
+        })
 
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)

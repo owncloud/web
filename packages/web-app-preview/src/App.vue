@@ -118,6 +118,8 @@ import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { unref } from '@vue/composition-api'
+import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'Preview',
@@ -262,10 +264,11 @@ export default defineComponent({
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.driveAliasAndItem = this.currentFileContext.space?.getDriveAliasAndItem(
-        this.activeFilteredFile
+      const routeOptions = mergeFileRouteOptions(
+        this.$route,
+        createFileRouteOptions(unref(this.currentFileContext.space), this.activeFilteredFile)
       )
-      history.pushState({}, document.title, this.$router.resolve(this.$route).href)
+      history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },
 
     loadMedium() {

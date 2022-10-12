@@ -1,0 +1,8 @@
+Enhancement: Resolve internal links
+
+Public links with the role "internal" can now be resolved.
+
+https://github.com/owncloud/web/issues/7304
+https://github.com/owncloud/web/issues/6844
+https://github.com/owncloud/web/pull/7405
+https://github.com/owncloud/web/pull/7769

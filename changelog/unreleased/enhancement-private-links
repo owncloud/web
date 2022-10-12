@@ -1,0 +1,7 @@
+Enhancement: Resolve private links
+
+Private links can now be resolved.
+
+https://github.com/owncloud/web/issues/7707
+https://github.com/owncloud/web/pull/7405
+https://github.com/owncloud/web/pull/7769

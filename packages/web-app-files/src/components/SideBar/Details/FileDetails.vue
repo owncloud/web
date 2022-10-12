@@ -140,17 +140,6 @@
             </div>
           </td>
         </tr>
-        <tr v-if="showTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
-          <td>
-            <router-link v-for="(tag, index) in file.tags" :key="tag" :to="getTagLink(tag)">
-              <span>
-                <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
-                <span v-else v-text="tag" />
-              </span>
-            </router-link>
-          </td>
-        </tr>
       </table>
     </div>
     <p v-else data-testid="noContentText" v-text="noContentText" />
@@ -163,7 +152,7 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import { basename, dirname } from 'path'
-import { createLocationSpaces, createLocationCommon } from '../../../router'
+import { createLocationSpaces } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
@@ -175,6 +164,7 @@ import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -183,10 +173,12 @@ export default defineComponent({
   },
   setup() {
     const sharedParentDir = ref('')
+    const sharedParentFileId = ref('')
     const store = useStore()
 
     return {
       sharedParentDir,
+      sharedParentFileId,
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace')
@@ -207,7 +199,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
-    ...mapGetters(['user', 'configuration', 'capabilities']),
+    ...mapGetters(['user', 'configuration']),
 
     file() {
       return this.displayedItem.value
@@ -270,25 +262,21 @@ export default defineComponent({
           shareName: basename(this.file.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: this.file.path } as Resource)
-          },
-          query: {
-            shareId: this.file.shareId
-          }
-        })
+        return createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(space, { path: this.file.path, fileId: this.file.fileId })
+        )
       }
       if (!this.matchingSpace) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({
-            path: this.sharedParentDir
-          } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(this.matchingSpace, {
+          path: this.sharedParentDir,
+          fileId: this.sharedParentFileId
+        })
+      )
     },
     showShares() {
       if (this.isPublicLinkContext) {
@@ -364,12 +352,6 @@ export default defineComponent({
       const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
-    showTags() {
-      return this.capabilities?.files.tags && this.file.tags?.length
-    },
-    tagsLabel() {
-      return this.$gettext('Tags')
-    },
     hasAnyShares() {
       return (
         this.file.shareTypes?.length > 0 ||
@@ -416,6 +398,7 @@ export default defineComponent({
         }
         this.sharedTime = this.sharedItem.stime
         this.sharedParentDir = sharePathParentOrCurrent
+        this.sharedParentFileId = shares[0].file?.source
       },
       immediate: true
     }
@@ -493,11 +476,6 @@ export default defineComponent({
         this.copiedDirect = false
         this.copiedEos = false
       }, 550)
-    },
-    getTagLink(tag) {
-      return createLocationCommon('files-common-search', {
-        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
-      })
     }
   }
 })
@@ -512,7 +490,6 @@ export default defineComponent({
     td {
       max-width: 0;
       width: 100%;
-      overflow-wrap: break-word;
 
       div {
         min-width: 0;

@@ -1,7 +1,6 @@
 import App from './App.vue'
 import Favorites from './views/Favorites.vue'
 import FilesDrop from './views/FilesDrop.vue'
-import PrivateLink from './views/PrivateLink.vue'
 import SharedWithMe from './views/shares/SharedWithMe.vue'
 import SharedWithOthers from './views/shares/SharedWithOthers.vue'
 import SharedViaLink from './views/shares/SharedViaLink.vue'
@@ -94,7 +93,6 @@ export default {
     App,
     Favorites,
     FilesDrop,
-    PrivateLink,
     SearchResults,
     Shares: {
       SharedViaLink,

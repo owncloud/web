@@ -31,7 +31,7 @@ const defaultLinksList = [
     name: 'public link 1',
     url: 'some-link-1',
     path: '/file-1.txt',
-    permissions: '1'
+    permissions: 1
   },
   {
     id: '2',
@@ -39,7 +39,7 @@ const defaultLinksList = [
     name: 'public link 2',
     url: 'some-link-2',
     path: '/file-2.txt',
-    permissions: '1'
+    permissions: 1
   }
 ]
 

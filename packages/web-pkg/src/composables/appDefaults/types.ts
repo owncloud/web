@@ -6,6 +6,7 @@ export interface FileContext {
   driveAliasAndItem: MaybeRef<string>
   space: MaybeRef<SpaceResource>
   item: MaybeRef<string>
+  itemId: MaybeRef<string>
   fileName: MaybeRef<string>
   routeName: MaybeRef<string>
   routeParams: MaybeRef<LocationParams>
