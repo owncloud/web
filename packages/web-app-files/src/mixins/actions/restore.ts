@@ -71,7 +71,7 @@ export default {
       const conflicts = []
       const resolvedResources = []
       for (const resource of resources) {
-        const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
+        const webDavParentPath = this.getParentFolderFromResource(resource)
 
         // ? check if parent folder has already been requested
         let parentResources = []
@@ -79,10 +79,9 @@ export default {
           parentResources = parentFolders[webDavParentPath]
         } else {
           try {
-            parentResources = await this.$clientService.webdav.listFiles(
-              this.space,
-              webDavParentPath
-            )
+            parentResources = await this.$clientService.webdav.listFiles(this.space, {
+              path: webDavParentPath
+            })
           } catch (error) {
             await this.restoreFolderStructure(resource)
           }
