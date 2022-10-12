@@ -12,12 +12,12 @@ localVue.use(Vuex)
 export const createWrapper = (): Wrapper<Vue> =>
   mount(
     defineComponent({
-      template: `<div>{{ y }}</div>`,
       setup() {
         const { y, refresh } = useFileListHeaderPosition()
 
         return { y, refresh, store: useStore() }
-      }
+      },
+      template: `<div>{{ y }}</div>`
     }),
     {
       localVue,

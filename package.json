@@ -79,7 +79,7 @@
     "cucumber-html-reporter": "^5.5.0",
     "depcheck": "^1.4.3",
     "ejs": "^3.1.5",
-    "eslint": "^7.32.0",
+    "eslint": "^8.25.0",
     "flush-promises": "^1.0.2",
     "focus-trap": "^6.9.0",
     "focus-trap-vue": "^1.1.1",

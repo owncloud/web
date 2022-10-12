@@ -1,10 +1,7 @@
 <template>
   <div v-if="showInfo" id="upload-info" class="oc-rounded oc-box-shadow-medium">
     <div
-      class="
-        upload-info-title
-        oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top
-      "
+      class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
       <p class="oc-my-xs" v-text="uploadInfoTitle" />
       <oc-button

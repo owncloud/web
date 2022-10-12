@@ -4,12 +4,7 @@ module.exports = {
     es6: true,
     amd: true
   },
-  extends: [
-    'standard',
-    'prettier/standard',
-    'plugin:prettier/recommended',
-    'plugin:jest/recommended'
-  ],
+  extends: ['plugin:vue/recommended', 'plugin:prettier-vue/recommended', 'plugin:jest/recommended'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: {
@@ -41,7 +36,7 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.vue'],
-      extends: ['plugin:vue/recommended', 'prettier/vue'],
+      extends: ['plugin:vue/recommended', 'plugin:prettier-vue/recommended'],
       rules: {
         'vue/multi-word-component-names': 'warn',
         'vue/no-v-text-v-html-on-component': 'warn'
@@ -53,7 +48,8 @@ module.exports = {
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
         '@typescript-eslint/no-extra-semi': 'off',
-        '@typescript-eslint/no-explicit-any': 'off'
+        '@typescript-eslint/no-explicit-any': 'off',
+        'prefer-const': 'warn'
       }
     }
   ]

@@ -36,10 +36,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -83,10 +80,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -130,10 +124,7 @@ exports[`RoleDropdown for file shares custom permissions inherits the parents sh
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -177,10 +168,7 @@ exports[`RoleDropdown for file shares when an existing role is present does not 
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -224,10 +212,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -271,10 +256,7 @@ exports[`RoleDropdown for file shares when an existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -312,10 +294,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
@@ -359,10 +338,7 @@ exports[`RoleDropdown for file shares when no existing role is present renders a
       <oc-checkbox-stub id="files-collaborators-permission-share" value="[object Object],[object Object]" option="[object Object]" label="Share" size="large" data-testid="files-collaborators-permission-share" class="oc-mr-xs files-collaborators-permission-checkbox"></oc-checkbox-stub>
     </li>
   </oc-list-stub>
-  <div class="
-        files-recipient-custom-permissions-drop-cancel-confirm-btns
-        oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-      ">
+  <div class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom">
     <oc-button-stub type="button" size="small" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">Cancel</oc-button-stub>
     <oc-button-stub type="button" size="small" submit="button" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-ml-s">Apply</oc-button-stub>
   </div>
