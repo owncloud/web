@@ -471,9 +471,22 @@ export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<
   return message.trim().toLowerCase()
 }
 
+export const getDeleteResourceButtonVisibility = async (
+  args: deleteResourceArgs
+): Promise<boolean> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  return await page.locator(permanentDeleteButton).isVisible()
+}
+
 export interface restoreResourceTrashbinArgs {
   resource: string
-  actionType: string
   page: Page
 }
 
@@ -497,6 +510,20 @@ export const restoreResourceTrashbin = async (
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
+}
+
+export const getRestoreResourceButtonVisibility = async (
+  args: restoreResourceTrashbinArgs
+): Promise<boolean> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  return await page.locator(restoreResourceButton).isVisible()
 }
 
 export interface searchResourceGlobalSearchArgs {
