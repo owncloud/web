@@ -6,6 +6,7 @@ export interface Resource {
   fileId?: string
   parentFolderId?: string
   storageId?: string
+  readonly nodeId?: string
   name?: string
   path: string
   webDavPath?: string

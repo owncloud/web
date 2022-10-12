@@ -14,7 +14,7 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from 'web-client/src/helpers/share'
-import { extractExtensionFromFile, extractStorageId } from './resource'
+import { extractExtensionFromFile, extractNodeId, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
 import { Resource, SpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
 import { urlJoin } from 'web-pkg/src/utils'
@@ -44,7 +44,7 @@ export function buildResource(resource): Resource {
   }
 
   const id = resource.fileInfo[DavProperty.FileId]
-  return {
+  const r = {
     id,
     fileId: id,
     storageId: extractStorageId(id),
@@ -106,6 +106,12 @@ export function buildResource(resource): Resource {
     },
     getDomSelector: () => extractDomSelector(id)
   }
+  Object.defineProperty(r, 'nodeId', {
+    get() {
+      return extractNodeId(this.id)
+    }
+  })
+  return r
 }
 
 export function buildWebDavPublicPath(publicLinkToken, path = '') {

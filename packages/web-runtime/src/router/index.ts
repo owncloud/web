@@ -6,7 +6,7 @@ import LoginPage from '../pages/login.vue'
 import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
-import ResolveFileLinkPage from '../pages/resolveFileLink.vue'
+import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 
@@ -63,7 +63,7 @@ export const router = patchRouter(
       {
         path: '/f/:fileId',
         name: 'resolvePrivateLink',
-        component: ResolveFileLinkPage,
+        component: ResolvePrivateLinkPage,
         meta: { title: $gettext('Private link') }
       },
       {
