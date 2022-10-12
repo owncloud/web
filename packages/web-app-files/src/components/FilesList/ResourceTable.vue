@@ -601,6 +601,12 @@ export default defineComponent({
           shareName: basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
+      } else if (!resource.shareId && !this.getInternalSpace(resource.storageId)) {
+        if (path === '/') {
+          return createLocationShares('files-shares-with-me')
+        }
+        // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
+        return { name: 'resolvePrivateLink', params: { fileId } }
       } else {
         space = this.getMatchingSpace(resource)
       }
@@ -783,10 +789,12 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
+    getInternalSpace(storageId) {
+      return this.space || this.spaces.find((space) => space.id === storageId)
+    },
     getMatchingSpace(resource: Resource): SpaceResource {
       return (
-        this.space ||
-        this.spaces.find((space) => space.id === resource.storageId) ||
+        this.getInternalSpace(resource.storageId) ||
         buildShareSpaceResource({
           shareId: resource.shareId,
           shareName: resource.name,
@@ -810,6 +818,10 @@ export default defineComponent({
         return resource.path === '/'
           ? this.$gettext('Shared with me')
           : basename(resource.shareRoot)
+      }
+
+      if (!this.getInternalSpace(resource.storageId)) {
+        return this.$gettext('Shared with me')
       }
 
       return this.$gettext('Personal')
