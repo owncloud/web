@@ -29,6 +29,7 @@ Summary
 * Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
+* Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
@@ -223,6 +224,14 @@ Details
 
    https://github.com/owncloud/web/issues/7521
    https://github.com/owncloud/web/pull/7546
+
+* Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
+
+   We've fixed the sidebar in the trash bin which was throwing errors and not showing the right
+   content.
+
+   https://github.com/owncloud/web/issues/7778
+   https://github.com/owncloud/web/pull/7787
 
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
