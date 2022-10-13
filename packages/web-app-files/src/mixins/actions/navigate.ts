@@ -9,6 +9,9 @@ import {
 } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {
@@ -49,18 +52,14 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: ({ resources }) => {
-            const path = this.getPath(resources[0])
-            const driveAliasAndItem = this.getDriveAliasAndItem(resources[0])
-            const shareId = this.getShareId(resources[0])
-            return merge({}, this.routeName, {
-              params: {
-                ...(path && { path }),
-                ...(driveAliasAndItem && { driveAliasAndItem })
-              },
-              query: {
-                ...(shareId && { shareId })
-              }
-            })
+            return merge(
+              {},
+              this.routeName,
+              createFileRouteOptions(this.$_navigate_getSpace(resources[0]), {
+                path: resources[0].path,
+                fileId: resources[0].fileId
+              })
+            )
           },
           class: 'oc-files-actions-navigate-trigger'
         }
@@ -75,35 +74,24 @@ export default {
     }
   },
   methods: {
-    getPath(resource) {
-      if (!isLocationPublicActive(this.$router, 'files-public-link')) {
-        return null
+    $_navigate_getSpace(resource) {
+      if (this.space) {
+        return this.space
       }
-      return resource.path
-    },
-    getDriveAliasAndItem(resource) {
-      if (
-        this.capabilities?.spaces?.share_jail &&
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return `share/${resource.name}`
+      const storageId = resource.storageId
+      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
+      const space = this.$store.getters['runtime/spaces/spaces'].find(
+        (space) => space.id === storageId
+      )
+      if (space) {
+        return space
       }
-      if (!this.space) {
-        return null
-      }
-      return this.space.driveAlias + resource.path
-    },
-    getShareId(resource) {
-      if (this.$route.query?.shareId) {
-        return this.$route.query.shareId
-      }
-      if (
-        this.capabilities?.spaces?.share_jail &&
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return resource.id
-      }
-      return undefined
+
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     }
   }
 }

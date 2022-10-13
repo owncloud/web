@@ -10,6 +10,7 @@ import { urlJoin } from 'web-pkg/src/utils'
 interface UploadHelpersOptions {
   space: ComputedRef<SpaceResource>
   currentFolder?: ComputedRef<string>
+  currentFolderId?: ComputedRef<string | number>
 }
 
 interface UploadHelpersResult {
@@ -20,6 +21,7 @@ interface inputFileOptions {
   route: Ref<Route>
   space: Ref<SpaceResource>
   currentFolder: Ref<string>
+  currentFolderId?: Ref<string | number>
 }
 
 export function useUploadHelpers(options: UploadHelpersOptions): UploadHelpersResult {
@@ -27,7 +29,8 @@ export function useUploadHelpers(options: UploadHelpersOptions): UploadHelpersRe
     inputFilesToUppyFiles: inputFilesToUppyFiles({
       route: useRoute(),
       space: options.space,
-      currentFolder: options.currentFolder
+      currentFolder: options.currentFolder,
+      currentFolderId: options.currentFolderId
     })
   }
 }
@@ -45,7 +48,12 @@ const getRelativeFilePath = (file: File): string | undefined => {
   return urlJoin(relativePath)
 }
 
-const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions) => {
+const inputFilesToUppyFiles = ({
+  route,
+  space,
+  currentFolder,
+  currentFolderId
+}: inputFileOptions) => {
   return (files: File[]): UppyResource[] => {
     const uppyFiles: UppyResource[] = []
 
@@ -86,6 +94,7 @@ const inputFilesToUppyFiles = ({ route, space, currentFolder }: inputFileOptions
           driveAlias: unref(space).driveAlias,
           driveType: unref(space).driveType,
           currentFolder: unref(currentFolder),
+          currentFolderId: unref(currentFolderId),
           // upload data
           relativeFolder: directory,
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath

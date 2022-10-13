@@ -7,6 +7,7 @@ export type OwnCloudSdk = {
     getFileContents(...args): any
     putFileContents(...args): any
     getFavoriteFiles(...args): any
+    getPathForFileId(fileId: string | number): Promise<string>
     search(...args): any
     copy(...args): any
     move(...args): any
@@ -33,6 +34,8 @@ export type OwnCloudSdk = {
   shares: {
     getShare(...args): any
     getShares(...args): any
+    getProtectedTokenInfo(...args): any
+    getUnprotectedTokenInfo(...args): any
   }
   users: {
     getUser(...args): any

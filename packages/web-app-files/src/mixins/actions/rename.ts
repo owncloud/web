@@ -1,10 +1,12 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
-import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
+import { isLocationTrashActive, isLocationSharesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { renameResource } from '../../helpers/resources'
 
 export default {
   computed: {
@@ -34,16 +36,6 @@ export default {
             if (resources.length !== 1) {
               return false
             }
-            // FIXME: once renaming shares in share_jail has been sorted out backend side we can enable renaming shares again
-            if (
-              this.capabilities?.spaces?.share_jail === true &&
-              (isLocationSharesActive(this.$router, 'files-shares-with-me') ||
-                (isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
-                  this.space.driveType === 'share' &&
-                  resources[0].path === '/'))
-            ) {
-              return false
-            }
 
             const renameDisabled = resources.some((resource) => {
               return !resource.canRename()
@@ -64,7 +56,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['RENAME_FILE']),
+    ...mapMutations('Files', ['UPSERT_RESOURCE', 'SET_CURRENT_FOLDER']),
 
     async $_rename_trigger({ resources }, space?: SpaceResource) {
       let parentResources
@@ -191,16 +183,43 @@ export default {
         })
         this.hideModal()
 
-        if (isSameResource(resource, this.currentFolder)) {
-          return this.$router.push({
-            params: {
-              driveAliasAndItem: this.space.getDriveAliasAndItem({ path: newPath } as Resource)
-            },
-            query: this.$route.query
-          })
+        const isCurrentFolder = isSameResource(resource, this.currentFolder)
+
+        if (isShareSpaceResource(space) && resource.isReceivedShare()) {
+          space.rename(newName)
+
+          if (isCurrentFolder) {
+            const currentFolder = { ...this.currentFolder } as Resource
+            currentFolder.name = newName
+            this.SET_CURRENT_FOLDER(currentFolder)
+            return this.$router.push(
+              createFileRouteOptions(space, {
+                path: '',
+                fileId: resource.fileId
+              })
+            )
+          }
+
+          const sharedResource = { ...resource }
+          sharedResource.name = newName
+          this.UPSERT_RESOURCE(sharedResource)
+          return
         }
 
-        this.RENAME_FILE({ space, resource, newPath })
+        if (isCurrentFolder) {
+          const currentFolder = { ...this.currentFolder } as Resource
+          renameResource(space, currentFolder, newPath)
+          this.SET_CURRENT_FOLDER(currentFolder)
+          return this.$router.push(
+            createFileRouteOptions(this.space, {
+              path: newPath,
+              fileId: resource.fileId
+            })
+          )
+        }
+        const fileResource = { ...resource } as Resource
+        renameResource(space, fileResource, newPath)
+        this.UPSERT_RESOURCE(fileResource)
       } catch (error) {
         console.error(error)
         this.toggleModalConfirmButton()
