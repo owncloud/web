@@ -31,7 +31,6 @@ export function useAppDocumentTitle({
   })
 
   useDocumentTitle({
-    document,
     titleSegments
   })
 }

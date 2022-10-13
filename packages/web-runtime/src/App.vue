@@ -51,6 +51,7 @@ import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
 import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
+import { eventBus } from 'web-pkg/src/services'
 
 export default defineComponent({
   components: {
@@ -100,12 +101,13 @@ export default defineComponent({
     $route: {
       immediate: true,
       handler: function (to) {
-        const title = this.extractPageTitleFromRoute(to)
-        if (!title) {
+        const extracted = this.extractPageTitleFromRoute(to)
+        if (!extracted) {
           return
         }
-        this.announceRouteChange(to)
-        document.title = title
+        const { shortDocumentTitle, fullDocumentTitle } = extracted
+        this.announceRouteChange(shortDocumentTitle)
+        document.title = fullDocumentTitle
       }
     },
     capabilities: {
@@ -145,7 +147,15 @@ export default defineComponent({
       }
     }
   },
-
+  mounted() {
+    eventBus.subscribe(
+      'runtime.documentTitle.changed',
+      ({ shortDocumentTitle, fullDocumentTitle }) => {
+        document.title = fullDocumentTitle
+        this.announceRouteChange(shortDocumentTitle)
+      }
+    )
+  },
   destroyed() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
@@ -183,26 +193,23 @@ export default defineComponent({
       })
     },
 
-    announceRouteChange(route) {
-      const pageTitle = this.extractPageTitleFromRoute(route, false)
+    announceRouteChange(pageTitle) {
       const translated = this.$gettext('Navigated to %{ pageTitle }')
       this.announcement = this.$gettextInterpolate(translated, { pageTitle })
     },
 
-    extractPageTitleFromRoute(route, includeGeneralName = true) {
-      const titleSegments = []
+    extractPageTitleFromRoute(route) {
       const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : undefined
       if (!routeTitle) {
         return
       }
-
-      titleSegments.push(routeTitle)
-
-      if (includeGeneralName) {
-        titleSegments.push(this.configuration.currentTheme.general.name)
+      const glue = ' - '
+      const titleSegments = [routeTitle]
+      const generalName = this.configuration.currentTheme.general.name
+      return {
+        shortDocumentTitle: titleSegments.join(glue),
+        fullDocumentTitle: [...titleSegments, generalName].join(glue)
       }
-
-      return titleSegments.join(' - ')
     }
   }
 })

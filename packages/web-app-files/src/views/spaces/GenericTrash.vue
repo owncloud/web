@@ -130,7 +130,7 @@ export default defineComponent({
       }
       return segments
     })
-    useDocumentTitle({ document, titleSegments })
+    useDocumentTitle({ titleSegments })
 
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),

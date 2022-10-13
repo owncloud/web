@@ -200,7 +200,7 @@ export default defineComponent({
 
       return segments
     })
-    useDocumentTitle({ document, titleSegments })
+    useDocumentTitle({ titleSegments })
 
     const { $gettext } = useTranslations()
     const route = useRoute()

@@ -1,25 +1,32 @@
 import { watch, Ref, unref } from '@vue/composition-api'
 import { useStore } from '../store'
 import { Store } from 'vuex'
+import { useEventBus } from '../eventBus'
+import { EventBus } from '../../services'
 
 interface DocumentTitleOptions {
-  document: Document
   titleSegments: Ref<string[]>
   store?: Store<any>
+  eventBus?: EventBus
 }
 
-export function useDocumentTitle({ document, titleSegments, store }: DocumentTitleOptions): void {
+export function useDocumentTitle({ titleSegments, store, eventBus }: DocumentTitleOptions): void {
   store = store || useStore()
+  eventBus = eventBus || useEventBus()
 
   watch(
     titleSegments,
     (newTitleSegments) => {
       const titleSegments = unref(newTitleSegments)
 
-      // TODO: announce navigation
+      const glue = ' - '
+      const generalName = store.getters['configuration'].currentTheme.general.name
+      const payload = {
+        shortDocumentTitle: titleSegments.join(glue),
+        fullDocumentTitle: [...titleSegments, generalName].join(glue)
+      }
 
-      titleSegments.push(store.getters['configuration'].currentTheme.general.name)
-      document.title = titleSegments.join(' - ')
+      eventBus.publish('runtime.documentTitle.changed', payload)
     },
     { immediate: true }
   )
