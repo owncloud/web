@@ -100,8 +100,12 @@ export default defineComponent({
     $route: {
       immediate: true,
       handler: function (to) {
+        const title = this.extractPageTitleFromRoute(to)
+        if (!title) {
+          return
+        }
         this.announceRouteChange(to)
-        document.title = this.extractPageTitleFromRoute(to)
+        document.title = title
       }
     },
     capabilities: {
@@ -186,23 +190,16 @@ export default defineComponent({
     },
 
     extractPageTitleFromRoute(route, includeGeneralName = true) {
-      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : route.name
-      const titleSegments = [routeTitle]
+      const titleSegments = []
+      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : undefined
+      if (!routeTitle) {
+        return
+      }
+
+      titleSegments.push(routeTitle)
 
       if (includeGeneralName) {
         titleSegments.push(this.configuration.currentTheme.general.name)
-      }
-
-      if (route.params.item) {
-        if (route.name.startsWith('files-')) {
-          const fileTree = route.params.item.split('/').filter((el) => el.length)
-
-          if (fileTree.length) {
-            titleSegments.unshift(fileTree.pop())
-          }
-        } else {
-          titleSegments.unshift(route.params.item)
-        }
       }
 
       return titleSegments.join(' - ')
