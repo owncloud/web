@@ -10,14 +10,16 @@ const state = {
   spaces: [],
   spacesInitialized: false,
   spacesLoading: false,
-  spaceMembers: []
+  spaceMembers: [],
+  spaceQuotas: {}
 }
 
 const getters = {
   spaces: (state) => state.spaces,
+  spaceMembers: (state) => state.spaceMembers,
+  spaceQuotas: (state) => state.spaceQuotas,
   spacesInitialized: (state) => state.spacesInitialized,
-  spacesLoading: (state) => state.spacesLoading,
-  spaceMembers: (state) => state.spaceMembers
+  spacesLoading: (state) => state.spacesLoading
 }
 
 const mutations = {
@@ -97,6 +99,9 @@ const mutations = {
     state.spaceMembers = state.spaceMembers.filter(
       (s) => member.id === s.id && member.collaborator.name !== s.collaborator.name
     )
+  },
+  LOAD_SPACE_QUOTAS(state, spaceQuotas) {
+    state.spaceQuotas = spaceQuotas
   }
 }
 
@@ -167,6 +172,17 @@ const actions = {
 
     return client.shares.deleteShare(share.id, additionalParams).then(() => {
       context.commit('REMOVE_SPACE_MEMBER', share)
+    })
+  },
+  async loadSpaceQuotas(context, { httpAuthenticatedClient }) {
+    // FIXME: Use graphClient after added to libre-graph-api specs https://github.com/owncloud/libre-graph-api
+    const { data } = await httpAuthenticatedClient.get(
+      `${context.rootGetters.configuration.server}graph/v1.0/drivequotas`
+    )
+    context.commit('LOAD_SPACE_QUOTAS', {
+      maxProjectQuota: data.max_project_quota || 0,
+      maxPersonalQuota: data.max_personal_quota || 0,
+      defaultProjectQuota: data.default_project_quota || 0
     })
   }
 }

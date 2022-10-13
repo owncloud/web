@@ -36,10 +36,7 @@
     <template v-else>
       <div
         v-show="activeMediaFileCached"
-        class="
-          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-          preview-player
-        "
+        class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
       >
         <img
           v-if="activeMediaFileCached.isImage"
@@ -68,16 +65,7 @@
     </template>
     <div class="oc-position-medium oc-position-bottom-center preview-details">
       <div
-        class="
-          oc-background-brand
-          oc-p-s
-          oc-width-large
-          oc-flex
-          oc-flex-middle
-          oc-flex-center
-          oc-flex-around
-          preview-controls-action-bar
-        "
+        class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
       >
         <oc-button
           class="preview-controls-previous"

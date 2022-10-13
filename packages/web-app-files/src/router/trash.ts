@@ -1,6 +1,6 @@
 import { RouteComponents } from './router'
 import { Location, RouteConfig } from 'vue-router'
-import { createLocation, $gettext, isLocationActiveDirector } from './utils'
+import { createLocation, isLocationActiveDirector } from './utils'
 
 type trashTypes = 'files-trash-generic'
 
@@ -21,8 +21,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: ':driveAliasAndItem*',
         component: components.Spaces.DriveResolver,
         meta: {
-          patchCleanPath: true,
-          title: $gettext('Deleted files')
+          patchCleanPath: true
         }
       }
     ]

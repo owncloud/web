@@ -25,6 +25,7 @@ import {
   announceUppyService,
   announceAuthService,
   announcePermissionManager,
+  announceCustomizations,
   startSentry
 } from './container'
 import {
@@ -54,6 +55,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceAuthService({ vue: Vue, configurationManager, store, router })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  announceCustomizations({ runtimeConfiguration })
   announceDefaults({ store, router })
 }
 
@@ -102,7 +104,13 @@ export const renderSuccess = (): void => {
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        return store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        const httpAuthenticatedClient = clientService.httpAuthenticated(
+          store.getters['runtime/auth/accessToken']
+        )
+
+        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
+        return
       }
 
       // Spaces feature not available. Create a virtual personal space

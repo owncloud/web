@@ -167,11 +167,14 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      const message = await resourceObject.deleteTrashBin({ resource: info.resource })
-      const paths = info.resource.split('/')
       if (actionType === 'should not') {
-        expect(message).toBe(`failed to delete "${paths[paths.length - 1]}"`)
+        const isVisible = await resourceObject.isDeleteTrashBinButtonVisible({
+          resource: info.resource
+        })
+        expect(isVisible).toBe(false)
       } else {
+        const message = await resourceObject.deleteTrashBin({ resource: info.resource })
+        const paths = info.resource.split('/')
         expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
       }
     }
@@ -190,14 +193,16 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      const message = await resourceObject.restoreTrashBin({
-        resource: info.resource,
-        actionType
-      })
-      const paths = info.resource.split('/')
       if (actionType === 'should not') {
-        expect(message).toBe(`failed to restore "${paths[paths.length - 1]}"`)
+        const isVisible = await resourceObject.isRestoreTrashBinButtonVisible({
+          resource: info.resource
+        })
+        expect(isVisible).toBe(false)
       } else {
+        const message = await resourceObject.restoreTrashBin({
+          resource: info.resource
+        })
+        const paths = info.resource.split('/')
         expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
       }
     }

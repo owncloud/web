@@ -140,6 +140,17 @@
             </div>
           </td>
         </tr>
+        <tr v-if="showTags" data-testid="tags">
+          <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
+          <td>
+            <router-link v-for="(tag, index) in file.tags" :key="tag" :to="getTagLink(tag)">
+              <span>
+                <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
+                <span v-else v-text="tag" />
+              </span>
+            </router-link>
+          </td>
+        </tr>
       </table>
     </div>
     <p v-else data-testid="noContentText" v-text="noContentText" />
@@ -152,14 +163,14 @@ import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import upperFirst from 'lodash-es/upperFirst'
 import { basename, dirname } from 'path'
-import { createLocationSpaces } from '../../../router'
+import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
@@ -199,7 +210,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['user', 'configuration', 'capabilities']),
 
     file() {
       return this.displayedItem.value
@@ -352,6 +363,12 @@ export default defineComponent({
       const displayDate = formatDateFromHTTP(this.file.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
+    showTags() {
+      return this.capabilities?.files.tags && this.file.tags?.length
+    },
+    tagsLabel() {
+      return this.$gettext('Tags')
+    },
     hasAnyShares() {
       return (
         this.file.shareTypes?.length > 0 ||
@@ -442,7 +459,7 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      bus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
     },
     async loadData() {
       const calls = []
@@ -476,6 +493,11 @@ export default defineComponent({
         this.copiedDirect = false
         this.copiedEos = false
       }, 550)
+    },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+      })
     }
   }
 })
@@ -490,6 +512,7 @@ export default defineComponent({
     td {
       max-width: 0;
       width: 100%;
+      overflow-wrap: break-word;
 
       div {
         min-width: 0;

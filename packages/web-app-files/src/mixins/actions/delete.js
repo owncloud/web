@@ -6,12 +6,13 @@ import {
   isLocationTrashActive,
   isLocationCommonActive
 } from '../../router'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default {
   mixins: [MixinDeleteResources],
   computed: {
     ...mapState('Files', ['currentFolder']),
-    ...mapGetters(['capabilities']),
+    ...mapGetters(['capabilities', 'user']),
     $_delete_items() {
       return [
         {
@@ -60,6 +61,15 @@ export default {
             if (this.capabilities?.files?.permanent_deletion === false) {
               return false
             }
+
+            if (
+              isProjectSpaceResource(this.space) &&
+              !this.space.isEditor(this.user.uuid) &&
+              !this.space.isManager(this.user.uuid)
+            ) {
+              return false
+            }
+
             return resources.length > 0
           },
           componentType: 'button',

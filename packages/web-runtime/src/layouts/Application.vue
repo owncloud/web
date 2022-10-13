@@ -44,6 +44,7 @@ import {
 import { watch, defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
+  name: 'ApplicationLayout',
   components: {
     AppLoadingSpinner,
     MessageBar,

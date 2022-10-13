@@ -1,6 +1,6 @@
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
@@ -38,7 +38,7 @@ export default {
       const panelName = isLocationTrashActive(this.$router, 'files-trash-generic')
         ? null
         : 'actions-item'
-      bus.publish(SideBarEventTopics.openWithPanel, panelName)
+      eventBus.publish(SideBarEventTopics.openWithPanel, panelName)
     }
   }
 }

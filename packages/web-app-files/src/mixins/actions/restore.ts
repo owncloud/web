@@ -7,7 +7,7 @@ import {
   buildWebDavSpacesTrashPath
 } from '../../helpers/resources'
 import { clientService } from 'web-pkg/src/services'
-import { buildWebDavSpacesPath } from 'web-client/src/helpers'
+import { buildWebDavSpacesPath, isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default {
   computed: {
@@ -26,6 +26,14 @@ export default {
               return false
             }
             if (!resources.every((r) => r.canBeRestored())) {
+              return false
+            }
+
+            if (
+              isProjectSpaceResource(this.space) &&
+              !this.space.isEditor(this.user.uuid) &&
+              !this.space.isManager(this.user.uuid)
+            ) {
               return false
             }
 

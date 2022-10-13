@@ -81,6 +81,22 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
+    <template #tags="{ item }">
+      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
+        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
+          <oc-icon name="price-tag-3" size="small" />
+          <span class="oc-text-truncate">{{ tag }}</span>
+        </oc-tag>
+      </router-link>
+      <oc-tag
+        v-if="item.tags.length > 2"
+        size="small"
+        class="resource-table-tag-more"
+        @click="openTagsSidebar"
+      >
+        + {{ item.tags.length - 2 }}
+      </oc-tag>
+    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -171,7 +187,7 @@
 </template>
 
 <script lang="ts">
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
@@ -186,7 +202,7 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationShares } from '../../router'
+import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
@@ -379,7 +395,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'capabilities']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -451,6 +467,15 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
+          this.capabilities?.files?.tags
+            ? {
+                name: 'tags',
+                title: this.$gettext('Tags'),
+                type: 'slot',
+                alignH: 'right',
+                wrap: 'nowrap'
+              }
+            : {},
           {
             name: 'owner',
             title: this.$gettext('Shared by'),
@@ -547,6 +572,11 @@ export default defineComponent({
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
+    getTagLink(tag) {
+      return createLocationCommon('files-common-search', {
+        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
+      })
+    },
     isResourceCut(resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) {
         return false
@@ -563,6 +593,9 @@ export default defineComponent({
     openRenameDialog(item) {
       this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
     },
+    openTagsSidebar() {
+      bus.publish(SideBarEventTopics.open)
+    },
     openSharingSidebar(file) {
       let panelToOpen
       if (file.type === 'space') {
@@ -572,7 +605,7 @@ export default defineComponent({
       } else {
         panelToOpen = 'sharing-item#peopleShares'
       }
-      bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
+      eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
       return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
@@ -692,10 +725,10 @@ export default defineComponent({
       const resource = data[0]
       const eventData = data[1]
       if (eventData && eventData.metaKey) {
-        return bus.publish('app.files.list.clicked.meta', resource)
+        return eventBus.publish('app.files.list.clicked.meta', resource)
       }
       if (eventData && eventData.shiftKey) {
-        return bus.publish('app.files.list.clicked.shift', resource)
+        return eventBus.publish('app.files.list.clicked.shift', resource)
       }
       return this.emitSelect([resource.id])
     },
@@ -713,7 +746,7 @@ export default defineComponent({
       }
     },
     emitSelect(selectedIds) {
-      bus.publish('app.files.list.clicked')
+      eventBus.publish('app.files.list.clicked')
       this.$emit('select', selectedIds)
     },
     toggleSelectionAll() {
@@ -850,6 +883,14 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
+  }
+  &-tag {
+    max-width: 80px;
+  }
+  &-tag-more {
+    cursor: pointer;
+    border: 0 !important;
+    vertical-align: text-bottom;
   }
   &-edit-name {
     display: inline-flex;

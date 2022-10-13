@@ -35,9 +35,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesGeneric.name,
         component: components.Spaces.DriveResolver,
         meta: {
-          patchCleanPath: true,
-          // FIXME: we'd need to extract the title from the resolved space...
-          title: $gettext('Space')
+          patchCleanPath: true
         }
       }
     ]

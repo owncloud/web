@@ -1,0 +1,6 @@
+Bugfix: Trash bin sidebar
+
+We've fixed the sidebar in the trash bin which was throwing errors and not showing the right content.
+
+https://github.com/owncloud/web/issues/7778
+https://github.com/owncloud/web/pull/7787

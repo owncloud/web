@@ -34,6 +34,7 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :space="space"
+          :has-actions="showActions"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
@@ -72,13 +73,18 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { computed, defineComponent, PropType, unref } from '@vue/composition-api'
 import { Resource } from 'web-client'
-import { useCapabilityShareJailEnabled, useTranslations } from 'web-pkg/src/composables'
+import {
+  useCapabilityShareJailEnabled,
+  useCapabilitySpacesEnabled,
+  useTranslations
+} from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -115,6 +121,17 @@ export default defineComponent({
         ? $gettext('You have no deleted files')
         : $gettext('Space has no deleted files')
     })
+
+    const hasSpaces = useCapabilitySpacesEnabled()
+    const titleSegments = computed(() => {
+      const segments = [$gettext('Deleted files')]
+      if (unref(hasSpaces)) {
+        segments.unshift(props.space.name)
+      }
+      return segments
+    })
+    useDocumentTitle({ titleSegments })
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       hasShareJail: useCapabilityShareJailEnabled(),
@@ -125,6 +142,7 @@ export default defineComponent({
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['highlightedFile', 'totalFilesCount']),
+    ...mapGetters(['user']),
 
     isEmpty() {
       return this.paginatedResources.length < 1
@@ -145,20 +163,28 @@ export default defineComponent({
         {
           allowContextActions,
           text: currentNodeName,
-          onClick: () => bus.publish('app.files.list.load')
+          onClick: () => eventBus.publish('app.files.list.load')
         }
       ]
+    },
+
+    showActions() {
+      return (
+        !isProjectSpaceResource(this.space) ||
+        this.space.isEditor(this.user.uuid) ||
+        this.space.isManager(this.user.uuid)
+      )
     }
   },
 
   created() {
     this.performLoaderTask()
 
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', () => {
+    const loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
       this.performLoaderTask()
     })
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
   },
 

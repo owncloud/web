@@ -38,6 +38,12 @@ describe('restore', () => {
       const wrapper = getWrapper({ invalidLocation: true })
       expect(wrapper.vm.$_restore_items[0].isEnabled({ resources: [{}] })).toBe(false)
     })
+    it('should be false in a space trash bin with insufficient permissions', () => {
+      const wrapper = getWrapper({ driveType: 'project' })
+      expect(
+        wrapper.vm.$_restore_items[0].isEnabled({ resources: [{ canBeRestored: () => true }] })
+      ).toBe(false)
+    })
   })
 
   describe('method "$_restore_trigger"', () => {
@@ -65,7 +71,11 @@ describe('restore', () => {
   })
 })
 
-function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRestore = true } = {}) {
+function getWrapper({
+  invalidLocation = false,
+  resolveClearTrashBin: resolveRestore = true,
+  driveType = 'personal'
+} = {}) {
   return mount(Component, {
     localVue,
     mocks: {
@@ -79,6 +89,7 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin: resolveRest
       },
       $gettext: jest.fn(),
       $gettextInterpolate: jest.fn(),
+      space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
         ...sdkMock,
         fileTrash: {

@@ -83,7 +83,7 @@ import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
 import { $gettext } from 'files/src/router/utils'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
@@ -139,7 +139,7 @@ export default defineComponent({
         { text: this.$gettext('User management'), to: { path: '/user-management' } },
         {
           text: this.$gettext('Groups'),
-          onClick: () => bus.publish('app.user-management.list.load')
+          onClick: () => eventBus.publish('app.user-management.list.load')
         }
       ]
     },
@@ -195,7 +195,7 @@ export default defineComponent({
   async mounted() {
     await this.loadResourcesTask.perform(this)
 
-    const loadResourcesEventToken = bus.subscribe('app.user-management.list.load', () => {
+    const loadResourcesEventToken = eventBus.subscribe('app.user-management.list.load', () => {
       this.loadResourcesTask.perform(this)
     })
 
@@ -204,7 +204,7 @@ export default defineComponent({
     window.addEventListener('resize', this.calculateListHeaderPosition)
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
     })
   },
 

@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../../helpers/resources'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default {
   computed: {
@@ -21,6 +22,15 @@ export default {
             if (this.capabilities?.files?.permanent_deletion === false) {
               return false
             }
+
+            if (
+              isProjectSpaceResource(this.space) &&
+              !this.space.isEditor(this.user.uuid) &&
+              !this.space.isManager(this.user.uuid)
+            ) {
+              return false
+            }
+
             // empty trash bin is not available for individual resources, but only for the trash bin as a whole
             return resources.length === 0
           },

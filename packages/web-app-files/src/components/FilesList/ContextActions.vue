@@ -22,10 +22,12 @@ import Rename from '../../mixins/actions/rename'
 import Restore from '../../mixins/actions/restore'
 import ShowActions from '../../mixins/actions/showActions'
 import ShowDetails from '../../mixins/actions/showDetails'
+import ShowEditTags from '../../mixins/actions/showEditTags'
 import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
+import VirusScan from '../../mixins/actions/virusScan'
 import { PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -51,10 +53,12 @@ export default {
     Restore,
     ShowActions,
     ShowDetails,
+    ShowEditTags,
     ShowShares,
     SetSpaceImage,
     SetSpaceReadme,
-    SpaceNavigate
+    SpaceNavigate,
+    VirusScan
   ],
 
   props: {
@@ -158,12 +162,14 @@ export default {
         ...this.$_copy_items,
         ...this.$_paste_items,
         ...this.$_rename_items,
+        ...this.$_showEditTags_items,
         ...this.$_restore_items,
         ...this.$_acceptShare_items,
         ...this.$_declineShare_items,
         ...this.$_setSpaceImage_items,
         ...this.$_setSpaceReadme_items,
-        ...this.$_navigate_space_items
+        ...this.$_navigate_space_items,
+        ...this.$_virus_scan_items
       ].filter((item) => item.isEnabled(this.filterParams))
     },
 
