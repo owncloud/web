@@ -134,6 +134,8 @@ import { CreateTargetRouteOptions } from '../../helpers/folderLink'
 import { FolderLoaderOptions } from '../../services/folder'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import omit from 'lodash-es/omit'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
+import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -189,6 +191,18 @@ export default defineComponent({
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
     })
+
+    const titleSegments = computed(() => {
+      const segments = [props.space.name]
+      if (props.item !== '/') {
+        segments.unshift(basename(props.item))
+      }
+
+      return segments
+    })
+
+    useDocumentTitle({ document, titleSegments })
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetRouteCallback,
