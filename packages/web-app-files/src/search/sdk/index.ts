@@ -1,7 +1,7 @@
 import { SearchProvider, SearchList, SearchPreview } from 'search/src/types'
 import Preview from './preview'
 import List from './list'
-import { EventBus } from 'web-pkg/src/event'
+import { EventBus } from 'web-pkg/src/services/eventBus'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
 

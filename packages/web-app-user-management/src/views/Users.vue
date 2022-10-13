@@ -90,7 +90,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import axios from 'axios'
 import { $gettext } from 'files/src/router/utils'
@@ -237,7 +237,7 @@ export default defineComponent({
         { text: this.$gettext('User management'), to: { path: '/user-management' } },
         {
           text: this.$gettext('Users'),
-          onClick: () => bus.publish('app.user-management.list.load')
+          onClick: () => eventBus.publish('app.user-management.list.load')
         }
       ]
     },
@@ -292,7 +292,7 @@ export default defineComponent({
   async mounted() {
     await this.loadResourcesTask.perform(this)
 
-    const loadResourcesEventToken = bus.subscribe('app.user-management.list.load', () => {
+    const loadResourcesEventToken = eventBus.subscribe('app.user-management.list.load', () => {
       this.loadResourcesTask.perform(this)
     })
 
@@ -301,7 +301,7 @@ export default defineComponent({
     window.addEventListener('resize', this.calculateListHeaderPosition)
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.user-management.list.load', loadResourcesEventToken)
     })
   },
 
@@ -478,7 +478,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        bus.publish('sidebar.entity.saved')
+        eventBus.publish('sidebar.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({
@@ -516,7 +516,7 @@ export default defineComponent({
          */
         this.selectedUsers = [editUser]
 
-        bus.publish('sidebar.entity.saved')
+        eventBus.publish('sidebar.entity.saved')
       } catch (error) {
         console.error(error)
         this.showMessage({

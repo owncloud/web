@@ -33,7 +33,7 @@ import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg
 import { defineComponent } from '@vue/composition-api'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
@@ -156,7 +156,7 @@ export default defineComponent({
   },
   methods: {
     parentFolderClicked() {
-      bus.publish('app.search.options-drop.hide')
+      eventBus.publish('app.search.options-drop.hide')
     },
     createFolderLink(p: string, fileId: string | number) {
       if (!this.matchingSpace) {

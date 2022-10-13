@@ -1,4 +1,4 @@
-import { EventBus } from 'web-pkg/src/event'
+import { EventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../../../src/composables/sideBar'
 import { unref } from '@vue/composition-api'
 import { createComposableWrapper } from '../composables.setup'

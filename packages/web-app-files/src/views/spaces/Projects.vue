@@ -144,7 +144,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
 import { WebDAV } from 'web-client/src/webdav'
@@ -293,7 +293,7 @@ export default defineComponent({
     openSidebarSharePanel(space: Resource) {
       this.loadSpaceMembers({ graphClient: this.graphClient, space })
       this.SET_FILE_SELECTION([space])
-      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     },
 
     getSpaceLinkProps(space: SpaceResource) {

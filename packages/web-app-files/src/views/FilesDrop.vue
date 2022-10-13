@@ -44,7 +44,7 @@ import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-com
 import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 
@@ -110,14 +110,14 @@ export default defineComponent({
     }
   },
   mounted() {
-    const dragOver = bus.subscribe('drag-over', this.onDragOver)
-    const dragOut = bus.subscribe('drag-out', this.hideDropzone)
-    const drop = bus.subscribe('drop', this.hideDropzone)
+    const dragOver = eventBus.subscribe('drag-over', this.onDragOver)
+    const dragOut = eventBus.subscribe('drag-out', this.hideDropzone)
+    const drop = eventBus.subscribe('drop', this.hideDropzone)
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('drag-over', dragOver)
-      bus.unsubscribe('drag-out', dragOut)
-      bus.unsubscribe('drop', drop)
+      eventBus.unsubscribe('drag-over', dragOver)
+      eventBus.unsubscribe('drag-out', dragOut)
+      eventBus.unsubscribe('drop', drop)
     })
     this.resolvePublicLink()
   },

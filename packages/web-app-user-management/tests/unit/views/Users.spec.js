@@ -3,7 +3,7 @@ import { createStore } from 'vuex-extensions'
 import Users from '../../../src/views/Users'
 import Vuex from 'vuex'
 import mockAxios from 'jest-mock-axios'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -52,7 +52,7 @@ describe('Users view', () => {
       }
 
       const wrapper = getMountedWrapper()
-      const busStub = jest.spyOn(bus, 'publish')
+      const busStub = jest.spyOn(eventBus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
       const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
       await wrapper.vm.editUser(editUser)
@@ -100,7 +100,7 @@ describe('Users view', () => {
           ]
         }
       })
-      const busStub = jest.spyOn(bus, 'publish')
+      const busStub = jest.spyOn(eventBus, 'publish')
       const setStub = jest.spyOn(wrapper.vm, '$set')
 
       await wrapper.vm.editUserGroupAssignments(editUser)
