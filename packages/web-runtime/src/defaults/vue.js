@@ -29,7 +29,7 @@ Vue.use(VueMeta, {
 Vue.use(PortalVue)
 Vue.use(AsyncComputed)
 
-Vue.component('avatar-image', Avatar)
+Vue.component('AvatarImage', Avatar)
 
 Vue.mixin(focusMixin)
 Vue.mixin(lifecycleMixin)

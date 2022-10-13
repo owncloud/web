@@ -11,11 +11,12 @@
   </oc-button>
 </template>
 
-<script>
-import { bus } from 'web-pkg/src/instance'
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
-export default {
+export default defineComponent({
   props: {
     sideBarOpen: {
       type: Boolean,
@@ -36,10 +37,10 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      bus.publish(SideBarEventTopics.toggle)
+      eventBus.publish(SideBarEventTopics.toggle)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -76,7 +76,7 @@ import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import SpaceQuota from '../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 
 export default defineComponent({
@@ -246,7 +246,7 @@ export default defineComponent({
   },
   methods: {
     expandSharesPanel() {
-      bus.publish(SideBarEventTopics.setActivePanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share-item')
     }
   }
 })

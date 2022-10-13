@@ -152,7 +152,7 @@ import {
 } from '@vue/composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SpaceResource } from 'web-client/src/helpers'
 import {
   extractNameWithoutExtension,
@@ -359,7 +359,7 @@ export default defineComponent({
           : currentFolder === this.item
         const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
         if (fileIsInCurrentPath) {
-          bus.publish('app.files.list.load')
+          eventBus.publish('app.files.list.load')
         }
       }
     },

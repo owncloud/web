@@ -88,7 +88,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
 const visibilityObserver = new VisibilityObserver()
@@ -246,7 +246,7 @@ export default defineComponent({
 
     const openSideBarSharePanel = () => {
       store.commit('Files/SET_SELECTED_IDS', [])
-      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
 
     return {

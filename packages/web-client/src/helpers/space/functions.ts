@@ -1,6 +1,6 @@
 import { User } from '../user'
 import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
-import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager } from '../share'
+import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
 import { buildWebDavPublicPath } from 'files/src/helpers/resources'
@@ -197,6 +197,15 @@ export function buildSpace(data): SpaceResource {
     },
     getWebDavUrl(resource: Resource): string {
       return urlJoin(this.webDavUrl, resource.path)
+    },
+    isViewer(uuid: string): boolean {
+      return this.spaceRoles[spaceRoleViewer.name].includes(uuid)
+    },
+    isEditor(uuid: string): boolean {
+      return this.spaceRoles[spaceRoleEditor.name].includes(uuid)
+    },
+    isManager(uuid: string): boolean {
+      return this.spaceRoles[spaceRoleManager.name].includes(uuid)
     }
   }
   Object.defineProperty(s, 'nodeId', {

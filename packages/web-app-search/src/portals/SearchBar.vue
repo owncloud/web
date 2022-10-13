@@ -92,15 +92,17 @@
   <div v-else><!-- no search provider available --></div>
 </template>
 
-<script>
+<!-- This is a `js` component because TypeScript and jest currently fail to import lodash-es/debounce and mark.js -->
+<script lang="js">
 import { providerStore } from '../service'
 
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'SearchBar',
 
   data() {
@@ -179,12 +181,12 @@ export default {
   created() {
     this.debouncedSearch = debounce(this.search, 200)
 
-    const hideOptionsDropEvent = bus.subscribe('app.search.options-drop.hide', () => {
+    const hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
       this.$refs.optionsDrop.hide()
     })
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
+      eventBus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
     })
   },
 
@@ -322,7 +324,9 @@ export default {
     },
     showSearchBar() {
       document.getElementById('files-global-search-bar').style.visibility = 'visible'
-      document.getElementsByClassName('oc-search-input')[0].focus()
+      const inputElement = document.getElementsByClassName('oc-search-input')[0] // FIXME: add when TypeScript is enabled: as HTMLElement
+      inputElement.focus()
+
       this.showCancelButton = true
     },
     cancelSearch() {
@@ -347,7 +351,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

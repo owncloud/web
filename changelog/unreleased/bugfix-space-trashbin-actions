@@ -1,0 +1,6 @@
+Bugfix: Hide actions in space trash bins
+
+Actions in space trash bins are now hidden if the current user has insufficient permissions.
+
+https://github.com/owncloud/web/pull/7768
+https://github.com/owncloud/web/issues/7702

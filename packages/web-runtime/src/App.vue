@@ -51,6 +51,7 @@ import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
 import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
+import { eventBus } from 'web-pkg/src/services'
 
 export default defineComponent({
   components: {
@@ -100,8 +101,13 @@ export default defineComponent({
     $route: {
       immediate: true,
       handler: function (to) {
-        this.announceRouteChange(to)
-        document.title = this.extractPageTitleFromRoute(to)
+        const extracted = this.extractPageTitleFromRoute(to)
+        if (!extracted) {
+          return
+        }
+        const { shortDocumentTitle, fullDocumentTitle } = extracted
+        this.announceRouteChange(shortDocumentTitle)
+        document.title = fullDocumentTitle
       }
     },
     capabilities: {
@@ -141,7 +147,15 @@ export default defineComponent({
       }
     }
   },
-
+  mounted() {
+    eventBus.subscribe(
+      'runtime.documentTitle.changed',
+      ({ shortDocumentTitle, fullDocumentTitle }) => {
+        document.title = fullDocumentTitle
+        this.announceRouteChange(shortDocumentTitle)
+      }
+    )
+  },
   destroyed() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
@@ -179,33 +193,23 @@ export default defineComponent({
       })
     },
 
-    announceRouteChange(route) {
-      const pageTitle = this.extractPageTitleFromRoute(route, false)
+    announceRouteChange(pageTitle) {
       const translated = this.$gettext('Navigated to %{ pageTitle }')
       this.announcement = this.$gettextInterpolate(translated, { pageTitle })
     },
 
-    extractPageTitleFromRoute(route, includeGeneralName = true) {
-      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : route.name
+    extractPageTitleFromRoute(route) {
+      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : undefined
+      if (!routeTitle) {
+        return
+      }
+      const glue = ' - '
       const titleSegments = [routeTitle]
-
-      if (includeGeneralName) {
-        titleSegments.push(this.configuration.currentTheme.general.name)
+      const generalName = this.configuration.currentTheme.general.name
+      return {
+        shortDocumentTitle: titleSegments.join(glue),
+        fullDocumentTitle: [...titleSegments, generalName].join(glue)
       }
-
-      if (route.params.item) {
-        if (route.name.startsWith('files-')) {
-          const fileTree = route.params.item.split('/').filter((el) => el.length)
-
-          if (fileTree.length) {
-            titleSegments.unshift(fileTree.pop())
-          }
-        } else {
-          titleSegments.unshift(route.params.item)
-        }
-      }
-
-      return titleSegments.join(' - ')
     }
   }
 })

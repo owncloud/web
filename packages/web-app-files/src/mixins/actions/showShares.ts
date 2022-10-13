@@ -3,7 +3,7 @@ import { isLocationSharesActive, isLocationTrashActive } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import isFilesAppActive from './helpers/isFilesAppActive'
 import { mapMutations } from 'vuex'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
@@ -47,7 +47,7 @@ export default {
 
     $_showShares_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
     }
   }
 }

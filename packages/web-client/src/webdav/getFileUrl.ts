@@ -22,7 +22,8 @@ export const GetFileUrlFactory = (
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
-      let { path, downloadURL } = resource
+      const { path } = resource
+      let { downloadURL } = resource
 
       let signed = true
       if (!downloadURL && !inlineDisposition) {

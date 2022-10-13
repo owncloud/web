@@ -1,6 +1,5 @@
 import { onBeforeUnmount, ref, Ref, unref } from '@vue/composition-api'
-import { bus } from 'web-pkg/src/instance'
-import { EventBus } from 'web-pkg/src/event'
+import { EventBus, eventBus as defaultEventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
 
 interface SideBarResult {
@@ -13,7 +12,7 @@ interface SideBarOptions {
 }
 
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
-  const eventBus = options?.bus || bus
+  const eventBus = options?.bus || defaultEventBus
   const sideBarOpen = ref(false)
   const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {

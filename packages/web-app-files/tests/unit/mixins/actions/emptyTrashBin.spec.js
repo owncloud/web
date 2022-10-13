@@ -30,6 +30,14 @@ describe('emptyTrashBin', () => {
       const wrapper = getWrapper({ invalidLocation: true })
       expect(wrapper.vm.$_emptyTrashBin_items[0].isEnabled({ resources: [] })).toBe(false)
     })
+    it('should be false in a space trash bin with insufficient permissions', () => {
+      const wrapper = getWrapper({ driveType: 'project' })
+      expect(
+        wrapper.vm.$_emptyTrashBin_items[0].isEnabled({
+          resources: [{ canBeRestored: () => true }]
+        })
+      ).toBe(false)
+    })
   })
 
   describe('method "$_emptyTrashBin_trigger"', () => {
@@ -65,7 +73,11 @@ describe('emptyTrashBin', () => {
   })
 })
 
-function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {}) {
+function getWrapper({
+  invalidLocation = false,
+  resolveClearTrashBin = true,
+  driveType = 'personal'
+} = {}) {
   return mount(Component, {
     localVue,
     mocks: {
@@ -79,6 +91,7 @@ function getWrapper({ invalidLocation = false, resolveClearTrashBin = true } = {
       },
       $gettext: jest.fn(),
       $pgettext: jest.fn(),
+      space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
         ...sdkMock,
         fileTrash: {

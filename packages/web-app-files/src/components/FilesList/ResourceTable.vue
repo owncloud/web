@@ -171,7 +171,7 @@
 </template>
 
 <script lang="ts">
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
@@ -572,7 +572,7 @@ export default defineComponent({
       } else {
         panelToOpen = 'sharing-item#peopleShares'
       }
-      bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
+      eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
       return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
@@ -692,10 +692,10 @@ export default defineComponent({
       const resource = data[0]
       const eventData = data[1]
       if (eventData && eventData.metaKey) {
-        return bus.publish('app.files.list.clicked.meta', resource)
+        return eventBus.publish('app.files.list.clicked.meta', resource)
       }
       if (eventData && eventData.shiftKey) {
-        return bus.publish('app.files.list.clicked.shift', resource)
+        return eventBus.publish('app.files.list.clicked.shift', resource)
       }
       return this.emitSelect([resource.id])
     },
@@ -713,7 +713,7 @@ export default defineComponent({
       }
     },
     emitSelect(selectedIds) {
-      bus.publish('app.files.list.clicked')
+      eventBus.publish('app.files.list.clicked')
       this.$emit('select', selectedIds)
     },
     toggleSelectionAll() {

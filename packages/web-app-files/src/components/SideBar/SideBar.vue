@@ -54,7 +54,7 @@ import {
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
@@ -93,10 +93,10 @@ export default defineComponent({
     const store = useStore()
 
     const closeSideBar = () => {
-      bus.publish(SideBarEventTopics.close)
+      eventBus.publish(SideBarEventTopics.close)
     }
     const setActiveSideBarPanel = (panelName) => {
-      bus.publish(SideBarEventTopics.setActivePanel, panelName)
+      eventBus.publish(SideBarEventTopics.setActivePanel, panelName)
     }
 
     const focusSideBar = (component, event) => {
@@ -109,7 +109,7 @@ export default defineComponent({
 
     const destroySideBar = (component, event) => {
       focusSideBar(component, event)
-      bus.publish(SideBarEventTopics.close)
+      eventBus.publish(SideBarEventTopics.close)
     }
 
     const { webdav } = useClientService()
@@ -201,6 +201,9 @@ export default defineComponent({
       }
       if (this.hasShareJail && this.space?.driveType === 'share') {
         return false
+      }
+      if (this.isTrashLocation && !this.highlightedFile?.id) {
+        return true
       }
       return !pathSegments.length
     },
