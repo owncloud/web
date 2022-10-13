@@ -483,6 +483,7 @@ export function buildDeletedResource(resource): Resource {
     id,
     parentFolderId: resource.fileInfo[DavProperty.FileParent],
     indicators: [],
+    webDavPath: '',
     canUpload: () => false,
     canDownload: () => false,
     canBeDeleted: () => {
