@@ -83,8 +83,8 @@ import {
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileShares',
@@ -333,13 +333,13 @@ export default defineComponent({
 
       // TODO: this doesn't work on files-spaces-share routes?!
       if (this.space && this.sharesTree[parentShare.path]) {
-        return createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(this.space, {
-            path: parentShare.path,
-            fileId: parentShare.file.source
-          })
-        )
+        return createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: this.space.getDriveAliasAndItem({
+              path: parentShare.path
+            } as Resource)
+          }
+        })
       }
 
       return null

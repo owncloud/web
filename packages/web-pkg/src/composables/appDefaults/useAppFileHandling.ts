@@ -65,8 +65,7 @@ export function useAppFileHandling({
     return webdav.getFileInfo(
       unref(unref(fileContext).space),
       {
-        path: unref(unref(fileContext).item),
-        fileId: unref(unref(fileContext).itemId)
+        path: unref(unref(fileContext).item)
       },
       options
     )

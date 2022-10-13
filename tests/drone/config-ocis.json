@@ -16,9 +16,6 @@
       "shares": {
         "showAllOnLoad": true
       }
-    },
-    "routing": {
-      "idBased": false
     }
   },
   "apps": [

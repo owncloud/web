@@ -6,15 +6,18 @@ import { Store } from 'vuex'
 import { ClientService } from 'web-pkg/src/services/client'
 
 import {
-  FolderLoaderSpace,
+  FolderLoaderSpacesGeneric,
+  FolderLoaderSpacesShare,
   FolderLoaderFavorites,
+  FolderLoaderLegacyPersonal,
+  FolderLoaderPublicFiles,
   FolderLoaderSharedViaLink,
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
 } from './folder/'
 
-export * from './folder/types'
+export { SHARE_JAIL_ID } from './folder/spaces/loaderShare'
 
 export type FolderLoaderTask = any
 
@@ -35,8 +38,14 @@ export class FolderService {
 
   constructor() {
     this.loaders = [
-      new FolderLoaderSpace(),
+      // legacy loaders
+      new FolderLoaderLegacyPersonal(),
+      // spaces loaders
+      new FolderLoaderSpacesGeneric(),
+      new FolderLoaderSpacesShare(),
+      // generic loaders
       new FolderLoaderFavorites(),
+      new FolderLoaderPublicFiles(),
       new FolderLoaderSharedViaLink(),
       new FolderLoaderSharedWithMe(),
       new FolderLoaderSharedWithOthers(),

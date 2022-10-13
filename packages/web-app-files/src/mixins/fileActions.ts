@@ -11,6 +11,7 @@ import DownloadArchive from './actions/downloadArchive'
 import DownloadFile from './actions/downloadFile'
 import Favorite from './actions/favorite'
 import Move from './actions/move'
+import ShowEditTags from './actions/showEditTags'
 import Navigate from './actions/navigate'
 import Rename from './actions/rename'
 import Restore from './actions/restore'
@@ -19,7 +20,6 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 import isSearchActive from './helpers/isSearchActive'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
 
 const actionsMixins = [
   'navigate',
@@ -29,6 +29,7 @@ const actionsMixins = [
   'copy',
   'move',
   'rename',
+  'showEditTags',
   'restore',
   'delete',
   'acceptShare',
@@ -56,6 +57,7 @@ export default {
     Navigate,
     Rename,
     Restore,
+    ShowEditTags,
     isSearchActive
   ],
   computed: {
@@ -94,7 +96,7 @@ export default {
                 editor,
                 options.space.getDriveAliasAndItem(options.resources[0]),
                 options.resources[0].webDavPath,
-                options.resources[0].fileId,
+                options.resources[0].id,
                 EDITOR_MODE_EDIT,
                 options.space.shareId
               ),
@@ -191,7 +193,6 @@ export default {
         },
         query: {
           ...(shareId && { shareId }),
-          ...(fileId && configurationManager.options.routing.idBased && { fileId }),
           ...routeToContextQuery(this.$route)
         }
       }

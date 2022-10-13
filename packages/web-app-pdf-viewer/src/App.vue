@@ -52,7 +52,6 @@ export default defineComponent({
       try {
         this.loading = true
         this.resource = await this.getFileInfo(fileContext)
-        this.replaceInvalidFileRoute(this.currentFileContext, this.resource)
         this.url = await this.getUrlForResource(fileContext.space, this.resource, {
           disposition: 'inline'
         })

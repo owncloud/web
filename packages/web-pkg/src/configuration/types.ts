@@ -2,14 +2,6 @@ export interface RuntimeConfiguration {
   serverUrl: string
 }
 
-export interface RoutingOptionsConfiguration {
-  idBased?: boolean
-}
-
-export interface OptionsConfiguration {
-  routing?: RoutingOptionsConfiguration
-}
-
 export interface OAuth2Configuration {
   clientId: string
   clientSecret?: string

@@ -135,6 +135,7 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
+import { createLocationSpaces } from '../../router'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from '../../constants'
@@ -148,8 +149,6 @@ import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
 import { WebDAV } from 'web-client/src/webdav'
-import { createLocationSpaces } from '../../router'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   components: {
@@ -274,13 +273,12 @@ export default defineComponent({
       'SET_FILE_SELECTION'
     ]),
 
-    getSpaceProjectRoute(space: SpaceResource) {
-      return space.disabled
+    getSpaceProjectRoute({ driveAlias, disabled }) {
+      return disabled
         ? '#'
-        : createLocationSpaces(
-            'files-spaces-generic',
-            createFileRouteOptions(space, { path: '', fileId: space.fileId })
-          )
+        : createLocationSpaces('files-spaces-generic', {
+            params: { driveAliasAndItem: driveAlias }
+          })
     },
 
     getSpaceCardAdditionalClass(space) {
@@ -296,7 +294,7 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     },
 
-    getSpaceLinkProps(space: SpaceResource) {
+    getSpaceLinkProps(space) {
       if (space.disabled) {
         return {
           appearance: 'raw'

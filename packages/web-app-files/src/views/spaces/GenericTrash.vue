@@ -100,11 +100,6 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
-    },
-    itemId: {
-      type: [String, Number],
-      required: false,
-      default: null
     }
   },
 

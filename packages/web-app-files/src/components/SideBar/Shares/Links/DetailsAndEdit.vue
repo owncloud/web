@@ -27,11 +27,14 @@
             <oc-button
               :id="`files-role-${roleOption.label.toLowerCase()}`"
               :class="{
-                selected: link.permissions === roleOption.bitmask(false),
-                'oc-background-primary-gradient': link.permissions === roleOption.bitmask(false)
+                selected: parseInt(link.permissions) === roleOption.bitmask(false),
+                'oc-background-primary-gradient':
+                  parseInt(link.permissions) === roleOption.bitmask(false)
               }"
               appearance="raw"
-              :variation="link.permissions === roleOption.bitmask(false) ? 'inverse' : 'passive'"
+              :variation="
+                parseInt(link.permissions) === roleOption.bitmask(false) ? 'inverse' : 'passive'
+              "
               justify-content="space-between"
               class="oc-p-s"
               @click="
@@ -55,7 +58,10 @@
                 </span>
               </span>
               <span class="oc-flex">
-                <oc-icon v-if="link.permissions === roleOption.bitmask(false)" name="check" />
+                <oc-icon
+                  v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
+                  name="check"
+                />
               </span>
             </oc-button>
           </li>
@@ -177,16 +183,12 @@ import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
 import { createLocationSpaces } from '../../../../router'
-import {
-  linkRoleInternalFile,
-  linkRoleInternalFolder,
-  LinkShareRoles
-} from 'web-client/src/helpers/share'
+import { LinkShareRoles } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { PropType } from '@vue/composition-api'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -237,15 +239,15 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    currentLinkRole() {
-      return LinkShareRoles.getByBitmask(this.link.permissions, this.isFolderShare)
-    },
     currentLinkRoleDescription() {
-      return this.currentLinkRole.description(false)
+      return LinkShareRoles.getByBitmask(
+        parseInt(this.link.permissions),
+        this.isFolderShare
+      ).description(false)
     },
 
     currentLinkRoleLabel() {
-      return this.currentLinkRole.label
+      return LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).label
     },
 
     editOptions() {
@@ -315,7 +317,7 @@ export default defineComponent({
           })
         }
       }
-      if (!this.isPasswordEnforced && !this.link.password && !this.isAliasLink) {
+      if (!this.isPasswordEnforced && !this.link.password) {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),
@@ -338,19 +340,18 @@ export default defineComponent({
     },
 
     viaRouterParams() {
+      const viaPath = this.link.path
       const matchingSpace = (this.space ||
         this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
       if (!matchingSpace) {
         return {}
       }
 
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(matchingSpace, {
-          path: this.link.path,
-          fileId: this.link.file.source
-        })
-      )
+      return createLocationSpaces('files-spaces-generic', {
+        params: {
+          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: viaPath } as Resource)
+        }
+      })
     },
 
     localExpirationDate() {
@@ -388,10 +389,6 @@ export default defineComponent({
 
     passwortProtectionTooltip() {
       return this.$gettext('This link is password-protected')
-    },
-
-    isAliasLink() {
-      return [linkRoleInternalFolder, linkRoleInternalFile].includes(this.currentLinkRole)
     }
   },
   watch: {

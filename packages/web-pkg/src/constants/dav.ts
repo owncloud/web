@@ -15,7 +15,6 @@ export abstract class DavProperty {
   static readonly Permissions: string = '{http://owncloud.org/ns}permissions'
   static readonly IsFavorite: string = '{http://owncloud.org/ns}favorite'
   static readonly FileId: string = '{http://owncloud.org/ns}fileid'
-  static readonly FileParent: string = '{http://owncloud.org/ns}file-parent'
   static readonly Name: string = '{http://owncloud.org/ns}name'
   static readonly OwnerId: string = '{http://owncloud.org/ns}owner-id'
   static readonly OwnerDisplayName: string = '{http://owncloud.org/ns}owner-display-name'
@@ -23,6 +22,7 @@ export abstract class DavProperty {
   static readonly ContentLength: string = '{DAV:}getcontentlength'
   static readonly ContentSize: string = '{http://owncloud.org/ns}size'
   static readonly LastModifiedDate: string = '{DAV:}getlastmodified'
+  static readonly Tags: string = '{http://owncloud.org/ns}tags'
   static readonly ETag: string = '{DAV:}getetag'
   static readonly MimeType: string = '{DAV:}getcontenttype'
   static readonly ResourceType: string = '{DAV:}resourcetype'
@@ -54,7 +54,6 @@ export abstract class DavProperties {
     DavProperty.Permissions,
     DavProperty.IsFavorite,
     DavProperty.FileId,
-    DavProperty.FileParent,
     DavProperty.Name,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
@@ -68,7 +67,8 @@ export abstract class DavProperties {
     DavProperty.ETag,
     DavProperty.MimeType,
     DavProperty.ResourceType,
-    DavProperty.DownloadURL
+    DavProperty.DownloadURL,
+    DavProperty.Tags
   ]
 
   static readonly PublicLink: DavProperty[] = DavProperties.Default.concat([
@@ -85,7 +85,6 @@ export abstract class DavProperties {
     DavProperty.TrashbinOriginalLocation,
     DavProperty.TrashbinOriginalFilename,
     DavProperty.TrashbinDeletedDate,
-    DavProperty.Permissions,
-    DavProperty.FileParent
+    DavProperty.Permissions
   ]
 }

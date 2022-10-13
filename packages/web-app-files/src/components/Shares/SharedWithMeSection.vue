@@ -105,11 +105,10 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import { useSelectedResources } from '../../composables/selection'
 import { SortDir } from '../../composables'
+import { Resource } from 'web-client'
 import { Location } from 'vue-router'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -187,29 +186,24 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const hasShareJail = useCapabilityShareJailEnabled()
-    const resourceTargetRouteCallback = ({
-      path,
-      fileId,
-      resource
-    }: CreateTargetRouteOptions): Location => {
+    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
       if (unref(hasShareJail)) {
         const space = buildShareSpaceResource({
           shareId: resource.id,
           shareName: resource.name,
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(space, { path, fileId })
-        )
+        return createLocationSpaces('files-spaces-generic', {
+          params: { driveAliasAndItem: space.getDriveAliasAndItem({ path } as Resource) },
+          query: { shareId: resource.id }
+        })
       }
       const personalSpace = store.getters['runtime/spaces/spaces'].find(
         (space) => space.driveType === 'personal'
       )
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(personalSpace, { path, fileId })
-      )
+      return createLocationSpaces('files-spaces-generic', {
+        params: { driveAliasAndItem: personalSpace.getDriveAliasAndItem({ path } as Resource) }
+      })
     }
 
     const personalSpace = computed(() => {
