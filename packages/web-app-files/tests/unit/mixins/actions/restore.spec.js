@@ -89,7 +89,7 @@ function getWrapper({
       },
       $gettext: jest.fn(),
       $gettextInterpolate: jest.fn(),
-      space: { driveType, spaceRoles: { viewer: [], editor: [], manager: [] } },
+      space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
         ...sdkMock,
         fileTrash: {

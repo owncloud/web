@@ -478,7 +478,6 @@ export const getDeleteResourceButtonVisibility = async (
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
   )
-  await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -519,7 +518,6 @@ export const getRestoreResourceButtonVisibility = async (
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
   )
-  await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }

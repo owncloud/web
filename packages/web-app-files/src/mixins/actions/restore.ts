@@ -29,9 +29,12 @@ export default {
               return false
             }
 
-            const { manager, editor } = this.space?.spaceRoles
             const isProjectSpace = isProjectSpaceResource(this.space)
-            if (isProjectSpace && ![...manager, ...editor].includes(this.user.uuid)) {
+            if (
+              isProjectSpace &&
+              !this.space.isEditor(this.user.uuid) &&
+              !this.space.isManager(this.user.uuid)
+            ) {
               return false
             }
 

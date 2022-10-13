@@ -153,8 +153,11 @@ export default defineComponent({
     },
 
     showActions() {
-      const { manager, editor } = this.space?.spaceRoles
-      return !isProjectSpaceResource(this.space) || [...manager, ...editor].includes(this.user.uuid)
+      return (
+        !isProjectSpaceResource(this.space) ||
+        this.space.isEditor(this.user.uuid) ||
+        this.space.isManager(this.user.uuid)
+      )
     }
   },
 

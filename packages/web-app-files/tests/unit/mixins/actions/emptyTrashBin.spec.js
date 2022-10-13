@@ -91,7 +91,7 @@ function getWrapper({
       },
       $gettext: jest.fn(),
       $pgettext: jest.fn(),
-      space: { driveType, spaceRoles: { viewer: [], editor: [], manager: [] } },
+      space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
         ...sdkMock,
         fileTrash: {
