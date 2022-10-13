@@ -148,6 +148,7 @@ Details
 
    https://github.com/owncloud/web/issues/7347
    https://github.com/owncloud/web/pull/7771
+   https://github.com/owncloud/web/pull/7790
 
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 
