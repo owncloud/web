@@ -255,6 +255,7 @@ Details
 
    https://github.com/owncloud/web/issues/6648
    https://github.com/owncloud/web/pull/7430
+   https://github.com/owncloud/web/pull/7791
 
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 
