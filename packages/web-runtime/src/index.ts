@@ -25,12 +25,12 @@ import {
   announceUppyService,
   announceAuthService,
   announcePermissionManager,
+  announceCustomizations,
   startSentry
 } from './container'
 import {
   buildPublicSpaceResource,
   buildSpace,
-  isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
@@ -55,6 +55,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceAuthService({ vue: Vue, configurationManager, store, router })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  announceCustomizations({ runtimeConfiguration })
   announceDefaults({ store, router })
 }
 
@@ -103,15 +104,12 @@ export const renderSuccess = (): void => {
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-        const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
-          isPersonalSpaceResource(space)
+        const httpAuthenticatedClient = clientService.httpAuthenticated(
+          store.getters['runtime/auth/accessToken']
         )
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: personalSpace.id,
-          field: 'name',
-          value: instance.$gettext('Personal')
-        })
+
+        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
         return
       }
 
@@ -121,7 +119,7 @@ export const renderSuccess = (): void => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: instance.$gettext('All files'),
+        name: user.id,
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
@@ -153,7 +151,6 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
-        name: instance.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })
