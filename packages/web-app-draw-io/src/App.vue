@@ -13,15 +13,16 @@
     />
   </main>
 </template>
-<script>
+<script lang="ts">
 import { mapActions } from 'vuex'
-import { basename } from 'path'
 import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
+import { basename } from 'path'
 
-export default {
+export default defineComponent({
   name: 'DrawIoEditor',
   setup() {
     return {
@@ -60,10 +61,17 @@ export default {
       return `${this.config.url}?${query}`
     }
   },
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.load()
+      },
+      immediate: true
+    }
+  },
   created() {
     this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
-    this.checkPermissions()
     window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
         const payload = JSON.parse(event.data)
@@ -110,37 +118,40 @@ export default {
         '*'
       )
     },
-    checkPermissions() {
-      this.getFileInfo(this.filePath, [DavProperty.Permissions])
-        .then((v) => {
-          this.isReadOnly =
-            v.fileInfo[DavProperty.Permissions].indexOf(DavPermission.Updateable) === -1
-          this.loading = false
+    async checkPermissions() {
+      try {
+        const resource = await this.getFileInfo(this.currentFileContext, {
+          davProperties: [DavProperty.FileId, DavProperty.Permissions]
         })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
+        this.replaceInvalidFileRoute(this.currentFileContext, resource)
+        this.isReadOnly = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
+          (p) => (resource.permissions || '').indexOf(p) > -1
+        )
+        this.loading = false
+      } catch (error) {
+        this.errorPopup(error)
+      }
     },
-    load() {
-      this.getFileContents(this.filePath)
-        .then((resp) => {
-          this.currentETag = resp.headers.ETag
-          this.$refs.drawIoEditor.contentWindow.postMessage(
-            JSON.stringify({
-              action: 'load',
-              xml: resp.body,
-              autosave: this.config.autosave
-            }),
-            '*'
-          )
-        })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
+    async loadFileContent() {
+      try {
+        const response = await this.getFileContents(this.currentFileContext)
+        this.currentETag = response.headers.ETag
+        this.$refs.drawIoEditor.contentWindow.postMessage(
+          JSON.stringify({
+            action: 'load',
+            xml: response.body,
+            autosave: this.config.autosave
+          }),
+          '*'
+        )
+      } catch (error) {
+        this.errorPopup(error)
+      }
+    },
+    async load() {
+      await Promise.all([this.checkPermissions(), this.loadFileContent()])
     },
     importVisio() {
-      const url = this.getFileUrl(this.filePath)
-
       const getDescription = () =>
         this.$gettextInterpolate(
           this.$gettext('The diagram will open as a new .drawio file: %{file}'),
@@ -153,12 +164,14 @@ export default {
         title: this.$gettext('Diagram imported'),
         desc: getDescription()
       })
-      this.makeRequest('GET', url)
+      this.getFileContents(this.currentFileContext, {
+        responseType: 'arrayBuffer'
+      })
         .then((resp) => {
           // Not setting `currentETag` on imports allows to create new files
           // otherwise the ETag comparison fails with a 412 during the autosave/save event
           // this.currentETag = resp.headers.get('etag')
-          return resp.arrayBuffer()
+          return resp.body
         })
         .then((arrayBuffer) => {
           const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
@@ -180,7 +193,8 @@ export default {
         })
     },
     save(payload, auto = false) {
-      this.putFileContents(this.filePath, payload.xml, {
+      this.putFileContents(this.currentFileContext, {
+        content: payload.xml,
         previousEntityTag: this.currentETag
       })
         .then((resp) => {
@@ -228,7 +242,7 @@ export default {
       return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
     }
   }
-}
+})
 </script>
 <style scoped>
 #drawio-editor {

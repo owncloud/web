@@ -165,26 +165,6 @@ Feature: User can open the details panel for any file or folder
     When the user browses to the shared-with-me page in declined shares view
     Then there should be no resources listed on the webUI
 
-  @issue-1158 @issue-5017 @comments-app-required
-  Scenario: View different areas of details panel for the folder with given tag in Tags page
-    Given user "Alice" has created folder "simple-folder" in the server
-    And the user has browsed to the personal page
-    Given user "Alice" has created a "normal" tag with name "simple"
-    And user "Alice" has added tag "simple" to folder "simple-folder"
-    When the user browses to the tags page
-    And the user searches for tag "simple" using the webUI
-    Then folder "simple-folder" should be listed on the webUI
-    When the user opens the actions sidebar panel of folder "simple-folder" on the webUI
-    And the "small" preview of thumbnail should be visible in the "actions" panel
-    When the user switches to "people" panel in details panel using the webUI
-    Then the "people" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
-    When the user switches to "versions" panel in details panel using the webUI
-    Then the "versions" details panel should be visible
-    When the user switches to "comments" panel in details panel using the webUI
-    Then the "comments" details panel should be visible
-
 
   Scenario: the sidebar is invisible after closing
     Given user "Alice" has created file "lorem.txt" in the server

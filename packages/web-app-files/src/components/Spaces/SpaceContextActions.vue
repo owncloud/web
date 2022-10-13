@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-action-menu :menu-sections="menuSections" :items="items" />
+    <context-action-menu :menu-sections="menuSections" :items="items" :space="space" />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ContextActionMenu from '../ContextActionMenu.vue'
 import QuotaModal from './QuotaModal.vue'
 import ReadmeContentModal from './ReadmeContentModal.vue'
@@ -32,7 +32,7 @@ import ReadmeContentModal from './ReadmeContentModal.vue'
 import Delete from '../../mixins/spaces/actions/delete'
 import Rename from '../../mixins/spaces/actions/rename'
 import Restore from '../../mixins/spaces/actions/restore'
-import ShowDetails from '../../mixins/spaces/actions/showDetails'
+import ShowDetails from '../../mixins/actions/showDetails'
 import EditDescription from '../../mixins/spaces/actions/editDescription'
 import EditQuota from '../../mixins/spaces/actions/editQuota'
 import DeletedFiles from '../../mixins/spaces/actions/deletedFiles'
@@ -41,8 +41,10 @@ import ShowMembers from '../../mixins/spaces/actions/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'SpaceContextActions',
   components: { ContextActionMenu, QuotaModal, ReadmeContentModal },
   mixins: [
@@ -60,6 +62,10 @@ export default {
   ],
 
   props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
+    },
     items: {
       type: Array,
       required: true
@@ -130,10 +136,7 @@ export default {
         ...this.$_uploadImage_items
       ]
 
-      if (
-        isLocationSpacesActive(this.$router, 'files-spaces-project') &&
-        this.$route.params.storageId
-      ) {
+      if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
         fileHandlers.splice(2, 0, ...this.$_editReadmeContent_items)
       }
       return [...fileHandlers].filter((item) => item.isEnabled(this.filterParams))
@@ -165,7 +168,7 @@ export default {
       this.$_editReadmeContent_closeModal()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -33,10 +33,11 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceRoleManager } from 'web-client/src/helpers/share'
+import { ShareTypes, spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -44,7 +45,13 @@ export default defineComponent({
     CollaboratorListItem,
     InviteCollaboratorForm
   },
-  inject: ['displayedItem'],
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
+  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
@@ -56,8 +63,10 @@ export default defineComponent({
     spaceAddMemberHelp() {
       return shareSpaceAddMemberHelp
     },
-    space() {
-      return this.displayedItem.value
+    members() {
+      return this.currentFileOutgoingCollaborators.filter(
+        (share) => share.shareType === ShareTypes.space.value
+      )
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0

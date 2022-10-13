@@ -67,12 +67,13 @@ function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
     localVue,
     store,
     mocks: {
+      space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } },
       $router: {
         currentRoute: invalidLocation
           ? createLocationShares('files-shares-via-link')
           : deletePermanent
-          ? createLocationTrash('files-trash-personal')
-          : createLocationSpaces('files-spaces-personal'),
+          ? createLocationTrash('files-trash-generic')
+          : createLocationSpaces('files-spaces-generic'),
         resolve: (r) => {
           return { href: r.name }
         }

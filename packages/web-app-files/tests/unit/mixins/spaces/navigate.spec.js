@@ -33,13 +33,15 @@ describe('navigate', () => {
   describe('method "$_navigate_space_trigger"', () => {
     it('should trigger route change', async () => {
       const wrapper = getWrapper()
-      await wrapper.vm.$_navigate_space_trigger()
+      const resource = { driveAlias: 'project/mars' }
+      await wrapper.vm.$_navigate_space_trigger({ resources: [resource] })
 
       expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
-        createLocationSpaces('files-spaces-project', {
+        createLocationSpaces('files-spaces-generic', {
           params: {
-            storageId: wrapper.vm.$router.currentRoute.params.storageId
-          }
+            driveAliasAndItem: resource.driveAlias
+          },
+          query: {}
         })
       )
     })
@@ -52,14 +54,20 @@ function getWrapper({ invalidLocation = false } = {}) {
     mocks: {
       $router: {
         currentRoute: invalidLocation
-          ? createLocationTrash('files-trash-personal')
-          : createLocationTrash('files-trash-spaces-project', { params: { storageId: '1' } }),
+          ? createLocationSpaces('files-spaces-generic')
+          : createLocationTrash('files-trash-generic', {
+              params: { driveAliasAndItem: 'project/mars' }
+            }),
         resolve: (r) => {
           return { href: r.name }
         },
         push: jest.fn()
       },
-      $gettext: jest.fn()
+      $gettext: jest.fn(),
+      space: {
+        driveType: 'project',
+        getDriveAliasAndItem: () => 'project/mars'
+      }
     },
     store: createStore(Vuex.Store, {
       actions: {

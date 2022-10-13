@@ -115,7 +115,9 @@ module.exports = {
         )
         if (disabled) {
           return disabled
-        } else return false
+        } else {
+          return false
+        }
       }
 
       await this.waitForElementVisible('@datepickerTitle')

@@ -23,7 +23,6 @@ Feature: accept/decline shares coming from internal users
     And user "Alice" has shared folder "/simple-folder" with group "grp1" in the server
     And the user has browsed to the shared-with-me page
     When the user declines share "simple-folder" offered by user "Alice Hansen" using the webUI
-    And the user browses to the shared-with-me page in declined shares view
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI

@@ -1,24 +1,36 @@
 import { Resource } from 'web-client'
 import fileExtensions from '../extensions/fileExtensions'
 
-export const extractStorageId = (id?: string): string => {
+const extractIdSegment = (id: string, index: number): string => {
   if (!id || typeof id !== 'string') {
     return ''
   }
-  return id.indexOf('!') >= 0 ? id.split('!')[0] : ''
+  return id.indexOf('!') >= 0 ? id.split('!')[index] : ''
+}
+
+export const extractStorageId = (id?: string): string => {
+  return extractIdSegment(id, 0)
+}
+
+export const extractNodeId = (id?: string): string => {
+  return extractIdSegment(id, 1)
 }
 
 export const extractNameWithoutExtension = (resource?: Resource): string => {
   const extension = resource.extension || ''
   const name = resource.name || ''
-  if (!extension.length) return name
+  if (!extension.length) {
+    return name
+  }
   const extensionIndexInName = name.lastIndexOf(`.${extension}`)
   return name.substring(0, extensionIndexInName)
 }
 
 export const extractExtensionFromFile = (resource: Resource): string => {
   const name = resource.name
-  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) return ''
+  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) {
+    return ''
+  }
 
   const parts = name.split('.')
   if (parts.length > 2) {
@@ -30,6 +42,8 @@ export const extractExtensionFromFile = (resource: Resource): string => {
     }
   }
   // Fallback if file extension is unknown or no extension
-  if (parts.length < 2) return ''
+  if (parts.length < 2) {
+    return ''
+  }
   return parts[parts.length - 1]
 }

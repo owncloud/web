@@ -15,7 +15,13 @@ const fileRow = '//ancestor::tr'
 const resourceNameSelector = `[data-test-resource-name="%s"]`
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
-const folderNameInput = '.oc-modal input'
+const createNewTxtFileButton = '.new-file-btn-txt'
+const createNewMdFileButton = '.new-file-btn-md'
+const createNewDrawioFileButton = '.new-file-btn-drawio'
+const saveTextFileInEditorButton = '#text-editor-controls-save'
+const closeTextEditorOrViewerButton = '#app-top-bar-close'
+const textEditorInput = '#text-editor-input'
+const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
@@ -38,6 +44,7 @@ const globalSearchOptions = '#files-global-search-options'
 const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
+const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 
 export const clickResource = async ({
   page,
@@ -50,7 +57,6 @@ export const clickResource = async ({
   for (const name of paths) {
     const resource = await page.locator(util.format(resourceNameSelector, name))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
-
     await Promise.all([
       resource.click(),
       page.waitForResponse(
@@ -69,33 +75,98 @@ export const clickResource = async ({
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder'
+  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile'
+  content?: string
 }
 
 export const createResource = async (args: createResourceArgs): Promise<void> => {
-  const { page, name } = args
+  const { page, name, type, content } = args
   const paths = name.split('/')
 
   for (const resource of paths) {
-    const folderExists = await resourceExists({
+    const resourcesExists = await resourceExists({
       page: page,
       name: resource
     })
 
-    if (!folderExists) {
+    if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-      await page.locator(createNewFolderButton).click()
-      await page.locator(folderNameInput).fill(resource)
-      await Promise.all([
-        page.waitForResponse(
-          (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
-        ),
-        page.locator(actionConfirmationButton).click()
-      ])
-    }
 
-    await clickResource({ page, path: resource })
+      switch (type) {
+        case 'folder': {
+          await page.locator(createNewFolderButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          break
+        }
+        case 'txtFile': {
+          await page.locator(createNewTxtFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await editTextDocument({ page, content: content })
+          break
+        }
+        case 'mdFile': {
+          await page.locator(createNewMdFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+          await Promise.all([
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await editTextDocument({ page, content: content })
+          break
+        }
+        case 'drawioFile': {
+          await page.locator(createNewDrawioFileButton).click()
+          await page.locator(resourceNameInput).fill(resource)
+
+          const [drawioTab] = await Promise.all([
+            page.waitForEvent('popup'),
+            page.waitForResponse(
+              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
+            ),
+            page.locator(actionConfirmationButton).click()
+          ])
+          await drawioTab.waitForLoadState()
+          await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
+          await drawioTab.waitForURL('**/draw-io/personal/**')
+          await drawioTab.close()
+          break
+        }
+      }
+    }
+    if (type === 'folder') {
+      await clickResource({ page, path: resource })
+    }
   }
+}
+
+export const editTextDocument = async ({
+  page,
+  content
+}: {
+  page: Page
+  content: string
+}): Promise<void> => {
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
+    page.locator(textEditorInput).fill(content),
+    page.locator(saveTextFileInEditorButton).click()
+  ])
+
+  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
 }
 
 /**/
@@ -381,7 +452,10 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
 
 export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  await new Promise((resolve) => setTimeout(resolve, 5000))
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -397,9 +471,21 @@ export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<
   return message.trim().toLowerCase()
 }
 
+export const getDeleteResourceButtonVisibility = async (
+  args: deleteResourceArgs
+): Promise<boolean> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  return await page.locator(permanentDeleteButton).isVisible()
+}
+
 export interface restoreResourceTrashbinArgs {
   resource: string
-  actionType: string
   page: Page
 }
 
@@ -407,7 +493,9 @@ export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
   const { page, resource } = args
-  const resourceCheckbox = page.locator(util.format(checkBoxForTrashbin, resource))
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
@@ -423,6 +511,19 @@ export const restoreResourceTrashbin = async (
   return message.trim().toLowerCase()
 }
 
+export const getRestoreResourceButtonVisibility = async (
+  args: restoreResourceTrashbinArgs
+): Promise<boolean> => {
+  const { page, resource } = args
+  const resourceCheckbox = page.locator(
+    util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
+  )
+  if (!(await resourceCheckbox.isChecked())) {
+    await resourceCheckbox.check()
+  }
+  return await page.locator(restoreResourceButton).isVisible()
+}
+
 export interface searchResourceGlobalSearchArgs {
   keyword: string
   page: Page
@@ -432,7 +533,10 @@ export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
   const { page, keyword } = args
-  await page.locator(globalSearchInput).fill(keyword)
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+    page.locator(globalSearchInput).fill(keyword)
+  ])
   await expect(page.locator(globalSearchOptions)).toBeVisible()
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
 }
@@ -446,4 +550,50 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
 export const showHiddenResources = async (page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await page.locator(hiddenFilesToggleButton).click()
+}
+
+export interface editResourcesArgs {
+  page: Page
+  name: string
+  content: string
+}
+
+export const editResources = async (args: editResourcesArgs): Promise<void> => {
+  const { page, name, content } = args
+  await page.locator(util.format(resourceNameSelector, name)).click()
+  await editTextDocument({ page, content: content })
+}
+
+export interface openFileInViewerArgs {
+  page: Page
+  name: string
+  actionType: 'mediaviewer' | 'pdfviewer'
+}
+
+export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
+  const { page, name, actionType } = args
+
+  if (actionType === 'mediaviewer') {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('preview') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+      ),
+      page.locator(util.format(resourceNameSelector, name)).click()
+    ])
+
+    // in case of error <img> doesn't contain src="blob:https://url"
+    expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
+  } else {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+      ),
+      page.locator(util.format(resourceNameSelector, name)).click()
+    ])
+  }
+
+  await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
 }

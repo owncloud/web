@@ -5,11 +5,13 @@ import {
   createLocationSpaces,
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {
@@ -23,10 +25,7 @@ export default {
           label: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
           isEnabled: ({ resources }) => {
-            if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-            ) {
+            if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
               return false
             }
             if (resources.length !== 1) {
@@ -53,67 +52,46 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: ({ resources }) => {
-            const shareId = this.getShareId(resources[0])
-            const shareName = this.getShareName(resources[0])
-            const { storageId } = resources[0]
-            return merge({}, this.routeName, {
-              params: {
-                item: resources[0].path,
-                ...(shareName && { shareName }),
-                ...(storageId && { storageId })
-              },
-              query: {
-                ...(shareId && { shareId })
-              }
-            })
+            return merge(
+              {},
+              this.routeName,
+              createFileRouteOptions(this.$_navigate_getSpace(resources[0]), {
+                path: resources[0].path,
+                fileId: resources[0].fileId
+              })
+            )
           },
           class: 'oc-files-actions-navigate-trigger'
         }
       ]
     },
     routeName() {
-      if (isLocationPublicActive(this.$router, 'files-public-files')) {
-        return createLocationPublic('files-public-files')
+      if (isLocationPublicActive(this.$router, 'files-public-link')) {
+        return createLocationPublic('files-public-link')
       }
 
-      if (isLocationSpacesActive(this.$router, 'files-spaces-project')) {
-        return createLocationSpaces('files-spaces-project')
-      }
-
-      if (
-        isLocationSpacesActive(this.$router, 'files-spaces-share') ||
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return createLocationSpaces('files-spaces-share')
-      }
-
-      return createLocationSpaces('files-spaces-personal')
+      return createLocationSpaces('files-spaces-generic')
     }
   },
   methods: {
-    getShareId(resource) {
-      if (this.$route.query?.shareId) {
-        return this.$route.query.shareId
+    $_navigate_getSpace(resource) {
+      if (this.space) {
+        return this.space
       }
-      if (
-        this.capabilities?.spaces?.share_jail &&
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return resource.id
+      const storageId = resource.storageId
+      // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
+      const space = this.$store.getters['runtime/spaces/spaces'].find(
+        (space) => space.id === storageId
+      )
+      if (space) {
+        return space
       }
-      return undefined
-    },
-    getShareName(resource) {
-      if (this.$route.params?.shareName) {
-        return this.$route.params.shareName
-      }
-      if (
-        this.capabilities?.spaces?.share_jail &&
-        isLocationSharesActive(this.$router, 'files-shares-with-me')
-      ) {
-        return resource.name
-      }
-      return undefined
+
+      return buildShareSpaceResource({
+        shareId: resource.shareId,
+        shareName: resource.name,
+        serverUrl: configurationManager.serverUrl
+      })
     }
   }
 }

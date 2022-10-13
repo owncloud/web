@@ -7,11 +7,6 @@ import {
 } from './common'
 import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import {
-  buildRoutes as buildOperationsRoutes,
-  createLocationOperations,
-  isLocationOperationsActive
-} from './operations'
-import {
   buildRoutes as buildPublicRoutes,
   createLocationPublic,
   isLocationPublicActive
@@ -36,7 +31,7 @@ import { ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',
-  redirect: (to) => createLocationSpaces('files-spaces-personal', to)
+  redirect: (to) => createLocationSpaces('files-spaces-generic', to)
 }
 
 const buildRoutes = (components: RouteComponents): RouteConfig[] => [
@@ -45,7 +40,6 @@ const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   ...buildSharesRoutes(components),
   ...buildPublicRoutes(components),
   ...buildSpacesRoutes(components),
-  ...buildOperationsRoutes(components),
   ...buildTrashRoutes(components),
   ...buildDeprecatedRoutes()
 ]
@@ -54,9 +48,7 @@ export {
   createLocationCommon,
   createLocationShares,
   createLocationSpaces,
-  createLocationOperations,
   createLocationPublic,
-  isLocationOperationsActive,
   isLocationCommonActive,
   isLocationSharesActive,
   isLocationSpacesActive,

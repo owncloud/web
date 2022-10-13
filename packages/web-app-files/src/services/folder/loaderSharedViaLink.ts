@@ -10,8 +10,6 @@ import {
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 import { unref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
-import { configurationManager } from 'web-pkg/src/configuration'
 
 export class FolderLoaderSharedViaLink implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,16 +40,7 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       })
 
       resources = resources.map((r) => r.shareInfo)
-      let spaces = []
-      if (store.getters.capabilities?.spaces?.enabled) {
-        const accessToken = store.getters['runtime/auth/accessToken']
-        const serverUrl = configurationManager.serverUrl
-        const graphClient = clientService.graphAuthenticated(serverUrl, accessToken)
-        // FIXME: Wait until spaces are loaded? We already load them in the runtime
-        yield store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-        spaces = store.getters['runtime/spaces/spaces']
-      }
-
+      const spaces = store.getters['runtime/spaces/spaces']
       if (resources.length) {
         resources = aggregateResourceShares(
           resources,
@@ -59,7 +48,13 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
           unref(hasResharing),
           unref(hasShareJail),
           spaces
-        )
+        ).map((resource) => {
+          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+          if (!resource.storageId) {
+            resource.storageId = store.getters.user.id
+          }
+          return resource
+        })
       }
 
       store.commit('Files/LOAD_FILES', {

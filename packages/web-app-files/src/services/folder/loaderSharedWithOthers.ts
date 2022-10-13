@@ -52,7 +52,13 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
           false,
           unref(hasResharing),
           unref(hasShareJail)
-        )
+        ).map((resource) => {
+          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+          if (!resource.storageId) {
+            resource.storageId = store.getters.user.id
+          }
+          return resource
+        })
       }
 
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: resources })

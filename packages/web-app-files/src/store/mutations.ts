@@ -2,7 +2,7 @@ import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
-import { renameResource } from '../helpers/resources'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -11,9 +11,6 @@ export default {
   },
   SET_CURRENT_FOLDER(state, currentFolder) {
     state.currentFolder = currentFolder
-  },
-  SET_CURRENT_SPACE(state, currentSpace) {
-    state.currentSpace = currentSpace
   },
   CLEAR_FILES(state) {
     state.files = []
@@ -32,10 +29,12 @@ export default {
     state.filesSearched = null
   },
   CLEAR_CLIPBOARD(state) {
+    state.clipboardSpace = null
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state) {
+  CLIPBOARD_SELECTED(state, { space }: { space: SpaceResource }) {
+    state.clipboardSpace = space
     state.clipboardResources = state.files.filter((f) => {
       return state.selectedIds.some((id) => f.id === id)
     })
@@ -85,16 +84,6 @@ export default {
   },
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
-  },
-  RENAME_FILE(state, { file, newValue, newPath }) {
-    const resources = [...state.files]
-    const fileIndex = resources.findIndex((f) => {
-      return f.id === file.id
-    })
-
-    renameResource(resources[fileIndex], newValue, newPath)
-
-    state.files = resources
   },
   CURRENT_FILE_OUTGOING_SHARES_SET(state, shares) {
     state.currentFileOutgoingShares = shares

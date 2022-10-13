@@ -1,5 +1,5 @@
 import get from 'lodash-es/get'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../router'
 import { routeToContextQuery } from 'web-pkg/src/composables/appDefaults'
@@ -17,6 +17,9 @@ import Restore from './actions/restore'
 import kebabCase from 'lodash-es/kebabCase'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import isSearchActive from './helpers/isSearchActive'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 const actionsMixins = [
   'navigate',
@@ -34,6 +37,11 @@ const actionsMixins = [
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
+
+export type FileActionOptions = {
+  space: SpaceResource
+  resources: Resource[]
+}
 
 export default {
   mixins: [
@@ -81,12 +89,14 @@ export default {
               iconFillType: this.apps.meta[editor.app].iconFillType
             }),
             img: this.apps.meta[editor.app].img,
-            handler: ({ resources }) =>
+            handler: (options: FileActionOptions) =>
               this.$_fileActions_openEditor(
                 editor,
-                resources[0].webDavPath,
-                resources[0].id,
-                EDITOR_MODE_EDIT
+                options.space.getDriveAliasAndItem(options.resources[0]),
+                options.resources[0].webDavPath,
+                options.resources[0].fileId,
+                EDITOR_MODE_EDIT,
+                options.space.shareId
               ),
             isEnabled: ({ resources }) => {
               if (resources.length !== 1) {
@@ -95,8 +105,7 @@ export default {
 
               if (
                 !this.$_isSearchActive &&
-                (isLocationTrashActive(this.$router, 'files-trash-personal') ||
-                  isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
+                (isLocationTrashActive(this.$router, 'files-trash-generic') ||
                   (isLocationSharesActive(this.$router, 'files-shares-with-me') &&
                     resources[0].status !== ShareStatus.accepted))
               ) {
@@ -135,39 +144,27 @@ export default {
   },
 
   methods: {
-    ...mapActions(['openFile']),
-
-    $_fileActions__routeOpts(app, filePath, fileId, mode) {
-      const route = this.$route
-
-      return {
-        name: app.routeName || app.app,
-        params: {
-          filePath,
-          fileId,
-          mode
-        },
-        query: routeToContextQuery(route)
-      }
-    },
-
-    $_fileActions_openEditor(editor, filePath, fileId, mode) {
+    $_fileActions_openEditor(editor, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
       if (editor.handler) {
         return editor.handler({
           config: this.configuration,
           extensionConfig: editor.config,
+          driveAliasAndItem,
           filePath,
           fileId,
-          mode
+          mode,
+          ...(shareId && { shareId })
         })
       }
 
-      // TODO: Refactor (or kill) openFile action in the global store
-      this.openFile({
-        filePath
-      })
-
-      const routeOpts = this.$_fileActions__routeOpts(editor, filePath, fileId, mode)
+      const routeOpts = this.$_fileActions__routeOpts(
+        editor,
+        driveAliasAndItem,
+        filePath,
+        fileId,
+        mode,
+        shareId
+      )
 
       if (editor.newTab) {
         const path = this.$router.resolve(routeOpts).href
@@ -183,18 +180,38 @@ export default {
       this.$router.push(routeOpts)
     },
 
+    $_fileActions__routeOpts(app, driveAliasAndItem: string, filePath, fileId, mode, shareId) {
+      return {
+        name: app.routeName || app.app,
+        params: {
+          driveAliasAndItem,
+          filePath,
+          fileId,
+          mode
+        },
+        query: {
+          ...(shareId && { shareId }),
+          ...(fileId && configurationManager.options.routing.idBased && { fileId }),
+          ...routeToContextQuery(this.$route)
+        }
+      }
+    },
+
     // TODO: Make user-configurable what is a defaultAction for a filetype/mimetype
     // returns the _first_ action from actions array which we now construct from
     // available mime-types coming from the app-provider and existing actions
-    $_fileActions_triggerDefaultAction(resource) {
-      const action = this.$_fileActions_getDefaultAction(resource)
-      action.handler({ resources: [resource], ...action.handlerData })
+    $_fileActions_triggerDefaultAction(options: FileActionOptions) {
+      const action = this.$_fileActions_getDefaultAction(options)
+      action.handler({ ...options, ...action.handlerData })
     },
 
-    $_fileActions_getDefaultAction(resource) {
-      const resources = [resource]
+    $_fileActions_getDefaultAction(options: FileActionOptions) {
       const filterCallback = (action) =>
-        action.canBeDefault && action.isEnabled({ resources, parent: this.currentFolder })
+        action.canBeDefault &&
+        action.isEnabled({
+          ...options,
+          parent: this.currentFolder
+        })
 
       // first priority: handlers from config
       const defaultEditorActions = this.$_fileActions_editorActions.filter(filterCallback)
@@ -205,7 +222,7 @@ export default {
       // second priority: `/app/open` endpoint of app provider if available
       // FIXME: files app should not know anything about the `external apps` app
       const externalAppsActions =
-        this.$_fileActions_loadExternalAppActions(resources).filter(filterCallback)
+        this.$_fileActions_loadExternalAppActions(options).filter(filterCallback)
       if (externalAppsActions.length) {
         return externalAppsActions[0]
       }
@@ -214,32 +231,32 @@ export default {
       return this.$_fileActions_systemActions.filter(filterCallback)[0]
     },
 
-    $_fileActions_getAllAvailableActions(resources) {
+    $_fileActions_getAllAvailableActions(options: FileActionOptions) {
       return [
         ...this.$_fileActions_editorActions,
-        ...this.$_fileActions_loadExternalAppActions(resources),
+        ...this.$_fileActions_loadExternalAppActions(options),
         ...this.$_fileActions_systemActions
       ].filter((action) => {
-        return action.isEnabled({ resources })
+        return action.isEnabled(options)
       })
     },
 
     // returns an array of available external Apps
     // to open a resource with a specific mimeType
     // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-    $_fileActions_loadExternalAppActions(resources) {
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project')
-      ) {
+    $_fileActions_loadExternalAppActions(options: FileActionOptions) {
+      if (isLocationTrashActive(this.$router, 'files-trash-generic')) {
         return []
       }
 
       // we don't support external apps as batch action as of now
-      if (resources.length !== 1) {
+      if (options.resources.length !== 1) {
         return []
       }
-      const { mimeType, webDavPath, fileId } = resources[0]
+
+      const resource = options.resources[0]
+      const { mimeType, webDavPath, fileId } = resource
+      const driveAliasAndItem = options.space.getDriveAliasAndItem(resource)
       const mimeTypes = this.$store.getters['External/mimeTypes'] || []
       if (
         mimeType === undefined ||
@@ -266,20 +283,29 @@ export default {
           class: `oc-files-actions-${app.name}-trigger`,
           isEnabled: () => true,
           canBeDefault: defaultApplication === app.name,
-          handler: () => this.$_fileActions_openLink(app.name, webDavPath, fileId),
+          handler: () =>
+            this.$_fileActions_openExternalApp(
+              app.name,
+              driveAliasAndItem,
+              webDavPath,
+              fileId,
+              options.space.shareId
+            ),
           label: () => this.$gettextInterpolate(label, { appName: app.name })
         }
       })
     },
 
-    $_fileActions_openLink(app, filePath, fileId) {
+    $_fileActions_openExternalApp(app, driveAliasAndItem: string, filePath, fileId, shareId) {
       const routeOpts = this.$_fileActions__routeOpts(
         {
           routeName: 'external-apps'
         },
+        driveAliasAndItem,
         filePath,
         undefined,
-        undefined
+        undefined,
+        shareId
       )
 
       routeOpts.query = {

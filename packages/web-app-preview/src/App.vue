@@ -36,10 +36,7 @@
     <template v-else>
       <div
         v-show="activeMediaFileCached"
-        class="
-          oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium
-          preview-player
-        "
+        class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
       >
         <img
           v-if="activeMediaFileCached.isImage"
@@ -68,16 +65,7 @@
     </template>
     <div class="oc-position-medium oc-position-bottom-center preview-details">
       <div
-        class="
-          oc-background-brand
-          oc-p-s
-          oc-width-large
-          oc-flex
-          oc-flex-middle
-          oc-flex-center
-          oc-flex-around
-          preview-controls-action-bar
-        "
+        class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
       >
         <oc-button
           class="preview-controls-previous"
@@ -118,6 +106,8 @@ import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { unref } from '@vue/composition-api'
+import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'Preview',
@@ -126,6 +116,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+
     return {
       ...useAppDefaults({
         applicationId: 'preview'
@@ -199,9 +190,6 @@ export default defineComponent({
           return 3840
       }
     },
-    rawMediaUrl() {
-      return this.getUrlForResource(this.activeFilteredFile)
-    },
 
     isActiveFileTypeImage() {
       return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
@@ -213,10 +201,6 @@ export default defineComponent({
 
     isActiveFileTypeVideo() {
       return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
-    },
-
-    isUrlSigningEnabled() {
-      return this.capabilities.core && this.capabilities.core['support-url-signing']
     }
   },
 
@@ -232,7 +216,7 @@ export default defineComponent({
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     await this.loadFolderForFileContext(this.currentFileContext)
-    this.setActiveFile(this.currentFileContext.path)
+    this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
   },
 
@@ -245,9 +229,12 @@ export default defineComponent({
   },
 
   methods: {
-    setActiveFile(filePath) {
+    setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
-        if (this.filteredFiles[i].webDavPath === filePath) {
+        if (
+          this.currentFileContext.space?.getDriveAliasAndItem(this.filteredFiles[i]) ===
+          driveAliasAndItem
+        ) {
           this.activeIndex = i
           return
         }
@@ -260,13 +247,16 @@ export default defineComponent({
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
-      this.setActiveFile(result.route.params.filePath)
+      this.setActiveFile(result.route.params.driveAliasAndItem)
     },
 
     // update route and url
     updateLocalHistory() {
-      this.$route.params.filePath = this.activeFilteredFile.webDavPath
-      history.pushState({}, document.title, this.$router.resolve(this.$route).href)
+      const routeOptions = mergeFileRouteOptions(
+        this.$route,
+        createFileRouteOptions(unref(this.currentFileContext.space), this.activeFilteredFile)
+      )
+      history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },
 
     loadMedium() {
@@ -292,7 +282,10 @@ export default defineComponent({
         const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
         if (loadRawFile) {
-          mediaUrl = await this.getUrlForResource(this.activeFilteredFile)
+          mediaUrl = await this.getUrlForResource(
+            this.currentFileContext.space,
+            this.activeFilteredFile
+          )
         } else {
           mediaUrl = await loadPreview({
             resource: this.activeFilteredFile,
@@ -338,6 +331,7 @@ export default defineComponent({
       this.direction = 'rtl'
       if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
+        this.updateLocalHistory()
         return
       }
       this.activeIndex++
@@ -351,6 +345,7 @@ export default defineComponent({
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
         this.activeIndex = this.filteredFiles.length - 1
+        this.updateLocalHistory()
         return
       }
       this.activeIndex--

@@ -12,11 +12,7 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      if (info.type !== 'folder') {
-        throw new Error('resource creation is currently only supported for folders ')
-      }
-
-      await resourceObject.create({ name: info.resource, type: info.type })
+      await resourceObject.create({ name: info.resource, type: info.type, content: info.content })
     }
   }
 )
@@ -171,11 +167,14 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      const message = await resourceObject.deleteTrashBin({ resource: info.resource })
-      const paths = info.resource.split('/')
       if (actionType === 'should not') {
-        expect(message).toBe(`failed to delete "${paths[paths.length - 1]}"`)
+        const isVisible = await resourceObject.isDeleteTrashBinButtonVisible({
+          resource: info.resource
+        })
+        expect(isVisible).toBe(false)
       } else {
+        const message = await resourceObject.deleteTrashBin({ resource: info.resource })
+        const paths = info.resource.split('/')
         expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
       }
     }
@@ -194,14 +193,16 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      const message = await resourceObject.restoreTrashBin({
-        resource: info.resource,
-        actionType
-      })
-      const paths = info.resource.split('/')
       if (actionType === 'should not') {
-        expect(message).toBe(`failed to restore "${paths[paths.length - 1]}"`)
+        const isVisible = await resourceObject.isRestoreTrashBinButtonVisible({
+          resource: info.resource
+        })
+        expect(isVisible).toBe(false)
       } else {
+        const message = await resourceObject.restoreTrashBin({
+          resource: info.resource
+        })
+        const paths = info.resource.split('/')
         expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
       }
     }
@@ -229,8 +230,11 @@ Then(
     const actualList = await resourceObject.getDisplayedResources()
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
-      if (actionType === 'should') expect(found).toBe(true)
-      else expect(found).toBe(false)
+      if (actionType === 'should') {
+        expect(found).toBe(true)
+      } else {
+        expect(found).toBe(false)
+      }
     }
   }
 )
@@ -309,3 +313,36 @@ export const processDownload = async (
     }
   }
 }
+
+When(
+  '{string} edits the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.editResourse({ name: info.resource, content: info.content })
+    }
+  }
+)
+
+When(
+  /^"([^"]*)" opens the following file(s)? in (mediaviewer|pdfviewer)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: string,
+    actionType: string,
+    stepTable: DataTable
+  ) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.openFileInViewer({
+        name: info.resource,
+        actionType: actionType === 'mediaviewer' ? 'mediaviewer' : 'pdfviewer'
+      })
+    }
+  }
+)

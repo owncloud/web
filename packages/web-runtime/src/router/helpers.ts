@@ -1,6 +1,6 @@
 import { base, router } from './index'
 import Router, { Route, RouteRecordPublic } from 'vue-router'
-import { contextQueryToFileContextProps } from 'web-pkg/src/composables'
+import { contextQueryToFileContextProps, LocationParams } from 'web-pkg/src/composables'
 
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
@@ -64,8 +64,12 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
     return false
   }
 
-  const publicLinkRouteNames = ['files-public-files', 'files-public-drop']
+  const publicLinkRouteNames = ['files-public-link', 'files-public-upload']
   if (publicLinkRouteNames.includes(to.name)) {
+    return true
+  }
+
+  if (to.params.driveAliasAndItem?.startsWith('public/')) {
     return true
   }
 
@@ -82,10 +86,24 @@ export const isPublicLinkContext = (router: Router, to: Route): boolean => {
 export const extractPublicLinkToken = (to: Route): string => {
   const contextRouteParams = contextQueryToFileContextProps(to.query)?.routeParams
   if (contextRouteParams) {
-    return (contextRouteParams.item || '').split('/')[0]
+    return extractPublicLinkTokenFromRouteParams(contextRouteParams)
   }
+  return extractPublicLinkTokenFromRouteParams(to.params)
+}
 
-  return (to.params.item || to.params.filePath || to.params.token || '').split('/')[0]
+/**
+ * Extracts the public link token from known possible occurrences in params of a route.
+ *
+ * @param params {LocationParams}
+ */
+const extractPublicLinkTokenFromRouteParams = (params: LocationParams): string => {
+  if (Object.prototype.hasOwnProperty.call(params, 'driveAliasAndItem')) {
+    if (!params.driveAliasAndItem.startsWith('public/')) {
+      return ''
+    }
+    return params.driveAliasAndItem.split('/')[1]
+  }
+  return (params.item || params.filePath || params.token || '').split('/')[0]
 }
 
 /**
@@ -102,7 +120,6 @@ export const isAuthenticationRequired = (router: Router, to: Route): boolean => 
     'login',
     'oidcCallback',
     'oidcSilentRedirect',
-    'resolvePrivateLink',
     'resolvePublicLink',
     'accessDenied'
   ]

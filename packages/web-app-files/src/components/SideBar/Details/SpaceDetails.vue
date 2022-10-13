@@ -82,7 +82,6 @@ import { SideBarEventTopics } from '../../../composables/sideBar'
 export default defineComponent({
   name: 'SpaceDetails',
   components: { SpaceQuota },
-  inject: ['displayedItem'],
   setup() {
     const store = useStore()
     const accessToken = useAccessToken({ store })
@@ -121,11 +120,11 @@ export default defineComponent({
     return { loadImageTask, spaceImage }
   },
   computed: {
-    ...mapGetters('Files', ['currentFileOutgoingLinks']),
+    ...mapGetters('Files', ['currentFileOutgoingLinks', 'highlightedFile']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['user']),
     space() {
-      return this.displayedItem.value
+      return this.highlightedFile
     },
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares

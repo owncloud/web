@@ -1,0 +1,7 @@
+Bugfix: Inhibit move files between spaces
+
+We've inhibited moving files between spaces and will offer the user to copy instead.
+
+https://github.com/owncloud/web/pull/7652
+https://github.com/owncloud/web/issues/6892
+https://github.com/owncloud/web/pull/7735

@@ -1,6 +1,13 @@
 import { useUpload } from 'web-runtime/src/composables/upload'
-import { createWrapper } from './spec'
-import { UppyService } from '../../../../src/services/uppyService'
+import { defineComponent } from '@vue/composition-api'
+import { mount } from '@vue/test-utils'
+import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'
+import { defaultLocalVue } from '../../../../../../tests/unit/localVue/defaultLocalVue'
+import { defaultStoreMockOptions } from '../../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
+import { createStore } from 'vuex-extensions'
+import Vuex from 'vuex'
+import { SpaceResource } from 'web-client/src/helpers'
+import { mock } from 'jest-mock-extended'
 
 describe('useUpload', () => {
   it('should be valid', () => {
@@ -8,14 +15,10 @@ describe('useUpload', () => {
   })
 
   it('should create non-existent folders before upload', async () => {
-    const createFolderMock = jest.fn()
+    const { mocks, wrapper } = createWrapper()
 
-    const wrapper = createWrapper(() => {
-      const uppyService = new UppyService()
-      const { createDirectoryTree } = useUpload({ uppyService })
-      return { createDirectoryTree }
-    }, createFolderMock)
-
+    const space = mock<SpaceResource>()
+    const currentFolder = 'currentFolder'
     const uppyResources = [
       {
         source: 'source',
@@ -61,7 +64,37 @@ describe('useUpload', () => {
       }
     ]
 
-    await wrapper.vm.createDirectoryTree(uppyResources)
-    expect(createFolderMock).toHaveBeenCalledTimes(4)
+    await wrapper.vm.createDirectoryTree(space, currentFolder, uppyResources)
+    expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledTimes(4)
   })
 })
+
+const createWrapper = () => {
+  const mocks = {
+    ...defaultComponentMocks()
+  }
+  const storeOptions = {
+    ...defaultStoreMockOptions
+  }
+  const localVue = defaultLocalVue()
+  const store = createStore(Vuex.Store, storeOptions)
+
+  return {
+    mocks,
+    wrapper: mount(
+      defineComponent({
+        setup: () => {
+          return {
+            ...useUpload({ uppyService: mocks.$uppyService })
+          }
+        },
+        template: `<div></div>`
+      }),
+      {
+        localVue,
+        store,
+        mocks
+      }
+    )
+  }
+}

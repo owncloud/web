@@ -2,7 +2,14 @@
   <div class="oc-height-1-1 oc-link-resolve">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
-      <template v-if="isPasswordRequiredTask.isRunning || !isPasswordRequiredTask.last">
+      <template
+        v-if="
+          loadTokenInfoTask.isRunning ||
+          !loadTokenInfoTask.last ||
+          isPasswordRequiredTask.isRunning ||
+          !isPasswordRequiredTask.last
+        "
+      >
         <div class="oc-card-header">
           <h2 key="public-link-loading">
             <translate>Loading public link…</translate>
@@ -12,17 +19,22 @@
           <oc-spinner :aria-hidden="true" />
         </div>
       </template>
-      <template v-else-if="isPasswordRequiredTask.isError">
+      <template v-else-if="loadTokenInfoTask.isError || isPasswordRequiredTask.isError">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="public-link-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
-          <p class="oc-text-xlarge">{{ isPasswordRequiredTask.last.error }}</p>
+          <p v-if="loadTokenInfoTask.isError" class="oc-text-xlarge">
+            {{ loadTokenInfoTask.last.error }}
+          </p>
+          <p v-if="isPasswordRequiredTask.isError" class="oc-text-xlarge">
+            {{ isPasswordRequiredTask.last.error }}
+          </p>
         </div>
       </template>
-      <template v-else-if="isPasswordRequiredTask.last.value">
+      <template v-else-if="isPasswordRequiredTask.last && isPasswordRequiredTask.last.value">
         <form @submit.prevent="resolvePublicLink(true)">
           <div class="oc-card-header">
             <h2>
@@ -59,11 +71,10 @@
   </div>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from "web-pkg/src/constants";
 import { SharePermissionBit } from 'web-client/src/helpers/share'
-import { authService } from "../services/auth";
+import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
@@ -72,17 +83,41 @@ import {
   useRouteQuery
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
-import { ref, unref, computed, defineComponent } from "@vue/composition-api";
+import { ref, unref, computed, defineComponent } from '@vue/composition-api'
+import {
+  buildPublicSpaceResource,
+  isPublicSpaceResource,
+  PublicSpaceResource
+} from 'web-client/src/helpers'
+import { buildWebDavPublicPath } from 'files/src/helpers/resources'
+import isEmpty from 'lodash-es/isEmpty'
+import { useLoadTokenInfo } from '../composables/tokenInfo'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const { owncloudSdk } = useClientService()
+    const { webdav } = useClientService()
     const token = useRouteParam('token')
     const password = ref('')
-    const isPasswordRequiredTask = useTask(function* (signal) {
+    const publicLinkSpace = computed(() =>
+      buildPublicSpaceResource({
+        id: unref(token),
+        driveAlias: `public/${unref(token)}`,
+        driveType: 'public',
+        webDavPath: buildWebDavPublicPath(unref(token), ''),
+        ...(unref(password) && { publicLinkPassword: unref(password) })
+      })
+    )
+    const isPasswordRequiredTask = useTask(function* (signal, ref) {
+      if (!isEmpty(ref.tokenInfo)) {
+        return ref.tokenInfo.password_protected
+      }
       try {
-        yield owncloudSdk.publicFiles.list(unref(token), '', DavProperties.PublicLink, '0')
+        let space: PublicSpaceResource = {
+          ...unref(publicLinkSpace),
+          publicLinkPassword: null
+        }
+        yield webdav.getFileInfo(space)
         return false
       } catch (error) {
         if (error.statusCode === 401) {
@@ -91,14 +126,14 @@ export default defineComponent({
         throw error
       }
     })
-    const loadPublicLinkTask = useTask(function* (signal) {
-      const files = yield owncloudSdk.publicFiles.list(
-        unref(token),
-        unref(password),
-        DavProperties.PublicLink,
-        '0'
-      )
-      return files[0]
+    const loadPublicLinkTask = useTask(function* () {
+      const resource = yield webdav.getFileInfo(unref(publicLinkSpace))
+      if (!isPublicSpaceResource(resource)) {
+        const e: any = new Error('resolved resource has wrong type')
+        e.resource = resource
+        throw e
+      }
+      return resource
     })
     const wrongPassword = computed(() => {
       if (loadPublicLinkTask.isError) {
@@ -107,12 +142,18 @@ export default defineComponent({
       return false
     })
     return {
+      ...useLoadTokenInfo(unref(token)),
       redirectUrl: useRouteQuery('redirectUrl'),
       token,
       password,
       isPasswordRequiredTask,
       loadPublicLinkTask,
       wrongPassword
+    }
+  },
+  data() {
+    return {
+      tokenInfo: {}
     }
   },
   computed: {
@@ -134,15 +175,25 @@ export default defineComponent({
     }
   },
   async mounted() {
-    const passwordRequired = await this.isPasswordRequiredTask.perform()
-    if (!passwordRequired) {
+    this.tokenInfo = await this.loadTokenInfoTask.perform()
+    const passwordProtected = await this.isPasswordRequiredTask.perform(this)
+    if (!passwordProtected) {
       await this.resolvePublicLink(false)
     }
   },
   methods: {
     async resolvePublicLink(passwordRequired) {
+      if (this.tokenInfo?.alias_link) {
+        return this.$router.push({
+          name: 'resolvePrivateLink',
+          params: { fileId: this.tokenInfo.id }
+        })
+      }
+
       const publicLink = await this.loadPublicLinkTask.perform()
       if (this.loadPublicLinkTask.isError) {
+        const e = this.loadPublicLinkTask.last.error
+        console.error(e, e.resource)
         return
       }
 
@@ -154,11 +205,14 @@ export default defineComponent({
         return this.$router.push({ path: redirectUrl })
       }
 
-      if (parseInt(publicLink.fileInfo[DavProperty.PublicLinkPermission]) === SharePermissionBit.Create) {
-        return this.$router.push({ name: 'files-public-drop', params: { token: this.token } })
+      if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
+        return this.$router.push({ name: 'files-public-upload', params: { token: this.token } })
       }
 
-      return this.$router.push({ name: 'files-public-files', params: { item: this.token } })
+      return this.$router.push({
+        name: 'files-public-link',
+        params: { driveAliasAndItem: `public/${this.token}` }
+      })
     }
   }
 })

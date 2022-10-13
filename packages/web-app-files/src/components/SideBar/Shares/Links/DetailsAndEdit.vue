@@ -27,14 +27,11 @@
             <oc-button
               :id="`files-role-${roleOption.label.toLowerCase()}`"
               :class="{
-                selected: parseInt(link.permissions) === roleOption.bitmask(false),
-                'oc-background-primary-gradient':
-                  parseInt(link.permissions) === roleOption.bitmask(false)
+                selected: link.permissions === roleOption.bitmask(false),
+                'oc-background-primary-gradient': link.permissions === roleOption.bitmask(false)
               }"
               appearance="raw"
-              :variation="
-                parseInt(link.permissions) === roleOption.bitmask(false) ? 'inverse' : 'passive'
-              "
+              :variation="link.permissions === roleOption.bitmask(false) ? 'inverse' : 'passive'"
               justify-content="space-between"
               class="oc-p-s"
               @click="
@@ -58,10 +55,7 @@
                 </span>
               </span>
               <span class="oc-flex">
-                <oc-icon
-                  v-if="parseInt(link.permissions) === roleOption.bitmask(false)"
-                  name="check"
-                />
+                <oc-icon v-if="link.permissions === roleOption.bitmask(false)" name="check" />
               </span>
             </oc-button>
           </li>
@@ -181,11 +175,18 @@
 <script lang="ts">
 import { basename } from 'path'
 import { DateTime } from 'luxon'
-import { mapActions } from 'vuex'
-import { createLocationSpaces, isLocationSpacesActive } from '../../../../router'
-import { LinkShareRoles } from 'web-client/src/helpers/share'
+import { mapActions, mapGetters } from 'vuex'
+import { createLocationSpaces } from '../../../../router'
+import {
+  linkRoleInternalFile,
+  linkRoleInternalFolder,
+  LinkShareRoles
+} from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/runtime-core'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
+import { PropType } from '@vue/composition-api'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -218,6 +219,15 @@ export default defineComponent({
     link: {
       type: Object,
       required: true
+    },
+    file: {
+      type: Object,
+      required: true
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -226,15 +236,16 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapGetters('runtime/spaces', ['spaces']),
+    currentLinkRole() {
+      return LinkShareRoles.getByBitmask(this.link.permissions, this.isFolderShare)
+    },
     currentLinkRoleDescription() {
-      return LinkShareRoles.getByBitmask(
-        parseInt(this.link.permissions),
-        this.isFolderShare
-      ).description(false)
+      return this.currentLinkRole.description(false)
     },
 
     currentLinkRoleLabel() {
-      return LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).label
+      return this.currentLinkRole.label
     },
 
     editOptions() {
@@ -304,7 +315,7 @@ export default defineComponent({
           })
         }
       }
-      if (!this.isPasswordEnforced && !this.link.password) {
+      if (!this.isPasswordEnforced && !this.link.password && !this.isAliasLink) {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),
@@ -327,20 +338,19 @@ export default defineComponent({
     },
 
     viaRouterParams() {
-      const viaPath = this.link.path
-      const locationName = isLocationSpacesActive(this.$router, 'files-spaces-project')
-        ? 'files-spaces-project'
-        : 'files-spaces-personal'
+      const matchingSpace = (this.space ||
+        this.spaces.find((space) => space.id === this.file.storageId)) as SpaceResource
+      if (!matchingSpace) {
+        return {}
+      }
 
-      return createLocationSpaces(locationName, {
-        params: {
-          item: viaPath || '/',
-          storageId: this.$route.params.storageId
-        },
-        query: {
-          scrollTo: basename(viaPath)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(matchingSpace, {
+          path: this.link.path,
+          fileId: this.link.file.source
+        })
+      )
     },
 
     localExpirationDate() {
@@ -378,6 +388,10 @@ export default defineComponent({
 
     passwortProtectionTooltip() {
       return this.$gettext('This link is password-protected')
+    },
+
+    isAliasLink() {
+      return [linkRoleInternalFolder, linkRoleInternalFile].includes(this.currentLinkRole)
     }
   },
   watch: {

@@ -1,0 +1,7 @@
+Bugfix: Disable copy/move overwrite on self
+
+We've disabled copy/move if the file is moved/copied in the exact same location as before and the user selects overwrite.
+Previously this caused an network error.
+
+https://github.com/owncloud/web/pull/7652
+https://github.com/owncloud/web/issues/6892

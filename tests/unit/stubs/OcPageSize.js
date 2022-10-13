@@ -1,5 +1,5 @@
 export default (vue) => {
-  return vue.component('oc-page-size', {
+  return vue.component('OcPageSize', {
     model: { prop: 'value', event: 'input' },
     template: `<select name="size">
       <option value="100">100</option>

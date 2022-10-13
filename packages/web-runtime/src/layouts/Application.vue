@@ -9,12 +9,15 @@
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
         <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
-        <router-view
-          v-for="name in ['default', 'app', 'fullscreen']"
-          :key="`router-view-${name}`"
-          class="app-content oc-width-1-1"
-          :name="name"
-        />
+        <app-loading-spinner v-if="areSpacesLoading" />
+        <template v-else>
+          <router-view
+            v-for="name in ['default', 'app', 'fullscreen']"
+            :key="`router-view-${name}`"
+            class="app-content oc-width-1-1"
+            :name="name"
+          />
+        </template>
       </div>
     </div>
     <div class="snackbars">
@@ -26,15 +29,24 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
+import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
-import { useActiveApp, useRoute, useStore, useUserContext } from 'web-pkg/src/composables'
+import {
+  useActiveApp,
+  useRoute,
+  useSpacesLoading,
+  useStore,
+  useUserContext
+} from 'web-pkg/src/composables'
 import { watch, defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
+  name: 'ApplicationLayout',
   components: {
+    AppLoadingSpinner,
     MessageBar,
     TopBar,
     SidebarNav,
@@ -62,6 +74,7 @@ export default defineComponent({
       { immediate: true }
     )
     return {
+      ...useSpacesLoading({ store }),
       activeApp: useActiveApp(),
       isUserContext: useUserContext({ store })
     }

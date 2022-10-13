@@ -1,0 +1,6 @@
+Bugfix: Search bar on small screens
+
+We've fixed the display of the search bar on small screens.
+
+https://github.com/owncloud/web/pull/7675
+https://github.com/owncloud/web/issues/7617

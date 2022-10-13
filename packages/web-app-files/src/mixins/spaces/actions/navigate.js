@@ -1,4 +1,5 @@
 import { createLocationSpaces, isLocationTrashActive } from '../../../router'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {
@@ -15,7 +16,10 @@ export default {
             if (resources.length) {
               return false
             }
-            return isLocationTrashActive(this.$router, 'files-trash-spaces-project')
+            if (!isLocationTrashActive(this.$router, 'files-trash-generic')) {
+              return false
+            }
+            return this.space?.driveType !== 'personal'
           },
           componentType: 'button',
           class: 'oc-files-actions-navigate-trigger'
@@ -25,12 +29,14 @@ export default {
   },
   methods: {
     $_navigate_space_trigger() {
-      this.$router.push(
-        createLocationSpaces('files-spaces-project', {
-          params: {
-            storageId: this.$router.currentRoute.params.storageId
-          }
-        })
+      if (!this.space) {
+        return
+      }
+      return this.$router.push(
+        createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(this.space, { fileId: this.space.fileId })
+        )
       )
     }
   }

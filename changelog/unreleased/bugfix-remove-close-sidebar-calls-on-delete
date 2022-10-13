@@ -1,0 +1,6 @@
+Bugfix: Remove the "close sidebar"-calls on delete
+
+We've removed the "close sidebar"-calls when deleting a resource as the mutations are not available as well as not needed anymore.
+
+https://github.com/owncloud/web/issues/7699
+https://github.com/owncloud/web/pull/7733

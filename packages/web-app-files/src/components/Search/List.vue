@@ -23,7 +23,6 @@
           class="files-table"
           :class="{ 'files-table-squashed': false }"
           :resources="paginatedResources"
-          :target-route="resourceTargetLocation"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :has-actions="true"
@@ -32,7 +31,11 @@
           @rowMounted="rowMounted"
         >
           <template #contextMenu="{ resource }">
-            <context-actions v-if="isResourceInSelection(resource)" :items="selectedResources" />
+            <context-actions
+              v-if="isResourceInSelection(resource)"
+              :items="selectedResources"
+              :space="getSpace(resource)"
+            />
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
@@ -52,7 +55,11 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" />
+    <side-bar
+      :open="sideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedResourceSpace"
+    />
   </div>
 </template>
 
@@ -61,7 +68,6 @@ import { useResourcesViewDefaults } from '../../composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from '../../constants'
-import { createLocationSpaces } from '../../router'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import ResourceTable from '../FilesList/ResourceTable.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
@@ -75,9 +81,12 @@ import MixinFileActions from '../../mixins/fileActions'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
+import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { useStore } from 'web-pkg/src/composables'
+import { configurationManager } from 'web-pkg/src/configuration'
+import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -108,12 +117,19 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const getSpace = (resource: Resource): SpaceResource => {
+      if (resource.shareId) {
+        return buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: basename(resource.shareRoot),
+          serverUrl: configurationManager.serverUrl
+        })
+      }
+      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
+    }
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-
-      resourceTargetLocation: createLocationSpaces('files-spaces-personal', {
-        params: { storageId: store.getters.user.id }
-      })
+      getSpace
     }
   },
   computed: {

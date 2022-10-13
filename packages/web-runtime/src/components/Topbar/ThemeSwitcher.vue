@@ -7,7 +7,7 @@
     variation="inverse"
     @click="toggleTheme"
   >
-    <span class="oc-visible@s" :aria-label="switchLabel" v-text="switchText" />
+    <span class="oc-visible@s" :aria-label="switchLabel" />
     <oc-icon :name="switchIcon" fill-type="line" />
   </oc-button>
 </template>
@@ -50,9 +50,6 @@ export default {
     },
     switchLabel() {
       return this.$gettext('Currently used theme')
-    },
-    switchText() {
-      return this.isLightTheme ? this.$gettext('Light mode') : this.$gettext('Dark mode')
     }
   },
   methods: {

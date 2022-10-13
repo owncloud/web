@@ -26,7 +26,10 @@
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
-      <space-info v-if="highlightedFileIsSpace" class="sidebar-panel__space_info" />
+      <space-info
+        v-if="isSingleResource && highlightedFileIsSpace"
+        class="sidebar-panel__space_info"
+      />
     </template>
   </SideBar>
 </template>
@@ -38,26 +41,25 @@ import FileInfo from './FileInfo.vue'
 import SpaceInfo from './SpaceInfo.vue'
 import { Panel } from 'web-pkg/src/components/sideBar/'
 
-import { DavProperties } from 'web-pkg/src/constants'
-import { buildResource } from '../../helpers/resources'
 import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
-  isLocationSpacesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
+  useClientService,
   usePublicLinkPassword,
-  useRouteParam,
   useStore
 } from 'web-pkg/src/composables'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
+import { SpaceResource } from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, SideBar },
@@ -65,7 +67,8 @@ export default defineComponent({
   provide() {
     return {
       displayedItem: computed(() => this.selectedFile),
-      activePanel: computed(() => this.activePanel)
+      activePanel: computed(() => this.activePanel),
+      displayedSpace: computed(() => this.space)
     }
   },
 
@@ -76,13 +79,18 @@ export default defineComponent({
     },
     activePanel: {
       type: String,
+      required: false,
+      default: null
+    },
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
       default: null
     }
   },
 
   setup() {
     const store = useStore()
-    const currentStorageId = useRouteParam('storageId')
 
     const closeSideBar = () => {
       bus.publish(SideBarEventTopics.close)
@@ -104,9 +112,9 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.close)
     }
 
+    const { webdav } = useClientService()
+
     return {
-      isSpacesProjectsLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-projects'),
-      isSpacesShareLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-share'),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       isSharedWithOthersLocation: useActiveLocation(
         isLocationSharesActive,
@@ -115,14 +123,15 @@ export default defineComponent({
       isSharedViaLinkLocation: useActiveLocation(isLocationSharesActive, 'files-shares-via-link'),
       isFavoritesLocation: useActiveLocation(isLocationCommonActive, 'files-common-favorites'),
       isSearchLocation: useActiveLocation(isLocationCommonActive, 'files-common-search'),
-      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-files'),
+      isPublicFilesLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
+      isTrashLocation: useActiveLocation(isLocationTrashActive, 'files-trash-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       publicLinkPassword: usePublicLinkPassword({ store }),
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
       focusSideBar,
-      currentStorageId
+      webdav
     }
   },
 
@@ -187,107 +196,61 @@ export default defineComponent({
     },
     isRootFolder() {
       const pathSegments = this.highlightedFile?.path?.split('/').filter(Boolean) || []
-      if (this.isPublicFilesLocation) {
-        // root node of a public link has the public link token as path
-        // root path `/` like for personal home doesn't exist for public links
-        return pathSegments.length === 1
-      }
       if (this.isSharedWithMeLocation || this.isSearchLocation) {
         return !this.highlightedFile
       }
-      if (this.hasShareJail && this.isSpacesShareLocation) {
+      if (this.hasShareJail && this.space?.driveType === 'share') {
         return false
       }
       return !pathSegments.length
     },
-    highlightedFileThumbnail() {
-      return this.highlightedFile?.thumbnail
-    },
-    highlightedFileFavorite() {
-      return this.highlightedFile?.starred
-    },
     highlightedFileIsSpace() {
       return this.highlightedFile?.type === 'space'
+    },
+    sharesLoadingDisabledOnCurrentRoute() {
+      return this.isPublicFilesLocation || this.isTrashLocation
     }
   },
   watch: {
-    highlightedFile(newFile, oldFile) {
-      if (!this.isSingleResource) {
-        return
-      }
+    highlightedFile: {
+      handler(newFile, oldFile) {
+        const noChanges = oldFile && isEqual(newFile, oldFile)
+        if (!this.isSingleResource || !this.highlightedFile || noChanges) {
+          return
+        }
 
-      if (oldFile && isEqual(newFile, oldFile)) {
-        return
-      }
-
-      // FIXME: isSpacesProjectsLocation resolves "true" within a project?!
-      const isSpacesProjectsLocation = this.isSpacesProjectsLocation && !this.currentStorageId
-      const loadShares =
-        !!oldFile ||
-        isSpacesProjectsLocation ||
-        this.isSharedWithMeLocation ||
-        this.isSharedWithOthersLocation ||
-        this.isSharedViaLinkLocation ||
-        this.isSearchLocation ||
-        this.isFavoritesLocation
-      this.fetchFileInfo(loadShares)
-    },
-
-    highlightedFileThumbnail(thumbnail) {
-      this.$set(this.selectedFile, 'thumbnail', thumbnail)
-    },
-
-    highlightedFileFavorite(starred) {
-      this.$set(this.selectedFile, 'starred', starred)
-    }
-  },
-  async created() {
-    if (!this.areMultipleSelected) {
-      await this.fetchFileInfo(false)
+        const loadShares =
+          !this.sharesLoadingDisabledOnCurrentRoute && (!!oldFile || !this.currentFolder)
+        this.fetchFileInfo(loadShares)
+      },
+      deep: true
     }
   },
   methods: {
     ...mapActions('Files', ['loadSharesTree']),
 
     async fetchFileInfo(loadShares) {
-      if (!this.highlightedFile) {
-        this.selectedFile = {}
-        return
-      }
-
-      if (
-        isLocationTrashActive(this.$router, 'files-trash-personal') ||
-        isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
-        this.highlightedFileIsSpace
-      ) {
-        if (loadShares) {
-          this.loadShares()
-        }
-        this.selectedFile = { ...this.highlightedFile }
-        return
-      }
-
       this.loading = true
-      try {
-        let item
-        if (isLocationPublicActive(this.$router, 'files-public-files')) {
-          item = await this.$client.publicFiles.getFileInfo(
-            this.highlightedFile.webDavPath,
-            this.publicLinkPassword,
-            DavProperties.PublicLink
-          )
-        } else {
-          item = await this.$client.files.fileInfo(
-            this.highlightedFile.webDavPath,
-            DavProperties.Default
-          )
-        }
+      const highlightedFileIsShare =
+        this.isSharedWithMeLocation ||
+        this.isSharedWithOthersLocation ||
+        this.isSharedViaLinkLocation
 
-        this.selectedFile = buildResource(item)
-        this.$set(this.selectedFile, 'thumbnail', this.highlightedFile.thumbnail || null)
-        if (loadShares) {
-          this.loadShares()
-        }
+      if (loadShares) {
+        this.loadShares()
+      }
+
+      if (!highlightedFileIsShare) {
+        this.selectedFile = { ...this.highlightedFile }
+        this.loading = false
+        return
+      }
+
+      // shared resources look different, hence we need to fetch the actual resource here
+      try {
+        this.selectedFile = await (this.webdav as WebDAV).getFileInfo(this.space, {
+          path: this.highlightedFile.path
+        })
       } catch (error) {
         this.selectedFile = { ...this.highlightedFile }
         console.error(error)

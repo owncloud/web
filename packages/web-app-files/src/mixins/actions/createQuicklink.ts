@@ -39,8 +39,9 @@ export default {
       const [resource] = resources
       await createQuicklink({
         resource,
-        storageId: this.$route.params.storageId || resource?.fileId || resource?.id,
-        store
+        storageId: this.space?.id || resource?.fileId || resource?.id,
+        store,
+        $gettext: this.$gettext
       })
 
       bus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')

@@ -25,7 +25,7 @@ export default {
           isEnabled: ({ resources }) => {
             if (
               !isLocationSharesActive(this.$router, 'files-shares-with-me') &&
-              !isLocationSpacesActive(this.$router, 'files-spaces-share')
+              !isLocationSpacesActive(this.$router, 'files-spaces-generic')
             ) {
               return false
             }
@@ -34,8 +34,10 @@ export default {
             }
 
             if (
-              isLocationSpacesActive(this.$router, 'files-spaces-share') &&
-              (resources.length > 1 || resources[0].path !== '/')
+              isLocationSpacesActive(this.$router, 'files-spaces-generic') &&
+              (this.space?.driveType !== 'share' ||
+                resources.length > 1 ||
+                resources[0].path !== '/')
             ) {
               return false
             }
@@ -85,7 +87,7 @@ export default {
       if (errors.length === 0) {
         this.resetFileSelection()
 
-        if (isLocationSpacesActive(this.$router, 'files-spaces-share')) {
+        if (isLocationSpacesActive(this.$router, 'files-spaces-generic')) {
           this.showMessage({
             title: this.$ngettext(
               'The selected share was declined successfully',

@@ -19,7 +19,7 @@ const availableRoleOptions = LinkShareRoles.list(false, true, true)
 const exampleLink = {
   name: 'Example link',
   url: 'https://some-url.com/abc',
-  permissions: '1'
+  permissions: 1
 }
 
 describe('DetailsAndEdit component', () => {
@@ -59,6 +59,7 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
     directives: {
       'oc-tooltip': jest.fn()
     },
+    props: { file: {} },
     stubs: {
       ...stubs,
       'oc-datepicker': true

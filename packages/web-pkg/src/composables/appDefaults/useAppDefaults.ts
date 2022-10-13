@@ -1,5 +1,5 @@
 import { computed, unref, Ref } from '@vue/composition-api'
-import { useRouter, useRoute } from '../router'
+import { useRouter, useRoute, useRouteParam } from '../router'
 import { useStore } from '../store'
 import { ClientService } from '../../services'
 import { basename } from 'path'
@@ -16,9 +16,11 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { usePublicLinkPassword, usePublicLinkContext, useRequest } from '../authContext'
+import { usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
+import { useDriveResolver } from '../driveResolver'
+import { urlJoin } from 'web-pkg/src/utils'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -46,13 +48,27 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const applicationId = options.applicationId
 
   const isPublicLinkContext = usePublicLinkContext({ store })
-  const publicLinkPassword = usePublicLinkPassword({ store })
 
+  const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+  const { space, item, itemId } = useDriveResolver({
+    store,
+    driveAliasAndItem
+  })
   const currentFileContext = computed((): FileContext => {
-    const path = `/${unref(currentRoute).params.filePath?.split('/').filter(Boolean).join('/')}`
+    let path
+    if (unref(space)) {
+      path = urlJoin(unref(space).webDavPath, unref(item))
+    } else {
+      // deprecated.
+      path = urlJoin(unref(currentRoute).params.filePath)
+    }
 
     return {
       path,
+      driveAliasAndItem: unref(driveAliasAndItem),
+      space: unref(space),
+      item: unref(item),
+      itemId: unref(itemId),
       fileName: basename(path),
       routeName: queryItemAsString(unref(currentRoute).query[contextRouteNameKey]),
       ...contextQueryToFileContextProps(unref(currentRoute).query)
@@ -73,16 +89,12 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
     ...useAppFileHandling({
-      clientService,
-      isPublicLinkContext,
-      publicLinkPassword
+      clientService
     }),
     ...useAppFolderHandling({
       clientService,
       store,
-      currentRoute,
-      isPublicLinkContext,
-      publicLinkPassword
+      currentRoute
     }),
     ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
   }

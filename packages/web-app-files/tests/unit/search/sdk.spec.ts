@@ -5,11 +5,14 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
 const searchMock = jest.fn()
-jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(() => ({
-  files: {
-    search: searchMock
-  }
-}))
+jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
+  () =>
+    ({
+      files: {
+        search: searchMock
+      } as any
+    } as any)
+)
 
 jest.mock('../../../src/helpers/resources', () => ({
   buildResource: (v) => v
@@ -20,6 +23,7 @@ localVue.use(Vuex)
 
 const store = new Vuex.Store({
   getters: {
+    user: () => ({ id: 1 }),
     capabilities: jest.fn(() => ({
       dav: {
         reports: ['search-files']

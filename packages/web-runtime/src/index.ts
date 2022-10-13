@@ -27,6 +27,14 @@ import {
   announcePermissionManager,
   startSentry
 } from './container'
+import {
+  buildPublicSpaceResource,
+  buildSpace,
+  isPublicSpaceResource,
+  Resource
+} from 'web-client/src/helpers'
+import { WebDAV } from 'web-client/src/webdav'
+import { DavProperty } from 'web-pkg/src/constants'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -82,19 +90,84 @@ export const renderSuccess = (): void => {
     (state, getters) => {
       return getters['runtime/auth/isUserContextReady']
     },
-    () => {
+    async (userContextReady) => {
+      if (!userContextReady) {
+        return
+      }
+      const clientService = instance.$clientService
+
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
-        const clientService = instance.$clientService
         const graphClient = clientService.graphAuthenticated(
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        return store.dispatch('runtime/spaces/loadSpaces', { graphClient })
       }
+
+      // Spaces feature not available. Create a virtual personal space
+      const user = store.getters.user
+      const space = buildSpace({
+        id: user.id,
+        driveAlias: `personal/${user.id}`,
+        driveType: 'personal',
+        name: user.id,
+        webDavPath: `/files/${user.id}`,
+        serverUrl: configurationManager.serverUrl
+      })
+      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(
+        space,
+        {
+          path: ''
+        },
+        { davProperties: [DavProperty.FileId] }
+      )
+      space.fileId = personalHomeInfo.fileId
+      store.commit('runtime/spaces/ADD_SPACES', [space])
+      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },
     {
       immediate: true
+    }
+  )
+  store.watch(
+    (state, getters) => {
+      return getters['runtime/auth/isPublicLinkContextReady']
+    },
+    (publicLinkContextReady) => {
+      if (!publicLinkContextReady) {
+        return
+      }
+      // Create virtual space for public link
+      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
+      const space = buildPublicSpaceResource({
+        id: publicLinkToken,
+        ...(publicLinkPassword && { publicLinkPassword }),
+        serverUrl: configurationManager.serverUrl
+      })
+      store.commit('runtime/spaces/ADD_SPACES', [space])
+      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
+    },
+    {
+      immediate: true
+    }
+  )
+  store.watch(
+    // only needed if a public link gets re-resolved with a changed password prop (changed or removed).
+    // don't need to set { immediate: true } on the watcher.
+    (state, getters) => {
+      return getters['runtime/auth/publicLinkPassword']
+    },
+    (publicLinkPassword: string | undefined) => {
+      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const space = store.getters['runtime/spaces/spaces'].find((space: Resource) => {
+        return isPublicSpaceResource(space) && space.id === publicLinkToken
+      })
+      if (!space) {
+        return
+      }
+      space.publicLinkPassword = publicLinkPassword
     }
   )
 }

@@ -3,7 +3,6 @@ import PreviewComponent from '../../components/Search/Preview.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from '../../helpers/resources'
 import { Cache } from 'web-pkg/src/helpers/cache'
-import { debounce } from 'web-pkg/src/decorator'
 import { Component } from 'vue'
 import VueRouter from 'vue-router'
 import { DavProperties } from 'web-pkg/src/constants'
@@ -25,10 +24,6 @@ export default class Preview implements SearchPreview {
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
   }
 
-  // we need to change the architecture of oc-sdk to be able to use cancelTokens
-  // every search requests hammers the backend even if it's not needed anymore..
-  // for now we worked around it by using a cache mechanism and make use of debouncing
-  @debounce(100)
   public async search(term: string): Promise<SearchResult> {
     if (!term) {
       return {
@@ -49,6 +44,10 @@ export default class Preview implements SearchPreview {
     )
     const resources = results.reduce((acc, result) => {
       const resource = buildResource(result)
+      // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+      if (!resource.storageId) {
+        resource.storageId = this.store.getters.user.id
+      }
 
       // filter results if hidden files shouldn't be shown due to settings
       if (!resource.name.startsWith('.') || areHiddenFilesShown) {

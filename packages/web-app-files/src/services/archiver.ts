@@ -1,7 +1,8 @@
 import { major, rcompare } from 'semver'
 import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
-
+import { urlJoin } from 'web-pkg/src/utils'
+import { configurationManager } from 'web-pkg/src/configuration'
 /**
  * Archiver struct within the capabilities as defined in reva
  * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
@@ -105,10 +106,7 @@ export class ArchiverService {
     if (/^https?:\/\//i.test(this.capability.archiver_url)) {
       return this.capability.archiver_url
     }
-    return [
-      this.serverUrl.replace(/\/+$/, ''),
-      this.capability.archiver_url.replace(/^\/+/, '')
-    ].join('/')
+    return urlJoin(configurationManager.serverUrl, this.capability.archiver_url)
   }
 }
 

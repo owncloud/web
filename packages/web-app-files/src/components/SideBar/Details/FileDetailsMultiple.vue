@@ -16,6 +16,10 @@
           <th scope="col" class="oc-pr-s" v-text="foldersText" />
           <td v-text="foldersCount" />
         </tr>
+        <tr v-if="showSpaceCount" data-testid="spacesCount">
+          <th scope="col" class="oc-pr-s" v-text="spacesText" />
+          <td v-text="spacesCount" />
+        </tr>
         <tr data-testid="size">
           <th scope="col" class="oc-pr-s" v-text="sizeText" />
           <td v-text="sizeValue" />
@@ -31,6 +35,9 @@ import { formatFileSize } from 'web-pkg/src/helpers'
 
 export default defineComponent({
   name: 'FileDetailsMultiple',
+  props: {
+    showSpaceCount: { type: Boolean, default: false }
+  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     selectedFilesCount() {
@@ -67,6 +74,12 @@ export default defineComponent({
     },
     foldersText() {
       return this.$gettext('Folders')
+    },
+    spacesCount() {
+      return this.selectedFiles.filter((i) => i.type === 'space').length
+    },
+    spacesText() {
+      return this.$gettext('Spaces')
     },
     detailsTableLabel() {
       return this.$gettext('Overview of the information about the selected files')

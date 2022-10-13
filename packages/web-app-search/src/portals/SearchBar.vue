@@ -1,5 +1,11 @@
 <template>
-  <div v-if="availableProviders.length" id="files-global-search" data-custom-key-bindings="true">
+  <div
+    v-if="availableProviders.length"
+    id="files-global-search"
+    ref="searchBar"
+    class="oc-flex"
+    data-custom-key-bindings="true"
+  >
     <oc-search-bar
       id="files-global-search-bar"
       ref="search"
@@ -7,13 +13,27 @@
       :type-ahead="true"
       :placeholder="searchLabel"
       :button-hidden="true"
+      :show-cancel-button="showCancelButton"
+      cancel-button-variation="inverse"
+      :cancel-handler="cancelSearch"
       @input="updateTerm"
+      @clear="onClear"
       @click.native="term && $refs.optionsDrop.show()"
       @keyup.native.esc="$refs.optionsDrop.hide()"
       @keyup.native.up="onKeyUpUp"
       @keyup.native.down="onKeyUpDown"
       @keyup.native.enter="onKeyUpEnter"
     />
+    <oc-button
+      v-oc-tooltip="$gettext('Display search bar')"
+      :aria-label="$gettext('Click to display and focus the search bar')"
+      class="mobile-search-btn oc-mr-s"
+      appearance="raw"
+      variation="inverse"
+      @click="showSearchBar"
+    >
+      <oc-icon name="search" fill-type="line"></oc-icon>
+    </oc-button>
     <oc-drop
       id="files-global-search-options"
       ref="optionsDrop"
@@ -22,7 +42,7 @@
     >
       <oc-list class="oc-list-divider">
         <li
-          v-if="$asyncComputed.searchResults.updating"
+          v-if="loading"
           class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
         >
           <oc-spinner size="small" :aria-hidden="true" aria-label="" />
@@ -35,9 +55,10 @@
           <li v-for="provider in displayProviders" :key="provider.id" class="provider">
             <oc-list>
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
-                <span>{{ provider.displayName }}</span>
+                <span class="display-name">{{ provider.displayName }}</span>
                 <span>
                   <router-link
+                    class="more-results"
                     :to="getMoreResultsLinkForProvider(provider)"
                     @click.native="$refs.optionsDrop.hide()"
                   >
@@ -56,6 +77,7 @@
               >
                 <component
                   :is="provider.previewSearch.component"
+                  class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
                   @click.native="$refs.optionsDrop.hide()"
@@ -72,28 +94,30 @@
 
 <script>
 import { providerStore } from '../service'
-import truncate from 'lodash-es/truncate'
+
 import { createLocationCommon } from 'files/src/router'
 import Mark from 'mark.js'
+import debounce from 'lodash-es/debounce'
+import { bus } from 'web-pkg/src/instance'
 
 export default {
   name: 'SearchBar',
 
-  filters: {
-    truncate
-  },
-
   data() {
     return {
+      resizeObserver: new ResizeObserver(this.onResize),
+      showCancelButton: false,
       term: '',
       activeProvider: undefined,
       optionsVisible: false,
       markInstance: null,
       activePreviewIndex: null,
-      providerStore
+      debouncedSearch: undefined,
+      providerStore,
+      loading: false,
+      searchResults: []
     }
   },
-
   computed: {
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
@@ -116,17 +140,22 @@ export default {
   },
 
   watch: {
+    term() {
+      this.debouncedSearch(this)
+    },
     searchResults() {
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
-        this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
-        this.markInstance.unmark()
-        this.markInstance.mark(this.term, {
-          element: 'span',
-          className: 'highlight-mark',
-          exclude: ['.provider-details *']
-        })
+        if (this.$refs.optionsDrop) {
+          this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
+          this.markInstance.unmark()
+          this.markInstance.mark(this.term, {
+            element: 'span',
+            className: 'highlight-mark',
+            exclude: ['.provider-details *']
+          })
+        }
       })
     },
     $route: {
@@ -135,7 +164,7 @@ export default {
           if (!this.availableProviders.length) {
             return
           }
-          const routeTerm = r.query.term
+          const routeTerm = r?.query?.term
           const input = this.$el.getElementsByTagName('input')[0]
           if (!input || !routeTerm) {
             return
@@ -147,32 +176,50 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.debouncedSearch = debounce(this.search, 200)
 
-  asyncComputed: {
-    searchResults: {
-      async get() {
-        if (!this.term) {
-          return []
-        }
+    const hideOptionsDropEvent = bus.subscribe('app.search.options-drop.hide', () => {
+      this.$refs.optionsDrop.hide()
+    })
 
-        const searchResult = []
+    this.$on('beforeDestroy', () => {
+      bus.unsubscribe('app.search.options-drop.hide', hideOptionsDropEvent)
+    })
+  },
 
-        for (const availableProvider of this.availableProviders) {
-          if (availableProvider.previewSearch?.available) {
-            searchResult.push({
-              providerId: availableProvider.id,
-              result: await availableProvider.previewSearch.search(this.term)
-            })
-          }
-        }
+  mounted() {
+    this.resizeObserver.observe(this.$refs.searchBar)
+  },
 
-        return searchResult
-      },
-      watch: ['term']
-    }
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.searchBar)
   },
 
   methods: {
+    async search() {
+      this.searchResults = []
+      if (!this.term) {
+        return
+      }
+
+      this.loading = true
+
+      for (const availableProvider of this.availableProviders) {
+        if (availableProvider.previewSearch?.available) {
+          this.searchResults.push({
+            providerId: availableProvider.id,
+            result: await availableProvider.previewSearch.search(this.term)
+          })
+        }
+      }
+
+      this.loading = false
+    },
+    onClear() {
+      this.term = ''
+      this.$refs.optionsDrop.hide()
+    },
     onKeyUpEnter() {
       this.$refs.optionsDrop.hide()
 
@@ -222,6 +269,10 @@ export default {
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
+      if (typeof this.$refs.optionsDrop.$el.scrollTo !== 'function') {
+        return
+      }
+
       const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
 
       this.$refs.optionsDrop.$el.scrollTo(
@@ -268,6 +319,32 @@ export default {
     isPreviewElementActive(searchId) {
       const previewElements = this.$refs.optionsDrop.$el.querySelectorAll('.preview')
       return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
+    },
+    showSearchBar() {
+      document.getElementById('files-global-search-bar').style.visibility = 'visible'
+      document.getElementsByClassName('oc-search-input')[0].focus()
+      this.showCancelButton = true
+    },
+    cancelSearch() {
+      document.getElementById('files-global-search-bar').style.visibility = 'hidden'
+      this.showCancelButton = false
+    },
+    onResize() {
+      const searchBarEl = document.getElementById('files-global-search-bar')
+      const optionDropVisible = !!document.querySelector('.tippy-box[data-state="visible"]')
+
+      if (window.innerWidth > 639) {
+        searchBarEl.style.visibility = 'visible'
+        this.showCancelButton = false
+      } else {
+        if (optionDropVisible) {
+          searchBarEl.style.visibility = 'visible'
+          this.showCancelButton = true
+        } else {
+          searchBarEl.style.visibility = 'hidden'
+          this.showCancelButton = false
+        }
+      }
     }
   }
 }
@@ -275,11 +352,18 @@ export default {
 
 <style lang="scss">
 #files-global-search {
+  .mobile-search-btn {
+    display: none;
+    @media (max-width: 639px) {
+      display: inline-flex;
+    }
+  }
+
   .oc-search-input {
     background-color: var(--oc-color-input-bg);
     transition: 0s;
 
-    @media (max-width: 959px) {
+    @media (max-width: 639px) {
       border: none;
       display: inline;
     }
@@ -288,42 +372,29 @@ export default {
   #files-global-search-bar {
     width: 452px;
     @media (max-width: 959px) {
-      min-width: 2.5rem;
-      width: 2.5rem;
-      background-color: var(--oc-color-swatch-brand-default);
+      width: 300px;
+    }
 
-      input,
-      .oc-width-expand {
-        width: 2.5rem;
-      }
+    @media (max-width: 639px) {
+      visibility: hidden;
+      background-color: var(--oc-color-swatch-brand-default);
+      position: absolute;
+      height: 48px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 0;
+      width: 95vw !important;
 
       .oc-search-input-icon {
-        padding: 0 var(--oc-space-large);
+        padding: 0 var(--oc-space-xlarge);
       }
 
-      .oc-search-clear {
-        right: var(--oc-space-medium);
-      }
-
-      &:focus-within {
-        position: absolute;
-        height: 60px;
-        left: var(--oc-space-medium);
-        margin: 0 auto;
-        top: 0;
-        width: 100vw !important;
-
-        .oc-search-input-icon {
-          padding: 0 var(--oc-space-xlarge);
-        }
-      }
-
-      &:focus-within input,
+      input,
       input:not(:placeholder-shown) {
         background-color: var(--oc-color-input-bg);
         border: 1px solid var(--oc-color-input-border);
         z-index: var(--oc-z-index-modal);
-        width: 95%;
         margin: 0 auto;
       }
     }
@@ -343,7 +414,11 @@ export default {
       font-weight: 600;
     }
 
-    @media (max-width: 959px) {
+    @media (max-width: 969px) {
+      width: 300px;
+    }
+
+    @media (max-width: 639px) {
       width: 93vw !important;
     }
 

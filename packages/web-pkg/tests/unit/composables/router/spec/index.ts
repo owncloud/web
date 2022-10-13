@@ -13,8 +13,8 @@ export const createWrapper = (
 ): Wrapper<Vue> =>
   mount(
     defineComponent({
-      template: `<div>${template}</div>`,
-      setup
+      setup,
+      template: `<div>${template}</div>`
     }),
     {
       localVue,

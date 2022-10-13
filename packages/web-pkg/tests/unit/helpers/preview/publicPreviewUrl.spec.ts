@@ -23,13 +23,13 @@ describe('publicPreviewUrl', () => {
     expect(params.get('c')).toBe('etag')
     expect(params.get('preview')).toBe('1')
     expect(params.get('scalingup')).toBe('0')
-    expect(mockAxios.head).toBeCalledTimes(1)
+    expect(mockAxios.head).toHaveBeenCalledTimes(1)
 
     publicPreviewUrlPromise = publicPreviewUrl(defaultOptions)
     mockAxios.mockResponse({ data: undefined, status: 404 })
 
     url = await publicPreviewUrlPromise
     expect(url).toBeFalsy()
-    expect(mockAxios.head).toBeCalledTimes(2)
+    expect(mockAxios.head).toHaveBeenCalledTimes(2)
   })
 })

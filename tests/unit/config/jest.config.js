@@ -15,7 +15,13 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
     '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1',
     '@vue/composition-api': '<rootDir>/node_modules/@vue/composition-api',
-    'core-js': '<rootDir>/node_modules/core-js'
+    'core-js': '<rootDir>/node_modules/core-js',
+
+    // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
+    '@uppy/core': '<rootDir>tests/unit/mocks/uppy',
+    '@uppy/xhr-upload': '<rootDir>tests/unit/mocks/uppy',
+    '@uppy/drop-target': '<rootDir>tests/unit/mocks/uppy',
+    '@uppy/tus': '<rootDir>tests/unit/mocks/uppy'
   },
   testEnvironment: 'jsdom',
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es|@uppy)'],
@@ -27,5 +33,6 @@ module.exports = {
     '<rootDir>/packages/**/src/**/*.{js,ts,vue}',
     '!<rootDir>/**/node_modules/**'
   ],
-  testMatch: ['**/*.spec.{js,ts}']
+  testMatch: ['**/*.spec.{js,ts}'],
+  clearMocks: true
 }

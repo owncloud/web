@@ -8,7 +8,7 @@ beforeEach(() => {
 })
 
 const clientService = new ClientService()
-clientService.owncloudSdk = {}
+clientService.owncloudSdk = {} as any
 
 const defaultOptions = {
   clientService,
@@ -21,7 +21,7 @@ describe('avatarUrl', () => {
   it('throws an error', async () => {
     const avatarUrlPromise = avatarUrl(defaultOptions)
     mockAxios.mockResponse({ status: 404, data: undefined, statusText: 'error' })
-    await expect(avatarUrlPromise).rejects.toThrowError(new Error('error'))
+    await expect(avatarUrlPromise).rejects.toThrow(new Error('error'))
     expect(mockAxios.head).toHaveBeenCalledWith(buildUrl(defaultOptions), expect.anything())
   })
 
@@ -48,21 +48,21 @@ describe('avatarUrl', () => {
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
     await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))
-    expect(mockAxios.head).toBeCalledTimes(1)
+    expect(mockAxios.head).toHaveBeenCalledTimes(1)
 
     const avatarUrlPromiseCached = avatarUrl(defaultOptions, true)
     await expect(avatarUrlPromiseCached).resolves.toBe(buildUrl(defaultOptions))
-    expect(mockAxios.head).toBeCalledTimes(1)
+    expect(mockAxios.head).toHaveBeenCalledTimes(1)
 
     const avatarUrlPromiseOtherSize = avatarUrl({ ...defaultOptions, size: 1 }, true)
     await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseOtherSize).resolves.toBe(buildUrl({ ...defaultOptions, size: 1 }))
-    expect(mockAxios.head).toBeCalledTimes(2)
+    expect(mockAxios.head).toHaveBeenCalledTimes(2)
 
     const avatarUrlPromiseSameUncached = avatarUrl(defaultOptions, false)
     await mockAxios.mockResponse({ data: undefined })
     await expect(avatarUrlPromiseSameUncached).resolves.toBe(buildUrl(defaultOptions))
-    expect(mockAxios.head).toBeCalledTimes(3)
+    expect(mockAxios.head).toHaveBeenCalledTimes(3)
   })
 })
 

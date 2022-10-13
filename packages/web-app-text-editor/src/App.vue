@@ -89,9 +89,10 @@ export default defineComponent({
     const {
       applicationConfig,
       currentFileContext,
-      getFileResource,
+      getFileInfo,
       getFileContents,
-      putFileContents
+      putFileContents,
+      replaceInvalidFileRoute
     } = defaults
     const serverContent = ref()
     const currentContent = ref()
@@ -100,27 +101,25 @@ export default defineComponent({
     const resource: Ref<Resource> = ref()
 
     const loadFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
-
-      resource.value = yield getFileResource(unref(filePath), [
-        DavProperty.Permissions,
-        DavProperty.Name
-      ])
+      resource.value = yield getFileInfo(currentFileContext, {
+        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+      })
+      replaceInvalidFileRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )
 
-      const fileContentsResponse = yield getFileContents(unref(filePath), {})
+      const fileContentsResponse = yield getFileContents(currentFileContext)
       serverContent.value = currentContent.value = fileContentsResponse.body
       currentETag.value = fileContentsResponse.headers['OC-ETag']
     }).restartable()
 
     const saveFileTask = useTask(function* () {
-      const filePath = unref(currentFileContext).path
       const newContent = unref(currentContent)
 
       try {
-        const putFileContentsResponse = yield putFileContents(unref(filePath), newContent, {
+        const putFileContentsResponse = yield putFileContents(currentFileContext, {
+          content: newContent,
           previousEntityTag: unref(currentETag)
         })
         serverContent.value = newContent

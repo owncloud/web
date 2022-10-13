@@ -25,6 +25,8 @@
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
       :checkbox-label="modal.checkboxLabel"
+      :contextual-helper-label="modal.contextualHelperLabel"
+      :contextual-helper-data="modal.contextualHelperData"
       @cancel="modal.onCancel"
       @confirm="modal.onConfirm"
       @input="modal.onInput"
@@ -32,7 +34,11 @@
       @confirm-secondary="modal.onConfirmSecondary"
       @mounted="focusModal"
       @beforeDestroy="focusModal"
-    />
+    >
+      <template v-if="modal.customContent" #content>
+        <div v-html="modal.customContent"></div>
+      </template>
+    </oc-modal>
   </div>
 </template>
 <script lang="ts">
@@ -44,6 +50,7 @@ import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
 import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
+import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 
 export default defineComponent({
   components: {

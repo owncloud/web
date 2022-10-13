@@ -19,13 +19,15 @@
       />
       <details-and-edit
         v-if="quicklink"
-        :available-role-options="availableRoleOptions"
+        :available-role-options="getAvailableRoleOptions(quicklink)"
         :can-rename="false"
         :expiration-date="expirationDate"
         :is-folder-share="highlightedFile.isFolder"
         :is-modifiable="canEdit"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
         :link="quicklink"
+        :file="file"
+        :space="space"
         @updateLink="checkLinkToUpdate"
         @removePublicLink="deleteLinkConfirmation"
       />
@@ -50,13 +52,15 @@
       >
         <name-and-copy :link="link" />
         <details-and-edit
-          :available-role-options="availableRoleOptions"
+          :available-role-options="getAvailableRoleOptions(link)"
           :can-rename="true"
           :expiration-date="expirationDate"
           :is-folder-share="highlightedFile.isFolder"
           :is-modifiable="canEdit"
           :is-password-enforced="isPasswordEnforcedFor(link)"
           :link="link"
+          :file="file"
+          :space="space"
           @updateLink="checkLinkToUpdate"
           @removePublicLink="deleteLinkConfirmation"
         />
@@ -85,11 +89,13 @@
         >
           <name-and-copy :link="link" />
           <details-and-edit
-            :available-role-options="availableRoleOptions"
+            :available-role-options="getAvailableRoleOptions(link)"
             :expiration-date="expirationDate"
             :is-folder-share="true"
             :is-modifiable="false"
             :link="link"
+            :file="file"
+            :space="space"
           />
         </li>
       </oc-list>
@@ -107,9 +113,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType, unref } from '@vue/composition-api'
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
   useStore,
   useCapabilitySpacesEnabled,
@@ -127,8 +133,9 @@ import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import { useGraphClient } from 'web-client/src/composables'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
-import { isLocationSpacesActive } from '../../../router'
 import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
+import { isLocationSharesActive } from '../../../router'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -137,7 +144,14 @@ export default defineComponent({
     DetailsAndEdit,
     NameAndCopy
   },
-  inject: ['incomingParentShare'],
+  inject: ['displayedItem', 'incomingParentShare'],
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: false,
+      default: null
+    }
+  },
   setup() {
     const store = useStore()
 
@@ -161,6 +175,10 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'configuration']),
     ...mapState(['user']),
     ...mapState('Files', ['sharesTree']),
+
+    file() {
+      return unref(this.displayedItem)
+    },
 
     addButtonLabel() {
       return this.$gettext('Add link')
@@ -213,23 +231,6 @@ export default defineComponent({
       }
     },
 
-    availableRoleOptions() {
-      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
-        return LinkShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.value.permissions),
-          this.highlightedFile.isFolder,
-          this.hasPublicLinkEditing,
-          this.hasPublicLinkAliasSupport
-        )
-      }
-
-      return LinkShareRoles.list(
-        this.highlightedFile.isFolder,
-        this.hasPublicLinkEditing,
-        this.hasPublicLinkAliasSupport
-      )
-    },
-
     passwordEnforced() {
       return (
         this.capabilities.files_sharing.public.password?.enforced_for || {
@@ -256,7 +257,7 @@ export default defineComponent({
         return false
       }
 
-      const isShareJail = isLocationSpacesActive(this.$router, 'files-spaces-share')
+      const isShareJail = this.space?.driveType === 'share'
       if (isShareJail && !this.hasResharing) {
         return false
       }
@@ -344,12 +345,17 @@ export default defineComponent({
         return this.highlightedFile.id
       }
 
-      return this.$route.params.storageId || null
+      if (this.space) {
+        return this.space.id
+      }
+
+      return null
     }
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
@@ -361,7 +367,7 @@ export default defineComponent({
 
     isPasswordEnforcedFor(link) {
       const currentRole = LinkShareRoles.getByBitmask(
-        parseInt(link.permissions),
+        link.permissions,
         link.indirect || this.highlightedFile.isFolder
       )
 
@@ -544,26 +550,51 @@ export default defineComponent({
       if (this.hasShareJail && path === '/') {
         path = `/${resource.name}`
       }
-      // removeLink currently fetches all shares from the backend in order to reload the shares indicators
-      // TODO: Check if to-removed link is last link share and only reload if it's the last link
-      await this.removeLink({
-        client,
-        share,
-        path,
-        storageId: resource.fileId
-      })
-        .then(
-          this.showMessage({
-            title: this.$gettext('Link was deleted successfully')
-          })
-        )
-        .catch((e) => {
-          console.error(e)
-          this.showMessage({
-            title: this.$gettext('Failed to delete link'),
-            status: 'danger'
-          })
+
+      const lastLinkId =
+        this.currentFileOutgoingLinks.length === 1 ? this.currentFileOutgoingLinks[0].id : undefined
+
+      try {
+        await this.removeLink({
+          client,
+          share,
+          path,
+          storageId: resource.fileId,
+          loadIndicators: !!lastLinkId
         })
+        this.showMessage({
+          title: this.$gettext('Link was deleted successfully')
+        })
+
+        if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
+          this.REMOVE_FILES([{ id: lastLinkId }])
+        }
+      } catch (e) {
+        console.error(e)
+        this.showMessage({
+          title: this.$gettext('Failed to delete link'),
+          status: 'danger'
+        })
+      }
+    },
+
+    getAvailableRoleOptions(link) {
+      if (this.share?.incoming && this.canCreatePublicLinks) {
+        return LinkShareRoles.filterByBitmask(
+          parseInt(this.share.permissions),
+          this.highlightedFile.isFolder,
+          this.hasPublicLinkEditing,
+          this.hasPublicLinkAliasSupport,
+          !!link.password
+        )
+      }
+
+      return LinkShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.hasPublicLinkEditing,
+        this.hasPublicLinkAliasSupport,
+        !!link.password
+      )
     }
   }
 })
