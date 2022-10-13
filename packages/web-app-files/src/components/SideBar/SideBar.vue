@@ -202,6 +202,9 @@ export default defineComponent({
       if (this.hasShareJail && this.space?.driveType === 'share') {
         return false
       }
+      if (this.isTrashLocation && !this.highlightedFile?.id) {
+        return true
+      }
       return !pathSegments.length
     },
     highlightedFileIsSpace() {
