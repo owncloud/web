@@ -177,7 +177,6 @@ describe('CreateAndUpload component', () => {
         null,
         null,
         null,
-        null,
         wrapper.vm.spaces,
         true,
         jest.fn(),

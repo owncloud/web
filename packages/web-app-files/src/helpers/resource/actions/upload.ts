@@ -20,7 +20,6 @@ export class ResourcesUpload extends ConflictDialog {
     private $uppyService: any,
     private space: SpaceResource,
     private currentFolder: string,
-    private currentFolderId: string | number,
     private spaces: SpaceResource[],
     private hasSpaces: boolean,
     private createDirectoryTree: any,
@@ -79,7 +78,7 @@ export class ResourcesUpload extends ConflictDialog {
 
   async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
     this.$uppyService.publish('uploadStarted')
-    await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
+    await this.createDirectoryTree(space, currentFolder, files)
     this.$uppyService.publish('addedForUpload', files)
     this.$uppyService.uploadFiles(files)
   }

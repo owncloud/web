@@ -39,10 +39,6 @@ policies:
         endpoint: /ocs/v[12].php/config
         backend: http://localhost:9140
         unprotected: true
-      - type: regex
-        endpoint: /ocs/v[12].php/apps/files_sharing/api/v1/tokeninfo/unprotected
-        backend: http://localhost:9140
-        unprotected: true
       - endpoint: /ocs/
         backend: http://localhost:9140
       - type: query

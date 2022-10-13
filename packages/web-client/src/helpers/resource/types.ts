@@ -4,9 +4,7 @@ import { User } from '../user'
 export interface Resource {
   id: number | string
   fileId?: string
-  parentFolderId?: string
   storageId?: string
-  readonly nodeId?: string
   name?: string
   path: string
   webDavPath?: string
@@ -34,8 +32,10 @@ export interface Resource {
   shareTypes?: number[]
   privateLink?: string
   description?: string
+  disabled?: boolean
   driveType?: 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   driveAlias?: string
+  tags?: string[]
 
   canCreate?(): boolean
   canUpload?(): boolean
@@ -44,6 +44,7 @@ export interface Resource {
   canRename?(): boolean
   canBeDeleted?(): boolean
   canBeRestored?(): boolean
+  canEditTags?(): boolean
   canDeny?(): boolean
   canEditDescription?(): boolean
   canRestore?(): boolean

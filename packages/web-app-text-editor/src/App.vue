@@ -86,14 +86,8 @@ export default defineComponent({
     const defaults = useAppDefaults({
       applicationId: 'text-editor'
     })
-    const {
-      applicationConfig,
-      currentFileContext,
-      getFileInfo,
-      getFileContents,
-      putFileContents,
-      replaceInvalidFileRoute
-    } = defaults
+    const { applicationConfig, currentFileContext, getFileInfo, getFileContents, putFileContents } =
+      defaults
     const serverContent = ref()
     const currentContent = ref()
     const currentETag = ref()
@@ -102,9 +96,8 @@ export default defineComponent({
 
     const loadFileTask = useTask(function* () {
       resource.value = yield getFileInfo(currentFileContext, {
-        davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
+        davProperties: [DavProperty.Permissions, DavProperty.Name]
       })
-      replaceInvalidFileRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
       )

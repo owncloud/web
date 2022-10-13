@@ -1,5 +1,4 @@
 import { createLocationSpaces, isLocationTrashActive } from '../../../router'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   computed: {
@@ -29,14 +28,16 @@ export default {
   },
   methods: {
     $_navigate_space_trigger() {
-      if (!this.space) {
+      const driveAlias = this.space?.driveAlias
+      if (!driveAlias) {
         return
       }
       return this.$router.push(
-        createLocationSpaces(
-          'files-spaces-generic',
-          createFileRouteOptions(this.space, { fileId: this.space.fileId })
-        )
+        createLocationSpaces('files-spaces-generic', {
+          params: {
+            driveAliasAndItem: driveAlias
+          }
+        })
       )
     }
   }

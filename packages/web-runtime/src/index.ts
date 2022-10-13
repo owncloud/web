@@ -25,6 +25,7 @@ import {
   announceUppyService,
   announceAuthService,
   announcePermissionManager,
+  announceCustomizations,
   startSentry
 } from './container'
 import {
@@ -33,8 +34,6 @@ import {
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
-import { DavProperty } from 'web-pkg/src/constants'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -54,6 +53,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceAuthService({ vue: Vue, configurationManager, store, router })
   announceTranslations({ vue: Vue, supportedLanguages, translations })
   await announceTheme({ store, vue: Vue, designSystem, runtimeConfiguration })
+  announceCustomizations({ runtimeConfiguration })
   announceDefaults({ store, router })
 }
 
@@ -90,19 +90,24 @@ export const renderSuccess = (): void => {
     (state, getters) => {
       return getters['runtime/auth/isUserContextReady']
     },
-    async (userContextReady) => {
+    (userContextReady) => {
       if (!userContextReady) {
         return
       }
-      const clientService = instance.$clientService
-
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
+        const clientService = instance.$clientService
         const graphClient = clientService.graphAuthenticated(
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        return store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        const httpAuthenticatedClient = clientService.httpAuthenticated(
+          store.getters['runtime/auth/accessToken']
+        )
+
+        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
+        return
       }
 
       // Spaces feature not available. Create a virtual personal space
@@ -115,14 +120,6 @@ export const renderSuccess = (): void => {
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
-      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(
-        space,
-        {
-          path: ''
-        },
-        { davProperties: [DavProperty.FileId] }
-      )
-      space.fileId = personalHomeInfo.fileId
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },

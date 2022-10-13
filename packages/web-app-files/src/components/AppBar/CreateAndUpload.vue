@@ -183,11 +183,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
       required: false
-    },
-    itemId: {
-      type: [String, Number],
-      required: false,
-      default: null
     }
   },
   setup(props) {
@@ -217,8 +212,7 @@ export default defineComponent({
       }),
       ...useUploadHelpers({
         space: computed(() => props.space),
-        currentFolder: computed(() => props.item),
-        currentFolderId: computed(() => props.itemId)
+        currentFolder: computed(() => props.item)
       }),
       ...useRequest(),
       ...useGraphClient(),
@@ -339,10 +333,9 @@ export default defineComponent({
           return
         }
 
-        const { spaceId, currentFolder, currentFolderId } = file.meta
         if (!['public', 'share'].includes(file.meta.driveType)) {
           if (this.hasSpaces) {
-            const driveResponse = await this.graphClient.drives.getDrive(spaceId)
+            const driveResponse = await this.graphClient.drives.getDrive(file.meta.spaceId)
             this.UPDATE_SPACE_FIELD({
               id: driveResponse.data.id,
               field: 'spaceQuota',
@@ -354,10 +347,8 @@ export default defineComponent({
           }
         }
 
-        const sameFolder = this.itemId
-          ? currentFolderId === this.itemId
-          : currentFolder === this.item
-        const fileIsInCurrentPath = spaceId === this.space.id && sameFolder
+        const fileIsInCurrentPath =
+          file.meta.spaceId === this.space.id && file.meta.currentFolder === this.item
         if (fileIsInCurrentPath) {
           bus.publish('app.files.list.load')
         }
@@ -510,11 +501,12 @@ export default defineComponent({
         this.UPSERT_RESOURCE(resource)
 
         if (this.newFileAction) {
+          const fileId = resource.fileId
+
           this.$_fileActions_openEditor(
             this.newFileAction,
             this.space.getDriveAliasAndItem(resource),
-            resource.webDavPath,
-            resource.fileId,
+            fileId,
             EDITOR_MODE_CREATE
           )
           this.hideModal()
@@ -623,7 +615,7 @@ export default defineComponent({
       return null
     },
 
-    onFilesSelected(filesToUpload: File[]) {
+    async onFilesSelected(filesToUpload: File[]) {
       const uploader = new ResourcesUpload(
         filesToUpload,
         this.files,
@@ -631,7 +623,6 @@ export default defineComponent({
         this.$uppyService,
         this.space,
         this.item,
-        this.itemId,
         this.spaces,
         this.hasSpaces,
         this.createDirectoryTree,

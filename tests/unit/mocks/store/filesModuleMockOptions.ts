@@ -11,8 +11,7 @@ export const filesModuleMockOptions = {
       SET_SELECTED_IDS: jest.fn(),
       RENAME_FILE: jest.fn(),
       SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
-      SET_FILE_EXTENSIONS_VISIBILITY: jest.fn(),
-      UPSERT_RESOURCE: jest.fn()
+      SET_FILE_EXTENSIONS_VISIBILITY: jest.fn()
     },
     actions: {
       deleteFiles: jest.fn()

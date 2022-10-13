@@ -19,7 +19,7 @@
       />
       <details-and-edit
         v-if="quicklink"
-        :available-role-options="getAvailableRoleOptions(quicklink)"
+        :available-role-options="availableRoleOptions"
         :can-rename="false"
         :expiration-date="expirationDate"
         :is-folder-share="highlightedFile.isFolder"
@@ -52,7 +52,7 @@
       >
         <name-and-copy :link="link" />
         <details-and-edit
-          :available-role-options="getAvailableRoleOptions(link)"
+          :available-role-options="availableRoleOptions"
           :can-rename="true"
           :expiration-date="expirationDate"
           :is-folder-share="highlightedFile.isFolder"
@@ -89,7 +89,7 @@
         >
           <name-and-copy :link="link" />
           <details-and-edit
-            :available-role-options="getAvailableRoleOptions(link)"
+            :available-role-options="availableRoleOptions"
             :expiration-date="expirationDate"
             :is-folder-share="true"
             :is-modifiable="false"
@@ -231,6 +231,23 @@ export default defineComponent({
       }
     },
 
+    availableRoleOptions() {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
+        return LinkShareRoles.filterByBitmask(
+          parseInt(this.incomingParentShare.value.permissions),
+          this.highlightedFile.isFolder,
+          this.hasPublicLinkEditing,
+          this.hasPublicLinkAliasSupport
+        )
+      }
+
+      return LinkShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.hasPublicLinkEditing,
+        this.hasPublicLinkAliasSupport
+      )
+    },
+
     passwordEnforced() {
       return (
         this.capabilities.files_sharing.public.password?.enforced_for || {
@@ -367,7 +384,7 @@ export default defineComponent({
 
     isPasswordEnforcedFor(link) {
       const currentRole = LinkShareRoles.getByBitmask(
-        link.permissions,
+        parseInt(link.permissions),
         link.indirect || this.highlightedFile.isFolder
       )
 
@@ -576,25 +593,6 @@ export default defineComponent({
           status: 'danger'
         })
       }
-    },
-
-    getAvailableRoleOptions(link) {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
-        return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
-          this.highlightedFile.isFolder,
-          this.hasPublicLinkEditing,
-          this.hasPublicLinkAliasSupport,
-          !!link.password
-        )
-      }
-
-      return LinkShareRoles.list(
-        this.highlightedFile.isFolder,
-        this.hasPublicLinkEditing,
-        this.hasPublicLinkAliasSupport,
-        !!link.password
-      )
     }
   }
 })

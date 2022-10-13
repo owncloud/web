@@ -364,14 +364,9 @@ export abstract class LinkShareRoles {
     linkRoleUploaderFolder
   ]
 
-  static list(
-    isFolder: boolean,
-    canEditFile = false,
-    hasAliasLinks = false,
-    hasPassword = false
-  ): ShareRole[] {
+  static list(isFolder: boolean, canEditFile = false, hasAliasLinks = false): ShareRole[] {
     return [
-      ...(hasAliasLinks && !hasPassword ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
+      ...(hasAliasLinks ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
       ...this.all,
       ...(canEditFile ? [linkRoleEditorFile] : [])
     ].filter((r) => r.folder === isFolder)
@@ -388,17 +383,15 @@ export abstract class LinkShareRoles {
    * @param isFolder
    * @param canEditFile
    * @param hasAliasLinks
-   * @param hasPassword
    */
   static filterByBitmask(
     bitmask: number,
     isFolder: boolean,
     canEditFile = false,
-    hasAliasLinks = false,
-    hasPassword = false
+    hasAliasLinks = false
   ): ShareRole[] {
     return [
-      ...(hasAliasLinks && !hasPassword ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
+      ...(hasAliasLinks ? [linkRoleInternalFile, linkRoleInternalFolder] : []),
       ...this.all,
       ...(canEditFile ? [linkRoleEditorFile] : [])
     ].filter((r) => {

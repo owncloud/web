@@ -120,6 +120,7 @@ export const isAuthenticationRequired = (router: Router, to: Route): boolean => 
     'login',
     'oidcCallback',
     'oidcSilentRedirect',
+    'resolvePrivateLink',
     'resolvePublicLink',
     'accessDenied'
   ]

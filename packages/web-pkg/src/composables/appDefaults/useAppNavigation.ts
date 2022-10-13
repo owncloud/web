@@ -4,8 +4,6 @@ import VueRouter, { Location } from 'vue-router'
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
 import { LocationQuery, LocationParams } from '../router'
-import { Resource } from 'web-client'
-import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
 interface AppNavigationOptions {
   router: VueRouter
@@ -14,7 +12,6 @@ interface AppNavigationOptions {
 
 export interface AppNavigationResult {
   closeApp(): void
-  replaceInvalidFileRoute(context: MaybeRef<FileContext>, resource: Resource): void
 }
 
 export const contextRouteNameKey = 'contextRouteName'
@@ -33,7 +30,7 @@ export const routeToContextQuery = (location: Location): LocationQuery => {
   const { params, query } = location
 
   const contextQuery = {}
-  const contextQueryItems = ['fileId', 'shareId'].concat(
+  const contextQueryItems = ['shareId'].concat(
     (location as any).meta?.contextQueryItems || []
   ) as string[]
   for (const queryItem of contextQueryItems) {
@@ -85,25 +82,11 @@ export function useAppNavigation({
     })
   }
 
-  const { replaceInvalidFileRoute: replaceInvalidFileRouteGeneric } = useFileRouteReplace({
-    router
-  })
-  const replaceInvalidFileRoute = (context: MaybeRef<FileContext>, resource: Resource) => {
-    const ctx = unref(context)
-    return replaceInvalidFileRouteGeneric({
-      space: unref(ctx.space),
-      resource,
-      path: unref(ctx.item),
-      fileId: unref(ctx.itemId)
-    })
-  }
-
   const closeApp = () => {
     return navigateToContext(currentFileContext)
   }
 
   return {
-    replaceInvalidFileRoute,
     closeApp
   }
 }

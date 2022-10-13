@@ -7,6 +7,11 @@ import {
 } from './common'
 import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprecated'
 import {
+  buildRoutes as buildOperationsRoutes,
+  createLocationOperations,
+  isLocationOperationsActive
+} from './operations'
+import {
   buildRoutes as buildPublicRoutes,
   createLocationPublic,
   isLocationPublicActive
@@ -40,6 +45,7 @@ const buildRoutes = (components: RouteComponents): RouteConfig[] => [
   ...buildSharesRoutes(components),
   ...buildPublicRoutes(components),
   ...buildSpacesRoutes(components),
+  ...buildOperationsRoutes(components),
   ...buildTrashRoutes(components),
   ...buildDeprecatedRoutes()
 ]
@@ -48,7 +54,9 @@ export {
   createLocationCommon,
   createLocationShares,
   createLocationSpaces,
+  createLocationOperations,
   createLocationPublic,
+  isLocationOperationsActive,
   isLocationCommonActive,
   isLocationSharesActive,
   isLocationSpacesActive,

@@ -86,7 +86,6 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -121,7 +120,7 @@ export default defineComponent({
       if (resource.shareId) {
         return buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: basename(resource.shareRoot),
+          shareName: resource.name,
           serverUrl: configurationManager.serverUrl
         })
       }

@@ -2,14 +2,7 @@
   <div class="oc-height-1-1 oc-link-resolve">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
-      <template
-        v-if="
-          loadTokenInfoTask.isRunning ||
-          !loadTokenInfoTask.last ||
-          isPasswordRequiredTask.isRunning ||
-          !isPasswordRequiredTask.last
-        "
-      >
+      <template v-if="isPasswordRequiredTask.isRunning || !isPasswordRequiredTask.last">
         <div class="oc-card-header">
           <h2 key="public-link-loading">
             <translate>Loading public link…</translate>
@@ -19,22 +12,17 @@
           <oc-spinner :aria-hidden="true" />
         </div>
       </template>
-      <template v-else-if="loadTokenInfoTask.isError || isPasswordRequiredTask.isError">
+      <template v-else-if="isPasswordRequiredTask.isError">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="public-link-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
-          <p v-if="loadTokenInfoTask.isError" class="oc-text-xlarge">
-            {{ loadTokenInfoTask.last.error }}
-          </p>
-          <p v-if="isPasswordRequiredTask.isError" class="oc-text-xlarge">
-            {{ isPasswordRequiredTask.last.error }}
-          </p>
+          <p class="oc-text-xlarge">{{ isPasswordRequiredTask.last.error }}</p>
         </div>
       </template>
-      <template v-else-if="isPasswordRequiredTask.last && isPasswordRequiredTask.last.value">
+      <template v-else-if="isPasswordRequiredTask.last.value">
         <form @submit.prevent="resolvePublicLink(true)">
           <div class="oc-card-header">
             <h2>
@@ -81,14 +69,11 @@ import {
   useClientService,
   useRouteParam,
   useRouteQuery
-} from "web-pkg/src/composables";
+} from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from "@vue/composition-api";
 import { buildPublicSpaceResource, isPublicSpaceResource } from "web-client/src/helpers";
 import { buildWebDavPublicPath } from "files/src/helpers/resources";
-import isEmpty from "lodash-es/isEmpty";
-import { useLoadTokenInfo } from '../composables/tokenInfo'
-
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -103,10 +88,7 @@ export default defineComponent({
       webDavPath: buildWebDavPublicPath(unref(token), ''),
       ...(unref(password) && { publicLinkPassword: unref(password) })
     }))
-    const isPasswordRequiredTask = useTask(function* (signal, ref) {
-      if (!isEmpty(ref.tokenInfo)) {
-        return ref.tokenInfo.password_protected
-      }
+    const isPasswordRequiredTask = useTask(function* () {
       try {
         yield webdav.getFileInfo({ ...unref(publicLinkSpace), publicLinkPassword: null })
         return false
@@ -133,18 +115,12 @@ export default defineComponent({
       return false
     })
     return {
-      ...useLoadTokenInfo(unref(token)),
       redirectUrl: useRouteQuery('redirectUrl'),
       token,
       password,
       isPasswordRequiredTask,
       loadPublicLinkTask,
       wrongPassword
-    }
-  },
-  data() {
-    return {
-      tokenInfo: {}
     }
   },
   computed: {
@@ -166,18 +142,13 @@ export default defineComponent({
     }
   },
   async mounted() {
-    this.tokenInfo = await this.loadTokenInfoTask.perform()
-    const passwordProtected = await this.isPasswordRequiredTask.perform(this)
-    if (!passwordProtected) {
+    const passwordRequired = await this.isPasswordRequiredTask.perform()
+    if (!passwordRequired) {
       await this.resolvePublicLink(false)
     }
   },
   methods: {
     async resolvePublicLink(passwordRequired) {
-      if (this.tokenInfo?.alias_link) {
-        return this.$router.push({ name: 'resolvePrivateLink', params: { fileId: this.tokenInfo.id }})
-      }
-
       const publicLink = await this.loadPublicLinkTask.perform()
       if (this.loadPublicLinkTask.isError) {
         const e = this.loadPublicLinkTask.last.error

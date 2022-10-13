@@ -29,8 +29,6 @@ export interface UppyResource {
     driveAlias: string
     driveType: string
     currentFolder: string // current folder path during upload initiation
-    currentFolderId?: string | number
-    fileId?: string | number
     // upload data
     relativeFolder: string
     relativePath: string
@@ -49,12 +47,7 @@ interface UploadOptions {
 }
 
 interface UploadResult {
-  createDirectoryTree(
-    space: SpaceResource,
-    currentPath: string,
-    files: UppyResource[],
-    currentFolderId?: string | number
-  ): void
+  createDirectoryTree(space: SpaceResource, currentPath: string, files: UppyResource[]): void
 }
 
 export function useUpload(options: UploadOptions): UploadResult {
@@ -129,12 +122,7 @@ const createDirectoryTree = ({
   clientService: ClientService
   uppyService: UppyService
 }) => {
-  return async (
-    space: SpaceResource,
-    currentFolder: string,
-    files: UppyResource[],
-    currentFolderId?: string | number
-  ) => {
+  return async (space: SpaceResource, currentFolder: string, files: UppyResource[]) => {
     const { webdav } = clientService
     const createdFolders = []
     for (const file of files) {
@@ -171,7 +159,6 @@ const createDirectoryTree = ({
             driveAlias: space.driveAlias,
             driveType: space.driveType,
             currentFolder,
-            currentFolderId,
             // upload data
             relativeFolder: createdSubFolders,
             uploadId,
@@ -184,17 +171,13 @@ const createDirectoryTree = ({
 
         uppyService.publish('addedForUpload', [uppyResource])
 
-        let folder
         try {
-          folder = await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
+          await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
         } catch (error) {
           console.error(error)
         }
 
-        uppyService.publish('uploadSuccess', {
-          ...uppyResource,
-          meta: { ...uppyResource.meta, fileId: folder?.fileId }
-        })
+        uppyService.publish('uploadSuccess', uppyResource)
 
         createdSubFolders += `/${subFolder}`
         createdFolders.push(createdSubFolders)
