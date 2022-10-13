@@ -143,6 +143,7 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
+        name: instance.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })

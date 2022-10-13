@@ -29,7 +29,6 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         component: components.Spaces.DriveResolver,
         meta: {
           auth: false,
-          title: $gettext('Public files'),
           patchCleanPath: true
         }
       }
