@@ -62,9 +62,8 @@ export default {
               return false
             }
 
-            const isProjectSpace = isProjectSpaceResource(this.space)
             if (
-              isProjectSpace &&
+              isProjectSpaceResource(this.space) &&
               !this.space.isEditor(this.user.uuid) &&
               !this.space.isManager(this.user.uuid)
             ) {
