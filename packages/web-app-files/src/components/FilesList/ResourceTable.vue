@@ -81,22 +81,6 @@
     <template #size="{ item }">
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
-    <template #tags="{ item }">
-      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
-        <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
-          <oc-icon name="price-tag-3" size="small" />
-          <span class="oc-text-truncate">{{ tag }}</span>
-        </oc-tag>
-      </router-link>
-      <oc-tag
-        v-if="item.tags.length > 2"
-        size="small"
-        class="resource-table-tag-more"
-        @click="openTagsSidebar"
-      >
-        + {{ item.tags.length - 2 }}
-      </oc-tag>
-    </template>
     <template #mdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.mdate)"
@@ -192,7 +176,6 @@ import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
-import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -203,11 +186,14 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createLocationSpaces, createLocationShares, createLocationCommon } from '../../router'
+import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { basename, dirname } from 'path'
 
 export default defineComponent({
   mixins: [Rename],
@@ -393,7 +379,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'capabilities']),
+    ...mapGetters(['configuration']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -465,15 +451,6 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          this.capabilities?.files?.tags
-            ? {
-                name: 'tags',
-                title: this.$gettext('Tags'),
-                type: 'slot',
-                alignH: 'right',
-                wrap: 'nowrap'
-              }
-            : {},
           {
             name: 'owner',
             title: this.$gettext('Shared by'),
@@ -570,11 +547,6 @@ export default defineComponent({
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
-    getTagLink(tag) {
-      return createLocationCommon('files-common-search', {
-        query: { term: `Tags:${tag}`, provider: 'files.sdk' }
-      })
-    },
     isResourceCut(resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) {
         return false
@@ -589,10 +561,7 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item.storageId))
-    },
-    openTagsSidebar() {
-      bus.publish(SideBarEventTopics.open)
+      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
     },
     openSharingSidebar(file) {
       let panelToOpen
@@ -606,45 +575,48 @@ export default defineComponent({
       bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file)
+      return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
     },
     parentFolderLink(file) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
 
-      return this.createFolderLink(path.dirname(file.path), file)
+      return this.createFolderLink({
+        path: dirname(file.path),
+        ...(file.parentFolderId && { fileId: file.parentFolderId }),
+        resource: file
+      })
     },
-    createFolderLink(p, resource) {
+    createFolderLink(options: CreateTargetRouteOptions) {
       if (this.targetRouteCallback) {
-        return this.targetRouteCallback(p, resource)
+        return this.targetRouteCallback(options)
       }
 
+      const { path, fileId, resource } = options
+      let space
       if (resource.shareId) {
-        const space = buildShareSpaceResource({
+        space = buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: path.basename(resource.shareRoot),
+          shareName: basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
-          },
-          query: {
-            shareId: resource.shareId
-          }
-        })
+      } else if (!resource.shareId && !this.getInternalSpace(resource.storageId)) {
+        if (path === '/') {
+          return createLocationShares('files-shares-with-me')
+        }
+        // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
+        return { name: 'resolvePrivateLink', params: { fileId } }
+      } else {
+        space = this.getMatchingSpace(resource)
       }
-
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (!matchingSpace) {
+      if (!space) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(space, { path, fileId })
+      )
     },
     fileDragged(file) {
       this.addSelectedResource(file)
@@ -751,7 +723,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource.storageId)
+      let space = this.getMatchingSpace(resource)
       if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
@@ -817,12 +789,22 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId): SpaceResource {
+    getInternalSpace(storageId) {
       return this.space || this.spaces.find((space) => space.id === storageId)
+    },
+    getMatchingSpace(resource: Resource): SpaceResource {
+      return (
+        this.getInternalSpace(resource.storageId) ||
+        buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      )
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -835,7 +817,11 @@ export default defineComponent({
       if (resource.shareId) {
         return resource.path === '/'
           ? this.$gettext('Shared with me')
-          : path.basename(resource.shareRoot)
+          : basename(resource.shareRoot)
+      }
+
+      if (!this.getInternalSpace(resource.storageId)) {
+        return this.$gettext('Shared with me')
       }
 
       return this.$gettext('Personal')
@@ -864,14 +850,6 @@ export default defineComponent({
         fill: var(--oc-color-text-default);
       }
     }
-  }
-  &-tag {
-    max-width: 80px;
-  }
-  &-tag-more {
-    cursor: pointer;
-    border: 0 !important;
-    vertical-align: text-bottom;
   }
   &-edit-name {
     display: inline-flex;

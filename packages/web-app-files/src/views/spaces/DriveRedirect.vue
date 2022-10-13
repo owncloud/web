@@ -8,8 +8,8 @@
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import { Resource } from 'web-client'
 import { urlJoin } from 'web-pkg/src/utils'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 // 'personal/home' is used as personal drive alias from static contexts
 // (i.e. places where we can't load the actual personal space)
@@ -53,16 +53,19 @@ export default defineComponent({
       return store.getters.homeFolder
     })
 
+    const { params, query } = createFileRouteOptions(unref(personalSpace), {
+      path: unref(itemPath)
+    })
+
     return (
       router
         .replace({
           ...unref(route),
           params: {
             ...unref(route).params,
-            driveAliasAndItem: unref(personalSpace).getDriveAliasAndItem({
-              path: unref(itemPath)
-            } as Resource)
-          }
+            ...params
+          },
+          query
         })
         // avoid NavigationDuplicated error in console
         .catch(() => {})

@@ -106,7 +106,8 @@ function getWrapper({
     data: {
       storageId: '1',
       name: 'lorem.txt',
-      path: '/'
+      path: '/',
+      shareRoot: ''
     }
   },
   user = { id: 'test' }

@@ -31,9 +31,10 @@ import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
-import { buildShareSpaceResource, Resource } from 'web-client/src/helpers'
+import { buildShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { bus } from 'web-pkg/src/instance'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -67,7 +68,7 @@ export default defineComponent({
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path)
+            to: this.createFolderLink(this.resource.path, this.resource.fileId)
           }
         : {}
     },
@@ -93,7 +94,7 @@ export default defineComponent({
 
       return buildShareSpaceResource({
         shareId: this.resource.shareId,
-        shareName: this.resource.name,
+        shareName: basename(this.resource.shareRoot),
         serverUrl: configurationManager.serverUrl
       })
     },
@@ -118,13 +119,13 @@ export default defineComponent({
       return !this.configuration?.options?.disablePreviews
     },
     folderLink() {
-      return this.createFolderLink(this.resource.path)
+      return this.createFolderLink(this.resource.path, this.resource.fileId)
     },
     parentFolderLink() {
       if (this.resource.shareId && this.resource.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
-      return this.createFolderLink(dirname(this.resource.path))
+      return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
     }
   },
   mounted() {
@@ -157,32 +158,15 @@ export default defineComponent({
     parentFolderClicked() {
       bus.publish('app.search.options-drop.hide')
     },
-    createFolderLink(p: string) {
-      if (this.resource.shareId) {
-        const space = buildShareSpaceResource({
-          shareId: this.resource.shareId,
-          shareName: basename(this.resource.shareRoot),
-          serverUrl: configurationManager.serverUrl
-        })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
-          },
-          query: {
-            shareId: this.resource.shareId
-          }
-        })
-      }
-
+    createFolderLink(p: string, fileId: string | number) {
       if (!this.matchingSpace) {
         return {}
       }
 
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: this.matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(this.matchingSpace, { path: p, fileId })
+      )
     }
   }
 })
