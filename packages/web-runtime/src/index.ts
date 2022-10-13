@@ -30,6 +30,7 @@ import {
 import {
   buildPublicSpaceResource,
   buildSpace,
+  isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
@@ -102,7 +103,16 @@ export const renderSuccess = (): void => {
           store.getters.configuration.server,
           store.getters['runtime/auth/accessToken']
         )
-        return store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
+          isPersonalSpaceResource(space)
+        )
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: personalSpace.id,
+          field: 'name',
+          value: instance.$gettext('Personal')
+        })
+        return
       }
 
       // Spaces feature not available. Create a virtual personal space
@@ -111,7 +121,7 @@ export const renderSuccess = (): void => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: user.id,
+        name: instance.$gettext('All files'),
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
