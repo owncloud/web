@@ -26,6 +26,7 @@ Summary
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
+* Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
@@ -198,6 +199,13 @@ Details
    token refresh mechanism.
 
    https://github.com/owncloud/web/pull/7756
+
+* Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
+
+   Actions in space trash bins are now hidden if the current user has insufficient permissions.
+
+   https://github.com/owncloud/web/issues/7702
+   https://github.com/owncloud/web/pull/7768
 
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 
