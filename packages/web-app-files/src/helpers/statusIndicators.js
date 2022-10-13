@@ -3,7 +3,10 @@ import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { bus } from 'web-pkg/src/instance'
 import { SideBarEventTopics } from '../composables/sideBar'
+import pathlink from '../index'
+import { router } from 'web-runtime/src/router'
 
+const shareRoot = `${pathlink.navItems[2].route.path}`
 const $shareTypes = (resource) => {
   if (typeof resource.shareTypes !== 'undefined') {
     return resource.shareTypes
@@ -88,17 +91,20 @@ const shareTypesIndirect = (path, sharesTree) => {
 
 // TODO: Think of a different way how to access sharesTree
 export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
+  const indicatorCondition = resource.shareTypes?.length > 0
   const indicators = [
     {
       id: `files-sharing-${resource.getDomSelector()}`,
       accessibleDescription: shareUserIconDescribedBy(resource, sharesTree),
-      label: $gettext('Shared with you, show details'),
+      label: indicatorCondition ? $gettext('Shared with others') : $gettext('Shared with you'),
       visible: isUserShare(resource, sharesTree, hasShareJail),
       icon: 'group',
       target: 'sharing-item',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: (resource, panel) => {
-        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
+        !hasShareJail && indicatorCondition
+          ? bus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
+          : router.push(shareRoot)
       }
     },
     {
