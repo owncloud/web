@@ -1,5 +1,5 @@
 import { mapActions, mapMutations } from 'vuex'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 import { useGraphClient } from 'web-client/src/composables'
 
@@ -29,7 +29,7 @@ export default {
     $_showMembers_trigger({ resources }) {
       this.loadSpaceMembers({ graphClient: this.graphClient, space: resources[0] })
       this.SET_FILE_SELECTION(resources)
-      bus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
     }
   }
 }

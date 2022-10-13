@@ -159,7 +159,7 @@ import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
 import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../composables/sideBar'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource } from 'web-client/src/helpers'
@@ -442,7 +442,7 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      bus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
     },
     async loadData() {
       const calls = []

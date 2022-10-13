@@ -8,7 +8,7 @@
 import { defineComponent, watch } from '@vue/composition-api'
 import { Route } from 'vue-router'
 import { useRoute, useStore } from 'web-pkg/src/composables'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 export default defineComponent({
   setup() {
@@ -21,14 +21,14 @@ export default defineComponent({
     dragareaEnabled: false
   }),
   created() {
-    const dragOver = bus.subscribe('drag-over', this.onDragOver)
-    const dragOut = bus.subscribe('drag-out', this.hideDropzone)
-    const drop = bus.subscribe('drop', this.hideDropzone)
+    const dragOver = eventBus.subscribe('drag-over', this.onDragOver)
+    const dragOut = eventBus.subscribe('drag-out', this.hideDropzone)
+    const drop = eventBus.subscribe('drop', this.hideDropzone)
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('drag-over', dragOver)
-      bus.unsubscribe('drag-out', dragOut)
-      bus.unsubscribe('drop', drop)
+      eventBus.unsubscribe('drag-over', dragOver)
+      eventBus.unsubscribe('drag-out', dragOut)
+      eventBus.unsubscribe('drop', drop)
     })
   },
 

@@ -114,7 +114,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
@@ -298,13 +298,15 @@ export default defineComponent({
 
   mounted() {
     this.performLoaderTask(false)
-    const loadResourcesEventToken = bus.subscribe(
+    const loadResourcesEventToken = eventBus.subscribe(
       'app.files.list.load',
       (path?: string, fileId?: string | number) => {
         this.performLoaderTask(true, path, fileId)
       }
     )
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
+    this.$on('beforeDestroy', () =>
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+    )
   },
 
   beforeDestroy() {

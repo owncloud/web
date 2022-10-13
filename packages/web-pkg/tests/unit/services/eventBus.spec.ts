@@ -1,4 +1,4 @@
-import { EventBus } from '../../../src/event'
+import { EventBus } from '../../../src/services/eventBus'
 
 describe('EventBus', () => {
   it('can handle load', () => {
