@@ -99,6 +99,7 @@ import { useGraphClient } from 'web-client/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 
 export default defineComponent({
+  name: 'UsersView',
   components: {
     AppTemplate,
     UsersList,

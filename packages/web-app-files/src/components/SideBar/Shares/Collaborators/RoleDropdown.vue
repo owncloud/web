@@ -83,10 +83,7 @@
         </li>
       </oc-list>
       <div
-        class="
-          files-recipient-custom-permissions-drop-cancel-confirm-btns
-          oc-px-m oc-py-s oc-mt-m oc-rounded-bottom
-        "
+        class="files-recipient-custom-permissions-drop-cancel-confirm-btns oc-px-m oc-py-s oc-mt-m oc-rounded-bottom"
       >
         <oc-button
           size="small"

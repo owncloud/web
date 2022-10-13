@@ -83,12 +83,12 @@ const createWrapper = () => {
     mocks,
     wrapper: mount(
       defineComponent({
-        template: `<div></div>`,
         setup: () => {
           return {
             ...useUpload({ uppyService: mocks.$uppyService })
           }
-        }
+        },
+        template: `<div></div>`
       }),
       {
         localVue,

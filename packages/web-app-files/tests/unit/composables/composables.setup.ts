@@ -10,8 +10,8 @@ localVue.use(Vuex)
 export const createComposableWrapper = (setup: SetupFunction<Data, Data>): Wrapper<Vue> =>
   mount(
     defineComponent({
-      template: `<div></div>`,
-      setup
+      setup,
+      template: `<div></div>`
     }),
     {
       localVue
