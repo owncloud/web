@@ -38,6 +38,9 @@ export const isPersonalSpaceResource = (resource: Resource): resource is Persona
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
+  isViewer(uuid: string): boolean
+  isEditor(uuid: string): boolean
+  isManager(uuid: string): boolean
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
   return resource.driveType === 'project'
