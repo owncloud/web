@@ -145,7 +145,7 @@ export default defineComponent({
     },
     quotaUsagePercent() {
       return this.useLegacyQuota
-        ? this.quota.relative
+        ? parseFloat(this.quota.relative).toFixed(2)
         : parseFloat(((this.quota.used / this.quota.total) * 100).toFixed(2))
     },
 
