@@ -199,7 +199,7 @@ module.exports = {
         await this.api.elementIdClick(collaboratorAvatarElId)
         await this.waitForElementNotPresent(
           '@collaboratorAccessDetailsDrop',
-          this.api.globals.waitForNegativeConditionTimeout
+          this.api.globals.waitForConditionTimeout
         )
       }
 
