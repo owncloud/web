@@ -31,6 +31,7 @@ import {
 import {
   buildPublicSpaceResource,
   buildSpace,
+  isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
 } from 'web-client/src/helpers'
@@ -107,9 +108,16 @@ export const renderSuccess = (): void => {
         const httpAuthenticatedClient = clientService.httpAuthenticated(
           store.getters['runtime/auth/accessToken']
         )
-
-        store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-        store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
+        await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+        await store.dispatch('runtime/spaces/loadSpaceQuotas', { httpAuthenticatedClient })
+        const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
+          isPersonalSpaceResource(space)
+        )
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: personalSpace.id,
+          field: 'name',
+          value: instance.$gettext('Personal')
+        })
         return
       }
 
@@ -119,7 +127,7 @@ export const renderSuccess = (): void => {
         id: user.id,
         driveAlias: `personal/${user.id}`,
         driveType: 'personal',
-        name: user.id,
+        name: instance.$gettext('All files'),
         webDavPath: `/files/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
@@ -151,6 +159,7 @@ export const renderSuccess = (): void => {
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
+        name: instance.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
         serverUrl: configurationManager.serverUrl
       })
