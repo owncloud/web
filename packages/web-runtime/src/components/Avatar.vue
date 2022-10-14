@@ -17,7 +17,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { v4 as uuidV4 } from 'uuid'
-import { clientService } from 'web-pkg/src/services'
 
 export default {
   name: 'Avatar',
