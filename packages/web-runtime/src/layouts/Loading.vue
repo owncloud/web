@@ -12,6 +12,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'LoadingLayout',
   computed: {
     ...mapGetters(['configuration'])
   }

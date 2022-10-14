@@ -28,7 +28,9 @@ import {
   editResources,
   editResourcesArgs,
   openFileInViewer,
-  openFileInViewerArgs
+  openFileInViewerArgs,
+  getDeleteResourceButtonVisibility,
+  getRestoreResourceButtonVisibility
 } from './actions'
 
 export class Resource {
@@ -115,11 +117,21 @@ export class Resource {
     return message
   }
 
+  async isDeleteTrashBinButtonVisible(args: Omit<deleteResourceArgs, 'page'>): Promise<boolean> {
+    return await getDeleteResourceButtonVisibility({ ...args, page: this.#page })
+  }
+
   async restoreTrashBin(args: Omit<restoreResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const message = await restoreResourceTrashbin({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
+  }
+
+  async isRestoreTrashBinButtonVisible(
+    args: Omit<restoreResourceTrashbinArgs, 'page'>
+  ): Promise<boolean> {
+    return await getRestoreResourceButtonVisibility({ ...args, page: this.#page })
   }
 
   async searchResource(args: Omit<searchResourceGlobalSearchArgs, 'page'>): Promise<void> {

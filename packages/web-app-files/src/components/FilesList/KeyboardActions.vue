@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import keycode from 'keycode'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { defineComponent, PropType } from '@vue/composition-api'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
@@ -44,20 +44,23 @@ export default defineComponent({
     }
     document.addEventListener('keydown', this.handleGlobalShortcuts)
 
-    const fileListClickedEvent = bus.subscribe('app.files.list.clicked', this.resetSelectionCursor)
-    const fileListClickedMetaEvent = bus.subscribe(
+    const fileListClickedEvent = eventBus.subscribe(
+      'app.files.list.clicked',
+      this.resetSelectionCursor
+    )
+    const fileListClickedMetaEvent = eventBus.subscribe(
       'app.files.list.clicked.meta',
       this.handleCtrlClickAction
     )
-    const fileListClickedShiftEvent = bus.subscribe(
+    const fileListClickedShiftEvent = eventBus.subscribe(
       'app.files.list.clicked.shift',
       this.handleShiftClickAction
     )
 
     this.$on('beforeDestroy', () => {
-      bus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
-      bus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
-      bus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
+      eventBus.unsubscribe('app.files.list.clicked', fileListClickedEvent)
+      eventBus.unsubscribe('app.files.list.clicked.meta', fileListClickedMetaEvent)
+      eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
       const element = document.getElementById(this.keybindOnElementId)
       if (element) {
         element.removeEventListener('keydown', this.handelLocalShortcuts)

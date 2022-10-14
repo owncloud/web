@@ -8,8 +8,23 @@
 // or all types get different members, the underscored props can be removed.
 import { Resource } from '../resource'
 
-export interface SpaceResource extends Resource {
+export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
+
+export interface SpaceResourceRemoteItem {
+  id: string
+  name: string
+}
+
+export interface SpaceResourceRoot {
+  id: string
+  remoteItem: SpaceResourceRemoteItem
   webDavUrl: string
+}
+
+export interface SpaceResource extends Resource {
+  disabled?: boolean
+  webDavUrl: string
+  root: SpaceResourceRoot
   getWebDavUrl(resource: Resource): string
   getDriveAliasAndItem(resource: Resource): string
 }
@@ -23,6 +38,9 @@ export const isPersonalSpaceResource = (resource: Resource): resource is Persona
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
+  isViewer(uuid: string): boolean
+  isEditor(uuid: string): boolean
+  isManager(uuid: string): boolean
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
   return resource.driveType === 'project'
@@ -30,9 +48,19 @@ export const isProjectSpaceResource = (resource: Resource): resource is ProjectS
 
 export interface ShareSpaceResource extends SpaceResource {
   __shareSpaceResource?: any
+  rename(newName: string): void
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
   return resource.driveType === 'share'
+}
+
+export interface MountPointSpaceResource extends SpaceResource {
+  __mountPointSpaceResource?: any
+}
+export const isMountPointSpaceResource = (
+  resource: Resource
+): resource is MountPointSpaceResource => {
+  return resource.driveType === 'mountpoint'
 }
 
 export interface PublicSpaceResource extends SpaceResource {

@@ -1,0 +1,7 @@
+Bugfix: Routing for re-shares
+
+We've fixed a bug where routing into re-shares and their parent folders from the "Shared with others/via link" page was broken.
+
+https://github.com/owncloud/web/pull/7771
+https://github.com/owncloud/web/pull/7790
+https://github.com/owncloud/web/issues/7347

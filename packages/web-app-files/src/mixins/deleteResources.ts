@@ -5,7 +5,8 @@ import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../helper
 import PQueue from 'p-queue'
 import { isLocationTrashActive, isLocationSpacesActive } from '../router'
 import { clientService } from 'web-pkg/src/services'
-import { urlJoin } from 'web-pkg/src/utils'
+import { dirname } from 'path'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default {
   data: () => ({
@@ -184,21 +185,16 @@ export default {
           }
         }
 
-        let parentFolderPath
         if (
           this.resourcesToDelete.length &&
           isSameResource(this.resourcesToDelete[0], this.currentFolder)
         ) {
-          const resourcePath = this.resourcesToDelete[0].path
-          parentFolderPath = resourcePath.substr(0, resourcePath.lastIndexOf('/') + 1)
-        }
-
-        if (parentFolderPath !== undefined) {
-          this.$router.push({
-            params: {
-              driveAliasAndItem: urlJoin(this.space.driveAlias, parentFolderPath)
-            }
-          })
+          return this.$router.push(
+            createFileRouteOptions(this.space, {
+              path: dirname(this.resourcesToDelete[0].path),
+              fileId: this.resourcesToDelete[0].parentFolderId
+            })
+          )
         }
       })
     },

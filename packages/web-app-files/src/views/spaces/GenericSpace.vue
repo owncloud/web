@@ -14,6 +14,7 @@
           <create-and-upload
             :space="space"
             :item="item"
+            :item-id="itemId"
             :limited-screen-space="limitedScreenSpace"
           />
         </template>
@@ -113,16 +114,28 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { BreadcrumbItem, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { computed, defineComponent, PropType, unref } from '@vue/composition-api'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { Resource } from 'web-client'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useRoute, useTranslations } from 'web-pkg/src/composables'
 import { Location } from 'vue-router'
-import { isPublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { FolderLoaderOptions } from '../../services/folder'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import omit from 'lodash-es/omit'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
+import { basename } from 'path'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -158,29 +171,111 @@ export default defineComponent({
       type: String,
       required: false,
       default: null
+    },
+    itemId: {
+      type: [String, Number],
+      required: false,
+      default: null
     }
   },
 
   setup(props) {
-    const resourceTargetRouteCallback = (path: string, resource: Resource): Location => {
+    const resourceTargetRouteCallback = ({ path, fileId }: CreateTargetRouteOptions): Location => {
+      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
       if (isPublicSpaceResource(props.space)) {
-        return createLocationPublic('files-public-link', {
-          params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) }
-        })
+        return createLocationPublic('files-public-link', { params, query })
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: { driveAliasAndItem: props.space.getDriveAliasAndItem({ path } as Resource) },
-        query: { ...(props.space.driveType === 'share' && { shareId: props.space.shareId }) }
-      })
+      return createLocationSpaces('files-spaces-generic', { params, query })
     }
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
       return props.space.driveType === 'project' && props.item === '/'
     })
+
+    const titleSegments = computed(() => {
+      const segments = [props.space.name]
+      if (props.item !== '/') {
+        segments.unshift(basename(props.item))
+      }
+
+      return segments
+    })
+    useDocumentTitle({ titleSegments })
+
+    const { $gettext } = useTranslations()
+    const route = useRoute()
+    const breadcrumbs = computed(() => {
+      const space = props.space
+      const rootBreadcrumbItems: BreadcrumbItem[] = []
+      if (isProjectSpaceResource(space)) {
+        rootBreadcrumbItems.push({
+          text: $gettext('Spaces'),
+          to: createLocationSpaces('files-spaces-projects')
+        })
+      } else if (isShareSpaceResource(space)) {
+        rootBreadcrumbItems.push(
+          {
+            text: $gettext('Shares'),
+            to: { path: '/files/shares' }
+          },
+          {
+            text: $gettext('Shared with me'),
+            to: { path: '/files/shares/with-me' }
+          }
+        )
+      }
+
+      let spaceBreadcrumbItem
+      let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
+      query = { ...unref(route).query, ...query }
+      if (isPersonalSpaceResource(space)) {
+        spaceBreadcrumbItem = {
+          text: space.name,
+          to: createLocationSpaces('files-spaces-generic', {
+            params,
+            query
+          })
+        }
+      } else if (isShareSpaceResource(space)) {
+        spaceBreadcrumbItem = {
+          allowContextActions: true,
+          text: space.name,
+          to: createLocationSpaces('files-spaces-generic', {
+            params,
+            query: omit(query, 'fileId')
+          })
+        }
+      } else if (isPublicSpaceResource(space)) {
+        spaceBreadcrumbItem = {
+          text: $gettext('Public link'),
+          to: createLocationPublic('files-public-link', {
+            params,
+            query
+          })
+        }
+      } else {
+        spaceBreadcrumbItem = {
+          allowContextActions: !unref(hasSpaceHeader),
+          text: space.name,
+          to: createLocationSpaces('files-spaces-generic', {
+            params,
+            query
+          })
+        }
+      }
+
+      return concatBreadcrumbs(
+        ...rootBreadcrumbItems,
+        spaceBreadcrumbItem,
+        // FIXME: needs file ids for each parent folder path
+        ...breadcrumbsFromPath(unref(route), props.item)
+      )
+    })
+
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       resourceTargetRouteCallback,
-      hasShareJail: useCapabilityShareJailEnabled(),
+      breadcrumbs,
       hasSpaceHeader
     }
   },
@@ -198,60 +293,6 @@ export default defineComponent({
 
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    breadcrumbs() {
-      const rootBreadcrumbItems: BreadcrumbItem[] = []
-      if (this.space.driveType === 'project') {
-        rootBreadcrumbItems.push({
-          text: this.$gettext('Spaces'),
-          to: createLocationSpaces('files-spaces-projects')
-        })
-      } else if (this.space.driveType === 'share') {
-        rootBreadcrumbItems.push(
-          {
-            text: this.$gettext('Shares'),
-            to: { path: '/files/shares' }
-          },
-          {
-            text: this.$gettext('Shared with me'),
-            to: { path: '/files/shares/with-me' }
-          }
-        )
-      }
-
-      let spaceBreadcrumbItem
-      if (this.space.driveType === 'personal') {
-        spaceBreadcrumbItem = {
-          text: this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files'),
-          to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias },
-            query: this.$route.query
-          })
-        }
-      } else if (isPublicSpaceResource(this.space)) {
-        spaceBreadcrumbItem = {
-          text: this.$gettext('Public link'),
-          to: createLocationPublic('files-public-link', {
-            params: { driveAliasAndItem: this.space.driveAlias }
-          })
-        }
-      } else {
-        spaceBreadcrumbItem = {
-          allowContextActions: !this.hasSpaceHeader,
-          text: this.space.name,
-          to: createLocationSpaces('files-spaces-generic', {
-            params: { driveAliasAndItem: this.space.driveAlias },
-            query: this.$route.query
-          })
-        }
-      }
-
-      return concatBreadcrumbs(
-        ...rootBreadcrumbItems,
-        spaceBreadcrumbItem,
-        ...breadcrumbsFromPath(this.$route, this.item)
-      )
     },
 
     folderNotFound() {
@@ -273,10 +314,15 @@ export default defineComponent({
 
   mounted() {
     this.performLoaderTask(false)
-    const loadResourcesEventToken = bus.subscribe('app.files.list.load', (path: string) => {
-      this.performLoaderTask(true, path)
-    })
-    this.$on('beforeDestroy', () => bus.unsubscribe('app.files.list.load', loadResourcesEventToken))
+    const loadResourcesEventToken = eventBus.subscribe(
+      'app.files.list.load',
+      (path?: string, fileId?: string | number) => {
+        this.performLoaderTask(true, path, fileId)
+      }
+    )
+    this.$on('beforeDestroy', () =>
+      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
+    )
   },
 
   beforeDestroy() {
@@ -292,8 +338,14 @@ export default defineComponent({
       'REMOVE_FILE_SELECTION'
     ]),
 
-    async performLoaderTask(sameRoute: boolean, path?: string) {
-      await this.loadResourcesTask.perform(this.space, path || this.item)
+    async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
+      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(this.space) }
+      await this.loadResourcesTask.perform(
+        this.space,
+        path || this.item,
+        fileId || this.itemId,
+        options
+      )
       this.scrollToResourceFromRoute()
       this.refreshFileListHeaderPosition()
       this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)

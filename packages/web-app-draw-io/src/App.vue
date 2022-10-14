@@ -61,10 +61,17 @@ export default defineComponent({
       return `${this.config.url}?${query}`
     }
   },
+  watch: {
+    currentFileContext: {
+      handler: function () {
+        this.load()
+      },
+      immediate: true
+    }
+  },
   created() {
     this.filePath = this.currentFileContext.path
     this.fileExtension = this.filePath.split('.').pop()
-    this.checkPermissions()
     window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
         const payload = JSON.parse(event.data)
@@ -114,8 +121,9 @@ export default defineComponent({
     async checkPermissions() {
       try {
         const resource = await this.getFileInfo(this.currentFileContext, {
-          davProperties: [DavProperty.Permissions]
+          davProperties: [DavProperty.FileId, DavProperty.Permissions]
         })
+        this.replaceInvalidFileRoute(this.currentFileContext, resource)
         this.isReadOnly = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
           (p) => (resource.permissions || '').indexOf(p) > -1
         )
@@ -124,24 +132,26 @@ export default defineComponent({
         this.errorPopup(error)
       }
     },
-    load() {
-      this.getFileContents(this.currentFileContext)
-        .then((resp) => {
-          this.currentETag = resp.headers.ETag
-          this.$refs.drawIoEditor.contentWindow.postMessage(
-            JSON.stringify({
-              action: 'load',
-              xml: resp.body,
-              autosave: this.config.autosave
-            }),
-            '*'
-          )
-        })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
+    async loadFileContent() {
+      try {
+        const response = await this.getFileContents(this.currentFileContext)
+        this.currentETag = response.headers.ETag
+        this.$refs.drawIoEditor.contentWindow.postMessage(
+          JSON.stringify({
+            action: 'load',
+            xml: response.body,
+            autosave: this.config.autosave
+          }),
+          '*'
+        )
+      } catch (error) {
+        this.errorPopup(error)
+      }
     },
-    async importVisio() {
+    async load() {
+      await Promise.all([this.checkPermissions(), this.loadFileContent()])
+    },
+    importVisio() {
       const getDescription = () =>
         this.$gettextInterpolate(
           this.$gettext('The diagram will open as a new .drawio file: %{file}'),

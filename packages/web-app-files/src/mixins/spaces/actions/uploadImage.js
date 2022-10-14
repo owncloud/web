@@ -1,6 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { clientService } from 'web-pkg/src/services'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { thumbnailService } from '../../../services'
 
 export default {
@@ -102,7 +102,7 @@ export default {
               this.showMessage({
                 title: this.$gettext('Space image was uploaded successfully')
               })
-              bus.publish('app.files.list.load')
+              eventBus.publish('app.files.list.load')
             })
         })
         .catch((error) => {

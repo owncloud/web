@@ -14,10 +14,9 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from 'web-client/src/helpers/share'
-import { extractExtensionFromFile, extractStorageId } from './resource'
+import { extractExtensionFromFile, extractNodeId, extractStorageId } from './resource'
 import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
-import { SHARE_JAIL_ID } from '../services/folder'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
 import { urlJoin } from 'web-pkg/src/utils'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
@@ -45,11 +44,11 @@ export function buildResource(resource): Resource {
   }
 
   const id = resource.fileInfo[DavProperty.FileId]
-
-  return {
+  const r = {
     id,
-    fileId: resource.fileInfo[DavProperty.FileId],
-    storageId: extractStorageId(resource.fileInfo[DavProperty.FileId]),
+    fileId: id,
+    storageId: extractStorageId(id),
+    parentFolderId: resource.fileInfo[DavProperty.FileParent],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     name,
     extension: isFolder ? '' : extension,
@@ -114,6 +113,12 @@ export function buildResource(resource): Resource {
     },
     getDomSelector: () => extractDomSelector(id)
   }
+  Object.defineProperty(r, 'nodeId', {
+    get() {
+      return extractNodeId(this.id)
+    }
+  })
+  return r
 }
 
 export function buildWebDavPublicPath(publicLinkToken, path = '') {
@@ -252,6 +257,7 @@ export function buildSharedResource(
     id: share.id,
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
+    parentFolderId: share.file_parent,
     type: share.item_type,
     mimeType: share.mimetype,
     isFolder,
@@ -288,7 +294,7 @@ export function buildSharedResource(
     }
     resource.canDownload = () => parseInt(share.state) === ShareStatus.accepted
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
-    resource.canRename = () => SharePermissions.update.enabled(share.permissions)
+    resource.canRename = () => parseInt(share.state) === ShareStatus.accepted
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
     resource.canEditTags = () =>
       parseInt(share.state) === ShareStatus.accepted &&
@@ -368,8 +374,9 @@ export function buildSpaceShare(s, storageId): Share {
 
 function _buildLink(link): Share {
   let description = ''
+  const permissions = parseInt(link.permissions)
 
-  const role = LinkShareRoles.getByBitmask(parseInt(link.permissions), link.item_type === 'folder')
+  const role = LinkShareRoles.getByBitmask(permissions, link.item_type === 'folder')
   if (role) {
     description = role.label
   }
@@ -393,7 +400,7 @@ function _buildLink(link): Share {
     token: link.token as string,
     url: link.url,
     path: link.path,
-    permissions: link.permissions,
+    permissions,
     description,
     quicklink,
     stime: link.stime,
@@ -422,7 +429,13 @@ function _fixAdditionalInfo(data) {
 export function buildCollaboratorShare(s, file, allowSharePermission): Share {
   const share: Share = {
     shareType: parseInt(s.share_type),
-    id: s.id
+    id: s.id,
+    itemSource: s.item_source,
+    file: {
+      parent: s.file_parent,
+      source: s.file_source,
+      target: s.file_target
+    }
   }
   if (
     ShareTypes.containsAnyValue(
@@ -479,7 +492,9 @@ export function buildDeletedResource(resource): Resource {
     extension,
     path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
+    parentFolderId: resource.fileInfo[DavProperty.FileParent],
     indicators: [],
+    webDavPath: '',
     canUpload: () => false,
     canDownload: () => false,
     canBeDeleted: () => {

@@ -57,7 +57,7 @@
 import { mapActions, mapMutations } from 'vuex'
 import { defineComponent, ref } from '@vue/composition-api'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
 import { useRequest, useStore } from 'web-pkg/src/composables'
 
@@ -129,7 +129,7 @@ export default defineComponent({
         })
         this.displayedItem.value.tags = [...this.editAssignedTags]
 
-        bus.publish('sidebar.entity.saved')
+        eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
       }

@@ -1,7 +1,7 @@
 import Uppy from '@uppy/core'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
@@ -138,15 +138,15 @@ export class UppyService {
   }
 
   subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): string {
-    return bus.subscribe(topic, callback)
+    return eventBus.subscribe(topic, callback)
   }
 
   unsubscribe(topic: UppyServiceTopics, token: string): void {
-    bus.unsubscribe(topic, token)
+    eventBus.unsubscribe(topic, token)
   }
 
   publish(topic: UppyServiceTopics, data?: unknown): void {
-    bus.publish(topic, data)
+    eventBus.publish(topic, data)
   }
 
   private setUpEvents() {

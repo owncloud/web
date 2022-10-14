@@ -1,5 +1,6 @@
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { Location } from 'vue-router'
+import omit from 'lodash-es/omit'
 
 export interface BreadcrumbItem {
   text: string
@@ -23,7 +24,7 @@ export const breadcrumbsFromPath = (
         text,
         to: {
           path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
-          query: currentRoute.query
+          query: omit(currentRoute.query, 'fileId') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
         }
       } as BreadcrumbItem)
   )
@@ -37,7 +38,7 @@ export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] 
     {
       allowContextActions: last.allowContextActions,
       text: last.text,
-      onClick: () => bus.publish('app.files.list.load')
+      onClick: () => eventBus.publish('app.files.list.load')
     }
   ]
 }

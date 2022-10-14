@@ -187,12 +187,11 @@
 </template>
 
 <script lang="ts">
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import maxSize from 'popper-max-size-modifier'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
-import * as path from 'path'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -208,6 +207,9 @@ import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { basename, dirname } from 'path'
 
 export default defineComponent({
   mixins: [Rename],
@@ -589,10 +591,10 @@ export default defineComponent({
         .length
     },
     openRenameDialog(item) {
-      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item.storageId))
+      this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
     },
     openTagsSidebar() {
-      bus.publish(SideBarEventTopics.open)
+      eventBus.publish(SideBarEventTopics.open)
     },
     openSharingSidebar(file) {
       let panelToOpen
@@ -603,48 +605,51 @@ export default defineComponent({
       } else {
         panelToOpen = 'sharing-item#peopleShares'
       }
-      bus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
+      eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
     folderLink(file) {
-      return this.createFolderLink(file.path, file)
+      return this.createFolderLink({ path: file.path, fileId: file.fileId, resource: file })
     },
     parentFolderLink(file) {
       if (file.shareId && file.path === '/') {
         return createLocationShares('files-shares-with-me')
       }
 
-      return this.createFolderLink(path.dirname(file.path), file)
+      return this.createFolderLink({
+        path: dirname(file.path),
+        ...(file.parentFolderId && { fileId: file.parentFolderId }),
+        resource: file
+      })
     },
-    createFolderLink(p, resource) {
+    createFolderLink(options: CreateTargetRouteOptions) {
       if (this.targetRouteCallback) {
-        return this.targetRouteCallback(p, resource)
+        return this.targetRouteCallback(options)
       }
 
+      const { path, fileId, resource } = options
+      let space
       if (resource.shareId) {
-        const space = buildShareSpaceResource({
+        space = buildShareSpaceResource({
           shareId: resource.shareId,
-          shareName: path.basename(resource.shareRoot),
+          shareName: basename(resource.shareRoot),
           serverUrl: configurationManager.serverUrl
         })
-        return createLocationSpaces('files-spaces-generic', {
-          params: {
-            driveAliasAndItem: space.getDriveAliasAndItem({ path: p } as Resource)
-          },
-          query: {
-            shareId: resource.shareId
-          }
-        })
+      } else if (!resource.shareId && !this.getInternalSpace(resource.storageId)) {
+        if (path === '/') {
+          return createLocationShares('files-shares-with-me')
+        }
+        // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
+        return { name: 'resolvePrivateLink', params: { fileId } }
+      } else {
+        space = this.getMatchingSpace(resource)
       }
-
-      const matchingSpace = this.getMatchingSpace(resource.storageId)
-      if (!matchingSpace) {
+      if (!space) {
         return {}
       }
-      return createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: matchingSpace.getDriveAliasAndItem({ path: p } as Resource)
-        }
-      })
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(space, { path, fileId })
+      )
     },
     fileDragged(file) {
       this.addSelectedResource(file)
@@ -720,10 +725,10 @@ export default defineComponent({
       const resource = data[0]
       const eventData = data[1]
       if (eventData && eventData.metaKey) {
-        return bus.publish('app.files.list.clicked.meta', resource)
+        return eventBus.publish('app.files.list.clicked.meta', resource)
       }
       if (eventData && eventData.shiftKey) {
-        return bus.publish('app.files.list.clicked.shift', resource)
+        return eventBus.publish('app.files.list.clicked.shift', resource)
       }
       return this.emitSelect([resource.id])
     },
@@ -741,7 +746,7 @@ export default defineComponent({
       }
     },
     emitSelect(selectedIds) {
-      bus.publish('app.files.list.clicked')
+      eventBus.publish('app.files.list.clicked')
       this.$emit('select', selectedIds)
     },
     toggleSelectionAll() {
@@ -751,7 +756,7 @@ export default defineComponent({
       this.emitSelect(this.resources.map((resource) => resource.id))
     },
     emitFileClick(resource) {
-      let space = this.getMatchingSpace(resource.storageId)
+      let space = this.getMatchingSpace(resource)
       if (!space) {
         space = buildShareSpaceResource({
           shareId: resource.shareId,
@@ -817,12 +822,22 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getMatchingSpace(storageId): SpaceResource {
+    getInternalSpace(storageId) {
       return this.space || this.spaces.find((space) => space.id === storageId)
+    },
+    getMatchingSpace(resource: Resource): SpaceResource {
+      return (
+        this.getInternalSpace(resource.storageId) ||
+        buildShareSpaceResource({
+          shareId: resource.shareId,
+          shareName: resource.name,
+          serverUrl: configurationManager.serverUrl
+        })
+      )
     },
     getDefaultParentFolderName(resource) {
       if (this.hasProjectSpaces) {
-        const matchingSpace = this.getMatchingSpace(resource.storageId)
+        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -835,7 +850,11 @@ export default defineComponent({
       if (resource.shareId) {
         return resource.path === '/'
           ? this.$gettext('Shared with me')
-          : path.basename(resource.shareRoot)
+          : basename(resource.shareRoot)
+      }
+
+      if (!this.getInternalSpace(resource.storageId)) {
+        return this.$gettext('Shared with me')
       }
 
       return this.$gettext('Personal')

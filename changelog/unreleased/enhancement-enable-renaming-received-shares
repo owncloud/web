@@ -1,0 +1,7 @@
+Enhancement: Enable renaming on received shares
+
+As a receiver the user can rename a share which will only take effect for the respective user
+but won't change the name for the sharee or other share receivers.
+
+https://github.com/owncloud/web/pull/7725
+https://github.com/owncloud/web/issues/6247

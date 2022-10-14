@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
 import { isLocationPublicActive, isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
@@ -15,7 +15,7 @@ export default {
           name: 'show-edit-tags',
           icon: 'price-tag-3',
           label: () => this.$gettext('Add or edit tags'),
-          handler: () => bus.publish(SideBarEventTopics.openWithPanel, 'tags-item'),
+          handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'tags-item'),
           // we don't have details in the trashbin, yet.
           // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {

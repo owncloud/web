@@ -830,7 +830,7 @@ def stagePipelines(ctx):
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
-    return build(ctx) + notify()
+    return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
 
 def yarnCache(ctx):
     return [{
