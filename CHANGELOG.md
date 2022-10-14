@@ -32,6 +32,7 @@ Summary
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+* Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
@@ -256,6 +257,14 @@ Details
    https://github.com/owncloud/web/issues/6648
    https://github.com/owncloud/web/pull/7430
    https://github.com/owncloud/web/pull/7791
+
+* Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
+
+   `X-Request-ID` headers have been added to all outgoing requests to make the tracing of
+   requests easier.
+
+   https://github.com/owncloud/web/issues/4675
+   https://github.com/owncloud/web/pull/7800
 
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 
