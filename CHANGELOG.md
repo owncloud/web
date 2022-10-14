@@ -315,6 +315,7 @@ Details
    https://github.com/owncloud/web/issues/7714
    https://github.com/owncloud/web/issues/7715
    https://github.com/owncloud/web/pull/7725
+   https://github.com/owncloud/web/pull/7797
 
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 
