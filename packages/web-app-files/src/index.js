@@ -10,7 +10,7 @@ import translations from '../l10n/translations.json'
 import quickActions from './quickActions'
 import store from './store'
 import { SDKSearch } from './search'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { archiverService, thumbnailService, Registry } from './services'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
@@ -112,7 +112,7 @@ export default {
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.
-    bus.publish('app.search.register.provider', Registry.sdkSearch)
+    eventBus.publish('app.search.register.provider', Registry.sdkSearch)
 
     archiverService.initialize(
       store.getters.configuration.server || window.location.origin,

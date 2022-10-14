@@ -9,7 +9,7 @@ import {
 } from '../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
+import { buildShareSpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
@@ -52,6 +52,15 @@ export default {
           canBeDefault: true,
           componentType: 'router-link',
           route: ({ resources }) => {
+            if (
+              isShareSpaceResource(this.space) &&
+              (isLocationSharesActive(this.$router, 'files-shares-with-others') ||
+                isLocationSharesActive(this.$router, 'files-shares-via-link'))
+            ) {
+              // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
+              return { name: 'resolvePrivateLink', params: { fileId: resources[0].fileId } }
+            }
+
             return merge(
               {},
               this.routeName,

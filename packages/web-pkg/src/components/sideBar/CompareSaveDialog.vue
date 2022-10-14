@@ -21,11 +21,12 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
 import isEqual from 'lodash-es/isEqual'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
-export default {
+export default defineComponent({
   name: 'CompareSaveDialog',
   props: {
     originalObject: {
@@ -41,37 +42,37 @@ export default {
       default: () => {
         return false
       }
-    },
+    }
   },
   data: () => ({
-    saved: false,
+    saved: false
   }),
   computed: {
-    unsavedChanges(){
+    unsavedChanges() {
       return !isEqual(this.originalObject, this.compareObject)
     },
-    unsavedChangesText(){
+    unsavedChangesText() {
       return this.unsavedChanges ? this.$gettext('Unsaved changes') : this.$gettext('No changes')
     }
   },
   watch: {
-    unsavedChanges(){
-      if(this.unsavedChanges){
+    unsavedChanges() {
+      if (this.unsavedChanges) {
         this.saved = false
       }
     },
-    'originalObject.id': function(){
-        this.saved = false
+    'originalObject.id': function () {
+      this.saved = false
     }
   },
   mounted() {
-    const savedEventToken = bus.subscribe('sidebar.entity.saved', () => {
+    const savedEventToken = eventBus.subscribe('sidebar.entity.saved', () => {
       this.saved = true
     })
 
-    this.$on('beforeDestroy', () => bus.unsubscribe('sidebar.entity.saved', savedEventToken))
+    this.$on('beforeDestroy', () => eventBus.unsubscribe('sidebar.entity.saved', savedEventToken))
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .compare-save-dialog {

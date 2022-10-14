@@ -1,7 +1,7 @@
 import { getParentPaths } from './path'
 import { $gettext } from '../gettext'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../composables/sideBar'
 import pathlink from '../index'
 import { router } from 'web-runtime/src/router'
@@ -116,7 +116,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       target: 'sharing-item',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: (resource, panel) => {
-        bus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
+        eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
       }
     }
   ]

@@ -1,4 +1,4 @@
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { Location } from 'vue-router'
 import omit from 'lodash-es/omit'
 
@@ -38,7 +38,7 @@ export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] 
     {
       allowContextActions: last.allowContextActions,
       text: last.text,
-      onClick: () => bus.publish('app.files.list.load')
+      onClick: () => eventBus.publish('app.files.list.load')
     }
   ]
 }

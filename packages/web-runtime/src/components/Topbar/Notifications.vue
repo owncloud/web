@@ -59,7 +59,7 @@
 </template>
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { ShareStatus } from 'web-client/src/helpers/share'
 
 export default {
@@ -92,14 +92,14 @@ export default {
 
               // accepted federated share
               if (state === ShareStatus.accepted && fileTarget) {
-                bus.publish('app.files.list.load')
+                eventBus.publish('app.files.list.load')
                 return
               }
 
               if (path) {
                 const itemPath = path.slice(0, path.lastIndexOf('/') + 1)
                 if (itemPath === currentPath) {
-                  bus.publish('app.files.list.load')
+                  eventBus.publish('app.files.list.load')
                 }
               }
             })

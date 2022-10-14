@@ -1,7 +1,7 @@
 import { mapActions, mapMutations } from 'vuex'
 import { isLocationTrashActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useGraphClient } from 'web-client/src/composables'
@@ -48,7 +48,7 @@ export default {
       }
 
       this.SET_FILE_SELECTION(resources)
-      bus.publish(SideBarEventTopics.open)
+      eventBus.publish(SideBarEventTopics.open)
     }
   }
 }
