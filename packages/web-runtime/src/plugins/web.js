@@ -1,6 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import { encodePath } from 'web-pkg/src/utils'
+import { v4 as uuidV4 } from 'uuid'
 
 export default {
   install(Vue) {
@@ -21,7 +22,7 @@ export default {
 
           // construct the url and headers
           let url = null
-          let headers = {}
+          let headers = { 'X-Request-ID': uuidV4() }
           if (isPublicLinkContext) {
             url = file.downloadURL
           } else {

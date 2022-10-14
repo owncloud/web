@@ -1,0 +1,6 @@
+Enhancement: Add `X-Request-ID` header to all outgoing requests
+
+`X-Request-ID` headers have been added to all outgoing requests to make the tracing of requests easier.
+
+https://github.com/owncloud/web/issues/4675
+https://github.com/owncloud/web/pull/7800

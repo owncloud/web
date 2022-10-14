@@ -21,6 +21,7 @@ import { init as SentryInit } from '@sentry/browser'
 import { Vue as SentryVueIntegration } from '@sentry/integrations'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
 import { webdav } from 'web-client/src/webdav'
+import { v4 as uuidV4 } from 'uuid'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -32,7 +33,7 @@ import { webdav } from 'web-client/src/webdav'
  * @param path - path to main configuration
  */
 export const announceConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
-  const request = await fetch(path)
+  const request = await fetch(path, { headers: { 'X-Request-ID': uuidV4() } })
   if (request.status !== 200) {
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }

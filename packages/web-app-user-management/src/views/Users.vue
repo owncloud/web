@@ -97,6 +97,7 @@ import { $gettext } from 'files/src/router/utils'
 import { defineComponent } from '@vue/runtime-core'
 import { useGraphClient } from 'web-client/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
+import { v4 as uuidV4 } from 'uuid'
 
 export default defineComponent({
   name: 'UsersView',
@@ -126,7 +127,8 @@ export default defineComponent({
         {},
         {
           headers: {
-            authorization: `Bearer ${unref(accessToken)}`
+            authorization: `Bearer ${unref(accessToken)}`,
+            'X-Request-ID': uuidV4()
           }
         }
       )
@@ -145,7 +147,8 @@ export default defineComponent({
         },
         {
           headers: {
-            authorization: `Bearer ${unref(accessToken)}`
+            authorization: `Bearer ${unref(accessToken)}`,
+            'X-Request-ID': uuidV4()
           }
         }
       )
@@ -462,7 +465,8 @@ export default defineComponent({
             },
             {
               headers: {
-                authorization: `Bearer ${this.accessToken}`
+                authorization: `Bearer ${this.accessToken}`,
+                'X-Request-ID': uuidV4()
               }
             }
           )

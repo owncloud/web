@@ -1,6 +1,7 @@
 import { Commit } from 'vuex'
 import { urlJoin } from 'web-pkg/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { v4 as uuidV4 } from 'uuid'
 
 interface AppProvider {
   icon: string
@@ -40,7 +41,7 @@ const actions = {
       rootGetters.capabilities.files.app_providers[0].apps_url
     )
 
-    const response = await fetch(url)
+    const response = await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })
 
     if (!response.ok) {
       throw new Error('Error fetching app provider MIME types')

@@ -154,6 +154,7 @@ export class AuthService {
       '/?' +
       new URLSearchParams(this.router.currentRoute.query as Record<string, string>).toString()
 
+    console.log('URL', url)
     try {
       await this.userManager.signinRedirectCallback(url)
 

@@ -1,7 +1,8 @@
 import { buildUrl } from '../router'
+import { v4 as uuidV4 } from 'uuid'
 
 async function get(url) {
-  return await fetch(url)
+  return await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })
     .then((res) => {
       return res.json()
     })
@@ -14,7 +15,8 @@ async function post(url, data) {
   return await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-Request-ID': uuidV4()
     },
     body: JSON.stringify(data)
   })

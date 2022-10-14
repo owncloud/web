@@ -48,7 +48,8 @@ export class ClientService {
         instance: new HttpClient({
           headers: {
             Authorization: 'Bearer ' + token,
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Request-ID': uuidV4()
           }
         })
       }
