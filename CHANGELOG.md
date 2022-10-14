@@ -42,6 +42,7 @@ Summary
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
+* Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
@@ -351,6 +352,13 @@ Details
    https://github.com/owncloud/web/issues/7707
    https://github.com/owncloud/web/pull/7405
    https://github.com/owncloud/web/pull/7769
+
+* Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
+
+   The files table on the search-result-page is now sortable.
+
+   https://github.com/owncloud/web/issues/7798
+   https://github.com/owncloud/web/pull/7801
 
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 
