@@ -1,0 +1,5 @@
+Enhancement: Redirect public link into user context
+
+If the current browser window already has an active user session we direct a public link into the correct context (via the private link). For now this only works for backends that support the token-info endpoint (oCIS) and it is limited to the current browser window. New windows / tabs don't have a user context in the session storage and thus can't detect a user. We want to enhance this in the future.
+
+https://github.com/owncloud/web/pull/7802

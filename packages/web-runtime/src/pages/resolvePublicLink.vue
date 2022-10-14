@@ -85,6 +85,8 @@ import {
 } from 'web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 import { useLoadTokenInfo } from '../composables/tokenInfo'
+import { DavProperty } from 'web-client/src/webdav/constants'
+import { useLoadFileInfoById } from '../composables/fileInfo'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -154,10 +156,25 @@ export default defineComponent({
         params: { fileId: `${fileId}` }
       })
     }
+    const { loadFileInfoByIdTask } = useLoadFileInfoById({
+      clientService,
+      davProperties: [DavProperty.FileId]
+    })
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
-      if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
-        redirectToPrivateLink(unref(tokenInfo).id)
-        return
+      if (!isEmpty(unref(tokenInfo))) {
+        if (unref(tokenInfo)?.alias_link) {
+          redirectToPrivateLink(unref(tokenInfo).id)
+          return
+        }
+        try {
+          // FIXME: user is not loaded, yet... how do we solve this? await timeout is of course not an option.
+          yield new Promise((resolve) => setTimeout(resolve, 1000))
+          yield loadFileInfoByIdTask.perform(unref(tokenInfo).id)
+          redirectToPrivateLink(unref(tokenInfo).id)
+          return
+        } catch (ignored) {
+          // Error can be ignored silently. We only need to know if the user has access to the file.
+        }
       }
 
       const publicLink = yield loadPublicLinkTask.perform()
