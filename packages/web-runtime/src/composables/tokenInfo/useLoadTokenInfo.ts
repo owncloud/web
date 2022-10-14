@@ -1,15 +1,19 @@
-import { unref } from '@vue/composition-api'
+import { Ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { useClientService, useStore, useUserContext } from 'web-pkg/src/composables'
+import { ClientService } from 'web-pkg/src/services'
 
-export function useLoadTokenInfo(token) {
-  const { owncloudSdk } = useClientService()
-  const store = useStore()
-  const isUserContext = useUserContext({ store })
+export interface LoadTokenInfoOptions {
+  clientService?: ClientService
+  isUserContext?: Ref<boolean>
+}
 
-  const loadTokenInfoTask = useTask(function* () {
+export function useLoadTokenInfo(options: LoadTokenInfoOptions) {
+  const { owncloudSdk } = options.clientService || useClientService()
+  const isUserContext = options.isUserContext || useUserContext({ store: useStore() })
+
+  const loadTokenInfoTask = useTask(function* (signal, token: string) {
     let tokenInfo
-
     try {
       if (unref(isUserContext)) {
         tokenInfo = yield owncloudSdk.shares.getProtectedTokenInfo(token)
