@@ -72,8 +72,7 @@ export default {
       showMessage,
       $gettext,
       $gettextInterpolate,
-      $ngettext,
-      upsertResource
+      $ngettext
     }
   ) {
     const copyMove = new ResourceTransfer(
@@ -105,7 +104,7 @@ export default {
             targetSpace,
             resource
           )
-          upsertResource(movedResource)
+          context.commit('UPSERT_RESOURCE', movedResource)
         })()
       )
     }
