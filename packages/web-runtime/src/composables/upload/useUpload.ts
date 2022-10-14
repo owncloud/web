@@ -14,6 +14,7 @@ import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
 import { SpaceResource } from 'web-client/src/helpers'
 import { join } from 'path'
+import { v4 as uuidV4 } from 'uuid'
 
 export interface UppyResource {
   id?: string
@@ -69,15 +70,20 @@ export function useUpload(options: UploadOptions): UploadResult {
   const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
+    const headers = { 'X-Request-ID': uuidV4() }
     if (unref(isPublicLinkContext)) {
       const password = unref(publicLinkPassword)
       if (password) {
-        return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
+        return {
+          ...headers,
+          Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
+        }
       }
 
-      return {}
+      return headers
     }
     return {
+      ...headers,
       Authorization: 'Bearer ' + unref(accessToken)
     }
   })
@@ -89,6 +95,7 @@ export function useUpload(options: UploadOptions): UploadResult {
       isTusSupported,
       onBeforeRequest: (req) => {
         req.setHeader('Authorization', unref(headers).Authorization)
+        req.setHeader('X-Request-ID', unref(headers)['X-Request-ID'])
       },
       headers: (file) => ({
         'x-oc-mtime': file.data.lastModified / 1000,
