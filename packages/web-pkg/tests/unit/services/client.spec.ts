@@ -4,6 +4,9 @@ import mockAxios from 'jest-mock-axios'
 
 beforeEach(jest.resetAllMocks)
 
+const v4uuid = '00000000-0000-0000-0000-000000000000'
+jest.mock('uuid', () => ({ v4: () => v4uuid }))
+
 describe('client', () => {
   describe('clientService', () => {
     test('httpAuthenticated', () => {
@@ -11,7 +14,11 @@ describe('client', () => {
       expect(client).toBeInstanceOf(HttpClient)
       expect(mockAxios.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          headers: { Authorization: 'Bearer token', 'X-Requested-With': 'XMLHttpRequest' }
+          headers: {
+            Authorization: 'Bearer token',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Request-ID': v4uuid
+          }
         })
       )
       expect(mockAxios.create).toHaveBeenCalledTimes(1)
