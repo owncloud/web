@@ -16,6 +16,7 @@ Summary
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
@@ -112,6 +113,16 @@ Details
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
    https://github.com/owncloud/web/pull/7735
+
+* Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
+
+   When apps (i.e Drawio) try to load a file, the browser caches the request. If the file was
+   modified somewhere else, this causes inconsistent results which prevent saving any changes
+   until the cache is properly cleared. This had previously been fixed for normal files, but not
+   yet for public links - which we took care of now.
+
+   https://github.com/owncloud/web/pull/7811
+   https://github.com/owncloud/web/pull/7075
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
