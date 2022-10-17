@@ -1,5 +1,6 @@
 import { isEqual } from 'lodash-es'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
+import { v4 as uuidV4 } from 'uuid'
 
 export const loadTheme = async (location = '') => {
   const defaults = { theme: defaultTheme }
@@ -12,7 +13,7 @@ export const loadTheme = async (location = '') => {
   }
 
   try {
-    const response = await fetch(location)
+    const response = await fetch(location, { headers: { 'X-Request-ID': uuidV4() } })
     if (!response.ok) {
       return defaults
     }

@@ -79,7 +79,6 @@ export default defineComponent({
       'toggleFileSelection'
     ]),
     ...mapMutations('Files', {
-      upsertResource: 'UPSERT_RESOURCE',
       setLatestSelectedFile: 'SET_LATEST_SELECTED_FILE_ID',
       setFileSelection: 'SET_FILE_SELECTION',
       addFileSelection: 'ADD_FILE_SELECTION'
@@ -264,8 +263,7 @@ export default defineComponent({
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
-        $ngettext: this.$ngettext,
-        upsertResource: this.upsertResource
+        $ngettext: this.$ngettext
       })
     },
 

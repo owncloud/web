@@ -324,8 +324,7 @@ export default defineComponent({
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
-        $ngettext: this.$ngettext,
-        upsertResource: this.UPSERT_RESOURCE
+        $ngettext: this.$ngettext
       }).then(() => {
         ;(document.activeElement as HTMLElement).blur()
       })

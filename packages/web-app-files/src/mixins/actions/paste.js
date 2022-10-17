@@ -3,7 +3,7 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
@@ -58,7 +58,6 @@ export default {
   methods: {
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
     ...mapActions('Files', ['pasteSelectedFiles']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE']),
 
     $_paste_trigger() {
       this.pasteSelectedFiles({
@@ -69,8 +68,7 @@ export default {
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
-        $ngettext: this.$ngettext,
-        upsertResource: this.UPSERT_RESOURCE
+        $ngettext: this.$ngettext
       })
     }
   }

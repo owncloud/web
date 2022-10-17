@@ -121,7 +121,7 @@ export class ResourceTransfer extends ConflictDialog {
     const movedResources: Resource[] = []
 
     for (let resource of this.resourcesToMove) {
-      // shallow copy of resources to prevent modifing existing rows
+      // shallow copy of resources to prevent modifying existing rows
       resource = { ...resource }
       const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
       let targetName = resource.name
@@ -164,6 +164,8 @@ export class ResourceTransfer extends ConflictDialog {
             { path: join(this.targetFolder.path, targetName) },
             { overwrite: overwriteTarget }
           )
+          resource.id = undefined
+          resource.fileId = undefined
         } else if (transferType === TransferType.MOVE) {
           await this.clientService.webdav.moveFiles(
             this.sourceSpace,

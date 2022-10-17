@@ -1,10 +1,12 @@
 import PQueue from 'p-queue'
+import { v4 as uuidV4 } from 'uuid'
 
 export default {
   install(Vue) {
     function _mediaSource(source, returnAs = 'url', headers) {
       return new Promise((resolve, reject) => {
         headers.append('X-Requested-With', 'XMLHttpRequest')
+        headers.append('X-Request-ID', uuidV4())
 
         fetch(source, { headers })
           .then((response) => {
