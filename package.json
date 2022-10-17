@@ -134,7 +134,7 @@
     "wait-for-expect": "^3.0.2"
   },
   "engines": {
-    "node": ">=14 <=16"
+    "node": ">=16"
   },
   "packageManager": "yarn@3.1.0",
   "dependenciesMeta": {
@@ -147,5 +147,8 @@
     "vue-concurrency": {
       "built": true
     }
+  },
+  "volta": {
+    "node": "16.18.0"
   }
 }
