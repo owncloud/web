@@ -27,8 +27,11 @@
           :are-thumbnails-displayed="displayThumbnails"
           :has-actions="true"
           :is-selectable="false"
+          :sort-by="sortBy"
+          :sort-dir="sortDir"
           @fileClick="$_fileActions_triggerDefaultAction"
           @rowMounted="rowMounted"
+          @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
             <context-actions

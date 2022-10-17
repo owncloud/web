@@ -1,0 +1,6 @@
+Enhancement: Make search results sortable
+
+The files table on the search-result-page is now sortable.
+
+https://github.com/owncloud/web/pull/7801
+https://github.com/owncloud/web/issues/7798

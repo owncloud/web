@@ -10,6 +10,7 @@ import { ClientService } from 'web-pkg/src/services'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
 import axios from 'axios'
+import { v4 as uuidV4 } from 'uuid'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -205,7 +206,8 @@ export class UserManager extends OidcUserManager {
         {},
         {
           headers: {
-            authorization: `Bearer ${accessToken}`
+            authorization: `Bearer ${accessToken}`,
+            'X-Request-ID': uuidV4()
           }
         }
       )
@@ -233,7 +235,8 @@ export class UserManager extends OidcUserManager {
       },
       {
         headers: {
-          authorization: `Bearer ${accessToken}`
+          authorization: `Bearer ${accessToken}`,
+          'X-Request-ID': uuidV4()
         }
       }
     )

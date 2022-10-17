@@ -25,7 +25,11 @@ export default {
   },
   watch: {
     '$route.query': {
-      handler: function () {
+      handler: function (newVal, oldVal) {
+        if (newVal?.term === oldVal?.term) {
+          return
+        }
+
         this.$nextTick(() => {
           this.debouncedSearch()
         })

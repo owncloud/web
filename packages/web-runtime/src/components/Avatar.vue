@@ -16,6 +16,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { v4 as uuidV4 } from 'uuid'
 
 export default {
   name: 'Avatar',
@@ -92,6 +93,7 @@ export default {
       const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
       headers.append('Authorization', 'Bearer ' + accessToken)
       headers.append('X-Requested-With', 'XMLHttpRequest')
+      headers.append('X-Request-ID', uuidV4())
       fetch(url, { headers })
         .then((response) => {
           if (response.ok) {
