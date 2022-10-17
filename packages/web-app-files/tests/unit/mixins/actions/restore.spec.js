@@ -73,7 +73,7 @@ describe('restore', () => {
       const wrapper = getWrapper()
       await wrapper.vm.collectRestoreConflicts([{ id: '1', path: '1', name: '1' }])
 
-      expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(undefined, {
+      expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(expect.anything(), {
         path: ''
       })
     })
@@ -124,11 +124,6 @@ function getWrapper({
       },
       $client: {
         ...sdkMock,
-        files: {
-          list: jest.fn().mockImplementation(() => {
-            return Promise.resolve([])
-          })
-        },
         fileTrash: {
           ...sdkMock.files,
           restore: jest.fn().mockImplementation(() => {

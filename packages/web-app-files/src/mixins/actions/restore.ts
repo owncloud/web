@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import PQueue from 'p-queue'
+import { dirname } from 'path'
 import { isLocationTrashActive } from '../../router'
 import {
   buildWebDavFilesTrashPath,
@@ -59,39 +60,32 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    getParentFolderFromResource(resource) {
-      return resource.path.slice(0, resource.path.lastIndexOf(resource.name))
-    },
-    getWebdavParentFolderFromResource(resource) {
-      const parentPath = this.getParentFolderFromResource(resource)
-      return buildWebDavFilesPath(this.user.id, parentPath)
-    },
     async collectRestoreConflicts(resources) {
       const parentFolders = {}
       const conflicts = []
       const resolvedResources = []
       for (const resource of resources) {
-        const webDavParentPath = this.getParentFolderFromResource(resource)
+        const parentPath = dirname(resource.path)
 
-        // ? check if parent folder has already been requested
+        // check if parent folder has already been requested
         let parentResources = []
-        if (webDavParentPath in parentFolders) {
-          parentResources = parentFolders[webDavParentPath]
+        if (parentPath in parentFolders) {
+          parentResources = parentFolders[parentPath]
         } else {
           try {
             parentResources = await this.$clientService.webdav.listFiles(this.space, {
-              path: webDavParentPath
+              path: parentPath
             })
           } catch (error) {
             await this.restoreFolderStructure(resource)
           }
-          const resourceParentPath = this.getParentFolderFromResource(resource)
+          const resourceParentPath = dirname(resource.path)
           parentResources = parentResources.filter(
-            (e) => this.getParentFolderFromResource(e) === resourceParentPath
+            (e) => dirname(e.path) === resourceParentPath
           )
-          parentFolders[webDavParentPath] = parentResources
+          parentFolders[parentPath] = parentResources
         }
-        // ? Check for naming conflict in parent folder and between resources batch
+        // Check for naming conflict in parent folder and between resources batch
         const hasConflict =
           parentResources.some((e) => e.name === resource.name) ||
           resources.filter((e) => e.id !== resource.id).some((e) => e.path === resource.path)
@@ -152,7 +146,7 @@ export default {
     async restoreFolderStructure(resource) {
       const { webdav } = clientService
       const createdFolders = []
-      const directory = this.getParentFolderFromResource(resource)
+      const directory = dirname(resource.path)
 
       const folders = directory.split('/')
       let createdSubFolders = ''
@@ -256,16 +250,17 @@ export default {
         this.SET_QUOTA(user.quota)
       }
     },
+
     async $_restore_trigger({ resources }) {
-      //! collect and request existing files in associated parent folders of each resource
+      // collect and request existing files in associated parent folders of each resource
       const { parentFolders, conflicts, resolvedResources } = await this.collectRestoreConflicts(
         resources
       )
 
-      //! iterate through conflicts and collect resolve strategies
+      // iterate through conflicts and collect resolve strategies
       const resolvedConflicts = await this.collectRestoreResolveStrategies(conflicts)
 
-      //! iterate through conflicts and behave according to strategy
+      // iterate through conflicts and behave according to strategy
       const filesToOverwrite = resolvedConflicts
         .filter((e) => e.strategy === ResolveStrategy.REPLACE)
         .map((e) => e.resource)
@@ -276,10 +271,10 @@ export default {
         .map((e) => e.resource)
 
       for (let resource of filesToKeepBoth) {
+        debugger
         resource = { ...resource }
-        const parentPath = this.getParentFolderFromResource(resource)
-        const webDavParentPath = this.getWebdavParentFolderFromResource(resource)
-        const parentResources = parentFolders[webDavParentPath]
+        const parentPath = dirname(resource.path)
+        const parentResources = parentFolders[parentPath] || []
         const extension = extractExtensionFromFile({ name: resource.name } as Resource)
         const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
           ...parentResources,
