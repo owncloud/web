@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import editReadmeContent from '@files/src/mixins/spaces/actions/editReadmeContent.js'
+import editReadmeContent from 'web-app-files/src/mixins/spaces/actions/editReadmeContent.js'
 import { buildSpace } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()

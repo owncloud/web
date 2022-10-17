@@ -1,5 +1,5 @@
 import vue from 'rollup-plugin-vue'
-import resolve from 'rollup-plugin-node-resolve'
+import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from 'rollup-plugin-babel'
@@ -21,10 +21,12 @@ import nodePolyfills from 'rollup-plugin-polyfill-node'
 import alias from '@rollup/plugin-alias'
 import inject from '@rollup/plugin-inject'
 import copy from '@rollup-extras/plugin-copy'
+import packageJson from './package.json' assert { type: "json" }
 
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
-const { version } = require('./package.json')
+
+const { version } = packageJson
 const compilationTimestamp = new Date().getTime()
 
 const config = {

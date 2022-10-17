@@ -2,5 +2,10 @@
   "name": "pdf-viewer",
   "version": "0.0.0",
   "description": "ownCloud web PDF viewer",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "vuex": "^3.6.2",
+    "web-pkg": "workspace:*"
+  }
 }

@@ -1,4 +1,4 @@
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from '../utils'
 import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 

@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import EditQuota from '@files/src/mixins/spaces/actions/editQuota.js'
+import EditQuota from 'web-app-files/src/mixins/spaces/actions/editQuota.js'
 import { buildSpace } from 'web-client/src/helpers'
 import { createStore } from 'vuex-extensions'
 

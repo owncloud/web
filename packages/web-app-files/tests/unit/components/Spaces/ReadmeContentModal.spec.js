@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import ReadmeContentModal from '@files/src/components/Spaces/ReadmeContentModal.vue'
+import ReadmeContentModal from 'web-app-files/src/components/Spaces/ReadmeContentModal.vue'
 import stubs from 'tests/unit/stubs'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'

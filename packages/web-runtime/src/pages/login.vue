@@ -36,11 +36,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import { authService } from '../services/auth'
 import { queryItemAsString, useRouteQuery } from 'web-pkg/src/composables'
-export default {
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
   name: 'LoginPage',
   setup() {
     return {
@@ -86,5 +88,5 @@ export default {
       authService.loginUser(queryItemAsString(this.redirectUrl))
     }
   }
-}
+})
 </script>

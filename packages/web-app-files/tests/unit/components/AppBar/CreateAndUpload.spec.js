@@ -4,7 +4,7 @@ import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
-import CreateAndUpload from 'files/src/components/AppBar/CreateAndUpload'
+import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload'
 import { createLocationSpaces } from '../../../../src/router'
 import { ResolveStrategy, ResourcesUpload } from '../../../../src/helpers/resource'
 

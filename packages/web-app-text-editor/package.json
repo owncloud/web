@@ -2,5 +2,14 @@
   "name": "text-editor",
   "version": "0.0.0",
   "description": "ownCloud Web simple text editor",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "marked": "^4.0.12",
+    "sanitize-html": "^2.7.0",
+    "vue-concurrency": "^3.0.0-7",
+    "vuex": "^3.6.2",
+    "web-client": "workspace:*",
+    "web-pkg": "workspace:*"
+  }
 }

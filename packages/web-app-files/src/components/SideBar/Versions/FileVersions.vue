@@ -49,7 +49,7 @@
 </template>
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { DavProperty } from 'web-pkg/src/constants'
+import { DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { inject } from '@vue/composition-api'

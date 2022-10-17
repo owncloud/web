@@ -36,17 +36,17 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { createLocationPublic } from '../router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
-import { getCurrentInstance, onMounted } from '@vue/composition-api/dist/vue-composition-api'
+import { getCurrentInstance, onMounted } from '@vue/composition-api'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import * as uuid from 'uuid'
 import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   components: {

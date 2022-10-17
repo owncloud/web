@@ -2,19 +2,19 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import VueCompositionAPI from '@vue/composition-api'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import fileSideBars from '@files/src/fileSideBars'
+import fileSideBars from 'web-app-files/src/fileSideBars'
 import stubs from '@/tests/unit/stubs'
 import merge from 'lodash-es/merge'
-import { buildResource } from '@files/src/helpers/resources'
+import { buildResource } from 'web-app-files/src/helpers/resources'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
-import SideBar from '@files/src/components/SideBar/SideBar.vue'
+import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 
 jest.mock('web-pkg/src/observer')
-jest.mock('@files/src/helpers/resources', () => {
-  const original = jest.requireActual('@files/src/helpers/resources')
+jest.mock('web-app-files/src/helpers/resources', () => {
+  const original = jest.requireActual('web-app-files/src/helpers/resources')
   return {
     ...original,
     buildResource: jest.fn()

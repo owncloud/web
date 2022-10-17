@@ -5,7 +5,7 @@ import { createLocationCommon } from './common'
 import { createLocationPublic } from './public'
 import { isLocationActive as isLocationActiveNoCompat } from './utils'
 import { createLocationTrash } from './trash'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 
 /**
  * all route configs created by buildRoutes are deprecated,

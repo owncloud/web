@@ -6,14 +6,13 @@
 </template>
 <script lang="ts">
 import { defineComponent, watch } from '@vue/composition-api'
-import { Route } from 'vue-router'
 import { useRoute, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 
 export default defineComponent({
   setup() {
     const store = useStore<any>()
-    watch(useRoute(), (to: Route, from?: Route) => {
+    watch(useRoute(), () => {
       store.dispatch('Files/resetFileSelection')
     })
   },

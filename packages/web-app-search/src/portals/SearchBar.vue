@@ -96,7 +96,7 @@
 <script lang="js">
 import { providerStore } from '../service'
 
-import { createLocationCommon } from 'files/src/router'
+import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
 import { eventBus } from 'web-pkg/src/services/eventBus'

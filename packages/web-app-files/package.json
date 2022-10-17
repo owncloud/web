@@ -1,9 +1,32 @@
 {
-  "name": "files",
+  "name": "web-app-files",
   "version": "0.0.0",
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
     "copy-to-clipboard": "^3.3.1"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "filesize": "^9.0.11",
+    "fuse.js": "^6.5.3",
+    "lodash-es": "4.17.21",
+    "luxon": "^2.4.0",
+    "marked": "^4.0.12",
+    "p-queue": "^6.6.2",
+    "popper-max-size-modifier": "^0.2.0",
+    "qs": "^6.10.3",
+    "sanitize-html": "^2.7.0",
+    "semver": "^7.3.8",
+    "uuid": "^9.0.0",
+    "vue-concurrency": "^3.0.0-7",
+    "vue-gettext": "^2.1.5",
+    "vue-resize": "^1.0.1",
+    "vue-router": "~3.5.3",
+    "vuex": "^3.6.2",
+    "web-app-search": "workspace:*",
+    "web-client": "workspace:*",
+    "web-pkg": "workspace:*",
+    "web-runtime": "workspace:*"
   }
 }

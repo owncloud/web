@@ -40,7 +40,7 @@
 <script lang="ts">
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import SideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   components: {

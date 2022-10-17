@@ -1,11 +1,11 @@
-import { SearchPreview, SearchResult } from 'search/src/types'
+import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
 import { clientService } from 'web-pkg/src/services'
-import { buildResource } from '../../helpers/resources'
+import { buildResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
 import { Component } from 'vue'
 import VueRouter from 'vue-router'
-import { DavProperties } from 'web-pkg/src/constants'
+import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 
 export const previewSearchLimit = 8

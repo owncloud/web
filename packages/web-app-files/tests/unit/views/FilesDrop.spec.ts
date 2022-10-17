@@ -1,8 +1,8 @@
-import FilesDrop from '@files/src/views/FilesDrop.vue'
+import FilesDrop from 'web-app-files/src/views/FilesDrop.vue'
 import { shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import { getStore, localVue } from './views.setup.js'
-import { DavProperty } from 'web-pkg/src/constants'
+import { DavProperty } from 'web-client/src/webdav/constants'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
 

@@ -85,11 +85,11 @@ import {
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent } from '@vue/composition-api'
 import {
+  buildWebDavPublicPath,
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
 } from 'web-client/src/helpers'
-import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import isEmpty from 'lodash-es/isEmpty'
 import { useLoadTokenInfo } from '../composables/tokenInfo'
 

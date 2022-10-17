@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import rename from 'files/src/mixins/actions/rename'
+import rename from 'web-app-files/src/mixins/actions/rename'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'

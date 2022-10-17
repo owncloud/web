@@ -17,7 +17,7 @@
 import { mapActions } from 'vuex'
 import qs from 'qs'
 import { DateTime } from 'luxon'
-import { DavPermission, DavProperty } from 'web-pkg/src/constants'
+import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
 import { basename } from 'path'

@@ -43,7 +43,7 @@ import {
 } from 'web-pkg/src/composables'
 import { unref, defineComponent, computed, onMounted } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
-import { createLocationSpaces } from 'files/src/router'
+// import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
@@ -56,9 +56,10 @@ import {
   Resource,
   SpaceResource
 } from 'web-client/src/helpers'
-import { DavProperty } from 'web-pkg/src/constants'
-import { urlJoin } from 'web-pkg/src/utils'
+import { DavProperty } from 'web-client/src/webdav/constants'
+import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { RawLocation } from 'vue-router'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',
@@ -119,10 +120,13 @@ export default defineComponent({
       }
 
       const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
-      const location = createLocationSpaces('files-spaces-generic', {
+      // FIXME: we should not hardcode the name here, but we should not depend on
+      // createLocationSpaces('files-spaces-generic') in web-app-files either
+      const location: RawLocation = {
+        name: 'files-spaces-generic',
         params,
         query: { ...query, ...(scrollTo && { scrollTo }) }
-      })
+      }
       return router.push(location)
     })
 

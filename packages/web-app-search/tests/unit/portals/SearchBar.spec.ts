@@ -2,7 +2,7 @@ import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import AsyncComputed from 'vue-async-computed'
-import { createLocationCommon } from 'files/src/router'
+import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 
 const localVue = createLocalVue()

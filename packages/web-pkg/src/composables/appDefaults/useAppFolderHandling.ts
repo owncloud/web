@@ -8,11 +8,11 @@ import { MaybeRef } from '../../utils'
 import { Resource } from 'web-client'
 
 import { FileContext } from './types'
-import { authService } from 'web-runtime/src/services/auth'
 import { Route } from 'vue-router'
 import { useAppFileHandling } from './useAppFileHandling'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
-import { DavProperty } from '../../constants'
+import { DavProperty } from '../../../../web-client/src/webdav/constants'
+import { useAuthService } from '../authContext/useAuthService'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
@@ -39,6 +39,7 @@ export function useAppFolderHandling({
   const { webdav } = clientService
   const { replaceInvalidFileRoute } = useFileRouteReplace()
   const { getFileInfo } = useAppFileHandling({ clientService })
+  const authService = useAuthService()
 
   const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
     if (store.getters.activeFile && store.getters.activeFile.path !== '') {

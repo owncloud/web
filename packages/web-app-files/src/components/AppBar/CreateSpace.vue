@@ -17,7 +17,7 @@
 import { mapActions, mapMutations } from 'vuex'
 
 import { defineComponent } from '@vue/composition-api'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { WebDAV } from 'web-client/src/webdav'

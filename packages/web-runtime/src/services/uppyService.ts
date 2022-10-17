@@ -5,7 +5,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'

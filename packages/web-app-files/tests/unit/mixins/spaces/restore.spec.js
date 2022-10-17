@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import restore from '@files/src/mixins/spaces/actions/restore.ts'
+import restore from 'web-app-files/src/mixins/spaces/actions/restore.ts'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
 import { buildSpace } from 'web-client/src/helpers'

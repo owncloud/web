@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import setImage from '@files/src/mixins/spaces/actions/setImage.js'
+import setImage from 'web-app-files/src/mixins/spaces/actions/setImage.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
 // eslint-disable-next-line jest/no-mocks-import
