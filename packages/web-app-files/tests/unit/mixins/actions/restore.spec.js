@@ -74,7 +74,7 @@ describe('restore', () => {
       await wrapper.vm.collectRestoreConflicts([{ id: '1', path: '1', name: '1' }])
 
       expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(expect.anything(), {
-        path: ''
+        path: '.'
       })
     })
     it('should find conflict within resources', async () => {

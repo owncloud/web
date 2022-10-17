@@ -80,9 +80,7 @@ export default {
             await this.restoreFolderStructure(resource)
           }
           const resourceParentPath = dirname(resource.path)
-          parentResources = parentResources.filter(
-            (e) => dirname(e.path) === resourceParentPath
-          )
+          parentResources = parentResources.filter((e) => dirname(e.path) === resourceParentPath)
           parentFolders[parentPath] = parentResources
         }
         // Check for naming conflict in parent folder and between resources batch
