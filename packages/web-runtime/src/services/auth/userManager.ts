@@ -36,7 +36,7 @@ export class UserManager extends OidcUserManager {
     const storePrefix = 'oc_oAuth.'
     const userStore = new WebStorageStateStore({
       prefix: storePrefix,
-      store: sessionStorage
+      store: localStorage
     })
     const openIdConfig: UserManagerSettings = {
       userStore,
