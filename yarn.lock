@@ -13214,9 +13214,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"v-calendar@npm:^2.3.2":
-  version: 2.3.4
-  resolution: "v-calendar@npm:2.3.4"
+"v-calendar@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "v-calendar@npm:2.4.1"
   dependencies:
     core-js: ^3.15.2
     date-fns: ^2.22.1
@@ -13225,7 +13225,7 @@ __metadata:
   peerDependencies:
     "@popperjs/core": ^2.4.0
     vue: ^2.5.18
-  checksum: bcb508084c02ea477ab623bef8957a12daa15b621ce236dd4c58d8ccd037c7acdd8e5f0b224627ca70452b7871d39dd787f9c112ec78bd2cf808c6a06f4dcb27
+  checksum: aaee401bb2f44e6285df4fcb94beb4ef8f7fc5587cfddefa8026761cb95284c8ee08e188262c3791f9327f156e52bd9a463d63995c07c596cc74eff094318ee7
   languageName: node
   linkType: hard
 
@@ -13628,7 +13628,7 @@ __metadata:
     tippy.js: ^6.3.7
     utf8: ^3.0.0
     uuid: ^9.0.0
-    v-calendar: ^2.3.2
+    v-calendar: ^2.4.1
     vue: ^2.6.10
     vue-async-computed: ^3.9.0
     vue-concurrency: ^3.0.0-7
