@@ -1,48 +1,41 @@
 <template>
   <div class="oc-height-1-1 oc-link-resolve">
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
-      <template v-if="loading">
-        <div class="oc-card-header">
-          <h2 key="private-link-loading">
-            <translate>Resolving private link…</translate>
-          </h2>
-        </div>
-        <div class="oc-card-body">
-          <oc-spinner :aria-hidden="true" />
-        </div>
-      </template>
-      <template v-else-if="errorMessage">
-        <div class="oc-card-header oc-link-resolve-error-title">
-          <h2 v-if="isUnacceptedShareError">{{ resource.name }}</h2>
-          <h2 v-else key="private-link-error">
-            <translate>An error occurred while resolving the private link</translate>
-          </h2>
-        </div>
-        <div class="oc-card-body oc-link-resolve-error-message">
-          <p class="oc-text-xlarge">{{ errorMessage }}</p>
-          <p
-            v-if="isUnacceptedShareError"
-            class="oc-text-xlarge"
-            v-text="$gettext('Note: You can reload this page after you accept the share.')"
-          ></p>
-          <oc-button
-            v-if="isUnacceptedShareError"
-            type="router-link"
-            variation="primary"
-            appearance="filled"
-            target="_blank"
-            :to="sharedWithMeRoute"
-          >
-            <span class="text" v-text="openSharedWithMeLabel" />
-          </oc-button>
-        </div>
-      </template>
-      <div class="oc-card-footer">
-        <p>
-          {{ configuration.currentTheme.general.slogan }}
-        </p>
+    <div class="oc-link-resolve-wrapper oc-flex oc-flex-center oc-flex-middle">
+      <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
+      <div class="oc-card oc-text-center oc-width-medium">
+        <template v-if="loading">
+          <div class="oc-card-body">
+            <h2 key="private-link-loading">
+              <translate>Resolving private link…</translate>
+            </h2>
+            <oc-spinner class="oc-mt-m" :aria-hidden="true" />
+          </div>
+        </template>
+        <template v-else-if="errorMessage">
+          <div class="oc-card-body oc-link-resolve-error-message">
+            <h2 v-if="isUnacceptedShareError">{{ resource.name }}</h2>
+            <h2 v-else key="private-link-error">
+              <translate>An error occurred while resolving the private link</translate>
+            </h2>
+            <p>{{ errorMessage }}</p>
+            <p
+              v-if="isUnacceptedShareError"
+              v-text="$gettext('Note: You can reload this page after you accept the share.')"
+            ></p>
+          </div>
+        </template>
       </div>
+      <oc-button
+        v-if="isUnacceptedShareError"
+        type="router-link"
+        variation="primary"
+        appearance="filled"
+        target="_blank"
+        class="oc-mt-m oc-text-center oc-width-medium"
+        :to="sharedWithMeRoute"
+      >
+        <span class="text" v-text="openSharedWithMeLabel" />
+      </oc-button>
     </div>
   </div>
 </template>
@@ -238,8 +231,18 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-link-resolve {
-  .oc-card-header h2,
-  .oc-card-footer p {
+  &-wrapper {
+    flex-flow: column;
+    min-height: 96vh;
+  }
+
+  .oc-card {
+    background: var(--oc-color-background-highlight);
+    border-radius: 15px;
+  }
+
+  h2 {
+    font-size: var(--oc-font-size-medium);
     margin: 0;
   }
 }
