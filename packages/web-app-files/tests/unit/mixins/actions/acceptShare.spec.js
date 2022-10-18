@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import acceptShare from '@files/src/mixins/actions/acceptShare.ts'
+import acceptShare from 'web-app-files/src/mixins/actions/acceptShare.ts'
 import { createLocationShares } from '../../../../src/router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 

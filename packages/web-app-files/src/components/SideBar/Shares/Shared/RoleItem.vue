@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { PropType } from '@vue/composition-api'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { ShareRole } from 'web-client/src/helpers/share'
 
 export default defineComponent({

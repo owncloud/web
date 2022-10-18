@@ -113,7 +113,7 @@ import {
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { PropType } from '@vue/composition-api'
 
 export default defineComponent({

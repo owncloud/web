@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es'
-import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
+import defaultTheme from '../../themes/owncloud/theme.json'
 import { v4 as uuidV4 } from 'uuid'
 
 export const loadTheme = async (location = '') => {

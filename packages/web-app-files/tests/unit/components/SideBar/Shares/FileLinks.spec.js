@@ -3,7 +3,7 @@ import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
-import FileLinks from '@files/src/components/SideBar/Shares/FileLinks.vue'
+import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
 import { createLocationSpaces } from '../../../../../src/router'
 
 const localVue = createLocalVue()

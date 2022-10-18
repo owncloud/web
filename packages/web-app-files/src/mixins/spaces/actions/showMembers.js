@@ -1,7 +1,7 @@
 import { mapActions, mapMutations } from 'vuex'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../composables/sideBar'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 
 export default {
   setup() {

@@ -3,7 +3,7 @@ import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
 
-import SpaceInfo from '@files/src/components/SideBar/SpaceInfo.vue'
+import SpaceInfo from 'web-app-files/src/components/SideBar/SpaceInfo.vue'
 import Vuex from 'vuex'
 
 const spaceMock = {

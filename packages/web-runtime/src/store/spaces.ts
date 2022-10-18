@@ -2,8 +2,9 @@ import { buildSpace } from 'web-client/src/helpers'
 import Vue from 'vue'
 import { set, has } from 'lodash-es'
 import { unref } from '@vue/composition-api'
-import { buildSpaceShare } from 'files/src/helpers/resources'
-import { sortSpaceMembers } from 'files/src/helpers/space'
+import { buildSpaceShare } from 'web-client/src/helpers/share'
+import { sortSpaceMembers } from '../helpers/space/sortMembers'
+
 import { configurationManager } from 'web-pkg/src/configuration'
 
 const state = {

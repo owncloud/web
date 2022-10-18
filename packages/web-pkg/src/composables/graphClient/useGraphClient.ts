@@ -1,6 +1,6 @@
 import { computed, unref } from '@vue/composition-api'
 import { Store } from 'vuex'
-import { useAccessToken, useClientService, useStore } from 'web-pkg/src/composables'
+import { useAccessToken, useClientService, useStore } from '../'
 
 interface GraphClientOptions {
   store?: Store<any>

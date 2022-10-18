@@ -4,7 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
 
-import FileInfo from '@files/src/components/SideBar/FileInfo.vue'
+import FileInfo from 'web-app-files/src/components/SideBar/FileInfo.vue'
 
 const simpleOwnFile = {
   type: 'file',

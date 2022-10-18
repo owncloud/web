@@ -1,7 +1,7 @@
 import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
-import { buildResource } from '../../../helpers/resources'
+import { buildResource } from 'web-client/src/helpers'
 import { thumbnailService } from '../../../services'
 
 export default {

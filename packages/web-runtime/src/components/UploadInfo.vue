@@ -142,7 +142,7 @@ import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
 import { defineComponent } from '@vue/composition-api'
 import { UppyResource } from '../composables/upload'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 import { isUndefined } from 'lodash-es'
 import { configurationManager } from 'web-pkg/src/configuration'
 

@@ -4,7 +4,7 @@ import isFilesAppActive from './helpers/isFilesAppActive'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 
 export default {
   setup() {

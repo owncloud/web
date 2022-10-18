@@ -35,7 +35,7 @@ import {
   Resource
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { DavProperty } from 'web-pkg/src/constants'
+import { DavProperty } from 'web-client/src/webdav/constants'
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)

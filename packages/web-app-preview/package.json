@@ -2,5 +2,11 @@
   "name": "preview",
   "version": "0.0.0",
   "description": "ownCloud Web Preview",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "vuex": "^3.6.2",
+    "web-client": "workspace:*",
+    "web-pkg": "workspace:*"
+  }
 }

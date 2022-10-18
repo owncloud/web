@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import isEqual from 'lodash-es/isEqual'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '../../services/eventBus'
 
 export default defineComponent({
   name: 'CompareSaveDialog',

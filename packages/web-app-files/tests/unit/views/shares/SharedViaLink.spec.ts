@@ -1,5 +1,5 @@
 import { createFile } from '../views.setup.js'
-import SharedViaLink from '@files/src/views/shares/SharedViaLink.vue'
+import SharedViaLink from 'web-app-files/src/views/shares/SharedViaLink.vue'
 
 const component = { ...SharedViaLink, mounted: jest.fn() }
 

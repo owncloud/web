@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { VisibilityObserver } from 'web-pkg/src/observer'
+import { VisibilityObserver } from '../../observer'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { Panel } from './types'
 

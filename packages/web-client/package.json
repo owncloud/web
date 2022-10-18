@@ -8,7 +8,8 @@
   "scripts": {
     "generate-openapi": "rm -rf src/generated && docker run --rm -v \"${PWD}/src:/local\" openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/owncloud/libre-graph-api/main/api/openapi-spec/v0.0.yaml  -g typescript-axios -o /local/generated"
   },
-  "dependencies": {
-    "@types/proper-url-join": "^2.1.1"
+  "peerDependencies": {
+    "axios": "^0.27.1",
+    "lodash-es": "^4.17.21"
   }
 }

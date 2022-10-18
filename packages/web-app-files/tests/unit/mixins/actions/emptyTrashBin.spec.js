@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import EmptyTashBin from '@files/src/mixins/actions/emptyTrashBin.js'
+import EmptyTashBin from 'web-app-files/src/mixins/actions/emptyTrashBin.js'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'

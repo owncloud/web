@@ -1,4 +1,4 @@
-import SpaceMembers from '@files/src/components/SideBar/Shares/SpaceMembers.vue'
+import SpaceMembers from 'web-app-files/src/components/SideBar/Shares/SpaceMembers.vue'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'

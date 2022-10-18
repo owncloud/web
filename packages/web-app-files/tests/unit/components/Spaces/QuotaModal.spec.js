@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import QuotaModal from '@files/src/components/Spaces/QuotaModal.vue'
+import QuotaModal from 'web-app-files/src/components/Spaces/QuotaModal.vue'
 import stubs from 'tests/unit/stubs'
 import { createStore } from 'vuex-extensions'
 import mockAxios from 'jest-mock-axios'

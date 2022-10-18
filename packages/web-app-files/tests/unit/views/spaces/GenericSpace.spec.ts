@@ -41,7 +41,7 @@ describe('GenericSpace view', () => {
 // })
 //
 // afterEach(() => {
-//   jest.unmock('@files/src/composables/index')
+//   jest.unmock('web-app-files/src/composables/index')
 // })
 //
 // window.ResizeObserver =

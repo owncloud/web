@@ -1,5 +1,5 @@
-import { buildResource } from 'files/src/helpers/resources'
-import { DavProperties, DavProperty } from 'web-pkg/src/constants'
+import { buildResource } from '../helpers/resource'
+import { DavProperties, DavProperty } from './constants'
 import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
@@ -7,7 +7,7 @@ import {
   SpaceResource
 } from '../helpers'
 import { WebDavOptions } from './types'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from '../utils'
 
 export type ListFilesOptions = {
   depth?: number
