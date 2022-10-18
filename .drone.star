@@ -43,13 +43,17 @@ dir = {
     "web": "/var/www/owncloud/web",
     "ocis": "/var/www/owncloud/ocis-build",
     "commentsFile": "/var/www/owncloud/web/comments.file",
+    "app": "/srv/app",
+    "config": "/srv/config",
     "ocisConfig": "/srv/config/drone/config-ocis.json",
     "oc10IntegrationAppOauthConfig": "/srv/config/drone/config-oc10-integration-app-oauth.json",
     "oc10IdentifierRegistrationConfig": "/srv/config/drone/identifier-registration-oc10.yml",
     "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
     "oc10OpenIdConfig": "/srv/config/drone/config-oc10-openid.json",
+    "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
+    "testingDataDir": "/srv/app/testing/data/",
     "setupServerAndAppScript": "tests/drone/setup-server-and-app.sh",
-    "oc10OauthConfig": "tests/drone/config-oc10-oauth.json"
+    "oc10OauthConfig": "tests/drone/config-oc10-oauth.json",
 }
 
 config = {
@@ -519,8 +523,8 @@ config = {
                 "SERVER_HOST": "https://ocis:9200",
                 "BACKEND_HOST": "https://ocis:9200",
                 "RUN_ON_OCIS": "true",
-                "TESTING_DATA_DIR": "/srv/app/testing/data/",
-                "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/owncloud/data/",
+                "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
+                "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
                 "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
@@ -736,13 +740,13 @@ minio_mc_environment = {
 
 go_step_volumes = [{
     "name": "server",
-    "path": "/srv/app",
+    "path": dir["app"],
 }, {
     "name": "gopath",
     "path": "/go",
 }, {
     "name": "configs",
-    "path": "/srv/config",
+    "path": dir["config"],
 }]
 
 web_workspace = {
@@ -1831,7 +1835,7 @@ def setupIntegrationWebApp():
         ],
         "volumes": [{
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2000,7 +2004,7 @@ def getSkeletonFiles():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }],
     }]
 
@@ -2083,10 +2087,10 @@ def buildGlauth():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2105,10 +2109,10 @@ def glauthService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2124,10 +2128,10 @@ def buildIdP():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2157,10 +2161,10 @@ def idpService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2185,24 +2189,24 @@ def ocisService():
                 "STORAGE_USERS_DRIVER": "ocis",
                 "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
                 "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
-                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
+                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "%s" % dir["ocisRevaDataRoot"],
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
                 "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "FRONTEND_SEARCH_MIN_LENGTH": "2",
             },
             "commands": [
                 "cd %s" % dir["ocis"],
-                "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
+                "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
                 "./ocis server",
             ],
             "volumes": [{
                 "name": "gopath",
-                "path": "/srv/app",
+                "path": dir["app"],
             }, {
                 "name": "configs",
-                "path": "/srv/config",
+                "path": dir["config"],
             }],
         },
         {
@@ -2226,10 +2230,10 @@ def buildOcisWeb():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2249,10 +2253,10 @@ def ocisWebService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2284,7 +2288,7 @@ def setupServerConfigureWeb(logLevel):
         ],
         "volumes": [{
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2425,10 +2429,10 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2828,7 +2832,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "environment": environment,
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "uploads",
             "path": "/uploads",
