@@ -95,6 +95,11 @@ export default defineComponent({
       return this.displayedItem.value
     }
   },
+  watch: {
+    resource() {
+      this.revertChanges()
+    }
+  },
   mounted() {
     this.editAssignedTags = [...this.resource.tags]
     this.loadAllTagsTask.perform(this)
