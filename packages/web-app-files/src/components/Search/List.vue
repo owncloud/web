@@ -173,7 +173,7 @@ export default defineComponent({
   watch: {
     searchResult: {
       handler: function () {
-        if (!this.searchResult) {
+        if (!this.searchResult || this.searchResult.totalResults === null) {
           return
         }
 

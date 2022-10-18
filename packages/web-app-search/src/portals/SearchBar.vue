@@ -18,7 +18,7 @@
       :cancel-handler="cancelSearch"
       @input="updateTerm"
       @clear="onClear"
-      @click.native="term && $refs.optionsDrop.show()"
+      @click.native="showPreview"
       @keyup.native.esc="$refs.optionsDrop.hide()"
       @keyup.native.up="onKeyUpUp"
       @keyup.native.down="onKeyUpDown"
@@ -179,7 +179,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.debouncedSearch = debounce(this.search, 200)
+    this.debouncedSearch = debounce(this.search, 500)
 
     const hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
       this.$refs.optionsDrop.hide()
@@ -199,6 +199,14 @@ export default defineComponent({
   },
 
   methods: {
+    async showPreview(){
+      if (!this.term) {
+        return
+      }
+
+      this.$refs.optionsDrop.show()
+      await this.search()
+    },
     async search() {
       this.searchResults = []
       if (!this.term) {

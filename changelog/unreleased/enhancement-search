@@ -1,0 +1,8 @@
+Enhancement: Improve search experience
+
+We've improved the overall search experience with following points:
+* increase search typing debounce to 500ms
+* send search requests only once on reloads
+* update search preview results on activation
+
+https://github.com/owncloud/web/pull/7821
