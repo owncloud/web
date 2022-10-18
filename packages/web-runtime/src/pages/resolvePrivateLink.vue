@@ -13,8 +13,10 @@
         </template>
         <template v-else-if="errorMessage">
           <div class="oc-card-body oc-link-resolve-error-message">
-            <h2 v-if="isUnacceptedShareError">{{ resource.name }}</h2>
-            <h2 v-else key="private-link-error">
+            <h2 v-if="isUnacceptedShareError" class="oc-link-resolve-error-title">
+              {{ resource.name }}
+            </h2>
+            <h2 v-else key="private-link-error" class="oc-link-resolve-error-title">
               <translate>An error occurred while resolving the private link</translate>
             </h2>
             <p>{{ errorMessage }}</p>
