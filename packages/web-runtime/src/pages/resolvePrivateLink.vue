@@ -1,32 +1,43 @@
 <template>
   <div class="oc-height-1-1 oc-link-resolve">
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
-      <template v-if="loading">
-        <div class="oc-card-header">
-          <h2 key="private-link-loading">
-            <translate>Resolving private link…</translate>
-          </h2>
-        </div>
-        <div class="oc-card-body">
-          <oc-spinner :aria-hidden="true" />
-        </div>
-      </template>
-      <template v-else-if="errorMessage">
-        <div class="oc-card-header oc-link-resolve-error-title">
-          <h2 key="private-link-error">
-            <translate>An error occurred while resolving the private link</translate>
-          </h2>
-        </div>
-        <div class="oc-card-body oc-link-resolve-error-message">
-          <p class="oc-text-xlarge">{{ errorMessage }}</p>
-        </div>
-      </template>
-      <div class="oc-card-footer">
-        <p>
-          {{ configuration.currentTheme.general.slogan }}
-        </p>
+    <div class="oc-link-resolve-wrapper oc-flex oc-flex-center oc-flex-middle">
+      <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
+      <div class="oc-card oc-text-center oc-width-medium">
+        <template v-if="loading">
+          <div class="oc-card-body">
+            <h2 key="private-link-loading">
+              <translate>Resolving private link…</translate>
+            </h2>
+            <oc-spinner class="oc-mt-m" :aria-hidden="true" />
+          </div>
+        </template>
+        <template v-else-if="errorMessage">
+          <div class="oc-card-body oc-link-resolve-error-message">
+            <h2 v-if="isUnacceptedShareError" class="oc-link-resolve-error-title">
+              {{ resource.name }}
+            </h2>
+            <h2 v-else key="private-link-error" class="oc-link-resolve-error-title">
+              <translate>An error occurred while resolving the private link</translate>
+            </h2>
+            <p>{{ errorMessage }}</p>
+            <p
+              v-if="isUnacceptedShareError"
+              v-text="$gettext('Note: You can reload this page after you accept the share.')"
+            ></p>
+          </div>
+        </template>
       </div>
+      <oc-button
+        v-if="isUnacceptedShareError"
+        type="router-link"
+        variation="primary"
+        appearance="filled"
+        target="_blank"
+        class="oc-mt-m oc-text-center oc-width-medium"
+        :to="sharedWithMeRoute"
+      >
+        <span class="text" v-text="openSharedWithMeLabel" />
+      </oc-button>
     </div>
   </div>
 </template>
@@ -41,7 +52,7 @@ import {
   queryItemAsString,
   useCapabilitySpacesEnabled
 } from 'web-pkg/src/composables'
-import { unref, defineComponent, computed, onMounted } from '@vue/composition-api'
+import { unref, defineComponent, computed, onMounted, ref, Ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces } from 'files/src/router'
 import { dirname } from 'path'
@@ -67,8 +78,11 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const id = useRouteParam('fileId')
-    const { $gettext } = useTranslations()
+    const { $gettext, $gettextInterpolate } = useTranslations()
     const hasSpaces = useCapabilitySpacesEnabled(store)
+    const resource: Ref<Resource> = ref()
+    const sharedParentResource: Ref<Resource> = ref()
+    const isUnacceptedShareError = ref(false)
 
     const pageTitle = computed(() => $gettext(unref(route).meta.title))
     const configuration = computed(() => {
@@ -80,20 +94,27 @@ export default defineComponent({
     })
 
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
-      let path, resource
+      let path
       let matchingSpace = getMatchingSpace(id)
       if (matchingSpace) {
         path = yield clientService.owncloudSdk.files.getPathForFileId(id)
-        resource = yield clientService.webdav.getFileInfo(matchingSpace, { path })
+        resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
       } else {
         // no matching space found => the file doesn't lie in own spaces => it's a share.
         // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
         let mountPoint = findMatchingMountPoint(id)
-        resource = yield fetchFileInfoById(id)
-        const sharePathSegments = mountPoint ? [] : [resource.name]
-        let tmpResource = resource
+        resource.value = yield fetchFileInfoById(id)
+        const sharePathSegments = mountPoint ? [] : [unref(resource).name]
+        let tmpResource = unref(resource)
         while (!mountPoint) {
-          tmpResource = yield fetchFileInfoById(tmpResource.parentFolderId)
+          try {
+            tmpResource = yield fetchFileInfoById(tmpResource.parentFolderId)
+          } catch (e) {
+            isUnacceptedShareError.value = true
+            throw Error(e)
+          }
+
+          sharedParentResource.value = tmpResource
           mountPoint = findMatchingMountPoint(tmpResource.id)
           if (!mountPoint) {
             sharePathSegments.unshift(tmpResource.name)
@@ -110,11 +131,11 @@ export default defineComponent({
 
       let fileId
       let scrollTo
-      if (resource.type === 'folder') {
-        fileId = resource.fileId
+      if (unref(resource).type === 'folder') {
+        fileId = unref(resource).fileId
       } else {
-        fileId = resource.parentFolderId
-        scrollTo = resource.name
+        fileId = unref(resource).parentFolderId
+        scrollTo = unref(resource).name
         path = dirname(path)
       }
 
@@ -164,7 +185,46 @@ export default defineComponent({
       return !resolvePrivateLinkTask.last || resolvePrivateLinkTask.isRunning
     })
 
+    const sharedWithMeRoute = computed(() => {
+      return { name: 'files-shares-with-me' }
+    })
+
+    const openSharedWithMeLabel = computed(() => {
+      return $gettext('Open "Shared with me"')
+    })
+
     const errorMessage = computed(() => {
+      if (unref(isUnacceptedShareError)) {
+        if (
+          !unref(sharedParentResource) ||
+          unref(resource).name === unref(sharedParentResource).name
+        ) {
+          if (unref(resource).type === 'file') {
+            return $gettext(
+              'This file has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
+            )
+          }
+          return $gettext(
+            'This folder has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
+          )
+        }
+
+        let translated
+        if (unref(resource).type === 'file') {
+          translated = $gettext(
+            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          )
+        } else {
+          translated = $gettext(
+            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          )
+        }
+
+        return $gettextInterpolate(translated, {
+          parentShareName: unref(sharedParentResource).name
+        })
+      }
+
       if (resolvePrivateLinkTask.isError) {
         return resolvePrivateLinkTask.last.error
       }
@@ -175,7 +235,11 @@ export default defineComponent({
       pageTitle,
       configuration,
       errorMessage,
-      loading
+      loading,
+      resource,
+      isUnacceptedShareError,
+      sharedWithMeRoute,
+      openSharedWithMeLabel
     }
   }
 })
@@ -183,8 +247,18 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-link-resolve {
-  .oc-card-header h2,
-  .oc-card-footer p {
+  &-wrapper {
+    flex-flow: column;
+    min-height: 96vh;
+  }
+
+  .oc-card {
+    background: var(--oc-color-background-highlight);
+    border-radius: 15px;
+  }
+
+  h2 {
+    font-size: var(--oc-font-size-medium);
     margin: 0;
   }
 }
