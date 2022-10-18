@@ -52,7 +52,7 @@ import {
   queryItemAsString,
   useCapabilitySpacesEnabled
 } from 'web-pkg/src/composables'
-import { unref, defineComponent, computed, onMounted, ref } from '@vue/composition-api'
+import { unref, defineComponent, computed, onMounted, ref, Ref } from '@vue/composition-api'
 import { clientService } from 'web-pkg/src/services'
 import { createLocationSpaces } from 'files/src/router'
 import { dirname } from 'path'
@@ -80,8 +80,8 @@ export default defineComponent({
     const id = useRouteParam('fileId')
     const { $gettext, $gettextInterpolate } = useTranslations()
     const hasSpaces = useCapabilitySpacesEnabled(store)
-    const resource = ref(undefined)
-    const sharedParentResource = ref(undefined)
+    const resource: Ref<Resource> = ref()
+    const sharedParentResource: Ref<Resource> = ref()
     const isUnacceptedShareError = ref(false)
 
     const pageTitle = computed(() => $gettext(unref(route).meta.title))
@@ -199,13 +199,27 @@ export default defineComponent({
           !unref(sharedParentResource) ||
           unref(resource).name === unref(sharedParentResource).name
         ) {
+          if (unref(resource).type === 'file') {
+            return $gettext(
+              'This file has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
+            )
+          }
           return $gettext(
-            'has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
+            'This folder has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
           )
         }
-        const translated = $gettext(
-          'has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
-        )
+
+        let translated
+        if (unref(resource).type === 'file') {
+          translated = $gettext(
+            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          )
+        } else {
+          translated = $gettext(
+            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          )
+        }
+
         return $gettextInterpolate(translated, {
           parentShareName: unref(sharedParentResource).name
         })
