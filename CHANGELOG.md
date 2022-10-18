@@ -40,6 +40,7 @@ Summary
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 * Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
+* Enhancement - Internal link on unaccepted share: [#7803](https://github.com/owncloud/web/issues/7803)
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
@@ -337,6 +338,14 @@ Details
    https://github.com/owncloud/web/issues/7715
    https://github.com/owncloud/web/pull/7725
    https://github.com/owncloud/web/pull/7797
+
+* Enhancement - Internal link on unaccepted share: [#7803](https://github.com/owncloud/web/issues/7803)
+
+   The error message when resolving an internal link to an unaccepted share has been improved for a
+   better UX.
+
+   https://github.com/owncloud/web/issues/7803
+   https://github.com/owncloud/web/pull/7814
 
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 
