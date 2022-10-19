@@ -47,10 +47,10 @@ const panelGenerators: (({
     component: NoSelection,
     default: () => true,
     get enabled() {
-      return rootFolder && highlightedFile?.type !== 'space'
+      return !highlightedFile || (rootFolder && highlightedFile?.type !== 'space')
     }
   }),
-  ({ router, multipleSelection, rootFolder }) => ({
+  ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'details-item',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
@@ -58,7 +58,10 @@ const panelGenerators: (({
     default: !isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
       return (
-        !isLocationTrashActive(router, 'files-trash-generic') && !multipleSelection && !rootFolder
+        !isLocationTrashActive(router, 'files-trash-generic') &&
+        !multipleSelection &&
+        !rootFolder &&
+        highlightedFile
       )
     }
   }),
@@ -91,14 +94,14 @@ const panelGenerators: (({
       return highlightedFile?.type === 'space' && !multipleSelection
     }
   }),
-  ({ router, multipleSelection, rootFolder }) => ({
+  ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'actions-item',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: FileActions,
     default: isLocationTrashActive(router, 'files-trash-generic'),
     get enabled() {
-      return !multipleSelection && !rootFolder
+      return !multipleSelection && !rootFolder && highlightedFile
     }
   }),
   ({ multipleSelection, highlightedFile, user }) => ({
@@ -119,7 +122,7 @@ const panelGenerators: (({
       ].includes(user.uuid)
     }
   }),
-  ({ capabilities, router, multipleSelection, rootFolder }) => ({
+  ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
     app: 'sharing-item',
     icon: 'user-add',
     iconFillType: 'line',
@@ -135,7 +138,7 @@ const panelGenerators: (({
       }
     },
     get enabled() {
-      if (multipleSelection || rootFolder) {
+      if (multipleSelection || rootFolder || !highlightedFile) {
         return false
       }
       if (
