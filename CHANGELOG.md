@@ -27,6 +27,7 @@ Summary
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+* Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
 * Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
 * Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
@@ -216,6 +217,14 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/7632
+
+* Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
+
+   Sidebar panels that require a resource now won't be loaded without such. This fixes a bug where
+   navigating with an open sidebar would break it.
+
+   https://github.com/owncloud/web/issues/7781
+   https://github.com/owncloud/web/pull/7826
 
 * Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
 
