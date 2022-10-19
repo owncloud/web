@@ -5,9 +5,11 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
-        :display-view-mode-switch="true"
-        :has-bulk-actions="true"
-        :show-actions-on-selection="true"
+        :display-view-mode-switch="!isSingleFile"
+        :has-bulk-actions="!isSingleFile"
+        :show-actions-on-selection="!isSingleFile"
+        :has-sidebar-toggle="!isSingleFile"
+        :has-view-options="!isSingleFile"
         :side-bar-open="sideBarOpen"
         :space="space"
       >
@@ -44,6 +46,9 @@
             </span>
           </template>
         </no-content-message>
+        <div v-else-if="isSingleFile">
+          <single-shared-file :space="space" />
+        </div>
         <resource-tiles
           v-else-if="viewMode === ViewModeConstants.tilesView.name"
           v-model:selectedIds="selectedResourcesIds"
@@ -180,6 +185,8 @@ import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
 
+import SingleSharedFile from './SingleSharedFile.vue'
+
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
@@ -200,7 +207,8 @@ export default defineComponent({
     ResourceTable,
     ResourceTiles,
     SideBar,
-    SpaceHeader
+    SpaceHeader,
+    SingleSharedFile
   },
 
   mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
@@ -381,6 +389,15 @@ export default defineComponent({
     ...mapGetters('Files', ['currentFolder', 'totalFilesCount', 'totalFilesSize']),
     ...mapGetters(['user', 'configuration']),
 
+    isSingleFile() {
+      if (
+        this.paginatedResources.length === 1 &&
+        (!this.currentFolder.fileId || this.currentFolder.path === this.paginatedResources[0].path)
+      ) {
+        return true
+      }
+      return false
+    },
     isEmpty() {
       return this.paginatedResources.length < 1
     },
@@ -408,6 +425,11 @@ export default defineComponent({
       handler: function () {
         this.performLoaderTask(true)
       }
+    },
+    paginatedResources: function () {
+      if (this.isSingleFile) {
+        this.SET_FILE_SELECTION(this.paginatedResources)
+      }
     }
   },
 
@@ -417,7 +439,8 @@ export default defineComponent({
     ...mapMutations('Files', [
       'REMOVE_FILES',
       'REMOVE_FILES_FROM_SEARCHED',
-      'REMOVE_FILE_SELECTION'
+      'REMOVE_FILE_SELECTION',
+      'SET_FILE_SELECTION'
     ]),
 
     async fileDropped(fileIdTarget) {
