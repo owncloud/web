@@ -173,7 +173,7 @@ export default defineComponent({
   watch: {
     searchResult: {
       handler: function () {
-        if (!this.searchResult || this.searchResult.totalResults === null) {
+        if (!this.searchResult) {
           return
         }
 
@@ -184,8 +184,7 @@ export default defineComponent({
             ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
-      },
-      immediate: true
+      }
     }
   },
   beforeDestroy() {
