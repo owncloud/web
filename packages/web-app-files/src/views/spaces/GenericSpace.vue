@@ -189,6 +189,8 @@ import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/t
 import SingleSharedFile from './SingleSharedFile.vue'
 import Home from './Home.vue'
 
+import MixinFilesListFilter from '../../mixins/filesListFilter'
+
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
@@ -214,7 +216,7 @@ export default defineComponent({
     Home
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListFilter],
 
   props: {
     space: {
