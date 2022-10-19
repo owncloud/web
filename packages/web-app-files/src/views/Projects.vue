@@ -191,6 +191,7 @@ export default defineComponent({
     /// /////////////////////////////
 
     const loadResourcesTask = useTask(function* (signal, ref) {
+      ref.CLEAR_FILES_SEARCHED()
       ref.CLEAR_CURRENT_FILES_LIST()
 
       const headers = new Headers()
