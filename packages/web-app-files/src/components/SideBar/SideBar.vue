@@ -22,7 +22,7 @@
   >
     <template #header>
       <file-info
-        v-if="isSingleResource && !highlightedFileIsSpace"
+        v-if="highlightedFile && isSingleResource && !highlightedFileIsSpace"
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
