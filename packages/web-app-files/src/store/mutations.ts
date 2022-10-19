@@ -35,7 +35,10 @@ export default {
   },
   CLIPBOARD_SELECTED(state, { space }: { space: SpaceResource }) {
     state.clipboardSpace = space
-    state.clipboardResources = state.files.filter((f) => {
+    state.clipboardResources = [
+      ...state.files,
+      ...(state.currentFolder && [state.currentFolder])
+    ].filter((f) => {
       return state.selectedIds.some((id) => f.id === id)
     })
   },

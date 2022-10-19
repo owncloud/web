@@ -1,0 +1,6 @@
+Bugfix: "Cut" and "Copy" actions for current folder
+
+The "Cut" and "Copy" actions for the current folder have been fixed.
+
+https://github.com/owncloud/web/pull/7830
+https://github.com/owncloud/web/issues/7784
