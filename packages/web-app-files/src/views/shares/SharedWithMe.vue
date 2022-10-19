@@ -274,3 +274,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+h2 {
+  font-size: 1.3em;
+  margin-top: 0;
+}
+</style>
