@@ -556,6 +556,7 @@ export default defineComponent({
     },
 
     getAvailableRoleOptions(link) {
+      /*
       if (this.incomingParentShare && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
           this.incomingParentShare.permissions,
@@ -566,6 +567,7 @@ export default defineComponent({
           !!link.password
         )
       }
+      */
 
       return LinkShareRoles.list(
         this.resource.isFolder,
