@@ -46,13 +46,13 @@
           :total-quota="editUser.drive.quota.total || 0"
           @selectedOptionChange="changeSelectedQuotaOption"
         />
-        <p v-else v-translate class="oc-m-rm">
+        <p v-else v-translate class="oc-mb-s oc-mt-rm oc-text-meta">
           To set an individual quota, the user needs to have logged in once.
         </p>
       </div>
       <compare-save-dialog
         class="edit-compare-save-dialog oc-mb-l"
-        :original-object="user"
+        :original-object="compareSaveDialogOriginalObject"
         :compare-object="editUser"
         :confirm-button-disabled="invalidFormData"
         @revert="revertChanges"
@@ -108,12 +108,15 @@ export default {
     },
     showQuota() {
       return this.editUser.drive
+    },
+    compareSaveDialogOriginalObject() {
+      return cloneDeep({ ...this.user, passwordProfile: { password: '' } })
     }
   },
   watch: {
     user: {
       handler: function () {
-        this.editUser = cloneDeep(this.user)
+        this.editUser = cloneDeep({ ...this.user, passwordProfile: { password: '' } })
       },
       deep: true,
       immediate: true
@@ -148,7 +151,7 @@ export default {
       return true
     },
     revertChanges() {
-      this.editUser = this.user
+      this.editUser = cloneDeep({ ...this.user, passwordProfile: { password: '' } })
       Object.values(this.formData).forEach((formDataValue) => {
         formDataValue.valid = true
         formDataValue.errorMessage = ''
