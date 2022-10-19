@@ -254,19 +254,14 @@ export default defineComponent({
       const debounced = debounce(({ unobserve }) => {
         unobserve()
         this.loadAvatars({ resource })
-
-        if (!this.displayThumbnails) {
-          return
-        }
-
+      }, 250)
+      if (this.displayThumbnails)
         this.loadPreview({
           resource,
           isPublic: false,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail
         })
-      }, 250)
-
       visibilityObserver.observe(component.$el, {
         onEnter: debounced,
         onExit: debounced.cancel
