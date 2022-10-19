@@ -508,6 +508,10 @@ export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
   const { page, keyword } = args
+
+  // .reload() waits nicely for search indexing to be finished
+  await page.reload()
+
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
     page.locator(globalSearchInput).fill(keyword)
