@@ -198,6 +198,7 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
+      /*
       if (this.incomingParentShare && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
           parseInt(this.incomingParentShare.permissions),
@@ -206,6 +207,7 @@ export default defineComponent({
           this.hasRoleCustomPermissions
         )
       }
+      */
 
       const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
       return PeopleShareRoles.list(this.resource.isFolder, this.hasRoleCustomPermissions, canDeny)
