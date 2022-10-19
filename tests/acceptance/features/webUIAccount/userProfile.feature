@@ -13,7 +13,7 @@ Feature: view profile
 
 
   Scenario: browse to account page to manage user account
-    Given user "Alice" has logged in using the webUI
+    Given user "Alicee" has logged in using the webUI
     When the user opens the user profile
     And the user browses to manage the account
     Then the accounts page should be visible on the webUI
