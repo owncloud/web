@@ -187,7 +187,7 @@ export default {
     resetProvider() {
       this.optionsVisible = false
       this.availableProviders.forEach((provider) => provider.reset())
-      this.$router.go(-1)
+      if (this.$route.name === 'files-common-search') this.$router.go(-1)
     },
     activateProvider(provider) {
       this.optionsVisible = false
