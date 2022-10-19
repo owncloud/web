@@ -18,7 +18,7 @@ export default {
       return [
         {
           name: 'decline-share',
-          icon: 'close',
+          icon: 'spam-3',
           handler: this.$_declineShare_trigger,
           label: ({ resources }) =>
             this.$ngettext('Decline share', 'Decline shares', resources.length),
