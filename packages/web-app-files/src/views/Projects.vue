@@ -64,8 +64,8 @@
                   <component
                     :is="space.disabled ? 'oc-button' : 'router-link'"
                     v-bind="getSpaceLinkProps(space)"
-                    v-on="getSpaceLinkListeners(space)"
                     :aria-label="spaceLabel"
+                    v-on="getSpaceLinkListeners(space)"
                   >
                     <oc-tag
                       v-if="space.disabled"
@@ -319,10 +319,11 @@ export default defineComponent({
     breadcrumbs() {
       return [{ text: this.$gettext('Projects') }]
     },
-    spaceLabel(){
-      return this.$gettext(
-        'Open project'
-      )
+    isLightweight() {
+      return this.user.usertype === 'lightweight'
+    },
+    spaceLabel() {
+      return this.$gettext('Open project')
     },
     spacesHint() {
       return this.$gettext(
