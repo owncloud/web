@@ -33,11 +33,12 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { ShareTypes, spaceRoleManager } from 'web-client/src/helpers/share'
+import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { SpaceResource } from 'web-client/src/helpers'
+import { useGraphClient } from 'web-client/src/composables'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -52,6 +53,11 @@ export default defineComponent({
       default: null
     }
   },
+  setup() {
+    return {
+      ...useGraphClient()
+    }
+  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
@@ -62,11 +68,6 @@ export default defineComponent({
     },
     spaceAddMemberHelp() {
       return shareSpaceAddMemberHelp
-    },
-    members() {
-      return this.currentFileOutgoingCollaborators.filter(
-        (share) => share.shareType === ShareTypes.space.value
-      )
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0
@@ -120,12 +121,18 @@ export default defineComponent({
 
     async $_ocCollaborators_deleteShare(share) {
       try {
-        await this.deleteSpaceMember({ client: this.$client, share: share })
+        const currentUserRemoved = share.collaborator.name === this.user.id
+        await this.deleteSpaceMember({
+          client: this.$client,
+          graphClient: this.graphClient,
+          share: share,
+          reloadSpace: !currentUserRemoved
+        })
         this.showMessage({
           title: this.$gettext('Share was removed successfully')
         })
-        // current user was removed from the share.
-        if (share.collaborator.name === this.user.id) {
+
+        if (currentUserRemoved) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
             return this.$router.go()
           }

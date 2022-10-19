@@ -1,4 +1,4 @@
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, isProjectSpaceResource } from 'web-client/src/helpers'
 import Vue from 'vue'
 import { set, has } from 'lodash-es'
 import { unref } from '@vue/composition-api'
@@ -76,6 +76,9 @@ const mutations = {
   CLEAR_SPACES(state) {
     state.spaces = []
   },
+  CLEAR_PROJECT_SPACES(state) {
+    state.spaces = state.spaces.filter((s) => !isProjectSpaceResource(s))
+  },
   CLEAR_SPACE_MEMBERS(state) {
     state.spaceMembers = []
   },
@@ -118,6 +121,17 @@ const actions = {
       context.commit('SET_SPACES_LOADING', false)
     }
   },
+  async reloadProjectSpaces(context, { graphClient }) {
+    const graphResponse = await graphClient.drives.listMyDrives('name asc', 'driveType eq project')
+    if (!graphResponse.data) {
+      return
+    }
+    const spaces = graphResponse.data.value.map((space) =>
+      buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+    )
+    context.commit('CLEAR_PROJECT_SPACES')
+    context.commit('ADD_SPACES', spaces)
+  },
   loadSpaceMembers(context, { graphClient, space }) {
     context.commit('CLEAR_SPACE_MEMBERS')
     const promises = []
@@ -139,36 +153,48 @@ const actions = {
       context.commit('SET_SPACE_MEMBERS', sortSpaceMembers(spaceShares))
     })
   },
-  addSpaceMember(context, { client, path, shareWith, permissions, role, storageId, displayName }) {
-    return client.shares
-      .shareSpaceWithUser(path, shareWith, storageId, { permissions, role: role.name })
-      .then(() => {
-        const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
-        context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
-      })
-  },
-  changeSpaceMember(context, { client, share, permissions, role }) {
-    return client.shares
-      .shareSpaceWithUser('', share.collaborator.name, share.id, { permissions, role: role.name })
-      .then(() => {
-        const spaceShare = buildSpaceShare(
-          {
-            role: role.name,
-            onPremisesSamAccountName: share.collaborator.name,
-            displayName: share.collaborator.displayName
-          },
-          share.id
-        )
-
-        context.commit('UPSERT_SPACE_MEMBERS', spaceShare)
-      })
-  },
-  deleteSpaceMember(context, { client, share }) {
-    const additionalParams = { shareWith: share.collaborator.name } as any
-
-    return client.shares.deleteShare(share.id, additionalParams).then(() => {
-      context.commit('REMOVE_SPACE_MEMBER', share)
+  async addSpaceMember(
+    context,
+    { client, graphClient, path, shareWith, permissions, role, storageId, displayName }
+  ) {
+    await client.shares.shareSpaceWithUser(path, shareWith, storageId, {
+      permissions,
+      role: role.name
     })
+    const graphResponse = await graphClient.drives.getDrive(storageId)
+    context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
+    const shareObj = { role: role.name, onPremisesSamAccountName: shareWith, displayName }
+    context.commit('UPSERT_SPACE_MEMBERS', buildSpaceShare(shareObj, storageId))
+  },
+  async changeSpaceMember(context, { client, graphClient, share, permissions, role }) {
+    await client.shares.shareSpaceWithUser('', share.collaborator.name, share.id, {
+      permissions,
+      role: role.name
+    })
+
+    const graphResponse = await graphClient.drives.getDrive(share.id)
+    context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
+    const spaceShare = buildSpaceShare(
+      {
+        role: role.name,
+        onPremisesSamAccountName: share.collaborator.name,
+        displayName: share.collaborator.displayName
+      },
+      share.id
+    )
+
+    context.commit('UPSERT_SPACE_MEMBERS', spaceShare)
+  },
+  async deleteSpaceMember(context, { client, graphClient, share, reloadSpace = true }) {
+    const additionalParams = { shareWith: share.collaborator.name } as any
+    await client.shares.deleteShare(share.id, additionalParams)
+
+    if (reloadSpace) {
+      const graphResponse = await graphClient.drives.getDrive(share.id)
+      context.commit('UPSERT_SPACE', buildSpace(graphResponse.data))
+    }
+
+    context.commit('REMOVE_SPACE_MEMBER', share)
   }
 }
 
