@@ -13,6 +13,7 @@ Summary
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+* Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
@@ -88,6 +89,14 @@ Details
 
    https://github.com/owncloud/web/issues/7736
    https://github.com/owncloud/web/pull/7740
+
+* Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
+
+   We've fixed a bug, where editing a user after creating in the user management was only possible
+   after page refresh.
+
+   https://github.com/owncloud/web/issues/7761
+   https://github.com/owncloud/web/pull/7820
 
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 
