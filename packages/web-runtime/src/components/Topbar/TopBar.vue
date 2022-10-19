@@ -20,7 +20,7 @@
 
       <theme-switcher v-if="darkThemeAvailable" />
       <template v-if="cernFeatures">
-        <oc-button id="oc-topbar-account-links" appearance="raw" variation="inverse">
+        <oc-button id="oc-topbar-account-links" appearance="raw" variation="inverse" :aria-label="helpButtonLabel">
           <oc-icon name="questionnaire" />
         </oc-button>
         <oc-drop
@@ -139,6 +139,9 @@ export default {
     ...mapGetters(['configuration', 'user']),
     ...mapGetters('Files', ['openedFile']),
 
+    helpButtonLabel() {
+      return this.$gettext('Show service links')
+    },
     cernFeatures() {
       return !!this.configuration?.options?.cernFeatures
     },

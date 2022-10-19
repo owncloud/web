@@ -65,6 +65,7 @@
                     :is="space.disabled ? 'oc-button' : 'router-link'"
                     v-bind="getSpaceLinkProps(space)"
                     v-on="getSpaceLinkListeners(space)"
+                    :aria-label="spaceLabel"
                   >
                     <oc-tag
                       v-if="space.disabled"
@@ -77,7 +78,7 @@
                       v-if="imageContentObject[space.id]"
                       class="space-image oc-rounded-top"
                       :src="imageContentObject[space.id]['data']"
-                      alt=""
+                      alt="Project logo"
                     />
                     <oc-icon
                       v-else
@@ -317,6 +318,11 @@ export default defineComponent({
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
     breadcrumbs() {
       return [{ text: this.$gettext('Projects') }]
+    },
+    spaceLabel(){
+      return this.$gettext(
+        'Open project'
+      )
     },
     spacesHint() {
       return this.$gettext(

@@ -63,12 +63,14 @@
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
           :parent-folder-link="parentFolderLink(item)"
+          :aria-label="resourceLabel"
           :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
         />
         <oc-button
           v-if="hasRenameAction(item)"
           class="resource-table-edit-name"
+          :ariaLabel="editButtonLabel"
           appearance="raw"
           @click="openRenameDialog(item)"
         >
@@ -433,6 +435,12 @@ export default defineComponent({
     table() {
       const { OcTable } = components
       return this.configuration?.options?.enableAdvancedTable ? AdvancedTable : OcTable
+    },
+    editButtonLabel(){
+      return this.$gettext('Edit resource name')
+    },
+    resourceLabel(){
+      return this.$gettext('Open resource')
     },
     popperOptions() {
       return {

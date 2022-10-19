@@ -1,16 +1,14 @@
 <template>
   <div>
     <div v-if="groupingAllowed && groupingSettings.showGroupingOptions" class="oc-pb-m">
-      <div class="oc-docs-width-small" style="display: inline">
-        <label class="oc-mx-s">Group By:</label>
-      </div>
-      <div class="oc-docs-width-medium" style="display: inline-block; width: 250px">
+      <div class="oc-px-m" style="display: inline-block; width: 250px">
         <oc-select
           v-model="selectedGroupingOption"
           :options="[
             ...Object.keys(groupingSettings.groupingFunctions),
             !Object.keys(groupingSettings.groupingFunctions).includes('None') ? 'None' : ''
           ]"
+          label="Group by"
           :clearable="false"
           :searchable="false"
         />

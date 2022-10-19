@@ -4,6 +4,7 @@
       v-if="tours.length === 1"
       id="toursButton"
       v-oc-tooltip="tours[0].tooltip"
+      :aria-label="tours[0].tooltip"
       @click.stop="startTour(0)"
     >
       <oc-icon name="map" />
@@ -11,7 +12,12 @@
     </oc-button>
 
     <div v-else>
-      <oc-button id="toursButton" v-oc-tooltip="toursTooltip" size="small">
+      <oc-button
+        id="toursButton"
+        v-oc-tooltip="toursTooltip"
+        size="small"
+        aria-label="toursTooltip"
+      >
         <oc-icon name="map" />
         <translate>Tours</translate> </oc-button
       ><oc-drop
@@ -30,7 +36,7 @@
             class="user-menu-list"
             @click.stop="startTour(id)"
           >
-            <oc-button v-oc-tooltip="tour.tooltip" appearance="raw">
+            <oc-button v-oc-tooltip="tour.tooltip" appearance="raw" :aria-label="tour.tooltip">
               <span class="profile-info-wrapper" :class="'oc-py-xs'">
                 {{ tour.tourName }}
               </span></oc-button

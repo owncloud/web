@@ -1,6 +1,6 @@
 <template>
   <div class="oc-mb-s oc-width-1-1">
-    <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm" v-text="linkName" />
+    <h4 v-if="linkName" class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm" v-text="linkName" />
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-s link-name-container">
       <div v-if="copied" class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon variation="success" name="checkbox-circle" />

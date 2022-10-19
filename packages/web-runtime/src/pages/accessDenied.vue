@@ -5,7 +5,7 @@
   >
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-login-card oc-position-center">
-      <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
+      <img class="oc-login-logo" :src="logoImg" alt="logo" :aria-hidden="true" />
       <div class="oc-login-card-body oc-width-large">
         <h3 class="oc-login-card-title">
           <span v-translate>Login Error</span>

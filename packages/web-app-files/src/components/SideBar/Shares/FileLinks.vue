@@ -2,7 +2,7 @@
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="linksHeading" />
-      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
+      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" :aria-label="helperLabel"/>
     </div>
     <p
       v-if="!canCreatePublicLinks"
@@ -73,7 +73,7 @@
         <h3 class="oc-text-bold oc-m-rm oc-text-medium">
           <span v-text="indirectLinksHeading" />
         </h3>
-        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
+        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" :aria-label="helperLabel"/>
       </div>
       <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
         <li
@@ -164,6 +164,9 @@ export default defineComponent({
 
     addButtonLabel() {
       return this.$gettext('Add link')
+    },
+    helperLabel(){
+      return this.$gettext('Contextual helper')
     },
 
     collapseButtonTitle() {

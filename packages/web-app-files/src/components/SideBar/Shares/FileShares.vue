@@ -6,6 +6,7 @@
         v-if="helpersEnabled"
         class="oc-pl-xs"
         v-bind="inviteCollaboratorHelp"
+        :aria-label="helperLabel"
       />
     </div>
     <invite-collaborator-form v-if="currentUserCanShare" key="new-collaborator" class="oc-my-s" />
@@ -142,6 +143,9 @@ export default {
       }
 
       return shareInviteCollaboratorHelp
+    },
+    helperLabel(){
+      return this.$gettext('Contextual helper')
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers

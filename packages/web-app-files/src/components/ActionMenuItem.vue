@@ -8,6 +8,7 @@
       data-testid="action-handler"
       size="small"
       v-on="getComponentListeners(action, items)"
+      :aria-label="action.name"
     >
       <oc-img
         v-if="action.img"
