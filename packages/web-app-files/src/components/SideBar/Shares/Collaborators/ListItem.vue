@@ -113,7 +113,7 @@ import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { defineComponent } from '@vue/composition-api'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'ListItem',

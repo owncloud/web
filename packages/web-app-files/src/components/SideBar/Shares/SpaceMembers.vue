@@ -38,7 +38,7 @@ import { createLocationSpaces, isLocationSpacesActive } from '../../../router'
 import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { SpaceResource } from 'web-client/src/helpers'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpaceMembers',
