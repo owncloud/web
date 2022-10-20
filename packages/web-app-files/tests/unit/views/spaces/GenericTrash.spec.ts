@@ -4,7 +4,7 @@ describe('GenericTrash view', () => {
 
 // import Vuex from 'vuex'
 // import { mount, createLocalVue } from '@vue/test-utils'
-// import Trashbin from '@files/src/views/spaces/Trashbin.vue'
+// import Trashbin from 'web-app-files/src/views/spaces/Trashbin.vue'
 // import { createStore } from 'vuex-extensions'
 // import { createLocationTrash } from '../../../../src/router'
 // import waitFor from 'wait-for-expect'
@@ -80,8 +80,8 @@ describe('GenericTrash view', () => {
 /* Old TrashBin.spec.js
 
 import { mount } from '@vue/test-utils'
-import TrashBin from '@files/src/components/TrashBin.vue'
-import { getStore, localVue, createFile } from '@files/tests/unit/components/components.setup.js'
+import TrashBin from 'web-app-files/src/components/TrashBin.vue'
+import { getStore, localVue, createFile } from 'web-app-files/tests/unit/components/components.setup.js'
 
 const stubs = {
   'app-bar': true,

@@ -1,7 +1,10 @@
-import { major, rcompare } from 'semver'
+// Workaround https://github.com/npm/node-semver/issues/381
+import major from 'semver/functions/major'
+import rcompare from 'semver/functions/rcompare'
+
 import { RuntimeError } from 'web-runtime/src/container/error'
 import { clientService as defaultClientService, ClientService } from 'web-pkg/src/services'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 /**
  * Archiver struct within the capabilities as defined in reva

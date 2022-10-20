@@ -4,7 +4,7 @@ import stubs from '@/tests/unit/stubs/index.js'
 import { createLocalVue, mount } from '@vue/test-utils'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'
 import GetTextPlugin from 'vue-gettext'
-import fixtureMimeTypes from '@files/tests/__fixtures__/mimeTypes.js'
+import fixtureMimeTypes from 'web-app-files/tests/__fixtures__/mimeTypes.js'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

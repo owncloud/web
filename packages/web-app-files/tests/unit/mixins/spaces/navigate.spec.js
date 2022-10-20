@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import Navigate from '@files/src/mixins/spaces/actions/navigate.js'
+import Navigate from 'web-app-files/src/mixins/spaces/actions/navigate.js'
 import { createLocationSpaces, createLocationTrash } from '../../../../src/router'
 
 const localVue = createLocalVue()

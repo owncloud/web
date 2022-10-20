@@ -132,14 +132,14 @@ import pathUtil from 'path'
 import MixinFileActions, { EDITOR_MODE_CREATE } from '../../mixins/fileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useActiveLocation } from '../../composables'
-import { useGraphClient } from 'web-client/src/composables'
 
 import {
   useRequest,
   useCapabilityShareJailEnabled,
   useCapabilitySpacesEnabled,
   useStore,
-  useUserContext
+  useUserContext,
+  useGraphClient
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
@@ -153,15 +153,11 @@ import {
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SpaceResource } from 'web-client/src/helpers'
-import {
-  extractNameWithoutExtension,
-  resolveFileNameDuplicate,
-  ResourcesUpload
-} from '../../helpers/resource'
+import { extractNameWithoutExtension, SpaceResource } from 'web-client/src/helpers'
+import { resolveFileNameDuplicate, ResourcesUpload } from '../../helpers/resource'
 import { WebDAV } from 'web-client/src/webdav'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 import qs from 'qs'
 
 export default defineComponent({

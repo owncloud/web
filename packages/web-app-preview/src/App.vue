@@ -94,7 +94,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { mapGetters } from 'vuex'
 import {
   useAccessToken,

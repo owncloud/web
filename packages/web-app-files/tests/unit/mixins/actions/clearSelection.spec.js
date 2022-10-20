@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import clearSelection from '@files/src/mixins/actions/clearSelection.js'
+import clearSelection from 'web-app-files/src/mixins/actions/clearSelection.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

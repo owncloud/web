@@ -1,4 +1,4 @@
-import { getStore, localVue } from 'files/tests/unit/views/views.setup.js'
+import { getStore, localVue } from 'web-app-files/tests/unit/views/views.setup.js'
 import { shallowMount, mount } from '@vue/test-utils'
 import resolvePublicLink from '../../../src/pages/resolvePublicLink'
 

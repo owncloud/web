@@ -1,4 +1,4 @@
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from '../utils'
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 
@@ -13,16 +13,21 @@ export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
       space: SpaceResource,
       { path }: { path?: string },
       {
-        responseType = 'text'
+        responseType = 'text',
+        noCache = true
       }: {
         responseType?: 'arrayBuffer' | 'blob' | 'text'
+        noCache?: boolean
       } = {}
     ): Promise<GetFileContentsResponse> {
       if (isPublicSpaceResource(space)) {
         const res = await sdk.publicFiles.download(
           '',
           urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          space.publicLinkPassword
+          space.publicLinkPassword,
+          {
+            noCache
+          }
         )
         res.statusCode = res.status
         return {

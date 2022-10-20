@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
-import SpaceQuota from '@files/src/components/SpaceQuota'
+import SpaceQuota from 'web-app-files/src/components/SpaceQuota'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

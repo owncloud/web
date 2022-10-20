@@ -14,7 +14,7 @@ jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
     } as any)
 )
 
-jest.mock('../../../src/helpers/resources', () => ({
+jest.mock('web-client/src/helpers', () => ({
   buildResource: (v) => v
 }))
 

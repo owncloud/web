@@ -7,7 +7,7 @@ import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
 
-import SharesNavigation from '@files/src/components/AppBar/SharesNavigation'
+import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

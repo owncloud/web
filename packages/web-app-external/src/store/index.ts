@@ -1,5 +1,5 @@
 import { Commit } from 'vuex'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { v4 as uuidV4 } from 'uuid'
 

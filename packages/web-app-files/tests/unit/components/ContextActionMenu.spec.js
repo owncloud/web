@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
-import ContextActionMenu from '@files/src/components/ContextActionMenu'
+import ContextActionMenu from 'web-app-files/src/components/ContextActionMenu'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

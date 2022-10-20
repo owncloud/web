@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import DesignSystem from 'owncloud-design-system'
-import Pagination from '@files/src/components/FilesList/Pagination.vue'
+import Pagination from 'web-app-files/src/components/FilesList/Pagination.vue'
 import {
   createLocalVue as OGCreateLocalVue,
   mount,

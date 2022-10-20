@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import setReadme from '@files/src/mixins/spaces/actions/setReadme.js'
+import setReadme from 'web-app-files/src/mixins/spaces/actions/setReadme.js'
 import { createLocationSpaces } from '../../../../src/router'
 // eslint-disable-next-line jest/no-mocks-import
 import sdkMock from '@/__mocks__/sdk'

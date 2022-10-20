@@ -2,5 +2,12 @@
   "name": "draw-io",
   "version": "0.0.0",
   "description": "ownCloud web draw.io integration",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "luxon": "^2.4.0",
+    "vuex": "^3.6.2",
+    "web-client": "workspace:*",
+    "web-pkg": "workspace:*"
+  }
 }

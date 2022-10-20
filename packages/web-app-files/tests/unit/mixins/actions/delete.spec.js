@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import Delete from '@files/src/mixins/actions/delete.js'
+import Delete from 'web-app-files/src/mixins/actions/delete.js'
 import {
   createLocationShares,
   createLocationSpaces,

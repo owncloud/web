@@ -87,7 +87,7 @@ import {
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {

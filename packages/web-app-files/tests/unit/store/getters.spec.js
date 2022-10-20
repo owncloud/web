@@ -1,4 +1,4 @@
-import getters from '@files/src/store/getters'
+import getters from 'web-app-files/src/store/getters'
 import FixtureFiles from '@/__fixtures__/files'
 
 let state

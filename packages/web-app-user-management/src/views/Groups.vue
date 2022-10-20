@@ -85,11 +85,10 @@ import { ref, unref } from '@vue/composition-api'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions } from 'vuex'
-import { $gettext } from 'files/src/router/utils'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import { useGraphClient } from 'web-client/src/composables'
-import { defineComponent } from '@vue/runtime-core'
+import { useGraphClient } from 'web-pkg/src/composables'
+import { defineComponent } from '@vue/composition-api'
 import AppTemplate from '../components/AppTemplate.vue'
 
 export default defineComponent({
@@ -153,7 +152,7 @@ export default defineComponent({
         {
           app: 'DetailsPanel',
           icon: 'group-2',
-          title: $gettext('Group details'),
+          title: this.$gettext('Group details'),
           component: DetailsPanel,
           default: true,
           enabled: true,
@@ -162,7 +161,7 @@ export default defineComponent({
         {
           app: 'EditPanel',
           icon: 'pencil',
-          title: $gettext('Edit group'),
+          title: this.$gettext('Edit group'),
           component: EditPanel,
           default: false,
           enabled: false // this.selectedGroups.length === 1

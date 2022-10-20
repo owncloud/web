@@ -1,14 +1,12 @@
 import filesize from 'filesize'
 import { Resource } from 'web-client'
-import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
 import {
-  ConflictDialog,
   extractExtensionFromFile,
-  ResolveConflict,
-  resolveFileNameDuplicate,
-  ResolveStrategy
-} from '..'
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
+import { UppyResource } from 'web-runtime/src/composables/upload'
+import { ConflictDialog, ResolveConflict, resolveFileNameDuplicate, ResolveStrategy } from '..'
 import { locationPublicLink } from '../../../router/public'
 import { locationSpacesGeneric } from '../../../router/spaces'
 

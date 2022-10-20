@@ -1,9 +1,10 @@
 {
-  "name": "search",
+  "name": "web-app-search",
   "version": "0.0.0",
   "description": "ownCloud web search",
   "license": "AGPL-3.0",
   "dependencies": {
+    "mark.js": "^8.11.1",
     "p-cancelable": "^3.0.0",
     "portal-vue": "^2.1.7",
     "vue": "^2.6.10",
@@ -11,5 +12,11 @@
   },
   "devDependencies": {
     "ts-async-decorators": "^0.3.0"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.2",
+    "lodash-es": "^4.17.21",
+    "web-app-files": "workspace:*",
+    "web-pkg": "workspace:*"
   }
 }

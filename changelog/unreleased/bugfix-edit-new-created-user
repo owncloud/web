@@ -1,0 +1,6 @@
+Bugfix: Edit new created user in user management
+
+We've fixed a bug, where editing a user after creating in the user management was only possible after page refresh.
+
+https://github.com/owncloud/web/pull/7820
+https://github.com/owncloud/web/issues/7761

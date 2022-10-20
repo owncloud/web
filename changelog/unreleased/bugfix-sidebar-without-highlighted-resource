@@ -1,0 +1,6 @@
+Bugfix: Sidebar without highlighted resource
+
+Sidebar panels that require a resource now won't be loaded without such. This fixes a bug where navigating with an open sidebar would break it.
+
+https://github.com/owncloud/web/issues/7781
+https://github.com/owncloud/web/pull/7826

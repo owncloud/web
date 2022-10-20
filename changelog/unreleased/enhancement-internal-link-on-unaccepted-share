@@ -1,0 +1,6 @@
+Enhancement: Internal link on unaccepted share
+
+The error message when resolving an internal link to an unaccepted share has been improved for a better UX.
+
+https://github.com/owncloud/web/issues/7803
+https://github.com/owncloud/web/pull/7814

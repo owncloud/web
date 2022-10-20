@@ -67,7 +67,7 @@
 import { defineComponent, ref, unref } from '@vue/composition-api'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource } from '../../../helpers/resources'
+import { buildResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { buildWebDavSpacesPath } from 'web-client/src/helpers'
