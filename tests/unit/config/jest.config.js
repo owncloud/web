@@ -1,6 +1,11 @@
 const path = require('path')
 const rootDir = path.resolve(__dirname, '../../../')
 
+// We need to transpile these modules as they are using esm syntax
+const esmModules = ['lodash-es'].map((m) =>
+  process.env.npm_config_user_agent?.startsWith('pnpm') ? `.pnpm/${m}@.*` : m
+)
+
 module.exports = {
   rootDir,
   modulePaths: ['<rootDir>'],
@@ -22,7 +27,7 @@ module.exports = {
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy'
   },
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es|@uppy)'],
+  transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esmModules.join('|')})`],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
