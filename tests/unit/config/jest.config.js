@@ -13,7 +13,6 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
     '^@/(.*)$': '<rootDir>/$1',
-    '^@files/(.*)$': '<rootDir>/packages/web-app-files/$1',
     'core-js': '<rootDir>/node_modules/core-js',
 
     // HACK: workaround for https://github.com/transloadit/uppy/issues/4127
