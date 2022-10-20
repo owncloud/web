@@ -42,6 +42,18 @@ dir = {
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
     "ocis": "/var/www/owncloud/ocis-build",
+    "commentsFile": "/var/www/owncloud/web/comments.file",
+    "app": "/srv/app",
+    "config": "/srv/config",
+    "ocisConfig": "/srv/config/drone/config-ocis.json",
+    "oc10IntegrationAppOauthConfig": "/srv/config/drone/config-oc10-integration-app-oauth.json",
+    "oc10IdentifierRegistrationConfig": "/srv/config/drone/identifier-registration-oc10.yml",
+    "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
+    "oc10OpenIdConfig": "/srv/config/drone/config-oc10-openid.json",
+    "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
+    "testingDataDir": "/srv/app/testing/data/",
+    "setupServerAndAppScript": "tests/drone/setup-server-and-app.sh",
+    "oc10OauthConfig": "tests/drone/config-oc10-oauth.json",
 }
 
 config = {
@@ -511,9 +523,9 @@ config = {
                 "SERVER_HOST": "https://ocis:9200",
                 "BACKEND_HOST": "https://ocis:9200",
                 "RUN_ON_OCIS": "true",
-                "TESTING_DATA_DIR": "/srv/app/testing/data/",
-                "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/owncloud/data/",
-                "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
+                "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
+                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "runningOnOCIS": True,
@@ -530,7 +542,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-integration-app-oauth.json",
+                "WEB_UI_CONFIG": "%s" % dir["oc10IntegrationAppOauthConfig"],
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
@@ -608,7 +620,7 @@ config = {
                 ],
             },
             "extraEnvironment": {
-                "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-integration-app-oauth.json",
+                "WEB_UI_CONFIG": "%s" % dir["oc10IntegrationAppOauthConfig"],
                 "SERVER_HOST": "http://owncloud/index.php/apps/web/index.html",
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login-and-web-integration-app.md" % dir["web"],
             },
@@ -728,13 +740,13 @@ minio_mc_environment = {
 
 go_step_volumes = [{
     "name": "server",
-    "path": "/srv/app",
+    "path": dir["app"],
 }, {
     "name": "gopath",
     "path": "/go",
 }, {
     "name": "configs",
-    "path": "/srv/config",
+    "path": dir["config"],
 }]
 
 web_workspace = {
@@ -1815,7 +1827,7 @@ def setupIntegrationWebApp():
             # setup web integration app
             "cd %s || exit" % dir["server"],
             "mkdir apps-external/web",
-            "cp /srv/config/drone/config-oc10-integration-app-oauth.json config/config.json",
+            "cp %s config/config.json" % dir["oc10IntegrationAppOauthConfig"],
             "cp %s/packages/web-integration-oc10/* apps-external/web -r" % dir["web"],
             "cp %s/dist/* apps-external/web -r" % dir["web"],
             "ls -la apps-external/web",
@@ -1823,7 +1835,7 @@ def setupIntegrationWebApp():
         ],
         "volumes": [{
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -1992,7 +2004,7 @@ def getSkeletonFiles():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }],
     }]
 
@@ -2075,10 +2087,10 @@ def buildGlauth():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2097,10 +2109,10 @@ def glauthService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2116,10 +2128,10 @@ def buildIdP():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2132,7 +2144,7 @@ def idpService():
             "LDAP_BASEDN": "dc=example,dc=com",
             "LDAP_BINDDN": "cn=admin,ou=users,dc=example,dc=com",
             "LDAP_URI": "ldap://glauth:9125",
-            "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration-oc10.yml",
+            "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["oc10IdentifierRegistrationConfig"],
             "IDP_ISS": "https://idp:9130",
             "LDAP_BINDPW": "admin",
             "LDAP_SCOPE": "sub",
@@ -2149,10 +2161,10 @@ def idpService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2164,7 +2176,7 @@ def ocisService():
             "detach": True,
             "environment": {
                 "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
-                "IDP_IDENTIFIER_REGISTRATION_CONF": "/srv/config/drone/identifier-registration.yml",
+                "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
                 "OCIS_INSECURE": "true",
                 "OCIS_LOG_LEVEL": "error",
                 "OCIS_URL": "https://ocis:9200",
@@ -2177,24 +2189,24 @@ def ocisService():
                 "STORAGE_USERS_DRIVER": "ocis",
                 "STORAGE_USERS_DRIVER_LOCAL_ROOT": "/srv/app/tmp/ocis/local/root",
                 "STORAGE_USERS_DRIVER_OCIS_ROOT": "/srv/app/tmp/ocis/storage/users",
-                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "/srv/app/tmp/ocis/owncloud/data",
+                "STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR": "%s" % dir["ocisRevaDataRoot"],
                 "WEB_ASSET_PATH": "%s/dist" % dir["web"],
-                "WEB_UI_CONFIG": "/srv/config/drone/config-ocis.json",
+                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
                 "FRONTEND_SEARCH_MIN_LENGTH": "2",
             },
             "commands": [
                 "cd %s" % dir["ocis"],
-                "mkdir -p /srv/app/tmp/ocis/owncloud/data/",
+                "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
                 "./ocis server",
             ],
             "volumes": [{
                 "name": "gopath",
-                "path": "/srv/app",
+                "path": dir["app"],
             }, {
                 "name": "configs",
-                "path": "/srv/config",
+                "path": dir["config"],
             }],
         },
         {
@@ -2218,10 +2230,10 @@ def buildOcisWeb():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2232,7 +2244,7 @@ def ocisWebService():
         "image": OC_CI_GOLANG,
         "detach": True,
         "environment": {
-            "WEB_UI_CONFIG": "/srv/config/drone/config-oc10-openid.json",
+            "WEB_UI_CONFIG": "%s" % dir["oc10OpenIdConfig"],
             "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         },
         "commands": [
@@ -2241,10 +2253,10 @@ def ocisWebService():
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2269,14 +2281,14 @@ def setupServerConfigureWeb(logLevel):
         "name": "setup-server-configure-web",
         "image": OC_CI_PHP,
         "commands": [
-            "cp tests/drone/config-oc10-oauth.json dist/config.json",
+            "cp %s dist/config.json" % dir["oc10OauthConfig"],
             "mkdir -p /srv/config",
             "cp -r %s/tests/drone /srv/config" % dir["web"],
             "ls -la /srv/config/drone",
         ],
         "volumes": [{
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2299,7 +2311,7 @@ def setupServerAndAppsForIntegrationApp(logLevel):
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
         "commands": [
-            "bash -x tests/drone/setup-server-and-app.sh %s %s %s" % (dir["server"], logLevel, "builtInWeb"),
+            "bash -x %s %s %s %s" % (dir["setupServerAndAppScript"], dir["server"], logLevel, "builtInWeb"),
         ],
     }]
 
@@ -2308,7 +2320,7 @@ def setupServerAndApp(logLevel):
         "name": "setup-server-%s" % config["app"],
         "image": OC_CI_PHP,
         "commands": [
-            "bash -x tests/drone/setup-server-and-app.sh %s %s" % (dir["server"], logLevel),
+            "bash -x %s %s %s" % (dir["setupServerAndAppScript"], dir["server"], logLevel),
         ],
     }]
 
@@ -2400,7 +2412,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         environment["SCREENSHOTS"] = "true"
     environment["SERVER_HOST"] = "http://web"
     environment["BACKEND_HOST"] = "http://owncloud"
-    environment["COMMENTS_FILE"] = "/var/www/owncloud/web/comments.file"
+    environment["COMMENTS_FILE"] = "%s" % dir["commentsFile"]
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
     environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
@@ -2417,10 +2429,10 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         ],
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "configs",
-            "path": "/srv/config",
+            "path": dir["config"],
         }],
     }]
 
@@ -2637,7 +2649,7 @@ def githubComment(alternateSuiteName):
             },
         },
         "commands": [
-            "if [ -s /var/www/owncloud/web/comments.file ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % prefix,
+            "if [ -s %s ]; then echo '%s' | cat - comments.file > temp && mv temp comments.file && /bin/drone-github-comment; fi" % (dir["commentsFile"], prefix),
         ],
         "when": {
             "status": [
@@ -2820,7 +2832,7 @@ def middlewareService(ocis = False, federatedServer = False):
         "environment": environment,
         "volumes": [{
             "name": "gopath",
-            "path": "/srv/app",
+            "path": dir["app"],
         }, {
             "name": "uploads",
             "path": "/uploads",
