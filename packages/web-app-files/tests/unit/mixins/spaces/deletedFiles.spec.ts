@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount } from '@vue/test-utils'
-import DeletedFiles from '../../../../src/mixins/spaces/actions/deletedFiles.js'
+import DeletedFiles from 'web-app-files/src/mixins/spaces/actions/deletedFiles.js'
 import { createLocationTrash } from '../../../../src/router'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'

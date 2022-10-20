@@ -1,10 +1,10 @@
+import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
 import { Component } from 'vue'
 import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
-import { SearchList, SearchResult } from '../../../../web-app-search/src/types'
 
 export const searchLimit = 200
 

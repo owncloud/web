@@ -1,12 +1,17 @@
 import { User } from '../user'
-import { buildWebDavSpacesPath, extractDomSelector, extractNodeId, Resource } from '../resource'
+import {
+  buildWebDavSpacesPath,
+  buildWebDavSpacesTrashPath,
+  extractDomSelector,
+  extractNodeId,
+  Resource
+} from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
 
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
-import { buildWebDavSpacesTrashPath } from 'web-app-files/src/helpers/resources'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
@@ -57,14 +62,6 @@ export function buildShareSpaceResource({
     space.name = newName
   }
   return space
-}
-
-export function buildWebDavFilesPath(userId, path) {
-  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function buildWebDavFilesTrashPath(userId, path = '') {
-  return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildSpace(data): SpaceResource {
