@@ -133,7 +133,6 @@ export default defineComponent({
       }
 
       if (key === keycode('c') && ctrl) {
-        console.log('selectedFiles', this.selectedFiles)
         return this.copySelectedFiles({ space: this.space, resources: this.selectedFiles })
       }
       if (key === keycode('v') && ctrl) {
