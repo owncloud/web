@@ -6006,6 +6006,7 @@ __metadata:
   peerDependencies:
     "@vue/composition-api": ^1.6.2
     uuid: ^9.0.0
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -9843,6 +9844,7 @@ __metadata:
   resolution: "pdf-viewer@workspace:packages/web-app-pdf-viewer"
   peerDependencies:
     "@vue/composition-api": ^1.6.2
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-pkg: "workspace:*"
   languageName: unknown
@@ -10645,6 +10647,7 @@ __metadata:
   resolution: "preview@workspace:packages/web-app-preview"
   peerDependencies:
     "@vue/composition-api": ^1.6.2
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -12567,6 +12570,7 @@ __metadata:
     marked: ^4.0.12
     sanitize-html: ^2.7.0
     vue-concurrency: ^3.0.0-7
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -13150,6 +13154,7 @@ __metadata:
     uuid: ^9.0.0
     vue-concurrency: ^3.0.0-7
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-pkg: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -13531,11 +13536,13 @@ __metadata:
     sanitize-html: ^2.7.0
     semver: ^7.3.8
     uuid: ^9.0.0
+    vue-async-computed: ^3.9.0
     vue-concurrency: ^3.0.0-7
     vue-gettext: ^2.1.5
     vue-resize: ^1.0.1
     vue-router: ~3.5.3
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-app-search: "workspace:*"
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -13551,11 +13558,11 @@ __metadata:
     p-cancelable: ^3.0.0
     portal-vue: ^2.1.7
     ts-async-decorators: ^0.3.0
-    vue: ^2.6.10
-    vue-async-computed: ^3.9.0
   peerDependencies:
     "@vue/composition-api": ^1.6.2
     lodash-es: ^4.17.21
+    vue-async-computed: ^3.9.0
+    vue-gettext: ^2.1.5
     web-app-files: "workspace:*"
     web-pkg: "workspace:*"
   languageName: unknown
@@ -13583,6 +13590,7 @@ __metadata:
     uuid: ^9.0.0
     vue-router: ~3.5.3
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-client: "workspace:*"
   languageName: unknown
   linkType: soft
