@@ -66,7 +66,7 @@ describe('InviteCollaborator RecipientContainer', () => {
       }
     }
     const wrapper = getMountedWrapper(recipient, true)
-    const spyOnDeselect = jest.spyOn(wrapper.vm, 'deselect').mockImplementation()
+    const spyOnDeselect = wrapper.vm.deselect.mockImplementation()
     const button = wrapper.find('.files-share-invite-recipient-btn-remove')
     await button.trigger('click')
     expect(spyOnDeselect).toHaveBeenCalledTimes(1)

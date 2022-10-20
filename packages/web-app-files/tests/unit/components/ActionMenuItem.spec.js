@@ -45,7 +45,7 @@ describe('ActionMenuItem component', () => {
   describe('component is of type oc-button', () => {
     it('calls the action handler on button click', async () => {
       const action = fileActions.download
-      const spyHandler = jest.spyOn(action, 'handler')
+      const spyHandler = action.handler
       const wrapper = getWrapper(action)
       const button = wrapper.find(selectors.handler)
       expect(button.exists()).toBeTruthy()
