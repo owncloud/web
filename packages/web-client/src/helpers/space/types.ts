@@ -26,6 +26,7 @@ export interface SpaceResource extends Resource {
   webDavUrl: string
   root: SpaceResourceRoot
   getWebDavUrl(resource: Resource): string
+  getWebDavTrashPath(): string
   getDriveAliasAndItem(resource: Resource): string
 }
 

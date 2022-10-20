@@ -1,4 +1,3 @@
-import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource } from 'web-client/src/helpers'
@@ -7,6 +6,7 @@ import { Component } from 'vue'
 import VueRouter from 'vue-router'
 import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
+import { SearchPreview, SearchResult } from '../../../../web-app-search/src/types'
 
 export const previewSearchLimit = 8
 

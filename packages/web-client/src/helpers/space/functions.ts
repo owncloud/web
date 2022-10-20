@@ -58,6 +58,14 @@ export function buildShareSpaceResource({
   return space
 }
 
+export function buildWebDavFilesPath(userId, path) {
+  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
+}
+
+export function buildWebDavFilesTrashPath(userId, path = '') {
+  return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
+}
+
 export function buildSpace(data): SpaceResource {
   let spaceImageData, spaceReadmeData
   let disabled = false
@@ -197,6 +205,12 @@ export function buildSpace(data): SpaceResource {
     },
     getWebDavUrl(resource: Resource): string {
       return urlJoin(this.webDavUrl, resource.path)
+    },
+    getWebDavTrashPath() {
+      return urlJoin(
+        '/',
+        `spaces/trash-bin/${this.storageId}/${this.path}`.split('/').filter(Boolean).join('/')
+      )
     },
     isViewer(uuid: string): boolean {
       return this.spaceRoles[spaceRoleViewer.name].includes(uuid)

@@ -1,9 +1,6 @@
 import {
   buildWebDavFilesPath,
   buildWebDavFilesTrashPath,
-  buildWebDavSpacesTrashPath
-} from 'files/src/helpers/resources'
-import {
   buildWebDavSpacesPath,
   FileResource,
   isPublicSpaceResource,
@@ -24,9 +21,7 @@ export const RestoreFileFactory = ({ sdk }: WebDavOptions) => {
       if (isPublicSpaceResource(space)) {
         return
       }
-      const path = hasShareJail
-        ? buildWebDavSpacesTrashPath(space.id)
-        : buildWebDavFilesTrashPath(userId)
+      const path = hasShareJail ? space.getWebDavTrashPath() : buildWebDavFilesTrashPath(userId)
       const restorePathBuilt = hasShareJail
         ? buildWebDavSpacesPath(space.id, restorePath)
         : buildWebDavFilesPath(userId, restorePath)
