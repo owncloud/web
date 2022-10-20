@@ -6,6 +6,7 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID }
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
+import { buildWebDavSpacesTrashPath } from 'web-app-files/src/helpers/resources'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
@@ -102,6 +103,10 @@ export function buildSpace(data): SpaceResource {
     leadingSlash: true
   })
   const webDavUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavPath)
+  const webDavTrashPath = urlJoin(data.webDavTrashPath || buildWebDavSpacesTrashPath(data.id), {
+    leadingSlash: true
+  })
+  const webDavTrashUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavTrashPath)
 
   const s = {
     id: data.id,
@@ -112,8 +117,8 @@ export function buildSpace(data): SpaceResource {
     description: data.description,
     extension: '',
     path: '/',
-    webDavUrl,
     webDavPath,
+    webDavTrashPath,
     driveAlias: data.driveAlias,
     driveType: data.driveType,
     type: 'space',
@@ -203,14 +208,11 @@ export function buildSpace(data): SpaceResource {
         leadingSlash: false
       })
     },
-    getWebDavUrl(resource: Resource): string {
-      return urlJoin(this.webDavUrl, resource.path)
+    getWebDavUrl({ path }: { path: string }): string {
+      return urlJoin(webDavUrl, path)
     },
-    getWebDavTrashPath() {
-      return urlJoin(
-        '/',
-        `spaces/trash-bin/${this.storageId}/${this.path}`.split('/').filter(Boolean).join('/')
-      )
+    getWebDavTrashUrl({ path }: { path: string }): string {
+      return urlJoin(webDavTrashUrl, path)
     },
     isViewer(uuid: string): boolean {
       return this.spaceRoles[spaceRoleViewer.name].includes(uuid)

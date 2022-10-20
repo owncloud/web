@@ -176,13 +176,10 @@ export default {
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              const hasShareJail = this.capabilities?.spaces?.share_jail === true
               await this.$clientService.webdav.restoreFile(
                 this.space,
-                this.user.id,
-                hasShareJail,
-                resource.id,
-                resource.path,
+                { id: resource.id },
+                { path: resource.path },
                 { overwrite }
               )
               restoredResources.push(resource)

@@ -1,31 +1,20 @@
-import {
-  buildWebDavFilesPath,
-  buildWebDavFilesTrashPath,
-  buildWebDavSpacesPath,
-  FileResource,
-  isPublicSpaceResource,
-  SpaceResource
-} from '../helpers'
+import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
+import { urlJoin } from '../utils'
 
 export const RestoreFileFactory = ({ sdk }: WebDavOptions) => {
   return {
-    async restoreFile(
+    restoreFile(
       space: SpaceResource,
-      userId: string | number,
-      hasShareJail: boolean,
-      id: string | number,
-      restorePath: string,
+      { id }: { id: string | number },
+      { path: restorePath }: { path: string },
       { overwrite }: { overwrite?: boolean }
     ): Promise<FileResource> {
       if (isPublicSpaceResource(space)) {
         return
       }
-      const path = hasShareJail ? space.getWebDavTrashPath() : buildWebDavFilesTrashPath(userId)
-      const restorePathBuilt = hasShareJail
-        ? buildWebDavSpacesPath(space.id, restorePath)
-        : buildWebDavFilesPath(userId, restorePath)
-      return sdk.fileTrash.restore(path, id, restorePathBuilt, overwrite)
+      const restoreWebDavPath = urlJoin(space.webDavPath, restorePath)
+      return sdk.fileTrash.restore(space.webDavTrashPath, id, restoreWebDavPath, overwrite)
     }
   }
 }

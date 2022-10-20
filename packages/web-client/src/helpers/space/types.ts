@@ -23,10 +23,10 @@ export interface SpaceResourceRoot {
 
 export interface SpaceResource extends Resource {
   disabled?: boolean
-  webDavUrl: string
+  webDavTrashPath: string
   root: SpaceResourceRoot
-  getWebDavUrl(resource: Resource): string
-  getWebDavTrashPath(): string
+  getWebDavUrl({ path }: { path: string }): string
+  getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string
 }
 
