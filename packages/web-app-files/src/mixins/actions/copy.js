@@ -3,13 +3,10 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../router'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { dirname } from 'path'
+import { mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['currentFolder']),
     isMacOs() {
       return window.navigator.platform.match('Mac')
     },
@@ -56,19 +53,8 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['copySelectedFiles']),
-    ...mapMutations('Files', ['SET_FILE_SELECTION']),
     $_copy_trigger({ resources }) {
-      this.SET_FILE_SELECTION(resources)
-      this.copySelectedFiles({ space: this.space })
-      const currentFolderSelected = resources.some((r) => r.id === this.currentFolder?.id)
-      if (currentFolderSelected) {
-        return this.$router.push(
-          createFileRouteOptions(this.space, {
-            path: dirname(this.currentFolder.path),
-            fileId: this.currentFolder.parentFolderId
-          })
-        )
-      }
+      this.copySelectedFiles({ space: this.space, resources })
     }
   }
 }

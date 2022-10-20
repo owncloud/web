@@ -5,7 +5,7 @@
 <script lang="ts">
 import keycode from 'keycode'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 import { defineComponent, PropType } from '@vue/composition-api'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -34,7 +34,8 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState('Files', ['latestSelectedId'])
+    ...mapState('Files', ['latestSelectedId']),
+    ...mapGetters('Files', ['files', 'selectedFiles'])
   },
 
   mounted() {
@@ -132,13 +133,14 @@ export default defineComponent({
       }
 
       if (key === keycode('c') && ctrl) {
-        return this.copySelectedFiles({ space: this.space })
+        console.log('selectedFiles', this.selectedFiles)
+        return this.copySelectedFiles({ space: this.space, resources: this.selectedFiles })
       }
       if (key === keycode('v') && ctrl) {
         return this.handlePasteAction()
       }
       if (key === keycode('x') && ctrl) {
-        return this.cutSelectedFiles({ space: this.space })
+        return this.cutSelectedFiles({ space: this.space, resources: this.selectedFiles })
       }
       if (key === keycode('down') && !shift) {
         return this.handleNavigateAction(event)

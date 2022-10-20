@@ -2,7 +2,7 @@ import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import { set, has } from 'lodash-es'
 import { getIndicators } from '../helpers/statusIndicators'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -33,14 +33,9 @@ export default {
     state.clipboardResources = []
     state.clipboardAction = null
   },
-  CLIPBOARD_SELECTED(state, { space }: { space: SpaceResource }) {
+  CLIPBOARD_SELECTED(state, { space, resources }: { space: SpaceResource; resources: Resource[] }) {
     state.clipboardSpace = space
-    state.clipboardResources = [
-      ...state.files,
-      ...(state.currentFolder && [state.currentFolder])
-    ].filter((f) => {
-      return state.selectedIds.some((id) => f.id === id)
-    })
+    state.clipboardResources = resources
   },
   SET_CLIPBOARD_ACTION(state, action) {
     state.clipboardAction = action
