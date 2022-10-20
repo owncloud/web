@@ -1,6 +1,7 @@
 {
   "name": "draw-io",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web draw.io integration",
   "license": "AGPL-3.0",
   "peerDependencies": {

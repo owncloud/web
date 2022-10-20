@@ -1,6 +1,7 @@
 {
   "name": "web-app-search",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web search",
   "license": "AGPL-3.0",
   "dependencies": {

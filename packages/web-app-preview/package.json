@@ -1,6 +1,7 @@
 {
   "name": "preview",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud Web Preview",
   "license": "AGPL-3.0",
   "peerDependencies": {

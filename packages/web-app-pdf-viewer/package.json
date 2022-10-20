@@ -1,6 +1,7 @@
 {
   "name": "pdf-viewer",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web PDF viewer",
   "license": "AGPL-3.0",
   "peerDependencies": {

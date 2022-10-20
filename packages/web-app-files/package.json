@@ -1,6 +1,7 @@
 {
   "name": "web-app-files",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
