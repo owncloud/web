@@ -18,7 +18,7 @@ Everyone is invited to contribute. Simply fork [the codebase](), check [the issu
 
 ### Linting and tests
 
-To make sure your pull request can be efficiently reviewed and won't need a lot of changes down the road, please run the linter and the unit tests via `yarn lint --fix` and `yarn test:unit` locally. [Our CI](https://drone.owncloud.com/owncloud/web) will run on pull requests and report back any problems after that. For a further introduction on how we handle testing, please head to the [testing docs]({{< ref "testing/_index.md" >}}).
+To make sure your pull request can be efficiently reviewed and won't need a lot of changes down the road, please run the linter and the unit tests via `pnpm lint --fix` and `pnpm test:unit` locally. [Our CI](https://drone.owncloud.com/owncloud/web) will run on pull requests and report back any problems after that. For a further introduction on how we handle testing, please head to the [testing docs]({{< ref "testing/_index.md" >}}).
 
 ### Changelog items
 

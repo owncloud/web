@@ -14,12 +14,12 @@
   "editor.formatOnSave": true,
   "eslint.alwaysShowStatus": false,
   "eslint.format.enable": true,
-  "eslint.packageManager": "yarn",
+  "eslint.packageManager": "pnpm",
   "jest.autoRun": {
     "watch": false,
     "onStartup": true
   },
-  "jest.jestCommandLine": "yarn test:unit",
-  "npm.packageManager": "yarn",
+  "jest.jestCommandLine": "pnpm test:unit",
+  "npm.packageManager": "pnpm",
   "typescript.format.enable": false
 }

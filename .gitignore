@@ -35,31 +35,6 @@ tests/testing-app
 
 /coverage
 
-# yarn2 with Zero-Installs: https://yarnpkg.com/features/zero-installs
-#.yarn/*
-#!.yarn/cache
-#!.yarn/patches
-#!.yarn/plugins
-#!.yarn/releases
-#!.yarn/sdks
-#!.yarn/versions
-
-# yarn2 not using Zero-Installs: https://yarnpkg.com/features/zero-installs
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
-tests/acceptance/.yarn/*
-!tests/acceptance/.yarn/patches
-!tests/acceptance/.yarn/releases
-!tests/acceptance/.yarn/plugins
-!tests/acceptance/.yarn/sdks
-!tests/acceptance/.yarn/versions
-
 # acceptance test artifacts
 logfile.txt
 comments.file
