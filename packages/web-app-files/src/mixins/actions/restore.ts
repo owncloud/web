@@ -11,6 +11,7 @@ import {
   resolveFileNameDuplicate,
   ConflictDialog
 } from '../../helpers/resource/'
+import { urlJoin } from 'web-client/src/utils'
 
 export default {
   computed: {
@@ -138,31 +139,27 @@ export default {
     },
     async restoreFolderStructure(resource) {
       const { webdav } = clientService
-      const createdFolders = []
+      const createdFolderPaths = []
       const directory = dirname(resource.path)
 
-      const folders = directory.split('/')
-      let createdSubFolders = ''
+      const folders = directory.split('/').filter(Boolean)
+      let parentPath = ''
       for (const subFolder of folders) {
-        if (!subFolder) {
-          continue
-        }
-
-        const folderToCreate = `${createdSubFolders}/${subFolder}`
-        if (createdFolders.includes(folderToCreate)) {
-          createdSubFolders += `/${subFolder}`
-          createdFolders.push(createdSubFolders)
+        const folderPath = urlJoin(parentPath, subFolder)
+        if (createdFolderPaths.includes(folderPath)) {
+          parentPath += `/${subFolder}`
+          createdFolderPaths.push(parentPath)
           continue
         }
 
         try {
-          await webdav.createFolder(this.space, { path: folderToCreate })
+          await webdav.createFolder(this.space, { path: folderPath })
         } catch (error) {
           console.error(error)
         }
 
-        createdSubFolders += `/${subFolder}`
-        createdFolders.push(createdSubFolders)
+        parentPath = urlJoin(parentPath, subFolder)
+        createdFolderPaths.push(parentPath)
       }
     },
     async restoreResources(resources, filesToOverwrite) {
@@ -176,12 +173,9 @@ export default {
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$clientService.webdav.restoreFile(
-                this.space,
-                { id: resource.id },
-                { path: resource.path },
-                { overwrite }
-              )
+              await this.$clientService.webdav.restoreFile(this.space, resource, resource, {
+                overwrite
+              })
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)
@@ -229,8 +223,7 @@ export default {
       if (this.capabilities?.spaces?.enabled) {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
-        const driveId = this.space.id
-        const driveResponse = await graphClient.drives.getDrive(driveId)
+        const driveResponse = await graphClient.drives.getDrive(this.space.id)
         this.UPDATE_SPACE_FIELD({
           id: driveResponse.data.id,
           field: 'spaceQuota',
@@ -262,18 +255,17 @@ export default {
         .map((e) => e.resource)
 
       for (let resource of filesToKeepBoth) {
-        debugger
         resource = { ...resource }
         const parentPath = dirname(resource.path)
         const parentResources = parentFolders[parentPath] || []
-        const extension = extractExtensionFromFile({ name: resource.name } as Resource)
+        const extension = extractExtensionFromFile(resource)
         const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
           ...parentResources,
           ...resolvedConflicts.map((e) => e.resource),
           ...resolvedResources
         ])
         resource.name = resolvedName
-        resource.path = `${parentPath}${resolvedName}`
+        resource.path = urlJoin(parentPath, resolvedName)
         resolvedResources.push(resource)
       }
       this.restoreResources(resolvedResources, filesToOverwrite)
