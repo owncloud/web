@@ -119,6 +119,12 @@ function getWrapper({
         webdav: {
           listFiles: jest.fn().mockImplementation(() => {
             return []
+          }),
+          restoreFile: jest.fn().mockImplementation(() => {
+            if (resolveRestore) {
+              return Promise.resolve({})
+            }
+            return Promise.reject(new Error(''))
           })
         }
       },

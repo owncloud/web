@@ -3,7 +3,7 @@ import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
 import { DavProperty } from 'web-pkg/src/constants'
-import { buildWebDavPublicPath, buildWebDavSpacesTrashPath } from 'files/src/helpers/resources'
+import { buildWebDavPublicPath } from 'files/src/helpers/resources'
 import { urlJoin } from 'web-pkg/src/utils'
 import { extractNodeId } from 'files/src/helpers/resource'
 

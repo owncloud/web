@@ -2,13 +2,9 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import PQueue from 'p-queue'
 import { dirname } from 'path'
 import { isLocationTrashActive } from '../../router'
-import {
-  buildWebDavFilesTrashPath,
-  buildWebDavFilesPath,
-  buildWebDavSpacesTrashPath
-} from '../../helpers/resources'
+
 import { clientService } from 'web-pkg/src/services'
-import { buildWebDavSpacesPath, Resource, isProjectSpaceResource } from 'web-client/src/helpers'
+import { Resource, isProjectSpaceResource } from 'web-client/src/helpers'
 import {
   ResolveStrategy,
   ResolveConflict,
@@ -181,7 +177,15 @@ export default {
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$clientService.webdav.restoreFile(this.space, this.user.id, resource.id, resource.path, { overwrite })
+              const hasShareJail = this.capabilities?.spaces?.share_jail === true
+              await this.$clientService.webdav.restoreFile(
+                this.space,
+                this.user.id,
+                hasShareJail,
+                resource.id,
+                resource.path,
+                { overwrite }
+              )
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)
