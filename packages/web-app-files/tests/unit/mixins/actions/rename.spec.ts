@@ -4,8 +4,8 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import rename from 'web-app-files/src/mixins/actions/rename'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
-import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from '../../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

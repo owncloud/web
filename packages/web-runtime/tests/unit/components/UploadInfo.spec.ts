@@ -1,10 +1,10 @@
 import { shallowMount } from '@vue/test-utils'
 import UploadInfo from '../../../src/components/UploadInfo.vue'
 import Vuex from 'vuex'
-import { defaultComponentMocks } from '../../../../../tests/unit/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from '../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from '../../../../../tests/unit/localVue/defaultLocalVue'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 
 const selectors = {
   overlay: '#upload-info',
