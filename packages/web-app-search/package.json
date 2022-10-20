@@ -13,6 +13,6 @@
     "vue-async-computed": "^3.9.0",
     "vue-gettext": "^2.1.5",
     "web-app-files": "workspace:*",
-    "web-pkg": "workspace:*"
+    "web-pkg": "npm:@ownclouders/web-pkg"
   }
 }

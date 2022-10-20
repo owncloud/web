@@ -28,8 +28,8 @@
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
     "web-app-search": "workspace:*",
-    "web-client": "workspace:*",
-    "web-pkg": "workspace:*",
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg",
     "web-runtime": "workspace:*"
   }
 }

@@ -1,6 +1,5 @@
 {
-  "name": "web-pkg",
-  "private": true,
+  "name": "@ownclouders/web-pkg",
   "version": "0.0.0",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
@@ -16,6 +15,7 @@
     "vue-router": "~3.5.3",
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
-    "web-client": "workspace:*"
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg"
   }
 }
