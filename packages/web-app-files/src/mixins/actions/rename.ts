@@ -1,10 +1,14 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { isSameResource, extractNameWithoutExtension } from '../../helpers/resource'
+import { isSameResource } from '../../helpers/resource'
 import { isLocationTrashActive, isLocationSharesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
-import { SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
+import {
+  SpaceResource,
+  isShareSpaceResource,
+  extractNameWithoutExtension
+} from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { renameResource } from '../../helpers/resources'
 

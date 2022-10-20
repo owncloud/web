@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import VueCompositionAPI from '@vue/composition-api'
 
-import SharesPanel from '@files/src/components/SideBar/Shares/SharesPanel.vue'
+import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
 const localVue = createLocalVue()
 localVue.use(VueCompositionAPI)
 

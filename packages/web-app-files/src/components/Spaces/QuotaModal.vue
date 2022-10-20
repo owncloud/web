@@ -21,9 +21,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { useGraphClient } from 'web-client/src/composables'
+import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 
 export default defineComponent({

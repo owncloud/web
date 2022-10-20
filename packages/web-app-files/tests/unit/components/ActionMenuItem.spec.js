@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
-import ActionMenuItem from '@files/src/components/ActionMenuItem'
+import ActionMenuItem from 'web-app-files/src/components/ActionMenuItem'
 import { fileActions } from '../../__fixtures__/fileActions'
 
 const localVue = createLocalVue()

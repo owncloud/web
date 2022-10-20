@@ -50,7 +50,7 @@
             class="file-row-share-decline oc-ml-s"
             @click.stop="$_declineShare_trigger({ resources: [resource] })"
           >
-            <oc-icon size="small" name="close" />
+            <oc-icon size="small" name="spam-3" fill-type="line" />
             <translate>Decline</translate>
           </oc-button>
         </div>

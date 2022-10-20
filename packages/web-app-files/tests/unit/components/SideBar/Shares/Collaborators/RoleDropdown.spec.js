@@ -1,4 +1,4 @@
-import RoleDropdown from '@files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
+import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'

@@ -4,7 +4,7 @@ import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
-import FileVersions from '@files/src/components/SideBar/Versions/FileVersions.vue'
+import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 
 const defaultStubs = {
   ...stubs,

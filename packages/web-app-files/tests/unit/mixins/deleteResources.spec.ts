@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import deleteResources from 'files/src/mixins/deleteResources'
+import deleteResources from 'web-app-files/src/mixins/deleteResources'
 import { defaultComponentMocks } from '../../../../../tests/unit/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'

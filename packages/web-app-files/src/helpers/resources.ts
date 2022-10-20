@@ -2,7 +2,7 @@ import orderBy from 'lodash-es/orderBy'
 import path, { basename, join } from 'path'
 import { DateTime } from 'luxon'
 import { getIndicators } from './statusIndicators'
-import { DavPermission, DavProperty } from 'web-pkg/src/constants'
+import { DavProperty } from 'web-client/src/webdav/constants'
 import {
   LinkShareRoles,
   PeopleShareRoles,
@@ -14,10 +14,14 @@ import {
   spaceRoleManager,
   spaceRoleViewer
 } from 'web-client/src/helpers/share'
-import { extractExtensionFromFile, extractNodeId, extractStorageId } from './resource'
-import { buildWebDavSpacesPath, extractDomSelector } from 'web-client/src/helpers/resource'
+import {
+  buildWebDavSpacesPath,
+  extractDomSelector,
+  extractExtensionFromFile,
+  extractStorageId
+} from 'web-client/src/helpers/resource'
 import { Resource, SpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
   resource.name = basename(newPath)
@@ -25,104 +29,6 @@ export function renameResource(space: SpaceResource, resource: Resource, newPath
   resource.webDavPath = join(space.webDavPath, newPath)
   resource.extension = extractExtensionFromFile(resource)
   return resource
-}
-
-export function buildResource(resource): Resource {
-  const name = resource.fileInfo[DavProperty.Name] || path.basename(resource.name)
-  const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile({ ...resource, name })
-  let resourcePath
-
-  if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
-    resourcePath = resource.name.split('/').slice(3).join('/')
-  } else {
-    resourcePath = resource.name
-  }
-
-  if (!resourcePath.startsWith('/')) {
-    resourcePath = `/${resourcePath}`
-  }
-
-  const id = resource.fileInfo[DavProperty.FileId]
-  const r = {
-    id,
-    fileId: id,
-    storageId: extractStorageId(id),
-    parentFolderId: resource.fileInfo[DavProperty.FileParent],
-    mimeType: resource.fileInfo[DavProperty.MimeType],
-    name,
-    extension: isFolder ? '' : extension,
-    path: resourcePath,
-    webDavPath: resource.name,
-    type: isFolder ? 'folder' : resource.type,
-    isFolder,
-    mdate: resource.fileInfo[DavProperty.LastModifiedDate],
-    size: isFolder
-      ? resource.fileInfo[DavProperty.ContentSize]
-      : resource.fileInfo[DavProperty.ContentLength],
-    indicators: [],
-    permissions: (resource.fileInfo[DavProperty.Permissions] as string) || '',
-    starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
-    etag: resource.fileInfo[DavProperty.ETag],
-    sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
-    shareTypes: (function () {
-      if (resource.fileInfo[DavProperty.ShareTypes]) {
-        return resource.fileInfo[DavProperty.ShareTypes].map((v) => parseInt(v))
-      }
-      return []
-    })(),
-    privateLink: resource.fileInfo[DavProperty.PrivateLink],
-    downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    shareId: resource.fileInfo[DavProperty.ShareId],
-    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
-    ownerId: resource.fileInfo[DavProperty.OwnerId],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
-    tags: (resource.fileInfo[DavProperty.Tags] || '').split(',').filter(Boolean),
-    canUpload: function () {
-      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
-    },
-    canDownload: function () {
-      return true
-    },
-    canBeDeleted: function () {
-      return this.permissions.indexOf(DavPermission.Deletable) >= 0
-    },
-    canRename: function () {
-      return this.permissions.indexOf(DavPermission.Renameable) >= 0
-    },
-    canShare: function () {
-      return this.permissions.indexOf(DavPermission.Shareable) >= 0
-    },
-    canCreate: function () {
-      return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
-    },
-    canEditTags: function () {
-      return (
-        this.permissions.indexOf(DavPermission.Updateable) >= 0 ||
-        this.permissions.indexOf(DavPermission.FileUpdateable) >= 0
-      )
-    },
-    isMounted: function () {
-      return this.permissions.indexOf(DavPermission.Mounted) >= 0
-    },
-    isReceivedShare: function () {
-      return this.permissions.indexOf(DavPermission.Shared) >= 0
-    },
-    canDeny: function () {
-      return this.permissions.indexOf(DavPermission.Deny) >= 0
-    },
-    getDomSelector: () => extractDomSelector(id)
-  }
-  Object.defineProperty(r, 'nodeId', {
-    get() {
-      return extractNodeId(this.id)
-    }
-  })
-  return r
-}
-
-export function buildWebDavPublicPath(publicLinkToken, path = '') {
-  return '/' + `public-files/${publicLinkToken}/${path}`.split('/').filter(Boolean).join('/')
 }
 
 export function buildWebDavFilesPath(userId, path) {

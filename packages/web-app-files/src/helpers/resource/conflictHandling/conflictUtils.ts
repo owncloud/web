@@ -1,6 +1,5 @@
 import { dirname } from 'path'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { extractNameWithoutExtension } from '../index'
+import { extractNameWithoutExtension, Resource, SpaceResource } from 'web-client/src/helpers'
 
 export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
   let potentialName

@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import GetTextPlugin from 'vue-gettext'
 
-import AppBar from '@files/src/components/AppBar/AppBar.vue'
+import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

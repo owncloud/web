@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import showDetails from 'files/src/mixins/actions/showDetails'
+import showDetails from 'web-app-files/src/mixins/actions/showDetails'
 import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from '../../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
 import { eventBus } from 'web-pkg/src/services/eventBus'

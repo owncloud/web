@@ -93,9 +93,8 @@ import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import axios from 'axios'
-import { $gettext } from 'files/src/router/utils'
-import { defineComponent } from '@vue/runtime-core'
-import { useGraphClient } from 'web-client/src/composables'
+import { defineComponent } from '@vue/composition-api'
+import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
 import { v4 as uuidV4 } from 'uuid'
 
@@ -177,7 +176,6 @@ export default defineComponent({
 
       users.value.forEach((user) => {
         user.memberOf = user.memberOf || []
-        user.passwordProfile = user.passwordProfile || { password: '' }
       })
 
       yield loadGroupsTask.perform()
@@ -254,7 +252,7 @@ export default defineComponent({
         {
           app: 'DetailsPanel',
           icon: 'user',
-          title: $gettext('User details'),
+          title: this.$gettext('User details'),
           component: DetailsPanel,
           default: true,
           enabled: true,
@@ -263,7 +261,7 @@ export default defineComponent({
         {
           app: 'EditPanel',
           icon: 'pencil',
-          title: $gettext('Edit user'),
+          title: this.$gettext('Edit user'),
           component: EditPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,
@@ -273,7 +271,7 @@ export default defineComponent({
         {
           app: 'GroupAssignmentsPanel',
           icon: 'group-2',
-          title: $gettext('Group assignments'),
+          title: this.$gettext('Group assignments'),
           component: GroupAssignmentsPanel,
           default: false,
           enabled: this.selectedUsers.length === 1,

@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import ListItem from '@files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
+import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import Users from '@/__fixtures__/users'

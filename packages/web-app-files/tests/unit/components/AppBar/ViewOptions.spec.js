@@ -4,12 +4,12 @@ import VueRouter from 'vue-router'
 import merge from 'lodash-es/merge'
 import VueCompositionAPI from '@vue/composition-api'
 
-import Store from '@files/src/store'
+import Store from 'web-app-files/src/store'
 import stubs from '@/tests/unit/stubs'
 import OcPageSize from '@/tests/unit/stubs/OcPageSize'
 import OcSwitch from '@/tests/unit/stubs/OcSwitch'
 
-import ViewOptions from '@files/src/components/AppBar/ViewOptions.vue'
+import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
 
 const OcTooltip = jest.fn()
 

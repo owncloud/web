@@ -51,7 +51,7 @@
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
-import { urlJoin } from 'web-pkg/src/utils'
+import { urlJoin } from 'web-client/src/utils'
 
 export default {
   props: {

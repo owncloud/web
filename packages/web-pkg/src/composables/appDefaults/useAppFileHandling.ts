@@ -43,7 +43,7 @@ export function useAppFileHandling({
   }
 
   // TODO: support query parameters, possibly needs porting away from owncloud-sdk
-  const getFileContents = async (
+  const getFileContents = (
     fileContext: MaybeRef<FileContext>,
     options: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
   ) => {

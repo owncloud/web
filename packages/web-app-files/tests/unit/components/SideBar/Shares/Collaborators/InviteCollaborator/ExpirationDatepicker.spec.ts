@@ -1,6 +1,6 @@
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
 import VueCompositionAPI, { nextTick } from '@vue/composition-api'
-import ExpirationDatepicker from '@files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
+import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import Vuex, { GetterTree } from 'vuex'

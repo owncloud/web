@@ -5,7 +5,7 @@
 // import DesignSystem from 'owncloud-design-system'
 // import GetTextPlugin from 'vue-gettext'
 //
-// import List from '@files/src/components/Search/List.vue'
+// import List from 'web-app-files/src/components/Search/List.vue'
 //
 // const localVue = createLocalVue()
 // localVue.use(Vuex)

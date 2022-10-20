@@ -182,7 +182,7 @@ import {
   linkRoleInternalFolder,
   LinkShareRoles
 } from 'web-client/src/helpers/share'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { SpaceResource } from 'web-client/src/helpers'
 import { PropType } from '@vue/composition-api'

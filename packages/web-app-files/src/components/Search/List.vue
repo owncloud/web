@@ -184,8 +184,7 @@ export default defineComponent({
             ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
-      },
-      immediate: true
+      }
     }
   },
   beforeDestroy() {

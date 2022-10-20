@@ -2,11 +2,11 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '@/tests/unit/stubs/index.js'
 import { createLocalVue, mount } from '@vue/test-utils'
-import FileActions from '@files/src/components/SideBar/Actions/FileActions.vue'
+import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 
 import GetTextPlugin from 'vue-gettext'
 
-import { apps, getActions, fileActions } from '@files/tests/__fixtures__/fileActions.js'
+import { apps, getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)

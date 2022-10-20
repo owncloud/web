@@ -1,7 +1,7 @@
 import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { computed, ComputedRef } from '@vue/composition-api'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '../store'
 
 export const useCapability = <T>(
   store: Store<any>,

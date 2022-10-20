@@ -29,7 +29,7 @@
     "serve": "SERVER=true yarn build:w",
     "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e -f json:tests/e2e/cucumber/report/cucumber_report.json",
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw jest --config ./tests/unit/config/jest.config.js",
-    "licenses:check": "license-checker-rseidelsohn --summary --relativeLicensePath --onlyAllow 'Python-2.0;Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;Public Domain;Unicode-TOU;Unlicense;WTFPL' --excludePackages 'draw-io;external;files;text-editor;preview;owncloud-design-system;pdf-viewer;search;user-management;web-client;web-pkg;web-runtime'",
+    "licenses:check": "license-checker-rseidelsohn --summary --relativeLicensePath --onlyAllow 'Python-2.0;Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;Public Domain;Unicode-TOU;Unlicense;WTFPL' --excludePackages 'draw-io;external;web-app-files;text-editor;preview;owncloud-design-system;pdf-viewer;web-app-search;user-management;web-client;web-pkg;web-runtime'",
     "licenses:csv": "license-checker-rseidelsohn --relativeLicensePath --csv --out ./third-party-licenses/third-party-licenses.csv",
     "licenses:save": "license-checker-rseidelsohn --relativeLicensePath --out /dev/null --files ./third-party-licenses/third-party-licenses"
   },
@@ -56,6 +56,10 @@
     "@cucumber/messages": "^17.1.1",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.2",
     "@noble/hashes": "^1.0.0",
+    "@ownclouders/babel-preset": "workspace:*",
+    "@ownclouders/eslint-config": "workspace:*",
+    "@ownclouders/prettier-config": "workspace:*",
+    "@ownclouders/tsconfig": "workspace:*",
     "@playwright/test": "^1.27.0",
     "@rollup-extras/plugin-copy": "^1.2.5",
     "@rollup/plugin-alias": "^3.1.9",
@@ -99,6 +103,7 @@
     "pino-pretty": "^7.6.0",
     "playwright": "^1.26.1",
     "postcss": "^8.3.6",
+    "qs": "^6.10.3",
     "react": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
     "requirejs": "^2.3.6",
@@ -129,7 +134,7 @@
     "wait-for-expect": "^3.0.2"
   },
   "engines": {
-    "node": ">=14 <=16"
+    "node": ">=16"
   },
   "packageManager": "yarn@3.1.0",
   "dependenciesMeta": {
@@ -142,5 +147,8 @@
     "vue-concurrency": {
       "built": true
     }
+  },
+  "volta": {
+    "node": "16.18.0"
   }
 }

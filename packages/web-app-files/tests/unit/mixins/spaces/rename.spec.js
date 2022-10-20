@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import rename from '@files/src/mixins/spaces/actions/rename.js'
+import rename from 'web-app-files/src/mixins/spaces/actions/rename.js'
 import { createLocationSpaces } from '../../../../src/router'
 import mockAxios from 'jest-mock-axios'
 

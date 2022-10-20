@@ -13,9 +13,11 @@ Summary
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+* Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
@@ -25,6 +27,7 @@ Summary
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
+* Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
 * Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
 * Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
@@ -39,6 +42,7 @@ Summary
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 * Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
+* Enhancement - Internal link on unaccepted share: [#7803](https://github.com/owncloud/web/issues/7803)
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
@@ -87,6 +91,14 @@ Details
    https://github.com/owncloud/web/issues/7736
    https://github.com/owncloud/web/pull/7740
 
+* Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
+
+   We've fixed a bug, where editing a user after creating in the user management was only possible
+   after page refresh.
+
+   https://github.com/owncloud/web/issues/7761
+   https://github.com/owncloud/web/pull/7820
+
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 
    We've fixed a bug where the file name would not update reactively in the sidebar after changing
@@ -112,6 +124,16 @@ Details
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
    https://github.com/owncloud/web/pull/7735
+
+* Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
+
+   When apps (i.e Drawio) try to load a file, the browser caches the request. If the file was
+   modified somewhere else, this causes inconsistent results which prevent saving any changes
+   until the cache is properly cleared. This had previously been fixed for normal files, but not
+   yet for public links - which we took care of now.
+
+   https://github.com/owncloud/web/pull/7811
+   https://github.com/owncloud/web/pull/7075
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
@@ -195,6 +217,14 @@ Details
    sidebar.
 
    https://github.com/owncloud/web/pull/7632
+
+* Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
+
+   Sidebar panels that require a resource now won't be loaded without such. This fixes a bug where
+   navigating with an open sidebar would break it.
+
+   https://github.com/owncloud/web/issues/7781
+   https://github.com/owncloud/web/pull/7826
 
 * Bugfix - Try to obtain refresh token before the error case: [#7756](https://github.com/owncloud/web/pull/7756)
 
@@ -326,6 +356,14 @@ Details
    https://github.com/owncloud/web/issues/7715
    https://github.com/owncloud/web/pull/7725
    https://github.com/owncloud/web/pull/7797
+
+* Enhancement - Internal link on unaccepted share: [#7803](https://github.com/owncloud/web/issues/7803)
+
+   The error message when resolving an internal link to an unaccepted share has been improved for a
+   better UX.
+
+   https://github.com/owncloud/web/issues/7803
+   https://github.com/owncloud/web/pull/7814
 
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 
