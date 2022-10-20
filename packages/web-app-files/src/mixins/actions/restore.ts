@@ -4,14 +4,13 @@ import { dirname } from 'path'
 import { isLocationTrashActive } from '../../router'
 
 import { clientService } from 'web-pkg/src/services'
-import { Resource, isProjectSpaceResource } from 'web-client/src/helpers'
+import { Resource, isProjectSpaceResource, extractExtensionFromFile } from 'web-client/src/helpers'
 import {
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   ConflictDialog
 } from '../../helpers/resource/'
-import { extractExtensionFromFile } from '../../helpers/resource'
 
 export default {
   computed: {
