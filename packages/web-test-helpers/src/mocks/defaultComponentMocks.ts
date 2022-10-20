@@ -16,7 +16,7 @@ export const defaultComponentMocks = ({ gettext = true }: ComponentMocksOptions 
     $route: mock<Route>(),
     $clientService: mockDeep<ClientService>(),
     $uppyService: mockDeep<UppyService>(),
-    ...((gettext) && {
+    ...(gettext && {
       $gettextInterpolate: jest.fn(),
       $ngettext: jest.fn(),
       $pgettext: jest.fn(),
