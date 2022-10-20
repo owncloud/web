@@ -2,10 +2,10 @@ import { User } from '../user'
 import { buildWebDavSpacesPath, extractDomSelector, Resource } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
-import { DavProperty } from '../../webdav/constants'
-import { buildWebDavPublicPath } from '../publicLink/functions'
-import { urlJoin } from '../../utils'
-import { extractNodeId } from '../resource'
+import { DavProperty } from 'web-pkg/src/constants'
+import { buildWebDavPublicPath, buildWebDavSpacesTrashPath } from 'files/src/helpers/resources'
+import { urlJoin } from 'web-pkg/src/utils'
+import { extractNodeId } from 'files/src/helpers/resource'
 
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword

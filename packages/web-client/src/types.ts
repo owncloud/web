@@ -15,6 +15,7 @@ export type OwnCloudSdk = {
   }
   fileTrash: {
     list(...args): any
+    restore(...args): any
   }
   publicFiles: {
     createFolder(...args): any

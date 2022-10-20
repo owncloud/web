@@ -176,19 +176,12 @@ export default {
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
       resources.forEach((resource) => {
-        const hasShareJail = this.capabilities?.spaces?.share_jail === true
-        const path = hasShareJail
-          ? buildWebDavSpacesTrashPath(this.space.id)
-          : buildWebDavFilesTrashPath(this.user.id)
-        const restorePath = hasShareJail
-          ? buildWebDavSpacesPath(this.space.id, resource.path)
-          : buildWebDavFilesPath(this.user.id, resource.path)
         const overwrite = filesToOverwrite.includes(resource)
 
         restorePromises.push(
           restoreQueue.add(async () => {
             try {
-              await this.$client.fileTrash.restore(path, resource.id, restorePath, overwrite)
+              await this.$clientService.webdav.restoreFile(this.space, this.user.id, resource.id, resource.path, { overwrite })
               restoredResources.push(resource)
             } catch (e) {
               console.error(e)

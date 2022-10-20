@@ -123,6 +123,7 @@ export const renderSuccess = (): void => {
         driveType: 'personal',
         name: instance.$gettext('All files'),
         webDavPath: `/files/${user.id}`,
+        webDavTrashPath: `/files/trash-bin/${user.id}`,
         serverUrl: configurationManager.serverUrl
       })
       const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(
