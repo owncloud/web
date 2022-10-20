@@ -9563,9 +9563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"owncloud-sdk@npm:~3.0.0-alpha.17":
-  version: 3.0.0-alpha.17
-  resolution: "owncloud-sdk@npm:3.0.0-alpha.17"
+"owncloud-sdk@owncloud/owncloud-sdk.git#experimental":
+  version: 2.0.1
+  resolution: "owncloud-sdk@https://github.com/owncloud/owncloud-sdk.git#commit=8d14a84d3113d2004ea35c0d3fe896993152a3c0"
   peerDependencies:
     axios: ^0.27.2
     cross-fetch: ^3.0.6
@@ -9578,7 +9578,7 @@ __metadata:
   dependenciesMeta:
     "@pact-foundation/pact":
       built: true
-  checksum: 587157336c6af1c20f1ce1255b924334372a5d4a28918b93857200ecf4f99d31f2619a9a19687ff3eec4a3de830aa7e9aa754ac5a1ba844841afb8be90afed24
+  checksum: 7e81ecec193f4e2a41a373340059826ee47dff14a5b3780b57498a5db9899e96be3aa6137604c602821f2a49a47391c73837955ce30b94007eed14868538e5bd
   languageName: node
   linkType: hard
 
@@ -13615,7 +13615,7 @@ __metadata:
     marked: ^4.0.12
     oidc-client-ts: ^2.0.5
     owncloud-design-system: 14.0.0-alpha.22
-    owncloud-sdk: ~3.0.0-alpha.17
+    owncloud-sdk: "owncloud/owncloud-sdk.git#experimental"
     p-queue: ^6.6.2
     popper-max-size-modifier: ^0.2.0
     portal-vue: ^2.1.7
