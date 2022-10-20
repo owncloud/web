@@ -1,18 +1,19 @@
 import { triggerShareAction } from '../../../../src/helpers/share/triggerShareAction'
 
-import OwnCloud from 'owncloud-sdk'
 import { ShareStatus } from 'web-client/src/helpers/share'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { mockDeep } from 'jest-mock-extended'
 
 jest.unmock('axios')
-const $client = new OwnCloud()
+const $client = mockDeep<OwnCloudSdk>()
 
 jest.mock('../../../../src/helpers/resources', () => ({
-  aggregateResourceShares: jest.fn(([shares]) => [shares])
+  aggregateResourceShares: ([shares]) => [shares]
 }))
 
 describe('method triggerShareAction', () => {
   beforeEach(() => {
-    fetch.resetMocks()
+    jest.resetAllMocks()
   })
 
   it('throws error if invalid share status given', async () => {
@@ -24,25 +25,51 @@ describe('method triggerShareAction', () => {
 
   it('throws error if share action response status is not 200', async () => {
     const statusText = 'status is not 200'
-    fetch.mockResponse(new Error(), { status: 404, statusText })
+    $client.requests.ocs.mockImplementation(() =>
+      Promise.resolve(
+        mockDeep<Response>({
+          status: 404,
+          statusText
+        })
+      )
+    )
     await expect(
       triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).rejects.toThrow(statusText)
   })
 
   it('silently fails when the response has a content-length header value of 0', async () => {
-    fetch.mockResponse('', {
-      headers: { 'content-length': 0 }
-    })
+    $client.requests.ocs.mockImplementation(() =>
+      Promise.resolve(
+        mockDeep<Response>({
+          status: 200,
+          headers: (() => {
+            const headers = new Headers()
+            headers.append('content-length', '0')
+            return headers
+          })()
+        })
+      )
+    )
     await expect(
       triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).resolves.toBeNull()
   })
 
   it('returns a resource of type share if content-length header is present and valid', async () => {
-    fetch.mockResponse(JSON.stringify({ ocs: { data: [{ id: 1 }] } }), {
-      headers: { 'content-length': 1 }
+    $client.requests.ocs.mockImplementation(() => {
+      const responseMock = mockDeep<Response>({
+        status: 200,
+        headers: (() => {
+          const headers = new Headers()
+          headers.append('content-length', '1')
+          return headers
+        })()
+      })
+      responseMock.json.mockImplementation(() => Promise.resolve({ ocs: { data: [{ id: 1 }] } }))
+      return Promise.resolve(responseMock)
     })
+
     await expect(
       triggerShareAction({ share: { id: 1 } }, ShareStatus.accepted, true, false, $client)
     ).resolves.toMatchObject({ id: 1 })
