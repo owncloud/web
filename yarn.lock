@@ -2880,6 +2880,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^6.1.4":
+  version: 6.4.5
+  resolution: "@vue/devtools-api@npm:6.4.5"
+  checksum: 40c5adc8788cb283972ce09ba7ce105fa894f4decec9168829cc8e6211462763402442e6c31be76f9da62b0e74ae724971b924571367b4ac89b94dc6894e2d07
+  languageName: node
+  linkType: hard
+
 "@vue/reactivity-transform@npm:3.2.40":
   version: 3.2.40
   resolution: "@vue/reactivity-transform@npm:3.2.40"
@@ -13369,10 +13376,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^3.5.3":
-  version: 3.5.3
-  resolution: "vue-router@npm:3.5.3"
-  checksum: 7b2cc0d41ff2a8ec3da45761f29e14d0998119f47e4887f54e17eb534f7b4823acb778302891b0aa3a10c62ae8ba999393d7891cc08d36f02ea87aa268e2a36c
+"vue-router@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "vue-router@npm:4.1.5"
+  dependencies:
+    "@vue/devtools-api": ^6.1.4
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: cafa2f4e14188bca0d4d45e05a901b6ff7bb3933010a6b2c9372bed7fa872bb2e18f1f033b23f540d3a75e1ecd6840b79a5ba5a714de01942d02e1e6cce88dec
   languageName: node
   linkType: hard
 
@@ -13611,7 +13622,7 @@ __metadata:
     vue-inline-svg: ^2.0.0
     vue-meta: ^2.2.2
     vue-resize: ^1.0.1
-    vue-router: ^3.5.3
+    vue-router: ^4.1.5
     vue-scrollto: ^2.15.0
     vue-select: ^3.18.3
     vuex: ^3.6.2
