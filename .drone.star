@@ -2415,7 +2415,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "environment": environment,
         "commands": [
             "corepack enable && corepack prepare pnpm@7.13.5 --activate",
-            "pnpm install --filter ./tests/acceptance",
+            "pnpm install",  # FIXME: use --filter ./tests/acceptance (currently @babel/register is not found)
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
