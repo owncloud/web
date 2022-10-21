@@ -35,6 +35,8 @@ tests/testing-app
 
 /coverage
 
+/.pnpm-store/
+
 # acceptance test artifacts
 logfile.txt
 comments.file
