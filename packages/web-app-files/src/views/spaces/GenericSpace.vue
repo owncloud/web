@@ -309,7 +309,7 @@ export default defineComponent({
     },
 
     isSpaceFrontpage() {
-      return isProjectSpaceResource(this.space) && this.currentFolder?.path === '/'
+      return isProjectSpaceResource(this.space) && this.item === '/'
     }
   },
 

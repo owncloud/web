@@ -2,10 +2,10 @@ import Vuex from 'vuex'
 import { mount } from '@vue/test-utils'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
 import { createStore } from 'vuex-extensions'
-import { defaultComponentMocks } from '../../../../../../tests/unit/mocks/defaultComponentMocks'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { buildSpace } from 'web-client/src/helpers'
-import { defaultLocalVue } from '../../../../../../tests/unit/localVue/defaultLocalVue'
-import { defaultStoreMockOptions } from '../../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 window.ResizeObserver =
   window.ResizeObserver ||
