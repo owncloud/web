@@ -1,7 +1,7 @@
 import { createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
-const { shallowMount, mount } = require('@vue/test-utils')
+import { shallowMount, mount } from '@vue/test-utils'
 
 const collaboratorAction = {
   displayed: jest.fn(() => true),
@@ -59,7 +59,7 @@ describe('QuickActions', () => {
   describe('action handler', () => {
     it('should call action handler on click', async () => {
       const wrapper = getMountedWrapper()
-      const handlerAction = jest.spyOn(collaboratorAction, 'handler').mockImplementation()
+      const handlerAction = collaboratorAction.handler.mockImplementation()
 
       const actionButton = wrapper.find('button')
       await actionButton.trigger('click')

@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import VueCompositionAPI from '@vue/composition-api'
 import GetTextPlugin from 'vue-gettext'
-import { isUndefined } from 'lodash-es'
 
 export interface LocalVueOptions {
   compositionApi?: boolean
@@ -12,29 +11,30 @@ export interface LocalVueOptions {
   vuex?: boolean
 }
 
-export const defaultLocalVue = (options: LocalVueOptions = {}) => {
+export const defaultLocalVue = ({
+  compositionApi = true,
+  designSystem = true,
+  gettext = true,
+  vuex = true
+}: LocalVueOptions = {}) => {
   const localVue = createLocalVue()
 
-  const useCompositionApi = isUndefined(options.compositionApi) ? true : options.compositionApi
-  if (useCompositionApi) {
+  if (compositionApi) {
     localVue.use(VueCompositionAPI)
   }
 
-  const useDesignSystem = isUndefined(options.designSystem) ? true : options.designSystem
-  if (useDesignSystem) {
+  if (designSystem) {
     localVue.use(DesignSystem)
   }
 
-  const useGetText = isUndefined(options.gettext) ? true : options.gettext
-  if (useGetText) {
+  if (gettext) {
     localVue.use(GetTextPlugin, {
       translations: 'does-not-matter.json',
       silent: true
     })
   }
 
-  const useVuex = isUndefined(options.vuex) ? true : options.vuex
-  if (useVuex) {
+  if (vuex) {
     localVue.use(Vuex)
   }
 

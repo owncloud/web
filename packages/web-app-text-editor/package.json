@@ -8,6 +8,7 @@
     "marked": "^4.0.12",
     "sanitize-html": "^2.7.0",
     "vue-concurrency": "^3.0.0-7",
+    "vue-gettext": "^2.1.5",
     "vuex": "^3.6.2",
     "web-client": "workspace:*",
     "web-pkg": "workspace:*"

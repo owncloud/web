@@ -7,7 +7,6 @@ import fixtureSharedWithMeFiles from '../__fixtures__/sharedWithMeFiles'
 import fixtureDeletedFiles from '../__fixtures__/deletedFiles'
 import fixturePublicFiles from '../__fixtures__/publicFiles'
 import fixtureRecipients from '../__fixtures__/recipients'
-import { DateTime } from 'luxon'
 
 const mockPath = (path) => {
   if (path.startsWith('/files/')) {
@@ -98,10 +97,6 @@ export default {
           url: 'url',
           name: 'Public link'
         }
-
-        if (params.expireDate) {
-          shareInfo.expiration = DateTime.fromISO(params.expireDate).toFormat('yyyy-MM-dd HH:mm:ss')
-        }
       } else {
         shareInfo = {
           id,
@@ -151,12 +146,6 @@ export default {
           url: 'url',
           name: 'Public link'
         }
-      }
-
-      if (params.expireDate) {
-        share.shareInfo.expiration = DateTime.fromISO(params.expireDate).toFormat(
-          'yyyy-MM-dd HH:mm:ss'
-        )
       }
 
       return Promise.resolve(share)

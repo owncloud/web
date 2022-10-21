@@ -3404,13 +3404,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"await-semaphore@npm:^0.1":
-  version: 0.1.3
-  resolution: "await-semaphore@npm:0.1.3"
-  checksum: 334c86541e446378dd832168de431327a77146f70cd80b57c99cd483ce5996e3bfdadea9d795e36f0b4faacb5121f5f7a99d94297ac2bdafbc690e5b0aa5cc32
-  languageName: node
-  linkType: hard
-
 "axe-core@npm:4.2.1":
   version: 4.2.1
   resolution: "axe-core@npm:4.2.1"
@@ -6006,6 +5999,7 @@ __metadata:
   peerDependencies:
     "@vue/composition-api": ^1.6.2
     uuid: ^9.0.0
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -9582,20 +9576,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-cancelable@npm:^2.0":
-  version: 2.1.1
-  resolution: "p-cancelable@npm:2.1.1"
-  checksum: 3dba12b4fb4a1e3e34524535c7858fc82381bbbd0f247cc32dedc4018592a3950ce66b106d0880b4ec4c2d8d6576f98ca885dc1d7d0f274d1370be20e9523ddf
-  languageName: node
-  linkType: hard
-
-"p-cancelable@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "p-cancelable@npm:3.0.0"
-  checksum: 2b5ae34218f9c2cf7a7c18e5d9a726ef9b165ef07e6c959f6738371509e747334b5f78f3bcdeb03d8a12dcb978faf641fd87eb21486ed7d36fb823b8ddef3219
-  languageName: node
-  linkType: hard
-
 "p-finally@npm:^1.0.0":
   version: 1.0.0
   resolution: "p-finally@npm:1.0.0"
@@ -9843,6 +9823,7 @@ __metadata:
   resolution: "pdf-viewer@workspace:packages/web-app-pdf-viewer"
   peerDependencies:
     "@vue/composition-api": ^1.6.2
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-pkg: "workspace:*"
   languageName: unknown
@@ -10645,6 +10626,7 @@ __metadata:
   resolution: "preview@workspace:packages/web-app-preview"
   peerDependencies:
     "@vue/composition-api": ^1.6.2
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -12567,6 +12549,7 @@ __metadata:
     marked: ^4.0.12
     sanitize-html: ^2.7.0
     vue-concurrency: ^3.0.0-7
+    vue-gettext: ^2.1.5
     vuex: ^3.6.2
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -12715,16 +12698,6 @@ __metadata:
   version: 1.1.0
   resolution: "treeify@npm:1.1.0"
   checksum: aa00dded220c1dd052573bd6fc2c52862f09870851a284f0d3650d72bf913ba9b4f6b824f4f1ab81899bae29375f4266b07fe47cbf82343a1efa13cc09ce87af
-  languageName: node
-  linkType: hard
-
-"ts-async-decorators@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "ts-async-decorators@npm:0.3.0"
-  dependencies:
-    await-semaphore: ^0.1
-    p-cancelable: ^2.0
-  checksum: 456888cc9ab632c669da0b8236c64b0c6289b46ab802f6126eaad9b5272e489bdc63dfcf052f94841b69409d1c152ad6b570bccfd24dff7b72112942107bc60e
   languageName: node
   linkType: hard
 
@@ -13150,6 +13123,7 @@ __metadata:
     uuid: ^9.0.0
     vue-concurrency: ^3.0.0-7
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-pkg: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -13531,11 +13505,13 @@ __metadata:
     sanitize-html: ^2.7.0
     semver: ^7.3.8
     uuid: ^9.0.0
+    vue-async-computed: ^3.9.0
     vue-concurrency: ^3.0.0-7
     vue-gettext: ^2.1.5
     vue-resize: ^1.0.1
     vue-router: ~3.5.3
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-app-search: "workspace:*"
     web-client: "workspace:*"
     web-pkg: "workspace:*"
@@ -13548,14 +13524,11 @@ __metadata:
   resolution: "web-app-search@workspace:packages/web-app-search"
   dependencies:
     mark.js: ^8.11.1
-    p-cancelable: ^3.0.0
-    portal-vue: ^2.1.7
-    ts-async-decorators: ^0.3.0
-    vue: ^2.6.10
-    vue-async-computed: ^3.9.0
   peerDependencies:
     "@vue/composition-api": ^1.6.2
     lodash-es: ^4.17.21
+    vue-async-computed: ^3.9.0
+    vue-gettext: ^2.1.5
     web-app-files: "workspace:*"
     web-pkg: "workspace:*"
   languageName: unknown
@@ -13583,6 +13556,7 @@ __metadata:
     uuid: ^9.0.0
     vue-router: ~3.5.3
     vuex: ^3.6.2
+    vuex-extensions: ^1.1.5
     web-client: "workspace:*"
   languageName: unknown
   linkType: soft
