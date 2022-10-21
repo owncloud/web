@@ -334,6 +334,8 @@ Details
    https://github.com/owncloud/web/issues/7693
    https://github.com/owncloud/web/issues/7694
    https://github.com/owncloud/web/issues/7685
+   https://github.com/owncloud/web/issues/7693
+   https://github.com/owncloud/web/issues/7773
    https://github.com/owncloud/web/pull/7684
 
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
