@@ -1137,7 +1137,6 @@ def unitTests(ctx):
                  skipIfUnchanged(ctx, "unit-tests") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
-                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
                  [
                      {
                          "name": "unit-tests",
