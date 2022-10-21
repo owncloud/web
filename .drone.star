@@ -1129,7 +1129,6 @@ def unitTests(ctx):
                  ] +
                  skipIfUnchanged(ctx, "unit-tests") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installPnpm() +
                  restoreBuildArtifactCache(ctx, "web-dist", "dist") +
                  [
