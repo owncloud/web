@@ -1072,7 +1072,6 @@ def buildCacheWeb(ctx):
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
                      "commands": [
-                         "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                          "pnpm config set store-dir ./.pnpm-store",
                          "make dist",
                      ],
@@ -1142,7 +1141,6 @@ def unitTests(ctx):
                          "name": "unit-tests",
                          "image": OC_CI_NODEJS,
                          "commands": [
-                             "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                              "pnpm test:unit --coverage",
                          ],
                      },
@@ -1260,7 +1258,6 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                          "sleep 10 && pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
                      ],
                  }] + \
@@ -1794,7 +1791,6 @@ def installPnpm():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "corepack enable && corepack prepare pnpm@7.13.5 --activate",
             "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",
         ],
@@ -1805,7 +1801,6 @@ def lint():
         "name": "lint",
         "image": OC_CI_NODEJS,
         "commands": [
-            "corepack enable && corepack prepare pnpm@7.13.5 --activate",
             "pnpm lint",
         ],
     }]
@@ -1864,7 +1859,6 @@ def buildRelease(ctx):
             "image": OC_CI_NODEJS,
             "commands": [
                 "cd %s" % dir["web"],
-                "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                 "make -f Makefile.release",
             ],
         },
@@ -2420,7 +2414,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
-            "corepack enable && corepack prepare pnpm@7.13.5 --activate",
             "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",  # FIXME: use --filter ./tests/acceptance (currently @babel/register is not found)
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
@@ -2782,7 +2775,6 @@ def licenseCheck(ctx):
                 "name": "pnpm-install",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                     "pnpm config set store-dir ./.pnpm-store",
                     "pnpm install",
                 ],
@@ -2791,7 +2783,6 @@ def licenseCheck(ctx):
                 "name": "node-check-licenses",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                     "pnpm licenses:check",
                 ],
             },
@@ -2799,7 +2790,6 @@ def licenseCheck(ctx):
                 "name": "node-save-licenses",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "corepack enable && corepack prepare pnpm@7.13.5 --activate",
                     "pnpm licenses:csv",
                     "pnpm licenses:save",
                 ],
