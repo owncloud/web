@@ -1068,7 +1068,6 @@ def buildCacheWeb(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
