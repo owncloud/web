@@ -257,7 +257,9 @@ Details
    We've fixed a bug where updated data for a space would not show up in the UI before reloading.
 
    https://github.com/owncloud/web/issues/7521
+   https://github.com/owncloud/web/issues/7782
    https://github.com/owncloud/web/pull/7546
+   https://github.com/owncloud/web/pull/7818
 
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 
