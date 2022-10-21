@@ -140,12 +140,11 @@ import { loadPreview } from 'web-pkg/src/helpers/preview'
 import { ImageDimension } from '../../constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { buildSpace, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
-import { Resource } from '../../../../../tests/e2e/support/objects/app-files'
 import { WebDAV } from 'web-client/src/webdav'
 import { createLocationSpaces } from '../../router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -162,25 +161,24 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const spaces = computed(() => store.getters['Files/activeFiles'] || [])
+    const spaces = computed(
+      () =>
+        store.getters['runtime/spaces/spaces']
+          .filter((s) => isProjectSpaceResource(s))
+          .sort((a, b) => a.name.localeCompare(b.name)) || []
+    )
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
-    const loadResourcesTask = useTask(function* (signal, ref) {
-      ref.CLEAR_FILES_SEARCHED()
-      ref.CLEAR_CURRENT_FILES_LIST()
-
-      const response = yield unref(graphClient).drives.listMyDrives(
-        'name asc',
-        'driveType eq project'
-      )
-      let loadedSpaces = response.data?.value || []
-
-      loadedSpaces = loadedSpaces.map((s) =>
-        buildSpace({ ...s, serverUrl: configurationManager.serverUrl })
-      )
-      ref.LOAD_FILES({ currentFolder: null, files: loadedSpaces })
+    const loadResourcesTask = useTask(function* () {
+      store.commit('Files/CLEAR_FILES_SEARCHED')
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
+        graphClient: unref(graphClient)
+      })
+      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
+
     const areResourcesLoading = computed(() => {
       return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
@@ -206,7 +204,7 @@ export default defineComponent({
       return [
         {
           text: this.$gettext('Spaces'),
-          onClick: () => this.loadResourcesTask.perform(this)
+          onClick: () => this.loadResourcesTask.perform()
         }
       ]
     },
@@ -256,22 +254,17 @@ export default defineComponent({
           })
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   created() {
-    this.loadResourcesTask.perform(this)
+    this.loadResourcesTask.perform()
   },
   methods: {
     ...mapActions(['showMessage']),
     ...mapActions('runtime/spaces', ['loadSpaceMembers']),
-    ...mapMutations('Files', [
-      'SET_CURRENT_FOLDER',
-      'LOAD_FILES',
-      'CLEAR_CURRENT_FILES_LIST',
-      'CLEAR_FILES_SEARCHED',
-      'SET_FILE_SELECTION'
-    ]),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'SET_FILE_SELECTION']),
 
     getSpaceProjectRoute(space: SpaceResource) {
       return space.disabled
@@ -289,7 +282,7 @@ export default defineComponent({
       return ''
     },
 
-    openSidebarSharePanel(space: Resource) {
+    openSidebarSharePanel(space: SpaceResource) {
       this.loadSpaceMembers({ graphClient: this.graphClient, space })
       this.SET_FILE_SELECTION([space])
       eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')

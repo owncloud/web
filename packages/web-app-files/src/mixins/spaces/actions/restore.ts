@@ -36,7 +36,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_restore_trigger({ resources }) {
       if (resources.length !== 1) {
@@ -77,7 +77,7 @@ export default {
         )
         .then(() => {
           this.hideModal()
-          this.UPDATE_RESOURCE_FIELD({
+          this.UPDATE_SPACE_FIELD({
             id,
             field: 'disabled',
             value: false

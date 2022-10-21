@@ -36,7 +36,7 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_editDescription_trigger({ resources }) {
       if (resources.length !== 1) {
@@ -66,7 +66,7 @@ export default {
         .updateDrive(id, { description }, {})
         .then(() => {
           this.hideModal()
-          this.UPDATE_RESOURCE_FIELD({
+          this.UPDATE_SPACE_FIELD({
             id,
             field: 'description',
             value: description

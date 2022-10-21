@@ -87,6 +87,7 @@ import {
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
 
+import { useGraphClient } from 'web-pkg/src/composables'
 import { defineComponent } from '@vue/composition-api'
 
 // just a dummy function to trick gettext tools
@@ -118,7 +119,8 @@ export default defineComponent({
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: useCapabilityShareJailEnabled(),
+      ...useGraphClient()
     }
   },
 
@@ -302,6 +304,7 @@ export default defineComponent({
             const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
             addMethod({
               client: this.$client,
+              graphClient: this.graphClient,
               path,
               $gettext: this.$gettext,
               shareWith: collaborator.value.shareWith,
