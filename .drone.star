@@ -886,7 +886,6 @@ def pnpmlint(ctx):
         },
         "steps": skipIfUnchanged(ctx, "lint") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installPnpm() +
                  lint(),
         "trigger": {
