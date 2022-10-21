@@ -1074,6 +1074,7 @@ def buildCacheWeb(ctx):
                      "image": OC_CI_NODEJS,
                      "commands": [
                          "corepack enable && corepack prepare pnpm@7.13.5 --activate",
+                         "pnpm config set store-dir ./.pnpm-store",
                          "make dist",
                      ],
                  }] +
@@ -1796,6 +1797,7 @@ def installPnpm():
         },
         "commands": [
             "corepack enable && corepack prepare pnpm@7.13.5 --activate",
+            "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",
         ],
     }]
@@ -2421,6 +2423,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "environment": environment,
         "commands": [
             "corepack enable && corepack prepare pnpm@7.13.5 --activate",
+            "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",  # FIXME: use --filter ./tests/acceptance (currently @babel/register is not found)
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
@@ -2782,6 +2785,7 @@ def licenseCheck(ctx):
                 "image": OC_CI_NODEJS,
                 "commands": [
                     "corepack enable && corepack prepare pnpm@7.13.5 --activate",
+                    "pnpm config set store-dir ./.pnpm-store",
                     "pnpm install",
                 ],
             },
