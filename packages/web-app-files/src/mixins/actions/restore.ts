@@ -60,6 +60,7 @@ export default {
       const parentFolders = {}
       const conflicts = []
       const resolvedResources = []
+      const missingFolderStructure = []
       for (const resource of resources) {
         const parentPath = dirname(resource.path)
 
@@ -73,7 +74,7 @@ export default {
               path: parentPath
             })
           } catch (error) {
-            await this.restoreFolderStructure(resource)
+            missingFolderStructure.push(resource)
           }
           const resourceParentPath = dirname(resource.path)
           parentResources = parentResources.filter((e) => dirname(e.path) === resourceParentPath)
@@ -92,7 +93,8 @@ export default {
       return {
         parentFolders,
         conflicts,
-        resolvedResources
+        resolvedResources,
+        missingFolderStructure
       }
     },
     async collectRestoreResolveStrategies(conflicts) {
@@ -162,12 +164,19 @@ export default {
         createdFolderPaths.push(parentPath)
       }
     },
-    async restoreResources(resources, filesToOverwrite) {
+    async restoreResources(resources, filesToOverwrite, missingFolderStructure) {
       const restoredResources = []
       const failedResources = []
       const restorePromises = []
       const restoreQueue = new PQueue({ concurrency: 4 })
-      resources.forEach((resource) => {
+      // resources need to be sorted by path ASC to recover the parents first in case of deep folder structure
+      const sortedResources = resources.sort((a,b) => a.path.length - b.path.length);
+
+      sortedResources.forEach(async (resource) => {
+        const parentPath = dirname(resource.path)
+        if(missingFolderStructure.includes(resource) && !sortedResources.some(r => r.path.includes(parentPath))) {
+          await this.restoreFolderStructure(resource)
+        }
         const overwrite = filesToOverwrite.includes(resource)
 
         restorePromises.push(
@@ -237,7 +246,7 @@ export default {
 
     async $_restore_trigger({ resources }) {
       // collect and request existing files in associated parent folders of each resource
-      const { parentFolders, conflicts, resolvedResources } = await this.collectRestoreConflicts(
+      const { parentFolders, conflicts, resolvedResources, missingFolderStructure } = await this.collectRestoreConflicts(
         resources
       )
 
@@ -268,7 +277,7 @@ export default {
         resource.path = urlJoin(parentPath, resolvedName)
         resolvedResources.push(resource)
       }
-      this.restoreResources(resolvedResources, filesToOverwrite)
+      this.restoreResources(resolvedResources, filesToOverwrite, missingFolderStructure)
     }
   }
 }
