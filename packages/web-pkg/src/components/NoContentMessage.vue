@@ -32,4 +32,8 @@ export default {
 .no-content-message {
   height: 75vh;
 }
+
+.space-frontpage .no-content-message {
+  height: 55vh;
+}
 </style>

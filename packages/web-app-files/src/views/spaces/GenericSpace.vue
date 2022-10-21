@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex oc-width-1-1">
+  <div class="oc-flex oc-width-1-1" :class="{ 'space-frontpage': isSpaceFrontpage }">
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
@@ -26,7 +26,12 @@
           :space="space"
           class="files-not-found oc-height-1-1"
         />
-        <space-header v-else-if="hasSpaceHeader" :space="space" class="oc-px-m oc-mt-m" />
+        <space-header
+          v-else-if="hasSpaceHeader"
+          :space="space"
+          :side-bar-open="sideBarOpen"
+          class="oc-px-m oc-mt-m"
+        />
 
         <no-content-message v-if="isEmpty" id="files-space-empty" class="files-empty" icon="folder">
           <template #message>
@@ -301,6 +306,10 @@ export default defineComponent({
 
     displayThumbnails() {
       return !this.configuration?.options?.disablePreviews
+    },
+
+    isSpaceFrontpage() {
+      return isProjectSpaceResource(this.space) && this.item === '/'
     }
   },
 
