@@ -35,7 +35,7 @@ export default defineComponent({
 
   computed: {
     ...mapState('Files', ['latestSelectedId']),
-    ...mapGetters('Files', ['files', 'selectedFiles'])
+    ...mapGetters('Files', ['selectedFiles'])
   },
 
   mounted() {
