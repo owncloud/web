@@ -849,6 +849,10 @@ def pnpmCache(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-pnpm",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
                  rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
@@ -1059,6 +1063,10 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
