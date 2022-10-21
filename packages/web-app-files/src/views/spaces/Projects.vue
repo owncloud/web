@@ -65,12 +65,12 @@
                 </div>
                 <div class="oc-card-body oc-p-s">
                   <div class="oc-flex oc-flex-between oc-flex-middle">
-                    <div class="oc-flex oc-flex-middle">
+                    <div class="oc-flex oc-flex-middle oc-text-truncate">
                       <oc-icon class="oc-mr-s" name="layout-grid" />
                       <component
                         :is="space.disabled ? 'oc-button' : 'router-link'"
                         v-bind="getSpaceLinkProps(space)"
-                        class="space-name oc-text-left"
+                        class="space-name oc-text-left oc-text-truncate"
                         v-on="getSpaceLinkListeners(space)"
                       >
                         <span v-text="space.name"> </span>
@@ -370,9 +370,6 @@ export default defineComponent({
   }
 
   .space-name {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
     overflow: hidden;
     color: var(--oc-color-text-default);
   }

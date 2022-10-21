@@ -1,5 +1,8 @@
 <template>
-  <div class="space-header oc-p-m" :class="{ 'oc-flex': !imageExpanded }">
+  <div
+    class="space-header oc-p-m"
+    :class="{ 'oc-flex': !imageExpanded, 'space-header-squashed': sideBarOpen }"
+  >
     <div class="space-header-image" :class="{ 'space-header-image-expanded': imageExpanded }">
       <img
         v-if="hasImage"
@@ -103,7 +106,8 @@ export default defineComponent({
     space: {
       type: Object as PropType<SpaceResource>,
       required: true
-    }
+    },
+    sideBarOpen: { type: Boolean, default: false }
   },
   setup(props) {
     const { $gettext, $ngettext, $gettextInterpolate } = useTranslations()
@@ -271,6 +275,14 @@ export default defineComponent({
 
 <style lang="scss">
 .space-header {
+  &-squashed {
+    .space-header-image {
+      @media only screen and (max-width: 1200px) {
+        display: none;
+      }
+    }
+  }
+
   &-image {
     width: 280px;
     min-width: 280px;
@@ -291,6 +303,8 @@ export default defineComponent({
     img {
       border-radius: 10px;
       width: 100%;
+      max-height: 100%;
+      object-fit: cover;
     }
   }
 
@@ -303,6 +317,7 @@ export default defineComponent({
 
   &-name {
     font-size: 1.5rem;
+    word-break: break-all;
   }
 
   &-people-count {
@@ -310,7 +325,7 @@ export default defineComponent({
   }
 
   .markdown-container.collapsed {
-    max-height: 150px;
+    max-height: 100px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent);
   }
