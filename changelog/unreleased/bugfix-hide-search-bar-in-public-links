@@ -1,0 +1,6 @@
+Bugfix: Hide search bar in public link context
+
+The search bar in a public link context has been hidden because it requires authentication.
+
+https://github.com/owncloud/web/issues/7603
+https://github.com/owncloud/web/pull/7849
