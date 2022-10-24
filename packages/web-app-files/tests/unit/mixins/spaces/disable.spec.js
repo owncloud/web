@@ -139,12 +139,6 @@ function getWrapper() {
             uuid: 1
           }
         },
-        Files: {
-          namespaced: true,
-          mutations: {
-            UPDATE_RESOURCE_FIELD: jest.fn()
-          }
-        },
         runtime: {
           namespaced: true,
           modules: {
@@ -152,6 +146,12 @@ function getWrapper() {
               namespaced: true,
               getters: {
                 accessToken: () => ''
+              }
+            },
+            spaces: {
+              namespaced: true,
+              mutations: {
+                UPDATE_SPACE_FIELD: jest.fn()
               }
             }
           }

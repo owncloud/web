@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Add language param opening external app: [#7419](https://github.com/owncloud/web/issues/7419)
 * Bugfix - "Copy Quicklink"-translations: [#7731](https://github.com/owncloud/web/pull/7731)
+* Bugfix - "Cut" and "Copy" actions for current folder: [#7830](https://github.com/owncloud/web/pull/7830)
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
@@ -46,6 +47,7 @@ Summary
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
+* Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
 * Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
@@ -67,6 +69,13 @@ Details
 
    https://github.com/owncloud/web/issues/7720
    https://github.com/owncloud/web/pull/7731
+
+* Bugfix - "Cut" and "Copy" actions for current folder: [#7830](https://github.com/owncloud/web/pull/7830)
+
+   The "Cut" and "Copy" actions for the current folder have been fixed.
+
+   https://github.com/owncloud/web/issues/7784
+   https://github.com/owncloud/web/pull/7830
 
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 
@@ -256,7 +265,9 @@ Details
    We've fixed a bug where updated data for a space would not show up in the UI before reloading.
 
    https://github.com/owncloud/web/issues/7521
+   https://github.com/owncloud/web/issues/7782
    https://github.com/owncloud/web/pull/7546
+   https://github.com/owncloud/web/pull/7818
 
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 
@@ -323,6 +334,8 @@ Details
    https://github.com/owncloud/web/issues/7693
    https://github.com/owncloud/web/issues/7694
    https://github.com/owncloud/web/issues/7685
+   https://github.com/owncloud/web/issues/7693
+   https://github.com/owncloud/web/issues/7773
    https://github.com/owncloud/web/pull/7684
 
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
@@ -390,6 +403,14 @@ Details
    https://github.com/owncloud/web/issues/7707
    https://github.com/owncloud/web/pull/7405
    https://github.com/owncloud/web/pull/7769
+
+* Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
+
+   We've improved the overall search experience with following points: * increase search typing
+   debounce to 500ms * send search requests only once on reloads * update search preview results on
+   activation
+
+   https://github.com/owncloud/web/pull/7821
 
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
 

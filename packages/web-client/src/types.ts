@@ -28,6 +28,9 @@ export type OwnCloudSdk = {
     copy(...args): any
     move(...args): any
   }
+  requests: {
+    ocs(options: Record<string, any>): ReturnType<typeof fetch>
+  }
   settings: {
     getSettingsValues(...args): any
   }

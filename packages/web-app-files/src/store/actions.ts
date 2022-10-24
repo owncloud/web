@@ -35,7 +35,7 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context, options: { space: SpaceResource }) {
+  copySelectedFiles(context, options: { space: SpaceResource; resources: Resource[] }) {
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
     context.dispatch(
@@ -47,7 +47,7 @@ export default {
       { root: true }
     )
   },
-  cutSelectedFiles(context, options: { space: SpaceResource }) {
+  cutSelectedFiles(context, options: { space: SpaceResource; resources: Resource[] }) {
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
     context.dispatch(

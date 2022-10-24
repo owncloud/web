@@ -29,8 +29,8 @@ config.mocks = {
   }
 }
 
-jest.mock('@files/src/composables', () => ({
-  ...jest.requireActual('@files/src/composables'),
+jest.mock('web-app-files/src/composables', () => ({
+  ...jest.requireActual('web-app-files/src/composables'),
   usePagination: jest.fn(({ page, items, sortDir, sortBy }) => {
     return {
       items,

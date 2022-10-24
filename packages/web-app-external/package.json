@@ -6,6 +6,7 @@
     "peerDependencies": {
         "@vue/composition-api": "^1.6.2",
         "uuid": "^9.0.0",
+        "vue-gettext": "^2.1.5",
         "vuex": "^3.6.2",
         "web-client": "workspace:*",
         "web-pkg": "workspace:*"

@@ -2,10 +2,10 @@ import { mount } from '@vue/test-utils'
 import { createFile } from './views.setup'
 import Favorites from '../../../src/views/Favorites.vue'
 
-import { defaultStoreMockOptions } from '../../../../../tests/unit/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from '../../../../../tests/unit/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from '../../../../../tests/unit/localVue/defaultLocalVue'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
 
 const stubs = {

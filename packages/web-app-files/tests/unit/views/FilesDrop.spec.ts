@@ -4,7 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import { getStore, localVue } from './views.setup.js'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import VueCompositionAPI from '@vue/composition-api'
 
 localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
