@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="availableProviders.length"
+    v-if="isSearchBarEnabled"
     id="files-global-search"
     ref="searchBar"
     class="oc-flex"
@@ -99,11 +99,18 @@ import { providerStore } from '../service'
 import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
+import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'SearchBar',
+  setup() {
+   const store = useStore()
+    return {
+      isUserContext: useUserContext({ store })
+    }
+  },
 
   data() {
     return {
@@ -126,6 +133,9 @@ export default defineComponent({
     },
     availableProviders() {
       return this.providerStore.availableProviders
+    },
+    isSearchBarEnabled() {
+      return this.availableProviders.length && this.isUserContext
     },
     displayProviders() {
       /**
@@ -191,11 +201,15 @@ export default defineComponent({
   },
 
   mounted() {
-    this.resizeObserver.observe(this.$refs.searchBar)
+    if (this.isSearchBarEnabled) {
+      this.resizeObserver.observe(this.$refs.searchBar)
+    }
   },
 
   beforeDestroy() {
-    this.resizeObserver.unobserve(this.$refs.searchBar)
+    if (this.isSearchBarEnabled) {
+      this.resizeObserver.unobserve(this.$refs.searchBar)
+    }
   },
 
   methods: {
