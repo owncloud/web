@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['cutSelectedFiles']),
-    $_move_trigger() {
-      this.cutSelectedFiles({ space: this.space })
+    $_move_trigger({ resources }) {
+      this.cutSelectedFiles({ space: this.space, resources })
     }
   }
 }

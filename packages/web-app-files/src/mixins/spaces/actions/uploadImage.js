@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapActions(['showMessage']),
     $_uploadImage_trigger({ resources }) {
       if (resources.length !== 1) {
@@ -94,7 +94,7 @@ export default {
               {}
             )
             .then(({ data }) => {
-              this.UPDATE_RESOURCE_FIELD({
+              this.UPDATE_SPACE_FIELD({
                 id: this.$data.$_uploadImage_selectedSpace.id,
                 field: 'spaceImageData',
                 value: data.special.find((special) => special.specialFolder.name === 'image')

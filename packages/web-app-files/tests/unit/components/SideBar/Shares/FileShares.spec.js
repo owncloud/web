@@ -1,6 +1,6 @@
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import mockAxios from 'jest-mock-axios'
-import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import VueCompositionAPI from '@vue/composition-api'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'

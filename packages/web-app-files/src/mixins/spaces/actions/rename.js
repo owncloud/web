@@ -35,7 +35,6 @@ export default {
       'showMessage',
       'toggleModalConfirmButton'
     ]),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     $_rename_trigger({ resources }) {
@@ -73,11 +72,6 @@ export default {
         .updateDrive(id, { name }, {})
         .then(() => {
           this.hideModal()
-          this.UPDATE_RESOURCE_FIELD({
-            id,
-            field: 'name',
-            value: name
-          })
           this.UPDATE_SPACE_FIELD({
             id,
             field: 'name',

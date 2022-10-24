@@ -216,7 +216,7 @@ describe('Search Bar portal component', () => {
   test('navigates to files-common-search route on key press enter if search term is given', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('albert')
-    const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
+    const spyRouterPushStub = wrapper.vm.$router.push
     await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).toHaveBeenCalledTimes(1)
@@ -229,7 +229,7 @@ describe('Search Bar portal component', () => {
   test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
     wrapper = getMountedWrapper()
     wrapper.find(selectors.searchInput).setValue('')
-    const spyRouterPushStub = jest.spyOn(wrapper.vm.$router, 'push')
+    const spyRouterPushStub = wrapper.vm.$router.push
     await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).toHaveBeenCalledTimes(0)

@@ -4,7 +4,6 @@ import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/
 import { ShareTypes } from 'web-client/src/helpers/share'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import VueSelect from 'vue-select'
 import stubs from '@/tests/unit/stubs'
 
 const localVue = createLocalVue()
@@ -13,7 +12,6 @@ localVue.use(GetTextPlugin, {
   silent: true
 })
 localVue.use(DesignSystem)
-localVue.use(VueSelect)
 localVue.use(Vuex)
 
 const folderMock = {

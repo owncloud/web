@@ -4,7 +4,7 @@ import SpaceDetails from '../../../../../src/components/SideBar/Details/SpaceDet
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
-import VueCompositionAPI from '@vue/composition-api/dist/vue-composition-api'
+import VueCompositionAPI from '@vue/composition-api'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
