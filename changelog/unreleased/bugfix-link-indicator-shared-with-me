@@ -1,0 +1,6 @@
+Bugfix: Link indicator on "Shared with me"-page
+
+Link indicators in the sidebar on the "Shared with me"-page will now be displayed correctly.
+
+https://github.com/owncloud/web/issues/7697
+https://github.com/owncloud/web/pull/7853
