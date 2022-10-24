@@ -17,6 +17,7 @@ Summary
 * Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
+* Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
@@ -125,6 +126,13 @@ Details
 
    https://github.com/owncloud/web/issues/7680
    https://github.com/owncloud/web/pull/7724
+
+* Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
+
+   The search bar in a public link context has been hidden because it requires authentication.
+
+   https://github.com/owncloud/web/issues/7603
+   https://github.com/owncloud/web/pull/7849
 
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 
