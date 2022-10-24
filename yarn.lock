@@ -1979,7 +1979,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.5, @popperjs/core@npm:^2.9.0":
+"@popperjs/core@npm:2.11.6":
+  version: 2.11.6
+  resolution: "@popperjs/core@npm:2.11.6"
+  checksum: 47fb328cec1924559d759b48235c78574f2d71a8a6c4c03edb6de5d7074078371633b91e39bbf3f901b32aa8af9b9d8f82834856d2f5737a23475036b16817f0
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.9.0":
   version: 2.11.5
   resolution: "@popperjs/core@npm:2.11.5"
   checksum: fd7f9dca3fb716d7426332b6ee283f88d2724c0ab342fb678865a640bad403dfb9eeebd8204a406986162f7e2b33394f104320008b74d0e9066d7322f70ea35d
@@ -13567,7 +13574,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-free": ^6.1.1
     "@jest/globals": ^29.1.2
-    "@popperjs/core": ^2.11.5
+    "@popperjs/core": 2.11.6
     "@sentry/browser": ^6.19.7
     "@sentry/integrations": ^6.19.7
     "@types/luxon": ^2.3.1
