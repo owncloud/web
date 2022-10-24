@@ -13,7 +13,7 @@ geekdocFilePath: getting-started.md
 
 ### Docker
 
-Make sure to have Docker, Docker-Compose, Node.js and Yarn installed.
+Make sure to have Docker, Docker-Compose, Node.js and pnpm installed.
 
 {{< hint info >}}
 This setup currently doesn't work on Windows out of the box.
@@ -25,7 +25,7 @@ This setup currently doesn't work on Windows out of the box.
 </details>
 {{< /hint >}}
 
-After cloning the [source code](https://github.com/owncloud/web), install the dependencies via `yarn install` and bundle the frontend code by running `yarn build:w`.
+After cloning the [source code](https://github.com/owncloud/web), install the dependencies via `pnpm install` and bundle the frontend code by running `pnpm build:w`.
 
 Then, you can start the backends by running `docker-compose up oc10 ocis` and access them via [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `172.17.0.1 docker.host.internal` to make the `host.docker.internal` links work.
 
