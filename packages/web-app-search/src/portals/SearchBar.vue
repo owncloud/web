@@ -99,12 +99,18 @@ import { providerStore } from '../service'
 import { createLocationCommon } from 'web-app-files/src/router'
 import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
+import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { defineComponent } from '@vue/composition-api'
-import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: 'SearchBar',
+  setup() {
+   const store = useStore()
+    return {
+      isUserContext: useUserContext({ store })
+    }
+  },
 
   data() {
     return {
@@ -122,8 +128,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['user']),
-
     showNoResults() {
       return this.searchResults.every(({ result }) => !result.values.length)
     },
@@ -131,7 +135,7 @@ export default defineComponent({
       return this.providerStore.availableProviders
     },
     isSearchBarEnabled() {
-      return this.availableProviders.length && this.user?.id
+      return this.availableProviders.length && this.isUserContext
     },
     displayProviders() {
       /**
