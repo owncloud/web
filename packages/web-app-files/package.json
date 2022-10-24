@@ -1,6 +1,7 @@
 {
   "name": "web-app-files",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
@@ -27,8 +28,8 @@
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
     "web-app-search": "workspace:*",
-    "web-client": "workspace:*",
-    "web-pkg": "workspace:*",
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg",
     "web-runtime": "workspace:*"
   }
 }

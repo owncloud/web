@@ -1,6 +1,7 @@
 {
   "name": "text-editor",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud Web simple text editor",
   "license": "AGPL-3.0",
   "peerDependencies": {
@@ -10,7 +11,7 @@
     "vue-concurrency": "^3.0.0-7",
     "vue-gettext": "^2.1.5",
     "vuex": "^3.6.2",
-    "web-client": "workspace:*",
-    "web-pkg": "workspace:*"
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg"
   }
 }

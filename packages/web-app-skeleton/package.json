@@ -1,6 +1,7 @@
 {
   "name": "skeleton",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web app skeleton",
   "license": "AGPL-3.0",
   "scripts": {

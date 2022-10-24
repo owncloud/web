@@ -14,9 +14,9 @@ To get closer to the point where we are able to release faster and more often, w
 Please make sure to point http://host.docker.internal/ to 127.0.0.1 by adding it to your hosts.
 
 ```shell
-$ yarn && yarn build:w
+$ pnpm && pnpm build:w
 $ docker-compose up oc10 ocis
-$ yarn test:e2e:cucumber tests/e2e/cucumber/features
+$ pnpm test:e2e:cucumber tests/e2e/cucumber/features
 ```
 
 ## Available options
@@ -24,7 +24,7 @@ $ yarn test:e2e:cucumber tests/e2e/cucumber/features
 Please read `tests/e2e/config.js` to see which options are supported.
 
 ```shell
-$ OPTION_1=foo OPTION_2=bar yarn test:e2e:cucumber ...
+$ OPTION_1=foo OPTION_2=bar pnpm test:e2e:cucumber ...
 ```
 
 ## Package structure

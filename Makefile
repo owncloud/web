@@ -5,8 +5,8 @@ RELEASE := ${CURDIR}/release
 OCX_RELEASE := $(CURDIR)/build/dist
 NODE_MODULES := ${CURDIR}/node_modules
 
-node_modules: package.json yarn.lock
-	yarn install --immutable && touch ${NODE_MODULES}
+node_modules: package.json pnpm-lock.yaml
+	pnpm install && touch ${NODE_MODULES}
 
 .PHONY: clean
 clean:

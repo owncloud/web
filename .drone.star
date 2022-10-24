@@ -65,7 +65,7 @@ config = {
     "branches": [
         "master",
     ],
-    "yarnlint": True,
+    "pnpmlint": True,
     "e2e": {
         "oC10": {
             "db": "mysql:5.5",
@@ -830,10 +830,10 @@ def beforePipelines(ctx):
            licenseCheck(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
-           yarnCache(ctx) + \
+           pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), yarnCache(ctx)) + \
-           pipelinesDependsOn(yarnlint(ctx), yarnCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
+           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
@@ -844,17 +844,19 @@ def stagePipelines(ctx):
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
 
-def yarnCache(ctx):
+def pnpmCache(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "cache-yarn",
+        "name": "cache-pnpm",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
         "steps": skipIfUnchanged(ctx, "cache") +
-                 installYarn() +
-                 yarnInstallTests() +
-                 rebuildBuildArtifactCache(ctx, "yarn", ".yarn") +
-                 rebuildBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 rebuildBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn"),
+                 installPnpm() +
+                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 rebuildBuildArtifactCache(ctx, "playwright", ".playwright"),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -864,14 +866,14 @@ def yarnCache(ctx):
         },
     }]
 
-def yarnlint(ctx):
+def pnpmlint(ctx):
     pipelines = []
 
-    if "yarnlint" not in config:
+    if "pnpmlint" not in config:
         return pipelines
 
-    if type(config["yarnlint"]) == "bool":
-        if not config["yarnlint"]:
+    if type(config["pnpmlint"]) == "bool":
+        if not config["pnpmlint"]:
             return pipelines
 
     result = {
@@ -883,9 +885,8 @@ def yarnlint(ctx):
             "path": config["app"],
         },
         "steps": skipIfUnchanged(ctx, "lint") +
-                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installYarn() +
+                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 installPnpm() +
                  lint(),
         "trigger": {
             "ref": [
@@ -945,9 +946,9 @@ def build(ctx):
             "base": dir["base"],
             "path": config["app"],
         },
-        "steps": restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
+        "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installYarn() +
+                 installPnpm() +
                  buildRelease(ctx) +
                  buildDockerImage(),
         "trigger": {
@@ -1061,13 +1062,17 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
         "steps": skipIfUnchanged(ctx, "cache") +
-                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
+                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
                      "commands": [
+                         "pnpm config set store-dir ./.pnpm-store",
                          "make dist",
                      ],
                  }] +
@@ -1129,16 +1134,14 @@ def unitTests(ctx):
                      },
                  ] +
                  skipIfUnchanged(ctx, "unit-tests") +
-                 restoreBuildArtifactCache(ctx, "yarn", ".yarn") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installYarn() +
-                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
+                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 installPnpm() +
                  [
                      {
                          "name": "unit-tests",
                          "image": OC_CI_NODEJS,
                          "commands": [
-                             "yarn test:unit --coverage",
+                             "pnpm test:unit --coverage",
                          ],
                      },
                      {
@@ -1215,9 +1218,9 @@ def e2eTests(ctx):
         services = []
         depends_on = []
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
-                restoreBuildArtifactCache(ctx, "yarn", ".yarn") + \
+                restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-                installYarn() + \
+                installPnpm() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 copyFilesForUpload()
 
@@ -1255,7 +1258,7 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "sleep 10 && yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
+                         "sleep 10 && pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.%s].feature" % ("oc10" if server == "oCIS" else "ocis"),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
@@ -1374,9 +1377,6 @@ def acceptance(ctx):
 
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
-
-                        steps += restoreBuildArtifactCache(ctx, "tests-yarn", "tests/acceptance/.yarn")
-                        steps += yarnInstallTests()
 
                         if (params["oc10IntegrationAppIncluded"]):
                             steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
@@ -1783,27 +1783,16 @@ def installFederatedServer(version, db, dbSuffix = "-federated"):
 
     return [stepDefinition]
 
-def installYarn():
+def installPnpm():
     return [{
-        "name": "yarn-install",
+        "name": "pnpm-install",
         "image": OC_CI_NODEJS,
         "environment": {
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "yarn install --immutable",
-        ],
-    }]
-
-def yarnInstallTests():
-    return [{
-        "name": "yarn-install-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        },
-        "commands": [
-            "cd tests/acceptance && yarn install --immutable",
+            "pnpm config set store-dir ./.pnpm-store",
+            "pnpm install",
         ],
     }]
 
@@ -1812,7 +1801,7 @@ def lint():
         "name": "lint",
         "image": OC_CI_NODEJS,
         "commands": [
-            "yarn run lint",
+            "pnpm lint",
         ],
     }]
 
@@ -2420,11 +2409,13 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
 
-    return [{
+    return restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + [{
         "name": "webui-acceptance-tests",
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
+            "pnpm config set store-dir ./.pnpm-store",
+            "pnpm install",  # FIXME: use --filter ./tests/acceptance (currently @babel/register is not found)
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
@@ -2781,25 +2772,26 @@ def licenseCheck(ctx):
         },
         "steps": [
             {
-                "name": "yarn-install",
+                "name": "pnpm-install",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "yarn install --immutable",
+                    "pnpm config set store-dir ./.pnpm-store",
+                    "pnpm install",
                 ],
             },
             {
                 "name": "node-check-licenses",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "yarn licenses:check",
+                    "pnpm licenses:check",
                 ],
             },
             {
                 "name": "node-save-licenses",
                 "image": OC_CI_NODEJS,
                 "commands": [
-                    "yarn licenses:csv",
-                    "yarn licenses:save",
+                    "pnpm licenses:csv",
+                    "pnpm licenses:save",
                 ],
             },
         ],

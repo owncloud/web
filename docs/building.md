@@ -11,12 +11,12 @@ geekdocFilePath: building.md
 
 ## Building ownCloud Web
 
-- Run `yarn install` to install dependencies
-- Run `yarn build` to build Web and all apps included in the `packages` folder
+- Run `pnpm install` to install dependencies
+- Run `pnpm build` to build Web and all apps included in the `packages` folder
 
 ## Updating dependencies
 
-- Run `yarn upgrade` to update dependencies
+- Run `pnpm upgrade` to update dependencies
 
 ## Building the documentation
 
