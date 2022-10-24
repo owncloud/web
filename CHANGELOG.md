@@ -18,6 +18,7 @@ Summary
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
+* Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
@@ -134,6 +135,13 @@ Details
 
    https://github.com/owncloud/web/issues/7603
    https://github.com/owncloud/web/pull/7849
+
+* Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
+
+   Link indicators in the sidebar on the "Shared with me"-page will now be displayed correctly.
+
+   https://github.com/owncloud/web/issues/7697
+   https://github.com/owncloud/web/pull/7853
 
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 
