@@ -27,6 +27,7 @@ Summary
 * Bugfix - Routing for re-shares: [#7771](https://github.com/owncloud/web/pull/7771)
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
+* Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
@@ -204,6 +205,14 @@ Details
 
    https://github.com/owncloud/web/issues/7661
    https://github.com/owncloud/web/pull/7662
+
+* Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
+
+   We've fixed a bug where the selectable roles on a re-share could exceed the parent share's
+   permissions in certain scenarios.
+
+   https://github.com/owncloud/web/issues/7657
+   https://github.com/owncloud/web/pull/7844
 
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 
