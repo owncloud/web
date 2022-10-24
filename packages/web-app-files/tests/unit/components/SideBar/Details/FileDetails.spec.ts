@@ -169,6 +169,17 @@ function createWrapper(
         }
       },
       modules: {
+        runtime: {
+          namespaced: true,
+          modules: {
+            spaces: {
+              namespaced: true,
+              getters: {
+                spaces: () => []
+              }
+            }
+          }
+        },
         Files: {
           namespaced: true,
           state: {
@@ -215,12 +226,8 @@ function createWrapper(
           auth: !publicLinkContext
         }
       },
-      $router: jest.fn()
-    },
-    provide: {
-      displayedItem: {
-        value: testResource
-      }
+      $router: jest.fn(),
+      file: testResource
     }
   })
 }

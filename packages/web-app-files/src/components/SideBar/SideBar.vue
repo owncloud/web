@@ -212,19 +212,34 @@ export default defineComponent({
     },
     sharesLoadingDisabledOnCurrentRoute() {
       return this.isPublicFilesLocation || this.isTrashLocation
+    },
+    isShareLocation() {
+      return (
+        this.isSharedWithMeLocation ||
+        this.isSharedWithOthersLocation ||
+        this.isSharedViaLinkLocation
+      )
     }
   },
   watch: {
     highlightedFile: {
       handler(newFile, oldFile) {
-        const noChanges = oldFile && isEqual(newFile, oldFile)
-        if (!this.isSingleResource || !this.highlightedFile || noChanges) {
+        if (!this.isSingleResource || !this.highlightedFile) {
           return
         }
 
+        const noChanges = oldFile && isEqual(newFile, oldFile)
         const loadShares =
-          !this.sharesLoadingDisabledOnCurrentRoute && (!!oldFile || !this.currentFolder)
-        this.fetchFileInfo(loadShares)
+          !noChanges &&
+          !this.sharesLoadingDisabledOnCurrentRoute &&
+          (!!oldFile || !this.currentFolder)
+        if (loadShares) {
+          this.loadShares()
+        }
+
+        if (this.isShareLocation || !noChanges) {
+          this.fetchFileInfo()
+        }
       },
       deep: true
     }
@@ -232,18 +247,10 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadSharesTree']),
 
-    async fetchFileInfo(loadShares) {
+    async fetchFileInfo() {
       this.loading = true
-      const highlightedFileIsShare =
-        this.isSharedWithMeLocation ||
-        this.isSharedWithOthersLocation ||
-        this.isSharedViaLinkLocation
 
-      if (loadShares) {
-        this.loadShares()
-      }
-
-      if (!highlightedFileIsShare) {
+      if (!this.isShareLocation) {
         this.selectedFile = { ...this.highlightedFile }
         this.loading = false
         return
