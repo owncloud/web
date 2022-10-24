@@ -947,7 +947,6 @@ def build(ctx):
             "path": config["app"],
         },
         "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
                  installPnpm() +
                  buildRelease(ctx) +
                  buildDockerImage(),
