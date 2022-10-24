@@ -61,8 +61,8 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@jest/globals": "^29.1.2",
-    "@types/luxon": "^2.3.1",
-    "@types/semver": "^7.3.8"
+    "@jest/globals": "29.2.1",
+    "@types/luxon": "2.4.0",
+    "@types/semver": "7.3.12"
   }
 }
