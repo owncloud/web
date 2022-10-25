@@ -1,0 +1,5 @@
+Enhancement: Disable share renaming
+
+Renaming of shares has been disabled temporarily until it works as expected.
+
+https://github.com/owncloud/web/pull/7865

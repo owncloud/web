@@ -41,6 +41,12 @@ export default {
               return false
             }
 
+            // FIXME: Remove this check as soon as renaming shares works as expected
+            const rootShareIncluded = resources.some((r) => r.shareId && r.path === '/')
+            if (rootShareIncluded) {
+              return false
+            }
+
             const renameDisabled = resources.some((resource) => {
               return !resource.canRename()
             })
