@@ -1,0 +1,6 @@
+Bugfix: Honour routes' auth config
+
+Ensures that routes marked with `auth: false` do not require a user login.
+
+https://github.com/owncloud/web/issues/7863
+https://github.com/owncloud/web/pull/7864
