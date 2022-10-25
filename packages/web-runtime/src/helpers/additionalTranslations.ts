@@ -4,6 +4,7 @@ function $gettext(msg: string): string {
 }
 
 export const additionalTranslations = {
+  fileNotAvailable: $gettext('The requested file is not yet available, please try again later.'),
   activities: $gettext('Activities'),
   noActivities: $gettext('No activities'),
   virusDetectedActivity: $gettext(

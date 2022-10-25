@@ -112,7 +112,9 @@ export default defineComponent({
         ...(this.applicationName && { app_name: this.applicationName })
       })
       const url = `${baseUrl}?${query}`
-      const response = await this.makeRequest('POST', url)
+      const response = await this.makeRequest('POST', url, {
+        validateStatus: () => true
+      })
 
       if (response.status !== 200) {
         this.errorMessage = response.message
