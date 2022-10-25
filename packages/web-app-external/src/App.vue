@@ -120,7 +120,7 @@ export default defineComponent({
         switch (response.status) {
           case 425:
             this.errorMessage = this.$gettext(
-              'The requested file is not yet available, please try again later.'
+              'This file is currently being processed and is not yet available for use. Please try again shortly.'
             )
             break
           default:
