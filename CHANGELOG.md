@@ -15,6 +15,7 @@ Summary
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
 * Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
+* Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
@@ -110,6 +111,13 @@ Details
 
    https://github.com/owncloud/web/issues/7761
    https://github.com/owncloud/web/pull/7820
+
+* Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
+
+   Axios no longer skips on non 200 status responses in app-external. If the status is not 2xx, the
+   application now displays a proper error message.
+
+   https://github.com/owncloud/web/pull/7861
 
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 
