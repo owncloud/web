@@ -4,9 +4,6 @@ function $gettext(msg: string): string {
 }
 
 export const additionalTranslations = {
-  fileInProcessing: $gettext(
-    'This file is currently being processed and is not yet available for use. Please try again shortly.'
-  ),
   activities: $gettext('Activities'),
   noActivities: $gettext('No activities'),
   virusDetectedActivity: $gettext(
