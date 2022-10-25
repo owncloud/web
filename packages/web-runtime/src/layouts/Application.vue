@@ -9,7 +9,7 @@
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
         <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
-        <app-loading-spinner v-if="areSpacesLoading" />
+        <app-loading-spinner v-if="isLoading" />
         <template v-else>
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
@@ -94,6 +94,9 @@ export default defineComponent({
       'getExtensionsWithNavItems',
       'getNavItemsByExtension'
     ]),
+    isLoading() {
+      return this.isUserContext && this.areSpacesLoading
+    },
     isIE11() {
       return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },

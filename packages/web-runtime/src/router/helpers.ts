@@ -49,7 +49,10 @@ export const isUserContext = (router: Router, to: Route): boolean => {
   }
 
   const contextRoute = getContextRoute(router, to)
-  return !contextRoute || contextRoute.meta?.auth !== false
+  if (contextRoute) {
+    return contextRoute.meta?.auth !== false
+  }
+  return false
 }
 
 /**
