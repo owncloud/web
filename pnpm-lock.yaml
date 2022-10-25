@@ -237,13 +237,13 @@ importers:
 
   packages/web-app-draw-io:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       luxon: ^2.4.0
       vuex: ^3.6.2
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       luxon: 2.4.0
       vuex: 3.6.2_vue@2.6.14
       web-client: link:../web-client
@@ -251,14 +251,14 @@ importers:
 
   packages/web-app-external:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       uuid: ^9.0.0
       vue-gettext: ^2.1.5
       vuex: ^3.6.2
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       uuid: 9.0.0
       vue-gettext: 2.1.12
       vuex: 3.6.2_vue@2.6.14
@@ -267,7 +267,7 @@ importers:
 
   packages/web-app-files:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       copy-to-clipboard: ^3.3.1
       filesize: ^9.0.11
       fuse.js: ^6.5.3
@@ -292,7 +292,7 @@ importers:
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       copy-to-clipboard: 3.3.1
       filesize: 9.0.11
       fuse.js: 6.5.3
@@ -319,25 +319,25 @@ importers:
 
   packages/web-app-pdf-viewer:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       vue-gettext: ^2.1.5
       vuex: ^3.6.2
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       vue-gettext: 2.1.12
       vuex: 3.6.2_vue@2.6.14
       web-pkg: link:../web-pkg
 
   packages/web-app-preview:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       vue-gettext: ^2.1.5
       vuex: ^3.6.2
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       vue-gettext: 2.1.12
       vuex: 3.6.2_vue@2.6.14
       web-client: link:../web-client
@@ -345,7 +345,7 @@ importers:
 
   packages/web-app-search:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       lodash-es: ^4.17.21
       mark.js: ^8.11.1
       vue-async-computed: ^3.9.0
@@ -355,7 +355,7 @@ importers:
       web-app-files: workspace:*
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       lodash-es: 4.17.21
       mark.js: 8.11.1
       vue-async-computed: 3.9.0_vue@2.6.14
@@ -381,7 +381,7 @@ importers:
 
   packages/web-app-text-editor:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       marked: ^4.0.12
       sanitize-html: ^2.7.0
       vue-concurrency: ^3.0.0-7
@@ -390,7 +390,7 @@ importers:
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       marked: 4.0.12
       sanitize-html: 2.7.0
       vue-concurrency: 3.0.0-7
@@ -401,7 +401,7 @@ importers:
 
   packages/web-app-user-management:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       axios: ^0.27.1
       email-validator: ^2.0.4
       fuse.js: ^6.5.3
@@ -413,7 +413,7 @@ importers:
       vuex-extensions: ^1.1.5
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       axios: 0.27.2
       email-validator: 2.0.4
       fuse.js: 6.5.3
@@ -435,7 +435,7 @@ importers:
 
   packages/web-pkg:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       axios: ^0.27.1
       filesize: ^9.0.11
       lodash-es: ^4.17.21
@@ -448,7 +448,7 @@ importers:
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       axios: 0.27.2
       filesize: 9.0.11
       lodash-es: 4.17.21
@@ -474,7 +474,7 @@ importers:
       '@uppy/drop-target': ^2.0.0
       '@uppy/tus': ^3.0.1
       '@uppy/xhr-upload': ^3.0.1
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       axios: ^0.27.2
       cross-fetch: ^3.0.6
       easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
@@ -529,7 +529,7 @@ importers:
       '@uppy/drop-target': 2.0.0_@uppy+core@3.0.2
       '@uppy/tus': 3.0.1_@uppy+core@3.0.2
       '@uppy/xhr-upload': 3.0.1_@uppy+core@3.0.2
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       axios: 0.27.2
       cross-fetch: 3.1.4
       easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'
@@ -541,7 +541,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-design-system: 14.0.0-alpha.22_tm5rswqxszqrgtpc2tapqap7um
+      owncloud-design-system: 14.0.0-alpha.22_qjo64ckxpkihsz2u7asmuqxitq
       owncloud-sdk: 3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
@@ -582,12 +582,12 @@ importers:
 
   packages/web-test-helpers:
     specifiers:
-      '@vue/composition-api': 1.6.3
+      '@vue/composition-api': 1.7.1
       vue-gettext: ^2.1.5
       vue-router: ~3.5.3
       vuex: ^3.6.2
     dependencies:
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       vue-gettext: 2.1.12
       vue-router: 3.5.3_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
@@ -4837,10 +4837,10 @@ packages:
       - whiskers
     dev: true
 
-  /@vue/composition-api/1.6.3_vue@2.6.14:
-    resolution: {integrity: sha512-f0TgOKqU460QyVLp5URi8LMVJ3eE3/3OuFrytItSNmp5FbisS67jVvUZg7pzIzZonqc4chG1SNS48PMOsH7a4g==}
+  /@vue/composition-api/1.7.1_vue@2.6.14:
+    resolution: {integrity: sha512-xDWoEtxGXhH9Ku3ROYX/rzhcpt4v31hpPU5zF3UeVC/qxA3dChmqU8zvTUYoKh3j7rzpNsoFOwqsWG7XPMlaFA==}
     peerDependencies:
-      vue: '>= 2.5 < 3'
+      vue: '>= 2.5 < 2.7'
     dependencies:
       vue: 2.6.14
     dev: false
@@ -11669,7 +11669,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /owncloud-design-system/14.0.0-alpha.22_tm5rswqxszqrgtpc2tapqap7um:
+  /owncloud-design-system/14.0.0-alpha.22_qjo64ckxpkihsz2u7asmuqxitq:
     resolution: {integrity: sha512-n6mn5h4v93eA/36GyqrqTNBd8ZoceDfATMw9vj/oFf72rIHCGtjWHoybusaTXNh1qqdToJcUe467G6Eh6GCAbw==}
     engines: {node: '>= 14.0.0', npm: '>= 3.0.0'}
     peerDependencies:
@@ -11690,7 +11690,7 @@ packages:
       webfontloader: ^1.6.28
     dependencies:
       '@popperjs/core': 2.11.5
-      '@vue/composition-api': 1.6.3_vue@2.6.14
+      '@vue/composition-api': 1.7.1_vue@2.6.14
       filesize: 9.0.11
       focus-trap: 6.9.0
       focus-trap-vue: 1.1.1_lfibo4zsg7agi62t6g5s7n7zpq

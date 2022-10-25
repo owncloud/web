@@ -5,7 +5,7 @@
   "description": "ownCloud Web simple text editor",
   "license": "AGPL-3.0",
   "peerDependencies": {
-    "@vue/composition-api": "1.6.3",
+    "@vue/composition-api": "1.7.1",
     "marked": "^4.0.12",
     "sanitize-html": "^2.7.0",
     "vue-concurrency": "^3.0.0-7",

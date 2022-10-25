@@ -13,7 +13,7 @@
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.0.1",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vue/composition-api": "1.6.3",
+    "@vue/composition-api": "1.7.1",
     "axios": "^0.27.2",
     "cross-fetch": "^3.0.6",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz",
