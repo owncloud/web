@@ -1,6 +1,6 @@
-Enhancement: Update ODS to v14.0.0-alpha.20
+Enhancement: Update ODS to v14.0.0-alpha.24
 
-We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
+We updated the ownCloud Design System to version 14.0.0-alpha.24. Please refer to the full changelog in the ODS release (linked) for more details. Summary:
 
 * Bugfix - Omit special characters in user avatar initials: [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070)
 * Bugfix - Avatar link icon: [#2269](https://github.com/owncloud/owncloud-design-system/pull/2269)
@@ -8,6 +8,7 @@ We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer t
 * Bugfix - Lazy loading render performance: [#2260](https://github.com/owncloud/owncloud-design-system/pull/2260)
 * Bugfix - Remove width shrinking of the ocAvatarItem: [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241)
 * Bugfix - Remove click event on OcIcon: [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216)
+* Bugfix - Modal input message overlays with buttons: [#2343](https://github.com/owncloud/owncloud-design-system/pull/2343)
 * Change - Redesign contextual helper: [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271)
 * Change - Remove OcAlert component: [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210)
 * Change - Remove transition animations: [#2210](https://github.com/owncloud/owncloud-design-system/pull/2210)
@@ -29,6 +30,8 @@ We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer t
 * Enhancement - Button text align left: [#2323](https://github.com/owncloud/owncloud-design-system/pull/2323)
 * Enhancement - "Cancel"-button and -handler in OcSearchBar: [#2328](https://github.com/owncloud/owncloud-design-system/pull/2328)
 * Enhancement - Adjust breadcrumb spacing: [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329)
+* Enhancement - Remove border on buttons: [#2345](https://github.com/owncloud/owncloud-design-system/pull/2345)
+* Enhancement - Input background color: [#2352](https://github.com/owncloud/owncloud-design-system/pull/2352)
 
-https://github.com/owncloud/web/pull/7684
-https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.20
+https://github.com/owncloud/web/pull/7862
+https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.24
