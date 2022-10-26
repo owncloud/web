@@ -1,5 +1,4 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import PQueue from 'p-queue'
 import { dirname } from 'path'
 import { isLocationTrashActive } from '../../router'
 
@@ -56,48 +55,48 @@ export default {
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
     ...mapMutations(['SET_QUOTA']),
 
-    async collectRestoreConflicts(resources) {
-      const parentFolders = {}
-      const conflicts = []
-      const resolvedResources = []
-      const missingFolderStructure = []
-      for (const resource of resources) {
+    async $_restore_collectConflicts(sortedResources: Resource[]) {
+      const existingResourcesCache = {}
+      const conflicts: Resource[] = []
+      const resolvedResources: Resource[] = []
+      const missingFolderPaths: string[] = []
+      for (const resource of sortedResources) {
         const parentPath = dirname(resource.path)
 
-        // check if parent folder has already been requested
-        let parentResources = []
-        if (parentPath in parentFolders) {
-          parentResources = parentFolders[parentPath]
+        let existingResources: Resource[] = []
+        if (parentPath in existingResourcesCache) {
+          existingResources = existingResourcesCache[parentPath]
         } else {
           try {
-            parentResources = await this.$clientService.webdav.listFiles(this.space, {
+            existingResources = await this.$clientService.webdav.listFiles(this.space, {
               path: parentPath
             })
+            existingResources = existingResources.slice(1)
           } catch (error) {
-            missingFolderStructure.push(resource)
+            missingFolderPaths.push(parentPath)
           }
-          const resourceParentPath = dirname(resource.path)
-          parentResources = parentResources.filter((e) => dirname(e.path) === resourceParentPath)
-          parentFolders[parentPath] = parentResources
+          existingResourcesCache[parentPath] = existingResources
         }
         // Check for naming conflict in parent folder and between resources batch
         const hasConflict =
-          parentResources.some((e) => e.name === resource.name) ||
-          resources.filter((e) => e.id !== resource.id).some((e) => e.path === resource.path)
-        if (!hasConflict) {
-          resolvedResources.push(resource)
-        } else {
+          existingResources.some((r) => r.name === resource.name) ||
+          resolvedResources
+            .filter((r) => r.id !== resource.id)
+            .some((r) => r.path === resource.path)
+        if (hasConflict) {
           conflicts.push(resource)
+        } else {
+          resolvedResources.push(resource)
         }
       }
       return {
-        parentFolders,
+        existingResourcesByPath: existingResourcesCache,
         conflicts,
         resolvedResources,
-        missingFolderStructure
+        missingFolderPaths: missingFolderPaths.filter((path) => !(path in existingResourcesCache))
       }
     },
-    async collectRestoreResolveStrategies(conflicts) {
+    async $_restore_collectResolveStrategies(conflicts: Resource[]) {
       let count = 0
       const resolvedConflicts = []
       const allConflictsCount = conflicts.length
@@ -139,63 +138,58 @@ export default {
       }
       return resolvedConflicts
     },
-    async restoreFolderStructure(resource) {
+    async $_restore_createFolderStructure(path: string, existingPaths: string[]) {
       const { webdav } = clientService
-      const createdFolderPaths = []
-      const directory = dirname(resource.path)
 
-      const folders = directory.split('/').filter(Boolean)
+      const pathSegments = path.split('/').filter(Boolean)
       let parentPath = ''
-      for (const subFolder of folders) {
+      for (const subFolder of pathSegments) {
         const folderPath = urlJoin(parentPath, subFolder)
-        if (createdFolderPaths.includes(folderPath)) {
-          parentPath += `/${subFolder}`
-          createdFolderPaths.push(parentPath)
+        if (existingPaths.includes(folderPath)) {
+          parentPath = urlJoin(parentPath, subFolder)
           continue
         }
 
         try {
           await webdav.createFolder(this.space, { path: folderPath })
-        } catch (error) {
-          console.error(error)
-        }
+        } catch (ignored) {}
 
-        parentPath = urlJoin(parentPath, subFolder)
-        createdFolderPaths.push(parentPath)
+        existingPaths.push(folderPath)
+        parentPath = folderPath
+      }
+
+      return {
+        existingPaths
       }
     },
-    async restoreResources(resources, filesToOverwrite, missingFolderStructure) {
+    async $_restore_restoreResources(resources: Resource[], missingFolderPaths: string[]) {
       const restoredResources = []
       const failedResources = []
-      const restorePromises = []
-      const restoreQueue = new PQueue({ concurrency: 4 })
-      // resources need to be sorted by path ASC to recover the parents first in case of deep folder structure
-      const sortedResources = resources.sort((a,b) => a.path.length - b.path.length);
 
-      sortedResources.forEach(async (resource) => {
+      let createdFolderPaths = []
+      for (const resource of resources) {
         const parentPath = dirname(resource.path)
-        if(missingFolderStructure.includes(resource) && !sortedResources.some(r => r.path.includes(parentPath))) {
-          await this.restoreFolderStructure(resource)
+        if (missingFolderPaths.includes(parentPath)) {
+          const { existingPaths } = await this.$_restore_createFolderStructure(
+            parentPath,
+            createdFolderPaths
+          )
+          createdFolderPaths = existingPaths
         }
-        const overwrite = filesToOverwrite.includes(resource)
 
-        restorePromises.push(
-          restoreQueue.add(async () => {
-            try {
-              await this.$clientService.webdav.restoreFile(this.space, resource, resource, {
-                overwrite
-              })
-              restoredResources.push(resource)
-            } catch (e) {
-              console.error(e)
-              failedResources.push(resource)
-            }
+        try {
+          await this.$clientService.webdav.restoreFile(this.space, resource, resource, {
+            overwrite: true
           })
-        )
-      })
-      await Promise.all(restorePromises)
+          restoredResources.push(resource)
+        } catch (e) {
+          console.error(e)
+          failedResources.push(resource)
+        }
+      }
+
       // success handler (for partial and full success)
-      if (restoredResources.length > 0) {
+      if (restoredResources.length) {
         this.removeFilesFromTrashbin(restoredResources)
         let translated
         const translateParams: any = {}
@@ -212,7 +206,7 @@ export default {
       }
 
       // failure handler (for partial and full failure)
-      if (failedResources.length > 0) {
+      if (failedResources.length) {
         let translated
         const translateParams: any = {}
         if (failedResources.length === 1) {
@@ -228,7 +222,7 @@ export default {
         })
       }
 
-      // Load quota
+      // Reload quota
       if (this.capabilities?.spaces?.enabled) {
         const accessToken = this.$store.getters['runtime/auth/accessToken']
         const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
@@ -244,14 +238,16 @@ export default {
       }
     },
 
-    async $_restore_trigger({ resources }) {
+    async $_restore_trigger({ resources }: { resources: Resource[] }) {
+      // resources need to be sorted by path ASC to recover the parents first in case of deep nested folder structure
+      const sortedResources = resources.sort((a, b) => a.path.length - b.path.length)
+
       // collect and request existing files in associated parent folders of each resource
-      const { parentFolders, conflicts, resolvedResources, missingFolderStructure } = await this.collectRestoreConflicts(
-        resources
-      )
+      const { existingResourcesByPath, conflicts, resolvedResources, missingFolderPaths } =
+        await this.$_restore_collectConflicts(sortedResources)
 
       // iterate through conflicts and collect resolve strategies
-      const resolvedConflicts = await this.collectRestoreResolveStrategies(conflicts)
+      const resolvedConflicts = await this.$_restore_collectResolveStrategies(conflicts)
 
       // iterate through conflicts and behave according to strategy
       const filesToOverwrite = resolvedConflicts
@@ -259,17 +255,16 @@ export default {
         .map((e) => e.resource)
       resolvedResources.push(...filesToOverwrite)
       const filesToKeepBoth = resolvedConflicts
-
         .filter((e) => e.strategy === ResolveStrategy.KEEP_BOTH)
         .map((e) => e.resource)
 
       for (let resource of filesToKeepBoth) {
         resource = { ...resource }
         const parentPath = dirname(resource.path)
-        const parentResources = parentFolders[parentPath] || []
+        const existingResources = existingResourcesByPath[parentPath] || []
         const extension = extractExtensionFromFile(resource)
         const resolvedName = resolveFileNameDuplicate(resource.name, extension, [
-          ...parentResources,
+          ...existingResources,
           ...resolvedConflicts.map((e) => e.resource),
           ...resolvedResources
         ])
@@ -277,7 +272,7 @@ export default {
         resource.path = urlJoin(parentPath, resolvedName)
         resolvedResources.push(resource)
       }
-      this.restoreResources(resolvedResources, filesToOverwrite, missingFolderStructure)
+      return this.$_restore_restoreResources(resolvedResources, missingFolderPaths)
     }
   }
 }
