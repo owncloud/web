@@ -43,6 +43,7 @@ Summary
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
+* Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
@@ -54,7 +55,7 @@ Summary
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
-* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
 Details
@@ -356,6 +357,16 @@ Details
    https://github.com/owncloud/web/issues/7703
    https://github.com/owncloud/web/pull/7709
 
+* Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
+
+   The colors in the dark mode have been aligned with the given design. This improves the overall
+   look and readability.
+
+   https://github.com/owncloud/web/issues/7373
+   https://github.com/owncloud/web/issues/7353
+   https://github.com/owncloud/web/issues/7738
+   https://github.com/owncloud/web/pull/7862
+
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 
    Sub-folders within user- and group-shares can now be denied for certain share receivers if the
@@ -460,9 +471,9 @@ Details
    https://github.com/owncloud/web/issues/7798
    https://github.com/owncloud/web/pull/7801
 
-* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.24. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
@@ -476,7 +487,9 @@ Details
    Remove width shrinking of the ocAvatarItem:
    [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
    Remove click event on OcIcon:
-   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Change -
+   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Bugfix -
+   Modal input message overlays with buttons:
+   [#2343](https://github.com/owncloud/owncloud-design-system/pull/2343) * Change -
    Redesign contextual helper:
    [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271) * Change -
    Remove OcAlert component:
@@ -517,10 +530,14 @@ Details
    Enhancement - "Cancel"-button and -handler in OcSearchBar:
    [#2328](https://github.com/owncloud/owncloud-design-system/pull/2328) *
    Enhancement - Adjust breadcrumb spacing:
-   [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329)
+   [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329) *
+   Enhancement - Remove border on buttons:
+   [#2345](https://github.com/owncloud/owncloud-design-system/pull/2345) *
+   Enhancement - Input background color:
+   [#2352](https://github.com/owncloud/owncloud-design-system/pull/2352)
 
-   https://github.com/owncloud/web/pull/7684
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.20
+   https://github.com/owncloud/web/pull/7862
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.24
 
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
