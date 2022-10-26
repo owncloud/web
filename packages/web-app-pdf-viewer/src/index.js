@@ -12,7 +12,7 @@ const routes = [
     component: App,
     name: 'pdf-viewer',
     meta: {
-      auth: false,
+      authContext: 'hybrid',
       title: $gettext('PDF Viewer'),
       patchCleanPath: true
     }

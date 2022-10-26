@@ -25,6 +25,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'list/:page?',
         component: components.SearchResults,
         meta: {
+          authContext: 'user',
           title: $gettext('Search results'),
           contextQueryItems: ['term', 'provider']
         }
@@ -40,6 +41,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: '',
         component: components.Favorites,
         meta: {
+          authContext: 'user',
           title: $gettext('Favorite files')
         }
       }

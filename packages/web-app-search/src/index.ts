@@ -35,6 +35,7 @@ export default {
           path: 'list/:page?',
           component: List,
           meta: {
+            authContext: 'user',
             contextQueryItems: ['term', 'provider']
           }
         }

@@ -14,8 +14,8 @@ const routes = [
     component: App,
     name: 'text-editor',
     meta: {
+      authContext: 'hybrid',
       title: $gettext('Text Editor'),
-      auth: false,
       patchCleanPath: true
     }
   }

@@ -15,4 +15,5 @@ export interface WebRouteMeta extends RouteMeta {
   title?: string
   authContext?: AuthContext
   patchCleanPath?: boolean
+  contextQueryItems?: string[]
 }

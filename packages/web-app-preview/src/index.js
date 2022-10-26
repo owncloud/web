@@ -14,7 +14,7 @@ const routes = [
     component: App,
     name: 'media',
     meta: {
-      auth: false,
+      authContext: 'hybrid',
       title: $gettext('Preview'),
       patchCleanPath: true
     }
