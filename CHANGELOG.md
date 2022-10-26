@@ -40,6 +40,7 @@ Summary
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+* Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
@@ -332,6 +333,13 @@ Details
    https://github.com/owncloud/web/issues/6648
    https://github.com/owncloud/web/pull/7430
    https://github.com/owncloud/web/pull/7791
+
+* Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
+
+   We've added conflict handling for restoring files from the trashbin
+
+   https://github.com/owncloud/web/issues/1753
+   https://github.com/owncloud/web/pull/7635
 
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 
