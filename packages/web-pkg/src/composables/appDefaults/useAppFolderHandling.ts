@@ -63,9 +63,9 @@ export function useAppFolderHandling({
       })
 
       const path = dirname(pathResource.path)
-      const resources = await webdav.listFiles(space, {
+      const resources = (await webdav.listFiles(space, {
         path
-      })
+      })).children
 
       if (resources[0].type === 'file') {
         store.commit('Files/LOAD_FILES', {

@@ -53,8 +53,9 @@ export class FolderLoaderSpace implements FolderLoader {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
-        const resources = yield webdav.listFiles(space, { path, fileId })
-        let currentFolder = resources.shift()
+        const listFilesResult = yield webdav.listFiles(space, { path, fileId })
+        const resources = listFilesResult.children
+        let currentFolder = listFilesResult.folder
         replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
 
         if (path === '/') {
