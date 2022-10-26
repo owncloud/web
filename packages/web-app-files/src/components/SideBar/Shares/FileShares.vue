@@ -83,7 +83,7 @@ import {
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, PropType } from '@vue/composition-api'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
@@ -347,6 +347,8 @@ export default defineComponent({
 
     isShareModifiable(collaborator) {
       if (
+        this.space &&
+        isProjectSpaceResource(this.space) &&
         this.currentUserIsMemberOfSpace &&
         !this.space?.spaceRoles.manager.includes(this.user.uuid)
       ) {
