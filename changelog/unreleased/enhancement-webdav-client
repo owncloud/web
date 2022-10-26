@@ -5,3 +5,4 @@ We've added webdav support to the `web-client` package. This wraps the existing 
 handles the differentiation of public link and user-specific webdav requests internally.
 
 https://github.com/owncloud/web/pull/7430
+https://github.com/owncloud/web/pull/7880

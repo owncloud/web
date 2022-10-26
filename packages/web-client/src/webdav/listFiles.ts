@@ -20,7 +20,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       space: SpaceResource,
       { path, fileId }: { path?: string; fileId?: string | number } = {},
       { depth = 1, davProperties }: ListFilesOptions = {}
-    ): Promise<{ folder: Resource, children: Resource[]}> {
+    ): Promise<{ folder: Resource; children: Resource[] }> {
       let webDavResources: any[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await sdk.publicFiles.list(
@@ -44,7 +44,10 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         })
         if (!path) {
           const [rootFolder, ...children] = webDavResources
-          return { folder: buildPublicSpaceResource(rootFolder), children: children.map(buildResource) }
+          return {
+            folder: buildPublicSpaceResource(rootFolder),
+            children: children.map(buildResource)
+          }
         }
         const resources = webDavResources.map(buildResource)
         return { folder: resources[0], children: resources.slice(1) }

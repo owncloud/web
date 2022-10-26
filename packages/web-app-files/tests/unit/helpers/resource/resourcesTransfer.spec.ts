@@ -75,7 +75,7 @@ describe('resourcesTransfer', () => {
       'should copy / move files without renaming them if no conflicts exist',
       async (action: TransferType) => {
         clientServiceMock.webdav.listFiles.mockReturnValueOnce(
-          new Promise((resolve) => resolve([] as Resource[]))
+          new Promise((resolve) => resolve({folder: {} as Resource, children: [] as Resource[]}))
         )
         const resourcesTransfer = new ResourceTransfer(
           sourceSpace,
