@@ -1,0 +1,8 @@
+Enhancement: Auth context in route meta props
+
+The route meta prop has been extended by a new "meta.authContext" property (can be one out of "anonymous", "user", "publicLink" or "hybrid"). With this, app developers can now define anonymous routes, which was hardcoded to a few well known route names before.
+Anonymous routes are rendered in the application layout, i.e. with the top bar, as the ownCloud Web Chrome should always be visible to the user (except for a few handpicked exceptions in the web runtime, which are still rendered in the plain layout).
+
+https://github.com/owncloud/web/issues/7234
+https://github.com/owncloud/web/issues/7863
+https://github.com/owncloud/web/pull/7874
