@@ -284,7 +284,7 @@ importers:
       vue-concurrency: ^3.0.0-7
       vue-gettext: ^2.1.5
       vue-resize: ^1.0.1
-      vue-router: ~3.5.3 || ~3.6.0
+      vue-router: 3.6.5
       vuex: ^3.6.2
       vuex-extensions: ^1.1.5
       web-app-search: workspace:*
@@ -309,7 +309,7 @@ importers:
       vue-concurrency: 3.0.0-7
       vue-gettext: 2.1.12
       vue-resize: 1.0.1_vue@2.6.14
-      vue-router: 3.5.3_vue@2.6.14
+      vue-router: 3.6.5_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
       vuex-extensions: 1.1.5
       web-app-search: link:../web-app-search
@@ -442,7 +442,7 @@ importers:
       luxon: ^2.4.0
       qs: ^6.10.3
       uuid: ^9.0.0
-      vue-router: ~3.5.3 || ~3.6.0
+      vue-router: 3.6.5
       vuex: ^3.6.2
       vuex-extensions: ^1.1.5
       web-client: npm:@ownclouders/web-client
@@ -455,7 +455,7 @@ importers:
       luxon: 2.4.0
       qs: 6.10.3
       uuid: 9.0.0
-      vue-router: 3.5.3_vue@2.6.14
+      vue-router: 3.6.5_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
       vuex-extensions: 1.1.5
       web-client: link:../web-client
@@ -509,7 +509,7 @@ importers:
       vue-inline-svg: ^2.0.0
       vue-meta: ^2.2.2
       vue-resize: ^1.0.1
-      vue-router: ^3.5.3
+      vue-router: 3.6.5
       vue-scrollto: ^2.15.0
       vue-select: ^3.18.3
       vuex: ^3.6.2
@@ -564,12 +564,12 @@ importers:
       vue-inline-svg: 2.0.0
       vue-meta: 2.4.0
       vue-resize: 1.0.1_vue@2.6.14
-      vue-router: 3.5.3_vue@2.6.14
+      vue-router: 3.6.5_vue@2.6.14
       vue-scrollto: 2.20.0
       vue-select: 3.18.3_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
       vuex-extensions: 1.1.5
-      vuex-router-sync: 5.0.0_d5xzus4q4k3c6iqxoi3vuv3cjy
+      vuex-router-sync: 5.0.0_xdhba6eyhs52juodf6fywqi4xi
       web-client: link:../web-client
       web-pkg: link:../web-pkg
       webdav: 4.10.0
@@ -584,12 +584,12 @@ importers:
     specifiers:
       '@vue/composition-api': 1.7.1
       vue-gettext: ^2.1.5
-      vue-router: ~3.5.3 || ~3.6.0
+      vue-router: 3.6.5
       vuex: ^3.6.2
     dependencies:
       '@vue/composition-api': 1.7.1_vue@2.6.14
       vue-gettext: 2.1.12
-      vue-router: 3.5.3_vue@2.6.14
+      vue-router: 3.6.5_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
 
   tests/acceptance:
@@ -14779,8 +14779,8 @@ packages:
       vue: 2.6.14
     dev: false
 
-  /vue-router/3.5.3_vue@2.6.14:
-    resolution: {integrity: sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg==}
+  /vue-router/3.6.5_vue@2.6.14:
+    resolution: {integrity: sha512-VYXZQLtjuvKxxcshuRAwjHnciqZVoXAjTjcqBTz4rKc8qih9g9pI3hbDjmqXaHdgL3v8pV6P8Z335XvHzESxLQ==}
     peerDependencies:
       vue: ^2
     dependencies:
@@ -14832,13 +14832,13 @@ packages:
       lodash.clonedeep: 4.5.0
     dev: true
 
-  /vuex-router-sync/5.0.0_d5xzus4q4k3c6iqxoi3vuv3cjy:
+  /vuex-router-sync/5.0.0_xdhba6eyhs52juodf6fywqi4xi:
     resolution: {integrity: sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==}
     peerDependencies:
       vue-router: ^3.0.0
       vuex: ^3.0.0
     dependencies:
-      vue-router: 3.5.3_vue@2.6.14
+      vue-router: 3.6.5_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
     dev: false
 
