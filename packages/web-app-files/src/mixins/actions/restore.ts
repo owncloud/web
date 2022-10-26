@@ -93,7 +93,9 @@ export default {
         existingResourcesByPath: existingResourcesCache,
         conflicts,
         resolvedResources,
-        missingFolderPaths: missingFolderPaths.filter((path) => !(path in existingResourcesCache))
+        missingFolderPaths: missingFolderPaths.filter(
+          (path) => !existingResourcesCache[path]?.length
+        )
       }
     },
     async $_restore_collectResolveStrategies(conflicts: Resource[]) {
