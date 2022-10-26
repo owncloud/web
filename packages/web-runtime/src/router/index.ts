@@ -40,49 +40,49 @@ export const router = patchRouter(
         path: '/login',
         name: 'login',
         component: LoginPage,
-        meta: { title: $gettext('Login') }
+        meta: { title: $gettext('Login'), authContext: 'anonymous' }
       },
       {
         path: '/logout',
         name: 'logout',
         component: LogoutPage,
-        meta: { title: $gettext('Logout') }
+        meta: { title: $gettext('Logout'), authContext: 'anonymous' }
       },
       {
         path: '/oidc-callback',
         name: 'oidcCallback',
         component: OidcCallbackPage,
-        meta: { title: $gettext('Oidc callback') }
+        meta: { title: $gettext('Oidc callback'), authContext: 'anonymous' }
       },
       {
         path: '/oidc-silent-redirect',
         name: 'oidcSilentRedirect',
         component: OidcCallbackPage,
-        meta: { title: $gettext('Oidc redirect') }
+        meta: { title: $gettext('Oidc redirect'), authContext: 'anonymous' }
       },
       {
         path: '/f/:fileId',
         name: 'resolvePrivateLink',
         component: ResolvePrivateLinkPage,
-        meta: { title: $gettext('Private link') }
+        meta: { title: $gettext('Private link'), authContext: 'user' }
       },
       {
         path: '/s/:token',
         name: 'resolvePublicLink',
         component: ResolvePublicLinkPage,
-        meta: { title: $gettext('Public link') }
+        meta: { title: $gettext('Public link'), authContext: 'anonymous' }
       },
       {
         path: '/access-denied',
         name: 'accessDenied',
         component: AccessDeniedPage,
-        meta: { title: $gettext('Access denied') }
+        meta: { title: $gettext('Access denied'), authContext: 'anonymous' }
       },
       {
         path: '/account',
         name: 'account',
         component: Account,
-        meta: { title: $gettext('Account') }
+        meta: { title: $gettext('Account'), authContext: 'user' }
       }
     ]
   })

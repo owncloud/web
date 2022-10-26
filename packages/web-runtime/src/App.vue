@@ -49,7 +49,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
-import { isPublicLinkContext, isUserContext, isAuthenticationRequired } from './router'
+import { isPublicLinkContext, isUserContext, isAnonymousContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus } from 'web-pkg/src/services'
 
@@ -70,7 +70,7 @@ export default defineComponent({
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
-      if (!this.$route.name || !isAuthenticationRequired(this.$router, this.$route)) {
+      if (!this.$route.name || isAnonymousContext(this.$router, this.$route)) {
         return LayoutPlain
       }
 

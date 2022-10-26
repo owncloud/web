@@ -28,7 +28,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: ':driveAliasAndItem*',
         component: components.Spaces.DriveResolver,
         meta: {
-          auth: false,
+          authContext: 'publicLink',
           patchCleanPath: true
         }
       }
@@ -46,7 +46,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: ':token?',
         component: components.FilesDrop,
         meta: {
-          auth: false,
+          authContext: 'publicLink',
           title: $gettext('Public file upload')
         }
       }
