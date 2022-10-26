@@ -284,7 +284,7 @@ importers:
       vue-concurrency: ^3.0.0-7
       vue-gettext: ^2.1.5
       vue-resize: ^1.0.1
-      vue-router: ~3.5.3
+      vue-router: ~3.5.3 || ~3.6.0
       vuex: ^3.6.2
       vuex-extensions: ^1.1.5
       web-app-search: workspace:*
@@ -442,7 +442,7 @@ importers:
       luxon: ^2.4.0
       qs: ^6.10.3
       uuid: ^9.0.0
-      vue-router: ~3.5.3
+      vue-router: ~3.5.3 || ~3.6.0
       vuex: ^3.6.2
       vuex-extensions: ^1.1.5
       web-client: npm:@ownclouders/web-client
@@ -584,7 +584,7 @@ importers:
     specifiers:
       '@vue/composition-api': 1.7.1
       vue-gettext: ^2.1.5
-      vue-router: ~3.5.3
+      vue-router: ~3.5.3 || ~3.6.0
       vuex: ^3.6.2
     dependencies:
       '@vue/composition-api': 1.7.1_vue@2.6.14
