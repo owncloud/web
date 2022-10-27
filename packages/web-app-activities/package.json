@@ -1,6 +1,14 @@
 {
   "name": "activities",
   "version": "0.0.0",
-  "description": "ownCloud activities",
-  "license": "AGPL-3.0"
+  "private": true,
+  "description": "ownCloud web activities",
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@vue/composition-api": "1.7.1",
+    "luxon": "^2.4.0",
+    "vue-concurrency": "^3.0.0-7",
+    "vue-gettext": "^2.1.5",
+    "web-pkg": "npm:@ownclouders/web-pkg"
+  }
 }

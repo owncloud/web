@@ -235,6 +235,20 @@ importers:
   packages/tsconfig:
     specifiers: {}
 
+  packages/web-app-activities:
+    specifiers:
+      '@vue/composition-api': 1.7.1
+      luxon: ^2.4.0
+      vue-concurrency: ^3.0.0-7
+      vue-gettext: ^2.1.5
+      web-pkg: npm:@ownclouders/web-pkg
+    dependencies:
+      '@vue/composition-api': 1.7.1_vue@2.6.14
+      luxon: 2.4.0
+      vue-concurrency: 3.0.0-7
+      vue-gettext: 2.1.12
+      web-pkg: link:../web-pkg
+
   packages/web-app-draw-io:
     specifiers:
       '@vue/composition-api': 1.7.1
@@ -487,7 +501,7 @@ importers:
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
       owncloud-design-system: 14.0.0-alpha.24
-      owncloud-sdk: ~3.0.0-alpha.17
+      owncloud-sdk: owncloud/owncloud-sdk.git#experimental
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
       portal-vue: ^2.1.7
@@ -542,7 +556,7 @@ importers:
       marked: 4.0.12
       oidc-client-ts: 2.1.0
       owncloud-design-system: 14.0.0-alpha.24_qjo64ckxpkihsz2u7asmuqxitq
-      owncloud-sdk: 3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: github.com/owncloud/owncloud-sdk/8d14a84d3113d2004ea35c0d3fe896993152a3c0_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       portal-vue: 2.1.7_vue@2.6.14
@@ -10623,7 +10637,7 @@ packages:
     dev: true
 
   /jstransformer/1.0.0:
-    resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}
+    resolution: {integrity: sha1-7Yvwkh4vPx7U1cGkT2hwntJHIsM=}
     dependencies:
       is-promise: 2.2.2
       promise: 7.3.1
@@ -11704,28 +11718,6 @@ packages:
       vue-inline-svg: 2.0.0
       vue-select: 3.18.3_vue@2.6.14
       webfontloader: 1.6.28
-    dev: false
-
-  /owncloud-sdk/3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-XO6XzyiMfAB/i4TcshuB6VGYzcsZUI/x+JBwv40Lj4p0bSU4eD1c2CPk66uj3t+13pcAqJqF9Mv9NcM0aEbj4w==}
-    peerDependencies:
-      axios: ^0.27.2
-      cross-fetch: ^3.0.6
-      promise: ^8.1.0
-      qs: ^6.10.3
-      utf8: ^3.0.0
-      uuid: ^8.2.0
-      webdav: 4.10.0
-      xml-js: ^1.6.11
-    dependencies:
-      axios: 0.27.2
-      cross-fetch: 3.1.4
-      promise: 8.1.0
-      qs: 6.10.3
-      utf8: 3.0.0
-      uuid: 9.0.0
-      webdav: 4.10.0
-      xml-js: 1.6.11
     dev: false
 
   /p-finally/1.0.0:
@@ -14249,7 +14241,7 @@ packages:
     dev: true
 
   /token-stream/1.0.0:
-    resolution: {integrity: sha512-VSsyNPPW74RpHwR8Fc21uubwHY7wMDeJLys2IX5zJNih+OnAnaifKHo+1LHT7DAdloQ7apeaaWg8l7qnf/TnEg==}
+    resolution: {integrity: sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=}
 
   /tough-cookie/2.5.0:
     resolution: {integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==}
@@ -15257,4 +15249,29 @@ packages:
       pug: 3.0.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  github.com/owncloud/owncloud-sdk/8d14a84d3113d2004ea35c0d3fe896993152a3c0_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {tarball: https://codeload.github.com/owncloud/owncloud-sdk/tar.gz/8d14a84d3113d2004ea35c0d3fe896993152a3c0}
+    id: github.com/owncloud/owncloud-sdk/8d14a84d3113d2004ea35c0d3fe896993152a3c0
+    name: owncloud-sdk
+    version: 2.0.1
+    peerDependencies:
+      axios: ^0.27.2
+      cross-fetch: ^3.0.6
+      promise: ^8.1.0
+      qs: ^6.10.3
+      utf8: ^3.0.0
+      uuid: ^8.2.0
+      webdav: 4.10.0
+      xml-js: ^1.6.11
+    dependencies:
+      axios: 0.27.2
+      cross-fetch: 3.1.4
+      promise: 8.1.0
+      qs: 6.10.3
+      utf8: 3.0.0
+      uuid: 9.0.0
+      webdav: 4.10.0
+      xml-js: 1.6.11
     dev: false
