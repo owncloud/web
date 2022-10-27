@@ -1,0 +1,8 @@
+Enhancement: Align dark mode colors with given design
+
+The colors in the dark mode have been aligned with the given design. This improves the overall look and readability.
+
+https://github.com/owncloud/web/issues/7373
+https://github.com/owncloud/web/issues/7353
+https://github.com/owncloud/web/issues/7738
+https://github.com/owncloud/web/pull/7862

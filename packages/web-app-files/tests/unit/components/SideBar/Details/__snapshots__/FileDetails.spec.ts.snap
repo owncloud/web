@@ -15,7 +15,12 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Last modified</th>
         <td><span>ABSOLUTE_TIME</span></td>
       </tr>
-      <!---->
+      <tr data-testid="shared-via">
+        <th scope="col" class="oc-pr-s">Shared via</th>
+        <td>
+          <router-link-stub to="[object Object]"><span>/Shares</span></router-link-stub>
+        </td>
+      </tr>
       <!---->
       <tr data-testid="ownerDisplayName">
         <th scope="col" class="oc-pr-s">Owner</th>

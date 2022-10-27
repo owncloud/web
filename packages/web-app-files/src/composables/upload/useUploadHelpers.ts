@@ -4,7 +4,7 @@ import { useRoute } from 'web-pkg/src/composables'
 import { ComputedRef, Ref, unref } from '@vue/composition-api'
 import * as uuid from 'uuid'
 import path from 'path'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
 
 interface UploadHelpersOptions {
@@ -58,7 +58,7 @@ const inputFilesToUppyFiles = ({
     const uppyFiles: UppyResource[] = []
 
     const { name, params, query } = unref(route)
-    const trimmedUploadPath = unref(space).getWebDavUrl({ path: unref(currentFolder) } as Resource)
+    const trimmedUploadPath = unref(space).getWebDavUrl({ path: unref(currentFolder) })
     const topLevelFolderIds = {}
 
     for (const file of files) {

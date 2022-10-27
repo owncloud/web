@@ -8,6 +8,7 @@ import { PutFileContentsFactory } from './putFileContents'
 import { CopyFilesFactory } from './copyFiles'
 import { MoveFilesFactory } from './moveFiles'
 import { DeleteFileFactory } from './deleteFile'
+import { RestoreFileFactory } from './restoreFile'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
@@ -24,4 +25,5 @@ export interface WebDAV {
   copyFiles: ReturnType<typeof CopyFilesFactory>['copyFiles']
   moveFiles: ReturnType<typeof MoveFilesFactory>['moveFiles']
   deleteFile: ReturnType<typeof DeleteFileFactory>['deleteFile']
+  restoreFile: ReturnType<typeof RestoreFileFactory>['restoreFile']
 }

@@ -36,6 +36,7 @@ module.exports = {
     '<rootDir>/packages/**/src/**/*.{js,ts,vue}',
     '!<rootDir>/**/node_modules/**'
   ],
-  testMatch: ['**/*.spec.{js,ts}'],
+  // workaround: restrict testMatch explicitly to packages/** to ignore .pnpm-store/**
+  testMatch: ['<rootDir>/packages/**/*.spec.{js,ts}'],
   clearMocks: true
 }

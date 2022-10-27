@@ -180,9 +180,9 @@ RUN_ACCEPTANCE_TESTS="cucumber-js ${RETRY_OPTION} --require-module @babel/regist
 
 if [ -z "${TEST_TAGS}" ]
 then
-	CUCUMBER_PUBLISH_ENABLED=false yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
+	CUCUMBER_PUBLISH_ENABLED=false pnpm ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} | tee -a 'logfile.txt'
 else
-	CUCUMBER_PUBLISH_ENABLED=false yarn ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
+	CUCUMBER_PUBLISH_ENABLED=false pnpm ${RUN_ACCEPTANCE_TESTS} ${TEST_PATHS[@]} -t "${TEST_TAGS}" | tee -a 'logfile.txt'
 fi
 
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}

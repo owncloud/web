@@ -1,0 +1,6 @@
+Bugfix: Share permissions for re-shares
+
+We've fixed a bug where the selectable roles on a re-share could exceed the parent share's permissions in certain scenarios.
+
+https://github.com/owncloud/web/issues/7657
+https://github.com/owncloud/web/pull/7844

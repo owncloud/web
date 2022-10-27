@@ -2,14 +2,7 @@
   <div class="oc-height-1-1 oc-link-resolve">
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
     <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
-      <template
-        v-if="
-          loadTokenInfoTask.isRunning ||
-          !loadTokenInfoTask.last ||
-          isPasswordRequiredTask.isRunning ||
-          !isPasswordRequiredTask.last
-        "
-      >
+      <template v-if="isLoading">
         <div class="oc-card-header">
           <h2 key="public-link-loading">
             <translate>Loading public link…</translate>
@@ -19,23 +12,18 @@
           <oc-spinner :aria-hidden="true" />
         </div>
       </template>
-      <template v-else-if="loadTokenInfoTask.isError || isPasswordRequiredTask.isError">
+      <template v-else-if="errorMessage">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="public-link-error">
             <translate>An error occurred while loading the public link</translate>
           </h2>
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
-          <p v-if="loadTokenInfoTask.isError" class="oc-text-xlarge">
-            {{ loadTokenInfoTask.last.error }}
-          </p>
-          <p v-if="isPasswordRequiredTask.isError" class="oc-text-xlarge">
-            {{ isPasswordRequiredTask.last.error }}
-          </p>
+          <p class="oc-text-xlarge">{{ errorMessage }}</p>
         </div>
       </template>
-      <template v-else-if="isPasswordRequiredTask.last && isPasswordRequiredTask.last.value">
-        <form @submit.prevent="resolvePublicLink(true)">
+      <template v-else-if="isPasswordRequired">
+        <form @submit.prevent="resolvePublicLinkTask.perform(true)">
           <div class="oc-card-header">
             <h2>
               <translate>This resource is password-protected</translate>
@@ -64,7 +52,7 @@
       </template>
       <div class="oc-card-footer">
         <p>
-          {{ configuration.currentTheme.general.slogan }}
+          {{ footerSlogan }}
         </p>
       </div>
     </div>
@@ -72,18 +60,23 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
   useClientService,
+  useRoute,
+  useRouteMeta,
   useRouteParam,
-  useRouteQuery
+  useRouteQuery,
+  useRouter,
+  useStore,
+  useTranslations,
+  useUserContext
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
-import { ref, unref, computed, defineComponent } from '@vue/composition-api'
+import { ref, unref, computed, defineComponent, onMounted } from '@vue/composition-api'
 import {
   buildWebDavPublicPath,
   buildPublicSpaceResource,
@@ -96,8 +89,12 @@ import { useLoadTokenInfo } from '../composables/tokenInfo'
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const { webdav } = useClientService()
+    const clientService = useClientService()
+    const router = useRouter()
+    const route = useRoute()
+    const store = useStore()
     const token = useRouteParam('token')
+    const redirectUrl = useRouteQuery('redirectUrl')
     const password = ref('')
     const publicLinkSpace = computed(() =>
       buildPublicSpaceResource({
@@ -108,16 +105,24 @@ export default defineComponent({
         ...(unref(password) && { publicLinkPassword: unref(password) })
       })
     )
-    const isPasswordRequiredTask = useTask(function* (signal, ref) {
-      if (!isEmpty(ref.tokenInfo)) {
-        return ref.tokenInfo.password_protected
+    const isUserContext = useUserContext({ store })
+
+    // token info
+    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, isUserContext })
+    const tokenInfo = ref(null)
+
+    // generic public link loading
+    const isPasswordRequired = ref<boolean>()
+    const isPasswordRequiredTask = useTask(function* () {
+      if (!isEmpty(unref(tokenInfo))) {
+        return unref(tokenInfo).password_protected
       }
       try {
         let space: PublicSpaceResource = {
           ...unref(publicLinkSpace),
           publicLinkPassword: null
         }
-        yield webdav.getFileInfo(space)
+        yield clientService.webdav.getFileInfo(space)
         return false
       } catch (error) {
         if (error.statusCode === 401) {
@@ -127,7 +132,7 @@ export default defineComponent({
       }
     })
     const loadPublicLinkTask = useTask(function* () {
-      const resource = yield webdav.getFileInfo(unref(publicLinkSpace))
+      const resource = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
       if (!isPublicSpaceResource(resource)) {
         const e: any = new Error('resolved resource has wrong type')
         e.resource = resource
@@ -141,78 +146,110 @@ export default defineComponent({
       }
       return false
     })
-    return {
-      ...useLoadTokenInfo(unref(token)),
-      redirectUrl: useRouteQuery('redirectUrl'),
-      token,
-      password,
-      isPasswordRequiredTask,
-      loadPublicLinkTask,
-      wrongPassword
-    }
-  },
-  data() {
-    return {
-      tokenInfo: {}
-    }
-  },
-  computed: {
-    ...mapGetters(['configuration']),
 
-    pageTitle() {
-      return this.$gettext(this.$route.meta.title)
-    },
-
-    passwordFieldLabel() {
-      return this.$gettext('Enter password for public link')
-    },
-
-    wrongPasswordMessage() {
-      if (this.wrongPassword) {
-        return this.$gettext('Incorrect password')
-      }
-      return null
+    // resolve public link. resolve into authenticated context if possible.
+    const redirectToPrivateLink = (fileId: string | number) => {
+      return router.push({
+        name: 'resolvePrivateLink',
+        params: { fileId: `${fileId}` }
+      })
     }
-  },
-  async mounted() {
-    this.tokenInfo = await this.loadTokenInfoTask.perform()
-    const passwordProtected = await this.isPasswordRequiredTask.perform(this)
-    if (!passwordProtected) {
-      await this.resolvePublicLink(false)
-    }
-  },
-  methods: {
-    async resolvePublicLink(passwordRequired) {
-      if (this.tokenInfo?.alias_link) {
-        return this.$router.push({
-          name: 'resolvePrivateLink',
-          params: { fileId: this.tokenInfo.id }
-        })
+    const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
+      if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
+        redirectToPrivateLink(unref(tokenInfo).id)
+        return
       }
 
-      const publicLink = await this.loadPublicLinkTask.perform()
-      if (this.loadPublicLinkTask.isError) {
-        const e = this.loadPublicLinkTask.last.error
+      const publicLink = yield loadPublicLinkTask.perform()
+      if (loadPublicLinkTask.isError) {
+        const e = loadPublicLinkTask.last.error
         console.error(e, e.resource)
         return
       }
 
-      const password = passwordRequired ? this.password : ''
-      await authService.resolvePublicLink(this.token, passwordRequired, password)
+      yield authService.resolvePublicLink(
+        unref(token),
+        unref(passwordRequired),
+        unref(passwordRequired) ? unref(password) : ''
+      )
 
-      const redirectUrl = queryItemAsString(this.redirectUrl)
-      if (redirectUrl) {
-        return this.$router.push({ path: redirectUrl })
+      const url = queryItemAsString(unref(redirectUrl))
+      if (url) {
+        router.push({ path: url })
+        return
       }
 
       if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
-        return this.$router.push({ name: 'files-public-upload', params: { token: this.token } })
+        router.push({ name: 'files-public-upload', params: { token: unref(token) } })
+        return
       }
 
-      return this.$router.push({
+      router.push({
         name: 'files-public-link',
-        params: { driveAliasAndItem: `public/${this.token}` }
+        params: { driveAliasAndItem: `public/${unref(token)}` }
       })
+    })
+
+    const isLoading = computed<boolean>(() => {
+      if (
+        loadTokenInfoTask.isRunning ||
+        !loadTokenInfoTask.last ||
+        isPasswordRequiredTask.isRunning ||
+        !isPasswordRequiredTask.last
+      ) {
+        return true
+      }
+      if (!unref(isPasswordRequired)) {
+        return resolvePublicLinkTask.isRunning || !resolvePublicLinkTask.last
+      }
+      return false
+    })
+    const errorMessage = computed<string>(() => {
+      if (loadTokenInfoTask.isError) {
+        return loadTokenInfoTask.last.error
+      }
+      if (isPasswordRequiredTask.isError) {
+        return isPasswordRequiredTask.last.error
+      }
+      return null
+    })
+
+    onMounted(async () => {
+      tokenInfo.value = await loadTokenInfoTask.perform(unref(token))
+      isPasswordRequired.value = await isPasswordRequiredTask.perform()
+      if (!unref(isPasswordRequired)) {
+        await resolvePublicLinkTask.perform(false)
+      }
+    })
+
+    const { $gettext } = useTranslations()
+    const footerSlogan = computed(() => store.getters.configuration.currentTheme.general.slogan)
+    const pageTitleRaw = useRouteMeta('title')
+    const pageTitle = computed(() => {
+      return $gettext(unref(pageTitleRaw))
+    })
+    const passwordFieldLabel = computed(() => {
+      return $gettext('Enter password for public link')
+    })
+    const wrongPasswordMessage = computed(() => {
+      if (unref(wrongPassword)) {
+        return $gettext('Incorrect password')
+      }
+      return null
+    })
+
+    return {
+      token,
+      isPasswordRequired,
+      password,
+      wrongPassword,
+      passwordFieldLabel,
+      wrongPasswordMessage,
+      isLoading,
+      errorMessage,
+      footerSlogan,
+      pageTitle,
+      resolvePublicLinkTask
     }
   }
 })

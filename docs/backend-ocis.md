@@ -12,12 +12,12 @@ geekdocFilePath: backend-ocis.md
 ## Setting up Web
 
 - Clone the [repository](https://github.com/owncloud/web/)
-- Initally install all dependencies by running `yarn install`
+- Initally install all dependencies by running `pnpm install`
 - Copy `./config/config.json.sample-ocis` to `./config/config.json` and adjust values if required
 
 ## Running Web
 
-- Start bundling web with a watcher by running `yarn build:w`
+- Start bundling web with a watcher by running `pnpm build:w`
 
 ## Setting up oCIS
 

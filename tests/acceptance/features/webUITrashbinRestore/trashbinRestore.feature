@@ -134,73 +134,73 @@ Feature: Restore deleted files/folders
     And file "data.zip" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
-  @issue-1753 @issue-product-186
-  Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
-    And the following files have been deleted by user "Alice" in the server
-      | name                                     |
-      | simple-folder/file-to-delete-and-restore |
-    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
-    When the user browses to the trashbin page
-    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to restore "file-to-delete-and-restore"
-      """
-    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
-    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
 
-  @skipOnOC10 @issue-product-186 @issue-ocis-1057
-  Scenario: Restore a file from trashbin whose parent folder is renamed (ocis bug demonstration)
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
-    And the following files have been deleted by user "Alice" in the server
-      | name                                     |
-      | simple-folder/file-to-delete-and-restore |
-    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed" in the server
-    When the user browses to the trashbin page
-    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to restore "file-to-delete-and-restore"
-      """
-    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist in the server
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
 
-  @issue-1753 @skipOnOCIS @issue-product-186
-  Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
-    And the following files have been deleted by user "Alice" in the server
-      | name                                     |
-      | simple-folder/file-to-delete-and-restore |
-      | simple-folder                            |
-    When the user browses to the trashbin page
-    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to restore "file-to-delete-and-restore"
-      """
-    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin in the server
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
 
-  @skipOnOC10 @issue-product-186 @issue-ocis-1057
-  Scenario: Restore a file from trashbin without restoring the parent folder (ocis bug demonstration)
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created file "simple-folder/file-to-delete-and-restore" in the server
-    And the following files have been deleted by user "Alice" in the server
-      | name                                     |
-      | simple-folder/file-to-delete-and-restore |
-      | simple-folder                            |
-    When the user browses to the trashbin page
-    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the following error message should be displayed on the webUI
-      """
-      Failed to restore "file-to-delete-and-restore"
-      """
-    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist in the server
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder

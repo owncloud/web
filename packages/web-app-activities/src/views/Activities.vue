@@ -19,7 +19,7 @@
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import Timeline from '../components/Timeline.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent } from '@vue/composition-api'
 import { useStore, useRequest } from 'web-pkg/src/composables'
 import { useTranslations } from 'web-pkg/src/composables/translations'
 import { useTask } from 'vue-concurrency'

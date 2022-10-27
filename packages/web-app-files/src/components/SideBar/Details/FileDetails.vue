@@ -157,7 +157,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject, ref } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject } from '@vue/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'
@@ -179,30 +179,19 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
   name: 'FileDetails',
-  inject: {
-    displayedItem: { from: 'displayedItem' }
-  },
   setup() {
-    const sharedParentDir = ref('')
-    const sharedParentFileId = ref('')
     const store = useStore()
 
     return {
-      sharedParentDir,
-      sharedParentFileId,
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
-      space: inject<ComputedRef<Resource>>('displayedSpace')
+      space: inject<ComputedRef<Resource>>('displayedSpace'),
+      file: inject<ComputedRef<Resource>>('displayedItem')
     }
   },
 
   data: () => ({
     loading: false,
-    sharedByName: '',
-    sharedByDisplayName: '',
-    sharedTime: 0,
-    sharedItem: null,
-    shareIndicators: [],
     copiedDirect: false,
     copiedEos: false,
     timeout: null
@@ -212,9 +201,6 @@ export default defineComponent({
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
     ...mapGetters(['user', 'configuration', 'capabilities']),
 
-    file() {
-      return this.displayedItem.value
-    },
     matchingSpace() {
       return this.space || this.spaces.find((space) => space.id === this.file.storageId)
     },
@@ -382,46 +368,48 @@ export default defineComponent({
         this.file.owner?.[0].username === this.user.id ||
         this.file.shareOwner === this.user.id
       )
+    },
+    shareIndicators() {
+      return getIndicators(this.file, this.sharesTree)
+    },
+    shares() {
+      if (this.sharedParentDir === null) {
+        return []
+      }
+      return this.sharesTree[this.sharedParentDir]?.filter((s) =>
+        ShareTypes.containsAnyValue(
+          [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
+          [s.shareType]
+        )
+      )
+    },
+    sharedItem() {
+      return this.shares.length ? this.shares[0] : null
+    },
+    sharedByName() {
+      return this.sharedItem?.owner?.name
+    },
+    sharedByDisplayName() {
+      let sharedByDisplayName = this.sharedItem?.owner?.displayName
+      if (this.sharedItem?.owner?.additionalInfo) {
+        sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
+      }
+      return sharedByDisplayName
+    },
+    sharedParentDir() {
+      return this.getParentSharePath(this.file.path, this.sharesTree)
+    },
+    sharedParentFileId() {
+      return this.sharedItem?.file?.source
     }
   },
   watch: {
-    file() {
-      this.loadData()
-    },
-    sharesTree: {
-      handler() {
-        // missing early return
-        this.sharedItem = null
-        this.shareIndicators = getIndicators(this.highlightedFile, this.sharesTree)
-        const sharePathParentOrCurrent = this.getParentSharePath(this.file.path, this.sharesTree)
-        if (sharePathParentOrCurrent === null) {
-          return
-        }
-        const shares = this.sharesTree[sharePathParentOrCurrent]?.filter((s) =>
-          ShareTypes.containsAnyValue(
-            [...ShareTypes.individuals, ...ShareTypes.unauthenticated],
-            [s.shareType]
-          )
-        )
-        if (shares.length === 0) {
-          return
-        }
-
-        this.sharedItem = shares[0]
-        this.sharedByName = this.sharedItem.owner?.name
-        this.sharedByDisplayName = this.sharedItem.owner?.displayName
-        if (this.sharedItem.owner?.additionalInfo) {
-          this.sharedByDisplayName += ' (' + this.sharedItem.owner.additionalInfo + ')'
-        }
-        this.sharedTime = this.sharedItem.stime
-        this.sharedParentDir = sharePathParentOrCurrent
-        this.sharedParentFileId = shares[0].file?.source
+    file: {
+      handler: function () {
+        this.loadData()
       },
       immediate: true
     }
-  },
-  mounted() {
-    this.loadData()
   },
   asyncComputed: {
     preview: {

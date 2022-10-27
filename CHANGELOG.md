@@ -15,8 +15,11 @@ Summary
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
 * Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
+* Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
+* Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
+* Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
@@ -26,6 +29,7 @@ Summary
 * Bugfix - Routing for re-shares: [#7771](https://github.com/owncloud/web/pull/7771)
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
+* Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
 * Bugfix - Sidebar without highlighted resource: [#7781](https://github.com/owncloud/web/issues/7781)
@@ -36,8 +40,10 @@ Summary
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+* Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
+* Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
@@ -49,7 +55,7 @@ Summary
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
-* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
 Details
@@ -108,6 +114,13 @@ Details
    https://github.com/owncloud/web/issues/7761
    https://github.com/owncloud/web/pull/7820
 
+* Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
+
+   Axios no longer skips on non 200 status responses in app-external. If the status is not 2xx, the
+   application now displays a proper error message.
+
+   https://github.com/owncloud/web/pull/7861
+
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
 
    We've fixed a bug where the file name would not update reactively in the sidebar after changing
@@ -125,6 +138,20 @@ Details
 
    https://github.com/owncloud/web/issues/7680
    https://github.com/owncloud/web/pull/7724
+
+* Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
+
+   The search bar in a public link context has been hidden because it requires authentication.
+
+   https://github.com/owncloud/web/issues/7603
+   https://github.com/owncloud/web/pull/7849
+
+* Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
+
+   Link indicators in the sidebar on the "Shared with me"-page will now be displayed correctly.
+
+   https://github.com/owncloud/web/issues/7697
+   https://github.com/owncloud/web/pull/7853
 
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 
@@ -196,6 +223,14 @@ Details
 
    https://github.com/owncloud/web/issues/7661
    https://github.com/owncloud/web/pull/7662
+
+* Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
+
+   We've fixed a bug where the selectable roles on a re-share could exceed the parent share's
+   permissions in certain scenarios.
+
+   https://github.com/owncloud/web/issues/7657
+   https://github.com/owncloud/web/pull/7844
 
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 
@@ -300,6 +335,13 @@ Details
    https://github.com/owncloud/web/pull/7430
    https://github.com/owncloud/web/pull/7791
 
+* Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
+
+   We've added conflict handling for restoring files from the trashbin
+
+   https://github.com/owncloud/web/issues/1753
+   https://github.com/owncloud/web/pull/7635
+
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 
    `X-Request-ID` headers have been added to all outgoing requests to make the tracing of
@@ -314,6 +356,16 @@ Details
 
    https://github.com/owncloud/web/issues/7703
    https://github.com/owncloud/web/pull/7709
+
+* Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
+
+   The colors in the dark mode have been aligned with the given design. This improves the overall
+   look and readability.
+
+   https://github.com/owncloud/web/issues/7373
+   https://github.com/owncloud/web/issues/7353
+   https://github.com/owncloud/web/issues/7738
+   https://github.com/owncloud/web/pull/7862
 
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 
@@ -419,9 +471,9 @@ Details
    https://github.com/owncloud/web/issues/7798
    https://github.com/owncloud/web/pull/7801
 
-* Enhancement - Update ODS to v14.0.0-alpha.20: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.20. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.24. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
@@ -435,7 +487,9 @@ Details
    Remove width shrinking of the ocAvatarItem:
    [#2241](https://github.com/owncloud/owncloud-design-system/issues/2241) * Bugfix -
    Remove click event on OcIcon:
-   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Change -
+   [#2216](https://github.com/owncloud/owncloud-design-system/pull/2216) * Bugfix -
+   Modal input message overlays with buttons:
+   [#2343](https://github.com/owncloud/owncloud-design-system/pull/2343) * Change -
    Redesign contextual helper:
    [#2271](https://github.com/owncloud/owncloud-design-system/pull/2271) * Change -
    Remove OcAlert component:
@@ -476,10 +530,14 @@ Details
    Enhancement - "Cancel"-button and -handler in OcSearchBar:
    [#2328](https://github.com/owncloud/owncloud-design-system/pull/2328) *
    Enhancement - Adjust breadcrumb spacing:
-   [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329)
+   [#2329](https://github.com/owncloud/owncloud-design-system/pull/2329) *
+   Enhancement - Remove border on buttons:
+   [#2345](https://github.com/owncloud/owncloud-design-system/pull/2345) *
+   Enhancement - Input background color:
+   [#2352](https://github.com/owncloud/owncloud-design-system/pull/2352)
 
-   https://github.com/owncloud/web/pull/7684
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.20
+   https://github.com/owncloud/web/pull/7862
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.24
 
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 

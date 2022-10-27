@@ -1,6 +1,5 @@
 {
-  "name": "web-client",
-  "private": true,
+  "name": "@ownclouders/web-client",
   "version": "0.0.0",
   "description": "ownCloud web client",
   "license": "AGPL-3.0",

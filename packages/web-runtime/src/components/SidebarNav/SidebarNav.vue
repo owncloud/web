@@ -137,7 +137,6 @@ export default {
     min-height: 3rem;
     transition: all 0.2s ease-out;
     &:hover {
-      background-color: var(--oc-color-background-secondary) !important;
       overflow: hidden;
     }
   }
