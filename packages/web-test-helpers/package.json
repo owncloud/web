@@ -2,7 +2,7 @@
   "name": "web-test-helpers",
   "private": true,
   "peerDependencies": {
-      "@vue/composition-api": "^1.6.2",
+      "@vue/composition-api": "1.7.1",
       "vue-gettext": "^2.1.5",
       "vue-router": "~3.5.3",
       "vuex": "^3.6.2"

@@ -4,10 +4,15 @@ import SearchBar from '../../../src/portals/SearchBar.vue'
 import AsyncComputed from 'vue-async-computed'
 import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
+import { createStore } from 'vuex-extensions'
+import Vuex from 'vuex'
+import CompositionAPI from '@vue/composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(AsyncComputed)
+localVue.use(Vuex)
+localVue.use(CompositionAPI)
 
 let wrapper: Wrapper<any>
 
@@ -87,8 +92,12 @@ afterEach(() => {
 })
 
 describe('Search Bar portal component', () => {
-  test('does not render a search field if not all requirements are fulfilled', () => {
+  test('does not render a search field if no availableProviders given', () => {
     wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
+    expect(wrapper.element.innerHTML).toBeFalsy()
+  })
+  test('does not render a search field if no user given', () => {
+    wrapper = getMountedWrapper({ isUserContextReady: false })
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
   test('updates the search term on input', () => {
@@ -236,7 +245,7 @@ describe('Search Bar portal component', () => {
   })
 })
 
-function getMountedWrapper({ data = {}, mocks = {} } = {}) {
+function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
   return mount(SearchBar, {
     localVue,
     attachTo: document.body,
@@ -262,6 +271,21 @@ function getMountedWrapper({ data = {}, mocks = {} } = {}) {
     },
     stubs: {
       'router-link': true
-    }
+    },
+    store: createStore(Vuex.Store, {
+      modules: {
+        runtime: {
+          namespaced: true,
+          modules: {
+            auth: {
+              namespaced: true,
+              getters: {
+                isUserContextReady: () => isUserContextReady
+              }
+            }
+          }
+        }
+      }
+    })
   })
 }

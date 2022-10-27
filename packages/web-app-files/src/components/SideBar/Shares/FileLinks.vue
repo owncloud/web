@@ -579,9 +579,9 @@ export default defineComponent({
     },
 
     getAvailableRoleOptions(link) {
-      if (this.share?.incoming && this.canCreatePublicLinks) {
+      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          parseInt(this.share.permissions),
+          this.incomingParentShare.value.permissions,
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport,

@@ -1,0 +1,6 @@
+Bugfix: Handle non 2xx external app responses
+
+Axios no longer skips on non 200 status responses in app-external.
+If the status is not 2xx, the application now displays a proper error message.
+
+https://github.com/owncloud/web/pull/7861

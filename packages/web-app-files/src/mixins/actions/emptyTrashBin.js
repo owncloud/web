@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { isLocationTrashActive } from '../../router'
-import { buildWebDavFilesTrashPath, buildWebDavSpacesTrashPath } from '../../helpers/resources'
+import { buildWebDavFilesTrashPath } from '../../helpers/resources'
+import { buildWebDavSpacesTrashPath } from 'web-client/src/helpers'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default {

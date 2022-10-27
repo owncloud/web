@@ -20,7 +20,7 @@ This page documents how you can set up an example app within your frontend repo 
 ## Setting up the example "skeleton app"
 
 {{< hint info >}}
-This guide assumes you have either an oCIS or ownCloud 10 backend running and followed the [getting started guide]({{< ref "../getting-started.md" >}}) for setting up a development environment with the `web` frontend, having it running via either `yarn serve` or `yarn build:w`. You should be able to use the web UI on localhost using the respective port you've assigned (defaults are `:8080` for OC10 and `:9200` for oCIS) and see changes to your .
+This guide assumes you have either an oCIS or ownCloud 10 backend running and followed the [getting started guide]({{< ref "../getting-started.md" >}}) for setting up a development environment with the `web` frontend, having it running via either `pnpm serve` or `pnpm build:w`. You should be able to use the web UI on localhost using the respective port you've assigned (defaults are `:8080` for OC10 and `:9200` for oCIS) and see changes to your .
 {{< /hint >}}
 
 From the root of the [web repository](https://github.com/owncloud/web), change into the example skeleton app by running
@@ -32,7 +32,7 @@ cd packages/web-app-skeleton/
 Then, you can install the necessary dependencies, bundle the code and start a development server by running
 
 ```sh
-yarn install && yarn serve
+pnpm install && pnpm serve
 ```
 
 In your terminal, you should see a success message and rollup (our bundler of choice) serving the content under `localhost:3000`. However, there's nothing to find under this address.

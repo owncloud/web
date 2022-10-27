@@ -66,14 +66,14 @@ When running a standalone Selenium server, make sure to set the environment vari
 
 ## Run tests
 - Change the directory to `tests/acceptance`
-- Install all the test dependencies with `yarn` command
+- Install all the test dependencies with `pnpm` command
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
 - set `MIDDLEWARE_HOST` to point to the URL of the [owncloud-test-middleware](https://github.com/owncloud/owncloud-test-middleware)
 - to be able to run federation tests, additional setup is needed:
    1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
-   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn test:acceptance:oc10 <feature-files-to-test>`
+   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> pnpm test:acceptance:oc10 <feature-files-to-test>`
 
 - set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
 - set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
@@ -85,16 +85,16 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 ### with oC10 backend
 
-- run `yarn test:acceptance:oc10 <feature-files-to-test>`
+- run `pnpm test:acceptance:oc10 <feature-files-to-test>`
 
 ### with oCIS backend
 
-- run `yarn test:acceptance:ocis <feature-files-to-test>`
-- If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' yarn test:acceptance:ocis <feature-files-to-test>`
+- run `pnpm test:acceptance:ocis <feature-files-to-test>`
+- If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' pnpm test:acceptance:ocis <feature-files-to-test>`
 
 ## Available settings to be set by environment variables
 
-These values can be set using the environment variables to configure `yarn test:acceptance:oc10` and `yarn test:acceptance:ocis` to match your local test environment.
+These values can be set using the environment variables to configure `pnpm test:acceptance:oc10` and `pnpm test:acceptance:ocis` to match your local test environment.
 
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
@@ -102,7 +102,7 @@ These values can be set using the environment variables to configure `yarn test:
 | `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with oCIS)        | http://host.docker.internal:8080 or https://host.docker.internal:9200 |
 | `BACKEND_USERNAME`  | ownCloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD`  | ownCloud administrator password                                        | admin                 |
-| `SELENIUM_HOST`     | selenium server host, if not set yarn will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
+| `SELENIUM_HOST`     | selenium server host, if not set pnpm will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`     | port of selenium server                                                   | 4444                  |
 | `SCREEN_RESOLUTION` | width and height in px to set the browser resolution to e.g. 375x812      | empty = fullscreen    |
 | `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./filesForUpload` |

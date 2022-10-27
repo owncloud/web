@@ -1,10 +1,11 @@
 {
   "name": "web-runtime",
   "version": "0.0.0",
+  "private": true,
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.1.1",
+    "@fortawesome/fontawesome-free": "6.2.0",
     "@popperjs/core": "^2.11.5",
     "@sentry/browser": "^6.19.7",
     "@sentry/integrations": "^6.19.7",
@@ -12,7 +13,7 @@
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.0.1",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vue/composition-api": "^1.6.2",
+    "@vue/composition-api": "1.7.1",
     "axios": "^0.27.2",
     "cross-fetch": "^3.0.6",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz",
@@ -23,8 +24,8 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.4.0",
     "marked": "^4.0.12",
-    "oidc-client-ts": "^2.0.5",
-    "owncloud-design-system": "14.0.0-alpha.22",
+    "oidc-client-ts": "^2.1.0",
+    "owncloud-design-system": "14.0.0-alpha.24",
     "owncloud-sdk": "owncloud/owncloud-sdk.git#experimental",
     "p-queue": "^6.6.2",
     "popper-max-size-modifier": "^0.2.0",
@@ -39,7 +40,7 @@
     "utf8": "^3.0.0",
     "uuid": "^9.0.0",
     "v-calendar": "^2.3.2",
-    "vue": "^2.6.10",
+    "vue": "2.6.14",
     "vue-async-computed": "^3.9.0",
     "vue-concurrency": "^3.0.0-7",
     "vue-events": "^3.1.0",
@@ -53,15 +54,15 @@
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
     "vuex-router-sync": "^5.0.0",
-    "web-client": "workspace:*",
-    "web-pkg": "workspace:*",
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg",
     "webdav": "^4.10.0",
     "webfontloader": "^1.6.28",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@jest/globals": "^29.1.2",
-    "@types/luxon": "^2.3.1",
-    "@types/semver": "^7.3.8"
+    "@jest/globals": "29.2.1",
+    "@types/luxon": "2.4.0",
+    "@types/semver": "7.3.12"
   }
 }

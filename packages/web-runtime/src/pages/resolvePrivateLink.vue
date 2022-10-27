@@ -50,27 +50,25 @@ import {
   useTranslations,
   useRouter,
   queryItemAsString,
-  useCapabilitySpacesEnabled
+  useCapabilitySpacesEnabled,
+  useClientService
 } from 'web-pkg/src/composables'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from '@vue/composition-api'
-import { clientService } from 'web-pkg/src/services'
 // import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import {
   buildShareSpaceResource,
-  buildSpace,
-  buildWebDavSpacesPath,
   isMountPointSpaceResource,
   isPersonalSpaceResource,
   Resource,
   SpaceResource
 } from 'web-client/src/helpers'
-import { DavProperty } from 'web-client/src/webdav/constants'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { RawLocation } from 'vue-router'
+import { useLoadFileInfoById } from '../composables/fileInfo'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',
@@ -89,11 +87,13 @@ export default defineComponent({
     const configuration = computed(() => {
       return store.getters.configuration
     })
+    const clientService = useClientService()
 
     onMounted(() => {
       resolvePrivateLinkTask.perform(queryItemAsString(unref(id)))
     })
 
+    const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
       let path
       let matchingSpace = getMatchingSpace(id)
@@ -104,24 +104,22 @@ export default defineComponent({
         // no matching space found => the file doesn't lie in own spaces => it's a share.
         // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
         let mountPoint = findMatchingMountPoint(id)
-        resource.value = yield fetchFileInfoById(id)
+        resource.value = yield loadFileInfoByIdTask.perform(id)
         const sharePathSegments = mountPoint ? [] : [unref(resource).name]
         let tmpResource = unref(resource)
         while (!mountPoint) {
           try {
-            tmpResource = yield fetchFileInfoById(tmpResource.parentFolderId)
+            tmpResource = yield loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
           } catch (e) {
             isUnacceptedShareError.value = true
             throw Error(e)
           }
-
           sharedParentResource.value = tmpResource
           mountPoint = findMatchingMountPoint(tmpResource.id)
           if (!mountPoint) {
             sharePathSegments.unshift(tmpResource.name)
           }
         }
-
         matchingSpace = buildShareSpaceResource({
           shareId: mountPoint.nodeId,
           shareName: mountPoint.name,
@@ -158,25 +156,6 @@ export default defineComponent({
         )
       }
       return store.getters['runtime/spaces/spaces'].find((space) => id.startsWith(space.id))
-    }
-
-    const fetchFileInfoById = async (id: string | number): Promise<Resource> => {
-      const space = buildSpace({
-        id,
-        webDavPath: buildWebDavSpacesPath(id)
-      })
-      return await clientService.webdav.getFileInfo(
-        space,
-        {},
-        {
-          davProperties: [
-            DavProperty.FileId,
-            DavProperty.FileParent,
-            DavProperty.Name,
-            DavProperty.ResourceType
-          ]
-        }
-      )
     }
 
     const findMatchingMountPoint = (id: string | number): SpaceResource => {

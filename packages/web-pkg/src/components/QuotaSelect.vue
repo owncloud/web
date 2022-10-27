@@ -15,15 +15,15 @@
     >
       <template #selected-option="{ displayValue, displayUnit }">
         <span>{{ displayValue }}</span>
-        <span v-if="displayUnit" class="oc-text-muted oc-ml-s">{{ displayUnit }}</span>
+        <span v-if="displayUnit" class="oc-ml-s">{{ displayUnit }}</span>
       </template>
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" v-on="events" />
       </template>
       <template #option="{ displayValue, displayUnit, error }">
         <div class="oc-flex oc-flex-between">
-          <span>{{ displayValue }}</span>
-          <span v-if="displayUnit" class="oc-text-muted">{{ displayUnit }}</span>
+          <div>{{ displayValue }}</div>
+          <div v-if="displayUnit">{{ displayUnit }}</div>
         </div>
         <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
       </template>

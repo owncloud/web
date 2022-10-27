@@ -1,0 +1,6 @@
+Enhancement: Add restore conflict dialog
+
+We've added conflict handling for restoring files from the trashbin
+
+https://github.com/owncloud/web/pull/7635
+https://github.com/owncloud/web/issues/1753

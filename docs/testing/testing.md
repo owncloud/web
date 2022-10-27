@@ -18,7 +18,7 @@ This can be achieved by running
 ```shell
 $ git clone https://github.com/owncloud/web.git
 $ cd web
-$ yarn
+$ pnpm install
 ```
 
 ### Unit Tests
@@ -26,10 +26,10 @@ $ yarn
 We have a steadily growing coverage of unit tests. You can run them locally via
 
 ```shell
-$ yarn test:unit
+$ pnpm test:unit
 ```
 
-You can also specify which tests to run by giving a path param, like so: `yarn test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
+You can also specify which tests to run by giving a path param, like so: `pnpm test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
 
 #### Unit test file structure
 Our unit tests spec files follow a simple structure:
@@ -48,7 +48,7 @@ To run acceptance tests with Docker, please make sure you have the following too
 
 - docker
 - docker-compose
-- yarn
+- pnpm
 - node
 
 Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by adding it to your hosts.
@@ -58,7 +58,7 @@ Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by 
 Bundle the web frontend, which then gets mounted into the respective backends. It also gets recompiled on changes.
 
 ```shell
-$ yarn build:w
+$ pnpm build:w
 ```
 
 #### Start Docker
@@ -82,20 +82,20 @@ and make sure there are no conflicting ports and everything runs smoothly. You c
 Depending on the backend you want to run the tests on, you can either run
 
 ```shell
-$ yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature
+$ pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature
 ```
 
 for an ownCloud 10 backend or
 
 ```shell
-$ OCIS=true yarn test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature
+$ OCIS=true pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature
 ```
 
 for an oCIS backend.
 
 #### Options
 
-To run a particular test, simply add the feature file and line number to the test command, e.g. `yarn test:e2e:cucumber tests/e2e/cucumber/shareFileJourney.feature:13`
+To run a particular test, simply add the feature file and line number to the test command, e.g. `pnpm test:e2e:cucumber tests/e2e/cucumber/shareFileJourney.feature:13`
 
 Various options are available via ENV variables, e.g.
 - `OCIS=true` to run the E2E tests against an oCIS backend
@@ -130,7 +130,7 @@ To run acceptance tests with Docker, please make sure you have the following too
 
 - docker
 - docker-compose
-- yarn
+- pnpm
 - node
 
 Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by adding it to your hosts.
@@ -140,7 +140,7 @@ Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by 
 Bundle the web frontend, which then gets mounted into the respective backends. It also gets recompiled on changes.
 
 ```shell
-$ yarn build:w
+$ pnpm build:w
 ```
 
 #### Start Docker
@@ -164,17 +164,17 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.0.0-b
 #### Run acceptance tests
 
 - Change the directory to `tests/acceptance`
-- Install all the test dependencies with `yarn` command
+- Install all the test dependencies with `pnpm` command
 - Depending on the backend you're running the tests on, you can either run
 
   ```shell
-  $ yarn test:acceptance:oc10 features/path/to/test
+  $ pnpm test:acceptance:oc10 features/path/to/test
   ```
 
   for ownCloud 10.X or
 
   ```shell
-  $ yarn test:acceptance:ocis features/path/to/test
+  $ pnpm test:acceptance:ocis features/path/to/test
   ```
 
   for oCIS acceptance tests.

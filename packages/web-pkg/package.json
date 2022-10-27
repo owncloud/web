@@ -1,12 +1,11 @@
 {
-  "name": "web-pkg",
-  "private": true,
+  "name": "@ownclouders/web-pkg",
   "version": "0.0.0",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
   "peerDependencies": {
-    "@vue/composition-api": "^1.6.2",
+    "@vue/composition-api": "1.7.1",
     "axios": "^0.27.1",
     "filesize": "^9.0.11",
     "lodash-es": "^4.17.21",
@@ -16,6 +15,7 @@
     "vue-router": "~3.5.3",
     "vuex": "^3.6.2",
     "vuex-extensions": "^1.1.5",
-    "web-client": "workspace:*"
+    "web-client": "npm:@ownclouders/web-client",
+    "web-pkg": "npm:@ownclouders/web-pkg"
   }
 }

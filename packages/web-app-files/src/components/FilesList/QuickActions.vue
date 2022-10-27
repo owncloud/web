@@ -43,7 +43,7 @@ export default {
 <style lang="scss">
 .quick-action-button {
   &:hover {
-    background-color: var(--oc-color-background-muted) !important;
+    background-color: var(--oc-color-background-secondary) !important;
   }
 }
 </style>
