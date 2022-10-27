@@ -575,7 +575,7 @@ export default defineComponent({
 
       if (error) {
         // TODO: Remove code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
-        let errorMessage = this.$gettext('Unknown error')
+        let errorMessage = error.message || this.$gettext('Unknown error')
         if (error.message.includes('response code: 507')) {
           errorMessage = this.$gettext('Quota exceeded')
         }
@@ -591,7 +591,7 @@ export default defineComponent({
           case 507:
             return this.$gettext('Quota exceeded')
           default:
-            return this.$gettext('Unknown error')
+            return error.message || this.$gettext('Unknown error')
         }**/
       }
     },
