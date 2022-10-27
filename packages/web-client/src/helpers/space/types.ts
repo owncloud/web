@@ -77,6 +77,6 @@ export const isPublicSpaceResource = (resource: Resource): resource is PublicSpa
 }
 
 export interface PropfindResult {
-  node: Resource
+  resource: Resource
   children?: Resource[]
 }

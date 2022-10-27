@@ -75,7 +75,7 @@ describe('resourcesTransfer', () => {
       'should copy / move files without renaming them if no conflicts exist',
       async (action: TransferType) => {
         const propfindResult = {
-          node: {} as Resource,
+          resource: {} as Resource,
           children: [] as Resource[]
         } as PropfindResult
         clientServiceMock.webdav.listFiles.mockReturnValueOnce(

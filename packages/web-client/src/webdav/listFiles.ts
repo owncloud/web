@@ -45,12 +45,12 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         if (!path) {
           const [rootFolder, ...children] = webDavResources
           return {
-            node: buildPublicSpaceResource(rootFolder),
+            resource: buildPublicSpaceResource(rootFolder),
             children: children.map(buildResource)
           } as PropfindResult
         }
         const resources = webDavResources.map(buildResource)
-        return { node: resources[0], children: resources.slice(1) } as PropfindResult
+        return { resource: resources[0], children: resources.slice(1) } as PropfindResult
       }
 
       const listFilesCorrectedPath = async () => {
@@ -68,7 +68,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         if (fileId && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()
         }
-        return { node: resources[0], children: resources.slice(1) } as PropfindResult
+        return { resource: resources[0], children: resources.slice(1) } as PropfindResult
       } catch (e) {
         if (e.statusCode === 404 && fileId) {
           return listFilesCorrectedPath()

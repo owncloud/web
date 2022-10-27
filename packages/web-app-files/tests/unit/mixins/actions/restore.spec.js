@@ -117,7 +117,7 @@ function getWrapper({
       $clientService: {
         webdav: {
           listFiles: jest.fn().mockImplementation(() => {
-            return { node: {}, children: [] }
+            return { resource: {}, children: [] }
           }),
           restoreFile: jest.fn().mockImplementation(() => {
             if (resolveRestore) {
