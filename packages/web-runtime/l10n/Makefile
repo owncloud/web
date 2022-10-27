@@ -1,6 +1,6 @@
 # On OSX the PATH variable isn't exported unless "SHELL" is also set, see: http://stackoverflow.com/a/25506676
 SHELL = /bin/bash
-NODE_MODULES = ../../../node_modules
+NODE_MODULES = ../node_modules
 NODE_BINDIR = $(NODE_MODULES)/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
