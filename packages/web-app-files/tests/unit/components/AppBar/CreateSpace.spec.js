@@ -32,6 +32,29 @@ describe('CreateSpace component', () => {
 
     expect(spyInputErrorMessageStub).toHaveBeenCalledWith('Space name cannot be empty')
   })
+
+  it('should throw an error with an space name longer than 255 characters', async () => {
+    const wrapper = getMountedWrapper()
+    wrapper.vm.setModalInputErrorMessage = jest.fn()
+
+    const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+    await wrapper.vm.checkSpaceName('n'.repeat(256))
+
+    expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+  })
+
+  it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
+    'should show an error message when trying to create a space with a special character',
+    (specialChar) => {
+      const wrapper = getMountedWrapper()
+      wrapper.vm.setModalInputErrorMessage = jest.fn()
+
+      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      wrapper.vm.checkSpaceName(specialChar)
+
+      expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+    }
+  )
 })
 
 function getMountedWrapper() {

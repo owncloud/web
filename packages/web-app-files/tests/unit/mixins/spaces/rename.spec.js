@@ -41,6 +41,25 @@ describe('rename', () => {
 
       expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
     })
+    it('should throw an error with an space name longer than 255 characters', async () => {
+      const wrapper = getWrapper()
+      const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+      await wrapper.vm.$_rename_checkName('n'.repeat(256))
+
+      expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+    })
+    it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
+      'should show an error message when trying to create a space with a special character',
+      (specialChar) => {
+        const wrapper = getWrapper()
+        wrapper.vm.setModalInputErrorMessage = jest.fn()
+
+        const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+        wrapper.vm.$_rename_checkName(specialChar)
+
+        expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+      }
+    )
   })
 
   describe('method "$_rename_renameSpace"', () => {
