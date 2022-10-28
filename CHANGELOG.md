@@ -30,6 +30,7 @@ Summary
 * Bugfix - Routing for re-shares: [#7771](https://github.com/owncloud/web/pull/7771)
 * Bugfix - Search bar on small screens: [#7675](https://github.com/owncloud/web/pull/7675)
 * Bugfix - Sidebar for received shares in search file list: [#7662](https://github.com/owncloud/web/pull/7662)
+* Bugfix - Share editing after selecting a space: [#7873](https://github.com/owncloud/web/pull/7873)
 * Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
 * Bugfix - Shares loading: [#7506](https://github.com/owncloud/web/issues/7506)
 * Bugfix - Sidebar toggle icon: [#7632](https://github.com/owncloud/web/pull/7632)
@@ -232,6 +233,14 @@ Details
 
    https://github.com/owncloud/web/issues/7661
    https://github.com/owncloud/web/pull/7662
+
+* Bugfix - Share editing after selecting a space: [#7873](https://github.com/owncloud/web/pull/7873)
+
+   We've fixed a bug where editing or deleting shares in the personal space was not possible if a
+   project space was selected previously.
+
+   https://github.com/owncloud/web/issues/7872
+   https://github.com/owncloud/web/pull/7873
 
 * Bugfix - Share permissions for re-shares: [#7657](https://github.com/owncloud/web/issues/7657)
 
