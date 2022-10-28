@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import get from 'lodash-es/get'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
@@ -115,6 +115,11 @@ import {
 import * as uuid from 'uuid'
 import { defineComponent } from '@vue/composition-api'
 import { PropType } from '@vue/composition-api'
+import {
+  useCapabilityFilesSharingAllowCustomPermissions,
+  useCapabilityFilesSharingCanDenyAccess,
+  useStore
+} from 'web-pkg'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -145,6 +150,13 @@ export default defineComponent({
       required: true
     }
   },
+  setup() {
+    const store = useStore()
+    return {
+      hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
+      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store)
+    }
+  },
   data() {
     return {
       selectedRole: null,
@@ -153,7 +165,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState('Files', ['sharesTree']),
-    ...mapGetters(['capabilities']),
 
     roleButtonId() {
       if (this.domSelector) {
@@ -181,9 +192,6 @@ export default defineComponent({
     resourceIsSharable() {
       return this.allowSharePermission && this.resource.canShare()
     },
-    allowCustomSharing() {
-      return this.capabilities?.files_sharing?.allow_custom
-    },
     availableRoles() {
       if (this.resourceIsSpace) {
         return SpacePeopleShareRoles.list()
@@ -194,15 +202,12 @@ export default defineComponent({
           parseInt(this.incomingParentShare.value.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
-          this.allowCustomSharing !== false
+          this.hasRoleCustomPermissions
         )
       }
 
-      return PeopleShareRoles.list(
-        this.resource.isFolder,
-        this.allowCustomSharing !== false,
-        this.resource.canDeny()
-      )
+      const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
+      return PeopleShareRoles.list(this.resource.isFolder, this.hasRoleCustomPermissions, canDeny)
     },
     availablePermissions() {
       if (this.incomingParentShare.value && this.resourceIsSharable) {
@@ -237,9 +242,11 @@ export default defineComponent({
       } else if (this.resourceIsSpace) {
         this.selectedRole = SpacePeopleShareRoles.list()[0]
       } else {
+        const canDeny = this.resource.canDeny() && this.hasRoleDenyAccess
         this.selectedRole = PeopleShareRoles.list(
           this.resource.isFolder,
-          this.resource.canDeny()
+          this.hasRoleCustomPermissions,
+          canDeny
         )[0]
       }
 
