@@ -79,7 +79,6 @@ importers:
       rollup-plugin-ts: 3.0.2
       rollup-plugin-visualizer: 5.8.3
       rollup-plugin-vue: 5.1.9
-      sync-fetch: 0.3.1
       ts-jest: 29.0.3
       ts-node: 10.9.1
       tslib: 2.4.0
@@ -168,7 +167,6 @@ importers:
       rollup-plugin-ts: 3.0.2_jfalcliwccimsnep6nslxnsrfm
       rollup-plugin-visualizer: 5.8.3_rollup@2.52.7
       rollup-plugin-vue: 5.1.9_ntr7jxvwzkwpopvmxzkinlh6ci
-      sync-fetch: 0.3.1
       ts-jest: 29.0.3_46kwo24hsqpwncicx4d3bfgdlq
       ts-node: 10.9.1_uwvrucnxy7xmunb7f53wnhbsze
       tslib: 2.4.0
@@ -476,7 +474,6 @@ importers:
       '@uppy/xhr-upload': ^3.0.1
       '@vue/composition-api': 1.7.1
       axios: ^0.27.2
-      cross-fetch: ^3.0.6
       easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
       filesize: ^9.0.11
       focus-trap: ^6.4.0
@@ -531,7 +528,6 @@ importers:
       '@uppy/xhr-upload': 3.0.1_@uppy+core@3.0.2
       '@vue/composition-api': 1.7.1_vue@2.6.14
       axios: 0.27.2
-      cross-fetch: 3.1.4
       easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'
       filesize: 9.0.11
       focus-trap: 6.9.0
@@ -14109,16 +14105,6 @@ packages:
 
   /symbol-tree/3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
-    dev: true
-
-  /sync-fetch/0.3.1:
-    resolution: {integrity: sha512-xj5qiCDap/03kpci5a+qc5wSJjc8ZSixgG2EUmH1B8Ea2sfWclQA7eH40hiHPCtkCn6MCk4Wb+dqcXdCy2PP3g==}
-    engines: {node: '>=8'}
-    dependencies:
-      buffer: 5.7.1
-      node-fetch: 2.6.7
-    transitivePeerDependencies:
-      - encoding
     dev: true
 
   /synchronous-promise/2.0.15:
