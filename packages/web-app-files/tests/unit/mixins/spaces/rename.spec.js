@@ -41,6 +41,18 @@ describe('rename', () => {
 
       expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
     })
+    it.each(['/', '\\', '.', ':', '?', '*', '"', '>', '<', '|'])(
+      'should show an error message when trying to create a space with a special character',
+      (specialChar) => {
+        const wrapper = getWrapper()
+        wrapper.vm.setModalInputErrorMessage = jest.fn()
+
+        const spyInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
+        wrapper.vm.$_rename_checkName(specialChar)
+
+        expect(spyInputErrorMessageStub).toHaveBeenCalledTimes(1)
+      }
+    )
   })
 
   describe('method "$_rename_renameSpace"', () => {

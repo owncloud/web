@@ -62,6 +62,16 @@ export default {
       if (name.trim() === '') {
         return this.setModalInputErrorMessage(this.$gettext('Space name cannot be empty'))
       }
+      if (name.length > 255) {
+        return this.setModalInputErrorMessage(
+          this.$gettext('Space name cannot exceed 255 characters')
+        )
+      }
+      if (/[/\\.:?*"><|]/.test(name)) {
+        return this.setModalInputErrorMessage(
+          this.$gettext('Space name cannot contain the following characters: / \\ . : ? * " > < |')
+        )
+      }
       return this.setModalInputErrorMessage(null)
     },
 
