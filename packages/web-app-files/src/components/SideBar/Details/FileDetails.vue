@@ -19,7 +19,7 @@
         <oc-resource-icon class="details-icon" :resource="file" size="xxxlarge" />
       </div>
       <div
-        v-if="shareIndicators.length"
+        v-if="!isPublicLinkContext && shareIndicators.length"
         key="file-shares"
         data-testid="sharingInfo"
         class="oc-flex oc-flex-middle oc-my-m"
