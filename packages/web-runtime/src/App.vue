@@ -49,7 +49,7 @@ import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
 import { defineComponent } from '@vue/composition-api'
-import { isPublicLinkContext, isUserContext, isAnonymousContext } from './router'
+import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus } from 'web-pkg/src/services'
 
@@ -70,17 +70,23 @@ export default defineComponent({
     ...mapGetters(['configuration', 'capabilities', 'getSettingsValue']),
     ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
     layout() {
-      if (!this.$route.name || isAnonymousContext(this.$router, this.$route)) {
+      const plainLayoutRoutes = [
+        'login',
+        'logout',
+        'oidcCallback',
+        'oidcSilentRedirect',
+        'resolvePublicLink',
+        'accessDenied'
+      ]
+      if (!this.$route.name || plainLayoutRoutes.includes(this.$route.name)) {
         return LayoutPlain
       }
-
       if (isPublicLinkContext(this.$router, this.$route)) {
         return this.isPublicLinkContextReady ? LayoutApplication : LayoutLoading
       }
       if (isUserContext(this.$router, this.$route)) {
         return this.isUserContextReady ? LayoutApplication : LayoutLoading
       }
-
       return LayoutApplication
     },
     favicon() {
