@@ -1,0 +1,6 @@
+Bugfix: Share editing after selecting a space
+
+We've fixed a bug where editing or deleting shares in the personal space was not possible if a project space was selected previously.
+
+https://github.com/owncloud/web/pull/7873
+https://github.com/owncloud/web/issues/7872
