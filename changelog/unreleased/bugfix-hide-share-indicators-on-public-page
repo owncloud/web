@@ -1,0 +1,6 @@
+Bugfix: Hide share indicators on public page
+
+Share indicators are now being hidden on public link pages.
+
+https://github.com/owncloud/web/pull/7889
+https://github.com/owncloud/web/issues/7888
