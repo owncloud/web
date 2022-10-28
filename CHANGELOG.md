@@ -57,6 +57,7 @@ Summary
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
 * Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
+* Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
 Details
@@ -546,6 +547,13 @@ Details
 
    https://github.com/owncloud/web/pull/7862
    https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.24
+
+* Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
+
+   Spaces names are now being validated when creating or renaming spaces. The following special
+   characters are not allowed: / \ . : ? * " > < |
+
+   https://github.com/owncloud/web/pull/7890
 
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 
