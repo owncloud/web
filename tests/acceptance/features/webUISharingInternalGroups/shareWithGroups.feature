@@ -26,9 +26,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "Alice Hansen" as "Viewer" using the webUI
     Then the current collaborators list should have order "Alice Hansen,Brian Murphy,grp1,grp11"
 
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS
+  @issue-6896 @skipOnOCIS
   Scenario Outline: share a file & folder with another internal user
     Given user "Carol" has created folder "simple-folder" in the server
     And user "Carol" has created file "simple-folder/lorem.txt" in the server
@@ -198,7 +196,7 @@ Feature: Sharing files and folders with internal groups
     And as "Brian" file "/Shares/lorem.txt" should not exist in the server
     But as "Carol" file "/Shares/lorem.txt" should exist in the server
 
-  @issue-ocis-1317
+  @issue-ocis-1328 @skipOnOCIS
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created in the server
     And user "Alice" has created folder "simple-folder" in the server
@@ -206,7 +204,6 @@ Feature: Sharing files and folders with internal groups
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
     And the user opens the share dialog for folder "simple-folder" using the webUI
-
     And the user types "system-group" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 

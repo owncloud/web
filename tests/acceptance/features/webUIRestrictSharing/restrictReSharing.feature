@@ -1,4 +1,4 @@
-@issue-ocis-1317
+@issue-ocis-1328 @issue-6896 @skipOnOCIS
 Feature: restrict resharing
   As an admin
   I want to be able to forbid the sharing of a received share globally
@@ -34,9 +34,6 @@ Feature: restrict resharing
     And as "Carol" folder "simple-folder" should not exist in the server
     When the user browses to the favorites page
     Then the user should not be able to share folder "Shares/simple-folder" using the webUI
-
-
-
 
   @smokeTest
   Scenario: disable resharing and check if the received resource from group share can be reshared

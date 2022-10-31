@@ -27,7 +27,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
 
-  @issue-2512 @issue-4102
+  @issue-2512 @issue-4102 @issue-6896 @skipOnOCIS
   Scenario: reshare a share that you received to a group that you are member of
     Given these groups have been created in the server:
       | groupname |
@@ -45,7 +45,7 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Brian Murphy" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @issue-4102 @issue-5531
+  @issue-4102 @issue-5531 @issue-6896 @skipOnOCIS
   Scenario: unshare accepted shares from "All files" page
     Given these groups have been created in the server:
       | groupname |
@@ -92,9 +92,6 @@ Feature: accept/decline shares coming from internal users
     And folder "Shares" should not be listed on the webUI
 
 
-
-
-
   Scenario: receive shares with same name from different users
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created file "lorem.txt" in the server
@@ -139,7 +136,6 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
 
-
   @skipOnOCIS
   Scenario: accept a previously declined share
     Given user "Alice" has created file "lorem.txt" in the server
@@ -157,7 +153,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem.txt" should be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
 
-  @issue-4102 @issue-5531
+  @issue-4102 @issue-5531 @issue-6896 @skipOnOCIS
   Scenario: delete an accepted share
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
@@ -196,7 +192,7 @@ Feature: accept/decline shares coming from internal users
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @issue-4102 @issue-5531
+  @issue-4102 @issue-5531 @issue-6896 @skipOnOCIS
   Scenario: shared file status is changed to declined when user deletes the file
     Given user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
