@@ -1,4 +1,4 @@
-@issue-ocis-1317
+@issue-ocis-1328 @skipOnOCIS
 Feature: restrict Sharing
   As an admin
   I want to be able to restrict the sharing function
@@ -31,7 +31,6 @@ Feature: restrict Sharing
   Scenario: Restrict users to only share with users in their groups
     Given the setting "shareapi_only_share_with_group_members" of app "core" has been set to "yes" in the server
     When the user opens the share dialog for folder "simple-folder" using the webUI
-
     And the user types "Ali" in the share-with-field
     Then "user" "Alice Hansen" should be listed in the autocomplete list on the webUI
     But "user" "Alison Cooper" should not be listed in the autocomplete list on the webUI
@@ -40,7 +39,6 @@ Feature: restrict Sharing
   Scenario: Restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "yes" in the server
     When the user opens the share dialog for folder "simple-folder" using the webUI
-
     And the user types "grp" in the share-with-field
     Then "group" "grp1" should be listed in the autocomplete list on the webUI
     But "group" "grp2" should not be listed in the autocomplete list on the webUI
@@ -56,7 +54,6 @@ Feature: restrict Sharing
   Scenario: Forbid sharing with groups
     Given the setting "shareapi_allow_group_sharing" of app "core" has been set to "no" in the server
     When the user opens the share dialog for folder "simple-folder" using the webUI
-
     And the user types "grp" in the share-with-field
     Then "group" "grp1" should not be listed in the autocomplete list on the webUI
     And "group" "grp2" should not be listed in the autocomplete list on the webUI

@@ -1,4 +1,4 @@
-@issue-ocis-1317
+@issue-ocis-1328 @issue-6896 @skipOnOCIS
 Feature: Sharing files and folders with internal users
   As a user
   I want to share files and folders with other users
