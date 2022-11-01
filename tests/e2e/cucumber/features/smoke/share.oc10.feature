@@ -94,14 +94,14 @@ Feature: share
       | resource        | from   |
       | testavatar.jpeg | Shares |
     And "Alice" updates following sharee role
-      | resource                         | user  | role   |
-      | folder_to_shared/testavatar.jpeg | Brian | editor |
+      | resource                         | recipient | role   |
+      | folder_to_shared/testavatar.jpeg | Brian     | editor |
     And "Brian" renames the following resource
       | resource               | as                  |
       | Shares/testavatar.jpeg | testavatar_new.jpeg |
     And "Alice" removes following sharee
-      | resource                         | user  |
-      | folder_to_shared/testavatar.jpeg | Brian |
+      | resource                         | recipient |
+      | folder_to_shared/testavatar.jpeg | Brian     |
     And "Alice" logs out
     When "Brian" opens the "files" app
     #Then "Brian" should not see the following resource

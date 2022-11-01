@@ -29,10 +29,9 @@ Feature: reshare
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" reshares the following resource
+    When "Brian" reshares the following resource
       | resource         | recipient | type  | role   |
       | folder_to_shared | sales     | group | viewer |
-    And "Brian" logs out
 
     And "Carol" logs in
     And "Carol" opens the "files" app
@@ -43,4 +42,23 @@ Feature: reshare
     And "Carol" reshares the following resource
       | resource         | recipient | type | role   |
       | folder_to_shared | Alice     | user | viewer |
+
+    And "Alice" logs in
+    And "Alice" opens the "files" app
+    And "Alice" navigates to the personal space page
+    Then "Alice" should see the following recipients
+      | resource         | recipient | type  | role   |
+      | folder_to_shared | Brian     | user  | editor |
+      | folder_to_shared | sales     | group | viewer |
+    And "Alice" logs out
+
+    When "Brian" updates following sharee role
+      | resource         | recipient | type  | role                    |
+      | folder_to_shared | sales     | group | custom_permissions:read |
+    And "Brian" logs out
+
+    And "Carol" navigates to the shared with me page
+    Then "Carol" should not be able to reshare the following resource
+      | resource         |
+      | folder_to_shared |
     And "Carol" logs out
