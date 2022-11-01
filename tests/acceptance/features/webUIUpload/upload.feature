@@ -39,6 +39,7 @@ Feature: File Upload
     And as "Alice" the content of "CUSTOM/sub1/new-lorem.txt" in the server should be the same as the content of local file "CUSTOM/sub1/new-lorem.txt"
     And as "Alice" the content of "CUSTOM/sub2/sub3/new-lorem.txt" in the server should be the same as the content of local file "CUSTOM/sub2/sub3/new-lorem.txt"
 
+
   Scenario: simple upload of a folder that does not exist before with empty sub-folders
     Given a folder "CUSTOM" has been created with the following files in separate sub-folders in the middleware
       | subFolder      | file |
@@ -125,14 +126,12 @@ Feature: File Upload
     And as "Alice" the content of "lorem.txt" in the server should be the same as the content of local file "lorem.txt"
     But file "lorem (2).txt" should not be listed on the webUI
 
-
   @disablePreviews
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
-
 
   @issue-ocis-2258 @disablePreviews
   Scenario: upload overwriting a file into a public share

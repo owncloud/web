@@ -43,7 +43,6 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with group "Alice" as "Editor" using the webUI
-
     And the user types "Alice" in the share-with-field
     Then "group" "Alice" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "Alice" should be "Carol file" in the server
@@ -59,7 +58,6 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "Alice" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "Brian" should be "Carol file" in the server
@@ -75,7 +73,6 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
-
     And the user types "ALICE" in the share-with-field
     Then "group" "ALICE" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "Brian" should be "Carol file" in the server
@@ -91,7 +88,6 @@ Feature: Sharing files and folders with internal groups
     And user "Carol" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "ALICE" as "Editor" using the webUI
     And the user shares file "randomfile.txt" with user "Alice Hansen" as "Editor" using the webUI
-
     And the user types "Alice" in the share-with-field
     Then "user" "Alice Hansen" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "Brian" should be "Carol file" in the server

@@ -7,8 +7,7 @@ Feature: Upload a file
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-  @smokeTest
-  @issue-1049
+  @smokeTest @issue-1049
   Scenario: simple upload of a file with the size greater than the size of quota
     Given the quota of user "Alice" has been set to "10 MB" in the server
     And user "Alice" has logged in using the webUI

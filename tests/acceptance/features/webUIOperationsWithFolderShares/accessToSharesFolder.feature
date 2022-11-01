@@ -17,11 +17,6 @@ Feature: Upload into a folder Shares
     When user "Alice" logs in using the webUI
     Then folder "Shares" should not be listed on the webUI
 
-
-
-
-
-
   @notToImplementOnOCIS
   Scenario: the Shares folder exists after accepting the first shared file
     Given user "Brian" has created file "lorem.txt" in the server
@@ -29,24 +24,6 @@ Feature: Upload into a folder Shares
     And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian" in the server
     When user "Alice" logs in using the webUI
     Then folder "Shares" should be listed on the webUI
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: upload of a file into a folder Shares in oc10
@@ -89,16 +66,6 @@ Feature: Upload into a folder Shares
     And user "Alice" has logged in using the webUI
     When the user moves folder "NewFolder" into folder "Shares" using the webUI
     Then folder "NewFolder" should be listed on the webUI
-
-
-
-
-
-
-
-
-
-
 
   @issue-ocis-2322 @notToImplementOnOCIS
   Scenario: the user can delete files that they wrote into the folder Shares

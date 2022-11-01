@@ -11,6 +11,7 @@ Feature: Shares collaborator list
       | Brian    |
     And user "Alice" has created folder "simple-folder" in the server
 
+
   Scenario Outline: change the collaborators of a file & folder
     Given user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "/simple-folder" with user "Brian" with "<initial-permissions>" permissions in the server
@@ -34,35 +35,6 @@ Feature: Shares collaborator list
       | all                 | Custom permissions   | Editor        | | update,create,delete,share | all                             |
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
@@ -81,29 +53,6 @@ Feature: Shares collaborator list
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Brian Murphy" should be listed without additional info in the collaborators list on the webUI
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   Scenario: share a file with another internal user via collaborators quick action

@@ -12,6 +12,7 @@ Feature: User can view files inside a folder
     And user "Alice" has uploaded file "data.zip" to "data.zip" in the server
     And user "Alice" has logged in using the webUI
 
+
   Scenario: Resources are listed and files list displays quicklink quick action
     When the user browses to the files page
     Then quick action "quicklink" should be displayed on the webUI

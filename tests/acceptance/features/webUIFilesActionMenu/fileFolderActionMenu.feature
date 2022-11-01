@@ -11,6 +11,7 @@ Feature: User can see the file or folder actions menu options
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal page
 
+
   Scenario: observe different actions menu options on selecting different file types
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf" in the server
     And the user has reloaded the current page of the webUI

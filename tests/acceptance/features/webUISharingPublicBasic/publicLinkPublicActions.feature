@@ -9,12 +9,6 @@ Feature: Access public link shares by public
     And user "Alice" has created folder "simple-folder" in the server
 
 
-
-
-
-
-
-
   Scenario: public should be able to access a public link with correct password
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server

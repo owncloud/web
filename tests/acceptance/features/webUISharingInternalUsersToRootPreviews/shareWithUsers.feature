@@ -37,20 +37,6 @@ Feature: Sharing details and preview of files
     Then the shared-via path in the details dialog should be "/simple-folder"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Scenario: file list view image preview in file share
     Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
     And user "Alice" has shared file "testavatar.jpg" with user "Brian" in the server

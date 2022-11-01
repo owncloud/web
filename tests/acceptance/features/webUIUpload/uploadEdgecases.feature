@@ -16,11 +16,9 @@ Feature: File Upload
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
     And as "Alice" the content of "new-'single'quotes.txt" in the server should be the same as the content of local file "new-'single'quotes.txt"
-
     When the user uploads file "new-strängé filename (duplicate #2 &).txt" using the webUI
     Then file "new-strängé filename (duplicate #2 &).txt" should be listed on the webUI
     And as "Alice" the content of "new-strängé filename (duplicate #2 &).txt" in the server should be the same as the content of local file "new-strängé filename (duplicate #2 &).txt"
-
     When the user uploads file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" using the webUI
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
     And as "Alice" the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" in the server should be the same as the content of local file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"

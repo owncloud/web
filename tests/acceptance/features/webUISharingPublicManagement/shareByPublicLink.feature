@@ -9,13 +9,6 @@ Feature: Public link share management
     And user "Alice" has created folder "/simple-folder" in the server
 
 
-
-
-
-
-
-
-
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
@@ -86,6 +79,7 @@ Feature: Public link share management
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
+
   Scenario: access details dialog of public share and check the tabs displayed
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
@@ -145,7 +139,6 @@ Feature: Public link share management
     And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
-
 
   @issue-product-130
   Scenario: User can attempt to upload a file in public link
