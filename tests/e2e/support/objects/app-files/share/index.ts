@@ -2,16 +2,15 @@ import { Page } from 'playwright'
 import {
   createShare,
   createShareArgs,
-  createReshare,
-  createReshareArgs,
   acceptShare,
   changeShareeRole,
-  changeShareeRoleArgs,
   removeShareeArgs,
   removeSharee,
-  acceptShareArgs,
-  declineShareArgs,
-  declineShare
+  ShareArgs,
+  ShareStatusArgs,
+  declineShare,
+  checkSharee,
+  hasPermissionToShare
 } from './actions'
 
 export class Share {
@@ -29,21 +28,15 @@ export class Share {
     await this.#page.locator('body').click()
   }
 
-  async createReshare(args: Omit<createReshareArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
-    await createReshare({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
-  }
-
-  async accept(args: Omit<acceptShareArgs, 'page'>): Promise<void> {
+  async accept(args: Omit<ShareStatusArgs, 'page'>): Promise<void> {
     await acceptShare({ ...args, page: this.#page })
   }
 
-  async declineShare(args: Omit<declineShareArgs, 'page'>): Promise<void> {
+  async declineShare(args: Omit<ShareStatusArgs, 'page'>): Promise<void> {
     await declineShare({ ...args, page: this.#page })
   }
 
-  async changeShareeRole(args: Omit<changeShareeRoleArgs, 'page'>): Promise<void> {
+  async changeShareeRole(args: Omit<ShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await changeShareeRole({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
@@ -53,5 +46,15 @@ export class Share {
     const startUrl = this.#page.url()
     await removeSharee({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  async checkSharee(args: Omit<ShareArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await checkSharee({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async hasPermissionToShare(resource: string): Promise<boolean> {
+    return await hasPermissionToShare({ page: this.#page, resource })
   }
 }

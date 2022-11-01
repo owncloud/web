@@ -17,11 +17,10 @@ import {
   reloadSpacePage,
   removeAccessMembersArgs,
   removeAccessSpaceMembers,
-  changeSpaceRoleArgs,
+  SpaceMembersArgs,
   changeSpaceRole,
   createPublicLinkForSpace
 } from './actions'
-import { inviteMembersArgs } from '../share/actions'
 import { spaceWithSpaceIDExist } from './utils'
 
 export class Spaces {
@@ -70,7 +69,7 @@ export class Spaces {
     await changeQuota({ id, value, page: this.#page })
   }
 
-  async addMembers(args: Omit<inviteMembersArgs, 'page'>): Promise<void> {
+  async addMembers(args: Omit<SpaceMembersArgs, 'page'>): Promise<void> {
     await addSpaceMembers({ ...args, page: this.#page })
   }
 
@@ -94,7 +93,7 @@ export class Spaces {
     return canEdit
   }
 
-  async changeRoles(args: Omit<changeSpaceRoleArgs, 'page'>): Promise<void> {
+  async changeRoles(args: Omit<SpaceMembersArgs, 'page'>): Promise<void> {
     await changeSpaceRole({ ...args, page: this.#page })
   }
 
