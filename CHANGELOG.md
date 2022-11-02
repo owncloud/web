@@ -54,6 +54,7 @@ Summary
 * Enhancement - Internal link on unaccepted share: [#7803](https://github.com/owncloud/web/issues/7803)
 * Enhancement - Resolve internal links: [#7304](https://github.com/owncloud/web/issues/7304)
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
+* Enhancement - Optimize email validation in the user management app: [#7894](https://github.com/owncloud/web/pull/7894)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
@@ -465,6 +466,14 @@ Details
    https://github.com/owncloud/web/pull/7569
    https://github.com/owncloud/web/pull/7648
    https://github.com/owncloud/web/pull/7735
+
+* Enhancement - Optimize email validation in the user management app: [#7894](https://github.com/owncloud/web/pull/7894)
+
+   We've optimized the email validation process while creating users in the user management app
+   to provide a better user experience.
+
+   https://github.com/owncloud/web/issues/7806
+   https://github.com/owncloud/web/pull/7894
 
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
 
