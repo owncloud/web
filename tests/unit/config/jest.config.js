@@ -13,7 +13,7 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
     '^.+\\.js$': ['babel-jest', { configFile: path.join(rootDir, '.babelrc') }],
-    '.*\\.(vue)$': 'vue-jest'
+    '.*\\.(vue)$': '@vue/vue2-jest'
   },
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
