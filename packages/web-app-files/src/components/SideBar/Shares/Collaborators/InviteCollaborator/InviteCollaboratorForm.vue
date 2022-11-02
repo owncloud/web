@@ -83,8 +83,11 @@ import {
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import {
+  useCapabilityFilesSharingAllowCustomPermissions,
+  useCapabilityFilesSharingCanDenyAccess,
   useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useStore
 } from 'web-pkg/src/composables'
 
 import { useGraphClient } from 'web-pkg/src/composables'
@@ -117,9 +120,12 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore()
     return {
-      hasResharing: useCapabilityFilesSharingResharing(),
-      hasShareJail: useCapabilityShareJailEnabled(),
+      hasResharing: useCapabilityFilesSharingResharing(store),
+      hasShareJail: useCapabilityShareJailEnabled(store),
+      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
+      hasRoleDenyAccess: useCapabilityFilesSharingCanDenyAccess(store),
       ...useGraphClient()
     }
   },
@@ -164,9 +170,16 @@ export default defineComponent({
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
 
-    this.selectedRole = this.resourceIsSpace
-      ? SpacePeopleShareRoles.list()[0]
-      : PeopleShareRoles.list(this.highlightedFile.isFolder)[0]
+    if (this.resourceIsSpace) {
+      this.selectedRole = SpacePeopleShareRoles.list()[0]
+    } else {
+      const canDeny = this.highlightedFile.canDeny() && this.hasRoleDenyAccess
+      this.selectedRole = PeopleShareRoles.list(
+        this.highlightedFile.isFolder,
+        this.hasRoleCustomPermissions,
+        canDeny
+      )[0]
+    }
   },
 
   methods: {

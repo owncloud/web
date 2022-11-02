@@ -52,6 +52,14 @@ export const useCapabilityFilesTusExtension = createCapabilityComposable<string>
   'files.tus_support.extension',
   ''
 )
+export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
+  'files_sharing.deny_access',
+  false
+)
+export const useCapabilityFilesSharingAllowCustomPermissions = createCapabilityComposable(
+  'files_sharing.allow_custom',
+  true
+)
 export const useCapabilityFilesSharingPublicCanEdit = createCapabilityComposable(
   'files_sharing.public.can_edit',
   false

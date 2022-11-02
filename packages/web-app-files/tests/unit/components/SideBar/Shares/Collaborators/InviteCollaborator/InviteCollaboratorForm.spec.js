@@ -25,7 +25,8 @@ const folderMock = {
   name: 'lorem.txt',
   privateLink: 'some-link',
   canShare: jest.fn(() => true),
-  path: '/documents'
+  path: '/documents',
+  canDeny: () => false
 }
 
 const spaceMock = {
