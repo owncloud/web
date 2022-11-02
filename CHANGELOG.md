@@ -45,6 +45,7 @@ Summary
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
+* Enhancement - Respect the new sharing denials capability (experimental): [#7892](https://github.com/owncloud/web/pull/7892)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
@@ -378,6 +379,16 @@ Details
 
    https://github.com/owncloud/web/issues/4675
    https://github.com/owncloud/web/pull/7800
+
+* Enhancement - Respect the new sharing denials capability (experimental): [#7892](https://github.com/owncloud/web/pull/7892)
+
+   The oCIS backend has added a new capability, files_sharing.enable_denials, which announces
+   to clients if the experimental "No access" sharing role is supposed to be available. This
+   capability is now respected by web, so that users only see the experimental "No access" role if
+   the backend allows it.
+
+   https://github.com/owncloud/web/pull/7892
+   https://github.com/owncloud/ocis/pull/4903
 
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 
