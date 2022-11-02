@@ -10,7 +10,9 @@ workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
   ignoreURLParametersMatching: [/.*/] // main.js is loaded with a version hash
 });
 
-
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
 self.addEventListener('message', (event) => {
   if (event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage(SW_VERSION);
@@ -21,4 +23,6 @@ addEventListener('message', (event) => {
     event.ports[0].postMessage(SW_VERSION);
   }
 });
+
+workbox.skipWaiting()
 
