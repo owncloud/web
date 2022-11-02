@@ -5,9 +5,8 @@
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "scripts": {
-    "build": "pnpm build:tokens && rollup -c",
-    "build:w": "pnpm build -w",
-    "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
+    "build": "rollup -c",
+    "build:w": "rollup -c -w",
     "depcheck": "depcheck",
     "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true pnpm build:w",
