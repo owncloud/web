@@ -108,7 +108,6 @@ export default {
 
       this.formData.email.errorMessage = ''
       this.formData.email.valid = true
-
     },
     validateUserName() {
       this.formData.userName.valid = false
