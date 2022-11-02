@@ -71,12 +71,16 @@ export const renderSuccess = (): void => {
   instance.$once('mounted', () => {
     applications.forEach((application) => application.mounted(instance))
     if ('serviceWorker' in navigator) {
-      (window as any).wb = new Workbox('/sw.js');
-      (window as any).wb.register();
-      (window as any).wb.messageSW({type:'START'});
+      debugger;
+      const wb = new Workbox('/sw.js')
+      wb.register()
+        wb.messageSW({type: 'GET_VERSION'}).then((response) => {
+          alert('Service Worker version:' + response)
+        })
+      
     }
   })
-
+  
   store.watch(
     (state, getters) =>
       getters['runtime/auth/isUserContextReady'] ||
