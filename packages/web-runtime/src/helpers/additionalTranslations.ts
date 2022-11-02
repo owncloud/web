@@ -8,6 +8,8 @@ export const additionalTranslations = {
     'This file is currently being processed and is not yet available for use. Please try again shortly.'
   ),
   activities: $gettext('Activities'),
+  tagsUpsert: $gettext('Add or edit tags'),
+  virusScan: $gettext('Scan for viruses'),
   noActivities: $gettext('No activities'),
   virusDetectedActivity: $gettext(
     'Virus "%{description}" detected. Please contact your administrator for more information.'
