@@ -1,0 +1,6 @@
+Bugfix: "Keep both"-conflict option
+
+We've fixed an issue with the "Keep both"-conflict option where uploaded folders would get mixed up.
+
+https://github.com/owncloud/web/issues/7903
+https://github.com/owncloud/web/pull/7905
