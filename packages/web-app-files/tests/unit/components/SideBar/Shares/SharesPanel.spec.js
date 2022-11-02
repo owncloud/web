@@ -70,8 +70,7 @@ describe('SharesPanel', () => {
       setup: () => {
         return {
           sharesLoading: sharesLoading,
-          graphClient: jest.fn(),
-          loadSpaceMembersTask: jest.fn()
+          graphClient: jest.fn()
         }
       }
     })

@@ -51,6 +51,7 @@ import { computed, defineComponent, PropType } from '@vue/composition-api'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
+  useGraphClient,
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
@@ -58,7 +59,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import isEqual from 'lodash-es/isEqual'
 import { useActiveLocation } from '../../composables'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 
 export default defineComponent({
@@ -115,6 +116,7 @@ export default defineComponent({
     const { webdav } = useClientService()
 
     return {
+      ...useGraphClient(),
       isSharedWithMeLocation: useActiveLocation(isLocationSharesActive, 'files-shares-with-me'),
       isSharedWithOthersLocation: useActiveLocation(
         isLocationSharesActive,
@@ -237,6 +239,10 @@ export default defineComponent({
           this.loadShares()
         }
 
+        if (isProjectSpaceResource(this.highlightedFile)) {
+          this.loadSpaceMembers({ graphClient: this.graphClient, space: this.highlightedFile })
+        }
+
         if (this.isShareLocation || !noChanges) {
           this.fetchFileInfo()
         }
@@ -246,6 +252,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['loadSharesTree']),
+    ...mapActions('runtime/spaces', ['loadSpaceMembers']),
 
     async fetchFileInfo() {
       this.loading = true
