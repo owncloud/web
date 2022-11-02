@@ -322,8 +322,10 @@ Details
 
    https://github.com/owncloud/web/issues/7103
    https://github.com/owncloud/web/issues/7741
+   https://github.com/owncloud/web/issues/7869
    https://github.com/owncloud/web/pull/7651
    https://github.com/owncloud/web/pull/7742
+   https://github.com/owncloud/web/pull/7870
 
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 
