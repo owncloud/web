@@ -41,6 +41,13 @@ export default {
               return false
             }
 
+            // FIXME: Remove this check as soon as renaming shares works as expected
+            // see https://github.com/owncloud/ocis/issues/4866
+            const rootShareIncluded = resources.some((r) => r.shareId && r.path === '/')
+            if (rootShareIncluded) {
+              return false
+            }
+
             const renameDisabled = resources.some((resource) => {
               return !resource.canRename()
             })
