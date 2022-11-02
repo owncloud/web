@@ -3,7 +3,7 @@ import { DavProperties, DavProperty } from './constants'
 import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
-  PropfindResult,
+  ListFilesResult,
   SpaceResource
 } from '../helpers'
 import { WebDavOptions } from './types'
@@ -20,7 +20,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       space: SpaceResource,
       { path, fileId }: { path?: string; fileId?: string | number } = {},
       { depth = 1, davProperties }: ListFilesOptions = {}
-    ): Promise<PropfindResult> {
+    ): Promise<ListFilesResult> {
       let webDavResources: any[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await sdk.publicFiles.list(
@@ -47,10 +47,10 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
           return {
             resource: buildPublicSpaceResource(rootFolder),
             children: children.map(buildResource)
-          } as PropfindResult
+          } as ListFilesResult
         }
         const resources = webDavResources.map(buildResource)
-        return { resource: resources[0], children: resources.slice(1) } as PropfindResult
+        return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       }
 
       const listFilesCorrectedPath = async () => {
@@ -68,7 +68,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         if (fileId && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()
         }
-        return { resource: resources[0], children: resources.slice(1) } as PropfindResult
+        return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       } catch (e) {
         if (e.statusCode === 404 && fileId) {
           return listFilesCorrectedPath()

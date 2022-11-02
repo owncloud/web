@@ -76,7 +76,7 @@ export const isPublicSpaceResource = (resource: Resource): resource is PublicSpa
   return resource.driveType === 'public'
 }
 
-export interface PropfindResult {
+export interface ListFilesResult {
   resource: Resource
   children?: Resource[]
 }

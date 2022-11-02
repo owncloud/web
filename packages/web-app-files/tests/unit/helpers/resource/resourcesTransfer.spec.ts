@@ -6,7 +6,7 @@ import {
   resolveFileNameDuplicate
 } from '../../../../src/helpers/resource'
 import { mockDeep, mockReset } from 'jest-mock-extended'
-import { buildSpace, PropfindResult, Resource } from 'web-client/src/helpers'
+import { buildSpace, ListFilesResult, Resource } from 'web-client/src/helpers'
 
 const clientServiceMock = mockDeep<ClientService>()
 let resourcesToMove
@@ -77,7 +77,7 @@ describe('resourcesTransfer', () => {
         const propfindResult = {
           resource: {} as Resource,
           children: [] as Resource[]
-        } as PropfindResult
+        } as ListFilesResult
         clientServiceMock.webdav.listFiles.mockReturnValueOnce(
           new Promise((resolve) => resolve(propfindResult))
         )
