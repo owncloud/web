@@ -71,13 +71,17 @@ export const renderSuccess = (): void => {
   instance.$once('mounted', () => {
     applications.forEach((application) => application.mounted(instance))
     if ('serviceWorker' in navigator) {
-      debugger;
-      const wb = new Workbox('/sw.js')
+      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js')
+      var wb = (window as any).wb
       wb.register()
-        wb.messageSW({type: 'GET_VERSION'}).then((response) => {
-          alert('Service Worker version:' + response)
-        })
-      
+      .then((registration) => {
+        console.log('workbox sw register successful');
+        console.log("sending message")
+        wb.messageSW({ type: 'GET_VERSION' }).then((ver) => console.log(`[workbox sw] version reported as ${ver}`))
+      })
+      .catch((err) => {
+        console.error('[workbox sw] could not activate sw', err);
+      });
     }
   })
   
