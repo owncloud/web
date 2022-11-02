@@ -1,4 +1,4 @@
-Enhancement: Optimize email validation while creating users in the user management app
+Enhancement: Optimize email validation in the user management app
 
 We've optimized the email validation process while creating users in the user management app to provide
 a better user experience.
