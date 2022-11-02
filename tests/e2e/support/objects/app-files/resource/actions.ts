@@ -29,7 +29,7 @@ const filesAction = `.oc-files-actions-%s-trigger`
 const clipboardBtns = '#clipboard-btns'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
-const deleteButton = 'button.oc-files-actions-delete-trigger'
+const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
 const actionConfirmationButton = '.oc-modal-body-actions-confirm'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
@@ -392,12 +392,10 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     await clickResource({ page, path: folderPaths.join('/') })
   }
 
-  const resourceCheckbox = page.locator(util.format(checkBox, resourceName))
+  await sidebar.open({ page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'actions' })
 
-  if (!(await resourceCheckbox.isChecked())) {
-    await resourceCheckbox.check()
-  }
-  await page.locator(deleteButton).first().click()
+  await page.locator(deleteButtonSidebar).first().click()
   await Promise.all([
     page.waitForResponse(
       (resp) =>
