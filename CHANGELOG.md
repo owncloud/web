@@ -48,6 +48,7 @@ Summary
 * Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
 * Enhancement - Deny subfolders inside share: [#7190](https://github.com/owncloud/web/pull/7190)
 * Enhancement - Design polishing: [#7684](https://github.com/owncloud/web/pull/7684)
+* Enhancement - Disable share renaming: [#7865](https://github.com/owncloud/web/pull/7865)
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 * Enhancement - Friendlier logout screen: [#7747](https://github.com/owncloud/web/pull/7747)
 * Enhancement - Id based routing: [#6247](https://github.com/owncloud/web/issues/6247)
@@ -408,6 +409,12 @@ Details
    https://github.com/owncloud/web/issues/7693
    https://github.com/owncloud/web/issues/7773
    https://github.com/owncloud/web/pull/7684
+
+* Enhancement - Disable share renaming: [#7865](https://github.com/owncloud/web/pull/7865)
+
+   Renaming of shares has been disabled temporarily until it works as expected.
+
+   https://github.com/owncloud/web/pull/7865
 
 * Enhancement - Enable renaming on received shares: [#7725](https://github.com/owncloud/web/pull/7725)
 
