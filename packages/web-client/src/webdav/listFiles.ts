@@ -1,10 +1,6 @@
 import { buildResource, Resource } from '../helpers/resource'
 import { DavProperties, DavProperty } from './constants'
-import {
-  buildPublicSpaceResource,
-  isPublicSpaceResource,
-  SpaceResource
-} from '../helpers'
+import { buildPublicSpaceResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
 
