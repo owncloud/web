@@ -75,8 +75,3 @@ export interface PublicSpaceResource extends SpaceResource {
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
   return resource.driveType === 'public'
 }
-
-export interface ListFilesResult {
-  resource: Resource
-  children?: Resource[]
-}

@@ -6,7 +6,8 @@ import {
   resolveFileNameDuplicate
 } from '../../../../src/helpers/resource'
 import { mockDeep, mockReset } from 'jest-mock-extended'
-import { buildSpace, ListFilesResult, Resource } from 'web-client/src/helpers'
+import { buildSpace, Resource } from 'web-client/src/helpers'
+import { ListFilesResult } from 'web-client/src/webdav/listFiles'
 
 const clientServiceMock = mockDeep<ClientService>()
 let resourcesToMove
@@ -74,12 +75,12 @@ describe('resourcesTransfer', () => {
     it.each([TransferType.COPY, TransferType.MOVE])(
       'should copy / move files without renaming them if no conflicts exist',
       async (action: TransferType) => {
-        const propfindResult = {
+        const listFilesResult = {
           resource: {} as Resource,
           children: [] as Resource[]
         } as ListFilesResult
         clientServiceMock.webdav.listFiles.mockReturnValueOnce(
-          new Promise((resolve) => resolve(propfindResult))
+          new Promise((resolve) => resolve(listFilesResult))
         )
         const resourcesTransfer = new ResourceTransfer(
           sourceSpace,

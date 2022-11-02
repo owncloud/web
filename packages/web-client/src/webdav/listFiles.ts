@@ -1,9 +1,8 @@
-import { buildResource } from '../helpers/resource'
+import { buildResource, Resource } from '../helpers/resource'
 import { DavProperties, DavProperty } from './constants'
 import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
-  ListFilesResult,
   SpaceResource
 } from '../helpers'
 import { WebDavOptions } from './types'
@@ -77,4 +76,8 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       }
     }
   }
+}
+export interface ListFilesResult {
+  resource: Resource
+  children?: Resource[]
 }
