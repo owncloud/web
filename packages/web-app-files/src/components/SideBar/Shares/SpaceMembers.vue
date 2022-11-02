@@ -1,8 +1,37 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <div class="oc-flex">
+    <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
+      <div class="oc-flex">
       <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
+      </div>
+      <div class="oc-flex">
+        <div class="oc-flex" v-if="isSearchOpen">
+        <oc-text-input
+          id="users-filter"
+          v-model="collaboratorSearchTerm"
+          class="oc-m-rm"
+          :label="$gettext('Search members')"
+        />
+        <oc-button
+          v-oc-tooltip="$gettext('Close search')"
+          :aria-label="$gettext('Close search')"
+          appearance="raw"
+          @click="toggleSearch"
+        >
+          <oc-icon name="close" fill-type="line" size="small"/>
+        </oc-button>
+        </div>
+        <oc-button
+          v-else
+          v-oc-tooltip="$gettext('Search members')"
+          :aria-label="$gettext('Search members')"
+          appearance="raw"
+          @click="toggleSearch"
+        >
+          <oc-icon name="search" fill-type="line" size="small"/>
+        </oc-button>
+      </div>
     </div>
     <invite-collaborator-form
       v-if="currentUserCanShare"
@@ -17,7 +46,7 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
-        <li v-for="collaborator in spaceMembers" :key="collaborator.key">
+        <li v-for="collaborator in filteredCollaborators" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
@@ -39,6 +68,7 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useGraphClient } from 'web-pkg/src/composables'
+import Fuse from "fuse.js";
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -53,6 +83,12 @@ export default defineComponent({
       default: null
     }
   },
+  data: () => {
+    return {
+      collaboratorSearchTerm: '',
+      isSearchOpen: false,
+    }
+  },
   setup() {
     return {
       ...useGraphClient()
@@ -63,6 +99,10 @@ export default defineComponent({
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
 
+    filteredCollaborators(){
+      console.log(this.spaceMembers)
+      return this.filter(this.spaceMembers, this.collaboratorSearchTerm)
+    },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
     },
@@ -83,10 +123,31 @@ export default defineComponent({
       return currentUserCollaborator?.role?.name === spaceRoleManager.name
     }
   },
+  watch: {
+    isSearchOpen() {
+     this.collaboratorSearchTerm = ''
+    }
+  },
   methods: {
     ...mapActions('runtime/spaces', ['deleteSpaceMember']),
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
+    filter(collection, term) {
+      if (!(term || '').trim()) {
+        return collection
+      }
+      const usersSearchEngine = new Fuse(collection, {
+        includeScore: true,
+        useExtendedSearch: true,
+        threshold: 0.3,
+        keys: ['collaborator.displayName', 'collaborator.name']
+      })
+
+      return usersSearchEngine.search(term).map((r) => r.item)
+    },
+    toggleSearch() {
+      this.isSearchOpen = !this.isSearchOpen
+    },
     isModifiable(share) {
       if (!this.currentUserIsManager) {
         return false
