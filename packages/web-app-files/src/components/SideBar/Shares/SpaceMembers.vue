@@ -8,8 +8,7 @@
       <div class="oc-flex">
         <div class="oc-flex" v-if="isSearchOpen">
         <oc-text-input
-          id="space-members-filter"
-          class="oc-text-truncate"
+          class="oc-text-truncate space-members-filter"
           v-model="collaboratorSearchTerm"
           :label="$gettext('Search members')"
         />
@@ -214,7 +213,7 @@ export default defineComponent({
 </script>
 
 <style>
-#space-members-filter{
+.space-members-filter{
   max-width: 160px;
 }
 .avatars-wrapper {
