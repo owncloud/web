@@ -100,7 +100,6 @@ export default defineComponent({
     ...mapState(['user']),
 
     filteredCollaborators(){
-      console.log(this.spaceMembers)
       return this.filter(this.spaceMembers, this.collaboratorSearchTerm)
     },
     helpersEnabled() {
