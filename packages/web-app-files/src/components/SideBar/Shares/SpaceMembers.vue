@@ -8,18 +8,19 @@
       <div class="oc-flex">
         <div class="oc-flex" v-if="isSearchOpen">
         <oc-text-input
-          id="users-filter"
+          id="space-members-filter"
+          class="oc-text-truncate"
           v-model="collaboratorSearchTerm"
-          class="oc-m-rm"
           :label="$gettext('Search members')"
         />
         <oc-button
           v-oc-tooltip="$gettext('Close search')"
           :aria-label="$gettext('Close search')"
           appearance="raw"
+          class="oc-mt-s"
           @click="toggleSearch"
         >
-          <oc-icon name="close" fill-type="line" size="small"/>
+          <oc-icon name="close" fill-type="line"/>
         </oc-button>
         </div>
         <oc-button
@@ -29,7 +30,7 @@
           appearance="raw"
           @click="toggleSearch"
         >
-          <oc-icon name="search" fill-type="line" size="small"/>
+          <oc-icon name="search" fill-type="line"/>
         </oc-button>
       </div>
     </div>
@@ -213,6 +214,9 @@ export default defineComponent({
 </script>
 
 <style>
+#space-members-filter{
+  max-width: 160px;
+}
 .avatars-wrapper {
   height: 40px;
 }
