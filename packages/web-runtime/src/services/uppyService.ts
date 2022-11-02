@@ -78,6 +78,7 @@ export class UppyService {
       endpoint: '',
       method: 'put',
       headers,
+      timeout: 60*60*1000,
       formData: false,
       getResponseData() {
         return {}
