@@ -411,21 +411,6 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens the details dialog for file "textfile.txt" using the webUI
     Then the shared-via path in the details dialog should be "/simple-folder"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @issue-4246
   Scenario: accepting folder shared by remote user is listed in shared-with-me page
     Given user "Alice" has created folder "simple-folder" on remote server

@@ -208,38 +208,6 @@ Feature: Sharing files and folders with internal groups
     Then the autocomplete list should not be displayed on the webUI
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI

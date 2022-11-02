@@ -84,29 +84,6 @@ Feature: Shares in share-with pages
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And as "Brian" folder "simple-folder" should not exist in the server
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page
     Given user "Alice" has created file "lorem.txt" in the server

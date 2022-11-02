@@ -28,6 +28,7 @@ Feature: Sort files/folders
       | test_sort/b10.txt         |
       | test_sort/z.txt           |
 
+
   Scenario: Folders are listed before files alphabetically by default and sorted using natural sort
     When the user has browsed to the personal page
     Then these resources should be listed in the folder "test_sort" on the webUI
@@ -47,6 +48,7 @@ Feature: Sort files/folders
       | b2.txt          |
       | b10.txt         |
       | z.txt           |
+
 
   Scenario: Resources can be sorted in reverse alphabetical order
     When the user has browsed to the personal page
@@ -68,6 +70,7 @@ Feature: Sort files/folders
       | 1               |
       | a 文件          |
       | a               |
+
 
   Scenario: Resources can be sorted by updated time
     When the user has browsed to the personal page

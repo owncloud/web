@@ -55,7 +55,6 @@ Feature: Share by public link with different roles
       | Editor      | read, update, create, delete |
       | Contributor | read, create                 |
 
-
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
     Given user "Alice" has created file "simple-folder/fileInside" in the server
@@ -87,7 +86,6 @@ Feature: Share by public link with different roles
       | path        | /simple-folder |
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
-
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link

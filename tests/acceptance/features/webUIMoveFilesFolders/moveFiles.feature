@@ -102,39 +102,6 @@ Feature: move files
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist in the server
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @issue-ocis-873
   Scenario: sharee moves a file shared by sharer into another folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server

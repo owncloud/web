@@ -200,21 +200,6 @@ Feature: Sharing files and folders with internal users
     When the user opens the details dialog for file "lorem.txt" using the webUI
     Then the shared-via path in the details dialog should be "/simple-folder"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @disablePreviews
   Scenario Outline: Share files/folders with special characters in their name
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes" in the server
@@ -248,7 +233,6 @@ Feature: Sharing files and folders with internal users
       | Viewer             | Viewer             | read,share                      | read,share        |
       | Editor             | Editor             | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
-
 
   @disablePreviews
   Scenario: sharing file after renaming it is possible

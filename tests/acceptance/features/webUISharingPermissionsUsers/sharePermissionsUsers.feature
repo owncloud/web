@@ -184,32 +184,6 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | delete, read, update  |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
   # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS

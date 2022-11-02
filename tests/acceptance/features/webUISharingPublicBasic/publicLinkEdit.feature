@@ -32,8 +32,6 @@ Feature: Edit public link shares
       | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
       | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
 
-
-
   @issue-ocis-1328 @skipOnOCIS
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes" in the server

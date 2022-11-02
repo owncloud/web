@@ -192,6 +192,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder             |
       | permissions | delete, read       |
 
+
   Scenario: Reshare a file and folder from shared with me page
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server

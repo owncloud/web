@@ -206,36 +206,6 @@ Feature: Sharing files and folders with internal users
     When the user opens the details dialog for file "lorem.txt" using the webUI
     Then the shared-via path in the details dialog should be "/Shares/simple-folder"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
   # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS @disablePreviews
@@ -274,45 +244,6 @@ Feature: Sharing files and folders with internal users
       | Viewer             | Viewer             | read,share                      | read,share        |
       | Editor             | Editor             | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @issue-4192 @disablePreviews
   Scenario: sharing file after renaming it is possible

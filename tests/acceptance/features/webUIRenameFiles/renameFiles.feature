@@ -123,13 +123,6 @@ Feature: rename files
       | .htaccess |
 
 
-
-
-
-
-
-
-
   Scenario Outline: Rename a file/folder using forward slash in its name
     Given user "Alice" has logged in using the webUI
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
@@ -139,7 +132,6 @@ Feature: rename files
       | from_file_name | to_file_name            |
       | lorem.txt      | simple-folder/lorem.txt |
       | lorem.txt      | lorem/txt               |
-
 
 
   Scenario: Rename the last file in a folder

@@ -113,11 +113,6 @@ Feature: rename folders
       | "simple-folder" | ".htaccess"       | Failed to rename "simple-folder" to ".htaccess"       |
 
 
-
-
-
-
-
   Scenario: Rename a folder putting a name of a file which already exists
     Given user "Alice" has logged in using the webUI
     When the user tries to rename folder "simple-folder" to "lorem.txt" using the webUI
@@ -147,6 +142,7 @@ Feature: rename folders
     Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then folder "simple.part" should be listed on the webUI
+
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given user "Alice" has logged in using the webUI

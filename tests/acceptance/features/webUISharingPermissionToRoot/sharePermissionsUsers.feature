@@ -170,27 +170,6 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | delete, read, update |
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions in the server

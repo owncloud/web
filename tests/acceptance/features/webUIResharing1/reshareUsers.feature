@@ -61,23 +61,6 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read, share           |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @skipOnOCIS
   Scenario: share a folder without share permissions and check if another user can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server

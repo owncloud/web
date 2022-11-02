@@ -37,10 +37,12 @@ Feature: create folders
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt
     And the create folder button should be disabled
 
+
   Scenario: Try to create a folder with invalid name
     When the user tries to create a folder with the invalid name "../folder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
     And the create folder button should be disabled
+
 
   Scenario: Try to create a folder with another invalid name
     When the user tries to create a folder with the invalid name "folder/subfolder" using the webUI

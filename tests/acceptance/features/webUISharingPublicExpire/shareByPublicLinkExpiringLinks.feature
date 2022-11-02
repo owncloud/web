@@ -19,19 +19,6 @@ Feature: Share by public link
     Then the last public link share response of user "Alice" should include the following fields in the server
       | expireDate | 2038-07-21 |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   @issue-ocis-1328 @skipOnOCIS
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
@@ -70,17 +57,6 @@ Feature: Share by public link
       | element | shared-resource |
       | file    | lorem.txt       |
       | folder  | simple-folder   |
-
-
-
-
-
-
-
-
-
-
-
 
   @issue-ocis-1328 @skipOnOCIS
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
@@ -124,8 +100,6 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +16         |
 
-
-
   @issue-ocis-1328 @skipOnOCIS
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
@@ -141,7 +115,6 @@ Feature: Share by public link
       | path        | /lorem.txt  |
       | name        | Link        |
       | expiration  | +7          |
-
 
   @issue-ocis-1328 @skipOnOCIS @skip
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
