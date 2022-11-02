@@ -89,9 +89,9 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
 </div>
 `;
 
-exports[`AppBar component renders bulkActions not if less than 2 files selected 1`] = `
+exports[`AppBar component renders bulkActions not if 1 file selected 1`] = `
 <div id="files-app-bar" class="">
-  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <oc-hidden-announcer-stub level="polite" announcement="1 item selected. Actions are available above the table."></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
     <div class="oc-flex oc-flex-right">
@@ -105,6 +105,7 @@ exports[`AppBar component renders bulkActions not if less than 2 files selected 
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start">
         <!---->
+        <batch-actions-stub></batch-actions-stub>
       </div>
     </div>
   </div>
