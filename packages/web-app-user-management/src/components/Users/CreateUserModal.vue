@@ -33,6 +33,7 @@
         :error-message="formData.email.errorMessage"
         type="email"
         :fix-message-line="true"
+        @input="onInputEmail"
         @change="validateEmail"
       />
       <oc-text-input
@@ -100,6 +101,14 @@ export default {
     }
   },
   methods: {
+    onInputEmail() {
+      if (!EmailValidator.validate(this.user.mail)) {
+        return
+      }
+
+      this.formData.email.errorMessage = ''
+      this.formData.email.valid = true
+    },
     validateUserName() {
       this.formData.userName.valid = false
 

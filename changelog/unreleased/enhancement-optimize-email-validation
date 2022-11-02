@@ -1,0 +1,7 @@
+Enhancement: Optimize email validation in the user management app
+
+We've optimized the email validation process while creating users in the user management app to provide
+a better user experience.
+
+https://github.com/owncloud/web/pull/7894
+https://github.com/owncloud/web/issues/7806
