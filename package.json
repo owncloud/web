@@ -29,12 +29,8 @@
   ],
   "dependencies": {
     "keycode": "^2.2.1",
-    "vue": "2.7.14"
-  },
-  "peerDependencies": {
-    "caf": "*",
-    "portal-vue": "*",
-    "uuid": "*"
+    "vue": "2.6.14",
+    "workbox-window": "^6.5.4"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
@@ -117,7 +113,8 @@
     "url-search-params-polyfill": "8.1.1",
     "vue-gettext": "2.1.12",
     "vuex-mock-store": "0.0.8",
-    "wait-for-expect": "3.0.2"
+    "wait-for-expect": "3.0.2",
+    "workbox-cli": "6.5.4"
   },
   "engines": {
     "node": ">=16"

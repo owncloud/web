@@ -7,6 +7,7 @@ import {
   Vue
 } from './defaults'
 
+import {Workbox} from 'workbox-window';
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
 
@@ -69,6 +70,11 @@ export const renderSuccess = (): void => {
 
   instance.$once('mounted', () => {
     applications.forEach((application) => application.mounted(instance))
+    if ('serviceWorker' in navigator) {
+      (window as any).wb = new Workbox('/sw.js');
+      (window as any).wb.register();
+      (window as any).wb.messageSW({type:'START'});
+    }
   })
 
   store.watch(
