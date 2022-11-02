@@ -76,6 +76,11 @@ describe('AppBar component', () => {
         const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
         expect(wrapper).toMatchSnapshot()
       })
+      it('not if less than 2 files selected', () => {
+        const store = createStore({ selected: [] })
+        const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
+        expect(wrapper).toMatchSnapshot()
+      })
     })
     describe('sharesNavigation', () => {
       it('if enabled', () => {

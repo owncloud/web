@@ -35,7 +35,7 @@
       <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start">
           <slot
-            v-if="showActionsOnSelection || selectedFiles.length === 0"
+            v-if="showActionsOnSelection || selectedFiles.length <= 1"
             name="actions"
             :limited-screen-space="limitedScreenSpace"
           />
@@ -115,7 +115,7 @@ export default defineComponent({
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
     showBatchActions() {
-      return this.hasBulkActions
+      return this.hasBulkActions && this.selectedFiles.length > 1
     },
     selectedResourcesAnnouncement() {
       if (this.selectedFiles.length === 0) {
