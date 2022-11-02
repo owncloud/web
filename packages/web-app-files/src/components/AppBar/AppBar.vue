@@ -35,7 +35,7 @@
       <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start">
           <slot
-            v-if="showActionsOnSelection || selectedFiles.length <= 1"
+            v-if="!selectedFiles.length || (showActionsOnSelection && selectedFiles.length === 1)"
             name="actions"
             :limited-screen-space="limitedScreenSpace"
           />
@@ -66,6 +66,7 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import { SpaceResource } from 'web-client/src/helpers'
+import { isLocationTrashActive } from 'web-app-files/src/router'
 
 export default defineComponent({
   components: {
@@ -115,7 +116,11 @@ export default defineComponent({
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
     showBatchActions() {
-      return this.hasBulkActions && this.selectedFiles.length > 1
+      return (
+        this.hasBulkActions &&
+        (this.selectedFiles.length > 1 ||
+          isLocationTrashActive(this.$router, 'files-trash-generic'))
+      )
     },
     selectedResourcesAnnouncement() {
       if (this.selectedFiles.length === 0) {
