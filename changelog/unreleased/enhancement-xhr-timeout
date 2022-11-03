@@ -1,0 +1,6 @@
+Enhancement: XHR upload timeout
+
+The default timeout for XHR uploads has been increased from 30 to 60 seconds. Also, it can now be configured via the `config.json` file (in ms).
+
+https://github.com/owncloud/web/issues/7900
+https://github.com/owncloud/web/pull/7912

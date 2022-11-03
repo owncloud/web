@@ -74,12 +74,13 @@ export class UppyService {
     this.uppy.use(CustomTus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({ headers }: { headers: () => uppyHeaders }) {
+  useXhr({ headers, xhrTimeout }: { headers: () => uppyHeaders; xhrTimeout: number }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',
       headers,
       formData: false,
+      timeout: xhrTimeout,
       getResponseData() {
         return {}
       }
