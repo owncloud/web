@@ -62,6 +62,7 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 hovers the row with his mouse. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
   - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.   
+- `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 
 ### Sentry
 

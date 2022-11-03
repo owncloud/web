@@ -30,6 +30,11 @@
       "image/png",
       "image/jpeg",
       "text/plain"
-    ]
+    ],
+    "upload": {
+      "xhr": {
+        "timeout": 60000
+      }
+    }
   }
 }

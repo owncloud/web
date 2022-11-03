@@ -14,5 +14,12 @@
     "search",
     "text-editor",
     "draw-io"
-  ]
+  ],
+  "options" : {
+    "upload": {
+      "xhr": {
+        "timeout": 60000
+      }
+    }
+  }
 }
