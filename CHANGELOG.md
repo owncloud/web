@@ -24,6 +24,7 @@ Summary
 * Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
+* Bugfix - Prefer alias links over private links: [#7916](https://github.com/owncloud/web/pull/7916)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
@@ -196,6 +197,15 @@ Details
 
    https://github.com/owncloud/web/pull/7811
    https://github.com/owncloud/web/pull/7075
+
+* Bugfix - Prefer alias links over private links: [#7916](https://github.com/owncloud/web/pull/7916)
+
+   The private link capability has recently been enabled in oCIS to announce to clients that
+   private links are available. However, if alias links are available the web ui is supposed to
+   only show alias links. Thus the "copy private link" button has been disabled when alias links
+   are available.
+
+   https://github.com/owncloud/web/pull/7916
 
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
 
