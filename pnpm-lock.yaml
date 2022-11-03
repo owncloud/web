@@ -85,7 +85,7 @@ importers:
       typescript: 4.8.4
       url-search-params-polyfill: 8.1.1
       vue: 2.6.14
-      vue-jest: 3.0.7
+      vue-jest: 3.0.6
       vue-template-compiler: 2.6.14
       vuex-mock-store: 0.0.8
       wait-for-expect: 3.0.2
@@ -172,7 +172,7 @@ importers:
       tslib: 2.4.0
       typescript: 4.8.4
       url-search-params-polyfill: 8.1.1
-      vue-jest: 3.0.7_emdz5kfrc5cn55r4a24jgpa35q
+      vue-jest: 3.0.6_emdz5kfrc5cn55r4a24jgpa35q
       vue-template-compiler: 2.6.14
       vuex-mock-store: 0.0.8_@types+jest@27.5.2
       wait-for-expect: 3.0.2
@@ -271,6 +271,7 @@ importers:
       fuse.js: ^6.5.3
       lodash-es: 4.17.21
       luxon: ^2.4.0
+      mark.js: ^8.11.1
       marked: ^4.0.12
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
@@ -296,6 +297,7 @@ importers:
       fuse.js: 6.5.3
       lodash-es: 4.17.21
       luxon: 2.4.0
+      mark.js: 8.11.1
       marked: 4.0.12
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
@@ -7203,8 +7205,8 @@ packages:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
     dev: true
 
-  /deasync/0.1.21:
-    resolution: {integrity: sha512-kUmM8Y+PZpMpQ+B4AuOW9k2Pfx/mSupJtxOsLzmnHY2WqZUYRFccFn2RhzPAqt3Xb+sorK/badW2D4zNzqZz5w==}
+  /deasync/0.1.28:
+    resolution: {integrity: sha512-QqLF6inIDwiATrfROIyQtwOQxjZuek13WRYZ7donU5wJPLoP67MnYxA6QtqdvdBy2mMqv5m3UefBVdJjvevOYg==}
     engines: {node: '>=0.11.0'}
     requiresBuild: true
     dependencies:
@@ -14725,8 +14727,8 @@ packages:
     resolution: {integrity: sha512-tvuYR9ynqJEuzrwqneNQ2q5uoFbgbot1fFuWIADfpmA1Sm9CMkid1SJyRuvmUdQHdjgAstGEU3tMbiTk5ud4OQ==}
     dev: false
 
-  /vue-jest/3.0.7_emdz5kfrc5cn55r4a24jgpa35q:
-    resolution: {integrity: sha512-PIOxFM+wsBMry26ZpfBvUQ/DGH2hvp5khDQ1n51g3bN0TwFwTy4J85XVfxTRMukqHji/GnAoGUnlZ5Ao73K62w==}
+  /vue-jest/3.0.6_emdz5kfrc5cn55r4a24jgpa35q:
+    resolution: {integrity: sha512-VyuM8wR0vAlYCbPRY+PhIqRU5yUyBnUmwYTo4IFScs2+tiuis5VBItU0PGC8Wcx6qJwKB5jq5p7WFhabzMFMgQ==}
     peerDependencies:
       babel-core: ^6.25.0 || ^7.0.0-0
       vue: ^2.x
@@ -14735,7 +14737,7 @@ packages:
       babel-core: 7.0.0-bridge.0_@babel+core@7.19.6
       babel-plugin-transform-es2015-modules-commonjs: 6.26.2
       chalk: 2.4.2
-      deasync: 0.1.21
+      deasync: 0.1.28
       extract-from-css: 0.4.4
       find-babel-config: 1.2.0
       js-beautify: 1.14.0

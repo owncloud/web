@@ -110,7 +110,7 @@
     "tslib": "2.4.0",
     "typescript": "4.8.4",
     "url-search-params-polyfill": "8.1.1",
-    "vue-jest": "3.0.7",
+    "vue-jest": "3.0.6",
     "vue-template-compiler": "2.6.14",
     "vuex-mock-store": "0.0.8",
     "wait-for-expect": "3.0.2"
