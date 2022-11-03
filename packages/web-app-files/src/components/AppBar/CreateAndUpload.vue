@@ -320,7 +320,8 @@ export default defineComponent({
         showMessage: this.showMessage,
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate,
-        $ngettext: this.$ngettext
+        $ngettext: this.$ngettext,
+        accessToken: this.$store.getters['runtime/auth/accessToken']
       }).then(() => {
         ;(document.activeElement as HTMLElement).blur()
       })

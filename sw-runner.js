@@ -22,7 +22,7 @@ class WebDav {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
         overwrite: 'F',
         destination: `${this.webDavPath}/spaces/${targetSpaceId}/${targetPath}`,
         'OCS-APIREQUEST': 'true'
@@ -33,7 +33,7 @@ class WebDav {
   }
 }
 
-const client = WebDav()
+const client = new WebDav()
 addEventListener('message', async (event) => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true);

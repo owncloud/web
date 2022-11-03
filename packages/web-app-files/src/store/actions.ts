@@ -72,7 +72,8 @@ export default {
       showMessage,
       $gettext,
       $gettextInterpolate,
-      $ngettext
+      $ngettext,
+      accessToken
     }
   ) {
     const copyMove = new ResourceTransfer(
@@ -86,7 +87,8 @@ export default {
       showMessage,
       $gettext,
       $ngettext,
-      $gettextInterpolate
+      $gettextInterpolate,
+      accessToken
     )
     let movedResources = []
     if (context.state.clipboardAction === ClipboardActions.Cut) {

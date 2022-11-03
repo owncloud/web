@@ -22,7 +22,8 @@ export class ResourceTransfer extends ConflictDialog {
     showMessage: (data: object) => void,
     $gettext: (msg: string) => string,
     $ngettext: (msgid: string, plural: string, n: number) => string,
-    $gettextInterpolate: (msg: string, context: object, disableHtmlEscaping?: boolean) => string
+    $gettextInterpolate: (msg: string, context: object, disableHtmlEscaping?: boolean) => string,
+    private accessToken?: string
   ) {
     super(createModal, hideModal, showMessage, $gettext, $ngettext, $gettextInterpolate)
   }
@@ -156,13 +157,24 @@ export class ResourceTransfer extends ConflictDialog {
           continue
         }
         if (transferType === TransferType.COPY) {
-          await this.clientService.webdav.copyFiles(
-            this.sourceSpace,
-            resource,
-            this.targetSpace,
-            { path: join(this.targetFolder.path, targetName) },
-            { overwrite: overwriteTarget }
-          )
+          if(this.accessToken) {
+            await (window as any).wb.messageSW({
+              type: 'copy',
+              sourceSpaceId: this.sourceSpace.id,
+              sourcePath: resource.path,
+              targetSpaceId: this.targetSpace.id,
+              targetPath: join(this.targetFolder.path, targetName),
+              token: this.accessToken
+            })
+          }else {
+            await this.clientService.webdav.copyFiles(
+              this.sourceSpace,
+              resource,
+              this.targetSpace,
+              { path: join(this.targetFolder.path, targetName) },
+              { overwrite: overwriteTarget }
+            )
+          }
           resource.id = undefined
           resource.fileId = undefined
         } else if (transferType === TransferType.MOVE) {
