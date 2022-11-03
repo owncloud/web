@@ -44,6 +44,7 @@ Summary
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
+* Enhancement - Add search field for space members: [#7901](https://github.com/owncloud/web/pull/7901)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 * Enhancement - Respect the new sharing denials capability (experimental): [#7892](https://github.com/owncloud/web/pull/7892)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
@@ -374,6 +375,14 @@ Details
 
    https://github.com/owncloud/web/issues/1753
    https://github.com/owncloud/web/pull/7635
+
+* Enhancement - Add search field for space members: [#7901](https://github.com/owncloud/web/pull/7901)
+
+   We've added a search field for space members, so the user can easily filter for existing space
+   members.
+
+   https://github.com/owncloud/web/issues/7746
+   https://github.com/owncloud/web/pull/7901
 
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
 
