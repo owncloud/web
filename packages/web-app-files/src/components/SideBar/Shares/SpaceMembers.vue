@@ -2,25 +2,25 @@
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
       <div class="oc-flex">
-      <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
+        <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
+        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
       <div class="oc-flex">
-        <div class="oc-flex" v-if="isSearchOpen">
-        <oc-text-input
-          class="oc-text-truncate space-members-filter"
-          v-model="collaboratorSearchTerm"
-          :label="$gettext('Search members')"
-        />
-        <oc-button
-          v-oc-tooltip="$gettext('Close search')"
-          :aria-label="$gettext('Close search')"
-          appearance="raw"
-          class="oc-mt-s"
-          @click="toggleSearch"
-        >
-          <oc-icon name="close" fill-type="line"/>
-        </oc-button>
+        <div v-if="isSearchOpen" class="oc-flex">
+          <oc-text-input
+            v-model="collaboratorSearchTerm"
+            class="oc-text-truncate space-members-filter oc-mr-s"
+            :label="$gettext('Search members')"
+          />
+          <oc-button
+            v-oc-tooltip="$gettext('Close search')"
+            :aria-label="$gettext('Close search')"
+            appearance="raw"
+            class="oc-mt-s"
+            @click="toggleSearch"
+          >
+            <oc-icon name="close" fill-type="line" size="small" />
+          </oc-button>
         </div>
         <oc-button
           v-else
@@ -29,7 +29,7 @@
           appearance="raw"
           @click="toggleSearch"
         >
-          <oc-icon name="search" fill-type="line"/>
+          <oc-icon name="search" fill-type="line" size="small" />
         </oc-button>
       </div>
     </div>
@@ -68,7 +68,7 @@ import { defineComponent, PropType } from '@vue/composition-api'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useGraphClient } from 'web-pkg/src/composables'
-import Fuse from "fuse.js";
+import Fuse from 'fuse.js'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -83,15 +83,15 @@ export default defineComponent({
       default: null
     }
   },
-  data: () => {
-    return {
-      collaboratorSearchTerm: '',
-      isSearchOpen: false,
-    }
-  },
   setup() {
     return {
       ...useGraphClient()
+    }
+  },
+  data: () => {
+    return {
+      collaboratorSearchTerm: '',
+      isSearchOpen: false
     }
   },
   computed: {
@@ -99,7 +99,7 @@ export default defineComponent({
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
 
-    filteredCollaborators(){
+    filteredCollaborators() {
       return this.filter(this.spaceMembers, this.collaboratorSearchTerm)
     },
     helpersEnabled() {
@@ -124,7 +124,7 @@ export default defineComponent({
   },
   watch: {
     isSearchOpen() {
-     this.collaboratorSearchTerm = ''
+      this.collaboratorSearchTerm = ''
     }
   },
   methods: {
@@ -135,14 +135,14 @@ export default defineComponent({
       if (!(term || '').trim()) {
         return collection
       }
-      const usersSearchEngine = new Fuse(collection, {
+      const searchEngine = new Fuse(collection, {
         includeScore: true,
         useExtendedSearch: true,
         threshold: 0.3,
         keys: ['collaborator.displayName', 'collaborator.name']
       })
 
-      return usersSearchEngine.search(term).map((r) => r.item)
+      return searchEngine.search(term).map((r) => r.item)
     },
     toggleSearch() {
       this.isSearchOpen = !this.isSearchOpen
@@ -213,7 +213,7 @@ export default defineComponent({
 </script>
 
 <style>
-.space-members-filter{
+.space-members-filter {
   max-width: 160px;
 }
 .avatars-wrapper {

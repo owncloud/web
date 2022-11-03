@@ -1,0 +1,6 @@
+Enhancement: Add search field for space members
+
+We've added a search field for space members, so the user can easily filter for existing space members.
+
+https://github.com/owncloud/web/pull/7901
+https://github.com/owncloud/web/issues/7746
