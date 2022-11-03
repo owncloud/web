@@ -107,10 +107,9 @@ export class ResourceTransfer extends ConflictDialog {
     }
 
     const errors = []
-    const targetFolderResources = await this.clientService.webdav.listFiles(
-      this.targetSpace,
-      this.targetFolder
-    )
+    const targetFolderResources = (
+      await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
+    ).children
 
     const resolvedConflicts = await this.resolveAllConflicts(
       this.resourcesToMove,

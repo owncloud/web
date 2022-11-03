@@ -73,10 +73,11 @@ export default {
       let parentResources
       if (isSameResource(resources[0], this.currentFolder)) {
         const parentPath = dirname(this.currentFolder.path)
-        parentResources = await (this.$clientService.webdav as WebDAV).listFiles(
-          space || this.space,
-          { path: parentPath }
-        )
+        parentResources = (
+          await (this.$clientService.webdav as WebDAV).listFiles(space || this.space, {
+            path: parentPath
+          })
+        ).children
       }
 
       const confirmAction = (newName) => {

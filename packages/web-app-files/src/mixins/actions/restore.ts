@@ -68,10 +68,11 @@ export default {
           existingResources = existingResourcesCache[parentPath]
         } else {
           try {
-            existingResources = await this.$clientService.webdav.listFiles(this.space, {
-              path: parentPath
-            })
-            existingResources = existingResources.slice(1)
+            existingResources = (
+              await this.$clientService.webdav.listFiles(this.space, {
+                path: parentPath
+              })
+            ).children
           } catch (error) {
             missingFolderPaths.push(parentPath)
           }

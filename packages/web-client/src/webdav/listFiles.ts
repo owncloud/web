@@ -1,11 +1,6 @@
-import { buildResource } from '../helpers/resource'
+import { buildResource, Resource } from '../helpers/resource'
 import { DavProperties, DavProperty } from './constants'
-import {
-  buildPublicSpaceResource,
-  isPublicSpaceResource,
-  Resource,
-  SpaceResource
-} from '../helpers'
+import { buildPublicSpaceResource, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
 
@@ -20,7 +15,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       space: SpaceResource,
       { path, fileId }: { path?: string; fileId?: string | number } = {},
       { depth = 1, davProperties }: ListFilesOptions = {}
-    ): Promise<Resource[]> {
+    ): Promise<ListFilesResult> {
       let webDavResources: any[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await sdk.publicFiles.list(
@@ -44,9 +39,13 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         })
         if (!path) {
           const [rootFolder, ...children] = webDavResources
-          return [buildPublicSpaceResource(rootFolder), ...children.map(buildResource)]
+          return {
+            resource: buildPublicSpaceResource(rootFolder),
+            children: children.map(buildResource)
+          } as ListFilesResult
         }
-        return webDavResources.map(buildResource)
+        const resources = webDavResources.map(buildResource)
+        return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       }
 
       const listFilesCorrectedPath = async () => {
@@ -64,7 +63,7 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         if (fileId && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()
         }
-        return resources
+        return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       } catch (e) {
         if (e.statusCode === 404 && fileId) {
           return listFilesCorrectedPath()
@@ -73,4 +72,8 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       }
     }
   }
+}
+export interface ListFilesResult {
+  resource: Resource
+  children?: Resource[]
 }

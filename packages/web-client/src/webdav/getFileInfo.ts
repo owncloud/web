@@ -17,7 +17,7 @@ export const GetFileInfoFactory = (
           depth: 0,
           ...options
         })
-      )[0]
+      ).resource
     }
   }
 }
