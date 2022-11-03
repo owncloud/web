@@ -4,7 +4,7 @@
       <avatar-image class="oc-mb-m" :width="80" :userid="group.id" :user-name="group.displayName" />
       <span class="oc-text-muted group-info-display-name" v-text="group.displayName"></span>
     </div>
-    <div id="group-edit-form" class="oc-background-highlight oc-p-m">
+    <form id="group-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <oc-text-input
         v-model="editGroup.displayName"
         class="oc-mb-s"
@@ -21,7 +21,7 @@
         @revert="revertChanges"
         @confirm="$emit('confirm', editGroup)"
       ></compare-save-dialog>
-    </div>
+    </form>
   </div>
 </template>
 <script>

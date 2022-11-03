@@ -5,6 +5,7 @@
       v-model="filterTerm"
       class="oc-ml-m oc-my-s"
       :label="$gettext('Filter users')"
+      autocomplete="off"
     />
     <oc-table
       ref="table"

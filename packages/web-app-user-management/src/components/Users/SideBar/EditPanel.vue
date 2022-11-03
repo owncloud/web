@@ -1,7 +1,7 @@
 <template>
   <div id="user-edit-panel" class="oc-mt-xl">
     <UserInfoBox :user="user" />
-    <div id="user-edit-form" class="oc-background-highlight oc-p-m">
+    <form id="user-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
       <div>
         <oc-text-input
           v-model="editUser.displayName"
@@ -58,7 +58,7 @@
         @revert="revertChanges"
         @confirm="$emit('confirm', editUser)"
       ></compare-save-dialog>
-    </div>
+    </form>
   </div>
 </template>
 <script>
