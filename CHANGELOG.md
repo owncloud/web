@@ -46,6 +46,7 @@ Summary
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add search field for space members: [#7901](https://github.com/owncloud/web/pull/7901)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
+* Enhancement - Batch actions for two or more items only: [#7904](https://github.com/owncloud/web/pull/7904)
 * Enhancement - Respect the new sharing denials capability (experimental): [#7892](https://github.com/owncloud/web/pull/7892)
 * Enhancement - Edit custom permissions wording: [#7709](https://github.com/owncloud/web/pull/7709)
 * Enhancement - Align dark mode colors with given design: [#7373](https://github.com/owncloud/web/issues/7373)
@@ -392,6 +393,12 @@ Details
 
    https://github.com/owncloud/web/issues/4675
    https://github.com/owncloud/web/pull/7800
+
+* Enhancement - Batch actions for two or more items only: [#7904](https://github.com/owncloud/web/pull/7904)
+
+   Batch actions are now only being displayed if two or more items are selected.
+
+   https://github.com/owncloud/web/pull/7904
 
 * Enhancement - Respect the new sharing denials capability (experimental): [#7892](https://github.com/owncloud/web/pull/7892)
 
