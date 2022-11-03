@@ -114,8 +114,6 @@ Feature: move files
     And user "Brian" has created folder "/Shares/testFolder" in the server
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"
-    When the user batch moves these files into folder "/Shares/testFolder" using the webUI
-      | file_name    |
-      | testFile.txt |
+    When the user moves file "testFile.txt" into folder "/Shares/testFolder" using the webUI
     Then breadcrumb for folder "Shares" should be displayed on the webUI
     And as "Brian" file "/Shares/testFolder/testFile.txt" should exist in the server

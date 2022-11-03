@@ -11,26 +11,26 @@ Feature: Visibility of the batch actions menu
     And user "Alice" has created folder "simple-folder" in the server
 
 
-  Scenario: View batch action menu for a folder on the personal page
-    Given user "Alice" has logged in using the webUI
-    When the user marks the folder "simple-folder" using the webUI
-    Then the following batch action buttons should be visible
-      | buttonName |
-      | Cut        |
-      | Copy       |
-      | Delete     |
 
 
-  Scenario: View batch action menu for a file on the personal page
-    Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    When the user marks the file "lorem.txt" using the webUI
-    Then the following batch action buttons should be visible
-      | buttonName |
-      | Download   |
-      | Delete     |
-      | Cut        |
-      | Copy       |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: View batch action menu when selecting both file and folder on the personal page
@@ -59,30 +59,30 @@ Feature: Visibility of the batch actions menu
       | Copy       |
 
 
-  Scenario: View batch action menu for a folder on the shared with me page (Pending Share)
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has logged in using the webUI
-    And the user has browsed to the shared-with-me page
-    When the user marks the folder "simple-folder" using the webUI
-    Then the following batch action buttons should be visible
-      | buttonName |
-      | Accept     |
-      | Decline    |
 
 
-  Scenario: View batch action menu for a folder on the shared with me page (Accepted Share)
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    And user "Brian" has logged in using the webUI
-    And the user has browsed to the shared-with-me page
-    When the user marks the folder "simple-folder" using the webUI
-    Then the following batch action buttons should be visible
-      | buttonName |
-      | Decline    |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: View batch action menu for a folder on the shared with others page
