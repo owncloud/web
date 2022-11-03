@@ -9,15 +9,17 @@
     @confirm="$emit('confirm', group)"
   >
     <template #content>
-      <oc-text-input
-        id="create-group-input-display-name"
-        v-model="group.displayName"
-        class="oc-mb-s"
-        :label="$gettext('Group name') + '*'"
-        :error-message="formData.displayName.errorMessage"
-        :fix-message-line="true"
-        @input="validateDisplayName"
-      />
+      <form autocomplete="off">
+        <oc-text-input
+          id="create-group-input-display-name"
+          v-model="group.displayName"
+          class="oc-mb-s"
+          :label="$gettext('Group name') + '*'"
+          :error-message="formData.displayName.errorMessage"
+          :fix-message-line="true"
+          @input="validateDisplayName"
+        />
+      </form>
     </template>
   </oc-modal>
 </template>
