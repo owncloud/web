@@ -1,0 +1,5 @@
+Bugfix: Prefer alias links over private links
+
+The private link capability has recently been enabled in oCIS to announce to clients that private links are available. However, if alias links are available the web ui is supposed to only show alias links. Thus the "copy private link" button has been disabled when alias links are available.
+
+https://github.com/owncloud/web/pull/7916

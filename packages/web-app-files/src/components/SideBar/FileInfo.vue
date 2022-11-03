@@ -46,6 +46,11 @@ export default {
     ...mapState('Files', ['areFileExtensionsShown']),
 
     privateLinkEnabled() {
+      if (this.capabilities.files_sharing?.public?.alias) {
+        // alias links are the next UI concept iteration for "file pointers"
+        // i.e. ignore private link capability if alias links are supported
+        return false
+      }
       return this.capabilities.files.privateLinks && this.file.privateLink
     },
 
