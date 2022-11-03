@@ -1,0 +1,5 @@
+Enhancement: Batch actions for two or more items only
+
+Batch actions are now only being displayed if two or more items are selected.
+
+https://github.com/owncloud/web/pull/7904
