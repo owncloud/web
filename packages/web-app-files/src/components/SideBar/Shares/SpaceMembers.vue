@@ -132,9 +132,8 @@ export default defineComponent({
     filterTerm() {
       this.$nextTick(() => {
         if (this.$refs.collaboratorList) {
-          this.markInstance = new Mark(this.$refs.collaboratorList.$el)
+          this.markInstance = new Mark(this.$refs.collaboratorList)
           this.markInstance.unmark()
-          console.log(this.markInstance)
           this.markInstance.mark(this.filterTerm, {
             element: 'span',
             className: 'highlight-mark'
@@ -229,6 +228,9 @@ export default defineComponent({
 </script>
 
 <style>
+.highlight-mark {
+  font-weight: 600;
+}
 .space-members-filter {
   max-width: 160px;
 }
