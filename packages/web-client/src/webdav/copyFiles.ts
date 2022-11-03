@@ -19,11 +19,18 @@ export const CopyFilesFactory = ({ sdk }: WebDavOptions) => {
           options?.overwrite || false
         )
       } else {
-        return sdk.files.copy(
+        /*return sdk.files.copy(
           urlJoin(sourceSpace.webDavPath, sourcePath),
           urlJoin(targetSpace.webDavPath, targetPath),
           options?.overwrite || false
-        )
+        )*/
+        (window as any).wb.messageSW({
+          type: 'move',
+          sdk,
+          source: urlJoin(sourceSpace.webDavPath, sourcePath),
+          target: urlJoin(targetSpace.webDavPath, targetPath),
+          options: options?.overwrite || false
+        })
       }
     }
   }

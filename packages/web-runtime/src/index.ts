@@ -71,7 +71,7 @@ export const renderSuccess = (): void => {
   instance.$once('mounted', () => {
     applications.forEach((application) => application.mounted(instance))
     if ('serviceWorker' in navigator) {
-      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js')
+      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js', {type: 'module'})
       var wb = (window as any).wb
       wb.register()
       .then((registration) => {

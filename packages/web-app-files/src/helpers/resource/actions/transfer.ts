@@ -117,7 +117,7 @@ export class ResourceTransfer extends ConflictDialog {
       this.targetFolder,
       targetFolderResources
     )
-    const movedResources: Resource[] = []
+    const movedResources: Resource[] = [];
 
     for (let resource of this.resourcesToMove) {
       // shallow copy of resources to prevent modifying existing rows
