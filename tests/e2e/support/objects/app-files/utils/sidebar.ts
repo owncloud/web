@@ -53,7 +53,7 @@ export const open = async ({
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {
-  await page.locator('.sidebar-panel.is-active-sub-panel .header__close').click()
+  await page.locator('.sidebar-panel .header__close').click()
 }
 
 export const openPanel = async ({ page, name }: { page: Page; name: string }): Promise<void> => {

@@ -405,6 +405,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
     ),
     page.locator(actionConfirmationButton).click()
   ])
+  await sidebar.close({ page: page })
 }
 
 export interface downloadResourceVersionArgs {
