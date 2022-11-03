@@ -640,6 +640,7 @@ Details
    public link and user-specific webdav requests internally.
 
    https://github.com/owncloud/web/pull/7430
+   https://github.com/owncloud/web/pull/7880
 
 * Enhancement - XHR upload timeout: [#7900](https://github.com/owncloud/web/issues/7900)
 
