@@ -104,7 +104,9 @@ export function useUpload(options: UploadOptions): UploadResult {
       ...(isTusSupported && {
         tusMaxChunkSize: unref(tusMaxChunkSize),
         tusHttpMethodOverride: unref(tusHttpMethodOverride),
-        tusExtension: unref(tusExtension),
+        tusExtension: unref(tusExtension)
+      }),
+      ...(!isTusSupported && {
         xhrTimeout: store.getters.configuration?.options?.upload?.xhr?.timeout || 60000
       })
     }
