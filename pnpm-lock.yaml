@@ -485,7 +485,7 @@ importers:
       luxon: ^2.4.0
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
-      owncloud-design-system: 14.0.0-alpha.24
+      owncloud-design-system: 14.0.0-alpha.25
       owncloud-sdk: ~3.0.0-alpha.17
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
@@ -539,7 +539,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-design-system: 14.0.0-alpha.24_qjo64ckxpkihsz2u7asmuqxitq
+      owncloud-design-system: 14.0.0-alpha.25_qjo64ckxpkihsz2u7asmuqxitq
       owncloud-sdk: 3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
@@ -11667,8 +11667,8 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /owncloud-design-system/14.0.0-alpha.24_qjo64ckxpkihsz2u7asmuqxitq:
-    resolution: {integrity: sha512-MmNP3d9KEvqnHvfeJrn9UYYr4wVE79lKoD3/nWz45Xl5dJw+1BiIZFFbFArTgkNj7l8Yfvd5MPQL1TG4Bw6nIA==}
+  /owncloud-design-system/14.0.0-alpha.25_qjo64ckxpkihsz2u7asmuqxitq:
+    resolution: {integrity: sha512-JRaH6dYJ7HmjZbVC0i7EPhcEVoFJDB94Gen/MdKHulzGLvthKH4p/jtb4CbhEnzNpK3xvFGAy5Sq9K6SpIAVwA==}
     engines: {node: '>= 14.0.0', npm: '>= 3.0.0'}
     peerDependencies:
       '@popperjs/core': ^2.4.0

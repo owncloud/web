@@ -119,7 +119,7 @@ import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
   useStore
-} from 'web-pkg'
+} from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'RoleDropdown',
