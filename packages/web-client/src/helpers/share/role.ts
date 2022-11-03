@@ -159,8 +159,7 @@ export const peopleRoleEditorFolder = new PeopleShareRole(
     SharePermissions.read,
     SharePermissions.update,
     SharePermissions.create,
-    SharePermissions.delete,
-    SharePermissions.share
+    SharePermissions.delete
   ]
 )
 export const peopleRoleCustomFile = new CustomShareRole(
@@ -181,7 +180,8 @@ export const peopleRoleCustomFolder = new CustomShareRole(
     SharePermissions.read,
     SharePermissions.update,
     SharePermissions.create,
-    SharePermissions.delete
+    SharePermissions.delete,
+    SharePermissions.share
   ]
 )
 export const peopleRoleDenyFolder = new PeopleShareRole(
