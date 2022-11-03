@@ -64,7 +64,7 @@ Summary
 * Enhancement - Auth context in route meta props: [#7234](https://github.com/owncloud/web/issues/7234)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
-* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
+* Enhancement - Update ODS to v14.0.0-alpha.25: [#7915](https://github.com/owncloud/web/pull/7915)
 * Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 * Enhancement - XHR upload timeout: [#7900](https://github.com/owncloud/web/issues/7900)
@@ -558,9 +558,9 @@ Details
    https://github.com/owncloud/web/issues/7798
    https://github.com/owncloud/web/pull/7801
 
-* Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
+* Enhancement - Update ODS to v14.0.0-alpha.25: [#7915](https://github.com/owncloud/web/pull/7915)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.24. Please refer to the full
+   We updated the ownCloud Design System to version 14.0.0-alpha.25. Please refer to the full
    changelog in the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
@@ -623,8 +623,8 @@ Details
    Enhancement - Input background color:
    [#2352](https://github.com/owncloud/owncloud-design-system/pull/2352)
 
-   https://github.com/owncloud/web/pull/7862
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.24
+   https://github.com/owncloud/web/pull/7915
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.25
 
 * Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 
