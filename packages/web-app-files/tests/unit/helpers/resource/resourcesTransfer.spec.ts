@@ -75,10 +75,10 @@ describe('resourcesTransfer', () => {
     it.each([TransferType.COPY, TransferType.MOVE])(
       'should copy / move files without renaming them if no conflicts exist',
       async (action: TransferType) => {
-        const listFilesResult = {
+        const listFilesResult: ListFilesResult = {
           resource: {} as Resource,
-          children: [] as Resource[]
-        } as ListFilesResult
+          children: []
+        }
         clientServiceMock.webdav.listFiles.mockReturnValueOnce(
           new Promise((resolve) => resolve(listFilesResult))
         )
