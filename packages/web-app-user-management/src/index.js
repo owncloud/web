@@ -25,6 +25,7 @@ const routes = [
     name: 'user-management-users',
     component: Users,
     meta: {
+      authContext: 'user',
       title: $gettext('Users')
     }
   },
@@ -33,6 +34,7 @@ const routes = [
     name: 'user-management-groups',
     component: Groups,
     meta: {
+      authContext: 'user',
       title: $gettext('Groups')
     }
   }

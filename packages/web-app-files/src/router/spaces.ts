@@ -27,6 +27,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesProjects.name,
         component: components.Spaces.Projects,
         meta: {
+          authContext: 'user',
           title: $gettext('Spaces')
         }
       },
@@ -35,6 +36,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         name: locationSpacesGeneric.name,
         component: components.Spaces.DriveResolver,
         meta: {
+          authContext: 'user',
           patchCleanPath: true
         }
       }

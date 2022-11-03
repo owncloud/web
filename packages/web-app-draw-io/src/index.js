@@ -7,7 +7,7 @@ const routes = [
     path: '/:driveAliasAndItem*',
     component: App,
     meta: {
-      auth: false,
+      authContext: 'hybrid',
       patchCleanPath: true
     }
   }

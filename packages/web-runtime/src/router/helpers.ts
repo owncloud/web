@@ -1,6 +1,11 @@
 import { base, router } from './index'
 import Router, { Route, RouteRecordPublic } from 'vue-router'
-import { contextQueryToFileContextProps, LocationParams } from 'web-pkg/src/composables'
+import {
+  authContextValues,
+  contextQueryToFileContextProps,
+  LocationParams,
+  WebRouteMeta
+} from 'web-pkg/src/composables'
 
 export const buildUrl = (pathname) => {
   const isHistoryMode = !!base
@@ -40,41 +45,42 @@ export const buildUrl = (pathname) => {
  * @returns {boolean}
  */
 export const isUserContext = (router: Router, to: Route): boolean => {
-  if (!isAuthenticationRequired(router, to)) {
+  const meta = getRouteMeta(to)
+  if (meta.authContext === 'user') {
+    return true
+  }
+  if (meta.authContext !== 'hybrid') {
     return false
   }
 
-  if (to.meta?.auth !== false) {
-    return true
-  }
-
   const contextRoute = getContextRoute(router, to)
-  return !contextRoute || contextRoute.meta?.auth !== false
+  return !contextRoute || getRouteMeta({ meta: contextRoute.meta } as Route).authContext === 'user'
 }
 
 /**
- * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) is a public link (with or without password).
+ * Checks if the `to` route or the route it was reached from (i.e. the `contextRoute`) needs a resolved public link context (with or without password).
  *
  * @param router {Router}
  * @param to {Route}
  * @returns {boolean}
  */
 export const isPublicLinkContext = (router: Router, to: Route): boolean => {
-  if (!isAuthenticationRequired(router, to)) {
-    return false
-  }
-
-  const publicLinkRouteNames = ['files-public-link', 'files-public-upload']
-  if (publicLinkRouteNames.includes(to.name)) {
-    return true
-  }
-
   if (to.params.driveAliasAndItem?.startsWith('public/')) {
     return true
   }
 
+  const meta = getRouteMeta(to)
+  if (meta.authContext === 'publicLink') {
+    return true
+  }
+  if (meta.authContext !== 'hybrid') {
+    return false
+  }
+
   const contextRoute = getContextRoute(router, to)
-  return contextRoute && publicLinkRouteNames.includes(contextRoute?.name)
+  return (
+    contextRoute && getRouteMeta({ meta: contextRoute.meta } as Route).authContext === 'publicLink'
+  )
 }
 
 /**
@@ -107,33 +113,14 @@ const extractPublicLinkTokenFromRouteParams = (params: LocationParams): string =
 }
 
 /**
- * Asserts whether any form of authentication is required, i.e.
- * - a user or
- * - public link (with or without password), which represents an impersonation of a user via public share
+ * Asserts that no form of authentication is required.
  *
  * @param router {Router}
  * @param to {Route}
  * @returns {boolean}
  */
-export const isAuthenticationRequired = (router: Router, to: Route): boolean => {
-  const publicRouteNames = [
-    'login',
-    'oidcCallback',
-    'oidcSilentRedirect',
-    'resolvePublicLink',
-    'accessDenied'
-  ]
-
-  if (publicRouteNames.includes(to.name)) {
-    return false
-  }
-
-  const contextRoute = getContextRoute(router, to)
-  if (publicRouteNames.includes(contextRoute?.name)) {
-    return false
-  }
-
-  return true
+export const isAnonymousContext = (router: Router, to: Route): boolean => {
+  return getRouteMeta(to).authContext === 'anonymous'
 }
 
 /**
@@ -153,4 +140,40 @@ const getContextRoute = (router: Router, to: Route): RouteRecordPublic | null =>
   }
 
   return router.getRoutes().find((r) => r.name === to.query[contextRouteNameKey])
+}
+
+const getRouteMeta = (to: Route): WebRouteMeta => {
+  if (!to.meta) {
+    return {
+      authContext: 'user'
+    }
+  }
+
+  // rewrite deprecated `auth` property to the respective `authContext` value
+  if (!to.meta.authContext && Object.prototype.hasOwnProperty.call(to.meta, 'auth')) {
+    to.meta.authContext = to.meta.auth ? 'user' : 'hybrid'
+    console.warn(
+      `route key meta.auth is deprecated. Please switch to meta.authContext="${to.meta.authContext}" in route "${to.name}".`
+    )
+  }
+
+  if (to?.meta?.authContext) {
+    if (authContextValues.includes(to.meta.authContext)) {
+      return to.meta
+    }
+    console.warn(
+      `invalid authContext "${to.meta.authContext}" in route "${
+        to.name
+      }". must be one of [${authContextValues.join(', ')}].`
+    )
+  }
+  if (to?.meta) {
+    return {
+      ...to.meta,
+      authContext: 'user'
+    }
+  }
+  return {
+    authContext: 'user'
+  }
 }

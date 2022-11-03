@@ -19,7 +19,7 @@ const deprecatedRedirect = (routeConfig: {
   redirect: (to: Route) => Location
 }): RouteConfig => {
   return {
-    meta: routeConfig.meta,
+    meta: { ...routeConfig.meta, authContext: 'anonymous' }, // authContext belongs to the redirect target, not to the redirect itself.
     path: routeConfig.path,
     redirect: (to) => {
       const location = routeConfig.redirect(to)
@@ -82,9 +82,6 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/public/list/:item*',
-      meta: {
-        auth: false
-      },
       redirect: (to) => createLocationPublic('files-public-link', to)
     },
     {
@@ -93,9 +90,6 @@ export const buildRoutes = (): RouteConfig[] =>
     },
     {
       path: '/public-link/:token',
-      meta: {
-        auth: false
-      },
       redirect: (to) => ({ name: 'resolvePublicLink', params: { token: to.params.token } })
     }
   ].map(deprecatedRedirect)

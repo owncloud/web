@@ -1,51 +1,54 @@
 <template>
-  <div id="Web" class="oc-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
-    <div class="oc-login oc-height-viewport">
-      <div class="oc-login-card oc-position-center">
-        <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
-        <div class="oc-login-card-body">
-          <h1 v-translate class="oc-login-card-title">Missing or invalid config</h1>
-          <p v-translate>Please check if the file config.json exists and is correct.</p>
-          <p v-translate>Also, make sure to check the browser console for more information.</p>
-        </div>
-        <div class="oc-login-card-footer">
-          <p>
-            <translate>For help visit our</translate>
-            <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
-            <translate>or join our</translate>
-            <a v-translate href="https://talk.owncloud.com/channel/web" target="_blank">chat</a>.
-          </p>
-        </div>
-      </div>
+  <div class="oc-login-card oc-position-center">
+    <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
+    <div class="oc-login-card-body">
+      <h1 v-translate class="oc-login-card-title">Missing or invalid config</h1>
+      <p v-translate>Please check if the file config.json exists and is correct.</p>
+      <p v-translate>Also, make sure to check the browser console for more information.</p>
+    </div>
+    <div class="oc-login-card-footer">
+      <p>
+        <translate>For help visit our</translate>
+        <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
+        <translate>or join our</translate>
+        <a v-translate href="https://talk.owncloud.com/channel/web" target="_blank">chat</a>.
+      </p>
+      <p>
+        {{ footerSlogan }}
+      </p>
     </div>
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script lang="ts">
 import { getBackendVersion, getWebVersion } from '../container/versions'
+import { computed, defineComponent } from '@vue/composition-api'
+import { useStore } from 'web-pkg'
 
-export default {
+export default defineComponent({
   name: 'MissingConfigPage',
+  setup() {
+    const store = useStore()
 
-  computed: {
-    ...mapGetters(['configuration']),
+    const logoImg = computed(() => {
+      return store.getters.configuration?.currentTheme?.logo?.login
+    })
+    const footerSlogan = computed(() => {
+      return store.getters.configuration?.currentTheme?.general?.slogan
+    })
+    const favicon = computed(() => {
+      return store.getters.configuration?.currentTheme?.logo?.favicon
+    })
 
-    backgroundImg() {
-      return this.configuration.currentTheme.loginPage.backgroundImg
-    },
-
-    logoImg() {
-      return this.configuration.currentTheme.logo.login
-    },
-
-    favicon() {
-      return this.configuration.currentTheme.logo.favicon
+    return {
+      logoImg,
+      footerSlogan,
+      favicon
     }
   },
 
   metaInfo() {
-    const metaInfo = {}
+    const metaInfo: any = {}
     if (this.favicon) {
       metaInfo.link = [{ rel: 'icon', href: this.favicon }]
     }
@@ -58,5 +61,5 @@ export default {
     metaInfo.meta = [metaGenerator]
     return metaInfo
   }
-}
+})
 </script>

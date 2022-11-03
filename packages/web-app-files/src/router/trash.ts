@@ -21,6 +21,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: ':driveAliasAndItem*',
         component: components.Spaces.DriveResolver,
         meta: {
+          authContext: 'user',
           patchCleanPath: true
         }
       }

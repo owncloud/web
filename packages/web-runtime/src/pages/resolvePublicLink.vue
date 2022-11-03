@@ -1,7 +1,8 @@
 <template>
-  <div class="oc-height-1-1 oc-link-resolve">
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-card oc-border oc-rounded oc-position-center oc-text-center oc-width-large">
+  <div
+    class="oc-link-resolve oc-height-viewport oc-flex oc-flex-column oc-flex-center oc-flex-middle"
+  >
+    <div class="oc-card oc-text-center oc-width-large">
       <template v-if="isLoading">
         <div class="oc-card-header">
           <h2 key="public-link-loading">
@@ -50,10 +51,8 @@
           </div>
         </form>
       </template>
-      <div class="oc-card-footer">
-        <p>
-          {{ footerSlogan }}
-        </p>
+      <div class="oc-card-footer oc-pt-rm">
+        <p>{{ footerSlogan }}</p>
       </div>
     </div>
   </div>
@@ -66,8 +65,6 @@ import { authService } from '../services/auth'
 import {
   queryItemAsString,
   useClientService,
-  useRoute,
-  useRouteMeta,
   useRouteParam,
   useRouteQuery,
   useRouter,
@@ -91,7 +88,6 @@ export default defineComponent({
   setup() {
     const clientService = useClientService()
     const router = useRouter()
-    const route = useRoute()
     const store = useStore()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
@@ -224,10 +220,6 @@ export default defineComponent({
 
     const { $gettext } = useTranslations()
     const footerSlogan = computed(() => store.getters.configuration.currentTheme.general.slogan)
-    const pageTitleRaw = useRouteMeta('title')
-    const pageTitle = computed(() => {
-      return $gettext(unref(pageTitleRaw))
-    })
     const passwordFieldLabel = computed(() => {
       return $gettext('Enter password for public link')
     })
@@ -248,7 +240,6 @@ export default defineComponent({
       isLoading,
       errorMessage,
       footerSlogan,
-      pageTitle,
       resolvePublicLinkTask
     }
   }
@@ -257,6 +248,11 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-link-resolve {
+  .oc-card {
+    background: var(--oc-color-background-highlight);
+    border-radius: 15px;
+  }
+
   .oc-text-input-message {
     justify-content: center;
   }

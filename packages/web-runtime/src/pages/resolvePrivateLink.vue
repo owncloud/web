@@ -1,50 +1,52 @@
 <template>
-  <div class="oc-height-1-1 oc-link-resolve">
-    <div class="oc-link-resolve-wrapper oc-flex oc-flex-center oc-flex-middle">
-      <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-      <div class="oc-card oc-text-center oc-width-medium">
-        <template v-if="loading">
-          <div class="oc-card-body">
-            <h2 key="private-link-loading">
-              <translate>Resolving private link…</translate>
-            </h2>
-            <oc-spinner class="oc-mt-m" :aria-hidden="true" />
-          </div>
-        </template>
-        <template v-else-if="errorMessage">
-          <div class="oc-card-body oc-link-resolve-error-message">
-            <h2 v-if="isUnacceptedShareError" class="oc-link-resolve-error-title">
-              {{ resource.name }}
-            </h2>
-            <h2 v-else key="private-link-error" class="oc-link-resolve-error-title">
-              <translate>An error occurred while resolving the private link</translate>
-            </h2>
-            <p>{{ errorMessage }}</p>
-            <p
-              v-if="isUnacceptedShareError"
-              v-text="$gettext('Note: You can reload this page after you accept the share.')"
-            ></p>
-          </div>
-        </template>
-      </div>
-      <oc-button
-        v-if="isUnacceptedShareError"
-        type="router-link"
-        variation="primary"
-        appearance="filled"
-        target="_blank"
-        class="oc-mt-m oc-text-center oc-width-medium"
-        :to="sharedWithMeRoute"
-      >
-        <span class="text" v-text="openSharedWithMeLabel" />
-      </oc-button>
+  <div
+    class="oc-link-resolve oc-height-viewport oc-flex oc-flex-column oc-flex-center oc-flex-middle"
+  >
+    <div class="oc-card oc-text-center oc-width-large">
+      <template v-if="loading">
+        <div class="oc-card-header">
+          <h2 key="private-link-loading">
+            <translate>Resolving private link…</translate>
+          </h2>
+        </div>
+        <div class="oc-card-body">
+          <oc-spinner :aria-hidden="true" />
+        </div>
+      </template>
+      <template v-else-if="errorMessage">
+        <div class="oc-card-header oc-link-resolve-error-title">
+          <h2 v-if="isUnacceptedShareError">
+            {{ resource.name }}
+          </h2>
+          <h2 v-else key="private-link-error">
+            <translate>An error occurred while resolving the private link</translate>
+          </h2>
+        </div>
+        <div class="oc-card-body oc-link-resolve-error-message">
+          <p class="oc-text-xlarge">{{ errorMessage }}</p>
+          <p
+            v-if="isUnacceptedShareError"
+            v-text="$gettext('Note: You can reload this page after you accept the share.')"
+          />
+        </div>
+      </template>
     </div>
+    <oc-button
+      v-if="isUnacceptedShareError"
+      type="router-link"
+      variation="primary"
+      appearance="filled"
+      target="_blank"
+      class="oc-mt-m oc-text-center oc-width-medium"
+      :to="sharedWithMeRoute"
+    >
+      <span class="text" v-text="openSharedWithMeLabel" />
+    </oc-button>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  useRoute,
   useRouteParam,
   useStore,
   useTranslations,
@@ -75,7 +77,6 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
     const id = useRouteParam('fileId')
     const { $gettext, $gettextInterpolate } = useTranslations()
     const hasSpaces = useCapabilitySpacesEnabled(store)
@@ -83,10 +84,6 @@ export default defineComponent({
     const sharedParentResource: Ref<Resource> = ref()
     const isUnacceptedShareError = ref(false)
 
-    const pageTitle = computed(() => $gettext(unref(route).meta.title))
-    const configuration = computed(() => {
-      return store.getters.configuration
-    })
     const clientService = useClientService()
 
     onMounted(() => {
@@ -146,7 +143,7 @@ export default defineComponent({
         params,
         query: { ...query, ...(scrollTo && { scrollTo }) }
       }
-      return router.push(location)
+      router.push(location)
     })
 
     const getMatchingSpace = (id) => {
@@ -215,8 +212,6 @@ export default defineComponent({
     })
 
     return {
-      pageTitle,
-      configuration,
       errorMessage,
       loading,
       resource,
@@ -230,18 +225,12 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-link-resolve {
-  &-wrapper {
-    flex-flow: column;
-    min-height: 96vh;
-  }
-
   .oc-card {
     background: var(--oc-color-background-highlight);
     border-radius: 15px;
   }
 
-  h2 {
-    font-size: var(--oc-font-size-medium);
+  .oc-card-header h2 {
     margin: 0;
   }
 }

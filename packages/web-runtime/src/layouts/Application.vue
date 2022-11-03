@@ -9,7 +9,7 @@
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
         <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="sidebarNavItems" />
-        <app-loading-spinner v-if="areSpacesLoading" />
+        <app-loading-spinner v-if="isLoading" />
         <template v-else>
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
@@ -37,11 +37,12 @@ import UploadInfo from '../components/UploadInfo.vue'
 import {
   useActiveApp,
   useRoute,
+  useRouteMeta,
   useSpacesLoading,
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { watch, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, unref, watch } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'ApplicationLayout',
@@ -73,8 +74,17 @@ export default defineComponent({
       },
       { immediate: true }
     )
+
+    const requiredAuthContext = useRouteMeta('authContext')
+    const { areSpacesLoading } = useSpacesLoading({ store })
+    const isLoading = computed(() => {
+      if (unref(requiredAuthContext) === 'anonymous') {
+        return false
+      }
+      return unref(areSpacesLoading)
+    })
     return {
-      ...useSpacesLoading({ store }),
+      isLoading,
       activeApp: useActiveApp(),
       isUserContext: useUserContext({ store })
     }

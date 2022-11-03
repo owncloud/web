@@ -28,6 +28,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'with-me',
         component: components.Shares.SharedWithMe,
         meta: {
+          authContext: 'user',
           title: $gettext('Files shared with me')
         }
       },
@@ -36,6 +37,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'with-others',
         component: components.Shares.SharedWithOthers,
         meta: {
+          authContext: 'user',
           title: $gettext('Files shared with others')
         }
       },
@@ -44,6 +46,7 @@ export const buildRoutes = (components: RouteComponents): RouteConfig[] => [
         path: 'via-link',
         component: components.Shares.SharedViaLink,
         meta: {
+          authContext: 'user',
           title: $gettext('Files shared via link')
         }
       }
