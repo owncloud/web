@@ -76,6 +76,11 @@ describe('AppBar component', () => {
         const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
         expect(wrapper).toMatchSnapshot()
       })
+      it('not if 1 file selected', () => {
+        const store = createStore({ selected: [selectedFiles[0]] })
+        const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
+        expect(wrapper).toMatchSnapshot()
+      })
     })
     describe('sharesNavigation', () => {
       it('if enabled', () => {
@@ -136,6 +141,12 @@ function getShallowWrapper(
         meta: {
           title: 'ExampleTitle'
         }
+      },
+      $router: {
+        resolve: () => {
+          return { href: '' }
+        },
+        afterEach: jest.fn()
       }
     },
     slots,
