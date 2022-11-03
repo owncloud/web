@@ -1,33 +1,33 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
-      <div class="oc-flex">
+      <div class="oc-flex oc-py-s">
         <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
       <div class="oc-flex">
-        <div v-if="isSearchOpen" class="oc-flex">
+        <div v-if="isFilterOpen" class="oc-flex">
           <oc-text-input
             v-model="filterTerm"
             class="oc-text-truncate space-members-filter oc-mr-s"
             label=""
-            :placeholder="$gettext('Search members')"
+            :placeholder="$gettext('Filter members')"
           />
           <oc-button
-            v-oc-tooltip="$gettext('Close search')"
-            :aria-label="$gettext('Close search')"
+            v-oc-tooltip="$gettext('Close filter')"
+            :aria-label="$gettext('Close filter')"
             appearance="raw"
-            @click="toggleSearch"
+            @click="toggleFilter"
           >
             <oc-icon name="close" fill-type="line" size="small" />
           </oc-button>
         </div>
         <oc-button
           v-else
-          v-oc-tooltip="$gettext('Search members')"
-          :aria-label="$gettext('Search members')"
+          v-oc-tooltip="$gettext('Filter members')"
+          :aria-label="$gettext('Filter members')"
           appearance="raw"
-          @click="toggleSearch"
+          @click="toggleFilter"
         >
           <oc-icon name="search" fill-type="line" size="small" />
         </oc-button>
@@ -93,7 +93,7 @@ export default defineComponent({
   data: () => {
     return {
       filterTerm: '',
-      isSearchOpen: false,
+      isFilterOpen: false,
       markInstance: null
     }
   },
@@ -126,7 +126,7 @@ export default defineComponent({
     }
   },
   watch: {
-    isSearchOpen() {
+    isFilterOpen() {
       this.filterTerm = ''
     },
     filterTerm() {
@@ -159,8 +159,8 @@ export default defineComponent({
 
       return searchEngine.search(term).map((r) => r.item)
     },
-    toggleSearch() {
-      this.isSearchOpen = !this.isSearchOpen
+    toggleFilter() {
+      this.isFilterOpen = !this.isFilterOpen
     },
     isModifiable(share) {
       if (!this.currentUserIsManager) {
