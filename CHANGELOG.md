@@ -59,6 +59,7 @@ Summary
 * Enhancement - Make keybindings global: [#7569](https://github.com/owncloud/web/pull/7569)
 * Enhancement - Optimize email validation in the user management app: [#7894](https://github.com/owncloud/web/pull/7894)
 * Enhancement - Resolve private links: [#7707](https://github.com/owncloud/web/issues/7707)
+* Enhancement - Auth context in route meta props: [#7234](https://github.com/owncloud/web/issues/7234)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
 * Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
@@ -511,6 +512,19 @@ Details
    https://github.com/owncloud/web/issues/7707
    https://github.com/owncloud/web/pull/7405
    https://github.com/owncloud/web/pull/7769
+
+* Enhancement - Auth context in route meta props: [#7234](https://github.com/owncloud/web/issues/7234)
+
+   The route meta prop has been extended by a new "meta.authContext" property (can be one out of
+   "anonymous", "user", "publicLink" or "hybrid"). With this, app developers can now define
+   anonymous routes, which was hardcoded to a few well known route names before. Anonymous routes
+   are rendered in the application layout, i.e. with the top bar, as the ownCloud Web Chrome should
+   always be visible to the user (except for a few handpicked exceptions in the web runtime, which
+   are still rendered in the plain layout).
+
+   https://github.com/owncloud/web/issues/7234
+   https://github.com/owncloud/web/issues/7863
+   https://github.com/owncloud/web/pull/7874
 
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 
