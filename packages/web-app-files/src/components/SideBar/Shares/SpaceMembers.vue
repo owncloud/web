@@ -8,15 +8,15 @@
       <div class="oc-flex">
         <div v-if="isSearchOpen" class="oc-flex">
           <oc-text-input
-            v-model="collaboratorSearchTerm"
+            v-model="filterTerm"
             class="oc-text-truncate space-members-filter oc-mr-s"
-            :label="$gettext('Search members')"
+            label=""
+            :placeholder="$gettext('Search members')"
           />
           <oc-button
             v-oc-tooltip="$gettext('Close search')"
             :aria-label="$gettext('Close search')"
             appearance="raw"
-            class="oc-mt-s"
             @click="toggleSearch"
           >
             <oc-icon name="close" fill-type="line" size="small" />
@@ -43,10 +43,11 @@
     <template v-if="hasCollaborators">
       <ul
         id="files-collaborators-list"
+        ref="collaboratorList"
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
-        <li v-for="collaborator in filteredCollaborators" :key="collaborator.key">
+        <li v-for="collaborator in filteredSpaceMembers" :key="collaborator.key">
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
@@ -69,6 +70,7 @@ import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { SpaceResource } from 'web-client/src/helpers'
 import { useGraphClient } from 'web-pkg/src/composables'
 import Fuse from 'fuse.js'
+import Mark from 'mark.js'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -90,8 +92,9 @@ export default defineComponent({
   },
   data: () => {
     return {
-      collaboratorSearchTerm: '',
-      isSearchOpen: false
+      filterTerm: '',
+      isSearchOpen: false,
+      markInstance: null
     }
   },
   computed: {
@@ -99,8 +102,8 @@ export default defineComponent({
     ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapState(['user']),
 
-    filteredCollaborators() {
-      return this.filter(this.spaceMembers, this.collaboratorSearchTerm)
+    filteredSpaceMembers() {
+      return this.filter(this.spaceMembers, this.filterTerm)
     },
     helpersEnabled() {
       return this.configuration?.options?.contextHelpers
@@ -124,7 +127,20 @@ export default defineComponent({
   },
   watch: {
     isSearchOpen() {
-      this.collaboratorSearchTerm = ''
+      this.filterTerm = ''
+    },
+    filterTerm() {
+      this.$nextTick(() => {
+        if (this.$refs.collaboratorList) {
+          this.markInstance = new Mark(this.$refs.collaboratorList.$el)
+          this.markInstance.unmark()
+          console.log(this.markInstance)
+          this.markInstance.mark(this.filterTerm, {
+            element: 'span',
+            className: 'highlight-mark'
+          })
+        }
+      })
     }
   },
   methods: {
