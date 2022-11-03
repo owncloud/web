@@ -1,17 +1,12 @@
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref } from '@vue/composition-api'
 import { dirname } from 'path'
-
-import { ClientService } from '../../services'
-import { MaybeRef } from '../../utils'
-
+import { ClientService, MaybeRef, useAppFileHandling } from 'web-pkg'
 import { Resource } from 'web-client'
-
 import { FileContext } from './types'
 import { Route } from 'vue-router'
-import { useAppFileHandling } from './useAppFileHandling'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
-import { DavProperty } from '../../../../web-client/src/webdav/constants'
+import { DavProperty } from 'web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
 
 interface AppFolderHandlingOptions {
@@ -63,20 +58,19 @@ export function useAppFolderHandling({
       })
 
       const path = dirname(pathResource.path)
-      const listFilesResult = await webdav.listFiles(space, {
+      const { resource, children } = await webdav.listFiles(space, {
         path
       })
-      const resources = [listFilesResult.resource, ...listFilesResult.children]
 
-      if (resources[0].type === 'file') {
+      if (resource.type === 'file') {
         store.commit('Files/LOAD_FILES', {
-          currentFolder: resources[0],
-          files: [resources[0]]
+          currentFolder: resource,
+          files: [resource]
         })
       } else {
         store.commit('Files/LOAD_FILES', {
-          currentFolder: resources[0],
-          files: resources.slice(1)
+          currentFolder: resource,
+          files: children
         })
       }
     } catch (error) {
