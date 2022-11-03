@@ -66,6 +66,7 @@ Summary
 * Enhancement - Update ODS to v14.0.0-alpha.24: [#7862](https://github.com/owncloud/web/pull/7862)
 * Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
+* Enhancement - XHR upload timeout: [#7900](https://github.com/owncloud/web/issues/7900)
 
 Details
 -------
@@ -632,6 +633,14 @@ Details
    public link and user-specific webdav requests internally.
 
    https://github.com/owncloud/web/pull/7430
+
+* Enhancement - XHR upload timeout: [#7900](https://github.com/owncloud/web/issues/7900)
+
+   The default timeout for XHR uploads has been increased from 30 to 60 seconds. Also, it can now be
+   configured via the `config.json` file (in ms).
+
+   https://github.com/owncloud/web/issues/7900
+   https://github.com/owncloud/web/pull/7912
 
 Changelog for ownCloud Web [5.7.0] (2022-09-09)
 =======================================
