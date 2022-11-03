@@ -86,9 +86,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
 -   [webUILogin/openidLogin.feature:60](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L60)
 
-### [Copy & Move is not supported for shares in 2.0.0-beta1](https://github.com/owncloud/ocis/issues/3721)
--   [webUIMoveFilesFolders/moveFiles.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L106)
-
 ### [Comments in sidebar](https://github.com/owncloud/web/issues/1158)
 -   [webUIFilesDetails/fileDetails.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L90)
 -   [webUIFilesDetails/fileDetails.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L106)
