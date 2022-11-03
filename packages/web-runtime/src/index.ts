@@ -67,21 +67,25 @@ export const renderSuccess = (): void => {
     router,
     render: (h) => h(pages.success)
   })
-
-  instance.$once('mounted', () => {
+  instance.$once('mounted', async () => {
     applications.forEach((application) => application.mounted(instance))
     if ('serviceWorker' in navigator) {
-      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js', {type: 'module'})
+      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js', /*{type: 'module'} */)
       var wb = (window as any).wb
       wb.register()
       .then((registration) => {
-        console.log('workbox sw register successful');
-        console.log("sending message")
-        wb.messageSW({ type: 'GET_VERSION' }).then((ver) => console.log(`[workbox sw] version reported as ${ver}`))
+        var healthCheck = setInterval(() => {
+          wb.messageSW({ type: 'health' }).then((health) => {
+            if(!health){
+              return;
+            }
+            clearInterval(healthCheck)
+          })
+        }, 250);
       })
       .catch((err) => {
-        console.error('[workbox sw] could not activate sw', err);
-      });
+        console.error('ServiceWorker could not be registered', err)
+      })
     }
   })
   

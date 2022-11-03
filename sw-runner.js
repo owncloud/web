@@ -1,13 +1,9 @@
-import {precacheAndRoute} from 'workbox-precaching';
-import OwnCloud from 'owncloud-sdk';
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
-console.log("SWag machine initialized 😎");
-const sdk = new OwnCloud();
-console.log(sdk);
-const SW_VERSION = '1.1.2';
+console.log('%c🔨 ServiceWorker initialized ', 'background: #273d3d; color: white');
 
 // auto generate from webpack manifest
-precacheAndRoute(self.__WB_MANIFEST, {
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
   // Ignore all URL parameters.
   ignoreURLParametersMatching: [/.*/] // main.js is loaded with a version hash
 });
@@ -15,20 +11,44 @@ precacheAndRoute(self.__WB_MANIFEST, {
 self.addEventListener('install', e => {
   self.skipWaiting();
 });
-addEventListener('message', (event) => {
-  if (event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage(SW_VERSION);
-    console.log("message recieved");
+class WebDav {
+  constructor() {
+    this.webDavPath = "https://host.docker.internal:9200/remote.php/dav";
   }
-  if (event.data.type === 'move') {
-    console.log("move files");
-    event.data.sdk.files.copy(
-      event.data.source,
-      event.data.target,
-      event.data.options
-    )
+  async moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token){
+    return fetch(`${this.webDavPath}/spaces/${sourceSpaceId}/${sourcePath}`, {
+      method: 'COPY',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        authorization: token,
+        overwrite: 'F',
+        destination: `${this.webDavPath}/spaces/${targetSpaceId}/${targetPath}`,
+        'OCS-APIREQUEST': 'true'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer'
+    });
+  }
+}
+
+const client = WebDav()
+addEventListener('message', async (event) => {
+  if (event.data.type === 'health') {
+    event.ports[0].postMessage(true);
+    console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
+  }
+  if (event.data.type === 'copy') {
+    const data = event.data
+    const sourceSpaceId = data.sourceSpaceId
+    const sourcePath = data.sourcePath
+    const targetSpaceId = data.targetSpaceId
+    const targetPath = data.targetPath
+    const token = data.token
+
+    console.log(`%c🔨 ServiceWorker copy file from ${sourcePath} to ${targetPath}`, 'background: blue; color: white');
+    await client.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token)
   }
 });
-
-workbox.skipWaiting()
 
