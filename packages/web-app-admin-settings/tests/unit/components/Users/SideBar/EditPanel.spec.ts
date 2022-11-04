@@ -1,7 +1,16 @@
 import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mockAxiosReject,
+  shallowMount
+} from 'web-test-helpers'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Group } from 'web-client/src/generated'
+import { Graph } from 'web-client'
+import { AxiosResponse } from 'axios'
 
 const availableGroupOptions = [
   mock<Group>({ id: '1', displayName: 'group1' }),
@@ -43,6 +52,44 @@ describe('EditPanel', () => {
       wrapper.vm.revertChanges()
       expect(wrapper.vm.formData.displayName.valid).toBeTruthy()
       expect(wrapper.vm.formData.displayName.errorMessage).toEqual('')
+    })
+  })
+
+  describe('method "validateUserName"', () => {
+    it('should be false when userName is empty', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editUser.onPremisesSamAccountName = ''
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+    })
+    it('should be false when userName contains white spaces', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editUser.onPremisesSamAccountName = 'jan owncCloud'
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+    })
+    it('should be false when userName starts with a numeric value', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.editUser.onPremisesSamAccountName = '1moretry'
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+    })
+    it('should be false when userName is already existing', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mockDeep<Graph>()
+      const getUserStub = graphMock.users.getUser.mockResolvedValue(
+        mock<AxiosResponse>({ data: { onPremisesSamAccountName: 'jan' } })
+      )
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
+      wrapper.vm.editUser.onPremisesSamAccountName = 'jan'
+      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      expect(getUserStub).toHaveBeenCalled()
+    })
+    it('should be true when userName is valid', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mockDeep<Graph>()
+      const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
+      wrapper.vm.editUser.onPremisesSamAccountName = 'jana'
+      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      expect(getUserStub).toHaveBeenCalled()
     })
   })
 
@@ -91,7 +138,11 @@ describe('EditPanel', () => {
 })
 
 function getWrapper({ selectedGroups = [] } = {}) {
+  const mocks = defaultComponentMocks()
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
+    mocks,
     wrapper: shallowMount(EditPanel, {
       props: {
         user: {
@@ -106,7 +157,8 @@ function getWrapper({ selectedGroups = [] } = {}) {
         groups: availableGroupOptions
       },
       global: {
-        plugins: [...defaultPlugins()]
+        mocks,
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

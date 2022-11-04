@@ -55,19 +55,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import * as EmailValidator from 'email-validator'
+import { useGraphClient } from 'web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',
-  props: {
-    existingUsers: {
-      type: Array,
-      required: false,
-      default: () => {
-        return []
-      }
+  emits: ['cancel', 'confirm'],
+  setup() {
+    return {
+      ...useGraphClient()
     }
   },
-  emits: ['cancel', 'confirm'],
   data: function () {
     return {
       formData: {
@@ -114,7 +111,7 @@ export default defineComponent({
       this.formData.email.errorMessage = ''
       this.formData.email.valid = true
     },
-    validateUserName() {
+    async validateUserName() {
       this.formData.userName.valid = false
 
       if (this.user.onPremisesSamAccountName.trim() === '') {
@@ -135,17 +132,17 @@ export default defineComponent({
         return false
       }
 
-      if (
-        this.existingUsers.find(
-          (existingUser) =>
-            existingUser.onPremisesSamAccountName === this.user.onPremisesSamAccountName
-        )
-      ) {
+      try {
+        await this.graphClient.users.getUser(this.user.onPremisesSamAccountName)
         this.formData.userName.errorMessage = this.$gettextInterpolate(
           this.$gettext('User "%{userName}" already exists'),
           { userName: this.user.onPremisesSamAccountName }
         )
         return false
+      } catch (e) {
+        /**
+         * If the backend throws an error, the user doesn't exist and everything is alright
+         */
       }
 
       this.formData.userName.errorMessage = ''
