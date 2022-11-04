@@ -8,6 +8,7 @@
 import { defineComponent, onBeforeUnmount, watch, ref } from 'vue'
 import { useRoute, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
+import { mapActions } from 'vuex'
 
 export default defineComponent({
   setup() {
@@ -34,6 +35,47 @@ export default defineComponent({
       eventBus.unsubscribe('drop', drop)
     })
     return { dragareaEnabled }
+  },
+
+  computed: {
+    otgStyle() {
+      return {
+        'background-color': 'var(--oc-color-swatch-warning-default) !important'
+      }
+    }
+  },
+
+  async mounted() {
+    const accessToken = this.$store.getters['runtime/auth/accessToken']
+
+    const headers = new Headers()
+    headers.append('Authorization', 'Bearer ' + accessToken)
+    headers.append('X-Requested-With', 'XMLHttpRequest')
+    const response = await fetch('otg', {
+      method: 'GET',
+      headers
+    })
+    if (response.status === 200) {
+      const data = await response.json()
+      if (data.message)
+        this.showMessage({
+          title: 'OTG',
+          desc: data.message,
+          timeout: 10,
+          status: 'warning',
+          style: this.otgStyle
+        })
+    }
+  },
+
+  methods: {
+    ...mapActions(['showMessage']),
+    hideDropzone() {
+      this.dragareaEnabled = false
+    },
+    onDragOver(event) {
+      this.dragareaEnabled = (event.dataTransfer.types || []).some((e) => e === 'Files')
+    }
   }
 })
 </script>
