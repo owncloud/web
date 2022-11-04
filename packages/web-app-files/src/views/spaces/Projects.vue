@@ -35,6 +35,7 @@
                 class="spaces-list-card oc-card oc-card-default oc-rounded"
                 :data-space-id="space.id"
                 :class="getSpaceCardAdditionalClass(space)"
+                @contextmenu="(event) => contextMenuClicked(event, space)"
               >
                 <div class="oc-card-media-top oc-border-b">
                   <component
@@ -97,6 +98,7 @@
                           <oc-icon name="more-2" />
                         </oc-button>
                         <oc-drop
+                          :ref="`spaceContextDrop-${space.getDomSelector()}`"
                           :drop-id="`space-context-drop-${space.getDomSelector()}`"
                           :toggle="`#space-context-btn-${space.getDomSelector()}`"
                           mode="click"
@@ -265,6 +267,12 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'SET_FILE_SELECTION']),
 
+    contextMenuClicked(event, space) {
+      event.preventDefault()
+      if (this.$refs[`spaceContextDrop-${space.getDomSelector()}`]?.[0]) {
+        this.$refs[`spaceContextDrop-${space.getDomSelector()}`][0].show()
+      }
+    },
     getSpaceProjectRoute(space: SpaceResource) {
       return space.disabled
         ? '#'
