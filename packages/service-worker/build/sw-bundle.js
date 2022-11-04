@@ -1,13 +1,6 @@
 'use strict';
 
-class Client {
-    test() {
-        console.log("LOL IM A MODULE");
-    }
-}
-
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
-
 console.log('%c🔨 ServiceWorker initialized ', 'background: #273d3d; color: white');
 
 // auto generate from webpack manifest
@@ -23,7 +16,7 @@ class WebDav {
   constructor() {
     this.webDavPath = "https://host.docker.internal:9200/remote.php/dav";
   }
-  async moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token){
+  async moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token) {
     return fetch(`${this.webDavPath}/spaces/${sourceSpaceId}/${sourcePath}`, {
       method: 'COPY',
       mode: 'cors',
@@ -40,15 +33,15 @@ class WebDav {
     });
   }
 }
-
 const client = new WebDav();
-addEventListener('message', async (event) => {
+addEventListener('message', async event => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true);
     console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
-    var t = new Client();
-    t.test();
+    /*var t = new Client();
+    t.test();*/
   }
+
   if (event.data.type === 'copy') {
     const data = event.data;
     const sourceSpaceId = data.sourceSpaceId;
@@ -56,7 +49,6 @@ addEventListener('message', async (event) => {
     const targetSpaceId = data.targetSpaceId;
     const targetPath = data.targetPath;
     const token = data.token;
-
     console.log(`%c🔨 ServiceWorker copy file from ${sourcePath} to ${targetPath}`, 'background: blue; color: white');
     await client.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token);
   }

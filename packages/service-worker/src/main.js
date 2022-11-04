@@ -33,14 +33,13 @@ class WebDav {
     });
   }
 }
-
 const client = new WebDav()
 addEventListener('message', async (event) => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true);
     console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
-    var t = new Client();
-    t.test();
+    /*var t = new Client();
+    t.test();*/
   }
   if (event.data.type === 'copy') {
     const data = event.data

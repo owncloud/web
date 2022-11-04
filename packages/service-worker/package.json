@@ -10,9 +10,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "rollup": "2.52.7",
+    "@rollup/plugin-commonjs": "17.1.0",
+    "rollup": "2.78.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-modify": "^3.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-polyfill-node": "^0.11.0",
     "workbox-cli": "^6.5.4",
     "workbox-window": "^6.5.4"
+  },
+  "dependencies": {
+    "owncloud-sdk": "~3.0.0-alpha.17"
   },
   "keywords": [],
   "author": "",
