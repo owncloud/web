@@ -158,7 +158,7 @@ export class ResourceTransfer extends ConflictDialog {
         }
         if (transferType === TransferType.COPY) {
           if(this.accessToken) {
-            await (window as any).wb.messageSW({
+            (window as any).wb.messageSW({
               type: 'copy',
               sourceSpaceId: this.sourceSpace.id,
               sourcePath: resource.path,

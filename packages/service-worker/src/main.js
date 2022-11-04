@@ -1,3 +1,4 @@
+import {Client} from './some.js'
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 console.log('%c🔨 ServiceWorker initialized ', 'background: #273d3d; color: white');
@@ -38,6 +39,8 @@ addEventListener('message', async (event) => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true);
     console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
+    var t = new Client();
+    t.test();
   }
   if (event.data.type === 'copy') {
     const data = event.data
