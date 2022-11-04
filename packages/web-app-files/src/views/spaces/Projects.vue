@@ -35,7 +35,7 @@
                 class="spaces-list-card oc-card oc-card-default oc-rounded"
                 :data-space-id="space.id"
                 :class="getSpaceCardAdditionalClass(space)"
-                @contextmenu="(event) => contextMenuClicked(event, space)"
+                @contextmenu="(event) => showSpaceContextDrop(event, space)"
               >
                 <div class="oc-card-media-top oc-border-b">
                   <component
@@ -94,14 +94,14 @@
                           v-oc-tooltip="$gettext('Show context menu')"
                           :aria-label="$gettext('Show context menu')"
                           appearance="raw"
+                          @click="(event) => showSpaceContextDrop(event, space)"
                         >
                           <oc-icon name="more-2" />
                         </oc-button>
                         <oc-drop
                           :ref="`spaceContextDrop-${space.getDomSelector()}`"
                           :drop-id="`space-context-drop-${space.getDomSelector()}`"
-                          :toggle="`#space-context-btn-${space.getDomSelector()}`"
-                          mode="click"
+                          mode="manual"
                           close-on-click
                           :options="{ delayHide: 0 }"
                           padding-size="small"
@@ -267,11 +267,25 @@ export default defineComponent({
     ...mapActions(['showMessage']),
     ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'SET_FILE_SELECTION']),
 
-    contextMenuClicked(event, space) {
+    showSpaceContextDrop(event, space) {
       event.preventDefault()
-      if (this.$refs[`spaceContextDrop-${space.getDomSelector()}`]?.[0]) {
-        this.$refs[`spaceContextDrop-${space.getDomSelector()}`][0].show()
+      const drop = this.$refs[`spaceContextDrop-${space.getDomSelector()}`]?.[0]
+
+      if (!drop) {
+        return
       }
+
+      drop.tippy.setProps({
+        getReferenceClientRect: () => ({
+          width: 0,
+          height: 0,
+          top: event.clientY,
+          bottom: event.clientY,
+          left: event.clientX,
+          right: event.clientX
+        })
+      })
+      drop.show()
     },
     getSpaceProjectRoute(space: SpaceResource) {
       return space.disabled
