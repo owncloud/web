@@ -113,12 +113,27 @@
         </li>
       </oc-list>
     </oc-drop>
-    <div id="clipboard-btns" class="oc-button-group">
-      <oc-button v-if="showPasteHereButton" @click="pasteFilesHere">
+    <div
+      id="clipboard-btns"
+      v-oc-tooltip="
+        uploadOrFileCreationBlocked ? $gettext('You have no permissions to paste files here!') : ''
+      "
+      class="oc-button-group"
+      :class="{ disabled: uploadOrFileCreationBlocked }"
+    >
+      <oc-button
+        v-if="showPasteHereButton"
+        :disabled="uploadOrFileCreationBlocked"
+        @click="pasteFilesHere"
+      >
         <oc-icon fill-type="line" name="clipboard" />
         <span v-translate>Paste here</span>
       </oc-button>
-      <oc-button v-if="showPasteHereButton" @click="clearClipboardFiles">
+      <oc-button
+        v-if="showPasteHereButton"
+        :disabled="uploadOrFileCreationBlocked"
+        @click="clearClipboardFiles"
+      >
         <oc-icon fill-type="line" name="close" />
       </oc-button>
     </div>
@@ -682,6 +697,14 @@ export default defineComponent({
 
   :nth-child(2) {
     border-left: 0px !important;
+  }
+}
+
+#clipboard-btns.disabled {
+  opacity: 0.6;
+
+  button {
+    opacity: 1;
   }
 }
 

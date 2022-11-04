@@ -1,0 +1,6 @@
+Bugfix: "Paste"-action without write permissions
+
+The "Paste"-action is now disabled in read-only folders/shares.
+
+https://github.com/owncloud/web/pull/7925
+https://github.com/owncloud/web/issues/7922
