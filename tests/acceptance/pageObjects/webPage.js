@@ -14,7 +14,7 @@ module.exports = {
      */
     search: async function (searchTerm) {
       // wait for search indexing to be finished
-      await this.pause(1000)
+      await this.pause(2000)
       return this.initAjaxCounters()
         .isVisible(
           {
