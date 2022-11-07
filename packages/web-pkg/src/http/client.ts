@@ -30,15 +30,15 @@ export class HttpClient {
     return this.instance.options(url, this.obtainConfig(config))
   }
 
-  public patch(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+  public patch(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
     return this.instance.patch(url, data, this.obtainConfig(config))
   }
 
-  public post(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+  public post(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
     return this.instance.post(url, data, this.obtainConfig(config))
   }
 
-  public put(url: string, data?: never, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+  public put(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse> {
     return this.instance.put(url, data, this.obtainConfig(config))
   }
 
