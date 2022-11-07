@@ -1,23 +1,19 @@
-import { WebDav } from './webDav.js'
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+import { WebDavClient } from './webDav.js'
+import { Logger } from './logger.js'
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js")
 
-console.log('%c🔨 ServiceWorker initialized ', 'background: #273d3d; color: white');
-
-// auto generate from webpack manifest
+Logger.info('initialized')
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
-  // Ignore all URL parameters.
-  ignoreURLParametersMatching: [/.*/] // main.js is loaded with a version hash
-});
+  ignoreURLParametersMatching: [/.*/]
+})
 
 self.addEventListener('install', e => {
-  self.skipWaiting();
-});
-
-const client = new WebDav()
+  self.skipWaiting()
+})
 addEventListener('message', async (event) => {
   if (event.data.type === 'health') {
-    event.ports[0].postMessage(true);
-    console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
+    event.ports[0].postMessage(true)
+    Logger.success('up and running')
   }
   if (event.data.type === 'copy') {
     const data = event.data
@@ -27,8 +23,8 @@ addEventListener('message', async (event) => {
     const targetPath = data.targetPath
     const token = data.token
 
-    console.log(`%c🔨 ServiceWorker copy file from ${sourcePath} to ${targetPath}`, 'background: blue; color: white');
-    await client.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token)
+    Logger.info(`copy file from ${sourcePath} to ${targetPath}`)
+    await WebDavClient.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token)
   }
-});
+})
 

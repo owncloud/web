@@ -1,6 +1,6 @@
 'use strict';
 
-class WebDav {
+class WebDavHelper {
   constructor() {
     this.webDavPath = "https://host.docker.internal:9200/remote.php/dav";
   }
@@ -21,24 +21,33 @@ class WebDav {
     });
   }
 }
+const WebDavClient = new WebDavHelper();
+
+class LoggerHelper {
+  info(message) {
+    console.log(`%c[🔨 ServiceWorker] ${message}`, 'background: #273d3d; color: white');
+  }
+  success(message) {
+    console.log(`%c[🔨 ServiceWorker] ${message}`, 'background: green; color: white');
+  }
+  error(message) {
+    console.log(`%c[🔨 ServiceWorker] ${message}`, 'background: #b52d34; color: white');
+  }
+}
+const Logger = new LoggerHelper();
 
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
-console.log('%c🔨 ServiceWorker initialized ', 'background: #273d3d; color: white');
-
-// auto generate from webpack manifest
+Logger.info('initialized');
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
-  // Ignore all URL parameters.
-  ignoreURLParametersMatching: [/.*/] // main.js is loaded with a version hash
+  ignoreURLParametersMatching: [/.*/]
 });
-
 self.addEventListener('install', e => {
   self.skipWaiting();
 });
-const client = new WebDav();
 addEventListener('message', async event => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true);
-    console.log('%c🔨 ServiceWorker up and running ', 'background: green; color: white');
+    Logger.success('up and running');
   }
   if (event.data.type === 'copy') {
     const data = event.data;
@@ -47,7 +56,7 @@ addEventListener('message', async event => {
     const targetSpaceId = data.targetSpaceId;
     const targetPath = data.targetPath;
     const token = data.token;
-    console.log(`%c🔨 ServiceWorker copy file from ${sourcePath} to ${targetPath}`, 'background: blue; color: white');
-    await client.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token);
+    Logger.info(`copy file from ${sourcePath} to ${targetPath}`);
+    await WebDavClient.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token);
   }
 });

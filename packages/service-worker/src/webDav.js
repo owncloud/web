@@ -1,4 +1,4 @@
-export class WebDav {
+class WebDavHelper {
 	constructor() {
 		this.webDavPath = "https://host.docker.internal:9200/remote.php/dav";
 	}
@@ -19,3 +19,5 @@ export class WebDav {
 		});
 	}
 }
+
+export const WebDavClient = new WebDavHelper()
