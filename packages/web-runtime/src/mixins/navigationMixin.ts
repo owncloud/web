@@ -1,3 +1,4 @@
+import { some } from 'lodash-es'
 import { mapGetters } from 'vuex'
 import { LinkConfig, Link } from '../store/config'
 
@@ -11,7 +12,7 @@ const checkLink = (link: LinkConfig) => {
   // if (link.target === applicationContainerTarget) {
   //   if (!link.name) {
   //     console.warn(
-  //       `Error: Menu Item with target "application-container" needs "name" specified and will not show up until it's added.`,
+  //       `Error: Menu Item with target "${applicationContainerTarget}" needs "name" specified and will not show up until it's added.`,
   //       link
   //     )
   //     return false
@@ -28,7 +29,7 @@ export const getTranslatedTitle = (link: LinkConfig, lang: string): string => {
 
 export default {
   computed: {
-    ...mapGetters(['getNavItemsByExtension'])
+    ...mapGetters(['getNavItemsByExtension', 'user'])
   },
   methods: {
     /**
@@ -55,10 +56,20 @@ export default {
           return isNavItemPermitted(permittedMenus, app)
         })
         .filter(checkLink)
+        .filter((link: LinkConfig) => {
+          if (link.groupsEnabled) {
+            return some(this.user.groups, (g) => link.groupsEnabled.includes(g.displayName))
+          }
+
+          if (link.rolesEnabled) {
+            return link.rolesEnabled.includes(this.user.role?.name)
+          }
+
+          return true
+        })
         .map((item): Link => {
           let icon
           let iconUrl
-
 
           if (!item.icon) {
             icon = 'deprecated' // "broken" icon
@@ -72,7 +83,9 @@ export default {
           const app: Link = {
             icon: icon,
             iconUrl: iconUrl,
-            title: getTranslatedTitle(item, this.$language.current)
+            title: getTranslatedTitle(item, this.$language.current),
+            groupsEnabled: item.groupsEnabled,
+            rolesEnabled: item.rolesEnabled
           }
 
           if (item.url) {

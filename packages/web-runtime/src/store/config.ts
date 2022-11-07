@@ -7,6 +7,9 @@ export interface LinkConfig {
   url?: string
   target?: string
   path?: string
+
+  groupsEnabled?: string[]
+  rolesEnabled?: string[]
 }
 
 export interface Link extends Omit<LinkConfig, 'title'> {
