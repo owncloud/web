@@ -62,4 +62,4 @@ tests/acceptance/report/cucumber_report.html
 /third-party-licenses
 
 # service worker
-packages/service-worker/build/*
+packages/service-worker/build
