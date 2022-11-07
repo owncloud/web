@@ -7,12 +7,12 @@
       <div class="oc-card oc-text-center oc-width-large">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="embedded-link-error">
-            <translate>External link error</translate>
+            <translate>Embedded link error</translate>
           </h2>
         </div>
         <div class="oc-card-body oc-link-embedded-error-message">
           <p class="oc-text-xlarge">
-            <translate>This external link does not exist.</translate>
+            <translate>This embedded link does not exist.</translate>
           </p>
         </div>
         <div class="oc-card-footer oc-pt-rm">
@@ -32,7 +32,7 @@ import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumen
 import { useCurrentLanguage } from 'web-pkg/src/composables/translations'
 
 export default defineComponent({
-  name: 'ExternalLink',
+  name: 'EmbeddedLink',
   setup() {
     const store = useStore()
     const linkId = useRouteParam('linkId')

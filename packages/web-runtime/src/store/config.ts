@@ -96,7 +96,7 @@ const actions = {
   }
 }
 
-// parameter state shadows the module scope state
+// parameter `state` shadows the module scope `state` variable
 type StateType = typeof state
 
 const mutations = {
