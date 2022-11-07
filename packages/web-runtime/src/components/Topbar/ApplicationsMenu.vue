@@ -36,7 +36,8 @@
             :variation="n.active ? 'inverse' : 'passive'"
           >
             <span class="icon-box">
-              <oc-icon :name="n.icon" />
+              <img v-if="n.iconUrl" :src="n.iconUrl" />
+              <oc-icon v-else :name="n.icon" />
             </span>
             <span v-text="$gettext(n.title)" />
             <oc-icon v-if="n.active" name="check" class="active-check" />
