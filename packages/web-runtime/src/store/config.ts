@@ -7,10 +7,12 @@ export interface LinkConfig {
   url?: string
   target?: string
   path?: string
+}
 
-  // internal
+export interface Link extends Omit<LinkConfig, 'title'> {
   iconUrl?: string
   active?: boolean
+  title?: string
 }
 
 const state = {

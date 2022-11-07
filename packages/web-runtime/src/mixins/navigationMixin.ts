@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import { LinkConfig } from '../store/config'
+import { LinkConfig, Link } from '../store/config'
 
 const applicationContainerTarget = 'application-container'
 
@@ -18,6 +18,12 @@ const checkLink = (link: LinkConfig) => {
   //   }
   // }
   return true
+}
+
+export const getTranslatedTitle = (link: LinkConfig, lang: string): string => {
+  // TODO: move language resolution to a common function
+  // FIXME: need to handle logic for variants like en_US vs en_GB
+  return link?.title?.[lang] || link?.title?.['en'] || link.name
 }
 
 export default {
@@ -49,16 +55,10 @@ export default {
           return isNavItemPermitted(permittedMenus, app)
         })
         .filter(checkLink)
-        .map((item): LinkConfig => {
-          const lang = this.$language.current
-          // TODO: move language resolution to a common function
-          // FIXME: need to handle logic for variants like en_US vs en_GB
-          let title = item.title ? item.title.en : item.name
+        .map((item): Link => {
           let icon
           let iconUrl
-          if (item.title && item.title[lang]) {
-            title = item.title[lang]
-          }
+
 
           if (!item.icon) {
             icon = 'deprecated' // "broken" icon
@@ -69,10 +69,10 @@ export default {
             iconUrl = item.icon
           }
 
-          const app: LinkConfig = {
+          const app: Link = {
             icon: icon,
             iconUrl: iconUrl,
-            title: title
+            title: getTranslatedTitle(item, this.$language.current)
           }
 
           if (item.url) {

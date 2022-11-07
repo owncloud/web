@@ -27,28 +27,35 @@
 import { computed, defineComponent, unref } from '@vue/composition-api'
 import { useRouteParam, useStore } from 'web-pkg/src'
 import { LinkConfig } from '../store/config'
-import { getLinkIdentifier } from '../mixins/navigationMixin'
+import { getLinkIdentifier, getTranslatedTitle } from '../mixins/navigationMixin'
+import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
+import { useCurrentLanguage } from 'web-pkg/src/composables/translations'
 
 export default defineComponent({
   name: 'ExternalLink',
   setup() {
     const store = useStore()
     const linkId = useRouteParam('linkId')
+    const currentLanguage = useCurrentLanguage()
 
     const footerSlogan = computed(() => {
       return store.getters.configuration.currentTheme.general.slogan
     })
 
-    const iframeSrc = computed(() => {
-      const link = (store.getters.configuration.applications as LinkConfig[]).find((app) => {
+    const link = computed(() => {
+      return (store.getters.configuration.applications as LinkConfig[]).find((app) => {
         return getLinkIdentifier(app) === unref(linkId)
       })
-      if (!link) {
-        return
-      }
-
-      return link.url
     })
+
+    const iframeSrc = computed(() => {
+      return unref(link)?.url
+    })
+
+    const titleSegments = computed(() => {
+      return [getTranslatedTitle(unref(link), unref(currentLanguage))]
+    })
+    useDocumentTitle({ titleSegments })
 
     return {
       footerSlogan,
