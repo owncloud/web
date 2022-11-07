@@ -10,6 +10,8 @@ import {
 } from '../conflictHandling'
 import { TransferType } from '.'
 
+declare const window: any
+
 export class ResourceTransfer extends ConflictDialog {
   constructor(
     private sourceSpace: SpaceResource,
@@ -158,7 +160,7 @@ export class ResourceTransfer extends ConflictDialog {
         }
         if (transferType === TransferType.COPY) {
           if (this.accessToken) {
-            ;(window as any).wb.messageSW({
+            window.wb.messageSW({
               type: 'copy',
               sourceSpaceId: this.sourceSpace.id,
               sourcePath: resource.path,

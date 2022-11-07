@@ -99,6 +99,7 @@ export default {
     }
     context.commit('CLEAR_CLIPBOARD')
     const loadingResources = []
+    // Replace this with bus response
     for (const resource of movedResources) {
       loadingResources.push(
         (async () => {

@@ -38,6 +38,7 @@ import {
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 
+declare const window: any
 
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -62,19 +63,21 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
 
 const checkWorkboxHealth = (): void => {
   let healthCheck
-  const intervalFunction = (window as any).wb.messageSW({ type: 'health' }).then((health: boolean) => {
-    if (!health) {
-      return
-    }
-    clearInterval(healthCheck)
-  })
+  const intervalFunction = () => {
+    window.wb.messageSW({ type: 'health' }).then((health: boolean) => {
+      if (!health) {
+        return
+      }
+      clearInterval(healthCheck)
+    })
+  }
   healthCheck = setInterval(intervalFunction, 250)
 }
 
 const registerServiceWorker = (): void => {
   if (!('serviceWorker' in navigator)) return
-  (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js')
-  (window as any).wb
+  window.wb = new Workbox('https://host.docker.internal:9200/sw.js')
+  window.wb
     .register()
     .then((registration) => {
       checkWorkboxHealth()
