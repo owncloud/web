@@ -77,6 +77,14 @@ const checkWorkboxHealth = (): void => {
 const registerServiceWorker = (): void => {
   if (!('serviceWorker' in navigator)) return
   window.wb = new Workbox('https://host.docker.internal:9200/sw.js')
+  window.wb.addEventListener('message', event => {
+    console.log("MESSAGE RECIEVED", event)
+    if (event.data.type === 'CACHE_UPDATED') {
+      const {updatedURL} = event.data.payload;
+  
+      console.log(`A newer version of ${updatedURL} is available!`);
+    }
+  });
   window.wb
     .register()
     .then((registration) => {
