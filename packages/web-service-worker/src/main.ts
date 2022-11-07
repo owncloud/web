@@ -9,7 +9,7 @@ precacheAndRoute(self.__WB_MANIFEST, {
   ignoreURLParametersMatching: [/.*/]
 })
 
-self.addEventListener('install', e => {
+self.addEventListener('install', () => {
   self.skipWaiting()
 })
 addEventListener('message', async (event) => {
