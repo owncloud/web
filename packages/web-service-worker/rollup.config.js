@@ -21,9 +21,7 @@ export default {
       browser: true,
       preferBuiltins: false
     }),
-    commonjs({
-      include: 'node_modules/**'
-    }),
+    commonjs(),
     modify({
       'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
       'process.env.PACKAGE_VERSION': JSON.stringify(version),

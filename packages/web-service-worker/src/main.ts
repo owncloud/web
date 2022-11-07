@@ -1,18 +1,17 @@
-import { WebDavClient } from './webDav.js'
-import { Logger } from './logger.js'
-import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from "workbox-precaching";
+import { WebDavClient } from './webDav'
+import { Logger } from './logger'
+import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from "workbox-precaching"
 
-declare const self: any;
+declare const self: any
 
-Logger.info('initialized')
 precacheAndRoute(self.__WB_MANIFEST, {
   ignoreURLParametersMatching: [/.*/]
 })
 
-self.addEventListener('install', () => {
+self.addEventListener('install', (): void => {
   self.skipWaiting()
 })
-addEventListener('message', async (event) => {
+addEventListener('message', async (event): Promise<void> => {
   if (event.data.type === 'health') {
     event.ports[0].postMessage(true)
     Logger.success('up and running')
