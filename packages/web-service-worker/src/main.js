@@ -1,6 +1,6 @@
 import { WebDavClient } from './webDav.js'
 import { Logger } from './logger.js'
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js")
+import '../workbox/workbox-v6.5.4/workbox-sw.js'
 
 Logger.info('initialized')
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
