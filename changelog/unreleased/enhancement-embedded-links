@@ -1,0 +1,7 @@
+Enhancement: Add embedded links
+
+We've added the possibility to add links to the application menu that are rendered inside the Web application frame.
+Moreover, it's now possible to use urls for icons and to filter for whom the link should be visible by group or role.
+
+https://github.com/owncloud/web/issues/7260
+https://github.com/owncloud/web/pull/7934
