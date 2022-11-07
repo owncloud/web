@@ -1,9 +1,11 @@
 import { WebDavClient } from './webDav.js'
 import { Logger } from './logger.js'
-import '../workbox/workbox-v6.5.4/workbox-sw.js'
+import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from "workbox-precaching";
+
+declare const self: any;
 
 Logger.info('initialized')
-workbox.precaching.precacheAndRoute(self.__WB_MANIFEST, {
+precacheAndRoute(self.__WB_MANIFEST, {
   ignoreURLParametersMatching: [/.*/]
 })
 

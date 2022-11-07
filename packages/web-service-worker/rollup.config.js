@@ -3,17 +3,19 @@ import babel from 'rollup-plugin-babel'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import modify from 'rollup-plugin-modify'
 import commonjs from '@rollup/plugin-commonjs'
+import typescript from '@rollup/plugin-typescript';
 
 const production = false
 const { version } = "1.0.0"
 
 export default {
-  input: 'src/main.js',
+  input: 'src/main.ts',
   output: {
     file: 'build/sw-bundle.js',
     format: 'cjs'
   },
   plugins: [
+    typescript({ compilerOptions: {lib: ["es5", "es6", "dom"], target: "es5"}}),
     resolve({
       include: 'node_modules/**',
       browser: true,
