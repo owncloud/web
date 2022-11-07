@@ -7,7 +7,7 @@ import {
   Vue
 } from './defaults'
 
-import {Workbox} from 'workbox-window';
+import { Workbox } from 'workbox-window'
 import { router } from './router'
 import { configurationManager } from 'web-pkg/src/configuration'
 
@@ -38,6 +38,7 @@ import {
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 
+
 export const bootstrap = async (configurationPath: string): Promise<void> => {
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, Vue)
@@ -59,6 +60,30 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   announceDefaults({ store, router })
 }
 
+const checkWorkboxHealth = (): void => {
+  let healthCheck
+  const intervalFunction = (window as any).wb.messageSW({ type: 'health' }).then((health: boolean) => {
+    if (!health) {
+      return
+    }
+    clearInterval(healthCheck)
+  })
+  healthCheck = setInterval(intervalFunction, 250)
+}
+
+const registerServiceWorker = (): void => {
+  if (!('serviceWorker' in navigator)) return
+  (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js')
+  (window as any).wb
+    .register()
+    .then((registration) => {
+      checkWorkboxHealth()
+    })
+    .catch((err) => {
+      console.error('ServiceWorker could not be registered', err)
+    })
+}
+
 export const renderSuccess = (): void => {
   const applications = Array.from(applicationStore.values())
   const instance = new Vue({
@@ -69,26 +94,9 @@ export const renderSuccess = (): void => {
   })
   instance.$once('mounted', async () => {
     applications.forEach((application) => application.mounted(instance))
-    if ('serviceWorker' in navigator) {
-      (window as any).wb = new Workbox('https://host.docker.internal:9200/sw.js', /*{type: 'module'} */)
-      var wb = (window as any).wb
-      wb.register()
-      .then((registration) => {
-        var healthCheck = setInterval(() => {
-          wb.messageSW({ type: 'health' }).then((health) => {
-            if(!health){
-              return;
-            }
-            clearInterval(healthCheck)
-          })
-        }, 250);
-      })
-      .catch((err) => {
-        console.error('ServiceWorker could not be registered', err)
-      })
-    }
+    registerServiceWorker()
   })
-  
+
   store.watch(
     (state, getters) =>
       getters['runtime/auth/isUserContextReady'] ||

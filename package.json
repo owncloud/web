@@ -28,7 +28,8 @@
   ],
   "dependencies": {
     "keycode": "^2.2.1",
-    "vue": "2.6.14"
+    "vue": "2.6.14",
+    "workbox-window": "^6.5.4"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",

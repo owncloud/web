@@ -118,7 +118,7 @@ export class ResourceTransfer extends ConflictDialog {
       this.targetFolder,
       targetFolderResources
     )
-    const movedResources: Resource[] = [];
+    const movedResources: Resource[] = []
 
     for (let resource of this.resourcesToMove) {
       // shallow copy of resources to prevent modifying existing rows
@@ -157,8 +157,8 @@ export class ResourceTransfer extends ConflictDialog {
           continue
         }
         if (transferType === TransferType.COPY) {
-          if(this.accessToken) {
-            (window as any).wb.messageSW({
+          if (this.accessToken) {
+            ;(window as any).wb.messageSW({
               type: 'copy',
               sourceSpaceId: this.sourceSpace.id,
               sourcePath: resource.path,
@@ -166,7 +166,7 @@ export class ResourceTransfer extends ConflictDialog {
               targetPath: join(this.targetFolder.path, targetName),
               token: this.accessToken
             })
-          }else {
+          } else {
             await this.clientService.webdav.copyFiles(
               this.sourceSpace,
               resource,

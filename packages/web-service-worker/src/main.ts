@@ -1,6 +1,6 @@
 import { WebDavClient } from './webDav'
 import { Logger } from './logger'
-import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from "workbox-precaching"
+import { precacheAndRoute } from 'workbox-precaching'
 
 declare const self: any
 
@@ -28,4 +28,3 @@ addEventListener('message', async (event): Promise<void> => {
     await WebDavClient.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token)
   }
 })
-

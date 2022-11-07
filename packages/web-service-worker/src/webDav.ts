@@ -1,12 +1,18 @@
 class WebDavHelper {
-	webDavPath: string
+  webDavPath: string
 
-	constructor() {
-		this.webDavPath = "https://host.docker.internal:9200/remote.php/dav"
-	}
+  constructor() {
+    this.webDavPath = 'https://host.docker.internal:9200/remote.php/dav'
+  }
 
-	async moveFile(sourceSpaceId: string, sourcePath: string, targetSpaceId: string, targetPath: string, token: string){
-		return fetch(`${this.webDavPath}/spaces/${sourceSpaceId}/${sourcePath}`, {
+  async moveFile(
+    sourceSpaceId: string,
+    sourcePath: string,
+    targetSpaceId: string,
+    targetPath: string,
+    token: string
+  ) {
+    return fetch(`${this.webDavPath}/spaces/${sourceSpaceId}/${sourcePath}`, {
       method: 'COPY',
       mode: 'cors',
       cache: 'no-cache',
@@ -19,8 +25,8 @@ class WebDavHelper {
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer'
-		});
-	}
+    })
+  }
 }
 
 export const WebDavClient = new WebDavHelper()

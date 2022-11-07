@@ -3,10 +3,10 @@ import babel from 'rollup-plugin-babel'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import modify from 'rollup-plugin-modify'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from '@rollup/plugin-typescript';
+import typescript from '@rollup/plugin-typescript'
 
 const production = false
-const { version } = "1.0.0"
+const { version } = '1.0.0'
 
 export default {
   input: 'src/main.ts',
@@ -15,7 +15,7 @@ export default {
     format: 'cjs'
   },
   plugins: [
-    typescript({ compilerOptions: {lib: ["es5", "es6", "dom"], target: "es5"}}),
+    typescript({ compilerOptions: { lib: ['es5', 'es6', 'dom'], target: 'es5' } }),
     resolve({
       include: 'node_modules/**',
       browser: true,
@@ -34,6 +34,6 @@ export default {
     babel({
       // babelHelpers: 'bundled',
       exclude: 'node_modules/**'
-    }),
+    })
   ]
-};
+}
