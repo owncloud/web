@@ -22,7 +22,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 import NavigationMixin from '../../mixins/navigationMixin'
 
@@ -31,8 +31,9 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   components: {
     ApplicationsMenu,
     FeedbackLink,
@@ -104,7 +105,7 @@ export default {
       return this.user?.id
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

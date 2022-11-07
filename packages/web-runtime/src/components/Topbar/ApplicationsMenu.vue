@@ -48,16 +48,18 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { LinkConfig } from '../../store/config'
 
-export default {
+export default defineComponent({
   props: {
     applicationsList: {
-      type: Array,
+      type: Array as PropType<LinkConfig[]>,
       required: false,
       default: () => []
     }
@@ -88,7 +90,7 @@ export default {
       return httpClient.post(url, { isDefault: false })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

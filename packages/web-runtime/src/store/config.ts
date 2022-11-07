@@ -1,6 +1,20 @@
 import isEmpty from 'lodash-es/isEmpty'
 
+export interface LinkConfig {
+  id?: string
+  title: string
+  icon: string
+  url?: string
+  target?: string
+  path?: string
+
+  // internal
+  iconUrl?: string
+  active?: boolean
+}
+
 const state = {
+  applications: [] as LinkConfig[],
   state: null,
   server: '',
   // auth is the legacy configuration
@@ -80,8 +94,11 @@ const actions = {
   }
 }
 
+// parameter state shadows the module scope state
+type StateType = typeof state
+
 const mutations = {
-  LOAD_CONFIG(state, config) {
+  LOAD_CONFIG(state: StateType, config) {
     state.server = config.server.endsWith('/') ? config.server : config.server + '/'
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
@@ -91,14 +108,11 @@ const mutations = {
       // Merge default options and provided options. Config options take precedence over defaults.
       state.options = { ...state.options, ...config.options }
     }
-    if (config.corrupted) {
-      state.corrupted = config.corrupted
-    }
   },
-  LOAD_THEME(state, theme) {
+  LOAD_THEME(state: StateType, theme) {
     state.currentTheme = theme
   },
-  LOAD_THEMES(state, theme) {
+  LOAD_THEMES(state: StateType, theme) {
     state.themes = theme
   }
 }

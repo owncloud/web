@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import { LinkConfig } from '../store/config'
 
 export default {
   computed: {
@@ -28,7 +29,7 @@ export default {
           }
           return isNavItemPermitted(permittedMenus, app)
         })
-        .map((item) => {
+        .map((item): LinkConfig => {
           const lang = this.$language.current
           // TODO: move language resolution to a common function
           // FIXME: need to handle logic for variants like en_US vs en_GB
@@ -48,7 +49,7 @@ export default {
             iconUrl = item.icon
           }
 
-          const app = {
+          const app: LinkConfig = {
             icon: icon,
             iconUrl: iconUrl,
             title: title
