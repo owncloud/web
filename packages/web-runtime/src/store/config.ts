@@ -1,8 +1,8 @@
 import isEmpty from 'lodash-es/isEmpty'
 
 export interface LinkConfig {
-  id?: string
-  title: string
+  name?: string
+  title: Record<string, string>
   icon: string
   url?: string
   target?: string

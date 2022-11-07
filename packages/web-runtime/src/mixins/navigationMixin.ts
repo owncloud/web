@@ -1,6 +1,25 @@
 import { mapGetters } from 'vuex'
 import { LinkConfig } from '../store/config'
 
+const applicationContainerTarget = 'application-container'
+
+// FIXME: do not use english title but a name or an id
+// We cannot do that right now because oCIS does not pass through id or name
+export const getLinkIdentifier = (link: LinkConfig) => link.title.en
+// FIXME: see above
+const checkLink = (link: LinkConfig) => {
+  // if (link.target === applicationContainerTarget) {
+  //   if (!link.name) {
+  //     console.warn(
+  //       `Error: Menu Item with target "application-container" needs "name" specified and will not show up until it's added.`,
+  //       link
+  //     )
+  //     return false
+  //   }
+  // }
+  return true
+}
+
 export default {
   computed: {
     ...mapGetters(['getNavItemsByExtension'])
@@ -29,6 +48,7 @@ export default {
           }
           return isNavItemPermitted(permittedMenus, app)
         })
+        .filter(checkLink)
         .map((item): LinkConfig => {
           const lang = this.$language.current
           // TODO: move language resolution to a common function
@@ -56,10 +76,15 @@ export default {
           }
 
           if (item.url) {
-            app.url = item.url
-            app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
-              ? item.target
-              : '_blank'
+            if (item.target === applicationContainerTarget) {
+              app.target = '_self'
+              app.path = `/e/${getLinkIdentifier(item)}`
+            } else {
+              app.url = item.url
+              app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
+                ? item.target
+                : '_blank'
+            }
           } else if (item.path) {
             app.path = item.path
             app.active = activeRoutePath?.startsWith(app.path)
