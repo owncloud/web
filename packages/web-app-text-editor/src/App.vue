@@ -1,14 +1,9 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
-    <app-top-bar :resource="resource">
+    <app-top-bar :resource="resource" :message="autosaveMessage">
       <template #right>
-        <oc-button
-          v-if="!isLoading"
-          id="text-editor-controls-save"
-          :aria-label="$gettext('Save')"
-          :disabled="isReadOnly || !isDirty"
-          @click="save"
-        >
+        <oc-button v-if="!isLoading" id="text-editor-controls-save" :aria-label="$gettext('Save')"
+          :disabled="isReadOnly || !isDirty" @click="save">
           <oc-icon name="save" size="small" />
         </oc-button>
       </template>
@@ -23,16 +18,8 @@
     </div>
     <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
-        <oc-textarea
-          id="text-editor-input"
-          v-model="currentContent"
-          name="input"
-          full-width
-          label=""
-          class="oc-height-1-1"
-          :rows="20"
-          :disabled="isReadOnly"
-        />
+        <oc-textarea id="text-editor-input" v-model="currentContent" name="input" full-width label=""
+          class="oc-height-1-1" :rows="20" :disabled="isReadOnly" />
       </div>
       <div v-if="showPreview" class="oc-container oc-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
@@ -239,6 +226,23 @@ export default defineComponent({
       handleUnload
     }
   },
+
+  data: ()=> ({
+    autosaveMessage: null
+  }),
+
+  mounted() {
+    this.interval = setInterval(() => {
+      if (this.isDirty) {
+        this.save()
+        this.autosaveMessage = this.$gettext('Document autosaved')
+
+        setTimeout(()=>{
+          this.autosaveMessage = null
+        }, 3*1000)
+      }
+    }, 60*1000)
+  },
   methods: {
     ...mapActions(['createModal', 'hideModal', 'showMessage']),
 
@@ -257,10 +261,12 @@ export default defineComponent({
   max-height: 80vh;
   overflow-y: scroll;
 }
+
 #text-editor-input {
   resize: vertical;
   height: 100%;
 }
+
 .editor-wrapper-height {
   height: calc(100% - 52px);
 }

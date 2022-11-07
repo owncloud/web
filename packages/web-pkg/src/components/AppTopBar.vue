@@ -1,5 +1,7 @@
 <template>
   <div class="oc-flex oc-p-s app-top-bar">
+    <oc-resource v-if="resource" id="app-top-bar-resource" :is-thumbnail-displayed="false" :resource="resource" />
+    <div v-if="message" class="app-top-bar-message">{{message}}</div>
     <div>
       <slot name="right"></slot>
     </div>
@@ -15,6 +17,10 @@ export default defineComponent({
     resource: {
       type: Object,
       default: null
+    },
+    message: {
+      type: String,
+      default: null
     }
   }
 })
@@ -24,5 +30,9 @@ export default defineComponent({
 .app-top-bar {
   align-items: center;
   justify-content: space-between;
+}
+
+.app-top-bar-message {
+  color: var(--oc-color-swatch-success-default);
 }
 </style>
