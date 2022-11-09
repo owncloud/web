@@ -37,6 +37,7 @@ import {
 } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 
 declare const window: any
 
@@ -78,12 +79,7 @@ const registerServiceWorker = (): void => {
   if (!('serviceWorker' in navigator)) return
   window.wb = new Workbox('https://host.docker.internal:9200/sw.js')
   window.wb.addEventListener('message', event => {
-    console.log("MESSAGE RECIEVED", event)
-    if (event.data.type === 'CACHE_UPDATED') {
-      const {updatedURL} = event.data.payload;
-  
-      console.log(`A newer version of ${updatedURL} is available!`);
-    }
+    eventBus.publish(`sw.${event.data.type}`, event.data)
   });
   window.wb
     .register()

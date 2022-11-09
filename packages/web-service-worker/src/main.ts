@@ -21,7 +21,7 @@ class WebServiceWorker{
   }
   async onHealthEventRecieved(event) {
     event.ports[0].postMessage(true)
-    this.sendEventToAllClients("IM A MESSAGE")
+    this.sendEventToAllClients({type: 'notamessage', message: "IM A MESSAGE"})
     Logger.success('up and running')
   }
 
@@ -35,6 +35,9 @@ class WebServiceWorker{
 
     Logger.info(`copy file from ${sourcePath} to ${targetPath}`)
     await WebDavClient.moveFile(sourceSpaceId, sourcePath, targetSpaceId, targetPath, token)
+    const response = await WebDavClient.propfind(targetPath, targetSpaceId, token)
+    const content = await response.text()
+    this.sendEventToAllClients({ type: 'copy', response: content })
   }
 
   bindEventListener() {
