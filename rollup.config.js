@@ -21,17 +21,20 @@ import nodePolyfills from 'rollup-plugin-polyfill-node'
 import alias from '@rollup/plugin-alias'
 import inject from '@rollup/plugin-inject'
 import copy from '@rollup-extras/plugin-copy'
+import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
 
 const production = !process.env.ROLLUP_WATCH
 const sourcemap = process.env.SOURCE_MAP === 'true'
 const { version } = require('./package.json')
 const compilationTimestamp = new Date().getTime()
+const supportedBrowsersRegex = getUserAgentRegExp({allowHigherVersions: true})
 
 const config = {
   requirejs: {},
   cdn: process.env.CDN === 'true',
   baseUrl: process.env.BASE_URL || '/',
-  history_mode: process.env.HISTORY_MODE === 'true'
+  history_mode: process.env.HISTORY_MODE === 'true',
+  documentation_url: process.env.DOCUMENTATION_URL
 }
 if (process.env.REQUIRE_TIMEOUT) {
   config.requirejs.waitSeconds = parseInt(process.env.REQUIRE_TIMEOUT)
@@ -163,7 +166,8 @@ const plugins = [
                 js: config.baseUrl + 'js'
               },
               config: config,
-              compilationTimestamp: compilationTimestamp
+              compilationTimestamp: compilationTimestamp,
+              supportedBrowsersRegex: supportedBrowsersRegex
             }
           },
           {},
