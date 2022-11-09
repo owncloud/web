@@ -91,6 +91,7 @@
                       <div>
                         <oc-button
                           :id="`space-context-btn-${space.getDomSelector()}`"
+                          :ref="`spaceContextBtn-${space.getDomSelector()}`"
                           v-oc-tooltip="$gettext('Show context menu')"
                           :aria-label="$gettext('Show context menu')"
                           appearance="raw"
@@ -270,8 +271,10 @@ export default defineComponent({
     showSpaceContextDrop(event, space) {
       event.preventDefault()
       const drop = this.$refs[`spaceContextDrop-${space.getDomSelector()}`]?.[0]
+      const contextMenuButtonPos =
+        this.$refs[`spaceContextBtn-${space.getDomSelector()}`]?.[0].$el?.getBoundingClientRect()
 
-      if (!drop) {
+      if (!drop || !contextMenuButtonPos) {
         return
       }
 
@@ -281,8 +284,8 @@ export default defineComponent({
           height: 0,
           top: event.clientY,
           bottom: event.clientY,
-          left: event.clientX,
-          right: event.clientX
+          left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
+          right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
         })
       })
       drop.show()
