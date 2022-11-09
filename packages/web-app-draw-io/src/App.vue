@@ -64,7 +64,7 @@ export default defineComponent({
   watch: {
     currentFileContext: {
       handler: function () {
-        this.load()
+        this.checkPermissions()
       },
       immediate: true
     }
@@ -74,6 +74,9 @@ export default defineComponent({
     this.fileExtension = this.filePath.split('.').pop()
     window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
+        if (event.origin !== this.config.url) {
+          return
+        }
         const payload = JSON.parse(event.data)
         switch (payload.event) {
           case 'init':
@@ -115,7 +118,7 @@ export default defineComponent({
           message: error,
           modified: false
         }),
-        '*'
+        this.config.url
       )
     },
     async checkPermissions() {
@@ -142,7 +145,7 @@ export default defineComponent({
             xml: response.body,
             autosave: this.config.autosave
           }),
-          '*'
+          this.config.url
         )
       } catch (error) {
         this.errorPopup(error)
@@ -183,7 +186,7 @@ export default defineComponent({
                 xml: reader.result,
                 autosave: this.config.autosave
               }),
-              '*'
+              this.config.url
             )
           }
           reader.readAsDataURL(blob)
@@ -208,7 +211,7 @@ export default defineComponent({
                 message: message,
                 modified: false
               }),
-              '*'
+              this.config.url
             )
           } else {
             this.successPopup(message)
