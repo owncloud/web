@@ -1,27 +1,37 @@
 import { Page } from 'playwright'
 import { sidebar } from '../utils'
-import { File, User } from '../../../types'
+import { File } from '../../../types'
 import util from 'util'
-import { inviteMembers, inviteMembersArgs, removeSharee, changeShareeRole } from '../share/actions'
+import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
-const spaceIdSelector = `[data-space-id="%s"]`
+const spaceIdSelector = '[data-space-id="%s"]'
 const spacesRenameOptionSelector = '.oc-files-actions-rename-trigger:visible'
 const editSpacesSubtitleOptionSelector = '.oc-files-actions-edit-description-trigger:visible'
 const editQuotaOptionSelector = '.oc-files-actions-edit-quota-trigger:visible'
 const editImageOptionSelector = '.oc-files-actions-upload-space-image-trigger:visible'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
-const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
+const quotaValueDropDown = '.vs__dropdown-option :text-is("%s")'
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
 const spacesDescriptionInputArea = '#description-input-area'
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const spaceDeletedFilesButton = '.oc-files-actions-delete-trigger:visible'
 const spaceContextButton = '#space-context-btn'
+
+export const openActionsPanel = async (page: Page): Promise<void> => {
+  await sidebar.open({ page })
+  await sidebar.openPanel({ page, name: 'space-actions' })
+}
+
+export const openSharingPanel = async (page: Page): Promise<void> => {
+  await sidebar.open({ page })
+  await sidebar.openPanel({ page, name: 'space-share' })
+}
 
 /**/
 
@@ -70,8 +80,7 @@ export const changeSpaceName = async (args: {
   value: string
 }): Promise<void> => {
   const { page, value, id } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-actions' })
+  await openActionsPanel(page)
 
   await page.locator(spacesRenameOptionSelector).click()
   await page.locator(spaceNameInputField).fill(value)
@@ -96,8 +105,7 @@ export const changeSpaceSubtitle = async (args: {
   value: string
 }): Promise<void> => {
   const { page, value, id } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-actions' })
+  await openActionsPanel(page)
 
   await page.locator(editSpacesSubtitleOptionSelector).click()
   await page.locator(spaceNameInputField).fill(value)
@@ -121,8 +129,7 @@ export const changeSpaceDescription = async (args: {
   value: string
 }): Promise<void> => {
   const { page, value } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-actions' })
+  await openActionsPanel(page)
   const waitForUpdate = async () =>
     await page.waitForResponse(
       (resp) =>
@@ -145,8 +152,7 @@ export const changeQuota = async (args: {
   value: string
 }): Promise<void> => {
   const { id, page, value } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-actions' })
+  await openActionsPanel(page)
 
   await page.locator(editQuotaOptionSelector).click()
   const searchLocator = await page.locator(spacesQuotaSearchField)
@@ -167,11 +173,16 @@ export const changeQuota = async (args: {
   await sidebar.close({ page: page })
 }
 
-export const addSpaceMembers = async (args: inviteMembersArgs): Promise<void> => {
-  const { page, role, recipients } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
-  await inviteMembers({ page, recipients, role })
+export interface SpaceMembersArgs {
+  page: Page
+  users: ICollaborator[]
+}
+
+export const addSpaceMembers = async (args: SpaceMembersArgs): Promise<void> => {
+  const { page, users } = args
+  await openSharingPanel(page)
+
+  await Collaborator.inviteCollaborators({ page, collaborators: users })
   await sidebar.close({ page: page })
 }
 
@@ -218,8 +229,7 @@ export const changeSpaceImage = async (args: {
   resource: File
 }): Promise<void> => {
   const { id, page, resource } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-actions' })
+  await openActionsPanel(page)
 
   const [fileChooser] = await Promise.all([
     page.waitForEvent('filechooser'),
@@ -244,38 +254,38 @@ export const changeSpaceImage = async (args: {
 
   await sidebar.close({ page: page })
 }
-export interface removeAccessMembersArgs {
-  users: User[]
-  page: Page
+export interface removeAccessMembersArgs extends Omit<SpaceMembersArgs, 'users'> {
+  users: Omit<ICollaborator, 'role'>[]
   removeOwnSpaceAccess?: boolean
 }
 export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
   const { page, users, removeOwnSpaceAccess } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
-  await removeSharee({ page, users, removeOwnSpaceAccess: removeOwnSpaceAccess })
+  await openSharingPanel(page)
+
+  for (const collaborator of users) {
+    await Collaborator.removeCollaborator({ page, collaborator, removeOwnSpaceAccess })
+  }
 }
 
-export interface changeSpaceRoleArgs {
-  role: string
-  users: User[]
-  page: Page
-}
-export const changeSpaceRole = async (args: changeSpaceRoleArgs): Promise<void> => {
-  const { page, role, users } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
-  await changeShareeRole({ page, users, role })
+export const changeSpaceRole = async (args: SpaceMembersArgs): Promise<void> => {
+  const { page, users } = args
+  await openSharingPanel(page)
+
+  for (const collaborator of users) {
+    await Promise.all([
+      Collaborator.changeCollaboratorRole({ page, collaborator }),
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('shares') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      )
+    ])
+  }
 }
 
-export interface createPublicLinkForSpaceArgs {
-  page: Page
-}
-export const createPublicLinkForSpace = async (
-  args: createPublicLinkForSpaceArgs
-): Promise<string> => {
+export const createPublicLinkForSpace = async (args: { page: Page }): Promise<string> => {
   const { page } = args
-  await sidebar.open({ page: page })
-  await sidebar.openPanel({ page: page, name: 'space-share' })
+  await openSharingPanel(page)
   return createLink({ page: page, space: true })
 }
