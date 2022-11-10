@@ -24,6 +24,7 @@ import copy from '@rollup-extras/plugin-copy'
 import packageJson from './package.json' assert { type: "json" }
 import {fileURLToPath} from 'url'
 import { dirname, resolve as pathResolve } from 'path'
+import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
 
 
 const production = !process.env.ROLLUP_WATCH
@@ -31,10 +32,12 @@ const sourcemap = process.env.SOURCE_MAP === 'true'
 
 const { version } = packageJson
 const compilationTimestamp = new Date().getTime()
+const supportedBrowsersRegex = getUserAgentRegExp({allowHigherVersions: true})
 
 const config = {
   requirejs: {},
-  cdn: process.env.CDN === 'true'
+  cdn: process.env.CDN === 'true',
+  documentation_url: process.env.DOCUMENTATION_URL
 }
 if (process.env.REQUIRE_TIMEOUT) {
   config.requirejs.waitSeconds = parseInt(process.env.REQUIRE_TIMEOUT)
@@ -183,7 +186,8 @@ const plugins = [
                 js: 'js'
               },
               config: config,
-              compilationTimestamp: compilationTimestamp
+              compilationTimestamp: compilationTimestamp,
+              supportedBrowsersRegex: supportedBrowsersRegex
             }
           },
           {},
