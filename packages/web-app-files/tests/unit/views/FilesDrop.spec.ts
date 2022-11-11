@@ -1,140 +1,56 @@
-import FilesDrop from 'web-app-files/src/views/FilesDrop.vue'
-import { shallowMount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
-import { getStore, localVue } from './views.setup.js'
-import { DavProperty } from 'web-client/src/webdav/constants'
-import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api'
-
-localVue.use(VueCompositionAPI)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-localVue.prototype.$client.publicFiles = {
-  PUBLIC_LINK_SHARE_OWNER: 'admin',
-  // function is mocked because it should return a promise with a list of resources
-  list: () =>
-    new Promise((resolve) => {
-      resolve([
-        {
-          getProperty: jest.fn((val) => {
-            if (val === DavProperty.PublicLinkPermission) {
-              return linkRoleUploaderFolder.bitmask(false)
-            }
-            return val
-          })
-        }
-      ])
-    }),
-  // function takes token as an argument and is mocked because it should return some public link url
-  getFileUrl: (token) => `http://some-url/${token}`,
-  putFileContents: jest.fn()
-}
-
-const $route = {
-  meta: {
-    title: 'page route title'
-  },
-  params: {
-    token: 'abc123def456'
-  }
-}
-
-const selectors = {
-  filesEmpty: '.files-empty',
-  loadingHeader: '.oc-login-card-title'
-}
-
-const ocSpinnerStubSelector = 'oc-spinner-stub'
+import { mount } from '@vue/test-utils'
+import FilesDrop from '../../../src/views/FilesDrop.vue'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { createStore } from 'vuex-extensions'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import Vuex from 'vuex'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import {mockDeep} from "jest-mock-extended";
+import {OwnCloudSdk} from "web-client/src/types";
 
 describe('FilesDrop view', () => {
-  it.todo('adapt tests, see comment in Favorites.spec.ts...')
-  // it('should call "resolvePublicLink" method on wrapper mount', () => {
-  //   const spyResolvePublicLink = jest.spyOn(FilesDrop.methods, 'resolvePublicLink')
-  //   getShallowWrapper()
-  //
-  //   expect(spyResolvePublicLink).toHaveBeenCalledTimes(1)
-  // })
-  //
-  // it('should show page title and configuration theme general slogan', () => {
-  //   const wrapper = getShallowWrapper()
-  //
-  //   expect(wrapper).toMatchSnapshot()
-  // })
-  //
-  // it('should show spinner with loading text if wrapper is loading', () => {
-  //   const wrapper = getShallowWrapper({ loading: true })
-  //
-  //   expect(wrapper.find(selectors.loadingHeader).exists()).toBeTruthy()
-  //   expect(wrapper.find(ocSpinnerStubSelector).exists()).toBeTruthy()
-  //   expect(wrapper).toMatchSnapshot()
-  // })
-  //
-  // describe('when "loading" is set to false', () => {
-  //   const wrapper = getShallowWrapper()
-  //
-  //   it('should not show spinner and loading header', () => {
-  //     expect(wrapper.find(selectors.loadingHeader).exists()).toBeFalsy()
-  //     expect(wrapper.find(ocSpinnerStubSelector).exists()).toBeFalsy()
-  //   })
-  //
-  //   it('should show share information title', () => {
-  //     expect(wrapper).toMatchSnapshot()
-  //   })
-  //
-  //   it('should show vue drop zone with given options', () => {
-  //     const dropZone = wrapper.find('#files-drop-zone')
-  //     expect(dropZone.exists()).toBeTruthy()
-  //   })
-  //
-  //   it('should show error message if only it has truthy value', () => {
-  //     const wrapper = getShallowWrapper({
-  //       loading: false,
-  //       errorMessage: 'This is a test error message'
-  //     })
-  //
-  //     expect(wrapper).toMatchSnapshot()
-  //   })
-  // })
+  it('drop container always present', () => {
+    const { wrapper } = getMountedWrapper()
+    expect(wrapper.find('#files-drop-container').exists()).toBeTruthy()
+  })
+  describe('different files view states', () => {
+    it('shows the loading spinner during loading', () => {
+      const { wrapper } = getMountedWrapper({ loading: true })
+      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
+    })
+    it('shows the "resource-upload"-component after loading', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
+      expect(wrapper.find('resource-upload-stub').exists()).toBeTruthy()
+    })
+  })
 })
 
-function createStore(slogan = 'some slogan', davProperties = []) {
-  return getStore({ slogan, davProperties })
-}
-
-function getShallowWrapper({ store = createStore(), loading = false, errorMessage = null } = {}) {
-  return shallowMount(FilesDrop, {
-    localVue,
-    store,
-    mocks: {
-      $route,
-      $router: {
-        currentRoute: { name: 'some-route' },
-        resolve: (r) => {
-          return { href: r.name }
-        },
-        afterEach: jest.fn()
-      },
-      $uppyService: {
-        $on: jest.fn(),
-        useDropTarget: jest.fn(),
-        useXhr: jest.fn(),
-        subscribe: jest.fn()
-      }
+function getMountedWrapper({ mocks = {}, loading = false } = {}) {
+  const defaultMocks = {
+    ...defaultComponentMocks({
+      currentRoute: { name: 'files-common-favorites' }
+    }),
+    $client: {
+      publicFiles: { list: jest.fn(() => Promise.resolve([ mockDeep<OwnCloudSdk>()])) }
     },
-    setup: () => {
-      return {}
-    },
-    data() {
-      return {
-        loading: loading,
-        errorMessage: errorMessage,
-        share: {
-          getProperty: (val) => val
-        }
-      }
-    }
-  })
+    ...(mocks && mocks)
+  }
+  const storeOptions = { ...defaultStoreMockOptions }
+  const localVue = defaultLocalVue({ compositionApi: true })
+  const store = createStore(Vuex.Store, storeOptions)
+  return {
+    mocks: defaultMocks,
+    storeOptions,
+    wrapper: mount(FilesDrop, {
+      localVue,
+      mocks: defaultMocks,
+      store,
+      stubs: defaultStubs,
+      data: () => ({
+        loading
+      })
+    })
+  }
 }

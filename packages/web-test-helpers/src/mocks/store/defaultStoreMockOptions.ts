@@ -4,7 +4,9 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 export const defaultStoreMockOptions = {
   getters: {
     capabilities: jest.fn().mockImplementation(() => ({})),
-    configuration: jest.fn().mockImplementation(() => ({}))
+    configuration: jest
+      .fn()
+      .mockImplementation(() => ({ currentTheme: { general: { slogan: '' } } }))
   },
   modules: {
     ...filesModuleMockOptions,

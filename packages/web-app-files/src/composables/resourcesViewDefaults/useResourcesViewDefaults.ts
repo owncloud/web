@@ -1,11 +1,4 @@
-import {
-  nextTick,
-  computed,
-  unref,
-  Ref,
-  ComputedRef,
-  WritableComputedRef
-} from '@vue/composition-api'
+import { nextTick, computed, unref, Ref } from '@vue/composition-api'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'
@@ -17,6 +10,7 @@ import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources } from '../selection'
+import { ReadOnlyRef } from 'web-pkg'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -26,18 +20,18 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
   fileListHeaderY: Ref<any>
   refreshFileListHeaderPosition(): void
   loadResourcesTask: Task<TT, TU>
-  areResourcesLoading: ComputedRef<boolean>
-  storeItems: ComputedRef<T[]>
-  fields: ComputedRef<SortField[]>
-  paginatedResources: ComputedRef<T[]>
-  paginationPages: ComputedRef<number>
-  paginationPage: ComputedRef<number>
+  areResourcesLoading: ReadOnlyRef<boolean>
+  storeItems: ReadOnlyRef<T[]>
+  fields: ReadOnlyRef<SortField[]>
+  paginatedResources: Ref<T[]>
+  paginationPages: ReadOnlyRef<number>
+  paginationPage: ReadOnlyRef<number>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
-  sortBy: ComputedRef<string>
-  sortDir: ComputedRef<SortDir>
+  sortBy: ReadOnlyRef<string>
+  sortDir: ReadOnlyRef<SortDir>
 
-  selectedResources: WritableComputedRef<Resource[]>
-  selectedResourcesIds: WritableComputedRef<(string | number)[]>
+  selectedResources: Ref<Resource[]>
+  selectedResourcesIds: Ref<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
 
   sideBarOpen: Ref<boolean>

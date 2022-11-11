@@ -1,4 +1,4 @@
-import { ref, readonly } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 import { Resource } from 'web-client/src/helpers/resource'
@@ -11,14 +11,7 @@ describe('useSort', () => {
   it('does not sort if no sort field was given', () => {
     createWrapper(() => {
       const input: SortOptions<any> = {
-        items: readonly([
-          { id: '3' },
-          { id: '4' },
-          { id: '6' },
-          { id: '1' },
-          { id: '2' },
-          { id: '5' }
-        ]),
+        items: [{ id: '3' }, { id: '4' }, { id: '6' }, { id: '1' }, { id: '2' }, { id: '5' }],
         fields: [],
         sortBy: ref(null),
         sortDir: ref(null),
