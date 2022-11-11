@@ -9,14 +9,14 @@ import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/co
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
-import { useSelectedResources } from '../selection'
+import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
 }
 
-interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
+type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   fileListHeaderY: Ref<any>
   refreshFileListHeaderPosition(): void
   loadResourcesTask: Task<TT, TU>
@@ -36,7 +36,7 @@ interface ResourcesViewDefaultsResult<T, TT, TU extends any[]> {
 
   sideBarOpen: Ref<boolean>
   sideBarActivePanel: Ref<string>
-}
+} & SelectedResourcesResult
 
 export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   options: ResourcesViewDefaultsOptions<TT, TU> = {}

@@ -1,15 +1,16 @@
-import { computed, ComputedRef, unref, WritableComputedRef } from '@vue/composition-api'
+import { computed, unref, WritableComputedRef, Ref } from '@vue/composition-api'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
+import { MaybeReadonlyRef } from 'web-pkg/src'
 
-interface SelectedResourcesResult {
-  selectedResources: WritableComputedRef<Resource[]>
-  selectedResourcesIds: WritableComputedRef<(string | number)[]>
+export interface SelectedResourcesResult {
+  selectedResources: Ref<Resource[]>
+  selectedResourcesIds: Ref<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
-  selectedResourceSpace?: ComputedRef<SpaceResource>
+  selectedResourceSpace?: MaybeReadonlyRef<SpaceResource>
 }
 
 interface SelectedResourcesOptions {

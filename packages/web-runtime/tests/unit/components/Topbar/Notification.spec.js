@@ -200,7 +200,7 @@ function wrapperShallowMounted(mocks) {
     stubs,
     mocks,
     directives: {
-      'oc-tooltip': () => {}
+      'oc-tooltip': () => undefined
     }
   })
 }

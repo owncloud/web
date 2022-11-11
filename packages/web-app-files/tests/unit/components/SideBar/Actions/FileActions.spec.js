@@ -86,7 +86,15 @@ function getWrapper(
   return mount(FileActions, mountOptions)
 }
 
-function createStore(state, filename, fileId, extension, type, mimeType, availableMimeTypes) {
+function createStore(
+  state,
+  filename = undefined,
+  fileId = undefined,
+  extension = undefined,
+  type = undefined,
+  mimeType = undefined,
+  availableMimeTypes = undefined
+) {
   return new Vuex.Store({
     state: {
       apps: apps
