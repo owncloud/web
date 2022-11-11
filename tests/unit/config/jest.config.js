@@ -12,8 +12,8 @@ module.exports = {
   moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.js$': ['babel-jest', { configFile: path.join(rootDir, '.babelrc') }],
-    '.*\\.(vue)$': '@vue/vue2-jest'
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.vue$': '@vue/vue2-jest'
   },
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
