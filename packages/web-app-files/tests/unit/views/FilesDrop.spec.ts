@@ -6,8 +6,6 @@ import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import {mockDeep} from "jest-mock-extended";
-import {OwnCloudSdk} from "web-client/src/types";
 
 describe('FilesDrop view', () => {
   it('drop container always present', () => {
@@ -33,7 +31,7 @@ function getMountedWrapper({ mocks = {}, loading = false } = {}) {
       currentRoute: { name: 'files-common-favorites' }
     }),
     $client: {
-      publicFiles: { list: jest.fn(() => Promise.resolve([ mockDeep<OwnCloudSdk>()])) }
+      publicFiles: { list: jest.fn(() => Promise.resolve([{ getProperty: jest.fn() }])) }
     },
     ...(mocks && mocks)
   }
