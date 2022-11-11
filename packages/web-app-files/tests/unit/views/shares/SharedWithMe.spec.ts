@@ -9,8 +9,9 @@ import { files } from '../../../__fixtures__/files'
 import { useResourcesViewDefaults, useSort } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { computed, Ref, ref } from '@vue/composition-api'
+import { Ref, ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 
 jest.mock('web-app-files/src/composables')
 
@@ -86,12 +87,7 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
       areResourcesLoading: ref(loading)
     })
   )
-  jest.mocked(useSort).mockImplementation((options) => ({
-    items: (options.items as Ref).value,
-    sortBy: computed(() => 'name'),
-    sortDir: undefined,
-    handleSort: jest.fn()
-  }))
+  jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: options.items as Ref }))
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: { name: 'files-shares-with-me' }

@@ -1,5 +1,5 @@
-import { ref, Ref, computed, ComputedRef, unref, isRef } from '@vue/composition-api'
-import { MaybeRef, MaybeReadonlyRef } from 'web-pkg/src/utils'
+import { ref, Ref, computed, unref, isRef } from '@vue/composition-api'
+import { MaybeRef, MaybeReadonlyRef, ReadOnlyRef } from 'web-pkg/src/utils'
 import { useRouteName, useRouteQueryPersisted, QueryValue } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
 
@@ -29,9 +29,9 @@ export interface SortOptions<T extends SortableItem> {
 }
 
 export interface SortResult<T> {
-  items: ComputedRef<Array<T>>
-  sortBy: ComputedRef<string>
-  sortDir: ComputedRef<SortDir>
+  items: ReadOnlyRef<Array<T>>
+  sortBy: ReadOnlyRef<string>
+  sortDir: ReadOnlyRef<SortDir>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
 }
 
