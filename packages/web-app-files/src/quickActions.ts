@@ -3,6 +3,11 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export function canShare(item, store) {
+  // CERNBox do not allow actions above home/project root
+  const elems = item.path?.split('/').filter(Boolean) //"/eos/project/c/cernbox"
+  if (elems.length < 5) {
+    return false
+  }
   const { capabilities } = store.state.user
   if (!capabilities.files_sharing || !capabilities.files_sharing.api_enabled) {
     return false
