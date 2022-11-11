@@ -11,6 +11,7 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
+
 jest.mock('web-app-files/src/composables')
 
 describe('Favorites view', () => {
