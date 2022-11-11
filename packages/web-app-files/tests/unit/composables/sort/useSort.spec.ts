@@ -1,4 +1,4 @@
-import { ref } from '@vue/composition-api'
+import { ref, unref } from '@vue/composition-api'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 import { Resource } from 'web-client/src/helpers/resource'
@@ -20,7 +20,7 @@ describe('useSort', () => {
 
       const { items } = useSort(input)
 
-      expect(items.value).toMatchObject([
+      expect(unref(items)).toMatchObject([
         { id: '3' },
         { id: '4' },
         { id: '6' },
@@ -65,7 +65,7 @@ describe('useSort', () => {
 
         const { items } = useSort<Resource>(input)
 
-        expect(items.value.map((i) => i.name)).toMatchObject([
+        expect(unref(items).map((i) => i.name)).toMatchObject([
           'Dir1',
           'dir2',
           'dir3',
@@ -78,7 +78,7 @@ describe('useSort', () => {
         ])
 
         sortDir.value = SortDir.Desc
-        expect(items.value.map((i) => i.name)).toMatchObject([
+        expect(unref(items).map((i) => i.name)).toMatchObject([
           'c.png',
           'b.png',
           'a.png',

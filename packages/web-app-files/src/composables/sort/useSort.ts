@@ -1,5 +1,5 @@
 import { ref, Ref, computed, unref, isRef } from '@vue/composition-api'
-import { MaybeRef, MaybeReadonlyRef, ReadOnlyRef } from 'web-pkg/src/utils'
+import { MaybeRef, ReadOnlyRef } from 'web-pkg/src/utils'
 import { useRouteName, useRouteQueryPersisted, QueryValue } from 'web-pkg/src/composables'
 import { SortConstants } from './constants'
 
@@ -19,7 +19,7 @@ export interface SortField {
 }
 
 export interface SortOptions<T extends SortableItem> {
-  items: MaybeReadonlyRef<Array<T>>
+  items: MaybeRef<Array<T>>
   fields: MaybeRef<Array<SortField>>
   sortBy?: MaybeRef<string>
   sortByQueryName?: MaybeRef<string>
@@ -29,7 +29,7 @@ export interface SortOptions<T extends SortableItem> {
 }
 
 export interface SortResult<T> {
-  items: ReadOnlyRef<Array<T>>
+  items: MaybeRef<Array<T>>
   sortBy: ReadOnlyRef<string>
   sortDir: ReadOnlyRef<SortDir>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
