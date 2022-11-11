@@ -22,6 +22,11 @@ export default {
           },
           handler: this.$_delete_trigger,
           isEnabled: ({ resources }) => {
+            // CERNBox do not allow actions above home/project root
+            const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
+            if (elems.length < 5) {
+              return false
+            }
             return !!this.filterResourcesToDelete(resources).length
           },
           componentType: 'button',

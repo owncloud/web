@@ -44,6 +44,11 @@ export default {
             if (isLocationPublicActive(this.$router, 'files-public-link')) {
               return this.currentFolder.canCreate()
             }
+            // CERNBox do not allow actions above home/project root
+            const elems = this.$router.currentRoute?.path?.split('/').filter(Boolean) || [] //"/files/spaces/eos/project/c/cernbox"
+            if (isLocationSpacesActive(this.$router, 'files-spaces-generic') && elems.length < 6) { //WE CAN PASTE IN ROOT
+              return false
+            }
 
             // copy can't be restricted in authenticated context, because
             // a user always has their home dir with write access

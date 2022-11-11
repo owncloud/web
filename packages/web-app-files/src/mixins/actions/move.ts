@@ -41,6 +41,11 @@ export default {
             if (!this.currentFolder) {
               return false
             }
+            // CERNBox do not allow actions above home/project root
+            const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
+            if (isLocationSpacesActive(this.$router, 'files-spaces-generic') && elems.length < 5) {
+              return false
+            }
 
             const moveDisabled = resources.some((resource) => {
               return canBeMoved(resource, this.currentFolder.path) === false

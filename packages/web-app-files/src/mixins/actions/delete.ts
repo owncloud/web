@@ -40,6 +40,12 @@ export default {
               return false
             }
 
+            // CERNBox do not allow actions above home/project root
+            const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
+            if (isLocationSpacesActive(this.$router, 'files-spaces-generic') && elems.length < 5) {
+              return false
+            }
+
             const deleteDisabled = resources.some((resource) => {
               return !resource.canBeDeleted()
             })

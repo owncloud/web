@@ -1,6 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { isSameResource } from '../../helpers/resource'
-import { isLocationTrashActive, isLocationSharesActive } from '../../router'
+import { isLocationTrashActive, isLocationSharesActive, isLocationSpacesActive } from '../../router'
 import { Resource } from 'web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
@@ -38,6 +38,11 @@ export default {
               return false
             }
             if (resources.length !== 1) {
+              return false
+            }
+            // CERNBox do not allow actions above home/project root
+            const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
+            if (isLocationSpacesActive(this.$router, 'files-spaces-generic') && elems.length < 5) {
               return false
             }
 
