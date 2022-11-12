@@ -27,6 +27,7 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
+    "@babel/runtime": "^7.19.4",
     "keycode": "^2.2.1",
     "vue": "2.6.14"
   },
@@ -46,12 +47,13 @@
     "@playwright/test": "1.27.1",
     "@rollup-extras/plugin-copy": "1.5.0",
     "@rollup/plugin-alias": "3.1.9",
+    "@rollup/plugin-babel": "6.0.2",
     "@rollup/plugin-commonjs": "17.1.0",
     "@rollup/plugin-html": "0.2.4",
     "@rollup/plugin-inject": "4.0.4",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-typescript": "8.5.0",
-    "@types/jest": "27.5.2",
+    "@types/jest": "29.2.2",
     "@types/jest-axe": "3.5.5",
     "@types/lodash-es": "4.17.6",
     "@types/node": "16.18.0",
@@ -91,7 +93,6 @@
     "regenerator-runtime": "0.13.10",
     "requirejs": "2.3.6",
     "rollup": "2.52.7",
-    "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-delete": "2.0.0",
     "rollup-plugin-gzip": "2.5.1",
     "rollup-plugin-livereload": "2.0.5",

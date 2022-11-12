@@ -4,7 +4,7 @@ import resolve from 'rollup-plugin-node-resolve'
 
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import modify from 'rollup-plugin-modify'
 import { terser } from 'rollup-plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
@@ -71,7 +71,7 @@ const plugins = [
     preferBuiltins: false
   }),
   babel({
-    // babelHelpers: 'bundled',
+    babelHelpers: 'runtime',
     exclude: 'node_modules/**'
   }),
   modify({
