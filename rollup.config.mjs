@@ -228,6 +228,7 @@ if (production) {
 }
 
 export default {
+  strictDeprecations: true,
   input: fs.readdirSync('packages').reduce((acc, i) => {
     for (const extension of ['js', 'ts']) {
       const root = path.join('packages', i, 'src', `index.${extension}`)
@@ -243,12 +244,12 @@ export default {
     format: 'amd',
     sourcemap: sourcemap,
     chunkFileNames: path.join('js', 'chunks', production ? '[name]-[hash].js' : '[name].js'),
-    entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
-  },
-  manualChunks: (id) => {
-    if (id.includes('node_modules')) {
-      return 'vendor'
-    }
+    entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js'),
+    manualChunks: (id) => {
+      if (id.includes('node_modules')) {
+        return 'vendor'
+      }
+    },
   },
   onwarn: (warning) => {
     if (warning.code !== 'CIRCULAR_DEPENDENCY') {
