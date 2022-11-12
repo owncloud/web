@@ -119,17 +119,6 @@
     "node": ">=16"
   },
   "packageManager": "pnpm@7.14.0",
-  "dependenciesMeta": {
-    "@playwright/test": {
-      "built": true
-    },
-    "playwright": {
-      "built": true
-    },
-    "vue-concurrency": {
-      "built": true
-    }
-  },
   "volta": {
     "node": "16.18.0"
   }
