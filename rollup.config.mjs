@@ -52,6 +52,7 @@ const plugins = [
   }),
   alias({
     entries: [
+      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.js') },
       { find: 'crypto', replacement: pathResolve(projectRootDir, 'polyfills/crypto.js') },
       { find: 'qs', replacement: pathResolve(projectRootDir, 'node_modules/qs/lib/index.js') }
     ]
