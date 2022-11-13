@@ -49,7 +49,7 @@
     "@rollup/plugin-commonjs": "17.1.0",
     "@rollup/plugin-html": "1.0.1",
     "@rollup/plugin-inject": "5.0.2",
-    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-json": "5.0.1",
     "@rollup/plugin-node-resolve": "11.2.1",
     "@types/jest": "27.5.2",
     "@types/jest-axe": "3.5.5",
