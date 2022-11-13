@@ -80,7 +80,6 @@ importers:
       rollup-plugin-postcss: 4.0.2
       rollup-plugin-progress: 1.1.2
       rollup-plugin-serve: 2.0.1
-      rollup-plugin-terser: 7.0.2
       rollup-plugin-ts: 3.0.2
       rollup-plugin-visualizer: 5.8.3
       rollup-plugin-vue: 5.1.9
@@ -166,7 +165,6 @@ importers:
       rollup-plugin-postcss: 4.0.2_neo3lunb2qpadwxplzw7r2isgm
       rollup-plugin-progress: 1.1.2
       rollup-plugin-serve: 2.0.1
-      rollup-plugin-terser: 7.0.2_rollup@3.3.0
       rollup-plugin-ts: 3.0.2_hwlqecvh7qxstt7ilgwa6dt3ra
       rollup-plugin-visualizer: 5.8.3_rollup@3.3.0
       rollup-plugin-vue: 5.1.9_j47dudq3docatrubsrzy76pmz4
@@ -10464,15 +10462,6 @@ packages:
       string-length: 4.0.2
     dev: true
 
-  /jest-worker/26.6.2:
-    resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
-    engines: {node: '>= 10.13.0'}
-    dependencies:
-      '@types/node': 17.0.45
-      merge-stream: 2.0.0
-      supports-color: 7.2.0
-    dev: true
-
   /jest-worker/27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
@@ -12958,12 +12947,6 @@ packages:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
     dev: true
 
-  /randombytes/2.1.0:
-    resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
-    dependencies:
-      safe-buffer: 5.2.1
-    dev: true
-
   /raw-body/2.5.1:
     resolution: {integrity: sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig==}
     engines: {node: '>= 0.8'}
@@ -13427,18 +13410,6 @@ packages:
       opener: 1.5.2
     dev: true
 
-  /rollup-plugin-terser/7.0.2_rollup@3.3.0:
-    resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
-    peerDependencies:
-      rollup: ^2.0.0
-    dependencies:
-      '@babel/code-frame': 7.18.6
-      jest-worker: 26.6.2
-      rollup: 3.3.0
-      serialize-javascript: 4.0.0
-      terser: 5.7.0
-    dev: true
-
   /rollup-plugin-ts/3.0.2_hwlqecvh7qxstt7ilgwa6dt3ra:
     resolution: {integrity: sha512-67qi2QTHewhLyKDG6fX3jpohWpmUPPIT/xJ7rsYK46X6MqmoWy64Ti0y8ygPfLv8mXDCdRZUofM3mTxDfCswRA==}
     engines: {node: '>=14.9.0', npm: '>=7.0.0', pnpm: '>=3.2.0', yarn: '>=1.13'}
@@ -13769,12 +13740,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-
-  /serialize-javascript/4.0.0:
-    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
-    dependencies:
-      randombytes: 2.1.0
-    dev: true
 
   /set-blocking/2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -14348,17 +14313,6 @@ packages:
       '@jridgewell/source-map': 0.3.2
       acorn: 8.8.0
       commander: 2.20.3
-      source-map-support: 0.5.21
-    dev: true
-
-  /terser/5.7.0:
-    resolution: {integrity: sha512-HP5/9hp2UaZt5fYkuhNBR8YyRcT8juw8+uFbAme53iN9hblvKnLUTKkmwJG6ocWpIKf8UK4DoeWG4ty0J6S6/g==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      acorn: 8.8.0
-      commander: 2.20.3
-      source-map: 0.7.4
       source-map-support: 0.5.21
     dev: true
 
