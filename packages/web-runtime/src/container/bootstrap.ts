@@ -110,12 +110,14 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  */
 export const initializeApplications = async ({
   runtimeConfiguration,
+  configurationManager,
   store,
   router,
   translations,
   supportedLanguages
 }: {
   runtimeConfiguration: RuntimeConfiguration
+  configurationManager: ConfigurationManager
   store: Store<unknown>
   router: VueRouter
   translations: unknown
@@ -136,7 +138,8 @@ export const initializeApplications = async ({
         store,
         supportedLanguages,
         router,
-        translations
+        translations,
+        configurationManager
       })
     )
   )

@@ -466,8 +466,6 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-table {
   border-collapse: collapse;
   border-spacing: 0;

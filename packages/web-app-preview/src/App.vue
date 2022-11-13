@@ -186,11 +186,29 @@ import {
   usePublicLinkContext,
   useStore
 } from 'web-pkg/src/composables'
-import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
+
+export const appId = 'preview'
+
+export const mimeTypes = () => {
+  return [
+    'audio/flac',
+    'audio/mpeg',
+    'audio/ogg',
+    'audio/wav',
+    'audio/x-flac',
+    'audio/x-wav',
+    'image/gif',
+    'image/jpeg',
+    'image/png',
+    'video/mp4',
+    'video/webm',
+    ...(window.Vue.$store.getters.extensionConfigByAppId(appId).mimeTypes || [])
+  ]
+}
 
 export default defineComponent({
   name: 'Preview',
@@ -271,7 +289,7 @@ export default defineComponent({
       }
 
       return this.activeFiles.filter((file) => {
-        return Preview.mimeTypes().includes(file.mimeType?.toLowerCase())
+        return mimeTypes().includes(file.mimeType?.toLowerCase())
       })
     },
     activeFilteredFile() {

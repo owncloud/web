@@ -284,8 +284,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-search {
   min-width: $form-width-medium;
 

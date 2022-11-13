@@ -42,7 +42,7 @@
     },
     {
       "id": "settings",
-      "path": "https://host.docker.internal:9200/settings.js"
+      "path": "/settings.js"
     },
     {
       "id": "draw-io",

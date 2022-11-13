@@ -30,8 +30,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-loader {
   -webkit-appearance: none;
   -moz-appearance: none;

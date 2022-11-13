@@ -1,3 +1,5 @@
+import { describe } from '@jest/globals'
+
 describe('buildUrl', () => {
   it.each`
     location                                                                          | base                         | path            | expected

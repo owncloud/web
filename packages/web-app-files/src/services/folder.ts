@@ -12,7 +12,7 @@ import {
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
-} from './folder/'
+} from './folder/index'
 
 export * from './folder/types'
 

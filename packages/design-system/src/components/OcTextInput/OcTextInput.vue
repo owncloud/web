@@ -273,8 +273,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-text-input {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);

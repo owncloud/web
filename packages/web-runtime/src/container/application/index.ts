@@ -10,6 +10,8 @@ import { isObject } from 'lodash-es'
 // import modules to provide them to applications
 import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
+import { urlJoin } from 'web-client/src/utils'
+import { ConfigurationManager } from 'web-pkg'
 
 export { NextApplication } from './next'
 
@@ -24,6 +26,19 @@ define('luxon', () => {
   return luxon
 })
 
+const loadScriptDynamicImport = async <T>(moduleUri: string) => {
+  return ((await import(/* @vite-ignore */ moduleUri)) as any).default as T
+}
+
+const loadScriptRequireJS = async <T>(moduleUri: string) => {
+  return new Promise<T>((resolve, reject) =>
+    requirejs(
+      [moduleUri],
+      (app) => resolve(app),
+      (err) => reject(err)
+    )
+  )
+}
 /**
  * sniffs arguments and decides if given manifest is of next or current application style.
  *
@@ -34,28 +49,52 @@ export const buildApplication = async ({
   store,
   router,
   translations,
-  supportedLanguages
+  supportedLanguages,
+  configurationManager
 }: {
   applicationPath: string
   store: Store<unknown>
   router: VueRouter
   translations: unknown
   supportedLanguages: { [key: string]: string }
+  configurationManager: ConfigurationManager
 }): Promise<NextApplication> => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
   }
 
-  const applicationScript: ClassicApplicationScript = await new Promise((resolve, reject) =>
-    requirejs(
-      [applicationPath],
-      (app) => resolve(app),
-      (err) => reject(err)
-    )
-  ).catch((e) => {
-    console.error(e)
-    throw new RuntimeError('cannot load application', applicationPath)
-  })
+  let applicationScript: ClassicApplicationScript
+  try {
+    if (applicationPath.includes('/')) {
+      if (
+        !applicationPath.startsWith('http://') &&
+        !applicationPath.startsWith('https://') &&
+        !applicationPath.startsWith('//')
+      ) {
+        applicationPath = urlJoin(configurationManager.serverUrl, applicationPath)
+      }
+
+      if (applicationPath.endsWith('.mjs') || applicationPath.endsWith('.ts')) {
+        applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(applicationPath)
+      } else {
+        applicationScript = await loadScriptRequireJS<ClassicApplicationScript>(applicationPath)
+      }
+    } else {
+      const productionModule = (window as any).WEB_APPS_MAP?.[applicationPath]
+      if (productionModule) {
+        applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(
+          `/${productionModule}`
+        )
+      } else {
+        applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(
+          `/packages/${applicationPath}/src/index`
+        )
+      }
+    }
+  } catch (e) {
+    console.trace(e)
+    throw new RuntimeError('cannot load application', applicationPath, e)
+  }
 
   let application: NextApplication
 

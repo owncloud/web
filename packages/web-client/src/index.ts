@@ -2,12 +2,12 @@ import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
 
-export { Graph } from './graph'
-export { OCS } from './ocs'
+export type { Graph } from './graph'
+export type { OCS } from './ocs'
 
 export * as helpers from './helpers'
 
-export { Resource, User } from './helpers'
+export type { Resource, User } from './helpers'
 
 interface Client {
   graph: Graph

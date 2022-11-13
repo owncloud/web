@@ -27,7 +27,7 @@ import {
   isLocationTrashActive,
   createLocationTrash
 } from './trash'
-import { ActiveRouteDirectorFunc } from './utils'
+import type { ActiveRouteDirectorFunc } from './utils'
 
 const ROOT_ROUTE = {
   path: '/',

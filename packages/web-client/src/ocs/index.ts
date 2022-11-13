@@ -1,7 +1,7 @@
 import { Capabilities, GetCapabilitiesFactory } from './capabilities'
 import { AxiosInstance } from 'axios'
 
-export { Capabilities } from './capabilities'
+export type { Capabilities } from './capabilities'
 
 export interface OCS {
   getCapabilities: () => Promise<Capabilities>

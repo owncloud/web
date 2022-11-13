@@ -43,6 +43,7 @@ export const bootstrap = async (configurationPath: string): Promise<void> => {
   await announceStore({ vue: Vue, store, runtimeConfiguration })
   await initializeApplications({
     runtimeConfiguration,
+    configurationManager,
     store,
     supportedLanguages,
     router,
@@ -195,3 +196,8 @@ export const renderFailure = async (err: Error): Promise<void> => {
     render: (h) => h(pages.failure)
   })
 }
+;(window as any).runtimeLoaded({
+  bootstrap,
+  renderSuccess,
+  renderFailure
+})
