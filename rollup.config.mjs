@@ -66,7 +66,6 @@ const plugins = [
   }),
   nodePolyfills(),
   resolve({
-    include: 'node_modules/**',
     browser: true,
     preferBuiltins: false
   }),
