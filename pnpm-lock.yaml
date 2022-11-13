@@ -25,7 +25,7 @@ importers:
       '@rollup-extras/plugin-copy': 1.5.0
       '@rollup/plugin-alias': 4.0.2
       '@rollup/plugin-commonjs': 17.1.0
-      '@rollup/plugin-html': 0.2.4
+      '@rollup/plugin-html': 1.0.1
       '@rollup/plugin-inject': 4.0.4
       '@rollup/plugin-json': 4.1.0
       '@rollup/plugin-node-resolve': 11.2.1
@@ -112,7 +112,7 @@ importers:
       '@rollup-extras/plugin-copy': 1.5.0_rollup@3.3.0
       '@rollup/plugin-alias': 4.0.2_rollup@3.3.0
       '@rollup/plugin-commonjs': 17.1.0_rollup@3.3.0
-      '@rollup/plugin-html': 0.2.4_rollup@3.3.0
+      '@rollup/plugin-html': 1.0.1_rollup@3.3.0
       '@rollup/plugin-inject': 4.0.4_rollup@3.3.0
       '@rollup/plugin-json': 4.1.0_rollup@3.3.0
       '@rollup/plugin-node-resolve': 11.2.1_rollup@3.3.0
@@ -913,13 +913,6 @@ packages:
 
   /@babel/helper-member-expression-to-functions/7.18.9:
     resolution: {integrity: sha512-RxifAh2ZoVU67PyKIO4AMi1wTenGfMR/O/ae0CCRqwgBAt5v7xjdtRw7UoSbsreKrQn5t7r89eruK/9JjYHuDg==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/types': 7.19.4
-    dev: true
-
-  /@babel/helper-module-imports/7.16.7:
-    resolution: {integrity: sha512-LVtS6TqjJHFc+nYeITRo6VLXve70xmq7wPhWTqDJusJEgGmkAACWwMiTNrvfoQo6hEhFwAIixNkvB0jPXDL8Wg==}
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.19.4
@@ -3772,11 +3765,14 @@ packages:
       rollup: 3.3.0
     dev: true
 
-  /@rollup/plugin-html/0.2.4_rollup@3.3.0:
-    resolution: {integrity: sha512-x0qpNXxbmGa9Jnl4OX89AORPe2T/a4DqNK69BGRnEdaPKq6MdiUXSTam/eCkF5DxkQGcRcPq0L4vzr/E3q4mVA==}
-    engines: {node: '>= 8.0.0'}
+  /@rollup/plugin-html/1.0.1_rollup@3.3.0:
+    resolution: {integrity: sha512-ex4qCaauEhrhYTlFaW/D1Y66I/qL8Uu04FWFR+eQgjOtRCegMtscn69fS6ZGeL1GG6qCFdV8DTaP911uyMycWw==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
     dependencies:
       rollup: 3.3.0
     dev: true
@@ -13345,7 +13341,7 @@ packages:
       rollup: '>=0.60.0 <3'
     dependencies:
       '@babel/core': 7.19.6
-      '@babel/helper-module-imports': 7.16.7
+      '@babel/helper-module-imports': 7.18.6
       rollup: 3.3.0
       rollup-pluginutils: 2.8.2
     dev: true

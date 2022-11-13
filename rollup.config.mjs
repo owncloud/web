@@ -15,7 +15,7 @@ import progress from 'rollup-plugin-progress'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
-import html from '@rollup/plugin-html'
+import html, { makeHtmlAttributes } from '@rollup/plugin-html'
 import ts from 'rollup-plugin-ts'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import alias from '@rollup/plugin-alias'
@@ -140,7 +140,7 @@ const plugins = [
           './packages/web-container/index.html.ejs',
           {
             helpers: {
-              makeHtmlAttributes: html.makeHtmlAttributes
+              makeHtmlAttributes
             },
             data: {
               attributes,
