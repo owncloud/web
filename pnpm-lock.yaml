@@ -73,7 +73,7 @@ importers:
       rollup: 3.3.0
       rollup-plugin-babel: 4.4.0
       rollup-plugin-delete: 2.0.0
-      rollup-plugin-gzip: 2.5.1
+      rollup-plugin-gzip: 3.1.0
       rollup-plugin-livereload: 2.0.5
       rollup-plugin-modify: 3.0.0
       rollup-plugin-polyfill-node: 0.11.0
@@ -159,7 +159,7 @@ importers:
       rollup: 3.3.0
       rollup-plugin-babel: 4.4.0_txtnmgqruyqabfdi2oqdrlmcxy
       rollup-plugin-delete: 2.0.0
-      rollup-plugin-gzip: 2.5.1_rollup@3.3.0
+      rollup-plugin-gzip: 3.1.0_rollup@3.3.0
       rollup-plugin-livereload: 2.0.5
       rollup-plugin-modify: 3.0.0
       rollup-plugin-polyfill-node: 0.11.0_rollup@3.3.0
@@ -13348,10 +13348,11 @@ packages:
       del: 5.1.0
     dev: true
 
-  /rollup-plugin-gzip/2.5.1_rollup@3.3.0:
-    resolution: {integrity: sha512-l9h3g0imsGvhjcSsxNRLHNW/gqRSSgaJLCKKWYeRclPHvDMDewmI43ZyiGJ3nc3+sZNy1pJnWzB3Bvm+tJI2jQ==}
+  /rollup-plugin-gzip/3.1.0_rollup@3.3.0:
+    resolution: {integrity: sha512-PFS9s6/w6dCra6/Z8PGD+ug3aaaqKLDCbr5y1Ek71Wd4rQSmMnOqCIIMgwbYxZ9A/gjP3pCN6rA4pAG47jxF0w==}
+    engines: {node: '>=10.0.0'}
     peerDependencies:
-      rollup: '>=0.60.0'
+      rollup: '>=2.0.0'
     dependencies:
       rollup: 3.3.0
     dev: true
