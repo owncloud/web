@@ -2,7 +2,7 @@ import vue from 'rollup-plugin-vue'
 import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import modify from 'rollup-plugin-modify'
 import terser from '@rollup/plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
@@ -52,8 +52,10 @@ const plugins = [
   }),
   alias({
     entries: [
-      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.js') },
+      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.browser.js') },
+      { find: 'portal-vue', replacement: pathResolve(projectRootDir, 'node_modules/portal-vue/dist/portal-vue.esm.js') },
       { find: 'crypto', replacement: pathResolve(projectRootDir, 'polyfills/crypto.js') },
+      { find: 'uuid', replacement: pathResolve(projectRootDir, 'node_modules/uuid/dist/esm-browser/index.js') },
       { find: 'qs', replacement: pathResolve(projectRootDir, 'node_modules/qs/lib/index.js') },
       { find: 'caf', replacement: pathResolve(projectRootDir, 'node_modules/caf/dist/esm/caf.mjs') }
     ]
@@ -70,7 +72,7 @@ const plugins = [
     preferBuiltins: false
   }),
   babel({
-    // babelHelpers: 'bundled',
+    babelHelpers: 'bundled',
     exclude: 'node_modules/**'
   }),
   modify({
