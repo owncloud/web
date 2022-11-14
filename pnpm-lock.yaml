@@ -177,6 +177,13 @@ importers:
       url-search-params-polyfill: 8.1.1
       vuex-mock-store: 0.0.8_@types+jest@27.5.2
       wait-for-expect: 3.0.2
+    dependenciesMeta:
+      '@playwright/test':
+        built: true
+      playwright:
+        built: true
+      vue-concurrency:
+        built: true
 
   packages/babel-preset:
     specifiers:
