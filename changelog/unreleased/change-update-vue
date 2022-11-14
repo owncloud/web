@@ -1,0 +1,7 @@
+Change: Update Vue to v2.7.14
+
+Vue has been updated to 2.7.14
+
+BREAKING CHANGE for developers: The `vue/composition-api` plugin is not available anymore as the composition-api now comes with Vue.
+
+https://github.com/owncloud/web/pull/7877
