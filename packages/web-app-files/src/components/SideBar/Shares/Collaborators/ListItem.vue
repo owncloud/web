@@ -107,7 +107,10 @@ import { DateTime } from 'luxon'
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
 import { SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
-import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityFilesSharingResharingDefault
+} from 'web-pkg/src/composables'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { defineComponent } from 'vue'
 import * as uuid from 'uuid'
@@ -138,6 +141,7 @@ export default defineComponent({
   setup() {
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
+      resharingDefault: useCapabilityFilesSharingResharingDefault(),
       ...useGraphClient()
     }
   },
@@ -357,7 +361,9 @@ export default defineComponent({
       const bitmask = role.hasCustomPermissions
         ? SharePermissions.permissionsToBitmask(permissions)
         : SharePermissions.permissionsToBitmask(
-            role.permissions(this.hasResharing || this.isAnySpaceShareType)
+            role.permissions(
+              (this.hasResharing && this.resharingDefault) || this.isAnySpaceShareType
+            )
           )
       const changeMethod = this.isAnySpaceShareType ? this.changeSpaceMember : this.changeShare
       changeMethod({

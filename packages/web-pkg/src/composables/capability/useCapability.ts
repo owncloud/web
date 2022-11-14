@@ -33,6 +33,10 @@ export const useCapabilityFilesSharingResharing = createCapabilityComposable(
   'files_sharing.resharing',
   true
 )
+export const useCapabilityFilesSharingResharingDefault = createCapabilityComposable(
+  'files_sharing.resharing_default',
+  true
+)
 
 export const useCapabilitySpacesEnabled = createCapabilityComposable('spaces.enabled', false)
 export const useCapabilityProjectSpacesEnabled = createCapabilityComposable(

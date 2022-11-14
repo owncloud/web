@@ -22,7 +22,10 @@ import { Language } from 'vue3-gettext'
 import { DavProperty } from 'web-client/src/webdav/constants'
 
 const allowSharePermissions = (getters) => {
-  return get(getters, `capabilities.files_sharing.resharing`, true)
+  return (
+    get(getters, `capabilities.files_sharing.resharing`, true) &&
+    get(getters, `capabilities.files_sharing.resharing_default`, true)
+  )
 }
 
 export default {
