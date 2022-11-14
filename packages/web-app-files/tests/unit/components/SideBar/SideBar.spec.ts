@@ -1,25 +1,18 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import VueCompositionAPI from '@vue/composition-api'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import stubs from '@/tests/unit/stubs'
-import merge from 'lodash-es/merge'
-import { buildResource } from 'web-app-files/src/helpers/resources'
-import { clientService } from 'web-pkg/src/services'
+import { ClientService } from 'web-pkg/src/services'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
+import { mockDeep } from 'jest-mock-extended'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { Resource } from 'web-client'
+import { Location } from 'vue-router'
 
 jest.mock('web-pkg/src/observer')
-jest.mock('web-app-files/src/helpers/resources', () => {
-  const original = jest.requireActual('web-app-files/src/helpers/resources')
-  return {
-    ...original,
-    buildResource: jest.fn()
-  }
-})
 
 const selectors = {
   noSelectionInfoPanel: 'noselection-stub'
@@ -47,16 +40,9 @@ describe('SideBar', () => {
           }
         ]
       ])('%s', async (name, { path, noSelectionExpected }) => {
-        const item = { path }
-        const mockFileInfo = jest.fn()
-        mockFileInfo.mockReturnValue(item)
-        buildResource.mockReturnValue(item)
+        const item = mockDeep<Resource>({ path })
         const wrapper = createWrapper({
           item,
-          selectedItems: [],
-          mocks: {
-            $client: { publicFiles: { getFileInfo: mockFileInfo } }
-          },
           currentRoute: createLocationPublic('files-public-link')
         })
         await wrapper.vm.$nextTick()
@@ -81,17 +67,8 @@ describe('SideBar', () => {
           }
         ]
       ])('%s', async (name, { path, noSelectionExpected }) => {
-        const item = { path }
-        const mockFileInfo = jest.fn()
-        mockFileInfo.mockReturnValue(item)
-        buildResource.mockReturnValue(item)
-        const wrapper = createWrapper({
-          item,
-          selectedItems: [],
-          mocks: {
-            $client: { files: { fileInfo: mockFileInfo } }
-          }
-        })
+        const item = mockDeep<Resource>({ path })
+        const wrapper = createWrapper({ item })
         await wrapper.vm.$nextTick()
         await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
@@ -102,15 +79,13 @@ describe('SideBar', () => {
 
 function createWrapper({
   item,
-  selectedItems,
-  mocks,
-  fileFetchMethod = () => ({}),
   currentRoute = createLocationSpaces('files-spaces-generic')
+}: {
+  item: Resource
+  currentRoute?: Location
 }) {
   const localVue = createLocalVue()
-  localVue.prototype.$clientService = clientService
   localVue.use(Vuex)
-  localVue.use(VueCompositionAPI)
   localVue.use(GetTextPlugin, {
     translations: 'does-not-matter.json',
     silent: true
@@ -129,9 +104,6 @@ function createWrapper({
             api_enabled: true,
             public: { enabled: true }
           }
-        }),
-        configuration: () => ({
-          server: 'https://example.com'
         })
       },
       modules: {
@@ -147,55 +119,32 @@ function createWrapper({
           },
           getters: {
             highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => selectedItems
-          },
-          mutations: {
-            SET_HIGHLIGHTED_FILE(state, file) {
-              state.highlightedFile = file
-            }
-          },
-          actions: {
-            loadCurrentFileOutgoingShares: jest.fn(),
-            loadIncomingShares: jest.fn(),
-            loadSharesTree: jest.fn(),
-            deleteShare: jest.fn()
-          }
-        },
-        runtime: {
-          modules: {
-            auth: {
-              getters: {
-                publicLinkPassword: () => ''
-              }
-            }
+            selectedFiles: () => [],
+            sharesTree: () => ({}),
+            versions: () => ({})
           }
         }
       }
     }),
     localVue,
     stubs: {
-      ...stubs,
-      SideBar: InnerSideBar
+      ...defaultStubs,
+      SideBar: InnerSideBar,
+      'oc-icon': true,
+      'oc-button': true
     },
     directives: {
       'click-outside': jest.fn()
     },
-    setup: () => {
-      return {
-        webdav: { getFileInfo: fileFetchMethod }
-      }
-    },
-    mocks: merge(
-      {
-        $router: {
-          currentRoute,
-          resolve: (r) => {
-            return { href: r.name }
-          },
-          afterEach: jest.fn()
-        }
+    mocks: {
+      $router: {
+        currentRoute,
+        resolve: (r) => {
+          return { href: r.name }
+        },
+        afterEach: jest.fn()
       },
-      mocks
-    )
+      $clientService: mockDeep<ClientService>()
+    }
   })
 }

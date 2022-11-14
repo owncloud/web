@@ -31,7 +31,7 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
   const makeRequest = (
     method: Method,
     url: string,
-    config: AxiosRequestConfig
+    config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
     let httpClient
     if (unref(accessToken)) {

@@ -5,6 +5,8 @@ import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { mockDeep } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src/helpers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -226,8 +228,11 @@ function createWrapper(
           auth: !publicLinkContext
         }
       },
-      $router: jest.fn(),
-      file: testResource
+      $router: jest.fn()
+    },
+    provide: {
+      displayedItem: testResource,
+      displayedSpace: mockDeep<SpaceResource>()
     }
   })
 }

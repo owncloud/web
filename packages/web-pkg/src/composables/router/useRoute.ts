@@ -8,5 +8,5 @@ export const useRoute = (): Ref<Route> => {
   currentRoute.value = router.currentRoute
   router.afterEach((to) => (currentRoute.value = { ...to }))
 
-  return readonly(currentRoute)
+  return currentRoute
 }

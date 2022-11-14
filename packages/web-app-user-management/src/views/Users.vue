@@ -95,7 +95,7 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { defineComponent } from 'vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
-import { v4 as uuidV4 } from 'uuid'
+import { useLoadTasks } from '../composables/loadTasks/useLoadTasks'
 
 export default defineComponent({
   name: 'UsersView',
@@ -115,53 +115,10 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const { graphClient } = useGraphClient()
 
-    /**
-     * Setting api calls are just temporary and will be replaced with the graph api,
-     * as the backend supports it.
-     */
-    const loadRolesTask = useTask(function* (signal) {
-      const rolesResponse = yield axios.post(
-        '/api/v0/settings/roles-list',
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${unref(accessToken)}`,
-            'X-Request-ID': uuidV4()
-          }
-        }
-      )
-      roles.value = rolesResponse.data.bundles
-    })
-
-    /**
-     * Setting api calls are just temporary and will be replaced with the graph api,
-     * as the backend supports it.
-     */
-    const loadUserRoleTask = useTask(function* (signal, ref) {
-      const userAssignmentResponse = yield axios.post(
-        '/api/v0/settings/assignments-list',
-        {
-          account_uuid: ref.user?.id
-        },
-        {
-          headers: {
-            authorization: `Bearer ${unref(accessToken)}`,
-            'X-Request-ID': uuidV4()
-          }
-        }
-      )
-      const assignments = userAssignmentResponse.data?.assignments
-      ref.user.role = {}
-      const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
-
-      if (roleAssignment) {
-        const role = roles.value.find((role) => role.id === roleAssignment.roleId)
-        if (role) {
-          ref.user.role = role
-        }
-      }
-
-      userAssignments.value[ref.user?.id] = userAssignmentResponse.data?.assignments
+    const { loadRolesTask, loadUserRoleTask, addRoleAssignment } = useLoadTasks({
+      accessToken,
+      roles,
+      userAssignments
     })
 
     const loadGroupsTask = useTask(function* (signal) {
@@ -191,7 +148,6 @@ export default defineComponent({
 
     const loadAdditionalUserDataTask = useTask(function* (signal, ref, user) {
       const { data } = yield unref(graphClient).users.getUser(user.id)
-
       if (!data.drive) {
         return
       }
@@ -204,6 +160,7 @@ export default defineComponent({
     })
 
     return {
+      addRoleAssignment,
       users,
       roles,
       groups,
@@ -454,19 +411,7 @@ export default defineComponent({
            * Setting api calls are just temporary and will be replaced with the graph api,
            * as the backend supports it.
            */
-          await axios.post(
-            '/api/v0/settings/assignments-add',
-            {
-              account_uuid: editUser.id,
-              role_id: editUser.role.id
-            },
-            {
-              headers: {
-                authorization: `Bearer ${this.accessToken}`,
-                'X-Request-ID': uuidV4()
-              }
-            }
-          )
+          await this.addRoleAssignment(editUser)
         }
 
         this.$set(

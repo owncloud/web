@@ -40,11 +40,6 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
-  provide() {
-    return {
-      incomingParentShare: computed(() => this.incomingParentShare)
-    }
-  },
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
@@ -53,8 +48,12 @@ export default defineComponent({
     const store = useStore()
     const sharesLoading = computed(() => store.getters['Files/sharesTreeLoading'])
 
+    const { incomingParentShare, ...rest } = useIncomingParentShare()
+    provide('incomingParentShare', incomingParentShare)
+
     return {
-      ...useIncomingParentShare(),
+      incomingParentShare,
+      ...rest,
       sharesLoading,
       space: inject<ComputedRef<Resource>>('displayedSpace'),
       file: inject<ComputedRef<Resource>>('displayedItem'),

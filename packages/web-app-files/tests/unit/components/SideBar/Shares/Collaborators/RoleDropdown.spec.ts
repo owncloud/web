@@ -85,7 +85,7 @@ describe('RoleDropdown', () => {
             const customPermissionsDrop = wrapper.find(selectors.customPermissionsDrop)
             const showHideMock = jest.fn()
             customPermissionsDrop.vm.show = showHideMock
-            wrapper.vm.$refs.rolesDrop.tippy = { hide: showHideMock }
+            ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
 
             await wrapper
               .find(selectors.roleButtonPrefix + PeopleShareRoles.custom(isFolder).name)
@@ -276,7 +276,7 @@ function getMountOptions({
     localVue,
     stubs,
     provide: {
-      incomingParentShare: {}
+      incomingParentShare: null
     }
   }
 }

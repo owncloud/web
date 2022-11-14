@@ -1,10 +1,10 @@
 import Vuex from 'vuex'
-import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
-import { createLocationSpaces } from '../../../../../src/router'
+import { createLocationSpaces } from 'web-app-files/src/router'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
 const localVue = createLocalVue()
 
@@ -98,15 +98,10 @@ describe('FileLinks', () => {
     })
 
     describe('when the add-new-link button is clicked', () => {
-      let wrapper
-      const spyAddNewLink = jest.spyOn(FileLinks.methods, 'addNewLink')
-
-      beforeEach(() => {
-        const store = createStore({ links: [] })
-        wrapper = getMountedWrapper(store)
-      })
-
       it('should call addNewLink', async () => {
+        const spyAddNewLink = jest.spyOn((FileLinks as any).methods, 'addNewLink')
+        const store = createStore({ links: [] })
+        const wrapper = getMountedWrapper(store)
         expect(spyAddNewLink).toHaveBeenCalledTimes(0)
 
         await wrapper.find(selectors.linkAddButton).trigger('click')
@@ -158,6 +153,13 @@ describe('FileLinks', () => {
           currentTheme: {
             general: {
               name: 'some-company'
+            }
+          },
+          options: {
+            sidebar: {
+              shares: {
+                showAllOnLoad: false
+              }
             }
           }
         })),
@@ -211,15 +213,13 @@ describe('FileLinks', () => {
           value: null
         }
       },
-      stubs: {
-        ...stubs
-      },
+      stubs: defaultStubs,
       mocks: {
         $route: {
           params: {}
         },
         $router: {
-          currentRoute: createLocationSpaces('some-route'),
+          currentRoute: createLocationSpaces('files-spaces-generic'),
           resolve: (r) => {
             return { href: r.name }
           }
@@ -243,7 +243,7 @@ describe('FileLinks', () => {
           params: {}
         },
         $router: {
-          currentRoute: createLocationSpaces('some-route'),
+          currentRoute: createLocationSpaces('files-spaces-generic'),
           resolve: (r) => {
             return { href: r.name }
           }

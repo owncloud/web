@@ -197,9 +197,9 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.incomingParentShare.value && this.resourceIsSharable) {
+      if (this.incomingParentShare && this.resourceIsSharable) {
         return PeopleShareRoles.filterByBitmask(
-          parseInt(this.incomingParentShare.value.permissions),
+          parseInt(this.incomingParentShare.permissions),
           this.resource.isFolder,
           this.allowSharePermission,
           this.hasRoleCustomPermissions
@@ -210,10 +210,8 @@ export default defineComponent({
       return PeopleShareRoles.list(this.resource.isFolder, this.hasRoleCustomPermissions, canDeny)
     },
     availablePermissions() {
-      if (this.incomingParentShare.value && this.resourceIsSharable) {
-        return SharePermissions.bitmaskToPermissions(
-          parseInt(this.incomingParentShare.value.permissions)
-        )
+      if (this.incomingParentShare && this.resourceIsSharable) {
+        return SharePermissions.bitmaskToPermissions(parseInt(this.incomingParentShare.permissions))
       }
       return this.customPermissionsRole.permissions(this.allowSharePermission)
     },

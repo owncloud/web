@@ -2,6 +2,17 @@ import App from '../../src/App.vue'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
+import { ClientService } from 'web-pkg/src'
+import { mockDeep } from 'jest-mock-extended'
+
+jest.mock('web-pkg/src/composables/appDefaults', () => {
+  const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
+  return {
+    useAppDefaults: jest.fn(),
+    useAppFileHandling: jest.fn(),
+    queryItemAsString
+  }
+})
 
 const localVue = createLocalVue()
 
@@ -54,7 +65,12 @@ const storeOptions = {
           }
         ]
       }
-    }))
+    })),
+    apps: jest.fn(() => {
+      return {
+        external: {}
+      }
+    })
   },
   modules: {
     External: {
@@ -189,11 +205,15 @@ function createShallowMountWrapper(makeRequest, options = {}) {
     store: createStore(),
     stubs: componentStubs,
     mocks: {
-      $route
+      $route,
+      $router: {
+        currentRoute: $route,
+        afterEach: jest.fn()
+      },
+      $clientService: mockDeep<ClientService>()
     },
     computed: {
-      currentFileContext: () => $route.params,
-      applicationName: () => $route.query.app
+      currentFileContext: () => $route.params
     },
     methods: {
       getFileInfo: mockFileInfo,
