@@ -78,7 +78,11 @@ describe('InviteCollaboratorForm', () => {
   })
 })
 
-function getWrapper({ selectedCollaborators = [], storageId, highlightedFile = folderMock } = {}) {
+function getWrapper({
+  selectedCollaborators = [],
+  storageId = 'fake-storage-id',
+  highlightedFile = folderMock
+} = {}) {
   return mount(InviteCollaboratorForm, {
     localVue,
     stubs: {
