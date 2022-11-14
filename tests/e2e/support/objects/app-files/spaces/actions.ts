@@ -8,14 +8,14 @@ import { createLink } from '../link/actions'
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
-const spaceIdSelector = '[data-space-id="%s"]'
+const spaceIdSelector = `[data-space-id="%s"]`
 const spacesRenameOptionSelector = '.oc-files-actions-rename-trigger:visible'
 const editSpacesSubtitleOptionSelector = '.oc-files-actions-edit-description-trigger:visible'
 const editQuotaOptionSelector = '.oc-files-actions-edit-quota-trigger:visible'
 const editImageOptionSelector = '.oc-files-actions-upload-space-image-trigger:visible'
 const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
-const quotaValueDropDown = '.vs__dropdown-option :text-is("%s")'
+const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
 const spacesDescriptionInputArea = '#description-input-area'
 const sideBarActions =

@@ -3,6 +3,8 @@ import { Store } from 'vuex-mock-store'
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
 import stubs from '../../../../../../tests/unit/stubs'
 import DesignSystem from 'owncloud-design-system'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
 
 const testData = {
   selectors: {
@@ -97,7 +99,8 @@ describe('Notification component', () => {
   describe('active notifications actions', () => {
     describe('when active notification action is empty', () => {
       const store = notificationStore(testData.notifications.emptyActions)
-      const wrapper = wrapperMounted({ $store: store })
+      const client = mockDeep<OwnCloudSdk>({})
+      const wrapper = wrapperMounted({ $store: store, $client: client })
 
       it('does not display the action button', () => {
         expect(wrapper.find(selectors.actionButton).exists()).toBeFalsy()
@@ -108,13 +111,15 @@ describe('Notification component', () => {
       })
 
       it('dispatches deleteNotification when resolve notification is clicked', () => {
+        client.requests.ocs.mockImplementation(() => Promise.resolve(new Response()))
+
         const resolveNotificationButton = wrapper.find(selectors.resolveNotificationButton)
 
         expect(resolveNotificationButton.exists()).toBeTruthy()
         resolveNotificationButton.trigger('click')
         expect(store.dispatch).toHaveBeenCalledTimes(1)
         expect(store.dispatch).toHaveBeenCalledWith('deleteNotification', {
-          client: wrapper.$client,
+          client,
           notification: 1
         })
       })
@@ -184,7 +189,7 @@ describe('Notification component', () => {
   })
 })
 
-function wrapperMounted(mocks, mockMethods) {
+function wrapperMounted(mocks, mockMethods = {}) {
   const localVue = createLocalVue()
   localVue.use(DesignSystem)
 
@@ -200,7 +205,7 @@ function wrapperShallowMounted(mocks) {
     stubs,
     mocks,
     directives: {
-      'oc-tooltip': () => {}
+      'oc-tooltip': () => undefined
     }
   })
 }

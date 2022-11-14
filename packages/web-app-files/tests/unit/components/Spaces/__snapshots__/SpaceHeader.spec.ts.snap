@@ -8,19 +8,19 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h1 class="space-header-name"></h1> <button type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <h1 class="space-header-name"></h1> <button aria-label="Show context menu" type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <div>
               <div id="oc-files-context-menu">
                 <ul id="oc-files-context-actions-members" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Members</span>
                       <!---->
                       <!---->
                     </button></li>
                 </ul>
                 <ul id="oc-files-context-actions-trashBin" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Deleted files</span>
                       <!---->
                       <!---->
                     </button></li>
@@ -51,19 +51,19 @@ exports[`SpaceHeader space image should show the default image if no other image
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h1 class="space-header-name"></h1> <button type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <h1 class="space-header-name"></h1> <button aria-label="Show context menu" type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <div>
               <div id="oc-files-context-menu">
                 <ul id="oc-files-context-actions-members" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Members</span>
                       <!---->
                       <!---->
                     </button></li>
                 </ul>
                 <ul id="oc-files-context-actions-trashBin" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Deleted files</span>
                       <!---->
                       <!---->
                     </button></li>
@@ -92,19 +92,19 @@ exports[`SpaceHeader space image should show the set image 1`] = `
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h1 class="space-header-name"></h1> <button type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
+        <h1 class="space-header-name"></h1> <button aria-label="Show context menu" type="button" class="oc-ml-s oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <div>
               <div id="oc-files-context-menu">
                 <ul id="oc-files-context-actions-members" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pb-s oc-files-context-actions-border">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-show-details-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Members</span>
                       <!---->
                       <!---->
                     </button></li>
                 </ul>
                 <ul id="oc-files-context-actions-trashBin" class="oc-list oc-my-rm oc-mx-rm oc-files-context-actions oc-pt-s">
-                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label"></span>
+                  <li class="oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-files-actions-delete-trigger action-menu-item" data-testid="action-handler"><span class="oc-icon oc-icon-m oc-icon-passive" data-testid="action-icon"><!----></span> <span data-testid="action-label" class="oc-files-context-action-label">Deleted files</span>
                       <!---->
                       <!---->
                     </button></li>

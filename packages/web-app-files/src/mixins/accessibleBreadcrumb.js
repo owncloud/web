@@ -7,9 +7,11 @@ export default {
   },
   methods: {
     accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute) {
-      const activeBreadcrumb = last(
-        document.getElementById('files-breadcrumb').children[0].children
-      )
+      const breadcrumbEl = document.getElementById('files-breadcrumb')
+      if (!breadcrumbEl) {
+        return
+      }
+      const activeBreadcrumb = last(breadcrumbEl.children[0].children)
       const activeBreadcrumbItem = activeBreadcrumb.getElementsByTagName('button')[0]
       if (!activeBreadcrumbItem) {
         return

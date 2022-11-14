@@ -1,0 +1,6 @@
+Bugfix: Editing text files on public pages
+
+We've fixed a bug where editing text files on public pages was not possible with the oC10 backend.
+
+https://github.com/owncloud/web/pull/7936
+https://github.com/owncloud/web/issues/7932

@@ -1,16 +1,19 @@
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import stubs from '@/tests/unit/stubs/index.js'
+import stubs from '../../../../../../../tests/unit/stubs'
 import { createLocalVue, mount } from '@vue/test-utils'
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
-
 import GetTextPlugin from 'vue-gettext'
+import VueCompositionAPI from '@vue/composition-api'
 
 import { apps, getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
+import { SpaceResource } from 'web-client/src/helpers'
+import { mockDeep } from 'jest-mock-extended'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -81,12 +84,23 @@ function getWrapper(
     },
     computed: {
       actions: () => getActions(actions)
+    },
+    provide: {
+      displayedSpace: mockDeep<SpaceResource>()
     }
   }
   return mount(FileActions, mountOptions)
 }
 
-function createStore(state, filename, fileId, extension, type, mimeType, availableMimeTypes) {
+function createStore(
+  state,
+  filename = undefined,
+  fileId = undefined,
+  extension = undefined,
+  type = undefined,
+  mimeType = undefined,
+  availableMimeTypes = undefined
+) {
   return new Vuex.Store({
     state: {
       apps: apps
