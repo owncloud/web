@@ -37,29 +37,35 @@ Our unit tests spec files follow a simple structure:
 - helper functions at the bottom
 - tests in between
 
+We usually organize tests with nested `describe` blocks. If you would like to get feedback from the core team about 
+the structure, scope and goals of your unit tests before actually writing some, we invite you to make a pull request 
+with only `describe` blocks and nested `it.todo("put your test description here")` lines. 
+
 ### E2E Tests (Playwright)
 
-Our end-to-end test suite is built upon [Playwright Framework](https://github.com/microsoft/playwright), 
+Our end-to-end test suite is built upon the [Playwright Framework](https://github.com/microsoft/playwright), 
 which makes it easy to write tests, debug them and have them run cross-browser with minimal overhead.
 
 #### Prerequisites
 
-To run acceptance tests with Docker, please make sure you have the following tools installed:
+To run e2e tests with Docker, please make sure you have the following tools installed:
 
 - docker
-- docker-compose
+- docker-compose (if not already included in your docker installation)
 - pnpm
 - node
 
-Please also make sure to point `http://host.docker.internal/` to `127.0.0.1` by adding it to your hosts.
+Please also make sure to point `host.docker.internal` to `127.0.0.1` by adding it to your `/etc/hosts` file.
 
 #### Prepare & start web
 
-Bundle the web frontend, which then gets mounted into the respective backends. It also gets recompiled on changes.
+Bundle the web frontend with the following command:
 
 ```shell
 $ pnpm build:w
 ```
+
+Our compose setup automatically mounts it into an oC10 and oCIS backend, respectively. Web also gets recompiled on changes.
 
 #### Start Docker
 
@@ -85,13 +91,13 @@ Depending on the backend you want to run the tests on, you can either run
 $ pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.ocis].feature
 ```
 
-for an ownCloud 10 backend or
+for an **ownCloud 10** backend (filenames including `.ocis` are excluded) or
 
 ```shell
 $ OCIS=true pnpm test:e2e:cucumber tests/e2e/cucumber/**/*[!.oc10].feature
 ```
 
-for an oCIS backend.
+for an **oCIS** backend (filenames including `.oc10` are excluded).
 
 #### Options
 
@@ -121,6 +127,14 @@ $ npx playwright show-trace path/to/file.zip
 
 ### Acceptance Tests (Nightwatch)
 
+{{< hint info >}}
+We've decided to switch to playwright for end-to-end tests. As we steadily increase the coverage of our playwright 
+based e2e tests we keep the existing nightwatch based e2e tests maintained. However, we decided to not add new scenarios 
+to the nightwatch based e2e tests anymore.
+
+In other words: only continue reading about our nightwatch based acceptance tests below if you need to debug a failing test.
+{{< /hint >}}
+
 At ownCloud, we have decided to adopt Docker as the main environment for developing our application.
 This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [manual testing guide]({{< ref "acceptance-tests-all.md" >}})
 
@@ -129,7 +143,7 @@ This also applies for running our acceptance tests. To run the tests without Doc
 To run acceptance tests with Docker, please make sure you have the following tools installed:
 
 - docker
-- docker-compose
+- docker-compose (if not already included in your docker installation)
 - pnpm
 - node
 
@@ -159,7 +173,7 @@ $ docker compose up ocis vnc selenium middleware-ocis
 
 and make sure there are no conflicting ports and everything runs smoothly. You can check if everything has worked by opening [https://host.docker.internal:9200](https://host.docker.internal:9200) (oCIS) and [http://host.docker.internal:8080](http://host.docker.internal:8080) (OC10) and logging in using the demo user (admin/admin).
 
-If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.0.0-beta-1-20210215`for now. To do so, export `SELENIUM_IMAGE=seleniarm/standalone-chromium:4.0.0-beta-1-20210215`.
+If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.4.0-20220814`for now. To do so, export `SELENIUM_IMAGE=seleniarm/standalone-chromium:4.4.0-20220814`.
 
 #### Run acceptance tests
 
@@ -185,7 +199,7 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.0.0-b
 To watch the tests while running, open [http://host.docker.internal:6080/](http://host.docker.internal:6080/) in the browser to access your VNC client.
 
 
-### Watch the test report
+### Analyze the test report
 
 The cucumber library is used as the test runner for both e2e and acceptance tests. The report generator script lives inside the `tests/e2e/cucumber/report` folder. If you want to create a report after the tests are done, run the command:
 
