@@ -6,7 +6,7 @@
 import keycode from 'keycode'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue'
 import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { SpaceResource } from 'web-client/src/helpers'
 

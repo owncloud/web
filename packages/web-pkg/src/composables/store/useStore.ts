@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api'
+import { getCurrentInstance } from 'vue'
 import { Store } from 'vuex'
 
 export const useStore = <T = any>(): Store<T> => {

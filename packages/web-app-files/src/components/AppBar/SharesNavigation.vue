@@ -48,7 +48,7 @@ import {
   locationSharesWithMe,
   locationSharesWithOthers
 } from '../../router/shares'
-import { computed, getCurrentInstance, unref } from '@vue/composition-api'
+import { computed, getCurrentInstance, unref } from 'vue'
 import { useRouter } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../../composables'
 

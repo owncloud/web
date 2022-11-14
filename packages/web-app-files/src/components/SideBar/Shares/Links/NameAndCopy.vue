@@ -28,7 +28,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import copyToClipboard from 'copy-to-clipboard'
 
 export default defineComponent({

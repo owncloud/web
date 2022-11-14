@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api'
+import { getCurrentInstance } from 'vue'
 
 export const useTranslations = () => {
   const p = getCurrentInstance().proxy as any

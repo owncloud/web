@@ -1,4 +1,4 @@
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import VueRouter, { Location } from 'vue-router'
 
 import { MaybeRef } from '../../utils'

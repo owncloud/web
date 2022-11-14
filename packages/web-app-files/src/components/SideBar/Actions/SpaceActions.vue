@@ -43,7 +43,7 @@ import EditQuota from '../../../mixins/spaces/actions/editQuota'
 import QuotaModal from '../../Spaces/QuotaModal.vue'
 import ReadmeContentModal from '../../../components/Spaces/ReadmeContentModal.vue'
 import { thumbnailService } from '../../../services'
-import { ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject } from 'vue'
 import { Resource } from 'web-client'
 
 export default defineComponent({

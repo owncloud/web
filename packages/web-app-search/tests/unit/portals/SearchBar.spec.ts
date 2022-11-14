@@ -6,13 +6,11 @@ import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
-import CompositionAPI from '@vue/composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(AsyncComputed)
 localVue.use(Vuex)
-localVue.use(CompositionAPI)
 
 let wrapper: Wrapper<any>
 

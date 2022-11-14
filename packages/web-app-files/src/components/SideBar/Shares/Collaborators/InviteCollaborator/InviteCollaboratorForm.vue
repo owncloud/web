@@ -91,7 +91,7 @@ import {
 } from 'web-pkg/src/composables'
 
 import { useGraphClient } from 'web-pkg/src/composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {

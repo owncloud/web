@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import { computed, Ref, ref, unref } from '@vue/composition-api'
+import { computed, Ref, ref, unref } from 'vue'
 import { dirname } from 'path'
 import { ClientService, MaybeRef, useAppFileHandling } from 'web-pkg'
 import { Resource } from 'web-client'

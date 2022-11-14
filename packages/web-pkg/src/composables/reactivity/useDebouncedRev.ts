@@ -1,4 +1,4 @@
-import { customRef, Ref, ref } from '@vue/composition-api'
+import { customRef, Ref, ref } from 'vue'
 import debounce, { DebounceSettings } from 'lodash-es/debounce'
 
 export const useDebouncedRef = <T>(

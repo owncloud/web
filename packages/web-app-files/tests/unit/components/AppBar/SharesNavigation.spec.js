@@ -2,7 +2,6 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import VueRouter from 'vue-router'
-import VueCompositionAPI from '@vue/composition-api'
 import GetTextPlugin from 'vue-gettext'
 
 import stubs from '@/tests/unit/stubs'
@@ -13,7 +12,6 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
 localVue.use(VueRouter)
-localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

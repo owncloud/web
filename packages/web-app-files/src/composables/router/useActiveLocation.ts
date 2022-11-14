@@ -1,4 +1,4 @@
-import { ref, Ref, watch } from '@vue/composition-api'
+import { ref, Ref, watch } from 'vue'
 import { useRoute, useRouter } from 'web-pkg/src/composables'
 import { ActiveRouteDirectorFunc } from '../../router'
 

@@ -47,7 +47,7 @@ import {
   isLocationSharesActive,
   isLocationTrashActive
 } from '../../router'
-import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from 'vue'
 import {
   useCapabilityShareJailEnabled,
   useClientService,

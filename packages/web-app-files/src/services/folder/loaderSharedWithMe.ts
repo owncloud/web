@@ -8,7 +8,7 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

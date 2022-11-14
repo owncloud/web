@@ -64,7 +64,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, unref } from '@vue/composition-api'
+import { defineComponent, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource } from 'web-client/src/helpers'

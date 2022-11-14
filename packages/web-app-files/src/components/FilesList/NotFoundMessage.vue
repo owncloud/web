@@ -52,7 +52,7 @@ import {
   isLocationSpacesActive
 } from '../../router'
 import { useRouter } from 'web-pkg/src/composables'
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 

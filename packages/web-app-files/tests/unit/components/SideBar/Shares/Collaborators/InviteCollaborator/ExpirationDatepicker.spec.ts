@@ -1,5 +1,5 @@
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
-import VueCompositionAPI, { nextTick } from '@vue/composition-api'
+import { nextTick } from 'vue'
 import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
@@ -175,7 +175,6 @@ const asCapabilitiesGetter = (capabilities = {}): { getters: GetterTree<unknown,
 
 const createWrapper = (store = {}): Wrapper<any> => {
   const localVue = createLocalVue()
-  localVue.use(VueCompositionAPI)
   localVue.use(Vuex)
   localVue.use(DesignSystem)
 

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

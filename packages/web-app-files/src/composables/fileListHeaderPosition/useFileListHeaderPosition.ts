@@ -1,4 +1,4 @@
-import { ref, nextTick, onMounted, Ref } from '@vue/composition-api'
+import { ref, nextTick, onMounted, Ref } from 'vue'
 
 export const useFileListHeaderPosition = (): { y: Ref; refresh: () => void } => {
   const y = ref(0)

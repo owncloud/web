@@ -1,5 +1,4 @@
 import Vuex from 'vuex'
-import CompositionAPI from '@vue/composition-api'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '../../../../../../tests/unit/stubs/index.js'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
@@ -10,7 +9,6 @@ import { MockProxy, mock } from 'jest-mock-extended'
 import { join } from 'path'
 
 const localVue = createLocalVue()
-localVue.use(CompositionAPI)
 localVue.use(DesignSystem)
 localVue.use(Vuex)
 

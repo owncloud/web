@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent } from 'vue'
 import { useRouter, useStore, useTranslations } from 'web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
 

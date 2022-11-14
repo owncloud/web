@@ -9,7 +9,7 @@ import {
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../helpers/statusIndicators'
 import { SpaceResource } from 'web-client/src/helpers'
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'

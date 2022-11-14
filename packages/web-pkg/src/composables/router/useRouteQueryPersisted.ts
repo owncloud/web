@@ -1,4 +1,4 @@
-import { Ref, watch, unref } from '@vue/composition-api'
+import { Ref, watch, unref } from 'vue'
 import { useRouteQuery } from './useRouteQuery'
 import { QueryValue } from './types'
 import { useLocalStorage } from '../localStorage'

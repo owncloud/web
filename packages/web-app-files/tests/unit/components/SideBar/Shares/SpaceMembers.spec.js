@@ -5,12 +5,10 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import Users from '@/__fixtures__/users'
 import { spaceRoleManager, spaceRoleViewer, ShareTypes } from 'web-client/src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

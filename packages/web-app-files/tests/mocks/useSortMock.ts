@@ -1,5 +1,5 @@
 import { useSort } from 'web-app-files/src/composables'
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 
 export const useSortMock = (
   options: Partial<ReturnType<typeof useSort>> = {}

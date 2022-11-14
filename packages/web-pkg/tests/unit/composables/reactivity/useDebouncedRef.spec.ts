@@ -1,6 +1,6 @@
 import { useDebouncedRef } from 'web-pkg/src/composables'
 import { createWrapper } from '../router/spec'
-import { nextTick } from '@vue/composition-api'
+import { nextTick } from 'vue'
 
 describe('useDebouncedRef', () => {
   it('should be valid', () => {

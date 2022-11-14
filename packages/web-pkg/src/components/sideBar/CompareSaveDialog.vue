@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import isEqual from 'lodash-es/isEqual'
 import { eventBus } from '../../services/eventBus'
 

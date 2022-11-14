@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import { computed, Ref, unref } from '@vue/composition-api'
+import { computed, Ref, unref } from 'vue'
 import { useAppMeta } from './useAppMeta'
 import type { AppConfigObject } from './types'
 interface AppConfigOptions {

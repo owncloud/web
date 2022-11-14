@@ -77,7 +77,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'

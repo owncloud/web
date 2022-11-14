@@ -1,6 +1,6 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
-import { computed, Ref, ref, unref, watch } from '@vue/composition-api'
+import { computed, Ref, ref, unref, watch } from 'vue'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { useGraphClient } from '../graphClient'

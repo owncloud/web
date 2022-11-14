@@ -143,13 +143,7 @@ import {
 } from 'web-pkg/src/composables'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  PropType
-} from '@vue/composition-api'
+import { computed, defineComponent, getCurrentInstance, onMounted, PropType } from 'vue'
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { useUploadHelpers } from '../../composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'

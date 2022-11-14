@@ -36,7 +36,7 @@ function getMountedWrapper({ mocks = {}, loading = false } = {}) {
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  const localVue = defaultLocalVue({ compositionApi: true })
+  const localVue = defaultLocalVue()
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,

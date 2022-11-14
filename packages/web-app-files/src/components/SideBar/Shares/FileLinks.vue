@@ -113,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, unref } from '@vue/composition-api'
+import { defineComponent, PropType, unref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {

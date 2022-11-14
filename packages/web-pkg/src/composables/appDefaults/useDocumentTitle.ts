@@ -1,4 +1,4 @@
-import { watch, Ref, unref } from '@vue/composition-api'
+import { watch, Ref, unref } from 'vue'
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { useEventBus } from '../eventBus'

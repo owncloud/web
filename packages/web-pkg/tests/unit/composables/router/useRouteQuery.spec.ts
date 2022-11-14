@@ -1,7 +1,7 @@
 import { useRouteQuery } from 'web-pkg/src/composables'
 import { createWrapper } from './spec'
 import VueRouter from 'vue-router'
-import { Ref, nextTick, computed, ComputedRef } from '@vue/composition-api'
+import { Ref, nextTick, computed, ComputedRef } from 'vue'
 
 describe('useRouteQuery', () => {
   it('is reactive', async () => {

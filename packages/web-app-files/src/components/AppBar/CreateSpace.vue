@@ -16,7 +16,7 @@
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { useGraphClient } from 'web-pkg/src/composables'
 import { buildSpace } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'

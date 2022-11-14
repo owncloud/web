@@ -146,7 +146,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { ImageDimension } from '../../../constants'
 import { loadPreview } from 'web-pkg/src/helpers/preview'

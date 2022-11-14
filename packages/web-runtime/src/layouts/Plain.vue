@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from '@vue/composition-api'
+import { computed, defineComponent, unref } from 'vue'
 import { useRouteMeta, useStore, useTranslations } from 'web-pkg'
 
 export default defineComponent({

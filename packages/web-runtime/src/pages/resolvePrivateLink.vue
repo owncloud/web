@@ -55,7 +55,7 @@ import {
   useCapabilitySpacesEnabled,
   useClientService
 } from 'web-pkg/src/composables'
-import { unref, defineComponent, computed, onMounted, ref, Ref } from '@vue/composition-api'
+import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'

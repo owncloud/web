@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue'
 import { Panel } from './types'
 
 let visibilityObserver: VisibilityObserver

@@ -94,7 +94,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import {
   useAccessToken,
@@ -106,7 +106,7 @@ import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({

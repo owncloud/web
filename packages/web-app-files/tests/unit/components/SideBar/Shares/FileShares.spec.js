@@ -1,6 +1,5 @@
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import mockAxios from 'jest-mock-axios'
-import VueCompositionAPI from '@vue/composition-api'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
@@ -18,7 +17,6 @@ const localVue = createLocalVue()
 localVue.prototype.$clientService = clientService
 localVue.use(DesignSystem)
 localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

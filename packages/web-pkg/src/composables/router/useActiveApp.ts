@@ -1,4 +1,4 @@
-import { computed, ComputedRef, unref } from '@vue/composition-api'
+import { computed, ComputedRef, unref } from 'vue'
 import { useRoute } from './useRoute'
 import { Route } from 'vue-router'
 

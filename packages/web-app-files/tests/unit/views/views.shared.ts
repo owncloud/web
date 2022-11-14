@@ -3,12 +3,10 @@ import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import { mount, VueClass, createLocalVue } from '@vue/test-utils'
 import { routes, getStore } from './views.setup'
-import VueCompositionAPI from '@vue/composition-api'
 import VueRouter from 'vue-router'
 import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()
-localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 localVue.use(VueRouter)
 localVue.use(DesignSystem)

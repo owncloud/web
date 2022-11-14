@@ -7,7 +7,7 @@ import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
 import { useDriveResolver } from 'web-pkg/src/composables'
 import { spaces } from 'web-app-files/tests/__fixtures__'
-import { computed, ref } from '@vue/composition-api'
+import { computed, ref } from 'vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
 jest.mock('web-pkg/src/composables/driveResolver')
@@ -47,7 +47,7 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  const localVue = defaultLocalVue({ compositionApi: true })
+  const localVue = defaultLocalVue()
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,

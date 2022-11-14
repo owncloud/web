@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { computed, ComputedRef, defineComponent, inject, provide } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'

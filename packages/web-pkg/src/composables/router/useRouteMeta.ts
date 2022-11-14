@@ -1,4 +1,4 @@
-import { computed, Ref, unref } from '@vue/composition-api'
+import { computed, Ref, unref } from 'vue'
 import { useRoute } from './useRoute'
 
 export const useRouteMeta = (key: string, defaultValue?: string): Ref<string> => {

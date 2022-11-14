@@ -12,7 +12,7 @@
   </oc-button>
 </template>
 <script>
-import { computed, unref, watch } from '@vue/composition-api'
+import { computed, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
 import { useStore, useLocalStorage } from 'web-pkg/src/composables'
 import { themeNameDark, themeNameLight, useDefaultThemeName } from '../../composables'

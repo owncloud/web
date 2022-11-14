@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from '@vue/composition-api'
+import { computed, defineComponent, unref } from 'vue'
 import { useRoute, useRouter, useStore } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { urlJoin } from 'web-client/src/utils'

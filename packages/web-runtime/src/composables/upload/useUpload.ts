@@ -9,7 +9,7 @@ import {
   usePublicLinkPassword,
   useStore
 } from 'web-pkg/src/composables'
-import { computed, unref, watch } from '@vue/composition-api'
+import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppyService'
 import * as uuid from 'uuid'
 import { SpaceResource } from 'web-client/src/helpers'

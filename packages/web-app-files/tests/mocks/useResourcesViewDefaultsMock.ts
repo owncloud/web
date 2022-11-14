@@ -1,5 +1,5 @@
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { readonly, ref } from '@vue/composition-api'
+import { readonly, ref } from 'vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Task } from 'vue-concurrency'
 import { SpaceResource } from 'web-client/src/helpers'

@@ -1,5 +1,4 @@
 // import { mount, createLocalVue } from '@vue/test-utils'
-// import VueCompositionAPI from '@vue/composition-api'
 // import VueRouter from 'vue-router'
 // import Vuex from 'vuex'
 // import DesignSystem from 'owncloud-design-system'
@@ -11,7 +10,6 @@
 // localVue.use(Vuex)
 // localVue.use(VueRouter)
 // localVue.use(DesignSystem)
-// localVue.use(VueCompositionAPI)
 // localVue.use(GetTextPlugin, {
 //   translations: 'does-not-matter.json',
 //   silent: true

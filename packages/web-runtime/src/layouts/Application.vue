@@ -42,7 +42,7 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { computed, defineComponent, unref, watch } from '@vue/composition-api'
+import { computed, defineComponent, unref, watch } from 'vue'
 
 export default defineComponent({
   name: 'ApplicationLayout',

@@ -1,4 +1,4 @@
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 
 import { Resource } from 'web-client'
 import { MaybeRef } from '../../utils'

@@ -1,4 +1,4 @@
-import { computed, unref } from '@vue/composition-api'
+import { computed, unref } from 'vue'
 import { Store } from 'vuex'
 import { useAccessToken, useClientService, useStore } from '../'
 
