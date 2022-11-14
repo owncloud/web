@@ -1,7 +1,5 @@
 import vue from 'rollup-plugin-vue'
-// import resolve from '@rollup/plugin-node-resolve'
-import resolve from 'rollup-plugin-node-resolve'
-
+import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from 'rollup-plugin-babel'
@@ -54,8 +52,10 @@ const plugins = [
   }),
   alias({
     entries: [
+      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.js') },
       { find: 'crypto', replacement: pathResolve(projectRootDir, 'polyfills/crypto.js') },
-      { find: 'qs', replacement: pathResolve(projectRootDir, 'node_modules/qs/lib/index.js') }
+      { find: 'qs', replacement: pathResolve(projectRootDir, 'node_modules/qs/lib/index.js') },
+      { find: 'caf', replacement: pathResolve(projectRootDir, 'node_modules/caf/dist/esm/caf.mjs') }
     ]
   }),
   commonjs({
@@ -227,6 +227,7 @@ if (production) {
 }
 
 export default {
+  strictDeprecations: true,
   input: fs.readdirSync('packages').reduce((acc, i) => {
     for (const extension of ['js', 'ts']) {
       const root = path.join('packages', i, 'src', `index.${extension}`)
@@ -242,12 +243,12 @@ export default {
     format: 'amd',
     sourcemap: sourcemap,
     chunkFileNames: path.join('js', 'chunks', production ? '[name]-[hash].js' : '[name].js'),
-    entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
-  },
-  manualChunks: (id) => {
-    if (id.includes('node_modules')) {
-      return 'vendor'
-    }
+    entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js'),
+    manualChunks: (id) => {
+      if (id.includes('node_modules')) {
+        return 'vendor'
+      }
+    },
   },
   onwarn: (warning) => {
     if (warning.code !== 'CIRCULAR_DEPENDENCY') {

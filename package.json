@@ -45,11 +45,12 @@
     "@ownclouders/tsconfig": "workspace:*",
     "@playwright/test": "1.27.1",
     "@rollup-extras/plugin-copy": "1.5.0",
-    "@rollup/plugin-alias": "3.1.9",
+    "@rollup/plugin-alias": "4.0.2",
     "@rollup/plugin-commonjs": "17.1.0",
     "@rollup/plugin-html": "0.2.4",
     "@rollup/plugin-inject": "4.0.4",
     "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "11.2.1",
     "@rollup/plugin-typescript": "8.5.0",
     "@types/jest": "27.5.2",
     "@types/jest-axe": "3.5.5",
@@ -91,13 +92,12 @@
     "react": "17.0.2",
     "regenerator-runtime": "0.13.10",
     "requirejs": "2.3.6",
-    "rollup": "2.52.7",
+    "rollup": "2.79.1",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-delete": "2.0.0",
     "rollup-plugin-gzip": "2.5.1",
     "rollup-plugin-livereload": "2.0.5",
     "rollup-plugin-modify": "3.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-polyfill-node": "0.8.0",
     "rollup-plugin-postcss": "4.0.2",
     "rollup-plugin-progress": "1.1.2",
@@ -119,17 +119,6 @@
     "node": ">=16"
   },
   "packageManager": "pnpm@7.14.0",
-  "dependenciesMeta": {
-    "@playwright/test": {
-      "built": true
-    },
-    "playwright": {
-      "built": true
-    },
-    "vue-concurrency": {
-      "built": true
-    }
-  },
   "volta": {
     "node": "16.18.0"
   }
