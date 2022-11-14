@@ -3,7 +3,44 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v5.7.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v6.0.0...master
+
+Summary
+-------
+
+* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
+
+Details
+-------
+
+* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+
+   We've fixed a bug where editing text files on public pages was not possible with the oC10
+   backend.
+
+   https://github.com/owncloud/web/issues/7932
+   https://github.com/owncloud/web/pull/7936
+
+* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
+
+   We have removed the deprecated `mediaSource` helper function and the `v-image-source`
+   directive.
+
+   BREAKING CHANGE for developers: `mediaSource` and `v-image-source` are not available
+   anymore, `loadPreview` should be used once web-pkg is published.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/7935
+   https://github.com/owncloud/web/pull/7072
+   https://github.com/owncloud/web/pull/7350
+
+Changelog for ownCloud Web [6.0.0] (2022-11-04)
+=======================================
+The following sections list the changes in ownCloud web 6.0.0 relevant to
+ownCloud admins and users.
+
+[6.0.0]: https://github.com/owncloud/web/compare/v5.7.0...v6.0.0
 
 Summary
 -------
