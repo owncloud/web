@@ -4,7 +4,10 @@ import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/
 import { ShareTypes } from 'web-client/src/helpers/share'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import stubs from '@/tests/unit/stubs'
+import stubs from '../../../../../../../../../tests/unit/stubs'
+import VueCompositionAPI from '@vue/composition-api'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg/src'
 
 const localVue = createLocalVue()
 localVue.use(GetTextPlugin, {
@@ -13,6 +16,7 @@ localVue.use(GetTextPlugin, {
 })
 localVue.use(DesignSystem)
 localVue.use(Vuex)
+localVue.use(VueCompositionAPI)
 
 const folderMock = {
   type: 'folder',
@@ -49,7 +53,7 @@ describe('InviteCollaboratorForm', () => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
-      const wrapper = getWrapper({ selectedCollaborators })
+      const wrapper = getWrapper({ selectedCollaborators } as any)
       const spyTriggerUpload = jest.spyOn(wrapper.vm, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
@@ -68,7 +72,7 @@ describe('InviteCollaboratorForm', () => {
       const wrapper = getWrapper({
         selectedCollaborators,
         storageId: dataSet.storageId,
-        highlightedFile: dataSet.highlightedFile
+        highlightedFile: dataSet.highlightedFile as any
       })
       const addShareSpy = jest.spyOn(wrapper.vm, dataSet.addMethod)
       await wrapper.vm.share()
@@ -98,7 +102,8 @@ function getWrapper({
     mocks: {
       $route: {
         params: { storageId }
-      }
+      },
+      $clientService: mockDeep<ClientService>({})
     },
     store: new Vuex.Store({
       modules: {
