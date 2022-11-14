@@ -1,7 +1,6 @@
-import { defineComponent, SetupFunction, Data } from 'vue'
+import Vue, { defineComponent, SetupFunction, Data } from 'vue'
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
 import Vuex from 'vuex'
-import Vue from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

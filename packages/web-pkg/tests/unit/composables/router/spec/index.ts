@@ -1,6 +1,5 @@
-import { defineComponent, SetupFunction, Data } from 'vue'
+import Vue, { defineComponent, SetupFunction, Data } from 'vue'
 import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
-import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const localVue = createLocalVue()

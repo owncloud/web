@@ -9,8 +9,7 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { ShareRole } from 'web-client/src/helpers/share'
 
 export default defineComponent({

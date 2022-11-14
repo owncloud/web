@@ -113,8 +113,7 @@ import {
   SpacePeopleShareRoles
 } from 'web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { defineComponent } from 'vue'
-import { PropType } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingCanDenyAccess,
