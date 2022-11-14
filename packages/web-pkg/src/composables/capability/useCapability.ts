@@ -73,6 +73,10 @@ export const useCapabilityFilesSharingPublicCanEdit = createCapabilityComposable
   'files_sharing.public.can_edit',
   false
 )
+export const useCapabilityFilesSharingPublicCanContribute = createCapabilityComposable(
+  'files_sharing.public.can_contribute',
+  true
+)
 export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
   'files_sharing.public.alias',
   false
