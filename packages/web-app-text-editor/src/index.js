@@ -57,11 +57,15 @@ const fileExtensions = () => {
     }
   ]
 
-  let primaryExtensions = window.Vue.$store.getters.extensionConfigByAppId(appId)
-    .primaryExtensions || ['txt', 'md']
+  let config = window.Vue.$store.getters.extensionConfigByAppId(appId)
+  let primaryExtensions = config.primaryExtensions || ['txt', 'md']
+  let extraExtensions = config.extraExtensions || []
+
   if (typeof primaryExtensions === 'string') {
     primaryExtensions = [primaryExtensions]
   }
+  extensions.push(...extraExtensions.map(ext => ({extension: ext})))
+
   return extensions.reduce((acc, extensionItem) => {
     const isPrimary = primaryExtensions.includes(extensionItem.extension)
     extensionItem.canBeDefault = isPrimary
@@ -72,6 +76,7 @@ const fileExtensions = () => {
         }
       }
     }
+    //extensionItem.canBeDefault = true
     acc.push(extensionItem)
     return acc
   }, [])
