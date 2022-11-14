@@ -90,7 +90,10 @@
   "vueCompilerOptions": {
     "experimentalCompatMode": 2,
     "experimentalTemplateCompilerOptions": {
-      "compatConfig": { "MODE": 2 } // optional
-    }
+      "compatConfig": {
+        "MODE": 2
+      } // optional
+    },
+    "target": 2.7
   }
 }
