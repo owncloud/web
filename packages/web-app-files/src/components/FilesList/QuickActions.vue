@@ -15,10 +15,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import pickBy from 'lodash-es/pickBy'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'QuickActions',
 
   props: {
@@ -37,7 +38,7 @@ export default {
       return pickBy(this.actions, (action) => action.displayed(this.item, this.$store) === true)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

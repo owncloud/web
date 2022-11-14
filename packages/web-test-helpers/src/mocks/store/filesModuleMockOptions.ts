@@ -4,6 +4,8 @@ export const filesModuleMockOptions = {
     getters: {
       currentFolder: jest.fn(),
       files: jest.fn(),
+      activeFiles: jest.fn(),
+      highlightedFile: jest.fn(),
       selectedFiles: jest.fn()
     },
     mutations: {
@@ -12,10 +14,15 @@ export const filesModuleMockOptions = {
       RENAME_FILE: jest.fn(),
       SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
       SET_FILE_EXTENSIONS_VISIBILITY: jest.fn(),
-      UPSERT_RESOURCE: jest.fn()
+      UPSERT_RESOURCE: jest.fn(),
+      CLEAR_CURRENT_FILES_LIST: jest.fn(),
+      SET_CURRENT_FOLDER: jest.fn(),
+      LOAD_FILES: jest.fn(),
+      CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {
-      deleteFiles: jest.fn()
+      deleteFiles: jest.fn(),
+      loadSharesTree: jest.fn()
     }
   }
 }

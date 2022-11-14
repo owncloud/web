@@ -1,6 +1,5 @@
 import 'vue-resize/dist/vue-resize.css'
 import Vue from 'vue'
-import MediaSource from '../plugins/mediaSource.js'
 import WebPlugin from '../plugins/web'
 import Avatar from '../components/Avatar.vue'
 import focusMixin from '../mixins/focusMixin'
@@ -20,7 +19,6 @@ Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(VueEvents)
 Vue.use(VueScrollTo)
-Vue.use(MediaSource)
 Vue.use(WebPlugin)
 Vue.use(VueResize)
 Vue.use(VueMeta, {

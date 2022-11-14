@@ -4,8 +4,12 @@ export const runtimeModuleMockOptions = {
     modules: {
       spaces: {
         namespaced: true,
+        getters: {
+          spaces: jest.fn(() => [])
+        },
         actions: {
-          loadSpaceMembers: jest.fn()
+          loadSpaceMembers: jest.fn(),
+          reloadProjectSpaces: jest.fn()
         }
       }
     }

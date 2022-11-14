@@ -2,6 +2,9 @@ import { createLocalVue } from '@vue/test-utils'
 import DesignSystem from 'owncloud-design-system'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 import { shallowMount, mount } from '@vue/test-utils'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { Store } from 'vuex-mock-store'
 
 const collaboratorAction = {
   displayed: jest.fn(() => true),
@@ -111,6 +114,10 @@ function getMountedWrapper() {
     stubs: {
       'oc-icon': false,
       'oc-button': false
+    },
+    mocks: {
+      $client: mockDeep<OwnCloudSdk>(),
+      $store: mockDeep<Store>()
     }
   })
 }

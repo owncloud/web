@@ -1,0 +1,10 @@
+Change: Remove mediaSource and v-image-source
+
+We have removed the deprecated `mediaSource` helper function and the `v-image-source` directive.
+
+BREAKING CHANGE for developers: `mediaSource` and `v-image-source` are not available anymore, `loadPreview` should be used once web-pkg is published.
+
+https://github.com/owncloud/web/pull/7935
+https://github.com/owncloud/web/issues/7338
+https://github.com/owncloud/web/pull/7072
+https://github.com/owncloud/web/pull/7350

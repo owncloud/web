@@ -24,14 +24,3 @@ config.mocks = {
     current: 'en'
   }
 }
-
-jest.mock('web-app-files/src/composables', () => ({
-  ...jest.requireActual('web-app-files/src/composables'),
-  usePagination: jest.fn(({ page, items, sortDir, sortBy }) => {
-    return {
-      items,
-      total: 1,
-      perPage: 10
-    }
-  })
-}))

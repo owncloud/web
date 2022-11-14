@@ -35,6 +35,7 @@ export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
           body: await res[responseType](),
           headers: {
             ETag: res.headers.get('etag'),
+            'OC-ETag': res.headers.get('oc-etag'),
             'OC-FileId': res.headers.get('oc-fileid')
           }
         }

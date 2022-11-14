@@ -1,253 +1,60 @@
 import { mount } from '@vue/test-utils'
-import { createFile } from './views.setup'
 import Favorites from '../../../src/views/Favorites.vue'
-
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
+import { files } from '../../__fixtures__'
+import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { ref } from '@vue/composition-api'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
-const stubs = {
-  'app-bar': true,
-  'router-link': true,
-  translate: true,
-  'oc-pagination': true,
-  'resource-table': true,
-  'oc-spinner': true,
-  'context-actions': true,
-  'side-bar': true
-}
-
-const selectors = {
-  noContentMessage: '#files-favorites-empty',
-  favoritesTable: '#files-favorites-table'
-}
-
-const spinnerStub = 'oc-spinner-stub'
-const resourceTableStub = 'resource-table-stub'
-const paginationStub = 'oc-pagination-stub'
-const listInfoStub = 'list-info-stub'
-
-const defaultActiveFiles = [createFile({ id: '1233' }), createFile({ id: '1234' })]
-
-window.ResizeObserver =
-  window.ResizeObserver ||
-  jest.fn().mockImplementation(() => ({
-    disconnect: jest.fn(),
-    observe: jest.fn(),
-    unobserve: jest.fn()
-  }))
+jest.mock('web-app-files/src/composables')
 
 describe('Favorites view', () => {
-  // these tests currently disable the composition API which basically renders the unit tests useless.
-  // we need to come up with import mocks for composables, then mock the state from the composables and
-  // test the respective composables separately. until then these view tests don't make much sense...
-  describe('appBar always present', () => {
-    it.todo('implement "app bar" tests')
+  it('appBar always present', () => {
+    const { wrapper } = getMountedWrapper()
+    expect(wrapper.find('app-bar-stub').exists()).toBeTruthy()
+  })
+  it('sideBar always present', () => {
+    const { wrapper } = getMountedWrapper()
+    expect(wrapper.find('side-bar-stub').exists()).toBeTruthy()
   })
   describe('different files view states', () => {
-    describe('loading', () => {
-      it('shows only the loader component during loading', () => {
-        const { wrapper } = getMountedWrapper({
-          mocks: {
-            loadResourcesTask: {
-              perform: jest.fn()
-            },
-            areResourcesLoading: true
-          }
-        })
-
-        expect(wrapper.find(spinnerStub).exists()).toBeTruthy()
-        expect(wrapper.find(resourceTableStub).exists()).toBeFalsy()
-      })
+    it('shows the loading spinner during loading', () => {
+      const { wrapper } = getMountedWrapper({ loading: true })
+      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
     })
-    describe('no content', () => {
-      it.todo('implement "no content" state tests')
+    it('shows the no-content-message after loading', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
+      expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
-    describe('list files', () => {
-      it.todo('implement "list files" state tests')
+    it('shows the files table when files are available', () => {
+      const { wrapper } = getMountedWrapper({ files })
+      expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
+      expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
     })
   })
 })
 
-// describe('Favorites view', () => {
-//   describe('loading indicator', () => {
-//     it('shows only the list-loader during loading', () => {
-//       const wrapper = getMountedWrapper({ loading: true })
-//
-//       expect(wrapper.find(spinnerStub).exists()).toBeTruthy()
-//       expect(wrapper.find(resourceTableStub).exists()).toBeFalsy()
-//     })
-//
-//     it('shows only the files table when loading is finished', () => {
-//       const wrapper = getMountedWrapper({
-//         setup() {
-//           return {
-//             paginatedResources: defaultActiveFiles
-//           }
-//         }
-//       })
-//
-//       expect(wrapper.find(spinnerStub).exists()).toBeFalsy()
-//       expect(wrapper.find(resourceTableStub).exists()).toBeTruthy()
-//     })
-//   })
-//   describe('no content message', () => {
-//     it('shows only the "no content" message if no resources are marked as favorite', () => {
-//       const store = getStore()
-//       const wrapper = getMountedWrapper({ store, loading: false })
-//
-//       expect(wrapper.find(selectors.noContentMessage).exists()).toBeTruthy()
-//       expect(wrapper.find(resourceTableStub).exists()).toBeFalsy()
-//     })
-//
-//     it('does not show the no content message if resources are marked as favorite', () => {
-//       const wrapper = getMountedWrapper({
-//         setup() {
-//           return {
-//             paginatedResources: defaultActiveFiles
-//           }
-//         }
-//       })
-//
-//       expect(wrapper.find('#files-favorites-empty').exists()).toBeFalsy()
-//       expect(wrapper.find(resourceTableStub).exists()).toBeTruthy()
-//     })
-//   })
-//   describe('files table', () => {
-//     describe('previews', () => {
-//       it('displays previews when the "disablePreviews" config is disabled', () => {
-//         const store = getStore({
-//           disablePreviews: false
-//         })
-//         const wrapper = getMountedWrapper({
-//           store,
-//           loading: false,
-//           setup() {
-//             return {
-//               paginatedResources: defaultActiveFiles
-//             }
-//           }
-//         })
-//
-//         expect(
-//           wrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
-//         ).toBeTruthy()
-//       })
-//
-//       it('hides previews when the "disablePreviews" config is enabled', () => {
-//         const store = getStore({
-//           disablePreviews: true
-//         })
-//         const wrapper = getMountedWrapper({
-//           store,
-//           loading: false,
-//           setup() {
-//             return {
-//               paginatedResources: defaultActiveFiles
-//             }
-//           }
-//         })
-//
-//         expect(
-//           wrapper.find(selectors.favoritesTable).attributes('arethumbnailsdisplayed')
-//         ).toBeFalsy()
-//       })
-//     })
-//
-//     describe('pagination', () => {
-//       beforeEach(() => {
-//         stubs['resource-table'] = false
-//       })
-//
-//       it('does not show any pagination when there is only one page', () => {
-//         const store = getStore({
-//           highlightedFile: defaultActiveFiles[0],
-//           pages: 1,
-//           currentPage: 1,
-//           totalFilesCount: { files: 10, folders: 10 }
-//         })
-//         const wrapper = getMountedWrapper({ store, loading: false })
-//
-//         expect(wrapper.find(paginationStub).exists()).toBeFalsy()
-//       })
-//     })
-//
-//     describe('list-info', () => {
-//       beforeEach(() => {
-//         stubs['resource-table'] = false
-//         stubs['list-info'] = true
-//       })
-//
-//       it('sets the counters and the size', () => {
-//         const store = getStore({
-//           highlightedFile: defaultActiveFiles[0],
-//           totalFilesCount: { files: 15, folders: 20 },
-//           totalFilesSize: 1024
-//         })
-//         const wrapper = getMountedWrapper({
-//           store,
-//           loading: false,
-//           setup() {
-//             return {
-//               paginatedResources: defaultActiveFiles
-//             }
-//           }
-//         })
-//         const listInfoStubElement = wrapper.find(listInfoStub)
-//
-//         expect(listInfoStubElement.props()).toMatchObject({
-//           files: 15,
-//           folders: 20,
-//           size: 1024
-//         })
-//         expect(listInfoStubElement.attributes()).toMatchObject({
-//           files: '15',
-//           folders: '20',
-//           size: '1024'
-//         })
-//       })
-//
-//       it('shows the list info when there is only one active file', () => {
-//         const file = createFile({ id: 3, status: 2, type: 'file' })
-//         const store = getStore({
-//           highlightedFile: file,
-//           totalFilesCount: { files: 15, folders: 20 }
-//         })
-//         const wrapper = getMountedWrapper({
-//           store,
-//           loading: false,
-//           setup() {
-//             return {
-//               paginatedResources: defaultActiveFiles
-//             }
-//           }
-//         })
-//
-//         expect(wrapper.find(listInfoStub).exists()).toBeTruthy()
-//       })
-//
-//       it('does not show the list info when there are no active files', () => {
-//         const store = getStore()
-//         const wrapper = getMountedWrapper({ store, loading: false })
-//
-//         expect(wrapper.find(listInfoStub).exists()).toBeFalsy()
-//       })
-//     })
-//   })
-// })
-
-function getMountedWrapper({ mocks }) {
+function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
+  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
+    useResourcesViewDefaultsMock({
+      paginatedResources: ref(files),
+      areResourcesLoading: ref(loading)
+    })
+  )
   const defaultMocks = {
-    ...defaultComponentMocks(),
-    sideBarOpen: false,
+    ...defaultComponentMocks({
+      currentRoute: { name: 'files-common-favorites' }
+    }),
     ...(mocks && mocks)
   }
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const localVue = defaultLocalVue({ compositionApi: false })
+  const storeOptions = { ...defaultStoreMockOptions }
+  const localVue = defaultLocalVue({ compositionApi: true })
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,
@@ -256,7 +63,7 @@ function getMountedWrapper({ mocks }) {
       localVue,
       mocks: defaultMocks,
       store,
-      stubs
+      stubs: defaultStubs
     })
   }
 }
