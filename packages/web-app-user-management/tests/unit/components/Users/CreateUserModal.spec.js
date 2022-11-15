@@ -8,11 +8,11 @@ localVue.use(Vuex)
 afterEach(() => jest.clearAllMocks())
 
 describe('CreateUserModal', () => {
-  describe('computed method "isFormInvalid"', () => {
+  describe('computed method "buttonConfirmDisabled"', () => {
     it('should be true if any data set is invalid', () => {
       const wrapper = getWrapper()
       wrapper.vm.formData.userName.valid = false
-      expect(wrapper.vm.isFormInvalid).toBeTruthy()
+      expect(wrapper.vm.buttonConfirmDisabled).toBeTruthy()
     })
   })
   it('should be false if no data set is invalid', () => {
@@ -20,7 +20,7 @@ describe('CreateUserModal', () => {
     Object.keys(wrapper.vm.formData).forEach((key) => {
       wrapper.vm.formData[key].valid = true
     })
-    expect(wrapper.vm.isFormInvalid).toBeFalsy()
+    expect(wrapper.vm.buttonConfirmDisabled).toBeFalsy()
   })
 
   describe('method "validateUserName"', () => {

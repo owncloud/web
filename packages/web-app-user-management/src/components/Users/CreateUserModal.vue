@@ -3,13 +3,13 @@
     :title="$gettext('Create user')"
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Create')"
-    :button-confirm-disabled="isFormInvalid"
+    :button-confirm-disabled="buttonConfirmDisabled"
     focus-trap-initial="#create-user-input-display-name"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', user)"
   >
     <template #content>
-      <form autocomplete="off" @keyup.enter="onFormSubmit">
+      <form autocomplete="off">
         <oc-text-input
           id="create-user-input-display-name"
           v-model="user.onPremisesSamAccountName"
@@ -96,7 +96,7 @@ export default {
     }
   },
   computed: {
-    isFormInvalid() {
+    buttonConfirmDisabled() {
       return Object.keys(this.formData)
         .map((k) => !!this.formData[k].valid)
         .includes(false)
@@ -149,6 +149,7 @@ export default {
       this.formData.userName.valid = true
       return true
     },
+
     validateDisplayName() {
       this.formData.displayName.valid = false
 
@@ -161,6 +162,7 @@ export default {
       this.formData.displayName.valid = true
       return true
     },
+
     validateEmail() {
       this.formData.email.valid = false
 
@@ -184,12 +186,6 @@ export default {
       this.formData.password.errorMessage = ''
       this.formData.password.valid = true
       return true
-    },
-    onFormSubmit() {
-      if (this.isFormInvalid) {
-        return
-      }
-      this.$emit('confirm', this.user)
     }
   }
 }
