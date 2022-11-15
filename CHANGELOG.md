@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
+* Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
 Details
 -------
@@ -34,6 +35,15 @@ Details
    https://github.com/owncloud/web/pull/7935
    https://github.com/owncloud/web/pull/7072
    https://github.com/owncloud/web/pull/7350
+
+* Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+
+   Vue has been updated to 2.7.14
+
+   BREAKING CHANGE for developers: The `vue/composition-api` plugin is not available anymore
+   as the composition-api now comes with Vue.
+
+   https://github.com/owncloud/web/pull/7877
 
 Changelog for ownCloud Web [6.0.0] (2022-11-04)
 =======================================
