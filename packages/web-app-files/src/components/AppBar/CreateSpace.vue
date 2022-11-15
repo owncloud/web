@@ -107,6 +107,11 @@ export default defineComponent({
           field: 'spaceReadmeData',
           value: updatedSpace.special.find((special) => special.specialFolder.name === 'readme')
         })
+        this.UPDATE_RESOURCE_FIELD({
+          id: space.id,
+          field: 'spaceQuota',
+          value: updatedSpace.quota
+        })
       } catch (error) {
         console.error(error)
         this.showMessage({
