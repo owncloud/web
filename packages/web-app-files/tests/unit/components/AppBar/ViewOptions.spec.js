@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import merge from 'lodash-es/merge'
-import VueCompositionAPI from '@vue/composition-api'
 
 import Store from 'web-app-files/src/store'
 import stubs from '@/tests/unit/stubs'
@@ -20,7 +19,6 @@ describe('ViewOptions', () => {
     localVue = createLocalVue()
     localVue.use(Vuex)
     localVue.use(VueRouter)
-    localVue.use(VueCompositionAPI)
 
     router = new VueRouter()
 

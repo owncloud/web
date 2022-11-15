@@ -8,7 +8,6 @@
     "mark.js": "^8.11.1"
   },
   "peerDependencies": {
-    "@vue/composition-api": "1.7.1",
     "lodash-es": "^4.17.21",
     "vue-async-computed": "^3.9.0",
     "vue-gettext": "^2.1.5",

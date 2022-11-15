@@ -48,7 +48,7 @@ import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
 import { getBackendVersion, getWebVersion } from './container/versions'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus } from 'web-pkg/src/services'

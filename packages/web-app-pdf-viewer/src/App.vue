@@ -13,7 +13,7 @@ import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PDFViewer',

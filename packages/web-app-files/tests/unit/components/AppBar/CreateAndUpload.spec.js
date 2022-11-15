@@ -433,6 +433,13 @@ function getFileHandlerSelector(extension) {
   return null
 }
 
+// TODO: port to ts and simply use mockDeep<UppyService>()
+const mockUppyService = () => ({
+  subscribe: jest.fn(),
+  useXhr: jest.fn(),
+  useDropTarget: jest.fn()
+})
+
 function getWrapper(route = {}, store = {}) {
   return mount(CreateAndUpload, {
     localVue,
@@ -442,10 +449,12 @@ function getWrapper(route = {}, store = {}) {
         currentRoute: route,
         resolve: (r) => {
           return { href: r.name }
-        }
+        },
+        afterEach: jest.fn()
       },
       isUserContext: jest.fn(() => false),
-      hasSpaces: true
+      hasSpaces: true,
+      $uppyService: mockUppyService()
     },
     propsData: {
       currentPath: ''
@@ -471,13 +480,12 @@ function getShallowWrapper(route = {}, store = {}) {
         currentRoute: route,
         resolve: (r) => {
           return { href: r.name }
-        }
+        },
+        afterEach: jest.fn()
       },
       isUserContext: jest.fn(() => false),
       hasSpaces: true,
-      $uppyService: {
-        clearInputs: jest.fn()
-      }
+      $uppyService: mockUppyService()
     },
     propsData: {
       currentPath: ''

@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { mapActions, mapMutations } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'

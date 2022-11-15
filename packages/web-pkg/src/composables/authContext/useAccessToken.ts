@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue'
 
 interface AccessTokenOptions {
   store: Store<any>
@@ -7,6 +7,6 @@ interface AccessTokenOptions {
 
 export const useAccessToken = ({ store }: AccessTokenOptions) => {
   return computed(() => {
-    return store.getters['runtime/auth/accessToken']
+    return store.getters['runtime/auth/accessToken'] as string
   })
 }

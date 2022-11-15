@@ -79,7 +79,7 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useStore } from 'web-pkg/src/composables'

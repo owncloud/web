@@ -2,7 +2,7 @@ import { useUploadHelpers } from '../../../../src/composables/upload'
 import { createWrapper } from './spec'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ComputedRef, computed } from '@vue/composition-api'
+import { ComputedRef, computed } from 'vue'
 
 describe('useUploadHelpers', () => {
   const currentPathMock = 'path'

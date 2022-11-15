@@ -1,4 +1,4 @@
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import { useClientService } from '../clientService'
 import type { Store } from 'vuex'
 import type { Route } from 'vue-router'
@@ -31,7 +31,7 @@ export function useRequest(options: RequestOptions = {}): RequestResult {
   const makeRequest = (
     method: Method,
     url: string,
-    config: AxiosRequestConfig
+    config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
     let httpClient
     if (unref(accessToken)) {

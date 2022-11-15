@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount } from '@vue/composition-api'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { MutationPayload, SubscribeOptions } from 'vuex'
 import { useStore } from './useStore'
 

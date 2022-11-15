@@ -1,18 +1,12 @@
 import Vuex from 'vuex'
 import { DateTime } from 'luxon'
-import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, shallowMount, createLocalVue, MountOptions } from '@vue/test-utils'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
-
-const defaultStubs = {
-  ...stubs,
-  'oc-td': true,
-  'oc-tr': true,
-  'oc-tbody': true,
-  'oc-table-simple': true
-}
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
 
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 
@@ -73,7 +67,7 @@ describe('FileVersions', () => {
   describe('loading is true', () => {
     // fetchFileVersion is fired up when the wrapper is mounted and it sets loading to false
     // so the function needs to be mocked to get a loading wrapper
-    jest.spyOn(FileVersions.methods, 'fetchFileVersions').mockImplementation()
+    jest.spyOn((FileVersions as any).methods, 'fetchFileVersions').mockImplementation()
     const wrapper = getShallowWrapper(createStore(), true)
 
     it('should show oc loader component', () => {
@@ -115,7 +109,11 @@ describe('FileVersions', () => {
       describe('versions table', () => {
         it('should render icon according to file type', () => {
           const store = createStore({
-            highlightedFile: { name: 'lorem.png', extension: 'png', type: 'file' },
+            highlightedFile: mockDeep<Resource>({
+              name: 'lorem.png',
+              extension: 'png',
+              type: 'file'
+            }),
             versions: [
               {
                 fileInfo: {
@@ -155,11 +153,11 @@ describe('FileVersions', () => {
         })
         describe('row actions', () => {
           const spyRevertFunction = jest
-            .spyOn(FileVersions.methods, 'revertVersion')
-            .mockImplementation((file) => {})
+            .spyOn((FileVersions as any).methods, 'revertVersion')
+            .mockImplementation()
           const spyDownloadFunction = jest
-            .spyOn(FileVersions.methods, 'downloadVersion')
-            .mockImplementation((file) => {})
+            .spyOn((FileVersions as any).methods, 'downloadVersion')
+            .mockImplementation()
           const wrapper = getMountedWrapper(createStore())
 
           it('should call revertVersion method when revert version button is clicked', async () => {
@@ -191,18 +189,29 @@ describe('FileVersions', () => {
   })
 })
 
-function getMountOptions({ store, loading = false, stubs = defaultStubs }) {
+function getMountOptions({ store, loading = false }): MountOptions<any> {
   return {
     localVue,
     store: store,
-    stubs: stubs,
+    stubs: {
+      ...defaultStubs,
+      'oc-td': true,
+      'oc-tr': true,
+      'oc-tbody': true,
+      'oc-table-simple': true,
+      'oc-resource-icon': true,
+      'oc-button': false
+    },
     directives: {
-      'oc-tooltip': true
+      'oc-tooltip': jest.fn()
     },
     data() {
       return {
         loading: loading
       }
+    },
+    provide: {
+      displayedSpace: {}
     }
   }
 }
@@ -215,24 +224,15 @@ function getMountedWrapper(store) {
   return mount(
     FileVersions,
     getMountOptions({
-      store: store,
-      stubs: {
-        ...defaultStubs,
-        'oc-resource-icon': true,
-        'oc-button': false
-      }
+      store: store
     })
   )
 }
 
 function createStore({
-  highlightedFile = {
-    id: 1223,
-    name: 'lorem.txt',
-    path: '/lorem.txt'
-  },
+  highlightedFile = mockDeep<Resource>(),
   versions = defaultVersions
-} = {}) {
+}: { highlightedFile?: Resource; versions?: typeof defaultVersions } = {}) {
   return new Vuex.Store({
     modules: {
       Files: {

@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../composables/sideBar'
 

@@ -1,4 +1,4 @@
-import { Ref, computed, unref } from '@vue/composition-api'
+import { Ref, computed, unref } from 'vue'
 import { basename } from 'path'
 import { FileContext } from './types'
 import { useAppMeta } from './useAppMeta'

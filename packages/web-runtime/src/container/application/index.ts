@@ -8,7 +8,6 @@ import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 
 // import modules to provide them to applications
-import * as vueCompositionAPI from '@vue/composition-api' // eslint-disable-line
 import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 
@@ -18,9 +17,6 @@ export { NextApplication } from './next'
 const { requirejs, define } = window as any
 
 // register modules with requirejs to provide them to applications
-define('@vue/composition-api', () => {
-  return vueCompositionAPI
-})
 define('vuex', () => {
   return vuex
 })

@@ -1,7 +1,7 @@
 import { Route } from 'vue-router'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { useRoute } from 'web-pkg/src/composables'
-import { ComputedRef, Ref, unref } from '@vue/composition-api'
+import { ComputedRef, Ref, unref } from 'vue'
 import * as uuid from 'uuid'
 import path from 'path'
 import { SpaceResource } from 'web-client/src/helpers'

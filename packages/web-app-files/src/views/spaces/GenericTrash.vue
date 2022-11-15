@@ -75,7 +75,7 @@ import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, unref } from '@vue/composition-api'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource } from 'web-client'
 import {
   useCapabilityShareJailEnabled,

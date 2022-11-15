@@ -16,7 +16,7 @@ import { mapGetters } from 'vuex'
 import ActionMenuItem from '../../ActionMenuItem.vue'
 
 import FileActions from '../../../mixins/fileActions'
-import { ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { ComputedRef, defineComponent, inject } from 'vue'
 import { Resource } from 'web-client'
 
 export default defineComponent({

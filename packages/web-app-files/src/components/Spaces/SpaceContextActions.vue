@@ -41,7 +41,7 @@ import ShowMembers from '../../mixins/spaces/actions/showMembers'
 import UploadImage from '../../mixins/spaces/actions/uploadImage'
 import EditReadmeContent from '../../mixins/spaces/actions/editReadmeContent'
 import { isLocationSpacesActive } from '../../router'
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({

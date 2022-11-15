@@ -140,7 +140,7 @@
 <script lang="ts">
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { mapGetters } from 'vuex'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { UppyResource } from '../composables/upload'
 import { urlJoin } from 'web-client/src/utils'
 import { isUndefined } from 'lodash-es'

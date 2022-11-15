@@ -5,7 +5,6 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import stubs from '../../../../../../../../../tests/unit/stubs'
-import VueCompositionAPI from '@vue/composition-api'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 
@@ -16,7 +15,6 @@ localVue.use(GetTextPlugin, {
 })
 localVue.use(DesignSystem)
 localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
 
 const folderMock = {
   type: 'folder',

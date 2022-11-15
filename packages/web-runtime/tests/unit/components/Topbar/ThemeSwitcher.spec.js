@@ -2,7 +2,6 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import DesignSystem from 'owncloud-design-system'
-import CompositionApi from '@vue/composition-api'
 
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import stubs from '../../../../../../tests/unit/stubs'
@@ -15,7 +14,6 @@ localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
 })
-localVue.use(CompositionApi)
 
 const lightTheme = {
   designTokens: {

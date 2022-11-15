@@ -76,7 +76,7 @@ import {
   ref,
   unref,
   watch
-} from '@vue/composition-api'
+} from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { loadPreview } from 'web-pkg/src/helpers'
 import {

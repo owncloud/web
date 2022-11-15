@@ -101,7 +101,7 @@ import Mark from 'mark.js'
 import debounce from 'lodash-es/debounce'
 import { useStore, useUserContext } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'SearchBar',

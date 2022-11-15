@@ -33,7 +33,7 @@
 <script lang="ts">
 import { authService } from '../services/auth'
 import { queryItemAsString, useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { computed, defineComponent, unref } from '@vue/composition-api'
+import { computed, defineComponent, unref } from 'vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
 export default defineComponent({

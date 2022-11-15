@@ -19,7 +19,7 @@ import qs from 'qs'
 import { DateTime } from 'luxon'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { basename } from 'path'
 
 export default defineComponent({

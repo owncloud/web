@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api'
+import { getCurrentInstance } from 'vue'
 import { ClientService } from '../../services'
 
 export const useClientService = (): ClientService => {

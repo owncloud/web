@@ -41,7 +41,7 @@ describe('SpaceHeader', () => {
 })
 
 function getWrapper({ space = {}, sideBarOpen = false }) {
-  const localVue = defaultLocalVue({ compositionApi: true })
+  const localVue = defaultLocalVue()
   const mocks = {
     ...defaultComponentMocks()
   }

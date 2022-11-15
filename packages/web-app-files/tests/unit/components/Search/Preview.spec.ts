@@ -4,10 +4,14 @@ import DesignSystem from 'owncloud-design-system'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
+import { useCapabilityShareJailEnabled } from 'web-pkg/src'
+import { ref } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(Vuex)
+
+jest.mock('web-pkg/src/composables/capability')
 
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
@@ -112,6 +116,10 @@ function getWrapper({
   },
   user = { id: 'test' }
 }: any = {}) {
+  jest.mocked(useCapabilityShareJailEnabled).mockImplementation(() => {
+    return ref(hasShareJail)
+  })
+
   return shallowMount(Preview, {
     localVue,
     store: createStore(Vuex.Store, {
@@ -139,8 +147,7 @@ function getWrapper({
     }),
     mocks: {
       $route: route,
-      $gettext: (text) => text,
-      hasShareJail
+      $gettext: (text) => text
     },
     propsData: {
       searchResult

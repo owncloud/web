@@ -1,4 +1,4 @@
-import { computed, ComputedRef, unref } from '@vue/composition-api'
+import { computed, ComputedRef, unref } from 'vue'
 import { useRoute } from './useRoute'
 
 export const useRouteName = (): ComputedRef<string> => {

@@ -1,4 +1,4 @@
-import { ref, unref } from '@vue/composition-api'
+import { ref, unref } from 'vue'
 import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 import { Resource } from 'web-client/src/helpers/resource'

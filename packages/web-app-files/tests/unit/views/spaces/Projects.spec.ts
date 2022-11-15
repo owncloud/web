@@ -48,7 +48,7 @@ function getMountedWrapper({ mocks = {}, spaces = [] } = {}) {
   }
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
-  const localVue = defaultLocalVue({ compositionApi: true })
+  const localVue = defaultLocalVue()
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,

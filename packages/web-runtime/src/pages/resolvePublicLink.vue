@@ -73,7 +73,7 @@ import {
   useUserContext
 } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
-import { ref, unref, computed, defineComponent, onMounted } from '@vue/composition-api'
+import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
   buildWebDavPublicPath,
   buildPublicSpaceResource,

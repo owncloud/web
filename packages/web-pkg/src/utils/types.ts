@@ -1,4 +1,4 @@
-import { Ref } from '@vue/composition-api'
+import { Ref } from 'vue'
 
 export type ReadOnlyRef<T> = Readonly<Ref<T>>
 export type MaybeRef<T> = T | Ref<T>

@@ -3,13 +3,11 @@ import { createStore } from 'vuex-extensions'
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import VueCompositionAPI from '@vue/composition-api'
 import DesignSystem from 'owncloud-design-system'
 
 const localVue = createLocalVue()
 localVue.use(VueRouter)
 localVue.use(DesignSystem)
-localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 
 describe('CreateSpace component', () => {

@@ -1,4 +1,4 @@
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import { usePagination } from '../../../../src/composables'
 import { createComposableWrapper } from '../composables.setup'
 

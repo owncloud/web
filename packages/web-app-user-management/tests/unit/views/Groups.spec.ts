@@ -1,10 +1,21 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
-import Groups from '../../../src/views/Groups'
+import Groups from '../../../src/views/Groups.vue'
+import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
+import { Graph } from 'web-client'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg/src'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
+
+const defaultGraphMock = () => {
+  const graph = mockDeep<Graph>()
+  graph.groups.listGroups.mockImplementation(() => mockAxiosResolve({ value: [{ id: '1' }] }))
+
+  return graph
+}
 
 describe('Groups view', () => {
   describe('method "createGroup"', () => {
@@ -19,8 +30,10 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveCreateGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graph = defaultGraphMock()
+      graph.groups.createGroup.mockImplementation(() => mockAxiosReject())
+      const wrapper = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
       await wrapper.vm.createGroup({ displayName: 'admins' })
@@ -42,8 +55,10 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveDeleteGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graph = defaultGraphMock()
+      graph.groups.deleteGroup.mockImplementation(() => mockAxiosReject())
+      const wrapper = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteGroupModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteGroupModal')
       await wrapper.vm.deleteGroups([{ id: '1' }])
@@ -63,8 +78,10 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveEditGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graph = defaultGraphMock()
+      graph.groups.editGroup.mockImplementation(() => mockAxiosReject())
+      const wrapper = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editGroup({})
 
@@ -98,59 +115,56 @@ describe('Groups view', () => {
   })
 
   describe('computed method "allGroupsSelected"', () => {
-    it('should be true if every group is selected', () => {
+    it('should be true if every group is selected', async () => {
       const wrapper = getMountedWrapper({
-        mocks: { groups: [{ id: '1' }] },
         data: { selectedGroups: [{ id: '1' }] }
       })
+      await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allGroupsSelected).toBeTruthy()
     })
-    it('should false if not every group is selected', () => {
+    it('should be false if not every group is selected', async () => {
+      const graph = defaultGraphMock()
+      graph.groups.listGroups.mockImplementation(() =>
+        mockAxiosResolve({ value: [{ id: '1' }, { id: '2' }] })
+      )
       const wrapper = getMountedWrapper({
-        mocks: { groups: [{ id: '1' }, { id: '2' }] },
+        graph,
         data: { selectedGroups: [{ id: '1' }] }
       })
+      await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allGroupsSelected).toBeFalsy()
     })
   })
 })
 
 function getMountedWrapper({
+  graph = defaultGraphMock(),
   data = {},
   mocks = {},
   resolveCreateGroup = true,
   resolveEditGroup = true,
   resolveDeleteGroup = true
 } = {}) {
+  const $clientService = mockDeep<ClientService>()
+  $clientService.graphAuthenticated.mockImplementation(() => graph)
+
   return shallowMount(Groups, {
     localVue,
     store: createStore(Vuex.Store, {
       actions: {
         showMessage: jest.fn()
+      },
+      getters: {
+        configuration: () => ({
+          server: 'https://example.com/'
+        })
       }
     }),
     mocks: {
       $gettext: jest.fn(),
       $ngettext: jest.fn(),
       $gettextInterpolate: jest.fn(),
-      loadResourcesTask: {
-        isRunning: false,
-        perform: jest.fn()
-      },
-      graphClient: {
-        groups: {
-          createGroup: () =>
-            resolveCreateGroup ? Promise.resolve() : Promise.reject(new Error('')),
-          deleteGroup: () =>
-            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error('')),
-          editGroup: () => (resolveEditGroup ? Promise.resolve() : Promise.reject(new Error('')))
-        }
-      },
-      groups: [
-        {
-          id: '1'
-        }
-      ],
+      $clientService,
       ...mocks
     },
     data: () => {

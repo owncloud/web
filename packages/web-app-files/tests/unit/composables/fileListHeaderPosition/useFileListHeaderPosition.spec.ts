@@ -1,4 +1,4 @@
-import { nextTick } from '@vue/composition-api'
+import { nextTick } from 'vue'
 import { createWrapper, createAppBar } from './spec'
 import { useFileListHeaderPosition } from '../../../../src/composables'
 

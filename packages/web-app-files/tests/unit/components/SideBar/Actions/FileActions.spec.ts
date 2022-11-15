@@ -4,7 +4,6 @@ import stubs from '../../../../../../../tests/unit/stubs'
 import { createLocalVue, mount } from '@vue/test-utils'
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import GetTextPlugin from 'vue-gettext'
-import VueCompositionAPI from '@vue/composition-api'
 
 import { apps, getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
 import { SpaceResource } from 'web-client/src/helpers'
@@ -13,7 +12,6 @@ import { mockDeep } from 'jest-mock-extended'
 const localVue = createLocalVue()
 localVue.use(DesignSystem)
 localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

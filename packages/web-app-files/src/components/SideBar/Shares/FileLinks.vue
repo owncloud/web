@@ -113,7 +113,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, unref } from '@vue/composition-api'
+import { defineComponent, PropType, unref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
@@ -579,9 +579,9 @@ export default defineComponent({
     },
 
     getAvailableRoleOptions(link) {
-      if (this.incomingParentShare.value && this.canCreatePublicLinks) {
+      if (this.incomingParentShare && this.canCreatePublicLinks) {
         return LinkShareRoles.filterByBitmask(
-          this.incomingParentShare.value.permissions,
+          this.incomingParentShare.permissions,
           this.highlightedFile.isFolder,
           this.hasPublicLinkEditing,
           this.hasPublicLinkAliasSupport,

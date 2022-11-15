@@ -1,6 +1,6 @@
 import { buildShare } from '../../helpers/resources'
 import { useCapabilitySpacesEnabled, useStore } from 'web-pkg/src/composables'
-import { computed, ref, unref } from '@vue/composition-api'
+import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { clientService } from 'web-pkg/src/services'
 import {

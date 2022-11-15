@@ -45,13 +45,7 @@
 
 <script lang="ts">
 import { DateTime } from 'luxon'
-import {
-  computed,
-  getCurrentInstance,
-  watch,
-  defineComponent,
-  customRef
-} from '@vue/composition-api'
+import { computed, getCurrentInstance, watch, defineComponent, customRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from 'web-pkg/src/helpers'

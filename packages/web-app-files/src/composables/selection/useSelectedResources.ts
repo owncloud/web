@@ -1,4 +1,4 @@
-import { computed, unref, WritableComputedRef, Ref } from '@vue/composition-api'
+import { computed, unref, WritableComputedRef, Ref } from 'vue'
 import { Resource } from 'web-client'
 import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'

@@ -1,4 +1,4 @@
-import { nextTick, computed, unref, Ref } from '@vue/composition-api'
+import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import { usePagination, useFileListHeaderPosition, SortField } from '../'

@@ -8,7 +8,7 @@ import Vuex from 'vuex'
 import { files, spaces } from '../../../__fixtures__'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
 jest.mock('web-app-files/src/composables')
@@ -66,7 +66,7 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     space: { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space' },
     ...props
   }
-  const localVue = defaultLocalVue({ compositionApi: true })
+  const localVue = defaultLocalVue()
   const store = createStore(Vuex.Store, storeOptions)
   return {
     mocks: defaultMocks,

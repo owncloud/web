@@ -26,7 +26,7 @@ import ShowShares from '../../mixins/actions/showShares'
 import SetSpaceImage from '../../mixins/spaces/actions/setImage'
 import SetSpaceReadme from '../../mixins/spaces/actions/setReadme'
 import SpaceNavigate from '../../mixins/spaces/actions/navigate'
-import { PropType } from '@vue/composition-api'
+import { PropType } from 'vue'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 

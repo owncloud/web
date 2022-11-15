@@ -1,5 +1,5 @@
 import { useUpload } from 'web-runtime/src/composables/upload'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'

@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import { useRoute, useStore } from 'web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
 

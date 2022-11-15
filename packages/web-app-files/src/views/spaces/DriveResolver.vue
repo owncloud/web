@@ -15,7 +15,7 @@ import DriveRedirect from './DriveRedirect.vue'
 import GenericSpace from './GenericSpace.vue'
 import GenericTrash from './GenericTrash.vue'
 
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue'
 import { useDriveResolver, useRouteParam, useStore } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../../composables'
 import { isLocationSpacesActive, isLocationTrashActive } from '../../router'

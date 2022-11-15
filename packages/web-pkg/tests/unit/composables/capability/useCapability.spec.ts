@@ -1,4 +1,4 @@
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import { createWrapper } from './spec'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
 import { Store } from 'vuex'

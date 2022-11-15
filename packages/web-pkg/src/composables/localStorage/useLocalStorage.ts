@@ -1,4 +1,4 @@
-import { ref, watch, unref } from '@vue/composition-api'
+import { ref, watch, unref } from 'vue'
 
 export const useLocalStorage = (key: string, defaultValue: any = undefined): any => {
   const existingValue = window.localStorage.getItem(key)

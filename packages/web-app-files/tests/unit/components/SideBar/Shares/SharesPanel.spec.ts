@@ -2,11 +2,9 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
-import VueCompositionAPI from '@vue/composition-api'
 
 import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
 const localVue = createLocalVue()
-localVue.use(VueCompositionAPI)
 
 localVue.use(DesignSystem)
 localVue.use(Vuex)
@@ -54,7 +52,8 @@ describe('SharesPanel', () => {
             getters: {
               highlightedFile: (state) => {
                 return state.highlightedFile
-              }
+              },
+              sharesTreeLoading: () => sharesLoading
             },
             mutations: {
               SET_HIGHLIGHTED_FILE(state, file) {
@@ -66,12 +65,6 @@ describe('SharesPanel', () => {
       }),
       stubs: {
         'file-shares': true
-      },
-      setup: () => {
-        return {
-          sharesLoading: sharesLoading,
-          graphClient: jest.fn()
-        }
       }
     })
   }

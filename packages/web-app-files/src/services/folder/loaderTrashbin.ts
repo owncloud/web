@@ -7,7 +7,7 @@ import { buildDeletedResource, buildWebDavFilesTrashPath } from '../../helpers/r
 import { Store } from 'vuex'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 import { buildResource, buildWebDavSpacesTrashPath } from 'web-client/src/helpers'
 
 export class FolderLoaderTrashbin implements FolderLoader {

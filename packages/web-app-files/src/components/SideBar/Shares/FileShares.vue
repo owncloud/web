@@ -82,7 +82,7 @@ import {
   shareInviteCollaboratorHelp,
   shareInviteCollaboratorHelpCern
 } from '../../../helpers/contextualHelpers'
-import { computed, defineComponent, PropType } from '@vue/composition-api'
+import { computed, defineComponent, PropType } from 'vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 

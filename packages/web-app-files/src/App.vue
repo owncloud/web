@@ -5,7 +5,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, watch } from '@vue/composition-api'
+import { defineComponent, watch } from 'vue'
 import { useRoute, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 

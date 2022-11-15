@@ -4,13 +4,11 @@ import SpaceDetails from '../../../../../src/components/SideBar/Details/SpaceDet
 import stubs from '../../../../../../../tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
 import AsyncComputed from 'vue-async-computed'
-import VueCompositionAPI from '@vue/composition-api'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(AsyncComputed)
-localVue.use(VueCompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true

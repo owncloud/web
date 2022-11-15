@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, inject } from '@vue/composition-api'
+import { computed, ComputedRef, defineComponent, inject, provide } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
@@ -40,11 +40,6 @@ export default defineComponent({
     FileShares,
     SpaceMembers
   },
-  provide() {
-    return {
-      incomingParentShare: computed(() => this.incomingParentShare)
-    }
-  },
   props: {
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
@@ -53,8 +48,12 @@ export default defineComponent({
     const store = useStore()
     const sharesLoading = computed(() => store.getters['Files/sharesTreeLoading'])
 
+    const { incomingParentShare, ...rest } = useIncomingParentShare()
+    provide('incomingParentShare', incomingParentShare)
+
     return {
-      ...useIncomingParentShare(),
+      incomingParentShare,
+      ...rest,
       sharesLoading,
       space: inject<ComputedRef<Resource>>('displayedSpace'),
       file: inject<ComputedRef<Resource>>('displayedItem'),

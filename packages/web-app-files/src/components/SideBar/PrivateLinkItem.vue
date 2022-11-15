@@ -21,7 +21,7 @@
 <script>
 import { mapActions } from 'vuex'
 import copyToClipboard from 'copy-to-clipboard'
-import { unref } from '@vue/composition-api'
+import { unref } from 'vue'
 
 export default {
   name: 'PrivateLinkItem',

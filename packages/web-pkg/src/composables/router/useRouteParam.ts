@@ -1,4 +1,4 @@
-import { customRef, Ref } from '@vue/composition-api'
+import { customRef, Ref } from 'vue'
 import { useRouter } from './useRouter'
 import { ParamValue } from './types'
 

@@ -45,12 +45,11 @@
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { useTask } from 'vue-concurrency'
-import { computed, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from 'vue'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { defineComponent } from '@vue/composition-api'
 import { Resource } from 'web-client'
 
 export default defineComponent({

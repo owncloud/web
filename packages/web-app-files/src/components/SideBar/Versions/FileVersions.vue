@@ -52,7 +52,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { inject } from '@vue/composition-api'
+import { inject } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 
 export default {
