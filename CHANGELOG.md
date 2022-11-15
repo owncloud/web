@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+* Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
@@ -22,6 +23,13 @@ Details
 
    https://github.com/owncloud/web/issues/7932
    https://github.com/owncloud/web/pull/7936
+
+* Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
+
+   We've fixed a bug where the quota in the space details was not shown after space creation.
+
+   https://github.com/owncloud/web/issues/7959
+   https://github.com/owncloud/web/pull/7969
 
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 
