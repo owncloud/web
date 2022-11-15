@@ -1,0 +1,6 @@
+Bugfix: Space quota not displayed after creation
+
+We've fixed a bug where the quota in the space details was not shown after space creation.
+
+https://github.com/owncloud/web/pull/7969
+https://github.com/owncloud/web/issues/7959
