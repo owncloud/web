@@ -2,9 +2,9 @@ import vue from 'rollup-plugin-vue'
 import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import modify from 'rollup-plugin-modify'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
 import * as path from 'path'
 import del from 'rollup-plugin-delete'
@@ -15,7 +15,7 @@ import progress from 'rollup-plugin-progress'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
-import html from '@rollup/plugin-html'
+import html, { makeHtmlAttributes } from '@rollup/plugin-html'
 import ts from 'rollup-plugin-ts'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import alias from '@rollup/plugin-alias'
@@ -52,8 +52,10 @@ const plugins = [
   }),
   alias({
     entries: [
-      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.js') },
+      { find: 'vue', replacement: pathResolve(projectRootDir, 'node_modules/vue/dist/vue.esm.browser.js') },
+      { find: 'portal-vue', replacement: pathResolve(projectRootDir, 'node_modules/portal-vue/dist/portal-vue.esm.js') },
       { find: 'crypto', replacement: pathResolve(projectRootDir, 'polyfills/crypto.js') },
+      { find: 'uuid', replacement: pathResolve(projectRootDir, 'node_modules/uuid/dist/esm-browser/index.js') },
       { find: 'qs', replacement: pathResolve(projectRootDir, 'node_modules/qs/lib/index.js') },
       { find: 'caf', replacement: pathResolve(projectRootDir, 'node_modules/caf/dist/esm/caf.mjs') }
     ]
@@ -66,12 +68,11 @@ const plugins = [
   }),
   nodePolyfills(),
   resolve({
-    include: 'node_modules/**',
     browser: true,
     preferBuiltins: false
   }),
   babel({
-    // babelHelpers: 'bundled',
+    babelHelpers: 'bundled',
     exclude: 'node_modules/**'
   }),
   modify({
@@ -141,7 +142,7 @@ const plugins = [
           './packages/web-container/index.html.ejs',
           {
             helpers: {
-              makeHtmlAttributes: html.makeHtmlAttributes
+              makeHtmlAttributes
             },
             data: {
               attributes,
