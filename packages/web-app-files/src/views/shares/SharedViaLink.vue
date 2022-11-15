@@ -45,6 +45,8 @@
               class="oc-width-1-1 oc-my-s"
               :files="totalFilesCount.files"
               :folders="totalFilesCount.folders"
+              :spaces="totalFilesCount.spaces"
+              :show-spaces="hasProjectSpaces"
             />
           </template>
         </resource-table>
@@ -79,7 +81,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
+import { useCapabilityProjectSpacesEnabled, useStore } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 
@@ -119,7 +121,8 @@ export default defineComponent({
 
     return {
       ...useResourcesViewDefaults<Resource, any, any[]>(),
-      getSpace
+      getSpace,
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
   },
 

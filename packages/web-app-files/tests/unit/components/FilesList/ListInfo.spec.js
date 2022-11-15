@@ -18,6 +18,7 @@ describe('ListInfo', () => {
       expect(itemElement.attributes('data-test-items')).toBe('5')
       expect(itemElement.attributes('data-test-files')).toBe('2')
       expect(itemElement.attributes('data-test-folders')).toBe('3')
+      expect(itemElement.attributes('data-test-spaces')).toBe('1')
     })
 
     it('should show text with files and folders total and individual count', () => {
@@ -96,6 +97,7 @@ function getWrapper(props = {}) {
     propsData: {
       files: 2,
       folders: 3,
+      spaces: 1,
       ...props
     }
   })

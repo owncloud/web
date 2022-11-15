@@ -1,0 +1,6 @@
+Bugfix: Include spaces in the list info
+
+Spaces have been included in the list info below file lists that support displaying spaces.
+
+https://github.com/owncloud/web/pull/7926
+https://github.com/owncloud/web/issues/7924
