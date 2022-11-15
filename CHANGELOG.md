@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+* Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
@@ -23,6 +24,13 @@ Details
 
    https://github.com/owncloud/web/issues/7932
    https://github.com/owncloud/web/pull/7936
+
+* Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
+
+   Spaces have been included in the list info below file lists that support displaying spaces.
+
+   https://github.com/owncloud/web/issues/7924
+   https://github.com/owncloud/web/pull/7926
 
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 
