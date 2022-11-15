@@ -12,6 +12,7 @@ import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
 import { ScrollToResult, useScrollTo } from '../scrollTo'
+import { useViewMode } from '../viewMode'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -30,6 +31,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
   sortBy: ReadOnlyRef<string>
   sortDir: ReadOnlyRef<SortDir>
+  viewMode: ReadOnlyRef<string>
 
   selectedResources: Ref<Resource[]>
   selectedResourcesIds: Ref<(string | number)[]>
@@ -61,6 +63,10 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     fields
   })
 
+  const currentViewMode = useRouteQuery('view-mode', 'resource-table')
+  const someViewMode = computed((): string => String(currentViewMode.value))
+  const viewMode = useViewMode(someViewMode)
+
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
@@ -80,6 +86,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     areResourcesLoading,
     storeItems,
     fields,
+    viewMode,
     paginatedResources,
     paginationPages,
     paginationPage,

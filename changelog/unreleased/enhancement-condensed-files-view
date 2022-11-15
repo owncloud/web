@@ -1,0 +1,7 @@
+Enhancement: Add switch to enable condensed resource table
+
+We've added a switch to have a more condensed resource table. 
+The change gets saved to the route and persisted across resource navigation.
+
+https://github.com/owncloud/web/pull/7976
+https://github.com/owncloud/web/issues/6380

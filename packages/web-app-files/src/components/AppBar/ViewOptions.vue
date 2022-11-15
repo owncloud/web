@@ -1,5 +1,19 @@
 <template>
-  <div>
+  <div class="oc-flex oc-flex-middle">
+    <div class="oc-button-group oc-visible@s oc-mr-s">
+      <oc-button
+        :appearance="viewModeCurrent === 'resource-table-condensed' ? 'filled' : 'outline'"
+        @click="setViewMode('resource-table-condensed')"
+      >
+        <oc-icon name="align-vertically" fill-type="none" />
+      </oc-button>
+      <oc-button
+        :appearance="viewModeCurrent === 'resource-table' ? 'filled' : 'outline'"
+        @click="setViewMode('resource-table')"
+      >
+        <oc-icon name="align-justify" fill-type="none" />
+      </oc-button>
+    </div>
     <oc-button
       id="files-view-options-btn"
       key="files-view-options-btn"
@@ -50,6 +64,7 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 import { PaginationConstants } from '../../composables'
 
 export default {
@@ -58,8 +73,13 @@ export default {
       name: PaginationConstants.perPageQueryName,
       defaultValue: PaginationConstants.perPageDefault
     })
+    const viewModeQuery = useRouteQueryPersisted({
+      name: ViewModeConstants.viewModeQueryName,
+      defaultValue: ViewModeConstants.viewModeDefault
+    })
 
     return {
+      viewModeCurrent: viewModeQuery,
       itemsPerPage: perPageQuery
     }
   },
@@ -90,7 +110,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
+    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
+    setViewMode(mode) {
+      this.viewModeCurrent = mode
+    }
   }
 }
 </script>

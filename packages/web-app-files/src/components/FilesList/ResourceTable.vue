@@ -1,6 +1,9 @@
 <template>
   <oc-table
-    :class="hoverableQuickActions && 'hoverable-quick-actions'"
+    :class="[
+      hoverableQuickActions && 'hoverable-quick-actions',
+      { condensed: viewMode === 'resource-table-condensed' }
+    ]"
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
@@ -317,6 +320,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    viewMode: {
+      type: String,
+      default: 'resource-table'
     },
     /**
      * Enable hover effect
@@ -833,6 +840,15 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.oc-table.condensed > tbody > tr {
+  height: 0 !important;
+  font-size: 0.7rem !important;
+  button,
+  span,
+  p {
+    font-size: 0.7rem !important;
+  }
+}
 .resource-table {
   &-resource-cut {
     opacity: 0.6;
