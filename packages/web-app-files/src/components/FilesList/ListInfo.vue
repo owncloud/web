@@ -48,8 +48,7 @@ export default {
   },
   computed: {
     items() {
-      const filesAndFolderCount = this.files + this.folders
-      return this.showSpaces ? filesAndFolderCount + this.spaces : filesAndFolderCount
+      return this.files + this.folders + (this.showSpaces ? this.spaces : 0)
     },
     text() {
       const filesStr = this.$gettextInterpolate(

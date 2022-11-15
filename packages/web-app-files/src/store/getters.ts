@@ -1,3 +1,4 @@
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 export default {
@@ -32,7 +33,7 @@ export default {
   totalFilesCount: (state, getters) => {
     const fileCount = getters.filesAll.filter((file) => file.type === 'file').length
     const folderCount = getters.filesAll.filter((file) => file.type === 'folder').length
-    const spaceCount = getters.filesAll.filter((file) => file.type === 'space').length
+    const spaceCount = getters.filesAll.filter((file) => isProjectSpaceResource(file)).length
     return {
       files: fileCount,
       folders: folderCount,
