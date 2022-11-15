@@ -3,13 +3,13 @@
     :title="$gettext('Create group')"
     :button-cancel-text="$gettext('Cancel')"
     :button-confirm-text="$gettext('Create')"
-    :button-confirm-disabled="buttonConfirmDisabled"
+    :button-confirm-disabled="isFormInvalid"
     focus-trap-initial="#create-group-input-display-name"
     @cancel="$emit('cancel')"
     @confirm="$emit('confirm', group)"
   >
     <template #content>
-      <form autocomplete="off">
+      <form autocomplete="off" @submit.prevent="onFormSubmit">
         <oc-text-input
           id="create-group-input-display-name"
           v-model="group.displayName"
@@ -19,6 +19,7 @@
           :fix-message-line="true"
           @input="validateDisplayName"
         />
+        <input type="submit" class="oc-hidden" />
       </form>
     </template>
   </oc-modal>
@@ -50,7 +51,7 @@ export default {
     }
   },
   computed: {
-    buttonConfirmDisabled() {
+    isFormInvalid() {
       return Object.keys(this.formData)
         .map((k) => !!this.formData[k].valid)
         .includes(false)
@@ -80,6 +81,12 @@ export default {
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
       return true
+    },
+    onFormSubmit() {
+      if (this.isFormInvalid) {
+        return
+      }
+      this.$emit('confirm', this.group)
     }
   }
 }
