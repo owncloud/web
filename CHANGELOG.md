@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
+* Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
@@ -31,6 +32,13 @@ Details
 
    https://github.com/owncloud/web/issues/7924
    https://github.com/owncloud/web/pull/7926
+
+* Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
+
+   The "Paste"-action is now disabled in read-only folders/shares.
+
+   https://github.com/owncloud/web/issues/7922
+   https://github.com/owncloud/web/pull/7925
 
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 
