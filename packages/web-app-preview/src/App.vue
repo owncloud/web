@@ -134,7 +134,7 @@
               :aria-label="imageRotateLeftDescription"
               @click="imageRotateLeft"
             >
-              <oc-icon ill-type="line" name="anticlockwise" />
+              <oc-icon fill-type="line" name="anticlockwise" />
             </oc-button>
             <oc-button
               v-oc-tooltip="imageRotateRightDescription"
@@ -144,7 +144,7 @@
               :aria-label="imageRotateRightDescription"
               @click="imageRotateRight"
             >
-              <oc-icon ill-type="line" name="clockwise" />
+              <oc-icon fill-type="line" name="clockwise" />
             </oc-button>
           </div>
         </div>
