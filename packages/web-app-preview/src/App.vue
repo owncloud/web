@@ -438,10 +438,14 @@ export default defineComponent({
       this.updateLocalHistory()
     },
     imageShrink() {
-      this.currentImageZoom = Math.max(0.1, this.currentImageZoom - 0.1)
+      this.currentImageZoom = Math.max(0.1, Math.round(this.currentImageZoom * 0.8 * 20) / 20)
     },
     imageZoom() {
-      this.currentImageZoom = Math.min(5, this.currentImageZoom + 0.1)
+      const maxZoomValue = Math.round(9 * 1.25 * 20) / 20
+      this.currentImageZoom = Math.min(
+        Math.round(this.currentImageZoom * 1.25 * 20) / 20,
+        maxZoomValue
+      )
     },
     imageRotateLeft() {
       this.currentImageRotation =
