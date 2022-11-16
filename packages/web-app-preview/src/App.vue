@@ -44,6 +44,7 @@
           :src="activeMediaFileCached.url"
           :alt="activeMediaFileCached.name"
           :data-id="activeMediaFileCached.id"
+          :style="`zoom: ${currentImageZoom}`"
         />
         <video
           v-else-if="activeMediaFileCached.isVideo"
@@ -89,6 +90,57 @@
         >
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
+        <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
+          <div>
+            <oc-button
+              class="preview-controls-minus-size"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="$gettext('Shrink the image')"
+              @click="minusSize"
+            >
+              <oc-icon fill-type="line" name="checkbox-indeterminate" />
+            </oc-button>
+            <oc-button
+              class="preview-controls-plus-size"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="$gettext('Enlarge the image')"
+              @click="plusSize"
+            >
+              <oc-icon fill-type="line" name="add-box" />
+            </oc-button>
+            <oc-button
+              class="preview-controls-original-size"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="$gettext('Show the image at its normal size')"
+              @click="currentImageZoom = 1"
+            >
+              <oc-icon fill-type="line" name="checkbox-blank" />
+            </oc-button>
+          </div>
+          <div class="oc-ml-m">
+            <oc-button
+              class="preview-controls-rotate-left"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="$gettext('Rotate the image 90 degrees to the left')"
+              @click="currentImageZoom += 10"
+            >
+              <oc-icon ill-type="line" name="anticlockwise" />
+            </oc-button>
+            <oc-button
+              class="preview-rotate-right"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="$gettext('Rotate the image 90 degrees to the right')"
+              @click="next"
+            >
+              <oc-icon ill-type="line" name="clockwise" />
+            </oc-button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -133,7 +185,9 @@ export default defineComponent({
       activeIndex: null,
       direction: 'rtl',
 
-      cachedFiles: []
+      cachedFiles: [],
+
+      currentImageZoom: 1
     }
   },
 
@@ -350,6 +404,12 @@ export default defineComponent({
       }
       this.activeIndex--
       this.updateLocalHistory()
+    },
+    minusSize() {
+      this.currentImageZoom = Math.max(0.1, this.currentImageZoom - 0.1)
+    },
+    plusSize() {
+      this.currentImageZoom = Math.min(5, this.currentImageZoom + 0.1)
     }
   }
 })
