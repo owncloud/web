@@ -69,10 +69,11 @@
         class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
       >
         <oc-button
+          v-oc-tooltip="previousDescription"
           class="preview-controls-previous"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Show previous media file in folder')"
+          :aria-label="previousDescription"
           @click="prev"
         >
           <oc-icon size="large" name="arrow-drop-left" />
@@ -82,10 +83,11 @@
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
         <oc-button
+          v-oc-tooltip="nextDescription"
           class="preview-controls-next"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Show next media file in folder')"
+          :aria-label="nextDescription"
           @click="next"
         >
           <oc-icon size="large" name="arrow-drop-right" />
@@ -93,28 +95,31 @@
         <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
           <div>
             <oc-button
-              class="preview-controls-minus-size"
+              v-oc-tooltip="imageShrinkDescription"
+              class="preview-controls-image-shrink"
               appearance="raw"
               variation="inverse"
-              :aria-label="$gettext('Shrink the image')"
-              @click="minusSize"
+              :aria-label="imageShrinkDescription"
+              @click="imageShrink"
             >
               <oc-icon fill-type="line" name="checkbox-indeterminate" />
             </oc-button>
             <oc-button
-              class="preview-controls-plus-size"
+              v-oc-tooltip="imageZoomDescription"
+              class="preview-controls-image-zoom"
               appearance="raw"
               variation="inverse"
-              :aria-label="$gettext('Enlarge the image')"
-              @click="plusSize"
+              :aria-label="imageZoomDescription"
+              @click="imageZoom"
             >
               <oc-icon fill-type="line" name="add-box" />
             </oc-button>
             <oc-button
-              class="preview-controls-original-size"
+              v-oc-tooltip="imageOriginalSizeDescription"
+              class="preview-controls-image-original-size"
               appearance="raw"
               variation="inverse"
-              :aria-label="$gettext('Show the image at its normal size')"
+              :aria-label="imageOriginalSizeDescription"
               @click="currentImageZoom = 1"
             >
               <oc-icon fill-type="line" name="checkbox-blank" />
@@ -122,19 +127,21 @@
           </div>
           <div class="oc-ml-m">
             <oc-button
+              v-oc-tooltip="imageRotateLeftDescription"
               class="preview-controls-rotate-left"
               appearance="raw"
               variation="inverse"
-              :aria-label="$gettext('Rotate the image 90 degrees to the left')"
+              :aria-label="imageRotateLeftDescription"
               @click="currentImageZoom += 10"
             >
               <oc-icon ill-type="line" name="anticlockwise" />
             </oc-button>
             <oc-button
+              v-oc-tooltip="imageRotateRightDescription"
               class="preview-rotate-right"
               appearance="raw"
               variation="inverse"
-              :aria-label="$gettext('Rotate the image 90 degrees to the right')"
+              :aria-label="imageRotateRightDescription"
               @click="next"
             >
               <oc-icon ill-type="line" name="clockwise" />
@@ -255,6 +262,27 @@ export default defineComponent({
 
     isActiveFileTypeVideo() {
       return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
+    },
+    imageShrinkDescription() {
+      return this.$gettext('Shrink the image')
+    },
+    imageZoomDescription() {
+      return this.$gettext('Enlarge the image')
+    },
+    imageOriginalSizeDescription() {
+      return this.$gettext('Show the image at its normal size')
+    },
+    imageRotateLeftDescription() {
+      return this.$gettext('Rotate the image 90 degrees to the left')
+    },
+    imageRotateRightDescription() {
+      return this.$gettext('Rotate the image 90 degrees to the right')
+    },
+    previousDescription() {
+      return this.$gettext('Show previous media file in folder')
+    },
+    nextDescription() {
+      return this.$gettext('Show next media file in folder')
     }
   },
 
@@ -263,6 +291,8 @@ export default defineComponent({
       if (o !== n) {
         this.loadMedium()
       }
+
+      this.currentImageZoom = 1
     }
   },
 
@@ -405,10 +435,10 @@ export default defineComponent({
       this.activeIndex--
       this.updateLocalHistory()
     },
-    minusSize() {
+    imageShrink() {
       this.currentImageZoom = Math.max(0.1, this.currentImageZoom - 0.1)
     },
-    plusSize() {
+    imageZoom() {
       this.currentImageZoom = Math.min(5, this.currentImageZoom + 0.1)
     }
   }
