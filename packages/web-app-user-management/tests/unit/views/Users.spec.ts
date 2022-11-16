@@ -166,7 +166,6 @@ describe('Users view', () => {
       expect(showMessageStub).toHaveBeenCalled()
       expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(1)
     })
-
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
