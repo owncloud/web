@@ -174,13 +174,12 @@ describe('Users view', () => {
       const wrapper = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
-      await wrapper.vm.deleteUsers([{ id: '1' }])
+      await wrapper.vm.deleteUsers([{ id: '2' }])
 
       expect(showMessageStub).toHaveBeenCalled()
       expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
     })
     it('should show message while user tries to delete own account', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
       const wrapper = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
