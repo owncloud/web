@@ -93,7 +93,7 @@
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
         <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
-          <div>
+          <div class="oc-flex">
             <oc-button
               v-oc-tooltip="imageShrinkDescription"
               class="preview-controls-image-shrink"
@@ -105,6 +105,16 @@
               <oc-icon fill-type="line" name="checkbox-indeterminate" />
             </oc-button>
             <oc-button
+              v-oc-tooltip="imageOriginalSizeDescription"
+              class="preview-controls-image-original-size oc-ml-s oc-mr-s"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageOriginalSizeDescription"
+              @click="currentImageZoom = 1"
+            >
+              <span v-text="currentZoomDisplayValue" />
+            </oc-button>
+            <oc-button
               v-oc-tooltip="imageZoomDescription"
               class="preview-controls-image-zoom"
               appearance="raw"
@@ -113,16 +123,6 @@
               @click="imageZoom"
             >
               <oc-icon fill-type="line" name="add-box" />
-            </oc-button>
-            <oc-button
-              v-oc-tooltip="imageOriginalSizeDescription"
-              class="preview-controls-image-original-size"
-              appearance="raw"
-              variation="inverse"
-              :aria-label="imageOriginalSizeDescription"
-              @click="currentImageZoom = 1"
-            >
-              <oc-icon fill-type="line" name="checkbox-blank" />
             </oc-button>
           </div>
           <div class="oc-ml-m">
@@ -284,6 +284,9 @@ export default defineComponent({
     },
     nextDescription() {
       return this.$gettext('Show next media file in folder')
+    },
+    currentZoomDisplayValue() {
+      return `${(this.currentImageZoom * 100).toFixed(0)}%`
     }
   },
 
