@@ -464,6 +464,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .preview-player {
+  overflow: auto;
   max-width: 90vw;
   height: 70vh;
   margin: 10px auto;
