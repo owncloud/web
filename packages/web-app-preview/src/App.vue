@@ -44,7 +44,7 @@
           :src="activeMediaFileCached.url"
           :alt="activeMediaFileCached.name"
           :data-id="activeMediaFileCached.id"
-          :style="`zoom: ${currentImageZoom}`"
+          :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg)`"
         />
         <video
           v-else-if="activeMediaFileCached.isVideo"
@@ -132,7 +132,7 @@
               appearance="raw"
               variation="inverse"
               :aria-label="imageRotateLeftDescription"
-              @click="currentImageZoom += 10"
+              @click="imageRotateLeft"
             >
               <oc-icon ill-type="line" name="anticlockwise" />
             </oc-button>
@@ -142,7 +142,7 @@
               appearance="raw"
               variation="inverse"
               :aria-label="imageRotateRightDescription"
-              @click="next"
+              @click="imageRotateRight"
             >
               <oc-icon ill-type="line" name="clockwise" />
             </oc-button>
@@ -194,7 +194,8 @@ export default defineComponent({
 
       cachedFiles: [],
 
-      currentImageZoom: 1
+      currentImageZoom: 1,
+      currentImageRotation: 0
     }
   },
 
@@ -293,6 +294,7 @@ export default defineComponent({
       }
 
       this.currentImageZoom = 1
+      this.currentImageRotation = 0
     }
   },
 
@@ -440,6 +442,14 @@ export default defineComponent({
     },
     imageZoom() {
       this.currentImageZoom = Math.min(5, this.currentImageZoom + 0.1)
+    },
+    imageRotateLeft() {
+      this.currentImageRotation =
+        this.currentImageRotation === -270 ? 0 : this.currentImageRotation - 90
+    },
+    imageRotateRight() {
+      this.currentImageRotation =
+        this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
     }
   }
 })
