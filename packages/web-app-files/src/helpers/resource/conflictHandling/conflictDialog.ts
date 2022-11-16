@@ -1,6 +1,5 @@
 import { join } from 'path'
 import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
 import { ResolveConflict, ResolveStrategy } from '.'
 
 interface FileConflict {
@@ -25,26 +24,22 @@ export class ConflictDialog {
 
   async resolveAllConflicts(
     resourcesToMove: Resource[],
-    targetSpace: SpaceResource,
     targetFolder: Resource,
     targetFolderResources: Resource[]
-  ) {
+  ): Promise<FileConflict[]> {
     // Collect all conflicting resources
-    const allConflicts = []
+    const allConflicts: FileConflict[] = []
     for (const resource of resourcesToMove) {
       const targetFilePath = join(targetFolder.path, resource.name)
       const exists = targetFolderResources.some((r) => r.path === targetFilePath)
       if (exists) {
-        allConflicts.push({
-          resource,
-          strategy: null
-        } as FileConflict)
+        allConflicts.push({ resource, strategy: null })
       }
     }
     let count = 0
     let doForAllConflicts = false
     let doForAllConflictsStrategy = null
-    const resolvedConflicts = []
+    const resolvedConflicts: FileConflict[] = []
     for (const conflict of allConflicts) {
       // Resolve conflicts accordingly
       if (doForAllConflicts) {
@@ -74,22 +69,31 @@ export class ConflictDialog {
     return resolvedConflicts
   }
 
-  async resolveFileExists(
+  resolveFileExists(
     resource: Resource,
     conflictCount: number,
     isSingleConflict: boolean,
-    suggestMerge = false
+    suggestMerge = false,
+    separateSkipHandling = false // separate skip-handling between files and folders
   ): Promise<ResolveConflict> {
+    const translatedSkipLabel = !separateSkipHandling
+      ? this.$gettext('Apply to all %{count} conflicts')
+      : resource.isFolder
+      ? this.$gettext('Apply to all %{count} folders')
+      : this.$gettext('Apply to all %{count} files')
+
     return new Promise<ResolveConflict>((resolve) => {
       let doForAllConflicts = false
       const modal = {
         variation: 'danger',
         icon: 'alarm-warning',
-        title: this.$gettext('File already exists'),
+        title: resource.isFolder
+          ? this.$gettext('Folder already exists')
+          : this.$gettext('File already exists'),
         message: this.$gettextInterpolate(
           resource.isFolder
-            ? this.$gettext('Folder with name %{name} already exists.')
-            : this.$gettext('File with name %{name} already exists.'),
+            ? this.$gettext('Folder with name "%{name}" already exists.')
+            : this.$gettext('File with name "%{name}" already exists.'),
           { name: resource.name },
           true
         ),
@@ -98,11 +102,7 @@ export class ConflictDialog {
         buttonSecondaryText: suggestMerge ? this.$gettext('Merge') : this.$gettext('Replace'),
         checkboxLabel: isSingleConflict
           ? ''
-          : this.$gettextInterpolate(
-              this.$gettext('Apply to all %{count} conflicts'),
-              { count: conflictCount },
-              true
-            ),
+          : this.$gettextInterpolate(translatedSkipLabel, { count: conflictCount }, true),
         onCheckboxValueChanged: (value) => {
           doForAllConflicts = value
         },

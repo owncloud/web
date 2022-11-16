@@ -11,6 +11,11 @@ import { ConflictDialog, ResolveConflict, resolveFileNameDuplicate, ResolveStrat
 import { locationPublicLink } from '../../../router/public'
 import { locationSpacesGeneric } from '../../../router/spaces'
 
+interface ConflictedResource {
+  name: string
+  type: string
+}
+
 export class ResourcesUpload extends ConflictDialog {
   constructor(
     private filesToUpload: File[],
@@ -38,15 +43,24 @@ export class ResourcesUpload extends ConflictDialog {
     super(createModal, hideModal, showMessage, $gettext, $ngettext, $gettextInterpolate)
   }
 
-  async perform() {
-    const conflicts = []
+  perform() {
     const uppyResources: UppyResource[] = this.inputFilesToUppyFiles(this.filesToUpload)
     const quotaExceeded = this.checkQuotaExceeded(uppyResources)
-
     if (quotaExceeded) {
       return this.$uppyService.clearInputs()
     }
-    for (const file of uppyResources) {
+
+    const conflicts = this.getConflicts(uppyResources)
+    if (conflicts.length) {
+      return this.displayOverwriteDialog(uppyResources, conflicts)
+    }
+
+    this.handleUppyFileUpload(this.space, this.currentFolder, uppyResources)
+  }
+
+  getConflicts(files: UppyResource[]): ConflictedResource[] {
+    const conflicts: ConflictedResource[] = []
+    for (const file of files) {
       const relativeFilePath = file.meta.relativePath
       if (relativeFilePath) {
         // Logic for folders, applies to all files inside folder and subfolders
@@ -56,10 +70,7 @@ export class ResourcesUpload extends ConflictDialog {
           if (conflicts.some((conflict) => conflict.name === rootFolder)) {
             continue
           }
-          conflicts.push({
-            name: rootFolder,
-            type: 'folder'
-          })
+          conflicts.push({ name: rootFolder, type: 'folder' })
           continue
         }
       }
@@ -68,17 +79,10 @@ export class ResourcesUpload extends ConflictDialog {
         (f) => f.name === file.name && !file.meta.relativeFolder
       )
       if (exists) {
-        conflicts.push({
-          name: file.name,
-          type: 'file'
-        })
+        conflicts.push({ name: file.name, type: 'file' })
       }
     }
-    if (conflicts.length) {
-      await this.displayOverwriteDialog(uppyResources, conflicts)
-    } else {
-      this.handleUppyFileUpload(this.space, this.currentFolder, uppyResources)
-    }
+    return conflicts
   }
 
   async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
@@ -100,9 +104,9 @@ export class ResourcesUpload extends ConflictDialog {
     }
   }
 
-  async displayOverwriteDialog(files: UppyResource[], conflicts) {
-    let count = 0
-    const allConflictsCount = conflicts.length
+  async displayOverwriteDialog(files: UppyResource[], conflicts: ConflictedResource[]) {
+    let fileCount = 0
+    let folderCount = 0
     const resolvedFileConflicts = []
     const resolvedFolderConflicts = []
     let doForAllConflicts = false
@@ -128,14 +132,19 @@ export class ResourcesUpload extends ConflictDialog {
         })
         continue
       }
-      const conflictsLeft = allConflictsCount - count
+
+      const conflictsLeft =
+        conflicts.filter((c) => c.type === conflict.type).length -
+        (isFolder ? folderCount : fileCount)
+
       const resolvedConflict: ResolveConflict = await this.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
         conflictsLeft,
         conflictsLeft === 1,
-        isFolder
+        isFolder,
+        true
       )
-      count++
+      isFolder ? folderCount++ : fileCount++
       if (resolvedConflict.doForAllConflicts) {
         if (isFolder) {
           doForAllConflictsFolders = true

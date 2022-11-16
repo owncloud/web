@@ -137,12 +137,7 @@ describe('resourcesTransfer', () => {
     resourcesTransfer.resolveFileExists = jest
       .fn()
       .mockImplementation(() => Promise.resolve({ strategy: 0 } as ResolveConflict))
-    await resourcesTransfer.resolveAllConflicts(
-      resourcesToMove,
-      targetSpace,
-      targetFolder,
-      targetFolderItems
-    )
+    await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetFolder, targetFolderItems)
 
     expect(resourcesTransfer.resolveFileExists).toHaveBeenCalled()
   })
