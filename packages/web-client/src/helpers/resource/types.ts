@@ -16,7 +16,7 @@ export interface Resource {
   spaceRoles?: {
     [k: string]: any[]
   }
-  spaceQuota?: any[]
+  spaceQuota?: any
   spaceImageData?: any
   spaceReadmeData?: any
   mimeType?: string

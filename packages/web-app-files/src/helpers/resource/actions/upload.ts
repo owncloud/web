@@ -5,7 +5,8 @@ import {
   isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
+import { CreateDirectoryTreeResult, UppyResource } from 'web-runtime/src/composables/upload'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 import { ConflictDialog, ResolveConflict, resolveFileNameDuplicate, ResolveStrategy } from '..'
 import { locationPublicLink } from '../../../router/public'
 import { locationSpacesGeneric } from '../../../router/spaces'
@@ -15,13 +16,18 @@ export class ResourcesUpload extends ConflictDialog {
     private filesToUpload: File[],
     private currentFiles: Resource[],
     private inputFilesToUppyFiles: (inputFileOptions) => UppyResource[],
-    private $uppyService: any,
+    private $uppyService: UppyService,
     private space: SpaceResource,
     private currentFolder: string,
     private currentFolderId: string | number,
     private spaces: SpaceResource[],
     private hasSpaces: boolean,
-    private createDirectoryTree: any,
+    private createDirectoryTree: (
+      space: SpaceResource,
+      currentPath: string,
+      files: UppyResource[],
+      currentFolderId?: string | number
+    ) => Promise<CreateDirectoryTreeResult>,
     createModal: (modal: object) => void,
     hideModal: () => void,
     showMessage: (data: object) => void,
@@ -77,9 +83,21 @@ export class ResourcesUpload extends ConflictDialog {
 
   async handleUppyFileUpload(space: SpaceResource, currentFolder: string, files: UppyResource[]) {
     this.$uppyService.publish('uploadStarted')
-    await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
-    this.$uppyService.publish('addedForUpload', files)
-    this.$uppyService.uploadFiles(files)
+    const result = await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
+
+    let filesToUpload = files
+    if (result.failed.length) {
+      filesToUpload = files.filter(
+        (f) => !result.failed.some((r) => f.meta.relativeFolder.startsWith(r))
+      )
+    }
+
+    if (filesToUpload.length) {
+      this.$uppyService.publish('addedForUpload', filesToUpload)
+      this.$uppyService.uploadFiles(filesToUpload)
+    } else {
+      this.$uppyService.publish('uploadCompleted', { successful: [] })
+    }
   }
 
   async displayOverwriteDialog(files: UppyResource[], conflicts) {
