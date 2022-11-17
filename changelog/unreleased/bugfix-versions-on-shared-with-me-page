@@ -1,0 +1,6 @@
+Bugfix: Versions on the "Shared with me"-page
+
+Downloading and reverting versions on the "Shared with me"-page has been fixed.
+
+https://github.com/owncloud/web/pull/7989
+https://github.com/owncloud/web/issues/7980
