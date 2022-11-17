@@ -18,7 +18,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
       <tr data-testid="shared-via">
         <th scope="col" class="oc-pr-s">Shared via</th>
         <td>
-          <router-link-stub to="[object Object]"><span>/Shares</span></router-link-stub>
+          <router-link-stub tag="a" to="[object Object]"><span>/Shares</span></router-link-stub>
         </td>
       </tr>
       <!---->

@@ -4,7 +4,7 @@ import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Co
 import { ShareTypes } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import Vuex, { GetterTree } from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { DateTime } from 'luxon'
 
 const bareCapabilities = {

@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
 import stubs from '../../../../../../tests/unit/stubs'

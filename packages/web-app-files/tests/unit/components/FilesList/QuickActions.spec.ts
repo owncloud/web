@@ -1,5 +1,5 @@
 import { createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { mockDeep } from 'jest-mock-extended'

@@ -2,7 +2,7 @@ import SpaceMembers from 'web-app-files/src/components/SideBar/Shares/SpaceMembe
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import Users from '@/__fixtures__/users'
 import { spaceRoleManager, spaceRoleViewer, ShareTypes } from 'web-client/src/helpers/share'
 

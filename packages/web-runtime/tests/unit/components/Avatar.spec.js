@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 import Avatar from 'web-runtime/src/components/Avatar.vue'
 

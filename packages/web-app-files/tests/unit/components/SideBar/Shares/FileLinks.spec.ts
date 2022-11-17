@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
 import { createLocationSpaces } from 'web-app-files/src/router'

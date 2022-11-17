@@ -1,7 +1,7 @@
 import merge from 'lodash-es/merge'
 import { mount, createLocalVue } from '@vue/test-utils'
 import { DateTime } from 'luxon'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'

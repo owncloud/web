@@ -3,7 +3,7 @@ import { createStore } from 'vuex-extensions'
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 const localVue = createLocalVue()
 localVue.use(VueRouter)

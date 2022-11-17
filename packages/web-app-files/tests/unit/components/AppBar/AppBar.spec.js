@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Files from '@/__fixtures__/files'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'

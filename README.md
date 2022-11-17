@@ -69,8 +69,6 @@ The repository's `packages` also contains the following apps, which can be en-/d
 - **text-editor:** An extension for creating, opening and editing plain text files, like e.g. `.md` or `.txt`
 - **user-management:** An extension for basic user and group management by the admin. Only works with the Infinite Scale platform, as it uses the graph API.
 
-Notable dependencies are the [ownCloud web design system](github.com/owncloud/owncloud-design-system/), providing UI components and style rules, and the [ownCloud web sdk](github.com/owncloud/owncloud-sdk/), which abstracts away interactions with both backends. Both are actively improved by the same maintainers that also work on the `web` frontend.
-
 ## Releases
 We currently publish a new release every couple of weeks, strictly following [semver](https://semver.org/). Releases and their corresponding changelogs can be found on [the release page](https://github.com/owncloud/web/releases) on GitHub.
 

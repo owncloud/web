@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
 const localVue = createLocalVue()

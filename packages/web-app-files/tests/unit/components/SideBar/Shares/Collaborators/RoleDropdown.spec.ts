@@ -2,7 +2,7 @@ import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborat
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { PeopleShareRoles, SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
 
 const localVue = createLocalVue()

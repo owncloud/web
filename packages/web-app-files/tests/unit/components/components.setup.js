@@ -2,7 +2,7 @@ import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import OwnCloud from 'owncloud-sdk'
 import { createStore } from 'vuex-extensions'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import { clientService } from 'web-pkg/src/services/client'
 

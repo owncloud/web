@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import stubs from '../../../../../../tests/unit/stubs'

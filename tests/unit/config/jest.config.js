@@ -26,9 +26,14 @@ module.exports = {
     '@uppy/drop-target': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy'
   },
+  modulePathIgnorePatterns: ['packages/design-system/docs/utils/statusLabels.spec.js'],
   testEnvironment: 'jsdom',
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esmModules.join('|')})`],
-  setupFiles: ['<rootDir>/tests/unit/config/jest.init.js', 'core-js'],
+  setupFiles: [
+    '<rootDir>/tests/unit/config/jest.init.js',
+    '<rootDir>/tests/unit/config/jest.overrides.js',
+    'core-js'
+  ],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['lcov'],

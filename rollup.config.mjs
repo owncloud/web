@@ -94,11 +94,11 @@ const plugins = [
     targets: [
       { src: 'node_modules/requirejs/require.js', dest: 'js' },
       {
-        src: 'node_modules/owncloud-design-system/dist/system/icons/*',
+        src: 'packages/design-system/src/assets/icons/*',
         dest: 'icons'
       },
       {
-        src: 'node_modules/owncloud-design-system/dist/system/fonts/*',
+        src: 'packages/design-system/src/assets/fonts/*',
         dest: 'fonts'
       }
     ],

@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { DateTime } from 'luxon'
 import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { mount, shallowMount, createLocalVue, MountOptions } from '@vue/test-utils'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'

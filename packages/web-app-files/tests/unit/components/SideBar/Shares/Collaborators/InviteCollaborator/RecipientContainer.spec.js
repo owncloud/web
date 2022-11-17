@@ -1,7 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 import Users from '@/__fixtures__/users'
 import Collaborators from '@/__fixtures__/collaborators'
