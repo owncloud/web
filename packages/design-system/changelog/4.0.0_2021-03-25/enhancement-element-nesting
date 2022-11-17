@@ -1,0 +1,5 @@
+Enhancement: Element nesting
+
+Fix the nesting for some html elements to make them w3c compliant.
+
+https://github.com/owncloud/owncloud-design-system/pull/1155

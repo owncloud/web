@@ -1,0 +1,6 @@
+Bugfix: OcSelect transparent background
+
+We fixed a non-transparent background in the OcSelect button, leading to visual glitches.
+
+https://github.com/owncloud/owncloud-design-system/pull/2036
+https://github.com/owncloud/owncloud-design-system/issues/2030

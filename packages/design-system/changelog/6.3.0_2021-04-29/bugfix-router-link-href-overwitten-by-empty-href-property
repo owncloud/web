@@ -1,0 +1,6 @@
+Bugfix: Set correct href to oc-button if type is router-link
+
+While setting the type property to 'router-link' the empty href property has overwritten the href target with null.
+Now the href property will be set correctly.
+
+https://github.com/owncloud/owncloud-design-system/pull/1245

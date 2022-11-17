@@ -1,0 +1,5 @@
+Bugfix: Non-interactive tooltips
+
+Interactive tooltips were breaking correct z-index behaviour so we set them to non-interactive.
+
+https://github.com/owncloud/owncloud-design-system/pull/1330

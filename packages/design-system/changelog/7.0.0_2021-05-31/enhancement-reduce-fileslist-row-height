@@ -1,0 +1,5 @@
+Enhancement: reduce the height of the filelist rows
+
+We've reduced the height of the filelist rows to the possible minimum to provide a more condensed view especially for desktop users. The possible minimum of the filelist row is currently determined by the height of the filename and the sharing-indicators below the filename.
+
+https://github.com/owncloud/owncloud-design-system/pull/1319

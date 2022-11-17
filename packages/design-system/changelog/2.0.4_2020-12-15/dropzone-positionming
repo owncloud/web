@@ -1,0 +1,12 @@
+Bugfix: positioning of dropzone
+
+switch oc-dropzone positioning from fixed to absolute, fixed always orientates by the viewport which means it always covers the entire screen.
+This is something we can't know and the decision should be left to the consuming app.
+
+Instead we use position absolute to just cover the next parent which ist positioned relative to the viewport.
+In situations where the body is higher or wider than the viewport fixed works better because absolute won't cover the scrollable parts of the content.
+
+Since oc apps always do scrolling on their own this is no problem
+
+
+https://github.com/owncloud/ocis/issues/1052

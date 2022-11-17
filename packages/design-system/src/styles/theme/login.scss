@@ -1,0 +1,40 @@
+.oc-login {
+  @extend .oc-background-cover;
+
+  position: relative;
+
+  &-logo {
+    @extend .oc-background-cover;
+
+    left: 50%;
+    max-height: 200px;
+    max-width: 200px;
+    position: absolute;
+    text-indent: -9999px;
+    transform: translate(-50%, -150%);
+  }
+
+  &-authorize-button {
+    width: 100%;
+  }
+
+  &-card {
+    @extend .oc-card;
+    @extend .oc-text-center;
+
+    border-radius: 15px;
+
+    &-title {
+      @extend .oc-card-title;
+    }
+
+    &-body {
+      @extend .oc-card-body;
+    }
+
+    &-footer {
+      @extend .oc-card-footer;
+      @extend .oc-text-small;
+    }
+  }
+}

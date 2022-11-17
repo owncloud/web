@@ -1,0 +1,5 @@
+Bugfix: Links in oc-avatar-group
+
+The oc-avatar-group was showing all link, ignoring the `maxDisplayed` property. We fixed that by properly cutting off the items used for rendering avatars.
+
+https://github.com/owncloud/owncloud-design-system/pull/1184

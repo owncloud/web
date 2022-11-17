@@ -1,0 +1,6 @@
+Enhancement: Improve OcList
+
+We've fixed some styling and added a 'raw' property
+in OcList to disable list styling.
+
+https://github.com/owncloud/owncloud-design-system/pull/1881

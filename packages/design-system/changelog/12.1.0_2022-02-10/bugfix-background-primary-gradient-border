@@ -1,0 +1,8 @@
+Bugfix: background-primary-gradient border
+
+The `.oc-background-primary-gradient` class was setting the CSS border property instead of 
+only the border-color, hereby removing any border-width the target tag might already carry. 
+This lead to some very small differences when rendering buttons and has been resolved now.
+
+https://github.com/owncloud/web/issues/6383
+https://github.com/owncloud/owncloud-design-system/pull/1945

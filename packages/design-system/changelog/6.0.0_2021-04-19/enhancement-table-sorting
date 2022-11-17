@@ -1,0 +1,6 @@
+Enhancement: Table sorting
+
+The latest version of OcTable and OcTableFiles had no more sorting.
+We brought it back. It can be enabled by simply adding a `sortable: true` to table fields.
+
+https://github.com/owncloud/owncloud-design-system/pull/1219

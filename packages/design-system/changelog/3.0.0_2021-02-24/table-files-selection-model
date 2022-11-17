@@ -1,0 +1,5 @@
+Change: Use resources instead of ids in selection model
+
+We changed the selection model of the `oc-table-files` component to use resources instead of their ids.
+
+https://github.com/owncloud/owncloud-design-system/pull/1095

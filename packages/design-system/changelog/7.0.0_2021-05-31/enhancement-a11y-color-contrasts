@@ -1,0 +1,7 @@
+Enhancement: a11y color contrasts
+
+The color contrast checker now runs when generating tokens via the yarn token command
+and reports if any colors don't match the minimum color contrast
+
+https://github.com/owncloud/owncloud-design-system/pull/1302
+https://github.com/owncloud/owncloud-design-system/pull/1316

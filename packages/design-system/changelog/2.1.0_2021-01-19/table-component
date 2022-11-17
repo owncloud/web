@@ -1,0 +1,9 @@
+Change: Create new table component
+
+We've dropped the table component and created a new one from scratch.
+The new component is defining its fields and data via props.
+To still use more "traditional" table, take a look at component `OcTableSimple`.
+
+https://github.com/owncloud/ocis/issues/1177
+https://github.com/owncloud/owncloud-design-system/pull/1034
+https://github.com/owncloud/owncloud-design-system/pull/1050

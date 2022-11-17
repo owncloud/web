@@ -1,0 +1,7 @@
+Bugfix: OcSwitch Off State is not pixel perfect
+
+We've addressed the fact that the OcSwitch wasn't aligned properly in it's off state.
+Both states are now aligned equaly.
+
+https://github.com/owncloud/owncloud-design-system/issues/1458
+https://github.com/owncloud/owncloud-design-system/pull/1512

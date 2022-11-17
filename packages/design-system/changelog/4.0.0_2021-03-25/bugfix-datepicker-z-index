@@ -1,0 +1,7 @@
+Bugfix: Increase the datepicker z-index
+
+The z-index of the datepicker modal was set to 1, which is a pretty small value
+for a modal window. As a result the date picker modal has been displayed behind the code
+example in the design system.
+
+https://github.com/owncloud/owncloud-design-system/pull/1147

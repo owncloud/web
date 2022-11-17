@@ -1,0 +1,11 @@
+Change: Remove UiKit
+
+We have removed the UiKit library this design system originally was built on.
+The necessary style rules for the design system itself and our web repository have been internalized, 
+and everything else got dropped to greatly reduce bundle size and build times.
+
+Please note that with this change, we have also dropped and/or refactored a lot of CSS classes and correlated styling.
+
+https://github.com/owncloud/owncloud-design-system/pull/1658
+https://github.com/owncloud/owncloud-design-system/issues/538
+https://github.com/owncloud/owncloud-design-system/pull/1882

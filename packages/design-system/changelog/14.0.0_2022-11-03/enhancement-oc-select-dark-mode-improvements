@@ -1,0 +1,7 @@
+Enhancement: OcSelect dark mode improvements
+
+We've improved the visual appearance of the OcSelect component in dark mode, 
+now the selected items have an adjusted color and are easier to read.
+
+https://github.com/owncloud/owncloud-design-system/pull/2262
+https://github.com/owncloud/web/issues/7269

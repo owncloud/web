@@ -1,0 +1,6 @@
+Enhancement: Accessibility improvements on the sidebar component
+
+Added a current page indicator and an overall aria label to the sidebar. Also implemented an alt property for the logo.
+It used the product name previously which is problematic because alt needs to describe the link rather than the image.
+
+https://github.com/owncloud/owncloud-design-system/pull/1231

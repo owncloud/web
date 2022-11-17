@@ -1,0 +1,12 @@
+Enhancement: Create new files table component
+
+We've built a new files table component which has a set of pre-defined fields.
+Which fields will be displayed depends on the provided resources.
+This component also wraps a few other components:
+
+- OcResource
+- OcAvatarGroup
+
+https://github.com/owncloud/ocis/issues/1177
+https://github.com/owncloud/owncloud-design-system/pull/1034
+https://github.com/owncloud/owncloud-design-system/pull/1050

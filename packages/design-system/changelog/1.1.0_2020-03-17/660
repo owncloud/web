@@ -1,0 +1,5 @@
+Bugfix: Made scrollbar styles consistent
+
+Scrollbar styles are now more consistent between Chrome and Firefox.
+
+https://github.com/owncloud/owncloud-design-system/pull/660

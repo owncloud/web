@@ -1,0 +1,6 @@
+Enhancement: Redesign OcGhostElement
+
+We've redesigned OcGhostElement to use OcResourceIcon and
+to display a better preview of the items that have been dragged
+
+https://github.com/owncloud/owncloud-design-system/pull/2049

@@ -1,0 +1,5 @@
+Bugfix: Initial sorting for OcTableFiles
+
+The OcTableFiles component didn't apply initial sorting. This was set to the first sortable field in the list of fields (which is "name").
+
+https://github.com/owncloud/owncloud-design-system/pull/1588

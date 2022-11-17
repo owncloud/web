@@ -1,0 +1,5 @@
+Enhancement: Add prop for the table header position
+
+We've added a prop which is defining the top position of the table header if the `sticky` prop is set to `true`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1092

@@ -1,0 +1,5 @@
+Bugfix: Padding in breadcrumb context menu
+
+We've removed the padding from the context menu in the breadcrumbs to align its visual appearance with the context menu in the files table.
+
+https://github.com/owncloud/owncloud-design-system/pull/1813

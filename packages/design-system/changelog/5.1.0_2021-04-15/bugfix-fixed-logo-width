@@ -1,0 +1,8 @@
+Bugfix: Remove fixed login logo width
+
+The logo displayed on login/error pages had a fixed width and height, wich was fine for 
+the provided ownCloud logo but produced suboptimal results when using files with other 
+width/height ratios. By changing this to max-width & max-height we allow for other files 
+while keeping their proper aspect ratio.
+
+https://github.com/owncloud/owncloud-design-system/pull/1207

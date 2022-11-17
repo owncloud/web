@@ -1,0 +1,6 @@
+Enhancement: Icons for drawio, ifc and odg resource types
+
+We've added resource type extension mapping and icons for the drawio, ifc, ipynb and odg file extensions.
+
+https://github.com/owncloud/owncloud-design-system/pull/2005
+https://github.com/owncloud/web/issues/6416

@@ -1,0 +1,6 @@
+Enhancement: Show compile errors and enforce node.js version in package.json
+
+Ensure we show compile-time errors on the command line when present and
+enforce Node.js v14.0.0 or greater to permit optional chaining to be used
+
+https://github.com/owncloud/owncloud-design-system/pull/1579

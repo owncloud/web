@@ -1,0 +1,5 @@
+Enhancement: Remove the OcTextInput component from the OcSearchBar component
+
+Also replace the loading spinner with the OcSpinner component in the course of this.
+
+https://github.com/owncloud/owncloud-design-system/pull/1151

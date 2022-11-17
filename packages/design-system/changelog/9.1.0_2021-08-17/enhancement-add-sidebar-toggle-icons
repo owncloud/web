@@ -1,0 +1,8 @@
+Enhancement: Add sidebar toggle icons 
+
+We added new chevron icons for the toggle button to switch between
+sidebar open and close
+
+https://github.com/owncloud/web/issues/5165
+https://github.com/owncloud/owncloud-design-system/pull/1587
+https://github.com/owncloud/owncloud-design-system/pull/1592

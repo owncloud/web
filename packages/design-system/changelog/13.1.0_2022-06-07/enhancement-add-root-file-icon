@@ -1,0 +1,6 @@
+Enhancement: Add ROOT file icon
+
+We've added an icon for files of ROOT type. ROOT is a software suite designed
+for data analysis in particle physics, astronomy and other sciences.
+
+https://github.com/owncloud/owncloud-design-system/pull/2158

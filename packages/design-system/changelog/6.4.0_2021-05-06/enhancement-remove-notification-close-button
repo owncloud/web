@@ -1,0 +1,6 @@
+Enhancement: Remove the notification close button
+
+The notification will now automatically close after a certain amount of time which can be defined via property.
+Also fixed some links in the docs in addition to that.
+
+https://github.com/owncloud/owncloud-design-system/pull/1247

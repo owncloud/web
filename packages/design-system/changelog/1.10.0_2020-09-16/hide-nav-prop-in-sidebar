@@ -1,0 +1,5 @@
+Change: Add prop to hide navigation in sidebar
+
+We added a prop for the sidebar component to hide the navigation. This is a breaking change, as we removed the internal logic hiding the navigation entirely in favor of the new prop.
+
+https://github.com/owncloud/owncloud-design-system/pull/859

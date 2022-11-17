@@ -1,0 +1,7 @@
+Bugfix: Use correct color for the accordion title
+
+In the last release, we introduced a regression in the accordion component.
+The custom color set for its title had not been respected and the button color was used instead.
+We've fixed this to use the custom color again.
+
+https://github.com/owncloud/owncloud-design-system/pull/1130

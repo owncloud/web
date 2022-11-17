@@ -1,0 +1,6 @@
+Enhancement: Add `isSelectable` prop to files table component
+
+We've added `isSelectable` prop to `oc-table-files` component.
+This prop is used to assert whether resources in the table can be selected.
+
+https://github.com/owncloud/owncloud-design-system/pull/1093

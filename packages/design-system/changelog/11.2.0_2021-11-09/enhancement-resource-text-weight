@@ -1,0 +1,5 @@
+Enhancement: Reduce filename text weight
+
+We reduced the font weight for filenames to make the files list easier for the eye.
+
+https://github.com/owncloud/owncloud-design-system/pull/1759

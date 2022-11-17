@@ -1,0 +1,6 @@
+Bugfix: Modal title variation
+
+The modal variation was only reflected in the title color in the `danger` variation.
+Now, the title colors gets correctly adapted to any of the 5 possible variations
+
+https://github.com/owncloud/owncloud-design-system/pull/1185

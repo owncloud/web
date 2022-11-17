@@ -1,0 +1,6 @@
+Enhancement: Give OcModal the option to use OcContextualHelper
+
+We've added the option for OcModal to use OcContextualHelper
+
+https://github.com/owncloud/owncloud-design-system/pull/2325
+https://github.com/owncloud/web/issues/6892

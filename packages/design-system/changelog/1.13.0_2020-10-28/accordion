@@ -1,0 +1,5 @@
+Change: New accordion component implementation
+
+We rewrote the accordion component to remove UIKit styles and align with our own styling. Some accessibility aspects are already implement, for example expanding and collapsing accordion items by pressing space or enter already works. More will come later on.
+
+https://github.com/owncloud/owncloud-design-system/pull/911

@@ -1,0 +1,7 @@
+Bugfix: Swap background colors
+
+In the `v6.0.0` release, the color values for `background-muted` and `background-hightlighted` 
+got swapped by accident. This produced unwanted results in the results and gets reverted to the 
+original and working version with this change.
+
+https://github.com/owncloud/owncloud-design-system/pull/1227

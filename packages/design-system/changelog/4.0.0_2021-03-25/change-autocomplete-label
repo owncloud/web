@@ -1,0 +1,6 @@
+Change: Add label to the autocomplete component
+
+Adding the label "from the outside" is not a11y compliant as you cannot get the id of the actual input element which therefore cannot be referenced. This change also removes all the unnecessary prefixes which were used in the component.
+
+https://github.com/owncloud/owncloud-design-system/pull/1156
+https://github.com/owncloud/web/issues/4329

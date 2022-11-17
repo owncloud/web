@@ -1,0 +1,5 @@
+Enhancement: Apply CSS custom properties to `:host`
+
+We've applied CSS custom properties to `:host` so that we can access them also in web components.
+
+https://github.com/owncloud/owncloud-design-system/pull/1333

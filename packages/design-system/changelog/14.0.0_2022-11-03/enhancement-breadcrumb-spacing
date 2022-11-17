@@ -1,0 +1,7 @@
+Enhancement: Adjust breadcrumb spacing
+
+We've adjusted some spacing in the breadcrumbs to improve the overall look.
+
+https://github.com/owncloud/web/issues/7676
+https://github.com/owncloud/web/issues/7525
+https://github.com/owncloud/owncloud-design-system/pull/2329

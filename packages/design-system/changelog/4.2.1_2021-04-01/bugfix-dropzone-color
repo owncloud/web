@@ -1,0 +1,5 @@
+Bugfix: Use primary text color for the dropzone
+
+We've changed the color of the dropzone hint message to the `oc-color` so that the text is visible even when brand and background colors are both dark.
+
+https://github.com/owncloud/owncloud-design-system/pull/1192

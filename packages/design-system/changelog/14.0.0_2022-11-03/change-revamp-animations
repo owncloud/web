@@ -1,0 +1,5 @@
+Change: Revamp animations
+
+We have removed the old animation classes and will subsequently add new ones, respecting the `prefers-reduced-motion` browser setting.
+
+https://github.com/owncloud/owncloud-design-system/pull/2210

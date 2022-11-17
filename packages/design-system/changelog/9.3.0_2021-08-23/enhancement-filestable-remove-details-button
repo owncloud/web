@@ -1,0 +1,6 @@
+Enhancement: Remove "Showdetails" button in OcTableFiles 
+
+We removed the Showdetails button in the OcTableFiles quickactions to de-clutter the UI.
+Opening the sidebar is supposed to happen from the contextmenu which gets triggered by the three dots button.
+
+https://github.com/owncloud/owncloud-design-system/pull/1610

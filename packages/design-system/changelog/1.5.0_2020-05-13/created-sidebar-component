@@ -1,0 +1,5 @@
+Enhancement: Created sidebar component
+
+We've created a sidebar component which is to be used as an in-app navigation and which will contain the branding.
+
+https://github.com/owncloud/owncloud-design-system/pull/735

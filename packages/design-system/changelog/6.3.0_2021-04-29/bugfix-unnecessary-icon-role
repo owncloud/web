@@ -1,0 +1,5 @@
+Bugfix: Remove unnecessary role attribute from oc-icon
+
+The oc-icon component had `role="presentation"` on the svg if there is no accessible label. Since we already have `aria-hidden="true"` the role is not needed. Removing it for less code complexity.
+
+https://github.com/owncloud/owncloud-design-system/pull/1241

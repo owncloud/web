@@ -1,0 +1,6 @@
+Bugfix: Sorting by date
+
+The OcTableFiles component sorted rows lexicographically by relative dates (e.g. "1 hour ago"). This was fixed to sort by unix timestamps instead.
+
+https://github.com/owncloud/owncloud-design-system/issues/1552
+https://github.com/owncloud/owncloud-design-system/pull/1588

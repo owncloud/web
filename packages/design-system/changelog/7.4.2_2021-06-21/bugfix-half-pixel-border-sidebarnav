@@ -1,0 +1,7 @@
+Bugfix: 0.5px separator line between OcSidebarNav items
+
+The small line between OcSidebarNav items was displayed with different widths 
+depending on the used browser, since some can't handle half-pixel values. 
+We've changed that to create the same look across browsers.
+
+https://github.com/owncloud/owncloud-design-system/pull/1402

@@ -1,0 +1,8 @@
+Change: Pin UIkit version to 3.5.16
+
+We've pinned the version of UIkit to 3.5.16.
+The reason for this is that the version 3.5.17 caused a regression to our autocomplete component.
+Since we want to remove UIkit from the ODS in the near future, we are not taking the time to come up with a fix.
+We do not plan to upgrade UIkit anymore.
+
+https://github.com/owncloud/owncloud-design-system/pull/1064

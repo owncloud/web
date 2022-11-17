@@ -1,0 +1,6 @@
+Enhancement: Initial focus in OcModal
+
+The OcModal component sets the initial focus to the input element now, if one exists. If the input element doesn't exist the focus remains on the modal itself, like we had it before.
+
+https://github.com/owncloud/owncloud-design-system/pull/1453
+https://github.com/owncloud/web/issues/3684

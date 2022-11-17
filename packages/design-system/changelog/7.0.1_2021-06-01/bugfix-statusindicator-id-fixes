@@ -1,0 +1,11 @@
+Bugfix: OcStatusIndicator ID fixes
+
+Inside the OcStatusIndicator, components were rendering the same IDs which resulted in invalid HTML. 
+Since the clickhandler on the OcStatusIndicator also was refering to these IDs and they now are 
+dynamically generated on the frontend, it has now been replaced with a computed 
+property which receives the click target.
+
+Also, the accessible description (only applicable to screen readers) has been 
+changed from `<span>` to `<p>` which sounds better to the listener.
+
+https://github.com/owncloud/owncloud-design-system/pull/1342

@@ -1,0 +1,5 @@
+Enhancement: Use bigger font size for breadcrumbs
+
+We've increased the font size of breadcrumbs to match the one from `oc-table` items.
+
+https://github.com/owncloud/owncloud-design-system/pull/1239

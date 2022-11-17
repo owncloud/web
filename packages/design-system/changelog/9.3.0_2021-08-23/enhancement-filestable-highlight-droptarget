@@ -1,0 +1,7 @@
+Enhancement: Highlight droptarget in OcTableFiles 
+
+The targeted table row in the OcTableFiles now gets a highlighted background when 
+another resource is dragged over it for visual user feedback.
+
+https://github.com/owncloud/owncloud-design-system/pull/1610
+https://github.com/owncloud/web/issues/5705

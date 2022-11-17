@@ -1,0 +1,6 @@
+Enhancement: OcSwitch off state color 
+
+We've addressed the fact that the OcSwitch 'off' state color doesn't differ enough from 'on' state
+
+https://github.com/owncloud/owncloud-design-system/issues/1457
+https://github.com/owncloud/owncloud-design-system/pull/1522

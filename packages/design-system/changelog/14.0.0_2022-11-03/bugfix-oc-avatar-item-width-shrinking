@@ -1,0 +1,6 @@
+Bugfix: Remove width shrinking of the ocAvatarItem
+
+We fixed an issue that the width of ocAvatarItem is shrinking in the sidebar of web by longer group names
+
+https://github.com/owncloud/owncloud-design-system/issues/2241
+https://github.com/owncloud/owncloud-design-system/pull/2242

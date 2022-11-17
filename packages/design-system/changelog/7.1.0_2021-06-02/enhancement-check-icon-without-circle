@@ -1,0 +1,7 @@
+Enhancement: Add check icon without circle
+
+According to community requests, we've added a 
+check/tick/approve icon without a background shape.
+
+https://github.com/owncloud/owncloud-design-system/issues/1341
+https://github.com/owncloud/owncloud-design-system/pull/1346

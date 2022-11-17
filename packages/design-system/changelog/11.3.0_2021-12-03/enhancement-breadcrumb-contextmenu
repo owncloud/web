@@ -1,0 +1,7 @@
+Enhancement: Breadcrumb contextmenu
+
+We've added a button to the last item of the OcBreadcrumb component 
+that triggers a dropdown which can be customizably filled.
+
+https://github.com/owncloud/web/issues/6030
+https://github.com/owncloud/owncloud-design-system/pull/1786

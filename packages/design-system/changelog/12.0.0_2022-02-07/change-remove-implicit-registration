@@ -1,0 +1,5 @@
+Change: Remove implicit ODS registration
+
+Remove implicit registration of ODS, from now on applications using ODS must register it explicit via `Vue.use`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1848

@@ -1,0 +1,6 @@
+Enhancement: Add lead breadcrumb variation
+
+We've added a lead variation to the breadcrumbs.
+This variation gives large font size to breadcrumb items.
+
+https://github.com/owncloud/owncloud-design-system/pull/806

@@ -1,0 +1,6 @@
+Enhancement: Add `disabled` prop to table components
+
+We've added `disabled` prop to `oc-table` and `oc-table-files` components.
+This prop is used to pass IDs of disabled resources so that they are clearly distinguishable from the other resources.
+
+https://github.com/owncloud/owncloud-design-system/pull/1093

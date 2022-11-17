@@ -1,0 +1,7 @@
+Enhancement: Switch filesize calculation base
+
+We've switched from base-2 to base-10 when calculating the displayed file-size 
+to align it better with user expectations.
+
+https://github.com/owncloud/owncloud-design-system/pull/1598
+https://github.com/owncloud/owncloud-design-system/pull/1615

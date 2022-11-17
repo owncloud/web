@@ -1,0 +1,6 @@
+Enhancement: Add table footer
+
+We've added a footer to the table and table files components.
+To add any content to the footer, use `footer` slot.
+
+https://github.com/owncloud/owncloud-design-system/pull/1099

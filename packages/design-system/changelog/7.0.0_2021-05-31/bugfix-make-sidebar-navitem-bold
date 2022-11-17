@@ -1,0 +1,5 @@
+Bugfix: Make OcSidebarNavitem text bold
+
+We've made the text of `OcSidebarNavItem` component bold again.
+
+https://github.com/owncloud/owncloud-design-system/pull/1308

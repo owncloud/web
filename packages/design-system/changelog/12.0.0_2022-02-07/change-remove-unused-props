@@ -1,0 +1,5 @@
+Change: Remove unused props for unstyled components
+
+We removed the `stopClassProgragation` property in two components, which resulted in unstyled components before but was unused.
+
+https://github.com/owncloud/owncloud-design-system/pull/1795

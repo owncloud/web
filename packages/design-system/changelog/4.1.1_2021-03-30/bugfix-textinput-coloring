@@ -1,0 +1,6 @@
+Bugfix: OcTextInput Coloring
+
+The OcTextInput input validation didn't correctly change to the `danger` or `warning` color variations (discovered this when checking the modals in `web`).
+This change fixes it, correctly changing colors when the validation gets triggered.
+
+https://github.com/owncloud/owncloud-design-system/pull/1182

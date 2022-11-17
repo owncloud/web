@@ -1,0 +1,6 @@
+Enhancement: Add nestedd drop functionality
+
+We've added the property "isNested" to ocDrop that prevents the parent drop from hiding by not firing hideAll() in the child drop
+
+https://github.com/owncloud/owncloud-design-system/issues/2238
+https://github.com/owncloud/owncloud-design-system/pull/2239

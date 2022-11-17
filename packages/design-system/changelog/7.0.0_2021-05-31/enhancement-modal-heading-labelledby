@@ -1,0 +1,6 @@
+Enhancement: Aria-labelledby through heading for modals
+
+The modal component now has an `aria-labelledby` attribute 
+linked to the `<h2>` tag inside, for improved accessibility.
+
+https://github.com/owncloud/owncloud-design-system/pull/1327

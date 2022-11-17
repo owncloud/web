@@ -1,0 +1,6 @@
+Bugfix: Fix extension icon rendering
+
+The `extension` icon wouldn't render in the ownCloud web. 
+We fixed the SVG file to prevent this problem.
+
+https://github.com/owncloud/owncloud-design-system/pull/1779

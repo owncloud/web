@@ -1,0 +1,6 @@
+Bugfix: Interactive texts in OcTooltips
+
+The new tooltip texts would only be initialized once and then didn't offer 
+the possibility of chaging reactively. By updating the directive, we've changed that.
+
+https://github.com/owncloud/owncloud-design-system/pull/1288

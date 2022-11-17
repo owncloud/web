@@ -1,0 +1,10 @@
+Enhancement: Relative date tooltips in the OcTableFiles component
+
+Relative dates like "1 day ago" now have a tooltip that shows the absolute date. The following dates in the files table are affected:
+
+* modify date
+* share date
+* delete date
+
+https://github.com/owncloud/owncloud-design-system/pull/1787
+https://github.com/owncloud/web/issues/5672

@@ -1,0 +1,5 @@
+Change: Option for gap on oc-button
+
+OcButton now has a property for defining a `gap` value out of xsmall, small, normal, medium, large and xlarge. The sizes are the same as in our margin classes.
+
+https://github.com/owncloud/owncloud-design-system/pull/878

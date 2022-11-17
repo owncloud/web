@@ -1,0 +1,6 @@
+Enhancement: Remove uk-drop from OcDrop
+
+We've used uikit to manage oc-drop before, now tippy.js acts as a drop in replacement.
+The api stays the same.
+
+https://github.com/owncloud/owncloud-design-system/pull/1269

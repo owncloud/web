@@ -1,0 +1,7 @@
+Enhancement: Modals listen to escape key
+
+The modal component now also emits its "cancel" event 
+when the user presses the escape key. This can for 
+example be used to close the modal via keyboard.
+
+https://github.com/owncloud/owncloud-design-system/pull/1324

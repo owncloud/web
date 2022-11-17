@@ -1,0 +1,6 @@
+Enhancement: Make searchbar component a11y-compliant
+
+It is now possible to reach and submit the "clear"-button within the search bar via keyboard. After a search query has been cleared, the input will be focused again. This change also removes the "uk-close" icon as it is not a11y-compliant.
+
+https://github.com/owncloud/owncloud-design-system/pull/1164
+https://github.com/owncloud/owncloud-design-system/issues/1160

@@ -1,0 +1,7 @@
+Change: Production Bundle Content
+
+In the past, we shipped the docs `.scss` file and 
+some example images which now have been removed 
+from the production bundle to reduce size.
+
+https://github.com/owncloud/owncloud-design-system/pull/1553

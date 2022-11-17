@@ -1,0 +1,7 @@
+Change: Pass object as the target route
+
+We've changed the `targetRoute` prop in the `oc-resource` component to accept an object instead of a string.
+This object is now accepting keys `name`, `params` and `query`. Only `name` is required.
+All keys are then passed to the router link which enables using more complex routes.
+
+https://github.com/owncloud/owncloud-design-system/pull/1102

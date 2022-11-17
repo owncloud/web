@@ -1,0 +1,20 @@
+$transition-duration-short: 200ms;
+$directions: (
+  "t": "top",
+  "r": "right",
+  "b": "bottom",
+  "l": "left",
+  "x": ("right", "left"),
+  "y": ("top", "bottom")
+);
+$sizes: (
+  "xs": $oc-space-xsmall,
+  "s": $oc-space-small,
+  "m": $oc-space-medium,
+  "l": $oc-space-large,
+  "xl": $oc-space-xlarge,
+  "xxl": $oc-space-xxlarge
+);
+
+$global-control-height: 15px;
+$global-border-width: 2px;

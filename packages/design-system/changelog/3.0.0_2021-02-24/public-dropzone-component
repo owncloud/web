@@ -1,0 +1,5 @@
+Change: Make dropzone component public
+
+We've made the dropzone component public so that it appears in the documentation.
+
+https://github.com/owncloud/owncloud-design-system/pull/1100

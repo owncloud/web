@@ -1,0 +1,5 @@
+Change: Rename OcSidebar to OcSidebarNav
+
+We've changed the name of the `OcSidebar` component to `OcSidebarNav` to better reflect that it shouldn't be used for anything else than the navigation.
+
+https://github.com/owncloud/owncloud-design-system/pull/1300

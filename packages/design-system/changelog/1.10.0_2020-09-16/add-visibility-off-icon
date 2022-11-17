@@ -1,0 +1,7 @@
+Enhancement: Add visibility off icon
+
+We've added a new icon to represent state when visibility is off.
+This can be used e.g. when toggling the visibility of a password.
+
+https://material.io/resources/icons/?search=eye&icon=visibility_off&style=baseline
+https://github.com/owncloud/owncloud-design-system/pull/855

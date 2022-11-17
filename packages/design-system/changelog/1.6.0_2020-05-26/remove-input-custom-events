@@ -1,0 +1,7 @@
+Change: Removed change and keydown events from text input
+
+We've removed change and keydown custom events from text input component.
+All listeners are passed to the input element so all events are still accessible.
+Focus and input events are still implemented as custom events.
+
+https://github.com/owncloud/owncloud-design-system/pull/768

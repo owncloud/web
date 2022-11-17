@@ -1,0 +1,6 @@
+Enhancement: Use Roboto font
+
+We've switched the default font from Fira Sans to Roboto.
+
+https://github.com/owncloud/owncloud-design-system/pull/1876
+https://github.com/owncloud/web/issues/6100/

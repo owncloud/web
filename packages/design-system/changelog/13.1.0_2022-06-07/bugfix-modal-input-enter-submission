@@ -1,0 +1,8 @@
+Bugfix: Fix event handler for submit-via-enter in OcModal input
+
+We fixed a small difference between clicking the confirm button and
+hitting the enter key when using an OcModal with an input field, which 
+lead to unexpected behaviour.
+
+https://github.com/owncloud/owncloud-design-system/pull/2159
+https://github.com/owncloud/web/pull/6961#pullrequestreview-979854434

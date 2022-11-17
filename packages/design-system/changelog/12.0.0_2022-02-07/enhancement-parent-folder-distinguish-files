@@ -1,0 +1,8 @@
+Enhancement: Show path / parent folder to distinguish files
+
+We've added an option to show the path / parent folder under the resource name
+in order to distinguish files better
+
+https://github.com/owncloud/web/issues/5953
+https://github.com/owncloud/owncloud-design-system/pull/1860
+https://github.com/owncloud/owncloud-design-system/pull/1871

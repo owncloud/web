@@ -1,0 +1,6 @@
+Bugfix: breadcrumb icon floating
+
+home icon in breadcrumb don't break into second line anymore
+
+https://github.com/owncloud/ocis/issues/1053
+https://github.com/owncloud/owncloud-design-system/pull/997

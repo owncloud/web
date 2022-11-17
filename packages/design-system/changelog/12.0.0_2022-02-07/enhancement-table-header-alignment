@@ -1,0 +1,5 @@
+Enhancement: OcTable header alignment
+
+We've applied the full row height to the table header and made it vertically centered to give a more fluffy experience for the eye.
+
+https://github.com/owncloud/owncloud-design-system/pull/1922

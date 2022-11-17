@@ -1,0 +1,5 @@
+Bugfix: Fix component docs
+
+The docs were broken after merging Elements and Patterns into a Components section. Apparently `Components` is not allowed as section name for technical reasons, so we renamed it to `oC Components`.
+
+https://github.com/owncloud/owncloud-design-system/pull/937

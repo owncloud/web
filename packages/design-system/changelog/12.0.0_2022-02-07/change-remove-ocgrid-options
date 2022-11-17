@@ -1,0 +1,6 @@
+Change: Remove OcGrid options
+
+We have removed the `match` and `childWidth` option in the OcGrid component 
+since they were unused and relied heavily on the removed UiKit library.
+
+https://github.com/owncloud/owncloud-design-system/pull/1658

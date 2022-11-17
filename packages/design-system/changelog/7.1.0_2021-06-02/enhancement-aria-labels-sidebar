@@ -1,0 +1,5 @@
+Enhancement: Accessible label for all landmarks in OcSidebarNav
+
+The OcSidebarNav component now has properties for providing accessible labels for all landmarks of the sidebar.
+
+https://github.com/owncloud/owncloud-design-system/pull/1345

@@ -1,0 +1,7 @@
+Bugfix: Reset droptarget background color in OcTableFiles 
+
+The targeted table row in the OcTableFiles gets highlighted background when 
+another resource is dragged over it for visual user feedback, but the background 
+wasn't reset upon a successful drop event, which has been fixed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1625

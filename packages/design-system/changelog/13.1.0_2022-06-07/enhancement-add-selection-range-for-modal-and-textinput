@@ -1,0 +1,7 @@
+Enhancement: Add selection range for OcModal and OcTextInput
+
+We've added the possibility to set a selection range for
+the initial focus selection in OcModal and OcTextinput.
+
+https://github.com/owncloud/web/issues/6729
+https://github.com/owncloud/owncloud-design-system/pull/2061

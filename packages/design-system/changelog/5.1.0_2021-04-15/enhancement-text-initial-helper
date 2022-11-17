@@ -1,0 +1,5 @@
+Enhancement: Text-inital helper class
+
+Introducing a `oc-text-inital` class to set font-size, e.g. in headings, back to `1rem`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1211

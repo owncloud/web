@@ -1,0 +1,5 @@
+Change: Introduce mode for accordion
+
+The oc-accordion component was allowing both clicks on accordion items and modified property values for `expandedId`/`expandedIds` to modify the internal state of the accordion. We now introduced a property `mode`, which defaults to `click`, for selecting the mode for controlling the internal state. From now on it can be either click or data, but not mixed anymore.
+
+https://github.com/owncloud/owncloud-design-system/pull/925

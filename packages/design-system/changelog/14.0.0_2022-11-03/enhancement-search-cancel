@@ -1,0 +1,6 @@
+Enhancement: "Chancel"-button and -handler in OcSearchBar
+
+We've added to possibility to have a "cancel"-button and -handler in the `OcSearchBar` component.
+
+https://github.com/owncloud/web/issues/7617
+https://github.com/owncloud/owncloud-design-system/pull/2328

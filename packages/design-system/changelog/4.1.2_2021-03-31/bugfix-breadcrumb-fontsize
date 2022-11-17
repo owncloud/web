@@ -1,0 +1,6 @@
+Bugfix: Breadcrumb font size
+
+The `lead` class in breadcrumbs didn't resize the font to match `<h1>` tags.
+This fix brings back the old behavior.
+
+https://github.com/owncloud/owncloud-design-system/pull/1185

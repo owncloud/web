@@ -1,0 +1,6 @@
+Enhancement: Improve `OcSwitch` UI and accessibility
+
+We've added round corners to the `OcSwitch` component so that it is more consistent with other elements in our UI.
+We've also made the component accessible, added visible label and enabled toggling its state with the spacebar.
+
+https://github.com/owncloud/owncloud-design-system/pull/1421

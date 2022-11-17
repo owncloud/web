@@ -1,0 +1,5 @@
+Bugfix: Hidden overflow on OcModal
+
+We've fixed a bug that prevented overflow within the OcModal to e.g. use dropdowns inside the modal body.
+
+https://github.com/owncloud/owncloud-design-system/pull/2000

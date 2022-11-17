@@ -1,0 +1,5 @@
+Change: Remove fill color for document icon
+
+We've removed the hardcoded fill color of the document icon.
+
+https://github.com/owncloud/owncloud-design-system/pull/902

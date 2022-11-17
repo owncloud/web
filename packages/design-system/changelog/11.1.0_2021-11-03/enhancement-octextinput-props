@@ -1,0 +1,10 @@
+Enhancement: Streamline OcTextInput
+
+We have updated the OcTextInput component to be in line with other form components in the design system.
+
+- Fixed the clear button being visible even when element is disabled
+- Made clear button emit null instead of empty string
+- Made input/change event handling a bit more consistent
+- Added defaultValue prop that is for now passed as placeholder to the input field
+
+https://github.com/owncloud/owncloud-design-system/pull/1636

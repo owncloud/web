@@ -1,0 +1,7 @@
+Bugfix: Visible separator between OcSidebarNav items
+
+We have added a small line between OcSidebarNav items in the `active` 
+and `hover` state to visually make them better differentiable.
+
+https://github.com/owncloud/owncloud-design-system/issues/1387
+https://github.com/owncloud/owncloud-design-system/pull/1390

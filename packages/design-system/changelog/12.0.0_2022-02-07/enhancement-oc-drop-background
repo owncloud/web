@@ -1,0 +1,7 @@
+Enhancement: Change background color of OcDrop
+
+The OcDrop component now has a different background 
+color than the default color to improve the contrast.
+
+https://github.com/owncloud/owncloud-design-system/pull/1919
+https://github.com/owncloud/owncloud-design-system/pull/1923

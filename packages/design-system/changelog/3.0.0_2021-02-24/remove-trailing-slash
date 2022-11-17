@@ -1,0 +1,7 @@
+Enhancement: Remove the trailing slash from resource target path
+
+We've removed the trailing slash from the resource target path.
+We're merging target path with the folder path into one and place a slash in between them.
+Having trailing slash in the target path resulted in two slashes in the final path.
+
+https://github.com/owncloud/owncloud-design-system/pull/1087

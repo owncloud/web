@@ -1,0 +1,6 @@
+Change: Replace vue-datetime with v-calendar in our datepicker component
+
+We've added `v-calendar` dependency so that we can use it as our datepicker component.
+By doing so, we removed the old datepicker library that we use, `vue-datetime`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1661

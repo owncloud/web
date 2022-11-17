@@ -1,0 +1,7 @@
+Enhancement: Add new variations and sizes of progress bar
+
+We've added new variations and sizes of the progress bar component.
+Variations change the color of the progress bar and can be either `primary` or `warning`.
+Sizes affect the height of the progress bar where it can be either `default` or `small`.
+
+https://github.com/owncloud/owncloud-design-system/pull/819

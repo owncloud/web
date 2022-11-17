@@ -1,0 +1,5 @@
+Change: Remove OcAppSideBar component
+
+We have removed the OcAppSideBar component since it's not actively used anywhere.
+
+https://github.com/owncloud/owncloud-design-system/pull/1810

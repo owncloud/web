@@ -1,0 +1,6 @@
+Enhancement: Truncate file names while preserving file extensions
+
+File names that exceed the horizontal space of a file list now get truncated while preserving their extensions. This way, the user can quickly identify the type of a file.
+
+https://github.com/owncloud/owncloud-design-system/issues/1758
+https://github.com/owncloud/owncloud-design-system/pull/1782

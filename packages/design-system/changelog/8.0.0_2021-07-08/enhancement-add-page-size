@@ -1,0 +1,5 @@
+Enhancement: Add page size component
+
+We've added page size component. This component can be used for specifying the pagination limit of items per page.
+
+https://github.com/owncloud/owncloud-design-system/pull/1478

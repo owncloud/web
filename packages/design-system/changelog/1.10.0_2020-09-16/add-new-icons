@@ -1,0 +1,9 @@
+Enhancement: Add new icons
+
+We've added new icons which can be used to symbolise adding new shares, creating links and shared with lists.
+We've also removed a wrong fill color from visibility off icon.
+
+https://fontawesome.com/icons/share-square?style=solid
+https://material.io/resources/icons/?search=group&icon=group_add&style=baseline
+https://github.com/owncloud/owncloud-design-system/pull/858
+https://github.com/owncloud/owncloud-design-system/pull/864

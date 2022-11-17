@@ -1,0 +1,5 @@
+Change: Delete pages
+
+We deleted the pages from our documentation. They were showcasing some of our components, but hard to maintain.
+
+https://github.com/owncloud/owncloud-design-system/pull/876

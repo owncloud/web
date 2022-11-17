@@ -1,0 +1,5 @@
+Enhancement: Hover in ocDrop menues
+
+We've added the "oc-menu-item-hover" class for <li> elements inside ocDrop, to add the hover effect on buttons and links. 
+
+https://github.com/owncloud/owncloud-design-system/pull/2069

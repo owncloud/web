@@ -1,0 +1,7 @@
+Enhancement: Add accentuated class for OcTable
+
+We've added an accentuated class for the OcTable for accentuating certain files
+e.g. after uploading, in a different way than already highlighted resources.
+
+https://github.com/owncloud/web/issues/5967
+https://github.com/owncloud/owncloud-design-system/pull/1763

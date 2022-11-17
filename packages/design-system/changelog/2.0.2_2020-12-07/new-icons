@@ -1,0 +1,7 @@
+Enhancement: Add new icons
+
+We've added a `key` and `checklist` icons.
+
+https://github.com/owncloud/owncloud-design-system/pull/975
+https://fontawesome.com/icons/key?style=solid
+https://fontawesome.com/icons/tasks?style=solid

@@ -1,0 +1,5 @@
+Enhancement: Aria-hide images if needed
+
+When the `alt` property of the oc-image is empty we now set `aria-hidden="true"`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1244

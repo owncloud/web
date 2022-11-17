@@ -1,0 +1,42 @@
+.oc-background-selected {
+  background-color: var(--oc-color-background-highlight) !important;
+}
+
+.oc-background-brand {
+  background-color: var(--oc-color-swatch-brand-default) !important;
+}
+
+/* stylelint-disable */
+.oc-background-primary-gradient {
+  background:
+    linear-gradient(90deg,
+    var(--oc-color-swatch-primary-muted) 0%,
+    var(--oc-color-swatch-primary-gradient) 100%);
+}
+/* stylelint-enable */
+
+.oc-background-secondary {
+  background-color: var(--oc-color-background-secondary) !important;
+}
+
+.oc-background-muted {
+  background-color: var(--oc-color-background-muted) !important;
+}
+
+.oc-background-highlight {
+  background-color: var(--oc-color-background-highlight) !important;
+}
+
+.oc-background-contain {
+  background-size: contain;
+}
+
+.oc-background-cover {
+  background-size: cover;
+}
+
+.oc-background-contain,
+.oc-background-cover {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}

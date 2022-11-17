@@ -1,0 +1,5 @@
+Bugfix: Use correct input background color
+
+We've moved definition of the input background color from hook into its class.
+
+https://github.com/owncloud/owncloud-design-system/pull/892

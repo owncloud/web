@@ -1,0 +1,6 @@
+Enhancement: Add mainContent slot to the sidebar
+
+We've added slot called mainContent into the sidebar component.
+This slot replaces the navigation if defined.
+
+https://github.com/owncloud/owncloud-design-system/pull/804

@@ -1,0 +1,6 @@
+Enhancement: Fix OcAvatar line-height
+
+We've fixed an visual bug that caused the OcAvatar
+to be positioned 1px too high
+
+https://github.com/owncloud/owncloud-design-system/pull/1810

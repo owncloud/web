@@ -1,0 +1,5 @@
+Enhancement: Add option to not truncate the resource name
+
+We've added a new property to the resourceName component that indicates whether a resource name should be truncated or not.
+
+https://github.com/owncloud/owncloud-design-system/pull/2157

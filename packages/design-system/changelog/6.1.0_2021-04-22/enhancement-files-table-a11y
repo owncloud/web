@@ -1,0 +1,8 @@
+Enhancement: Files table accessibility
+
+* Add accessible description in case a resource link opens in a new window
+* Add accessible description for status indicators
+* Adjust some of the labels to make them more descriptive
+* Fix broken outline on directories
+
+https://github.com/owncloud/owncloud-design-system/pull/1229

@@ -1,0 +1,6 @@
+Enhancement: Modal focus trap
+
+We've added [Vue focus trap library](https://github.com/posva/focus-trap-vue) to trap the keyboard navigation inside of the modal.
+To enable the focus trap, use prop `focusTrapActive`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1237

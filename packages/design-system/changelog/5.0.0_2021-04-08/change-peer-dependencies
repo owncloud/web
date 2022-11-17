@@ -1,0 +1,9 @@
+Change: Use peerDependencies instead of dependencies
+
+In the past we used dependencies in package.json which can blow up the bundle size a lot.
+Expect this, it is also possible that the same package with 2 versions is part of the bundle.
+
+From now on dependencies that are required to use ODS are added to the peerDependencies section in package.json.
+Then the consuming application has to add the dependency on it's own and can decide which minor or bugfix version to use.
+
+https://github.com/owncloud/owncloud-design-system/pull/1202

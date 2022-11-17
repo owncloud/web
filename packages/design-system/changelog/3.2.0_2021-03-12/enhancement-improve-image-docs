@@ -1,0 +1,5 @@
+Enhancement: Improve documentation for image and user component
+
+Changed the documentation markup for more semantic HTML that also looks better.
+
+https://github.com/owncloud/owncloud-design-system/pull/1133

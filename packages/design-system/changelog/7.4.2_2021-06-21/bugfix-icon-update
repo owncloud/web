@@ -1,0 +1,9 @@
+Bugfix: OcIcon crashes if icon gets updated
+
+before this bugfix, updating `oc-icon` name prop crashed `vue-inline-svg`.
+We had to overwrite `vue-inline-svg` download method and forgot to implement its `isPending`
+property on the returned promise.
+
+This is fixed now and tested
+
+https://github.com/owncloud/owncloud-design-system/pull/1407

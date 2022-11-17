@@ -1,0 +1,6 @@
+Bugfix: Fix files table event
+
+In v11.2.0 we refactored the naming of the table drag and drop events.
+This introduced a naming clash in the files table events which is fixed now.
+
+https://github.com/owncloud/owncloud-design-system/pull/1777

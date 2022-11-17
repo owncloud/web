@@ -1,0 +1,6 @@
+Enhancement: Accessibility for OcSelect
+
+- Add l10n for default no options text
+- Add l10n for vue-select combobox aria-label
+
+https://github.com/owncloud/owncloud-design-system/pull/1268

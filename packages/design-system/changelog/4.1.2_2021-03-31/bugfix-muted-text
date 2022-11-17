@@ -1,0 +1,5 @@
+Bugfix: Muted text uikit class
+
+The `uk-text-muted` was overwritten to correctly use CI colors.
+
+https://github.com/owncloud/owncloud-design-system/pull/1185

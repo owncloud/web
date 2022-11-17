@@ -1,0 +1,5 @@
+Bugfix: Fix buttons in modal
+
+We fixed the button layout of the oc-modal component, which was broken since we introduced our new oc-button.
+
+https://github.com/owncloud/owncloud-design-system/pull/876

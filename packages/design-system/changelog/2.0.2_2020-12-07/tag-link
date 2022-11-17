@@ -1,0 +1,5 @@
+Bugfix: Add `to` prop to `oc-tag` component
+
+We've added an optional `to` prop to the `oc-tag` component so that it is properly assigned to the element in case of `router-link` type.
+
+https://github.com/owncloud/owncloud-design-system/pull/975

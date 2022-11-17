@@ -1,0 +1,8 @@
+Enhancement: Tooltips
+
+We've used uikit to display tooltips before, now we added a own `v-oc-tooltip` directive and use this instead.
+This improves accessibility and possibilities for later re-use.
+
+https://github.com/owncloud/owncloud-design-system/pull/1263
+https://github.com/owncloud/owncloud-design-system/pull/1271
+https://github.com/owncloud/owncloud-design-system/pull/1272

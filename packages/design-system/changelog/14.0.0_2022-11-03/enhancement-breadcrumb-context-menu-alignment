@@ -1,0 +1,6 @@
+Enhancement: Align breadcrumb context menu with regular context menu
+
+We've aligned the breadcrumb context menu visually to match with the regular context menu in the files table.
+
+https://github.com/owncloud/owncloud-design-system/pull/2296
+https://github.com/owncloud/web/issues/7493

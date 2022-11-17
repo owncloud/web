@@ -1,0 +1,29 @@
+Change: Remove deprecated components
+
+To focus on the quality of the currently relevant components and to reduce bundle size, 
+we are dropping a bunch of deprecated components from our design system.
+
+List of removed components, for reference:
+
+- OcActionDrop.vue
+- OcAppLayout.vue
+- OcAutocomplete.vue
+- OcDatepicker.vue
+- OcDisclosureDrop.vue
+- OcNav.vue
+- OcNavItem.vue
+- OcNavbar.vue
+- OcTabItem.vue
+- OcTabbed.vue
+- OcTabbedPanel.vue
+- OcTabbedTab.vue
+- OcTabs.vue
+- OcTopBar.vue
+- OcUser.vue
+- _OcNavbarItem.vue
+- _OcSidebarNavDivider.vue
+- _OcSidebarNavHeader.vue
+- _OcTopBarItem.vue
+- _OcTopBarLogo.vue
+
+https://github.com/owncloud/owncloud-design-system/pull/1545

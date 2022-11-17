@@ -1,0 +1,9 @@
+Enhancement: added drag-drop property
+
+In order to enable file moving via drag & drop we added 
+the property drag-drop on OcTable and OcTableFiles
+
+https://github.com/owncloud/web/issues/5592
+https://github.com/owncloud/owncloud-design-system/pull/1539
+https://github.com/owncloud/owncloud-design-system/pull/1562
+https://github.com/owncloud/owncloud-design-system/pull/1574

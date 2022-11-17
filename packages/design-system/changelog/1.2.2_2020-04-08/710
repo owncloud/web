@@ -1,0 +1,5 @@
+Bugfix: Fix oc-autocomplete
+
+We fixed a bug in OcAutocomplete which was introduced with the removal of lodash as a dependency.
+
+https://github.com/owncloud/owncloud-design-system/pull/710

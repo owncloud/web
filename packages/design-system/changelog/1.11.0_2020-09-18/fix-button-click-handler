@@ -1,0 +1,5 @@
+Bugfix: Pass event in button click handler
+
+The click event for oc-button now passes the actual click event into the handler.
+
+https://github.com/owncloud/owncloud-design-system/pull/872

@@ -1,0 +1,7 @@
+Enhancement: Make OcAvatarX sizeable
+
+We've added the possibility to size Avatars and gave e.g. 
+OcAvatarGroup a width and iconSize.
+
+https://github.com/owncloud/owncloud-design-system/pull/1645
+https://github.com/owncloud/web/issues/5763

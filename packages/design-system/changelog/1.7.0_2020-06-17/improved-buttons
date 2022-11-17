@@ -1,0 +1,7 @@
+Enhancement: Improve the design of buttons
+
+We've added border-radius to buttons, added shadow to the primary button and adjusted font-weight and padding.
+
+https://github.com/owncloud/owncloud-design-system/issues/784
+https://github.com/owncloud/owncloud-design-system/issues/777
+https://github.com/owncloud/owncloud-design-system/pull/791

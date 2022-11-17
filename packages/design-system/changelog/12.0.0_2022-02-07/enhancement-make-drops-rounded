@@ -1,0 +1,6 @@
+Enhancement: Make OcDrop rounded
+
+We've added a border-radius for the OcDrop 
+to make it rounded.
+
+https://github.com/owncloud/owncloud-design-system/pull/1881

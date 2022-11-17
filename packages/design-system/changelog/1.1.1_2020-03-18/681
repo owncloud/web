@@ -1,0 +1,5 @@
+Bugfix: Fixed oc-icon to reload image when url changes
+
+The oc-icon component will now reload its image whenever the url property has been modified
+
+https://github.com/owncloud/owncloud-design-system/pull/681

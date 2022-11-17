@@ -1,0 +1,6 @@
+Enhancement: Extract SAAS functionality from `src/` to `docs/``
+
+Some SCSS-files were only used to build the ODS documentation, but lived within the design system styles.
+We moved them to the documentation folder to avoid shipping them with the official ODS releases.
+
+https://github.com/owncloud/owncloud-design-system/pull/1134

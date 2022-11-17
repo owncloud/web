@@ -1,0 +1,5 @@
+Change: Do not enforce muted color as background of app bar
+
+We've stopped enforcing the muted color as a background of the app bar.
+
+https://github.com/owncloud/owncloud-design-system/pull/750

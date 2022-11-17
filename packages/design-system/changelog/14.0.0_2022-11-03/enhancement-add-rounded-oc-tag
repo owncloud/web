@@ -1,0 +1,5 @@
+Enhancement: Add rounded prop to OcTag
+
+We've added a rounded property to the OcTag component
+
+https://github.com/owncloud/owncloud-design-system/pull/2284

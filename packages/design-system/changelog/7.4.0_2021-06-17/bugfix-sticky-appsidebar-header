@@ -1,0 +1,6 @@
+Bugfix: Sticky OcAppSideBar Header
+
+The OcAppSideBar Header is now sticky so the user always sees the filename and most important info.
+UX is also improved since he now can always close the appsidebar on mobile without having to scroll back to the top.
+
+https://github.com/owncloud/owncloud-design-system/pull/1384

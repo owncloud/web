@@ -1,0 +1,8 @@
+Enhancement: Input background color
+
+The background color for input fields has been adjusted to better match with the overall design.
+
+https://github.com/owncloud/web/issues/7353
+https://github.com/owncloud/web/issues/7373
+https://github.com/owncloud/owncloud-design-system/pull/2345
+https://github.com/owncloud/owncloud-design-system/pull/2352

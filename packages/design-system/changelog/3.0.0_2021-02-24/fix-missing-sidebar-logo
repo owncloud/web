@@ -1,0 +1,7 @@
+Bugfix: Missing logo in OcSidebar
+
+After to changes in the formerly referenced structure of the ownCloud.com website, no logo was displayed in the sidebar anymore. 
+Due to license changes in this repository, it was decided not to include an ownCloud-branded logo anymore, 
+so this change adds a placeholder svg file in `assets/example/`. 
+
+https://github.com/owncloud/owncloud-design-system/pull/1090

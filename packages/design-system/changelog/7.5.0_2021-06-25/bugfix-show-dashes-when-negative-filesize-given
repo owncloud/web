@@ -1,0 +1,6 @@
+Bugfix: show `--` as file-size when the folder size is not yet computed
+
+When the folder size is unknown (not yet calculated or cannot be calculated) the server returns `-1` as the size. In this case we now show `--` and not only an empty string
+
+https://github.com/owncloud/owncloud-design-system/issues/1402
+https://github.com/owncloud/owncloud-design-system/pull/1393

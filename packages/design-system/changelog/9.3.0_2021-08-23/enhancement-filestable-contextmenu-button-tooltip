@@ -1,0 +1,7 @@
+Enhancement: OcTableFiles Contextmenu Tooltip 
+
+Since most of the quickactions in the OcTableFiles have a tooltip the 
+contextmenu button should get one, too. It also replaces the (removed) Showdetails 
+button and leads to better discoverability of the contextmenu (and therefore the sidebar).
+
+https://github.com/owncloud/owncloud-design-system/pull/1610

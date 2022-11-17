@@ -1,0 +1,6 @@
+Change: Use slots in OcSidebarNav
+
+We've moved away from defining the nav items in the `OcSidebarNav` via props to including them through slots.
+The component now contains 3 slots - `header`, `nav` and `footer`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1300

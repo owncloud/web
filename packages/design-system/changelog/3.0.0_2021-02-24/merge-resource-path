@@ -1,0 +1,7 @@
+Change: Merge resource target path with folder path
+
+We've merged the resource target route path with the folder path in the `router-link`.
+When passing the path as a parameter, it wasn't being recognised and the navigation just pointed to the target route path.
+By explicitly merging them, we make sure that the navigation behaves as expected.
+
+https://github.com/owncloud/owncloud-design-system/pull/1085

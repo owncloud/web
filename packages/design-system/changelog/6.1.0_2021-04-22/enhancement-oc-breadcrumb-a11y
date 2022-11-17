@@ -1,0 +1,8 @@
+Enhancement: Improve accessibility of oc-breadcrumb component
+
+In order to enhance accessibility oc breadcrumb has been wrapped into a <nav> tag.
+The <ul> element changed to <ol> element, furthermore aria-current=page applies to the last item and
+the default home breadcrumb has been removed.
+Keyboard navigation has been fixed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1228

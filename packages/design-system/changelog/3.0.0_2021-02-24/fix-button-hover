@@ -1,0 +1,7 @@
+Bugfix: Button hover color
+
+When hovering the oc-button (*primary*) component had different styling, depending on if it was used as `a` or `button` tag.
+This was caused by the underlying `ui-kit` styles, since no specific component-based styling was provided.
+By making the hover styling explicit in the component stylesheet, this is fixed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1091

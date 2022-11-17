@@ -1,0 +1,5 @@
+Enhancement: Introduce breakpoints tokens and utility classes
+
+We've added tokens and utility classes to dynamically display/hide content depending on the breakpoints.
+
+https://github.com/owncloud/owncloud-design-system/pull/1045

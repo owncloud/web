@@ -1,0 +1,8 @@
+Change: Remove OcStatusIndicators from OcResource
+
+We've removed OcStatusIndicators from OcResource
+since it will be moved in a separate column
+
+https://github.com/owncloud/owncloud-design-system/pull/2014
+https://github.com/owncloud/web/issues/5976
+https://github.com/owncloud/web/pull/6552

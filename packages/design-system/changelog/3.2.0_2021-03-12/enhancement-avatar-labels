@@ -1,0 +1,5 @@
+Enhancement: Use accessible labels for avatars in the avatars group component
+
+We've added the accessible labels for all avatars in the avatars group component because they are shown there without any supporting label thus rendering them hidden from screen readers.
+
+https://github.com/owncloud/owncloud-design-system/pull/1126

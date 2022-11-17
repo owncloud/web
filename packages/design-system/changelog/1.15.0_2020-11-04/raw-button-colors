@@ -1,0 +1,6 @@
+Enhancement: Add color prop to buttons
+
+We've added a new property to the button component to enable setting a different color when the variation is set to `raw`.
+Available colors are `default`, `primary` and `text`.
+
+https://github.com/owncloud/owncloud-design-system/pull/924

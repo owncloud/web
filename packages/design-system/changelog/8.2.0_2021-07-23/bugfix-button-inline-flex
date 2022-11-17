@@ -1,0 +1,5 @@
+Bugfix: Button as inline element
+
+We made our OcButton an inline-flex instead of a flex element, so that it behaves correctly regarding alignment inside containers.
+
+https://github.com/owncloud/owncloud-design-system/pull/1529

@@ -48,6 +48,9 @@ comments.file
 /packages/web-runtime/themes/*
 !/packages/web-runtime/themes/owncloud/
 
+# Compiled tokens
+/packages/design-system/src/assets/tokens/
+
 # Report for tests
 tests/report/cucumber_report.json
 tests/report/cucumber_report.html

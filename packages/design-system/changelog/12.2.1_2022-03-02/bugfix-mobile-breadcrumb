@@ -1,0 +1,6 @@
+Bugfix: Icon & background color for mobile OcBreadcrumb
+
+The icon in the mobile OcBreadcrumb drop was missing, also the background color made reading the content impossible. This has been adressed.
+
+https://github.com/owncloud/owncloud-design-system/issues/1980
+https://github.com/owncloud/owncloud-design-system/pull/1994
