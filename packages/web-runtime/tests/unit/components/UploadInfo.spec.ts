@@ -220,7 +220,8 @@ function getShallowWrapper({
   successful = [],
   errors = {},
   uploadsCancelled = false,
-  inPreparation = false
+  inPreparation = false,
+  uploadsWritingToStorage = false
 } = {}) {
   const mocks = {
     ...defaultComponentMocks({ gettext: false })
@@ -248,7 +249,8 @@ function getShallowWrapper({
           successful,
           errors,
           uploadsCancelled,
-          inPreparation
+          inPreparation,
+          uploadsWritingToStorage
         }
       }
     })
