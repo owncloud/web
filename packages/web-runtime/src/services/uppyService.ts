@@ -57,7 +57,14 @@ export class UppyService {
       overridePatchMethod: !!tusHttpMethodOverride,
       retryDelays: [0, 500, 1000],
       uploadDataDuringCreation,
-      onBeforeRequest
+      onBeforeRequest,
+      onShouldRetry: (err, retryAttempt, options, next) => {
+        // status code 5xx means the upload is gone on the server side
+        if (err?.originalResponse?.getStatus() >= 500) {
+          return false
+        }
+        return next(err)
+      }
     }
 
     const xhrPlugin = this.uppy.getPlugin('XHRUpload')
