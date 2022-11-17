@@ -441,7 +441,7 @@ importers:
 
   packages/web-runtime:
     specifiers:
-      '@fortawesome/fontawesome-free': 6.2.0
+      '@fortawesome/fontawesome-free': 6.2.1
       '@jest/globals': 29.3.1
       '@popperjs/core': ^2.11.5
       '@sentry/browser': ^6.19.7
@@ -497,7 +497,7 @@ importers:
       webfontloader: ^1.6.28
       xml-js: ^1.6.11
     dependencies:
-      '@fortawesome/fontawesome-free': 6.2.0
+      '@fortawesome/fontawesome-free': 6.2.1
       '@popperjs/core': 2.11.5
       '@sentry/browser': 6.19.7
       '@sentry/integrations': 6.19.7
@@ -3126,8 +3126,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@fortawesome/fontawesome-free/6.2.0:
-    resolution: {integrity: sha512-CNR7qRIfCwWHNN7FnKUniva94edPdyQzil/zCwk3v6k4R6rR2Fr8i4s3PM7n/lyfPA6Zfko9z5WDzFxG9SW1uQ==}
+  /@fortawesome/fontawesome-free/6.2.1:
+    resolution: {integrity: sha512-viouXhegu/TjkvYQoiRZK3aax69dGXxgEjpvZW81wIJdxm5Fnvp3VVIP4VHKqX4SvFw6qpmkILkD4RJWAdrt7A==}
     engines: {node: '>=6'}
     requiresBuild: true
     dev: false
