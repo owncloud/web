@@ -37,6 +37,7 @@
       <div
         v-show="activeMediaFileCached"
         class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
+        :class="{ lightbox: isFullScreenModeActivated }"
       >
         <img
           v-if="activeMediaFileCached.isImage"
@@ -64,7 +65,10 @@
         </audio>
       </div>
     </template>
-    <div class="oc-position-medium oc-position-bottom-center preview-details">
+    <div
+      class="oc-position-medium oc-position-bottom-center preview-details"
+      :class="{ lightbox: isFullScreenModeActivated }"
+    >
       <div
         class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
       >
@@ -92,6 +96,18 @@
         >
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
+        <div class="oc-flex">
+          <oc-button
+            v-oc-tooltip="toggleFullScreenDescription"
+            class="preview-controls-fullscreen"
+            appearance="raw"
+            variation="inverse"
+            :aria-label="toggleFullScreenDescription"
+            @click="isFullScreenModeActivated = !isFullScreenModeActivated"
+          >
+            <oc-icon fill-type="line" name="fullscreen" />
+          </oc-button>
+        </div>
         <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
           <div class="oc-flex">
             <oc-button
@@ -188,6 +204,7 @@ export default defineComponent({
     return {
       isFileContentLoading: true,
       isFileContentError: false,
+      isFullScreenModeActivated: true,
 
       activeIndex: null,
       direction: 'rtl',
@@ -287,6 +304,9 @@ export default defineComponent({
     },
     currentZoomDisplayValue() {
       return `${(this.currentImageZoom * 100).toFixed(0)}%`
+    },
+    toggleFullScreenDescription() {
+      return this.$gettext('Toggle full screen mode')
     }
   },
 
@@ -479,10 +499,32 @@ export default defineComponent({
     max-height: 65vh;
   }
 }
+.preview-player.lightbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  margin: 0;
+  background: rgba(38, 38, 38, 0.8);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+}
+
+.preview-player.lightbox > * {
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+.preview-details.lightbox {
+  z-index: 1000;
+  opacity: 0.9;
+}
 
 .preview-tool-bar {
   align-items: center;
   justify-content: space-between;
+  z-index: 1001;
 }
 
 .preview-controls-action-count {
