@@ -1,0 +1,8 @@
+Bugfix: Introduce "upload finalizing"-state in upload overlay
+
+The "upload finalizing"-state has been introduced to the upload overlay. This state is relevant during the time window when all data has been transferred to the server (= progress bar is at 100%), but the server still needs to write all data to the storage.
+
+The "cancel"- and "pause"-actions are disabled during the "upload finalizing"-state as the data transfer is technically finished. Previously, when pausing and resuming when being in this state, the upload would be marked as successful instantly, despite the server still writing to the storage.
+
+https://github.com/owncloud/web/issues/7956
+https://github.com/owncloud/web/pull/7974

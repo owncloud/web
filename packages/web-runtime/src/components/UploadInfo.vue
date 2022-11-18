@@ -53,7 +53,7 @@
           <oc-icon name="restart" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads && uploadsPausable && !inPreparation"
+          v-if="runningUploads && uploadsPausable && !inPreparation && !inFinalization"
           id="pause-upload-info-btn"
           v-oc-tooltip="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           class="oc-ml-s"
@@ -63,7 +63,7 @@
           <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
         </oc-button>
         <oc-button
-          v-if="runningUploads && !inPreparation"
+          v-if="runningUploads && !inPreparation && !inFinalization"
           id="cancel-upload-info-btn"
           v-oc-tooltip="$gettext('Cancel upload')"
           class="oc-ml-s"
@@ -162,6 +162,7 @@ export default defineComponent({
     totalProgress: 0, // current uploads progress (0-100)
     uploadsPaused: false, // all uploads paused?
     uploadsCancelled: false, // all uploads cancelled?
+    inFinalization: false, // uploads transferred but still need to be finalized
     inPreparation: true, // preparation before upload
     runningUploads: 0, // all uploads (not files!) that are in progress currently
     bytesTotal: 0,
@@ -236,6 +237,7 @@ export default defineComponent({
 
       this.showInfo = true
       this.runningUploads += 1
+      this.inFinalization = false
     })
     this.$uppyService.subscribe('addedForUpload', (files) => {
       this.filesInProgressCount += files.filter((f) => !f.isFolder).length
@@ -297,6 +299,9 @@ export default defineComponent({
       const remainingMilliseconds = totalTimeNeededInMilliseconds - timeElapsed
 
       this.remainingTime = this.getRemainingTime(remainingMilliseconds)
+      if (progressPercent === 100) {
+        this.inFinalization = true
+      }
     })
     this.$uppyService.subscribe('uploadError', ({ file, error }) => {
       if (this.errors[file.meta.uploadId]) {
@@ -425,6 +430,7 @@ export default defineComponent({
       this.timeStarted = null
       this.remainingTime = undefined
       this.inPreparation = true
+      this.inFinalization = false
     },
     displayFileAsResource(file) {
       return !!file.targetRoute
@@ -545,6 +551,10 @@ export default defineComponent({
         if (error.message.includes('response code: 507')) {
           errorMessage = this.$gettext('Quota exceeded')
         }
+        if (error.message.includes('precondition failed:')) {
+          errorMessage = this.$gettext('Unknown error')
+        }
+
         return errorMessage
 
         /**
