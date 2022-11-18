@@ -52,6 +52,7 @@
           :key="`media-video-${activeMediaFileCached.id}`"
           controls
           preload
+          autoplay
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
         </video>
@@ -60,6 +61,7 @@
           :key="`media-audio-${activeMediaFileCached.id}`"
           controls
           preload
+          autoplay
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
         </audio>
