@@ -10,6 +10,14 @@ import { SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 
 describe('useUpload', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('should be valid', () => {
     expect(useUpload).toBeDefined()
   })
@@ -64,8 +72,58 @@ describe('useUpload', () => {
       }
     ]
 
-    await wrapper.vm.createDirectoryTree(space, currentFolder, uppyResources)
+    const result = await wrapper.vm.createDirectoryTree(space, currentFolder, uppyResources)
+
+    expect(result.successful).toContain('/l1')
+    expect(result.successful).toContain('/l1/l2')
+    expect(result.successful).toContain('/l1/l2/l3')
+    expect(result.successful).toContain('/l1/l2/anotherFolder')
+    expect(result.failed.length).toBe(0)
     expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledTimes(4)
+  })
+
+  it('should contain failed folders in the result', async () => {
+    const { mocks, wrapper } = createWrapper()
+    mocks.$clientService.webdav.createFolder.mockRejectedValue(new Error())
+
+    const space = mock<SpaceResource>()
+    const currentFolder = 'currentFolder'
+    const uppyResources = [
+      {
+        source: 'source',
+        name: 'file1',
+        type: 'type',
+        data: new Blob(),
+        meta: {
+          currentFolder: 'currentFolder',
+          relativeFolder: 'l1',
+          relativePath: 'relativePath',
+          route: { name: 'files-personal' },
+          tusEndpoint: 'tusEndpoint',
+          webDavBasePath: 'webDavBasePath'
+        }
+      },
+      {
+        source: 'source',
+        name: 'file2',
+        type: 'type',
+        data: new Blob(),
+        meta: {
+          currentFolder: 'currentFolder',
+          relativeFolder: 'l1',
+          relativePath: 'relativePath',
+          route: { name: 'files-personal' },
+          tusEndpoint: 'tusEndpoint',
+          webDavBasePath: 'webDavBasePath'
+        }
+      }
+    ]
+
+    const result = await wrapper.vm.createDirectoryTree(space, currentFolder, uppyResources)
+
+    expect(result.failed).toContain('/l1')
+    expect(result.successful.length).toBe(0)
+    expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledTimes(1)
   })
 })
 

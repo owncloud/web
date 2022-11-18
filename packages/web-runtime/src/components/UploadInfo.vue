@@ -545,6 +545,10 @@ export default defineComponent({
         if (error.message.includes('response code: 507')) {
           errorMessage = this.$gettext('Quota exceeded')
         }
+        if (error.message.includes('precondition failed:')) {
+          errorMessage = this.$gettext('Unknown error')
+        }
+
         return errorMessage
 
         /**
