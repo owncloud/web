@@ -77,6 +77,10 @@ We currently publish a new release every couple of weeks, strictly following [se
 ## Documentation
 The documentation is an important part of this project and can be found in the [docs](https://github.com/owncloud/web/tree/master/docs) folder, or in its deployed [live version](https://owncloud.dev/clients/web).
 
+## Dependencies
+
+To initialize or update dependencies, run `pnpm install`.
+
 ## Contribution
 Contribution in the form of bug reports, user feedback or actual code is always welcome! We do have a [contribution guide](https://github.com/owncloud/web/blob/master/.github/CONTRIBUTING.md), actively use the [good-first-issue](https://github.com/owncloud/web/issues?q=is%3Aopen+is%3Aissue+label%3ATopic%3Agood-first-issue) label and try to feedback on issues and pull requests in a timely manner. There is also a [setup guide](https://owncloud.dev/clients/web/getting-started/) for building and running `web` locally.
 
