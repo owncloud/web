@@ -94,6 +94,18 @@ describe('UploadInfo component', () => {
       const uploadTitle = wrapper.find(selectors.title).text()
       expect(uploadTitle).toBe('Preparing upload...')
     })
+    it('should show that an upload is being finalized', () => {
+      const { wrapper } = getShallowWrapper({
+        showInfo: true,
+        filesInProgressCount: 1,
+        runningUploads: 1,
+        inFinalization: true,
+        errors: [],
+        successful: []
+      })
+      const uploadTitle = wrapper.find(selectors.title).text()
+      expect(uploadTitle).toBe('Finalizing upload...')
+    })
   })
   describe('progress bar', () => {
     it('should show the progress bar when an upload is in progress', () => {
