@@ -1,0 +1,6 @@
+Bugfix: Prevent file upload when folder creation failed
+
+We've fixed a bug where files would try to be uploaded if the creation of their respective folder failed beforehand.
+
+https://github.com/owncloud/web/pull/7975
+https://github.com/owncloud/web/issues/7957

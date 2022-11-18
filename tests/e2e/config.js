@@ -4,20 +4,20 @@ exports.config = {
   // environment
   ocis: process.env.OCIS === 'true',
   assets: './tests/e2e/filesForUpload',
-  baseUrlOcc: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
-  baseUrlOCis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
+  baseUrlOc10: process.env.BASE_URL_OCC ?? 'host.docker.internal:8080',
+  baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   get backendUrl() {
     return withHttp(
       process.env.BACKEND_HOST ||
-        (this.ocis ? 'https://' + this.baseUrlOCis : 'http://' + this.baseUrlOcc)
+        (this.ocis ? 'https://' + this.baseUrlOcis : 'http://' + this.baseUrlOc10)
     )
   },
   get frontendUrl() {
     return withHttp(
       process.env.SERVER_HOST ||
         (this.ocis
-          ? 'https://' + this.baseUrlOCis
-          : 'http://' + this.baseUrlOcc + '/index.php/apps/web/index.html')
+          ? 'https://' + this.baseUrlOcis
+          : 'http://' + this.baseUrlOc10 + '/index.php/apps/web/index.html')
     )
   },
   debug: process.env.DEBUG === 'true',

@@ -1,0 +1,6 @@
+Bugfix: Prevent retrying uploads with status code 5xx
+
+Uploads with status code 5xx can't be retried on the server side, hence the automatic retry has been disabled in such cases.
+
+https://github.com/owncloud/web/pull/7985
+https://github.com/owncloud/web/issues/7971

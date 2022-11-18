@@ -45,6 +45,11 @@ export interface UppyResource {
   }
 }
 
+export interface CreateDirectoryTreeResult {
+  successful: string[]
+  failed: string[]
+}
+
 interface UploadOptions {
   uppyService: UppyService
 }
@@ -144,9 +149,10 @@ const createDirectoryTree = ({
     currentFolder: string,
     files: UppyResource[],
     currentFolderId?: string | number
-  ) => {
+  ): Promise<CreateDirectoryTreeResult> => {
     const { webdav } = clientService
     const createdFolders = []
+    const failedFolders = []
     for (const file of files) {
       const directory = file.meta.relativeFolder
 
@@ -166,6 +172,11 @@ const createDirectoryTree = ({
           createdSubFolders += `/${subFolder}`
           createdFolders.push(createdSubFolders)
           continue
+        }
+
+        if (failedFolders.includes(folderToCreate)) {
+          // only care about top level folders, no need to go deeper
+          break
         }
 
         const uploadId = createdSubFolders ? uuid.v4() : file.meta.topLevelFolderId
@@ -194,21 +205,28 @@ const createDirectoryTree = ({
 
         uppyService.publish('addedForUpload', [uppyResource])
 
-        let folder
         try {
-          folder = await webdav.createFolder(space, { path: join(currentFolder, folderToCreate) })
+          const folder = await webdav.createFolder(space, {
+            path: join(currentFolder, folderToCreate)
+          })
+          uppyService.publish('uploadSuccess', {
+            ...uppyResource,
+            meta: { ...uppyResource.meta, fileId: folder?.fileId }
+          })
+
+          createdSubFolders += `/${subFolder}`
+          createdFolders.push(createdSubFolders)
         } catch (error) {
           console.error(error)
+          failedFolders.push(folderToCreate)
+          uppyService.publish('uploadError', { file: uppyResource, error })
         }
-
-        uppyService.publish('uploadSuccess', {
-          ...uppyResource,
-          meta: { ...uppyResource.meta, fileId: folder?.fileId }
-        })
-
-        createdSubFolders += `/${subFolder}`
-        createdFolders.push(createdSubFolders)
       }
+    }
+
+    return {
+      successful: createdFolders,
+      failed: failedFolders
     }
   }
 }

@@ -1,0 +1,6 @@
+Bugfix: Add origin check to Draw.io events
+
+Origin checks have been added to all Draw.io events due to security reasons.
+
+https://github.com/owncloud/web/pull/7941
+https://github.com/owncloud/web/issues/7933

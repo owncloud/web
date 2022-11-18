@@ -47,6 +47,11 @@ export default defineComponent({
       } = this.applicationConfig
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
+    urlHost() {
+      const url = new URL(this.config.url)
+      const urlHost = `${url.protocol}//${url.hostname}`
+      return url.port ? `${urlHost}:${url.port}` : urlHost
+    },
     iframeSource() {
       const query = qs.stringify({
         embed: 1,
@@ -64,7 +69,7 @@ export default defineComponent({
   watch: {
     currentFileContext: {
       handler: function () {
-        this.load()
+        this.checkPermissions()
       },
       immediate: true
     }
@@ -74,6 +79,9 @@ export default defineComponent({
     this.fileExtension = this.filePath.split('.').pop()
     window.addEventListener('message', (event) => {
       if (event.data.length > 0) {
+        if (event.origin !== this.config.url) {
+          return
+        }
         const payload = JSON.parse(event.data)
         switch (payload.event) {
           case 'init':
@@ -115,7 +123,7 @@ export default defineComponent({
           message: error,
           modified: false
         }),
-        '*'
+        this.urlHost
       )
     },
     async checkPermissions() {
@@ -142,7 +150,7 @@ export default defineComponent({
             xml: response.body,
             autosave: this.config.autosave
           }),
-          '*'
+          this.urlHost
         )
       } catch (error) {
         this.errorPopup(error)
@@ -183,7 +191,7 @@ export default defineComponent({
                 xml: reader.result,
                 autosave: this.config.autosave
               }),
-              '*'
+              this.urlHost
             )
           }
           reader.readAsDataURL(blob)
@@ -208,7 +216,7 @@ export default defineComponent({
                 message: message,
                 modified: false
               }),
-              '*'
+              this.urlHost
             )
           } else {
             this.successPopup(message)
