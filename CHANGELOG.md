@@ -9,9 +9,13 @@ Summary
 -------
 
 * Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
+* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
+* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
+* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
@@ -26,12 +30,35 @@ Details
    https://github.com/owncloud/web/issues/7932
    https://github.com/owncloud/web/pull/7936
 
+* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
+
+   We've fixed a bug where files would try to be uploaded if the creation of their respective folder
+   failed beforehand.
+
+   https://github.com/owncloud/web/issues/7957
+   https://github.com/owncloud/web/pull/7975
+
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 
    Spaces have been included in the list info below file lists that support displaying spaces.
 
    https://github.com/owncloud/web/issues/7924
    https://github.com/owncloud/web/pull/7926
+
+* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
+
+   Uploads with status code 5xx can't be retried on the server side, hence the automatic retry has
+   been disabled in such cases.
+
+   https://github.com/owncloud/web/issues/7971
+   https://github.com/owncloud/web/pull/7985
+
+* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
+
+   Origin checks have been added to all Draw.io events due to security reasons.
+
+   https://github.com/owncloud/web/issues/7933
+   https://github.com/owncloud/web/pull/7941
 
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 
@@ -46,6 +73,20 @@ Details
 
    https://github.com/owncloud/web/issues/7959
    https://github.com/owncloud/web/pull/7969
+
+* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
+
+   The "upload finalizing"-state has been introduced to the upload overlay. This state is
+   relevant during the time window when all data has been transferred to the server (= progress bar
+   is at 100%), but the server still needs to write all data to the storage.
+
+   The "cancel"- and "pause"-actions are disabled during the "upload finalizing"-state as the
+   data transfer is technically finished. Previously, when pausing and resuming when being in
+   this state, the upload would be marked as successful instantly, despite the server still
+   writing to the storage.
+
+   https://github.com/owncloud/web/issues/7956
+   https://github.com/owncloud/web/pull/7974
 
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 
