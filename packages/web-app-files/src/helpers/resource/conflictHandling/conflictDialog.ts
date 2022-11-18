@@ -76,11 +76,15 @@ export class ConflictDialog {
     suggestMerge = false,
     separateSkipHandling = false // separate skip-handling between files and folders
   ): Promise<ResolveConflict> {
-    const translatedSkipLabel = !separateSkipHandling
-      ? this.$gettext('Apply to all %{count} conflicts')
-      : resource.isFolder
-      ? this.$gettext('Apply to all %{count} folders')
-      : this.$gettext('Apply to all %{count} files')
+    let translatedSkipLabel
+
+    if (!separateSkipHandling) {
+      translatedSkipLabel = this.$gettext('Apply to all %{count} conflicts')
+    } else if (resource.isFolder) {
+      translatedSkipLabel = this.$gettext('Apply to all %{count} folders')
+    } else {
+      translatedSkipLabel = this.$gettext('Apply to all %{count} files')
+    }
 
     return new Promise<ResolveConflict>((resolve) => {
       let doForAllConflicts = false
