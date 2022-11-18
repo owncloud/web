@@ -175,6 +175,10 @@ export default defineComponent({
     ...mapGetters(['configuration']),
 
     uploadInfoTitle() {
+      if (this.inFinalization) {
+        return this.$gettext('Finalizing upload...')
+      }
+
       if (this.filesInProgressCount && !this.inPreparation) {
         return this.$gettextInterpolate(
           this.$ngettext(
@@ -552,7 +556,7 @@ export default defineComponent({
           errorMessage = this.$gettext('Quota exceeded')
         }
         if (error.message.includes('precondition failed:')) {
-          errorMessage = this.$gettext('Unknown error')
+          errorMessage = this.$gettext('Parent folder does not exist')
         }
 
         return errorMessage
