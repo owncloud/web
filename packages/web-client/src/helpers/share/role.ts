@@ -444,6 +444,6 @@ const linkRoleDescriptions = {
     'Recipients can view, download, edit, delete and upload contents.'
   ),
   [linkRoleUploaderFolder.bitmask(false)]: $gettext(
-    'Recipients can upload but existing contents are not revealed.'
+    'Recipients can upload, existing content is not revealed.'
   )
 }
