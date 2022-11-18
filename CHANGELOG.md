@@ -37,6 +37,7 @@ Details
 
    https://github.com/owncloud/web/issues/7957
    https://github.com/owncloud/web/pull/7975
+   https://github.com/owncloud/web/pull/7999
 
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 
@@ -87,6 +88,7 @@ Details
 
    https://github.com/owncloud/web/issues/7956
    https://github.com/owncloud/web/pull/7974
+   https://github.com/owncloud/web/pull/7999
 
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 
