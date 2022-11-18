@@ -99,26 +99,8 @@ module.exports = {
     isExpiryDateDisabled: async function (pastDate) {
       let disabled = false
       const yearSelector = this.getSelectorExpiryDateYear(pastDate)
-      const month = pastDate.toLocaleString('default', { month: 'long' })
       const monthSelector = this.getSelectorExpiryDateMonth(pastDate)
       const daySelector = this.getSelectorExpiryDateDay(pastDate)
-
-      if (month === 'December') {
-        await this.waitForElementVisible(daySelector).getAttribute(
-          daySelector,
-          'class',
-          (result) => {
-            if (result.value.includes('is-disabled') === true) {
-              disabled = true
-            }
-          }
-        )
-        if (disabled) {
-          return disabled
-        } else {
-          return false
-        }
-      }
 
       await this.waitForElementVisible('@datepickerTitle')
         .click('@datepickerTitle')

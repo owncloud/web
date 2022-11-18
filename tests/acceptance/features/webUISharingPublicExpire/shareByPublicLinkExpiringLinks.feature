@@ -58,7 +58,7 @@ Feature: Share by public link
       | file    | lorem.txt       |
       | folder  | simple-folder   |
 
-  @issue-ocis-1328 @skipOnOCIS @skipOnOC10 # skipped on oc10 due to https://github.com/owncloud/web/issues/7513
+  @issue-ocis-1328 @skipOnOCIS
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes" in the server
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes" in the server
