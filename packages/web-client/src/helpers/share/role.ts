@@ -429,10 +429,10 @@ const shareRoleDescriptions = {
  */
 const linkRoleDescriptions = {
   [linkRoleInternalFile.bitmask(false)]: $gettext(
-    'People need to be invited and login is required'
+    'Account and existing access rights required'
   ),
   [linkRoleInternalFolder.bitmask(false)]: $gettext(
-    'People need to be invited and login is required'
+    'Account and existing access rights required'
   ),
   [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),

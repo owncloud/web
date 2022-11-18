@@ -66,12 +66,12 @@ export const shareViaLinkHelp = {
   title: $gettext('Choose how access is granted'),
   list: [
     {
-      text: $gettext('Only invited people can access'),
+      text: $gettext('Account and existing access rights required'),
       headline: true
     },
     {
       text: $gettext(
-        'Account and login is required. Only people from the list "Invited people" can access.'
+        'The recipient of this link can access the shared content only if he has already an account with at least viewing permissions to that shared content. This role is beneficial to point an existing member to data directly he already has access to, therefore the name Internal is used.'
       )
     },
     {
