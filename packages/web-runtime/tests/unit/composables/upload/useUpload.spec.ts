@@ -11,8 +11,7 @@ import { mock } from 'jest-mock-extended'
 
 describe('useUpload', () => {
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
   })
 
   afterEach(() => {
