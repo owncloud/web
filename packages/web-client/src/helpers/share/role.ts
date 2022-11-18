@@ -428,12 +428,8 @@ const shareRoleDescriptions = {
  * Maps relevant permission bitmasks of link roles to descriptions
  */
 const linkRoleDescriptions = {
-  [linkRoleInternalFile.bitmask(false)]: $gettext(
-    'Account and existing access rights required'
-  ),
-  [linkRoleInternalFolder.bitmask(false)]: $gettext(
-    'Account and existing access rights required'
-  ),
+  [linkRoleInternalFile.bitmask(false)]: $gettext('Account and existing access rights required'),
+  [linkRoleInternalFolder.bitmask(false)]: $gettext('Account and existing access rights required'),
   [linkRoleViewerFile.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleViewerFolder.bitmask(false)]: $gettext('Recipients can view and download contents.'),
   [linkRoleContributorFolder.bitmask(false)]: $gettext(
