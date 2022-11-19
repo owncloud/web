@@ -103,7 +103,7 @@
             appearance="raw"
             variation="inverse"
             :aria-label="toggleFullScreenDescription"
-            @click="isFullScreenModeActivated = !isFullScreenModeActivated"
+            @click="toggleFullscreenMode"
           >
             <oc-icon fill-type="line" name="fullscreen" />
           </oc-button>
@@ -169,7 +169,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapGetters } from 'vuex'
 import {
   useAccessToken,
@@ -192,19 +192,36 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
+    const isFullScreenModeActivated = ref(true)
+    const toggleFullscreenMode = () => {
+      const activateFullscreen = !unref(isFullScreenModeActivated)
+      isFullScreenModeActivated.value = activateFullscreen
+      if (activateFullscreen) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen()
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
     return {
       ...useAppDefaults({
         applicationId: 'preview'
       }),
       accessToken: useAccessToken({ store }),
-      isPublicLinkContext: usePublicLinkContext({ store })
+      isPublicLinkContext: usePublicLinkContext({ store }),
+
+      isFullScreenModeActivated,
+      toggleFullscreenMode
     }
   },
   data() {
     return {
       isFileContentLoading: true,
       isFileContentError: false,
-      isFullScreenModeActivated: true,
 
       activeIndex: null,
       direction: 'rtl',
