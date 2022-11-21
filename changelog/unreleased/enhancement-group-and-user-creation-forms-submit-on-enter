@@ -1,0 +1,6 @@
+Enhancement: Group and user creation forms submit on enter
+
+Group and User creation forms can now be submitted by pressing enter.
+
+https://github.com/owncloud/web/pull/7968
+https://github.com/owncloud/web/issues/7937
