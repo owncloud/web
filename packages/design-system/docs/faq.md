@@ -26,10 +26,6 @@ Definitely possible, see instructions in [Getting Started guide](https://github.
 
 The reason for choosing Vue.js over React or some other library is how easy it is to learn. If you know HTML, CSS, and a bit of JavaScript you’re ready to start using this tool and getting involved. This becomes especially important when we want to involve designers more into the process and move further away from static design tools. In addition, static site generators like Jekyll give you a bit too much freedom, which makes it harder for people to follow specific guidelines or a workflow.
 
-## Where are molecules and pages from Atomic Design?
-
-Compared to Atomic Design, this setup doesn’t include molecule/page levels. They’re omitted to help reduce the complexity of the system for its end-users.
-
 ## Is this tool only for Vue.js based applications?
 
 Organizations that have more than just Vue.js based applications can benefit from ownCloud Design System as well. Tokens which store visual design attributes are universal and can be used on any platform. ownCloud Design System also renders all components in both Vue.js & HTML which allows you to use the components on any web based platform. Additionally, it’s possible to configure the build process to output Web Components instead of Vue.js Components.
