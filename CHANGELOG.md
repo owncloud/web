@@ -18,6 +18,7 @@ Summary
 * Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
 * Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+* Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 
 Details
 -------
@@ -111,6 +112,13 @@ Details
    as the composition-api now comes with Vue.
 
    https://github.com/owncloud/web/pull/7877
+
+* Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
+
+   Group and User creation forms can now be submitted by pressing enter.
+
+   https://github.com/owncloud/web/issues/7937
+   https://github.com/owncloud/web/pull/7968
 
 Changelog for ownCloud Web [6.0.0] (2022-11-04)
 =======================================
