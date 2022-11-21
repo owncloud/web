@@ -1,0 +1,5 @@
+Bugfix: Use correct selected background colour
+
+We've fixed the css custom property in `.oc-background-selected` helper class so that the background highlighted colour is used there instead.
+
+https://github.com/owncloud/owncloud-design-system/pull/1368

@@ -1,0 +1,6 @@
+Change: Use oc-spinner css class in oc-search-bar component
+
+UiKit spinner is not supporting IE11. The css classes around oc-spinner have been introduces
+previously and now they are used in the component oc-search-bar as well.
+
+https://github.com/owncloud/owncloud-design-system/pull/802

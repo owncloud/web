@@ -1,0 +1,5 @@
+Bugfix: Input border variable
+
+The custom CSS prop for `input-border` had a duplicate and wrong dash and was therefore not rendered correctly.
+
+https://github.com/owncloud/owncloud-design-system/pull/1187

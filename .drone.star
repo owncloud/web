@@ -1140,6 +1140,7 @@ def unitTests(ctx):
                          "name": "unit-tests",
                          "image": OC_CI_NODEJS,
                          "commands": [
+                             "pnpm build:tokens",
                              "pnpm test:unit --coverage",
                          ],
                      },

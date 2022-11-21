@@ -1,0 +1,7 @@
+Enhancement: Add tabindex on active breadcrumb element
+
+We've added a tabindex to the span that can represent 
+the latest breadcrumb to make it possible to set the 
+focus there on page navigation for accessibility reasons.
+
+https://github.com/owncloud/owncloud-design-system/pull/1334

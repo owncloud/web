@@ -1,0 +1,6 @@
+Enhancement: make Vue-Composition-API available
+
+To support upcoming Vue composition-api we`ve added the compatibility layer from the creators.
+From now on all features described here `https://github.com/vuejs/composition-api` can be used.
+
+https://github.com/owncloud/owncloud-design-system/pull/1848

@@ -1,0 +1,7 @@
+Enhancement: Redesign OcModal
+
+We have redesigned the OcModal to suit better to dark mode UIs, 
+to have a nicer background overlay, to always have a primary 
+confirm button and fixed some icon bugs in its code examples.
+
+https://github.com/owncloud/owncloud-design-system/pull/1953

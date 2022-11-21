@@ -1,0 +1,7 @@
+Change: remove custom model from OcSelect
+
+We've removed the custom model defined in OcSelect component.
+It is no longer possible to pass the value via `model` prop. You can use `value` instead.
+`v-model` is still available.
+
+https://github.com/owncloud/owncloud-design-system/pull/1478

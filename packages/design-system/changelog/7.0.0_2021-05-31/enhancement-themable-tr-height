@@ -1,0 +1,7 @@
+Enhancement: Themable Table Row Height
+
+By moving the table row height from a component property to a themable variable, 
+we give users of the web frontend a way to customize the appearance of their UI 
+(instead of only giving the freedom to users of the ODS).
+
+https://github.com/owncloud/owncloud-design-system/pull/1291

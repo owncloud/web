@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import stubs from '../../../../../../tests/unit/stubs/index.js'
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'

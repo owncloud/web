@@ -1,0 +1,6 @@
+Bugfix: Missing OcDrop shadow
+
+In certain situations, other DOM elements made the OcDrop shadow invisible. This has been resolved.
+
+https://github.com/owncloud/owncloud-design-system/pull/1926
+https://github.com/owncloud/owncloud-design-system/pull/1931

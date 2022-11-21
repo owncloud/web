@@ -1,0 +1,5 @@
+Bugfix: Unnecessary context menu events
+
+Clicking on the context menu in OcTableFiles was emitting unnecessary showDetails events. This has been fixed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1564

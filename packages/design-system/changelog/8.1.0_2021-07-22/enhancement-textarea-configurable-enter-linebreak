@@ -1,0 +1,7 @@
+Enhancement: OcTextarea configurable Enter/Linebreak
+
+OcTextArea has now an property 'submitOnEnter'. 
+This prop controls how the textarea should react to ENTER.
+
+https://github.com/owncloud/owncloud-design-system/issues/1422
+https://github.com/owncloud/owncloud-design-system/pull/1517

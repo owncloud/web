@@ -1,0 +1,5 @@
+Change: Move all elements into components section
+
+We've moved all elements into a new section called components.
+
+https://github.com/owncloud/owncloud-design-system/pull/933

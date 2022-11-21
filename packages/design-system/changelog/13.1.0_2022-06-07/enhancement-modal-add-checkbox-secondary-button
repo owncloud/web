@@ -1,0 +1,7 @@
+Enhancement: OcModal add checkbox and secondary button
+
+We've added an optional checkbox and secondary button to
+the OcModal
+
+https://github.com/owncloud/web/pull/6994
+https://github.com/owncloud/web/issues/6996

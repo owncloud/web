@@ -1,0 +1,5 @@
+Bugfix: Add missing peerDependency
+
+In the 5.0.0 release, we missed to add the dependency for `vue-inline-svg` to the peerDependencies.
+
+https://github.com/owncloud/owncloud-design-system/pull/1205

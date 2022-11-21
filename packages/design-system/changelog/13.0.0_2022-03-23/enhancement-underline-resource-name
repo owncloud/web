@@ -1,0 +1,6 @@
+Enhancement: Underline OcResourceName
+
+We've added an underline on hover effect to OcResourceName
+
+https://github.com/owncloud/owncloud-design-system/pull/2019
+https://github.com/owncloud/web/issues/6492

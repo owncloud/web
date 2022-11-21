@@ -1,0 +1,5 @@
+Enhancement: Add messages to autocomplete component
+
+The component supports 3 kinds of messages: description, warning and error. The description message will basically replace the informative text which was displayed via placeholder. While it's still possible to use a placeholder if you need it, we encourage you to not use it anymore. A label is always required, a description message can be added if more context is needed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1174

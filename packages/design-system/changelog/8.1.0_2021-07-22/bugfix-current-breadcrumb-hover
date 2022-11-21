@@ -1,0 +1,6 @@
+Bugfix: No hover on current breadcrumb item
+
+The current page's breadcrumb item is not interactive and shouldn't have a focus on hover, so we removed it.
+
+https://github.com/owncloud/owncloud-design-system/issues/1416
+https://github.com/owncloud/owncloud-design-system/pull/1511

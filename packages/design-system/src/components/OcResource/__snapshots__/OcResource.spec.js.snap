@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OcResource displays parent folder name default if calculated name is empty 1`] = `
+<div class="oc-resource oc-text-overflow"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw" draggable="false"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span></button>
+  <div class="oc-resource-details oc-text-overflow"><button type="button" class="oc-text-overflow oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw" draggable="false">
+      <!----> <span data-test-resource-path="example.pdf" data-test-resource-name="example.pdf" data-test-resource-type="file" class="oc-resource-name"><span class="oc-text-truncate"><span class="oc-resource-basename">example</span></span><span class="oc-resource-extension">.pdf</span></span>
+    </button>
+    <div class="oc-resource-indicators"><span class="parent-folder" style="cursor: default;"><span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="text">Example parent folder name</span></span></div>
+  </div>
+</div>
+`;

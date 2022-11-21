@@ -1,0 +1,5 @@
+Enhancement: OcModal input type
+
+We've added an option to set the input type for input fields in the OcModal component.
+
+https://github.com/owncloud/owncloud-design-system/pull/2077

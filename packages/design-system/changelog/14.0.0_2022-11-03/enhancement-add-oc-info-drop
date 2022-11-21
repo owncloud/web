@@ -1,0 +1,5 @@
+Enhancement: Add OcInfoDrop
+
+We've added the new component OcInfoDrop, which will be consumed by the OcContextualHelper component.
+
+https://github.com/owncloud/owncloud-design-system/pull/2286

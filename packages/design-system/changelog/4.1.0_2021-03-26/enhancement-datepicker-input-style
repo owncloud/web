@@ -1,0 +1,5 @@
+Enhancement: Datepicker input style
+
+The input style of the datepicker now matches with the ones we use in other components (like text input e.g.).
+
+https://github.com/owncloud/owncloud-design-system/pull/1176

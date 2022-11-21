@@ -1,6 +1,6 @@
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 const permissionsHelper = '../../../../../src/helpers/permissions'
 
 jest.mock(permissionsHelper, () => ({

@@ -1,0 +1,6 @@
+Bugfix: Translateable default close button label in OcSidebar
+
+The sidebar component's close button label was hardcoded to be in English. 
+Since the label is pretty unambiguous we can move its translations to the ODS.
+
+https://github.com/owncloud/owncloud-design-system/pull/1243

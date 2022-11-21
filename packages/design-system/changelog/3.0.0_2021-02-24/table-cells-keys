@@ -1,0 +1,5 @@
+Change: Use values as keys for table cells
+
+We've started using values as keys for the table cells so that they are reactive to the changes in values.
+
+https://github.com/owncloud/owncloud-design-system/pull/1094

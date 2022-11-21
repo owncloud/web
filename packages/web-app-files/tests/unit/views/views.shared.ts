@@ -4,7 +4,7 @@ import GetTextPlugin from 'vue-gettext'
 import { mount, VueClass, createLocalVue } from '@vue/test-utils'
 import { routes, getStore } from './views.setup'
 import VueRouter from 'vue-router'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

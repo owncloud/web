@@ -1,0 +1,5 @@
+Bugfix: Do not mutate input value prop in the modal directly
+
+We've used a local state as a v-model of the input in the modal to avoid direct mutations of the input value property.
+
+https://github.com/owncloud/owncloud-design-system/pull/741

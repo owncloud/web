@@ -1,0 +1,8 @@
+Enhancement: Improve modal component
+
+We've made the OcModal component more accessible:
+- It now features `role="dialog"` and `aria-modal="true"`
+- The modal title is now a `<h2>` 
+- Component styles have been moved from an individual stylesheet to the component file
+
+https://github.com/owncloud/owncloud-design-system/pull/1214

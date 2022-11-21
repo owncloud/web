@@ -2,7 +2,7 @@ import { config as testConfig, createLocalVue, mount, shallowMount } from '@vue/
 import { Store } from 'vuex-mock-store'
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
 import stubs from '../../../../../../tests/unit/stubs'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 

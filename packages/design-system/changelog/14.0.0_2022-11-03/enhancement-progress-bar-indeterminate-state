@@ -1,0 +1,6 @@
+Enhancement: Progress bar indeterminate state
+
+We've added an indeterminate state to the progress bar.
+
+https://github.com/owncloud/owncloud-design-system/pull/2200
+https://github.com/owncloud/web/issues/7105

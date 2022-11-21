@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import stubs from '@/tests/unit/stubs/index.js'
 import { createLocalVue, mount } from '@vue/test-utils'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'

@@ -1,6 +1,6 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex, { Store } from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
 import { createLocationSpaces } from '../../../../src/router'

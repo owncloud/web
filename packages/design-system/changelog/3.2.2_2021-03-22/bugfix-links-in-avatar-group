@@ -1,0 +1,5 @@
+Bugfix: Remove leading comma from link avatar group tooltip
+
+We fixed a bug in the oc-avatar-group component, which showed a leading ", " in its tooltip in case it was only about links.
+
+https://github.com/owncloud/owncloud-design-system/pull/1165

@@ -1,0 +1,6 @@
+Enhancement: OCDrop accessibility
+
+Changed DOM order of example data to allow proper tab interactions,
+added focus border to a elements in list.
+
+https://github.com/owncloud/owncloud-design-system/pull/1230

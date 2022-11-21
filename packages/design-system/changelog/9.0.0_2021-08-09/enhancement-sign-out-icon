@@ -1,0 +1,9 @@
+Enhancement: Add sign-out icon
+
+There has been confusion in user experience about the 
+current usage of the `exit_to_app` icon as sign-out icon.
+We have added a dedicated `sign-out` icon to avoid this 
+in the future.
+
+https://github.com/owncloud/web/issues/5590
+https://github.com/owncloud/owncloud-design-system/pull/1551

@@ -1,0 +1,5 @@
+Enhancement: Make files table headings more descriptive
+
+This makes it easier to understand for people using a screen reader.
+
+https://github.com/owncloud/owncloud-design-system/pull/1252

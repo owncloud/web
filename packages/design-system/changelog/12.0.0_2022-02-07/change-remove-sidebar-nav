@@ -1,0 +1,8 @@
+Change: Move OcSidebarNav and OcSidebarNavItem to web
+
+We've moved OcSidebarNav and OcSidebarNavItem to web and renamed it
+to SidebarNav and SidebarNavItem.
+
+https://github.com/owncloud/web/issues/6036
+https://github.com/owncloud/owncloud-design-system/pull/1810
+

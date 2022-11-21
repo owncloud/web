@@ -1,0 +1,5 @@
+Enhancement: Add label and messages to textarea
+
+This also implies all the necessary accessibility changes.
+
+https://github.com/owncloud/owncloud-design-system/pull/1144

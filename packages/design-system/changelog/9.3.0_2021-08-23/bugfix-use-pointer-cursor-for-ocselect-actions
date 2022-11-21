@@ -1,0 +1,7 @@
+Bugfix: Use pointer cursor for OcSelect actions
+
+We changed the cursor for the actions (down/up arrows) on `OcSelect` to `pointer`.
+It used to be a `text` cursor.
+
+
+https://github.com/owncloud/owncloud-design-system/pull/1604

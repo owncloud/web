@@ -1,0 +1,5 @@
+Enhancement: Make UI smaller
+
+We've adjusted several values to make the UI appear less big.
+
+https://github.com/owncloud/owncloud-design-system/pull/2270

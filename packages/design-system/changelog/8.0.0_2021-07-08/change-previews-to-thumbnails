@@ -1,0 +1,8 @@
+Change: Rename previews to thumbnails
+
+Until now, we have been referring to preview images in OcFilesTable and OcResource as `preview`.
+The technically more correct term for our use case would be `thumbnail` and since we're introducing 
+proper previews in the web repo now this change renames `previews` in ODS to `thumbnails` to avoid 
+naming conflicts down the road.
+
+https://github.com/owncloud/owncloud-design-system/pull/1429

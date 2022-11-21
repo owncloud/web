@@ -1,0 +1,8 @@
+Enhancement: Extended the modal component with input
+
+We've added an input into the modal component which can be displayed via prop.
+If the input is displayed, the message gets overridden.
+The content slot can override the input.
+In the confirm event is now emitted the value of input.
+
+https://github.com/owncloud/owncloud-design-system/pull/730

@@ -1,0 +1,9 @@
+Enhancement: Redesign files table related components
+
+We've adjusted OcTable, OcResource, OcDrop and OcCheckbox
+to fit the redesign.
+
+https://github.com/owncloud/owncloud-design-system/pull/1958
+https://github.com/owncloud/owncloud-design-system/pull/1978
+https://github.com/owncloud/owncloud-design-system/pull/1988
+https://github.com/owncloud/web/issues/6207

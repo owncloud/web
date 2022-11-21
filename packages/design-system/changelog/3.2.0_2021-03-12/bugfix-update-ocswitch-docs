@@ -1,0 +1,7 @@
+Bugfix: Update OcSwitch docs
+
+The OcSwitch documentation was featuring the `<oc-star>` component which was dropped a while ago. 
+This change deletes an obsolete `oc-star.scss` file and updates the OcSwitch documentation by displaying 
+its reactive functionality using other HTML elements.
+
+https://github.com/owncloud/owncloud-design-system/pull/1135

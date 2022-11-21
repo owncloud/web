@@ -1,0 +1,6 @@
+Bugfix: Remove required prop from sidebar & obsolete role
+
+- property productName shouldn't be required anymore in OcSidebar after logoAlt has been introduced
+- role="progressbar" is obsolete on `<progress>` HTML elements
+
+https://github.com/owncloud/owncloud-design-system/pull/1233

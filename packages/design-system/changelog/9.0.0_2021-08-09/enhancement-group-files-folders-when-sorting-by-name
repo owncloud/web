@@ -1,0 +1,6 @@
+Enhancement: Group files and folder when sorting by name
+
+Like in oc10 when sorting by name, files and folders should be listed separately
+
+https://github.com/owncloud/web/issues/5613
+https://github.com/owncloud/owncloud-design-system/pull/1559

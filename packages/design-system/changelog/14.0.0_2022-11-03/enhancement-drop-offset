@@ -1,0 +1,6 @@
+Enhancement: Add offset property to the drop component
+
+We've added an offset property to the drop component to define a custom offset. Also, the max width of drop menus was increased to 400px.
+
+https://github.com/owncloud/web/issues/7335
+https://github.com/owncloud/owncloud-design-system/pull/2276

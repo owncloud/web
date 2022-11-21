@@ -1,0 +1,7 @@
+Enhancement: Redesign OcStatusIndicators
+
+We've redesigned the share/status indicators to fit the new design in web.
+
+https://github.com/owncloud/owncloud-design-system/pull/2014
+https://github.com/owncloud/web/issues/5976
+https://github.com/owncloud/web/pull/6552

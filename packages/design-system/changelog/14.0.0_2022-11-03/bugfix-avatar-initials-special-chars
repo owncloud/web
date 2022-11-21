@@ -1,0 +1,6 @@
+Bugfix: Omit special characters in user avatar initials
+
+We now make sure that user avatars without a picture (i.e. rendering user initials) only show unicode letters and numbers.
+
+https://github.com/owncloud/owncloud-design-system/issues/2070
+https://github.com/owncloud/owncloud-design-system/pull/2267

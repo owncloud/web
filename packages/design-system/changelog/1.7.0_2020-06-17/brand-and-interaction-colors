@@ -1,0 +1,8 @@
+Enhancement: Bring oC primary brand and interaction colors
+
+We've brought the ownCloud corporate identity brand and interaction colors.
+The primary brand colour is used as a background in the sidebar.
+Interaction colours are used in buttons and links.
+
+https://github.com/owncloud/owncloud-design-system/issues/546
+https://github.com/owncloud/owncloud-design-system/pull/791

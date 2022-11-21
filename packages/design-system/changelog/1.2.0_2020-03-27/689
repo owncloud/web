@@ -1,0 +1,10 @@
+Change: Render error and warning messages in oc-text-input
+
+The oc-text-input element now has properties for rendering a warning or error message below
+the input field. The input field border receives the respective matching color as well. Also
+it's possible to reserve a fixed vertical space below the input element, so that an appearing
+message doesn't break the layout around the input element.
+
+https://github.com/owncloud/owncloud-design-system/issues/689
+https://github.com/owncloud/owncloud-design-system/pull/690
+

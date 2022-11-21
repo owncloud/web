@@ -1,0 +1,6 @@
+Enhancement: OcCheckbox remove aria checked
+
+We've introduced `aria-checked` on the checkbox component but since then 
+learned it's redundant information, so we're removing it again.
+
+https://github.com/owncloud/owncloud-design-system/pull/1212

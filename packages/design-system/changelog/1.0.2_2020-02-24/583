@@ -1,0 +1,6 @@
+Change: Small sidebar navigation design improvements
+
+We've changed the padding of sidebar nav to small and removed text transformation to uppercase.
+
+https://github.com/owncloud/owncloud-design-system/issues/583
+https://github.com/owncloud/owncloud-design-system/pull/648

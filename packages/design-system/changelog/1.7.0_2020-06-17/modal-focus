@@ -1,0 +1,6 @@
+Enhancement: Automatically focus modal
+
+When the modal is mounted, it receives automatically a focus.
+The focus is sent directly to the modal itself so skipping the wrapping div which works only as a background.
+
+https://github.com/owncloud/owncloud-design-system/pull/781

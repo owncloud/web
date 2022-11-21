@@ -1,0 +1,5 @@
+Bugfix: Disabled OcSelect background
+
+We've fixed a bug that prevented the background of disabled OcSelect components from using theming colors.
+
+https://github.com/owncloud/owncloud-design-system/pull/2008

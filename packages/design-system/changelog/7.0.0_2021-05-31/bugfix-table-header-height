@@ -1,0 +1,5 @@
+Bugfix: Do not define table header height via row height var
+
+We've separated the height styles of table header and table row so that the row height variable is not affecting both of them.
+
+https://github.com/owncloud/owncloud-design-system/pull/1309

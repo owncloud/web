@@ -1,0 +1,5 @@
+Enhancement: Use button to trigger table sort
+
+We've added a button to the table head cell which can trigger sort for its column so that it is keyboard accessible and is aligned directly next to the cell text.
+
+https://github.com/owncloud/owncloud-design-system/pull/1309

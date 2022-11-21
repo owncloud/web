@@ -1,0 +1,9 @@
+Change: Remove icon prop from buttons and use css grid
+
+We've removed the prop which was responsible for displaying icons in the button component.
+To add an icon into the button, it needs to be included in the slot together with the text.
+We've added css grid into the button to ensure that all child items of the button will have a predefined gutter between them.
+We've removed all UIKit button styles from the button component.
+
+https://github.com/owncloud/owncloud-design-system/pull/418
+https://github.com/owncloud/owncloud-design-system/pull/865

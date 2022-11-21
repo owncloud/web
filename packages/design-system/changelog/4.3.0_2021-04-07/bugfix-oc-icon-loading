@@ -1,0 +1,7 @@
+Bugfix: Embed svg images
+We've changed the way how svg images get loaded in oc-icon.
+Before this, svg images where transformed to data urls by webpack.
+Now, we use require to inline them, which prevents the browser from
+doing a XMLHttpRequest that can lead to problems with the content-security-police.
+
+https://github.com/owncloud/owncloud-design-system/pull/1198

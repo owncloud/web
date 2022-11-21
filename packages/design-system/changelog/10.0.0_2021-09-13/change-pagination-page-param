@@ -1,0 +1,5 @@
+Change: Use route query to store active page
+
+We've switched the storage of current paginated page to use route query object instead of param.
+
+https://github.com/owncloud/owncloud-design-system/pull/1626

@@ -1,0 +1,5 @@
+Enhancement: deprecate OcAutocomplete
+
+We've deprecated the OcAutocomplete component. OcSelect with `:multiple="true"` prop can be used to achieve the same behaviour.
+
+https://github.com/owncloud/owncloud-design-system/pull/1521

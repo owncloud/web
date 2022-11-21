@@ -1,0 +1,6 @@
+Enhancement: Add closure to mutate resource dom selector
+
+In some cases the resource or item id is not a valid dom selector, we've introduced an optional closure property
+for oc-table and oc-table-files to customize the selector to its need.
+
+https://github.com/owncloud/owncloud-design-system/pull/1766

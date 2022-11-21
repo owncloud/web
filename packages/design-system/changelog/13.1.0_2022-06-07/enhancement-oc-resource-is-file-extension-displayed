@@ -1,0 +1,7 @@
+Enhancement: Add `isFileExtensionDisplayed` property
+
+We've added the `isFileExtensionDisplayed` property to the `OcResource` and `OcResourceName` components,
+to determine whether the file extension should be displayed or not.
+
+https://github.com/owncloud/owncloud-design-system/pull/2087
+https://github.com/owncloud/web/issues/6730

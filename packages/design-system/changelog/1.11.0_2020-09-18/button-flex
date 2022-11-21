@@ -1,0 +1,6 @@
+Change: Use flexbox in buttons instead of css grid
+
+We've started using flexbox in the button component instead of css grid to position children correctly.
+This gives us more flexibility for the alignment of children.
+
+https://github.com/owncloud/owncloud-design-system/pull/873

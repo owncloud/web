@@ -1,4 +1,3 @@
-import 'owncloud-design-system/dist/system/system.css'
 import merge from 'lodash-es/merge'
 import App from '../App.vue'
 import missingOrInvalidConfigPage from '../pages/missingOrInvalidConfig.vue'
@@ -11,7 +10,7 @@ import Vuex from 'vuex'
 import '@fortawesome/fontawesome-free/attribution'
 
 export { default as Vue } from './vue'
-export { default as DesignSystem } from 'owncloud-design-system'
+export { default as DesignSystem } from '@ownclouders/design-system'
 
 export const store = createStore(Vuex.Store, { ...Store })
 export const pages = { success: App, failure: missingOrInvalidConfigPage }

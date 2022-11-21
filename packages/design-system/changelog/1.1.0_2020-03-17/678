@@ -1,0 +1,7 @@
+Enhancement: Added iconUrl to oc-file element
+
+The oc-file element now supports passing an arbitrary URL to be displayed as a file thumbnail.
+It will fall back to the icon name in case the thumbnail could not be loaded.
+
+https://github.com/owncloud/owncloud-design-system/pull/678
+

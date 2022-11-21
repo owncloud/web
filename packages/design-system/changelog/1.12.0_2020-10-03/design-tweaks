@@ -1,0 +1,7 @@
+Change: Small design improvements
+
+We've changed a few color design tokens.
+We've rotated the `link` icon 45 degrees to the left.
+We've changed the spacing values and united them in one design token for both margin and padding.
+
+https://github.com/owncloud/owncloud-design-system/pull/890

@@ -1,0 +1,8 @@
+Enhancement: Lazy img loading & accessibility for OcAvatar
+
+- Add lazy loading to OcImg component
+- Internalize former dependency vue-avatar into OcAvatar
+- Make OcAvatar use OcImg component, using lazy loading
+- Change OcAvatar to be a11y compliant (color contrasts, DOM structure)
+
+https://github.com/owncloud/owncloud-design-system/pull/1282

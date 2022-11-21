@@ -1,0 +1,6 @@
+Enhancement: add manual mode to oc-drop
+
+We've added the manual mode to `oc-drop` component.
+This mode enables showing/hiding the drop **only** via provided methods ([see docs](https://owncloud.design/#/oC%20Components/OcDrop)).
+
+https://github.com/owncloud/owncloud-design-system/pull/1575

@@ -1,0 +1,8 @@
+Bugfix: OcSpinner make ariaLabel prop optional
+
+The OcSpinner component had a required property that caused console errors. 
+Since we're not always using it in a case where a label is required, we've 
+made it optional but strongly recommend to use it unless the element is 
+wrapped in/equiped with a `aria-hidden="true"` attribute.
+
+https://github.com/owncloud/owncloud-design-system/pull/1251

@@ -1,0 +1,7 @@
+Enhancement: More themable variables
+
+Due to recent changes, more variables other than colors have been 
+moved from SASS to CSS variables and are therefore customizable through theming. 
+This change loads them correctly when providing a `theme.json` as a Vue plugin option.
+
+https://github.com/owncloud/owncloud-design-system/pull/1224

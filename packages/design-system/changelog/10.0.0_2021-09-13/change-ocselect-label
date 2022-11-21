@@ -1,0 +1,9 @@
+Change: Label for OcSelect
+
+We've added a configurable `<label>` for OcSelect accessible via the `label` property.
+This shadows the `label` property of `vue-select`. Hence we introduced the `optionLabel`
+property on OcSelect which maps to the `label` property of `vue-select`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1633
+https://github.com/owncloud/owncloud-design-system/pull/1570
+https://github.com/owncloud/owncloud-design-system/issues/1503

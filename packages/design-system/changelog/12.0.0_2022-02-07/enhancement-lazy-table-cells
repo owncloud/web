@@ -1,0 +1,14 @@
+Enhancement: Add option to render table cells lazy
+
+In cases where an instance of `OcTable` has many child rows and cells, it can be a bottleneck to render all of them immediately.
+With this in mind we've added the lazy option to the table fields object where the consuming app can decide how lazy rendering should behave.
+
+By default lazy cell rendering is disabled, to enable it add a lazy object to the field.
+
+following options are available:
+* `delay: 250` - when the cell visibility on screen is below the given milliseconds value rendering gets skipped.
+* `mode: show` - cell gets rendered and stays painted, no de-rendering happens.
+* `mode: showHide` - cell gets rendered when it enters the screen and de-rendered when its off.
+* `rootMargin: 100px` - given value will be added to the outer area of the element which then increases the visibility detection radius
+
+https://github.com/owncloud/owncloud-design-system/pull/1848

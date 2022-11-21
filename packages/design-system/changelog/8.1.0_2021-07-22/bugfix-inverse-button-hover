@@ -1,0 +1,7 @@
+Bugfix: Inverse button hover
+
+Icons inside inverse buttons were hidden on hover, which shouldn't happen anymore.
+Also added an icon and some padding to the OcButton docs.
+
+https://github.com/owncloud/owncloud-design-system/issues/1401
+https://github.com/owncloud/owncloud-design-system/pull/1506

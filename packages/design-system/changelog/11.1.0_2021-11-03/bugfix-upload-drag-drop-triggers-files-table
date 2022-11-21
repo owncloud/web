@@ -1,0 +1,7 @@
+Bugfix: Drag and Drop triggers wrong actions
+
+We addressed the problem when a user tries to upload a file via drag and drop
+which falsely triggered the drag and drop move in the files table.
+
+https://github.com/owncloud/web/issues/5808
+https://github.com/owncloud/owncloud-design-system/pull/1732

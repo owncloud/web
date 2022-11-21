@@ -1,0 +1,7 @@
+Change: Enable multiple highlighting for OcTableFiles
+
+We changed the highlighting in a way that now every selected file
+is highlighted automatically. The `highlighted` prop has been removed as it's not used anymore. 
+
+https://github.com/owncloud/web/issues/5164
+https://github.com/owncloud/owncloud-design-system/pull/1568

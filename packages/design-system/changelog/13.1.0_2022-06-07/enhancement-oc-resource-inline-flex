@@ -1,0 +1,6 @@
+Enhancement: Make OcResource inline-flex
+
+We've changed OcResource's display CSS attribute to inline-flex to prevent
+a line break
+
+https://github.com/owncloud/owncloud-design-system/pull/2041

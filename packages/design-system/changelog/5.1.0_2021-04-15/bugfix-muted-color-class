@@ -1,0 +1,7 @@
+Bugfix: Muted color class
+
+The `uk-text-muted` class caused some inconsistancy in ownCloud-web, sometimes being 
+overwritten by default uikit styles. Changing it to `oc-text-muted` and updating the 
+references in ownCloud-web should prevent this.
+
+https://github.com/owncloud/owncloud-design-system/pull/1210

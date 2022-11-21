@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { createLocalVue, mount } from '@vue/test-utils'
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import GetTextPlugin from 'vue-gettext'

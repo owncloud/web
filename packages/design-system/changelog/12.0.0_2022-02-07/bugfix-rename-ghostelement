@@ -1,0 +1,5 @@
+Bugfix: Rename GhostElement
+
+We've renamed the GhostElement component to OcGhostElement to follow the atomic design principles.
+
+https://github.com/owncloud/owncloud-design-system/pull/1845

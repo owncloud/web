@@ -1,0 +1,8 @@
+Bugfix: Icons/Thumbnails were only visible for clickable resources
+
+We fixed that only clickable resources had icons/thumbnails in `OcResource`.
+It was fixed by introducing an `OcResourceLink` component that reduces code
+complexity and duplication when linking resources.
+
+
+https://github.com/owncloud/owncloud-design-system/pull/2007

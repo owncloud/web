@@ -1,0 +1,6 @@
+Bugfix: Add word-break rule to OcNotificationMessage component
+
+We had issues with long filenames overflowing the OcNotificationMessage body.
+
+https://github.com/owncloud/owncloud-design-system/issues/1712
+https://github.com/owncloud/owncloud-design-system/pulls/1736

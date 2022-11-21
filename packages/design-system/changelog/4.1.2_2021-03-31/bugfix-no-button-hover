@@ -1,0 +1,6 @@
+Bugfix: No underline on button hover
+
+When hovering `<button>`s we don't want to display an underline 
+to differentiate them properly from `<a>`s and `<router-link>`s.
+
+https://github.com/owncloud/owncloud-design-system/pull/1185

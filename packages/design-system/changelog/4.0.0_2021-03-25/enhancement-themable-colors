@@ -1,0 +1,7 @@
+Enhancement: Initialize the design system with themable colors
+
+By passing suitable plugin options, you can overwrite the CSS color variables within the ODS to adjust it to your likings.
+The default color values are generated from within the design system and act as a fallback 
+if no (or not all) options are passed when initializing the design system plugin.
+
+https://github.com/owncloud/owncloud-design-system/pull/1168

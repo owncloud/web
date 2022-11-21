@@ -1,0 +1,5 @@
+Change: text utility classes
+
+We introduced text utility classes for deciding if a text element should break into multiple lines, prevent line breaks or truncate text with an ellipsis.
+
+https://github.com/owncloud/owncloud-design-system/pull/1115

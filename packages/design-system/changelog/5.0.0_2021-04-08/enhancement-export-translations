@@ -1,0 +1,7 @@
+Enhancement: Export translations
+
+Some ODS components depend on translations and they correctly get pulled from Transifex into 
+`l10n/translations.json`, yet we never exported them for other projects to use. Now, they get 
+copied into the `dist` folder and can be imported and used alongside the styles and components.
+
+https://github.com/owncloud/owncloud-design-system/pull/1201

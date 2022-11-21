@@ -1,0 +1,7 @@
+Bugfix: Contextmenu button triggered wrong event 
+
+The contextmenu button in the OcTableFiles triggered a `showDetails` event, which 
+lead to the sidebar appearing instead of the (expected) contextmenu. This has been fixed.
+
+https://github.com/owncloud/owncloud-design-system/pull/1610
+https://github.com/owncloud/owncloud-design-system/issues/1608

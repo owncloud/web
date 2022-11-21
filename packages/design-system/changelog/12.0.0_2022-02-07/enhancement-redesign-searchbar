@@ -1,0 +1,6 @@
+Enhancement: Adjust OcSearchBar to new design
+
+We've redesigned the OcSearchBar to fit the new design.
+
+https://github.com/owncloud/owncloud-design-system/pull/1810/
+https://github.com/owncloud/web/issues/6036

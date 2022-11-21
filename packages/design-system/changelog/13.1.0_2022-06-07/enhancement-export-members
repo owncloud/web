@@ -1,0 +1,6 @@
+Enhancement: Export package members
+
+Add exports for `composables`, `utils`, `components`, `directives`, `helpers` and `mixins`.
+Start using them via `import { composables, utils, ... } from 'owncloud-design-system'`.
+
+https://github.com/owncloud/owncloud-design-system/pull/2048

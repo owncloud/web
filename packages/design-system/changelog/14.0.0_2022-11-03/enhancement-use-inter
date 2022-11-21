@@ -1,0 +1,6 @@
+Enhancement: Use Inter font
+
+We've switched the default font from Roboto to Inter.
+
+https://github.com/owncloud/owncloud-design-system/pull/2270
+https://github.com/owncloud/owncloud-design-system/pull/2299

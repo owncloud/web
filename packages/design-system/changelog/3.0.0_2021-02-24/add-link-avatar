@@ -1,0 +1,5 @@
+Enhancement: Add link avatar component
+
+We've created a link avatar component which mimics styles of the avatar component.
+
+https://github.com/owncloud/owncloud-design-system/pull/1101

@@ -1,0 +1,9 @@
+change: Use style-dictionary instead of theo
+
+We've used theo to generate tokens, it was a bit cumbersome to
+manage global aliases and hard to define property based filters.
+
+From now on we use amazon style-dictionary to generate the tokens which is more flexible.
+In the same process we renamed the tokens to get a more meaningful naming convention for css // scss variables.
+
+https://github.com/owncloud/owncloud-design-system/pull/1217

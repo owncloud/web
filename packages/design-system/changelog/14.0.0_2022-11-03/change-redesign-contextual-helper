@@ -1,0 +1,7 @@
+Change: Redesign contextual helper
+
+We've redesigned the contextual helper, which accepts now a title property and is able to display a description list.
+
+https://github.com/owncloud/owncloud-design-system/pull/2271
+https://github.com/owncloud/owncloud-design-system/pull/2273
+https://github.com/owncloud/web/issues/7331

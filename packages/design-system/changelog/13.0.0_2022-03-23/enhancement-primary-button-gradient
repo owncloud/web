@@ -1,0 +1,7 @@
+Enhancement: Make filled primary OcButton use gradient background
+
+We've updated the OcButton to use the gradient background color when used in its `filled` appearance.
+
+https://github.com/owncloud/owncloud-design-system/pull/2036
+https://github.com/owncloud/owncloud-design-system/pull/2038
+https://github.com/owncloud/owncloud-design-system/issues/1952

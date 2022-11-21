@@ -1,0 +1,6 @@
+Bugfix: OcTooltip isn't reactive
+
+We've fixed an issue with the OcTooltip when the tooltip
+gets hidden by reactivity and then reactivated with some value.
+
+https://github.com/owncloud/owncloud-design-system/pull/1863

@@ -1,0 +1,7 @@
+Enhancement: Logo sizing
+
+We've added theming variables for the max-width and max-height of the OcLogo component and increased the default (max-)height.
+
+https://github.com/owncloud/owncloud-design-system/issues/795
+https://github.com/owncloud/web/issues/5128
+https://github.com/owncloud/owncloud-design-system/pull/1380

@@ -1,0 +1,7 @@
+Enhancement: Configurable OcResource parentfolder name
+
+We've added a `parent-folder-name-default` property to the OcResource component.
+Before, an empty parent resulted in a hardcoded "All files and folders" which 
+becomes misleading with the introduction of spaces in oCIS.
+
+https://github.com/owncloud/owncloud-design-system/pull/2029

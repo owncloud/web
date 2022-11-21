@@ -1,0 +1,9 @@
+Change: Do not sort in OcTable
+
+We removed sorting from OcTable and added a `sort` event instead, which can be used to sort the data externally.
+This is crucial for server side sorting and handling pagination correctly.
+
+https://github.com/owncloud/owncloud-design-system/pull/1825
+https://github.com/owncloud/owncloud-design-system/pull/1839
+https://github.com/owncloud/web/pull/6136
+https://github.com/owncloud/web/issues/5687

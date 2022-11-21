@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 
 import SpaceQuota from 'web-app-files/src/components/SpaceQuota'

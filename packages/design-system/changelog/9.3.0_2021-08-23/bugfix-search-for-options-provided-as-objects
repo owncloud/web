@@ -1,0 +1,9 @@
+Bugfix: Fix search for options provided as objects
+
+We fixed a regression that was introduced in https://github.com/owncloud/owncloud-design-system/pull/1521.
+`vue-select` automatically uses the property specified in `label` for filtering.
+When custom filtering based on Fuse.js was introduced that functionality got lost.
+Hence it was not possible to filter objects at all.
+
+
+https://github.com/owncloud/owncloud-design-system/pull/1602

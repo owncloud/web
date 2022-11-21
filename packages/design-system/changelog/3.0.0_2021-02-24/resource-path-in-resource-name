@@ -1,0 +1,5 @@
+Change: Add resource path attribute to oc-resource-name
+
+We added a custom attribute to the oc-resource-name component which contains the full resource path. While this is not needed for rendering the component, this makes end to end testing much easier.
+
+https://github.com/owncloud/owncloud-design-system/pull/1103

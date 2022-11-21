@@ -1,0 +1,7 @@
+Change: Remove basic styles
+
+We've removed styles from the body element and from the #oc-content element.
+We were forcing styles on a global level which were too specific and because of that limited the usage of the design system.
+Any specific styling like that should be done in the consuming app.
+
+https://github.com/owncloud/owncloud-design-system/pull/1084

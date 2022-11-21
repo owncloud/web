@@ -1,0 +1,5 @@
+Enhancement: Add name attribute in the resource name component
+
+We've added a `resource-name` data attribute in the `oc-resource-name` component which equals the concatenated resource path, name and extension.
+
+https://github.com/owncloud/owncloud-design-system/pull/1119

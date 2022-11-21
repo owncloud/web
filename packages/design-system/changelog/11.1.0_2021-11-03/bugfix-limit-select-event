@@ -1,0 +1,7 @@
+Bugfix: Limit select event in OcTableFiles 
+
+We've updated the behaviour in the OcTableFiles component so select events only 
+get fired if the target row is not already selected. This allows for batch actions 
+in the contextmenu which was limited to only one resource before.
+
+https://github.com/owncloud/owncloud-design-system/pull/1753

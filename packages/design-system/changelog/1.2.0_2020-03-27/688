@@ -1,0 +1,6 @@
+Bugfix: Fixed oc-text-input not appearing in generated docs
+
+The oc-text-input element didn't appear in the generated docs because of a compilation warning.
+
+https://github.com/owncloud/owncloud-design-system/issues/688
+https://github.com/owncloud/owncloud-design-system/pull/690

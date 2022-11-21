@@ -1,5 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
 import { createStore } from 'vuex-extensions'

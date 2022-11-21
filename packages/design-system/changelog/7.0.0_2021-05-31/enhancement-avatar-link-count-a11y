@@ -1,0 +1,7 @@
+Enhancement: Avatar link & count a11y improvements
+
+- wrappend OcAvatarLink in span (was div)
+- wrappend OcAvatarCount in span (was div)
+- changed the way the OcAvatarLink background color was picked, which improves the color contrast to >4.5 (a11y requirement)
+
+https://github.com/owncloud/owncloud-design-system/pull/1298

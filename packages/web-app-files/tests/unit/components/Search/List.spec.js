@@ -1,7 +1,7 @@
 // import { mount, createLocalVue } from '@vue/test-utils'
 // import VueRouter from 'vue-router'
 // import Vuex from 'vuex'
-// import DesignSystem from 'owncloud-design-system'
+// import DesignSystem from '@ownclouders/design-system'
 // import GetTextPlugin from 'vue-gettext'
 //
 // import List from 'web-app-files/src/components/Search/List.vue'

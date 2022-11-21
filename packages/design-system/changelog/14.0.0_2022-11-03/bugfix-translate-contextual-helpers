@@ -1,0 +1,6 @@
+Bugfix: Translate contextual helpers
+
+We've fixed a bug where contextual helpers were not translated.
+
+https://github.com/owncloud/owncloud-design-system/pull/2334
+https://github.com/owncloud/web/issues/7716

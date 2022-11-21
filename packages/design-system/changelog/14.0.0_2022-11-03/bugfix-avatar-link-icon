@@ -1,0 +1,6 @@
+Bugfix: Avatar link icon
+
+We've updated the avatar link icon to the current icon used in Web.
+
+https://github.com/owncloud/owncloud-design-system/pull/2269
+https://github.com/owncloud/web/issues/7345

@@ -1,0 +1,9 @@
+Change: Default type of OcButton
+
+We've changed the default type of buttons rendered by `OcButton` to `button`.
+Browsers otherwise assume they are of type `submit` which leads to very unexpected
+behavior in forms, especially as we use `OcButton` in a lot of (not so obvious) places
+for a11y reasons.
+
+
+https://github.com/owncloud/owncloud-design-system/pull/2009

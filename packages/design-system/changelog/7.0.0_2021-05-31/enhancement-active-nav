@@ -1,0 +1,6 @@
+Enhancement: Color contrast for OcSidebarNav
+
+We've set different colors for the active and hover state of nav items in the OcSidebarNav component. Those colors now fulfill required color contrast ratios.
+
+https://github.com/owncloud/owncloud-design-system/pull/1310
+https://github.com/owncloud/owncloud-design-system/pull/1315

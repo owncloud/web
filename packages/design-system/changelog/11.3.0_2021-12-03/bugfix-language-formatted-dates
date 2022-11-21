@@ -1,0 +1,5 @@
+Bugfix: Set language for date formatting
+
+We're now setting the language when formatting dates, so that localized parts of the date/time get shown according to the respective language.
+
+https://github.com/owncloud/owncloud-design-system/pull/1806

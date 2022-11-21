@@ -1,0 +1,6 @@
+Enhancement: Button text align left
+
+We've changed the text alignment of buttons to left.
+
+https://github.com/owncloud/web/issues/7619
+https://github.com/owncloud/owncloud-design-system/pull/2323

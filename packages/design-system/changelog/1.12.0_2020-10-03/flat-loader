@@ -1,0 +1,7 @@
+Change: Add flat style for oc-loader
+
+The oc-loader component now has a `flat` style, which removes the border radius and shrinks the height. It can be
+enabled by setting the `flat` property on the component to `true`.
+With this the visual appearance of the loader is less prominent.
+
+https://github.com/owncloud/owncloud-design-system/pull/884

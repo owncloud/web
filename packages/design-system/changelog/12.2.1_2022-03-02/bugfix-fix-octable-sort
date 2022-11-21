@@ -1,0 +1,6 @@
+Bugfix: OcTable Sort
+
+We've fixed a visual bug that caused the field sort
+arrow to be always visible.
+
+https://github.com/owncloud/owncloud-design-system/pull/1996

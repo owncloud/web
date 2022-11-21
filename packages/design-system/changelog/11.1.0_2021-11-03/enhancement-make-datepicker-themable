@@ -1,0 +1,7 @@
+Enhancement: Make OcDatepicker themable
+
+We've added styling to the OcDatepicker to use the colors set by
+the used theme.
+
+https://github.com/owncloud/owncloud-design-system/issues/1679
+https://github.com/owncloud/owncloud-design-system/pull/1740

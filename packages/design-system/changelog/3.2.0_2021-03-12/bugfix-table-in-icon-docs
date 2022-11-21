@@ -1,0 +1,7 @@
+Bugfix: Update table component in OcIcon docs
+
+The `<oc-table>` component had a breaking change in the *2.1.0* release, 
+which broke the [oc-icon component docs](https://owncloud.design/#/oC%20Components/OcIcon).
+To fix it we needed to use the new `<oc-table-simple>` component instead, which mimics the behaviour of the old `<oc-table>` component.
+
+https://github.com/owncloud/owncloud-design-system/pull/1127

@@ -1,0 +1,6 @@
+Change: Drop Internet Explorer support
+
+Since it's nearing its end-of-life, we've dropped 
+polyfills for IE in favor of a smaller bundle size.
+
+https://github.com/owncloud/owncloud-design-system/pull/1909

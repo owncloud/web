@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import ResourceUpload from '../../../../../src/components/AppBar/Upload/ResourceUpload.vue'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 
 const Translate = jest.fn()
 

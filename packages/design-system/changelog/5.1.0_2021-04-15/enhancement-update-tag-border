@@ -1,0 +1,6 @@
+Enhancement: Update tag border color
+
+The OcTag border color didn't offer enough contrast, so it's been updated to match the font color.
+Also, the OcTag styles have been moved to the component level.
+
+https://github.com/owncloud/owncloud-design-system/pull/1213

@@ -1,0 +1,6 @@
+Enhancement: Add tabindex to table rows
+
+By adding a negative tabindex the table rows are now focusable 
+which is an important aspect of accessibility/keyboard navigation.
+
+https://github.com/owncloud/owncloud-design-system/pull/1233

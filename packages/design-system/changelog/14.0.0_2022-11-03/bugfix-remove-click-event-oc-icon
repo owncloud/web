@@ -1,0 +1,5 @@
+Bugfix: Remove click event on OcIcon
+
+We have removed an unnecessary default click handler on the OcIcon component, expecting it to increase performance of the UI.
+
+https://github.com/owncloud/owncloud-design-system/pull/2216

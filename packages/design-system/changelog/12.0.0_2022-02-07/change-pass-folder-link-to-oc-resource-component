@@ -1,0 +1,5 @@
+Change: Pass folderLink to OcResource component
+
+For more flexibility, the folderLink needs to be passed to the OcResource component
+
+https://github.com/owncloud/owncloud-design-system/pull/1913

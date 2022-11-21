@@ -1,0 +1,5 @@
+Bugfix: Removed size for oc-button with raw variation
+
+Raw variation of buttons have no border, so they now also don't have a size enforced to avoid needless white space.
+
+https://github.com/owncloud/owncloud-design-system/issues/654

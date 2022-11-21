@@ -1,0 +1,6 @@
+Change: OcTable emit event data on row click
+
+We've extended the emit data on row click to now also include the event data
+
+https://github.com/owncloud/owncloud-design-system/pull/2218
+https://github.com/owncloud/web/issues/6029

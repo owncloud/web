@@ -1,0 +1,17 @@
+---
+font:
+  family:
+    value: 'Inter, sans-serif'
+  size:
+    default:
+      value: 0.875rem
+    xsmall:
+      value: 0.72rem
+    small:
+      value: 0.86rem
+    medium:
+      value: 1rem
+    large:
+      value: 1.14rem
+    xlarge:
+      value: 1.29rem

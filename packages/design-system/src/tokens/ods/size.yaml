@@ -1,0 +1,24 @@
+---
+size:
+  max-width:
+    logo:
+      value: 150px
+  max-height:
+    logo:
+      value: 60px
+  height:
+    small:
+      value: 50px
+    table-row:
+      value: 42px
+  width:
+    xsmall:
+      value: 100px
+    small:
+      value: 150px
+    medium:
+      value: 300px
+  icon-default:
+    value: 22px
+  form-check-default:
+    value: 14px

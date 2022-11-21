@@ -1,0 +1,7 @@
+Bugfix: Removed width class from sidebar menu
+
+There were different values for width of the sidebar menu and it's left position when hidden.
+We've removed the width class so that the width and left position are the same and the sidebar menu is no more overlapping when it's state is hidden.
+
+https://github.com/owncloud/owncloud-design-system/issues/668
+https://github.com/owncloud/owncloud-design-system/pull/669

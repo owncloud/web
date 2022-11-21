@@ -1,0 +1,5 @@
+Bugfix: Made modal position fixed
+
+We've made the position of modal fixed and added z-index so it is always going to be visible on top of the content.
+
+https://github.com/owncloud/owncloud-design-system/pull/769

@@ -1,0 +1,6 @@
+Change: Remove URL prop from icons
+
+We've removed the URL prop from icons which was replacing the internal icons with an image loading the icon from arbitrary URLs.
+As of now, only internal icons can be used in the `oc-icon` component.
+
+https://github.com/owncloud/owncloud-design-system/pull/1082

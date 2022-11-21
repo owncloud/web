@@ -1,0 +1,6 @@
+Bugfix: Progressbar background color
+
+The progressbar background color wasn't theme-able and therefore inherited uikit-styles that provided undesired results on dark backgrounds. 
+It now uses the text-muted color for the background.
+
+https://github.com/owncloud/owncloud-design-system/pull/1192

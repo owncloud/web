@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import { mount, createLocalVue } from '@vue/test-utils'
 import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
 

@@ -1,0 +1,7 @@
+Enhancement: Theme-able breakpoint variables
+
+We've added custom CSS props for breakpoints a while ago but missed adding them to the theming initialization, 
+so they weren't theme-able until now.
+
+https://github.com/owncloud/web/pull/5281
+https://github.com/owncloud/owncloud-design-system/pull/1388

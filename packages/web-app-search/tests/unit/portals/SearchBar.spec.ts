@@ -1,5 +1,5 @@
 import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
+import DesignSystem from '@ownclouders/design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import AsyncComputed from 'vue-async-computed'
 import { createLocationCommon } from 'web-app-files/src/router'

@@ -1,0 +1,5 @@
+Change: Remove OcAppBar component
+
+We have removed the OcAppBar component since it's not actively used anywhere and broken.
+
+https://github.com/owncloud/owncloud-design-system/pull/1810

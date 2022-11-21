@@ -1,0 +1,5 @@
+Bugfix: Folder names with dots
+
+Folder names with dots showed were separated into a basename and extension part in the oc-resource-name component, which has been fixed. Additionally, the oc-resource-name component now as a `resource-type` attribute, which reflects the `type` property of the displayed resource. This makes testing easier.
+
+https://github.com/owncloud/owncloud-design-system/pull/1153

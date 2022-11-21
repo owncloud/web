@@ -1,0 +1,7 @@
+Bugfix: OcTable sorting case sensitivity
+
+We've addressed the problem when sorting upper and lowercase
+which resulted in both being sorted separately.
+
+https://github.com/owncloud/owncloud-design-system/issues/1698
+https://github.com/owncloud/owncloud-design-system/pull/1735

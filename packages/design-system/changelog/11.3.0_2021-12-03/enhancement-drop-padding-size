@@ -1,0 +1,6 @@
+Enhancement: Optional padding size for OcDrop
+
+We've added a `paddingSize` property to the OcDrop component for specifying a dedicated padding of the div that wraps the content slot.
+It defaults to "medium" and also allows to remove the padding entirely.
+
+https://github.com/owncloud/owncloud-design-system/pull/1798

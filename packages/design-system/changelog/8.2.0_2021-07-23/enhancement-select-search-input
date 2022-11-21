@@ -1,0 +1,5 @@
+Enhancement: add `search:input` event to OcSelect
+
+We've added `search:input` event to the OcSelect component which is triggered when a search query is typed into the select.
+
+https://github.com/owncloud/owncloud-design-system/pull/1521

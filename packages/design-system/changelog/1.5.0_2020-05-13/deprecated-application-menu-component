@@ -1,0 +1,5 @@
+Change: Deprecated application menu component
+
+We've deprecated the application menu component in favor of the sidebar component.
+
+https://github.com/owncloud/owncloud-design-system/pull/735

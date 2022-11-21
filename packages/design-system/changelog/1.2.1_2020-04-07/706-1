@@ -1,0 +1,5 @@
+Bugfix: Correct layout of search bar
+
+We've fixed layout of search bar which was broken after we introduced error message in oc-text-input.
+
+https://github.com/owncloud/owncloud-design-system/pull/706

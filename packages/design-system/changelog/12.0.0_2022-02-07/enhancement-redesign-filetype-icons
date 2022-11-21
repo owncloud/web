@@ -1,0 +1,10 @@
+Enhancement: Redesign Filetype icons
+
+We've adjusted the resource icons to fit the redesign.
+We've added a new OcResourceIcon component that is themable.
+
+https://github.com/owncloud/web/issues/6278
+https://github.com/owncloud/owncloud-design-system/pull/1900
+https://github.com/owncloud/owncloud-design-system/pull/1924
+https://github.com/owncloud/owncloud-design-system/pull/1925
+https://github.com/owncloud/owncloud-design-system/pull/1934

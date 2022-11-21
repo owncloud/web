@@ -1,0 +1,7 @@
+Bugfix: OcNotification positioning
+
+We have taken care of the positioning in the OcNotification component, 
+which didn't work as expected. Notifications can now be displayed on 
+the left or right side or centered.
+
+https://github.com/owncloud/owncloud-design-system/pull/1658

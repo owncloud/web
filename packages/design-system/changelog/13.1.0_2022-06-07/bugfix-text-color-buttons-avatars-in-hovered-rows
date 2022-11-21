@@ -1,0 +1,6 @@
+Bugfix: Text color of buttons and avatars in hovered table rows
+
+We fixed an issue that made text of buttons and avatars inside hovered rows bad readable for light mode.
+
+https://github.com/owncloud/owncloud-design-system/pull/2139
+https://github.com/owncloud/owncloud-design-system/issues/2138

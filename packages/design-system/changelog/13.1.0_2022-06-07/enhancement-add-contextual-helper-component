@@ -1,0 +1,7 @@
+Enhancement: Add OcContextualHelper
+
+We've added a contextual helper component to provide more information
+based on the context
+
+https://github.com/owncloud/web/issues/6590
+https://github.com/owncloud/owncloud-design-system/pull/2064

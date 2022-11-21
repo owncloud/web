@@ -1,0 +1,5 @@
+Bugfix: Add word breaking in tooltips
+
+We've added word wrapping to the tippy tooltips so they handle very long paths properly.
+
+https://github.com/owncloud/owncloud-design-system/pull/2137

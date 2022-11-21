@@ -1,0 +1,7 @@
+Enhancement: Increase the logo clearspace
+
+We've increased the gutter between top corner of the sidebar and the logo.
+We've also decreased the size of the logo itself.
+
+https://github.com/owncloud/owncloud-design-system/issues/786
+https://github.com/owncloud/owncloud-design-system/pull/791

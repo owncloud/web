@@ -1,0 +1,6 @@
+Enhancement: Downgrade sass version
+
+Decrease the version of sass in order to prevent emitting of deprecation
+warnings in the ui-kit libray.
+
+https://github.com/owncloud/owncloud-design-system/pull/1583

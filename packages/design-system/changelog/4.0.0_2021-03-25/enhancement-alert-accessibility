@@ -1,0 +1,5 @@
+Enhancement: Make alert component a11y-compliant
+
+It is now possible to reach and submit the "close"-button of an alert via keyboard. This change also removes the "uk-close" icon as it is not a11y-compliant.
+
+https://github.com/owncloud/owncloud-design-system/pull/1166

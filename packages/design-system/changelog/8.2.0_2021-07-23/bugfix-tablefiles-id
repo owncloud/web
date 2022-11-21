@@ -1,0 +1,7 @@
+Bugfix: OcTableFiles Contextmenu ID
+
+Handling of `=`s in resource IDs in the OcTableFiles contextmenu was broken and lead to undesired behavior.
+This has been fixed now.
+
+https://github.com/owncloud/owncloud-design-system/pull/1525
+https://github.com/owncloud/owncloud-design-system/pull/1528

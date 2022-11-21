@@ -1,0 +1,6 @@
+Enhancement: Table Sorting by String or Function
+
+Sorting inside the OcTable now can be done by passing a string or a function, 
+so you can e.g. sort objects inside Array by their properties.
+
+https://github.com/owncloud/owncloud-design-system/pull/1377

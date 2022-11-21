@@ -1,0 +1,6 @@
+Enhancement: Show dropdown in autocomplete on focus
+
+In case the input is focused and it still has a value the dropdown will open
+
+https://github.com/owncloud/owncloud-design-system/pull/804
+

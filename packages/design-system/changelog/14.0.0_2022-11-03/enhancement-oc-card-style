@@ -1,0 +1,7 @@
+Enhancement: oc-card style 
+
+We've enhanced the oc-card style classes, to fit better in the corporate design
+
+https://github.com/owncloud/owncloud-design-system/pull/2306
+https://github.com/owncloud/web/issues/7537
+https://github.com/owncloud/owncloud-design-system/pull/2321

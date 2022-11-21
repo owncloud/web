@@ -1,0 +1,5 @@
+Enhancement: Add prop to define table padding
+
+We've added new prop called `paddingX` which can be used to set the padding along x axis of the `oc-table` or `oc-table-files`.
+
+https://github.com/owncloud/owncloud-design-system/pull/1240

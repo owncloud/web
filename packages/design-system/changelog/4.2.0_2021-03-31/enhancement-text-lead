@@ -1,0 +1,5 @@
+Enhancement: Add `oc-text-lead` class
+
+We've added a utility class called `oc-text-lead` which is increasing the font size of the text.
+
+https://github.com/owncloud/owncloud-design-system/pull/1189

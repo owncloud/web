@@ -1,0 +1,7 @@
+Enhancement: Unify input colors
+
+`OcAutocomplete`, `OcTextInput`, `OcTextarea` and `OcSearchBar` had all slightly different ways of using variables to defined border- and text-colors.
+This change introduces two dedicated color varaibles for text inside input fields (for theme-ability) and unifies their usage.
+It also moves the styles for these components from a stylesheet each into a `<style>` tag in each Vue component.
+
+https://github.com/owncloud/owncloud-design-system/pull/1190

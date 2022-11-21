@@ -1,0 +1,5 @@
+Bugfix: Contextmenu should change selection model
+
+We changed the rightclick logic so the selection model changes to the file the rightclick was performed on.
+
+https://github.com/owncloud/owncloud-design-system/pull/1580

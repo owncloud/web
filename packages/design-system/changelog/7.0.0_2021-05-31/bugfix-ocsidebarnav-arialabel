@@ -1,0 +1,7 @@
+Bugfix: Move arialabel in OcSideBarNav to nav element
+
+The accessibleLabel property describing the navigation inside 
+the OcSideBarNav was set to the whole component, yet was meant 
+to describe the `<nav>` element so we changed its target.
+
+https://github.com/owncloud/owncloud-design-system/pull/1325

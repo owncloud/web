@@ -1,0 +1,6 @@
+Bugfix: Remove pagination list padding
+
+The pagination list had a small left padding which caused 
+it to be visually off from the desired horizontal center.
+
+https://github.com/owncloud/owncloud-design-system/pull/1398

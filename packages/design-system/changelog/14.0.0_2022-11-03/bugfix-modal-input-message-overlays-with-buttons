@@ -1,0 +1,6 @@
+Bugfix: Modal input message overlays with buttons
+
+We've fixed a bug where the modal input message eventually overlays with the confirm and cancel buttons.
+
+https://github.com/owncloud/owncloud-design-system/pull/2343
+https://github.com/owncloud/web/issues/7807

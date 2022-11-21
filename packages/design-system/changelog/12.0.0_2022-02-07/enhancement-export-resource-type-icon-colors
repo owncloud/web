@@ -1,0 +1,6 @@
+Enhancement: Export mappings of types, icons and colors of resources
+
+The bundled design system now contains two json files that map file extensions 
+to their dedicated resource icon and the corresponding color token.
+
+https://github.com/owncloud/owncloud-design-system/pull/1920

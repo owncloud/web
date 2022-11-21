@@ -1,0 +1,6 @@
+Bugfix: Fix wrong extend syntax
+
+We've fixed the wrong extend syntax in oc-user-menu which was written in LESS.
+This syntax caused an issue with loading all styles and e.g. margin utility classes were not working.
+
+https://github.com/owncloud/owncloud-design-system/pull/870

@@ -1,0 +1,6 @@
+Bugfix: Removed uppercase on buttons
+
+Buttons look nicer without the uppercase which was brought in by default by UIKit.
+
+https://github.com/owncloud/owncloud-design-system/issues/442
+https://github.com/owncloud/owncloud-design-system/pull/652

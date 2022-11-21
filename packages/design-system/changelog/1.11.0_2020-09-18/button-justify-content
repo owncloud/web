@@ -1,0 +1,6 @@
+Change: Option for justify-content on oc-button
+
+OcButton now has a property for defining a `justify-content` value out of left, center, right, space-between, space-around and space-evenly.
+
+https://github.com/owncloud/owncloud-design-system/pull/878
+https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content

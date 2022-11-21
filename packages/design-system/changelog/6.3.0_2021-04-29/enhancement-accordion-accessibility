@@ -1,0 +1,8 @@
+Enhancement: Improved accessibility for oc-accordion
+
+We improved the accessibility of the oc-accordion component:
+- Switch from ul+li to just using divs. A list of accordions is not useful.
+- Make sure that collapsed accordions have aria-expanded="false" (attribute vanished from the html before, needs to be a string).
+- Remove aria-label from the button as the button already contains all the accessibility hints it needs.
+
+https://github.com/owncloud/owncloud-design-system/pull/1241

@@ -1,0 +1,7 @@
+Enhancement: Add Ghost Element for Drag & Drop
+
+We've added a custom ghost element for the drag&drop functionality in the OcTableFiles to
+better visualize the action to the user.
+
+https://github.com/owncloud/web/issues/5788
+https://github.com/owncloud/owncloud-design-system/pull/1754

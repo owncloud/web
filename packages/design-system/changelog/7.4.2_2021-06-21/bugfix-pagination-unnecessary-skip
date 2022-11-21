@@ -1,0 +1,8 @@
+Bugfix: Pagination renders unnecessary ... skip label
+
+In cases where the pagination should only render 4 pages at once
+and 4 are available, it rendered a skip label `< 1 2 ... 4 >` even if it's not required.
+
+Now this is fixed and it renders `< 1 2 3 4 >` instead.
+
+https://github.com/owncloud/owncloud-design-system/pull/1406

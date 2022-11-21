@@ -1,0 +1,8 @@
+Enhancement: OcTableFiles dropdown menu
+
+The OcTableFiles component now has a slot that will be displayed inside an OcDrop upon 
+either right-clicking a table row or the three-dot button on the right end of the row.
+
+https://github.com/owncloud/owncloud-design-system/pull/1420
+https://github.com/owncloud/web/issues/5102
+https://github.com/owncloud/web/issues/5103

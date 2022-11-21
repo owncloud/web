@@ -1,0 +1,5 @@
+Enhancement: Implement labels and descriptions for text input fields
+
+This also implies all the required accessibility changes.
+
+https://github.com/owncloud/owncloud-design-system/pull/1141

@@ -1,0 +1,5 @@
+Enhancement: Extend modal focus-trap functionality
+
+We've added the option to define which child element should be focused initially.
+
+https://github.com/owncloud/owncloud-design-system/pull/1987
