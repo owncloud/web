@@ -9,7 +9,7 @@ import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
 import { mockDeep } from 'jest-mock-extended'
-import { ref } from 'vue'
+import { ref } from '@vue/composition-api'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 

@@ -1,5 +1,5 @@
 import { mockDeep } from 'jest-mock-extended'
-import { ref } from 'vue'
+import { ref } from '@vue/composition-api'
 import { Resource } from 'web-client/src'
 import { FileResource } from 'web-client/src/helpers'
 import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
