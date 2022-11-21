@@ -325,7 +325,13 @@ export default defineComponent({
 
   async mounted() {
     if (isPublicSpaceResource(this.space)) {
-      const publicSpace = await this.$clientService.webdav.getFileInfo(this.space)
+      let publicSpace
+      try {
+        publicSpace = await this.$clientService.webdav.getFileInfo(this.space)
+      } catch (e) {
+        publicSpace = this.space
+      }
+
       if (linkRoleUploaderFolder.bitmask(false) === publicSpace.publicLinkPermission) {
         return this.$router.push({
           name: locationPublicUpload.name,
