@@ -47,7 +47,6 @@ import { usePublicLinkPassword, useStore } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { defineComponent } from '@vue/composition-api'
-import { authService } from 'web-runtime/src/services/auth'
 
 export default defineComponent({
   components: {
@@ -152,7 +151,7 @@ export default defineComponent({
         .catch((error) => {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
-            return authService.handleAuthError(this.$router.currentRoute)
+            return this.$authService.handleAuthError(this.$router.currentRoute)
           }
           console.error(error)
           this.errorMessage = error
