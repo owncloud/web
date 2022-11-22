@@ -1,8 +1,11 @@
 import { WebDavClient } from './webDav'
 import { Logger } from './logger'
 import { precacheAndRoute } from 'workbox-precaching'
+import OwnCloud from 'owncloud-sdk'
 
 declare const self: any
+
+const sdk = OwnCloud()
 
 precacheAndRoute(self.__WB_MANIFEST, {
   ignoreURLParametersMatching: [/.*/]

@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^9.0.2",
     "@rollup/plugin-commonjs": "17.1.0",
+    "@rollup/plugin-typescript": "^9.0.2",
     "rollup": "2.78.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-modify": "^3.0.0",
@@ -22,7 +22,10 @@
     "workbox-window": "^6.5.4"
   },
   "dependencies": {
+    "@rollup/plugin-alias": "3.1.9",
     "owncloud-sdk": "~3.0.0-alpha.17",
+    "path": "^0.12.7",
+    "qs": "^6.10.3",
     "typescript": "^4.8.4",
     "workbox-precaching": "^6.5.4"
   },

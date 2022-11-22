@@ -45,6 +45,7 @@ export default defineComponent({
     },
     onServiceWorkerCopy(event) {
       const response = event.response
+      console.log(response)
       const resource = buildResource(response)
       console.log(resource)
       //context.commit('UPSERT_RESOURCE', movedResource)
