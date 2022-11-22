@@ -133,3 +133,12 @@ When(
     }
   }
 )
+
+When(
+  '{string} navigates to the shared with me page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
+    await pageObject.navigate()
+  }
+)
