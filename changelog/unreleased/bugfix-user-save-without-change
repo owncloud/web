@@ -1,0 +1,6 @@
+Bugfix: Prevent unnecessary request when saving a user
+
+We've fixed a bug where changing the role of a user without changing any other data would cause an unnecessary request.
+
+https://github.com/owncloud/web/issues/8011
+https://github.com/owncloud/web/pull/8013
