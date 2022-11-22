@@ -2,10 +2,10 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { kebabCase } from 'lodash'
 import { DateTime } from 'luxon'
-import { World } from '../../../environment'
-import { objects } from '../../../../support'
-import { processDownload } from '../resource'
-import { linkStore } from '../../../../support/store'
+import { World } from '../../environment'
+import { objects } from '../../../support'
+import { processDownload } from './resources'
+import { linkStore } from '../../../support/store'
 
 When(
   '{string} opens the public link {string}',
