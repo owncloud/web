@@ -16,7 +16,13 @@ interface DriveResolverOptions {
   driveAliasAndItem?: Ref<string>
 }
 
-export const useDriveResolver = (options: DriveResolverOptions = {}) => {
+interface ResolvedDrive {
+  space: Ref<SpaceResource>
+  item: Ref<string>
+  itemId: Ref<string>
+}
+
+export const useDriveResolver = (options: DriveResolverOptions = {}): ResolvedDrive => {
   const store = options.store || useStore()
   const { areSpacesLoading } = useSpacesLoading({ store })
   const shareId = useRouteQuery('shareId')

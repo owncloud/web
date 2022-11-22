@@ -141,8 +141,6 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import omit from 'lodash-es/omit'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { basename } from 'path'
-import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { locationPublicUpload } from 'web-app-files/src/router/public'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -323,23 +321,7 @@ export default defineComponent({
     }
   },
 
-  async mounted() {
-    if (isPublicSpaceResource(this.space)) {
-      let publicSpace
-      try {
-        publicSpace = await this.$clientService.webdav.getFileInfo(this.space)
-      } catch (e) {
-        publicSpace = this.space
-      }
-
-      if (linkRoleUploaderFolder.bitmask(false) === publicSpace.publicLinkPermission) {
-        return this.$router.push({
-          name: locationPublicUpload.name,
-          params: { token: this.space.id }
-        })
-      }
-    }
-
+  mounted() {
     this.performLoaderTask(false)
     const loadResourcesEventToken = eventBus.subscribe(
       'app.files.list.load',

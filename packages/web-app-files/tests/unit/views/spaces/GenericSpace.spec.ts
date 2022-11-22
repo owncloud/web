@@ -10,11 +10,6 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
-import { PublicSpaceResource } from 'web-client/src/helpers'
-import { SharePermissionBit } from 'web-client/src/helpers/share'
-import { locationPublicUpload } from 'web-app-files/src/router/public'
 
 jest.mock('web-app-files/src/composables')
 
@@ -64,23 +59,6 @@ describe('GenericSpace view', () => {
       const { wrapper } = getMountedWrapper({ files })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
-    })
-  })
-  it('redirects to the public drop page in a public context with "upload-only"-permissions', async () => {
-    const space = { id: 1, getDriveAliasAndItem: jest.fn(), driveType: 'public' }
-    const clientService = mockDeep<ClientService>()
-    clientService.webdav.getFileInfo.mockResolvedValue(
-      mockDeep<PublicSpaceResource>({ publicLinkPermission: SharePermissionBit.Create })
-    )
-    const { wrapper, mocks } = getMountedWrapper({
-      props: { space },
-      mocks: { $clientService: clientService }
-    })
-
-    await wrapper.vm.$nextTick()
-    expect(mocks.$router.push).toHaveBeenCalledWith({
-      name: locationPublicUpload.name,
-      params: { token: space.id }
     })
   })
 })
