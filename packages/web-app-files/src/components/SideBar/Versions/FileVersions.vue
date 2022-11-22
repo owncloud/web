@@ -93,7 +93,7 @@ export default defineComponent({
       this.loading = false
     },
     async revertVersion(file) {
-      const { fileId, path } = this.highlightedFile
+      const { fileId, id, path } = this.highlightedFile
       await this.$client.fileVersions.restoreFileVersion(fileId, this.currentVersionId(file), path)
       const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
         this.space,
@@ -103,7 +103,7 @@ export default defineComponent({
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
         if (this.highlightedFile[field]) {
-          this.UPDATE_RESOURCE_FIELD({ id: fileId, field, value: resource[field] })
+          this.UPDATE_RESOURCE_FIELD({ id, field, value: resource[field] })
         }
       }
 
