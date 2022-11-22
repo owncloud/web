@@ -322,6 +322,7 @@ export const announceAuthService = ({
   router: VueRouter
 }): void => {
   authService.initialize(configurationManager, clientService, store, router)
+  vue.prototype.$authService = authService
   set(vue, '$authService', authService)
 }
 
