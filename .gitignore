@@ -57,3 +57,6 @@ tests/acceptance/report/cucumber_report.html
 
 # third party licenses
 /third-party-licenses
+
+# dev setup certificates
+/dev/docker/ocis-ca
