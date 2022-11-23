@@ -32,7 +32,6 @@ services:
 
       # IDP
       IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
-      IDP_IDENTIFIER_REGISTRATION_CONF: ${IDP_IDENTIFIER_REGISTRATION_CONF:-/web/identifier-registration.yml}
 
       # STORAGE
       STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
@@ -51,8 +50,9 @@ services:
       PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
     volumes:
       - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
+      - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+      - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
       - ./dist:/web/dist:ro
-      - ./tests/acceptance/mac-identifier-registration.yml:/web/identifier-registration.yml:ro
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
