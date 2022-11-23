@@ -7,13 +7,18 @@ const localVue = createLocalVue()
 localVue.use(VueCompositionAPI)
 localVue.use(Vuex)
 
-export const createComposableWrapper = (setup: SetupFunction<Data, Data>): Wrapper<Vue> =>
+export const createComposableWrapper = (
+  setup: SetupFunction<Data, Data>,
+  options = { mocks: undefined, store: undefined }
+): Wrapper<Vue> =>
   mount(
     defineComponent({
       setup,
       template: `<div></div>`
     }),
     {
-      localVue
+      localVue,
+      ...(options.mocks && { mocks: options.mocks }),
+      ...(options.store && { store: options.store })
     }
   )
