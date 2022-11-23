@@ -210,6 +210,13 @@ export class ResourcesUpload extends ConflictDialog {
     const uploadSizeSpaceMapping = uppyResources.reduce((acc, uppyResource) => {
       let targetUploadSpace
 
+      const existingFile = this.currentFiles.find(
+        (c) => !uppyResource.meta.relativeFolder && c.name === uppyResource.name
+      )
+      if (existingFile?.size >= uppyResource.data.size) {
+        return acc
+      }
+
       if (uppyResource.meta.routeName === locationPublicLink.name) {
         return acc
       }
