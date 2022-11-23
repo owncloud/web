@@ -1,5 +1,5 @@
 ---
-title: "Running acceptance tests"
+title: "Running tests"
 date: 2021-07-27T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
@@ -135,8 +135,7 @@ to the nightwatch based e2e tests anymore.
 In other words: only continue reading about our nightwatch based acceptance tests below if you need to debug a failing test.
 {{< /hint >}}
 
-At ownCloud, we have decided to adopt Docker as the main environment for developing our application.
-This also applies for running our acceptance tests. To run the tests without Docker on your local machine, please refer to the [manual testing guide]({{< ref "acceptance-tests-all.md" >}})
+At ownCloud, we have decided to adopt Docker as the main environment for developing our application. This also applies for running our acceptance tests.
 
 #### Prerequisites
 
