@@ -30,10 +30,19 @@ describe('Text editor app', () => {
       expect(wrapper.find('oc-textarea-stub').exists()).toBeTruthy()
     })
   })
-  it('shows the preview', async () => {
-    const { wrapper } = getWrapper({ fileName: 'markdown.md' })
-    await wrapper.vm.loadFileTask.last
-    expect(wrapper.find('#text-editor-preview').exists()).toBeTruthy()
+  describe('preview', () => {
+    it.each([
+      { fileExtension: 'txt', showPreview: false },
+      { fileExtension: 'js', showPreview: false },
+      { fileExtension: 'php', showPreview: false },
+      { fileExtension: 'json', showPreview: false },
+      { fileExtension: 'xml', showPreview: false },
+      { fileExtension: 'md', showPreview: true }
+    ])('shows only for supported file types', async (data) => {
+      const { wrapper } = getWrapper({ fileName: `file.${data.fileExtension}` })
+      await wrapper.vm.loadFileTask.last
+      expect(wrapper.find('#text-editor-preview').exists()).toBe(data.showPreview)
+    })
   })
 })
 
