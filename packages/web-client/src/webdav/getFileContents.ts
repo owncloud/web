@@ -2,7 +2,7 @@ import { urlJoin } from '../utils'
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 
-type GetFileContentsResponse = {
+export type GetFileContentsResponse = {
   body: any
   [key: string]: any
 }

@@ -387,6 +387,7 @@ importers:
       vue-concurrency: ^3.0.0-7
       vue-gettext: ^2.1.5
       vuex: ^3.6.2
+      vuex-extensions: ^1.1.5
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
@@ -396,6 +397,7 @@ importers:
       vue-concurrency: 3.0.0-7
       vue-gettext: 2.1.12
       vuex: 3.6.2_vue@2.6.14
+      vuex-extensions: 1.1.5
       web-client: link:../web-client
       web-pkg: link:../web-pkg
 
