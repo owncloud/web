@@ -222,6 +222,11 @@ export class ResourcesUpload extends ConflictDialog {
         return acc
       }
 
+      const existingFile = this.currentFiles.find(
+        (c) => !uppyResource.meta.relativeFolder && c.name === uppyResource.name
+      )
+      const existingFileSize = existingFile ? Number(existingFile.size) : 0
+
       const matchingMappingRecord = acc.find(
         (mappingRecord) => mappingRecord.space.id === targetUploadSpace.id
       )
@@ -229,12 +234,12 @@ export class ResourcesUpload extends ConflictDialog {
       if (!matchingMappingRecord) {
         acc.push({
           space: targetUploadSpace,
-          uploadSize: uppyResource.data.size
+          uploadSize: uppyResource.data.size - existingFileSize
         })
         return acc
       }
 
-      matchingMappingRecord.uploadSize += uppyResource.data.size
+      matchingMappingRecord.uploadSize = uppyResource.data.size - existingFileSize
 
       return acc
     }, [])

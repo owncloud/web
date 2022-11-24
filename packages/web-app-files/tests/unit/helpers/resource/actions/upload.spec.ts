@@ -1,30 +1,21 @@
 import { mockDeep } from 'jest-mock-extended'
 import { ResolveStrategy, ResourcesUpload } from 'web-app-files/src/helpers/resource'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { CreateDirectoryTreeResult, UppyResource } from 'web-runtime/src/composables/upload'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-
-const spacesMock = [
-  mockDeep<SpaceResource>({
-    id: '1',
-    name: 'admin',
-    driveType: 'personal',
-    spaceQuota: {
-      remaining: 1000
-    }
-  })
-]
 
 const getResourcesUploadInstance = ({
   space = mockDeep<SpaceResource>(),
   currentFolder = '/',
-  spaces = spacesMock,
+  currentFiles = [mockDeep<Resource>()],
+  spaces = [mockDeep<SpaceResource>()],
   showMessage = jest.fn(),
   uppyService = mockDeep<UppyService>(),
   createDirectoryTree = jest.fn().mockImplementation(() => ({ failed: [], successful: [] }))
 }: {
   space?: SpaceResource
   currentFolder?: string
+  currentFiles?: Resource[]
   spaces?: SpaceResource[]
   showMessage?: () => void
   uppyService?: UppyService
@@ -37,7 +28,7 @@ const getResourcesUploadInstance = ({
 } = {}) => {
   return new ResourcesUpload(
     [],
-    [],
+    currentFiles,
     jest.fn(() => []),
     uppyService,
     space,
@@ -57,33 +48,58 @@ const getResourcesUploadInstance = ({
 
 describe('upload helper', () => {
   describe('method "checkQuotaExceeded"', () => {
-    it('should be true if space quota exceeded', () => {
-      const showMessageStub = jest.fn()
-      const resourcesUpload = getResourcesUploadInstance({ showMessage: showMessageStub })
-
-      expect(
-        resourcesUpload.checkQuotaExceeded([
-          mockDeep<UppyResource>({
-            data: {
-              size: 1001
-            },
-            meta: {
-              spaceId: '1',
-              routeName: 'files-spaces-generic'
-            }
-          })
-        ])
-      ).toBeTruthy()
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+    const remainingQuota = 1000
+    const spacesMock = mockDeep<SpaceResource>({
+      id: '1',
+      name: 'admin',
+      driveType: 'personal',
+      spaceQuota: { remaining: remainingQuota }
     })
 
-    it('should be false if space quota not exceeded', () => {
+    it('should be true if the filesize to be uploaded is greater than the remaining quota', () => {
+      const fileToBeUploaded = mockDeep<UppyResource>({
+        data: { size: 1001 },
+        meta: { spaceId: '1', routeName: 'files-spaces-generic' }
+      })
       const showMessageStub = jest.fn()
-      const resourcesUpload = getResourcesUploadInstance({ showMessage: showMessageStub })
+      const resourcesUpload = getResourcesUploadInstance({
+        showMessage: showMessageStub,
+        spaces: [spacesMock]
+      })
 
-      expect(
-        resourcesUpload.checkQuotaExceeded([mockDeep<UppyResource>({ data: { size: 999 } })])
-      ).toBeFalsy()
+      expect(resourcesUpload.checkQuotaExceeded([fileToBeUploaded])).toBeTruthy()
+      expect(showMessageStub).toHaveBeenCalledTimes(1)
+    })
+    it('should be false if the filesize to be uploaded is smaller than the remaining quota', () => {
+      const fileToBeUploaded = mockDeep<UppyResource>({ data: { size: 900 } })
+      const showMessageStub = jest.fn()
+      const resourcesUpload = getResourcesUploadInstance({
+        showMessage: showMessageStub,
+        spaces: [spacesMock]
+      })
+
+      expect(resourcesUpload.checkQuotaExceeded([fileToBeUploaded])).toBeFalsy()
+      expect(showMessageStub).toHaveBeenCalledTimes(0)
+    })
+    it('should be false if an existing file is being overwritten with a smaller filesize', () => {
+      const existingFile = mockDeep<Resource>({ name: 'someFile.txt', size: 2000 })
+      const fileToBeUploaded = mockDeep<UppyResource>({
+        name: existingFile.name,
+        data: { size: 1999 },
+        meta: {
+          spaceId: '1',
+          routeName: 'files-spaces-generic',
+          relativeFolder: ''
+        }
+      })
+      const showMessageStub = jest.fn()
+      const resourcesUpload = getResourcesUploadInstance({
+        showMessage: showMessageStub,
+        spaces: [spacesMock],
+        currentFiles: [existingFile]
+      })
+
+      expect(resourcesUpload.checkQuotaExceeded([fileToBeUploaded])).toBeFalsy()
       expect(showMessageStub).toHaveBeenCalledTimes(0)
     })
   })
