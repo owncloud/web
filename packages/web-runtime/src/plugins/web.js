@@ -29,7 +29,7 @@ export default {
             if (version === null) {
               url = `${this.$client.helpers._davPath}${file.webDavPath}`
             } else {
-              url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
+              url = this.$client.fileVersions.getFileVersionUrl(file.fileId, version)
             }
             const accessToken = this.$store.getters['runtime/auth/accessToken']
             headers = { Authorization: 'Bearer ' + accessToken }

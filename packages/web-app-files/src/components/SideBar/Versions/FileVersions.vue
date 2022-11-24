@@ -52,10 +52,10 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { inject } from '@vue/composition-api'
+import { defineComponent, inject } from '@vue/composition-api'
 import { SpaceResource } from 'web-client/src/helpers'
 
-export default {
+export default defineComponent({
   name: 'FileVersions',
   setup() {
     return {
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadVersions']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE']),
+    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
     currentVersionId(file) {
       const etag = file.name.split('/')
       return etag[etag.length - 1]
@@ -92,21 +92,22 @@ export default {
       await this.loadVersions({ client: this.$client, fileId: this.highlightedFile.fileId })
       this.loading = false
     },
-    revertVersion(file) {
-      this.$client.fileVersions
-        .restoreFileVersion(
-          this.highlightedFile.id,
-          this.currentVersionId(file),
-          this.highlightedFile.path
-        )
-        .then(async () => {
-          const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
-            this.space,
-            this.highlightedFile
-          )
-          this.UPDATE_RESOURCE(resource)
-          return this.fetchFileVersions()
-        })
+    async revertVersion(file) {
+      const { fileId, id, path } = this.highlightedFile
+      await this.$client.fileVersions.restoreFileVersion(fileId, this.currentVersionId(file), path)
+      const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
+        this.space,
+        this.highlightedFile
+      )
+
+      const fieldsToUpdate = ['size', 'mdate']
+      for (const field of fieldsToUpdate) {
+        if (this.highlightedFile[field]) {
+          this.UPDATE_RESOURCE_FIELD({ id, field, value: resource[field] })
+        }
+      }
+
+      this.fetchFileVersions()
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
@@ -122,5 +123,5 @@ export default {
       return formatFileSize(file.fileInfo[DavProperty.ContentLength], this.$language.current)
     }
   }
-}
+})
 </script>
