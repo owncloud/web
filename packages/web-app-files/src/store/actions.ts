@@ -236,49 +236,21 @@ export default {
     context,
     { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
   ) {
-    if (shareType === ShareTypes.group.value) {
-      client.shares
-        .shareFileWithGroup(path, shareWith, {
-          permissions,
-          role: role.name,
-          expirationDate,
-          spaceRef: storageId
-        })
-        .then((share) => {
-          context.commit(
-            'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
-            buildCollaboratorShare(
-              share.shareInfo,
-              context.getters.highlightedFile,
-              allowSharePermissions(context.rootGetters)
-            )
-          )
-          context.dispatch('updateCurrentFileShareTypes')
-          context.dispatch('loadIndicators', { client, currentFolder: path })
-        })
-        .catch((e) => {
-          context.dispatch(
-            'showMessage',
-            {
-              title: $gettext('Error while sharing.'),
-              desc: e,
-              status: 'danger'
-            },
-            { root: true }
-          )
-        })
-      return
+    const isGroupShare = shareType === ShareTypes.group.value
+    const options = {
+      permissions,
+      role: role.name,
+      expirationDate,
+      spaceRef: storageId,
+      remoteUser: undefined
     }
 
-    const remoteShare = shareType === ShareTypes.remote.value
-    client.shares
-      .shareFileWithUser(path, shareWith, {
-        remoteUser: remoteShare,
-        permissions,
-        role: role.name,
-        expirationDate,
-        spaceRef: storageId
-      })
+    if (!isGroupShare) {
+      options.remoteUser = shareType === ShareTypes.remote.value
+    }
+
+    const shareMethod = isGroupShare ? 'shareFileWithGroup' : 'shareFileWithUser'
+    return client.shares[shareMethod](path, shareWith, options)
       .then((share) => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_UPSERT',
