@@ -50,6 +50,7 @@ export default defineComponent({
         const publicSpace = (await clientService.webdav.getFileInfo(space)) as SpaceResource
         return publicSpace
       } catch (e) {
+        console.error(e)
         return space
       }
     }
