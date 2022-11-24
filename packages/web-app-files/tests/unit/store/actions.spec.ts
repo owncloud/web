@@ -52,20 +52,24 @@ describe('vuex store actions', () => {
   })
 
   describe('addShare', () => {
-    it('succeeds when resolved sucessfully', async () => {
+    it.each([
+      { shareType: ShareTypes.user.value, shareMethod: 'shareFileWithUser' },
+      { shareType: ShareTypes.group.value, shareMethod: 'shareFileWithGroup' }
+    ])('succeeds when resolved sucessfully', async (data) => {
       const clientMock = mockDeep<OwnCloudSdk>()
-      clientMock.shares.shareFileWithUser.mockResolvedValue({})
+      clientMock.shares[data.shareMethod].mockResolvedValue({})
       await actions.addShare(stateMock, {
         client: clientMock,
         path: '/someFile.txt',
         shareWith: 'user',
-        shareType: ShareTypes.user.value,
+        shareType: data.shareType,
         permissions: spaceRoleManager.bitmask(false),
         role: spaceRoleManager,
         expirationDate: null,
         storageId: null
       })
 
+      expect(clientMock.shares[data.shareMethod]).toHaveBeenCalledTimes(1)
       expect(stateMock.commit).toHaveBeenCalledTimes(1)
     })
     it('fails on error', async () => {
