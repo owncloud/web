@@ -4,6 +4,7 @@ import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 
 jest.mock('../../../src/helpers/resources')
+jest.mock('../../../src/gettext')
 
 const stateMock = {
   commit: jest.fn(),
@@ -13,14 +14,6 @@ const stateMock = {
 }
 
 describe('vuex store actions', () => {
-  beforeEach(() => {
-    // because of the $gettext warnings
-    jest.spyOn(console, 'warn').mockImplementation(() => undefined)
-  })
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('changeShare', () => {
     it('succeeds when resolved sucessfully', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
