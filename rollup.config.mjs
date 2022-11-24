@@ -204,7 +204,11 @@ if (process.env.SERVER === 'true') {
     serve({
       host: '0.0.0.0',
       contentBase: ['dist'],
-      port: process.env.PORT || 9100
+      port: process.env.PORT || 9100,
+      https: {
+        key: fs.readFileSync('./dev/docker/ocis-ca/server.key'),
+        cert: fs.readFileSync('./dev/docker/ocis-ca/server.crt')
+      },
     })
   )
   plugins.push(
