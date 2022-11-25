@@ -5,7 +5,7 @@ NODE_BINDIR = $(NODE_MODULES)/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
 # Where to find apps (it can be multiple paths).
-APPS = $(shell find ../.. -maxdepth 1 -name 'web-app-*') ../../web-client ../../web-pkg
+APPS = $(shell find ../.. -maxdepth 1 -name 'web-app-*') ../../design-system ../../web-client ../../web-pkg
 
 # Where to find core folder
 CORE = ..
