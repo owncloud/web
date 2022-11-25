@@ -1,9 +1,8 @@
 [main]
 host = https://www.transifex.com
-lang_map = cs_CZ: cs
 
-[owncloud.owncloud-design-system]
-file_filter = locale/<lang>/owncloud-design-system.po
+[owncloud-web.design-system]
+file_filter = locale/<lang>/LC_MESSAGES/app.po
 minimum_perc = 0
 source_file = template.pot
 source_lang = en

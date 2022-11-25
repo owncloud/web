@@ -5,7 +5,7 @@ NODE_BINDIR = $(NODE_MODULES)/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
 # Where to find apps (it can be multiple paths).
-APPS = $(shell find ../.. -maxdepth 1 -name 'web-app-*') ../../web-client ../../web-pkg
+APPS = $(shell find ../.. -maxdepth 1 -name 'web-app-*') ../../design-system ../../web-client ../../web-pkg
 
 # Where to find core folder
 CORE = ..
@@ -20,7 +20,7 @@ OUTPUT_DIR = .
 TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
-LOCALES = de fr es it cs gl
+LOCALES = ar bg de cs es fr gl he it pl ru sk sq tr
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))
