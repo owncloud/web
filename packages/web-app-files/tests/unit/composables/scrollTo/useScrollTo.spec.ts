@@ -130,7 +130,7 @@ describe('useScrollTo', () => {
         {
           mocks: {
             ...defaultComponentMocks({
-              currentRoute: { query: { scrollTo: resourceId, details: 'details-item' } }
+              currentRoute: { query: { scrollTo: resourceId, details: 'details' } }
             }),
             $store: { commit: jest.fn() }
           },

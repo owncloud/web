@@ -246,7 +246,7 @@ export default defineComponent({
   },
   methods: {
     expandSharesPanel() {
-      eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share')
     }
   }
 })

@@ -311,7 +311,7 @@ export default defineComponent({
 
     openSidebarSharePanel(space: SpaceResource) {
       this.SET_FILE_SELECTION([space])
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
     },
 
     getSpaceLinkProps(space: SpaceResource) {

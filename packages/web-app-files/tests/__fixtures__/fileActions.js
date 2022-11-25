@@ -61,12 +61,12 @@ const editors = [
 
 const sideBars = [
   {
-    app: 'details-item',
+    app: 'details',
     enabled: jest.fn(),
     icon: 'information'
   },
   {
-    app: 'actions-item',
+    app: 'actions',
     enabled: jest.fn(),
     icon: 'information'
   }

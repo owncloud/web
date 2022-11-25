@@ -250,7 +250,7 @@ export default defineComponent({
 
     const openSideBarSharePanel = () => {
       store.commit('Files/SET_SELECTED_IDS', [])
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
     }
 
     return {

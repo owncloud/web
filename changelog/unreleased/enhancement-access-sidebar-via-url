@@ -6,11 +6,11 @@ For private or internal links it only requires the new `details` param in the UR
 
 The following values can be used for the `details` param:
 
-* `details-item` - sidebar open, no specific panel
-* `actions-item` - actions panel
-* `sharing-item` - share panel
-* `versions-item` - versions panel
-* `space-share-item` - members panel (project space only)
+* `details` - sidebar open, no specific panel
+* `actions` - actions panel
+* `sharing` - share panel
+* `versions` - versions panel
+* `space-share` - members panel (project space only)
 
 https://github.com/owncloud/web/pull/8021
 https://github.com/owncloud/web/issues/7927

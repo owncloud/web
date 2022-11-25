@@ -47,7 +47,7 @@ export default {
 
     $_showShares_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
     }
   }
 }

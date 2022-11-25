@@ -33,11 +33,11 @@ export default {
     $_showActions_trigger() {
       // we don't have details in the trashbin, yet. the actions panel is the default
       // panel at the moment, so we need to use `null` as panel name for trashbins.
-      // unconditionally return hardcoded `actions-item` once we have a dedicated
+      // unconditionally return hardcoded `actions` once we have a dedicated
       // details panel in trashbins.
       const panelName = isLocationTrashActive(this.$router, 'files-trash-generic')
         ? null
-        : 'actions-item'
+        : 'actions'
       eventBus.publish(SideBarEventTopics.openWithPanel, panelName)
     }
   }

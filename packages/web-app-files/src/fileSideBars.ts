@@ -41,7 +41,7 @@ const panelGenerators: (({
   // We don't have file details in the trashbin, yet.
   // Only allow `actions` panel on trashbin route for now.
   ({ rootFolder, highlightedFile }): Panel => ({
-    app: 'no-selection-item',
+    app: 'no-selection',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: NoSelection,
@@ -51,7 +51,7 @@ const panelGenerators: (({
     }
   }),
   ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
-    app: 'details-item',
+    app: 'details',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetails,
@@ -66,7 +66,7 @@ const panelGenerators: (({
     }
   }),
   ({ multipleSelection, rootFolder, highlightedFile, router }) => ({
-    app: 'details-multiple-item',
+    app: 'details-multiple',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: FileDetailsMultiple,
@@ -85,7 +85,7 @@ const panelGenerators: (({
     }
   }),
   ({ multipleSelection, highlightedFile }) => ({
-    app: 'details-space-item',
+    app: 'details-space',
     icon: 'questionnaire-line',
     title: $gettext('Details'),
     component: SpaceDetails,
@@ -95,7 +95,7 @@ const panelGenerators: (({
     }
   }),
   ({ router, multipleSelection, rootFolder, highlightedFile }) => ({
-    app: 'actions-item',
+    app: 'actions',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: FileActions,
@@ -105,7 +105,7 @@ const panelGenerators: (({
     }
   }),
   ({ multipleSelection, highlightedFile, user }) => ({
-    app: 'space-actions-item',
+    app: 'space-actions',
     icon: 'slideshow-3',
     title: $gettext('Actions'),
     component: SpaceActions,
@@ -123,7 +123,7 @@ const panelGenerators: (({
     }
   }),
   ({ capabilities, router, multipleSelection, rootFolder, highlightedFile }) => ({
-    app: 'sharing-item',
+    app: 'sharing',
     icon: 'user-add',
     iconFillType: 'line',
     title: $gettext('Shares'),
@@ -155,7 +155,7 @@ const panelGenerators: (({
     }
   }),
   ({ multipleSelection, highlightedFile, capabilities }) => ({
-    app: 'space-share-item',
+    app: 'space-share',
     icon: 'group',
     title: $gettext('Members'),
     component: SharesPanel,
@@ -173,7 +173,7 @@ const panelGenerators: (({
     }
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
-    app: 'versions-item',
+    app: 'versions',
     icon: 'git-branch',
     title: $gettext('Versions'),
     component: FileVersions,

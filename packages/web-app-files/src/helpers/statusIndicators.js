@@ -95,7 +95,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       label: $gettext('Show invited people'),
       visible: isUserShare(resource, sharesTree, hasShareJail),
       icon: 'group',
-      target: 'sharing-item',
+      target: 'sharing',
       type: isDirectUserShare(resource) ? 'user-direct' : 'user-indirect',
       handler: (resource, panel) => {
         eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#peopleShares`)
@@ -107,7 +107,7 @@ export const getIndicators = (resource, sharesTree, hasShareJail = false) => {
       label: $gettext('Show links'),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
-      target: 'sharing-item',
+      target: 'sharing',
       type: isDirectLinkShare(resource) ? 'link-direct' : 'link-indirect',
       handler: (resource, panel) => {
         eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
