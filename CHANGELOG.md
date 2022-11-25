@@ -8,37 +8,14 @@ ownCloud admins and users.
 Summary
 -------
 
-* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
-* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
-* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
-* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
-* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
-* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 
 Details
 -------
-
-* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
-
-   We've fixed a bug where editing text files on public pages was not possible with the oC10
-   backend.
-
-   https://github.com/owncloud/web/issues/7932
-   https://github.com/owncloud/web/pull/7936
-
-* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
-
-   We've fixed a bug where files would try to be uploaded if the creation of their respective folder
-   failed beforehand.
-
-   https://github.com/owncloud/web/issues/7957
-   https://github.com/owncloud/web/pull/7975
-   https://github.com/owncloud/web/pull/7999
 
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 
@@ -46,21 +23,6 @@ Details
 
    https://github.com/owncloud/web/issues/7924
    https://github.com/owncloud/web/pull/7926
-
-* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
-
-   Uploads with status code 5xx can't be retried on the server side, hence the automatic retry has
-   been disabled in such cases.
-
-   https://github.com/owncloud/web/issues/7971
-   https://github.com/owncloud/web/pull/7985
-
-* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
-
-   Origin checks have been added to all Draw.io events due to security reasons.
-
-   https://github.com/owncloud/web/issues/7933
-   https://github.com/owncloud/web/pull/7941
 
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 
@@ -75,34 +37,6 @@ Details
 
    https://github.com/owncloud/web/issues/7959
    https://github.com/owncloud/web/pull/7969
-
-* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
-
-   The "upload finalizing"-state has been introduced to the upload overlay. This state is
-   relevant during the time window when all data has been transferred to the server (= progress bar
-   is at 100%), but the server still needs to write all data to the storage.
-
-   The "cancel"- and "pause"-actions are disabled during the "upload finalizing"-state as the
-   data transfer is technically finished. Previously, when pausing and resuming when being in
-   this state, the upload would be marked as successful instantly, despite the server still
-   writing to the storage.
-
-   https://github.com/owncloud/web/issues/7956
-   https://github.com/owncloud/web/pull/7974
-   https://github.com/owncloud/web/pull/7999
-
-* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
-
-   We have removed the deprecated `mediaSource` helper function and the `v-image-source`
-   directive.
-
-   BREAKING CHANGE for developers: `mediaSource` and `v-image-source` are not available
-   anymore, `loadPreview` should be used once web-pkg is published.
-
-   https://github.com/owncloud/web/issues/7338
-   https://github.com/owncloud/web/pull/7935
-   https://github.com/owncloud/web/pull/7072
-   https://github.com/owncloud/web/pull/7350
 
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
@@ -120,7 +54,7 @@ Details
    https://github.com/owncloud/web/issues/7937
    https://github.com/owncloud/web/pull/7968
 
-Changelog for ownCloud Web [6.0.0] (2022-11-04)
+Changelog for ownCloud Web [6.0.0] (2022-11-24)
 =======================================
 The following sections list the changes in ownCloud web 6.0.0 relevant to
 ownCloud admins and users.
@@ -136,18 +70,26 @@ Summary
 * Bugfix - Disable copy/move overwrite on self: [#7652](https://github.com/owncloud/web/pull/7652)
 * Bugfix - Disable shares loading on public and trash locations: [#7739](https://github.com/owncloud/web/pull/7739)
 * Bugfix - Disappearing quicklink in sidebar: [#7740](https://github.com/owncloud/web/pull/7740)
+* Bugfix - Prevent shares from disappearing after sharing with groups: [#7946](https://github.com/owncloud/web/issues/7946)
 * Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
+* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
 * Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
 * Bugfix - File name reactivity: [#7734](https://github.com/owncloud/web/pull/7734)
+* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 * Bugfix - Hide search bar in public link context: [#7603](https://github.com/owncloud/web/issues/7603)
 * Bugfix - Hide share indicators on public page: [#7889](https://github.com/owncloud/web/pull/7889)
 * Bugfix - "Keep both"-conflict option: [#7903](https://github.com/owncloud/web/issues/7903)
 * Bugfix - Link indicator on "Shared with me"-page: [#7697](https://github.com/owncloud/web/issues/7697)
+* Bugfix - Missing password form on public drop page: [#8007](https://github.com/owncloud/web/pull/8007)
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
+* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
+* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
 * Bugfix - Prefer alias links over private links: [#7916](https://github.com/owncloud/web/pull/7916)
 * Bugfix - "Private link"-button alignment: [#7640](https://github.com/owncloud/web/pull/7640)
+* Bugfix - Public link loading on role change: [#8006](https://github.com/owncloud/web/pull/8006)
+* Bugfix - Quota check when replacing files: [#7962](https://github.com/owncloud/web/issues/7962)
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 * Bugfix - Remove the "close sidebar"-calls on delete: [#7699](https://github.com/owncloud/web/issues/7699)
 * Bugfix - Resolve upload existing folder: [#7504](https://github.com/owncloud/web/pull/7504)
@@ -163,9 +105,14 @@ Summary
 * Bugfix - Hide actions in space trash bins: [#7768](https://github.com/owncloud/web/pull/7768)
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
+* Bugfix - Display error messages in text editor: [#7960](https://github.com/owncloud/web/issues/7960)
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
+* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
+* Bugfix - Prevent unnecessary request when saving a user: [#8011](https://github.com/owncloud/web/issues/8011)
+* Bugfix - Versions on the "Shared with me"-page: [#7989](https://github.com/owncloud/web/pull/7989)
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
+* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 * Enhancement - Add search field for space members: [#7901](https://github.com/owncloud/web/pull/7901)
 * Enhancement - Add `X-Request-ID` header to all outgoing requests: [#4675](https://github.com/owncloud/web/issues/4675)
@@ -240,6 +187,14 @@ Details
    https://github.com/owncloud/web/issues/7736
    https://github.com/owncloud/web/pull/7740
 
+* Bugfix - Prevent shares from disappearing after sharing with groups: [#7946](https://github.com/owncloud/web/issues/7946)
+
+   The disappearing of shares after sharing with groups on the "Shared with me"-page has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/7946
+   https://github.com/owncloud/web/pull/8009
+
 * Bugfix - Edit new created user in user management: [#7820](https://github.com/owncloud/web/pull/7820)
 
    We've fixed a bug, where editing a user after creating in the user management was only possible
@@ -247,6 +202,14 @@ Details
 
    https://github.com/owncloud/web/issues/7761
    https://github.com/owncloud/web/pull/7820
+
+* Bugfix - Editing text files on public pages: [#7936](https://github.com/owncloud/web/pull/7936)
+
+   We've fixed a bug where editing text files on public pages was not possible with the oC10
+   backend.
+
+   https://github.com/owncloud/web/issues/7932
+   https://github.com/owncloud/web/pull/7936
 
 * Bugfix - Handle non 2xx external app responses: [#7861](https://github.com/owncloud/web/pull/7861)
 
@@ -262,6 +225,15 @@ Details
 
    https://github.com/owncloud/web/issues/7713
    https://github.com/owncloud/web/pull/7734
+
+* Bugfix - Prevent file upload when folder creation failed: [#7975](https://github.com/owncloud/web/pull/7975)
+
+   We've fixed a bug where files would try to be uploaded if the creation of their respective folder
+   failed beforehand.
+
+   https://github.com/owncloud/web/issues/7957
+   https://github.com/owncloud/web/pull/7975
+   https://github.com/owncloud/web/pull/7999
 
 * Bugfix - Folder conflict dialog: [#7724](https://github.com/owncloud/web/pull/7724)
 
@@ -302,6 +274,14 @@ Details
    https://github.com/owncloud/web/issues/7697
    https://github.com/owncloud/web/pull/7853
 
+* Bugfix - Missing password form on public drop page: [#8007](https://github.com/owncloud/web/pull/8007)
+
+   We've fixed a bug where the password form on a public drop page would not show after setting a
+   required password.
+
+   https://github.com/owncloud/web/issues/7670
+   https://github.com/owncloud/web/pull/8007
+
 * Bugfix - Inhibit move files between spaces: [#7652](https://github.com/owncloud/web/pull/7652)
 
    We've inhibited moving files between spaces and will offer the user to copy instead.
@@ -309,6 +289,14 @@ Details
    https://github.com/owncloud/web/issues/6892
    https://github.com/owncloud/web/pull/7652
    https://github.com/owncloud/web/pull/7735
+
+* Bugfix - Prevent retrying uploads with status code 5xx: [#7985](https://github.com/owncloud/web/pull/7985)
+
+   Uploads with status code 5xx can't be retried on the server side, hence the automatic retry has
+   been disabled in such cases.
+
+   https://github.com/owncloud/web/issues/7971
+   https://github.com/owncloud/web/pull/7985
 
 * Bugfix - Do not load files from cache in public links: [#7811](https://github.com/owncloud/web/pull/7811)
 
@@ -319,6 +307,13 @@ Details
 
    https://github.com/owncloud/web/pull/7811
    https://github.com/owncloud/web/pull/7075
+
+* Bugfix - Add origin check to Draw.io events: [#7941](https://github.com/owncloud/web/pull/7941)
+
+   Origin checks have been added to all Draw.io events due to security reasons.
+
+   https://github.com/owncloud/web/issues/7933
+   https://github.com/owncloud/web/pull/7941
 
 * Bugfix - Prefer alias links over private links: [#7916](https://github.com/owncloud/web/pull/7916)
 
@@ -335,6 +330,22 @@ Details
 
    https://github.com/owncloud/web/issues/7618
    https://github.com/owncloud/web/pull/7640
+
+* Bugfix - Public link loading on role change: [#8006](https://github.com/owncloud/web/pull/8006)
+
+   The loading and resolving of public links when their respective roles have changed has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/8003
+   https://github.com/owncloud/web/pull/8006
+
+* Bugfix - Quota check when replacing files: [#7962](https://github.com/owncloud/web/issues/7962)
+
+   An issue with the quota check when replacing an existing file while having enough quota has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/7962
+   https://github.com/owncloud/web/pull/8015
 
 * Bugfix - Reload file list after last share removal: [#7748](https://github.com/owncloud/web/pull/7748)
 
@@ -472,6 +483,13 @@ Details
    https://github.com/owncloud/web/pull/7546
    https://github.com/owncloud/web/pull/7818
 
+* Bugfix - Display error messages in text editor: [#7960](https://github.com/owncloud/web/issues/7960)
+
+   Error messages in and when leaving the text editor are now being displayed properly.
+
+   https://github.com/owncloud/web/issues/7960
+   https://github.com/owncloud/web/pull/8001
+
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 
    We've fixed the sidebar in the trash bin which was throwing errors and not showing the right
@@ -479,6 +497,21 @@ Details
 
    https://github.com/owncloud/web/issues/7778
    https://github.com/owncloud/web/pull/7787
+
+* Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
+
+   The "upload finalizing"-state has been introduced to the upload overlay. This state is
+   relevant during the time window when all data has been transferred to the server (= progress bar
+   is at 100%), but the server still needs to write all data to the storage.
+
+   The "cancel"- and "pause"-actions are disabled during the "upload finalizing"-state as the
+   data transfer is technically finished. Previously, when pausing and resuming when being in
+   this state, the upload would be marked as successful instantly, despite the server still
+   writing to the storage.
+
+   https://github.com/owncloud/web/issues/7956
+   https://github.com/owncloud/web/pull/7974
+   https://github.com/owncloud/web/pull/7999
 
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
 
@@ -488,6 +521,21 @@ Details
    https://github.com/owncloud/web/issues/7628
    https://github.com/owncloud/web/pull/7630
    https://github.com/owncloud/web/pull/7641
+
+* Bugfix - Prevent unnecessary request when saving a user: [#8011](https://github.com/owncloud/web/issues/8011)
+
+   We've fixed a bug where changing the role of a user without changing any other data would cause an
+   unnecessary request.
+
+   https://github.com/owncloud/web/issues/8011
+   https://github.com/owncloud/web/pull/8013
+
+* Bugfix - Versions on the "Shared with me"-page: [#7989](https://github.com/owncloud/web/pull/7989)
+
+   Downloading and reverting versions on the "Shared with me"-page has been fixed.
+
+   https://github.com/owncloud/web/issues/7980
+   https://github.com/owncloud/web/pull/7989
 
 * Change - Drive aliases in URLs: [#6648](https://github.com/owncloud/web/issues/6648)
 
@@ -502,6 +550,19 @@ Details
    https://github.com/owncloud/web/issues/6648
    https://github.com/owncloud/web/pull/7430
    https://github.com/owncloud/web/pull/7791
+
+* Change - Remove mediaSource and v-image-source: [#7935](https://github.com/owncloud/web/pull/7935)
+
+   We have removed the deprecated `mediaSource` helper function and the `v-image-source`
+   directive.
+
+   BREAKING CHANGE for developers: `mediaSource` and `v-image-source` are not available
+   anymore, `loadPreview` should be used once web-pkg is published.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/7935
+   https://github.com/owncloud/web/pull/7072
+   https://github.com/owncloud/web/pull/7350
 
 * Enhancement - Add restore conflict dialog: [#7635](https://github.com/owncloud/web/pull/7635)
 
