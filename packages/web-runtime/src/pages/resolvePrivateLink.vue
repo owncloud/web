@@ -53,7 +53,8 @@ import {
   useRouter,
   queryItemAsString,
   useCapabilitySpacesEnabled,
-  useClientService
+  useClientService,
+  useRouteQuery
 } from 'web-pkg/src/composables'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
@@ -85,6 +86,11 @@ export default defineComponent({
     const isUnacceptedShareError = ref(false)
 
     const clientService = useClientService()
+
+    const detailsQuery = useRouteQuery('details')
+    const details = computed(() => {
+      return queryItemAsString(unref(detailsQuery))
+    })
 
     onMounted(() => {
       resolvePrivateLinkTask.perform(queryItemAsString(unref(id)))
@@ -126,12 +132,10 @@ export default defineComponent({
       }
 
       let fileId
-      let scrollTo
       if (unref(resource).type === 'folder') {
         fileId = unref(resource).fileId
       } else {
         fileId = unref(resource).parentFolderId
-        scrollTo = unref(resource).name
         path = dirname(path)
       }
 
@@ -141,7 +145,11 @@ export default defineComponent({
       const location: RawLocation = {
         name: 'files-spaces-generic',
         params,
-        query: { ...query, ...(scrollTo && { scrollTo }) }
+        query: {
+          ...query,
+          scrollTo: unref(resource).fileId,
+          ...(unref(details) && { details: unref(details) })
+        }
       }
       router.push(location)
     })

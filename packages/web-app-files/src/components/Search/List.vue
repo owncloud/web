@@ -77,11 +77,10 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import debounce from 'lodash-es/debounce'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import AppBar from '../AppBar/AppBar.vue'
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from '../FilesList/Pagination.vue'
 import MixinFileActions from '../../mixins/fileActions'
-import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
@@ -105,7 +104,7 @@ export default defineComponent({
     ResourceTable,
     FilesViewWrapper
   },
-  mixins: [MixinFileActions, MixinFilesListScrolling],
+  mixins: [MixinFileActions],
   props: {
     searchResult: {
       type: Object,
@@ -172,7 +171,7 @@ export default defineComponent({
   },
   watch: {
     searchResult: {
-      handler: function () {
+      handler: async function () {
         if (!this.searchResult) {
           return
         }
@@ -184,6 +183,8 @@ export default defineComponent({
             ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
+        await nextTick()
+        this.scrollToResourceFromRoute(this.paginatedResources)
       }
     }
   },

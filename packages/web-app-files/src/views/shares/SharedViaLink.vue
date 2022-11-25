@@ -145,8 +145,9 @@ export default defineComponent({
     }
   },
 
-  created() {
-    this.loadResourcesTask.perform()
+  async created() {
+    await this.loadResourcesTask.perform()
+    this.scrollToResourceFromRoute(this.paginatedResources)
   },
 
   beforeDestroy() {

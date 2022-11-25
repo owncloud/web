@@ -33,7 +33,7 @@
             >
               <div
                 class="spaces-list-card oc-card oc-card-default oc-rounded"
-                :data-space-id="space.id"
+                :data-item-id="space.id"
                 :class="getSpaceCardAdditionalClass(space)"
                 @contextmenu="(event) => showSpaceContextDrop(event, space)"
               >
@@ -151,6 +151,7 @@ import { SideBarEventTopics, useSideBar } from '../../composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { createLocationSpaces } from '../../router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
 export default defineComponent({
   components: {
@@ -188,6 +189,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
+      ...useScrollTo(),
       spaces,
       graphClient,
       loadResourcesTask,
@@ -261,8 +263,9 @@ export default defineComponent({
       immediate: true
     }
   },
-  created() {
-    this.loadResourcesTask.perform()
+  async created() {
+    await this.loadResourcesTask.perform()
+    this.scrollToResourceFromRoute(this.spaces)
   },
   methods: {
     ...mapActions(['showMessage']),

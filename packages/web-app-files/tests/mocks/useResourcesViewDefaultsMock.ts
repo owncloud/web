@@ -28,6 +28,8 @@ export const useResourcesViewDefaultsMock = (
     isResourceInSelection: jest.fn(() => false),
     sideBarOpen: ref(false),
     sideBarActivePanel: ref(''),
+    scrollToResource: jest.fn(),
+    scrollToResourceFromRoute: jest.fn(),
     ...options
   }
 }
