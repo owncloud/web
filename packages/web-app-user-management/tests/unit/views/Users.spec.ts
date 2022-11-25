@@ -104,7 +104,7 @@ describe('Users view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
       graph.users.editUser.mockImplementation(() => mockAxiosReject())
-      const wrapper = getMountedWrapper()
+      const wrapper = getMountedWrapper({ graph })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
 
       await wrapper.vm.loadResourcesTask.last
