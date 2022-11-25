@@ -192,29 +192,25 @@ export default {
 @import '../../styles/styles';
 
 .oc-textarea {
-  background-color: var(--oc-color-input-bg);
-  border: 1px solid var(--oc-color-input-border);
+  padding-bottom: var(--oc-space-xsmall);
+  padding-top: var(--oc-space-xsmall);
   box-sizing: border-box;
-  color: var(--oc-color-input-text-muted);
-  font-family: initial;
+  background: var(--oc-color-background-muted);
+  border: 0 none;
   margin: 0;
+  color: var(--oc-color-text-default);
   max-width: 100%;
-  overflow: auto;
-  padding: var(--oc-space-xsmall) var(--oc-space-small);
-
-  transition: 0.2s ease-in-out;
-  transition-property: color, background-color, border;
   width: 100%;
-  -webkit-appearance: none;
+  overflow: auto;
 
   &:disabled {
     color: var(--oc-color-input-text-muted);
   }
 
   &:focus {
-    background-color: var(--oc-color-input-bg);
     border-color: var(--oc-color-input-text-default);
-    color: var(--oc-color-input-text-default);
+    background-color: var(--oc-color-background-muted);
+    color: var(--oc-color-text-default);
   }
 
   &-warning,

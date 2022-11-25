@@ -1,0 +1,5 @@
+Bugfix: Text editor appearance
+
+The text editor now looks normal again after its appearance had changed due to the inclusion of the ODS in the web repository.
+
+https://github.com/owncloud/web/pull/8026
