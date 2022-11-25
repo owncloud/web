@@ -153,7 +153,7 @@ export default defineComponent({
             if (space) {
               errorPopup(
                 $gettextInterpolate(
-                  'There is not enough quota on "%{spaceName}" to save this file',
+                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
                   { spaceName: space.name }
                 )
               )
