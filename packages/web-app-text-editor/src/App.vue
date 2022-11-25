@@ -152,18 +152,14 @@ export default defineComponent({
             )
             if (space) {
               errorPopup(
-                // FIXME: translation
-                // $gettextInterpolate(
-                //   'There is not enough quota on "%{spaceName}" to save this file',
-                //   { spaceName: space.name }
-                // )
-                $gettext('Error when contacting the server')
+                $gettextInterpolate(
+                  'There is not enough quota on "%{spaceName}" to save this file',
+                  { spaceName: space.name }
+                )
               )
               break
             }
-            // FIXME: translation
-            // errorPopup($gettext('There is not enough quota to save this file'))
-            errorPopup($gettext('Error when contacting the server'))
+            errorPopup($gettext('There is not enough quota to save this file'))
             break
           case 401:
             errorPopup($gettext("You're not authorized to save this file"))
