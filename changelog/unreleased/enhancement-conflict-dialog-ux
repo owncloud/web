@@ -1,0 +1,10 @@
+Enhancement: Conflict dialog UX
+
+The UX of the conflict dialog has been improved slightly:
+
+* The name of the conflicting resource is now written in quotes
+* The title of the dialog now tells the difference between files and folders
+* The "Skip"-dialog now tells the difference between files and folders
+
+https://github.com/owncloud/web/pull/7983
+https://github.com/owncloud/web/issues/7682

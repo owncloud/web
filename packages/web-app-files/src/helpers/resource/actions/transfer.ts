@@ -113,7 +113,6 @@ export class ResourceTransfer extends ConflictDialog {
 
     const resolvedConflicts = await this.resolveAllConflicts(
       this.resourcesToMove,
-      this.targetSpace,
       this.targetFolder,
       targetFolderResources
     )

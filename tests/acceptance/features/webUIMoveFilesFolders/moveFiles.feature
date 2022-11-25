@@ -45,7 +45,7 @@ Feature: move files
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And the user has browsed to the personal page
     When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
-    Then the "modal error" message with header 'File with name lorem.txt already exists.' should be displayed on the webUI
+    Then the "modal error" message with header 'File with name "lorem.txt" already exists.' should be displayed on the webUI
 
   @smokeTest @ocisSmokeTest  @disablePreviews
   Scenario: Move multiple files at once

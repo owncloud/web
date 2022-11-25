@@ -32,7 +32,7 @@ Feature: copy files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the personal page
     When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then the "modal error" message with header 'File with name strängé filename (duplicate #2 &).txt already exists.' should be displayed on the webUI
+    Then the "modal error" message with header 'File with name "strängé filename (duplicate #2 &).txt" already exists.' should be displayed on the webUI
 
   @smokeTest @ocisSmokeTest
   Scenario: Copy multiple files at once

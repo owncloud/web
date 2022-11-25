@@ -47,6 +47,53 @@ const getResourcesUploadInstance = ({
 }
 
 describe('upload helper', () => {
+  describe('method "perform"', () => {
+    it('should handle the file upload when no conflicts found', () => {
+      const resourcesUpload = getResourcesUploadInstance()
+      const handleFileUppyloadStub = jest.fn()
+      const displayOverwriteDialogStub = jest.fn()
+      resourcesUpload.handleUppyFileUpload = handleFileUppyloadStub
+      resourcesUpload.displayOverwriteDialog = displayOverwriteDialogStub
+      resourcesUpload.perform()
+      expect(handleFileUppyloadStub).toHaveBeenCalledTimes(1)
+      expect(displayOverwriteDialogStub).toHaveBeenCalledTimes(0)
+    })
+    it('should display the overwrite dialog when conflicts found', () => {
+      const resourcesUpload = getResourcesUploadInstance()
+      const handleFileUppyloadStub = jest.fn()
+      const displayOverwriteDialogStub = jest.fn()
+      const getConflictsStub = jest.fn(() => [{ name: 'name', type: 'file' }])
+      resourcesUpload.handleUppyFileUpload = handleFileUppyloadStub
+      resourcesUpload.displayOverwriteDialog = displayOverwriteDialogStub
+      resourcesUpload.getConflicts = getConflictsStub
+      resourcesUpload.perform()
+      expect(handleFileUppyloadStub).toHaveBeenCalledTimes(0)
+      expect(displayOverwriteDialogStub).toHaveBeenCalledTimes(1)
+    })
+  })
+  describe('method "getConflicts"', () => {
+    it('should return file and folder conflicts', () => {
+      const fileName = 'someFile.txt'
+      const folderName = 'someFolder'
+      const currentFiles = [
+        mockDeep<Resource>({ name: fileName }),
+        mockDeep<Resource>({ name: folderName })
+      ]
+      const filesToUpload = [
+        mockDeep<UppyResource>({ name: fileName, meta: { relativePath: '', relativeFolder: '' } }),
+        mockDeep<UppyResource>({
+          name: 'anotherFile',
+          meta: { relativePath: `/${folderName}/anotherFile` }
+        })
+      ]
+      const resourcesUpload = getResourcesUploadInstance({ currentFiles })
+      const conflicts = resourcesUpload.getConflicts(filesToUpload)
+
+      expect(conflicts.length).toBe(2)
+      expect(conflicts).toContainEqual({ name: fileName, type: 'file' })
+      expect(conflicts).toContainEqual({ name: folderName, type: 'folder' })
+    })
+  })
   describe('method "checkQuotaExceeded"', () => {
     const remainingQuota = 1000
     const spacesMock = mockDeep<SpaceResource>({
@@ -158,7 +205,7 @@ describe('upload helper', () => {
     })
   })
 
-  describe('upload conflict dialog', () => {
+  describe('method "displayOverwriteDialog"', () => {
     it.each([ResolveStrategy.REPLACE, ResolveStrategy.KEEP_BOTH])(
       'should upload file if user chooses replace or keep both',
       async (strategy) => {
