@@ -12,6 +12,7 @@ Summary
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+* Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 
 Details
@@ -46,6 +47,17 @@ Details
    as the composition-api now comes with Vue.
 
    https://github.com/owncloud/web/pull/7877
+
+* Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
+
+   The UX of the conflict dialog has been improved slightly:
+
+   * The name of the conflicting resource is now written in quotes * The title of the dialog now tells
+   the difference between files and folders * The "Skip"-dialog now tells the difference between
+   files and folders
+
+   https://github.com/owncloud/web/issues/7682
+   https://github.com/owncloud/web/pull/7983
 
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 
