@@ -2,6 +2,7 @@ import { filesModuleMockOptions } from './filesModuleMockOptions'
 import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 
 export const defaultStoreMockOptions = {
+  commit: jest.fn(),
   getters: {
     capabilities: jest.fn().mockImplementation(() => ({})),
     configuration: jest
