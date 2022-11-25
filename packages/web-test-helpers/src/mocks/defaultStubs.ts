@@ -12,5 +12,7 @@ export const defaultStubs = {
   'generic-trash': true,
   'generic-space': true,
   'space-header': true,
-  'shared-with-me-section': true
+  'shared-with-me-section': true,
+  'app-top-bar': true,
+  'oc-textarea': true
 }

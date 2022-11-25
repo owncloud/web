@@ -1,0 +1,6 @@
+Bugfix: Display error messages in text editor
+
+Error messages in and when leaving the text editor are now being displayed properly.
+
+https://github.com/owncloud/web/issues/7960
+https://github.com/owncloud/web/pull/8001

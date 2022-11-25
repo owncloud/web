@@ -1,0 +1,6 @@
+Bugfix: Quota check when replacing files
+
+An issue with the quota check when replacing an existing file while having enough quota has been fixed.
+
+https://github.com/owncloud/web/issues/7962
+https://github.com/owncloud/web/pull/8015

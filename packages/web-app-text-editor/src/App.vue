@@ -48,9 +48,10 @@ import { useTask } from 'vue-concurrency'
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref, unref, Ref, watch } from 'vue'
 import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { useAppDefaults } from 'web-pkg/src/composables'
+import { useAppDefaults, useStore, useTranslations } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { Resource } from 'web-client'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'TextEditor',
@@ -70,8 +71,8 @@ export default defineComponent({
           this.hideModal()
           next()
         },
-        onConfirm: () => {
-          this.save()
+        onConfirm: async () => {
+          await this.save()
           this.hideModal()
           next()
         }
@@ -98,6 +99,16 @@ export default defineComponent({
     const currentETag = ref()
     const isReadOnly = ref(true)
     const resource: Ref<Resource> = ref()
+    const store = useStore()
+    const { $gettext, $gettextInterpolate } = useTranslations()
+
+    const errorPopup = (error) => {
+      store.dispatch('showMessage', {
+        title: $gettext('An error occurred'),
+        desc: error,
+        status: 'danger'
+      })
+    }
 
     const loadFileTask = useTask(function* () {
       resource.value = yield getFileInfo(currentFileContext, {
@@ -126,20 +137,39 @@ export default defineComponent({
       } catch (e) {
         switch (e.statusCode) {
           case 412:
-            this.errorPopup(
-              this.$gettext(
+            errorPopup(
+              $gettext(
                 'This file was updated outside this window. Please refresh the page (all changes will be lost).'
               )
             )
             break
           case 500:
-            this.errorPopup(this.$gettext('Error when contacting the server'))
+            errorPopup($gettext('Error when contacting the server'))
+            break
+          case 507:
+            const space = store.getters['runtime/spaces/spaces'].find(
+              (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
+            )
+            if (space) {
+              errorPopup(
+                // FIXME: translation
+                // $gettextInterpolate(
+                //   'There is not enough quota on "%{spaceName}" to save this file',
+                //   { spaceName: space.name }
+                // )
+                $gettext('Error when contacting the server')
+              )
+              break
+            }
+            // FIXME: translation
+            // errorPopup($gettext('There is not enough quota to save this file'))
+            errorPopup($gettext('Error when contacting the server'))
             break
           case 401:
-            this.errorPopup(this.$gettext("You're not authorized to save this file"))
+            errorPopup($gettext("You're not authorized to save this file"))
             break
           default:
-            this.errorPopup(e.message || e)
+            errorPopup(e.message || e)
         }
       }
     }).restartable()
@@ -195,8 +225,8 @@ export default defineComponent({
       document.removeEventListener('keydown', handleSKey, false)
     })
 
-    const save = function () {
-      saveFileTask.perform()
+    const save = async function () {
+      await saveFileTask.perform()
     }
 
     const handleSKey = function (e) {
@@ -238,15 +268,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['createModal', 'hideModal', 'showMessage']),
-
-    errorPopup(error) {
-      this.showMessage({
-        title: this.$gettext('An error occurred'),
-        desc: error,
-        status: 'danger'
-      })
-    }
+    ...mapActions(['createModal', 'hideModal'])
   }
 })
 </script>
