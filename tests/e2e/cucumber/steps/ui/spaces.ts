@@ -1,7 +1,16 @@
 import { DataTable, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
-import { World } from '../../../../environment'
-import { objects } from '../../../../../support'
+import { World } from '../../environment'
+import { objects } from '../../../support'
+
+When(
+  '{string} navigates to the personal space page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.spaces.Personal({ page })
+    await pageObject.navigate()
+  }
+)
 
 When(
   '{string} navigates to the projects space page',

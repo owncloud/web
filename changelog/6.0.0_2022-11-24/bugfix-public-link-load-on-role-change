@@ -1,0 +1,6 @@
+Bugfix: Public link loading on role change
+
+The loading and resolving of public links when their respective roles have changed has been fixed.
+
+https://github.com/owncloud/web/pull/8006
+https://github.com/owncloud/web/issues/8003

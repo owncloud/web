@@ -40,6 +40,10 @@ export type OwnCloudSdk = {
     getShares(...args): any
     getProtectedTokenInfo(...args): any
     getUnprotectedTokenInfo(...args): any
+    shareFileWithGroup(...args): any
+    shareFileWithUser(...args): any
+    deleteShare(...args): any
+    updateShare(...args): any
   }
   users: {
     getUser(...args): any

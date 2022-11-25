@@ -371,7 +371,11 @@ export default defineComponent({
     },
     async editUser(editUser) {
       try {
-        const actualUser = this.users.find((user) => user.id === editUser.id)
+        const user = this.users.find((user) => user.id === editUser.id)
+        const actualUser = {
+          ...(user && user),
+          passwordProfile: { password: '' }
+        }
 
         const graphEditUserRawObjectExtractor = (user) => {
           return omit(user, ['drive', 'role'])
