@@ -1,5 +1,6 @@
 <template>
   <main id="text-editor" class="oc-height-1-1">
+    <open-file-bar :resource="resource" @close="closeApp"/>
     <app-top-bar :resource="resource" @close="closeApp">
       <template #right>
         <oc-button
@@ -50,6 +51,7 @@ import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults, useStore } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import OpenFileBar from 'web-pkg/src/portals/OpenFileBar.vue'
 import { Resource } from 'web-client'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
@@ -57,7 +59,8 @@ import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'TextEditor',
   components: {
-    AppTopBar
+    AppTopBar,
+    OpenFileBar
   },
   beforeRouteLeave(_to, _from, next) {
     if (this.isDirty) {
