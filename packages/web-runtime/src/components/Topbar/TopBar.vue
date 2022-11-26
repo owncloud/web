@@ -9,8 +9,9 @@
       <router-link ref="navigationSidebarLogo" to="/">
         <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
+      <portal-target name="app.runtime.header.left" @change="updateLeftPortal"></portal-target>
     </div>
-    <div class="portal-wrapper">
+    <div v-if="showMiddleSlot" class="portal-wrapper">
       <portal-target name="app.runtime.header" multiple></portal-target>
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle oc-flex-between">
@@ -53,8 +54,17 @@ export default {
       default: () => []
     }
   },
+  data: function () {
+    return {
+      contentOnLeftPortal: false
+    }
+  },
   computed: {
     ...mapGetters(['configuration', 'user']),
+
+    showMiddleSlot() {
+      return !this.contentOnLeftPortal
+    },
 
     activeRoutePath() {
       return this.$router.resolve(this.$route).path
@@ -102,6 +112,12 @@ export default {
 
     isUserMenuEnabled() {
       return this.user?.id
+    }
+  },
+
+  methods: {
+    updateLeftPortal(newContent, oldContent) {
+      this.contentOnLeftPortal = newContent
     }
   }
 }
