@@ -14,6 +14,7 @@ Summary
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
+* Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 
 Details
 -------
@@ -65,6 +66,11 @@ Details
 
    https://github.com/owncloud/web/issues/7937
    https://github.com/owncloud/web/pull/7968
+
+* Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
+
+   https://github.com/owncloud/web/issues/7160
+   https://github.com/owncloud/web/pull/7977
 
 Changelog for ownCloud Web [6.0.0] (2022-11-24)
 =======================================
