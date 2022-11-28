@@ -440,13 +440,16 @@ export default defineComponent({
       this.activeIndex--
       this.updateLocalHistory()
     },
+    calculateZoom(zoom, factor) {
+      return Math.round(zoom * factor * 20) / 20
+    },
     imageShrink() {
-      this.currentImageZoom = Math.max(0.1, Math.round(this.currentImageZoom * 0.8 * 20) / 20)
+      this.currentImageZoom = Math.max(0.1, this.calculateZoom(this.currentImageZoom, 0.8))
     },
     imageZoom() {
-      const maxZoomValue = Math.round(9 * 1.25 * 20) / 20
+      const maxZoomValue = this.calculateZoom(9, 1.25)
       this.currentImageZoom = Math.min(
-        Math.round(this.currentImageZoom * 1.25 * 20) / 20,
+        this.calculateZoom(this.currentImageZoom, 1.25),
         maxZoomValue
       )
     },
@@ -484,6 +487,10 @@ export default defineComponent({
 
 .preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
+}
+
+.preview-controls-image-original-size {
+  width: 42px;
 }
 
 @media (max-width: 959px) {
