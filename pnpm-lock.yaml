@@ -1,10 +1,5 @@
 lockfileVersion: 5.4
 
-patchedDependencies:
-  '@vue/vue2-jest@29.2.0':
-    hash: py4w7em26nb2aqnpp2a4ntiivi
-    path: patches/@vue__vue2-jest@29.2.0.patch
-
 importers:
 
   .:
@@ -38,7 +33,7 @@ importers:
       '@types/node': 16.18.3
       '@types/node-fetch': 2.6.2
       '@vue/test-utils': 1.3.3
-      '@vue/vue2-jest': 29.2.0
+      '@vue/vue2-jest': 29.2.1
       autoprefixer: 10.4.13
       babel-core: 7.0.0-bridge.0
       babel-jest: 29.3.1
@@ -131,7 +126,7 @@ importers:
       '@types/node': 16.18.3
       '@types/node-fetch': 2.6.2
       '@vue/test-utils': 1.3.3_rhqkolmkwunxzlyyxxsuwaiuri
-      '@vue/vue2-jest': 29.2.0_py4w7em26nb2aqnpp2a4ntiivi_qp2k2gllpzzgaywgd6qprhtkxm
+      '@vue/vue2-jest': 29.2.1_qp2k2gllpzzgaywgd6qprhtkxm
       autoprefixer: 10.4.13_postcss@8.4.19
       babel-core: 7.0.0-bridge.0_@babel+core@7.20.2
       babel-jest: 29.3.1_@babel+core@7.20.2
@@ -5422,8 +5417,8 @@ packages:
       vue-template-compiler: 2.7.14
     dev: true
 
-  /@vue/vue2-jest/29.2.0_py4w7em26nb2aqnpp2a4ntiivi_qp2k2gllpzzgaywgd6qprhtkxm:
-    resolution: {integrity: sha512-Ichxz+KJBZrgeFvPUFefWaICAsSTaWVi359UQ0V0cEFsKHmrkqjPcmgtafStwnSBNFGticcsfNQ9qJFRPCUBwQ==}
+  /@vue/vue2-jest/29.2.1_qp2k2gllpzzgaywgd6qprhtkxm:
+    resolution: {integrity: sha512-Zts7+8G5WuBfoXGJKpOZpNWY1aQaO5PrD+wiy6AaNDFxSytKMWufWwxmTN/q1nCUtSBNxYFwnlmZpQBSYVM+1g==}
     engines: {node: '>10'}
     peerDependencies:
       '@babel/core': 7.x
@@ -5504,7 +5499,6 @@ packages:
       - walrus
       - whiskers
     dev: true
-    patched: true
 
   /@vxna/mini-html-webpack-template/1.0.0:
     resolution: {integrity: sha512-cwlmP9CoWyZYtI33DUKOjS6Hyn3yNrXZQtP+QxPjaRpYNYcbrg+u7EZQZmvB/Mi7qwiDbeTU7UtMT0C5ouRTNA==}
@@ -11539,13 +11533,6 @@ packages:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
     dev: true
-
-  /get-intrinsic/1.1.1:
-    resolution: {integrity: sha512-kWZrnVM42QCiEA2Ig1bG8zjoIMOgxWwYCEeNdwY6Tv/cOSeGpcoX4pXHfKUxNKVoArnrEr2e9srnAxxGIraS9Q==}
-    dependencies:
-      function-bind: 1.1.1
-      has: 1.0.3
-      has-symbols: 1.0.3
 
   /get-intrinsic/1.1.3:
     resolution: {integrity: sha512-QJVz1Tj7MS099PevUG5jvnt9tSkXN8K14dxQlikJuPt4uD9hHAHjLyLBiLR5zELelBdD9QNRAXZzsJx0WaDL9A==}
@@ -19513,7 +19500,7 @@ packages:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
     dependencies:
       call-bind: 1.0.2
-      get-intrinsic: 1.1.1
+      get-intrinsic: 1.1.3
       object-inspect: 1.11.0
 
   /sigmund/1.0.1:
