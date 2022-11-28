@@ -354,18 +354,16 @@ export default defineComponent({
   async mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
+    document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
+
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
-    document.addEventListener('fullscreenchange', () => {
-      if (document.fullscreenElement === null) {
-        this.isFullScreenModeActivated.value = false
-      }
-    })
   },
 
   beforeDestroy() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
+    document.removeEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
 
     this.cachedFiles.forEach((medium) => {
       this.revokeUrl(medium.url)
@@ -392,6 +390,12 @@ export default defineComponent({
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
       this.setActiveFile(result.route.params.driveAliasAndItem)
+    },
+
+    handleFullScreenChangeEvent() {
+      if (document.fullscreenElement === null) {
+        this.isFullScreenModeActivated = false
+      }
     },
 
     // update route and url
