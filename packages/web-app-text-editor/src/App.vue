@@ -278,6 +278,6 @@ export default defineComponent({
   height: 100%;
 }
 .editor-wrapper-height {
-  height: calc(100% - 52px);
+  height: calc(100% - 58px);
 }
 </style>
