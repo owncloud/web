@@ -52,7 +52,7 @@
           :key="`media-video-${activeMediaFileCached.id}`"
           controls
           preload
-          autoplay
+          :autoplay="isAutoPlayEnabled"
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
         </video>
@@ -61,7 +61,7 @@
           :key="`media-audio-${activeMediaFileCached.id}`"
           controls
           preload
-          autoplay
+          :autoplay="isAutoPlayEnabled"
         >
           <source :src="activeMediaFileCached.url" :type="activeMediaFileCached.mimeType" />
         </audio>
@@ -178,7 +178,7 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import {
   useAccessToken,
@@ -190,7 +190,6 @@ import Preview from './index'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { unref } from 'vue'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 export default defineComponent({
@@ -231,6 +230,7 @@ export default defineComponent({
     return {
       isFileContentLoading: true,
       isFileContentError: false,
+      isAutoPlayEnabled: true,
 
       activeIndex: null,
       direction: 'rtl',
@@ -343,9 +343,13 @@ export default defineComponent({
   },
 
   watch: {
-    activeIndex(o, n) {
-      if (o !== n) {
+    activeIndex(newValue, oldValue) {
+      if (newValue !== oldValue) {
         this.loadMedium()
+      }
+
+      if (oldValue !== null) {
+        this.isAutoPlayEnabled = false
       }
 
       this.currentImageZoom = 1
