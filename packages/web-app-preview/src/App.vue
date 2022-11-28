@@ -98,14 +98,21 @@
         </oc-button>
         <div class="oc-flex">
           <oc-button
-            v-oc-tooltip="toggleFullScreenDescription"
+            v-oc-tooltip="
+              isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
+            "
             class="preview-controls-fullscreen"
             appearance="raw"
             variation="inverse"
-            :aria-label="toggleFullScreenDescription"
+            :aria-label="
+              isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
+            "
             @click="toggleFullscreenMode"
           >
-            <oc-icon fill-type="line" name="fullscreen" />
+            <oc-icon
+              fill-type="line"
+              :name="isFullScreenModeActivated ? 'fullscreen-exit' : 'fullscreen'"
+            />
           </oc-button>
         </div>
         <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
@@ -192,7 +199,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
-    const isFullScreenModeActivated = ref(true)
+    const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
       const activateFullscreen = !unref(isFullScreenModeActivated)
       isFullScreenModeActivated.value = activateFullscreen
@@ -202,7 +209,7 @@ export default defineComponent({
         }
       } else {
         if (document.exitFullscreen) {
-          document.exitFullscreen();
+          document.exitFullscreen()
         }
       }
     }
@@ -298,6 +305,12 @@ export default defineComponent({
     isActiveFileTypeVideo() {
       return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
     },
+    enterFullScreenDescription() {
+      return this.$gettext('Enter full screen mode')
+    },
+    exitFullScreenDescription() {
+      return this.$gettext('Exit full screen mode')
+    },
     imageShrinkDescription() {
       return this.$gettext('Shrink the image')
     },
@@ -344,6 +357,11 @@ export default defineComponent({
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement === null) {
+        this.isFullScreenModeActivated.value = false
+      }
+    })
   },
 
   beforeDestroy() {
