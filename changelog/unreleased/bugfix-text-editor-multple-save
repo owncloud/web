@@ -1,0 +1,6 @@
+Bugfix: Saving a file multiple times with the text editor
+
+An issue with saving a file multiple times via text editor has been fixed.
+
+https://github.com/owncloud/web/pull/8030
+https://github.com/owncloud/web/issues/8029
