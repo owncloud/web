@@ -1,0 +1,25 @@
+Enhancement: Update SDK to v3.0.0
+
+We updated the ownCloud SDK to version 3.0.0. Please refer to the full changelog in the SDK release (linked) for more details. Summary:
+
+* Bugfix - Depth 0 PROPFIND on empty responses: [#1128](https://github.com/owncloud/owncloud-sdk/pull/1128)
+* Bugfix - Optional no cache for public links: [#1079](https://github.com/owncloud/owncloud-sdk/pull/1079)
+* Bugfix - Always add X-Request-ID: [#1016](https://github.com/owncloud/owncloud-sdk/pull/1016)
+* Bugfix - Always add X-Requested-With header: [#1020](https://github.com/owncloud/owncloud-sdk/pull/1020)
+* Change - Pass full trash bin path to methods of FilesTrash class: [#1021](https://github.com/owncloud/owncloud-sdk/pull/1021)
+* Enhancement - Add overwrite flag for file copy: [#1087](https://github.com/owncloud/owncloud-sdk/pull/1087)
+* Enhancement - Add overwrite flag for file move: [#1073](https://github.com/owncloud/owncloud-sdk/pull/1073)
+* Enhancement - Add overwrite flag for public files move and copy: [#7122](https://github.com/owncloud/web/issues/7122)
+* Enhancement - Add range to search result: [#1112](https://github.com/owncloud/owncloud-sdk/pull/1112)
+* Enhancement - Enable search results for ocis: [#1057](https://github.com/owncloud/owncloud-sdk/pull/1057)
+* Enhancement - Enforce `share_type` guest if applies: [#1046](https://github.com/owncloud/owncloud-sdk/pull/1046)
+* Enhancement - Create quicklink: [#1041](https://github.com/owncloud/owncloud-sdk/pull/1041)
+* Enhancement - Replace deprecated String.prototype.substr(): [#1035](https://github.com/owncloud/owncloud-sdk/pull/1035)
+* Enhancement - Add role api parameter and stop deleting other params: [#1092](https://github.com/owncloud/owncloud-sdk/pull/1092)
+* Enhancement - Add blob resolveType: [#1028](https://github.com/owncloud/owncloud-sdk/pull/1028)
+* Enhancement - Send oc-etag on putFileContents and getFileContents methods: [#1067](https://github.com/owncloud/owncloud-sdk/pull/1067)
+* Enhancement - Adjust share management to properly work with spaces: [#1013](https://github.com/owncloud/owncloud-sdk/pull/1013)
+* Enhancement - Add token info endpoint support: [#1126](https://github.com/owncloud/owncloud-sdk/pull/1126)
+
+https://github.com/owncloud/web/pull/8032
+https://github.com/owncloud/owncloud-sdk/releases/tag/v3.0.0

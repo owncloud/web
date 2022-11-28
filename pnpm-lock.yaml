@@ -488,7 +488,7 @@ importers:
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
       owncloud-design-system: 14.0.1
-      owncloud-sdk: ~3.0.0-alpha.17
+      owncloud-sdk: 3.0.0
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
       portal-vue: ^2.1.7
@@ -542,7 +542,7 @@ importers:
       marked: 4.0.12
       oidc-client-ts: 2.1.0
       owncloud-design-system: 14.0.1_qjo64ckxpkihsz2u7asmuqxitq
-      owncloud-sdk: 3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: 3.0.0_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       portal-vue: 2.1.7_vue@2.6.14
@@ -11770,8 +11770,8 @@ packages:
       webfontloader: 1.6.28
     dev: false
 
-  /owncloud-sdk/3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-XO6XzyiMfAB/i4TcshuB6VGYzcsZUI/x+JBwv40Lj4p0bSU4eD1c2CPk66uj3t+13pcAqJqF9Mv9NcM0aEbj4w==}
+  /owncloud-sdk/3.0.0_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {integrity: sha512-/WPNIrOpH+Yzk8kT7lJSlTzZ1Ut8/rJRX5HB0fMiDicGIw7PyDQdAOs4TCD+v1Xydzo10S4mLxVLDUyELZ+w0g==}
     peerDependencies:
       axios: ^0.27.2
       cross-fetch: ^3.0.6
