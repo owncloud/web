@@ -5,7 +5,7 @@
         :appearance="viewModeCurrent === 'resource-table-condensed' ? 'filled' : 'outline'"
         @click="setViewMode('resource-table-condensed')"
       >
-        <oc-icon name="align-vertically" fill-type="none" />
+        <oc-icon name="menu-line-condensed" fill-type="none" />
       </oc-button>
       <oc-button
         :appearance="viewModeCurrent === 'resource-table' ? 'filled' : 'outline'"

@@ -30,6 +30,7 @@ export const useResourcesViewDefaultsMock = (
     sideBarActivePanel: ref(''),
     scrollToResource: jest.fn(),
     scrollToResourceFromRoute: jest.fn(),
+    viewMode: ref('resource-table'),
     ...options
   }
 }

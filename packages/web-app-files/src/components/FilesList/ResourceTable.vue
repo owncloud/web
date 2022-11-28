@@ -842,12 +842,6 @@ export default defineComponent({
 <style lang="scss">
 .oc-table.condensed > tbody > tr {
   height: 0 !important;
-  font-size: 0.7rem !important;
-  button,
-  span,
-  p {
-    font-size: 0.7rem !important;
-  }
 }
 .resource-table {
   &-resource-cut {
