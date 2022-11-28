@@ -44,6 +44,7 @@
           :src="activeMediaFileCached.url"
           :alt="activeMediaFileCached.name"
           :data-id="activeMediaFileCached.id"
+          :style="`zoom: ${currentImageZoom};transform: rotate(${currentImageRotation}deg)`"
         />
         <video
           v-else-if="activeMediaFileCached.isVideo"
@@ -68,10 +69,11 @@
         class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
       >
         <oc-button
+          v-oc-tooltip="previousDescription"
           class="preview-controls-previous"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Show previous media file in folder')"
+          :aria-label="previousDescription"
           @click="prev"
         >
           <oc-icon size="large" name="arrow-drop-left" />
@@ -81,14 +83,71 @@
           <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
         </p>
         <oc-button
+          v-oc-tooltip="nextDescription"
           class="preview-controls-next"
           appearance="raw"
           variation="inverse"
-          :aria-label="$gettext('Show next media file in folder')"
+          :aria-label="nextDescription"
           @click="next"
         >
           <oc-icon size="large" name="arrow-drop-right" />
         </oc-button>
+        <div v-if="activeMediaFileCached.isImage" class="oc-flex oc-flex-middle">
+          <div class="oc-flex">
+            <oc-button
+              v-oc-tooltip="imageShrinkDescription"
+              class="preview-controls-image-shrink"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageShrinkDescription"
+              @click="imageShrink"
+            >
+              <oc-icon fill-type="line" name="checkbox-indeterminate" />
+            </oc-button>
+            <oc-button
+              v-oc-tooltip="imageOriginalSizeDescription"
+              class="preview-controls-image-original-size oc-ml-s oc-mr-s"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageOriginalSizeDescription"
+              @click="currentImageZoom = 1"
+            >
+              <span v-text="currentZoomDisplayValue" />
+            </oc-button>
+            <oc-button
+              v-oc-tooltip="imageZoomDescription"
+              class="preview-controls-image-zoom"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageZoomDescription"
+              @click="imageZoom"
+            >
+              <oc-icon fill-type="line" name="add-box" />
+            </oc-button>
+          </div>
+          <div class="oc-ml-m">
+            <oc-button
+              v-oc-tooltip="imageRotateLeftDescription"
+              class="preview-controls-rotate-left"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageRotateLeftDescription"
+              @click="imageRotateLeft"
+            >
+              <oc-icon fill-type="line" name="anticlockwise" />
+            </oc-button>
+            <oc-button
+              v-oc-tooltip="imageRotateRightDescription"
+              class="preview-rotate-right"
+              appearance="raw"
+              variation="inverse"
+              :aria-label="imageRotateRightDescription"
+              @click="imageRotateRight"
+            >
+              <oc-icon fill-type="line" name="clockwise" />
+            </oc-button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -133,7 +192,10 @@ export default defineComponent({
       activeIndex: null,
       direction: 'rtl',
 
-      cachedFiles: []
+      cachedFiles: [],
+
+      currentImageZoom: 1,
+      currentImageRotation: 0
     }
   },
 
@@ -201,6 +263,30 @@ export default defineComponent({
 
     isActiveFileTypeVideo() {
       return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
+    },
+    imageShrinkDescription() {
+      return this.$gettext('Shrink the image')
+    },
+    imageZoomDescription() {
+      return this.$gettext('Enlarge the image')
+    },
+    imageOriginalSizeDescription() {
+      return this.$gettext('Show the image at its normal size')
+    },
+    imageRotateLeftDescription() {
+      return this.$gettext('Rotate the image 90 degrees to the left')
+    },
+    imageRotateRightDescription() {
+      return this.$gettext('Rotate the image 90 degrees to the right')
+    },
+    previousDescription() {
+      return this.$gettext('Show previous media file in folder')
+    },
+    nextDescription() {
+      return this.$gettext('Show next media file in folder')
+    },
+    currentZoomDisplayValue() {
+      return `${(this.currentImageZoom * 100).toFixed(0)}%`
     }
   },
 
@@ -209,6 +295,9 @@ export default defineComponent({
       if (o !== n) {
         this.loadMedium()
       }
+
+      this.currentImageZoom = 1
+      this.currentImageRotation = 0
     }
   },
 
@@ -350,6 +439,27 @@ export default defineComponent({
       }
       this.activeIndex--
       this.updateLocalHistory()
+    },
+    calculateZoom(zoom, factor) {
+      return Math.round(zoom * factor * 20) / 20
+    },
+    imageShrink() {
+      this.currentImageZoom = Math.max(0.1, this.calculateZoom(this.currentImageZoom, 0.8))
+    },
+    imageZoom() {
+      const maxZoomValue = this.calculateZoom(9, 1.25)
+      this.currentImageZoom = Math.min(
+        this.calculateZoom(this.currentImageZoom, 1.25),
+        maxZoomValue
+      )
+    },
+    imageRotateLeft() {
+      this.currentImageRotation =
+        this.currentImageRotation === -270 ? 0 : this.currentImageRotation - 90
+    },
+    imageRotateRight() {
+      this.currentImageRotation =
+        this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
     }
   }
 })
@@ -357,6 +467,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .preview-player {
+  overflow: auto;
   max-width: 90vw;
   height: 70vh;
   margin: 10px auto;
@@ -376,6 +487,10 @@ export default defineComponent({
 
 .preview-controls-action-count {
   color: var(--oc-color-swatch-inverse-default);
+}
+
+.preview-controls-image-original-size {
+  width: 42px;
 }
 
 @media (max-width: 959px) {
