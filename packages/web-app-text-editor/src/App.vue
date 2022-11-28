@@ -133,7 +133,7 @@ export default defineComponent({
           previousEntityTag: unref(currentETag)
         })
         serverContent.value = newContent
-        currentETag.value = putFileContentsResponse['OC-ETag']
+        currentETag.value = putFileContentsResponse.etag
       } catch (e) {
         switch (e.statusCode) {
           case 412:
