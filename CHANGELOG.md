@@ -11,6 +11,7 @@ Summary
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
+* Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
@@ -39,6 +40,13 @@ Details
 
    https://github.com/owncloud/web/issues/7959
    https://github.com/owncloud/web/pull/7969
+
+* Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
+
+   The text editor now looks normal again after its appearance had changed due to the inclusion of
+   the ODS in the web repository.
+
+   https://github.com/owncloud/web/pull/8026
 
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
