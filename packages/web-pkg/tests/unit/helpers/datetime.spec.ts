@@ -40,7 +40,7 @@ describe('datetime helper', () => {
   })
   describe('formatDateFromJSDate', () => {
     it.each([
-      [new Date('2010-10-22T21:38:00'), 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 19:38']
+      [new Date('2010-10-22T21:38:00'), 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 21:38']
     ])(
       'invalid input "%s"',
       (date: Date, currentLanguage: string, format: any, expected: string) => {
