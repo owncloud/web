@@ -12,9 +12,9 @@ import {
 } from '../../../src/helpers'
 
 describe('datetime helper', () => {
-	beforeEach(() => {
-		Settings.defaultZone = 'utc'
-	})
+  beforeEach(() => {
+    Settings.defaultZone = 'utc'
+  })
   describe('formatDateFromDateTime', () => {
     it.each([
       [
