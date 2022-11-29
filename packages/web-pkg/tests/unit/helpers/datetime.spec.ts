@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import {
   formatDateFromDateTime,
   formatDateFromJSDate,
@@ -12,6 +12,9 @@ import {
 } from '../../../src/helpers'
 
 describe('datetime helper', () => {
+	beforeEach(() => {
+		Settings.defaultZone = 'utc'
+	})
   describe('formatDateFromDateTime', () => {
     it.each([
       [
@@ -37,7 +40,7 @@ describe('datetime helper', () => {
   })
   describe('formatDateFromJSDate', () => {
     it.each([
-      [new Date('2010-10-22T21:38:00'), 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 21:38']
+      [new Date('2010-10-22T21:38:00'), 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 19:38']
     ])(
       'invalid input "%s"',
       (date: Date, currentLanguage: string, format: any, expected: string) => {
@@ -47,7 +50,7 @@ describe('datetime helper', () => {
   })
   describe('formatDateFromHTTP', () => {
     it.each([
-      ['Tue, 15 Nov 1994 12:45:26 GMT', 'de', DateTime.DATETIME_MED, '15. Nov. 1994, 13:45']
+      ['Tue, 15 Nov 1994 12:45:26 GMT', 'de', DateTime.DATETIME_MED, '15. Nov. 1994, 12:45']
     ])(
       'invalid input "%s"',
       (date: string, currentLanguage: string, format: any, expected: string) => {
@@ -64,7 +67,7 @@ describe('datetime helper', () => {
     )
   })
   describe('formatDateFromRFC', () => {
-    it.each([['01 Jun 2016 14:31:46 -0700', 'de', DateTime.DATETIME_MED, '1. Juni 2016, 23:31']])(
+    it.each([['01 Jun 2016 14:31:46 -0700', 'de', DateTime.DATETIME_MED, '1. Juni 2016, 21:31']])(
       'invalid input "%s"',
       (date: string, currentLanguage: string, format: any, expected: string) => {
         expect(formatDateFromRFC(date, currentLanguage, format)).toBe(expected)
