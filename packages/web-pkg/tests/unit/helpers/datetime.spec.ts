@@ -9,104 +9,83 @@ import {
   formatRelativeDateFromJSDate,
   formatRelativeDateFromISO,
   formatRelativeDateFromRFC
-} from '../../../src/helpers'
+} from 'web-pkg'
 
 describe('datetime helper', () => {
+  const language = 'en'
+  const dateFormat = DateTime.DATETIME_MED
   beforeEach(() => {
     Settings.defaultZone = 'utc'
   })
   describe('formatDateFromDateTime', () => {
-    it.each([
-      [
-        DateTime.fromISO('2010-10-22T21:38:00'),
-        'de',
-        DateTime.DATETIME_MED,
-        '22. Okt. 2010, 21:38'
-      ],
-      [
-        DateTime.fromISO('2010-10-22T21:38:00'),
-        'en',
-        DateTime.DATETIME_MED,
-        'Oct 22, 2010, 9:38 PM'
-      ],
-      [DateTime.fromISO('2010-10-22T21:38:00'), 'fr', DateTime.DATETIME_MED, '22 oct. 2010, 21:38'],
-      [DateTime.fromISO('2010-10-22T21:38:00'), 'it', DateTime.DATETIME_MED, '22 ott 2010, 21:38']
-    ])(
-      'correct output for %s (lang: %s)',
-      (date: DateTime, currentLanguage: string, format: any, expected: string) => {
-        expect(formatDateFromDateTime(date, currentLanguage, format)).toBe(expected)
+    it.each([[DateTime.fromISO('2010-10-22T21:38:00'), 'Oct 22, 2010, 9:38 PM']])(
+      'correct output for %s',
+      (date: DateTime, expected: string) => {
+        expect(formatDateFromDateTime(date, language, dateFormat)).toBe(expected)
       }
     )
   })
   describe('formatDateFromJSDate', () => {
-    it.each([
-      [new Date('2010-10-22T21:38:00'), 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 21:38']
-    ])(
-      'correct output for %s (lang: %s)',
-      (date: Date, currentLanguage: string, format: any, expected: string) => {
-        expect(formatDateFromJSDate(date, currentLanguage, format)).toBe(expected)
+    it.each([[new Date('2010-10-22T21:38:00'), 'Oct 22, 2010, 9:38 PM']])(
+      'correct output for %s',
+      (date: Date, expected: string) => {
+        expect(formatDateFromJSDate(date, language, dateFormat)).toBe(expected)
       }
     )
   })
   describe('formatDateFromHTTP', () => {
-    it.each([
-      ['Tue, 15 Nov 1994 12:45:26 GMT', 'de', DateTime.DATETIME_MED, '15. Nov. 1994, 12:45']
-    ])(
-      'correct output for %s (lang: %s)',
-      (date: string, currentLanguage: string, format: any, expected: string) => {
-        expect(formatDateFromHTTP(date, currentLanguage, format)).toBe(expected)
+    it.each([['Tue, 15 Nov 1994 12:45:26 GMT', 'Nov 15, 1994, 12:45 PM']])(
+      'correct output for %s',
+      (date: string, expected: string) => {
+        expect(formatDateFromHTTP(date, language, dateFormat)).toBe(expected)
       }
     )
   })
   describe('formatDateFromISO', () => {
-    it.each([['2010-10-22T21:38:00', 'de', DateTime.DATETIME_MED, '22. Okt. 2010, 21:38']])(
-      'correct output for %s (lang: %s)',
-      (date: string, currentLanguage: string, format: any, expected: string) => {
-        expect(formatDateFromISO(date, currentLanguage, format)).toBe(expected)
+    it.each([['2010-10-22T21:38:00', 'Oct 22, 2010, 9:38 PM']])(
+      'correct output for %s',
+      (date: string, expected: string) => {
+        expect(formatDateFromISO(date, language, dateFormat)).toBe(expected)
       }
     )
   })
   describe('formatDateFromRFC', () => {
-    it.each([['01 Jun 2016 14:31:46 -0700', 'de', DateTime.DATETIME_MED, '1. Juni 2016, 21:31']])(
-      'correct output for %s (lang: %s)',
-      (date: string, currentLanguage: string, format: any, expected: string) => {
-        expect(formatDateFromRFC(date, currentLanguage, format)).toBe(expected)
+    it.each([['01 Jun 2016 14:31:46 -0700', 'Jun 1, 2016, 9:31 PM']])(
+      'correct output for %s',
+      (date: string, expected: string) => {
+        expect(formatDateFromRFC(date, language, dateFormat)).toBe(expected)
       }
     )
   })
   describe('formatRelativeDateFromDateTime', () => {
-    it.each([
-      [DateTime.now().minus({ years: 12 }), 'de', 'vor 12 Jahren'],
-      [DateTime.now().minus({ years: 12 }), 'en', '12 years ago'],
-      [DateTime.now().minus({ years: 12 }), 'it', '12 anni fa']
-    ])(
-      'correct relative time for %s (lang: %s)',
-      (date: DateTime, currentLanguage: string, expected) => {
-        expect(formatRelativeDateFromDateTime(date, currentLanguage)).toBe(expected)
+    it.each([[DateTime.now().minus({ years: 12 }), '12 years ago']])(
+      'correct relative time for %s',
+      (date: DateTime, expected) => {
+        expect(formatRelativeDateFromDateTime(date, language)).toBe(expected)
       }
     )
   })
   describe('formatRelativeDateFromJSDate', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toJSDate(), 'de', 'vor 12 Jahren']])(
-      'correct relative time for %s (lang: %s)',
-      (date: Date, currentLanguage: string, expected) => {
-        expect(formatRelativeDateFromJSDate(date, currentLanguage)).toBe(expected)
+    it.each([[DateTime.now().minus({ years: 12 }).toJSDate(), '12 years ago']])(
+      'correct relative time for %s',
+      (date: Date, expected) => {
+        expect(formatRelativeDateFromJSDate(date, language)).toBe(expected)
       }
     )
   })
   describe('formatRelativeDateFromISO', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toISO(), 'de', 'vor 12 Jahren']])(
-      'correct relative time for %s (lang: %s)',
-      (date: string, currentLanguage: string, expected) => {
-        expect(formatRelativeDateFromISO(date, currentLanguage)).toBe(expected)
+    it.each([[DateTime.now().minus({ years: 12 }).toISO(), '12 years ago']])(
+      'correct relative time for %s',
+      (date: string, expected) => {
+        expect(formatRelativeDateFromISO(date, language)).toBe(expected)
       }
     )
   })
   describe('formatRelativeDateFromRFC', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toRFC2822(), 'de', 'vor 12 Jahren']])(
-      'correct relative time for %s (lang: %s)',
-      (date: string, currentLanguage: string, expected) => {
-        expect(formatRelativeDateFromRFC(date, currentLanguage)).toBe(expected)
+    it.each([[DateTime.now().minus({ years: 12 }).toRFC2822(), '12 years ago']])(
+      'correct relative time for %s',
+      (date: string, expected) => {
+        expect(formatRelativeDateFromRFC(date, language)).toBe(expected)
       }
     )
   })
