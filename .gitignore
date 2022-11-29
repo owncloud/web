@@ -60,3 +60,6 @@ tests/acceptance/report/cucumber_report.html
 
 # dev setup certificates
 /dev/docker/ocis-ca
+
+# design system (exists on master, not present in stable-6.0)
+/packages/design-system
