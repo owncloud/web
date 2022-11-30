@@ -1,0 +1,6 @@
+Enhancement: Don't open sidebar when copying quicklink
+
+Following user feedback, we don't open the sharing sidebar anymore after copying/creating a quicklink.
+
+https://github.com/owncloud/web/issues/8008
+https://github.com/owncloud/web/pull/8036

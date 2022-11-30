@@ -67,12 +67,10 @@ export default {
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
           await createQuicklink({ ...ctx, resource: ctx.item, password })
-          eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
         })
       }
 
       await createQuicklink({ ...ctx, resource: ctx.item })
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
     },
     displayed: canShare
   }
