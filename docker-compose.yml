@@ -69,6 +69,7 @@ services:
       - 8080:8080
     environment:
       OWNCLOUD_LOCKING_ENABLED: "false"
+      OWNCLOUD_TRUSTED_DOMAINS: "host.docker.internal"
     volumes:
       - ${OC10_WEB_CONFIG:-./dev/docker/oc10.web.config.json}:/mnt/data/config/config.json
       - ${OC10_CONFIG:-./dev/docker/oc10.config.php}:/mnt/data/config/setup.config.php
