@@ -18,105 +18,93 @@ describe('datetime helper', () => {
     Settings.defaultZone = 'utc'
   })
   describe('formatDateFromDateTime', () => {
-    it.each([[DateTime.fromISO('2010-10-22T21:38:00'), 'Oct 22, 2010, 9:38 PM']])(
-      'correct output for %s',
-      (date: DateTime, expected: string) => {
-        expect(formatDateFromDateTime(date, language, dateFormat)).toBe(expected)
-      }
-    )
+    it('should give correct output', () => {
+      expect(
+        formatDateFromDateTime(DateTime.fromISO('2010-10-22T21:38:00'), language, dateFormat)
+      ).toBe('Oct 22, 2010, 9:38 PM')
+    })
   })
   describe('formatDateFromJSDate', () => {
-    it.each([[new Date('2010-10-22T21:38:00'), 'Oct 22, 2010, 9:38 PM']])(
-      'correct output for %s',
-      (date: Date, expected: string) => {
-        expect(formatDateFromJSDate(date, language, dateFormat)).toBe(expected)
-      }
-    )
-    it.each([[null, 'Invalid DateTime']])('should fail for %s', (date: Date, expected: string) => {
-      expect(formatDateFromJSDate(date, language, dateFormat)).toBe(expected)
+    it('should give correct output', () => {
+      expect(formatDateFromJSDate(new Date('2010-10-22T21:38:00'), language, dateFormat)).toBe(
+        'Oct 22, 2010, 9:38 PM'
+      )
+    })
+    it('should fail for null', () => {
+      expect(formatDateFromJSDate(null, language, dateFormat)).toBe('Invalid DateTime')
     })
   })
   describe('formatDateFromHTTP', () => {
-    it.each([['Tue, 15 Nov 1994 12:45:26 GMT', 'Nov 15, 1994, 12:45 PM']])(
-      'correct output for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromHTTP(date, language, dateFormat)).toBe(expected)
-      }
-    )
-    it.each([['Some not http date 123', 'Invalid DateTime']])(
-      'should fail for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromHTTP(date, language, dateFormat)).toBe(expected)
-      }
-    )
+    it('should give correct output', () => {
+      expect(formatDateFromHTTP('Tue, 15 Nov 1994 12:45:26 GMT', language, dateFormat)).toBe(
+        'Nov 15, 1994, 12:45 PM'
+      )
+    })
+    it('should fail for invalid http date', () => {
+      expect(formatDateFromHTTP('Some not http date 123', language, dateFormat)).toBe(
+        'Invalid DateTime'
+      )
+    })
   })
   describe('formatDateFromISO', () => {
-    it.each([['2010-10-22T21:38:00', 'Oct 22, 2010, 9:38 PM']])(
-      'correct output for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromISO(date, language, dateFormat)).toBe(expected)
-      }
-    )
-    it.each([['some invalid iso date 123', 'Invalid DateTime']])(
-      'should fail for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromISO(date, language, dateFormat)).toBe(expected)
-      }
-    )
+    it('should give correct output', () => {
+      expect(formatDateFromISO('2010-10-22T21:38:00', language, dateFormat)).toBe(
+        'Oct 22, 2010, 9:38 PM'
+      )
+    })
+    it('should fail for invalid iso date', () => {
+      expect(formatDateFromISO('some invalid iso date 123', language, dateFormat)).toBe(
+        'Invalid DateTime'
+      )
+    })
   })
   describe('formatDateFromRFC', () => {
-    it.each([['01 Jun 2016 14:31:46 -0700', 'Jun 1, 2016, 9:31 PM']])(
-      'correct output for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromRFC(date, language, dateFormat)).toBe(expected)
-      }
-    )
-    it.each([['some invalid rfc 123', 'Invalid DateTime']])(
-      'should fail for %s',
-      (date: string, expected: string) => {
-        expect(formatDateFromRFC(date, language, dateFormat)).toBe(expected)
-      }
-    )
+    it('should give correct output', () => {
+      expect(formatDateFromRFC('01 Jun 2016 14:31:46 -0700', language, dateFormat)).toBe(
+        'Jun 1, 2016, 9:31 PM'
+      )
+    })
+    it('should fail for invalid rfc date', () => {
+      expect(formatDateFromRFC('some invalid rfc 123', language, dateFormat)).toBe(
+        'Invalid DateTime'
+      )
+    })
   })
   describe('formatRelativeDateFromDateTime', () => {
-    it.each([[DateTime.now().minus({ years: 12 }), '12 years ago']])(
-      'correct relative time for %s',
-      (date: DateTime, expected) => {
-        expect(formatRelativeDateFromDateTime(date, language)).toBe(expected)
-      }
-    )
+    it('should return correct relative time', () => {
+      expect(formatRelativeDateFromDateTime(DateTime.now().minus({ years: 12 }), language)).toBe(
+        '12 years ago'
+      )
+    })
   })
   describe('formatRelativeDateFromJSDate', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toJSDate(), '12 years ago']])(
-      'correct relative time for %s',
-      (date: Date, expected) => {
-        expect(formatRelativeDateFromJSDate(date, language)).toBe(expected)
-      }
-    )
-    it.each([[null, null]])('should fail for %s', (date: Date, expected) => {
-      expect(formatRelativeDateFromJSDate(date, language)).toBe(expected)
+    it('should return correct relative time', () => {
+      expect(
+        formatRelativeDateFromJSDate(DateTime.now().minus({ years: 12 }).toJSDate(), language)
+      ).toBe('12 years ago')
+    })
+    it('should return null if date is null', () => {
+      expect(formatRelativeDateFromJSDate(null, language)).toBe(null)
     })
   })
   describe('formatRelativeDateFromISO', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toISO(), '12 years ago']])(
-      'correct relative time for %s',
-      (date: string, expected) => {
-        expect(formatRelativeDateFromISO(date, language)).toBe(expected)
-      }
-    )
-    it.each([['some invalid iso 123', null]])('should fail for %s', (date: string, expected) => {
-      expect(formatRelativeDateFromISO(date, language)).toBe(expected)
+    it('should return correct relative time', () => {
+      expect(formatRelativeDateFromISO(DateTime.now().minus({ years: 12 }).toISO(), language)).toBe(
+        '12 years ago'
+      )
+    })
+    it('should return null if invalid iso', () => {
+      expect(formatRelativeDateFromISO('some invalid iso 123', language)).toBe(null)
     })
   })
   describe('formatRelativeDateFromRFC', () => {
-    it.each([[DateTime.now().minus({ years: 12 }).toRFC2822(), '12 years ago']])(
-      'correct relative time for %s',
-      (date: string, expected) => {
-        expect(formatRelativeDateFromRFC(date, language)).toBe(expected)
-      }
-    )
-    it.each([['some invalid rfc 123', null]])('should fail for %s', (date: string, expected) => {
-      expect(formatRelativeDateFromRFC(date, language)).toBe(expected)
+    it('should return correct relative time', () => {
+      expect(
+        formatRelativeDateFromRFC(DateTime.now().minus({ years: 12 }).toRFC2822(), language)
+      ).toBe('12 years ago')
+    })
+    it('should return null if invalid rfc', () => {
+      expect(formatRelativeDateFromRFC('some invalid rfc 123', language)).toBe(null)
     })
   })
 })
