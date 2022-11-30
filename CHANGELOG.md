@@ -13,6 +13,7 @@ Summary
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
+* Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
@@ -58,6 +59,22 @@ Details
    as the composition-api now comes with Vue.
 
    https://github.com/owncloud/web/pull/7877
+
+* Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
+
+   Opening the right sidebar (including its panels) is now possible via URL param.
+
+   For private or internal links it only requires the new `details` param in the URL. For other URLs
+   (e.g. personal space, project space) the `scrollTo` param including the resource id is needed
+   as well.
+
+   The following values can be used for the `details` param:
+
+   * `details` - sidebar open, no specific panel * `actions` - actions panel * `sharing` - share
+   panel * `versions` - versions panel * `space-share` - members panel (project space only)
+
+   https://github.com/owncloud/web/issues/7927
+   https://github.com/owncloud/web/pull/8021
 
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 
