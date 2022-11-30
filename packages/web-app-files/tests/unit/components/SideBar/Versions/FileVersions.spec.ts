@@ -1,18 +1,15 @@
 import Vuex from 'vuex'
 import { DateTime } from 'luxon'
-import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
+import CompositionAPI from '@vue/composition-api'
 import DesignSystem from 'owncloud-design-system'
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, shallowMount, createLocalVue, MountOptions } from '@vue/test-utils'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
-
-const defaultStubs = {
-  ...stubs,
-  'oc-td': true,
-  'oc-tr': true,
-  'oc-tbody': true,
-  'oc-table-simple': true
-}
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
+import { ShareSpaceResource } from 'web-client/src/helpers'
+import { DavPermission } from 'web-client/src/webdav/constants'
 
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 
@@ -21,6 +18,7 @@ const sevenDaysBefore = DateTime.now().minus({ days: 7 }).toHTTP()
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(DesignSystem)
+localVue.use(CompositionAPI)
 localVue.use(GetTextPlugin, {
   translations: 'does-not-matter.json',
   silent: true
@@ -73,7 +71,7 @@ describe('FileVersions', () => {
   describe('loading is true', () => {
     // fetchFileVersion is fired up when the wrapper is mounted and it sets loading to false
     // so the function needs to be mocked to get a loading wrapper
-    jest.spyOn(FileVersions.methods, 'fetchFileVersions').mockImplementation()
+    jest.spyOn((FileVersions as any).methods, 'fetchFileVersions').mockImplementation()
     const wrapper = getShallowWrapper(createStore(), true)
 
     it('should show oc loader component', () => {
@@ -91,13 +89,14 @@ describe('FileVersions', () => {
 
   describe('when loading is false', () => {
     const store = createStore({ versions: [] })
-    const wrapper = getShallowWrapper(store)
 
     it('should not show oc loader component', () => {
+      const wrapper = getShallowWrapper(store)
       expect(wrapper.find(loadingStubSelector).exists()).toBeFalsy()
     })
 
     it('should show no versions message if hasVersion is falsy', () => {
+      const wrapper = getShallowWrapper(store)
       const noVersionsMessageElement = wrapper.find(selectors.noVersionsMessage)
 
       expect(noVersionsMessageElement.text()).toBe('No Versions available for this file')
@@ -105,6 +104,7 @@ describe('FileVersions', () => {
 
     describe('currentVersionId method', () => {
       it('should return last item from slitted file name', () => {
+        const wrapper = getShallowWrapper(store)
         expect(wrapper.vm.currentVersionId({ name: '/meta/2147525688/v/1616851438' })).toBe(
           '1616851438'
         )
@@ -115,7 +115,11 @@ describe('FileVersions', () => {
       describe('versions table', () => {
         it('should render icon according to file type', () => {
           const store = createStore({
-            highlightedFile: { name: 'lorem.png', extension: 'png', type: 'file' },
+            highlightedFile: mockDeep<Resource>({
+              name: 'lorem.png',
+              extension: 'png',
+              type: 'file'
+            }),
             versions: [
               {
                 fileInfo: {
@@ -155,26 +159,57 @@ describe('FileVersions', () => {
         })
         describe('row actions', () => {
           const spyRevertFunction = jest
-            .spyOn(FileVersions.methods, 'revertVersion')
-            .mockImplementation((file) => {})
+            .spyOn((FileVersions as any).methods, 'revertVersion')
+            .mockImplementation()
           const spyDownloadFunction = jest
-            .spyOn(FileVersions.methods, 'downloadVersion')
-            .mockImplementation((file) => {})
-          const wrapper = getMountedWrapper(createStore())
+            .spyOn((FileVersions as any).methods, 'downloadVersion')
+            .mockImplementation()
 
-          it('should call revertVersion method when revert version button is clicked', async () => {
-            const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
+          describe('reverting versions', () => {
+            it('should be possible for a non-share', () => {
+              const wrapper = getMountedWrapper(createStore())
+              const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
+              expect(revertVersionButton.length).toBe(2)
+            })
+            it('should be possible for a share with write permissions', () => {
+              const wrapper = getMountedWrapper(
+                createStore({
+                  highlightedFile: mockDeep<Resource>({
+                    permissions: DavPermission.Updateable,
+                    share: undefined
+                  })
+                }),
+                mockDeep<ShareSpaceResource>({ driveType: 'share' })
+              )
+              const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
+              expect(revertVersionButton.length).toBe(2)
+            })
+            it('should not be possible for a share with read-only permissions', () => {
+              const wrapper = getMountedWrapper(
+                createStore({
+                  highlightedFile: mockDeep<Resource>({ permissions: '', share: undefined })
+                }),
+                mockDeep<ShareSpaceResource>({ driveType: 'share' })
+              )
+              const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
+              expect(revertVersionButton.length).toBe(0)
+            })
+            it('should call revertVersion method when revert version button is clicked', async () => {
+              const wrapper = getMountedWrapper(createStore())
+              const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
 
-            expect(revertVersionButton.length).toBe(2)
-            expect(spyRevertFunction).not.toHaveBeenCalled()
+              expect(revertVersionButton.length).toBe(2)
+              expect(spyRevertFunction).not.toHaveBeenCalled()
 
-            await revertVersionButton.at(0).trigger('click')
+              await revertVersionButton.at(0).trigger('click')
 
-            expect(spyRevertFunction).toHaveBeenCalledTimes(1)
-            expect(spyRevertFunction).toHaveBeenCalledWith(defaultVersions[0])
+              expect(spyRevertFunction).toHaveBeenCalledTimes(1)
+              expect(spyRevertFunction).toHaveBeenCalledWith(defaultVersions[0])
+            })
           })
 
           it('should call downloadVersion method when download version button is clicked', async () => {
+            const wrapper = getMountedWrapper(createStore())
             const downloadVersionButton = wrapper.findAll(selectors.downloadVersionButton)
 
             expect(downloadVersionButton.length).toBe(2)
@@ -191,48 +226,45 @@ describe('FileVersions', () => {
   })
 })
 
-function getMountOptions({ store, loading = false, stubs = defaultStubs }) {
+function getMountOptions({ store, loading = false, space = undefined }): MountOptions<any> {
   return {
     localVue,
-    store: store,
-    stubs: stubs,
+    store,
+    stubs: {
+      ...defaultStubs,
+      'oc-td': true,
+      'oc-tr': true,
+      'oc-tbody': true,
+      'oc-table-simple': true,
+      'oc-resource-icon': true,
+      'oc-button': false
+    },
     directives: {
-      'oc-tooltip': true
+      'oc-tooltip': jest.fn()
     },
     data() {
       return {
-        loading: loading
+        loading
       }
+    },
+    provide: {
+      displayedSpace: space
     }
   }
 }
 
-function getShallowWrapper(store, loading = false) {
-  return shallowMount(FileVersions, getMountOptions({ store: store, loading: loading }))
+function getShallowWrapper(store, loading = false, space = undefined) {
+  return shallowMount(FileVersions, getMountOptions({ store, loading, space }))
 }
 
-function getMountedWrapper(store) {
-  return mount(
-    FileVersions,
-    getMountOptions({
-      store: store,
-      stubs: {
-        ...defaultStubs,
-        'oc-resource-icon': true,
-        'oc-button': false
-      }
-    })
-  )
+function getMountedWrapper(store, space = undefined) {
+  return mount(FileVersions, getMountOptions({ store, space }))
 }
 
 function createStore({
-  highlightedFile = {
-    id: 1223,
-    name: 'lorem.txt',
-    path: '/lorem.txt'
-  },
+  highlightedFile = mockDeep<Resource>(),
   versions = defaultVersions
-} = {}) {
+}: { highlightedFile?: Resource; versions?: typeof defaultVersions } = {}) {
   return new Vuex.Store({
     modules: {
       Files: {
