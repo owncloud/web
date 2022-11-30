@@ -1,6 +1,6 @@
 <template>
   <nav :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
-    <ol class="oc-breadcrumb-list oc-flex">
+    <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
         v-for="(item, index) in items"
         :key="index"
@@ -52,12 +52,12 @@
       <label
         ref="mobileDropdown"
         tabindex="0"
-        class="oc-breadcrumb-drop-label"
+        class="oc-breadcrumb-drop-label oc-flex oc-flex-middle oc-flex-between"
         @keydown.enter="$refs.mobileDropdown.click()"
       >
         <span
           v-if="currentFolder"
-          class="oc-breadcrumb-drop-label-text"
+          class="oc-breadcrumb-drop-label-text oc-text-truncate"
           aria-current="page"
           v-text="currentFolder.text"
         />
@@ -177,9 +177,9 @@ export default {
   overflow: hidden;
 
   &-list {
-    @extend .oc-visible\@s;
-    @extend .oc-m-rm;
-    @extend .oc-p-rm;
+    @media (max-width: $oc-breakpoint-xsmall-max) {
+      display: none !important;
+    }
 
     list-style: none;
     align-items: baseline;
@@ -234,12 +234,13 @@ export default {
   /* stylelint-enable */
 
   &-drop {
-    @extend .oc-hidden\@s;
+    @media (min-width: $oc-breakpoint-small-default) {
+      display: none !important;
+    }
 
     .oc-drop > .oc-card > ol {
-      @extend .oc-m-rm;
-      @extend .oc-p-rm;
-
+      margin: 0;
+      padding: 0;
       list-style: none;
 
       > li a,
@@ -261,18 +262,10 @@ export default {
     }
 
     &-label {
-      @extend .oc-flex;
-      @extend .oc-flex-middle;
-      @extend .oc-flex-between;
-
       border: $global-border-width solid var(--oc-color-swatch-primary-muted);
       cursor: pointer;
       height: $global-control-height;
       padding: var(--oc-space-small);
-
-      &-text {
-        @extend .oc-text-truncate;
-      }
     }
   }
 }

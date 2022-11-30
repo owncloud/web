@@ -7,7 +7,7 @@
         v-bind="additionalAttributes"
         ref="input"
         :aria-invalid="ariaInvalid"
-        class="oc-text-input oc-rounded"
+        class="oc-text-input oc-input oc-rounded"
         :class="{
           'oc-text-input-warning': !!warningMessage,
           'oc-text-input-danger': !!errorMessage
@@ -276,8 +276,6 @@ export default {
 @import '../../styles/styles';
 
 .oc-text-input {
-  @extend .oc-input;
-
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);
   color: var(--oc-color-input-text-muted);
@@ -309,10 +307,9 @@ export default {
   }
 
   &-message {
-    @extend .oc-flex;
-    @extend .oc-flex-middle;
-    @extend .oc-mt-xs;
-
+    display: flex;
+    align-items: center;
+    margin-top: var(--oc-space-xsmall);
     min-height: $oc-font-size-default * 1.5;
   }
 }

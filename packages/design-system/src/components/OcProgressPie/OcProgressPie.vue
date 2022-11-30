@@ -1,7 +1,7 @@
 <template>
   <div class="oc-progress-pie" :data-fill="_fill">
     <div class="oc-progress-pie-container" />
-    <label v-if="showLabel" class="oc-progress-pie-label" v-text="_label" />
+    <label v-if="showLabel" class="oc-progress-pie-label oc-text-muted" v-text="_label" />
   </div>
 </template>
 <script>
@@ -104,8 +104,6 @@ $default-size: 64px;
   }
 
   &-label {
-    @extend .oc-text-muted;
-
     color: var(--oc-color-text-muted) !important;
     left: 50%;
     position: absolute;
