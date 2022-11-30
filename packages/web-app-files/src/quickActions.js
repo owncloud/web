@@ -52,7 +52,7 @@ export default {
     id: 'collaborators',
     label: ($gettext) => $gettext('Add people'),
     icon: 'user-add',
-    handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#peopleShares'),
+    handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares'),
     displayed: canShare
   },
   quicklink: {
@@ -67,12 +67,12 @@ export default {
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(ctx, async (password) => {
           await createQuicklink({ ...ctx, resource: ctx.item, password })
-          eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
+          eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
         })
       }
 
       await createQuicklink({ ...ctx, resource: ctx.item })
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
     },
     displayed: canShare
   }

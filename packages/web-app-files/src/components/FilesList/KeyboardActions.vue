@@ -7,11 +7,10 @@ import keycode from 'keycode'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 import { defineComponent, PropType } from 'vue'
-import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 import { SpaceResource } from 'web-client/src/helpers'
+import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 
 export default defineComponent({
-  mixins: [MixinFilesListScrolling],
   props: {
     paginatedResources: {
       type: Array,
@@ -26,6 +25,9 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: true
     }
+  },
+  setup() {
+    return { ...useScrollTo() }
   },
   data: () => {
     return {

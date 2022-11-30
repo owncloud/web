@@ -2,7 +2,7 @@ import { Page } from 'playwright'
 import util from 'util'
 
 const emptySpacesSelector = '//span[@data-msgid="%s"]'
-const spaceIdSelector = `[data-space-id="%s"]`
+const spaceIdSelector = `[data-item-id="%s"]`
 
 export interface searchForSpacesIdsArgs {
   spaceID: string

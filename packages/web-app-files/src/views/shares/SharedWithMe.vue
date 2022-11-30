@@ -95,7 +95,8 @@ export default defineComponent({
       selectedResourcesIds,
       sideBarActivePanel,
       sideBarOpen,
-      storeItems
+      storeItems,
+      scrollToResourceFromRoute
     } = useResourcesViewDefaults<Resource, any, any[]>()
 
     // pending shares
@@ -176,6 +177,7 @@ export default defineComponent({
       sideBarOpen,
       sideBarActivePanel,
       selectedShareSpace,
+      scrollToResourceFromRoute,
 
       // view specific
       pendingHandleSort,
@@ -224,8 +226,9 @@ export default defineComponent({
     }
   },
 
-  created() {
-    this.loadResourcesTask.perform()
+  async created() {
+    await this.loadResourcesTask.perform()
+    this.scrollToResourceFromRoute(this.acceptedItems)
   }
 })
 </script>

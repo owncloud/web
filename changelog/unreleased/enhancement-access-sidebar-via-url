@@ -1,0 +1,16 @@
+Enhancement: Access right sidebar panels via URL
+
+Opening the right sidebar (including its panels) is now possible via URL param.
+
+For private or internal links it only requires the new `details` param in the URL. For other URLs (e.g. personal space, project space) the `scrollTo` param including the resource id is needed as well.
+
+The following values can be used for the `details` param:
+
+* `details` - sidebar open, no specific panel
+* `actions` - actions panel
+* `sharing` - share panel
+* `versions` - versions panel
+* `space-share` - members panel (project space only)
+
+https://github.com/owncloud/web/pull/8021
+https://github.com/owncloud/web/issues/7927

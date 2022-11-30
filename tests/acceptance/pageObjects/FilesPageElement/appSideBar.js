@@ -221,7 +221,7 @@ module.exports = {
       selector: '#oc-file-details-sidebar .details-icon'
     },
     fileInfoIconSmallPreview: {
-      selector: '#sidebar-panel-%s-item .file_info__icon'
+      selector: '#sidebar-panel-%s .file_info__icon'
     },
     fileInfoResourceNameAnyType: {
       selector: `//div[contains(@id, "app-sidebar")]//span[contains(@class, "oc-resource-name") and (@data-test-resource-name=%s or @data-test-resource-path=%s)]`,
@@ -253,36 +253,36 @@ module.exports = {
     },
     collaboratorsPanel: {
       selector:
-        '//*[@id="sidebar-panel-sharing-item"]//*[contains(@class, "sidebar-panel__body-content")]',
+        '//*[@id="sidebar-panel-sharing"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     collaboratorsPanelMenuItem: {
-      selector: '//button[@id="sidebar-panel-sharing-item-select"]',
+      selector: '//button[@id="sidebar-panel-sharing-select"]',
       locateStrategy: 'xpath'
     },
     linksPanel: {
       selector: '#oc-files-file-link'
     },
     linksPanelMenuItem: {
-      selector: '//button[@id="sidebar-panel-links-item-select"]',
+      selector: '//button[@id="sidebar-panel-links-select"]',
       locateStrategy: 'xpath'
     },
     actionsPanel: {
       selector:
-        '//*[@id="sidebar-panel-actions-item"]//*[contains(@class, "sidebar-panel__body-content")]',
+        '//*[@id="sidebar-panel-actions"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     actionsPanelMenuItem: {
-      selector: '//button[@id="sidebar-panel-actions-item-select"]',
+      selector: '//button[@id="sidebar-panel-actions-select"]',
       locateStrategy: 'xpath'
     },
     detailsPanel: {
       selector:
-        '//*[@id="sidebar-panel-details-item"]//*[contains(@class, "sidebar-panel__body-content")]',
+        '//*[@id="sidebar-panel-details"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     detailsPanelMenuItem: {
-      selector: '//button[@id="sidebar-panel-details-item-select"]',
+      selector: '//button[@id="sidebar-panel-details-select"]',
       locateStrategy: 'xpath'
     },
     privateLinkURLCopyButton: {
@@ -290,11 +290,11 @@ module.exports = {
     },
     versionsPanel: {
       selector:
-        '//*[@id="sidebar-panel-versions-item"]//*[contains(@class, "sidebar-panel__body-content")]',
+        '//*[@id="sidebar-panel-versions"]//*[contains(@class, "sidebar-panel__body-content")]',
       locateStrategy: 'xpath'
     },
     versionsPanelMenuItem: {
-      selector: '//button[@id="sidebar-panel-versions-item-select"]',
+      selector: '//button[@id="sidebar-panel-versions-select"]',
       locateStrategy: 'xpath'
     }
   }

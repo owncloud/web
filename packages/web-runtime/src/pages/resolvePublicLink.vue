@@ -103,6 +103,11 @@ export default defineComponent({
     )
     const isUserContext = useUserContext({ store })
 
+    const detailsQuery = useRouteQuery('details')
+    const details = computed(() => {
+      return queryItemAsString(unref(detailsQuery))
+    })
+
     // token info
     const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, isUserContext })
     const tokenInfo = ref(null)
@@ -147,7 +152,8 @@ export default defineComponent({
     const redirectToPrivateLink = (fileId: string | number) => {
       return router.push({
         name: 'resolvePrivateLink',
-        params: { fileId: `${fileId}` }
+        params: { fileId: `${fileId}` },
+        ...(unref(details) && { query: { details: unref(details) } })
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {

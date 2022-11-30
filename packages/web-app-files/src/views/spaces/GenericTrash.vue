@@ -192,6 +192,7 @@ export default defineComponent({
     async performLoaderTask() {
       await this.loadResourcesTask.perform(this.space)
       this.refreshFileListHeaderPosition()
+      this.scrollToResourceFromRoute(this.paginatedResources)
     }
   }
 })

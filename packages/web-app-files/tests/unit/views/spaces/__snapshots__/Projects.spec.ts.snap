@@ -8,7 +8,7 @@ exports[`Projects view different files view states lists all available project s
       <div class="spaces-list oc-px-m oc-mt-l">
         <ul class="oc-list oc-my-rm oc-mx-rm oc-flex">
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-space-id="2" class="spaces-list-card oc-card oc-card-default oc-rounded">
+            <div data-item-id="2" class="spaces-list-card oc-card oc-card-default oc-rounded">
               <div class="oc-card-media-top oc-border-b">
                 <router-link-stub tag="a" to="[object Object]">
                   <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
@@ -29,7 +29,7 @@ exports[`Projects view different files view states lists all available project s
             </div>
           </li>
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-space-id="3" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
+            <div data-item-id="3" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
               <div class="oc-card-media-top oc-border-b"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span"><span>Disabled</span></span> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></button></div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
@@ -44,7 +44,7 @@ exports[`Projects view different files view states lists all available project s
             </div>
           </li>
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-space-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded">
+            <div data-item-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded">
               <div class="oc-card-media-top oc-border-b">
                 <router-link-stub tag="a" to="[object Object]">
                   <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>

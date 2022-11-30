@@ -44,7 +44,7 @@ export default {
         $gettext: this.$gettext
       })
 
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing-item#linkShares')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
     }
   }
 }

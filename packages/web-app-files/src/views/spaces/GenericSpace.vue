@@ -100,7 +100,6 @@ import debounce from 'lodash-es/debounce'
 
 import MixinAccessibleBreadcrumb from '../../mixins/accessibleBreadcrumb'
 import MixinFileActions from '../../mixins/fileActions'
-import MixinFilesListScrolling from '../../mixins/filesListScrolling'
 
 import AppBar from '../../components/AppBar/AppBar.vue'
 import ContextActions from '../../components/FilesList/ContextActions.vue'
@@ -164,7 +163,7 @@ export default defineComponent({
     SpaceHeader
   },
 
-  mixins: [MixinAccessibleBreadcrumb, MixinFileActions, MixinFilesListScrolling],
+  mixins: [MixinAccessibleBreadcrumb, MixinFileActions],
 
   props: {
     space: {
@@ -355,7 +354,7 @@ export default defineComponent({
         fileId || this.itemId,
         options
       )
-      this.scrollToResourceFromRoute()
+      this.scrollToResourceFromRoute([this.currentFolder, ...this.paginatedResources])
       this.refreshFileListHeaderPosition()
       this.accessibleBreadcrumb_focusAndAnnounceBreadcrumb(sameRoute)
     },
@@ -407,18 +406,6 @@ export default defineComponent({
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    },
-    scrollToResourceFromRoute() {
-      const resourceName = this.$route.query.scrollTo
-
-      if (resourceName && this.paginatedResources.length > 0) {
-        const resource = this.paginatedResources.find((r) => r.name === resourceName)
-
-        if (resource) {
-          this.selectedResources = [resource]
-          this.scrollToResource(resource)
-        }
-      }
     }
   }
 })

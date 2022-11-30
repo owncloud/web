@@ -64,8 +64,8 @@ export const openPanel = async ({ page, name }: { page: Page; name: string }): P
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
-  const panelSelector = page.locator(`#sidebar-panel-${name}-item-select`)
-  const nextPanel = page.locator(`#sidebar-panel-${name}-item`)
+  const panelSelector = page.locator(`#sidebar-panel-${name}-select`)
+  const nextPanel = page.locator(`#sidebar-panel-${name}`)
 
   await panelSelector.click()
   if (config.ocis) {

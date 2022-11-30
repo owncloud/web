@@ -27,7 +27,7 @@ export default {
 
     $_showMembers_trigger({ resources }) {
       this.SET_FILE_SELECTION(resources)
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share-item')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
     }
   }
 }

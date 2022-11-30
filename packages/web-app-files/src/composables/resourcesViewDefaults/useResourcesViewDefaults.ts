@@ -11,6 +11,7 @@ import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
+import { ScrollToResult, useScrollTo } from '../scrollTo'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -36,7 +37,8 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
 
   sideBarOpen: Ref<boolean>
   sideBarActivePanel: Ref<string>
-} & SelectedResourcesResult
+} & SelectedResourcesResult &
+  ScrollToResult
 
 export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   options: ResourcesViewDefaultsOptions<TT, TU> = {}
@@ -85,6 +87,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     sortBy,
     sortDir,
     ...useSelectedResources({ store }),
-    ...useSideBar()
+    ...useSideBar(),
+    ...useScrollTo()
   }
 }

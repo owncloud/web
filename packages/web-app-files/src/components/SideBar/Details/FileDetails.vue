@@ -430,7 +430,7 @@ export default defineComponent({
       return null
     },
     expandVersionsPanel() {
-      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions-item')
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
     },
     async loadData() {
       const calls = []

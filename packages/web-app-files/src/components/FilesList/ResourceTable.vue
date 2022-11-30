@@ -566,11 +566,11 @@ export default defineComponent({
     openSharingSidebar(file) {
       let panelToOpen
       if (file.type === 'space') {
-        panelToOpen = 'space-share-item'
+        panelToOpen = 'space-share'
       } else if (file.share?.shareType === ShareTypes.link.value) {
-        panelToOpen = 'sharing-item#linkShares'
+        panelToOpen = 'sharing#linkShares'
       } else {
-        panelToOpen = 'sharing-item#peopleShares'
+        panelToOpen = 'sharing#peopleShares'
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
