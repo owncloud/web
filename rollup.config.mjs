@@ -47,7 +47,7 @@ const plugins = [
   {
     transform(src, id) {
       if (id.includes('rollup-plugin-vue=styles')) {
-        const split = src.split('/* SHITTY MARKER */')
+        const split = src.split('/* STYLES STRIP IMPORTS MARKER */')
         const newSrc = split[split.length-1]
         return {
           code: newSrc,
