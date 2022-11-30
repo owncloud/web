@@ -9,7 +9,7 @@ importers:
       '@babel/preset-env': 7.20.2
       '@babel/register': 7.18.9
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 17.1.1
+      '@cucumber/messages': 20.0.0
       '@cucumber/pretty-formatter': 1.0.0
       '@noble/hashes': 1.1.3
       '@ownclouders/babel-preset': workspace:*
@@ -102,8 +102,8 @@ importers:
       '@babel/preset-env': 7.20.2_@babel+core@7.20.2
       '@babel/register': 7.18.9_@babel+core@7.20.2
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 17.1.1
-      '@cucumber/pretty-formatter': 1.0.0_qryek53up3qi2jzngptomlbc6y
+      '@cucumber/messages': 20.0.0
+      '@cucumber/pretty-formatter': 1.0.0_abdeawmydh2dfoa3rc72ddbzhq
       '@noble/hashes': 1.1.3
       '@ownclouders/babel-preset': link:packages/babel-preset
       '@ownclouders/design-system': link:packages/design-system
@@ -3254,6 +3254,15 @@ packages:
       uuid: 8.3.2
     dev: true
 
+  /@cucumber/messages/20.0.0:
+    resolution: {integrity: sha512-JFrFwuhxsbig0afaViNhuzoQyC+GQzlI7m+rX+lSiDGV13K3sJzMmHjkbCiNOgoRlKAMwIGR9TRMH0xj9/My0w==}
+    dependencies:
+      '@types/uuid': 8.3.4
+      class-transformer: 0.5.1
+      reflect-metadata: 0.1.13
+      uuid: 9.0.0
+    dev: true
+
   /@cucumber/pretty-formatter/1.0.0-alpha.2_sjnv2xgful32zzxk477e7gdl4u:
     resolution: {integrity: sha512-+tFbS2idJ8yL+saEYGBaJLkhU9glxmS6FMD22S/bfZsi/c3LeLMeo1ZkNeyzuxV7Yq9jGFjiwgZ+iRaO/bN8hw==}
     peerDependencies:
@@ -3268,14 +3277,14 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@cucumber/pretty-formatter/1.0.0_qryek53up3qi2jzngptomlbc6y:
+  /@cucumber/pretty-formatter/1.0.0_abdeawmydh2dfoa3rc72ddbzhq:
     resolution: {integrity: sha512-wcnIMN94HyaHGsfq72dgCvr1d8q6VGH4Y6Gl5weJ2TNZw1qn2UY85Iki4c9VdaLUONYnyYH3+178YB+9RFe/Hw==}
     peerDependencies:
       '@cucumber/cucumber': '>=7.0.0'
       '@cucumber/messages': '*'
     dependencies:
       '@cucumber/cucumber': 7.3.2
-      '@cucumber/messages': 17.1.1
+      '@cucumber/messages': 20.0.0
       ansi-styles: 5.2.0
       cli-table3: 0.6.0
       figures: 3.2.0
@@ -4626,6 +4635,10 @@ packages:
 
   /@types/uuid/8.3.1:
     resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
+    dev: true
+
+  /@types/uuid/8.3.4:
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
     dev: true
 
   /@types/webpack-sources/3.2.0:
@@ -7068,7 +7081,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -7406,6 +7419,10 @@ packages:
 
   /class-transformer/0.4.0:
     resolution: {integrity: sha512-ETWD/H2TbWbKEi7m9N4Km5+cw1hNcqJSxlSYhsLsNjQzWWiZIYA1zafxpK9PwVfaZ6AqR5rrjPVUBGESm5tQUA==}
+    dev: true
+
+  /class-transformer/0.5.1:
+    resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
     dev: true
 
   /class-utils/0.3.6:
@@ -17711,6 +17728,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -21225,7 +21251,6 @@ packages:
   /uuid/9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
-    dev: false
 
   /v-calendar/2.3.4_2swpk75dthi2ukkvfa23v6u5ei:
     resolution: {integrity: sha512-jH9cCuryt7++LWkHE4zvkqORQYUmmfLwhYxaDzndTrd3hWyLtm3WGyfanc++PEqchTkPP31VewFTXqlSf3Gk7Q==}
