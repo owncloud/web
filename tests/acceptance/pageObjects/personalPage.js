@@ -356,12 +356,12 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     breadcrumbMobile: {
-      selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
+      selector: '//span[contains(@class, "oc-breadcrumb-drop-label-text") and text()=%s]',
       locateStrategy: 'xpath'
     },
     breadcrumbMobileReferencedToOpenSidebarButton: {
       selector:
-        '//button[@aria-label="Open sidebar to view details"]/ancestor::div//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
+        '//button[@aria-label="Open sidebar to view details"]/ancestor::div//span[contains(@class, "oc-breadcrumb-drop-label-text") and text()=%s]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumb: {
