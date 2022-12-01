@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Current year selection in the date picker: [#8058](https://github.com/owncloud/web/pull/8058)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
@@ -22,6 +23,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Current year selection in the date picker: [#8058](https://github.com/owncloud/web/pull/8058)
+
+   We applied a hotpatch to fix the selection of the current year in December in the date picker.
+
+   https://github.com/owncloud/web/issues/8042
+   https://github.com/owncloud/web/pull/8058
 
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 
