@@ -1,0 +1,6 @@
+Bugfix: Current year selection in the date picker
+
+We applied a hotpatch to fix the selection of the current year in December in the date picker.
+
+https://github.com/owncloud/web/pull/8058
+https://github.com/owncloud/web/issues/8042
