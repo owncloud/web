@@ -10,6 +10,8 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { mockDeep } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -59,6 +61,26 @@ describe('GenericSpace view', () => {
       const { wrapper } = getMountedWrapper({ files })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
+    })
+  })
+  describe('loader task', () => {
+    it('re-loads the resources on item change', async () => {
+      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
+      const { wrapper } = getMountedWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(1)
+      wrapper.setProps({ item: 'newItem' })
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(2)
+    })
+    it('re-loads the resources on space change', async () => {
+      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
+      const { wrapper } = getMountedWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(1)
+      wrapper.setProps({ space: mockDeep<SpaceResource>() })
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(2)
     })
   })
 })

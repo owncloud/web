@@ -318,6 +318,11 @@ export default defineComponent({
       handler: function () {
         this.performLoaderTask(true)
       }
+    },
+    space: {
+      handler: function () {
+        this.performLoaderTask(true)
+      }
     }
   },
 
@@ -348,6 +353,10 @@ export default defineComponent({
     ]),
 
     async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
+      if (this.loadResourcesTask.isRunning) {
+        return
+      }
+
       const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(this.space) }
       await this.loadResourcesTask.perform(
         this.space,
