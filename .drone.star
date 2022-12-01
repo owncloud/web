@@ -860,6 +860,7 @@ def pnpmCache(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -891,6 +892,7 @@ def pnpmlint(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -953,6 +955,7 @@ def build(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
             ],
         },
@@ -1047,6 +1050,7 @@ def changelog(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/pull/**",
             ],
         },
@@ -1079,6 +1083,7 @@ def buildCacheWeb(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -1152,6 +1157,7 @@ def unitTests(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -1186,6 +1192,7 @@ def e2eTests(ctx):
     e2e_trigger = {
         "ref": [
             "refs/heads/master",
+            "refs/heads/stable-*",
             "refs/tags/**",
             "refs/pull/**",
         ],
@@ -1977,6 +1984,7 @@ def documentation(ctx):
             "trigger": {
                 "ref": [
                     "refs/heads/master",
+                    "refs/heads/stable-*",
                     "refs/pull/**",
                 ],
             },
@@ -2445,6 +2453,7 @@ def cacheOcisPipeline(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -2721,6 +2730,7 @@ def deploy(ctx, config, rebuild):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/v*",
             ],
         },
@@ -2797,6 +2807,7 @@ def licenseCheck(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/v*",
                 "refs/pull/**",
             ],
@@ -3000,6 +3011,7 @@ def genericCachePurge(flush_path):
         "trigger": {
             "ref": [
                 "refs/heads/master",
+                "refs/heads/stable-*",
                 "refs/tags/v*",
                 "refs/pull/**",
             ],
