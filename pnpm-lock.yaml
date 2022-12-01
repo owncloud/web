@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  v-calendar@2.3.4:
+    hash: y3xp3q23722rnj6ewses6p57yq
+    path: patches/v-calendar@2.3.4.patch
+
 importers:
 
   .:
@@ -252,7 +257,7 @@ importers:
       tippy.js: ^6.3.7
       typescript: ^4.3.2
       url-loader: ^4.1.1
-      v-calendar: ^2.3.2
+      v-calendar: ^2.3.4
       vue: 2.7.14
       vue-gettext: ^2.1.12
       vue-inline-svg: ^2.0.0
@@ -334,7 +339,7 @@ importers:
       tippy.js: 6.3.7
       typescript: 4.9.3
       url-loader: 4.1.1_lit45vopotvaqup7lrvlnvtxwy
-      v-calendar: 2.3.4_2swpk75dthi2ukkvfa23v6u5ei
+      v-calendar: 2.3.4_y3xp3q23722rnj6ewses6p57yq_2swpk75dthi2ukkvfa23v6u5ei
       vue: 2.7.14
       vue-gettext: 2.1.12
       vue-inline-svg: 2.0.0
@@ -641,7 +646,6 @@ importers:
       tippy.js: ^6.3.7
       utf8: ^3.0.0
       uuid: ^9.0.0
-      v-calendar: ^2.3.2
       vue: 2.7.14
       vue-async-computed: ^3.9.0
       vue-concurrency: 4.0.0
@@ -694,7 +698,6 @@ importers:
       tippy.js: 6.3.7
       utf8: 3.0.0
       uuid: 9.0.0
-      v-calendar: 2.3.4_2swpk75dthi2ukkvfa23v6u5ei
       vue: 2.7.14
       vue-async-computed: 3.9.0_vue@2.7.14
       vue-concurrency: 4.0.0_vue@2.7.14
@@ -7068,7 +7071,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -8769,6 +8772,7 @@ packages:
   /core-js/3.26.1:
     resolution: {integrity: sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA==}
     requiresBuild: true
+    dev: true
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
@@ -9427,10 +9431,12 @@ packages:
       date-fns: '>=2.0.0-alpha.13'
     dependencies:
       date-fns: 2.25.0
+    dev: true
 
   /date-fns/2.25.0:
     resolution: {integrity: sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==}
     engines: {node: '>=0.11'}
+    dev: true
 
   /dateformat/4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
@@ -17711,6 +17717,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -21227,7 +21242,7 @@ packages:
     hasBin: true
     dev: false
 
-  /v-calendar/2.3.4_2swpk75dthi2ukkvfa23v6u5ei:
+  /v-calendar/2.3.4_y3xp3q23722rnj6ewses6p57yq_2swpk75dthi2ukkvfa23v6u5ei:
     resolution: {integrity: sha512-jH9cCuryt7++LWkHE4zvkqORQYUmmfLwhYxaDzndTrd3hWyLtm3WGyfanc++PEqchTkPP31VewFTXqlSf3Gk7Q==}
     peerDependencies:
       '@popperjs/core': ^2.4.0
@@ -21239,6 +21254,8 @@ packages:
       date-fns-tz: 1.1.6_date-fns@2.25.0
       lodash: 4.17.21
       vue: 2.7.14
+    dev: true
+    patched: true
 
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}

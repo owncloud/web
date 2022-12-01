@@ -37,7 +37,6 @@
     "tippy.js": "^6.3.7",
     "utf8": "^3.0.0",
     "uuid": "^9.0.0",
-    "v-calendar": "^2.3.2",
     "vue-async-computed": "^3.9.0",
     "vue-concurrency": "4.0.0",
     "vue-events": "^3.1.0",
