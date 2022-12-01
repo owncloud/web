@@ -383,6 +383,7 @@ export default defineComponent({
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
+    this.preloadImages()
   },
 
   beforeDestroy() {
@@ -409,19 +410,16 @@ export default defineComponent({
       this.isFileContentLoading = false
       this.isFileContentError = true
     },
-
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
       this.setActiveFile(result.route.params.driveAliasAndItem)
     },
-
     handleFullScreenChangeEvent() {
       if (document.fullscreenElement === null) {
         this.isFullScreenModeActivated = false
       }
     },
-
     // update route and url
     updateLocalHistory() {
       const routeOptions = mergeFileRouteOptions(
@@ -430,7 +428,6 @@ export default defineComponent({
       )
       history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },
-
     loadMedium() {
       this.isFileContentLoading = true
 
@@ -448,7 +445,6 @@ export default defineComponent({
 
       this.loadActiveFileIntoCache()
     },
-
     async loadActiveFileIntoCache() {
       try {
         const loadRawFile = !this.isActiveFileTypeImage
@@ -487,7 +483,6 @@ export default defineComponent({
         console.error(e)
       }
     },
-
     triggerActiveFileDownload() {
       if (this.isFileContentLoading) {
         return
@@ -543,6 +538,36 @@ export default defineComponent({
     imageRotateRight() {
       this.currentImageRotation =
         this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
+    },
+    preloadImages() {
+      for (const activeFile of this.filteredFiles) {
+        if (
+          activeFile.mimeType.toLowerCase().startsWith('audio') ||
+          activeFile.mimeType.toLowerCase().startsWith('video')
+        ) {
+          continue
+        }
+        loadPreview({
+          resource: this.activeFile,
+          isPublic: this.isPublicLinkContext,
+          server: configurationManager.serverUrl,
+          userId: this.user.id,
+          token: this.accessToken,
+          dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+        }).then((mediaUrl) => {
+          this.cachedFiles.push({
+            id: activeFile.id,
+            name: activeFile.name,
+            url: mediaUrl,
+            ext: activeFile.extension,
+            mimeType: activeFile.mimeType,
+            isImage: true,
+            isVideo: false,
+            isAudio: false
+          })
+          console.log(this.cachedFiles)
+        })
+      }
     }
   }
 })
