@@ -214,6 +214,7 @@ export default defineComponent({
         uppyService
       }),
       ...useUploadHelpers({
+        uppyService,
         space: computed(() => props.space),
         currentFolder: computed(() => props.item),
         currentFolderId: computed(() => props.itemId)

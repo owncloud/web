@@ -21,6 +21,7 @@ export interface UppyResource {
   source: string
   name: string
   type: string
+  size: number
   data: Blob
   meta: {
     // IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
@@ -33,6 +34,7 @@ export interface UppyResource {
     currentFolderId?: string | number
     fileId?: string | number
     // upload data
+    uppyId?: string
     relativeFolder: string
     relativePath: string
     tusEndpoint: string

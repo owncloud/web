@@ -1,4 +1,4 @@
-import Uppy from '@uppy/core'
+import Uppy, { UppyFile } from '@uppy/core'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -6,6 +6,8 @@ import { UppyResource } from '../composables/upload'
 import { CustomDropTarget } from '../composables/upload/uppyPlugins/customDropTarget'
 import { CustomTus } from '../composables/upload/uppyPlugins/customTus'
 import { urlJoin } from 'web-client/src/utils'
+import getFileType from '@uppy/utils/lib/getFileType'
+import generateFileID from '@uppy/utils/lib/generateFileID'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -217,6 +219,23 @@ export class UppyService {
 
   removeUploadInput(el: HTMLInputElement) {
     this.uploadInputs = this.uploadInputs.filter((input) => input !== el)
+  }
+
+  generateUploadId(file: File): string {
+    return generateFileID({
+      name: file.name,
+      size: file.size,
+      type: getFileType(file as unknown as UppyFile),
+      data: file
+    } as unknown as UppyFile)
+  }
+
+  getFailedFiles(): UppyResource[] {
+    return this.uppy.getFiles() as unknown as UppyResource[]
+  }
+
+  retryUpload(fileId) {
+    this.uppy.retryUpload(fileId)
   }
 
   uploadFiles(files: UppyResource[]) {
