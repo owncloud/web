@@ -388,6 +388,7 @@ export default defineComponent({
   .oc-search-input {
     background-color: var(--oc-color-input-bg);
     transition: 0s;
+    height: 2.3rem;
 
     @media (max-width: 639px) {
       border: none;
