@@ -16,7 +16,7 @@ module.exports = {
     '^.+\\.vue$': '@vue/vue2-jest'
   },
   moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/tests/unit/stubs/empty.js',
+    '\\.(css|less|scss)$': '<rootDir>/tests/unit/stubs/empty.js',
     '^@/(.*)$': '<rootDir>/$1',
     'core-js': '<rootDir>/node_modules/core-js',
 

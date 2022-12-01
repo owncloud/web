@@ -167,7 +167,7 @@ $width-2xlarge-width: 750px !default;
 .oc-width-2xlarge { width: $width-2xlarge-width; }
 
 /* Auto */
-.oc-width-auto { width: auto; }
+.oc-width-auto { width: auto !important; }
 
 /* Expand */
 .oc-width-expand {

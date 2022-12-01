@@ -42,6 +42,8 @@
   </div>
 </template>
 <script lang="ts">
+import '../../design-system/src/styles/styles.scss'
+
 import { mapGetters, mapState, mapActions } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'

@@ -360,7 +360,7 @@ export default {
       var(--oc-color-swatch-primary-muted)
     );
     &-filled {
-      @extend .oc-background-primary-gradient;
+      @include oc-background-primary-gradient;
       color: var(--oc-color-swatch-inverse-default) !important;
 
       span > svg {

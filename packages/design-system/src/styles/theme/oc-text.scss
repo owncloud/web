@@ -68,14 +68,14 @@ td.oc-text-truncate {
  * Wrap long words onto the next line and break them if they are too long to fit
  */
 .oc-text-break {
-  overflow-wrap: break-word;
-  white-space: unset;
-  word-wrap: break-word;
+  overflow-wrap: break-word !important;
+  white-space: unset !important;
+  word-wrap: break-word !important;
 }
 
 th.oc-text-break,
 td.oc-text-break {
-  word-break: break-all;
+  word-break: break-all !important;
 }
 
 /* ----------------------- */

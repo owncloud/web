@@ -2,7 +2,7 @@
   <oc-grid
     flex
     :role="isFilter ? undefined : 'search'"
-    class="oc-search"
+    class="oc-search oc-flex-middle"
     :class="{ 'oc-search-small': small }"
   >
     <div class="oc-width-expand oc-position-relative">
@@ -227,7 +227,7 @@ export default {
       return 'medium'
     },
     inputClass() {
-      const classes = ['oc-search-input']
+      const classes = ['oc-search-input', 'oc-input']
 
       this.icon && classes.push('oc-search-input-icon')
       !this.buttonHidden && classes.push('oc-search-input-button')
@@ -287,8 +287,6 @@ export default {
 @import '../../styles/styles';
 
 .oc-search {
-  @extend .oc-flex-middle;
-
   min-width: $form-width-medium;
 
   &-button {
@@ -313,8 +311,6 @@ export default {
   }
 
   &-input {
-    @extend .oc-input;
-
     border-radius: 25px;
     border: 1px solid var(--oc-color-input-border);
     color: var(--oc-color-input-text-muted);

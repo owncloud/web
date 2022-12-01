@@ -158,8 +158,7 @@ export default {
   }
 
   &-title {
-    @extend .oc-mb-rm;
-
+    margin-bottom: 0;
     display: block;
     font-size: var(--oc-font-size-large);
 

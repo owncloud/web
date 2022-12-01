@@ -13,7 +13,7 @@
         <textarea
           id="description-input-area"
           v-model="readmeContent"
-          class="oc-width-1-1 oc-height-1-1 oc-text-input"
+          class="oc-width-1-1 oc-height-1-1 oc-input oc-text-input"
           rows="30"
         ></textarea>
       </template>

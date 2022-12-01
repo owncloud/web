@@ -230,9 +230,9 @@ export default {
   }
 
   &-message {
-    @extend .oc-flex;
-    @extend .oc-flex-middle;
-    @extend .oc-mt-xs;
+    display: flex;
+    align-items: center;
+    margin-top: var(--oc-space-xsmall);
 
     min-height: $oc-font-size-default * 1.5;
   }

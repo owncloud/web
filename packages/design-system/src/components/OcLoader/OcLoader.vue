@@ -33,8 +33,6 @@ export default {
 @import '../../styles/styles';
 
 .oc-loader {
-  @extend .oc-position-relative;
-
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: #f8f8f8;
@@ -47,6 +45,7 @@ export default {
   overflow: hidden;
   vertical-align: baseline;
   width: 100%;
+  position: relative;
 
   &-flat {
     border-radius: 0 !important;
@@ -54,13 +53,12 @@ export default {
   }
 
   &::after {
-    @extend .oc-position-absolute;
-    @extend .oc-display-block;
-
     background: var(--oc-color-text-muted);
     content: '';
     height: 100%;
     width: 0;
+    display: block;
+    position: absolute;
 
     animation: {
       duration: 1.4s;

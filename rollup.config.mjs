@@ -44,6 +44,18 @@ const __filename = fileURLToPath(import.meta.url)
 const projectRootDir = dirname(__filename)
 
 const plugins = [
+  {
+    transform(src, id) {
+      if (id.includes('rollup-plugin-vue=styles')) {
+        const split = src.split('/* STYLES STRIP IMPORTS MARKER */')
+        const newSrc = split[split.length-1]
+        return {
+          code: newSrc,
+          map: null
+        }
+      }
+    }
+  },
   postcss({
     extract: path.join('css', 'web.css'),
     minimize: production,
