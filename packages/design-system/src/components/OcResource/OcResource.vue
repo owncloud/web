@@ -172,7 +172,7 @@ export default {
     hasThumbnail() {
       return (
         this.isThumbnailDisplayed &&
-        !isTxtFileAlmostEmpty() &&
+        !this.isTxtFileAlmostEmpty &&
         Object.prototype.hasOwnProperty.call(this.resource, 'thumbnail')
       )
     },
