@@ -2730,8 +2730,6 @@ def deploy(ctx, config, rebuild):
         "trigger": {
             "ref": [
                 "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/v*",
             ],
         },
     }
