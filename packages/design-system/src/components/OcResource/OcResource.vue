@@ -165,9 +165,14 @@ export default {
       }
     },
 
+    isTxtFileAlmostEmpty() {
+      return this.resource.extension === 'txt' && parseInt(this.resource.size) < 30
+    },
+
     hasThumbnail() {
       return (
         this.isThumbnailDisplayed &&
+        !isTxtFileAlmostEmpty() &&
         Object.prototype.hasOwnProperty.call(this.resource, 'thumbnail')
       )
     },
