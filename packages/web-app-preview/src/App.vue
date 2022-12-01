@@ -319,11 +319,11 @@ export default defineComponent({
     },
 
     isActiveFileTypeAudio() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('audio')
+      return this.isFileTypeAudio(this.activeFilteredFile)
     },
 
     isActiveFileTypeVideo() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
+      return this.isFileTypeVideo(this.activeFilteredFile)
     },
     enterFullScreenDescription() {
       return this.$gettext('Enter full screen mode')
@@ -539,16 +539,23 @@ export default defineComponent({
       this.currentImageRotation =
         this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
     },
+    isFileTypeImage(file) {
+      return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
+    },
+    isFileTypeAudio(file) {
+      return file.mimeType.toLowerCase().startsWith('audio')
+    },
+
+    isFileTypeVideo(file) {
+      return file.mimeType.toLowerCase().startsWith('video')
+    },
     preloadImages() {
-      for (const activeFile of this.filteredFiles) {
-        if (
-          activeFile.mimeType.toLowerCase().startsWith('audio') ||
-          activeFile.mimeType.toLowerCase().startsWith('video')
-        ) {
+      for (const file of this.filteredFiles) {
+        if (!this.isFileTypeImage(file)) {
           continue
         }
         loadPreview({
-          resource: this.activeFile,
+          resource: file,
           isPublic: this.isPublicLinkContext,
           server: configurationManager.serverUrl,
           userId: this.user.id,
@@ -556,11 +563,11 @@ export default defineComponent({
           dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
         }).then((mediaUrl) => {
           this.cachedFiles.push({
-            id: activeFile.id,
-            name: activeFile.name,
+            id: file.id,
+            name: file.name,
             url: mediaUrl,
-            ext: activeFile.extension,
-            mimeType: activeFile.mimeType,
+            ext: file.extension,
+            mimeType: file.mimeType,
             isImage: true,
             isVideo: false,
             isAudio: false
