@@ -10,7 +10,7 @@ const getResourcesUploadInstance = ({
   currentFiles = [mockDeep<Resource>()],
   spaces = [mockDeep<SpaceResource>()],
   showMessage = jest.fn(),
-  uppyService = mockDeep<UppyService>(),
+  uppyService = mockDeep<UppyService>({ getFailedFiles: jest.fn(() => []) }),
   createDirectoryTree = jest.fn().mockImplementation(() => ({ failed: [], successful: [] }))
 }: {
   space?: SpaceResource
@@ -157,7 +157,8 @@ describe('upload helper', () => {
       const publishStub = jest.fn()
       const uppyService = mockDeep<UppyService>({
         uploadFiles: uploadFilesStub,
-        publish: publishStub
+        publish: publishStub,
+        getFailedFiles: jest.fn(() => [])
       })
       const filesToUpload = [mockDeep<UppyResource>()]
       const resourcesUpload = getResourcesUploadInstance({ uppyService })
@@ -172,7 +173,8 @@ describe('upload helper', () => {
       const publishStub = jest.fn()
       const uppyService = mockDeep<UppyService>({
         uploadFiles: uploadFilesStub,
-        publish: publishStub
+        publish: publishStub,
+        getFailedFiles: jest.fn(() => [])
       })
       const filesToUpload = []
       const resourcesUpload = getResourcesUploadInstance({ uppyService })
@@ -190,7 +192,8 @@ describe('upload helper', () => {
       const publishStub = jest.fn()
       const uppyService = mockDeep<UppyService>({
         uploadFiles: uploadFilesStub,
-        publish: publishStub
+        publish: publishStub,
+        getFailedFiles: jest.fn(() => [])
       })
       const filesToUpload = [mockDeep<UppyResource>({ meta: { relativeFolder: '/parent' } })]
       const resourcesUpload = getResourcesUploadInstance({
@@ -202,6 +205,25 @@ describe('upload helper', () => {
       expect(publishStub).toHaveBeenCalledWith('uploadStarted')
       expect(publishStub).toHaveBeenCalledTimes(2)
       expect(uploadFilesStub).toHaveBeenCalledTimes(0)
+    })
+    it('should filter out retries', async () => {
+      const uploadFilesStub = jest.fn()
+      const publishStub = jest.fn()
+      const retryUploadStub = jest.fn()
+      const filesToUpload = [mockDeep<UppyResource>()]
+      const uppyService = mockDeep<UppyService>({
+        uploadFiles: uploadFilesStub,
+        publish: publishStub,
+        retryUpload: retryUploadStub,
+        getFailedFiles: jest.fn(() => filesToUpload)
+      })
+      const resourcesUpload = getResourcesUploadInstance({ uppyService })
+      await resourcesUpload.handleUppyFileUpload(mockDeep<SpaceResource>(), '/', filesToUpload)
+
+      expect(publishStub).toHaveBeenCalledWith('uploadStarted')
+      expect(publishStub).toHaveBeenCalledTimes(2)
+      expect(retryUploadStub).toHaveBeenCalled()
+      expect(uploadFilesStub).not.toHaveBeenCalled()
     })
   })
 

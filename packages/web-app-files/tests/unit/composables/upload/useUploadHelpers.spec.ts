@@ -3,6 +3,7 @@ import { createWrapper } from './spec'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ComputedRef, computed } from 'vue'
+import { UppyService } from 'web-runtime/src/services/uppyService'
 
 describe('useUploadHelpers', () => {
   const currentPathMock = 'path'
@@ -17,6 +18,7 @@ describe('useUploadHelpers', () => {
       () => {
         const fileName = 'filename'
         const { inputFilesToUppyFiles } = useUploadHelpers({
+          uppyService: mockDeep<UppyService>(),
           space: mockDeep<ComputedRef<SpaceResource>>(),
           currentFolder: computed(() => '')
         })
