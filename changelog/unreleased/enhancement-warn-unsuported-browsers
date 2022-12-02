@@ -1,0 +1,8 @@
+Enhancement: Warn users when using unsupported browsers
+
+We've added a warning message if the browser is older than our supported configuration, instead of just failing and showing blue/white screens or generic errors.
+Users still have the option to proceed and open the page if they want to. By proceeding to the page, the setting is set for 30 days, afterwards the warning is shown again. 
+
+When building web, it's possible to pass a documentation url for users to know more about this issue, by setting the env variable DOCUMENTATION_URL.
+
+https://github.com/owncloud/web/pull/7942
