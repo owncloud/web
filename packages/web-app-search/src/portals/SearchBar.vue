@@ -159,6 +159,9 @@ export default defineComponent({
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
+        if(this.showNoResults) {
+          return
+        }
         if (this.$refs.optionsDrop) {
           this.markInstance = new Mark(this.$refs.optionsDrop.$refs.drop)
           this.markInstance.unmark()
