@@ -24,7 +24,7 @@ export const breadcrumbsFromPath = (
         text,
         to: {
           path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
-          query: omit(currentRoute.query, 'fileId') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
+          query: omit(currentRoute.query, 'fileId', 'page') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
         }
       } as BreadcrumbItem)
   )
