@@ -20,6 +20,7 @@ Summary
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
+* Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
 Details
 -------
@@ -116,6 +117,18 @@ Details
 
    https://github.com/owncloud/web/issues/7160
    https://github.com/owncloud/web/pull/7977
+
+* Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
+
+   We've added a warning message if the browser is older than our supported configuration,
+   instead of just failing and showing blue/white screens or generic errors. Users still have the
+   option to proceed and open the page if they want to. By proceeding to the page, the setting is set
+   for 30 days, afterwards the warning is shown again.
+
+   When building web, it's possible to pass a documentation url for users to know more about this
+   issue, by setting the env variable DOCUMENTATION_URL.
+
+   https://github.com/owncloud/web/pull/7942
 
 Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
