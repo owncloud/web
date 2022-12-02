@@ -159,7 +159,7 @@ export default defineComponent({
       this.activePreviewIndex = null
 
       this.$nextTick(() => {
-        if(this.showNoResults) {
+        if (this.showNoResults) {
           return
         }
         if (this.$refs.optionsDrop) {
