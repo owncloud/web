@@ -1,0 +1,6 @@
+Enhancement: Retry failed uploads on re-upload
+
+When re-uploading a file that failed uploading before, the upload is now being retried instead of being started from scratch again. This fixes some issues with the overlay and preserves the upload progress.
+
+https://github.com/owncloud/web/pull/8055
+https://github.com/owncloud/web/issues/7944

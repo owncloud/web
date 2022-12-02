@@ -89,6 +89,7 @@ export class ResourcesUpload extends ConflictDialog {
     this.$uppyService.publish('uploadStarted')
     const result = await this.createDirectoryTree(space, currentFolder, files, this.currentFolderId)
 
+    // filter out files in folders that could not be created
     let filesToUpload = files
     if (result.failed.length) {
       filesToUpload = files.filter(
@@ -96,10 +97,34 @@ export class ResourcesUpload extends ConflictDialog {
       )
     }
 
+    // gather failed files to be retried
+    const failedFiles = this.$uppyService.getFailedFiles()
+    const retries = []
+
+    for (const failedFile of failedFiles) {
+      const fileToRetry = filesToUpload.find((f) => f.meta.uppyId === failedFile.meta.uppyId)
+      if (fileToRetry) {
+        // re-use the old uploadId
+        fileToRetry.meta.uploadId = failedFile.meta.uploadId
+        retries.push(fileToRetry)
+      }
+    }
+
     if (filesToUpload.length) {
       this.$uppyService.publish('addedForUpload', filesToUpload)
+    }
+
+    for (const retry of retries) {
+      this.$uppyService.retryUpload(retry.meta.uppyId)
+      // filter out files that have been retried
+      filesToUpload = filesToUpload.filter((f) => f.meta.uppyId !== retry.meta.uppyId)
+    }
+
+    if (filesToUpload.length) {
       this.$uppyService.uploadFiles(filesToUpload)
-    } else {
+    }
+
+    if (!filesToUpload.length && !retries.length) {
       this.$uppyService.publish('uploadCompleted', { successful: [] })
     }
   }

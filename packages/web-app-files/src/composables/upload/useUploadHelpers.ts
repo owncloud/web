@@ -6,11 +6,12 @@ import * as uuid from 'uuid'
 import path from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
-
+import { UppyService } from 'web-runtime/src/services/uppyService'
 interface UploadHelpersOptions {
   space: ComputedRef<SpaceResource>
   currentFolder?: ComputedRef<string>
   currentFolderId?: ComputedRef<string | number>
+  uppyService: UppyService
 }
 
 interface UploadHelpersResult {
@@ -18,6 +19,7 @@ interface UploadHelpersResult {
 }
 
 interface inputFileOptions {
+  uppyService: UppyService
   route: Ref<Route>
   space: Ref<SpaceResource>
   currentFolder: Ref<string>
@@ -27,6 +29,7 @@ interface inputFileOptions {
 export function useUploadHelpers(options: UploadHelpersOptions): UploadHelpersResult {
   return {
     inputFilesToUppyFiles: inputFilesToUppyFiles({
+      uppyService: options.uppyService,
       route: useRoute(),
       space: options.space,
       currentFolder: options.currentFolder,
@@ -49,6 +52,7 @@ const getRelativeFilePath = (file: File): string | undefined => {
 }
 
 const inputFilesToUppyFiles = ({
+  uppyService,
   route,
   space,
   currentFolder,
@@ -86,6 +90,7 @@ const inputFilesToUppyFiles = ({
         source: 'file input',
         name: file.name,
         type: file.type,
+        size: file.size,
         data: file,
         meta: {
           // current path & space
@@ -96,6 +101,7 @@ const inputFilesToUppyFiles = ({
           currentFolder: unref(currentFolder),
           currentFolderId: unref(currentFolderId),
           // upload data
+          uppyId: uppyService.generateUploadId(file),
           relativeFolder: directory,
           relativePath: relativeFilePath, // uppy needs this property to be named relativePath
           tusEndpoint,

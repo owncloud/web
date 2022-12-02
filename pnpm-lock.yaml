@@ -624,6 +624,7 @@ importers:
       '@uppy/core': ^3.0.2
       '@uppy/drop-target': ^2.0.0
       '@uppy/tus': ^3.0.1
+      '@uppy/utils': ^5.0.2
       '@uppy/xhr-upload': ^3.0.1
       axios: ^0.27.2
       easygettext: https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz
@@ -676,6 +677,7 @@ importers:
       '@uppy/core': 3.0.2
       '@uppy/drop-target': 2.0.0_@uppy+core@3.0.2
       '@uppy/tus': 3.0.1_@uppy+core@3.0.2
+      '@uppy/utils': 5.0.2
       '@uppy/xhr-upload': 3.0.1_@uppy+core@3.0.2
       axios: 0.27.2
       easygettext: '@github.com/owncloud/easygettext/archive/refs/tags/v2.18.1-oc.tar.gz'

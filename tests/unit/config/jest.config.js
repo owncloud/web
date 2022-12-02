@@ -24,7 +24,8 @@ module.exports = {
     '@uppy/core': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/xhr-upload': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/drop-target': '<rootDir>tests/unit/stubs/uppy',
-    '@uppy/tus': '<rootDir>tests/unit/stubs/uppy'
+    '@uppy/tus': '<rootDir>tests/unit/stubs/uppy',
+    '@uppy/utils': '<rootDir>tests/unit/stubs/uppy'
   },
   modulePathIgnorePatterns: ['packages/design-system/docs/utils/statusLabels.spec.js'],
   testEnvironment: 'jsdom',
