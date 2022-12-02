@@ -20,6 +20,7 @@ Summary
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
+* Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
 Details
@@ -117,6 +118,15 @@ Details
 
    https://github.com/owncloud/web/issues/7160
    https://github.com/owncloud/web/pull/7977
+
+* Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
+
+   When re-uploading a file that failed uploading before, the upload is now being retried instead
+   of being started from scratch again. This fixes some issues with the overlay and preserves the
+   upload progress.
+
+   https://github.com/owncloud/web/issues/7944
+   https://github.com/owncloud/web/pull/8055
 
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
