@@ -117,7 +117,7 @@ Details
    https://github.com/owncloud/web/issues/7160
    https://github.com/owncloud/web/pull/7977
 
-Changelog for ownCloud Web [6.0.0] (2022-11-24)
+Changelog for ownCloud Web [6.0.0] (2022-11-29)
 =======================================
 The following sections list the changes in ownCloud web 6.0.0 relevant to
 ownCloud admins and users.
@@ -169,6 +169,7 @@ Summary
 * Bugfix - Spaces on "Shared via link"-page: [#7651](https://github.com/owncloud/web/pull/7651)
 * Bugfix - Spaces reactivity on update: [#7521](https://github.com/owncloud/web/issues/7521)
 * Bugfix - Display error messages in text editor: [#7960](https://github.com/owncloud/web/issues/7960)
+* Bugfix - Saving a file multiple times with the text editor: [#8030](https://github.com/owncloud/web/pull/8030)
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 * Bugfix - Introduce "upload finalizing"-state in upload overlay: [#7956](https://github.com/owncloud/web/issues/7956)
 * Bugfix - Upload modify time: [#7630](https://github.com/owncloud/web/pull/7630)
@@ -197,7 +198,7 @@ Summary
 * Enhancement - Auth context in route meta props: [#7234](https://github.com/owncloud/web/issues/7234)
 * Enhancement - Improve search experience: [#7821](https://github.com/owncloud/web/pull/7821)
 * Enhancement - Make search results sortable: [#7801](https://github.com/owncloud/web/pull/7801)
-* Enhancement - Update ODS to v14.0.0-alpha.25: [#7915](https://github.com/owncloud/web/pull/7915)
+* Enhancement - Update ODS to v14.0.1: [#8028](https://github.com/owncloud/web/pull/8028)
 * Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 * Enhancement - Webdav support in web-client package: [#7430](https://github.com/owncloud/web/pull/7430)
 * Enhancement - XHR upload timeout: [#7900](https://github.com/owncloud/web/issues/7900)
@@ -553,6 +554,13 @@ Details
    https://github.com/owncloud/web/issues/7960
    https://github.com/owncloud/web/pull/8001
 
+* Bugfix - Saving a file multiple times with the text editor: [#8030](https://github.com/owncloud/web/pull/8030)
+
+   An issue with saving a file multiple times via text editor has been fixed.
+
+   https://github.com/owncloud/web/issues/8029
+   https://github.com/owncloud/web/pull/8030
+
 * Bugfix - Trash bin sidebar: [#7778](https://github.com/owncloud/web/issues/7778)
 
    We've fixed the sidebar in the trash bin which was throwing errors and not showing the right
@@ -814,10 +822,10 @@ Details
    https://github.com/owncloud/web/issues/7798
    https://github.com/owncloud/web/pull/7801
 
-* Enhancement - Update ODS to v14.0.0-alpha.25: [#7915](https://github.com/owncloud/web/pull/7915)
+* Enhancement - Update ODS to v14.0.1: [#8028](https://github.com/owncloud/web/pull/8028)
 
-   We updated the ownCloud Design System to version 14.0.0-alpha.25. Please refer to the full
-   changelog in the ODS release (linked) for more details. Summary:
+   We updated the ownCloud Design System to version 14.0.1. Please refer to the full changelog in
+   the ODS release (linked) for more details. Summary:
 
    * Bugfix - Omit special characters in user avatar initials:
    [#2070](https://github.com/owncloud/owncloud-design-system/issues/2070) * Bugfix -
@@ -879,8 +887,9 @@ Details
    Enhancement - Input background color:
    [#2352](https://github.com/owncloud/owncloud-design-system/pull/2352)
 
-   https://github.com/owncloud/web/pull/7915
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0-alpha.25
+   https://github.com/owncloud/web/pull/8028
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v14.0.1
 
 * Enhancement - Validate space names: [#7890](https://github.com/owncloud/web/pull/7890)
 
