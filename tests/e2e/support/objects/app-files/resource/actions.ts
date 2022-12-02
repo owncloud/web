@@ -18,7 +18,7 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const saveTextFileInEditorButton = '#text-editor-controls-save'
+const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
@@ -30,9 +30,10 @@ const clipboardBtns = '#clipboard-btns'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
-const actionConfirmationButton = '.oc-modal-body-actions-confirm'
+const actionConfirmationButton =
+  '//button[contains(@class,"oc-modal-body-actions-confirm") and text()="%s"]'
 const actionSkipButton = '.oc-modal-body-actions-cancel'
-const actionReplaceButton = '.oc-modal-body-actions-secondary'
+const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
 const notificationMessageDialog = '.oc-notification-message-title'
@@ -46,6 +47,8 @@ const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
+const saveBigButton = '.geBigButton >> text=Save'
+const drawIoFrame = '#drawio-editor'
 
 export const clickResource = async ({
   page,
@@ -91,7 +94,7 @@ export const createNewFolder = async ({
   await page.locator(resourceNameInput).fill(resource)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
 }
 
@@ -108,7 +111,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await page.locator(resourceNameInput).fill(name)
       await Promise.all([
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
-        page.locator(actionConfirmationButton).click()
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await editTextDocument({ page, content: content })
       break
@@ -118,7 +121,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await page.locator(resourceNameInput).fill(name)
       await Promise.all([
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
-        page.locator(actionConfirmationButton).click()
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await editTextDocument({ page, content: content })
       break
@@ -130,10 +133,10 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       const [drawioTab] = await Promise.all([
         page.waitForEvent('popup'),
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
-        page.locator(actionConfirmationButton).click()
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await drawioTab.waitForLoadState()
-      await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
+      await drawioTab.frameLocator(drawIoFrame).locator(saveBigButton).click()
       await drawioTab.waitForURL('**/draw-io/personal/**')
       await drawioTab.close()
       break
@@ -144,31 +147,21 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
 export const createResources = async (args: createResourceArgs): Promise<void> => {
   const { page, name, type, content } = args
   const paths = name.split('/')
-  const baseResource = paths.pop()
+  const resource = paths.pop()
 
-  for (const resource of paths) {
+  for (const path of paths) {
     const resourcesExists = await resourceExists({
       page: page,
-      name: resource
+      name: path
     })
 
     if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-      await createNewFolder({ page, resource: resource })
-      await clickResource({ page, path: resource })
-    } else {
-      await clickResource({ page, path: resource })
+      await createNewFolder({ page, resource: path })
     }
+    await clickResource({ page, path: path })
   }
-
-  const baseResourcesExists = await resourceExists({
-    page: page,
-    name: baseResource
-  })
-
-  if (!baseResourcesExists) {
-    await createNewFileOrFolder({ page, name: baseResource, type: type, content: content })
-  }
+  await createNewFileOrFolder({ page, name: resource, type: type, content: content })
 }
 
 export const editTextDocument = async ({
@@ -211,8 +204,9 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
         await page.locator(actionSkipButton).click()
         break
       }
+      case 'merge':
       case 'replace': {
-        await page.locator(actionReplaceButton).click()
+        await page.locator(actionSecondaryConfirmationButton).click()
         await page.locator(uploadInfoCloseButton).click()
 
         await waitForResources({
@@ -222,7 +216,7 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
         break
       }
       case 'keep both': {
-        await page.locator(actionConfirmationButton).click()
+        await page.locator(util.format(actionConfirmationButton, 'Keep both')).click()
         await page.locator(uploadInfoCloseButton).click()
 
         await waitForResources({
@@ -385,7 +379,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
         resp.status() === 201 &&
         resp.request().method() === 'MOVE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
 
   await waitForResources({
@@ -445,7 +439,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   await sidebar.close({ page: page })
 }
@@ -485,7 +479,7 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
     page.waitForResponse(
       (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
@@ -506,7 +500,7 @@ export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<
     page.waitForResponse(
       (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()

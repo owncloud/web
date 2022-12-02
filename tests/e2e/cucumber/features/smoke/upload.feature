@@ -27,4 +27,4 @@ Feature: Upload
   #  And "Alice" uploads the following resources
   #    | resource |
   #    | PARENT   |
-
+  And "Alice" logs out
