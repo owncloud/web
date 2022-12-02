@@ -32,8 +32,8 @@ Feature: share
       | simple.pdf | folder_to_shared |
     When "Alice" opens the "files" app
     And "Alice" uploads the following resource
-      | resource          | to               | create_version |
-      | PARENT/simple.pdf | folder_to_shared | true           |
+      | resource          | to               | option  |
+      | PARENT/simple.pdf | folder_to_shared | replace |
     And "Brian" downloads old version of the following resource
       | resource   | to               |
       | simple.pdf | folder_to_shared |

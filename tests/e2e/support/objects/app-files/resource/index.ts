@@ -1,6 +1,6 @@
 import { Download, Page } from 'playwright'
 import {
-  createResource,
+  createResources,
   createResourceArgs,
   deleteResource,
   deleteResourceArgs,
@@ -42,7 +42,7 @@ export class Resource {
 
   async create(args: Omit<createResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await createResource({ ...args, page: this.#page })
+    await createResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     await this.#page.waitForSelector('.files-table')
   }
