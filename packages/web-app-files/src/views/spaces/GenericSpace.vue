@@ -232,7 +232,7 @@ export default defineComponent({
 
       let spaceBreadcrumbItem
       let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
-      query = { ...unref(route).query, ...query }
+      query = omit({ ...unref(route).query, ...query }, 'page')
       if (isPersonalSpaceResource(space)) {
         spaceBreadcrumbItem = {
           text: space.name,
