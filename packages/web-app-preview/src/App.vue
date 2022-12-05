@@ -556,6 +556,8 @@ export default defineComponent({
       let imageFilesToPreLoad = []
       const imageFiles = this.filteredFiles.filter((file) => this.isFileTypeImage(file))
 
+      //TODO: Needs to pay attention to the current index
+
       // Load first 10 images in to cache
       imageFilesToPreLoad.push(...imageFiles.slice(0, PRELOAD_IMAGE_COUNT))
 
