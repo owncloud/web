@@ -3,8 +3,6 @@ import { createQuicklink } from '../../helpers/share'
 import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../router'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   computed: {
@@ -43,8 +41,6 @@ export default {
         store,
         $gettext: this.$gettext
       })
-
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#linkShares')
     }
   }
 }
