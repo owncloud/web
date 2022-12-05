@@ -37,7 +37,7 @@
     "uuid": "*"
   },
   "devDependencies": {
-    "@babel/core": "7.20.2",
+    "@babel/core": "7.20.5",
     "@babel/polyfill": "7.12.1",
     "@babel/preset-env": "7.20.2",
     "@babel/register": "7.18.9",
@@ -50,14 +50,14 @@
     "@ownclouders/eslint-config": "workspace:*",
     "@ownclouders/prettier-config": "workspace:*",
     "@ownclouders/tsconfig": "workspace:*",
-    "@playwright/test": "1.28.0",
+    "@playwright/test": "1.28.1",
     "@rollup-extras/plugin-copy": "1.5.3",
     "@rollup/plugin-alias": "4.0.2",
-    "@rollup/plugin-babel": "6.0.2",
-    "@rollup/plugin-commonjs": "23.0.2",
+    "@rollup/plugin-babel": "6.0.3",
+    "@rollup/plugin-commonjs": "23.0.3",
     "@rollup/plugin-html": "1.0.1",
     "@rollup/plugin-inject": "5.0.2",
-    "@rollup/plugin-json": "5.0.1",
+    "@rollup/plugin-json": "5.0.2",
     "@rollup/plugin-node-resolve": "15.0.1",
     "@rollup/plugin-terser": "0.1.0",
     "@types/jest": "27.5.2",
@@ -76,7 +76,7 @@
     "cucumber-html-reporter": "5.5.0",
     "depcheck": "1.4.3",
     "ejs": "3.1.8",
-    "eslint": "8.27.0",
+    "eslint": "8.28.0",
     "flush-promises": "1.0.2",
     "focus-trap": "6.9.4",
     "focus-trap-vue": "1.1.1",
@@ -94,12 +94,12 @@
     "node-fetch": "2.6.7",
     "pino": "7.11.0",
     "pino-pretty": "7.6.1",
-    "playwright": "1.28.0",
+    "playwright": "1.28.1",
     "postcss": "8.4.19",
     "qs": "6.11.0",
     "react": "17.0.2",
     "requirejs": "2.3.6",
-    "rollup": "3.3.0",
+    "rollup": "3.5.0",
     "rollup-plugin-delete": "2.0.0",
     "rollup-plugin-gzip": "3.1.0",
     "rollup-plugin-livereload": "2.0.5",
@@ -107,7 +107,7 @@
     "rollup-plugin-polyfill-node": "0.11.0",
     "rollup-plugin-postcss": "4.0.2",
     "rollup-plugin-progress": "1.1.2",
-    "rollup-plugin-serve": "2.0.1",
+    "rollup-plugin-serve": "2.0.2",
     "rollup-plugin-ts": "3.0.2",
     "rollup-plugin-visualizer": "5.8.3",
     "rollup-plugin-vue": "5.1.9",
@@ -128,7 +128,18 @@
     "node": "16.18.1"
   },
   "pnpm": {
+    "packageExtensions": {
+      "@adobe/leonardo-contrast-colors": {
+        "dependencies": {
+          "d3": "^5.12.0",
+          "d3-cam02": "^0.1.5",
+          "d3-hsluv": "^0.1.2",
+          "d3-hsv": "^0.1.0"
+        }
+      }
+    },
     "patchedDependencies": {
+      "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
       "v-calendar@2.3.4": "patches/v-calendar@2.3.4.patch"
     }
   }

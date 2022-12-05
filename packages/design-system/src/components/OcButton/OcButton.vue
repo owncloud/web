@@ -179,7 +179,7 @@ export default {
 @import '../../styles/styles';
 
 @mixin oc-button-gap($factor) {
-  gap: round($oc-space-small * $factor / 2) * 2;
+  gap: round(calc($oc-space-small * $factor / 2)) * 2;
 }
 
 @mixin oc-button-line-height($factor) {
