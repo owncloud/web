@@ -210,6 +210,8 @@ export const mimeTypes = () => {
   ]
 }
 
+const PRELOAD_IMAGE_COUNT = 10
+
 export default defineComponent({
   name: 'Preview',
   components: {
@@ -550,7 +552,22 @@ export default defineComponent({
       return file.mimeType.toLowerCase().startsWith('video')
     },
     preloadImages() {
-      for (const file of this.filteredFiles) {
+      let imageFilesToPreLoad = []
+      const imageFiles = this.filteredFiles.filter((file) => this.isFileTypeImage(file))
+
+      // Load first 10 images in to cache
+      imageFilesToPreLoad.push(...imageFiles.slice(0, PRELOAD_IMAGE_COUNT))
+
+      // Load last 10 images in to cache
+      if (imageFiles.length > PRELOAD_IMAGE_COUNT) {
+        imageFilesToPreLoad.push(
+          ...imageFiles.slice(
+            -Math.min(imageFiles.length - PRELOAD_IMAGE_COUNT, PRELOAD_IMAGE_COUNT)
+          )
+        )
+      }
+
+      for (const file of imageFilesToPreLoad) {
         if (!this.isFileTypeImage(file)) {
           continue
         }
