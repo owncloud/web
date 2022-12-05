@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-flex-middle">
-    <div class="oc-button-group oc-visible@s oc-mr-s">
+    <div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
       <oc-button
         :appearance="viewModeCurrent === ViewModeConstants.condensedTable ? 'filled' : 'outline'"
         @click="setViewMode(ViewModeConstants.condensedTable)"
