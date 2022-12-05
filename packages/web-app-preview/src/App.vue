@@ -191,6 +191,7 @@ import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
+const PRELOAD_IMAGE_COUNT = 5
 export const appId = 'preview'
 
 export const mimeTypes = () => {
@@ -268,7 +269,7 @@ export default defineComponent({
     pageTitle() {
       const translated = this.$gettext('Preview for %{currentMediumName}')
       return this.$gettextInterpolate(translated, {
-        currentMediumName: this.activeFilteredFile?.name
+        currentMediumName: this.activeFilteredFile?.namedata
       })
     },
     ariaHiddenFileCount() {
@@ -589,7 +590,6 @@ export default defineComponent({
             isVideo: false,
             isAudio: false
           })
-          console.log(this.cachedFiles)
         })
       }
     }
