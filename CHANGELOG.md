@@ -17,6 +17,7 @@ Summary
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
+* Enhancement - Don't open sidebar when copying quicklink: [#8008](https://github.com/owncloud/web/issues/8008)
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
@@ -103,6 +104,14 @@ Details
 
    https://github.com/owncloud/web/issues/7937
    https://github.com/owncloud/web/pull/7968
+
+* Enhancement - Don't open sidebar when copying quicklink: [#8008](https://github.com/owncloud/web/issues/8008)
+
+   Following user feedback, we don't open the sharing sidebar anymore after copying/creating a
+   quicklink.
+
+   https://github.com/owncloud/web/issues/8008
+   https://github.com/owncloud/web/pull/8036
 
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
 
