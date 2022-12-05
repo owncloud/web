@@ -156,7 +156,7 @@ const panelGenerators: (({
     }
   }),
   ({ capabilities, highlightedFile, router, multipleSelection, rootFolder }) => ({
-    app: 'tags-item',
+    app: 'tags',
     icon: 'price-tag-3',
     iconFillType: 'line',
     title: $gettext('Tags'),

@@ -1,6 +1,8 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
+import { eventBus } from 'web-pkg'
 import { isLocationTrashActive, isLocationPublicActive } from '../../router'
 import isFilesAppActive from './helpers/isFilesAppActive'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default {
   mixins: [isFilesAppActive],
@@ -30,17 +32,15 @@ export default {
             }
             return resources.length === 1 && resources[0].canEditTags()
           },
-          componentType: 'oc-button',
+          componentType: 'button',
           class: 'oc-files-actions-show-edit-tags-trigger'
         }
       ]
     }
   },
   methods: {
-    ...mapActions('Files/sidebar', { openSidebarWithPanel: 'openWithPanel' }),
-
-    async $_showEditTags_trigger() {
-      await this.openSidebarWithPanel('tags-item')
+    $_showEditTags_trigger() {
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'tags')
     }
   }
 }
