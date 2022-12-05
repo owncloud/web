@@ -1,0 +1,6 @@
+Bugfix: UI fixes for sorting and quickactions
+
+Ensure the sorting of "shared with" in "shared with me" view is correct when they have been shared simultaneously with users and groups.
+Prevent the context actions to disappear when `hoverableQuickActions` is set to true.
+
+https://github.com/owncloud/web/pull/7966
