@@ -2,6 +2,8 @@ import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { eventBus } from 'web-pkg/src'
+import { SideBarEventTopics } from 'web-app-files/src/composables/sideBar'
 
 const router = {
   push: jest.fn(),
@@ -80,6 +82,7 @@ const resourcesWithAllFields = [
     indicators,
     isFolder: false,
     type: 'file',
+    tags: ['space', 'tag', 'moon'],
     size: '111000234',
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
@@ -98,6 +101,7 @@ const resourcesWithAllFields = [
     isFolder: false,
     type: 'file',
     size: 'big',
+    tags: ['space', 'tag'],
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
@@ -114,6 +118,7 @@ const resourcesWithAllFields = [
     isFolder: true,
     type: 'folder',
     size: '-1',
+    tags: [],
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
@@ -134,6 +139,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
+    tags: [],
     owner,
     canRename: jest.fn,
     getDomSelector: () => extractDomSelector('another-one==')
@@ -260,10 +266,39 @@ describe('ResourceTable', () => {
       expect(wrapper.classes()).toContain('oc-table-hover')
     })
   })
+
+  describe('tags', () => {
+    it('renders more than 2 tags and more button', () => {
+      const { wrapper } = getMountedWrapper({ props: { hover: false } })
+      const resource = wrapper.find('[data-item-id="forest"]')
+      expect(resource.findAll('.resource-table-tag').length).toBe(2)
+      expect(resource.findAll('.resource-table-tag-more').length).toBe(1)
+    })
+    it('renders no more button if tag count smaller 3', () => {
+      const { wrapper } = getMountedWrapper({ props: { hover: false } })
+      const resource = wrapper.find('[data-item-id="notes"]')
+      expect(resource.findAll('.resource-table-tag').length).toBe(2)
+      expect(resource.findAll('.resource-table-tag-more').length).toBe(0)
+    })
+    it('open sidebar on clicking more', async () => {
+      const spyBus = jest.spyOn(eventBus, 'publish')
+      const { wrapper } = getMountedWrapper({ props: { hover: false } })
+      const resource = wrapper.find('[data-item-id="forest"]')
+      await resource.find('.resource-table-tag-more').trigger('click')
+      expect(spyBus).toHaveBeenCalledWith(SideBarEventTopics.open)
+    })
+  })
 })
 
 function getMountedWrapper({ props = {} } = {}) {
-  const store = createStore(defaultStoreMockOptions)
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files: {
+      tags: true
+    }
+  }))
+
+  const store = createStore(storeOptions)
 
   return {
     wrapper: mount(ResourceTable, {
