@@ -2,7 +2,7 @@
   <oc-table
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
-      { condensed: viewMode === 'resource-table-condensed' }
+      { condensed: viewMode === ViewModeConstants.viewModeResourceTableCondensed }
     ]"
     :data="resources"
     :fields="fields"
@@ -184,6 +184,8 @@ import {
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled
 } from 'web-pkg/src/composables'
+import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
+
 import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
@@ -323,7 +325,7 @@ export default defineComponent({
     },
     viewMode: {
       type: String,
-      default: 'resource-table'
+      default: ViewModeConstants.viewModeDefault
     },
     /**
      * Enable hover effect
@@ -374,6 +376,7 @@ export default defineComponent({
   },
   setup() {
     return {
+      ViewModeConstants,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }

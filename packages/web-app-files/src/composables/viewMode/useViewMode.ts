@@ -1,5 +1,5 @@
 import { computed, ComputedRef, unref } from 'vue'
-import { useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { queryItemAsString, useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { ViewModeConstants } from './constants'
 
 export function useViewMode<T>(options: ComputedRef<string>): ComputedRef<string> {
@@ -7,9 +7,9 @@ export function useViewMode<T>(options: ComputedRef<string>): ComputedRef<string
     return computed(() => unref(options))
   }
 
-  const perPageQuery = useRouteQueryPersisted({
+  const viewModeQuery = useRouteQueryPersisted({
     name: ViewModeConstants.viewModeQueryName,
     defaultValue: ViewModeConstants.viewModeDefault
   })
-  return computed(() => String(unref(perPageQuery)))
+  return computed(() => queryItemAsString(unref(viewModeQuery)))
 }

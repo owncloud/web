@@ -2,14 +2,18 @@
   <div class="oc-flex oc-flex-middle">
     <div class="oc-button-group oc-visible@s oc-mr-s">
       <oc-button
-        :appearance="viewModeCurrent === 'resource-table-condensed' ? 'filled' : 'outline'"
-        @click="setViewMode('resource-table-condensed')"
+        :appearance="
+          viewModeCurrent === ViewModeConstants.viewModeResourceTableCondensed
+            ? 'filled'
+            : 'outline'
+        "
+        @click="setViewMode(ViewModeConstants.viewModeResourceTableCondensed)"
       >
         <oc-icon name="menu-line-condensed" fill-type="none" size="small" />
       </oc-button>
       <oc-button
-        :appearance="viewModeCurrent === 'resource-table' ? 'filled' : 'outline'"
-        @click="setViewMode('resource-table')"
+        :appearance="viewModeCurrent === ViewModeConstants.viewModeDefault ? 'filled' : 'outline'"
+        @click="setViewMode(ViewModeConstants.viewModeDefault)"
       >
         <oc-icon name="align-justify" fill-type="none" size="small" />
       </oc-button>
@@ -64,8 +68,7 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
-import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
-import { PaginationConstants } from '../../composables'
+import { PaginationConstants, ViewModeConstants } from '../../composables'
 
 export default {
   setup() {
@@ -79,6 +82,7 @@ export default {
     })
 
     return {
+      ViewModeConstants,
       viewModeCurrent: viewModeQuery,
       itemsPerPage: perPageQuery
     }
