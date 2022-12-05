@@ -8,8 +8,8 @@ export function useViewMode<T>(options: ComputedRef<string>): ComputedRef<string
   }
 
   const viewModeQuery = useRouteQueryPersisted({
-    name: ViewModeConstants.viewModeQueryName,
-    defaultValue: ViewModeConstants.viewModeDefault
+    name: ViewModeConstants.queryName,
+    defaultValue: ViewModeConstants.default
   })
   return computed(() => queryItemAsString(unref(viewModeQuery)))
 }

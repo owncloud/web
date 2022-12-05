@@ -2,18 +2,14 @@
   <div class="oc-flex oc-flex-middle">
     <div class="oc-button-group oc-visible@s oc-mr-s">
       <oc-button
-        :appearance="
-          viewModeCurrent === ViewModeConstants.viewModeResourceTableCondensed
-            ? 'filled'
-            : 'outline'
-        "
-        @click="setViewMode(ViewModeConstants.viewModeResourceTableCondensed)"
+        :appearance="viewModeCurrent === ViewModeConstants.condensedTable ? 'filled' : 'outline'"
+        @click="setViewMode(ViewModeConstants.condensedTable)"
       >
         <oc-icon name="menu-line-condensed" fill-type="none" size="small" />
       </oc-button>
       <oc-button
-        :appearance="viewModeCurrent === ViewModeConstants.viewModeDefault ? 'filled' : 'outline'"
-        @click="setViewMode(ViewModeConstants.viewModeDefault)"
+        :appearance="viewModeCurrent === ViewModeConstants.default ? 'filled' : 'outline'"
+        @click="setViewMode(ViewModeConstants.default)"
       >
         <oc-icon name="align-justify" fill-type="none" size="small" />
       </oc-button>
@@ -77,8 +73,8 @@ export default {
       defaultValue: PaginationConstants.perPageDefault
     })
     const viewModeQuery = useRouteQueryPersisted({
-      name: ViewModeConstants.viewModeQueryName,
-      defaultValue: ViewModeConstants.viewModeDefault
+      name: ViewModeConstants.queryName,
+      defaultValue: ViewModeConstants.default
     })
 
     return {
