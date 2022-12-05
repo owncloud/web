@@ -5,13 +5,13 @@
         :appearance="viewModeCurrent === 'resource-table-condensed' ? 'filled' : 'outline'"
         @click="setViewMode('resource-table-condensed')"
       >
-        <oc-icon name="menu-line-condensed" fill-type="none" />
+        <oc-icon name="menu-line-condensed" fill-type="none" size="small" />
       </oc-button>
       <oc-button
         :appearance="viewModeCurrent === 'resource-table' ? 'filled' : 'outline'"
         @click="setViewMode('resource-table')"
       >
-        <oc-icon name="align-justify" fill-type="none" />
+        <oc-icon name="align-justify" fill-type="none" size="small" />
       </oc-button>
     </div>
     <oc-button
