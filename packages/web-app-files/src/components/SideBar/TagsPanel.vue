@@ -54,9 +54,9 @@
 
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref } from 'vue'
 import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
-import { bus } from 'web-pkg/src/instance'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
 import { useRequest, useStore } from 'web-pkg/src/composables'
 
@@ -92,7 +92,7 @@ export default defineComponent({
   },
   computed: {
     resource() {
-      return this.displayedItem.value
+      return this.displayedItem
     }
   },
   watch: {
@@ -131,9 +131,9 @@ export default defineComponent({
           field: 'tags',
           value: [...this.editAssignedTags]
         })
-        this.displayedItem.value.tags = [...this.editAssignedTags]
+        this.displayedItem.tags = [...this.editAssignedTags]
 
-        bus.publish('sidebar.entity.saved')
+        eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
       }

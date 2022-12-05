@@ -23,9 +23,8 @@ export default {
             }
 
             if (
-              isLocationTrashActive(this.$router, 'files-trash-personal') ||
-              isLocationTrashActive(this.$router, 'files-trash-spaces-project') ||
-              isLocationPublicActive(this.$router, 'files-public-files')
+              isLocationTrashActive(this.$router, 'files-trash-generic') ||
+              isLocationPublicActive(this.$router, 'files-public-link')
             ) {
               return false
             }

@@ -610,7 +610,9 @@ export default defineComponent({
       this.$_rename_trigger({ resources: [item] }, this.getMatchingSpace(item))
     },
     openTagsSidebar() {
-      this.openSidebar()
+      console.log('HALLOOOO')
+
+      eventBus.publish(SideBarEventTopics.open)
     },
     openSharingSidebar(file) {
       let panelToOpen
