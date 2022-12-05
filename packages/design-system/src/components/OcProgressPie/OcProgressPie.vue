@@ -70,7 +70,7 @@ $default-size: 64px;
 
   // Shadow
   &::after {
-    border: $default-size / 10 solid var(--oc-color-swatch-passive-hover);
+    border: calc($default-size / 10) solid var(--oc-color-swatch-passive-hover);
     border-radius: 50%;
     box-sizing: border-box;
     content: '';
@@ -80,7 +80,7 @@ $default-size: 64px;
   }
 
   &-container {
-    clip: rect(0, $default-size, $default-size, $default-size / 2);
+    clip: rect(0, $default-size, $default-size, calc($default-size / 2));
     height: 100%;
     left: 0;
     position: absolute;
@@ -89,10 +89,10 @@ $default-size: 64px;
 
     &::before,
     &::after {
-      border: ($default-size / 10) solid var(--oc-color-swatch-brand-default);
+      border: calc($default-size / 10) solid var(--oc-color-swatch-brand-default);
       border-color: var(--oc-color-swatch-brand-default);
       border-radius: 50%;
-      clip: rect(0, $default-size / 2, $default-size, 0);
+      clip: rect(0, calc($default-size / 2), $default-size, 0);
       content: '';
       display: block;
       height: 100%;
