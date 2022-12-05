@@ -9,7 +9,7 @@
     "serve": "SERVER=true rollup -c -w"
   },
   "devDependencies": {
-    "rollup": "3.5.0",
+    "rollup": "3.5.1",
     "rollup-plugin-serve": "1.1.0",
     "rollup-plugin-vue": "5.1.9",
     "vue": "2.7.14"
