@@ -13,6 +13,7 @@ Summary
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
+* Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
@@ -62,6 +63,14 @@ Details
    the ODS in the web repository.
 
    https://github.com/owncloud/web/pull/8026
+
+* Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
+
+   Ensure the sorting of "shared with" in "shared with me" view is correct when they have been
+   shared simultaneously with users and groups. Prevent the context actions to disappear when
+   `hoverableQuickActions` is set to true.
+
+   https://github.com/owncloud/web/pull/7966
 
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 
