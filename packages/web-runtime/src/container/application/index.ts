@@ -83,7 +83,7 @@ export const buildApplication = async ({
       const productionModule = (window as any).WEB_APPS_MAP?.[applicationPath]
       if (productionModule) {
         applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(
-          `/${productionModule}`
+          productionModule
         )
       } else {
         applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(

@@ -83,6 +83,7 @@ export default defineConfig(({ mode }) => {
 
   return mergeConfig(
     {
+      base: "",
       publicDir: 'packages/web-container',
       build: {
         // TODO: Vue3: We currently cannot inline styles of components because @vite/plugin-vue2 does not support it
@@ -217,7 +218,9 @@ export default defineConfig(({ mode }) => {
                   .map((m) => {
                     const match = re.exec(m)
                     if (match?.[1]) {
-                      return [match[1], m]
+                      // see `build.rollupOptions.entryFileNames`
+                      // filename needs to be relative to module that triggers the import, i.e. web-runtime*.mjs
+                      return [match[1], m.replace('js/', './')]
                     }
                   })
                   .filter(Boolean)
