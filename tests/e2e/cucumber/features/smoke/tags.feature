@@ -6,7 +6,7 @@ Feature: Users can use web to organize tags
       | Alice |
       | Brian |
 
-  Scenario: Manage tags
+  Scenario: Tag management
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
@@ -15,19 +15,19 @@ Feature: Users can use web to organize tags
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | Tag 1, Tag 2 |
-#    And following resources should contain the following tags in the files list
-#      | resource  | tags         |
-#      | lorem.txt | Tag 1, Tag 2 |
-#    And following resources should contain the following tags in the details panel
-#      | resource  | tags         |
-#      | lorem.txt | Tag 1, Tag 2 |
+    And the following resources should contain the following tags in the files list for user "Alice"
+      | resource  | tags         |
+      | lorem.txt | Tag 1, Tag 2 |
+    And the following resources should contain the following tags in the details panel for user "Alice"
+      | resource  | tags         |
+      | lorem.txt | Tag 1, Tag 2 |
     And "Alice" removes the following tags for the following resources using the sidebar panel
       | resource  | tags  |
       | lorem.txt | Tag 1 |
-    And following resources should contain the following tags in the files list
+    And the following resources should contain the following tags in the files list for user "Alice"
       | resource  | tags  |
       | lorem.txt | Tag 2 |
-    And following resources should contain the following tags in the details panel
+    And the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags  |
       | lorem.txt | Tag 2 |
     And "Alice" logs out
@@ -36,7 +36,7 @@ Feature: Users can use web to organize tags
      When "Alice" logs in
      And "Alice" logs out
 
-  Scenario: Tags visibility
+  Scenario: Tags sharing
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
@@ -45,6 +45,9 @@ Feature: Users can use web to organize tags
     And "Alice" uploads the following resource
       | resource  | to               |
       | lorem.txt | folder_to_shared |
+    And "Alice" adds the following tags for the following resources using the sidebar panel
+      | resource                   | tags         |
+      | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
@@ -54,4 +57,7 @@ Feature: Users can use web to organize tags
     And "Brian" accepts the following share
       | name                 |
       | folder_to_shared     |
+    And the following resources should contain the following tags in the files list for user "Brian"
+      | resource                   | tags         |
+      | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
     And "Brian" logs out

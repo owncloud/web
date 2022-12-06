@@ -539,6 +539,12 @@ export interface restoreResourceTrashbinArgs {
   page: Page
 }
 
+export interface areTagsVisibleForResourceArgs {
+  resource: string
+  tags: string[]
+  page: Page
+}
+
 export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
@@ -572,6 +578,63 @@ export const getRestoreResourceButtonVisibility = async (
     await resourceCheckbox.check()
   }
   return await page.locator(restoreResourceButton).isVisible()
+}
+
+export const getTagsForResourceVisibilityInFilesTable = async (
+  args: areTagsVisibleForResourceArgs
+): Promise<boolean> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  const tagCellSelector = `//*[@data-test-resource-name="${resourceName}"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]`
+  await page.waitForSelector(tagCellSelector)
+  const resourceTagCell = page.locator(tagCellSelector)
+
+  for (const tag of tags) {
+    const tagSelector = `//*[contains(@class, "oc-tag")]//span[text()='${tag}']`
+    const tagSpan = resourceTagCell.locator(tagSelector)
+    const isVisible = await tagSpan.isVisible()
+    if (!isVisible) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export const getTagsForResourceVisibilityInDetailsPanel = async (
+  args: areTagsVisibleForResourceArgs
+): Promise<boolean> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+
+  for (const tag of tags) {
+    const tagSelector = `//*[@data-testid='tags']/td//span[text()='${tag}']`
+    await page.waitForSelector(tagSelector)
+    const tagSpan = page.locator(tagSelector)
+    const isVisible = await tagSpan.isVisible()
+    if (!isVisible) {
+      return false
+    }
+  }
+
+  return true
 }
 
 export interface searchResourceGlobalSearchArgs {

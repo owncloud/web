@@ -347,13 +347,48 @@ When(
   }
 )
 
+Then(
+  'the following resource(s) should contain the following tag(s) in the files list for user {string}',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    console.log('stepUser', stepUser)
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      const isVisible = await resourceObject.areTagsVisibleForResourceInFilesTable({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+      expect(isVisible).toBe(true)
+    }
+  }
+)
+
+Then(
+  'the following resource(s) should contain the following tag(s) in the details panel for user {string}',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    console.log('stepUser', stepUser)
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      const isVisible = await resourceObject.areTagsVisibleForResourceInDetailsPanel({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+      expect(isVisible).toBe(true)
+    }
+  }
+)
+
 When(
   '{string} adds the following tag(s) for the following resource(s) using the sidebar panel',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const { resource, tags } of stepTable.hashes()) {
-      await resourceObject.addTags({ resource, tags: tags.split(',').map((tag) => tag.trim()) })
+      await resourceObject.addTags({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
     }
   }
 )

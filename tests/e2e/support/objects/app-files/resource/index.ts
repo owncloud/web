@@ -33,7 +33,10 @@ import {
   getDeleteResourceButtonVisibility,
   getRestoreResourceButtonVisibility,
   addTagsToResourceArgs,
-  removeTagsFromResource
+  removeTagsFromResource,
+  areTagsVisibleForResourceArgs,
+  getTagsForResourceVisibilityInFilesTable,
+  getTagsForResourceVisibilityInDetailsPanel
 } from './actions'
 
 export class Resource {
@@ -135,6 +138,18 @@ export class Resource {
     args: Omit<restoreResourceTrashbinArgs, 'page'>
   ): Promise<boolean> {
     return await getRestoreResourceButtonVisibility({ ...args, page: this.#page })
+  }
+
+  async areTagsVisibleForResourceInFilesTable(
+    args: Omit<areTagsVisibleForResourceArgs, 'page'>
+  ): Promise<boolean> {
+    return await getTagsForResourceVisibilityInFilesTable({ ...args, page: this.#page })
+  }
+
+  async areTagsVisibleForResourceInDetailsPanel(
+    args: Omit<areTagsVisibleForResourceArgs, 'page'>
+  ): Promise<boolean> {
+    return await getTagsForResourceVisibilityInDetailsPanel({ ...args, page: this.#page })
   }
 
   async searchResource(args: Omit<searchResourceGlobalSearchArgs, 'page'>): Promise<void> {

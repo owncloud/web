@@ -143,17 +143,15 @@
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
           <td>
-            <component
-              :is="isUserContext ? 'router-link' : 'span'"
-              v-for="(tag, index) in file.tags"
-              :key="tag"
-              v-bind="getTagComponentAttrs(tag)"
-            >
-              <span>
-                <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
-                <span v-else v-text="tag" />
-              </span>
-            </component>
+            <span v-for="(tag, index) in file.tags" :key="tag">
+              <component
+                :is="isUserContext ? 'router-link' : 'span'"
+                v-bind="getTagComponentAttrs(tag)"
+              >
+                <span v-if="index + 1 < file.tags.length">{{ tag }}</span>
+                <span v-else v-text="tag" /></component
+              ><span v-if="index + 1 < file.tags.length" class="oc-mr-xs">,</span>
+            </span>
           </td>
         </tr>
       </table>
