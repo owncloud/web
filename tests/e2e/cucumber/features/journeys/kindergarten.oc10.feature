@@ -60,10 +60,10 @@ Feature: Kindergarten can use web to organize a day
       | meal plan |
     And "Carol" navigates to the personal space page
     And "Carol" downloads the following resources using the sidebar panel
-      | resource      | from             |
-      | data.zip      | Shares/meal plan |
-      | lorem.txt     | Shares/meal plan |
-      | lorem-big.txt | Shares/meal plan |
+      | resource      | from              |
+      | data.zip      | Shares/meaaal plan |
+      | lorem.txt     | Shares/meal plan  |
+      | lorem-big.txt | Shares/meal plan  |
     # Then what do we check for to be confident that the above things done by Carol have worked?
     # Then the downloaded files should have content "abc..."
     And "Carol" logs out

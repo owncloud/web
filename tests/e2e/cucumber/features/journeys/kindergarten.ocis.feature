@@ -57,10 +57,10 @@ Feature: Kindergarten can use web to organize a day
       | name      |
       | meal plan |
     And "Carol" downloads the following resources using the sidebar panel
-      | resource      | from      |
-      | data.zip      | meal plan |
-      | lorem.txt     | meal plan |
-      | lorem-big.txt | meal plan |
+      | resource      | from       |
+      | data.zip      | meaaaal plan |
+      | lorem.txt     | meal plan  |
+      | lorem-big.txt | meal plan  |
     # Then what do we check for to be confident that the above things done by Carol have worked?
     # Then the downloaded files should have content "abc..."
     And "Carol" logs out

@@ -17,7 +17,7 @@ Feature: Renaming files inside a folder with problematic name
     When the user reloads the current page of the webUI
     Then file "???.txt" should be listed on the webUI
     Examples:
-      | folder           |
+      | folder         |
       | 0              |
       | 'single'quotes |
 
@@ -32,5 +32,5 @@ Feature: Renaming files inside a folder with problematic name
     When the user reloads the current page of the webUI
     Then file "???.txt" should be listed on the webUI
     Examples:
-      | folder                  |
-      | strängé नेपाली folder |
+      | folder                 |
+      | strännngé नेपाली folder |
