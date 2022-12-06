@@ -10,7 +10,11 @@ Summary
 
 * Bugfix - Current year selection in the date picker: [#8058](https://github.com/owncloud/web/pull/8058)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
+* Bugfix - Omit "page"-query in breadcrumb navigation: [#8061](https://github.com/owncloud/web/pull/8061)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
+* Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
+* Bugfix - Reverting versions for read-only shares: [#8040](https://github.com/owncloud/web/pull/8040)
+* Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
 * Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
@@ -43,12 +47,42 @@ Details
    https://github.com/owncloud/web/issues/7924
    https://github.com/owncloud/web/pull/7926
 
+* Bugfix - Omit "page"-query in breadcrumb navigation: [#8061](https://github.com/owncloud/web/pull/8061)
+
+   We've omitted the "page"-query when navigating via breadcrumb. This solves an issue were the
+   file list would be empty after navigating via breadcrumb from a paginated folder.
+
+   https://github.com/owncloud/web/issues/8060
+   https://github.com/owncloud/web/pull/8061
+
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 
    The "Paste"-action is now disabled in read-only folders/shares.
 
    https://github.com/owncloud/web/issues/7922
    https://github.com/owncloud/web/pull/7925
+
+* Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
+
+   We've fixed a bug where folder listing was not reloaded when being in a space/share root and
+   navigating into another space/share root via search.
+
+   https://github.com/owncloud/web/issues/8034
+   https://github.com/owncloud/web/pull/8045
+
+* Bugfix - Reverting versions for read-only shares: [#8040](https://github.com/owncloud/web/pull/8040)
+
+   Reverting versions for read-only shares is no longer possible.
+
+   https://github.com/owncloud/web/issues/8037
+   https://github.com/owncloud/web/pull/8040
+
+* Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
+
+   We've fixed a bug that caused to repeat the 'no results' message when searching.
+
+   https://github.com/owncloud/web/issues/8054
+   https://github.com/owncloud/web/pull/8062
 
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 
