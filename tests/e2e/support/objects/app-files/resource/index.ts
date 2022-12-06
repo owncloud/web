@@ -1,5 +1,6 @@
 import { Download, Page } from 'playwright'
 import {
+  addTagsToResource,
   createResources,
   createResourceArgs,
   deleteResource,
@@ -30,7 +31,9 @@ import {
   openFileInViewer,
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
-  getRestoreResourceButtonVisibility
+  getRestoreResourceButtonVisibility,
+  addTagsToResourceArgs,
+  removeTagsFromResource
 } from './actions'
 
 export class Resource {
@@ -156,5 +159,17 @@ export class Resource {
 
   async openFileInViewer(args: Omit<openFileInViewerArgs, 'page'>): Promise<void> {
     await openFileInViewer({ ...args, page: this.#page })
+  }
+
+  async addTags(args: Omit<addTagsToResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await addTagsToResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async removeTags(args: Omit<addTagsToResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await removeTagsFromResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
   }
 }

@@ -364,6 +364,18 @@ export interface renameResourceArgs {
   newName: string
 }
 
+export interface addTagsToResourceArgs {
+  page: Page
+  resource: string
+  tags: string[]
+}
+
+export interface removeTagsFromResource {
+  page: Page
+  resource: string
+  tags: string[]
+}
+
 export const renameResource = async (args: renameResourceArgs): Promise<void> => {
   const { page, resource, newName } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
@@ -604,6 +616,57 @@ export const editResources = async (args: editResourcesArgs): Promise<void> => {
   const { page, name, content } = args
   await page.locator(util.format(resourceNameSelector, name)).click()
   await editTextDocument({ page, content: content })
+}
+
+export const addTagsToResource = async (args: addTagsToResourceArgs): Promise<void> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'tags' })
+
+  const inputForm = page.locator('#tags-form input')
+
+  for (const tag of tags) {
+    await inputForm.fill(tag)
+    await page.locator('.vs__dropdown-option').first().click()
+  }
+
+  await page.locator('.compare-save-dialog-confirm-btn').click()
+  await sidebar.close({ page })
+}
+
+export const removeTagsFromResource = async (args: removeTagsFromResource): Promise<void> => {
+  const { page, resource, tags } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.openPanel({ page: page, name: 'tags' })
+
+  for (const tag of tags) {
+    await page
+      .locator(
+        `//span[contains(@class, 'vs__selected')]//span[text()='${tag}']//ancestor::span/button[contains(@class, 'vs__deselect')]`
+      )
+      .click()
+  }
+
+  await page.locator('.compare-save-dialog-confirm-btn').click()
+  await sidebar.close({ page })
 }
 
 export interface openFileInViewerArgs {

@@ -346,3 +346,28 @@ When(
     }
   }
 )
+
+When(
+  '{string} adds the following tag(s) for the following resource(s) using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      await resourceObject.addTags({ resource, tags: tags.split(',').map((tag) => tag.trim()) })
+    }
+  }
+)
+
+When(
+  '{string} removes the following tag(s) for the following resource(s) using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      await resourceObject.removeTags({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+    }
+  }
+)

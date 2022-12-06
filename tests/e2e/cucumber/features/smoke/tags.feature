@@ -12,17 +12,17 @@ Feature: Users can use web to organize tags
     And "Alice" uploads the following resource
       | resource  |
       | lorem.txt |
-    And "Alice" tags the following resources using the sidebar panel
+    And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | Tag 1, Tag 2 |
-    And following resources should contain the following tags in the files list
-      | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
-    And following resources should contain the following tags in the details panel
-      | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
+#    And following resources should contain the following tags in the files list
+#      | resource  | tags         |
+#      | lorem.txt | Tag 1, Tag 2 |
+#    And following resources should contain the following tags in the details panel
+#      | resource  | tags         |
+#      | lorem.txt | Tag 1, Tag 2 |
     And "Alice" removes the following tags for the following resources using the sidebar panel
-      | resource  | tags         |
+      | resource  | tags  |
       | lorem.txt | Tag 1 |
     And following resources should contain the following tags in the files list
       | resource  | tags  |
