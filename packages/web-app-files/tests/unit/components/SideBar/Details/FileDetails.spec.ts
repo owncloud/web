@@ -147,6 +147,7 @@ function createWrapper(testResource, publicLinkContext = false, runningOnEos = f
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
+      ...defaultStoreMockOptions.getters,
       user: function () {
         return { id: 'marie' }
       },
@@ -163,6 +164,9 @@ function createWrapper(testResource, publicLinkContext = false, runningOnEos = f
   storeOptions.modules.Files.getters.versions.mockImplementation(() => ['2'])
   storeOptions.modules.Files.getters.sharesTree.mockImplementation((state) => state.sharesTree)
   storeOptions.modules.Files.state.sharesTree = {}
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files: { tags: true }
+  }))
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(FileDetails, {

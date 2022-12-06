@@ -56,7 +56,7 @@
 <script lang="ts">
 import { mapActions, mapMutations } from 'vuex'
 import { defineComponent, ref } from 'vue'
-import CompareSaveDialog from 'web-pkg/src/components/sidebar/CompareSaveDialog.vue'
+import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
 import { useRequest, useStore } from 'web-pkg/src/composables'
@@ -64,7 +64,7 @@ import { useRequest, useStore } from 'web-pkg/src/composables'
 const tagsMaxCount = 100
 
 export default defineComponent({
-  name: 'Tags',
+  name: 'TagsPanel',
   components: {
     CompareSaveDialog
   },
