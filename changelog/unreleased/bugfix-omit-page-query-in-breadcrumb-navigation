@@ -1,0 +1,6 @@
+Bugfix: Omit "page"-query in breadcrumb navigation
+
+We've omitted the "page"-query when navigating via breadcrumb. This solves an issue were the file list would be empty after navigating via breadcrumb from a paginated folder.
+
+https://github.com/owncloud/web/pull/8061
+https://github.com/owncloud/web/issues/8060

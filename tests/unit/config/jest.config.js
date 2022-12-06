@@ -5,7 +5,7 @@ const rootDir = path.resolve(__dirname, '../../../')
 const esmModules = ['lodash-es'].map((m) =>
   process.env.npm_config_user_agent?.startsWith('pnpm') ? `.pnpm/${m}@.*` : m
 )
-
+process.env.TZ = 'GMT'
 module.exports = {
   rootDir,
   modulePaths: ['<rootDir>'],

@@ -1,0 +1,6 @@
+Bugfix: Resolving drives in search
+
+We've fixed a bug where folder listing was not reloaded when being in a space/share root and navigating into another space/share root via search.
+
+https://github.com/owncloud/web/pull/8045
+https://github.com/owncloud/web/issues/8034

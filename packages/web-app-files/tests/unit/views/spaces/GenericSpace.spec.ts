@@ -10,6 +10,8 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { mockDeep } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -61,9 +63,59 @@ describe('GenericSpace view', () => {
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
     })
   })
+  describe('breadcrumbs', () => {
+    it.each([
+      { driveType: 'personal', expectedItems: 1 },
+      { driveType: 'project', expectedItems: 2 },
+      { driveType: 'share', expectedItems: 3 }
+    ])('include root item(s)', (data) => {
+      const { driveType } = data
+      const space = { id: 1, getDriveAliasAndItem: jest.fn(), driveType }
+      const { wrapper } = getMountedWrapper({ files, props: { space } })
+      expect(wrapper.find('app-bar-stub').props().breadcrumbs.length).toBe(data.expectedItems)
+    })
+    it('include the root item and the current folder', () => {
+      const folderName = 'someFolder'
+      const { wrapper } = getMountedWrapper({ files, props: { item: `/${folderName}` } })
+      expect(wrapper.find('app-bar-stub').props().breadcrumbs.length).toBe(2)
+      expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual(folderName)
+    })
+    it('omit the "page"-query of the current route', () => {
+      const currentRoute = { name: 'files-spaces-generic', path: '/', query: { page: '2' } }
+      const { wrapper } = getMountedWrapper({ files, props: { item: 'someFolder' }, currentRoute })
+      const breadCrumbItem = wrapper.find('app-bar-stub').props().breadcrumbs[0]
+      expect(breadCrumbItem.to.query.page).toBeUndefined()
+    })
+  })
+  describe('loader task', () => {
+    it('re-loads the resources on item change', async () => {
+      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
+      const { wrapper } = getMountedWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(1)
+      wrapper.setProps({ item: 'newItem' })
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(2)
+    })
+    it('re-loads the resources on space change', async () => {
+      const loaderSpy = jest.spyOn((GenericSpace as any).methods, 'performLoaderTask')
+      const { wrapper } = getMountedWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(1)
+      wrapper.setProps({ space: mockDeep<SpaceResource>() })
+      await wrapper.vm.loadResourcesTask.last
+      expect(loaderSpy).toHaveBeenCalledTimes(2)
+    })
+  })
 })
 
-function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  props = {},
+  files = [],
+  loading = false,
+  currentRoute = { name: 'files-spaces-generic', path: '/' }
+} = {}) {
   jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
@@ -71,9 +123,7 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     })
   )
   const defaultMocks = {
-    ...defaultComponentMocks({
-      currentRoute: { name: 'files-spaces-generic', path: '/' }
-    }),
+    ...defaultComponentMocks({ currentRoute }),
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }

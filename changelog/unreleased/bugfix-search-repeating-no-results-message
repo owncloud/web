@@ -1,0 +1,6 @@
+Bugfix: Search repeating no results message
+
+We've fixed a bug that caused to repeat the 'no results' message when searching.
+
+https://github.com/owncloud/web/issues/8054
+https://github.com/owncloud/web/pull/8062

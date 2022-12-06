@@ -17,7 +17,7 @@
           <oc-td class="oc-text-muted oc-text-nowrap" data-testid="file-versions-file-size">
             {{ formatVersionFileSize(item) }}
           </oc-td>
-          <oc-td width="shrink">
+          <oc-td v-if="isRevertable" width="shrink">
             <oc-button
               v-oc-tooltip="$gettext('Restore older version')"
               data-testid="file-versions-revert-button"
@@ -49,11 +49,12 @@
 </template>
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { defineComponent, inject } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { SharePermissions } from 'web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'FileVersions',
@@ -70,6 +71,22 @@ export default defineComponent({
     ...mapGetters('Files', ['highlightedFile', 'versions']),
     hasVersion() {
       return this.versions.length > 0
+    },
+    isRevertable() {
+      if (
+        (this.space && isShareSpaceResource(this.space)) ||
+        this.highlightedFile.isReceivedShare()
+      ) {
+        if (this.highlightedFile.permissions !== undefined) {
+          return this.highlightedFile.permissions.includes(DavPermission.Updateable)
+        }
+
+        if (this.highlightedFile.share?.role) {
+          return this.highlightedFile.share.role.hasPermission(SharePermissions.update)
+        }
+      }
+
+      return true
     }
   },
   watch: {

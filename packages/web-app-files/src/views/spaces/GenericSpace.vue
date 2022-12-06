@@ -231,7 +231,7 @@ export default defineComponent({
 
       let spaceBreadcrumbItem
       let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
-      query = { ...unref(route).query, ...query }
+      query = omit({ ...unref(route).query, ...query }, 'page')
       if (isPersonalSpaceResource(space)) {
         spaceBreadcrumbItem = {
           text: space.name,
@@ -317,6 +317,11 @@ export default defineComponent({
       handler: function () {
         this.performLoaderTask(true)
       }
+    },
+    space: {
+      handler: function () {
+        this.performLoaderTask(true)
+      }
     }
   },
 
@@ -347,6 +352,10 @@ export default defineComponent({
     ]),
 
     async performLoaderTask(sameRoute: boolean, path?: string, fileId?: string | number) {
+      if (this.loadResourcesTask.isRunning) {
+        return
+      }
+
       const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(this.space) }
       await this.loadResourcesTask.perform(
         this.space,
