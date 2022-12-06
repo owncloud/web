@@ -85,12 +85,17 @@
       <oc-resource-size :size="item.size || Number.NaN" />
     </template>
     <template #tags="{ item }">
-      <router-link v-for="tag in item.tags.slice(0, 2)" :key="tag" :to="getTagLink(tag)">
+      <component
+        :is="isUserContext ? 'router-link' : 'span'"
+        v-for="tag in item.tags.slice(0, 2)"
+        :key="tag"
+        v-bind="getTagComponentAttrs(tag)"
+      >
         <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
           <oc-icon name="price-tag-3" size="small" />
           <span class="oc-text-truncate">{{ tag }}</span>
         </oc-tag>
-      </router-link>
+      </component>
       <oc-tag
         v-if="item.tags.length > 2"
         size="small"
@@ -198,7 +203,9 @@ import { SortDir } from '../../composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
   useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useStore,
+  useUserContext
 } from 'web-pkg/src/composables'
 import { ViewModeConstants } from 'web-app-files/src/composables/viewMode'
 
@@ -392,8 +399,11 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
+
     return {
       ViewModeConstants,
+      isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled()
     }
@@ -598,6 +608,15 @@ export default defineComponent({
       return createLocationCommon('files-common-search', {
         query: { term: `Tags:${tag}`, provider: 'files.sdk' }
       })
+    },
+    getTagComponentAttrs(tag) {
+      if (!this.isUserContext) {
+        return {}
+      }
+
+      return {
+        to: this.getTagLink(tag)
+      }
     },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId

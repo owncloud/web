@@ -143,12 +143,17 @@
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s" v-text="tagsLabel" />
           <td>
-            <router-link v-for="(tag, index) in file.tags" :key="tag" :to="getTagLink(tag)">
+            <component
+              :is="isUserContext ? 'router-link' : 'span'"
+              v-for="(tag, index) in file.tags"
+              :key="tag"
+              v-bind="getTagComponentAttrs(tag)"
+            >
               <span>
                 <span v-if="index + 1 < file.tags.length" class="oc-mr-xs">{{ tag }},</span>
                 <span v-else v-text="tag" />
               </span>
-            </router-link>
+            </component>
           </td>
         </tr>
       </table>
@@ -165,7 +170,12 @@ import upperFirst from 'lodash-es/upperFirst'
 import { basename, dirname } from 'path'
 import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { useAccessToken, usePublicLinkContext, useStore } from 'web-pkg/src/composables'
+import {
+  useAccessToken,
+  usePublicLinkContext,
+  useStore,
+  useUserContext
+} from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import copyToClipboard from 'copy-to-clipboard'
 import { encodePath } from 'web-pkg/src/utils'
@@ -183,6 +193,7 @@ export default defineComponent({
     const store = useStore()
 
     return {
+      isUserContext: useUserContext({ store }),
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace'),
@@ -486,6 +497,15 @@ export default defineComponent({
       return createLocationCommon('files-common-search', {
         query: { term: `Tags:${tag}`, provider: 'files.sdk' }
       })
+    },
+    getTagComponentAttrs(tag) {
+      if (!this.isUserContext) {
+        return {}
+      }
+
+      return {
+        to: this.getTagLink(tag)
+      }
     }
   }
 })
