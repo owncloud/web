@@ -1,10 +1,10 @@
-Enhancement: Add Tag support
+Enhancement: Add tag support
 
-Managing files via tags is now possible in web, the feature is experimental and will be only available through a dedicated experimental web build.
-Beside that the web version is experimental, it also needs a special experimental ocis version.
-
-Creating Tags, tagging resources and search for tags now is possible and can be used as an alternative way of working and organizing resources.
+Web now supports tags on resources to enhance the way of organizing and working. Tags are visible in the files list and can also be searched to quickly filter tagged files.
 
 https://github.com/owncloud/web/pull/7388
 https://github.com/owncloud/web/pull/7385
 https://github.com/owncloud/web/pull/7442
+https://github.com/owncloud/web/pull/7754
+https://github.com/owncloud/web/pull/8067
+https://github.com/owncloud/web/issues/7134

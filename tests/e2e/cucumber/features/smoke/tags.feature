@@ -15,19 +15,19 @@ Feature: Users can use web to organize tags
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | Tag 1, Tag 2 |
-    And the following resources should contain the following tags in the files list for user "Alice"
+    Then the following resources should contain the following tags in the files list for user "Alice"
       | resource  | tags         |
       | lorem.txt | Tag 1, Tag 2 |
-    And the following resources should contain the following tags in the details panel for user "Alice"
+    Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags         |
       | lorem.txt | Tag 1, Tag 2 |
-    And "Alice" removes the following tags for the following resources using the sidebar panel
+    When "Alice" removes the following tags for the following resources using the sidebar panel
       | resource  | tags  |
       | lorem.txt | Tag 1 |
-    And the following resources should contain the following tags in the files list for user "Alice"
+    Then the following resources should contain the following tags in the files list for user "Alice"
       | resource  | tags  |
       | lorem.txt | Tag 2 |
-    And the following resources should contain the following tags in the details panel for user "Alice"
+    Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags  |
       | lorem.txt | Tag 2 |
     And "Alice" logs out
@@ -57,7 +57,7 @@ Feature: Users can use web to organize tags
     And "Brian" accepts the following share
       | name                 |
       | folder_to_shared     |
-    And the following resources should contain the following tags in the files list for user "Brian"
+    Then the following resources should contain the following tags in the files list for user "Brian"
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
     And "Brian" logs out
