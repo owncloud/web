@@ -619,7 +619,7 @@ importers:
       luxon: ^2.4.0
       marked: ^4.0.12
       oidc-client-ts: ^2.1.0
-      owncloud-sdk: ~3.0.0-alpha.17
+      owncloud-sdk: ~3.1.0-alpha.1
       p-queue: ^6.6.2
       popper-max-size-modifier: ^0.2.0
       portal-vue: ^2.1.7
@@ -673,7 +673,7 @@ importers:
       luxon: 2.4.0
       marked: 4.0.12
       oidc-client-ts: 2.1.0
-      owncloud-sdk: 3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4
+      owncloud-sdk: 3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4
       p-queue: 6.6.2
       popper-max-size-modifier: 0.2.0_@popperjs+core@2.11.5
       portal-vue: 2.1.7_vue@2.7.14
@@ -3160,7 +3160,7 @@ packages:
       '@babel/core': 7.20.5
       '@babel/helper-module-transforms': 7.20.2
       '@babel/helper-plugin-utils': 7.20.2
-      '@babel/helper-simple-access': 7.19.4
+      '@babel/helper-simple-access': 7.20.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -17539,8 +17539,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk/3.0.0-alpha.17_qgpf6seimtkgc6dfu7oqfstxh4:
-    resolution: {integrity: sha512-XO6XzyiMfAB/i4TcshuB6VGYzcsZUI/x+JBwv40Lj4p0bSU4eD1c2CPk66uj3t+13pcAqJqF9Mv9NcM0aEbj4w==}
+  /owncloud-sdk/3.1.0-alpha.1_qgpf6seimtkgc6dfu7oqfstxh4:
+    resolution: {integrity: sha512-iurt3QNIdWBxYCzx4j6Ihyy13vYfjY6UgU9qCrXFG9NiIpMlMLDFhwRLZdlVZlpeuAzCboi8hHmHooUpYFI6zQ==}
     peerDependencies:
       axios: ^0.27.2
       cross-fetch: ^3.0.6
