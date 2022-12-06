@@ -1,3 +1,5 @@
+import { mockDeep } from 'jest-mock-extended'
+import { ConfigurationManager } from 'web-pkg/src'
 import {
   initializeApplications,
   announceApplicationsReady,
@@ -27,6 +29,7 @@ describe('initialize applications', () => {
     jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
     const applications = await initializeApplications({
+      configurationManager: mockDeep<ConfigurationManager>(),
       runtimeConfiguration: {
         apps: ['internalFishy', 'internalValid'],
         external_apps: [{ path: 'externalFishy' }, { path: 'externalValid' }]
