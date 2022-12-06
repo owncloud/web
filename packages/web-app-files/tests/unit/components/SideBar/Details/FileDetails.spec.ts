@@ -24,6 +24,7 @@ const simpleOwnFolder = createFile({
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  tags: ['moon', 'mars'],
   size: '740'
 })
 
@@ -34,6 +35,7 @@ const sharedFolder = createFile({
   ownerDisplayName: 'Einstein',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
+  tags: [],
   shareTypes: [ShareTypes.user.value]
 })
 
@@ -43,6 +45,7 @@ const simpleOwnFile = createFile({
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
+  tags: [],
   size: '740'
 })
 
@@ -56,6 +59,7 @@ const sharedFile = createFile({
   thumbnail: 'example.com/image',
   mdate: 'Tue, 20 Oct 2015 06:15:00 GMT',
   size: '740',
+  tags: [],
   shareTypes: [ShareTypes.user.value],
   isReceivedShare: () => true
 })
@@ -141,9 +145,28 @@ describe('Details SideBar Panel', () => {
       })
     })
   })
+  describe('tags', () => {
+    it('should display tags', () => {
+      const { wrapper } = createWrapper(simpleOwnFolder, true)
+      expect(wrapper.find('[data-testid="tags"]').exists()).toBeTruthy()
+    })
+    it('should use router-link when authenticated', () => {
+      const { wrapper } = createWrapper(simpleOwnFolder, true, false, true)
+      expect(wrapper.find('[data-testid="tags"]').find('router-link-stub').exists()).toBeTruthy()
+    })
+    it('should not use router-link when not authenticated', () => {
+      const { wrapper } = createWrapper(simpleOwnFolder, true, false, false)
+      expect(wrapper.find('[data-testid="tags"]').find('router-link-stub').exists()).toBeFalsy()
+    })
+  })
 })
 
-function createWrapper(testResource, publicLinkContext = false, runningOnEos = false) {
+function createWrapper(
+  testResource,
+  publicLinkContext = false,
+  runningOnEos = false,
+  isUserContextReady = true
+) {
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -160,6 +183,7 @@ function createWrapper(testResource, publicLinkContext = false, runningOnEos = f
       }
     }
   }
+
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => testResource)
   storeOptions.modules.Files.getters.versions.mockImplementation(() => ['2'])
   storeOptions.modules.Files.getters.sharesTree.mockImplementation((state) => state.sharesTree)
@@ -167,6 +191,9 @@ function createWrapper(testResource, publicLinkContext = false, runningOnEos = f
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files: { tags: true }
   }))
+  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
+    isUserContextReady
+  )
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(FileDetails, {

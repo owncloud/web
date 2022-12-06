@@ -405,7 +405,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       <!---->
       <!---->
       <!---->
-      <!---->
+      <tr data-testid="tags">
+        <th scope="col" class="oc-pr-s">Tags</th>
+        <td>
+          <router-link-stub tag="a" to="[object Object]"><span><span class="oc-mr-xs">moon,</span></span></router-link-stub>
+          <router-link-stub tag="a" to="[object Object]"><span><span>mars</span></span></router-link-stub>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
