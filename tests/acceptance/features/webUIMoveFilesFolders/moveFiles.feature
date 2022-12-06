@@ -9,12 +9,12 @@
 #    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 #
 #
-#  Scenario: An attempt to move a file into a sub-folder using rename is not allowed
-#    Given user "Alice" has logged in using the webUI
-#    And the user has browsed to the personal page
-#    When the user tries to rename file "lorem.txt" to "simple-folder/lorem.txt" using the webUI
-#    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
-#    And file "lorem.txt" should be listed on the webUI
+  Scenario: An attempt to move a file into a sub-folder using rename is not allowed
+    Given user "Alice" has logged in using the webUI
+    And the user has browsed to the personal page
+    When the user tries to rename file "lorem.txt" to "simple-folder/lorem.txt" using the webUI
+    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
+    And file "loreeem.txt" should be listed on the webUI
 #
 #  @smokeTest @ocisSmokeTest
 #  Scenario: move a file into a folder
@@ -40,12 +40,12 @@
 #    And file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
 #
 #
-#  Scenario: move a file into a folder where a file with the same name already exists
-#    Given user "Alice" has logged in using the webUI
-#    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
-#    And the user has browsed to the personal page
-#    When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
-#    Then the "modal error" message with header 'File with name "lorem.txt" already exists.' should be displayed on the webUI
+  Scenario: move a file into a folder where a file with the same name already exists
+    Given user "Alice" has logged in using the webUI
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
+    And the user has browsed to the personal page
+    When the user tries to move file "lorem.txt" into folder "simple-folder" using the webUI
+    Then the "modal errrror" message with header 'File with name "lorem.txt" already exists.' should be displayed on the webUI
 #
 #  @smokeTest @ocisSmokeTest  @disablePreviews
 #  Scenario: Move multiple files at once

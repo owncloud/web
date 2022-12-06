@@ -84,6 +84,9 @@ config = {
                 "oC10MoveFileFolder": [
                     "webUIMoveFilesFolders",
                 ],
+                "oC10Files1": [
+                    "webUIUpload",
+                ],
             },
             "extraEnvironment": {
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md" % dir["web"],
