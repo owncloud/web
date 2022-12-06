@@ -68,4 +68,17 @@ describe('privatePreviewBlob', () => {
     await expect(window.URL.createObjectURL).toHaveBeenCalledTimes(3)
     await expect(window.URL.createObjectURL).toHaveBeenCalledWith('data')
   })
+  describe('error handling', () => {
+    const error = new Error('some weirdo error')
+    it('swallows errors by default', async () => {
+      const privatePreviewBlobPromise = privatePreviewBlob(defaultOptions)
+      mockAxios.mockError(error)
+      await expect(privatePreviewBlobPromise).resolves.not.toThrow(error)
+    })
+    it('throws errors if requested', async () => {
+      const privatePreviewBlobPromise = privatePreviewBlob(defaultOptions, false, true)
+      mockAxios.mockError(error)
+      await expect(privatePreviewBlobPromise).rejects.toThrow(error)
+    })
+  })
 })

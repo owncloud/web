@@ -25,14 +25,14 @@
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
-    <oc-icon
-      v-else-if="isFileContentError"
-      name="file-damage"
-      variation="danger"
-      size="xlarge"
-      class="oc-position-center"
-      :accessible-label="$gettext('Failed to load media file')"
-    />
+    <div v-else-if="isFileContentError" class="oc-position-center">
+      <div class="oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center">
+        <oc-icon name="file-damage" variation="danger" size="xlarge" />
+        <div class="oc-text-muted oc-text-xlarge oc-mt-s">
+          {{ fileContentErrorMessage }}
+        </div>
+      </div>
+    </div>
     <template v-else>
       <div
         v-show="activeMediaFileCached"
@@ -250,6 +250,7 @@ export default defineComponent({
     return {
       isFileContentLoading: true,
       isFileContentError: false,
+      fileContentErrorMessage: null,
       isAutoPlayEnabled: true,
 
       activeIndex: null,
@@ -412,6 +413,7 @@ export default defineComponent({
 
       this.isFileContentLoading = false
       this.isFileContentError = true
+      this.fileContentErrorMessage = this.$gettext('Failed to load media file')
     },
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
@@ -464,9 +466,16 @@ export default defineComponent({
         this.addPreviewToCache(this.activeFilteredFile, mediaUrl)
         this.isFileContentLoading = false
         this.isFileContentError = false
+        this.fileContentErrorMessage = null
       } catch (e) {
         this.isFileContentLoading = false
         this.isFileContentError = true
+        this.fileContentErrorMessage =
+          e.statusCode === 425
+            ? this.$gettext(
+                'This file is currently being processed and is not yet available for use. Please try again shortly.'
+              )
+            : this.$gettext('Failed to load media file')
         console.error(e)
       }
     },
@@ -482,6 +491,7 @@ export default defineComponent({
         return
       }
       this.isFileContentError = false
+      this.fileContentErrorMessage = null
       this.direction = 'rtl'
       if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
@@ -496,6 +506,7 @@ export default defineComponent({
         return
       }
       this.isFileContentError = false
+      this.fileContentErrorMessage = null
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
         this.activeIndex = this.filteredFiles.length - 1
@@ -549,14 +560,18 @@ export default defineComponent({
       })
     },
     loadPreview(file) {
-      return loadPreview({
-        resource: file,
-        isPublic: this.isPublicLinkContext,
-        server: configurationManager.serverUrl,
-        userId: this.user.id,
-        token: this.accessToken,
-        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
-      })
+      return loadPreview(
+        {
+          resource: file,
+          isPublic: this.isPublicLinkContext,
+          server: configurationManager.serverUrl,
+          userId: this.user.id,
+          token: this.accessToken,
+          dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+        },
+        false,
+        true
+      )
     },
     preloadImages() {
       const loadPreviewAsync = (file) => {

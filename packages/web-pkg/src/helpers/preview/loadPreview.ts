@@ -17,7 +17,8 @@ export const loadPreview = async (
     userId?: string
     token?: string
   },
-  cached = false
+  cached = false,
+  throwErrors = false
 ): Promise<string> => {
   let preview = ''
   if (resource.type === 'folder' || !resource.extension) {
@@ -39,7 +40,8 @@ export const loadPreview = async (
         resource,
         dimensions
       },
-      cached
+      cached,
+      throwErrors
     )
   }
 
