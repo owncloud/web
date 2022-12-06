@@ -90,6 +90,7 @@
         v-for="tag in item.tags.slice(0, 2)"
         :key="tag"
         v-bind="getTagComponentAttrs(tag)"
+        class="resource-table-tag-wrapper"
       >
         <oc-tag class="resource-table-tag oc-ml-xs" :rounded="true" size="small">
           <oc-icon name="price-tag-3" size="small" />
@@ -400,9 +401,6 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-  const a = useUserContext({ store })
-    console.log(a.value)
-    console.log("HALLO")
 
     return {
       ViewModeConstants,

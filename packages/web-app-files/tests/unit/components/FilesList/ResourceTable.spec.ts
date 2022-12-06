@@ -290,17 +290,19 @@ describe('ResourceTable', () => {
     it('renders router link if user is authenticated', () => {
       const { wrapper } = getMountedWrapper({ props: { hover: false } })
       const resource = wrapper.find('[data-item-id="forest"]')
-      expect(resource.find('.resource-table-tag').element.tagName).toEqual('A')
+      expect(resource.find('.resource-table-tag-wrapper').element.tagName).toEqual(
+        'ROUTER-LINK-STUB'
+      )
     })
     it('does not render router link if user is not authenticated', () => {
-      const { wrapper } = getMountedWrapper({ props: { hover: false }, isUserContextReady: true })
+      const { wrapper } = getMountedWrapper({ props: { hover: false }, isUserContextReady: false })
       const resource = wrapper.find('[data-item-id="forest"]')
-      expect(resource.find('.resource-table-tag').element.tagName).toEqual('SPAN')
+      expect(resource.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
     })
   })
 })
 
-function getMountedWrapper({ props = {}, isUserContextReady = false } = {}) {
+function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
     isUserContextReady
