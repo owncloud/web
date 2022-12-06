@@ -287,11 +287,24 @@ describe('ResourceTable', () => {
       await resource.find('.resource-table-tag-more').trigger('click')
       expect(spyBus).toHaveBeenCalledWith(SideBarEventTopics.open)
     })
+    it('renders router link if user is authenticated', () => {
+      const { wrapper } = getMountedWrapper({ props: { hover: false } })
+      const resource = wrapper.find('[data-item-id="forest"]')
+      expect(resource.find('.resource-table-tag').element.tagName).toEqual('A')
+    })
+    it('does not render router link if user is not authenticated', () => {
+      const { wrapper } = getMountedWrapper({ props: { hover: false }, isUserContextReady: true })
+      const resource = wrapper.find('[data-item-id="forest"]')
+      expect(resource.find('.resource-table-tag').element.tagName).toEqual('SPAN')
+    })
   })
 })
 
-function getMountedWrapper({ props = {} } = {}) {
+function getMountedWrapper({ props = {}, isUserContextReady = false } = {}) {
   const storeOptions = defaultStoreMockOptions
+  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
+    isUserContextReady
+  )
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files: {
       tags: true

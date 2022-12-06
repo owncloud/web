@@ -400,6 +400,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+  const a = useUserContext({ store })
+    console.log(a.value)
+    console.log("HALLO")
 
     return {
       ViewModeConstants,
