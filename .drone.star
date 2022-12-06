@@ -654,7 +654,7 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return e2e_pipelines + acceptance_pipelines
+    return acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1264,7 +1264,7 @@ def acceptance(ctx):
                             steps += buildGithubCommentForBuildStopped(suiteName)
 
                         # Upload the screenshots to github comment
-                        steps += githubComment(alternateSuiteName, server)
+                        steps += githubComment(alternateSuiteName)
 
                         if (params["earlyFail"]):
                             steps += stopBuild()
