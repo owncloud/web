@@ -9,7 +9,7 @@
     "build:w": "pnpm build --watch",
     "build:tokens": "pnpm --filter @ownclouders/design-system tokens",
     "depcheck": "depcheck",
-    "lint": "eslint '{packages,tests}/**/*.{js,ts,vue}' --color",
+    "lint": "eslint vite.config.ts '{packages,tests}/**/*.{js,ts,vue}' --color",
     "serve": "SERVER=true pnpm build:w",
     "test:e2e:cucumber": "NODE_TLS_REJECT_UNAUTHORIZED=0 cucumber-js --profile=e2e -f json:tests/e2e/cucumber/report/cucumber_report.json",
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw jest --config ./tests/unit/config/jest.config.js",

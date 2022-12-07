@@ -83,7 +83,7 @@ export default defineConfig(({ mode }) => {
 
   return mergeConfig(
     {
-      base: "",
+      base: '',
       publicDir: 'packages/web-container',
       build: {
         // TODO: Vue3: We currently cannot inline styles of components because @vite/plugin-vue2 does not support it
@@ -183,29 +183,24 @@ export default defineConfig(({ mode }) => {
           }
         },
         {
-          name: 'ejs-pre',
+          name: 'ejs',
           transformIndexHtml: {
             enforce: 'pre',
-            transform(html, ...args) {
+            transform(html) {
               return ejs.render(html, {
                 data: {
-                  title: process.env.TITLE || 'ownCloud',
-                  compilationTimestamp: new Date().getTime(),
-                  supportedBrowsersRegex: supportedBrowsersRegex,
-
                   buildConfig,
 
-                  // We need to process the html file once before vite to avoid parse errors because of ejs syntax
-                  // and process it a second time after vite processing to inject our module map (in production)
-                  // this ejs string is inside a script tag and so causes no parsing issues
-                  WEB_APPS_MAP: '<%- JSON.stringify(data.WEB_APPS_MAP_POST) %>'
+                  title: process.env.TITLE || 'ownCloud',
+                  compilationTimestamp: new Date().getTime(),
+                  supportedBrowsersRegex: supportedBrowsersRegex
                 }
               })
             }
           }
         },
         {
-          name: 'ejs-post',
+          name: 'import-map',
           transformIndexHtml: {
             transform(html, { bundle }) {
               // Build an import map for loading internal (as in: shipped and built within this mono repo) apps
@@ -218,15 +213,17 @@ export default defineConfig(({ mode }) => {
                 // so it works when oC Web is hosted in a sub folder, e.g. when using the oC 10 integration app
                 // The regexp here needs to match the filenames defined in `build.rollupOptions.entryFileNames`
                 re = new RegExp(/js\/(web-app-.*)-.*\.(.+)/)
-                buildModulePath = moduleName => moduleName.replace('js/', './')
+                buildModulePath = (moduleName) => moduleName.replace('js/', './')
               } else {
                 // We are in development mode here, so we can just use absolute module paths
                 moduleNames = Object.keys(input)
                 re = new RegExp(/(web-app-.*)/)
-                buildModulePath = moduleName => `/packages/${moduleName}/src/index`
+                buildModulePath = (moduleName) => `/packages/${moduleName}/src/index`
               }
 
-              const map = Object.fromEntries(moduleNames.map((m) => {
+              const map = Object.fromEntries(
+                moduleNames
+                  .map((m) => {
                     const appName = re.exec(m)?.[1]
                     if (appName) {
                       return [appName, buildModulePath(m)]
@@ -234,7 +231,12 @@ export default defineConfig(({ mode }) => {
                   })
                   .filter(Boolean)
               )
-              return ejs.render(html, { data: { WEB_APPS_MAP_POST: map } })
+              return [
+                {
+                  tag: 'script',
+                  children: `window.WEB_APPS_MAP = ${JSON.stringify(map)}`
+                }
+              ]
             }
           }
         },
