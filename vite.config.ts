@@ -134,12 +134,21 @@ export default defineConfig(({ mode }) => {
       plugins: [
         // We need to "undefine" `define` which is set by requirejs loaded in index.html
         treatAsCommonjs() as any as PluginOption, // treatAsCommonjs currently returns a Plugin_2 instance
+
+        // In order to avoid multiple definitions of the global styles we import via additionalData into every component
+        // we also insert a marker, so we can remove the global definitions after processing.
+        // The downside of this approach is that @extend does not work because it modifies the global styles, thus we emit
+        // a warning if `@extend` is used in the code base.
         {
           name: '@ownclouders/vite-plugin-strip-css',
           transform(src: string, id) {
+            if (id.endsWith('.vue') && !id.includes('node_modules') && src.includes('@extend')) {
+              console.warn('You are using @extend in your component. This is likely not working in your styles. Please use mixins instead.', id.replace(`${projectRootDir}/`, ''))
+            }
             if (id.includes('lang.scss')) {
               const split = src.split(stripScssMarker)
               const newSrc = split[split.length - 1]
+
               return {
                 code: newSrc,
                 map: null
