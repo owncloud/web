@@ -143,7 +143,10 @@ export default defineConfig(({ mode }) => {
           name: '@ownclouders/vite-plugin-strip-css',
           transform(src: string, id) {
             if (id.endsWith('.vue') && !id.includes('node_modules') && src.includes('@extend')) {
-              console.warn('You are using @extend in your component. This is likely not working in your styles. Please use mixins instead.', id.replace(`${projectRootDir}/`, ''))
+              console.warn(
+                'You are using @extend in your component. This is likely not working in your styles. Please use mixins instead.',
+                id.replace(`${projectRootDir}/`, '')
+              )
             }
             if (id.includes('lang.scss')) {
               const split = src.split(stripScssMarker)
