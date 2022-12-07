@@ -36,7 +36,11 @@ import {
   removeTagsFromResource,
   areTagsVisibleForResourceArgs,
   getTagsForResourceVisibilityInFilesTable,
-  getTagsForResourceVisibilityInDetailsPanel
+  getTagsForResourceVisibilityInDetailsPanel,
+  clickTagArgs,
+  clickResourceTag,
+  getDisplayedResourcesArgs,
+  getDisplayedResourcesFromFilesList
 } from './actions'
 
 export class Resource {
@@ -156,8 +160,14 @@ export class Resource {
     await searchResourceGlobalSearch({ ...args, page: this.#page })
   }
 
-  getDisplayedResources(): Promise<string[]> {
-    return getDisplayedResourcesFromSearch(this.#page)
+  getDisplayedResources(args: Omit<getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
+    if (args.keyword === 'files list') {
+      return getDisplayedResourcesFromFilesList(this.#page)
+    } else if (args.keyword === 'search list') {
+      return getDisplayedResourcesFromSearch(this.#page)
+    } else {
+      throw new Error('Unknown keyword')
+    }
   }
 
   async openFolder(resource): Promise<void> {
@@ -186,5 +196,9 @@ export class Resource {
     const startUrl = this.#page.url()
     await removeTagsFromResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  async clickTag(args: Omit<clickTagArgs, 'page'>): Promise<void> {
+    return await clickResourceTag({ ...args, page: this.#page })
   }
 }

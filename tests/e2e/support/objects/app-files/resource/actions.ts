@@ -545,6 +545,12 @@ export interface areTagsVisibleForResourceArgs {
   page: Page
 }
 
+export interface clickTagArgs {
+  resource: string
+  tag: string
+  page: Page
+}
+
 export const restoreResourceTrashbin = async (
   args: restoreResourceTrashbinArgs
 ): Promise<string> => {
@@ -609,6 +615,26 @@ export const getTagsForResourceVisibilityInFilesTable = async (
   return true
 }
 
+export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
+  const { page, resource, tag } = args
+  const { dir: resourceDir } = path.parse(resource)
+
+  const folderPaths = resource.split('/')
+  const resourceName = folderPaths.pop()
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  const tagCellSelector = `//*[@data-test-resource-name="${resourceName}"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]`
+  await page.waitForSelector(tagCellSelector)
+  const resourceTagCell = page.locator(tagCellSelector)
+
+  const tagSelector = `//*[contains(@class, "oc-tag")]//span[text()='${tag}']//ancestor::a`
+  const tagSpan = resourceTagCell.locator(tagSelector)
+  return tagSpan.click()
+}
+
 export const getTagsForResourceVisibilityInDetailsPanel = async (
   args: areTagsVisibleForResourceArgs
 ): Promise<boolean> => {
@@ -642,6 +668,11 @@ export interface searchResourceGlobalSearchArgs {
   page: Page
 }
 
+export interface getDisplayedResourcesArgs {
+  keyword: 'search list' | 'files list'
+  page: Page
+}
+
 export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
@@ -662,6 +693,20 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
   const result = await page.locator(searchList).allInnerTexts()
   // the result has values like `test\n.txt` so remove new line
   return result.map((result) => result.replace('\n', ''))
+}
+
+export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
+  const files = []
+  const result = page.locator(
+    '//table[contains(@class, "files-table")]//span[contains(@class, "oc-resource-name")]'
+  )
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    files.push(await result.nth(i).getAttribute('data-test-resource-name'))
+  }
+
+  return files
 }
 
 export const showHiddenResources = async (page): Promise<void> => {

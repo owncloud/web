@@ -218,16 +218,19 @@ When(
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the search list for user "([^"]*)"?$/,
+  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"?$/,
   async function (
     this: World,
     actionType: string,
+    listType: string,
     stepUser: string,
     stepTable: DataTable
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const actualList = await resourceObject.getDisplayedResources()
+    const actualList = await resourceObject.getDisplayedResources({
+      keyword: listType as any
+    })
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
       if (actionType === 'should') {
@@ -328,9 +331,16 @@ When(
 
 When(
   '{string} clicks the tag {string} on the resource {string}',
-  async function (this: World, stepUser: string, tagName: string, resourceName: string, stepTable: DataTable): Promise<void> {
+  async function (
+    this: World,
+    stepUser: string,
+    tagName: string,
+    resourceName: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    await resourceObject.clickTag({ resource: resourceName, tag: tagName.toLowerCase() })
 
     console.log(stepUser, tagName, resourceName)
   }

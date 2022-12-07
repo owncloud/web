@@ -14,34 +14,41 @@ Feature: Users can use web to organize tags
       | lorem.txt |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
+      | lorem.txt | tag 1, tag 2 |
     Then the following resources should contain the following tags in the files list for user "Alice"
       | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
+      | lorem.txt | tag 1, tag 2 |
     Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
+      | lorem.txt | tag 1, tag 2 |
     When "Alice" removes the following tags for the following resources using the sidebar panel
       | resource  | tags  |
-      | lorem.txt | Tag 1 |
+      | lorem.txt | tag 1 |
     Then the following resources should contain the following tags in the files list for user "Alice"
       | resource  | tags  |
-      | lorem.txt | Tag 2 |
+      | lorem.txt | tag 2 |
     Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags  |
-      | lorem.txt | Tag 2 |
+      | lorem.txt | tag 2 |
     And "Alice" logs out
 
   Scenario: Tags search
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
-      | resource  |
-      | lorem.txt |
+      | resource      |
+      | lorem.txt     |
+      | textfile.txt  |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
-      | lorem.txt | Tag 1, Tag 2 |
-    And "Alice" clicks the tag "Tag 1" on the resource "lorem.txt"
+      | lorem.txt | tag 1, tag 2 |
+    And "Alice" clicks the tag "tag 1" on the resource "lorem.txt"
+    Then the following resources should contain the following tags in the files list for user "Alice"
+      | resource  | tags  |
+      | lorem.txt | tag 1 |
+    Then following resources should not be displayed in the files list for user "Alice"
+      | resource     |
+      | textfile.txt |
     And "Alice" logs out
 
 
@@ -56,7 +63,7 @@ Feature: Users can use web to organize tags
       | lorem.txt | folder_to_shared |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource                   | tags         |
-      | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
+      | folder_to_shared/lorem.txt | tag 1, tag 2 |
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
@@ -68,6 +75,5 @@ Feature: Users can use web to organize tags
       | folder_to_shared     |
     Then the following resources should contain the following tags in the files list for user "Brian"
       | resource                   | tags         |
-      | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
+      | folder_to_shared/lorem.txt | tag 1, tag 2 |
     And "Brian" logs out
-  
