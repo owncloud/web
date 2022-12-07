@@ -45,6 +45,10 @@ export type OwnCloudSdk = {
     deleteShare(...args): any
     updateShare(...args): any
   }
+  tags: {
+    addResourceTag(...args): any
+    removeResourceTag(...args): any
+  }
   users: {
     getUser(...args): any
     getUserGroups(...args): any
