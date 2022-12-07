@@ -668,11 +668,6 @@ export interface searchResourceGlobalSearchArgs {
   page: Page
 }
 
-export interface getDisplayedResourcesArgs {
-  keyword: 'search list' | 'files list'
-  page: Page
-}
-
 export const searchResourceGlobalSearch = async (
   args: searchResourceGlobalSearchArgs
 ): Promise<void> => {
@@ -687,6 +682,13 @@ export const searchResourceGlobalSearch = async (
   ])
   await expect(page.locator(globalSearchOptions)).toBeVisible()
   await expect(page.locator(loadingSpinner)).not.toBeVisible()
+}
+
+export type displayedResourceType = 'search list' | 'files list'
+
+export interface getDisplayedResourcesArgs {
+  keyword: displayedResourceType
+  page: Page
 }
 
 export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {

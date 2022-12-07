@@ -32,7 +32,8 @@ Feature: Users can use web to organize tags
       | lorem.txt | tag 2 |
     And "Alice" logs out
 
-  Scenario: Tags search
+
+  Scenario: Tag search
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
@@ -52,7 +53,7 @@ Feature: Users can use web to organize tags
     And "Alice" logs out
 
 
-  Scenario: Tags sharing
+  Scenario: Tag sharing
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
@@ -68,6 +69,7 @@ Feature: Users can use web to organize tags
       | resource         | recipient | type | role   |
       | folder_to_shared | Brian     | user | editor |
     And "Alice" logs out
+
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share

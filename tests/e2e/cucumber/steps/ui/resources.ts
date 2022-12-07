@@ -4,6 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
+import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
 
 When(
   '{string} creates the following resource(s)',
@@ -229,7 +230,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualList = await resourceObject.getDisplayedResources({
-      keyword: listType as any
+      keyword: listType as displayedResourceType
     })
     for (const info of stepTable.hashes()) {
       const found = actualList.includes(info.resource)
@@ -339,10 +340,7 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-
     await resourceObject.clickTag({ resource: resourceName, tag: tagName.toLowerCase() })
-
-    console.log(stepUser, tagName, resourceName)
   }
 )
 
