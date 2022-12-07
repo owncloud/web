@@ -150,7 +150,13 @@ export default defineConfig(({ mode }) => {
         EnvironmentPlugin({
           PACKAGE_VERSION: version
         }),
-        vue(),
+        vue({
+          template: {
+            compilerOptions: {
+              whitespace: 'preserve'
+            }
+          }
+        }),
         viteStaticCopy({
           targets: [
             ...['fonts', 'icons'].map((name) => ({
