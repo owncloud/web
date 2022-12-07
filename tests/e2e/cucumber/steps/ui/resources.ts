@@ -327,6 +327,16 @@ When(
 )
 
 When(
+  '{string} clicks the tag {string} on the resource {string}',
+  async function (this: World, stepUser: string, tagName: string, resourceName: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    console.log(stepUser, tagName, resourceName)
+  }
+)
+
+When(
   /^"([^"]*)" opens the following file(s)? in (mediaviewer|pdfviewer)$/,
   async function (
     this: World,

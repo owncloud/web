@@ -33,8 +33,17 @@ Feature: Users can use web to organize tags
     And "Alice" logs out
 
   Scenario: Tags search
-     When "Alice" logs in
-     And "Alice" logs out
+    When "Alice" logs in
+    And "Alice" opens the "files" app
+    And "Alice" uploads the following resource
+      | resource  |
+      | lorem.txt |
+    And "Alice" adds the following tags for the following resources using the sidebar panel
+      | resource  | tags         |
+      | lorem.txt | Tag 1, Tag 2 |
+    And "Alice" clicks the tag "Tag 1" on the resource "lorem.txt"
+    And "Alice" logs out
+
 
   Scenario: Tags sharing
     When "Alice" logs in
@@ -61,3 +70,4 @@ Feature: Users can use web to organize tags
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | Tag 1, Tag 2 |
     And "Brian" logs out
+  
