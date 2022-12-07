@@ -1,4 +1,4 @@
-@skipOnOCIS @issue-6844
+@notToImplementOnOCIS @issue-6844
 Feature: Access private link
   As a user I want to directly access item which I have received private link for
 
