@@ -1149,12 +1149,11 @@ def unitTests(ctx):
                              "pnpm test:unit --coverage",
                          ],
                      },
-                     # FIXME: reenable sonarcloud before merging
-                     #  {
-                     #      "name": "sonarcloud",
-                     #      "image": SONARSOURCE_SONAR_SCANNER_CLI,
-                     #      "environment": sonar_env,
-                     #  },
+                     {
+                         "name": "sonarcloud",
+                         "image": SONARSOURCE_SONAR_SCANNER_CLI,
+                         "environment": sonar_env,
+                     },
                  ],
         "trigger": {
             "ref": [
