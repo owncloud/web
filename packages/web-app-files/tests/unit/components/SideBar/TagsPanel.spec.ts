@@ -1,5 +1,4 @@
 import { createLocalVue, mount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
 import Vuex from 'vuex'
 import TagsPanel from 'web-app-files/src/components/SideBar/TagsPanel.vue'
 import { useRequest } from 'web-pkg/src/composables'
@@ -15,66 +14,42 @@ jest.mock('web-pkg/src/composables/authContext')
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-const createFile = (input) => {
-  return {
-    isReceivedShare: () => false,
-    getDomSelector: () => input.id,
-    ...input // spread input last so that input can overwrite predefined defaults
-  }
-}
-const simpleOwnFolder = createFile({
-  id: '1',
-  type: 'folder',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
-  mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
-  tags: ['moon', 'mars'],
-  size: '740'
-})
 
 describe('Tags Panel', () => {
-  it('show tags if loaded successfully', () => {
-    const wrapper = createWrapper(simpleOwnFolder)
+  const allTags = ['moon', 'mars', 'sun']
+  const resource = mockDeep<Resource>({ tags: ['moon', 'mars'] })
+
+  it('show tags input form if loaded successfully', () => {
+    const wrapper = createWrapper(resource)
     expect(wrapper.find('#tags-form').exists()).toBeTruthy()
   })
-  it('pass tags to the oc-select component', async () => {
-    const tags = ['test', 'tag']
-    const wrapper = createWrapper(simpleOwnFolder, tags)
+  it('all available tags are selectable', async () => {
+    const wrapper = createWrapper(resource, allTags)
     await wrapper.vm.loadAllTagsTask.last
-    expect(wrapper.find('oc-select-stub').attributes().options).toEqual(tags.join(','))
+    expect(wrapper.find('oc-select-stub').attributes().options).toEqual(allTags.join(','))
   })
-  describe('save', () => {
-    it('published the save event', async () => {
-      const tags = ['test', 'tag']
+  describe('save method', () => {
+    it('publishes the "save"-event', async () => {
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const wrapper = createWrapper(simpleOwnFolder, tags)
+      const wrapper = createWrapper(resource, allTags)
       await wrapper.vm.save()
       expect(eventStub).toHaveBeenCalled()
     })
-    it('adds new tags', async () => {
-      const addResourceTagStub = jest.fn().mockImplementation().mockResolvedValue(true)
+    it('calls the client to add new tags', async () => {
+      const addResourceTagStub = jest.fn().mockImplementation().mockResolvedValue({})
       const clientMock = mockDeep<OwnCloudSdk>({
         tags: { addResourceTag: addResourceTagStub }
       })
-      const resource = mockDeep<Resource>({ tags: ['moon'] })
-      const allTags = ['moon', 'mars']
       const wrapper = createWrapper(resource, allTags, clientMock)
       resource.tags = []
       await wrapper.vm.save()
       expect(addResourceTagStub).toHaveBeenCalled()
     })
-    it('remove existing tags', async () => {
-      const removeResourceTagStub = jest.fn().mockImplementation().mockResolvedValue(true)
+    it('calls the client to remove existing tags', async () => {
+      const removeResourceTagStub = jest.fn().mockImplementation().mockResolvedValue({})
       const clientMock = mockDeep<OwnCloudSdk>({
         tags: { removeResourceTag: removeResourceTagStub }
       })
-      const resource = mockDeep<Resource>({ tags: ['moon'] })
-      const allTags = ['moon', 'mars']
       const wrapper = createWrapper(resource, allTags, clientMock)
       resource.tags.push('new tag')
       await wrapper.vm.save()
@@ -82,15 +57,13 @@ describe('Tags Panel', () => {
     })
     it('logs error on failure', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const removeResourceTagStub = jest.fn().mockImplementation().mockRejectedValue(false)
+      const removeResourceTagStub = jest.fn().mockImplementation().mockRejectedValue(new Error())
       const clientMock = mockDeep<OwnCloudSdk>({
         tags: { removeResourceTag: removeResourceTagStub }
       })
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const resource = mockDeep<Resource>({ tags: ['moon'] })
-      const allTags = ['moon', 'mars']
       const wrapper = createWrapper(resource, allTags, clientMock)
-      resource.tags.push('new tag')
+      resource.tags.push('sun')
       await wrapper.vm.save()
       expect(eventStub).not.toHaveBeenCalled()
     })
@@ -98,15 +71,9 @@ describe('Tags Panel', () => {
 })
 
 function createWrapper(testResource, allTags = [], clientMock = mockDeep<OwnCloudSdk>()) {
-  jest.mocked(useRequest).mockImplementation(() => {
-    return {
-      makeRequest: jest.fn().mockResolvedValue({
-        data: {
-          tags: allTags
-        }
-      })
-    }
-  })
+  jest.mocked(useRequest).mockImplementation(() => ({
+    makeRequest: jest.fn().mockResolvedValue({ data: { tags: allTags } })
+  }))
   return mount(TagsPanel, {
     store: new Vuex.Store(defaultStoreMockOptions),
     localVue,
