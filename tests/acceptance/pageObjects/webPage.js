@@ -151,23 +151,6 @@ module.exports = {
     },
 
     /**
-     * Checks if the web page contains any elements on the web container
-     *
-     * @returns {boolean}
-     */
-    isPageVisible: async function () {
-      let isVisible = true
-      await this.api.elements(
-        this.elements.webContainer.locateStrategy,
-        this.elements.webContainer.selector,
-        function (result) {
-          isVisible = result.value.length > 0
-        }
-      )
-      return isVisible
-    },
-
-    /**
      * Clear all error messages from the webUI
      *
      * @returns {Promise<void>}
