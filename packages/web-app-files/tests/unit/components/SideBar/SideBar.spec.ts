@@ -1,4 +1,9 @@
 import fileSideBars from 'web-app-files/src/fileSideBars'
+import {
+  createLocationPublic,
+  createLocationSpaces,
+  createLocationTrash
+} from '../../../../src/router'
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from 'web-client/src/helpers'
@@ -22,7 +27,8 @@ jest.mock('web-app-files/src/helpers/resources', () => {
 })
 
 const selectors = {
-  noSelectionInfoPanel: 'noselection-stub'
+  noSelectionInfoPanel: 'noselection-stub',
+  tagsPanel: '#sidebar-panel-tags'
 }
 
 describe('SideBar', () => {
@@ -77,9 +83,43 @@ describe('SideBar', () => {
       })
     })
   })
+  describe('tags panel', () => {
+    it('shows when enabled via capabilities and possible on the resource', () => {
+      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
+      const { wrapper } = createWrapper({ item })
+      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(true)
+    })
+    it('does not show when disabled via capabilities', () => {
+      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
+      const { wrapper } = createWrapper({ item, tagsEnabled: false })
+      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+    })
+    it('does not show for root folders', () => {
+      const item = mockDeep<Resource>({ path: '/', canEditTags: () => true })
+      const { wrapper } = createWrapper({ item })
+      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+    })
+    it('does not show when not possible on the resource', () => {
+      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => false })
+      const { wrapper } = createWrapper({ item })
+      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+    })
+    it.each([
+      createLocationTrash('files-trash-generic'),
+      createLocationPublic('files-public-link')
+    ])('does not show on trash and public routes', (currentRoute) => {
+      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
+      const { wrapper } = createWrapper({ item, currentRoute })
+      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+    })
+  })
 })
 
-function createWrapper({ item = undefined } = {}) {
+function createWrapper({
+  item = undefined,
+  currentRoute = createLocationSpaces('files-spaces-generic'),
+  tagsEnabled = true
+} = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -88,6 +128,7 @@ function createWrapper({ item = undefined } = {}) {
         return { id: 'marie' }
       },
       capabilities: () => ({
+        files: { tags: tagsEnabled },
         files_sharing: {
           api_enabled: true,
           public: { enabled: true }
@@ -116,7 +157,7 @@ function createWrapper({ item = undefined } = {}) {
           'click-outside': jest.fn()
         },
         mocks: {
-          ...defaultComponentMocks()
+          ...defaultComponentMocks({ currentRoute: currentRoute as unknown })
         }
       }
     })
