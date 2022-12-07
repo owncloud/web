@@ -208,19 +208,28 @@ export default defineConfig(({ mode }) => {
           name: 'ejs-post',
           transformIndexHtml: {
             transform(html, { bundle }) {
-              if (!bundle) {
-                return ejs.render(html, { data: { WEB_APPS_MAP_POST: null } })
+              // Build an import map for loading internal (as in: shipped and built within this mono repo) apps
+              let moduleNames: string[]
+              let re: RegExp
+              let buildModulePath: any
+              if (bundle) {
+                moduleNames = Object.keys(bundle)
+                // We are in production mode here and need to provide paths relative to the module that contains the import, i.e. web-runtime-*.mjs
+                // so it works when oC Web is hosted in a sub folder, e.g. when using the oC 10 integration app
+                // The regexp here needs to match the filenames defined in `build.rollupOptions.entryFileNames`
+                re = new RegExp(/js\/(web-app-.*)-.*\.(.+)/)
+                buildModulePath = moduleName => moduleName.replace('js/', './')
+              } else {
+                // We are in development mode here, so we can just use absolute module paths
+                moduleNames = Object.keys(input)
+                re = new RegExp(/(web-app-.*)/)
+                buildModulePath = moduleName => `/packages/${moduleName}/src/index`
               }
-              // get all web-app-* modules and create a map like { "web-app-foo": "js/web-app-foo-XYZ123.js", ... }
-              const re = new RegExp(/js\/(web-app-.*)-.*\.(.+)/)
-              const map = Object.fromEntries(
-                Object.keys(bundle)
-                  .map((m) => {
-                    const match = re.exec(m)
-                    if (match?.[1]) {
-                      // see `build.rollupOptions.entryFileNames`
-                      // filename needs to be relative to module that triggers the import, i.e. web-runtime*.mjs
-                      return [match[1], m.replace('js/', './')]
+
+              const map = Object.fromEntries(moduleNames.map((m) => {
+                    const appName = re.exec(m)?.[1]
+                    if (appName) {
+                      return [appName, buildModulePath(m)]
                     }
                   })
                   .filter(Boolean)

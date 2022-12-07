@@ -86,9 +86,7 @@ export const buildApplication = async ({
           productionModule
         )
       } else {
-        applicationScript = await loadScriptDynamicImport<ClassicApplicationScript>(
-          `/packages/${applicationPath}/src/index`
-        )
+        throw new RuntimeError('cannot load application as only a name (and no path) is given and that name is not known to the application import map')
       }
     }
   } catch (e) {
