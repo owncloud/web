@@ -49,6 +49,14 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
+const tagTableCell =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
+const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
+const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
+const tagInInputForm =
+  '//span[contains(@class, "vs__selected")]//span[text()="%s"]//ancestor::span/button[contains(@class, "vs__deselect")]'
+const tagFormInput = '#tags-form input'
+const compareDialogConfirmBtn = '.compare-save-dialog-confirm-btn'
 
 export const clickResource = async ({
   page,
@@ -364,13 +372,7 @@ export interface renameResourceArgs {
   newName: string
 }
 
-export interface addTagsToResourceArgs {
-  page: Page
-  resource: string
-  tags: string[]
-}
-
-export interface removeTagsFromResource {
+export interface resourceTagsArgs {
   page: Page
   resource: string
   tags: string[]
@@ -539,12 +541,6 @@ export interface restoreResourceTrashbinArgs {
   page: Page
 }
 
-export interface areTagsVisibleForResourceArgs {
-  resource: string
-  tags: string[]
-  page: Page
-}
-
 export interface clickTagArgs {
   resource: string
   tag: string
@@ -587,7 +583,7 @@ export const getRestoreResourceButtonVisibility = async (
 }
 
 export const getTagsForResourceVisibilityInFilesTable = async (
-  args: areTagsVisibleForResourceArgs
+  args: resourceTagsArgs
 ): Promise<boolean> => {
   const { page, resource, tags } = args
   const { dir: resourceDir } = path.parse(resource)
@@ -599,13 +595,12 @@ export const getTagsForResourceVisibilityInFilesTable = async (
     await clickResource({ page, path: resourceDir })
   }
 
-  const tagCellSelector = `//*[@data-test-resource-name="${resourceName}"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]`
+  const tagCellSelector = util.format(tagTableCell, resourceName)
   await page.waitForSelector(tagCellSelector)
   const resourceTagCell = page.locator(tagCellSelector)
 
   for (const tag of tags) {
-    const tagSelector = `//*[contains(@class, "oc-tag")]//span[text()='${tag}']`
-    const tagSpan = resourceTagCell.locator(tagSelector)
+    const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
     const isVisible = await tagSpan.isVisible()
     if (!isVisible) {
       return false
@@ -626,17 +621,15 @@ export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
     await clickResource({ page, path: resourceDir })
   }
 
-  const tagCellSelector = `//*[@data-test-resource-name="${resourceName}"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]`
+  const tagCellSelector = util.format(tagTableCell, resourceName)
   await page.waitForSelector(tagCellSelector)
   const resourceTagCell = page.locator(tagCellSelector)
-
-  const tagSelector = `//*[contains(@class, "oc-tag")]//span[text()='${tag}']//ancestor::a`
-  const tagSpan = resourceTagCell.locator(tagSelector)
+  const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
   return tagSpan.click()
 }
 
 export const getTagsForResourceVisibilityInDetailsPanel = async (
-  args: areTagsVisibleForResourceArgs
+  args: resourceTagsArgs
 ): Promise<boolean> => {
   const { page, resource, tags } = args
   const { dir: resourceDir } = path.parse(resource)
@@ -651,7 +644,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
   await sidebar.open({ page: page, resource: resourceName })
 
   for (const tag of tags) {
-    const tagSelector = `//*[@data-testid='tags']/td//span[text()='${tag}']`
+    const tagSelector = util.format(tagInDetailsPanel, tag)
     await page.waitForSelector(tagSelector)
     const tagSpan = page.locator(tagSelector)
     const isVisible = await tagSpan.isVisible()
@@ -699,9 +692,7 @@ export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> =
 
 export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
   const files = []
-  const result = page.locator(
-    '//table[contains(@class, "files-table")]//span[contains(@class, "oc-resource-name")]'
-  )
+  const result = page.locator(resourceNameSelector)
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -728,7 +719,7 @@ export const editResources = async (args: editResourcesArgs): Promise<void> => {
   await editTextDocument({ page, content: content })
 }
 
-export const addTagsToResource = async (args: addTagsToResourceArgs): Promise<void> => {
+export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
   const { page, resource, tags } = args
   const { dir: resourceDir } = path.parse(resource)
 
@@ -742,18 +733,18 @@ export const addTagsToResource = async (args: addTagsToResourceArgs): Promise<vo
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'tags' })
 
-  const inputForm = page.locator('#tags-form input')
+  const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
     await inputForm.fill(tag)
     await page.locator('.vs__dropdown-option').first().click()
   }
 
-  await page.locator('.compare-save-dialog-confirm-btn').click()
+  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 
-export const removeTagsFromResource = async (args: removeTagsFromResource): Promise<void> => {
+export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<void> => {
   const { page, resource, tags } = args
   const { dir: resourceDir } = path.parse(resource)
 
@@ -768,14 +759,10 @@ export const removeTagsFromResource = async (args: removeTagsFromResource): Prom
   await sidebar.openPanel({ page: page, name: 'tags' })
 
   for (const tag of tags) {
-    await page
-      .locator(
-        `//span[contains(@class, 'vs__selected')]//span[text()='${tag}']//ancestor::span/button[contains(@class, 'vs__deselect')]`
-      )
-      .click()
+    await page.locator(util.format(tagInInputForm, tag)).click()
   }
 
-  await page.locator('.compare-save-dialog-confirm-btn').click()
+  await page.locator(compareDialogConfirmBtn).click()
   await sidebar.close({ page })
 }
 

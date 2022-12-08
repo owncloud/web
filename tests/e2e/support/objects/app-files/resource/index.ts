@@ -1,6 +1,5 @@
 import { Download, Page } from 'playwright'
 import {
-  addTagsToResource,
   createResources,
   createResourceArgs,
   deleteResource,
@@ -32,15 +31,15 @@ import {
   openFileInViewerArgs,
   getDeleteResourceButtonVisibility,
   getRestoreResourceButtonVisibility,
-  addTagsToResourceArgs,
+  addTagsToResource,
   removeTagsFromResource,
-  areTagsVisibleForResourceArgs,
   getTagsForResourceVisibilityInFilesTable,
   getTagsForResourceVisibilityInDetailsPanel,
   clickTagArgs,
   clickResourceTag,
   getDisplayedResourcesArgs,
-  getDisplayedResourcesFromFilesList
+  getDisplayedResourcesFromFilesList,
+  resourceTagsArgs
 } from './actions'
 
 export class Resource {
@@ -145,13 +144,13 @@ export class Resource {
   }
 
   async areTagsVisibleForResourceInFilesTable(
-    args: Omit<areTagsVisibleForResourceArgs, 'page'>
+    args: Omit<resourceTagsArgs, 'page'>
   ): Promise<boolean> {
     return await getTagsForResourceVisibilityInFilesTable({ ...args, page: this.#page })
   }
 
   async areTagsVisibleForResourceInDetailsPanel(
-    args: Omit<areTagsVisibleForResourceArgs, 'page'>
+    args: Omit<resourceTagsArgs, 'page'>
   ): Promise<boolean> {
     return await getTagsForResourceVisibilityInDetailsPanel({ ...args, page: this.#page })
   }
@@ -186,13 +185,13 @@ export class Resource {
     await openFileInViewer({ ...args, page: this.#page })
   }
 
-  async addTags(args: Omit<addTagsToResourceArgs, 'page'>): Promise<void> {
+  async addTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await addTagsToResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
   }
 
-  async removeTags(args: Omit<addTagsToResourceArgs, 'page'>): Promise<void> {
+  async removeTags(args: Omit<resourceTagsArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await removeTagsFromResource({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
