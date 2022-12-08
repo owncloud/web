@@ -1,86 +1,40 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import setImage from 'web-app-files/src/mixins/spaces/actions/setImage.js'
-import { createLocationSpaces } from '../../../../src/router'
-import mockAxios from 'jest-mock-axios'
-// eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
-import fileFixtures from '__fixtures__/files'
+import setImage from 'web-app-files/src/mixins/spaces/actions/setImage'
 import { thumbnailService } from '../../../../src/services'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace, Resource } from 'web-client/src/helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService, clientService } from 'web-pkg'
+import { Graph } from 'web-client'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('setImage', () => {
   const Component = {
-    render() {},
+    template: '<div></div>',
     mixins: [setImage]
   }
 
   function getWrapper(space) {
+    const clientMock = mockDeep<ClientService>()
+    clientMock.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
+    const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
     return mount(Component, {
       localVue,
       mocks: {
-        $client: {
-          ...sdkMock,
-          files: {
-            ...sdkMock.files,
-            copy: jest.fn().mockImplementation(() => Promise.resolve()),
-            fileInfo: jest.fn().mockImplementation(() => Promise.resolve(fileFixtures['/'][4]))
-          }
-        },
-        $route: {
-          params: {
-            storageId: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
-          }
-        },
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-generic'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
-        $gettext: jest.fn(),
+        ...defaultMocks,
+        $clientService: clientMock,
         space
       },
       store: createStore(Vuex.Store, {
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          showMessage: jest.fn(),
-          setModalInputErrorMessage: jest.fn()
-        },
-        getters: {
-          configuration: () => ({
-            server: 'https://example.com'
-          })
-        },
+        ...defaultStoreMockOptions,
         modules: {
-          user: {
-            state: {
-              id: 'alice',
-              uuid: 1
-            }
-          },
-          runtime: {
-            namespaced: true,
-            modules: {
-              auth: {
-                namespaced: true,
-                getters: {
-                  accessToken: () => ''
-                }
-              },
-              spaces: {
-                namespaced: true,
-                mutations: {
-                  UPDATE_SPACE_FIELD: jest.fn()
-                }
-              }
-            }
-          }
+          ...defaultStoreMockOptions.modules,
+          user: { state: { uuid: 1 } }
         }
       })
     })
@@ -161,9 +115,11 @@ describe('setImage', () => {
 
   describe('method "$_setSpaceImage_trigger"', () => {
     it('should show message on success', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
+      const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
+      const graphMock = mockDeep<Graph>({
+        drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
       })
+      jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
 
       const wrapper = getWrapper({ id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -180,10 +136,11 @@ describe('setImage', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.reject(new Error())
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graphMock = mockDeep<Graph>({
+        drives: { updateDrive: jest.fn().mockRejectedValue(new Error()) }
       })
+      jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
 
       const wrapper = getWrapper({ id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
