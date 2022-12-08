@@ -2,22 +2,26 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import uploadImage from 'web-app-files/src/mixins/spaces/actions/uploadImage.js'
-import { createLocationSpaces } from '../../../../src/router'
-import mockAxios from 'jest-mock-axios'
-// eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
 import { thumbnailService } from '../../../../src/services'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { Graph } from 'web-client'
+import { clientService } from 'web-pkg'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('uploadImage', () => {
   const Component = {
-    render() {},
+    template: '<div></div>',
     mixins: [uploadImage]
   }
 
   function getWrapper(resolvePutFileContents = true) {
+    const clientMock = mockDeep<OwnCloudSdk>()
+    const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
     return mount(Component, {
       localVue,
       data: () => ({
@@ -26,16 +30,11 @@ describe('uploadImage', () => {
         }
       }),
       mocks: {
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-projects'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
+        ...defaultMocks,
         $client: {
-          ...sdkMock,
+          ...clientMock,
           files: {
-            ...sdkMock.files,
+            ...clientMock.files,
             putFileContents: jest.fn().mockImplementation(() => {
               if (resolvePutFileContents) {
                 return Promise.resolve({
@@ -45,42 +44,10 @@ describe('uploadImage', () => {
               }
               return Promise.reject(new Error(''))
             })
-          },
-          $gettext: jest.fn()
-        }
-      },
-      store: createStore(Vuex.Store, {
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          showMessage: jest.fn(),
-          setModalInputErrorMessage: jest.fn()
-        },
-        getters: {
-          configuration: () => ({
-            server: 'https://example.com'
-          })
-        },
-        modules: {
-          runtime: {
-            namespaced: true,
-            modules: {
-              auth: {
-                namespaced: true,
-                getters: {
-                  accessToken: () => ''
-                }
-              },
-              spaces: {
-                namespaced: true,
-                mutations: {
-                  UPDATE_SPACE_FIELD: jest.fn()
-                }
-              }
-            }
           }
         }
-      })
+      },
+      store: createStore(Vuex.Store, defaultStoreMockOptions)
     })
   }
 
@@ -96,9 +63,11 @@ describe('uploadImage', () => {
 
   describe('method "$_uploadImage_uploadImageSpace"', () => {
     it('should show message on success', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
+      const responseMock = { data: { special: [{ specialFolder: { name: 'image' } }] } }
+      const graphMock = mockDeep<Graph>({
+        drives: { updateDrive: jest.fn().mockResolvedValue(responseMock) }
       })
+      jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
 
       const wrapper = getWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
@@ -112,7 +81,7 @@ describe('uploadImage', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_uploadImage_uploadImageSpace({

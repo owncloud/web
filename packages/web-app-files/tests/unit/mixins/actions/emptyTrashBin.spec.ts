@@ -1,17 +1,18 @@
 import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
-import EmptyTashBin from 'web-app-files/src/mixins/actions/emptyTrashBin.js'
+import EmptyTrashBin from 'web-app-files/src/mixins/actions/emptyTrashBin.js'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
-// eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const Component = {
-  render() {},
-  mixins: [EmptyTashBin]
+  template: '<div></div>',
+  mixins: [EmptyTrashBin]
 }
 
 describe('emptyTrashBin', () => {
@@ -78,6 +79,7 @@ function getWrapper({
   resolveClearTrashBin = true,
   driveType = 'personal'
 } = {}) {
+  const clientMock = mockDeep<OwnCloudSdk>()
   return mount(Component, {
     localVue,
     mocks: {
@@ -93,9 +95,9 @@ function getWrapper({
       $pgettext: jest.fn(),
       space: { driveType, isEditor: () => false, isManager: () => false },
       $client: {
-        ...sdkMock,
+        ...clientMock,
         fileTrash: {
-          ...sdkMock.files,
+          ...clientMock.files,
           clearTrashBin: jest.fn().mockImplementation(() => {
             if (resolveClearTrashBin) {
               return Promise.resolve({})
@@ -106,33 +108,10 @@ function getWrapper({
       }
     },
     store: createStore(Vuex.Store, {
-      actions: {
-        createModal: jest.fn(),
-        hideModal: jest.fn(),
-        showMessage: jest.fn()
-      },
-      getters: {
-        configuration: () => ({
-          server: 'https://example.com'
-        }),
-        capabilities: () => {}
-      },
+      ...defaultStoreMockOptions,
       modules: {
-        user: {
-          state: {
-            id: 'alice',
-            uuid: 1
-          }
-        },
-        Files: {
-          namespaced: true,
-          mutations: {
-            REMOVE_FILE: jest.fn()
-          },
-          actions: {
-            clearTrashBin: jest.fn()
-          }
-        }
+        ...defaultStoreMockOptions.modules,
+        user: { state: { uuid: 1 } }
       }
     })
   })

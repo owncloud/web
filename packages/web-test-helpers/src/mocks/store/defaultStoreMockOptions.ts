@@ -18,5 +18,8 @@ export const defaultStoreMockOptions = {
     toggleModalConfirmButton: jest.fn(),
     showMessage: jest.fn(),
     setModalInputErrorMessage: jest.fn()
+  },
+  mutations: {
+    SET_QUOTA: () => jest.fn()
   }
 } // FIXME: when we switch to TypeScript 4.9: satisfies StoreOptionsExtended<any>
