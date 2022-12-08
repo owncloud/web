@@ -24,9 +24,9 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
       await resourceObject.upload({
-        to: info.to !== 'undefined' ? info.to : null,
+        to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
-        createVersion: info.create_version === 'true'
+        option: info.option
       })
     }
   }

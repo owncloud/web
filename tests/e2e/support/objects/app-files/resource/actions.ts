@@ -18,7 +18,7 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const saveTextFileInEditorButton = '#text-editor-controls-save'
+const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
@@ -30,7 +30,9 @@ const clipboardBtns = '#clipboard-btns'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]/a'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
-const actionConfirmationButton = '.oc-modal-body-actions-confirm'
+const actionConfirmationButton =
+  '//button[contains(@class,"oc-modal-body-actions-confirm") and text()="%s"]'
+const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const emptyTrashBinButton = '.oc-files-actions-empty-trash-bin-trigger'
@@ -45,6 +47,8 @@ const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
+const drawioSaveButton = '.geBigButton >> text=Save'
+const drawioIframe = '#drawio-editor'
 
 export const clickResource = async ({
   page,
@@ -79,78 +83,85 @@ export interface createResourceArgs {
   content?: string
 }
 
-export const createResource = async (args: createResourceArgs): Promise<void> => {
+export const createNewFolder = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
+  await page.locator(createNewFolderButton).click()
+  await page.locator(resourceNameInput).fill(resource)
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+}
+
+export const createNewFileOrFolder = async (args: createResourceArgs): Promise<void> => {
+  const { page, name, type, content } = args
+  await page.locator(addNewResourceButton).click()
+  switch (type) {
+    case 'folder': {
+      await createNewFolder({ page, resource: name })
+      break
+    }
+    case 'txtFile': {
+      await page.locator(createNewTxtFileButton).click()
+      await page.locator(resourceNameInput).fill(name)
+      await Promise.all([
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
+      ])
+      await editTextDocument({ page, content })
+      break
+    }
+    case 'mdFile': {
+      await page.locator(createNewMdFileButton).click()
+      await page.locator(resourceNameInput).fill(name)
+      await Promise.all([
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
+      ])
+      await editTextDocument({ page, content })
+      break
+    }
+    case 'drawioFile': {
+      await page.locator(createNewDrawioFileButton).click()
+      await page.locator(resourceNameInput).fill(name)
+
+      const [drawioTab] = await Promise.all([
+        page.waitForEvent('popup'),
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
+        page.locator(util.format(actionConfirmationButton, 'Create')).click()
+      ])
+      await drawioTab.waitForLoadState()
+      await drawioTab.frameLocator(drawioIframe).locator(drawioSaveButton).click()
+      await drawioTab.waitForURL('**/draw-io/personal/**')
+      await drawioTab.close()
+      break
+    }
+  }
+}
+
+export const createResources = async (args: createResourceArgs): Promise<void> => {
   const { page, name, type, content } = args
   const paths = name.split('/')
+  const resource = paths.pop()
 
-  for (const resource of paths) {
+  for (const path of paths) {
     const resourcesExists = await resourceExists({
       page: page,
-      name: resource
+      name: path
     })
 
     if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-
-      switch (type) {
-        case 'folder': {
-          await page.locator(createNewFolderButton).click()
-          await page.locator(resourceNameInput).fill(resource)
-          await Promise.all([
-            page.waitForResponse(
-              (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
-            ),
-            page.locator(actionConfirmationButton).click()
-          ])
-          break
-        }
-        case 'txtFile': {
-          await page.locator(createNewTxtFileButton).click()
-          await page.locator(resourceNameInput).fill(resource)
-          await Promise.all([
-            page.waitForResponse(
-              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
-            ),
-            page.locator(actionConfirmationButton).click()
-          ])
-          await editTextDocument({ page, content: content })
-          break
-        }
-        case 'mdFile': {
-          await page.locator(createNewMdFileButton).click()
-          await page.locator(resourceNameInput).fill(resource)
-          await Promise.all([
-            page.waitForResponse(
-              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
-            ),
-            page.locator(actionConfirmationButton).click()
-          ])
-          await editTextDocument({ page, content: content })
-          break
-        }
-        case 'drawioFile': {
-          await page.locator(createNewDrawioFileButton).click()
-          await page.locator(resourceNameInput).fill(resource)
-
-          const [drawioTab] = await Promise.all([
-            page.waitForEvent('popup'),
-            page.waitForResponse(
-              (resp) => resp.status() === 201 && resp.request().method() === 'PUT'
-            ),
-            page.locator(actionConfirmationButton).click()
-          ])
-          await drawioTab.waitForLoadState()
-          await drawioTab.locator('.geBigButton', { hasText: 'Save' }).isVisible()
-          await drawioTab.waitForURL('**/draw-io/personal/**')
-          await drawioTab.close()
-          break
-        }
-      }
+      await createNewFolder({ page, resource: path })
     }
-    if (type === 'folder') {
-      await clickResource({ page, path: resource })
-    }
+    await clickResource({ page, path })
   }
+  await createNewFileOrFolder({ page, name: resource, type, content })
 }
 
 export const editTextDocument = async ({
@@ -175,29 +186,54 @@ export interface uploadResourceArgs {
   page: Page
   resources: File[]
   to?: string
-  createVersion?: boolean
+  option?: string
 }
 
 export const uploadResource = async (args: uploadResourceArgs): Promise<void> => {
-  const { page, resources, to, createVersion } = args
+  const { page, resources, to, option } = args
   if (to) {
-    await clickResource({ page: page, path: to })
+    await clickResource({ page, path: to })
   }
 
   await page.locator(resourceUploadButton).click()
   await page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
 
-  if (createVersion) {
-    await page.locator(actionSecondaryConfirmationButton).click()
-    // @TODO check if upload was successful
+  if (option) {
+    switch (option) {
+      case 'skip': {
+        await page.locator(actionSkipButton).click()
+        break
+      }
+      case 'merge':
+      case 'replace': {
+        await page.locator(actionSecondaryConfirmationButton).click()
+        await page.locator(uploadInfoCloseButton).click()
+
+        await waitForResources({
+          page: page,
+          names: resources.map((file) => path.basename(file.name))
+        })
+        break
+      }
+      case 'keep both': {
+        await page.locator(util.format(actionConfirmationButton, 'Keep both')).click()
+        await page.locator(uploadInfoCloseButton).click()
+
+        await waitForResources({
+          page: page,
+          names: resources.map((file) => path.basename(file.name))
+        })
+        break
+      }
+    }
+  } else {
+    await page.locator(uploadInfoCloseButton).click()
+
+    await waitForResources({
+      page: page,
+      names: resources.map((file) => path.basename(file.name))
+    })
   }
-
-  await page.locator(uploadInfoCloseButton).click()
-
-  await waitForResources({
-    page: page,
-    names: resources.map((file) => path.basename(file.name))
-  })
 }
 
 /**/
@@ -219,15 +255,15 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         await clickResource({ page, path: folder })
       }
       for (const name of names) {
-        await sidebar.open({ page: page, resource: name })
-        await sidebar.openPanel({ page: page, name: 'actions' })
+        await sidebar.open({ page, resource: name })
+        await sidebar.openPanel({ page, name: 'actions' })
 
         const [download] = await Promise.all([
           page.waitForEvent('download'),
           page.locator(downloadButtonSideBar).click()
         ])
 
-        await sidebar.close({ page: page })
+        await sidebar.close({ page })
 
         downloads.push(download)
       }
@@ -235,7 +271,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
     }
 
     case 'BATCH_ACTION': {
-      await selectOrDeselectResources({ page: page, names: names, folder: folder, select: true })
+      await selectOrDeselectResources({ page, names, folder, select: true })
       let downloadSelector = downloadButtonBatchActionMultiple
       if (names.length === 1) {
         downloadSelector = downloadButtonBatchActionSingleFile
@@ -262,12 +298,12 @@ export type selectResourcesArgs = {
 export const selectOrDeselectResources = async (args: selectResourcesArgs): Promise<void> => {
   const { page, folder, names, select } = args
   if (folder) {
-    await clickResource({ page: page, path: folder })
+    await clickResource({ page, path: folder })
   }
 
   for (const resource of names) {
     const exists = await resourceExists({
-      page: page,
+      page,
       name: resource
     })
     if (exists) {
@@ -298,7 +334,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
-    await clickResource({ page: page, path: resourceDir })
+    await clickResource({ page, path: resourceDir })
   }
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
@@ -306,7 +342,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   await page.locator(breadcrumbRoot).click()
 
   if (newLocation !== 'Personal') {
-    await clickResource({ page: page, path: newLocation })
+    await clickResource({ page, path: newLocation })
   }
 
   await page.locator(clipboardBtns).first().click()
@@ -343,7 +379,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
         resp.status() === 201 &&
         resp.request().method() === 'MOVE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
 
   await waitForResources({
@@ -393,7 +429,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
   }
 
   await sidebar.open({ page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'actions' })
+  await sidebar.openPanel({ page, name: 'actions' })
 
   await page.locator(deleteButtonSidebar).first().click()
   await Promise.all([
@@ -403,9 +439,9 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         resp.status() === 204 &&
         resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
-  await sidebar.close({ page: page })
+  await sidebar.close({ page })
 }
 
 export interface downloadResourceVersionArgs {
@@ -443,7 +479,7 @@ export const emptyTrashBinResources = async (page): Promise<string> => {
     page.waitForResponse(
       (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
@@ -464,7 +500,7 @@ export const deleteResourceTrashbin = async (args: deleteResourceArgs): Promise<
     page.waitForResponse(
       (resp) => statuses.includes(resp.status()) && resp.request().method() === 'DELETE'
     ),
-    page.locator(actionConfirmationButton).click()
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()

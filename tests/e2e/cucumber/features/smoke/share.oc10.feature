@@ -44,8 +44,8 @@ Feature: share
     #  | folder_to_shared/lorem_new.txt |
     #  | folder_to_shared/simple.pdf    |
     And "Alice" uploads the following resource
-      | resource          | to               | create_version |
-      | PARENT/simple.pdf | folder_to_shared | true           |
+      | resource          | to               | option  |
+      | PARENT/simple.pdf | folder_to_shared | replace |
     #Then "Alice" should see that the resource "folder_to_shared/simple.pdf" has 1 version
     And "Brian" downloads old version of the following resource
       | resource   | to                      |

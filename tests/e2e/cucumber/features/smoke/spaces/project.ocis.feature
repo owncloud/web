@@ -105,8 +105,8 @@ Feature: spaces.personal
     And "Alice" navigates to the project space "team.1"
     And "Alice" updates the space "team.1" image to "testavatar.jpeg"
     And "Alice" uploads the following resource
-      | resource          | to               | create_version |
-      | PARENT/simple.pdf | folder_to_shared | true           |
+      | resource          | to               | option  |
+      | PARENT/simple.pdf | folder_to_shared | replace |
     When "Brian" restores following resources
       | resource   | to               | version |
       | simple.pdf | folder_to_shared | 1       |
