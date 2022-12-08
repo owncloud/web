@@ -114,7 +114,7 @@ When(
       await pageObject.upload({
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
-        createVersion: info.create_version === 'true'
+        option: info.option
       })
     }
   }
