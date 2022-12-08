@@ -1,3 +1,4 @@
+// test
 const path = require('path')
 const { config } = require('./tests/e2e/config')
 const fs = require('fs')
