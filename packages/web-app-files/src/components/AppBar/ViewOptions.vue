@@ -11,7 +11,7 @@
         :appearance="viewModeCurrent === ViewModeConstants.default ? 'filled' : 'outline'"
         @click="setViewMode(ViewModeConstants.default)"
       >
-        <oc-icon name="align-justify" fill-type="none" size="small" />
+        <oc-icon name="menu-line" fill-type="none" size="small" />
       </oc-button>
     </div>
     <oc-button
