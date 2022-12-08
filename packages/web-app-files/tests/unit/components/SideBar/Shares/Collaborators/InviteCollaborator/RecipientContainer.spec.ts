@@ -1,70 +1,39 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
+import { mount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-
-import Users from '@/__fixtures__/users'
-import Collaborators from '@/__fixtures__/collaborators'
-import SharedFiles from '@/__fixtures__/sharedFiles'
-
 import RecipientContainer from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
-import { buildSharedResource } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 
 jest.mock('web-app-files/src/helpers/user/avatarUrl', () => ({
   avatarUrl: jest.fn().mockReturnValue('avatarUrl')
 }))
 
-const user = Users.admin
-const collaborators = Collaborators
+const localVue = defaultLocalVue()
 
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-localVue.use(Vuex)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
+const getRecipient = (shareType: number | string = ShareTypes.user.value) => ({
+  label: 'Albert Einstein',
+  value: {
+    shareType,
+    shareWith: 'einstein',
+    shareWithAdditionalInfo: 'einstein@example.org'
+  }
 })
 
 describe('InviteCollaborator RecipientContainer', () => {
   describe('renders a recipient with a deselect button', () => {
     it.each(ShareTypes.authenticated)('different recipients for different shareTypes', (type) => {
-      const { collaborator } = collaborators.filter((sharee) => sharee.shareType === type.value)[0]
-      const recipient = {
-        label: collaborator.displayName,
-        value: {
-          shareType: type.key,
-          shareWith: collaborator.name,
-          shareWithAdditionalInfo: collaborator.additionalInfo
-        }
-      }
+      const recipient = getRecipient(type.key)
       const wrapper = getMountedWrapper(recipient)
       expect(wrapper).toMatchSnapshot()
     })
   })
   it('displays an avatar image if capability is present', () => {
-    const { collaborator } = collaborators[0]
-    const recipient = {
-      label: collaborator.displayName,
-      value: {
-        shareType: ShareTypes.user.value,
-        shareWith: collaborator.name,
-        shareWithAdditionalInfo: collaborator.additionalInfo
-      }
-    }
+    const recipient = getRecipient()
     const wrapper = getMountedWrapper(recipient, true)
     expect(wrapper).toMatchSnapshot()
   })
   it('emits an event if deselect button is clicked', async () => {
-    const { collaborator } = collaborators[0]
-    const recipient = {
-      label: collaborator.displayName,
-      value: {
-        shareType: ShareTypes.user.value,
-        shareWith: collaborator.name,
-        shareWithAdditionalInfo: collaborator.additionalInfo
-      }
-    }
+    const recipient = getRecipient()
     const wrapper = getMountedWrapper(recipient, true)
     const spyOnDeselect = wrapper.vm.deselect.mockImplementation()
     const button = wrapper.find('.files-share-invite-recipient-btn-remove')
@@ -75,30 +44,13 @@ describe('InviteCollaborator RecipientContainer', () => {
 
 const storeOptions = (avatarsEnabled) => {
   return {
-    state: {
-      user
-    },
-    modules: {
-      Files: {
-        namespaced: true,
-        getters: {
-          highlightedFile: () => buildSharedResource(SharedFiles.json().ocs.data[0], true)
-        }
-      }
-    },
     getters: {
-      user: () => user,
+      user: () => ({ id: 1 }),
       capabilities: () => {
         return {
           files_sharing: {
             user: {
               profile_picture: avatarsEnabled,
-              expire_date: {
-                enabled: true,
-                days: 10
-              }
-            },
-            group: {
               expire_date: {
                 enabled: true,
                 days: 10

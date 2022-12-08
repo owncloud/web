@@ -5,13 +5,14 @@ import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultCompone
 import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
-import { files } from '../../../__fixtures__/files'
 import { useResourcesViewDefaults, useSort } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
 
 jest.mock('web-app-files/src/composables')
 
@@ -43,13 +44,13 @@ describe('SharedWithMe view', () => {
     describe('pending', () => {
       it('shows when a share is pending', () => {
         const { wrapper } = getMountedWrapper({
-          files: [{ ...files[1], status: ShareStatus.pending }]
+          files: [mockDeep<Resource>({ status: ShareStatus.pending })]
         })
         expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeTruthy()
       })
       it('does not show when no share is pending', () => {
         const { wrapper } = getMountedWrapper({
-          files: [{ ...files[1], status: ShareStatus.accepted }]
+          files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
         })
         expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeFalsy()
       })
@@ -57,7 +58,7 @@ describe('SharedWithMe view', () => {
     describe('accepted', () => {
       it('shows an accepted share', () => {
         const { wrapper } = getMountedWrapper({
-          files: [{ ...files[1], status: ShareStatus.accepted }]
+          files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
         })
         expect(wrapper.find('#files-shared-with-me-accepted-section').exists()).toBeTruthy()
         expect(wrapper.find('#files-shared-with-me-accepted-section').props().items.length).toEqual(
@@ -68,7 +69,7 @@ describe('SharedWithMe view', () => {
     describe('declined', () => {
       it('shows a declined share', async () => {
         const { wrapper } = getMountedWrapper({
-          files: [{ ...files[1], status: ShareStatus.declined }]
+          files: [mockDeep<Resource>({ status: ShareStatus.declined })]
         })
         await wrapper.vm.loadResourcesTask.last
         expect(wrapper.find('#files-shared-with-me-declined-section').exists()).toBeTruthy()

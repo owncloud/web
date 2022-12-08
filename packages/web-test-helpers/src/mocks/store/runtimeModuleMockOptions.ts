@@ -5,7 +5,8 @@ export const runtimeModuleMockOptions = {
       spaces: {
         namespaced: true,
         getters: {
-          spaces: jest.fn(() => [])
+          spaces: jest.fn(() => []),
+          spaceMembers: jest.fn(() => [])
         },
         mutations: {
           UPDATE_SPACE_FIELD: jest.fn(),

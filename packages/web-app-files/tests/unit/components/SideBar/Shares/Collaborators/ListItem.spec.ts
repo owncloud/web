@@ -1,11 +1,10 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
-import stubs from '@/tests/unit/stubs'
 import GetTextPlugin from 'vue-gettext'
-import Users from '@/__fixtures__/users'
 import { peopleRoleViewerFolder, ShareTypes } from 'web-client/src/helpers/share'
 import VueCompositionAPI from '@vue/composition-api'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -111,7 +110,7 @@ function createWrapper({
   return mount(ListItem, {
     store: new Vuex.Store({
       state: {
-        user: Users.alice
+        user: { id: '1' }
       },
       modules: {
         Files: {
@@ -137,7 +136,11 @@ function createWrapper({
     },
     localVue,
     stubs: {
-      ...stubs,
+      ...defaultStubs,
+      'oc-icon': true,
+      'avatar-image': true,
+      'router-link': true,
+      'oc-info-drop': true,
       'oc-table-simple': true,
       'oc-tr': true,
       'oc-td': true,

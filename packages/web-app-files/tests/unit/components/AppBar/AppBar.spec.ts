@@ -1,21 +1,12 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Files from '@/__fixtures__/files'
+import { shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetTextPlugin from 'vue-gettext'
-
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-const selectedFiles = [Files['/'][1], Files['/'][4]]
-
+const localVue = defaultLocalVue()
+const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"
 const contextMenuSlot = "<button class='context-menu-slot'>Click</button>"
 const contentSlot = "<div class='content-slot'>Foo</div>"
@@ -124,9 +115,9 @@ describe('AppBar component', () => {
 })
 
 function getShallowWrapper(
-  store = {},
+  store,
   slots = {},
-  props = {
+  props: { [key: string]: any } = {
     breadcrumbs: [],
     hasBulkActions: false,
     hasSharesNavigation: false,

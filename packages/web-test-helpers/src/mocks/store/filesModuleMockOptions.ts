@@ -1,11 +1,16 @@
 export const filesModuleMockOptions = {
   Files: {
     namespaced: true,
+    state: {
+      sharesTree: {}
+    },
     getters: {
       currentFolder: jest.fn(),
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
       highlightedFile: jest.fn(),
+      currentFileOutgoingCollaborators: jest.fn(() => []),
+      indirectOutgoingShares: jest.fn(() => []),
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn()
     },

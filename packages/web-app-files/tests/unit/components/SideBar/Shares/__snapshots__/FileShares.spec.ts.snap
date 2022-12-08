@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileShares collaborators present correctly passes the shared parent route to the collaborator list item 1`] = `
+<div id="oc-files-sharing-sidebar" class="oc-position-relative">
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
+    <!---->
+  </div>
+  <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
+  <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
+    <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
+  </div>
+  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
+    <li>
+      <collaborator-list-item-stub share="[object Object]" sharedparentroute="[object Object]"></collaborator-list-item-stub>
+    </li>
+  </ul>
+  <!---->
+  <!---->
+</div>
+`;
+
+exports[`FileShares collaborators present renders sharedWithLabel and sharee list 1`] = `
+<div id="oc-files-sharing-sidebar" class="oc-position-relative">
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
+    <!---->
+  </div>
+  <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
+  <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
+    <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
+  </div>
+  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
+    <li>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
+    </li>
+  </ul>
+  <!---->
+  <!---->
+</div>
+`;
+
+exports[`FileShares current space loads space members if a space is given and the current user is member 1`] = `
+<div id="oc-files-sharing-sidebar" class="oc-position-relative">
+  <div class="oc-flex">
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
+    <!---->
+  </div>
+  <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
+  <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
+    <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
+  </div>
+  <ul id="files-collaborators-list" aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-mb-l">
+    <li>
+      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+    </li>
+  </ul>
+  <!---->
+  <h4 class="oc-text-bold oc-my-s">Space members</h4>
+  <ul id="space-collaborators-list" aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm">
+    <li>
+      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+    </li>
+    <li>
+      <collaborator-list-item-stub share="[object Object]"></collaborator-list-item-stub>
+    </li>
+  </ul>
+  <!---->
+</div>
+`;

@@ -14,6 +14,7 @@
             :placeholder="$gettext('Filter members')"
           />
           <oc-button
+            class="close-filter-btn"
             v-oc-tooltip="$gettext('Close filter')"
             :aria-label="$gettext('Close filter')"
             appearance="raw"
@@ -24,6 +25,7 @@
         </div>
         <oc-button
           v-else
+          class="open-filter-btn"
           v-oc-tooltip="$gettext('Filter members')"
           :aria-label="$gettext('Filter members')"
           appearance="raw"
