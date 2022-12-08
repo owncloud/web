@@ -1,0 +1,4 @@
+Bugfix: Remove navigation text flickering
+
+We've fixed a bug that caused the navigation text to flicker in light mode.
+
