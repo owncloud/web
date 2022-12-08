@@ -1,3 +1,4 @@
+@notToImplementOnOCIS @issue-6844
 Feature: Access private link
   As a user I want to directly access item which I have received private link for
 
@@ -5,14 +6,14 @@ Feature: Access private link
     Given user "Alice" has been created with default attributes and without skeleton files in the server
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt" in the server
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest
   Scenario: Copy and access private link
     Given user "Alice" has logged in using the webUI
     When the user copies the private link of the file "lorem.txt" using the webUI
     And the user navigates to the copied private link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @smokeTest @ocisSmokeTest
+  @smokeTest
   Scenario: Access private link before authorisation
     When an anonymous user tries to navigate to the private link created by user "Alice" for file "lorem.txt"
     Then the user should be redirected to the IdP login page
