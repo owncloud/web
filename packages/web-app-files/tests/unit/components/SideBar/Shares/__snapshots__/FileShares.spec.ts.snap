@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FileShares collaborators present correctly passes the shared parent route to the collaborator list item 1`] = `
+exports[`FileShares collaborators list correctly passes the shared parent route to the collaborator list item 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
     <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
-    <!---->
+    <oc-contextual-helper-stub title="Invite specific people" text="Enter a name or group to share this item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
@@ -20,11 +20,11 @@ exports[`FileShares collaborators present correctly passes the shared parent rou
 </div>
 `;
 
-exports[`FileShares collaborators present renders sharedWithLabel and sharee list 1`] = `
+exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1`] = `
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
     <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
-    <!---->
+    <oc-contextual-helper-stub title="Invite specific people" text="Enter a name or group to share this item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
@@ -34,8 +34,19 @@ exports[`FileShares collaborators present renders sharedWithLabel and sharee lis
     <li>
       <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
     </li>
+    <li>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
+    </li>
+    <li>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
+    </li>
+    <li>
+      <collaborator-list-item-stub share="[object Object]" modifiable="true"></collaborator-list-item-stub>
+    </li>
   </ul>
-  <!---->
+  <div class="oc-flex oc-flex-center">
+    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="toggle-shares-list-btn">Show less</oc-button-stub>
+  </div>
   <!---->
 </div>
 `;
@@ -44,7 +55,7 @@ exports[`FileShares current space loads space members if a space is given and th
 <div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
     <h3 class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
-    <!---->
+    <oc-contextual-helper-stub title="Invite specific people" text="Enter a name or group to share this item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
   </div>
   <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">

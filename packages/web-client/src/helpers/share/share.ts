@@ -23,4 +23,5 @@ export interface Share {
   customPermissions?: SharePermission[]
   expires?: Date
   quicklink?: boolean
+  outgoing?: boolean
 }

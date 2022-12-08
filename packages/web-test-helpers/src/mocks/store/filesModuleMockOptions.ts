@@ -26,6 +26,7 @@ export const filesModuleMockOptions = {
       LOAD_FILES: jest.fn(),
       UPDATE_RESOURCE_FIELD: jest.fn(),
       REMOVE_FILE: jest.fn(),
+      REMOVE_FILES: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {
@@ -33,6 +34,7 @@ export const filesModuleMockOptions = {
       pasteSelectedFiles: jest.fn(),
       clearClipboardFiles: jest.fn(),
       loadIndicators: jest.fn(),
+      deleteShare: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
       loadSharesTree: jest.fn(),
