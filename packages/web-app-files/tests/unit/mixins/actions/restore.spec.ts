@@ -59,7 +59,7 @@ describe('restore', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const wrapper = getWrapper({ resolveClearTrashBin: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
