@@ -1,8 +1,7 @@
 import { Store } from 'vuex'
 
 export const getWebVersion = (): string => {
-  const version = process.env.PACKAGE_VERSION
-  return `ownCloud Web UI ${version}`
+  return `ownCloud Web UI ${process.env.PACKAGE_VERSION}`
 }
 
 export const getBackendVersion = ({ store }: { store: Store<unknown> }): string => {

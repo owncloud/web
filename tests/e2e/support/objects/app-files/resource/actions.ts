@@ -177,6 +177,9 @@ export const editTextDocument = async ({
     page.locator(saveTextFileInEditorButton).click()
   ])
 
+  await page.waitForResponse(
+    (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+  )
   await Promise.all([page.waitForNavigation(), page.locator(closeTextEditorOrViewerButton).click()])
 }
 

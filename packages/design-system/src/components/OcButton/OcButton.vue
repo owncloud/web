@@ -176,8 +176,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 @mixin oc-button-gap($factor) {
   gap: round(calc($oc-space-small * $factor / 2)) * 2;
 }

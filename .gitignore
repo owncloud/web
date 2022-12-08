@@ -33,6 +33,8 @@ tests/testing-app
 /webpack.json
 /webpack-build-log.json
 
+/.vite-inspect
+
 /coverage
 
 /.pnpm-store/

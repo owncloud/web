@@ -85,8 +85,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-tag {
   align-items: center;
   background-color: var(--oc-color-background-default);

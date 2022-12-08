@@ -189,8 +189,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .oc-textarea {
   padding-bottom: var(--oc-space-xsmall);
   padding-top: var(--oc-space-xsmall);

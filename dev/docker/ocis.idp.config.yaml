@@ -7,8 +7,11 @@ clients:
   redirect_uris:
     - https://host.docker.internal:9100/
     - https://host.docker.internal:9200/
+    - https://host.docker.internal:9201/
     - https://host.docker.internal:9100/oidc-callback.html
     - https://host.docker.internal:9200/oidc-callback.html
+    - https://host.docker.internal:9201/oidc-callback.html
   origins:
     - https://host.docker.internal:9100
     - https://host.docker.internal:9200
+    - https://host.docker.internal:9201

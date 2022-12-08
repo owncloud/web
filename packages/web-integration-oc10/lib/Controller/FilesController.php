@@ -59,6 +59,13 @@ class FilesController extends Controller {
 		parent::__construct($appName, $request);
 		$this->appManager = $appManager;
 		$this->mimeTypeDetector = $mimeTypeDetector;
+
+		$this->mimeTypeDetector->registerType("js", "text/javascript");
+		$this->mimeTypeDetector->registerType("mjs", "text/javascript");
+		$this->mimeTypeDetector->registerType("html", "text/html");
+		$this->mimeTypeDetector->registerType("css", "text/css");
+		$this->mimeTypeDetector->registerType("svg", "image/svg+xml");
+
 	}
 
 	/**
@@ -77,7 +84,7 @@ class FilesController extends Controller {
 		}
 
 		// check if path permitted
-		$permittedPaths = ["css", "img", "js", "themes", "icons", "fonts", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
+		$permittedPaths = ["assets", "img", "js", "themes", "icons", "fonts", "index.html", "manifest.json", "oidc-callback.html", "oidc-silent-redirect.html"];
 		$found = false;
 		foreach ($permittedPaths as $p) {
 			if (\strpos($path, $p) === 0) {

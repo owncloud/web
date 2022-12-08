@@ -134,8 +134,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/styles';
-
 .vs--disabled {
   .vs__clear,
   .vs__dropdown-toggle,

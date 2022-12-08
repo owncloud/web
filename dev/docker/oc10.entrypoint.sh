@@ -36,6 +36,13 @@ then
       UmCVsEIxdWmssxa6uVRRPC3txYBVN4qqxooJbsPhuuoPmHk9Pt9Oy68N4ZaKXUYy \
       HW1fo6lbtgEERBQufBouJ4HID2QaDfngvIdc2vjDUE46qKB4JRG1YDir41LliReC \
       http://localhost:9100/oidc-callback.html
+    occ oauth2:add-client \
+      web-vite \
+      AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC \
+      VsrTbbeTPJ56e93eKpCdb6Wf5IGHD2meadlsDT1M9EpS3k7Y1ywTYgOhTkKZ0QTL \
+      http://host.docker.internal:8081/oidc-callback.html \
+      false \
+      true
     occ config:system:set trusted_domains 0 --value="localhost"
     occ config:system:set cors.allowed-domains 0 --value="http://localhost:9100"
 fi

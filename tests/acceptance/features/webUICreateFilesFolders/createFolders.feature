@@ -49,13 +49,13 @@ Feature: create folders
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
     And the create folder button should be disabled
 
-  @issue-2467
+
   Scenario: Create folder with special characters in its name and browse to that folder
     When the user creates a folder with the name "?&%0" using the webUI
     And the user opens folder "?&%0" using the webUI
     And the user reloads the current page of the webUI
-    Then the page should be empty
-  # Then the files table should be displayed
+    Then the files table should be displayed
+
 
 
   Scenario: Create a folder in a public share
