@@ -21,6 +21,7 @@ Summary
 * Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
 * Change - Update Vue to v2.7.14: [#7877](https://github.com/owncloud/web/pull/7877)
 * Enhancement - Access right sidebar panels via URL: [#8021](https://github.com/owncloud/web/pull/8021)
+* Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 * Enhancement - Group and user creation forms submit on enter: [#7968](https://github.com/owncloud/web/pull/7968)
 * Enhancement - Increase Searchbar height: [#8056](https://github.com/owncloud/web/pull/8056)
@@ -139,6 +140,14 @@ Details
 
    https://github.com/owncloud/web/issues/7927
    https://github.com/owncloud/web/pull/8021
+
+* Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
+
+   We've added a switch to have a more condensed resource table. The change gets saved to the route
+   and persisted across resource navigation.
+
+   https://github.com/owncloud/web/issues/6380
+   https://github.com/owncloud/web/pull/7976
 
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 
