@@ -28,6 +28,7 @@
     "files",
     "text-editor",
     "pdf-viewer",
+      "epub-viewer",
     "search",
     "external",
     "user-management"
