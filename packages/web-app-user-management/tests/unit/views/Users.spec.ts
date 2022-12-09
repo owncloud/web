@@ -166,18 +166,31 @@ describe('Users view', () => {
       expect(showMessageStub).toHaveBeenCalled()
       expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(1)
     })
-
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const graph = defaultGraphMock()
       graph.users.deleteUser.mockImplementation(() => mockAxiosReject())
       const wrapper = getMountedWrapper({ graph })
+      const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
+      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
+      await wrapper.vm.deleteUsers([{ id: '2' }])
+
+      expect(graphDeleteUserStub).toHaveBeenCalledTimes(1)
+      expect(showMessageStub).toHaveBeenCalled()
+      expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
+    })
+    it('should show message while user tries to delete own account', async () => {
+      const wrapper = getMountedWrapper()
+      const graph = defaultGraphMock()
+      const graphDeleteUserStub = jest.spyOn(graph.users, 'deleteUser')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteUserModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteUserModal')
       await wrapper.vm.deleteUsers([{ id: '1' }])
 
+      expect(graphDeleteUserStub).toHaveBeenCalledTimes(0)
       expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleDeleteUserModalStub).toHaveBeenCalledTimes(0)
+      expect(toggleDeleteUserModalStub).toHaveBeenCalled()
     })
   })
 

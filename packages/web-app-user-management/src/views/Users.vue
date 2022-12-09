@@ -307,8 +307,21 @@ export default defineComponent({
       this.sideBarActivePanel = panel
       this.sideBarOpen = true
     },
-    async deleteUsers(users) {
-      const promises = users.map((user) => this.graphClient.users.deleteUser(user.id))
+    async deleteUsers(usersToDelete) {
+      if (usersToDelete.some((user) => user.id === this.currentUser.uuid)) {
+        this.showMessage({
+          title: this.$gettext('Self deletion is not allowed'),
+          status: 'danger'
+        })
+      }
+
+      usersToDelete = usersToDelete.filter((user) => user.id !== this.currentUser.uuid)
+
+      const promises = usersToDelete.map((user) => this.graphClient.users.deleteUser(user.id))
+
+      if (!promises.length) {
+        return this.toggleDeleteUserModal()
+      }
 
       try {
         await Promise.all(promises)
@@ -317,17 +330,17 @@ export default defineComponent({
             this.$ngettext(
               'User "%{user}" was deleted successfully',
               '%{userCount} users were deleted successfully',
-              this.selectedUsers.length
+              usersToDelete.length
             ),
             {
-              userCount: this.selectedUsers.length,
-              user: this.selectedUsers[0].onPremisesSamAccountName
+              userCount: usersToDelete.length,
+              user: usersToDelete[0].onPremisesSamAccountName
             },
             true
           )
         })
         this.users = this.users.filter((user) => {
-          return !users.find((deletedUser) => user.id === deletedUser.id)
+          return !usersToDelete.find((deletedUser) => user.id === deletedUser.id)
         })
         this.selectedUsers = []
         this.toggleDeleteUserModal()
@@ -338,11 +351,11 @@ export default defineComponent({
             this.$ngettext(
               'Failed to delete user "%{user}"',
               'Failed to delete %{userCount} users',
-              this.selectedUsers.length
+              usersToDelete.length
             ),
             {
-              userCount: users.length,
-              user: users.onPremisesSamAccountName
+              userCount: usersToDelete.length,
+              user: usersToDelete.onPremisesSamAccountName
             },
             true
           ),

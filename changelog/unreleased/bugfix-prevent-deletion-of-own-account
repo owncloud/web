@@ -1,0 +1,8 @@
+Bugfix: Prevent deletion of own account
+
+We've fixed a bug while a user tries to delete their own account in the user management app,
+a non descriptive error message have popped up.
+We now show a proper error message.
+
+https://github.com/owncloud/web/pull/7958
+https://github.com/owncloud/web/issues/7955
