@@ -19,4 +19,6 @@ Feature: view profile
   @oauthLogin @notToImplementOnOCIS
   Scenario: the user session of a blocked user is cleared properly using oauth authentication
     When the user reloads the current page of the webUI
-    Then the user should be redirected to the user disabled page
+    Then the user should be redirected to the login error page
+    When the user exits the login error page
+    Then the user should be redirected to the login page
