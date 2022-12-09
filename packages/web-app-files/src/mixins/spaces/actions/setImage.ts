@@ -1,7 +1,6 @@
 import { isLocationSpacesActive } from '../../../router'
 import { clientService } from 'web-pkg/src/services'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
-import { buildResource } from 'web-client/src/helpers'
 import { thumbnailService } from '../../../services'
 
 export default {
@@ -51,15 +50,21 @@ export default {
       const accessToken = this.$store.getters['runtime/auth/accessToken']
       const graphClient = clientService.graphAuthenticated(this.configuration.server, accessToken)
       const storageId = this.space?.id
-      const sourcePath = resources[0].webDavPath
-      const destinationPath = `/spaces/${storageId}/.space/${resources[0].name}`
+      const sourcePath = resources[0].path
+      const destinationPath = `/.space/${resources[0].name}`
+      const { copyFiles, getFileInfo } = this.$clientService.webdav
 
       try {
         if (sourcePath !== destinationPath) {
-          await this.$client.files.copy(sourcePath, destinationPath)
+          await copyFiles(
+            this.space,
+            { path: sourcePath },
+            this.space,
+            { path: destinationPath },
+            { overwrite: true }
+          )
         }
-        const fileInfo = await this.$client.files.fileInfo(destinationPath)
-        const file = buildResource(fileInfo)
+        const file = await getFileInfo(this.space, { path: destinationPath })
         const { data } = await graphClient.drives.updateDrive(
           storageId,
           {

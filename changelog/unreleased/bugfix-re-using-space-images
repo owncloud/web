@@ -1,0 +1,6 @@
+Bugfix: Re-using space images
+
+We've fixed a bug where re-using a previously used space image via "Set as space image" would cause errors.
+
+https://github.com/owncloud/web/issues/8083
+https://github.com/owncloud/web/pull/8084
