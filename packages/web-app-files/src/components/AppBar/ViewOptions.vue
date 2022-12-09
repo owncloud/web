@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants } from '../../composables'
