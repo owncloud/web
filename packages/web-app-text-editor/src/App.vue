@@ -13,12 +13,15 @@
         </oc-button>
       </template>
     </app-top-bar>
-    <div v-if="isLoading" class="oc-text-center">
-      <oc-spinner :aria-label="$gettext('Loading editor content')" />
+    <div v-if="isLoading" class="oc-position-center">
+      <oc-spinner :aria-label="$gettext('Loading editor content')" size="xlarge" />
     </div>
-    <div v-else-if="isError" class="oc-text-center">
-      <div class="oc-position-center oc-text-center">
-        <oc-icon size="xxlarge" name="error-warning" fill-type="line" />
+    <div v-else-if="isLoadingError" class="oc-position-center">
+      <div class="oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center">
+        <oc-icon name="file-damage" variation="danger" size="xlarge" />
+        <div class="oc-text-muted oc-text-xlarge oc-mt-s">
+          {{ loadingErrorMessage }}
+        </div>
       </div>
     </div>
     <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
@@ -67,13 +70,13 @@ export default defineComponent({
         message: this.$gettext('Your changes were not saved. Do you want to save them?'),
         cancelText: this.$gettext("Don't Save"),
         confirmText: this.$gettext('Save'),
-        onCancel: () => {
-          this.hideModal()
+        onCancel: async () => {
+          await this.hideModal()
           next()
         },
         onConfirm: async () => {
           await this.save()
-          this.hideModal()
+          await this.hideModal()
           next()
         }
       }
@@ -110,10 +113,14 @@ export default defineComponent({
       })
     }
 
+    const STATUS_PROCESSING = 'processing'
     const loadFileTask = useTask(function* () {
       resource.value = yield getFileInfo(currentFileContext, {
         davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
       })
+      if (unref(resource).processing) {
+        throw new Error(STATUS_PROCESSING)
+      }
       replaceInvalidFileRoute(currentFileContext, unref(resource))
       isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
         (p) => (resource.value.permissions || '').indexOf(p) > -1
@@ -188,8 +195,16 @@ export default defineComponent({
       return unref(serverContent) !== unref(currentContent)
     })
 
-    const isError = computed(() => {
+    const isLoadingError = computed(() => {
       return loadFileTask.isError
+    })
+    const loadingErrorMessage = computed(() => {
+      if (loadFileTask.last.error?.message === STATUS_PROCESSING) {
+        return $gettext(
+          'This file is currently being processed and is not yet available for use. Please try again shortly.'
+        )
+      }
+      return $gettext('Failed to load file')
     })
 
     const isLoading = computed(() => {
@@ -248,7 +263,8 @@ export default defineComponent({
 
       // data
       isLoading,
-      isError,
+      isLoadingError,
+      loadingErrorMessage,
       showPreview,
       isDirty,
       isReadOnly,
