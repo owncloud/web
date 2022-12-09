@@ -3,9 +3,10 @@ export const filesModuleMockOptions = {
     namespaced: true,
     getters: {
       currentFolder: jest.fn(),
-      files: jest.fn(),
+      files: jest.fn(() => []),
       activeFiles: jest.fn(),
       highlightedFile: jest.fn(),
+      clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn()
     },
     mutations: {
@@ -22,6 +23,9 @@ export const filesModuleMockOptions = {
     },
     actions: {
       deleteFiles: jest.fn(),
+      pasteSelectedFiles: jest.fn(),
+      clearClipboardFiles: jest.fn(),
+      loadIndicators: jest.fn(),
       loadSharesTree: jest.fn()
     }
   }

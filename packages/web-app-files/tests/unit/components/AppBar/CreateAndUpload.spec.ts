@@ -1,39 +1,31 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
-import Vuex, { Store } from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetTextPlugin from 'vue-gettext'
+import { shallowMount } from '@vue/test-utils'
+import Vuex from 'vuex'
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { createLocationSpaces } from '../../../../src/router'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { UppyResource } from 'web-runtime/src/composables/upload'
+import { Graph } from 'web-client'
+import { Drive } from 'web-client/src/generated'
+import { eventBus, useRequest } from 'web-pkg'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+jest.mock('web-pkg/src/composables/authContext')
+const localVue = defaultLocalVue()
 
 const elSelector = {
+  component: '#create-and-upload-actions',
   newFileButton: '#new-file-menu-btn',
-  newFileDrop: 'oc-drop-stub #new-file-menu-drop',
-  newFileMenuList: '#create-list > li',
-  uploadButton: '#upload-menu-btn',
-  uploadDrop: 'oc-drop-stub #upload-menu-drop',
-  uploadMenuList: '#upload-list > li',
-  fileUpload: 'resource-upload-stub',
-  folderUpload: 'resource-upload-stub',
+  uploadBtn: '#upload-menu-btn',
+  resourceUpload: 'resource-upload-stub',
   newFolderBtn: '#new-folder-btn',
-  newTextFileBtn: '.new-file-btn-txt',
-  newMdFileBtn: '.new-file-btn-md',
-  newDrawioFileBtn: '.new-file-btn-drawio'
+  clipboardBtns: '#clipboard-btns',
+  pasteFilesBtn: '.paste-files-btn',
+  clearClipboardBtn: '.clear-clipboard-btn'
 }
 
-const personalHomeLocation = createLocationSpaces('files-spaces-generic')
-
-const newFileHandlers = [
+const fileHandlerMocks = [
   {
     ext: 'txt',
     action: {
@@ -64,99 +56,72 @@ const newFileHandlers = [
   }
 ]
 
-const currentFolder = {
-  path: '/',
-  canUpload: jest.fn(() => true),
-  canCreate: jest.fn(() => true),
-  canBeDeleted: jest.fn(() => true)
-}
-
 describe('CreateAndUpload component', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  const route = {
-    name: personalHomeLocation.name,
-    params: {
-      driveAliasAndItem: 'personal/einstein'
-    }
-  }
-
-  let wrapper
-
-  const spyShowCreateResourceModal = jest
-    .spyOn((CreateAndUpload as any).methods, 'showCreateResourceModal')
-    .mockImplementation()
-
-  beforeEach(() => {
-    const store = createStore({ currentFolder })
-    wrapper = getShallowWrapper(route, store)
-  })
-
-  it('should show default file menu items', () => {
-    const fileUpload = wrapper.find(elSelector.fileUpload)
-    const folderUpload = wrapper.find(elSelector.folderUpload)
-    const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
-
-    expect(fileUpload.exists()).toBeTruthy()
-    expect(folderUpload.exists()).toBeTruthy()
-    expect(newFolderBtn.exists()).toBeTruthy()
-  })
-
-  describe('no file handlers available', () => {
-    it('should show the create folder button standalone (no dropdown)', () => {
-      const newFileMenuList = wrapper.findAll(elSelector.newFileMenuList)
-      expect(newFileMenuList.exists()).toBeFalsy()
+  describe('action buttons', () => {
+    it('should show and be enabled if file creation is possible', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find(elSelector.uploadBtn).props().disabled).toBeFalsy()
+      expect(wrapper.find(elSelector.newFolderBtn).props().disabled).toBeFalsy()
+      expect(wrapper).toMatchSnapshot()
+    })
+    it('should be disabled if file creation is not possible', () => {
+      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const { wrapper } = getWrapper({ currentFolder })
+      expect(wrapper.find(elSelector.uploadBtn).props().disabled).toBeTruthy()
+      expect(wrapper.find(elSelector.newFolderBtn).props().disabled).toBeTruthy()
+    })
+    it('should not be visible if file creation is not possible on a public page', () => {
+      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const { wrapper } = getWrapper({ currentFolder, currentRouteName: 'files-public-link' })
+      expect(wrapper.find(elSelector.component).exists()).toBeFalsy()
     })
   })
-
-  describe('some file handlers available', () => {
-    it('should show the create folder button in a dropdown', () => {
-      const store = createStore({ currentFolder }, newFileHandlers)
-      wrapper = getShallowWrapper(route, store)
-      const newFileMenuList = wrapper.findAll(elSelector.newFileMenuList)
-      expect(newFileMenuList.exists()).toBeTruthy()
+  describe('file handlers', () => {
+    it('should always show for uploading files and folders', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.findAll(elSelector.resourceUpload).length).toBe(2)
     })
-
-    it('should show extra file menu items for file handlers', () => {
-      const store = createStore({ currentFolder }, newFileHandlers)
-      wrapper = getShallowWrapper(route, store)
-      const newTextFileBtn = wrapper.find(elSelector.newTextFileBtn)
-      const newMdFileBtn = wrapper.find(elSelector.newMdFileBtn)
-      const newDrawioFileBtn = wrapper.find(elSelector.newDrawioFileBtn)
-      const newFileMenuList = wrapper.findAll(elSelector.newFileMenuList)
-
-      expect(newTextFileBtn.exists()).toBeTruthy()
-      expect(newMdFileBtn.exists()).toBeTruthy()
-      expect(newDrawioFileBtn.exists()).toBeTruthy()
-      expect(newFileMenuList.length).toBe(newFileHandlers.length + 1) // + 1 for "create folder"
+    it('should show additional handlers', () => {
+      const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
+      expect(wrapper).toMatchSnapshot()
     })
   })
-
+  describe('clipboard buttons', () => {
+    it('should show if clipboard is empty', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.findAll(`${elSelector.clipboardBtns} oc-button-stub`).exists()).toBeFalsy()
+    })
+    it('should show if clipboard is not empty', () => {
+      const { wrapper } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      expect(wrapper.findAll(`${elSelector.clipboardBtns} oc-button-stub`).length).toBe(2)
+    })
+    it('call the "paste files"-action', () => {
+      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      wrapper.find(elSelector.pasteFilesBtn).vm.$emit('click')
+      expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
+    })
+    it('call "clear clipboard"-action', () => {
+      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      wrapper.find(elSelector.clearClipboardBtn).vm.$emit('click')
+      expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
+    })
+  })
   describe('button triggers', () => {
-    it('should trigger "showCreateResourceModal" if new-folder button is clicked', async () => {
-      const store = createStore({ currentFolder }, newFileHandlers)
-      wrapper = getWrapper(route, store)
-
-      const newFolderBtn = wrapper.find(elSelector.newFolderBtn)
-      expect(newFolderBtn.exists()).toBeTruthy()
-      await newFolderBtn.trigger('click')
-
-      expect(spyShowCreateResourceModal).toHaveBeenCalled()
+    it('should create a modal if "New folder" button is clicked', () => {
+      const { wrapper } = getWrapper()
+      const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
+      wrapper.find(elSelector.newFolderBtn).vm.$emit('click')
+      expect(createModalSpy).toHaveBeenCalled()
     })
-    it.each(newFileHandlers)(
-      'should trigger "showCreateResourceModal" if new file button is clicked',
-      async (fileHandler) => {
-        const store = createStore({ currentFolder }, newFileHandlers)
-        wrapper = getWrapper(route, store)
-
-        const button = wrapper.find(getFileHandlerSelector(fileHandler.ext))
-        expect(button.exists()).toBeTruthy()
-        await button.trigger('click')
-
-        expect(spyShowCreateResourceModal).toHaveBeenCalled()
-        expect(spyShowCreateResourceModal).toHaveBeenCalledWith(
+    it.each(fileHandlerMocks)(
+      'should create a modal if "New file" button is clicked',
+      (fileHandler) => {
+        const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
+        const createModalSpy = jest.spyOn(wrapper.vm, 'createModal')
+        const showCreateResourceModal = jest.spyOn(wrapper.vm, 'showCreateResourceModal')
+        wrapper.find(`.new-file-btn-${fileHandler.ext}`).vm.$emit('click')
+        expect(createModalSpy).toHaveBeenCalled()
+        expect(showCreateResourceModal).toHaveBeenCalledWith(
           false,
           fileHandler.ext,
           fileHandler.action
@@ -164,107 +129,156 @@ describe('CreateAndUpload component', () => {
       }
     )
   })
+  describe('method "onUploadComplete"', () => {
+    it.each([
+      { driveType: 'personal', updated: 1 },
+      { driveType: 'project', updated: 1 },
+      { driveType: 'share', updated: 0 },
+      { driveType: 'public', updated: 0 }
+    ])('updates the space quota for supported drive types', async (data) => {
+      const { driveType, updated } = data
+      const { wrapper, mocks, storeOptions } = getWrapper()
+      const file = mockDeep<UppyResource>({ meta: { driveType } })
+      const graphMock = mockDeep<Graph>()
+      graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
+      await wrapper.vm.onUploadComplete({ successful: [file] })
+      expect(
+        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
+      ).toHaveBeenCalledTimes(updated)
+    })
+    it('reloads the file list if files were uploaded to the current path', async () => {
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const itemId = 'itemId'
+      const space = mockDeep<SpaceResource>({ id: '1' })
+      const { wrapper, mocks } = getWrapper({ itemId, space })
+      const file = mockDeep<UppyResource>({
+        meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
+      })
+      const graphMock = mockDeep<Graph>()
+      graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
+      mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
+      await wrapper.vm.onUploadComplete({ successful: [file] })
+      expect(eventSpy).toHaveBeenCalled()
+    })
+  })
+  describe('methods "addNewFolder" & "addNewFile"', () => {
+    it.each(['addNewFolder', 'addNewFile'])(
+      'updates the resource after the folder as been created successfully',
+      async (method) => {
+        const createMethod = method === 'addNewFolder' ? 'createFolder' : 'putFileContents'
+        const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
+        mocks.$clientService.webdav[createMethod].mockResolvedValue(mockDeep<Resource>())
+        await wrapper.vm[method]('New resource')
+        expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
+      }
+    )
+    it.each(['addNewFolder', 'addNewFile'])(
+      'shows a message when an error occurres',
+      async (method) => {
+        const createMethod = method === 'addNewFolder' ? 'createFolder' : 'putFileContents'
+        jest.spyOn(console, 'error').mockImplementation(() => undefined)
+        const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
+        mocks.$clientService.webdav[createMethod].mockRejectedValue(new Error())
+        await wrapper.vm[method]('New resource')
+        expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      }
+    )
+    it('opens the file editor after a file has been created and a supported editor is available', async () => {
+      const { wrapper, mocks } = getWrapper({
+        newFileAction: true,
+        item: '/',
+        newFileHandlers: fileHandlerMocks
+      })
+      const openEditorSpy = jest.spyOn(wrapper.vm, '$_fileActions_openEditor').mockImplementation()
+      mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
+      await wrapper.vm.addNewFile('New resource.txt')
+      expect(openEditorSpy).toHaveBeenCalled()
+    })
+  })
+  describe('methods "checkNewFolderName" & "checkNewFileName"', () => {
+    it.each([
+      { name: '', valid: false },
+      { name: '/name', valid: false },
+      { name: '.', valid: false },
+      { name: '..', valid: false },
+      { name: 'name ', valid: false },
+      { name: 'name', valid: true }
+    ])('verifies the resource name', (data) => {
+      const { name, valid } = data
+      const { wrapper } = getWrapper()
+      const folderResult = wrapper.vm.checkNewFolderName(name)
+      expect(folderResult === null).toBe(valid)
+      const fileResult = wrapper.vm.checkNewFileName(name)
+      expect(fileResult === null).toBe(valid)
+    })
+    it('shows error when the resource name already exists', () => {
+      const existingFile = mockDeep<Resource>({ name: 'someFile.txt' })
+      const { wrapper } = getWrapper({ files: [existingFile] })
+      const folderResult = wrapper.vm.checkNewFolderName(existingFile.name)
+      expect(folderResult).not.toBeNull()
+      const fileResult = wrapper.vm.checkNewFileName(existingFile.name)
+      expect(fileResult).not.toBeNull()
+    })
+  })
+  describe('method "addAppProviderFile"', () => {
+    it('triggers the default file action', async () => {
+      const { wrapper, mocks } = getWrapper({ item: '/' })
+      const defaultActionSpy = jest.spyOn(wrapper.vm, '$_fileActions_triggerDefaultAction')
+      mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
+      await wrapper.vm.addAppProviderFile('someFile.txt')
+      expect(defaultActionSpy).toHaveBeenCalled()
+    })
+    it('shows a message when an error occurred', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper, mocks, storeOptions } = getWrapper({ item: '/' })
+      mocks.$clientService.webdav.getFileInfo.mockRejectedValue(new Error())
+      await wrapper.vm.addAppProviderFile('someFile.txt')
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+    })
+  })
 })
 
-function getFileHandlerSelector(extension) {
-  const ext = extension.toLowerCase()
-  if (ext === 'txt') {
-    return elSelector.newTextFileBtn
-  } else if (ext === 'md') {
-    return elSelector.newMdFileBtn
-  } else if (ext === 'drawio') {
-    return elSelector.newDrawioFileBtn
-  }
-  return null
-}
-
-function getWrapper(route = {}, store: Store<any> = undefined) {
-  return mount(CreateAndUpload, {
-    localVue,
-    mocks: {
-      $route: route,
-      $router: {
-        currentRoute: route,
-        resolve: (r) => {
-          return { href: r.name }
-        },
-        afterEach: jest.fn()
-      },
-      isUserContext: jest.fn(() => false),
-      hasSpaces: true,
-      $uppyService: mockDeep<UppyService>()
-    },
-    propsData: {
-      currentPath: ''
-    },
-    props: {
-      space: {}
-    },
-    stubs: {
-      ...defaultStubs,
-      'oc-button': false,
-      'resource-upload': true,
-      'oc-drop': true
-    },
-    store
-  })
-}
-
-function getShallowWrapper(route = {}, store: Store<any> = undefined) {
-  return shallowMount(CreateAndUpload, {
-    localVue,
-    mocks: {
-      $route: route,
-      $router: {
-        currentRoute: route,
-        resolve: (r) => {
-          return { href: r.name }
-        },
-        afterEach: jest.fn()
-      },
-      isUserContext: jest.fn(() => false),
-      hasSpaces: true,
-      $uppyService: mockDeep<UppyService>()
-    },
-    propsData: {
-      currentPath: ''
-    },
-    props: {
-      space: {}
-    },
-    store
-  })
-}
-
-function createStore(state = { currentFolder: {} }, fileHandlers = []): Store<any> {
-  return new Vuex.Store({
-    actions: {
-      createModal: jest.fn(),
-      hideModal: jest.fn(),
-      showMessage: jest.fn()
-    },
+function getWrapper({
+  newFileHandlers = [],
+  clipboardResources = [],
+  files = [],
+  currentFolder = mockDeep<Resource>({ canUpload: () => true }),
+  currentRouteName = 'files-spaces-generic',
+  space = mockDeep<SpaceResource>(),
+  item = undefined,
+  itemId = undefined,
+  newFileAction = false
+} = {}) {
+  jest.mocked(useRequest).mockImplementation(() => ({
+    makeRequest: jest.fn().mockResolvedValue({ status: 200 })
+  }))
+  const storeOptions = {
+    ...defaultStoreMockOptions,
     getters: {
-      user: function () {
-        return { id: 'alice' }
-      },
-      newFileHandlers: jest.fn(() => fileHandlers)
-    },
-    modules: {
-      Files: {
-        namespaced: true,
-        state: {
-          currentFolder: {
-            path: '/'
-          },
-          ...state
-        },
-        getters: {
-          currentFolder: () => state.currentFolder,
-          clipboardResources: () => [],
-          selectedFiles: () => [],
-          files: () => []
-        }
-      }
+      ...defaultStoreMockOptions.getters,
+      newFileHandlers: () => newFileHandlers,
+      user: () => ({ id: '1' }),
+      capabilities: () => ({
+        spaces: { enabled: true },
+        files: { app_providers: [{ new_url: '/' }] }
+      })
     }
-  })
+  }
+  storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
+  storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
+  storeOptions.modules.Files.getters.files.mockImplementation(() => files)
+  const store = new Vuex.Store(storeOptions)
+  const mocks = { ...defaultComponentMocks({ currentRoute: { name: currentRouteName } }) }
+  return {
+    storeOptions,
+    mocks,
+    wrapper: shallowMount(CreateAndUpload, {
+      localVue,
+      store,
+      mocks,
+      propsData: { space, item, itemId },
+      data: () => ({ newFileAction })
+    })
+  }
 }
