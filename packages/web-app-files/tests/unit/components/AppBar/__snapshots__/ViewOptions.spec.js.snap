@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ViewOptions initially shows normal resource-table by default 1`] = `
+<div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
+  <oc-button-stub appearance="outline">
+    <oc-icon-stub name="menu-line-condensed" fill-type="none" size="small"></oc-icon-stub>
+  </oc-button-stub>
+  <oc-button-stub appearance="filled">
+    <oc-icon-stub name="menu-line" fill-type="none" size="small"></oc-icon-stub>
+  </oc-button-stub>
+</div>
+`;
+
+exports[`ViewOptions toggles between normal and condensed resource-table upon clicking the respective buttons 1`] = `
+<div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-filled">
+    <oc-icon-stub name="menu-line-condensed" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline">
+    <oc-icon-stub name="menu-line" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </button></div>
+`;
+
+exports[`ViewOptions toggles between normal and condensed resource-table upon clicking the respective buttons 2`] = `
+<div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline">
+    <oc-icon-stub name="menu-line-condensed" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-filled">
+    <oc-icon-stub name="menu-line" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </button></div>
+`;

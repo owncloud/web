@@ -5,13 +5,19 @@ import { usePagination, useFileListHeaderPosition, SortField } from '../'
 import { useSort, SortDir } from '../sort/'
 import { useSideBar } from '../sideBar'
 
-import { useMutationSubscription, useRouteQuery, useStore } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useMutationSubscription,
+  useRouteQuery,
+  useStore
+} from 'web-pkg/src/composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
 import { useSelectedResources, SelectedResourcesResult } from '../selection'
 import { ReadOnlyRef } from 'web-pkg'
 import { ScrollToResult, useScrollTo } from '../scrollTo'
+import { useViewMode, ViewModeConstants } from '../viewMode'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -30,6 +36,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
   sortBy: ReadOnlyRef<string>
   sortDir: ReadOnlyRef<SortDir>
+  viewMode: ReadOnlyRef<string>
 
   selectedResources: Ref<Resource[]>
   selectedResourcesIds: Ref<(string | number)[]>
@@ -61,6 +68,10 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     fields
   })
 
+  const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.default)
+  const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
+  const viewMode = useViewMode(currentViewMode)
+
   const paginationPageQuery = useRouteQuery('page', '1')
   const paginationPage = computed((): number => parseInt(String(paginationPageQuery.value)))
   const { items: paginatedResources, total: paginationPages } = usePagination({
@@ -80,6 +91,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     areResourcesLoading,
     storeItems,
     fields,
+    viewMode,
     paginatedResources,
     paginationPages,
     paginationPage,

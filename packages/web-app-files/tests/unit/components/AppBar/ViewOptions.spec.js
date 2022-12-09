@@ -1,7 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import merge from 'lodash-es/merge'
+
+import DesignSystem from '@ownclouders/design-system'
 
 import Store from 'web-app-files/src/store'
 import stubs from '@/tests/unit/stubs'
@@ -94,5 +96,47 @@ describe('ViewOptions', () => {
     wrapper.find('[data-testid="files-switch-hidden-files"]').vm.$emit('change', false)
 
     expect(mockedStore.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
+  })
+
+  it('initially shows normal resource-table by default', () => {
+    const wrapper = shallowMount(ViewOptions, {
+      store,
+      router,
+      localVue,
+      stubs: stubs,
+      directives: { OcTooltip }
+    })
+    const viewModeSwitchButtons = wrapper.find('[data-testid="viewmode-switch-buttons"]')
+
+    expect(viewModeSwitchButtons).toMatchSnapshot()
+  })
+  it('toggles between normal and condensed resource-table upon clicking the respective buttons', async () => {
+    localVue.use(DesignSystem)
+
+    const wrapper = mount(ViewOptions, {
+      store,
+      router,
+      localVue,
+      stubs: {
+        ...stubs,
+        'oc-button': false
+      },
+      directives: { OcTooltip }
+    })
+
+    const viewModeSwitchButtons = wrapper.find('[data-testid="viewmode-switch-buttons"]')
+    console.log(viewModeSwitchButtons.html())
+
+    await wrapper
+      .findAll('[data-testid="viewmode-switch-buttons"] > .oc-button')
+      .at(0)
+      .trigger('click')
+    expect(viewModeSwitchButtons).toMatchSnapshot()
+
+    await wrapper
+      .findAll('[data-testid="viewmode-switch-buttons"] > .oc-button')
+      .at(1)
+      .trigger('click')
+    expect(viewModeSwitchButtons).toMatchSnapshot()
   })
 })

@@ -1,0 +1,5 @@
+Enhancement: Add condensed menu icon 
+
+We added a new menu icon for the switch between condensed and regular resource table.
+
+https://github.com/owncloud/web/pull/7976

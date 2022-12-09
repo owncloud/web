@@ -49,6 +49,7 @@
           v-model="selectedResourcesIds"
           class="files-table"
           :class="{ 'files-table-squashed': sideBarOpen }"
+          :view-mode="viewMode"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
           :target-route-callback="resourceTargetRouteCallback"
