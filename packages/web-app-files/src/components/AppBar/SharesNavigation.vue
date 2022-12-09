@@ -41,7 +41,7 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 import {
   isLocationSharesActive,
   locationSharesViaLink,
