@@ -116,7 +116,10 @@ export default defineComponent({
       return this.$gettext('Personal')
     },
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configuration?.options?.disablePreviews && !this.isResourceTxtFileAlmostEmpty
+    },
+    isResourceTxtFileAlmostEmpty() {
+      return this.resource.extension === 'txt' && parseInt(this.resource.size) < 30
     },
     folderLink() {
       return this.createFolderLink(this.resource.path, this.resource.fileId)

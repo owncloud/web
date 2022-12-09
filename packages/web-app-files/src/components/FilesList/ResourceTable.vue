@@ -56,7 +56,7 @@
           :resource="item"
           :is-path-displayed="getArePathsDisplayed(item)"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
-          :is-thumbnail-displayed="areThumbnailsDisplayed"
+          :is-thumbnail-displayed="areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
@@ -546,6 +546,9 @@ export default defineComponent({
     ...mapActions('Files', ['toggleFileSelection']),
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
+    },
+    isResourceTxtFileAlmostEmpty(item) {
+      return item.extension === 'txt' && parseInt(item.size) < 30
     },
     isResourceCut(resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) {
