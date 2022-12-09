@@ -1272,7 +1272,7 @@ def e2eTests(ctx):
                  publishTracingResult(ctx, "e2e-tests %s" % server)
         if (params["earlyFail"]):
             steps += buildGithubCommentForBuildStopped("e2e-ocis" if server == "oCIS" else "e2e-oc10")
-        steps += githubComment("e2e-tests %s" % server)
+        steps += githubComment("e2e-tests", server)
         if (params["earlyFail"]):
             steps += stopBuild()
 
@@ -1456,7 +1456,8 @@ def acceptance(ctx):
                             steps += buildGithubCommentForBuildStopped(suiteName)
 
                         # Upload the screenshots to github comment
-                        steps += githubComment(alternateSuiteName)
+                        server_type = "oCIS" if params["runningOnOCIS"] else "oC10"
+                        steps += githubComment("acceptance", server_type)
 
                         if (params["earlyFail"]):
                             steps += stopBuild()
@@ -2634,15 +2635,15 @@ def buildGithubCommentForBuildStopped(suite):
         },
     }]
 
-def githubComment(alternateSuiteName):
-    prefix = "Results for <strong>%s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % alternateSuiteName
+def githubComment(alternateSuiteName, server_type = ""):
+    prefix = "Results for <strong>%s %s</strong> ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}${DRONE_STAGE_NUMBER}/1" % (alternateSuiteName, server_type)
     return [{
         "name": "github-comment",
         "image": THEGEEKLAB_DRONE_GITHUB_COMMENT,
         "pull": "if-not-exists",
         "settings": {
             "message": "%s/comments.file" % dir["web"],
-            "key": "pr-${DRONE_PULL_REQUEST}",  #TODO: we could delete the comment after a successful CI run
+            "key": "pr-${DRONE_PULL_REQUEST}-%s" % server_type,  #TODO: we could delete the comment after a successful CI run
             "update": "true",
             "api_key": {
                 "from_secret": "github_token",
