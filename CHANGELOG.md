@@ -12,6 +12,7 @@ Summary
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
 * Bugfix - Omit "page"-query in breadcrumb navigation: [#8061](https://github.com/owncloud/web/pull/8061)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
+* Bugfix - Prevent deletion of own account: [#7958](https://github.com/owncloud/web/pull/7958)
 * Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
 * Bugfix - Reverting versions for read-only shares: [#8040](https://github.com/owncloud/web/pull/8040)
 * Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
@@ -61,6 +62,14 @@ Details
 
    https://github.com/owncloud/web/issues/7922
    https://github.com/owncloud/web/pull/7925
+
+* Bugfix - Prevent deletion of own account: [#7958](https://github.com/owncloud/web/pull/7958)
+
+   We've fixed a bug while a user tries to delete their own account in the user management app, a non
+   descriptive error message have popped up. We now show a proper error message.
+
+   https://github.com/owncloud/web/issues/7955
+   https://github.com/owncloud/web/pull/7958
 
 * Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
 
