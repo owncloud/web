@@ -56,7 +56,7 @@
           :resource="item"
           :is-path-displayed="getArePathsDisplayed(item)"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
-          :is-thumbnail-displayed="areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)"
+          :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
@@ -187,7 +187,11 @@ import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
-import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
+import {
+  formatDateFromJSDate,
+  formatRelativeDateFromJSDate,
+  isResourceTxtFileAlmostEmpty
+} from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
@@ -547,14 +551,14 @@ export default defineComponent({
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
-    isResourceTxtFileAlmostEmpty(item) {
-      return item.extension === 'txt' && parseInt(item.size) < 30
-    },
     isResourceCut(resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) {
         return false
       }
       return this.clipboardResources.some((r) => r.id === resource.id)
+    },
+    shouldDisplayThumbnails(item) {
+      return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId
