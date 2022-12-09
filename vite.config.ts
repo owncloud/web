@@ -5,6 +5,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
+import compression from 'rollup-plugin-gzip'
 
 import ejs from 'ejs'
 import { join } from 'path'
@@ -265,6 +266,7 @@ export default defineConfig(({ mode, command }) => {
             }
           }
         },
+        compression(),
         process.env.REPORT !== 'true'
           ? null
           : visualizer({
