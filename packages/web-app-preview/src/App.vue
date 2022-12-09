@@ -367,6 +367,7 @@ export default defineComponent({
     activeIndex(newValue, oldValue) {
       if (newValue !== oldValue) {
         this.loadMedium()
+        this.preloadImages()
       }
 
       if (oldValue !== null) {
@@ -386,7 +387,6 @@ export default defineComponent({
     await this.loadFolderForFileContext(this.currentFileContext)
     this.setActiveFile(this.currentFileContext.driveAliasAndItem)
     this.$refs.preview.focus()
-    this.preloadImages()
   },
 
   beforeDestroy() {
@@ -553,27 +553,10 @@ export default defineComponent({
       return file.mimeType.toLowerCase().startsWith('video')
     },
     preloadImages() {
-      let imageFilesToPreLoad = []
-      const imageFiles = this.filteredFiles.filter((file) => this.isFileTypeImage(file))
+      let toPreloadFiles = []
 
-      //TODO: Needs to pay attention to the current index
-
-      // Load first 10 images in to cache
-      imageFilesToPreLoad.push(...imageFiles.slice(0, PRELOAD_IMAGE_COUNT))
-
-      // Load last 10 images in to cache
-      if (imageFiles.length > PRELOAD_IMAGE_COUNT) {
-        imageFilesToPreLoad.push(
-          ...imageFiles.slice(
-            -Math.min(imageFiles.length - PRELOAD_IMAGE_COUNT, PRELOAD_IMAGE_COUNT)
-          )
-        )
-      }
-
-      for (const file of imageFilesToPreLoad) {
-        if (!this.isFileTypeImage(file)) {
-          continue
-        }
+      const loadPreviewAsync = (file) => {
+        toPreloadFiles.push(file.id)
         loadPreview({
           resource: file,
           isPublic: this.isPublicLinkContext,
@@ -581,18 +564,40 @@ export default defineComponent({
           userId: this.user.id,
           token: this.accessToken,
           dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
-        }).then((mediaUrl) => {
-          this.cachedFiles.push({
-            id: file.id,
-            name: file.name,
-            url: mediaUrl,
-            ext: file.extension,
-            mimeType: file.mimeType,
-            isImage: true,
-            isVideo: false,
-            isAudio: false
-          })
         })
+          .then((mediaUrl) => {
+            this.cachedFiles.push({
+              id: file.id,
+              name: file.name,
+              url: mediaUrl,
+              ext: file.extension,
+              mimeType: file.mimeType,
+              isImage: true,
+              isVideo: false,
+              isAudio: false
+            })
+          })
+          .catch((e) => {
+            console.error(e)
+            toPreloadFiles = toPreloadFiles.filter((fileId) => fileId !== file.id)
+          })
+      }
+
+      console.log('active index: ', this.activeIndex)
+
+      for (
+        let followingFileIndex = 1;
+        followingFileIndex <= PRELOAD_IMAGE_COUNT;
+        followingFileIndex++
+      ) {
+        let cycleIndex = (this.activeIndex + followingFileIndex) % this.activeFiles.length
+        const file = this.filteredFiles[cycleIndex]
+
+        if (!this.isFileTypeImage(file) || toPreloadFiles.includes(file.id)) {
+          continue
+        }
+
+        loadPreviewAsync(file)
       }
     }
   }
