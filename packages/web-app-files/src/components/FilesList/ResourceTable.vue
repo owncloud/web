@@ -185,13 +185,10 @@ import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
-import {
-  formatDateFromJSDate,
-  formatRelativeDateFromJSDate,
-  isResourceTxtFileAlmostEmpty
-} from 'web-pkg/src/helpers'
+import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import { buildShareSpaceResource, extractDomSelector, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
