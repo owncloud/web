@@ -19,6 +19,7 @@ export const filesModuleMockOptions = {
       CLEAR_CURRENT_FILES_LIST: jest.fn(),
       SET_CURRENT_FOLDER: jest.fn(),
       LOAD_FILES: jest.fn(),
+      UPDATE_RESOURCE_FIELD: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {
