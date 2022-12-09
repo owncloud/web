@@ -15,6 +15,7 @@ export const runtimeModuleMockOptions = {
         actions: {
           loadSpaceMembers: jest.fn(),
           changeSpaceMember: jest.fn(),
+          deleteSpaceMember: jest.fn(),
           reloadProjectSpaces: jest.fn()
         }
       }

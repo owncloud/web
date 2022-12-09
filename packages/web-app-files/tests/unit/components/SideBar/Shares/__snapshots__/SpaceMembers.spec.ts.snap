@@ -5,7 +5,7 @@ exports[`SpaceMembers existing members can edit when current user is manager of 
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <!---->
+      <oc-contextual-helper-stub title="Add members to this Space" text="Enter a name to add people or groups as members to this Space." list="[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
     </div>
     <div class="oc-flex">
       <oc-button-stub type="button" size="medium" arialabel="Filter members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="open-filter-btn">
@@ -33,12 +33,32 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <!---->
+      <div class="oc-contextual-helper oc-pl-xs"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-4-button">
+          <oc-icon-stub name="question" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+        </button>
+        <div id="oc-contextual-helper-4" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
+          <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+            <div class="info-drop-content">
+              <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s"><span class="oc-m-rm info-title">Add members to this Space</span> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+                  <oc-icon-stub name="close" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+                </button></div>
+              <p class="info-text">Enter a name to add people or groups as members to this Space.</p>
+              <dl class="info-list">
+                <dt>What members can do</dt>
+                <dd>Members can see who else has access to this space and can access all files in this space. Read or write permissions can be set by the member’s role such as “Viewer” or “Editor”.</dd>
+                <dt>What Space managers can do</dt>
+                <dd>Members with the Manager role can edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
+              </dl>
+              <!----> <a href="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" target="_blank" class="info-more-link oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">Read more</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="oc-flex">
       <div class="oc-flex">
-        <div class="oc-text-truncate space-members-filter oc-mr-s"><label for="oc-textinput-4" class="oc-label"></label>
-          <div class="oc-position-relative"><input id="oc-textinput-4" aria-invalid="false" type="text" placeholder="Filter members" class="oc-text-input oc-rounded">
+        <div class="oc-text-truncate space-members-filter oc-mr-s"><label for="oc-textinput-5" class="oc-label"></label>
+          <div class="oc-position-relative"><input id="oc-textinput-5" aria-invalid="false" type="text" placeholder="Filter members" class="oc-text-input oc-rounded">
             <!---->
           </div>
           <!---->
@@ -68,7 +88,7 @@ exports[`SpaceMembers invite collaborator form renders the form when the current
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
-      <!---->
+      <oc-contextual-helper-stub title="Add members to this Space" text="Enter a name to add people or groups as members to this Space." list="[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
     </div>
     <div class="oc-flex">
       <oc-button-stub type="button" size="medium" arialabel="Filter members" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" class="open-filter-btn">
