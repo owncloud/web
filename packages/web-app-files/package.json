@@ -31,6 +31,7 @@
     "web-app-search": "workspace:*",
     "web-client": "npm:@ownclouders/web-client",
     "web-pkg": "npm:@ownclouders/web-pkg",
-    "web-runtime": "workspace:*"
+    "web-runtime": "workspace:*",
+    "web-test-helpers": "workspace:*"
   }
 }

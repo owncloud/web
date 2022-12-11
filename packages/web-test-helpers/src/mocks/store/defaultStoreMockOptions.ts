@@ -3,6 +3,7 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 
 export const defaultStoreMockOptions = {
   getters: {
+    newFileHandlers: jest.fn(() => []),
     capabilities: jest.fn().mockImplementation(() => ({})),
     configuration: jest
       .fn()

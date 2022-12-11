@@ -290,6 +290,7 @@ importers:
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
       web-runtime: workspace:*
+      web-test-helpers: workspace:*
     dependencies:
       '@vue/composition-api': 1.7.1_vue@2.6.14
       copy-to-clipboard: 3.3.1
@@ -316,6 +317,7 @@ importers:
       web-client: link:../web-client
       web-pkg: link:../web-pkg
       web-runtime: link:../web-runtime
+      web-test-helpers: link:../web-test-helpers
 
   packages/web-app-pdf-viewer:
     specifiers:

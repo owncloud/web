@@ -40,8 +40,8 @@ export const defaultLocalVue = ({
 
   // mock `v-translate` directive
   localVue.directive('translate', {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    inserted: () => {}
+    inserted: () => undefined
   })
+
   return localVue
 }
