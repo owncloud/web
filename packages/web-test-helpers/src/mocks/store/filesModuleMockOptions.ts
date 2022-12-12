@@ -46,7 +46,8 @@ export const filesModuleMockOptions = {
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
       changeShare: jest.fn(),
-      addLink: jest.fn()
+      addLink: jest.fn(),
+      addShare: jest.fn()
     }
   }
 }
