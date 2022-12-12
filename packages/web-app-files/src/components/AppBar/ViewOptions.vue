@@ -47,12 +47,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants } from '../../composables'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   setup() {
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
@@ -92,7 +93,7 @@ export default {
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY'])
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

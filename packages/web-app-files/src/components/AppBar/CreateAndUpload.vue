@@ -114,11 +114,15 @@
       </oc-list>
     </oc-drop>
     <div id="clipboard-btns" class="oc-button-group">
-      <oc-button v-if="showPasteHereButton" @click="pasteFilesHere">
+      <oc-button v-if="showPasteHereButton" class="paste-files-btn" @click="pasteFilesHere">
         <oc-icon fill-type="line" name="clipboard" />
         <span v-translate>Paste here</span>
       </oc-button>
-      <oc-button v-if="showPasteHereButton" @click="clearClipboardFiles">
+      <oc-button
+        v-if="showPasteHereButton"
+        class="clear-clipboard-btn"
+        @click="clearClipboardFiles"
+      >
         <oc-icon fill-type="line" name="close" />
       </oc-button>
     </div>

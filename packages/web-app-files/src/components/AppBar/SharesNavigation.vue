@@ -41,18 +41,18 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 import {
   isLocationSharesActive,
   locationSharesViaLink,
   locationSharesWithMe,
   locationSharesWithOthers
 } from '../../router/shares'
-import { computed, getCurrentInstance, unref } from '@vue/composition-api'
+import { computed, defineComponent, getCurrentInstance, unref } from '@vue/composition-api'
 import { useRouter } from 'web-pkg/src/composables'
 import { useActiveLocation } from '../../composables'
 
-export default {
+export default defineComponent({
   setup() {
     const $gettext = getCurrentInstance().proxy.$gettext
     const router = useRouter()
@@ -99,7 +99,7 @@ export default {
       navItems
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 #shares-navigation {
