@@ -11,6 +11,7 @@ const selectors = {
 describe('FileInfo', () => {
   it('shows file info', () => {
     const { wrapper } = createWrapper()
+    // FIXME check for highlightedFile
     expect(wrapper.find(selectors.name).exists()).toBeTruthy()
   })
 })
@@ -25,7 +26,7 @@ function createWrapper() {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => file)
-  const store = createStore(defaultStoreMockOptions)
+  const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(FileInfo, {
       global: {
