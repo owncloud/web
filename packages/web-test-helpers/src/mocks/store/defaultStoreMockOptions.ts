@@ -11,7 +11,12 @@ export const defaultStoreMockOptions = {
   },
   modules: {
     ...filesModuleMockOptions,
-    ...runtimeModuleMockOptions
+    ...runtimeModuleMockOptions,
+    apps: {
+      getters: {
+        fileSideBars: jest.fn(() => [])
+      }
+    }
   },
   actions: {
     createModal: jest.fn(),
