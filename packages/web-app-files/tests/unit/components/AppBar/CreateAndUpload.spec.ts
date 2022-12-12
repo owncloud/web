@@ -1,7 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
@@ -10,9 +7,9 @@ import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Graph } from 'web-client'
 import { Drive } from 'web-client/src/generated'
 import { eventBus, useRequest } from 'web-pkg'
+import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/authContext')
-const localVue = defaultLocalVue()
 
 const elSelector = {
   component: '#create-and-upload-actions',
@@ -268,17 +265,18 @@ function getWrapper({
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
-  const store = new Vuex.Store(storeOptions)
+  const store = createStore(storeOptions)
   const mocks = { ...defaultComponentMocks({ currentRoute: { name: currentRouteName } }) }
   return {
     storeOptions,
     mocks,
-    wrapper: shallowMount(CreateAndUpload, {
-      localVue,
-      store,
-      mocks,
-      propsData: { space, item, itemId },
-      data: () => ({ newFileAction })
+    wrapper: shallowMount(CreateAndUpload as any, {
+      data: () => ({ newFileAction }),
+      props: { space: space as any, item, itemId },
+      global: {
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
 }
