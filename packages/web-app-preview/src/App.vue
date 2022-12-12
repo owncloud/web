@@ -191,7 +191,6 @@ import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
 
-const PRELOAD_IMAGE_COUNT = 10
 export const appId = 'preview'
 
 export const mimeTypes = () => {
