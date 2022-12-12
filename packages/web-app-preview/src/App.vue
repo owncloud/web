@@ -583,21 +583,35 @@ export default defineComponent({
           })
       }
 
-      console.log('active index: ', this.activeIndex)
+      const preloadUpcomingFile = (upcomingFileIndex) => {
+        let cycleIndex =
+          (((this.activeIndex + upcomingFileIndex) % this.filteredFiles.length) +
+            this.filteredFiles.length) %
+          this.filteredFiles.length
+
+        const file = this.filteredFiles[cycleIndex]
+
+        if (!this.isFileTypeImage(file) || toPreloadFiles.includes(file.id)) {
+          return
+        }
+
+        loadPreviewAsync(file)
+      }
 
       for (
         let followingFileIndex = 1;
         followingFileIndex <= PRELOAD_IMAGE_COUNT;
         followingFileIndex++
       ) {
-        let cycleIndex = (this.activeIndex + followingFileIndex) % this.activeFiles.length
-        const file = this.filteredFiles[cycleIndex]
+        preloadUpcomingFile(followingFileIndex)
+      }
 
-        if (!this.isFileTypeImage(file) || toPreloadFiles.includes(file.id)) {
-          continue
-        }
-
-        loadPreviewAsync(file)
+      for (
+        let previousFileIndex = -1;
+        previousFileIndex >= PRELOAD_IMAGE_COUNT * -1;
+        previousFileIndex--
+      ) {
+        preloadUpcomingFile(previousFileIndex)
       }
     }
   }
