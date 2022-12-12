@@ -1,12 +1,7 @@
 import _ from 'lodash'
-import DesignSystem from 'owncloud-design-system'
 import Pagination from 'web-app-files/src/components/FilesList/Pagination.vue'
-import {
-  createLocalVue as OGCreateLocalVue,
-  mount,
-  RouterLinkStub,
-  shallowMount
-} from '@vue/test-utils'
+import { RouterLinkStub } from '@vue/test-utils'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 
@@ -18,14 +13,14 @@ describe('Pagination', () => {
   describe('when amount of pages is', () => {
     describe('less than or equals one', () => {
       it.each([-1, 0, 1])('should not show wrapper', (pages) => {
-        const wrapper = getWrapper({ currentPage: 0, pages })
+        const { wrapper } = getWrapper({ currentPage: 0, pages })
 
         expect(wrapper.find(selectors.filesPagination).exists()).toBeFalsy()
       })
     })
 
     describe('greater than one', () => {
-      const wrapper = getWrapper({ currentPage: 1, pages: 2 })
+      const { wrapper } = getWrapper({ currentPage: 1, pages: 2 })
 
       it('should show wrapper', () => {
         const paginationEl = wrapper.find('.files-pagination')
@@ -43,7 +38,7 @@ describe('Pagination', () => {
 
   describe('current route', () => {
     it('should use provided route to render pages', () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getWrapper({}, mount)
       const currentRoute = wrapper.vm.$route
       const links = wrapper.findAllComponents(RouterLinkStub)
 
@@ -56,37 +51,19 @@ describe('Pagination', () => {
   })
 })
 
-function createLocalVue() {
-  const localVue = OGCreateLocalVue()
-  localVue.use(DesignSystem)
-  localVue.prototype.$gettextInterpolate = jest.fn()
-
-  return localVue
-}
-
-function getWrapper(propsData = {}) {
-  return shallowMount(Pagination, {
-    localVue: createLocalVue(),
-    stubs: {
-      'oc-pagination': true
-    },
-    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
-}
-
-const getMountedWrapper = (propsData = {}) => {
-  return mount(Pagination, {
-    localVue: createLocalVue(),
-    propsData: _.merge({ currentPage: 1, pages: 10 }, propsData),
-    stubs: {
-      'oc-pagination': false,
-      RouterLink: RouterLinkStub
-    },
-    mocks: {
-      $route: filesPersonalRoute
-    }
-  })
+function getWrapper(propsData = {}, mountType = shallowMount) {
+  return {
+    wrapper: mountType(Pagination, {
+      props: _.merge({ currentPage: 1, pages: 10 }, propsData),
+      global: {
+        stubs: {
+          RouterLink: RouterLinkStub
+        },
+        mocks: {
+          $route: filesPersonalRoute
+        },
+        plugins: [...defaultPlugins()]
+      }
+    })
+  }
 }
