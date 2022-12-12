@@ -3,19 +3,22 @@ import Vuex from 'vuex'
 import DesignSystem from 'owncloud-design-system'
 import VueCompositionAPI from '@vue/composition-api'
 import GetTextPlugin from 'vue-gettext'
+import AsyncComputed from 'vue-async-computed'
 
 export interface LocalVueOptions {
   compositionApi?: boolean
   designSystem?: boolean
   gettext?: boolean
   vuex?: boolean
+  asyncComputed?: boolean
 }
 
 export const defaultLocalVue = ({
   compositionApi = true,
   designSystem = true,
   gettext = true,
-  vuex = true
+  vuex = true,
+  asyncComputed = true
 }: LocalVueOptions = {}) => {
   const localVue = createLocalVue()
 
@@ -36,6 +39,10 @@ export const defaultLocalVue = ({
 
   if (vuex) {
     localVue.use(Vuex)
+  }
+
+  if (asyncComputed) {
+    localVue.use(AsyncComputed)
   }
 
   // mock `v-translate` directive

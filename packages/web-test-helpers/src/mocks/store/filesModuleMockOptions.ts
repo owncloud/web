@@ -16,7 +16,8 @@ export const filesModuleMockOptions = {
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
-      sharesTree: jest.fn(() => ({}))
+      sharesTreeLoading: jest.fn(() => false),
+      sharesTree: jest.fn((state) => ({}))
     },
     mutations: {
       SET_FILE_SELECTION: jest.fn(),
@@ -38,10 +39,11 @@ export const filesModuleMockOptions = {
       pasteSelectedFiles: jest.fn(),
       clearClipboardFiles: jest.fn(),
       loadIndicators: jest.fn(),
+      loadVersions: jest.fn(),
+      loadSharesTree: jest.fn(),
       deleteShare: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
-      loadSharesTree: jest.fn(),
       changeShare: jest.fn()
     }
   }

@@ -1,19 +1,10 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
 import stubs from '../../../../../../../tests/unit/stubs'
-import GetTextPlugin from 'vue-gettext'
-import AsyncComputed from 'vue-async-computed'
 import { ShareTypes } from 'web-client/src/helpers/share'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(AsyncComputed)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-const OcTooltip = jest.fn()
+import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src/helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const createFile = (input) => {
   return {
@@ -22,6 +13,7 @@ const createFile = (input) => {
     ...input // spread input last so that input can overwrite predefined defaults
   }
 }
+
 const simpleOwnFolder = createFile({
   id: '1',
   type: 'folder',
@@ -68,25 +60,25 @@ describe('Details SideBar Panel', () => {
   describe('displays a resource of type folder', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
-        const wrapper = createWrapper(simpleOwnFolder)
+        const { wrapper } = createWrapper(simpleOwnFolder)
         expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info and share date', () => {
-        const wrapper = createWrapper(sharedFolder)
+        const { wrapper } = createWrapper(sharedFolder)
         expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info and share date running on eos', () => {
-        const wrapper = createWrapper(sharedFolder, [], null, false, true)
+        const { wrapper } = createWrapper(sharedFolder, false, true)
         expect(wrapper).toMatchSnapshot()
       })
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info and no share info', () => {
-        const wrapper = createWrapper(sharedFolder, [], null, true)
+        const { wrapper } = createWrapper(sharedFolder, true)
         expect(wrapper).toMatchSnapshot()
       })
       it('with owner, timestamp, size info and no share info running on eos', () => {
-        const wrapper = createWrapper(sharedFolder, [], null, true, true)
+        const { wrapper } = createWrapper(sharedFolder, true, true)
         expect(wrapper).toMatchSnapshot()
       })
     })
@@ -94,20 +86,20 @@ describe('Details SideBar Panel', () => {
   describe('displays a resource of type file', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
-        const wrapper = createWrapper(simpleOwnFile)
+        const { wrapper } = createWrapper(simpleOwnFile)
         expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info, share date and preview', () => {
-        const wrapper = createWrapper(sharedFile)
+        const { wrapper } = createWrapper(sharedFile)
         expect(wrapper).toMatchSnapshot()
       })
       it('with timestamp, size info, share info, share date and preview running on eos', () => {
-        const wrapper = createWrapper(sharedFile, [], null, false, true)
+        const { wrapper } = createWrapper(sharedFile, false, true)
         expect(wrapper).toMatchSnapshot()
       })
 
       it('updates when the shareTree updates', async () => {
-        const wrapper = createWrapper(sharedFile)
+        const { wrapper } = createWrapper(sharedFile)
         // make sure this renders once when initial sharesTree become available
         wrapper.vm.$store.state.Files.sharesTree = {
           '/Shares': [{}]
@@ -136,98 +128,60 @@ describe('Details SideBar Panel', () => {
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info, no share info and preview', () => {
-        const wrapper = createWrapper(sharedFile, [], null, true)
+        const { wrapper } = createWrapper(sharedFile, true)
         expect(wrapper).toMatchSnapshot()
       })
       it('with owner, timestamp, size info, no share info and preview running on eos', () => {
-        const wrapper = createWrapper(sharedFile, [], null, true, true)
+        const { wrapper } = createWrapper(sharedFile, true, true)
         expect(wrapper).toMatchSnapshot()
       })
     })
   })
 })
 
-function createWrapper(
-  testResource,
-  testVersions = [],
-  testPreview = undefined,
-  publicLinkContext = false,
-  runningOnEos = false
-) {
-  return shallowMount(FileDetails, {
-    store: new Vuex.Store({
-      getters: {
-        user: function () {
-          return { id: 'marie' }
-        },
-        configuration: function () {
-          return {
-            options: {
-              runningOnEos
-            }
-          }
-        }
+function createWrapper(testResource, publicLinkContext = false, runningOnEos = false) {
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      user: function () {
+        return { id: 'marie' }
       },
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            spaces: {
-              namespaced: true,
-              getters: {
-                spaces: () => []
-              }
-            }
-          }
-        },
-        Files: {
-          namespaced: true,
-          state: {
-            sharesTree: {}
-          },
-          getters: {
-            highlightedFile: function () {
-              return testResource
-            },
-            versions: function () {
-              return 2
-            },
-            sharesTreeLoading: function () {
-              return false
-            },
-            sharesTree: function (state) {
-              return state.sharesTree
-            }
-          },
-          actions: {
-            loadVersions: function () {
-              return testVersions
-            },
-            loadPreview: function () {
-              return testPreview
-            },
-            loadSharesTree: jest.fn()
+      configuration: function () {
+        return {
+          options: {
+            runningOnEos
           }
         }
       }
-    }),
-    localVue,
-    stubs: { ...stubs, 'oc-resource-icon': true },
-    directives: {
-      OcTooltip
-    },
-    computed: {
-      capitalizedTimestamp: () => 'ABSOLUTE_TIME'
-    },
-    mocks: {
-      isPublicLinkContext: publicLinkContext,
-      $route: {
-        meta: {
-          auth: !publicLinkContext
-        }
-      },
-      $router: jest.fn(),
-      file: testResource
     }
-  })
+  }
+  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => testResource)
+  storeOptions.modules.Files.getters.versions.mockImplementation(() => ['2'])
+  storeOptions.modules.Files.getters.sharesTree.mockImplementation((state) => state.sharesTree)
+  storeOptions.modules.Files.state.sharesTree = {}
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(FileDetails, {
+      global: {
+        stubs: { ...stubs, 'oc-resource-icon': true },
+        provide: {
+          displayedItem: testResource,
+          displayedSpace: mockDeep<SpaceResource>()
+        },
+        directives: {
+          OcTooltip: jest.fn()
+        },
+        plugins: [...defaultPlugins(), store],
+        mocks: {
+          ...defaultComponentMocks(),
+          $route: {
+            meta: {
+              auth: !publicLinkContext
+            }
+          },
+          $router: jest.fn()
+        }
+      }
+    })
+  }
 }
