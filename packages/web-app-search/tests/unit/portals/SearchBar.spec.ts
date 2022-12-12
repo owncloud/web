@@ -92,6 +92,7 @@ afterEach(() => {
 })
 
 describe('Search Bar portal component', () => {
+  jest.spyOn(console, 'warn').mockImplementation(undefined)
   test('does not render a search field if no availableProviders given', () => {
     wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
     expect(wrapper.element.innerHTML).toBeFalsy()
