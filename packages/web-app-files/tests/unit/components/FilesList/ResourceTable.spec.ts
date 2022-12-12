@@ -1,12 +1,8 @@
-import merge from 'lodash-es/merge'
-import { mount, createLocalVue } from '@vue/test-utils'
 import { DateTime } from 'luxon'
-import DesignSystem from 'owncloud-design-system'
-import VueCompositionAPI from '@vue/composition-api'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
 import { extractDomSelector } from 'web-client/src/helpers'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const router = {
   push: jest.fn(),
@@ -147,17 +143,15 @@ const resourcesWithAllFields = [
 
 describe('ResourceTable', () => {
   const spyDisplayPositionedDropdown = jest
-    .spyOn(ResourceTable.methods, 'displayPositionedDropdown')
+    .spyOn((ResourceTable as any).methods, 'displayPositionedDropdown')
     .mockImplementation()
 
-  let wrapper
-
   beforeEach(() => {
-    wrapper = getMountedWrapper()
     jest.clearAllMocks()
   })
 
   it('displays all known fields of the resources', () => {
+    const { wrapper } = getMountedWrapper()
     for (const field of fields) {
       expect(wrapper.findAll('.oc-table-header-cell-' + field).length).toEqual(1)
       expect(wrapper.findAll('.oc-table-data-cell-' + field).length).toEqual(
@@ -167,8 +161,8 @@ describe('ResourceTable', () => {
   })
 
   it('accepts resourceDomId closure', () => {
-    const wrapper = getMountedWrapper({
-      propsData: {
+    const { wrapper } = getMountedWrapper({
+      props: {
         resourceDomSelector: (resource) => ['custom', resource.getDomSelector()].join('-')
       }
     })
@@ -182,6 +176,7 @@ describe('ResourceTable', () => {
   })
 
   it('formats the resource size to a human readable format', () => {
+    const { wrapper } = getMountedWrapper()
     expect(wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size').text()).toEqual('111 MB')
     expect(wrapper.find('.oc-tbody-tr-documents .oc-table-data-cell-size').text()).toEqual('--')
     expect(wrapper.find('.oc-tbody-tr-notes .oc-table-data-cell-size').text()).toEqual('?')
@@ -189,6 +184,7 @@ describe('ResourceTable', () => {
 
   describe('resource selection', () => {
     it('adds resources to selection model via checkboxes', () => {
+      const { wrapper } = getMountedWrapper()
       wrapper.find('.resource-table-select-all .oc-checkbox').setChecked()
       wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setChecked()
       expect(wrapper.emitted().select.length).toBe(2)
@@ -196,20 +192,21 @@ describe('ResourceTable', () => {
 
     describe('all rows already selected', () => {
       it('de-selects all resources via the select-all checkbox', async () => {
-        const wrapperSelected = getMountedWrapper({
-          propsData: {
+        const { wrapper } = getMountedWrapper({
+          props: {
             selectedIds: resourcesWithAllFields.map((resource) => resource.id)
           }
         })
 
-        await wrapperSelected.find('.resource-table-select-all .oc-checkbox').setChecked(false)
-        expect(wrapperSelected.emitted().select[0][0].length).toBe(0)
+        await wrapper.find('.resource-table-select-all .oc-checkbox').setChecked(false)
+        expect(wrapper.emitted().select[0][0].length).toBe(0)
       })
     })
   })
 
   describe('resource activation', () => {
     it('emits fileClick upon clicking on a resource name', () => {
+      const { wrapper } = getMountedWrapper()
       wrapper.find('.oc-tbody-tr-forest .oc-resource-name').trigger('click')
 
       expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
@@ -218,6 +215,7 @@ describe('ResourceTable', () => {
 
   describe('resource details', () => {
     it('emits select event when clicking on the row', async () => {
+      const { wrapper } = getMountedWrapper()
       const tableRow = await wrapper.find('.oc-tbody-tr .oc-table-data-cell-size')
       await tableRow.trigger('click')
       expect(wrapper.emitted().select).toBeTruthy()
@@ -226,12 +224,14 @@ describe('ResourceTable', () => {
 
   describe('context menu', () => {
     it('emits select event on contextmenu click', async () => {
+      const { wrapper } = getMountedWrapper()
       await wrapper.find('.oc-tbody-tr').trigger('contextmenu')
       expect(wrapper.emitted().select.length).toBe(1)
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
     })
 
     it('emits select event on clicking the three-dot icon in table row', async () => {
+      const { wrapper } = getMountedWrapper()
       await wrapper
         .find('.oc-table-data-cell-actions .resource-table-btn-action-dropdown')
         .trigger('click')
@@ -240,6 +240,7 @@ describe('ResourceTable', () => {
     })
 
     it('removes invalid chars from item ids for usage in html template', async () => {
+      const { wrapper } = getMountedWrapper()
       const contextMenuTriggers = await wrapper.findAll('.resource-table-btn-action-dropdown')
       for (let i = 0; i < contextMenuTriggers.length; i++) {
         const id = contextMenuTriggers.at(i).attributes().id
@@ -251,75 +252,44 @@ describe('ResourceTable', () => {
 
   describe('hover effect', () => {
     it('is disabled by default', () => {
-      const wrapper = getMountedWrapper({ propsData: { hover: false } })
+      const { wrapper } = getMountedWrapper({ props: { hover: false } })
       expect(wrapper.classes()).not.toContain('oc-table-hover')
     })
 
     it('can be enabled', () => {
-      const wrapper = getMountedWrapper({ propsData: { hover: true } })
+      const { wrapper } = getMountedWrapper({ props: { hover: true } })
       expect(wrapper.classes()).toContain('oc-table-hover')
     })
   })
 })
 
-function getMountedWrapper(options = {}) {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  localVue.use(Vuex)
-  localVue.use(VueCompositionAPI)
-  localVue.prototype.$gettextInterpolate = jest.fn()
-  localVue.prototype.$ngettext = jest.fn()
+function getMountedWrapper({ props = {} } = {}) {
+  const store = createStore(defaultStoreMockOptions)
 
-  return mount(
-    ResourceTable,
-    merge(
-      {
-        store: createStore(Vuex.Store, {
-          getters: {
-            configuration: () => {},
-            capabilities: () => {}
-          },
-          modules: {
-            Files: {
-              namespaced: true,
-              state: {
-                spaces: []
-              }
-            },
-            runtime: {
-              namespaced: true,
-              modules: {
-                spaces: {
-                  namespaced: true,
-                  state: {
-                    spaces: []
-                  }
-                }
-              }
-            }
-          }
-        }),
-        propsData: {
-          resources: resourcesWithAllFields,
-          selection: [],
-          slots: {
-            status: "<div class='status-slot'>Hello world!</div>"
-          },
-          hover: false,
-          space: {
-            getDriveAliasAndItem: jest.fn()
-          }
+  return {
+    wrapper: mount(ResourceTable, {
+      props: {
+        resources: resourcesWithAllFields,
+        selection: [],
+        slots: {
+          status: "<div class='status-slot'>Hello world!</div>"
         },
+        hover: false,
+        space: {
+          getDriveAliasAndItem: jest.fn()
+        },
+        ...props
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
         stubs: {
           'router-link': true
         },
         mocks: {
           $route: router.currentRoute,
           $router: router
-        },
-        localVue
-      },
-      options
-    )
-  )
+        }
+      }
+    })
+  }
 }
