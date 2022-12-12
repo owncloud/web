@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+  <div>
+    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" class="edit-public-link-role-dropdown-toggle oc-text-left"><span class="link-current-role">Viewer</span>
+      <oc-icon-stub name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+    </oc-button-stub>
+    <oc-drop-stub dropid="edit-public-link-role-dropdown" toggle="#edit-public-link-role-dropdown-toggle-undefined" position="bottom-start" mode="click" paddingsize="small" offset="0" class="edit-public-link-role-dropdown">
+      <oc-list-stub class="roleDropdownList">
+        <li>
+          <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-role-internal" class="oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="user" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Internal</span> <span class="oc-text-small">People need to be invited and login is required</span></span></span> <span class="oc-flex"><!----></span></oc-button-stub>
+        </li>
+        <li>
+          <oc-button-stub type="button" size="medium" submit="button" variation="inverse" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-role-viewer" class="oc-p-s selected oc-background-primary-gradient"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="eye" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Viewer</span> <span class="oc-text-small">Recipients can view and download contents.</span></span></span> <span class="oc-flex"><oc-icon-stub name="check" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span></oc-button-stub>
+        </li>
+        <li>
+          <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="space-between" gapsize="medium" id="files-role-editor" class="oc-p-s"><span class="oc-flex oc-flex-middle"><oc-icon-stub name="pencil" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color="" class="oc-pl-s oc-pr-m"></oc-icon-stub> <span><span class="oc-text-bold oc-display-block oc-width-1-1">Editor</span> <span class="oc-text-small">Recipients can view, download and edit contents.</span></span></span> <span class="oc-flex"><!----></span></oc-button-stub>
+        </li>
+      </oc-list-stub>
+    </oc-drop-stub>
+  </div>
+  <div class="details-buttons">
+    <!---->
+    <!---->
+    <!---->
+    <div>
+      <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="edit-public-link-dropdown-toggl-undefined" data-testid="files-link-id-undefined-btn-edit" class="edit-drop-trigger">
+        <oc-icon-stub name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+      </oc-button-stub>
+      <oc-drop-stub dropid="edit-public-link-dropdown" toggle="#edit-public-link-dropdown-toggl-undefined" position="bottom-start" mode="click" paddingsize="small">
+        <oc-list-stub class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" data-testid="files-link-id-undefined-edit-rename" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="pencil" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Rename</span>
+            </oc-button-stub>
+          </li>
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-datepicker-stub min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en" class="link-expiry-picker"></oc-datepicker-stub>
+          </li>
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" data-testid="files-link-id-undefined-edit-add-password" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="lock-password" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Add password</span>
+            </oc-button-stub>
+          </li>
+        </oc-list-stub>
+        <oc-list-stub class="edit-public-link-dropdown-menu oc-pt-s">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" data-testid="files-link-id-undefined-edit-delete" class="oc-p-s action-menu-item">
+              <oc-icon-stub name="delete-bin-5" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Delete link</span>
+            </oc-button-stub>
+          </li>
+        </oc-list-stub>
+      </oc-drop-stub>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
+<div class="link-details oc-flex oc-flex-between oc-flex-middle oc-pl-s">
+  <p class="oc-my-rm"><span class="link-current-role">Viewer</span></p>
+  <div class="details-buttons oc-pr-s">
+    <!---->
+    <!---->
+    <!---->
+    <!---->
+  </div>
+</div>
+`;
