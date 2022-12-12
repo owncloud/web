@@ -457,26 +457,10 @@ export default defineComponent({
             this.activeFilteredFile
           )
         } else {
-          mediaUrl = await loadPreview({
-            resource: this.activeFilteredFile,
-            isPublic: this.isPublicLinkContext,
-            server: configurationManager.serverUrl,
-            userId: this.user.id,
-            token: this.accessToken,
-            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
-          })
+          mediaUrl = await this.loadPreview(this.activeFilteredFile)
         }
 
-        this.cachedFiles.push({
-          id: this.activeFilteredFile.id,
-          name: this.activeFilteredFile.name,
-          url: mediaUrl,
-          ext: this.activeFilteredFile.extension,
-          mimeType: this.activeFilteredFile.mimeType,
-          isVideo: this.isActiveFileTypeVideo,
-          isImage: this.isActiveFileTypeImage,
-          isAudio: this.isActiveFileTypeAudio
-        })
+        this.addPreviewToCache(this.activeFilteredFile, mediaUrl)
         this.isFileContentLoading = false
         this.isFileContentError = false
       } catch (e) {
@@ -551,30 +535,36 @@ export default defineComponent({
     isFileTypeVideo(file) {
       return file.mimeType.toLowerCase().startsWith('video')
     },
+    addPreviewToCache(file, url) {
+      this.cachedFiles.push({
+        id: file.id,
+        name: file.name,
+        url,
+        ext: file.extension,
+        mimeType: file.mimeType,
+        isVideo: this.isFileTypeVideo(file),
+        isImage: this.isFileTypeImage(file),
+        isAudio: this.isFileTypeAudio(file)
+      })
+    },
+    loadPreview(file) {
+      return loadPreview({
+        resource: file,
+        isPublic: this.isPublicLinkContext,
+        server: configurationManager.serverUrl,
+        userId: this.user.id,
+        token: this.accessToken,
+        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+      })
+    },
     preloadImages() {
       let toPreloadFiles = []
 
       const loadPreviewAsync = (file) => {
         toPreloadFiles.push(file.id)
-        loadPreview({
-          resource: file,
-          isPublic: this.isPublicLinkContext,
-          server: configurationManager.serverUrl,
-          userId: this.user.id,
-          token: this.accessToken,
-          dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
-        })
+        this.loadPreview(file)
           .then((mediaUrl) => {
-            this.cachedFiles.push({
-              id: file.id,
-              name: file.name,
-              url: mediaUrl,
-              ext: file.extension,
-              mimeType: file.mimeType,
-              isImage: true,
-              isVideo: false,
-              isAudio: false
-            })
+            this.addPreviewToCache(file, mediaUrl)
           })
           .catch((e) => {
             console.error(e)
