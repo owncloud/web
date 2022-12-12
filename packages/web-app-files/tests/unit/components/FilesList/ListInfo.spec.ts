@@ -1,14 +1,6 @@
 import ListInfo from '../../../../src/components/FilesList/ListInfo.vue'
-import GetTextPlugin from 'vue-gettext'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
+import { shallowMount } from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
 describe('ListInfo', () => {
   describe('files and folders prop', () => {
     const wrapper = getWrapper()
@@ -92,8 +84,7 @@ describe('ListInfo', () => {
 
 function getWrapper(props = {}) {
   return shallowMount(ListInfo, {
-    localVue,
-    propsData: {
+    props: {
       files: 2,
       folders: 3,
       ...props
