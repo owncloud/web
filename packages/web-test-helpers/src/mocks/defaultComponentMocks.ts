@@ -30,9 +30,9 @@ export const defaultComponentMocks = ({
     $client: mockDeep<OwnCloudSdk>(),
     $uppyService: mockDeep<UppyService>(),
     ...(gettext && {
-      $gettextInterpolate: jest.fn(),
-      $ngettext: jest.fn(),
-      $pgettext: jest.fn(),
+      $gettextInterpolate: jest.fn((text) => text),
+      $ngettext: jest.fn((text) => text),
+      $pgettext: jest.fn((text) => text),
       $gettext: jest.fn((text) => text)
     })
   }
