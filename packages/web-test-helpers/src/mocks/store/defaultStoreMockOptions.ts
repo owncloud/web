@@ -16,6 +16,11 @@ export const defaultStoreMockOptions = {
       getters: {
         fileSideBars: jest.fn(() => [])
       }
+    },
+    External: {
+      getters: {
+        mimeTypes: jest.fn(() => ({}))
+      }
     }
   },
   actions: {

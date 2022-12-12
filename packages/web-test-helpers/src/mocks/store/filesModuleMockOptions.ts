@@ -3,6 +3,7 @@ export const filesModuleMockOptions = {
     namespaced: true,
     state: {
       highlightedFile: undefined,
+      currentFolder: undefined,
       sharesTree: {}
     },
     getters: {
