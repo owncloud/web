@@ -133,7 +133,6 @@ function getWrapper({
         ...clientMock,
         users: { getUser: () => ({ quota: {} }) },
         fileTrash: {
-          ...clientMock.files,
           restore: jest.fn().mockImplementation(() => {
             if (resolveRestore) {
               return Promise.resolve({})

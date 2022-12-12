@@ -24,7 +24,7 @@ exports[`Projects view different files view states lists all available project s
                     </div>
                   </div>
                 </div>
-                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>undefined</small></p>
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
               </div>
             </div>
           </li>
@@ -45,7 +45,7 @@ exports[`Projects view different files view states lists all available project s
                     </div>
                   </div>
                 </div>
-                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>undefined</small></p>
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
               </div>
             </div>
           </li>

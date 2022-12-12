@@ -31,11 +31,23 @@ describe('Projects view', () => {
     })
     it('lists all available project spaces', async () => {
       const spaces = [
-        mockDeep<SpaceResource>({ id: '1', name: 'Some space', driveType: 'project' }),
-        mockDeep<SpaceResource>({ id: '2', name: 'Some other space', driveType: 'project' })
+        mockDeep<SpaceResource>({
+          id: '1',
+          name: 'Some space',
+          driveType: 'project',
+          description: 'desc'
+        }),
+        mockDeep<SpaceResource>({
+          id: '2',
+          name: 'Some other space',
+          driveType: 'project',
+          description: 'desc'
+        })
       ]
       const { wrapper } = getMountedWrapper({ spaces })
       await wrapper.vm.loadResourcesTask.last
+      // "space" is undefined for "space-context-actions", seems to be a bug because it's definitely not
+      // {{ space }} -> undefined, {{ space.id }} -> "1"
       expect(wrapper).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
