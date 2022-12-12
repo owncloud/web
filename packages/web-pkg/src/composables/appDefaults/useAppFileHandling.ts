@@ -14,7 +14,7 @@ interface AppFileHandlingOptions {
 }
 
 export interface AppFileHandlingResult {
-  getUrlForResource(space: SpaceResource, resource: Resource): Promise<string>
+  getUrlForResource(space: SpaceResource, resource: Resource, options?: any): Promise<string>
   revokeUrl(url: string): void
   getFileInfo(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
   getFileContents(

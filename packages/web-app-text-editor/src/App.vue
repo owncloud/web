@@ -205,7 +205,7 @@ export default defineComponent({
     })
 
     const isLoading = computed(() => {
-      return loadFileTask.isRunning || saveFileTask.isRunning
+      return loadFileTask.isRunning || !loadFileTask.last || saveFileTask.isRunning
     })
 
     const showPreview = computed(() => {
