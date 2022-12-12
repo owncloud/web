@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { extractDomSelector } from 'web-client/src/helpers'
+import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import { eventBus } from 'web-pkg/src'
 import { SideBarEventTopics } from 'web-app-files/src/composables/sideBar'
+import { mockDeep } from 'jest-mock-extended'
 
 const router = {
   push: jest.fn(),
@@ -268,36 +269,57 @@ describe('ResourceTable', () => {
   })
 
   describe('tags', () => {
-    it('renders more than 2 tags and more button', () => {
-      const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      const resource = wrapper.find('[data-item-id="forest"]')
-      expect(resource.findAll('.resource-table-tag').length).toBe(2)
-      expect(resource.findAll('.resource-table-tag-more').length).toBe(1)
+    describe('inline', () => {
+      it.each([
+        { tags: [], tagCount: 0 },
+        { tags: ['1'], tagCount: 1 },
+        { tags: ['1', '2'], tagCount: 2 },
+        { tags: ['1', '2', '3'], tagCount: 2 },
+        { tags: ['1', '2', '3', '4'], tagCount: 2 }
+      ])('render 2 tags max', (data) => {
+        const { tags, tagCount } = data
+        const resource = mockDeep<Resource>({ id: '1', tags })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.findAll('.resource-table-tag').length).toBe(tagCount)
+      })
+      it('render router link if user is authenticated', () => {
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual(
+            'ROUTER-LINK-STUB'
+        )
+      })
+      it('do not render router link if user is not authenticated', () => {
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] }, isUserContextReady: false})
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
+      })
     })
-    it('renders no more button if tag count smaller 3', () => {
-      const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      const resource = wrapper.find('[data-item-id="notes"]')
-      expect(resource.findAll('.resource-table-tag').length).toBe(2)
-      expect(resource.findAll('.resource-table-tag-more').length).toBe(0)
-    })
-    it('open sidebar on clicking more', async () => {
-      const spyBus = jest.spyOn(eventBus, 'publish')
-      const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      const resource = wrapper.find('[data-item-id="forest"]')
-      await resource.find('.resource-table-tag-more').trigger('click')
-      expect(spyBus).toHaveBeenCalledWith(SideBarEventTopics.open)
-    })
-    it('renders router link if user is authenticated', () => {
-      const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      const resource = wrapper.find('[data-item-id="forest"]')
-      expect(resource.find('.resource-table-tag-wrapper').element.tagName).toEqual(
-        'ROUTER-LINK-STUB'
-      )
-    })
-    it('does not render router link if user is not authenticated', () => {
-      const { wrapper } = getMountedWrapper({ props: { hover: false }, isUserContextReady: false })
-      const resource = wrapper.find('[data-item-id="forest"]')
-      expect(resource.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
+    describe('"more"-button', () => {
+      it.each([
+        { tags: [], renderButton: false },
+        { tags: ['1'], renderButton: false },
+        { tags: ['1', '2'], renderButton: false },
+        { tags: ['1', '2', '3'], renderButton: true },
+        { tags: ['1', '2', '3', '4'], renderButton: true }
+      ])('does only render when the resource has 3 tags or more', (data) => {
+        const { tags, renderButton } = data
+        const resource = mockDeep<Resource>({ id: '1', tags })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        expect(resourceRow.find('.resource-table-tag-more').exists()).toBe(renderButton)
+      })
+      it('opens sidebar on click', async () => {
+        const spyBus = jest.spyOn(eventBus, 'publish')
+        const resource = mockDeep<Resource>({ id: '1', tags: ['1', '2', '3'] })
+        const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
+        const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
+        await resourceRow.find('.resource-table-tag-more').trigger('click')
+        expect(spyBus).toHaveBeenCalledWith(SideBarEventTopics.open)
+      })
     })
   })
 })

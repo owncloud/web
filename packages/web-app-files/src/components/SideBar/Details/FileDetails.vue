@@ -170,6 +170,7 @@ import { createLocationSpaces, createLocationCommon } from '../../../router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useAccessToken,
+  useCapabilityFilesTags,
   usePublicLinkContext,
   useStore,
   useUserContext
@@ -195,7 +196,8 @@ export default defineComponent({
       isPublicLinkContext: usePublicLinkContext({ store }),
       accessToken: useAccessToken({ store }),
       space: inject<ComputedRef<Resource>>('displayedSpace'),
-      file: inject<ComputedRef<Resource>>('displayedItem')
+      file: inject<ComputedRef<Resource>>('displayedItem'),
+      hasTags: useCapabilityFilesTags()
     }
   },
 
@@ -208,7 +210,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions', 'sharesTree', 'sharesTreeLoading', 'highlightedFile']),
-    ...mapGetters(['user', 'configuration', 'capabilities']),
+    ...mapGetters(['user', 'configuration']),
 
     matchingSpace() {
       return this.space || this.spaces.find((space) => space.id === this.file.storageId)
@@ -359,7 +361,7 @@ export default defineComponent({
       return upperFirst(displayDate)
     },
     showTags() {
-      return this.capabilities?.files.tags && this.file.tags?.length
+      return this.hasTags && this.file.tags?.length
     },
     tagsLabel() {
       return this.$gettext('Tags')

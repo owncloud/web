@@ -203,6 +203,7 @@ import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED } from '../../constants'
 import { SortDir } from '../../composables'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import {
+  useCapabilityFilesTags,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   useStore,
@@ -406,7 +407,8 @@ export default defineComponent({
       ViewModeConstants,
       isUserContext: useUserContext({ store }),
       hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
+      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
+      hasTags: useCapabilityFilesTags()
     }
   },
   data() {
@@ -417,7 +419,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'capabilities']),
+    ...mapGetters(['configuration']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -489,7 +491,7 @@ export default defineComponent({
             alignH: 'right',
             wrap: 'nowrap'
           },
-          this.capabilities?.files?.tags
+          this.hasTags
             ? {
                 name: 'tags',
                 title: this.$gettext('Tags'),
@@ -591,8 +593,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['toggleFileSelection']),
-    ...mapActions('Files/sidebar', ['openWithPanel']),
-    ...mapActions('Files/sidebar', { openSidebar: 'open' }),
+
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },

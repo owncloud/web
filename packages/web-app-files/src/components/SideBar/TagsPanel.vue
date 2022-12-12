@@ -54,12 +54,12 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapMutations } from 'vuex'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, inject, onMounted, ref, unref, watch } from 'vue'
 import CompareSaveDialog from 'web-pkg/src/components/sideBar/CompareSaveDialog.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useTask } from 'vue-concurrency'
-import { useRequest, useStore } from 'web-pkg/src/composables'
+import { useClientService, useRequest, useStore } from 'web-pkg/src/composables'
+import { Resource } from 'web-client'
 
 const tagsMaxCount = 100
 
@@ -68,82 +68,79 @@ export default defineComponent({
   components: {
     CompareSaveDialog
   },
-  inject: ['displayedItem'],
   setup() {
     const store = useStore()
+    const clientService = useClientService()
     const allTags = ref([])
     const { makeRequest } = useRequest()
-    const loadAllTagsTask = useTask(function* (signal, ref) {
+    const loadAllTagsTask = useTask(function* (signal) {
       const {
         data: { tags = [] }
       } = yield makeRequest('GET', `${store.getters.configuration.server}experimental/tags`, {})
       allTags.value = tags
     })
 
-    return {
-      loadAllTagsTask,
-      allTags,
-      tagsMaxCount
+    const displayedItem = inject<Resource>('displayedItem')
+    const resource = computed(() => unref(displayedItem))
+    const editAssignedTags = ref([])
+    const tagSelect = ref(null)
+    const revertChanges = () => {
+      editAssignedTags.value = [...unref(resource).tags]
     }
-  },
-  data: function () {
-    return {
-      editAssignedTags: []
+    const createOption = (option) => {
+      return option.toLowerCase()
     }
-  },
-  computed: {
-    resource() {
-      return this.displayedItem
+    const showSelectNewLabel = (option) => {
+      return !unref(tagSelect).$refs.select.optionExists(option)
     }
-  },
-  watch: {
-    resource() {
-      this.revertChanges()
-    }
-  },
-  mounted() {
-    this.editAssignedTags = [...this.resource.tags]
-    this.loadAllTagsTask.perform(this)
-  },
-  methods: {
-    ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
 
-    revertChanges() {
-      this.editAssignedTags = [...this.resource.tags]
-    },
-    async save() {
+    const save = async () => {
       try {
-        const tagsToAdd = this.editAssignedTags.filter((tag) => !this.resource.tags.includes(tag))
-        const tagsToRemove = this.resource.tags.filter(
-          (tag) => !this.editAssignedTags.includes(tag)
-        )
+        const { id, tags, fileId } = unref(resource)
+        const tagsToAdd = unref(editAssignedTags).filter((tag) => !tags.includes(tag))
+        const tagsToRemove = tags.filter((tag) => !unref(editAssignedTags).includes(tag))
 
         if (tagsToAdd.length) {
-          await this.$client.tags.addResourceTag(this.resource.fileId, tagsToAdd)
+          await unref(clientService).owncloudSdk.tags.addResourceTag(fileId, tagsToAdd)
         }
 
         if (tagsToRemove.length) {
-          await this.$client.tags.removeResourceTag(this.resource.fileId, tagsToRemove)
+          await unref(clientService).owncloudSdk.tags.removeResourceTag(fileId, tagsToRemove)
         }
 
-        this.UPDATE_RESOURCE_FIELD({
-          id: this.resource.id,
+        store.commit('Files/UPDATE_RESOURCE_FIELD', {
+          id: id,
           field: 'tags',
-          value: [...this.editAssignedTags]
+          value: [...unref(editAssignedTags)]
         })
-        this.displayedItem.tags = [...this.editAssignedTags]
 
+        unref(resource).tags = [...unref(editAssignedTags)]
         eventBus.publish('sidebar.entity.saved')
       } catch (e) {
         console.error(e)
       }
-    },
-    createOption(option) {
-      return option.toLowerCase()
-    },
-    showSelectNewLabel(option) {
-      return !this.$refs.tagSelect.$refs.select.optionExists(option)
+    }
+
+    watch(resource, () => {
+      revertChanges()
+    })
+
+    onMounted(() => {
+      editAssignedTags.value = [...unref(resource).tags]
+      loadAllTagsTask.perform()
+    })
+
+    return {
+      loadAllTagsTask,
+      allTags,
+      tagsMaxCount,
+      editAssignedTags,
+      resource,
+      tagSelect,
+      revertChanges,
+      createOption,
+      showSelectNewLabel,
+      save
     }
   }
 })

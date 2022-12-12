@@ -5,7 +5,7 @@ import { useRequest } from 'web-pkg/src/composables'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { eventBus } from 'web-pkg'
+import { ClientService, eventBus } from 'web-pkg'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { OwnCloudSdk } from 'web-client/src/types'
@@ -18,6 +18,7 @@ localVue.use(Vuex)
 describe('Tags Panel', () => {
   const allTags = ['moon', 'mars', 'sun']
   const resource = mockDeep<Resource>({ tags: ['moon', 'mars'] })
+  const clientService = mockDeep<ClientService>()
 
   it('show tags input form if loaded successfully', () => {
     const wrapper = createWrapper(resource)
@@ -37,20 +38,20 @@ describe('Tags Panel', () => {
     })
     it('calls the client to add new tags', async () => {
       const addResourceTagStub = jest.fn().mockImplementation().mockResolvedValue({})
-      const clientMock = mockDeep<OwnCloudSdk>({
+      clientService.owncloudSdk = mockDeep<OwnCloudSdk>({
         tags: { addResourceTag: addResourceTagStub }
       })
-      const wrapper = createWrapper(resource, allTags, clientMock)
+      const wrapper = createWrapper(resource, allTags, clientService)
       resource.tags = []
       await wrapper.vm.save()
       expect(addResourceTagStub).toHaveBeenCalled()
     })
     it('calls the client to remove existing tags', async () => {
       const removeResourceTagStub = jest.fn().mockImplementation().mockResolvedValue({})
-      const clientMock = mockDeep<OwnCloudSdk>({
+      clientService.owncloudSdk = mockDeep<OwnCloudSdk>({
         tags: { removeResourceTag: removeResourceTagStub }
       })
-      const wrapper = createWrapper(resource, allTags, clientMock)
+      const wrapper = createWrapper(resource, allTags, clientService)
       resource.tags.push('new tag')
       await wrapper.vm.save()
       expect(removeResourceTagStub).toHaveBeenCalled()
@@ -58,11 +59,11 @@ describe('Tags Panel', () => {
     it('logs error on failure', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const removeResourceTagStub = jest.fn().mockImplementation().mockRejectedValue(new Error())
-      const clientMock = mockDeep<OwnCloudSdk>({
+      clientService.owncloudSdk = mockDeep<OwnCloudSdk>({
         tags: { removeResourceTag: removeResourceTagStub }
       })
       const eventStub = jest.spyOn(eventBus, 'publish')
-      const wrapper = createWrapper(resource, allTags, clientMock)
+      const wrapper = createWrapper(resource, allTags, clientService)
       resource.tags.push('sun')
       await wrapper.vm.save()
       expect(eventStub).not.toHaveBeenCalled()
@@ -70,14 +71,14 @@ describe('Tags Panel', () => {
   })
 })
 
-function createWrapper(testResource, allTags = [], clientMock = mockDeep<OwnCloudSdk>()) {
+function createWrapper(testResource, allTags = [], clientService = mockDeep<ClientService>()) {
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ data: { tags: allTags } })
   }))
   return mount(TagsPanel, {
     store: new Vuex.Store(defaultStoreMockOptions),
     localVue,
-    mocks: { ...defaultComponentMocks(), $client: clientMock },
+    mocks: { ...defaultComponentMocks(), $clientService: clientService },
     stubs: defaultStubs,
     provide: {
       displayedItem: testResource

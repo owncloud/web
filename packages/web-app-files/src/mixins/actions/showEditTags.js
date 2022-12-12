@@ -16,8 +16,6 @@ export default {
           icon: 'price-tag-3',
           label: () => this.$gettext('Add or edit tags'),
           handler: this.$_showEditTags_trigger,
-          // we don't have details in the trashbin, yet.
-          // remove trashbin route rule once we have them.
           isEnabled: ({ resources }) => {
             // sidebar is currently only available inside files app
             if (!this.$_isFilesAppActive || !this.capabilities?.files?.tags) {
