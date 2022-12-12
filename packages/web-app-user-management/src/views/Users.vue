@@ -86,7 +86,7 @@ import DeleteUserModal from '../components/Users/DeleteUserModal.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import GroupAssignmentsPanel from '../components/Users/SideBar/GroupAssignmentsPanel.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 import { useAccessToken, useStore } from 'web-pkg/src/composables'
 import { defineComponent, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
@@ -94,7 +94,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { useGraphClient } from 'web-pkg/src/composables'
 import AppTemplate from '../components/AppTemplate.vue'
-import { useLoadTasks } from '../composables/loadTasks/useLoadTasks'
+import { useLoadTasks } from '../composables/loadTasks'
 
 export default defineComponent({
   name: 'UsersView',

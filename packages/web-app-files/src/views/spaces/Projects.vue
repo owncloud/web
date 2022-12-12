@@ -133,7 +133,7 @@
 <script lang="ts">
 import AppBar from '../../components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { computed, defineComponent, unref } from 'vue'
 import { useAccessToken, useStore, useGraphClient } from 'web-pkg/src/composables'

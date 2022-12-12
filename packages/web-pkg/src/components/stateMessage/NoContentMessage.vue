@@ -2,7 +2,7 @@
   <div
     class="no-content-message oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center"
   >
-    <oc-icon :name="icon" type="div" size="xxlarge" :fill-type="iconFillType" />
+    <oc-icon :name="icon" type="div" :fill-type="iconFillType" size="xxlarge" />
     <div class="oc-text-muted oc-text-xlarge">
       <slot name="message" />
     </div>
@@ -12,8 +12,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'NoContentMessage',
 
   props: {
@@ -26,8 +28,9 @@ export default {
       default: 'fill'
     }
   }
-}
+})
 </script>
+
 <style>
 .no-content-message {
   height: 75vh;

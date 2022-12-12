@@ -1,4 +1,4 @@
-import NoContentMessage from '../../../src/components/NoContentMessage.vue'
+import NoContentMessage from '../../../../src/components/stateMessage/NoContentMessage.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('NoContentMessage', () => {

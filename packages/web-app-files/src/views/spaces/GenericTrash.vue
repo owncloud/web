@@ -71,7 +71,7 @@ import Pagination from '../../components/FilesList/Pagination.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'

@@ -25,14 +25,9 @@
     <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
-    <div v-else-if="isFileContentError" class="oc-position-center">
-      <div class="oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center">
-        <oc-icon name="file-damage" variation="danger" size="xlarge" />
-        <div class="oc-text-muted oc-text-xlarge oc-mt-s">
-          {{ fileContentErrorMessage }}
-        </div>
-      </div>
-    </div>
+    <loading-error-message v-else-if="isFileContentError">
+      {{ fileContentErrorMessage }}
+    </loading-error-message>
     <template v-else>
       <div
         v-show="activeMediaFileCached"
@@ -187,6 +182,7 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import LoadingErrorMessage from 'web-pkg/src/components/stateMessage/LoadingErrorMessage.vue'
 import { loadPreview } from 'web-pkg/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { createFileRouteOptions, mergeFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -215,7 +211,8 @@ const PRELOAD_IMAGE_COUNT = 10
 export default defineComponent({
   name: 'Preview',
   components: {
-    AppTopBar
+    AppTopBar,
+    LoadingErrorMessage
   },
   setup() {
     const store = useStore()

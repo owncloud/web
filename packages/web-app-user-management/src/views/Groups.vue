@@ -80,7 +80,7 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import DeleteGroupModal from '../components/Groups/DeleteGroupModal.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 import { defineComponent, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from 'web-pkg/src/services/eventBus'

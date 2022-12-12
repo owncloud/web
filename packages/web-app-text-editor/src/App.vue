@@ -16,14 +16,9 @@
     <div v-if="isLoading" class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading editor content')" size="xlarge" />
     </div>
-    <div v-else-if="isLoadingError" class="oc-position-center">
-      <div class="oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center">
-        <oc-icon name="file-damage" variation="danger" size="xlarge" />
-        <div class="oc-text-muted oc-text-xlarge oc-mt-s">
-          {{ loadingErrorMessage }}
-        </div>
-      </div>
-    </div>
+    <loading-error-message v-else-if="isLoadingError">
+      {{ loadingErrorMessage }}
+    </loading-error-message>
     <div v-else class="oc-flex editor-wrapper-height oc-px-s oc-pt-rm oc-pb-s">
       <div :class="showPreview ? 'oc-width-1-2' : 'oc-width-1-1'" class="oc-height-1-1">
         <oc-textarea
@@ -53,13 +48,15 @@ import { mapActions } from 'vuex'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
 import { useAppDefaults, useStore, useTranslations } from 'web-pkg/src/composables'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import LoadingErrorMessage from 'web-pkg/src/components/stateMessage/LoadingErrorMessage.vue'
 import { Resource } from 'web-client'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'TextEditor',
   components: {
-    AppTopBar
+    AppTopBar,
+    LoadingErrorMessage
   },
   beforeRouteLeave(_to, _from, next) {
     if (this.isDirty) {

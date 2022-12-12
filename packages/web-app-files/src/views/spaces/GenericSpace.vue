@@ -116,7 +116,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'

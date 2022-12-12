@@ -69,7 +69,7 @@ import { ImageDimension, ImageType } from '../../constants'
 import debounce from 'lodash-es/debounce'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import NoContentMessage from 'web-pkg/src/components/stateMessage/NoContentMessage.vue'
 import AppBar from '../../components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import Pagination from '../../components/FilesList/Pagination.vue'
