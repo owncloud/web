@@ -1,13 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables/router'
 import { ref } from '@vue/composition-api'
+import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 
-const localVue = defaultLocalVue()
 jest.mock('web-pkg/src/composables/router')
 const selectors = {
   pageSizeSelect: 'oc-page-size-stub',
@@ -38,15 +35,16 @@ function getWrapper({ perPage = '100' } = {}) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
-  const store = new Vuex.Store(defaultStoreMockOptions)
+  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
     storeOptions,
     mocks,
     wrapper: shallowMount(ViewOptions, {
-      localVue,
-      mocks,
-      store
+      global: {
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
 }
