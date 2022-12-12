@@ -1,12 +1,9 @@
-import { mount } from '@vue/test-utils'
 import SidebarToggle from '../../../../src/components/AppBar/SidebarToggle.vue'
-import Vuex from 'vuex'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { eventBus } from 'web-pkg'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
-const localVue = defaultLocalVue()
 const selectors = {
   toggleSidebarBtn: '#files-toggle-sidebar'
 }
@@ -30,16 +27,17 @@ describe('SidebarToggle component', () => {
 
 function getWrapper({ sideBarOpen = false } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  const store = new Vuex.Store(storeOptions)
+  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
     storeOptions,
     mocks,
     wrapper: mount(SidebarToggle, {
-      localVue,
-      mocks,
-      store,
-      propsData: { sideBarOpen }
+      props: { sideBarOpen },
+      global: {
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
 }
