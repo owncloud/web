@@ -43,6 +43,11 @@ export function attachIndicators(resource, sharesTree) {
   return (resource.indicators = getIndicators(resource, sharesTree))
 }
 
+export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {
+  const mimeType = resource.mimeType || ''
+  return mimeType.startsWith('text/') && (resource.size as number) < 30
+}
+
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
  * @param {Array} shares Shares to be transformed into unique resources

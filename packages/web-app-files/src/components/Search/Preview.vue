@@ -23,7 +23,8 @@
 import MixinFileActions from '../../mixins/fileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from '../../constants'
-import { loadPreview } from 'web-pkg/src/helpers/preview'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
+import { loadPreview } from 'web-pkg/src/helpers'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
@@ -116,7 +117,10 @@ export default defineComponent({
       return this.$gettext('Personal')
     },
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return (
+        !this.configuration?.options?.disablePreviews &&
+        !isResourceTxtFileAlmostEmpty(this.resource)
+      )
     },
     folderLink() {
       return this.createFolderLink(this.resource.path, this.resource.fileId)
