@@ -1,21 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetTextPlugin from 'vue-gettext'
-
-import SpaceQuota from 'web-app-files/src/components/SpaceQuota'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+import SpaceQuota from 'web-app-files/src/components/SpaceQuota.vue'
+import { shallowMount } from 'web-test-helpers'
 
 describe('SpaceQuota component', () => {
   it('renders the space storage quota label', () => {
-    const wrapper = getWrapper({ total: 10, used: 1, state: 'normal' })
+    const { wrapper } = getWrapper({ total: 10, used: 1, state: 'normal' })
     expect(wrapper.find('.space-quota').exists()).toBeTruthy()
     expect(wrapper).toMatchSnapshot()
   })
@@ -25,7 +13,7 @@ describe('SpaceQuota component', () => {
     { state: 'critical', expectedVariation: 'warning' },
     { state: 'exceeded', expectedVariation: 'danger' }
   ])('renders the progress variant correctly', (dataSet) => {
-    const wrapper = getWrapper({ total: 10, used: 1, state: dataSet.state })
+    const { wrapper } = getWrapper({ total: 10, used: 1, state: dataSet.state })
     const progressBar = wrapper.find('.space-quota oc-progress-stub')
     expect(progressBar.exists()).toBeTruthy()
     expect(progressBar.props().variation).toBe(dataSet.expectedVariation)
@@ -33,10 +21,11 @@ describe('SpaceQuota component', () => {
 })
 
 function getWrapper(spaceQuota) {
-  return shallowMount(SpaceQuota, {
-    localVue,
-    propsData: {
-      spaceQuota
-    }
-  })
+  return {
+    wrapper: shallowMount(SpaceQuota, {
+      props: {
+        spaceQuota
+      }
+    })
+  }
 }
