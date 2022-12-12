@@ -1,23 +1,8 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
 import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 jest.useFakeTimers()
-
-const localVue = createLocalVue()
-
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-const mapActions = {
-  showMessage: jest.fn()
-}
 
 const exampleLink = {
   name: 'Example link',
@@ -25,24 +10,21 @@ const exampleLink = {
 }
 
 describe('NameAndCopy', () => {
+  // ignore tippy warning
+  jest.spyOn(console, 'warn').mockImplementation(undefined)
   it('should show link info component including a copy-to-clipboard button', () => {
-    const wrapper = getWrapper()
+    const { wrapper } = getWrapper()
     expect(wrapper).toMatchSnapshot()
   })
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
-    const spyShowMessage = jest.spyOn(mapActions, 'showMessage')
     const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
-
-    const store = createStore()
-    const wrapper = getWrapper(store)
-
+    const { wrapper } = getWrapper()
+    const spyShowMessage = jest.spyOn(wrapper.vm, 'showMessage')
     expect(spyShowMessage).not.toHaveBeenCalled()
     expect(windowSpy).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
-
     expect(wrapper).toMatchSnapshot()
-
     expect(spyShowMessage).toHaveBeenCalledTimes(1)
     expect(windowSpy).toHaveBeenCalledTimes(1)
     expect(windowSpy).toHaveBeenCalledWith('Copy to clipboard: Ctrl+C, Enter', exampleLink.url)
@@ -55,32 +37,21 @@ describe('NameAndCopy', () => {
   })
 })
 
-function createStore() {
-  return new Vuex.Store({
-    actions: mapActions,
-    commit: jest.fn(),
-    dispatch: jest.fn(),
-    getters: {
-      capabilities: function () {
-        return {
-          files: {
-            privateLinks: true
-          }
+function getWrapper() {
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(NameAndCopy, {
+      props: {
+        link: exampleLink
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        directives: {
+          'oc-tooltip': jest.fn()
         }
       }
-    }
-  })
-}
-
-function getWrapper(store) {
-  return mount(NameAndCopy, {
-    localVue,
-    store,
-    propsData: {
-      link: exampleLink
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
+    })
+  }
 }
