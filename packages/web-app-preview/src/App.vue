@@ -582,9 +582,9 @@ export default defineComponent({
           })
       }
 
-      const preloadUpcomingFile = (upcomingFileIndex) => {
+      const preloadFile = (preloadFileIndex) => {
         let cycleIndex =
-          (((this.activeIndex + upcomingFileIndex) % this.filteredFiles.length) +
+          (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
             this.filteredFiles.length) %
           this.filteredFiles.length
 
@@ -602,7 +602,7 @@ export default defineComponent({
         followingFileIndex <= PRELOAD_IMAGE_COUNT;
         followingFileIndex++
       ) {
-        preloadUpcomingFile(followingFileIndex)
+        preloadFile(followingFileIndex)
       }
 
       for (
@@ -610,7 +610,7 @@ export default defineComponent({
         previousFileIndex >= PRELOAD_IMAGE_COUNT * -1;
         previousFileIndex--
       ) {
-        preloadUpcomingFile(previousFileIndex)
+        preloadFile(previousFileIndex)
       }
     }
   }
