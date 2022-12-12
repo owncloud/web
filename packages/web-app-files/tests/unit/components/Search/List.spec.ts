@@ -1,21 +1,5 @@
-// import { mount, createLocalVue } from '@vue/test-utils'
-// import VueCompositionAPI from '@vue/composition-api'
 // import VueRouter from 'vue-router'
-// import Vuex from 'vuex'
-// import DesignSystem from 'owncloud-design-system'
-// import GetTextPlugin from 'vue-gettext'
-//
 // import List from 'web-app-files/src/components/Search/List.vue'
-//
-// const localVue = createLocalVue()
-// localVue.use(Vuex)
-// localVue.use(VueRouter)
-// localVue.use(DesignSystem)
-// localVue.use(VueCompositionAPI)
-// localVue.use(GetTextPlugin, {
-//   translations: 'does-not-matter.json',
-//   silent: true
-// })
 //
 // const stubs = {
 //   'app-bar': true,
@@ -125,7 +109,7 @@ describe('List component', () => {
 // }
 //
 // function createStore(activeFiles) {
-//   return new Vuex.Store({
+//   return createStore({
 //     getters: {
 //       configuration: () => ({
 //         options: {
