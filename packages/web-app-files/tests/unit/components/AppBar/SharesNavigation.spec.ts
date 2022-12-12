@@ -33,7 +33,7 @@ describe('SharesNavigation component', () => {
 
 function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  const store = new Vuex.Store(defaultStoreMockOptions)
+  const store = new Vuex.Store(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: { name: currentRouteName } })
   mocks.$router.getRoutes.mockImplementation(() => routes)
   return {
