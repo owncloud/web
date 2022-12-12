@@ -16,7 +16,6 @@ export const filesModuleMockOptions = {
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
-      currentFileOutgoingCollaborators: jest.fn(() => []),
       currentFileOutgoingLinks: jest.fn(() => []),
       sharesTreeLoading: jest.fn(() => false),
       sharesTree: jest.fn((state) => ({}))
@@ -46,7 +45,8 @@ export const filesModuleMockOptions = {
       deleteShare: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
-      changeShare: jest.fn()
+      changeShare: jest.fn(),
+      addLink: jest.fn()
     }
   }
 }
