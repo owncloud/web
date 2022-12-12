@@ -21,7 +21,7 @@ export const defaultComponentMocks = ({
   const $router = mockDeep<Router>({ ...(currentRoute && { currentRoute }) })
   $router.resolve.mockImplementation((to: RawLocation) => ({ href: (to as any).name } as any))
   const $route = mockDeep<Route>()
-  $route.path = '/'
+  $route.path = currentRoute?.path || '/'
 
   return {
     $router,
