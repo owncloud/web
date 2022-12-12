@@ -5,6 +5,7 @@ export const defaultStoreMockOptions = {
   getters: {
     newFileHandlers: jest.fn(() => []),
     capabilities: jest.fn().mockImplementation(() => ({})),
+    user: jest.fn().mockImplementation(() => ({})),
     configuration: jest
       .fn()
       .mockImplementation(() => ({ currentTheme: { general: { slogan: '' } } }))

@@ -16,6 +16,8 @@ export const filesModuleMockOptions = {
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
+      currentFileOutgoingCollaborators: jest.fn(() => []),
+      currentFileOutgoingLinks: jest.fn(() => []),
       sharesTreeLoading: jest.fn(() => false),
       sharesTree: jest.fn((state) => ({}))
     },

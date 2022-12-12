@@ -3,15 +3,15 @@
 exports[`Details SideBar Panel displays the details side panel 1`] = `
 <div id="oc-space-details-sidebar">
   <div class="oc-space-details-sidebar-image oc-text-center">
-    <oc-icon-stub name="layout-grid" size="xxlarge" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
+    <oc-icon-stub name="layout-grid" filltype="fill" accessiblelabel="" type="span" size="xxlarge" variation="passive" color="" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
   </div>
   <div class="oc-flex oc-flex-middle oc-mb-m oc-text-small" style="gap: 15px;">
-    <oc-button-stub appearance="raw" aria-label="Open member list in share panel">
-      <oc-icon-stub name="group"></oc-icon-stub>
+    <oc-button-stub type="button" size="medium" arialabel="Open member list in share panel" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+      <oc-icon-stub name="group" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
     </oc-button-stub>
     <!---->
     <p>This space has 1 member.</p>
-    <oc-button-stub appearance="raw" aria-label="Open share panel" size="small"><span class="oc-text-small">Show</span></oc-button-stub>
+    <oc-button-stub type="button" size="small" arialabel="Open share panel" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium"><span class="oc-text-small">Show</span></oc-button-stub>
   </div>
   <table aria-label="Overview of the information about the selected space" class="details-table">
     <tr>
