@@ -406,7 +406,7 @@ importers:
   packages/web-app-user-management:
     specifiers:
       '@vue/composition-api': 1.7.1
-      axios: ^0.27.1
+      axios: ^0.27.2
       email-validator: ^2.0.4
       fuse.js: ^6.5.3
       lodash-es: 4.17.21
@@ -431,7 +431,7 @@ importers:
 
   packages/web-client:
     specifiers:
-      axios: ^0.27.1
+      axios: ^0.27.2
       lodash-es: ^4.17.21
     dependencies:
       axios: 0.27.2
@@ -440,7 +440,7 @@ importers:
   packages/web-pkg:
     specifiers:
       '@vue/composition-api': 1.7.1
-      axios: ^0.27.1
+      axios: ^0.27.2
       filesize: ^9.0.11
       lodash-es: ^4.17.21
       luxon: ^2.4.0
@@ -585,12 +585,14 @@ importers:
   packages/web-test-helpers:
     specifiers:
       '@vue/composition-api': 1.7.1
+      axios: ^0.27.2
       vue-async-computed: ^3.9.0
       vue-gettext: ^2.1.5
       vue-router: 3.6.5
       vuex: ^3.6.2
     dependencies:
       '@vue/composition-api': 1.7.1_vue@2.6.14
+      axios: 0.27.2
       vue-async-computed: 3.9.0_vue@2.6.14
       vue-gettext: 2.1.12
       vue-router: 3.6.5_vue@2.6.14
@@ -13849,6 +13851,7 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
+    deprecated: Please use @jridgewell/sourcemap-codec instead
 
   /spdx-compare/1.0.0:
     resolution: {integrity: sha512-C1mDZOX0hnu0ep9dfmuoi03+eOdDoz2yvK79RxbcrVEG1NO1Ph35yW102DHWKN4pk80nwCgeMmSY5L25VE4D9A==}
