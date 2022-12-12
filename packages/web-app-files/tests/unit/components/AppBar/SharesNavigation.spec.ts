@@ -1,14 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
 import SharesNavigation from '../../../../src/components/AppBar/SharesNavigation.vue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import Vuex from 'vuex'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { locationSharesWithMe } from 'web-app-files/src/router/shares'
 import { mock } from 'jest-mock-extended'
 import { RouteRecordPublic } from 'vue-router/types/router'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { createStore, defaultPlugins, defaultStubs, shallowMount } from 'web-test-helpers'
 
-const localVue = defaultLocalVue()
 const routes = [
   mock<RouteRecordPublic>({
     path: '/files/shares/with-me/',
@@ -33,16 +30,18 @@ describe('SharesNavigation component', () => {
 
 function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  const store = new Vuex.Store(storeOptions)
+  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: { name: currentRouteName } })
   mocks.$router.getRoutes.mockImplementation(() => routes)
   return {
     storeOptions,
     mocks,
-    wrapper: shallowMount(SharesNavigation, {
-      localVue,
-      mocks,
-      store
+    wrapper: shallowMount(SharesNavigation as any, {
+      global: {
+        stubs: defaultStubs,
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
 }
