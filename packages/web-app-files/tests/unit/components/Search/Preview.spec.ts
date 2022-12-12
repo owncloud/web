@@ -1,17 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
-
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
-
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-localVue.use(Vuex)
+import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {
-    const wrapper = getWrapper()
+    const { wrapper } = getWrapper()
     const ocResource = wrapper.find('oc-resource-stub')
 
     expect(ocResource.exists()).toBeTruthy()
@@ -20,7 +13,7 @@ describe('Preview component', () => {
   describe('computed parentFolderLink', () => {
     it('should use the items storageId for the resource target location if present', () => {
       const driveAliasAndItem = '1'
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         spaces: [
           {
             id: '1',
@@ -36,13 +29,13 @@ describe('Preview component', () => {
 
   describe('computed method "defaultParentFolderName"', () => {
     it('should equal "All files and folders" if spaces capability is not present', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         hasShareJail: false
       })
       expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
     })
     it('should equal the space name if resource storage is representing a project space', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         spaces: [
           {
             id: '1',
@@ -55,7 +48,7 @@ describe('Preview component', () => {
       expect(wrapper.vm.defaultParentFolderName).toEqual('New space')
     })
     it('should equal the share name if resource is representing a file or folder in the root of a share', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
@@ -68,7 +61,7 @@ describe('Preview component', () => {
       expect(wrapper.vm.defaultParentFolderName).toEqual('My share')
     })
     it('should equal the "Shared with me" if resource is representing the root share', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
@@ -81,7 +74,7 @@ describe('Preview component', () => {
       expect(wrapper.vm.defaultParentFolderName).toEqual('Shared with me')
     })
     it('should equal "Personal" if resource storage is not representing the personal home', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         spaces: [
           {
             id: 1,
@@ -112,42 +105,34 @@ function getWrapper({
   },
   user = { id: 'test' }
 }: any = {}) {
-  return shallowMount(Preview, {
-    localVue,
-    store: createStore(Vuex.Store, {
-      getters: {
-        configuration: () => ({
-          options: {
-            disablePreviews: true
-          }
-        }),
-        user: () => user
-      },
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            spaces: {
-              namespaced: true,
-              state: {
-                spaces
-              }
-            }
-          }
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      configuration: () => ({
+        options: {
+          disablePreviews: true
         }
-      }
-    }),
-    mocks: {
-      $route: route,
-      $gettext: (text) => text,
-      hasShareJail
-    },
-    propsData: {
-      searchResult
-    },
-    stubs: {
-      'oc-progress': true,
-      'oc-resource': true
+      }),
+      capabilities: () => ({
+        spaces: {
+          share_jail: hasShareJail
+        }
+      }),
+      user: () => user
     }
-  })
+  }
+  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockImplementation(() => spaces)
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(Preview, {
+      props: {
+        searchResult
+      },
+      global: {
+        mocks: defaultComponentMocks({ currentRoute: route }),
+        plugins: [...defaultPlugins(), store]
+      }
+    })
+  }
 }
