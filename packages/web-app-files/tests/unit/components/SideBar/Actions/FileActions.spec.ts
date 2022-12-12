@@ -10,6 +10,7 @@ const filesPersonalRoute = { name: 'files-personal' }
 
 describe('FileActions', () => {
   // FIXME: Fix tests, see down below
+  it.todo('Fix tests')
   // describe('when user is on personal route', () => {
   //   describe('action handlers', () => {
   //     afterEach(() => {
