@@ -520,6 +520,7 @@ importers:
       vuex-router-sync: ^5.0.0
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
+      web-test-helpers: workspace:*
       webdav: ^4.10.0
       webfontloader: ^1.6.28
       xml-js: ^1.6.11
@@ -574,6 +575,7 @@ importers:
       vuex-router-sync: 5.0.0_xdhba6eyhs52juodf6fywqi4xi
       web-client: link:../web-client
       web-pkg: link:../web-pkg
+      web-test-helpers: link:../web-test-helpers
       webdav: 4.10.0
       webfontloader: 1.6.28
       xml-js: 1.6.11

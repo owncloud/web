@@ -1,20 +1,11 @@
-import { getStore, localVue } from 'web-app-files/tests/unit/views/views.setup.js'
-import { shallowMount, mount } from '@vue/test-utils'
-import resolvePublicLink from '../../../src/pages/resolvePublicLink'
+import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
+import { defaultPlugins, defaultComponentMocks, createStore, shallowMount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { mockDeep } from 'jest-mock-extended'
+import { ClientService } from 'web-pkg'
+import { Resource } from 'web-client'
 
-const theme = {
-  general: { slogan: 'some-slogan' }
-}
-
-const stubs = {
-  'oc-spinner': true,
-  translate: true
-}
-
-const route = { meta: { title: 'some page title' }, params: { token: 'some-token' } }
-
-const component = { ...resolvePublicLink, mounted: jest.fn(), created: jest.fn() }
-
+jest.mock('web-runtime/src/services/auth')
 const selectors = {
   cardFooter: '.oc-card-footer',
   cardBody: '.oc-card-body',
@@ -22,26 +13,20 @@ const selectors = {
   errorTitle: '.oc-link-resolve-error-title',
   publicLinkPasswordRequired: 'form > .oc-card-title'
 }
-
 const spinnerStub = 'oc-spinner-stub'
 const textInputStub = 'oc-text-input-stub'
 
 describe('resolvePublicLink', () => {
   describe('theming options', () => {
-    const wrapper = getWrapper()
-
-    it('should have the page-title set', () => {
-      expect(wrapper).toMatchSnapshot()
-    })
     it('should display the configuration theme general slogan as the login card footer', () => {
+      const { wrapper } = getWrapper({ loading: true })
       const slogan = wrapper.find(selectors.cardFooter)
-
       expect(slogan).toMatchSnapshot()
     })
   })
 
   describe('when the view is still loading', () => {
-    const wrapper = getWrapper({ loading: true })
+    const { wrapper } = getWrapper({ loading: true })
     it('should display the loading text with the spinner', () => {
       const loading = wrapper.find(selectors.cardBody)
 
@@ -57,34 +42,28 @@ describe('resolvePublicLink', () => {
   })
 
   describe('when the view is not loading anymore', () => {
-    it('should not display the loading text and the spinner', () => {
-      const wrapper = getWrapper({ loading: false })
+    it('should not display the loading text and the spinner', async () => {
+      const { wrapper } = getWrapper()
       const loading = wrapper.find(selectors.cardBody)
-
       expect(loading.exists()).toBeFalsy()
     })
     it('should display the error message if "errorMessage" is not empty', async () => {
-      const wrapper = getWrapper({ loading: false })
-      await wrapper.setData({ errorMessage: 'some-error-message' })
-
+      const { wrapper } = getWrapper({ errorMessage: 'some-error-message' })
       expect(wrapper.find(selectors.errorTitle).exists()).toBeTruthy()
       expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
     })
 
     describe('and when "passwordRequired" is set as true', () => {
       let passwordRequiredForm
-      const wrapper = getWrapper({ loading: false })
+      const { wrapper } = getWrapper({ passwordRequired: true })
 
       beforeEach(async () => {
-        await wrapper.setData({ passwordRequired: true })
         passwordRequiredForm = wrapper.find('form')
       })
-
       it('should display the password required form', () => {
         expect(passwordRequiredForm.exists()).toBeTruthy()
         expect(passwordRequiredForm).toMatchSnapshot()
       })
-
       describe('and the password input', () => {
         it('should have a computed label', () => {
           const passwordInput = passwordRequiredForm.find(textInputStub)
@@ -97,23 +76,21 @@ describe('resolvePublicLink', () => {
           expect(passwordInput.attributes().errormessage).toBeUndefined()
         })
         it('should display the error message if "inputErrorMessage" is not empty', async () => {
-          await wrapper.setData({ inputErrorMessage: 'some input error message' })
           const passwordInput = passwordRequiredForm.find(textInputStub)
 
           expect(passwordInput).toMatchSnapshot()
         })
       })
-
       describe('and the submit button', () => {
         it('should be set as disabled if "password" is empty', () => {
-          expect(wrapper.vm.password).toBeNull()
+          expect(wrapper.vm.password).toBe('')
 
           const submitButton = wrapper.find(selectors.submitButton)
           expect(submitButton.exists()).toBeTruthy()
           expect(submitButton).toMatchSnapshot()
         })
         it('should be set as enabled if "password" is not empty', async () => {
-          await wrapper.setData({ password: 'some-value' })
+          const { wrapper } = getWrapper({ passwordRequired: true, password: 'some-value' })
           expect(wrapper.vm.password).toBe('some-value')
 
           const submitButton = wrapper.find(selectors.submitButton)
@@ -121,13 +98,8 @@ describe('resolvePublicLink', () => {
           expect(submitButton.attributes().disabled).toBeUndefined()
         })
       })
-
       it('should call "resolvePublicLink" method on form submit', async () => {
-        const spyResolvePublicLink = jest.spyOn(resolvePublicLink.methods, 'resolvePublicLink')
-        const wrapper = getMountedWrapper({ loading: false })
-
-        await wrapper.setData({ passwordRequired: true, password: 'some-pass' })
-
+        const spyResolvePublicLink = jest.spyOn(wrapper.vm.resolvePublicLinkTask, 'perform')
         const submitButton = wrapper.find(selectors.submitButton)
         await submitButton.trigger('submit')
 
@@ -137,33 +109,36 @@ describe('resolvePublicLink', () => {
   })
 })
 
-function getMountOptions({
-  $route = route,
-  store = getStore({
-    slogan: theme.general.slogan
-  }),
-  loading = false
+function getWrapper({
+  loading = false,
+  tokenInfo = {},
+  driveType = 'public',
+  errorMessage = undefined,
+  password = '',
+  passwordRequired = false
 } = {}) {
+  const $clientService = mockDeep<ClientService>()
+  $clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>({ driveType }))
+  $clientService.owncloudSdk.shares.getUnprotectedTokenInfo.mockResolvedValue(tokenInfo)
+  const mocks = { ...defaultComponentMocks(), $clientService }
+
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files_sharing: { federation: { incoming: true, outgoing: true } }
+  }))
+  const store = createStore(storeOptions)
   return {
-    localVue,
-    store,
-    stubs,
-    mocks: {
-      $route
-    },
-    data: () => ({
-      loading: loading
+    wrapper: shallowMount(ResolvePublicLink, {
+      data: () => ({
+        isLoading: loading,
+        password,
+        errorMessage,
+        isPasswordRequired: passwordRequired
+      }),
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
+      }
     })
   }
-}
-
-function getWrapper({ loading, store } = {}) {
-  return shallowMount(component, getMountOptions({ store, loading }))
-}
-
-function getMountedWrapper({ loading, store } = {}) {
-  return mount(component, {
-    ...getMountOptions({ store, loading }),
-    stubs: {}
-  })
 }
