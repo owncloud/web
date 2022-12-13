@@ -572,8 +572,6 @@ export default defineComponent({
           })
       }
 
-      console.log('?????')
-
       const preloadFile = (preloadFileIndex) => {
         let cycleIndex =
           (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
