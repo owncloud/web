@@ -1,6 +1,4 @@
 import SpaceMembers from 'web-app-files/src/components/SideBar/Shares/SpaceMembers.vue'
-import { mount, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import {
   spaceRoleManager,
   spaceRoleViewer,
@@ -9,12 +7,10 @@ import {
   Share
 } from 'web-client/src/helpers/share'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { SpaceResource, User } from 'web-client/src/helpers'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-
-const localVue = defaultLocalVue()
+import { createStore, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const memberMocks = {
   [spaceRoleManager.name]: {
@@ -168,24 +164,23 @@ function getWrapper({
     () => spaceMembers
   )
   storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => space)
-  const store = new Vuex.Store(storeOptions)
+  const store = createStore(storeOptions)
   return mountType(SpaceMembers, {
-    localVue,
-    store,
-    mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),
-    stubs: {
-      'oc-button': false,
-      'oc-icon': true,
-      'oc-spinner': true,
-      'avatar-image': true,
-      'role-dropdown': true,
-      'edit-dropdown': true,
-      'invite-collaborator-form': true,
-      'collaborator-list-item': true
-    },
-    provide: {
-      displayedItem: {
-        value: space
+    global: {
+      plugins: [...defaultPlugins(), store],
+      mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),
+      provide: {
+        displayedItem: space
+      },
+      stubs: {
+        'oc-button': false,
+        'oc-icon': true,
+        'oc-spinner': true,
+        'avatar-image': true,
+        'role-dropdown': true,
+        'edit-dropdown': true,
+        'invite-collaborator-form': true,
+        'collaborator-list-item': true
       }
     }
   })
