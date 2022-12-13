@@ -1,5 +1,6 @@
 <template>
-  <oc-table
+  <component
+    :is="table"
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
       { condensed: viewMode === ViewModeConstants.condensedTable.name }
@@ -9,6 +10,7 @@
     :highlighted="selectedIds"
     :disabled="disabled"
     :sticky="true"
+    :grouping-settings="groupingSettings"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
     :hover="hover"
@@ -178,7 +180,7 @@
       <!-- @slot Footer of the files table -->
       <slot name="footer" />
     </template>
-  </oc-table>
+  </component>
 </template>
 
 <script lang="ts">
@@ -207,6 +209,8 @@ import {
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { configurationManager } from 'web-pkg/src/configuration'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import AdvancedTable from 'web-pocs/src/components/OcTable/OcTable.vue'
+import { components } from '@ownclouders/design-system'
 
 import { SortDir } from 'web-app-files/src/composables'
 import { useResourceRouteResolver } from 'web-app-files/src/composables/filesList/useResourceRouteResolver'
@@ -221,7 +225,10 @@ import { ref } from 'vue'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction },
+  components: {
+    ContextMenuQuickAction,
+    AdvancedTable
+  },
   mixins: [Rename],
   props: {
     /**
@@ -242,6 +249,18 @@ export default defineComponent({
     resources: {
       type: Array as PropType<Resource[]>,
       required: true
+    },
+    /**
+     * Grouping settings for the table. Following settings are possible:<br />
+     * -**groupingFunctions**: Object with keys as grouping options names and functions that get a table data row and return a group name for that row. The names of the functions are used as grouping options.
+     * -**groupingBy**: must be either one of the keys in groupingFunctions or 'None'. If not set, default grouping will be 'None'.<br />
+     * -**ShowGroupingOptions**:  boolean value for showing or hinding the select element with grouping options above the table. <br />
+     * -**PreviewAmount**: Integer value that is used to show only the first n data rows of the table.
+     */
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
     },
     /**
      * Closure function to mutate the resource id into a valid DOM selector.
@@ -444,6 +463,10 @@ export default defineComponent({
       'clipboardAction'
     ]),
     ...mapState('runtime/spaces', ['spaces']),
+    table() {
+      const { OcTable } = components
+      return this.configuration?.options?.enableAdvancedTable ? AdvancedTable : OcTable
+    },
     fields() {
       if (this.resources.length === 0) {
         return []
@@ -845,7 +868,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.oc-table.condensed > tbody > tr {
+.condensed > .oc-table > tbody > tr {
   height: 0 !important;
 }
 .resource-table {
