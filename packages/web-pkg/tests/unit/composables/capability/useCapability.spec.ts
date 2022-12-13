@@ -2,7 +2,7 @@ import { unref } from '@vue/composition-api'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
 import user from 'web-runtime/src/store/user'
 import set from 'lodash-es/set'
-import { createStore, getComposableWrapper } from 'web-test-helpers'
+import { createStore, getComposableWrapper, getStoreInstance } from 'web-test-helpers'
 import { useStore } from 'web-pkg'
 
 const commitValue = <T>(store, name: string, value: T) => {
@@ -18,19 +18,7 @@ describe('useCapability', () => {
   })
 
   it('handles bools correctly', () => {
-    const defaultStore = createStore({
-      modules: {
-        user
-      }
-    })
-    const wrapper = getComposableWrapper(
-      () => {
-        return { store: useStore() }
-      },
-      { store: defaultStore }
-    )
-
-    const { store } = wrapper.vm
+    const store = getStoreInstance({ modules: { user } })
 
     const hasResharing = useCapability<boolean>(store, 'files_sharing.resharing')
     const hasResharingWithDefault = useCapability<boolean>(store, 'files_sharing.resharing', true)
@@ -51,19 +39,7 @@ describe('useCapability', () => {
   })
 
   it('handles arrays correctly', () => {
-    const defaultStore = createStore({
-      modules: {
-        user
-      }
-    })
-    const wrapper = getComposableWrapper(
-      () => {
-        return { store: useStore() }
-      },
-      { store: defaultStore }
-    )
-
-    const { store } = wrapper.vm
+    const store = getStoreInstance({ modules: { user } })
 
     const supportedTypesCapability = useCapability<string[]>(store, 'checksums.supportedTypes')
     const supportedTypesCapabilityWithDefaults = useCapability<string[]>(

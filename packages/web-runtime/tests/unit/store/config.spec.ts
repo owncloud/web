@@ -1,24 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-
 import { loadTheme } from 'web-runtime/src/helpers/theme'
 import Store from 'web-runtime/src/store'
 import { objectKeys } from 'web-pkg/src/utils'
 import get from 'lodash-es/get'
 import difference from 'lodash-es/difference'
+import { getStoreInstance } from 'web-test-helpers'
+import { cloneDeep } from 'lodash-es'
 
 describe('config theme bootstrap', () => {
-  Vue.use(Vuex)
-
-  const store = createStore(Vuex.Store, { ...Store })
-  const initialStoreTheme = { ...store.getters.configuration.theme }
-
-  beforeEach(() => {
-    store.reset()
-  })
-
   it('should be able to loadTheme', async () => {
+    const store = getStoreInstance(cloneDeep(Store))
     const { theme } = await loadTheme()
     const defaultTheme = theme.default
 
@@ -29,6 +19,8 @@ describe('config theme bootstrap', () => {
   })
 
   it('should not overwrite keys that are not part of theme', async () => {
+    const store = getStoreInstance(cloneDeep(Store))
+    const initialStoreTheme = { ...store.getters.configuration.theme }
     const { theme } = await loadTheme()
     const defaultTheme = theme.default
 
