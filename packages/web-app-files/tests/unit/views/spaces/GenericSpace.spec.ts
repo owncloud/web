@@ -1,16 +1,13 @@
-import { mount } from '@vue/test-utils'
 import GenericSpace from '../../../../src/views/spaces/GenericSpace.vue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import Vuex from 'vuex'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -138,17 +135,17 @@ function getMountedWrapper({
     item: '/',
     ...props
   }
-  const localVue = defaultLocalVue({ compositionApi: true })
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(GenericSpace, {
-      localVue,
-      mocks: defaultMocks,
-      store,
-      stubs: defaultStubs,
-      propsData
+      props: propsData,
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultMocks,
+        stubs: defaultStubs
+      }
     })
   }
 }

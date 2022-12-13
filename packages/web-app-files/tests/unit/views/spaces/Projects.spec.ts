@@ -1,13 +1,10 @@
-import { mount } from '@vue/test-utils'
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import Vuex from 'vuex'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 describe('Projects view', () => {
   it('appBar always present', () => {
@@ -65,16 +62,16 @@ function getMountedWrapper({ mocks = {}, spaces = [] } = {}) {
   }
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
-  const localVue = defaultLocalVue({ compositionApi: true })
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(Projects, {
-      localVue,
-      mocks: defaultMocks,
-      store,
-      stubs: { ...defaultStubs, 'space-context-actions': true }
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultMocks,
+        stubs: { ...defaultStubs, 'space-context-actions': true }
+      }
     })
   }
 }
