@@ -37,6 +37,7 @@
       <div v-if="showShareToggle" class="oc-flex oc-flex-center">
         <oc-button
           appearance="raw"
+          class="toggle-shares-list-btn"
           @click="toggleShareesListCollapsed"
           v-text="collapseButtonTitle"
         />

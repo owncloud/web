@@ -6,13 +6,12 @@ import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
 import { useDriveResolver } from 'web-pkg/src/composables'
-import { spaces } from 'web-app-files/tests/__fixtures__'
 import { computed, ref } from '@vue/composition-api'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import { locationPublicUpload } from 'web-app-files/src/router/public'
-import { PublicSpaceResource } from 'web-client/src/helpers'
+import { PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 
 jest.mock('web-pkg/src/composables/driveResolver')
@@ -24,13 +23,15 @@ describe('DriveResolver view', () => {
   })
   it('renders the "generic-trash"-component when on a trash route', () => {
     const { wrapper } = getMountedWrapper({
-      space: spaces[0],
+      space: mockDeep<SpaceResource>({ driveType: 'project' }),
       currentRouteName: 'files-trash-generic'
     })
     expect(wrapper.find('generic-trash-stub').exists()).toBeTruthy()
   })
   it('renders the "generic-space"-component when a space is given', () => {
-    const { wrapper } = getMountedWrapper({ space: spaces[0] })
+    const { wrapper } = getMountedWrapper({
+      space: mockDeep<SpaceResource>({ driveType: 'project' })
+    })
     expect(wrapper.find('generic-space-stub').exists()).toBeTruthy()
   })
   it('redirects to the public drop page in a public context with "upload-only"-permissions', async () => {

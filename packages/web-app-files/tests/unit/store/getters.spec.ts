@@ -1,11 +1,13 @@
 import getters from 'web-app-files/src/store/getters'
-import FixtureFiles from '@/__fixtures__/files'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
 
 let state
+const mockedFiles = [mockDeep<Resource>(), mockDeep<Resource>(), mockDeep<Resource>()]
 describe('Getters', () => {
   beforeEach(() => {
     state = {
-      files: FixtureFiles['/'],
+      files: mockedFiles,
       searchTermGlobal: '',
       areHiddenFilesShown: true
     }
@@ -23,7 +25,7 @@ describe('Getters', () => {
       const { activeFiles, filesAll } = getters
       const result = activeFiles(state, { filesAll: filesAll(state) })
 
-      expect(result.length).toEqual(5)
+      expect(result.length).toEqual(mockedFiles.length)
     })
   })
 })

@@ -5,7 +5,8 @@ export const runtimeModuleMockOptions = {
       spaces: {
         namespaced: true,
         getters: {
-          spaces: jest.fn(() => [])
+          spaces: jest.fn(() => []),
+          spaceMembers: jest.fn(() => [])
         },
         mutations: {
           UPDATE_SPACE_FIELD: jest.fn(),
@@ -13,6 +14,8 @@ export const runtimeModuleMockOptions = {
         },
         actions: {
           loadSpaceMembers: jest.fn(),
+          changeSpaceMember: jest.fn(),
+          deleteSpaceMember: jest.fn(),
           reloadProjectSpaces: jest.fn()
         }
       }

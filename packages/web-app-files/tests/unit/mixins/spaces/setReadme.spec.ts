@@ -2,27 +2,32 @@ import Vuex from 'vuex'
 import { createStore } from 'vuex-extensions'
 import { mount, createLocalVue } from '@vue/test-utils'
 import setReadme from 'web-app-files/src/mixins/spaces/actions/setReadme.js'
-import { createLocationSpaces } from '../../../../src/router'
-// eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
 import { buildSpace } from 'web-client/src/helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('setReadme', () => {
   const Component = {
-    render() {},
+    template: '<div></div>',
     mixins: [setReadme]
   }
 
-  function getWrapper(resolveGetFileContents = true, space) {
+  function getWrapper(resolveGetFileContents = true, space = undefined) {
+    const clientMock = mockDeep<OwnCloudSdk>()
+    const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
     return mount(Component, {
       localVue,
       mocks: {
+        ...defaultMocks,
         $client: {
-          ...sdkMock,
+          ...clientMock,
           files: {
-            ...sdkMock.files,
+            ...clientMock.files,
             getFileContents: jest.fn().mockImplementation(() => {
               if (resolveGetFileContents) {
                 return Promise.resolve('readme')
@@ -34,61 +39,13 @@ describe('setReadme', () => {
               .mockImplementation(() => Promise.resolve({ ETag: '60c7243c2e7f1' }))
           }
         },
-        $route: {
-          params: { storageId: 1 }
-        },
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-generic'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        },
-        $gettext: jest.fn(),
         space
       },
-      provide: {
-        currentSpace: {
-          value: space
-        }
-      },
       store: createStore(Vuex.Store, {
-        actions: {
-          createModal: jest.fn(),
-          hideModal: jest.fn(),
-          showMessage: jest.fn(),
-          setModalInputErrorMessage: jest.fn()
-        },
-        getters: {
-          configuration: () => ({
-            server: 'https://example.com'
-          })
-        },
+        ...defaultStoreMockOptions,
         modules: {
-          user: {
-            state: {
-              id: 'alice',
-              uuid: 1
-            }
-          },
-          Files: {
-            namespaced: true,
-            state: {
-              currentFolder: {
-                id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22'
-              }
-            }
-          },
-          runtime: {
-            namespaced: true,
-            modules: {
-              spaces: {
-                namespaced: true,
-                mutations: {
-                  UPDATE_SPACE_FIELD: jest.fn()
-                }
-              }
-            }
-          }
+          ...defaultStoreMockOptions.modules,
+          user: { state: { uuid: 1 } }
         }
       })
     })
@@ -158,7 +115,7 @@ describe('setReadme', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const wrapper = getWrapper(false, { id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({

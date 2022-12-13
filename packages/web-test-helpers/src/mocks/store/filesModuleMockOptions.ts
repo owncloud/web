@@ -1,11 +1,16 @@
 export const filesModuleMockOptions = {
   Files: {
     namespaced: true,
+    state: {
+      sharesTree: {}
+    },
     getters: {
       currentFolder: jest.fn(),
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
       highlightedFile: jest.fn(),
+      currentFileOutgoingCollaborators: jest.fn(() => []),
+      indirectOutgoingShares: jest.fn(() => []),
       clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn()
     },
@@ -20,6 +25,8 @@ export const filesModuleMockOptions = {
       SET_CURRENT_FOLDER: jest.fn(),
       LOAD_FILES: jest.fn(),
       UPDATE_RESOURCE_FIELD: jest.fn(),
+      REMOVE_FILE: jest.fn(),
+      REMOVE_FILES: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {
@@ -27,7 +34,11 @@ export const filesModuleMockOptions = {
       pasteSelectedFiles: jest.fn(),
       clearClipboardFiles: jest.fn(),
       loadIndicators: jest.fn(),
-      loadSharesTree: jest.fn()
+      deleteShare: jest.fn(),
+      clearTrashBin: jest.fn(),
+      removeFilesFromTrashbin: jest.fn(),
+      loadSharesTree: jest.fn(),
+      changeShare: jest.fn()
     }
   }
 }

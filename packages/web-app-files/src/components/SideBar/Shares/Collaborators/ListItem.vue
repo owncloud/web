@@ -164,10 +164,6 @@ export default defineComponent({
       return extractDomSelector(this.share.id)
     },
 
-    isGroup() {
-      return this.shareType === ShareTypes.group
-    },
-
     isUser() {
       return this.shareType === ShareTypes.user
     },

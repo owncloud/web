@@ -1,10 +1,12 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import ReadmeContentModal from 'web-app-files/src/components/Spaces/ReadmeContentModal.vue'
-import stubs from 'tests/unit/stubs'
-// eslint-disable-next-line jest/no-mocks-import
-import sdkMock from '@/__mocks__/sdk'
 import { createStore } from 'vuex-extensions'
+import { mockDeep } from 'jest-mock-extended'
+import { OwnCloudSdk } from 'web-client/src/types'
+import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -22,7 +24,7 @@ describe('ReadmeContentModal', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const wrapper = getWrapper(false)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editReadme()
@@ -33,13 +35,15 @@ describe('ReadmeContentModal', () => {
 })
 
 function getWrapper(resolvePutFileContents = true) {
+  const clientMock = mockDeep<OwnCloudSdk>()
   return mount(ReadmeContentModal, {
     localVue,
     mocks: {
+      ...defaultComponentMocks(),
       $client: {
-        ...sdkMock,
+        ...clientMock,
         files: {
-          ...sdkMock.files,
+          ...clientMock.files,
           putFileContents: jest.fn().mockImplementation(() => {
             if (resolvePutFileContents) {
               return Promise.resolve('readme')
@@ -50,28 +54,9 @@ function getWrapper(resolvePutFileContents = true) {
             return Promise.resolve('readme')
           })
         }
-      },
-      $gettext: jest.fn(),
-      $gettextInterpolate: jest.fn()
-    },
-    store: createStore(Vuex.Store, {
-      actions: {
-        showMessage: jest.fn()
-      },
-      getters: {
-        configuration: () => ({
-          server: 'https://example.com'
-        })
-      },
-      modules: {
-        Files: {
-          namespaced: true,
-          mutations: {
-            UPDATE_RESOURCE_FIELD: jest.fn()
-          }
-        }
       }
-    }),
+    },
+    store: createStore(Vuex.Store, defaultStoreMockOptions),
     propsData: {
       cancel: jest.fn(),
       space: {
@@ -82,23 +67,6 @@ function getWrapper(resolvePutFileContents = true) {
         }
       }
     },
-    modules: {
-      Files: {
-        namespaced: true,
-        mutations: {
-          UPDATE_RESOURCE_FIELD: jest.fn()
-        },
-        state: {
-          currentFolder: {
-            id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
-            spaceReadmeData: {
-              webDavUrl:
-                'https://localhost:9200/dav/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/readme.md'
-            }
-          }
-        }
-      }
-    },
-    stubs: { ...stubs, portal: true, 'oc-modal': true }
+    stubs: { ...defaultStubs, portal: true, 'oc-modal': true }
   })
 }
