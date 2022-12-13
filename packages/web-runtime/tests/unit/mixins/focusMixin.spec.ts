@@ -1,26 +1,27 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
 import focusMixin from '../../../src/mixins/focusMixin'
+import { defineComponent } from '@vue/composition-api'
+import { mount } from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.mixin(focusMixin)
-const wrapper = shallowMount(
-  {
-    name: 'dummy',
-    // language=HTML
-    template: `
+const Component = defineComponent({
+  name: 'DummyComponent',
+  mixins: [focusMixin],
+  template: `
           <ul>
             <li v-for="index in 10" :key="index">
               <a v-bind:id="'item-' + index" tabindex="0">{{index}}</a>
             </li>
           </ul>
         `
-  },
-  {
-    localVue,
-    attachTo: document.body
+})
+
+function getWrapper() {
+  return {
+    wrapper: mount(Component, { attachTo: document.body })
   }
-)
-const wrapperComponent = wrapper.findComponent({ name: 'dummy' })
+}
+
+const { wrapper } = getWrapper()
+const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
 const item1 = wrapper.get('#item-1')
 const item2 = wrapper.get('#item-2')
 const item3 = wrapper.get('#item-3')

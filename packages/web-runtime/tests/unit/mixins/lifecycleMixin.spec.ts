@@ -1,24 +1,21 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
 import lifecycleMixin from '../../../src/mixins/lifecycleMixin'
+import { mount } from 'web-test-helpers'
+import { defineComponent } from '@vue/composition-api'
 
-const localVue = createLocalVue()
-localVue.mixin(lifecycleMixin)
-const wrapper = shallowMount(
-  {
-    name: 'dummy',
-    data: () => ({
-      id: 'dummy'
-    }),
-    template: '<div v-bind:id="id">{{id}}</div>'
-  },
-  {
-    localVue
-  }
-)
-const wrapperComponent = wrapper.findComponent({ name: 'dummy' })
+const Component = defineComponent({
+  name: 'DummyComponent',
+  mixins: [lifecycleMixin],
+  data: () => ({
+    id: 'dummy'
+  }),
+  template: '<div v-bind:id="id">{{id}}</div>'
+})
 
-describe('lifecycleMixin', () => {
+describe('livecycleMixin', () => {
   it('handles mounted', async () => {
+    const { wrapper } = getWrapper()
+    const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
+
     await wrapper.vm.$nextTick()
     const event = 'mounted'
     const [emittedComponent, emittedEvent] = wrapper.emitted(event)[0]
@@ -27,6 +24,9 @@ describe('lifecycleMixin', () => {
   })
 
   it('handles updated', async () => {
+    const { wrapper } = getWrapper()
+    const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
+
     const event = 'updated'
     wrapperComponent.vm.$data.id = event
     await wrapper.vm.$nextTick()
@@ -36,6 +36,9 @@ describe('lifecycleMixin', () => {
   })
 
   it('handles beforeDestroy', async () => {
+    const { wrapper } = getWrapper()
+    const wrapperComponent = wrapper.findComponent({ name: 'DummyComponent' })
+
     const event = 'beforeDestroy'
     wrapperComponent.destroy()
     await wrapper.vm.$nextTick()
@@ -44,3 +47,9 @@ describe('lifecycleMixin', () => {
     expect(emittedEvent).toBe(event)
   })
 })
+
+function getWrapper() {
+  return {
+    wrapper: mount(Component, {})
+  }
+}
