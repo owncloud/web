@@ -285,7 +285,6 @@ importers:
       vue-resize: ^1.0.1
       vue-router: 3.6.5
       vuex: ^3.6.2
-      vuex-extensions: ^1.1.5
       web-app-search: workspace:*
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
@@ -312,7 +311,6 @@ importers:
       vue-resize: 1.0.1_vue@2.6.14
       vue-router: 3.6.5_vue@2.6.14
       vuex: 3.6.2_vue@2.6.14
-      vuex-extensions: 1.1.5
       web-app-search: link:../web-app-search
       web-client: link:../web-client
       web-pkg: link:../web-pkg
@@ -352,8 +350,6 @@ importers:
       mark.js: ^8.11.1
       vue-async-computed: ^3.9.0
       vue-gettext: ^2.1.5
-      vuex: ^3.6.2
-      vuex-extensions: ^1.1.5
       web-app-files: workspace:*
       web-pkg: npm:@ownclouders/web-pkg
     dependencies:
@@ -362,8 +358,6 @@ importers:
       mark.js: 8.11.1
       vue-async-computed: 3.9.0_vue@2.6.14
       vue-gettext: 2.1.12
-      vuex: 3.6.2_vue@2.6.14
-      vuex-extensions: 1.1.5
       web-app-files: link:../web-app-files
       web-pkg: link:../web-pkg
 
