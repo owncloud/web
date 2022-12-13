@@ -1,7 +1,6 @@
-import { shallowMount } from '@vue/test-utils'
 import SkipTo from 'web-runtime/src/components/SkipTo.vue'
-
-document.getElementById = jest.fn(() => ({
+import { shallowMount } from 'web-test-helpers'
+;(document as any).getElementById = jest.fn(() => ({
   setAttribute: jest.fn(),
   focus: jest.fn(),
   scrollIntoView: jest.fn()
@@ -16,12 +15,12 @@ describe('SkipTo component', () => {
     jest.clearAllMocks()
   })
 
-  const spySkipToTarget = jest.spyOn(SkipTo.methods, 'skipToTarget')
+  const spySkipToTarget = jest.spyOn((SkipTo as any).methods, 'skipToTarget')
 
   let wrapper
   let skipButton
   beforeEach(() => {
-    wrapper = getShallowWrapper()
+    wrapper = getShallowWrapper().wrapper
     skipButton = wrapper.find(selectors.skipButton)
   })
 
@@ -36,12 +35,14 @@ describe('SkipTo component', () => {
 })
 
 function getShallowWrapper() {
-  return shallowMount(SkipTo, {
-    propsData: {
-      target: ''
-    },
-    slots: {
-      default: 'Skip to main'
-    }
-  })
+  return {
+    wrapper: shallowMount(SkipTo, {
+      props: {
+        target: ''
+      },
+      slots: {
+        default: 'Skip to main'
+      }
+    })
+  }
 }

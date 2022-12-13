@@ -1,17 +1,6 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetText from 'vue-gettext'
-
 import MessageBar from 'web-runtime/src/components/MessageBar.vue'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetText, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const messages = [
   {
@@ -57,15 +46,15 @@ const selectors = {
 }
 
 describe('MessageBar component', () => {
-  const spyDeleteMessage = jest.spyOn(MessageBar.methods, 'deleteMessage')
-  const spyOcMessagesLimited = jest.spyOn(MessageBar.computed, '$_ocMessages_limited')
+  const spyDeleteMessage = jest.spyOn((MessageBar as any).methods, 'deleteMessage')
+  const spyOcMessagesLimited = jest.spyOn((MessageBar as any).computed, '$_ocMessages_limited')
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
   describe('when there is an active message', () => {
-    const wrapper = getShallowWrapper([messages[0]])
+    const { wrapper } = getShallowWrapper([messages[0]])
     const notificationMessage = wrapper.find(selectors.notificationMessage)
 
     it('should set props in oc-notification-message component', () => {
@@ -87,7 +76,7 @@ describe('MessageBar component', () => {
 
   describe('when there are more than five active messages', () => {
     it('should return only the first five messages', () => {
-      const wrapper = getShallowWrapper(messages)
+      const { wrapper } = getShallowWrapper(messages)
 
       expect(spyOcMessagesLimited).toHaveBeenCalledTimes(1)
       expect(wrapper.vm.$_ocMessages_limited).toHaveLength(5)
@@ -96,24 +85,21 @@ describe('MessageBar component', () => {
 })
 
 function getShallowWrapper(activeMessages = []) {
-  return shallowMount(MessageBar, {
-    localVue,
-    propsData: {
-      activeMessages
-    },
-    store: new Vuex.Store({
-      getters: {
-        configuration: () => ({
-          options: {
-            topCenterNotifications: false
-          }
-        })
-      }
-    }),
-    stubs: {
-      'oc-icon': true,
-      'oc-notifications': true,
-      'oc-notification-message': true
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.configuration.mockImplementation(() => ({
+    options: {
+      topCenterNotifications: false
     }
-  })
+  }))
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(MessageBar, {
+      props: {
+        activeMessages
+      },
+      global: {
+        plugins: [...defaultPlugins(), store]
+      }
+    })
+  }
 }

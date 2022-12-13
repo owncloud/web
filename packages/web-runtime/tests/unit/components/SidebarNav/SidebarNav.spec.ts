@@ -1,11 +1,7 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-
 import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
-
 import stubs from '../../../../../../tests/unit/stubs'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -13,16 +9,12 @@ jest.mock('uuid', () => ({
   }
 }))
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-
 const slots = {
   bottom: '<span class="footer">Footer</span>'
 }
 
 describe('OcSidebarNav', () => {
-  const wrapper = getWrapper()
+  const { wrapper } = getWrapper()
 
   it('displays a bottom slot if given', () => {
     expect(wrapper.findAll('.footer').length).toBe(1)
@@ -46,36 +38,41 @@ describe('OcSidebarNav', () => {
 })
 
 function getWrapper() {
-  return mount(SidebarNav, {
-    store: new Vuex.Store({
-      state: {
-        navigation: {
-          closed: false
-        }
+  const storeOptions = {
+    state: {
+      navigation: {
+        closed: false
+      }
+    },
+    mutations: {
+      SET_CLOSED(state, value) {
+        state.navigation.closed = value
+      }
+    },
+    actions: {
+      openNavigation({ commit }) {
+        commit('SET_CLOSED', false)
       },
-      mutations: {
-        SET_CLOSED(state, value) {
-          state.navigation.closed = value
-        }
+      closeNavigation({ commit }) {
+        commit('SET_CLOSED', true)
+      }
+    }
+  }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(SidebarNav, {
+      slots,
+      props: {
+        navItems: sidebarNavItemFixtures
       },
-      actions: {
-        openNavigation({ commit }) {
-          commit('SET_CLOSED', false)
-        },
-        closeNavigation({ commit }) {
-          commit('SET_CLOSED', true)
+      global: {
+        plugins: [...defaultPlugins(), store],
+        stubs: {
+          ...stubs,
+          'sidebar-nav-item': true,
+          'oc-button': false
         }
       }
-    }),
-    localVue,
-    stubs: {
-      ...stubs,
-      'sidebar-nav-item': true,
-      'oc-button': false
-    },
-    slots,
-    propsData: {
-      navItems: sidebarNavItemFixtures
-    }
-  })
+    })
+  }
 }

@@ -1,10 +1,7 @@
-import { shallowMount } from '@vue/test-utils'
 import UploadInfo from '../../../src/components/UploadInfo.vue'
-import Vuex from 'vuex'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const selectors = {
   overlay: '#upload-info',
@@ -229,16 +226,11 @@ function getShallowWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  const localVue = defaultLocalVue()
-  const store = createStore(Vuex.Store, storeOptions)
-
+  const store = createStore(storeOptions)
   return {
     mocks,
     storeOptions,
     wrapper: shallowMount(UploadInfo, {
-      localVue,
-      store,
-      mocks,
       data() {
         return {
           showInfo,
@@ -252,6 +244,10 @@ function getShallowWrapper({
           inPreparation,
           inFinalization
         }
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
       }
     })
   }
