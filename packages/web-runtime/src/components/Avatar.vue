@@ -16,7 +16,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { v4 as uuidV4 } from 'uuid'
 
 export default {
   name: 'Avatar',
@@ -88,20 +87,16 @@ export default {
         return
       }
       const accessToken = this.$store.getters['runtime/auth/accessToken']
-      const headers = new Headers()
       const instance = this.configuration.server || window.location.origin
       const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
-      headers.append('Authorization', 'Bearer ' + accessToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-      headers.append('X-Request-ID', uuidV4())
-      fetch(url, { headers })
+      this.$clientService
+        .httpAuthenticated(accessToken)
+        .get(url, { responseType: 'blob' })
         .then((response) => {
-          if (response.ok) {
-            return response.blob()
+          if (response.status === 200) {
+            return response.data
           }
-          if (response.status !== 404) {
-            throw new Error(`Unexpected status code ${response.status}`)
-          }
+          throw new Error(`Unexpected status code ${response.status}`)
         })
         .then((blob) => {
           this.loading = false

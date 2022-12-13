@@ -1,0 +1,121 @@
+import Avatar from 'web-runtime/src/components/Avatar.vue'
+import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { HttpClient } from 'web-pkg'
+import { AxiosResponse } from 'axios'
+import { nextTick } from '@vue/composition-api'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+
+const propsData = {
+  userName: 'admin',
+  userid: 'admin',
+  width: 24
+}
+
+const ocSpinner = 'oc-spinner-stub'
+const ocAvatar = 'oc-avatar-stub'
+
+describe('Avatar component', () => {
+  window.URL.createObjectURL = jest.fn()
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should set user when the component is mounted', () => {
+    const spySetUser = jest.spyOn((Avatar as any).methods, 'setUser')
+    getShallowWrapper()
+    expect(spySetUser).toHaveBeenCalledTimes(1)
+    expect(spySetUser).toHaveBeenCalledWith(propsData.userid)
+  })
+
+  describe('when the component is still loading', () => {
+    it('should render oc-spinner but not oc-avatar', () => {
+      const { wrapper } = getShallowWrapper(true)
+      const spinner = wrapper.find(ocSpinner)
+      const avatar = wrapper.find(ocAvatar)
+
+      expect(avatar.exists()).toBeFalsy()
+      expect(spinner.exists()).toBeTruthy()
+      expect(spinner.attributes().style).toEqual(
+        `width: ${propsData.width}px; height: ${propsData.width}px;`
+      )
+    })
+  })
+
+  describe('when the component is not loading anymore', () => {
+    it('should render oc-avatar but not oc-spinner', () => {
+      const { wrapper } = getShallowWrapper()
+      const spinner = wrapper.find(ocSpinner)
+      const avatar = wrapper.find(ocAvatar)
+
+      expect(spinner.exists()).toBeFalsy()
+      expect(avatar.exists()).toBeTruthy()
+    })
+    it('should set props on oc-avatar component', () => {
+      const { wrapper } = getShallowWrapper()
+      const avatar = wrapper.find(ocAvatar)
+
+      expect(avatar.props().width).toEqual(propsData.width)
+      expect(avatar.props().userName).toEqual(propsData.userName)
+    })
+
+    describe('when an avatar is not found', () => {
+      it('should set empty string to src prop on oc-avatar component', async () => {
+        const { wrapper } = getShallowWrapper()
+        const avatar = wrapper.find(ocAvatar)
+        expect(avatar.props().src).toEqual('')
+      })
+    })
+
+    describe('when an avatar is found', () => {
+      const blob = 'blob:https://web.org/6fe8f675-6727'
+      it('should set blob as src prop on oc-avatar component', async () => {
+        global.URL.createObjectURL = jest.fn(() => blob)
+        const clientMock = mockDeep<HttpClient>()
+        clientMock.get.mockImplementation(async () =>
+          mockDeep<AxiosResponse>({
+            status: 200,
+            data: blob
+          })
+        )
+        const { wrapper } = getShallowWrapper(false, clientMock)
+        await nextTick()
+        await nextTick()
+        const avatar = wrapper.find(ocAvatar)
+        expect(avatar.props().src).toEqual(blob)
+      })
+    })
+  })
+})
+
+function getShallowWrapper(loading = false, clientMock = undefined) {
+  const mocks = { ...defaultComponentMocks() }
+  if (!clientMock) {
+    clientMock = mockDeep<HttpClient>()
+    clientMock.get.mockImplementation(async () => ({ status: 200 }))
+  }
+  mocks.$clientService.httpAuthenticated.mockImplementation(() => clientMock)
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files_sharing: {
+      user: {
+        profile_picture: true
+      }
+    }
+  }))
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(Avatar, {
+      props: propsData,
+      data() {
+        return {
+          loading
+        }
+      },
+      global: {
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
+    })
+  }
+}
