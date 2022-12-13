@@ -8,9 +8,6 @@ Level-3 headings should be used for the references to the relevant issues. Inclu
 
 Other free text and markdown formatting can be used elsewhere in the document if needed. But if you want to explain something about the issue, then please post that in the issue itself.
 
-### [user session of a blocked user is not cleared properly](https://github.com/owncloud/web/issues/4795)
--   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L20)
-
 ### [Comments in sidebar](https://github.com/owncloud/web/issues/1158)
 -   [webUIFilesDetails/fileDetails.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L90)
 -   [webUIFilesDetails/fileDetails.feature:106](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L106)
