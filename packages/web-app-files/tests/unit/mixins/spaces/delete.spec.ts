@@ -10,7 +10,7 @@ import {
 import { mockDeep } from 'jest-mock-extended'
 import { clientService } from 'web-pkg'
 import { Graph } from 'web-client'
-import {defaultStoreMockOptions} from "web-test-helpers/src/mocks/store/defaultStoreMockOptions";
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const Component = {
   template: '<div></div>',
