@@ -2,6 +2,12 @@ export const runtimeModuleMockOptions = {
   runtime: {
     namespaced: true,
     modules: {
+      auth: {
+        namespaced: true,
+        getters: {
+          isUserContextReady: jest.fn(() => true)
+        }
+      },
       spaces: {
         namespaced: true,
         getters: {

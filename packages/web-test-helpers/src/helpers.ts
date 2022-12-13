@@ -50,6 +50,10 @@ export const mount = (component: ComponentType, options: CompatMountOptions) => 
     localVue.component(name, component)
   }
 
+  for (const [name, component] of Object.entries(options?.global?.components || {})) {
+    localVue.component(name, component)
+  }
+
   return _mount(component, {
     localVue,
     ...(options?.shallow && { shouldProxy: options.shallow }),

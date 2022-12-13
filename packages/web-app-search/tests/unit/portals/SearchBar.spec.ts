@@ -1,20 +1,9 @@
-import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
-import DesignSystem from 'owncloud-design-system'
 import SearchBar from '../../../src/portals/SearchBar.vue'
-import AsyncComputed from 'vue-async-computed'
 import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
-import CompositionAPI from '@vue/composition-api'
-
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-localVue.use(AsyncComputed)
-localVue.use(Vuex)
-localVue.use(CompositionAPI)
-
-let wrapper: Wrapper<any>
+import { defineComponent } from '@vue/composition-api'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const providerFiles = {
   id: 'files',
@@ -23,7 +12,7 @@ const providerFiles = {
   previewSearch: {
     available: true,
     search: jest.fn(),
-    component: localVue.component('ProviderFilesPreview', {
+    component: defineComponent({
       render(createElement) {
         return createElement('div')
       }
@@ -39,7 +28,7 @@ const providerContacts = {
     available: true,
     search: jest.fn()
   },
-  component: localVue.component('ProviderContactsPreview', {
+  component: defineComponent({
     render(createElement) {
       return createElement('div')
     }
@@ -87,6 +76,7 @@ beforeEach(() => {
   })
 })
 
+let wrapper
 afterEach(() => {
   wrapper.destroy()
 })
@@ -94,20 +84,20 @@ afterEach(() => {
 describe('Search Bar portal component', () => {
   jest.spyOn(console, 'warn').mockImplementation(undefined)
   test('does not render a search field if no availableProviders given', () => {
-    wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } })
+    wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } }).wrapper
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
   test('does not render a search field if no user given', () => {
-    wrapper = getMountedWrapper({ isUserContextReady: false })
+    wrapper = getMountedWrapper({ isUserContextReady: false }).wrapper
     expect(wrapper.element.innerHTML).toBeFalsy()
   })
   test('updates the search term on input', () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('alice')
     expect(wrapper.vm.$data.term).toBe('alice')
   })
   test('shows message if no results are available', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     providerFiles.previewSearch.search.mockImplementationOnce(() => {
       return {
         values: []
@@ -123,13 +113,13 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find(selectors.noResults)).toBeTruthy()
   })
   test('displays all available providers', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(2)
   })
   test('only displays provider list item if search results are attached', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     providerContacts.previewSearch.search.mockImplementation(() => {
       return {
         values: []
@@ -140,7 +130,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(1)
   })
   test('displays the provider name in the provider list item', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     const providerDisplayNameItems = wrapper.findAll(selectors.providerDisplayName)
@@ -148,13 +138,13 @@ describe('Search Bar portal component', () => {
     expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
   })
   test('displays the more results link for the available providers', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(2)
   })
   test('hides options on preview item click', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
@@ -162,7 +152,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on key press enter', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
@@ -170,7 +160,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on key press escape', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
@@ -178,7 +168,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options on clear', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
@@ -186,7 +176,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('hides options if no search term is given', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
@@ -195,7 +185,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
   })
   test('resets search term on clear', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     await wrapper.find(selectors.searchInputClear).trigger('click')
@@ -210,21 +200,21 @@ describe('Search Bar portal component', () => {
           }
         }
       }
-    })
+    }).wrapper
 
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.$data.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
   test.skip('sets active preview item via keyboard navigation', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()
     wrapper.find(selectors.searchInput).trigger('keyup.down')
     wrapper.find(selectors.searchInput).trigger('keyup.down')
   })
   test('navigates to files-common-search route on key press enter if search term is given', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     const spyRouterPushStub = wrapper.vm.$router.push
     await flushPromises()
@@ -237,7 +227,7 @@ describe('Search Bar portal component', () => {
     )
   })
   test('does not navigate to files-common-search route on key press enter if no search term is given', async () => {
-    wrapper = getMountedWrapper()
+    wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('')
     const spyRouterPushStub = wrapper.vm.$router.push
     await flushPromises()
@@ -247,46 +237,43 @@ describe('Search Bar portal component', () => {
 })
 
 function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
-  return mount(SearchBar, {
-    localVue,
-    attachTo: document.body,
-    data: () => {
-      return {
-        providerStore: {
-          availableProviders: [providerFiles, providerContacts]
-        },
-        ...data
-      }
+  const localMocks = {
+    $gettextInterpolate: (text) => text,
+    $gettext: (text) => text,
+    $route: {
+      name: ''
     },
-    mocks: {
-      $gettextInterpolate: (text) => text,
-      $gettext: (text) => text,
-      $route: {
-        name: ''
+    $router: {
+      go: jest.fn(),
+      push: jest.fn()
+    },
+    ...mocks
+  }
+
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockImplementation(
+    () => isUserContextReady
+  )
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(SearchBar, {
+      attachTo: document.body,
+      data: () => {
+        return {
+          providerStore: {
+            availableProviders: [providerFiles, providerContacts]
+          },
+          ...data
+        }
       },
-      $router: {
-        go: jest.fn(),
-        push: jest.fn()
-      },
-      ...mocks
-    },
-    stubs: {
-      'router-link': true
-    },
-    store: createStore(Vuex.Store, {
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                isUserContextReady: () => isUserContextReady
-              }
-            }
-          }
+
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: localMocks,
+        stubs: {
+          'router-link': true
         }
       }
     })
-  })
+  }
 }
