@@ -1,0 +1,8 @@
+Enhancement: Add package to store POCs
+
+We've added a package to keep track of experimental features.
+It also adds a first experimental table component which supports grouping.
+
+https://github.com/owncloud/web/pull/6680
+https://github.com/owncloud/owncloud-design-system/pull/2048
+https://github.com/owncloud/owncloud-design-system/pull/1838

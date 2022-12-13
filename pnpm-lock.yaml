@@ -487,6 +487,7 @@ importers:
       web-app-search: workspace:*
       web-client: workspace:@ownclouders/web-client@*
       web-pkg: workspace:@ownclouders/web-pkg@*
+      web-pocs: workspace:*
       web-runtime: workspace:*
     dependencies:
       '@ownclouders/design-system': link:../design-system
@@ -509,6 +510,7 @@ importers:
       web-app-search: link:../web-app-search
       web-client: link:../web-client
       web-pkg: link:../web-pkg
+      web-pocs: link:../web-pocs
       web-runtime: link:../web-runtime
     devDependencies:
       '@jest/globals': 29.3.1
@@ -621,6 +623,9 @@ importers:
       vuex: 4.1.0_vue@3.2.45
       web-client: link:../web-client
       web-pkg: 'link:'
+
+  packages/web-pocs:
+    specifiers: {}
 
   packages/web-runtime:
     specifiers:
