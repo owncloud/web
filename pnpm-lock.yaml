@@ -87,7 +87,6 @@ importers:
       url-search-params-polyfill: 8.1.1
       vue: 2.6.14
       vue-template-compiler: 2.6.14
-      vuex-mock-store: 0.0.8
       wait-for-expect: 3.0.2
     dependencies:
       keycode: 2.2.1
@@ -174,7 +173,6 @@ importers:
       typescript: 4.8.4
       url-search-params-polyfill: 8.1.1
       vue-template-compiler: 2.6.14
-      vuex-mock-store: 0.0.8_@types+jest@27.5.2
       wait-for-expect: 3.0.2
     dependenciesMeta:
       '@playwright/test':
@@ -14899,15 +14897,6 @@ packages:
   /vuex-extensions/1.1.5:
     resolution: {integrity: sha512-1Jfi8o6coel3jj20k6SaEtinddzS0jEG41lyyWmodAorXoN85AzuYa4oou71e99B6V+Y+gSVUysa3yHVhWpTrQ==}
     dev: false
-
-  /vuex-mock-store/0.0.8_@types+jest@27.5.2:
-    resolution: {integrity: sha512-pRCNdUuS4KRtycDuJKLNFqSJB8vb2XeVilM+QUVPM5Tp6HKFSdAVOmpbwWoMbEnPnJEypkb7s6Ee4fFxp1b32g==}
-    peerDependencies:
-      '@types/jest': '>=24.0.0'
-    dependencies:
-      '@types/jest': 27.5.2
-      lodash.clonedeep: 4.5.0
-    dev: true
 
   /vuex-router-sync/5.0.0_xdhba6eyhs52juodf6fywqi4xi:
     resolution: {integrity: sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==}
