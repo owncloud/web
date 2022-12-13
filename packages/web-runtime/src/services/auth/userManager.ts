@@ -200,6 +200,7 @@ export class UserManager extends OidcUserManager {
       displayname: user.displayname || login['display-name'],
       email: login?.email || user?.email || '',
       groups: graphUser?.data?.memberOf || userGroups || [],
+      isLightweight: ['federated', 'lightweight'].includes(user['user-type']),
       role,
       language: login?.language
     })

@@ -16,6 +16,7 @@ import fileSideBars from './fileSideBars'
 import { buildRoutes } from './router'
 import get from 'lodash-es/get'
 
+
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
 
@@ -50,11 +51,15 @@ const navItems = [
       path: `/${appInfo.id}/favorites`
     },
     enabled(capabilities) {
-      return capabilities.files && capabilities.files.favorites
+      return (
+        !(window as any).__$store.getters.user.isLightweight && capabilities.files && capabilities.files.favorites
+      )
     }
   },
   {
-    name: $gettext('Shares'),
+    name(capabilities) {
+      return (window as any).__$store.getters.user.isLightweight ? $gettext('Shared with me') : $gettext('Shares')
+    },
     icon: 'share-forward',
     route: {
       path: `/${appInfo.id}/shares`
@@ -82,7 +87,11 @@ const navItems = [
       path: `/${appInfo.id}/trash/eos`
     },
     enabled(capabilities) {
-      return capabilities.dav && capabilities.dav.trashbin === '1.0'
+      return (
+        !(window as any).__$store.getters.user.isLightweight &&
+        capabilities.dav &&
+        capabilities.dav.trashbin === '1.0'
+      )
     }
   },
   {

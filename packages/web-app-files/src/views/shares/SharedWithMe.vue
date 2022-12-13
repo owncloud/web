@@ -2,7 +2,7 @@
   <div class="oc-flex">
     <files-view-wrapper class="oc-flex-column">
       <app-bar
-        :has-shares-navigation="true"
+        :has-shares-navigation="!user.isLightweight"
         :has-bulk-actions="true"
         :side-bar-open="sideBarOpen"
       />
@@ -222,6 +222,7 @@ export default defineComponent({
 
   computed: {
     ...mapGetters(['configuration']),
+    ...mapGetters(['user']),
 
     groupingSettings() {
       const that = this

@@ -49,7 +49,8 @@
     "web-runtime": "workspace:*",
     "webdav": "^4.10.0",
     "webfontloader": "^1.6.28",
-    "xml-js": "^1.6.11"
+    "xml-js": "^1.6.11",
+    "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
     "@jest/globals": "29.3.1",
