@@ -59,7 +59,7 @@
           :resource="item"
           :is-path-displayed="getArePathsDisplayed(item)"
           :parent-folder-name-default="getDefaultParentFolderName(item)"
-          :is-thumbnail-displayed="areThumbnailsDisplayed"
+          :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
           :folder-link="folderLink(item)"
@@ -190,6 +190,7 @@ import Rename from '../../mixins/actions/rename'
 import { defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
 import { ClipboardActions } from '../../helpers/clipboardActions'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { formatDateFromJSDate, formatRelativeDateFromJSDate } from 'web-pkg/src/helpers'
@@ -562,6 +563,9 @@ export default defineComponent({
         return false
       }
       return this.clipboardResources.some((r) => r.id === resource.id)
+    },
+    shouldDisplayThumbnails(item) {
+      return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
     isLatestSelectedItem(item) {
       return item.id === this.latestSelectedId

@@ -30,6 +30,7 @@ Summary
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
+* Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 
 Details
@@ -204,6 +205,12 @@ Details
 
    https://github.com/owncloud/web/issues/7944
    https://github.com/owncloud/web/pull/8055
+
+* Enhancement - Show text file icon for empty text files: [#8057](https://github.com/owncloud/web/pull/8057)
+
+   We've changed the thumbnail of almost empty text files to the regular text icon.
+
+   https://github.com/owncloud/web/pull/8057
 
 * Enhancement - Warn users when using unsupported browsers: [#7942](https://github.com/owncloud/web/pull/7942)
 

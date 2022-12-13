@@ -73,6 +73,7 @@ importers:
       qs: 6.11.0
       react: 17.0.2
       requirejs: 2.3.6
+      rollup-plugin-gzip: ^3.1.0
       rollup-plugin-node-polyfills: 0.2.1
       rollup-plugin-visualizer: 5.8.3
       ts-jest: 29.0.3
@@ -94,6 +95,7 @@ importers:
       caf: 15.0.1
       keycode: 2.2.1
       portal-vue: 2.1.7_vue@2.7.14
+      rollup-plugin-gzip: 3.1.0_rollup@3.7.0
       uuid: 9.0.0
       vite-plugin-static-copy: 0.12.0_vite@4.0.0
       vite-plugin-treat-umd-as-commonjs: 0.1.3_vite@4.0.0
@@ -113,7 +115,7 @@ importers:
       '@ownclouders/prettier-config': link:packages/prettier-config
       '@ownclouders/tsconfig': link:packages/tsconfig
       '@playwright/test': 1.28.1
-      '@rollup/plugin-inject': 5.0.2
+      '@rollup/plugin-inject': 5.0.2_rollup@3.7.0
       '@types/jest': 27.5.2
       '@types/jest-axe': 3.5.5
       '@types/lodash-es': 4.17.6
@@ -156,7 +158,7 @@ importers:
       react: 17.0.2
       requirejs: 2.3.6
       rollup-plugin-node-polyfills: 0.2.1
-      rollup-plugin-visualizer: 5.8.3
+      rollup-plugin-visualizer: 5.8.3_rollup@3.7.0
       ts-jest: 29.0.3_jav3n3okgvu6u2xhc6e4p2qzoi
       ts-node: 10.9.1_ktqh5g7uh373agvmqtg5sb4gve
       tslib: 2.4.1
@@ -5232,7 +5234,7 @@ packages:
   /@popperjs/core/2.11.5:
     resolution: {integrity: sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==}
 
-  /@rollup/plugin-inject/5.0.2:
+  /@rollup/plugin-inject/5.0.2_rollup@3.7.0:
     resolution: {integrity: sha512-zRthPC/sZ2OaQwPh2LvFn0A+3SyMAZR1Vqsp89mWkIuGXKswT8ty1JWj1pf7xdZvft4gHZaCuhdopuiCwjclWg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5241,9 +5243,10 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.0.2_rollup@3.7.0
       estree-walker: 2.0.2
       magic-string: 0.26.6
+      rollup: 3.7.0
     dev: true
 
   /@rollup/pluginutils/4.2.1:
@@ -5254,7 +5257,7 @@ packages:
       picomatch: 2.3.1
     dev: false
 
-  /@rollup/pluginutils/5.0.2:
+  /@rollup/pluginutils/5.0.2_rollup@3.7.0:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5266,6 +5269,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
+      rollup: 3.7.0
     dev: true
 
   /@sentry/browser/6.19.7:
@@ -8078,7 +8082,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -18429,15 +18433,6 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: true
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -19540,6 +19535,15 @@ packages:
       inherits: 2.0.4
     dev: true
 
+  /rollup-plugin-gzip/3.1.0_rollup@3.7.0:
+    resolution: {integrity: sha512-PFS9s6/w6dCra6/Z8PGD+ug3aaaqKLDCbr5y1Ek71Wd4rQSmMnOqCIIMgwbYxZ9A/gjP3pCN6rA4pAG47jxF0w==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      rollup: '>=2.0.0'
+    dependencies:
+      rollup: 3.7.0
+    dev: false
+
   /rollup-plugin-inject/3.0.2:
     resolution: {integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==}
     deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
@@ -19562,7 +19566,7 @@ packages:
       opener: 1.5.2
     dev: true
 
-  /rollup-plugin-visualizer/5.8.3:
+  /rollup-plugin-visualizer/5.8.3_rollup@3.7.0:
     resolution: {integrity: sha512-QGJk4Bqe4AOat5AjipOh8esZH1nck5X2KFpf4VytUdSUuuuSwvIQZjMGgjcxe/zXexltqaXp5Vx1V3LmnQH15Q==}
     engines: {node: '>=14'}
     hasBin: true
@@ -19573,6 +19577,7 @@ packages:
         optional: true
     dependencies:
       open: 8.4.0
+      rollup: 3.7.0
       source-map: 0.7.4
       yargs: 17.6.0
     dev: true

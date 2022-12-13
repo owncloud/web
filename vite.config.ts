@@ -5,6 +5,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
+import compression from 'rollup-plugin-gzip'
 
 import ejs from 'ejs'
 import { join } from 'path'
@@ -44,7 +45,7 @@ const input = readdirSync('packages').reduce(
   { 'index.html': 'index.html' }
 )
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const production = mode === 'production'
   const ocis = process.env.OCIS !== 'false'
   let config: UserConfigExport
@@ -170,24 +171,31 @@ export default defineConfig(({ mode }) => {
           }
         }),
         viteStaticCopy({
-          targets: [
-            ...['fonts', 'icons'].map((name) => ({
-              src: `packages/design-system/src/assets/${name}/*`,
-              dest: `${name}`
-            })),
-            {
-              src: `./packages/web-runtime/themes/*`,
-              dest: `themes`
-            },
-            {
-              src: `./config/vite_${configName}/*`,
-              dest: ``
-            },
-            {
-              src: 'node_modules/requirejs/require.js',
-              dest: 'js'
+          targets: (() => {
+            const targets = [
+              ...['fonts', 'icons'].map((name) => ({
+                src: `packages/design-system/src/assets/${name}/*`,
+                dest: `${name}`
+              })),
+              {
+                src: `./packages/web-runtime/themes/*`,
+                dest: `themes`
+              },
+              {
+                src: 'node_modules/requirejs/require.js',
+                dest: 'js'
+              }
+            ]
+
+            if (command === 'serve') {
+              targets.push({
+                src: `./config/vite_${configName}/*`,
+                dest: ``
+              })
             }
-          ]
+
+            return targets
+          })()
         }),
         {
           name: '@ownclouders/vite-plugin-docs',
@@ -258,6 +266,7 @@ export default defineConfig(({ mode }) => {
             }
           }
         },
+        compression(),
         process.env.REPORT !== 'true'
           ? null
           : visualizer({
