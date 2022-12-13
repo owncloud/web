@@ -76,12 +76,12 @@ export const shallowMount = (component: ComponentType, options: CompatMountOptio
 
 export const getComposableWrapper = (
   setup: SetupFunction<Data, Data>,
-  { mocks = undefined, store = undefined } = {}
+  { mocks = undefined, store = undefined, template = undefined } = {}
 ) => {
   return mount(
     defineComponent({
       setup,
-      template: '<div></div>'
+      template: template ? template : '<div></div>'
     }),
     {
       global: {
