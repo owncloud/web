@@ -1,8 +1,7 @@
 <template>
   <main>
     <div v-if="loading" class="oc-position-center">
-      <oc-spinner size="xlarge" />
-      <p v-translate class="oc-invisible">Loading media</p>
+      <oc-spinner :aria-label="$gettext('Loading media')" size="xlarge" />
     </div>
     <iframe
       v-else
