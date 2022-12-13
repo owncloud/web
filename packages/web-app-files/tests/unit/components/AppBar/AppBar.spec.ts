@@ -1,11 +1,9 @@
-import { shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
-const localVue = defaultLocalVue()
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"
 const contextMenuSlot = "<button class='context-menu-slot'>Click</button>"
@@ -32,29 +30,25 @@ window.ResizeObserver =
 describe('AppBar component', () => {
   describe('renders', () => {
     it('by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle', () => {
-      const store = createStore()
-      const wrapper = getShallowWrapper(store)
+      const { wrapper } = getShallowWrapper()
       expect(wrapper).toMatchSnapshot()
     })
     describe('breadcrumbs', () => {
       it('if given, by default without breadcrumbsContextActionsItems', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(store, {}, { breadcrumbs: breadcrumbItems })
+        const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: breadcrumbItems })
         expect(wrapper).toMatchSnapshot()
       })
       it('if given, with breadcrumbsContextActionsItems if allowed on last breadcrumb item', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(
-          store,
+        const { wrapper } = getShallowWrapper(
+          [],
           {},
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
         expect(wrapper).toMatchSnapshot()
       })
       it('if given, with content in the contextMenu slot', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(
-          store,
+        const { wrapper } = getShallowWrapper(
+          [],
           { contextMenu: contextMenuSlot },
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
@@ -63,38 +57,32 @@ describe('AppBar component', () => {
     })
     describe('bulkActions', () => {
       it('if enabled', () => {
-        const store = createStore({ selected: selectedFiles })
-        const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
+        const { wrapper } = getShallowWrapper(selectedFiles, {}, { hasBulkActions: true })
         expect(wrapper).toMatchSnapshot()
       })
       it('not if 1 file selected', () => {
-        const store = createStore({ selected: [selectedFiles[0]] })
-        const wrapper = getShallowWrapper(store, {}, { hasBulkActions: true })
+        const { wrapper } = getShallowWrapper([selectedFiles[0]], {}, { hasBulkActions: true })
         expect(wrapper).toMatchSnapshot()
       })
     })
     describe('sharesNavigation', () => {
       it('if enabled', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(store, {}, { hasSharesNavigation: true })
+        const { wrapper } = getShallowWrapper([], {}, { hasSharesNavigation: true })
         expect(wrapper).toMatchSnapshot()
       })
     })
     describe('viewoptions and sidebartoggle', () => {
       it('only viewoptions if sidebartoggle is disabled', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(store, {}, { hasSidebarToggle: false })
+        const { wrapper } = getShallowWrapper([], {}, { hasSidebarToggle: false })
         expect(wrapper).toMatchSnapshot()
       })
       it('only sidebartoggle if viewoptions is disabled', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(store, {}, { hasViewOptions: false })
+        const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: false })
         expect(wrapper).toMatchSnapshot()
       })
       it('neither if both are disabled', () => {
-        const store = createStore()
-        const wrapper = getShallowWrapper(
-          store,
+        const { wrapper } = getShallowWrapper(
+          [],
           {},
           { hasSidebarToggle: false, hasViewOptions: false }
         )
@@ -102,20 +90,18 @@ describe('AppBar component', () => {
       })
     })
     it('if given, with content in the actions slot', () => {
-      const store = createStore()
-      const wrapper = getShallowWrapper(store, { actions: actionSlot })
+      const { wrapper } = getShallowWrapper([], { actions: actionSlot })
       expect(wrapper).toMatchSnapshot()
     })
     it('if given, with content in the content slot', () => {
-      const store = createStore()
-      const wrapper = getShallowWrapper(store, { content: contentSlot })
+      const { wrapper } = getShallowWrapper([], { content: contentSlot })
       expect(wrapper).toMatchSnapshot()
     })
   })
 })
 
 function getShallowWrapper(
-  store,
+  selected = [],
   slots = {},
   props: { [key: string]: any } = {
     breadcrumbs: [],
@@ -125,43 +111,22 @@ function getShallowWrapper(
     hasViewOptions: true
   }
 ) {
-  return shallowMount(AppBar, {
-    localVue,
-    mocks: {
-      $route: {
-        meta: {
-          title: 'ExampleTitle'
-        }
-      },
-      $router: {
-        resolve: () => {
-          return { href: '' }
-        },
-        afterEach: jest.fn()
-      }
-    },
-    slots,
-    propsData: {
-      ...props
-    },
-    store
+  const mocks = defaultComponentMocks({
+    gettext: false,
+    currentRoute: { name: 'files-trash-generic' }
   })
-}
-
-function createStore(state = { selected: [] }) {
-  return new Vuex.Store({
-    modules: {
-      Files: {
-        namespaced: true,
-        state,
-        getters: {
-          selectedFiles: () => state.selected
-        },
-        mutations: {
-          SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
-          SET_FILE_EXTENSIONS_VISIBILITY: jest.fn()
-        }
+  mocks.$route.meta.title = 'ExampleTitle'
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.modules.Files.getters.selectedFiles.mockImplementation(() => selected)
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(AppBar, {
+      props: { ...props },
+      slots,
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
       }
-    }
-  })
+    })
+  }
 }
