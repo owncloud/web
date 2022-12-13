@@ -1,14 +1,9 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import deleteResources from 'web-app-files/src/mixins/deleteResources'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 const currentFolder = {
   id: 1,
@@ -53,17 +48,15 @@ function getWrapper(currentFolder, resourcesToDelete) {
   }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
 
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks,
     storeOptions,
     wrapper: mount(Component, {
-      localVue,
-      mocks,
-      store,
       data: () => {
         return { resourcesToDelete: resourcesToDelete }
-      }
+      },
+      global: { plugins: [...defaultPlugins(), store], mocks }
     })
   }
 }

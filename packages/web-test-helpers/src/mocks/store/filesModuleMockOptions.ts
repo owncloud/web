@@ -33,6 +33,7 @@ export const filesModuleMockOptions = {
       UPDATE_RESOURCE_FIELD: jest.fn(),
       REMOVE_FILE: jest.fn(),
       REMOVE_FILES: jest.fn(),
+      RESET_SELECTION: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn()
     },
     actions: {

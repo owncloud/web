@@ -1,27 +1,12 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from 'web-app-files/src/mixins/actions/delete.js'
-import {
-  createLocationShares,
-  createLocationSpaces,
-  createLocationTrash
-} from '../../../../src/router'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const Component = {
-  render() {},
+  template: '<div></div>',
   mixins: [Delete]
 }
-
-const store = new Vuex.Store({
-  getters: {
-    capabilities: () => {
-      return {}
-    }
-  }
-})
 
 describe('delete', () => {
   describe('computed property "$_delete_items"', () => {
@@ -35,7 +20,7 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const wrapper = getWrapper({ invalidLocation: inputData.invalidLocation })
+        const { wrapper } = getWrapper({ invalidLocation: inputData.invalidLocation })
         const resources = inputData.resources
         expect(wrapper.vm.$_delete_items[0].isEnabled({ resources })).toBe(inputData.expectedStatus)
       })
@@ -51,7 +36,7 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const wrapper = getWrapper({
+        const { wrapper } = getWrapper({
           deletePermanent: true,
           invalidLocation: inputData.invalidLocation
         })
@@ -63,21 +48,20 @@ describe('delete', () => {
 })
 
 function getWrapper({ deletePermanent = false, invalidLocation = false } = {}) {
-  return mount(Component, {
-    localVue,
-    store,
-    mocks: {
-      space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } },
-      $router: {
-        currentRoute: invalidLocation
-          ? createLocationShares('files-shares-via-link')
-          : deletePermanent
-          ? createLocationTrash('files-trash-generic')
-          : createLocationSpaces('files-spaces-generic'),
-        resolve: (r) => {
-          return { href: r.name }
-        }
-      }
-    }
-  })
+  const routeName = invalidLocation
+    ? 'files-shares-via-link'
+    : deletePermanent
+    ? 'files-trash-generic'
+    : 'files-spaces-generic'
+  const mocks = {
+    ...defaultComponentMocks({ currentRoute: { name: routeName } }),
+    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+  }
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(Component, {
+      global: { plugins: [...defaultPlugins(), store], mocks }
+    })
+  }
 }

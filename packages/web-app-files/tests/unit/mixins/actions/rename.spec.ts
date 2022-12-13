@@ -1,14 +1,9 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import rename from 'web-app-files/src/mixins/actions/rename'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 const currentFolder = {
   id: 1,
@@ -122,8 +117,7 @@ describe('rename', () => {
     })
 
     it('should handle errors properly', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { mocks, storeOptions, wrapper } = getWrapper()
       mocks.$clientService.webdav.moveFiles.mockRejectedValueOnce(new Error())
@@ -145,18 +139,13 @@ function getWrapper() {
     })
   }
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(Vuex.Store, storeOptions)
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
     mocks,
     storeOptions,
     wrapper: mount(Component, {
-      localVue,
-      mocks,
-      store
+      global: { plugins: [...defaultPlugins(), store], mocks }
     })
   }
 }
