@@ -30,6 +30,7 @@
       :sort-by="sortBy"
       :sort-dir="sortDir"
       @file-click="triggerDefaultAction"
+      :grouping-settings="groupingSettings"
       @row-mounted="rowMounted"
       @sort="sortHandler"
     >
@@ -181,6 +182,11 @@ export default defineComponent({
     fileListHeaderY: {
       type: Number,
       default: 0
+    },
+    groupingSettings: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   setup() {
