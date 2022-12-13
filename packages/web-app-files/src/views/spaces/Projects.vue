@@ -178,7 +178,7 @@ export default defineComponent({
       return this.$gettext('Show members')
     },
     hasCreatePermission() {
-      return true
+      return !this.user.isLightweight
     }
   },
   watch: {
