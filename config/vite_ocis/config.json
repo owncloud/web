@@ -14,7 +14,8 @@
     "pdf-viewer",
     "search",
     "external",
-    "user-management"
+    "user-management",
+    "draw-io"
   ],
   "external_apps": [
     {
