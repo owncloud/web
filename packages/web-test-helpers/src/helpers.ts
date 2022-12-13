@@ -91,3 +91,8 @@ export const getComposableWrapper = (
     }
   )
 }
+
+export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
+  defaultLocalVue()
+  return new Vuex.Store(storeOptions)
+}
