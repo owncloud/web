@@ -1,16 +1,10 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
-import DeleteGroupModal from '../../../../src/components/Groups/DeleteGroupModal'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-afterEach(() => jest.clearAllMocks())
+import DeleteGroupModal from '../../../../src/components/Groups/DeleteGroupModal.vue'
+import { shallowMount } from 'web-test-helpers'
 
 describe('DeleteGroupModal', () => {
   describe('computed method "title"', () => {
     it('should be singular if one group is given', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         propsData: {
           groups: [{ id: '1' }]
         }
@@ -18,7 +12,7 @@ describe('DeleteGroupModal', () => {
       expect(wrapper.vm.title).toEqual('Delete group %{group}?')
     })
     it('should be plural if multiple groups are given', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         propsData: {
           groups: [{ id: '1' }, { id: '2' }]
         }
@@ -29,7 +23,7 @@ describe('DeleteGroupModal', () => {
 
   describe('computed method "message"', () => {
     it('should be singular if one group is given', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         propsData: {
           groups: [{ id: '1' }]
         }
@@ -37,7 +31,7 @@ describe('DeleteGroupModal', () => {
       expect(wrapper.vm.message).toEqual('Are you sure you want to delete this group?')
     })
     it('should be plural if multiple groups are given', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         propsData: {
           groups: [{ id: '1' }, { id: '2' }]
         }
@@ -48,16 +42,16 @@ describe('DeleteGroupModal', () => {
 })
 
 function getWrapper({ propsData = {} } = {}) {
-  return mount(DeleteGroupModal, {
-    localVue,
-    propsData: {
-      ...propsData
-    },
-    stubs: { 'oc-modal': true, 'oc-text-input': true },
-    mocks: {
-      $gettextInterpolate: (translation) => translation,
-      $ngettext: (translationSingular, translationPlural, count) =>
-        count > 1 ? translationPlural : translationSingular
-    }
-  })
+  return {
+    wrapper: shallowMount(DeleteGroupModal, {
+      props: { ...propsData },
+      global: {
+        mocks: {
+          $gettextInterpolate: (translation) => translation,
+          $ngettext: (translationSingular, translationPlural, count) =>
+            count > 1 ? translationPlural : translationSingular
+        }
+      }
+    })
+  }
 }

@@ -1,12 +1,5 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
-import AppTemplate from '../../../src/components/AppTemplate'
-import stubs from 'tests/unit/stubs'
-import DesignSystem from 'owncloud-design-system'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
+import AppTemplate from '../../../src/components/AppTemplate.vue'
+import { shallowMount } from 'web-test-helpers'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -23,48 +16,48 @@ afterEach(() => jest.clearAllMocks())
 describe('AppTemplate', () => {
   describe('loading is true', () => {
     it('should show app loading spinner component', () => {
-      const wrapper = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ propsData: { loading: true } })
       expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeTruthy()
     })
     it('should not show side bar component', () => {
-      const wrapper = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ propsData: { loading: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
     it('should not show user management wrapper', () => {
-      const wrapper = getWrapper({ propsData: { loading: true } })
+      const { wrapper } = getWrapper({ propsData: { loading: true } })
       expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeFalsy()
     })
   })
   describe('loading is false', () => {
     it('should not show app loading spinner component', () => {
-      const wrapper = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ propsData: { loading: false } })
       expect(wrapper.find(stubSelectors.appLoadingSpinner).exists()).toBeFalsy()
     })
     it('should show side bar component', () => {
-      const wrapper = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ propsData: { loading: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
     it('should show user management wrapper', () => {
-      const wrapper = getWrapper({ propsData: { loading: false } })
+      const { wrapper } = getWrapper({ propsData: { loading: false } })
       expect(wrapper.find(elSelectors.userManagementWrapper).exists()).toBeTruthy()
     })
   })
   describe('sideBarOpen is true', () => {
     it('should show side bar component', () => {
-      const wrapper = getWrapper({ propsData: { sideBarOpen: true } })
+      const { wrapper } = getWrapper({ propsData: { sideBarOpen: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
   })
   describe('sideBarOpen is false', () => {
     it('should not show side bar component', () => {
-      const wrapper = getWrapper({ propsData: { sideBarOpen: false } })
+      const { wrapper } = getWrapper({ propsData: { sideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
   })
   describe('property propagation', () => {
     describe('oc breadcrumb component', () => {
       it('receives correct props', () => {
-        const wrapper = getWrapper({
+        const { wrapper } = getWrapper({
           propsData: { breadcrumbs: [{ text: 'User management' }, { text: 'Users' }] }
         })
         expect(wrapper.find(stubSelectors.ocBreadcrumb).props().items).toEqual([
@@ -75,7 +68,7 @@ describe('AppTemplate', () => {
     })
     describe('side bar component', () => {
       it('receives correct props', () => {
-        const wrapper = getWrapper({
+        const { wrapper } = getWrapper({
           propsData: {
             sideBarActivePanel: 'DetailsPanel',
             sideBarAvailablePanels: [{ app: 'DetailsPanel' }]
@@ -91,27 +84,16 @@ describe('AppTemplate', () => {
 })
 
 function getWrapper({ propsData = {} } = {}) {
-  return mount(AppTemplate, {
-    localVue,
-    mocks: {
-      $gettext: jest.fn(),
-      $gettextInterpolate: jest.fn()
-    },
-    propsData: {
-      loading: false,
-      breadcrumbs: [],
-      sideBarOpen: true,
-      sideBarAvailablePanels: [],
-      sideBarActivePanel: '',
-      ...propsData
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    },
-    stubs: {
-      ...stubs,
-      'app-loading-spinner': true,
-      'side-bar': true
-    }
-  })
+  return {
+    wrapper: shallowMount(AppTemplate, {
+      props: {
+        loading: false,
+        breadcrumbs: [],
+        sideBarOpen: true,
+        sideBarAvailablePanels: [],
+        sideBarActivePanel: '',
+        ...propsData
+      }
+    })
+  }
 }

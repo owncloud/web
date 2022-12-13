@@ -1,16 +1,10 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
-import UsersList from '../../../../src/components/Groups/GroupsList'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-afterEach(() => jest.clearAllMocks())
+import UsersList from '../../../../src/components/Groups/GroupsList.vue'
+import { shallowMount } from 'web-test-helpers'
 
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {
     it('should return an ascending ordered list while desc is set to false', () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
 
       expect(
         wrapper.vm.orderBy(
@@ -21,7 +15,7 @@ describe('GroupsList', () => {
       ).toEqual([{ displayName: 'admins' }, { displayName: 'users' }])
     })
     it('should return an descending ordered list while desc is set to true', () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
 
       expect(
         wrapper.vm.orderBy(
@@ -35,14 +29,14 @@ describe('GroupsList', () => {
 
   describe('method "filter"', () => {
     it('should return a list containing record admins if search term is "ad"', () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
 
       expect(
         wrapper.vm.filter([{ displayName: 'users' }, { displayName: 'admins' }], 'ad')
       ).toEqual([{ displayName: 'admins' }])
     })
     it('should return an an empty list if search term does not match any entry', () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
 
       expect(
         wrapper.vm.filter([{ displayName: 'admins' }, { displayName: 'users' }], 'ownClouders')
@@ -52,24 +46,14 @@ describe('GroupsList', () => {
 })
 
 function getMountedWrapper({ propsData = {} } = {}) {
-  return mount(UsersList, {
-    localVue,
-    mocks: {
-      $gettext: jest.fn(),
-      $gettextInterpolate: jest.fn()
-    },
-    propsData: {
-      groups: [],
-      selectedGroups: [],
-      headerPosition: 0,
-      ...propsData
-    },
-    stubs: {
-      'avatar-image': true,
-      'oc-checkbox': true,
-      'oc-button': true,
-      'oc-text-input': true,
-      'oc-table': { template: '<div></div>' }
-    }
-  })
+  return {
+    wrapper: shallowMount(UsersList, {
+      props: {
+        groups: [],
+        selectedGroups: [],
+        headerPosition: 0,
+        ...propsData
+      }
+    })
+  }
 }
