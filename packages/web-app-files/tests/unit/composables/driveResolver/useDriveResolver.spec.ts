@@ -1,12 +1,10 @@
 import { useCapabilitySpacesEnabled, useDriveResolver } from 'web-pkg/src'
-import { createComposableWrapper } from '../composables.setup'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { computed, ref, unref } from '@vue/composition-api'
 import { mockDeep } from 'jest-mock-extended'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
+import { createStore, getComposableWrapper } from 'web-test-helpers'
 
 jest.unmock('web-app-files/src/composables')
 jest.mock('web-pkg/src/composables/capability')
@@ -16,13 +14,13 @@ describe('useDriveResolver', () => {
     expect(useDriveResolver).toBeDefined()
   })
   it('space and item should be null when no driveAliasAndItem given', () => {
-    createComposableWrapper(
+    getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({ driveAliasAndItem: ref('') })
         expect(unref(space)).toEqual(null)
         expect(unref(item)).toEqual(null)
       },
-      { mocks: defaultComponentMocks(), store: defaultStoreMockOptions }
+      { mocks: defaultComponentMocks(), store: createStore(defaultStoreMockOptions) }
     )
   })
   it('returns a public space on a public page', () => {
@@ -30,8 +28,8 @@ describe('useDriveResolver', () => {
     const spaceMock = mockDeep<SpaceResource>({ id: token })
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
-    const store = createStore(Vuex.Store, storeOptions)
-    createComposableWrapper(
+    const store = createStore(storeOptions)
+    getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({ driveAliasAndItem: ref(`public/${token}`) })
         expect(unref(space)).toEqual(spaceMock)
@@ -44,8 +42,8 @@ describe('useDriveResolver', () => {
     const spaceMock = mockDeep<SpaceResource>()
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
-    const store = createStore(Vuex.Store, storeOptions)
-    createComposableWrapper(
+    const store = createStore(storeOptions)
+    getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({
           driveAliasAndItem: ref(`share/someSharedFolder`)
@@ -63,11 +61,11 @@ describe('useDriveResolver', () => {
     const spaceMock = mockDeep<SpaceResource>({ fileId, driveAlias: 'driveAlias' })
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
-    const store = createStore(Vuex.Store, storeOptions)
+    const store = createStore(storeOptions)
 
     jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
-    createComposableWrapper(
+    getComposableWrapper(
       () => {
         const { space, item, itemId } = useDriveResolver({
           driveAliasAndItem: ref(`/personal${resourcePath}`)
@@ -91,11 +89,11 @@ describe('useDriveResolver', () => {
     const spaceMock = mockDeep<SpaceResource>({ driveAlias })
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
-    const store = createStore(Vuex.Store, storeOptions)
+    const store = createStore(storeOptions)
 
     jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
-    createComposableWrapper(
+    getComposableWrapper(
       () => {
         const { space, item } = useDriveResolver({
           driveAliasAndItem: ref(`${driveAlias}${resourcePath}`)
@@ -121,9 +119,9 @@ describe('useDriveResolver', () => {
     const spaceMock = mockDeep<SpaceResource>({ driveAlias, driveType: data.driveType })
     const storeOptions = { ...defaultStoreMockOptions }
     storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
-    const store = createStore(Vuex.Store, storeOptions)
+    const store = createStore(storeOptions)
 
-    createComposableWrapper(
+    getComposableWrapper(
       () => {
         useDriveResolver({ driveAliasAndItem: ref(`${driveAlias}/someFolder`) })
         expect(

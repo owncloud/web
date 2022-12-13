@@ -1,7 +1,7 @@
 import { ref, unref } from '@vue/composition-api'
-import { createWrapper } from './spec'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables'
 import { Resource } from 'web-client/src/helpers/resource'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useSort', () => {
   it('should be valid', () => {
@@ -9,7 +9,7 @@ describe('useSort', () => {
   })
 
   it('does not sort if no sort field was given', () => {
-    createWrapper(() => {
+    getComposableWrapper(() => {
       const input: SortOptions<any> = {
         items: [{ id: '3' }, { id: '4' }, { id: '6' }, { id: '1' }, { id: '2' }, { id: '5' }],
         fields: [],
@@ -45,7 +45,7 @@ describe('useSort', () => {
     ]
 
     it('sorts resources by name', () => {
-      createWrapper(() => {
+      getComposableWrapper(() => {
         const sortDir = ref(SortDir.Asc)
         const input = {
           items: ref<Resource[]>(resources),

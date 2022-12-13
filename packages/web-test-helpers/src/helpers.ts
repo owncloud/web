@@ -2,6 +2,8 @@ import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex, { StoreOptions } from 'vuex'
 import { Component } from 'vue'
 import { mount as _mount } from '@vue/test-utils'
+import { Data, defineComponent, SetupFunction } from '@vue/composition-api'
+import { defaultPlugins } from 'web-test-helpers'
 
 export const createStore = <T>(storeOptions: StoreOptions<T>) => {
   return {
@@ -65,4 +67,22 @@ export const shallowMount = (component: ComponentType, options: CompatMountOptio
   options.shallow = true
 
   return mount(component, options)
+}
+
+export const getComposableWrapper = (
+  setup: SetupFunction<Data, Data>,
+  { mocks = undefined, store = undefined } = {}
+) => {
+  return mount(
+    defineComponent({
+      setup,
+      template: '<div></div>'
+    }),
+    {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        ...(mocks && { mocks })
+      }
+    }
+  )
 }

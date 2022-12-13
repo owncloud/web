@@ -1,15 +1,9 @@
-import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
-import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 import { useFileListHeaderPosition } from '../../../../../src/composables'
 import { useStore } from 'web-pkg/src/composables'
+import { mount } from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.use(VueCompositionAPI)
-localVue.use(Vuex)
-
-export const createWrapper = (): Wrapper<Vue> =>
+export const createWrapper = () =>
   mount(
     defineComponent({
       setup() {
@@ -20,7 +14,6 @@ export const createWrapper = (): Wrapper<Vue> =>
       template: `<div>{{ y }}</div>`
     }),
     {
-      localVue,
       attachTo: document.body
     }
   )

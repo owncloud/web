@@ -1,7 +1,7 @@
 import { EventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../../../src/composables/sideBar'
 import { unref } from '@vue/composition-api'
-import { createComposableWrapper } from '../composables.setup'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useSideBar', () => {
   let eventBus
@@ -10,13 +10,13 @@ describe('useSideBar', () => {
   })
   describe('initial state', () => {
     it('should have "sideBarOpen" as "false"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         expect(unref(sideBarOpen)).toBe(false)
       })
     })
     it('should have "sideBarActivePanel" as "null"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         expect(unref(sideBarActivePanel)).toBeNull()
       })
@@ -24,14 +24,14 @@ describe('useSideBar', () => {
   })
   describe('open', () => {
     it('should set "sideBarOpen" to "true"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.open)
         expect(unref(sideBarOpen)).toBe(true)
       })
     })
     it('should set "sideBarActivePanel" to "null"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.open)
         expect(unref(sideBarActivePanel)).toBeNull()
@@ -40,14 +40,14 @@ describe('useSideBar', () => {
   })
   describe('close', () => {
     it('should set "sideBarOpen" to "false"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.close)
         expect(unref(sideBarOpen)).toBe(false)
       })
     })
     it('should set "sideBarActivePanel" to "null"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.close)
         expect(unref(sideBarActivePanel)).toBeNull()
@@ -56,7 +56,7 @@ describe('useSideBar', () => {
   })
   describe('toggle', () => {
     it('should toggle "sideBarOpen" back and forth', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.toggle)
         expect(unref(sideBarOpen)).toBe(true)
@@ -65,7 +65,7 @@ describe('useSideBar', () => {
       })
     })
     it('should not influence "sideBarActivePanel"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         // initial state
         eventBus.publish(SideBarEventTopics.toggle)
@@ -79,14 +79,14 @@ describe('useSideBar', () => {
   })
   describe('openWithPanel', () => {
     it('should set "sideBarOpen" to "true"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.openWithPanel, 'SomePanel')
         expect(unref(sideBarOpen)).toBe(true)
       })
     })
     it('should set "sideBarActivePanel" to provided value', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.openWithPanel, 'SomePanel')
         expect(unref(sideBarActivePanel)).toBe('SomePanel')
@@ -95,14 +95,14 @@ describe('useSideBar', () => {
   })
   describe('setActivePanel', () => {
     it('should not influence "sideBarOpen"', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarOpen } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.setActivePanel)
         expect(unref(sideBarOpen)).toBe(false)
       })
     })
     it('should set "sideBarActivePanel" to provided value', () => {
-      createComposableWrapper(() => {
+      getComposableWrapper(() => {
         const { sideBarActivePanel } = useSideBar({ bus: eventBus })
         eventBus.publish(SideBarEventTopics.setActivePanel, 'SomePanel')
         expect(unref(sideBarActivePanel)).toBe('SomePanel')
