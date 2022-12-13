@@ -1,21 +1,11 @@
 import { unref } from '@vue/composition-api'
-import { createWrapper } from './spec'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
-import { Store } from 'vuex'
 import user from 'web-runtime/src/store/user'
 import set from 'lodash-es/set'
+import { createStore, getComposableWrapper } from 'web-test-helpers'
+import { useStore } from 'web-pkg'
 
-let store
-beforeEach(() => {
-  createWrapper(undefined)
-  store = new Store({
-    modules: {
-      user
-    }
-  })
-})
-
-const commitValue = <T>(name: string, value: T) => {
+const commitValue = <T>(store, name: string, value: T) => {
   store.commit('SET_CAPABILITIES', {
     version: '1.2.3',
     capabilities: set({}, name, value)
@@ -28,6 +18,20 @@ describe('useCapability', () => {
   })
 
   it('handles bools correctly', () => {
+    const defaultStore = createStore({
+      modules: {
+        user
+      }
+    })
+    const wrapper = getComposableWrapper(
+      () => {
+        return { store: useStore() }
+      },
+      { store: defaultStore }
+    )
+
+    const { store } = wrapper.vm
+
     const hasResharing = useCapability<boolean>(store, 'files_sharing.resharing')
     const hasResharingWithDefault = useCapability<boolean>(store, 'files_sharing.resharing', true)
 
@@ -37,16 +41,30 @@ describe('useCapability', () => {
     // }).rejects.toThrow()
     expect(unref(hasResharingWithDefault)).toBe(true)
 
-    commitValue('files_sharing.resharing', false)
+    commitValue(store, 'files_sharing.resharing', false)
     expect(unref(hasResharing)).toBe(false)
     expect(unref(hasResharingWithDefault)).toBe(false)
 
-    commitValue('files_sharing.resharing', true)
+    commitValue(store, 'files_sharing.resharing', true)
     expect(unref(hasResharing)).toBe(true)
     expect(unref(hasResharingWithDefault)).toBe(true)
   })
 
   it('handles arrays correctly', () => {
+    const defaultStore = createStore({
+      modules: {
+        user
+      }
+    })
+    const wrapper = getComposableWrapper(
+      () => {
+        return { store: useStore() }
+      },
+      { store: defaultStore }
+    )
+
+    const { store } = wrapper.vm
+
     const supportedTypesCapability = useCapability<string[]>(store, 'checksums.supportedTypes')
     const supportedTypesCapabilityWithDefaults = useCapability<string[]>(
       store,
@@ -60,10 +78,10 @@ describe('useCapability', () => {
     // }).rejects.toThrow()
     expect(unref(supportedTypesCapabilityWithDefaults)).toStrictEqual(['foo', 'bar'])
 
-    commitValue('checksums.supportedTypes', ['sha1', 'md5', 'adler32'])
+    commitValue(store, 'checksums.supportedTypes', ['sha1', 'md5', 'adler32'])
     expect(unref(supportedTypesCapability)).toStrictEqual(['sha1', 'md5', 'adler32'])
 
-    commitValue('checksums.supportedTypes', ['sha1', 'adler32'])
+    commitValue(store, 'checksums.supportedTypes', ['sha1', 'adler32'])
     expect(unref(supportedTypesCapability)).toStrictEqual(['sha1', 'adler32'])
   })
 })

@@ -9,7 +9,6 @@ export const useMutationSubscription = <P extends MutationPayload>(
 ): void => {
   let unsubscribe
   onMounted(() => {
-    console.log('useStore()', useStore())
     unsubscribe = useStore().subscribe<P>(
       (mutation: P) => mutations.includes(mutation.type) && callback(mutation),
       options
