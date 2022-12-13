@@ -4,6 +4,8 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 export const defaultStoreMockOptions = {
   getters: {
     newFileHandlers: jest.fn(() => []),
+    activeNotifications: jest.fn(() => []),
+    quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
     user: jest.fn().mockImplementation(() => ({})),
     configuration: jest
@@ -29,6 +31,8 @@ export const defaultStoreMockOptions = {
     hideModal: jest.fn(),
     toggleModalConfirmButton: jest.fn(),
     showMessage: jest.fn(),
+    deleteNotification: jest.fn(),
+    loadTheme: jest.fn(),
     setModalInputErrorMessage: jest.fn()
   },
   mutations: {

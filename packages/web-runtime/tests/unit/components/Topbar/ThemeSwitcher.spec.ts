@@ -1,21 +1,8 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
-import DesignSystem from 'owncloud-design-system'
-import CompositionApi from '@vue/composition-api'
-
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import stubs from '../../../../../../tests/unit/stubs'
 import { themeNameDark, themeNameLight } from '../../../../src/composables'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-localVue.use(CompositionApi)
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const lightTheme = {
   designTokens: {
@@ -33,7 +20,7 @@ const darkTheme = {
   }
 }
 
-const spyToggleTheme = jest.spyOn(ThemeSwitcher.methods, 'toggleTheme')
+const spyToggleTheme = jest.spyOn((ThemeSwitcher as any).methods, 'toggleTheme')
 
 describe('ThemeSwitcher component', () => {
   describe('visually', () => {
@@ -45,20 +32,20 @@ describe('ThemeSwitcher component', () => {
     })
 
     it('renders a button, initially in light mode per default', async () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
 
     it('renders a button, initially in dark mode if user prefers dark color scheme', async () => {
       mockDarkModePreferred(true)
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
 
     it('toggles between themes upon click', async () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(spyToggleTheme).toHaveBeenCalledTimes(0)
 
       await wrapper.find('.themeswitcher-btn').trigger('click')
@@ -78,13 +65,13 @@ describe('ThemeSwitcher component', () => {
   describe('restores', () => {
     it('light theme if light theme is saved in localstorage', async () => {
       window.localStorage.setItem('oc_currentThemeName', themeNameLight)
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
     it('dark theme if dark theme is saved in localstorage', async () => {
       window.localStorage.setItem('oc_currentThemeName', themeNameDark)
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper).toMatchSnapshot()
     })
@@ -109,25 +96,21 @@ function mockDarkModePreferred(enabled = false) {
 }
 
 function getWrapper() {
-  return mount(ThemeSwitcher, {
-    store: new Vuex.Store({
-      getters: {
-        configuration: () => ({
-          themes: {
-            default: lightTheme,
-            'default-dark': darkTheme
-          },
-          currentTheme: lightTheme
-        })
-      },
-      actions: {
-        loadTheme: jest.fn()
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.configuration.mockImplementation(() => ({
+    themes: {
+      default: lightTheme,
+      'default-dark': darkTheme
+    },
+    currentTheme: lightTheme
+  }))
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(ThemeSwitcher, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        stubs: { ...stubs, 'oc-button': false }
       }
-    }),
-    localVue,
-    stubs: { ...stubs, 'oc-button': false },
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
+    })
+  }
 }

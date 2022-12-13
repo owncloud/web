@@ -1,17 +1,7 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import GetTextPlugin from 'vue-gettext'
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
 import stubs from '../../../../../../tests/unit/stubs'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -118,20 +108,17 @@ describe('User Menu component', () => {
 })
 
 const getMountedWrapper = (quota, userEmail) => {
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.quota.mockImplementation(() => quota)
+  storeOptions.getters.user.mockImplementation(() => ({
+    id: 'einstein',
+    username: 'einstein',
+    userDisplayName: 'Albert Einstein',
+    userEmail
+  }))
+  const store = createStore(storeOptions)
   return mount(UserMenu, {
-    store: new Vuex.Store({
-      getters: {
-        quota: () => quota,
-        user: () => ({
-          id: 'einstein',
-          username: 'einstein',
-          userDisplayName: 'Albert Einstein',
-          userEmail
-        })
-      }
-    }),
-    localVue,
-    propsData: {
+    props: {
       applicationsList: [
         {
           icon: 'application',
@@ -140,6 +127,9 @@ const getMountedWrapper = (quota, userEmail) => {
         }
       ]
     },
-    stubs
+    global: {
+      plugins: [...defaultPlugins(), store],
+      stubs
+    }
   })
 }
