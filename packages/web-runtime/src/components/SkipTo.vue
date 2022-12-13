@@ -1,5 +1,5 @@
 <template>
-  <button class="skip-button" @click="skipToTarget"><slot></slot></button>
+  <button class="skip-button" @click="skipToTarget"><slot /></button>
 </template>
 
 <script>

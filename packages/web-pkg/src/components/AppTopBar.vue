@@ -7,9 +7,8 @@
       :resource="resource"
     />
     <div v-else />
-
     <div>
-      <slot name="right"></slot>
+      <slot name="right" />
       <oc-button
         id="app-top-bar-close"
         :aria-label="$gettext('Close')"
