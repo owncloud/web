@@ -1,13 +1,10 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
 import editReadmeContent from 'web-app-files/src/mixins/spaces/actions/editReadmeContent.js'
 import { buildSpace } from 'web-client/src/helpers'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 const Component = {
-  render() {},
+  template: '<div></div>',
   mixins: [editReadmeContent]
 }
 afterEach(() => jest.clearAllMocks())
@@ -21,7 +18,7 @@ describe('editReadmeContent', () => {
         special: [{ specialFolder: { name: 'readme' } }]
       }
 
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(
         wrapper.vm.$_editReadmeContent_items[0].isEnabled({
           resources: [buildSpace(spaceMock)]
@@ -29,7 +26,7 @@ describe('editReadmeContent', () => {
       ).toBe(true)
     })
     it('should be false when not resource given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_editReadmeContent_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when spaceReadmeData does not exist', () => {
@@ -38,7 +35,7 @@ describe('editReadmeContent', () => {
         root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] }
       }
 
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(
         wrapper.vm.$_editReadmeContent_items[0].isEnabled({
           resources: [buildSpace(spaceMock)]
@@ -51,7 +48,7 @@ describe('editReadmeContent', () => {
         root: { permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }] }
       }
 
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(
         wrapper.vm.$_editReadmeContent_items[0].isEnabled({
           resources: [buildSpace(spaceMock)]
@@ -62,17 +59,16 @@ describe('editReadmeContent', () => {
 })
 
 function getWrapper() {
-  return mount(Component, {
-    localVue,
-    store: new Vuex.Store({
-      modules: {
-        user: {
-          state: {
-            id: 'alice',
-            uuid: 1
-          }
-        }
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(Component, {
+      global: {
+        plugins: [...defaultPlugins(), store]
       }
     })
-  })
+  }
 }

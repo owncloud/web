@@ -1,14 +1,10 @@
-import Vuex from 'vuex'
-import { mount, createLocalVue } from '@vue/test-utils'
 import EditQuota from 'web-app-files/src/mixins/spaces/actions/editQuota.js'
 import { buildSpace } from 'web-client/src/helpers'
-import { createStore } from 'vuex-extensions'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const Component = {
-  render() {},
+  template: '<div></div>',
   mixins: [EditQuota]
 }
 
@@ -17,7 +13,7 @@ describe('editQuota', () => {
 
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_editQuota_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be true when the current user has the "set-space-quota"-permission', () => {
@@ -28,7 +24,7 @@ describe('editQuota', () => {
           permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
         }
       }
-      const wrapper = getWrapper({ canEditSpaceQuota: true })
+      const { wrapper } = getWrapper({ canEditSpaceQuota: true })
       expect(
         wrapper.vm.$_editQuota_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })
       ).toBe(true)
@@ -41,7 +37,7 @@ describe('editQuota', () => {
           permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
         }
       }
-      const wrapper = getWrapper({ canEditSpaceQuota: false })
+      const { wrapper } = getWrapper({ canEditSpaceQuota: false })
       expect(
         wrapper.vm.$_editQuota_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })
       ).toBe(false)
@@ -50,22 +46,21 @@ describe('editQuota', () => {
 })
 
 function getWrapper({ canEditSpaceQuota = false } = {}) {
-  return mount(Component, {
-    localVue,
-    mocks: {
-      $permissionManager: {
-        canEditSpaceQuota: () => canEditSpaceQuota
-      }
-    },
-    store: createStore(Vuex.Store, {
-      modules: {
-        user: {
-          state: {
-            id: 'alice',
-            uuid: 1
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(Component, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: {
+          $permissionManager: {
+            canEditSpaceQuota: () => canEditSpaceQuota
           }
         }
       }
     })
-  })
+  }
 }

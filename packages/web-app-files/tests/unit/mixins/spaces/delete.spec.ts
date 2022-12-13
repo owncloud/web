@@ -1,16 +1,19 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import Delete from 'web-app-files/src/mixins/spaces/actions/delete.js'
-import { createLocationSpaces } from '../../../../src/router'
-import mockAxios from 'jest-mock-axios'
 import { buildSpace } from 'web-client/src/helpers'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  mockAxiosResolve,
+  mount
+} from 'web-test-helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { clientService } from 'web-pkg'
+import { Graph } from 'web-client'
+import {defaultStoreMockOptions} from "web-test-helpers/src/mocks/store/defaultStoreMockOptions";
 
 const Component = {
-  render() {},
+  template: '<div></div>',
   mixins: [Delete]
 }
 
@@ -19,7 +22,7 @@ describe('delete', () => {
 
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when the space is not disabled', () => {
@@ -29,7 +32,7 @@ describe('delete', () => {
           permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }]
         }
       }
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
         false
       )
@@ -42,7 +45,7 @@ describe('delete', () => {
           deleted: { state: 'trashed' }
         }
       }
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
         true
       )
@@ -55,7 +58,7 @@ describe('delete', () => {
           deleted: { state: 'trashed' }
         }
       }
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_delete_items[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(
         false
       )
@@ -64,14 +67,14 @@ describe('delete', () => {
 
   describe('method "$_delete_trigger"', () => {
     it('should trigger the delete modal window', async () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_delete_trigger({ resources: [{ id: 1 }] })
 
       expect(spyCreateModalStub).toHaveBeenCalledTimes(1)
     })
     it('should not trigger the delete modal window without any resource', async () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       const spyCreateModalStub = jest.spyOn(wrapper.vm, 'createModal')
       await wrapper.vm.$_delete_trigger({ resources: [] })
 
@@ -81,10 +84,9 @@ describe('delete', () => {
 
   describe('method "$_delete_deleteSpace"', () => {
     it('should hide the modal and show message on success', async () => {
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.resolve()
-      })
-      const wrapper = getWrapper()
+      const graphMock = mockDeep<Graph>()
+      graphMock.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
+      const { wrapper } = getWrapper(graphMock)
       const hideModalStub = jest.spyOn(wrapper.vm, 'hideModal')
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_delete_deleteSpace(1)
@@ -94,11 +96,10 @@ describe('delete', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      mockAxios.request.mockImplementationOnce(() => {
-        return Promise.reject(new Error())
-      })
-      const wrapper = getWrapper()
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const graphMock = mockDeep<Graph>()
+      graphMock.drives.deleteDrive.mockRejectedValue(new Error())
+      const { wrapper } = getWrapper(graphMock)
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_delete_deleteSpace(1)
 
@@ -107,60 +108,19 @@ describe('delete', () => {
   })
 })
 
-function getWrapper() {
-  return mount(Component, {
-    localVue,
-    mocks: {
-      $router: {
-        currentRoute: createLocationSpaces('files-spaces-projects'),
-        resolve: (r) => {
-          return { href: r.name }
-        }
-      },
-      $gettext: jest.fn()
-    },
-    store: createStore(Vuex.Store, {
-      actions: {
-        createModal: jest.fn(),
-        hideModal: jest.fn(),
-        showMessage: jest.fn()
-      },
-      getters: {
-        configuration: () => ({
-          server: 'https://example.com'
-        })
-      },
-      modules: {
-        user: {
-          state: {
-            id: 'alice',
-            uuid: 1
-          }
-        },
-        Files: {
-          namespaced: true,
-          mutations: {
-            REMOVE_FILES: jest.fn()
-          }
-        },
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                accessToken: () => ''
-              }
-            },
-            spaces: {
-              namespaced: true,
-              mutations: {
-                REMOVE_SPACE: jest.fn()
-              }
-            }
-          }
-        }
+function getWrapper(graphMock = mockDeep<Graph>()) {
+  jest.spyOn(clientService, 'graphAuthenticated').mockImplementation(() => graphMock)
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(Component, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultComponentMocks({ currentRoute: { name: 'files-spaces-projects' } })
       }
     })
-  })
+  }
 }

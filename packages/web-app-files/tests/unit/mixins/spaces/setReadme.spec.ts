@@ -1,61 +1,21 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import setReadme from 'web-app-files/src/mixins/spaces/actions/setReadme.js'
 import { buildSpace } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
+const Component = {
+  template: '<div></div>',
+  mixins: [setReadme]
+}
 
 describe('setReadme', () => {
-  const Component = {
-    template: '<div></div>',
-    mixins: [setReadme]
-  }
-
-  function getWrapper(resolveGetFileContents = true, space = undefined) {
-    const clientMock = mockDeep<OwnCloudSdk>()
-    const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
-    return mount(Component, {
-      localVue,
-      mocks: {
-        ...defaultMocks,
-        $client: {
-          ...clientMock,
-          files: {
-            ...clientMock.files,
-            getFileContents: jest.fn().mockImplementation(() => {
-              if (resolveGetFileContents) {
-                return Promise.resolve('readme')
-              }
-              return Promise.reject(new Error(''))
-            }),
-            putFileContents: jest
-              .fn()
-              .mockImplementation(() => Promise.resolve({ ETag: '60c7243c2e7f1' }))
-          }
-        },
-        space
-      },
-      store: createStore(Vuex.Store, {
-        ...defaultStoreMockOptions,
-        modules: {
-          ...defaultStoreMockOptions.modules,
-          user: { state: { uuid: 1 } }
-        }
-      })
-    })
-  }
-
   afterEach(() => jest.clearAllMocks())
-
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_setSpaceReadme_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be false when mimeType is not text', () => {
@@ -64,7 +24,7 @@ describe('setReadme', () => {
         root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
-      const wrapper = getWrapper(true, buildSpace(spaceMock))
+      const { wrapper } = getWrapper(true, buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'image/png' }]
@@ -77,7 +37,7 @@ describe('setReadme', () => {
         root: { permissions: [{ roles: ['manager'], grantedTo: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
-      const wrapper = getWrapper(true, buildSpace(spaceMock))
+      const { wrapper } = getWrapper(true, buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'text/plain' }]
@@ -90,7 +50,7 @@ describe('setReadme', () => {
         root: { permissions: [{ roles: ['viewer'], grantedTo: [{ user: { id: 1 } }] }] },
         special: [{ specialFolder: { name: 'readme' } }]
       }
-      const wrapper = getWrapper(true, buildSpace(spaceMock))
+      const { wrapper } = getWrapper(true, buildSpace(spaceMock))
       expect(
         wrapper.vm.$_setSpaceReadme_items[0].isEnabled({
           resources: [{ id: 1, mimeType: 'text/plain' }]
@@ -100,7 +60,7 @@ describe('setReadme', () => {
   })
   describe('method "$_setSpaceReadme_trigger"', () => {
     it('should show message on success', async () => {
-      const wrapper = getWrapper(true, { id: 1 })
+      const { wrapper } = getWrapper(true, { id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
@@ -116,7 +76,7 @@ describe('setReadme', () => {
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const wrapper = getWrapper(false, { id: 1 })
+      const { wrapper } = getWrapper(false, { id: 1 })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.$_setSpaceReadme_trigger({
         resources: [
@@ -131,3 +91,40 @@ describe('setReadme', () => {
     })
   })
 })
+
+function getWrapper(resolveGetFileContents = true, space = undefined) {
+  const clientMock = mockDeep<OwnCloudSdk>()
+  const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
+  const mocks = {
+    ...defaultMocks,
+    $client: {
+      ...clientMock,
+      files: {
+        ...clientMock.files,
+        getFileContents: jest.fn().mockImplementation(() => {
+          if (resolveGetFileContents) {
+            return Promise.resolve('readme')
+          }
+          return Promise.reject(new Error(''))
+        }),
+        putFileContents: jest
+          .fn()
+          .mockImplementation(() => Promise.resolve({ ETag: '60c7243c2e7f1' }))
+      }
+    },
+    space
+  }
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(Component, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
+      }
+    })
+  }
+}

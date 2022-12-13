@@ -1,41 +1,33 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import ShowMembers from 'web-app-files/src/mixins/spaces/actions/showMembers.js'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 const Component = {
-  render() {},
+  template: '<div></div>',
   mixins: [ShowMembers]
 }
 
 describe('showMembers', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_showMembers_items[0].isEnabled({ resources: [] })).toBe(false)
     })
     it('should be true when a resource is given', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.vm.$_showMembers_items[0].isEnabled({ resources: [{ id: 1 }] })).toBe(true)
     })
   })
 })
 
 function getWrapper() {
-  return mount(Component, {
-    localVue,
-    store: createStore(Vuex.Store, {
-      modules: {
-        Files: {
-          namespaced: true,
-          mutations: {
-            SET_FILE_SELECTION: jest.fn()
-          }
-        }
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(Component, {
+      global: {
+        plugins: [...defaultPlugins(), store]
       }
     })
-  })
+  }
 }

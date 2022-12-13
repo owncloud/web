@@ -1,13 +1,10 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount } from '@vue/test-utils'
 import DeletedFiles from 'web-app-files/src/mixins/spaces/actions/deletedFiles.js'
 import { createLocationTrash } from '../../../../src/router'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { createStore, defaultPlugins, mount } from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',
@@ -61,15 +58,15 @@ function getWrapper() {
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  const localVue = defaultLocalVue()
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks,
     storeOptions,
     wrapper: mount(Component, {
-      localVue,
-      mocks,
-      store
+      global: {
+        mocks,
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
 }
