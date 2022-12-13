@@ -1,5 +1,4 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import { createStore } from 'vuex-extensions'
 import Vuex from 'vuex'
 import Groups from '../../../src/views/Groups'
 
@@ -124,7 +123,7 @@ function getMountedWrapper({
 } = {}) {
   return shallowMount(Groups, {
     localVue,
-    store: createStore(Vuex.Store, {
+    store: new Vuex.Store({
       actions: {
         showMessage: jest.fn()
       }

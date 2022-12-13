@@ -1,5 +1,4 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import { createStore } from 'vuex-extensions'
 import Users from '../../../src/views/Users'
 import Vuex from 'vuex'
 import mockAxios from 'jest-mock-axios'
@@ -219,7 +218,7 @@ function getMountedWrapper({
 } = {}) {
   return shallowMount(Users, {
     localVue,
-    store: createStore(Vuex.Store, {
+    store: new Vuex.Store({
       state: {
         user: { id: '1', uuid: '1' }
       },
