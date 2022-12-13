@@ -120,6 +120,7 @@ function getWrapper({
   const $clientService = mockDeep<ClientService>()
   $clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>({ driveType }))
   $clientService.owncloudSdk.shares.getUnprotectedTokenInfo.mockResolvedValue(tokenInfo)
+  $clientService.owncloudSdk.shares.getProtectedTokenInfo.mockResolvedValue(tokenInfo)
   const mocks = { ...defaultComponentMocks(), $clientService }
 
   const storeOptions = defaultStoreMockOptions

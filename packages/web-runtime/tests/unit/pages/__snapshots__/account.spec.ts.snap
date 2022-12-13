@@ -5,19 +5,19 @@ exports[`account page account information displays basic user information 1`] = 
   <div class="account-page-info-username oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Username</dt>
     <dd>
-      some-username
+
     </dd>
   </div>
   <!---->
   <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Display name</dt>
     <dd>
-      some-displayname
+
     </dd>
   </div>
   <div class="account-page-info-email oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Email</dt>
-    <dd>some-email</dd>
+    <dd><span>No email has been set up</span></dd>
   </div>
   <div class="account-page-info-groups oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Group memberships</dt>
@@ -29,15 +29,15 @@ exports[`account page account information displays basic user information 1`] = 
 exports[`account page account information group membership displays group names 1`] = `<dd data-testid="group-names"><span>one, two, three</span></dd>`;
 
 exports[`account page header section edit buttons edit route button should be displayed if running with ocis and has navItems 1`] = `
-<oc-button-stub variation="primary" type="router-link" to="some-route" data-testid="account-page-edit-route-btn">
-  <oc-icon-stub name="edit"></oc-icon-stub>
+<oc-button-stub type="router-link" size="medium" to="some-route" submit="button" variation="primary" appearance="outline" justifycontent="center" gapsize="medium" data-testid="account-page-edit-route-btn">
+  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
   <translate-stub tag="span">Edit</translate-stub>
 </oc-button-stub>
 `;
 
 exports[`account page header section edit buttons edit url button should be displayed if not running with ocis 1`] = `
-<oc-button-stub variation="primary" type="a" href="/index.php/settings/personal" data-testid="account-page-edit-url-btn">
-  <oc-icon-stub name="edit"></oc-icon-stub>
+<oc-button-stub type="a" size="medium" href="/index.php/settings/personal" submit="button" variation="primary" appearance="outline" justifycontent="center" gapsize="medium" data-testid="account-page-edit-url-btn">
+  <oc-icon-stub name="edit" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
   <translate-stub tag="span">Edit</translate-stub>
 </oc-button-stub>
 `;
