@@ -1,10 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
 import NoContentMessage from '../../../src/components/NoContentMessage.vue'
+import { shallowMount } from 'web-test-helpers'
 
 describe('NoContentMessage', () => {
   describe('icon prop', () => {
     it('should render the provided icon', () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
 
       const iconEl = wrapper.find('oc-icon-stub')
       expect(iconEl.exists()).toBeTruthy()
@@ -14,7 +14,7 @@ describe('NoContentMessage', () => {
 
   describe('named slots', () => {
     it('should render slot html for message', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         message: `
         <p class="test message">This is a test message</p>
         `
@@ -29,7 +29,7 @@ describe('NoContentMessage', () => {
     })
 
     it('should render slot html for callToAction', () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         callToAction: `
         <button class="test action">Click here</button>
         `
@@ -45,11 +45,10 @@ describe('NoContentMessage', () => {
 })
 
 function getWrapper(slots = {}) {
-  return shallowMount(NoContentMessage, {
-    slots: slots,
-    propsData: { icon: 'mdi-test-icon' },
-    stubs: {
-      'oc-icon': true
-    }
-  })
+  return {
+    wrapper: shallowMount(NoContentMessage, {
+      slots: slots,
+      props: { icon: 'mdi-test-icon' }
+    })
+  }
 }
