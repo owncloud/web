@@ -90,7 +90,6 @@ describe('List component', () => {
 //
 // function getWrapper(searchTerm = '', files = []) {
 //   return mount(List, {
-//     localVue,
 //     propsData: {
 //       searchResult: {
 //         totalResults: 100,
