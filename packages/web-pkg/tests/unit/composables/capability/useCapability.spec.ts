@@ -2,8 +2,7 @@ import { unref } from '@vue/composition-api'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
 import user from 'web-runtime/src/store/user'
 import set from 'lodash-es/set'
-import { createStore, getComposableWrapper, getStoreInstance } from 'web-test-helpers'
-import { useStore } from 'web-pkg'
+import { getStoreInstance } from 'web-test-helpers'
 
 const commitValue = <T>(store, name: string, value: T) => {
   store.commit('SET_CAPABILITIES', {
