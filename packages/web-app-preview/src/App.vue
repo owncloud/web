@@ -256,6 +256,7 @@ export default defineComponent({
       direction: 'rtl',
 
       cachedFiles: [],
+      toPreloadImageIds: [],
 
       currentImageZoom: 1,
       currentImageRotation: 0
@@ -558,19 +559,20 @@ export default defineComponent({
       })
     },
     preloadImages() {
-      let toPreloadFiles = []
-
       const loadPreviewAsync = (file) => {
-        toPreloadFiles.push(file.id)
+        this.toPreloadImageIds.push(file.id)
         this.loadPreview(file)
+
           .then((mediaUrl) => {
             this.addPreviewToCache(file, mediaUrl)
           })
           .catch((e) => {
             console.error(e)
-            toPreloadFiles = toPreloadFiles.filter((fileId) => fileId !== file.id)
+            this.toPreloadImageIds = this.toPreloadImageIds.filter((fileId) => fileId !== file.id)
           })
       }
+
+      console.log('?????')
 
       const preloadFile = (preloadFileIndex) => {
         let cycleIndex =
@@ -580,7 +582,7 @@ export default defineComponent({
 
         const file = this.filteredFiles[cycleIndex]
 
-        if (!this.isFileTypeImage(file) || toPreloadFiles.includes(file.id)) {
+        if (!this.isFileTypeImage(file) || this.toPreloadImageIds.includes(file.id)) {
           return
         }
 
