@@ -1,14 +1,21 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
-import Groups from '../../../src/views/Groups'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import Groups from '../../../src/views/Groups.vue'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  mockAxiosReject,
+  mockAxiosResolve,
+  shallowMount
+} from 'web-test-helpers'
+import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { mockDeep } from 'jest-mock-extended'
+import { Graph } from 'web-client'
+import { Group, CollectionOfGroup } from 'web-client/src/generated'
 
 describe('Groups view', () => {
   describe('method "createGroup"', () => {
     it('should hide the modal and show message on success', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
       await wrapper.vm.createGroup({ displayName: 'admins' })
@@ -18,8 +25,8 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveCreateGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getMountedWrapper({ resolveCreateGroup: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
       await wrapper.vm.createGroup({ displayName: 'admins' })
@@ -31,7 +38,7 @@ describe('Groups view', () => {
 
   describe('method "deleteGroups"', () => {
     it('should hide the modal and show message on success', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteGroupModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteGroupModal')
       await wrapper.vm.deleteGroups([{ id: '1' }])
@@ -41,8 +48,8 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveDeleteGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getMountedWrapper({ resolveDeleteGroup: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       const toggleDeleteGroupModalStub = jest.spyOn(wrapper.vm, 'toggleDeleteGroupModal')
       await wrapper.vm.deleteGroups([{ id: '1' }])
@@ -54,7 +61,7 @@ describe('Groups view', () => {
 
   describe('method "editGroup"', () => {
     it('should show message on success', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getMountedWrapper()
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editGroup({ id: '1', displayName: 'Super group' })
 
@@ -62,8 +69,8 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-      const wrapper = getMountedWrapper({ resolveEditGroup: false })
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getMountedWrapper({ resolveEditGroup: false })
       const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
       await wrapper.vm.editGroup({})
 
@@ -77,19 +84,21 @@ describe('Groups view', () => {
      */
     // eslint-disable-next-line jest/no-disabled-tests
     it.skip('should contain EditPanel with property enabled set true when one group is selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
+      const { wrapper } = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeTruthy()
     })
     it('should contain EditPanel with property enabled set false when no group is selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedGroups: [] } })
+      const { wrapper } = getMountedWrapper({ data: { selectedGroups: [] } })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
     })
     it('should contain EditPanel with property enabled set false when multiple groups are selected', () => {
-      const wrapper = getMountedWrapper({ data: { selectedGroups: [{ id: '1' }, { id: '2' }] } })
+      const { wrapper } = getMountedWrapper({
+        data: { selectedGroups: [{ id: '1' }, { id: '2' }] }
+      })
       expect(
         wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
       ).toBeFalsy()
@@ -97,18 +106,20 @@ describe('Groups view', () => {
   })
 
   describe('computed method "allGroupsSelected"', () => {
-    it('should be true if every group is selected', () => {
-      const wrapper = getMountedWrapper({
-        mocks: { groups: [{ id: '1' }] },
+    it('should be true if every group is selected', async () => {
+      const { wrapper } = getMountedWrapper({
+        groups: [mockDeep<Group>({ id: '1' })],
         data: { selectedGroups: [{ id: '1' }] }
       })
+      await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allGroupsSelected).toBeTruthy()
     })
-    it('should false if not every group is selected', () => {
-      const wrapper = getMountedWrapper({
-        mocks: { groups: [{ id: '1' }, { id: '2' }] },
-        data: { selectedGroups: [{ id: '1' }] }
+    it('should false if not every group is selected', async () => {
+      const { wrapper } = getMountedWrapper({
+        groups: [mockDeep<Group>({ id: '1' })],
+        data: { selectedGroups: [{ id: '1' }, { id: '2' }] }
       })
+      await wrapper.vm.loadResourcesTask.last
       expect(wrapper.vm.allGroupsSelected).toBeFalsy()
     })
   })
@@ -116,65 +127,39 @@ describe('Groups view', () => {
 
 function getMountedWrapper({
   data = {},
-  mocks = {},
+  groups = [],
   resolveCreateGroup = true,
   resolveEditGroup = true,
   resolveDeleteGroup = true
 } = {}) {
-  return shallowMount(Groups, {
-    localVue,
-    store: new Vuex.Store({
-      actions: {
-        showMessage: jest.fn()
-      }
-    }),
-    mocks: {
-      $gettext: jest.fn(),
-      $ngettext: jest.fn(),
-      $gettextInterpolate: jest.fn(),
-      loadResourcesTask: {
-        isRunning: false,
-        perform: jest.fn()
-      },
-      graphClient: {
-        groups: {
-          createGroup: () =>
-            resolveCreateGroup ? Promise.resolve() : Promise.reject(new Error('')),
-          deleteGroup: () =>
-            resolveDeleteGroup ? Promise.resolve() : Promise.reject(new Error('')),
-          editGroup: () => (resolveEditGroup ? Promise.resolve() : Promise.reject(new Error('')))
-        }
-      },
-      groups: [
-        {
-          id: '1'
-        }
-      ],
-      ...mocks
-    },
-    data: () => {
-      return {
-        selectedGroups: [
-          {
-            id: 1
-          }
-        ],
+  const mocks = defaultComponentMocks()
+  const graphMock = mockDeep<Graph>()
+  graphMock.groups.listGroups.mockResolvedValue(
+    mockAxiosResolve(mockDeep<CollectionOfGroup>({ value: groups }))
+  )
+  graphMock.groups.createGroup.mockImplementation(() =>
+    resolveCreateGroup ? mockAxiosResolve() : mockAxiosReject()
+  )
+  graphMock.groups.editGroup.mockImplementation(() =>
+    resolveEditGroup ? mockAxiosResolve() : mockAxiosReject()
+  )
+  graphMock.groups.deleteGroup.mockImplementation(() =>
+    resolveDeleteGroup ? mockAxiosResolve() : mockAxiosReject()
+  )
+  mocks.$clientService.graphAuthenticated.mockImplementation(() => graphMock)
+  const storeOptions = { ...defaultStoreMockOptions }
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(Groups, {
+      data: () => ({
+        selectedGroups: [{ id: 1 }],
         sideBarActivePanel: 'DetailsPanel',
         ...data
+      }),
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks
       }
-    },
-    stubs: {
-      'create-group-modal': true,
-      'delete-group-modal': true,
-      'app-loading-spinner': true,
-      'no-content-message': true,
-      'oc-breadcrumb': true,
-      'oc-button': true,
-      'oc-icon': true,
-      translate: true
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
+    })
+  }
 }
