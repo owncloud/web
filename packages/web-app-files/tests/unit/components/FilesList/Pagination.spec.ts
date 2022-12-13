@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import Pagination from 'web-app-files/src/components/FilesList/Pagination.vue'
-import { RouterLinkStub } from '@vue/test-utils'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount, RouterLinkStub } from 'web-test-helpers'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 

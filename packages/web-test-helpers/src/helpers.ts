@@ -4,6 +4,7 @@ import { Component } from 'vue'
 import { mount as _mount } from '@vue/test-utils'
 import { Data, defineComponent, SetupFunction } from '@vue/composition-api'
 import { defaultPlugins } from 'web-test-helpers'
+export { RouterLinkStub } from '@vue/test-utils'
 
 export const createStore = <T>(storeOptions: StoreOptions<T>) => {
   return {
