@@ -42,9 +42,6 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     And the "small" preview of thumbnail should be visible in the "people" panel
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
-    And the "small" preview of thumbnail should be visible in the "links" panel
 
   @files_versions-app-required @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a file in favorites page
@@ -82,9 +79,6 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
     And the "small" preview of thumbnail should be visible in the "people" panel
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
-    And the "small" preview of thumbnail should be visible in the "links" panel
 
   @issue-1158 @comments-app-required @public_link_share-feature-required
   Scenario: user shares a file through public link and then the details dialog should work in a Shared by link page
@@ -97,8 +91,6 @@ Feature: User can open the details panel for any file or folder
     Then the "small" preview of thumbnail should be visible in the "actions" panel
     When the user switches to "people" panel in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
 
@@ -116,8 +108,6 @@ Feature: User can open the details panel for any file or folder
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
 
   @issue-1158 @comments-app-required
   Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
@@ -133,8 +123,6 @@ Feature: User can open the details panel for any file or folder
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
 
   @issue-1158 @comments-app-required
   Scenario: the recipient user should be able to view different areas of details panel in Shared with me page
@@ -151,8 +139,6 @@ Feature: User can open the details panel for any file or folder
     Then the "people" details panel should be visible
     When the user switches to "comments" panel in details panel using the webUI
     Then the "comments" details panel should be visible
-    When the user switches to "links" panel in details panel using the webUI
-    Then the "links" details panel should be visible
 
   @ocis-reva-issue-106
   Scenario: without any share the shared-with-others page should be empty
