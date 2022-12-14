@@ -25,7 +25,7 @@ describe('DeleteGroupModal', () => {
     it('should be singular if one group is given', () => {
       const { wrapper } = getWrapper({
         propsData: {
-          groups: [{ id: '1',  displayName: 'Scientists' }]
+          groups: [{ id: '1', displayName: 'Scientists' }]
         }
       })
       expect(wrapper.vm.message).toEqual('Are you sure you want to delete this group?')
