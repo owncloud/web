@@ -271,9 +271,6 @@ function getMountedWrapper({ props = {} } = {}) {
       props: {
         resources: resourcesWithAllFields,
         selection: [],
-        slots: {
-          status: "<div class='status-slot'>Hello world!</div>"
-        },
         hover: false,
         space: {
           getDriveAliasAndItem: jest.fn()
