@@ -51,7 +51,7 @@ Feature: Sharing files and folders with internal users
       | Editor             | Editor             | read,update,create,delete,share | read,update,share |
       | Custom permissions | Custom permissions | read                            | read              |
 
-  @issue-4102 @issue-ocis-2267 @disablePreviews
+  @issue-4102 @issue-ocis-2267 @disablePreviews @issue-6896 @notToImplementOnOCIS
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has logged in using the webUI
