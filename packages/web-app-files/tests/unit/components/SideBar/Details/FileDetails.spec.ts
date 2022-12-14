@@ -1,5 +1,4 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
-import stubs from '../../../../../../../tests/unit/stubs'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
@@ -163,7 +162,7 @@ function createWrapper(testResource, publicLinkContext = false, runningOnEos = f
   return {
     wrapper: shallowMount(FileDetails, {
       global: {
-        stubs: { ...stubs, 'oc-resource-icon': true },
+        stubs: { 'router-link': true, 'oc-resource-icon': true },
         provide: {
           displayedItem: testResource,
           displayedSpace: mockDeep<SpaceResource>()

@@ -1,9 +1,8 @@
-import stubs from '../../../../../../../tests/unit/stubs'
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const Component = { ...FileActions, mixins: [] }
@@ -53,7 +52,7 @@ function getWrapper(actions = []) {
     wrapper: mount(Component, {
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs: { ...stubs, 'oc-button': false },
+        stubs: { ...defaultStubs, 'oc-button': false },
         mocks: {
           $_fileActions_getAllAvailableActions: jest.fn(() => getActions(actions))
         },

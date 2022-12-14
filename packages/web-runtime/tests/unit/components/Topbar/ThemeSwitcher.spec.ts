@@ -1,7 +1,6 @@
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
-import stubs from '../../../../../../tests/unit/stubs'
 import { themeNameDark, themeNameLight } from '../../../../src/composables'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const lightTheme = {
@@ -109,7 +108,7 @@ function getWrapper() {
     wrapper: mount(ThemeSwitcher, {
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs: { ...stubs, 'oc-button': false }
+        stubs: { ...defaultStubs, 'oc-icon': true }
       }
     })
   }

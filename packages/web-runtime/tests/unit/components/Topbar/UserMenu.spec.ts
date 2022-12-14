@@ -1,6 +1,5 @@
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
-import stubs from '../../../../../../tests/unit/stubs'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const totalQuota = 1000
@@ -129,7 +128,15 @@ const getMountedWrapper = (quota, userEmail) => {
     },
     global: {
       plugins: [...defaultPlugins(), store],
-      stubs
+      stubs: {
+        ...defaultStubs,
+        'oc-button': true,
+        'oc-drop': true,
+        'oc-list': true,
+        'avatar-image': true,
+        'oc-icon': true,
+        'oc-progress': true
+      }
     }
   })
 }

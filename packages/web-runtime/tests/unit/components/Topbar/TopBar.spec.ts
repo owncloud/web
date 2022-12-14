@@ -1,5 +1,4 @@
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
-import stubs from '../../../../../../tests/unit/stubs'
 import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
@@ -57,7 +56,7 @@ const getWrapper = () => {
       },
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs,
+        stubs: { 'router-link': true, 'portal-target': true },
         mocks
       }
     })

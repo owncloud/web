@@ -1,4 +1,3 @@
-import stubs from '../../../../../../tests/unit/stubs/index.js'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 import { PublicSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
@@ -93,7 +92,6 @@ function getWrapper(space, route) {
       props: { space },
       global: {
         mocks: defaultComponentMocks({ currentRoute: route }),
-        stubs,
         plugins: [...defaultPlugins()]
       }
     })

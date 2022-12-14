@@ -1,5 +1,4 @@
 import SpaceDetails from '../../../../../src/components/SideBar/Details/SpaceDetails.vue'
-import stubs from '../../../../../../../tests/unit/stubs'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
@@ -49,7 +48,6 @@ function createWrapper(spaceResource) {
     wrapper: shallowMount(SpaceDetails, {
       global: {
         plugins: [...defaultPlugins(), store],
-        stubs,
         directives: {
           OcTooltip: jest.fn()
         },
