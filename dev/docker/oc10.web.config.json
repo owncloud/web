@@ -1,50 +1,50 @@
 {
-  "server": "http://host.docker.internal:8080",
-  "auth": {
-    "clientId": "M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5",
-    "clientSecret": "sqvPYXK94tMsEEVOYORxg8Ufesi2kC4WpJJSYb0Kj1DSAYl6u2XvJZjc3VcitjDv",
-    "url": "http://host.docker.internal:8080/index.php/apps/oauth2/api/v1/token",
-    "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize",
-    "logoutUrl": "http://host.docker.internal:8080/index.php/logout"
-  },
-  "apps": [
-    "files",
-    "preview",
-    "text-editor",
-      "epub-viewer",
-    "pdf-viewer",
-    "search"
-  ],
-  "options": {
-    "topCenterNotifications": true,
-    "disablePreviews": true,
-    "displayResourcesLazy": false,
-    "sidebar": {
-      "shares": {
-        "showAllOnLoad": true
-      }
-    }
-  },
-  "applications": [
-    {
-      "title": {
-        "en": "Classic Design",
-        "de": "Klassisches Design",
-        "fr": "Design classique",
-        "zh_CN": "文件"
+      "server": "http://host.docker.internal:8080",
+      "auth": {
+        "clientId": "M8W5mo3wQV3VHWYsaYpWhkr8dwa949i4GljCkedHhl7GWqmHMkxSeJgK2PcS0jt5",
+        "clientSecret": "sqvPYXK94tMsEEVOYORxg8Ufesi2kC4WpJJSYb0Kj1DSAYl6u2XvJZjc3VcitjDv",
+        "url": "http://host.docker.internal:8080/index.php/apps/oauth2/api/v1/token",
+        "authUrl": "http://host.docker.internal:8080/index.php/apps/oauth2/authorize",
+        "logoutUrl": "http://host.docker.internal:8080/index.php/logout"
       },
-      "icon": "swap-box",
-      "url": "http://host.docker.internal:8080/index.php/apps/files"
-    },
-    {
-      "icon": "settings-4",
-      "menu": "user",
-      "target": "_self",
-      "title": {
-        "de": "Einstellungen",
-        "en": "Settings"
+      "apps": [
+        "files",
+        "text-editor",
+        "preview",
+        "pdf-viewer",
+        "epub-viewer",
+        "search"
+      ],
+      "options": {
+        "topCenterNotifications": true,
+        "disablePreviews": true,
+        "displayResourcesLazy": false,
+        "sidebar": {
+          "shares": {
+            "showAllOnLoad": true
+          }
+        }
       },
-      "url": "http://host.docker.internal:8080/index.php/settings/personal"
+      "applications": [
+        {
+          "title": {
+            "en": "Classic Design",
+            "de": "Klassisches Design",
+            "fr": "Design classique",
+            "zh_CN": "文件"
+          },
+          "icon": "swap-box",
+          "url": "http://host.docker.internal:8080/index.php/apps/files"
+        },
+        {
+          "icon": "settings-4",
+          "menu": "user",
+          "target": "_self",
+          "title": {
+            "de": "Einstellungen",
+            "en": "Settings"
+          },
+          "url": "http://host.docker.internal:8080/index.php/settings/personal"
+        }
+      ]
     }
-  ]
-}
