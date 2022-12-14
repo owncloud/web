@@ -50,7 +50,6 @@ describe('SideBar', () => {
         const item = mockDeep<Resource>({ path })
         const { wrapper } = createWrapper({ item })
         await wrapper.vm.$nextTick()
-        await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
       })
     })
@@ -73,7 +72,6 @@ describe('SideBar', () => {
       ])('%s', async (name, { path, noSelectionExpected }) => {
         const item = mockDeep<Resource>({ path })
         const { wrapper } = createWrapper({ item })
-        await wrapper.vm.$nextTick()
         await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
       })
