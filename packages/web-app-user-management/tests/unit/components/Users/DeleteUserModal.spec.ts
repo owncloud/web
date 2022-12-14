@@ -6,10 +6,10 @@ describe('DeleteUserModal', () => {
     it('should be singular if one user is given', () => {
       const { wrapper } = getWrapper({
         propsData: {
-          users: [{ id: '1' }]
+          users: [{ id: '1', onPremisesSamAccountName: 'Marie' }]
         }
       })
-      expect(wrapper.vm.title).toEqual('Delete user %{user}?')
+      expect(wrapper.vm.title).toEqual('Delete user Marie?')
     })
     it('should be plural if multiple users are given', () => {
       const { wrapper } = getWrapper({
@@ -17,7 +17,7 @@ describe('DeleteUserModal', () => {
           users: [{ id: '1' }, { id: '2' }]
         }
       })
-      expect(wrapper.vm.title).toEqual('Delete %{userCount} selected users?')
+      expect(wrapper.vm.title).toEqual('Delete 2 selected users?')
     })
   })
 
@@ -25,7 +25,7 @@ describe('DeleteUserModal', () => {
     it('should be singular if one user is given', () => {
       const { wrapper } = getWrapper({
         propsData: {
-          users: [{ id: '1' }]
+          users: [{ id: '1', onPremisesSamAccountName: 'Marie' }]
         }
       })
       expect(wrapper.vm.message).toEqual('Are you sure you want to delete this user?')
@@ -46,11 +46,6 @@ function getWrapper({ propsData = {} } = {}) {
     wrapper: shallowMount(DeleteUserModal, {
       props: { ...propsData },
       global: {
-        mocks: {
-          $gettextInterpolate: (translation) => translation,
-          $ngettext: (translationSingular, translationPlural, count) =>
-            count > 1 ? translationPlural : translationSingular
-        },
         plugins: [...defaultPlugins()]
       }
     })
