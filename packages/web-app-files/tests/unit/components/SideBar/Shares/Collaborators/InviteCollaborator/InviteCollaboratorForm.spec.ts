@@ -1,7 +1,12 @@
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const folderMock = {
   type: 'folder',

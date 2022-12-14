@@ -1,7 +1,12 @@
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import { buildSpace } from 'web-client/src/helpers'
-import { createStore, defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const spaceMock = {
   id: '1',

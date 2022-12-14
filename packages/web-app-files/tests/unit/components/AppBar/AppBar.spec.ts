@@ -1,8 +1,13 @@
 import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"

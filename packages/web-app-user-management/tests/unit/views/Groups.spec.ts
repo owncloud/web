@@ -5,9 +5,9 @@ import {
   defaultPlugins,
   mockAxiosReject,
   mockAxiosResolve,
-  shallowMount
+  shallowMount,
+  defaultStoreMockOptions
 } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { Group, CollectionOfGroup } from 'web-client/src/generated'

@@ -1,6 +1,10 @@
 import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
-import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const ocLoaderStubSelector = 'oc-loader-stub'
 

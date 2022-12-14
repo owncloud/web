@@ -2,8 +2,7 @@ import EmptyTrashBin from 'web-app-files/src/mixins/actions/emptyTrashBin.js'
 import { createLocationTrash, createLocationSpaces } from '../../../../src/router'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

@@ -1,12 +1,17 @@
 import { DateTime } from 'luxon'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { defaultStubs } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { ShareSpaceResource } from 'web-client/src/helpers'
 import { DavPermission } from 'web-client/src/webdav/constants'
-import { createStore, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 const sevenDaysBefore = DateTime.now().minus({ days: 7 }).toHTTP()

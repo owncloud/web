@@ -4,12 +4,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosResolve,
-  mount
+  mount,
+  defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const Component = {
   template: '<div></div>',

@@ -1,7 +1,11 @@
 import UploadInfo from '../../../src/components/UploadInfo.vue'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const selectors = {
   overlay: '#upload-info',

@@ -1,10 +1,15 @@
 import App from '../../src/App.vue'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { ref } from '@vue/composition-api'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 jest.mock('web-pkg/src/composables/appDefaults', () => {
   const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')

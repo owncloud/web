@@ -1,13 +1,17 @@
 import SharedViaLink from '../../../../src/views/shares/SharedViaLink.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from '@vue/composition-api'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
 

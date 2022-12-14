@@ -1,10 +1,15 @@
 import Avatar from 'web-runtime/src/components/Avatar.vue'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { HttpClient } from 'web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from '@vue/composition-api'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const propsData = {
   userName: 'admin',

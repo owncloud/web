@@ -1,7 +1,6 @@
 import SidebarNavItem from 'web-runtime/src/components/SidebarNav/SidebarNavItem.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const exampleNavItem = sidebarNavItemFixtures[0]
 

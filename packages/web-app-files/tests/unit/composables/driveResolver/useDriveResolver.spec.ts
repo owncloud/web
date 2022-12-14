@@ -1,10 +1,13 @@
 import { useCapabilitySpacesEnabled, useDriveResolver } from 'web-pkg/src'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { computed, ref, unref } from '@vue/composition-api'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { createStore, getComposableWrapper } from 'web-test-helpers'
+import {
+  createStore,
+  getComposableWrapper,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.unmock('web-app-files/src/composables')
 jest.mock('web-pkg/src/composables/capability')

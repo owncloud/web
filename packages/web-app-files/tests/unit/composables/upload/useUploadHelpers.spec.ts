@@ -2,8 +2,12 @@ import { useUploadHelpers } from '../../../../src/composables/upload'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 import { ComputedRef, computed } from '@vue/composition-api'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import {
+  createStore,
+  defaultComponentMocks,
+  getComposableWrapper,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 describe('useUploadHelpers', () => {
   const currentPathMock = 'path'

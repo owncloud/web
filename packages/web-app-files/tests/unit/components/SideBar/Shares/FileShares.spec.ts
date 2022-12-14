@@ -1,13 +1,18 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
 import { Share, ShareTypes } from 'web-client/src/helpers/share'
-import { createStore, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 const getCollaborator = () => ({
   shareType: 0,

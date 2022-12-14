@@ -1,9 +1,13 @@
 import showDetails from 'web-app-files/src/mixins/actions/showDetails'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const Component: any = {
   template: '<div></div>',

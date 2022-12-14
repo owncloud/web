@@ -1,7 +1,12 @@
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import { themeNameDark, themeNameLight } from '../../../../src/composables'
-import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  defaultStubs,
+  mount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const lightTheme = {
   designTokens: {

@@ -1,7 +1,6 @@
 import { useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
-import { createStore, getComposableWrapper } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, getComposableWrapper, defaultStoreMockOptions } from 'web-test-helpers'
 
 describe('useStore', () => {
   it('should be valid', () => {

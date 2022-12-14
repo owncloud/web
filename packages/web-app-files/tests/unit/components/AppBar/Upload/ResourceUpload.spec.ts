@@ -1,9 +1,9 @@
 import ResourceUpload from '../../../../../src/components/AppBar/Upload/ResourceUpload.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
+  defaultStoreMockOptions,
   defaultStubs,
   mount
 } from 'web-test-helpers'

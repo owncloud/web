@@ -3,6 +3,7 @@ import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
+  defaultStoreMockOptions,
   defaultStubs,
   mount,
   mockAxiosResolve
@@ -10,7 +11,6 @@ import {
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg'
 import { Graph } from 'web-client'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 afterEach(() => jest.clearAllMocks())
 

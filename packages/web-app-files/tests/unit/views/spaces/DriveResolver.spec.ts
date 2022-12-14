@@ -1,15 +1,19 @@
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { useDriveResolver } from 'web-pkg/src/composables'
 import { computed, ref } from '@vue/composition-api'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import { locationPublicUpload } from 'web-app-files/src/router/public'
 import { PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/driveResolver')
 

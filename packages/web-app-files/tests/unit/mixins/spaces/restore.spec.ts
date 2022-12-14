@@ -3,13 +3,13 @@ import { buildSpace } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph } from 'web-client'
 import { clientService } from 'web-pkg'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosResolve,
-  mount
+  mount,
+  defaultStoreMockOptions
 } from 'web-test-helpers'
 
 const Component = {

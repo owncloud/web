@@ -1,6 +1,10 @@
 import SpaceInfo from 'web-app-files/src/components/SideBar/SpaceInfo.vue'
-import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const spaceMock = {
   type: 'space',

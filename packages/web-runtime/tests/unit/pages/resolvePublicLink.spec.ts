@@ -1,6 +1,11 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
-import { defaultPlugins, defaultComponentMocks, createStore, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  defaultPlugins,
+  defaultComponentMocks,
+  createStore,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg'
 import { Resource } from 'web-client'

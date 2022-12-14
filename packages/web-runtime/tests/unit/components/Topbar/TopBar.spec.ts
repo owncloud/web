@@ -1,6 +1,11 @@
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 jest.spyOn((TopBar as any).mixins[0].methods, 'navigation_getMenuItems').mockImplementation(() => [
   {

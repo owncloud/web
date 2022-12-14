@@ -1,10 +1,14 @@
 import ReadmeContentModal from 'web-app-files/src/components/Spaces/ReadmeContentModal.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())
 

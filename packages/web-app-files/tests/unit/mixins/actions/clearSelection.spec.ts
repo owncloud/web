@@ -1,6 +1,5 @@
 import clearSelection from 'web-app-files/src/mixins/actions/clearSelection.js'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

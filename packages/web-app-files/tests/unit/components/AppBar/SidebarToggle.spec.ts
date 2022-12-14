@@ -1,8 +1,12 @@
 import SidebarToggle from '../../../../src/components/AppBar/SidebarToggle.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { eventBus } from 'web-pkg'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const selectors = {
   toggleSidebarBtn: '#files-toggle-sidebar'

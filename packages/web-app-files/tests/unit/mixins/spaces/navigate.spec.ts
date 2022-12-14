@@ -1,7 +1,12 @@
 import Navigate from 'web-app-files/src/mixins/spaces/actions/navigate.js'
 import { createLocationSpaces } from '../../../../src/router'
-import { createStore, defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

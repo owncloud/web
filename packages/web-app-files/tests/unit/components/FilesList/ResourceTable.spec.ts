@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector } from 'web-client/src/helpers'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const router = {
   push: jest.fn(),

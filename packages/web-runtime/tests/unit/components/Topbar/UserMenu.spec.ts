@@ -1,6 +1,11 @@
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
-import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  defaultStubs,
+  mount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const totalQuota = 1000
 const basicQuota = 300

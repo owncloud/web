@@ -7,10 +7,10 @@ import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
+  defaultStoreMockOptions,
   defaultStubs,
   shallowMount
 } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 jest.mock('web-pkg/src/observer')
 jest.mock('web-app-files/src/helpers/resources', () => {

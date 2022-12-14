@@ -1,6 +1,11 @@
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 describe('Preview component', () => {
   it('should set correct props on oc-resource component', () => {

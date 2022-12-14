@@ -1,10 +1,14 @@
 import DeletedFiles from 'web-app-files/src/mixins/spaces/actions/deletedFiles.js'
 import { createLocationTrash } from '../../../../src/router'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

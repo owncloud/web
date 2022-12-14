@@ -1,7 +1,6 @@
 import EditQuota from 'web-app-files/src/mixins/spaces/actions/editQuota.js'
 import { buildSpace } from 'web-client/src/helpers'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

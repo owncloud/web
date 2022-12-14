@@ -2,8 +2,7 @@ import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Co
 import { ShareTypes } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import { DateTime } from 'luxon'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import { nextTick } from '@vue/composition-api'
 
 const bareCapabilities = {

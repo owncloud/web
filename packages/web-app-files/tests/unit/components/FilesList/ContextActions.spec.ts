@@ -2,12 +2,12 @@ import {
   createStore,
   defaultComponentMocks,
   defaultPlugins,
+  defaultStoreMockOptions,
   defaultStubs,
   mount
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import ContextActions from 'web-app-files/src/components/FilesList/ContextActions.vue'
 
 const mixins = [

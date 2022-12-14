@@ -1,10 +1,14 @@
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { defineComponent } from '@vue/composition-api'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 describe('useUpload', () => {
   it('should be valid', () => {

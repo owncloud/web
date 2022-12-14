@@ -1,8 +1,7 @@
 import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 jest.useFakeTimers()
 

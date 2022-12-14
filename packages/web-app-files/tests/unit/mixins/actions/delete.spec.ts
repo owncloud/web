@@ -1,7 +1,12 @@
 import Delete from 'web-app-files/src/mixins/actions/delete.js'
 
-import { createStore, defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const Component = {
   template: '<div></div>',

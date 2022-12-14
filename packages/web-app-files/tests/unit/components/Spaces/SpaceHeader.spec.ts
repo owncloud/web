@@ -1,8 +1,13 @@
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import {} from 'web-test-helpers'
 import { buildSpace } from 'web-client/src/helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 window.ResizeObserver =
   window.ResizeObserver ||

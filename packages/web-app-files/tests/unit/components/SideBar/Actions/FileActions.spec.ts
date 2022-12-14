@@ -2,8 +2,13 @@ import FileActions from 'web-app-files/src/components/SideBar/Actions/FileAction
 import { getActions, fileActions } from 'web-app-files/tests/__fixtures__/fileActions.js'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  defaultStubs,
+  mount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const Component = { ...FileActions, mixins: [] }
 

@@ -1,8 +1,12 @@
 import FilesDrop from '../../../src/views/FilesDrop.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 describe('FilesDrop view', () => {
   it('drop container always present', () => {

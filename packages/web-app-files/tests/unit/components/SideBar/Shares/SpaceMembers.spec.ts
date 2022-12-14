@@ -7,10 +7,15 @@ import {
   Share
 } from 'web-client/src/helpers/share'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { SpaceResource, User } from 'web-client/src/helpers'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const memberMocks = {
   [spaceRoleManager.name]: {

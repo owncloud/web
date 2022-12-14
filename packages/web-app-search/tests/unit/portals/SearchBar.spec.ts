@@ -2,8 +2,7 @@ import SearchBar from '../../../src/portals/SearchBar.vue'
 import { createLocationCommon } from 'web-app-files/src/router'
 import flushPromises from 'flush-promises'
 import { defineComponent } from '@vue/composition-api'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 const providerFiles = {
   id: 'files',

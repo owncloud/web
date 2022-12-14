@@ -5,10 +5,14 @@ import {
   SharePermissions,
   ShareTypes
 } from 'web-client/src/helpers/share'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultStubs,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.mock('uuid', () => ({
   v4: () => {

@@ -1,13 +1,17 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Graph } from 'web-client'
 import { Drive } from 'web-client/src/generated'
 import { eventBus, useRequest } from 'web-pkg'
-import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/authContext')
 

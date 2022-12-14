@@ -1,10 +1,15 @@
 import SharesNavigation from '../../../../src/components/AppBar/SharesNavigation.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { locationSharesWithMe } from 'web-app-files/src/router/shares'
 import { mock } from 'jest-mock-extended'
 import { RouteRecordPublic } from 'vue-router/types/router'
-import { createStore, defaultPlugins, defaultStubs, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  defaultStubs,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const routes = [
   mock<RouteRecordPublic>({

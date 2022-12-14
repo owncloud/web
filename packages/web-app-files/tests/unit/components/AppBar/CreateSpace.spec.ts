@@ -1,10 +1,14 @@
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { Graph, Resource } from 'web-client'
 import { Drive } from 'web-client/src/generated'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const selectors = {
   newSpaceBtn: '#new-space-menu-btn'

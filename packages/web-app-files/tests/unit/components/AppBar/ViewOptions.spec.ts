@@ -1,9 +1,13 @@
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import ViewOptions from 'web-app-files/src/components/AppBar/ViewOptions.vue'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables/router'
 import { ref } from '@vue/composition-api'
-import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/router')
 const selectors = {

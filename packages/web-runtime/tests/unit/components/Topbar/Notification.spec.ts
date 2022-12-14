@@ -7,9 +7,9 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mount,
-  shallowMount
+  shallowMount,
+  defaultStoreMockOptions
 } from 'web-test-helpers'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 
 const testData = {
   selectors: {
