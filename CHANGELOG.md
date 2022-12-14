@@ -27,6 +27,7 @@ Summary
 * Enhancement - Increase Searchbar height: [#8056](https://github.com/owncloud/web/pull/8056)
 * Enhancement - Don't open sidebar when copying quicklink: [#8008](https://github.com/owncloud/web/issues/8008)
 * Enhancement - Enable autoplay in the preview app: [#7995](https://github.com/owncloud/web/pull/7995)
+* Enhancement - Introduce image preloading to the preview app: [#8051](https://github.com/owncloud/web/pull/8051)
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 * Enhancement - Introduce zoom and rotate to the preview app: [#7977](https://github.com/owncloud/web/pull/7977)
 * Enhancement - Retry failed uploads on re-upload: [#8055](https://github.com/owncloud/web/pull/8055)
@@ -186,6 +187,11 @@ Details
 
    https://github.com/owncloud/web/issues/7908
    https://github.com/owncloud/web/pull/7995
+
+* Enhancement - Introduce image preloading to the preview app: [#8051](https://github.com/owncloud/web/pull/8051)
+
+   https://github.com/owncloud/web/issues/2052
+   https://github.com/owncloud/web/pull/8051
 
 * Enhancement - Introduce full screen mode to the preview app: [#7994](https://github.com/owncloud/web/pull/7994)
 

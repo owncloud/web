@@ -210,6 +210,8 @@ export const mimeTypes = () => {
   ]
 }
 
+const PRELOAD_IMAGE_COUNT = 10
+
 export default defineComponent({
   name: 'Preview',
   components: {
@@ -254,6 +256,7 @@ export default defineComponent({
       direction: 'rtl',
 
       cachedFiles: [],
+      toPreloadImageIds: [],
 
       currentImageZoom: 1,
       currentImageRotation: 0
@@ -319,11 +322,11 @@ export default defineComponent({
     },
 
     isActiveFileTypeAudio() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('audio')
+      return this.isFileTypeAudio(this.activeFilteredFile)
     },
 
     isActiveFileTypeVideo() {
-      return this.activeFilteredFile.mimeType.toLowerCase().startsWith('video')
+      return this.isFileTypeVideo(this.activeFilteredFile)
     },
     enterFullScreenDescription() {
       return this.$gettext('Enter full screen mode')
@@ -364,6 +367,7 @@ export default defineComponent({
     activeIndex(newValue, oldValue) {
       if (newValue !== oldValue) {
         this.loadMedium()
+        this.preloadImages()
       }
 
       if (oldValue !== null) {
@@ -409,19 +413,16 @@ export default defineComponent({
       this.isFileContentLoading = false
       this.isFileContentError = true
     },
-
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
       this.setActiveFile(result.route.params.driveAliasAndItem)
     },
-
     handleFullScreenChangeEvent() {
       if (document.fullscreenElement === null) {
         this.isFullScreenModeActivated = false
       }
     },
-
     // update route and url
     updateLocalHistory() {
       const routeOptions = mergeFileRouteOptions(
@@ -430,7 +431,6 @@ export default defineComponent({
       )
       history.pushState({}, document.title, this.$router.resolve(routeOptions).href)
     },
-
     loadMedium() {
       this.isFileContentLoading = true
 
@@ -448,7 +448,6 @@ export default defineComponent({
 
       this.loadActiveFileIntoCache()
     },
-
     async loadActiveFileIntoCache() {
       try {
         const loadRawFile = !this.isActiveFileTypeImage
@@ -459,26 +458,10 @@ export default defineComponent({
             this.activeFilteredFile
           )
         } else {
-          mediaUrl = await loadPreview({
-            resource: this.activeFilteredFile,
-            isPublic: this.isPublicLinkContext,
-            server: configurationManager.serverUrl,
-            userId: this.user.id,
-            token: this.accessToken,
-            dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
-          })
+          mediaUrl = await this.loadPreview(this.activeFilteredFile)
         }
 
-        this.cachedFiles.push({
-          id: this.activeFilteredFile.id,
-          name: this.activeFilteredFile.name,
-          url: mediaUrl,
-          ext: this.activeFilteredFile.extension,
-          mimeType: this.activeFilteredFile.mimeType,
-          isVideo: this.isActiveFileTypeVideo,
-          isImage: this.isActiveFileTypeImage,
-          isAudio: this.isActiveFileTypeAudio
-        })
+        this.addPreviewToCache(this.activeFilteredFile, mediaUrl)
         this.isFileContentLoading = false
         this.isFileContentError = false
       } catch (e) {
@@ -487,7 +470,6 @@ export default defineComponent({
         console.error(e)
       }
     },
-
     triggerActiveFileDownload() {
       if (this.isFileContentLoading) {
         return
@@ -543,6 +525,83 @@ export default defineComponent({
     imageRotateRight() {
       this.currentImageRotation =
         this.currentImageRotation === 270 ? 0 : this.currentImageRotation + 90
+    },
+    isFileTypeImage(file) {
+      return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
+    },
+    isFileTypeAudio(file) {
+      return file.mimeType.toLowerCase().startsWith('audio')
+    },
+
+    isFileTypeVideo(file) {
+      return file.mimeType.toLowerCase().startsWith('video')
+    },
+    addPreviewToCache(file, url) {
+      this.cachedFiles.push({
+        id: file.id,
+        name: file.name,
+        url,
+        ext: file.extension,
+        mimeType: file.mimeType,
+        isVideo: this.isFileTypeVideo(file),
+        isImage: this.isFileTypeImage(file),
+        isAudio: this.isFileTypeAudio(file)
+      })
+    },
+    loadPreview(file) {
+      return loadPreview({
+        resource: file,
+        isPublic: this.isPublicLinkContext,
+        server: configurationManager.serverUrl,
+        userId: this.user.id,
+        token: this.accessToken,
+        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+      })
+    },
+    preloadImages() {
+      const loadPreviewAsync = (file) => {
+        this.toPreloadImageIds.push(file.id)
+        this.loadPreview(file)
+
+          .then((mediaUrl) => {
+            this.addPreviewToCache(file, mediaUrl)
+          })
+          .catch((e) => {
+            console.error(e)
+            this.toPreloadImageIds = this.toPreloadImageIds.filter((fileId) => fileId !== file.id)
+          })
+      }
+
+      const preloadFile = (preloadFileIndex) => {
+        let cycleIndex =
+          (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
+            this.filteredFiles.length) %
+          this.filteredFiles.length
+
+        const file = this.filteredFiles[cycleIndex]
+
+        if (!this.isFileTypeImage(file) || this.toPreloadImageIds.includes(file.id)) {
+          return
+        }
+
+        loadPreviewAsync(file)
+      }
+
+      for (
+        let followingFileIndex = 1;
+        followingFileIndex <= PRELOAD_IMAGE_COUNT;
+        followingFileIndex++
+      ) {
+        preloadFile(followingFileIndex)
+      }
+
+      for (
+        let previousFileIndex = -1;
+        previousFileIndex >= PRELOAD_IMAGE_COUNT * -1;
+        previousFileIndex--
+      ) {
+        preloadFile(previousFileIndex)
+      }
     }
   }
 })
