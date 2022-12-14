@@ -96,7 +96,9 @@ export default {
           if (response.status === 200) {
             return response.data
           }
-          throw new Error(`Unexpected status code ${response.status}`)
+          if (response.status !== 404) {
+            throw new Error(`Unexpected status code ${response.status}`)
+          }
         })
         .then((blob) => {
           this.loading = false
