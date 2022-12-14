@@ -1,7 +1,7 @@
 import { defineComponent } from '@vue/composition-api'
 import { useFileListHeaderPosition } from '../../../../../src/composables'
 import { useStore } from 'web-pkg/src/composables'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 export const createWrapper = () =>
   mount(
@@ -14,7 +14,10 @@ export const createWrapper = () =>
       template: `<div>{{ y }}</div>`
     }),
     {
-      attachTo: document.body
+      attachTo: document.body,
+      global: {
+        plugins: [...defaultPlugins()]
+      }
     }
   )
 

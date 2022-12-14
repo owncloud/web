@@ -1,5 +1,5 @@
 import CompareSaveDialog from '../../../../src/components/sideBar/CompareSaveDialog.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())
 
@@ -34,6 +34,9 @@ function getWrapper({ propsData = {} } = {}) {
         originalObject: {},
         compareObject: {},
         ...propsData
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

@@ -1,5 +1,5 @@
 import CreateGroupModal from '../../../../src/components/Groups/CreateGroupModal.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('CreateGroupModal', () => {
   describe('computed method "buttonConfirmDisabled"', () => {
@@ -47,6 +47,9 @@ function getWrapper() {
             displayName: 'admins'
           }
         ]
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

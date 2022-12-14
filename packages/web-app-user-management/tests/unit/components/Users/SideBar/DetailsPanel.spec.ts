@@ -1,5 +1,5 @@
 import DetailsPanel from '../../../../../src/components/Users/SideBar/DetailsPanel.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('DetailsPanel', () => {
   describe('computed method "user"', () => {
@@ -55,7 +55,10 @@ describe('DetailsPanel', () => {
 function getWrapper({ propsData = {} } = {}) {
   return {
     wrapper: shallowMount(DetailsPanel, {
-      props: { ...propsData }
+      props: { ...propsData },
+      global: {
+        plugins: [...defaultPlugins()]
+      }
     })
   }
 }

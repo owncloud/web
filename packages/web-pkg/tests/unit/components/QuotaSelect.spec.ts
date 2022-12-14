@@ -1,5 +1,5 @@
 import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())
 
@@ -75,6 +75,9 @@ function getWrapper({ totalQuota = 10000000000 } = {}) {
         totalQuota,
         maxQuota: 100 * Math.pow(10, 9),
         title: 'Personal quota'
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

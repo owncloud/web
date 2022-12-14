@@ -1,6 +1,6 @@
 import ActionMenuItem from 'web-app-files/src/components/ActionMenuItem.vue'
 import { fileActions } from '../../__fixtures__/fileActions'
-import { mount, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const selectors = {
   handler: '[data-testid="action-handler"]',
@@ -67,7 +67,8 @@ function getWrapper(action, items = [], appearance = null, mountType = shallowMo
       global: {
         stubs: {
           'router-link': true
-        }
+        },
+        plugins: [...defaultPlugins()]
       }
     })
   }

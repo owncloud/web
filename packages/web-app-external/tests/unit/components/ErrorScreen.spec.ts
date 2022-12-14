@@ -1,5 +1,5 @@
 import ErrorScreen from '../../../src/components/ErrorScreen.vue'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('The external app error screen component', () => {
   test('displays an icon and a paragraph', () => {
@@ -10,7 +10,8 @@ describe('The external app error screen component', () => {
       global: {
         stubs: {
           OcIcon: true
-        }
+        },
+        plugins: [...defaultPlugins()]
       }
     })
     expect(wrapper).toMatchSnapshot()

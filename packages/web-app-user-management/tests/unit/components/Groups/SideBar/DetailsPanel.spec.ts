@@ -1,5 +1,5 @@
 import DetailsPanel from '../../../../../src/components/Groups/SideBar/DetailsPanel.vue'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('DetailsPanel', () => {
   describe('computed method "group"', () => {
@@ -62,7 +62,8 @@ function getWrapper({ propsData = {} } = {}) {
         stubs: {
           'avatar-image': true,
           'oc-icon': true
-        }
+        },
+        plugins: [...defaultPlugins()]
       }
     })
   }

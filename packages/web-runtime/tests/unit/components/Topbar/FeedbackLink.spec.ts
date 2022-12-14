@@ -1,6 +1,6 @@
 import FeedbackLink from '../../../../src/components/Topbar/FeedbackLink.vue'
 import { axe, toHaveNoViolations } from 'jest-axe'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 expect.extend(toHaveNoViolations)
 
@@ -41,6 +41,10 @@ describe('FeedbackLink component', () => {
 
 const getWrapper = () => {
   return {
-    wrapper: mount(FeedbackLink, {})
+    wrapper: mount(FeedbackLink, {
+      global: {
+        plugins: [...defaultPlugins()]
+      }
+    })
   }
 }

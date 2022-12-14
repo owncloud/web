@@ -1,5 +1,5 @@
 import NoContentMessage from '../../../src/components/NoContentMessage.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('NoContentMessage', () => {
   describe('icon prop', () => {
@@ -48,7 +48,10 @@ function getWrapper(slots = {}) {
   return {
     wrapper: shallowMount(NoContentMessage, {
       slots: slots,
-      props: { icon: 'mdi-test-icon' }
+      props: { icon: 'mdi-test-icon' },
+      global: {
+        plugins: [...defaultPlugins()]
+      }
     })
   }
 }

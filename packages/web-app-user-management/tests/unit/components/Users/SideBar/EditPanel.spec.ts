@@ -1,5 +1,5 @@
 import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('EditPanel', () => {
   describe('method "revertChanges"', () => {
@@ -78,6 +78,9 @@ function getWrapper({ propsData = {} } = {}) {
         },
         roles: [{ id: '1', displayName: 'admin' }],
         ...propsData
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

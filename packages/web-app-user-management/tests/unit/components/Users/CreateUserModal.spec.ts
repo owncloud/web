@@ -1,5 +1,5 @@
 import CreateUserModal from '../../../../src/components/Users/CreateUserModal.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('CreateUserModal', () => {
   describe('computed method "buttonConfirmDisabled"', () => {
@@ -98,6 +98,9 @@ function getWrapper() {
             onPremisesSamAccountName: 'jan'
           }
         ]
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

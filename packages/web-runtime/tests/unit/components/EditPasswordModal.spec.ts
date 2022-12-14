@@ -1,5 +1,5 @@
 import EditPasswordModal from '../../../src/components/EditPasswordModal.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())
 
@@ -46,6 +46,9 @@ function getWrapper() {
             displayName: 'admins'
           }
         ]
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

@@ -1,5 +1,5 @@
 import LoadingScreen from '../../../src/components/LoadingScreen.vue'
-import { mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('The external app loading screen component', () => {
   test('displays a spinner and a paragraph', () => {
@@ -7,7 +7,8 @@ describe('The external app loading screen component', () => {
       global: {
         stubs: {
           OcSpinner: true
-        }
+        },
+        plugins: [...defaultPlugins()]
       }
     })
     expect(wrapper).toMatchSnapshot()

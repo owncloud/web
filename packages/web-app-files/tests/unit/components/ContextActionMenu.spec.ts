@@ -1,5 +1,5 @@
 import ContextActionMenu from 'web-app-files/src/components/ContextActionMenu.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src/helpers'
 
@@ -20,6 +20,9 @@ function getShallowWrapper(menuSections, items = []) {
         space: mockDeep<SpaceResource>(),
         menuSections,
         items
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

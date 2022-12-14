@@ -1,5 +1,5 @@
 import UsersList from '../../../../src/components/Users/UsersList.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('UsersList', () => {
   describe('computed method "allUsersSelected"', () => {
@@ -93,6 +93,9 @@ function getWrapper({ propsData = {} } = {}) {
         selectedUsers: [],
         headerPosition: 0,
         ...propsData
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

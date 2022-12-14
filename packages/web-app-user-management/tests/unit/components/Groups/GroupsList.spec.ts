@@ -1,5 +1,5 @@
 import UsersList from '../../../../src/components/Groups/GroupsList.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {
@@ -53,6 +53,9 @@ function getMountedWrapper({ propsData = {} } = {}) {
         selectedGroups: [],
         headerPosition: 0,
         ...propsData
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }

@@ -1,5 +1,5 @@
 import ApplicationsMenu from 'web-runtime/src/components/Topbar/ApplicationsMenu.vue'
-import { defaultComponentMocks, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const menuLinks = [
   {
@@ -31,7 +31,8 @@ function getWrapper(applicationsList = []) {
         applicationsList
       },
       global: {
-        mocks: defaultComponentMocks()
+        mocks: defaultComponentMocks(),
+        plugins: [...defaultPlugins()]
       }
     })
   }

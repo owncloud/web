@@ -1,5 +1,5 @@
 import ListInfo from '../../../../src/components/FilesList/ListInfo.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('ListInfo', () => {
   describe('files and folders prop', () => {
@@ -88,6 +88,9 @@ function getWrapper(props = {}) {
       files: 2,
       folders: 3,
       ...props
+    },
+    global: {
+      plugins: [...defaultPlugins()]
     }
   })
 }

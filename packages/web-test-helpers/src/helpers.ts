@@ -1,8 +1,8 @@
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex, { StoreOptions } from 'vuex'
 import { Component } from 'vue'
 import { mount as _mount } from '@vue/test-utils'
-import { Data, defineComponent, SetupFunction } from '@vue/composition-api'
+import VueCompositionApi, { Data, defineComponent, SetupFunction } from '@vue/composition-api'
 import { defaultPlugins } from 'web-test-helpers'
 export { RouterLinkStub } from '@vue/test-utils'
 
@@ -42,9 +42,15 @@ type CompatMountOptions = {
 }
 
 export const mount = (component: ComponentType, options: CompatMountOptions) => {
-  const localVue = defaultLocalVue()
+  const localVue = createLocalVue()
 
-  options?.global?.plugins?.filter((p) => p).forEach(localVue.use)
+  options?.global?.plugins?.filter(Boolean).forEach((plugin) => {
+    if (Array.isArray(plugin)) {
+      localVue.use(plugin[0], plugin[1])
+    } else {
+      localVue.use(plugin)
+    }
+  })
 
   for (const [name, component] of Object.entries(options?.global?.components || {})) {
     localVue.component(name, component)
@@ -93,6 +99,8 @@ export const getComposableWrapper = (
 }
 
 export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
-  defaultLocalVue()
+  const localVue = createLocalVue()
+  localVue.use(Vuex)
+  localVue.use(VueCompositionApi)
   return new Vuex.Store(storeOptions)
 }

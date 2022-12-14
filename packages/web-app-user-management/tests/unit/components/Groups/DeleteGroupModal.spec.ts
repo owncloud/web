@@ -1,5 +1,5 @@
 import DeleteGroupModal from '../../../../src/components/Groups/DeleteGroupModal.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('DeleteGroupModal', () => {
   describe('computed method "title"', () => {
@@ -50,7 +50,8 @@ function getWrapper({ propsData = {} } = {}) {
           $gettextInterpolate: (translation) => translation,
           $ngettext: (translationSingular, translationPlural, count) =>
             count > 1 ? translationPlural : translationSingular
-        }
+        },
+        plugins: [...defaultPlugins()]
       }
     })
   }

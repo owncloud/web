@@ -1,5 +1,5 @@
 import AppTemplate from '../../../src/components/AppTemplate.vue'
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -93,6 +93,9 @@ function getWrapper({ propsData = {} } = {}) {
         sideBarAvailablePanels: [],
         sideBarActivePanel: '',
         ...propsData
+      },
+      global: {
+        plugins: [...defaultPlugins()]
       }
     })
   }
