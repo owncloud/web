@@ -1,7 +1,6 @@
 import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
-import stubs from '../../../../../../tests/unit/stubs'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
-import { createStore, defaultPlugins, mount } from 'web-test-helpers'
+import { createStore, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -68,9 +67,11 @@ function getWrapper() {
       global: {
         plugins: [...defaultPlugins(), store],
         stubs: {
-          ...stubs,
+          ...defaultStubs,
           'sidebar-nav-item': true,
-          'oc-button': false
+          'oc-button': false,
+          'oc-icon': true,
+          'oc-list': true
         }
       }
     })
