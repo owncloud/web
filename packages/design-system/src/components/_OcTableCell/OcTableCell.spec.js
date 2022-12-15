@@ -1,10 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import Cell from './_OcTableCell.vue'
 
 describe('OcTableCell', () => {
   it('Uses correct element', () => {
     const wrapper = shallowMount(Cell, {
-      propsData: {
+      props: {
         type: 'th',
         alignH: 'right',
         alignV: 'bottom',
