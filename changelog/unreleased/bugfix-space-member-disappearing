@@ -1,0 +1,6 @@
+Bugfix: Space member disappearing
+
+We've fixed a bug where adding links to a space would remove newly added members in the UI.
+
+https://github.com/owncloud/web/issues/8081
+https://github.com/owncloud/web/pull/8082

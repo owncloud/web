@@ -61,12 +61,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   setup() {
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
@@ -115,7 +116,7 @@ export default {
       this.viewModeCurrent = mode
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -15,6 +15,7 @@
           />
           <oc-button
             v-oc-tooltip="$gettext('Close filter')"
+            class="close-filter-btn"
             :aria-label="$gettext('Close filter')"
             appearance="raw"
             @click="toggleFilter"
@@ -25,6 +26,7 @@
         <oc-button
           v-else
           v-oc-tooltip="$gettext('Filter members')"
+          class="open-filter-btn"
           :aria-label="$gettext('Filter members')"
           appearance="raw"
           @click="toggleFilter"

@@ -1,0 +1,5 @@
+Bugfix: Left sidebar navigation item text flickers on transition
+
+We've fixed a bug that caused the left sidebar navigation items text to flicker in light mode.
+
+https://github.com/owncloud/web/pull/8080

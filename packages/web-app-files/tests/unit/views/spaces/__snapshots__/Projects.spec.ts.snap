@@ -8,59 +8,32 @@ exports[`Projects view different files view states lists all available project s
       <div class="spaces-list oc-px-m oc-mt-l">
         <ul class="oc-list oc-my-rm oc-mx-rm oc-flex">
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-item-id="2" class="spaces-list-card oc-card oc-card-default oc-rounded">
-              <div class="oc-card-media-top oc-border-b">
-                <router-link-stub tag="a" to="[object Object]">
-                  <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
-                </router-link-stub>
-              </div>
-              <div class="oc-card-body oc-p-s">
-                <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                    <router-link-stub tag="a" to="[object Object]" class="space-name oc-text-left oc-text-truncate"><span>Another space</span></router-link-stub>
-                  </div>
-                  <div class="oc-flex oc-flex-middle">
-                    <div><button aria-label="Show members" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button></div>
-                    <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined" aria-expanded="false"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button> </div>
-                  </div>
-                </div>
-                <!---->
-              </div>
-            </div>
-          </li>
-          <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-item-id="3" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
+            <div data-item-id="2" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
               <div class="oc-card-media-top oc-border-b"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span"><span>Disabled</span></span> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></button></div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <button type="button" class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span>Disabled space</span></button></div>
+                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <button type="button" class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span>Some other space</span></button></div>
                   <div class="oc-flex oc-flex-middle">
                     <div><button aria-label="Show members" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button></div>
                     <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined" aria-expanded="false"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button> </div>
                   </div>
                 </div>
-                <!---->
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
               </div>
             </div>
           </li>
           <li class="spaces-list-item oc-mb-m oc-mr-m">
-            <div data-item-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded">
-              <div class="oc-card-media-top oc-border-b">
-                <router-link-stub tag="a" to="[object Object]">
-                  <!----> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span>
-                </router-link-stub>
-              </div>
+            <div data-item-id="1" class="spaces-list-card oc-card oc-card-default oc-rounded state-trashed">
+              <div class="oc-card-media-top oc-border-b"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-position-absolute space-disabled-indicator oc-tag oc-tag-m oc-tag-span"><span>Disabled</span></span> <span class="space-default-image oc-px-m oc-py-m oc-icon oc-icon-xxl oc-icon-passive"><!----></span></button></div>
               <div class="oc-card-body oc-p-s">
                 <div class="oc-flex oc-flex-between oc-flex-middle">
-                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span>
-                    <router-link-stub tag="a" to="[object Object]" class="space-name oc-text-left oc-text-truncate"><span>Some space</span></router-link-stub>
-                  </div>
+                  <div class="oc-flex oc-flex-middle oc-text-truncate"><span class="oc-mr-s oc-icon oc-icon-m oc-icon-passive"><!----></span> <button type="button" class="space-name oc-text-left oc-text-truncate oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span>Some space</span></button></div>
                   <div class="oc-flex oc-flex-middle">
                     <div><button aria-label="Show members" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button></div>
                     <div><button aria-label="Show context menu" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="space-context-btn-undefined" aria-expanded="false"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></button> </div>
                   </div>
                 </div>
-                <!---->
+                <p class="oc-text-left oc-ml-xs oc-mt-xs oc-mb-rm oc-text-truncate"><small>desc</small></p>
               </div>
             </div>
           </li>

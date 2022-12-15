@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ViewOptions component sets the correct initial files page limit 1`] = `
+<div class="oc-flex oc-flex-middle">
+  <div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
+    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">
+      <oc-icon-stub name="menu-line-condensed" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+    </oc-button-stub>
+    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">
+      <oc-icon-stub name="menu-line" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+    </oc-button-stub>
+  </div>
+  <oc-button-stub type="button" size="medium" arialabel="Display customization options of the files list" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="files-view-options-btn" data-testid="files-view-options-btn" class="oc-my-s oc-p-xs">
+    <oc-icon-stub name="settings-3" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
+  </oc-button-stub>
+  <oc-drop-stub dropid="files-view-options-drop" toggle="#files-view-options-btn" position="bottom-start" mode="click" paddingsize="medium" class="oc-width-auto">
+    <oc-list-stub>
+      <li class="files-view-options-list-item oc-mb-m">
+        <oc-switch-stub label="Show hidden files" labelid="oc-switch-label-3" data-testid="files-switch-hidden-files"></oc-switch-stub>
+      </li>
+      <li class="files-view-options-list-item oc-my-m">
+        <oc-switch-stub label="Show file extensions" labelid="oc-switch-label-3" data-testid="files-switch-files-extensions-files"></oc-switch-stub>
+      </li>
+      <li class="files-view-options-list-item oc-mt-m">
+        <oc-page-size-stub options="100,500" label="Items per page" selected="100" selectid="oc-page-size-2" data-testid="files-pagination-size" class="files-pagination-size"></oc-page-size-stub>
+      </li>
+    </oc-list-stub>
+  </oc-drop-stub>
+</div>
+`;

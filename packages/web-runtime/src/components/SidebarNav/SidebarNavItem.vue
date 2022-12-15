@@ -129,7 +129,7 @@ export default {
   }
   .text {
     opacity: 1;
-    transition: all 0s;
+    transition: all 0.3s;
   }
   .text-invisible {
     opacity: 0 !important;
