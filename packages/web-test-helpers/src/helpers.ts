@@ -66,6 +66,7 @@ export const mount = (component: ComponentType, options: CompatMountOptions) => 
     ...(options?.data && { data: options.data }),
     ...(options?.attachTo && { attachTo: options.attachTo }),
     ...(options?.slots && { slots: options.slots }),
+    ...(options?.global?.directives && { directives: options.global.directives }),
     ...(options?.global?.provide && { provide: options.global.provide }),
     ...(options?.global?.mocks && { mocks: options.global.mocks }),
     ...(options?.global?.stubs && { stubs: options.global.stubs })

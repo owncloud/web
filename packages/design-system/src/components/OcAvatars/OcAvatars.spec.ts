@@ -1,5 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
-
+import { shallowMount } from 'web-test-helpers'
 import Avatars from './OcAvatars.vue'
 
 const items = [
@@ -43,14 +42,16 @@ describe('OcAvatars', () => {
   it('displays tooltip', () => {
     const OcTooltip = jest.fn()
     const wrapper = shallowMount(Avatars, {
-      propsData: {
+      props: {
         items,
         maxDisplayed: 2,
         isTooltipDisplayed: true,
         accessibleDescription: 'List of users'
       },
-      directives: {
-        OcTooltip
+      global: {
+        directives: {
+          OcTooltip
+        }
       }
     })
 
@@ -61,14 +62,16 @@ describe('OcAvatars', () => {
   it('prefers avatars over links when maxDisplayed is exceeded', () => {
     const OcTooltip = jest.fn()
     const wrapper = shallowMount(Avatars, {
-      propsData: {
+      props: {
         items,
         maxDisplayed: 3,
         isTooltipDisplayed: true,
         accessibleDescription: 'List of users'
       },
-      directives: {
-        OcTooltip
+      global: {
+        directives: {
+          OcTooltip
+        }
       }
     })
 
@@ -81,13 +84,15 @@ describe('OcAvatars', () => {
   it('shows avatars first and links last', () => {
     const OcTooltip = jest.fn()
     const wrapper = shallowMount(Avatars, {
-      propsData: {
+      props: {
         items,
         isTooltipDisplayed: true,
         accessibleDescription: 'List of users'
       },
-      directives: {
-        OcTooltip
+      global: {
+        directives: {
+          OcTooltip
+        }
       }
     })
 

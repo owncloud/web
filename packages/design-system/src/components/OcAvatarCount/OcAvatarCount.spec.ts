@@ -1,11 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
-
+import { shallowMount } from 'web-test-helpers'
 import Count from './OcAvatarCount.vue'
 
 describe('OcAvatarCount', () => {
   it('dynamically calculates font size', () => {
     const wrapper = shallowMount(Count, {
-      propsData: {
+      props: {
         size: 100,
         count: 2
       }
