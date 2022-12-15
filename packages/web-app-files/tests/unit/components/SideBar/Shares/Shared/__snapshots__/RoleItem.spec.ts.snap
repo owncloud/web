@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoleItem renders the role information 1`] = `<span id="files-role-undefined" class="roles-select-role-item"><span class="oc-text-bold oc-display-block oc-width-1-1">undefined</span> <span class="oc-m-rm oc-text-small oc-display-block"></span></span>`;
