@@ -1,8 +1,6 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, mount } from 'web-test-helpers'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import Table from './OcTable.vue'
-
-const localVue = createLocalVue()
 
 expect.extend(toHaveNoViolations)
 
@@ -51,8 +49,7 @@ const data = [
 describe('OcTable', () => {
   it('displays all field types', async () => {
     const wrapper = mount(Table, {
-      localVue,
-      propsData: {
+      props: {
         fields,
         data
       },
@@ -85,7 +82,7 @@ describe('OcTable', () => {
 
   it('hides header', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         hasHeader: false
@@ -97,7 +94,7 @@ describe('OcTable', () => {
 
   it('enables hover effect', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         hover: true
@@ -109,7 +106,7 @@ describe('OcTable', () => {
 
   it('extracts field title', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields: [
           {
             name: 'resource-name'
@@ -129,7 +126,7 @@ describe('OcTable', () => {
 
   it('extracts cell props', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields: [
           {
             name: 'name',
@@ -160,7 +157,7 @@ describe('OcTable', () => {
 
   it('adds sticky header', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         sticky: true
@@ -172,7 +169,7 @@ describe('OcTable', () => {
 
   it('highlights a row', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: '4b136c0a-5057-11eb-ac70-eba264112003'
@@ -184,7 +181,7 @@ describe('OcTable', () => {
 
   it('highlights multiple rows', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: [
@@ -199,7 +196,7 @@ describe('OcTable', () => {
 
   it('adds data-item-id for rows', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: []
@@ -210,7 +207,7 @@ describe('OcTable', () => {
 
   it('accepts itemDomSelector closure', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: [],
@@ -224,7 +221,7 @@ describe('OcTable', () => {
 
   it('emits contextmenu-clicked event upon right click on table row', async () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: []
@@ -236,7 +233,7 @@ describe('OcTable', () => {
 
   it('enable dragDrop should enable draggable on rows', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         fields,
         data,
         highlighted: [],
