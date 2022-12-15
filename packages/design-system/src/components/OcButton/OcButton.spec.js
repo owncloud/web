@@ -1,14 +1,13 @@
 import OcButton from './OcButton.vue'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-const localVue = createLocalVue()
+import { shallowMount } from 'web-test-helpers'
 
 describe('OcButton', () => {
   const testSlots = { default: '<p class="text">Test button</p>' }
   function getWrapperWithProps(props) {
-    return shallowMount(OcButton, { localVue: localVue, propsData: props })
+    return shallowMount(OcButton, { props })
   }
   function getWrapperWithTestSlot() {
-    return shallowMount(OcButton, { localVue: localVue, slots: testSlots })
+    return shallowMount(OcButton, { slots: testSlots })
   }
 
   it('should display slot html', () => {
