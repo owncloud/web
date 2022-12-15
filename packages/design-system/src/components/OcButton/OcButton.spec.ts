@@ -102,7 +102,7 @@ describe('OcButton', () => {
       ${'variation'}
       ${'gapSize'}
     `('when prop "$prop" is set to an invalid value"', ({ prop }) => {
-      let props = {}
+      const props = {}
       props[prop] = 'not-valid'
       expect(() => {
         getWrapperWithProps(props)
