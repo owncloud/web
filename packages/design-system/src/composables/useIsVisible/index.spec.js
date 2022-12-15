@@ -1,8 +1,6 @@
-import { createLocalVue, mount } from '@vue/test-utils'
 import { ref, nextTick } from 'vue'
 import { useIsVisible } from './index'
-
-const localVue = createLocalVue()
+import { mount } from 'web-test-helpers'
 
 const mockIntersectionObserver = () => {
   jest.useFakeTimers()
@@ -48,9 +46,6 @@ const createWrapper = (options = {}) =>
           target
         }
       }
-    },
-    {
-      localVue
     }
   )
 
