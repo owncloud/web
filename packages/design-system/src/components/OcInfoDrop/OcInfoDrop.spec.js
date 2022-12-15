@@ -1,20 +1,14 @@
 import OcInfoDrop from './OcInfoDrop.vue'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
-
-const localVue = createLocalVue()
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
+import { shallowMount } from 'web-test-helpers'
 
 describe('OcInfoDrop', () => {
   function getWrapperWithProps(props) {
     return shallowMount(OcInfoDrop, {
-      localVue: localVue,
-      propsData: props,
-      stubs: {
-        OcDrop: true
+      props,
+      global: {
+        stubs: {
+          OcDrop: true
+        }
       }
     })
   }
