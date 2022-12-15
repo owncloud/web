@@ -1,45 +1,23 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import setImage from 'web-app-files/src/mixins/spaces/actions/setImage'
 import { thumbnailService } from '../../../../src/services'
 import { buildSpace, Resource } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService, clientService } from 'web-pkg'
 import { Graph } from 'web-client'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
+const Component = {
+  template: '<div></div>',
+  mixins: [setImage]
+}
 
 describe('setImage', () => {
-  const Component = {
-    template: '<div></div>',
-    mixins: [setImage]
-  }
-
-  function getWrapper(space) {
-    const clientMock = mockDeep<ClientService>()
-    clientMock.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
-    const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
-    return mount(Component, {
-      localVue,
-      mocks: {
-        ...defaultMocks,
-        $clientService: clientMock,
-        space
-      },
-      store: createStore(Vuex.Store, {
-        ...defaultStoreMockOptions,
-        modules: {
-          ...defaultStoreMockOptions.modules,
-          user: { state: { uuid: 1 } }
-        }
-      })
-    })
-  }
-
   beforeAll(() => {
     thumbnailService.initialize({
       enabled: true,
@@ -174,3 +152,24 @@ describe('setImage', () => {
     }) */
   })
 })
+
+function getWrapper(space) {
+  const clientMock = mockDeep<ClientService>()
+  clientMock.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
+  const defaultMocks = defaultComponentMocks({ currentRoute: { name: 'files-spaces-generic' } })
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  return mount(Component, {
+    global: {
+      plugins: [...defaultPlugins(), store],
+      mocks: {
+        ...defaultMocks,
+        $clientService: clientMock,
+        space
+      }
+    }
+  })
+}

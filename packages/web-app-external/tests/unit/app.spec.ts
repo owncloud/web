@@ -1,87 +1,28 @@
 import App from '../../src/App.vue'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
+import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
+import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
+import { ref } from '@vue/composition-api'
+import { mockDeep } from 'jest-mock-extended'
 
-const localVue = createLocalVue()
-
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
+jest.mock('web-pkg/src/composables/appDefaults', () => {
+  const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
+  return {
+    useAppDefaults: jest.fn(),
+    useAppFileHandling: jest.fn(),
+    queryItemAsString
+  }
 })
-localVue.use(Vuex)
 
 const componentStubs = {
   ErrorScreen: true,
   LoadingScreen: true
-}
-
-const $route = {
-  query: {
-    'public-token': 'a-token',
-    app: 'exampleApp',
-    fileId: '2147491323'
-  },
-  params: {
-    filePath: 'someFile.md'
-  }
-}
-
-const mockFileInfo = jest.fn(() => ({
-  name: $route.params.filePath,
-  fileInfo: {
-    '{http://owncloud.org/ns}fileid': '2147491323'
-  }
-}))
-
-const storeOptions = {
-  getters: {
-    configuration: jest.fn(() => ({
-      server: 'http://example.com/',
-      currentTheme: {
-        general: {
-          name: 'some-company'
-        }
-      }
-    })),
-    capabilities: jest.fn(() => ({
-      files: {
-        app_providers: [
-          {
-            apps_url: '/app/list',
-            enabled: true,
-            open_url: '/app/open'
-          }
-        ]
-      }
-    }))
-  },
-  modules: {
-    External: {
-      namespaced: true,
-      getters: {
-        mimeTypes: jest.fn()
-      },
-      actions: {
-        fetchMimeTypes: jest.fn()
-      },
-      mutations: {
-        SET_MIME_TYPES: jest.fn()
-      }
-    },
-    runtime: {
-      namespaced: true,
-      modules: {
-        auth: {
-          namespaced: true,
-          getters: {
-            accessToken: jest.fn(() => 'GFwHKXdsMgoFwt'),
-            isUserContextReady: jest.fn(() => true)
-          }
-        }
-      }
-    }
-  }
 }
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -102,8 +43,7 @@ const providerSuccessResponseGet = {
 
 describe('The app provider extension', () => {
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
   })
 
   afterEach(() => {
@@ -111,71 +51,52 @@ describe('The app provider extension', () => {
   })
 
   it('should show a loading spinner while loading', async () => {
-    const makeRequest = jest.fn(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              ok: true,
-              status: 200
-            })
-          }, 500)
-        })
-    )
-    const wrapper = createShallowMountWrapper(makeRequest)
+    const { wrapper } = createShallowMountWrapper()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should show a meaningful message if an error occurs during loading', async () => {
-    const makeRequest = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        status: 500,
-        message: 'We encountered an internal error'
-      })
-    )
-    const wrapper = createShallowMountWrapper(makeRequest)
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+      message: 'We encountered an internal error'
+    })
+    const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should fail for unauthenticated users', async () => {
-    const makeRequest = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        status: 401,
-        message: 'Login Required'
-      })
-    )
-    const wrapper = createShallowMountWrapper(makeRequest)
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 401,
+      message: 'Login Required'
+    })
+    const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should be able to load an iFrame via get', async () => {
-    const makeRequest = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        data: providerSuccessResponseGet
-      })
-    )
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      data: providerSuccessResponseGet
+    })
 
-    const wrapper = createShallowMountWrapper(makeRequest)
+    const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper).toMatchSnapshot()
   })
   it('should be able to load an iFrame via post', async () => {
-    const makeRequest = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        data: providerSuccessResponsePost
-      })
-    )
-    const wrapper = createShallowMountWrapper(makeRequest)
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      data: providerSuccessResponsePost
+    })
+    const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -183,26 +104,40 @@ describe('The app provider extension', () => {
   })
 })
 
-function createShallowMountWrapper(makeRequest, options = {}) {
-  return shallowMount(App, {
-    localVue,
-    store: createStore(),
-    stubs: componentStubs,
-    mocks: {
-      $route
-    },
-    computed: {
-      currentFileContext: () => $route.params,
-      applicationName: () => $route.query.app
-    },
-    methods: {
-      getFileInfo: mockFileInfo,
+function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ status: 200 })) {
+  jest.mocked(useAppDefaults).mockImplementation(() =>
+    useAppDefaultsMock({
+      currentFileContext: ref(mockDeep<FileContext>({ path: 'someFile.md' })),
       makeRequest
-    },
-    ...options
-  })
-}
+    })
+  )
 
-function createStore() {
-  return new Vuex.Store(storeOptions)
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files: {
+      app_providers: [
+        {
+          apps_url: '/app/list',
+          enabled: true,
+          open_url: '/app/open'
+        }
+      ]
+    }
+  }))
+
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(App, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        stubs: componentStubs,
+        mocks: {
+          ...defaultComponentMocks({
+            gettext: false,
+            currentRoute: { query: { app: 'exampleApp' } }
+          })
+        }
+      }
+    })
+  }
 }

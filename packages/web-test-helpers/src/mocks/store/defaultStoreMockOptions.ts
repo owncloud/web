@@ -3,20 +3,38 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 
 export const defaultStoreMockOptions = {
   getters: {
+    newFileHandlers: jest.fn(() => []),
+    activeNotifications: jest.fn(() => []),
+    getNavItemsByExtension: jest.fn(),
+    apps: jest.fn(() => ({})),
+    quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
+    user: jest.fn().mockImplementation(() => ({})),
     configuration: jest
       .fn()
       .mockImplementation(() => ({ currentTheme: { general: { slogan: '' } } }))
   },
   modules: {
     ...filesModuleMockOptions,
-    ...runtimeModuleMockOptions
+    ...runtimeModuleMockOptions,
+    apps: {
+      getters: {
+        fileSideBars: jest.fn(() => [])
+      }
+    },
+    External: {
+      getters: {
+        mimeTypes: jest.fn(() => ({}))
+      }
+    }
   },
   actions: {
     createModal: jest.fn(),
     hideModal: jest.fn(),
     toggleModalConfirmButton: jest.fn(),
     showMessage: jest.fn(),
+    deleteNotification: jest.fn(),
+    loadTheme: jest.fn(),
     setModalInputErrorMessage: jest.fn()
   },
   mutations: {

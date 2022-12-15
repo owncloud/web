@@ -1,11 +1,9 @@
-import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
-import VueCompositionAPI, { nextTick } from '@vue/composition-api'
 import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import Vuex, { GetterTree } from 'vuex'
-import DesignSystem from 'owncloud-design-system'
 import { DateTime } from 'luxon'
+import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { nextTick } from '@vue/composition-api'
 
 const bareCapabilities = {
   user: {
@@ -46,32 +44,32 @@ const enforcedCapabilities = merge({}, enabledCapabilities, {
 
 describe('InviteCollaborator ExpirationDatepicker', () => {
   it('only gets displayed if share expiration is supported', () => {
-    const wrapper = createWrapper(asCapabilitiesGetter())
+    const { wrapper } = createWrapper()
     expect(wrapper.html()).toBe('')
   })
 
   it('renders a button to open the datepicker and set an expiration date', () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(bareCapabilities))
+    const { wrapper } = createWrapper({ capabilities: bareCapabilities })
 
     expect(wrapper.find('[data-testid="recipient-datepicker-btn"]').exists()).toBe(true)
   })
 
   it('does not allow to select a date from the past', () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(bareCapabilities))
+    const { wrapper } = createWrapper({ capabilities: bareCapabilities })
     const minDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['min-date']
 
     expect(DateTime.now().toISODate()).toBe(DateTime.fromJSDate(new Date(minDate)).toISODate())
   })
 
   it('does not set any maximum date if no user or group is selected', () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
 
     expect(maxDate).toBe(undefined)
   })
 
   it('pre selects and enforces the default expiration date for users', async () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
 
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
@@ -79,7 +77,12 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
-    wrapper.vm.$store.hotUpdate(asCapabilitiesGetter(enforcedCapabilities))
+    const newCapabilities = {
+      getters: {
+        capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
+      }
+    }
+    wrapper.vm.$store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -88,7 +91,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the default expiration date for groups', async () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
 
@@ -96,7 +99,12 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
-    wrapper.vm.$store.hotUpdate(asCapabilitiesGetter(enforcedCapabilities))
+    const newCapabilities = {
+      getters: {
+        capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
+      }
+    }
+    wrapper.vm.$store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -105,7 +113,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('pre selects and enforces the smallest expiration date if user and group shareTypes are provided', async () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value, ShareTypes.user.value] })
     const selectedDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes().value
 
@@ -113,7 +121,12 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
-    wrapper.vm.$store.hotUpdate(asCapabilitiesGetter(enforcedCapabilities))
+    const newCapabilities = {
+      getters: {
+        capabilities: jest.fn().mockImplementation(() => ({ files_sharing: enforcedCapabilities }))
+      }
+    }
+    wrapper.vm.$store.hotUpdate(newCapabilities)
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
@@ -122,7 +135,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 
   it('emits an event if date changes', async () => {
-    const wrapper = createWrapper(asCapabilitiesGetter(enabledCapabilities))
+    const { wrapper } = createWrapper({ capabilities: enabledCapabilities })
     const checker = jest.fn()
     wrapper.vm.$on('optionChange', checker as any)
 
@@ -165,25 +178,16 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
   })
 })
 
-const asCapabilitiesGetter = (capabilities = {}): { getters: GetterTree<unknown, unknown> } => ({
-  getters: {
-    capabilities: () => ({
-      files_sharing: capabilities
+const createWrapper = ({ capabilities = {} } = {}) => {
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({ files_sharing: capabilities }))
+  const store = createStore(storeOptions)
+  return {
+    storeOptions,
+    wrapper: mount(ExpirationDatepicker, {
+      global: {
+        plugins: [...defaultPlugins(), store]
+      }
     })
   }
-})
-
-const createWrapper = (store = {}): Wrapper<any> => {
-  const localVue = createLocalVue()
-  localVue.use(VueCompositionAPI)
-  localVue.use(Vuex)
-  localVue.use(DesignSystem)
-
-  return mount(ExpirationDatepicker, {
-    localVue,
-    store: new Vuex.Store(store),
-    stubs: {
-      translate: true
-    }
-  })
 }

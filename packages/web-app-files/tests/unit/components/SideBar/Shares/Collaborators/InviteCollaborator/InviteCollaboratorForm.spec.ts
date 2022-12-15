@@ -1,22 +1,12 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import Vuex from 'vuex'
-import DesignSystem from 'owncloud-design-system'
-import stubs from '../../../../../../../../../tests/unit/stubs'
-import VueCompositionAPI from '@vue/composition-api'
-import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
-
-const localVue = createLocalVue()
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-localVue.use(DesignSystem)
-localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
 const folderMock = {
   type: 'folder',
@@ -53,12 +43,12 @@ describe('InviteCollaboratorForm', () => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
-      const wrapper = getWrapper({ selectedCollaborators } as any)
+      const { wrapper } = getWrapper({ selectedCollaborators } as any)
       const spyTriggerUpload = jest.spyOn(wrapper.vm, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
 
-      await shareBtn.trigger('click')
+      await shareBtn.vm.$emit('click')
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
@@ -69,7 +59,7 @@ describe('InviteCollaboratorForm', () => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         selectedCollaborators,
         storageId: dataSet.storageId,
         highlightedFile: dataSet.highlightedFile as any
@@ -87,63 +77,23 @@ function getWrapper({
   storageId = 'fake-storage-id',
   highlightedFile = folderMock
 } = {}) {
-  return mount(InviteCollaboratorForm, {
-    localVue,
-    stubs: {
-      'recipient-container': true,
-      'role-dropdown': true,
-      ...stubs
-    },
-    data() {
-      return {
-        selectedCollaborators
-      }
-    },
-    mocks: {
-      $route: {
-        params: { storageId }
-      },
-      $clientService: mockDeep<ClientService>({})
-    },
-    store: new Vuex.Store({
-      modules: {
-        Files: {
-          namespaced: true,
-          getters: {
-            highlightedFile: () => {
-              return highlightedFile
-            }
-          },
-          actions: {
-            addShare: jest.fn()
-          }
-        },
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                accessToken: () => 'GFwHKXdsMgoFwt'
-              }
-            },
-            spaces: {
-              namespaced: true,
-              actions: {
-                addSpaceMember: jest.fn()
-              }
-            }
-          }
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.capabilities.mockImplementation(() => ({
+    files_sharing: { federation: { incoming: true, outgoing: true } }
+  }))
+  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(() => highlightedFile)
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(InviteCollaboratorForm, {
+      data() {
+        return {
+          selectedCollaborators
         }
       },
-      getters: {
-        capabilities: () => ({
-          files_sharing: { federation: { incoming: true, outgoing: true } }
-        }),
-        configuration: jest.fn(() => ({
-          server: 'http://example.com/'
-        }))
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultComponentMocks({ currentRoute: { params: { storageId } } })
       }
     })
-  })
+  }
 }

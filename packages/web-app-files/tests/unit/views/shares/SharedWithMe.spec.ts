@@ -1,18 +1,19 @@
-import { mount } from '@vue/test-utils'
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import Vuex from 'vuex'
 import { useResourcesViewDefaults, useSort } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { ref } from '@vue/composition-api'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { defaultStubs } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -96,16 +97,16 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  const localVue = defaultLocalVue({ compositionApi: true })
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(SharedWithMe, {
-      localVue,
-      mocks: defaultMocks,
-      store,
-      stubs: defaultStubs
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultMocks,
+        stubs: defaultStubs
+      }
     })
   }
 }

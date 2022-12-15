@@ -2,6 +2,12 @@ export const runtimeModuleMockOptions = {
   runtime: {
     namespaced: true,
     modules: {
+      auth: {
+        namespaced: true,
+        getters: {
+          isUserContextReady: jest.fn(() => true)
+        }
+      },
       spaces: {
         namespaced: true,
         getters: {
@@ -10,12 +16,14 @@ export const runtimeModuleMockOptions = {
         },
         mutations: {
           UPDATE_SPACE_FIELD: jest.fn(),
+          REMOVE_SPACE: jest.fn(),
           UPSERT_SPACE: jest.fn()
         },
         actions: {
           loadSpaceMembers: jest.fn(),
           changeSpaceMember: jest.fn(),
           deleteSpaceMember: jest.fn(),
+          addSpaceMember: jest.fn(),
           reloadProjectSpaces: jest.fn()
         }
       }

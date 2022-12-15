@@ -1,7 +1,7 @@
 import { useRouteQuery } from 'web-pkg/src/composables'
-import { createWrapper } from './spec'
 import VueRouter from 'vue-router'
 import { Ref, nextTick, computed, ComputedRef } from '@vue/composition-api'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useRouteQuery', () => {
   it('is reactive', async () => {
@@ -9,7 +9,8 @@ describe('useRouteQuery', () => {
     let fooQuery: Ref
     let fooValue: ComputedRef
 
-    const wrapper = createWrapper(
+    const mocks = { $router: router }
+    const wrapper = getComposableWrapper(
       () => {
         fooQuery = useRouteQuery('foo', '1')
         fooValue = computed(() => parseInt(fooQuery.value as string))
@@ -20,8 +21,8 @@ describe('useRouteQuery', () => {
         }
       },
       {
-        router,
-        template: `<div id="fooQuery">{{ fooQuery }}</div><div id="fooValue">{{ fooValue }}</div>`
+        mocks,
+        template: `<div><div id="fooQuery">{{ fooQuery }}</div><div id="fooValue">{{ fooValue }}</div></div>`
       }
     )
 
@@ -51,7 +52,8 @@ describe('useRouteQuery', () => {
   it('has a default value if route query is not set', () => {
     const router = new VueRouter()
 
-    createWrapper(
+    const mocks = { $router: router }
+    getComposableWrapper(
       () => {
         const fooQuery = useRouteQuery('foo', 'defaultValue')
 
@@ -63,14 +65,15 @@ describe('useRouteQuery', () => {
         router.push({})
         expect(fooQuery.value).toBe('defaultValue')
       },
-      { router }
+      { mocks }
     )
   })
 
   it('should update on route query change', () => {
     const router = new VueRouter()
 
-    createWrapper(
+    const mocks = { $router: router }
+    getComposableWrapper(
       () => {
         const fooQuery = useRouteQuery('foo')
         const barQuery = useRouteQuery('bar')
@@ -87,16 +90,15 @@ describe('useRouteQuery', () => {
         expect(fooQuery.value).toBe('foo-3')
         expect(barQuery.value).toBe('bar-1')
       },
-      { router }
+      { mocks }
     )
   })
 
   it('should be undefined if route changes and query is not present', () => {
-    const router = new VueRouter({
-      routes: [{ path: '/home' }, { path: '/sub' }]
-    })
+    const router = new VueRouter()
 
-    createWrapper(
+    const mocks = { $router: router }
+    getComposableWrapper(
       () => {
         const fooQuery = useRouteQuery('foo')
 
@@ -106,16 +108,15 @@ describe('useRouteQuery', () => {
         router.push({ path: '/sub' })
         expect(fooQuery.value).toBeUndefined()
       },
-      { router }
+      { mocks }
     )
   })
 
   it('should update route query', () => {
-    const router = new VueRouter({
-      routes: [{ path: '/home' }]
-    })
+    const router = new VueRouter()
 
-    createWrapper(
+    const mocks = { $router: router }
+    getComposableWrapper(
       () => {
         const fooQuery = useRouteQuery('foo')
 
@@ -125,7 +126,7 @@ describe('useRouteQuery', () => {
         fooQuery.value = 'changedThroughRef'
         expect(router.currentRoute.query.foo).toBe('changedThroughRef')
       },
-      { router }
+      { mocks }
     )
   })
 })

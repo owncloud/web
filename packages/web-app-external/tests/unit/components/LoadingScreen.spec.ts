@@ -1,22 +1,14 @@
 import LoadingScreen from '../../../src/components/LoadingScreen.vue'
-import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
-
-const localVue = createLocalVue()
-
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-let wrapper: Wrapper<any>
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('The external app loading screen component', () => {
   test('displays a spinner and a paragraph', () => {
-    wrapper = mount(LoadingScreen, {
-      localVue,
-      stubs: {
-        OcSpinner: true
+    const wrapper = mount(LoadingScreen, {
+      global: {
+        stubs: {
+          OcSpinner: true
+        },
+        plugins: [...defaultPlugins()]
       }
     })
     expect(wrapper).toMatchSnapshot()

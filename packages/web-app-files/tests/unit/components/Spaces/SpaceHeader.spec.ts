@@ -1,11 +1,13 @@
-import Vuex from 'vuex'
-import { mount } from '@vue/test-utils'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
-import { createStore } from 'vuex-extensions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import {} from 'web-test-helpers'
 import { buildSpace } from 'web-client/src/helpers'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 window.ResizeObserver =
   window.ResizeObserver ||
@@ -41,35 +43,18 @@ describe('SpaceHeader', () => {
 })
 
 function getWrapper({ space = {}, sideBarOpen = false }) {
-  const localVue = defaultLocalVue({ compositionApi: true })
   const mocks = {
     ...defaultComponentMocks()
   }
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: {
-      ...defaultStoreMockOptions.modules,
-      runtime: {
-        namespaced: true,
-        modules: {
-          spaces: {
-            namespaced: true,
-            getters: {
-              spaceMembers: () => []
-            }
-          }
-        }
-      }
-    }
-  }
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
-    localVue,
-    mocks,
-    store,
-    propsData: {
+    props: {
       space,
       sideBarOpen
+    },
+    global: {
+      mocks,
+      plugins: [...defaultPlugins(), store]
     }
   })
 }

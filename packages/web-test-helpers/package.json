@@ -1,8 +1,11 @@
 {
   "name": "web-test-helpers",
   "private": true,
+  "main": "src/index.ts",
   "peerDependencies": {
       "@vue/composition-api": "1.7.1",
+      "axios": "^0.27.2",
+      "vue-async-computed": "^3.9.0",
       "vue-gettext": "^2.1.5",
       "vue-router": "3.6.5",
       "vuex": "^3.6.2"

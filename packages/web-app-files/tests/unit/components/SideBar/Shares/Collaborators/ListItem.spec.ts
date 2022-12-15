@@ -1,31 +1,24 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
-import GetTextPlugin from 'vue-gettext'
 import {
   peopleRoleViewerFile,
   peopleRoleViewerFolder,
   SharePermissions,
   ShareTypes
 } from 'web-client/src/helpers/share'
-import VueCompositionAPI from '@vue/composition-api'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultStubs,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 jest.mock('uuid', () => ({
   v4: () => {
     return '00000000-0000-0000-0000-000000000000'
   }
 }))
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(VueCompositionAPI)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
 
 const selectors = {
   userAvatarImage: 'avatar-image-stub.files-collaborators-collaborator-indicator',
@@ -45,13 +38,13 @@ describe('Collaborator ListItem component', () => {
       it.each([ShareTypes.user.value, ShareTypes.space.value])(
         'should display a users avatar',
         (shareType) => {
-          const wrapper = createWrapper({ shareType })
+          const { wrapper } = createWrapper({ shareType })
           expect(wrapper.find(selectors.userAvatarImage).exists()).toBeTruthy()
           expect(wrapper.find(selectors.notUserAvatar).exists()).toBeFalsy()
         }
       )
       it('sets user info on the avatar', () => {
-        const wrapper = createWrapper()
+        const { wrapper } = createWrapper()
         expect(wrapper.find(selectors.userAvatarImage).attributes('userid')).toEqual('brian')
         expect(wrapper.find(selectors.userAvatarImage).attributes('user-name')).toEqual(
           'Brian Murphy'
@@ -64,7 +57,7 @@ describe('Collaborator ListItem component', () => {
           (shareType) => ![ShareTypes.user, ShareTypes.space].includes(shareType)
         )
       )('should display an oc-avatar-item for any non-user share types', (shareType) => {
-        const wrapper = createWrapper({ shareType: shareType.value })
+        const { wrapper } = createWrapper({ shareType: shareType.value })
         expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
         expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
@@ -73,47 +66,47 @@ describe('Collaborator ListItem component', () => {
   })
   describe('share info', () => {
     it('shows the collaborator display name', () => {
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
     })
     it('shows the share expiration date if given', () => {
-      const wrapper = createWrapper({ expires: new Date() })
+      const { wrapper } = createWrapper({ expires: new Date() })
       expect(wrapper.find(selectors.expirationDateIcon).exists()).toBeTruthy()
     })
   })
   describe('modifiable property', () => {
     it('shows interactive elements when modifiable', () => {
-      const wrapper = createWrapper({ modifiable: true })
+      const { wrapper } = createWrapper({ modifiable: true })
       expect(wrapper.find(selectors.collaboratorRole).exists()).toBeTruthy()
     })
     it('hides interactive elements when not modifiable', () => {
-      const wrapper = createWrapper({ modifiable: false })
+      const { wrapper } = createWrapper({ modifiable: false })
       expect(wrapper.find(selectors.collaboratorRole).exists()).toBeFalsy()
     })
   })
   describe('share inheritance indicators', () => {
     it('show when sharedParentRoute is given', () => {
-      const wrapper = createWrapper({
+      const { wrapper } = createWrapper({
         sharedParentRoute: { params: { driveAliasAndItem: '/folder' } }
       })
       expect(wrapper.find(selectors.shareInheritanceIndicators).exists()).toBeTruthy()
       expect(wrapper).toMatchSnapshot()
     })
     it('do not show when sharedParentRoute is not given', () => {
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       expect(wrapper.find(selectors.shareInheritanceIndicators).exists()).toBeFalsy()
     })
   })
   describe('remove share', () => {
     it('emits the "removeShare" event', () => {
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       wrapper.find('edit-dropdown-stub').vm.$emit('removeShare')
       expect(wrapper.emitted().onDelete).toBeTruthy()
     })
   })
   describe('change share role', () => {
     it('calls "changeShare" for regular resources', () => {
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       wrapper.find('role-dropdown-stub').vm.$emit('optionChange', {
         role: peopleRoleViewerFile,
@@ -122,7 +115,7 @@ describe('Collaborator ListItem component', () => {
       expect(changeShareStub).toHaveBeenCalled()
     })
     it('calls "changeSpaceMember" for space resources', () => {
-      const wrapper = createWrapper({ shareType: ShareTypes.space.value })
+      const { wrapper } = createWrapper({ shareType: ShareTypes.space.value })
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeSpaceMember')
       wrapper.find('role-dropdown-stub').vm.$emit('optionChange', {
         role: peopleRoleViewerFile,
@@ -132,7 +125,7 @@ describe('Collaborator ListItem component', () => {
     })
     it('shows a message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
@@ -148,7 +141,7 @@ describe('Collaborator ListItem component', () => {
   })
   describe('change expiration date', () => {
     it('calls "changeShare" for regular resources', () => {
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       wrapper
         .find('edit-dropdown-stub')
@@ -157,7 +150,7 @@ describe('Collaborator ListItem component', () => {
     })
     it('shows a message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const wrapper = createWrapper()
+      const { wrapper } = createWrapper()
       jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
@@ -198,40 +191,44 @@ function createWrapper({
     isFolder: true
   }))
   storeOptions.modules.Files.actions.changeShare = jest.fn()
-  return mount(ListItem, {
-    store: new Vuex.Store(storeOptions),
-    mocks: defaultComponentMocks(),
-    propsData: {
-      share: {
-        id: 'asdf',
-        collaborator,
-        owner,
-        shareType,
-        expires,
-        role
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mount(ListItem, {
+      props: {
+        share: {
+          id: 'asdf',
+          collaborator,
+          owner,
+          shareType,
+          expires,
+          role
+        },
+        modifiable,
+        sharedParentRoute
       },
-      modifiable,
-      sharedParentRoute
-    },
-    localVue,
-    stubs: {
-      ...defaultStubs,
-      'oc-icon': true,
-      'avatar-image': true,
-      'router-link': true,
-      'oc-info-drop': true,
-      'oc-table-simple': true,
-      'oc-tr': true,
-      'oc-td': true,
-      'oc-tag': true,
-      'oc-pagination': true,
-      'oc-avatar-item': true,
-      'role-dropdown': true,
-      'edit-dropdown': true,
-      translate: false
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    }
-  })
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultComponentMocks(),
+        stubs: {
+          ...defaultStubs,
+          'oc-icon': true,
+          'avatar-image': true,
+          'router-link': true,
+          'oc-info-drop': true,
+          'oc-table-simple': true,
+          'oc-tr': true,
+          'oc-td': true,
+          'oc-tag': true,
+          'oc-pagination': true,
+          'oc-avatar-item': true,
+          'role-dropdown': true,
+          'edit-dropdown': true,
+          translate: false
+        },
+        directives: {
+          'oc-tooltip': jest.fn()
+        }
+      }
+    })
+  }
 }

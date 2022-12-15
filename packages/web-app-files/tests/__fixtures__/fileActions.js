@@ -72,7 +72,7 @@ const sideBars = [
   }
 ]
 
-exports.apps = {
+export const apps = {
   customFileListIndicators: [],
   file: {
     edit: false,
