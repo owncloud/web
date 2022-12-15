@@ -27,7 +27,7 @@ module.exports = {
     '@uppy/tus': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/utils': '<rootDir>tests/unit/stubs/uppy'
   },
-  modulePathIgnorePatterns: ['packages/design-system/docs/utils/statusLabels.spec.js'],
+  modulePathIgnorePatterns: ['packages/design-system/docs/'],
   testEnvironment: 'jsdom',
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esmModules.join('|')})`],
   setupFiles: [
