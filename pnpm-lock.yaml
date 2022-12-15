@@ -637,7 +637,6 @@ importers:
       vue-scrollto: ^2.15.0
       vue-select: ^3.18.3
       vuex: ^3.6.2
-      vuex-extensions: ^1.1.5
       vuex-router-sync: ^5.0.0
       web-client: npm:@ownclouders/web-client
       web-pkg: npm:@ownclouders/web-pkg
@@ -691,7 +690,6 @@ importers:
       vue-scrollto: 2.20.0
       vue-select: 3.18.3_vue@2.7.14
       vuex: 3.6.2_vue@2.7.14
-      vuex-extensions: 1.1.5
       vuex-router-sync: 5.0.0_xdhba6eyhs52juodf6fywqi4xi
       web-client: link:../web-client
       web-pkg: link:../web-pkg
@@ -22579,10 +22577,6 @@ packages:
     dependencies:
       '@vue/compiler-sfc': 2.7.14
       csstype: 3.1.1
-
-  /vuex-extensions/1.1.5:
-    resolution: {integrity: sha512-1Jfi8o6coel3jj20k6SaEtinddzS0jEG41lyyWmodAorXoN85AzuYa4oou71e99B6V+Y+gSVUysa3yHVhWpTrQ==}
-    dev: false
 
   /vuex-router-sync/5.0.0_xdhba6eyhs52juodf6fywqi4xi:
     resolution: {integrity: sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==}
