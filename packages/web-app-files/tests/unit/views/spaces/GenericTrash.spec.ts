@@ -5,11 +5,13 @@ import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultCompone
 import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
-import { files, spaces } from '../../../__fixtures__'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -27,8 +29,9 @@ describe('GenericTrash view', () => {
     expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual('Personal space')
   })
   it('shows the project space breadcrumb', () => {
-    const { wrapper } = getMountedWrapper({ props: { space: spaces[0] } })
-    expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual(spaces[0].name)
+    const space = mockDeep<SpaceResource>({ driveType: 'project' })
+    const { wrapper } = getMountedWrapper({ props: { space } })
+    expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual(space.name)
   })
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {
@@ -41,7 +44,7 @@ describe('GenericTrash view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const { wrapper } = getMountedWrapper({ files })
+      const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()] })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
     })

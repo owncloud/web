@@ -2,6 +2,8 @@ import actions from '../../../src/store/actions'
 import { spaceRoleManager, ShareTypes, Share } from 'web-client/src/helpers/share'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
 jest.mock('../../../src/helpers/resources')
 jest.mock('../../../src/gettext')
@@ -96,6 +98,27 @@ describe('vuex store actions', () => {
       })
 
       expect(stateMock.commit).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('updateCurrentFileShareTypes', () => {
+    const stateMock = { currentFileOutgoingShares: [] }
+    const commitSpy = jest.fn()
+
+    it('updates the resource if given', () => {
+      const getters = { highlightedFile: mockDeep<Resource>() }
+      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      expect(commitSpy).toHaveBeenCalledTimes(1)
+    })
+    it('does not update the resource if not given', () => {
+      const getters = { highlightedFile: undefined }
+      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      expect(commitSpy).toHaveBeenCalledTimes(0)
+    })
+    it('does not update project space resources', () => {
+      const getters = { highlightedFile: mockDeep<SpaceResource>({ driveType: 'project' }) }
+      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      expect(commitSpy).toHaveBeenCalledTimes(0)
     })
   })
 })

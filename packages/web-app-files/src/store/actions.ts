@@ -12,7 +12,12 @@ import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from '../helpers/clipboardActions'
 import { thumbnailService } from '../services'
-import { buildResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import {
+  buildResource,
+  isProjectSpaceResource,
+  Resource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { ClientService } from 'web-pkg/src/services'
 
@@ -192,7 +197,7 @@ export default {
   },
   updateCurrentFileShareTypes({ state, getters, commit }) {
     const highlighted = getters.highlightedFile
-    if (!highlighted) {
+    if (!highlighted || isProjectSpaceResource(highlighted)) {
       return
     }
     commit('UPDATE_RESOURCE_FIELD', {

@@ -5,13 +5,12 @@ import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultCompone
 import { createStore } from 'vuex-extensions'
 import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import Vuex from 'vuex'
-import { files, spaces } from '../../../__fixtures__'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables')
 
@@ -33,7 +32,7 @@ describe('GenericSpace view', () => {
       const { wrapper } = getMountedWrapper({
         props: {
           item: '/someFolder',
-          space: spaces[0]
+          space: mockDeep<SpaceResource>({ driveType: 'project' })
         }
       })
       expect(wrapper.find('space-header-stub').exists()).toBeFalsy()
@@ -41,7 +40,7 @@ describe('GenericSpace view', () => {
     it('renders the space header on a space frontpage', () => {
       const { wrapper } = getMountedWrapper({
         props: {
-          space: spaces[0]
+          space: mockDeep<SpaceResource>({ driveType: 'project' })
         }
       })
       expect(wrapper.find('space-header-stub').exists()).toBeTruthy()
@@ -58,7 +57,7 @@ describe('GenericSpace view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const { wrapper } = getMountedWrapper({ files })
+      const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()] })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
     })
@@ -71,18 +70,25 @@ describe('GenericSpace view', () => {
     ])('include root item(s)', (data) => {
       const { driveType } = data
       const space = { id: 1, getDriveAliasAndItem: jest.fn(), driveType }
-      const { wrapper } = getMountedWrapper({ files, props: { space } })
+      const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()], props: { space } })
       expect(wrapper.find('app-bar-stub').props().breadcrumbs.length).toBe(data.expectedItems)
     })
     it('include the root item and the current folder', () => {
       const folderName = 'someFolder'
-      const { wrapper } = getMountedWrapper({ files, props: { item: `/${folderName}` } })
+      const { wrapper } = getMountedWrapper({
+        files: [mockDeep<Resource>()],
+        props: { item: `/${folderName}` }
+      })
       expect(wrapper.find('app-bar-stub').props().breadcrumbs.length).toBe(2)
       expect(wrapper.find('app-bar-stub').props().breadcrumbs[1].text).toEqual(folderName)
     })
     it('omit the "page"-query of the current route', () => {
       const currentRoute = { name: 'files-spaces-generic', path: '/', query: { page: '2' } }
-      const { wrapper } = getMountedWrapper({ files, props: { item: 'someFolder' }, currentRoute })
+      const { wrapper } = getMountedWrapper({
+        files: [mockDeep<Resource>()],
+        props: { item: 'someFolder' },
+        currentRoute
+      })
       const breadCrumbItem = wrapper.find('app-bar-stub').props().breadcrumbs[0]
       expect(breadCrumbItem.to.query.page).toBeUndefined()
     })

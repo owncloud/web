@@ -5,7 +5,7 @@ import DesignSystem from '@ownclouders/design-system'
 import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
 
 import stubs from '../../../../../../tests/unit/stubs'
-import sidebarNavItemFixtures from '../../../../../../__fixtures__/sidebarNavItems'
+import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
 
 jest.mock('uuid', () => ({
   v4: () => {

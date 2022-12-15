@@ -50,6 +50,7 @@ export interface Resource {
   canDisable?(): boolean
   canEditImage?(): boolean
   canEditReadme?(): boolean
+  canEditSpaceQuota?(): boolean
 
   isReceivedShare?(): boolean
   isMounted?(): boolean

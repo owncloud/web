@@ -4,7 +4,7 @@ import DesignSystem from '@ownclouders/design-system'
 import GetTextPlugin from 'vue-gettext'
 
 import SidebarNavItem from 'web-runtime/src/components/SidebarNav/SidebarNavItem.vue'
-import sidebarNavItemFixtures from '../../../../../../__fixtures__/sidebarNavItems'
+import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

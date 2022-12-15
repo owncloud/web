@@ -122,11 +122,19 @@
       class="oc-button-group"
       :class="{ disabled: uploadOrFileCreationBlocked }"
     >
-      <oc-button :disabled="uploadOrFileCreationBlocked" @click="pasteFilesHere">
+      <oc-button
+        :disabled="uploadOrFileCreationBlocked"
+        class="paste-files-btn"
+        @click="pasteFilesHere"
+      >
         <oc-icon fill-type="line" name="clipboard" />
         <span v-translate>Paste here</span>
       </oc-button>
-      <oc-button :disabled="uploadOrFileCreationBlocked" @click="clearClipboardFiles">
+      <oc-button
+        :disabled="uploadOrFileCreationBlocked"
+        class="clear-clipboard-btn"
+        @click="clearClipboardFiles"
+      >
         <oc-icon fill-type="line" name="close" />
       </oc-button>
     </div>
