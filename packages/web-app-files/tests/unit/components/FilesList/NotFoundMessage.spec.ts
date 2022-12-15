@@ -1,16 +1,9 @@
-import Vuex from 'vuex'
-import DesignSystem from '@ownclouders/design-system'
-import stubs from '../../../../../../tests/unit/stubs/index.js'
-import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
 import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
 import { PublicSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { MockProxy, mock } from 'jest-mock-extended'
 import { join } from 'path'
-
-const localVue = createLocalVue()
-localVue.use(DesignSystem)
-localVue.use(Vuex)
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const selectors = {
   homeButton: '#files-list-not-found-button-go-home',
@@ -30,7 +23,7 @@ describe('NotFoundMessage', () => {
     })
 
     it('should show home button', () => {
-      const wrapper = getWrapper(space, spacesLocation)
+      const { wrapper } = getWrapper(space, spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.exists()).toBeTruthy()
@@ -39,14 +32,14 @@ describe('NotFoundMessage', () => {
     })
 
     it('should not show reload public link button', () => {
-      const wrapper = getWrapper(space, spacesLocation)
+      const { wrapper } = getWrapper(space, spacesLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.exists()).toBeFalsy()
     })
 
     it('should have property route to personal space', () => {
-      const wrapper = getMountedWrapper(space, spacesLocation)
+      const { wrapper } = getWrapper(space, spacesLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.props().to.name).toBe(spacesLocation.name)
@@ -66,7 +59,7 @@ describe('NotFoundMessage', () => {
     })
 
     it('should show reload link button', () => {
-      const wrapper = getWrapper(space, publicLocation)
+      const { wrapper } = getWrapper(space, publicLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.exists()).toBeTruthy()
@@ -75,14 +68,14 @@ describe('NotFoundMessage', () => {
     })
 
     it('should not show home button', () => {
-      const wrapper = getWrapper(space, publicLocation)
+      const { wrapper } = getWrapper(space, publicLocation)
       const homeButton = wrapper.find(selectors.homeButton)
 
       expect(homeButton.exists()).toBeFalsy()
     })
 
     it('should have property route to files public list', () => {
-      const wrapper = getMountedWrapper(space, publicLocation)
+      const { wrapper } = getWrapper(space, publicLocation)
       const reloadLinkButton = wrapper.find(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.props().to.name).toBe(publicLocation.name)
@@ -93,33 +86,14 @@ describe('NotFoundMessage', () => {
   })
 })
 
-function getMountOpts(space, route) {
-  return {
-    localVue,
-    stubs: stubs,
-    mocks: {
-      $route: route,
-      $router: {
-        resolve: (r) => {
-          return {
-            href: r.name
-          }
-        },
-        currentRoute: route
-      }
-    },
-    propsData: { space }
-  }
-}
-
-function getMountedWrapper(space, route) {
-  return mount(NotFoundMessage, {
-    ...getMountOpts(space, route)
-  })
-}
-
 function getWrapper(space, route) {
-  return shallowMount(NotFoundMessage, {
-    ...getMountOpts(space, route)
-  })
+  return {
+    wrapper: shallowMount(NotFoundMessage, {
+      props: { space },
+      global: {
+        mocks: defaultComponentMocks({ currentRoute: route }),
+        plugins: [...defaultPlugins()]
+      }
+    })
+  }
 }

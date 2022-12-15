@@ -1,6 +1,6 @@
 import { useDebouncedRef } from 'web-pkg/src/composables'
-import { createWrapper } from '../router/spec'
 import { nextTick } from 'vue'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useDebouncedRef', () => {
   it('should be valid', () => {
@@ -14,10 +14,17 @@ describe('useDebouncedRef', () => {
       jest.advanceTimersByTime(ms)
       await nextTick()
     }
-    const checker = useDebouncedRef(1, 500)
-    const wrapper = createWrapper(() => ({ checker }), {
-      template: '<div id="checker">{{checker}}</div>'
-    })
+
+    let checker
+    const wrapper = getComposableWrapper(
+      () => {
+        checker = useDebouncedRef(1, 500)
+        return { checker }
+      },
+      {
+        template: '<div id="checker">{{checker}}</div>'
+      }
+    )
 
     checker.value = 2
     await fastForward(0)

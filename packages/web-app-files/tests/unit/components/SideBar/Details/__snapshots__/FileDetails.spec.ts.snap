@@ -4,16 +4,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <tr data-testid="shared-via">
         <th scope="col" class="oc-pr-s">Shared via</th>
@@ -36,7 +38,12 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <!---->
       <!---->
     </table>
@@ -48,16 +55,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <tr data-testid="shared-by">
@@ -78,7 +87,12 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <!---->
       <!---->
     </table>
@@ -96,7 +110,9 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 21, 2015, 7:28 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <!---->
@@ -105,7 +121,7 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>
           <p class="oc-m-rm">
             Marie
-            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
+            <span>(me)</span>
             <!---->
           </p>
         </td>
@@ -114,7 +130,12 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <!---->
       <!---->
     </table>
@@ -126,16 +147,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <!---->
@@ -153,7 +176,12 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <!---->
       <!---->
     </table>
@@ -165,16 +193,18 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <!---->
@@ -192,14 +222,19 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">EOS Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy EOS path" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -209,8 +244,8 @@ exports[`Details SideBar Panel displays a resource of type file on a private pag
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy direct link" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -224,16 +259,18 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <!---->
@@ -251,7 +288,12 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <!---->
       <!---->
     </table>
@@ -263,16 +305,18 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
 <div id="oc-file-details-sidebar">
   <div>
     <div data-testid="preview" class="details-preview oc-flex oc-flex-middle oc-flex-center oc-mb" style="background-image: none;">
-      <oc-spinner-stub></oc-spinner-stub>
+      <oc-spinner-stub arialabel="" size="medium"></oc-spinner-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This file has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">Oct 20, 2015, 6:15 AM</oc-button-stub>
+        </td>
       </tr>
       <!---->
       <!---->
@@ -290,14 +334,19 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <th scope="col" class="oc-pr-s">Size</th>
         <td>740 B</td>
       </tr>
-      <!---->
+      <tr data-testid="versionsInfo">
+        <th scope="col" class="oc-pr-s">Versions</th>
+        <td>
+          <oc-button-stub type="button" size="medium" arialabel="See all versions" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">1</oc-button-stub>
+        </td>
+      </tr>
       <tr>
         <th scope="col" class="oc-pr-s">EOS Path</th>
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy EOS path" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -307,8 +356,8 @@ exports[`Details SideBar Panel displays a resource of type file on a public page
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home/Shares/123.png</p>
-            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy direct link" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -328,7 +377,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td><span>Oct 21, 2015, 7:28 AM</span></td>
       </tr>
       <!---->
       <!---->
@@ -337,7 +386,7 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <td>
           <p class="oc-m-rm">
             Marie
-            <span data-msgid="(me)" data-current-language="en_US">(me)</span>
+            <span>(me)</span>
             <!---->
           </p>
         </td>
@@ -361,13 +410,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td><span>Oct 21, 2015, 7:28 AM</span></td>
       </tr>
       <!---->
       <!---->
@@ -400,13 +449,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td><span>Oct 21, 2015, 7:28 AM</span></td>
       </tr>
       <!---->
       <!---->
@@ -430,8 +479,8 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate"></p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy EOS path" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -441,8 +490,8 @@ exports[`Details SideBar Panel displays a resource of type folder on a private p
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy direct link" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -459,13 +508,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td><span>Oct 21, 2015, 7:28 AM</span></td>
       </tr>
       <!---->
       <!---->
@@ -498,13 +547,13 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
       <oc-resource-icon-stub resource="[object Object]" size="xxxlarge" class="details-icon"></oc-resource-icon-stub>
     </div>
     <div data-testid="sharingInfo" class="oc-flex oc-flex-middle oc-my-m">
-      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]"></oc-status-indicators-stub>
+      <oc-status-indicators-stub resource="[object Object]" indicators="[object Object]" target=""></oc-status-indicators-stub>
       <p class="oc-my-rm oc-mx-s">This folder has been shared.</p>
     </div>
     <table aria-label="Overview of the information about the selected file" class="details-table">
       <tr data-testid="timestamp">
         <th scope="col" class="oc-pr-s">Last modified</th>
-        <td><span>ABSOLUTE_TIME</span></td>
+        <td><span>Oct 21, 2015, 7:28 AM</span></td>
       </tr>
       <!---->
       <!---->
@@ -528,8 +577,8 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate"></p>
-            <oc-button-stub aria-label="Copy EOS path" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy EOS path" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>
@@ -539,8 +588,8 @@ exports[`Details SideBar Panel displays a resource of type folder on a public pa
         <td>
           <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
             <p class="oc-my-rm oc-text-truncate">undefinedfiles/spaces/personal/home</p>
-            <oc-button-stub aria-label="Copy direct link" appearance="raw" variation="passive">
-              <oc-icon-stub name="clipboard"></oc-icon-stub>
+            <oc-button-stub type="button" size="medium" arialabel="Copy direct link" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium">
+              <oc-icon-stub name="clipboard" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
             </oc-button-stub>
           </div>
         </td>

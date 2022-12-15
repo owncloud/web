@@ -1,8 +1,5 @@
 import { getBackendVersion, getWebVersion } from '../../../src/container/versions'
-import Vuex, { Store } from 'vuex'
-import Vue from 'vue'
-
-Vue.use(Vuex)
+import { getStoreInstance } from 'web-test-helpers'
 
 describe('collect version information', () => {
   describe('web version', () => {
@@ -52,8 +49,8 @@ describe('collect version information', () => {
   })
 })
 
-const versionStore = (version: any): Store<any> => {
-  return new Vuex.Store({
+const versionStore = (version: any) => {
+  return getStoreInstance({
     getters: {
       capabilities: jest.fn(() => ({
         core: {

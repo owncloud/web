@@ -1,11 +1,12 @@
-import { mount } from '@vue/test-utils'
 import FilesDrop from '../../../src/views/FilesDrop.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import Vuex from 'vuex'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 describe('FilesDrop view', () => {
   it('drop container always present', () => {
@@ -36,19 +37,19 @@ function getMountedWrapper({ mocks = {}, loading = false } = {}) {
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  const localVue = defaultLocalVue()
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(FilesDrop, {
-      localVue,
-      mocks: defaultMocks,
-      store,
-      stubs: defaultStubs,
       data: () => ({
         loading
-      })
+      }),
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultMocks,
+        stubs: defaultStubs
+      }
     })
   }
 }

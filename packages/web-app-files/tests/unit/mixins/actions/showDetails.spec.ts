@@ -1,14 +1,13 @@
-import Vuex from 'vuex'
-import { createStore } from 'vuex-extensions'
-import { mount, createLocalVue } from '@vue/test-utils'
 import showDetails from 'web-app-files/src/mixins/actions/showDetails'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 const Component: any = {
   template: '<div></div>',
@@ -31,19 +30,13 @@ function getWrapper() {
   const mocks = {
     ...defaultComponentMocks()
   }
-
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(Vuex.Store, storeOptions)
+  const storeOptions = defaultStoreMockOptions
+  const store = createStore(storeOptions)
   return {
     mocks,
     storeOptions,
     wrapper: mount(Component, {
-      localVue,
-      mocks,
-      store
+      global: { plugins: [...defaultPlugins(), store], mocks }
     })
   }
 }

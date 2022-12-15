@@ -1,10 +1,5 @@
-import { createLocalVue } from '@vue/test-utils'
-import DesignSystem from '@ownclouders/design-system'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
-import { shallowMount, mount } from '@vue/test-utils'
-import { mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
-import { Store } from 'vuex-mock-store'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const collaboratorAction = {
   displayed: jest.fn(() => true),
@@ -35,7 +30,7 @@ describe('QuickActions', () => {
   })
 
   describe('when multiple actions are provided', () => {
-    const wrapper = getShallowMountedWrapper()
+    const { wrapper } = getWrapper()
 
     it('should display all action buttons where "displayed" is set to true', () => {
       const actionButtons = wrapper.findAll('oc-button-stub')
@@ -61,11 +56,11 @@ describe('QuickActions', () => {
 
   describe('action handler', () => {
     it('should call action handler on click', async () => {
-      const wrapper = getMountedWrapper()
+      const { wrapper } = getWrapper()
       const handlerAction = collaboratorAction.handler.mockImplementation()
 
-      const actionButton = wrapper.find('button')
-      await actionButton.trigger('click')
+      const actionButton = wrapper.find('oc-button-stub')
+      await actionButton.vm.$emit('click')
       expect(handlerAction).toHaveBeenCalledTimes(1)
       Object.keys(testItem).forEach((key) => {
         expect(handlerAction.mock.calls[0][0].item[key]).toBe(testItem[key])
@@ -74,50 +69,23 @@ describe('QuickActions', () => {
   })
 })
 
-function getShallowMountedWrapper() {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  return shallowMount(QuickActions, {
-    localVue,
-    propsData: {
-      actions: {
-        collaborators: collaboratorAction,
-        publicLink: quicklinkAction
+function getWrapper() {
+  return {
+    wrapper: shallowMount(QuickActions, {
+      props: {
+        actions: {
+          collaborators: collaboratorAction,
+          publicLink: quicklinkAction
+        },
+        item: testItem
       },
-      item: testItem
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    },
-    stubs: {
-      'oc-icon': true,
-      'oc-button': true
-    }
-  })
-}
-
-function getMountedWrapper() {
-  const localVue = createLocalVue()
-  localVue.use(DesignSystem)
-  return mount(QuickActions, {
-    localVue,
-    propsData: {
-      actions: {
-        collaborators: collaboratorAction,
-        publicLink: quicklinkAction
-      },
-      item: testItem
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
-    },
-    stubs: {
-      'oc-icon': false,
-      'oc-button': false
-    },
-    mocks: {
-      $client: mockDeep<OwnCloudSdk>(),
-      $store: mockDeep<Store>()
-    }
-  })
+      global: {
+        directives: {
+          'oc-tooltip': jest.fn()
+        },
+        mocks: { ...defaultComponentMocks(), $store: null },
+        plugins: [...defaultPlugins()]
+      }
+    })
+  }
 }

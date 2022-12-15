@@ -1,24 +1,18 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import GetTextPlugin from 'vue-gettext'
-import Vuex from 'vuex'
-import DesignSystem from '@ownclouders/design-system'
-
 import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
-const localVue = createLocalVue()
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
 
-localVue.use(DesignSystem)
-localVue.use(Vuex)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
 const ocLoaderStubSelector = 'oc-loader-stub'
 
 jest.mock('web-pkg/src/composables/reactivity')
 describe('SharesPanel', () => {
   describe('when loading is set to true', () => {
     it('should show the oc loader', () => {
-      const wrapper = getShallowWrapper({ sharesLoading: true })
+      const { wrapper } = getWrapper({ sharesLoading: true })
 
       expect(wrapper.find(ocLoaderStubSelector).exists()).toBeTruthy()
       expect(wrapper.find(ocLoaderStubSelector).attributes().arialabel).toBe(
@@ -28,44 +22,27 @@ describe('SharesPanel', () => {
   })
   describe('when sharesLoading is set to false', () => {
     it('should not show the oc loader', () => {
-      const wrapper = getShallowWrapper()
+      const { wrapper } = getWrapper()
       expect(wrapper.find('oc-loader-stub').exists()).toBeFalsy()
     })
   })
 
-  function getShallowWrapper({ sharesLoading = false } = {}) {
-    return shallowMount(SharesPanel, {
-      localVue,
-      provide: {
-        activePanel: null,
-        displayedItem: {},
-        displayedSpace: {},
-        spaceMembers: { value: [] }
-      },
-      store: new Vuex.Store({
-        modules: {
-          Files: {
-            namespaced: true,
-            state: {
-              highlightedFile: { name: '1' }
-            },
-            getters: {
-              highlightedFile: (state) => {
-                return state.highlightedFile
-              },
-              sharesTreeLoading: () => sharesLoading
-            },
-            mutations: {
-              SET_HIGHLIGHTED_FILE(state, file) {
-                state.highlightedFile = file
-              }
-            }
+  function getWrapper({ sharesLoading = false } = {}) {
+    const storeOptions = defaultStoreMockOptions
+    storeOptions.modules.Files.getters.sharesTreeLoading.mockImplementation(() => sharesLoading)
+    const store = createStore(storeOptions)
+    return {
+      wrapper: shallowMount(SharesPanel, {
+        global: {
+          plugins: [...defaultPlugins(), store],
+          provide: {
+            activePanel: null,
+            displayedItem: {},
+            displayedSpace: {},
+            spaceMembers: { value: [] }
           }
         }
-      }),
-      stubs: {
-        'file-shares': true
-      }
-    })
+      })
+    }
   }
 })

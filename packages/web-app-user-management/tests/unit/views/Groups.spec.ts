@@ -1,14 +1,9 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const defaultGraphMock = () => {
   const graph = mockDeep<Graph>()
@@ -148,24 +143,40 @@ function getMountedWrapper({
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.mockImplementation(() => graph)
 
+  const store = createStore({
+    actions: {
+      showMessage: jest.fn()
+    },
+    getters: {
+      configuration: () => ({
+        server: 'https://example.com/'
+      })
+    }
+  })
+
   return shallowMount(Groups, {
-    localVue,
-    store: createStore(Vuex.Store, {
-      actions: {
-        showMessage: jest.fn()
+    global: {
+      plugins: [...defaultPlugins(), store],
+      mocks: {
+        $gettext: jest.fn(),
+        $ngettext: jest.fn(),
+        $gettextInterpolate: jest.fn(),
+        $clientService,
+        ...mocks
       },
-      getters: {
-        configuration: () => ({
-          server: 'https://example.com/'
-        })
+      stubs: {
+        'create-group-modal': true,
+        'delete-group-modal': true,
+        'app-loading-spinner': true,
+        'no-content-message': true,
+        'oc-breadcrumb': true,
+        'oc-button': true,
+        'oc-icon': true,
+        translate: true
+      },
+      directives: {
+        'oc-tooltip': jest.fn()
       }
-    }),
-    mocks: {
-      $gettext: jest.fn(),
-      $ngettext: jest.fn(),
-      $gettextInterpolate: jest.fn(),
-      $clientService,
-      ...mocks
     },
     data: () => {
       return {
@@ -177,19 +188,6 @@ function getMountedWrapper({
         sideBarActivePanel: 'DetailsPanel',
         ...data
       }
-    },
-    stubs: {
-      'create-group-modal': true,
-      'delete-group-modal': true,
-      'app-loading-spinner': true,
-      'no-content-message': true,
-      'oc-breadcrumb': true,
-      'oc-button': true,
-      'oc-icon': true,
-      translate: true
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
     }
   })
 }

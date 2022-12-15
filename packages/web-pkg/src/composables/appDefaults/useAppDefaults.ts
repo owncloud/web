@@ -16,7 +16,7 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { usePublicLinkContext, useRequest } from '../authContext'
+import { RequestResult, usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
@@ -35,6 +35,7 @@ interface AppDefaultsOptions {
 type AppDefaultsResult = AppConfigResult &
   AppNavigationResult &
   AppFileHandlingResult &
+  RequestResult &
   AppFolderHandlingResult & {
     isPublicLinkContext: Ref<boolean>
     currentFileContext: Ref<FileContext>

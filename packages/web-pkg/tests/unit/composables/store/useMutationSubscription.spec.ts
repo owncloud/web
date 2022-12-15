@@ -1,6 +1,6 @@
 import { MutationPayload } from 'vuex'
 import { useMutationSubscription, useStore } from 'web-pkg/src/composables'
-import { createWrapper } from './spec'
+import { createStore, getComposableWrapper } from 'web-test-helpers'
 
 describe('subscribeMutation', () => {
   it('should be valid', () => {
@@ -11,14 +11,36 @@ describe('subscribeMutation', () => {
   it('subscribes to mutations', () => {
     let mutation: MutationPayload
     let callCount = 0
-    const wrapper = createWrapper(() => {
-      useMutationSubscription(['UPDATE'], (callbackMutation) => {
-        mutation = callbackMutation
-        callCount += 1
-      })
-
-      return { store: useStore() }
+    const defaultStore = createStore({
+      state: {
+        value: 0
+      },
+      mutations: {
+        UPDATE(state, value) {
+          state.value = value
+        }
+      },
+      actions: {
+        update({ commit }, value) {
+          commit('UPDATE', value)
+        },
+        reset({ commit }) {
+          commit('UPDATE', 0)
+        }
+      }
     })
+    const wrapper = getComposableWrapper(
+      () => {
+        useMutationSubscription(['UPDATE'], (callbackMutation) => {
+          mutation = callbackMutation
+          callCount += 1
+        })
+
+        return { store: useStore() }
+      },
+      { store: defaultStore }
+    )
+
     const { store } = wrapper.vm
 
     store.commit('UPDATE', 5)

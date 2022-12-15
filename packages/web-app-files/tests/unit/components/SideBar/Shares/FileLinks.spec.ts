@@ -1,28 +1,12 @@
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
-import DesignSystem from '@ownclouders/design-system'
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
-import { createLocationSpaces } from 'web-app-files/src/router'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-
-const localVue = createLocalVue()
-
-localVue.use(Vuex)
-localVue.use(DesignSystem)
-localVue.use(GetTextPlugin, {
-  translations: 'does-not-matter.json',
-  silent: true
-})
-
-const mapActions = {
-  addLink: jest.fn(),
-  loadSharesTree: jest.fn()
-}
-
-const mapMutations = {
-  TRIGGER_PUBLIC_LINK_CREATE: jest.fn()
-}
+import {
+  createStore,
+  defaultPlugins,
+  shallowMount,
+  defaultStoreMockOptions
+} from 'web-test-helpers'
+import { mockDeep } from 'jest-mock-extended'
+import { Resource } from 'web-client'
 
 const defaultLinksList = [
   {
@@ -55,8 +39,7 @@ const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 describe('FileLinks', () => {
   describe('links', () => {
     describe('when links list is not empty', () => {
-      const store = createStore()
-      const wrapper = getShallowWrapper(store)
+      const { wrapper } = getWrapper()
 
       it('should render a list of links', () => {
         const linkListItems = wrapper.findAll(linkListItemNameAndCopy)
@@ -85,170 +68,91 @@ describe('FileLinks', () => {
     })
 
     it('should not render link list if no links are provided', () => {
-      const wrapper = getShallowWrapper(createStore({ links: [] }))
+      const { wrapper } = getWrapper({ links: [] })
       expect(wrapper.find('oc-list-stub').exists()).toBeFalsy()
     })
   })
   describe('when canCreatePublicLinks is set to true', () => {
     it('should show a button to add a link', () => {
-      const store = createStore()
-      const wrapper = getShallowWrapper(store)
-
+      const { wrapper } = getWrapper()
       expect(wrapper.find(selectors.linkAddButton).exists()).toBeTruthy()
     })
 
     describe('when the add-new-link button is clicked', () => {
       it('should call addNewLink', async () => {
         const spyAddNewLink = jest.spyOn((FileLinks as any).methods, 'addNewLink')
-        const store = createStore({ links: [] })
-        const wrapper = getMountedWrapper(store)
+        const { wrapper } = getWrapper()
         expect(spyAddNewLink).toHaveBeenCalledTimes(0)
-
-        await wrapper.find(selectors.linkAddButton).trigger('click')
-
+        await wrapper.find(selectors.linkAddButton).vm.$emit('click')
         expect(spyAddNewLink).toHaveBeenCalledTimes(1)
       })
     })
   })
   describe('when canCreatePublicLinks is set to false', () => {
-    const store = createStore({
-      highlightedFile: {
+    it('should show the "no reshare permissions" message', () => {
+      const highlightedFile = mockDeep<Resource>({
         path: '/lorem.txt',
         type: 'file',
         canShare: jest.fn(() => false),
         isFolder: false,
         isReceivedShare: jest.fn()
-      }
-    })
-
-    it('should show the "no reshare permissions" message', () => {
-      const wrapper = getShallowWrapper(store)
-
+      })
+      const { wrapper } = getWrapper({ highlightedFile })
       expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
     })
   })
-  function createStore({
-    links = defaultLinksList,
-    highlightedFile = {
-      path: '/lorem.txt',
-      type: 'file',
-      canShare: jest.fn(() => true),
-      isFolder: false,
-      isReceivedShare: jest.fn()
-    },
-    sharesTreeLoading = false,
-    expireDate = {
-      enabled: true,
-      days: 1,
-      enforced: false
-    }
-  } = {}) {
-    return new Vuex.Store({
-      actions: {
-        showMessage: jest.fn()
-      },
-      getters: {
-        configuration: jest.fn(() => ({
-          server: 'http://example.com/',
-          currentTheme: {
-            general: {
-              name: 'some-company'
-            }
-          },
-          options: {
-            sidebar: {
-              shares: {
-                showAllOnLoad: false
-              }
-            }
-          }
-        })),
-        capabilities: jest.fn(() => {
-          return {
-            files_sharing: {
-              public: {
-                defaultPublicLinkShareName: 'public link name default',
-                expire_date: expireDate,
-                password: {
-                  enforced_for: {
-                    read_only: false,
-                    upload_only: false,
-                    read_write: false
-                  }
+})
+
+function getWrapper({
+  highlightedFile = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
+  links = defaultLinksList,
+  sharesTreeLoading = false
+} = {}) {
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      configuration: jest.fn(() => ({
+        options: { sidebar: { shares: { showAllOnLoad: true } } }
+      })),
+      capabilities: jest.fn(() => {
+        return {
+          files_sharing: {
+            public: {
+              defaultPublicLinkShareName: 'public link name default',
+              expire_date: new Date(),
+              password: {
+                enforced_for: {
+                  read_only: false,
+                  upload_only: false,
+                  read_write: false
                 }
               }
             }
           }
-        })
-      },
-      modules: {
-        Files: {
-          namespaced: true,
-          state: {
-            sharesTree: {}
-          },
-          getters: {
-            highlightedFile: function () {
-              return highlightedFile
-            },
-            currentFileOutgoingLinks: function () {
-              return links
-            },
-            sharesTreeLoading: jest.fn(() => sharesTreeLoading)
-          },
-          actions: mapActions,
-          mutations: mapMutations
+        }
+      })
+    }
+  }
+  defaultStoreMockOptions.modules.Files.getters.highlightedFile.mockImplementation(
+    () => highlightedFile
+  )
+  defaultStoreMockOptions.modules.Files.getters.currentFileOutgoingLinks.mockImplementation(
+    () => links
+  )
+  defaultStoreMockOptions.modules.Files.getters.sharesTreeLoading.mockImplementation(
+    () => sharesTreeLoading
+  )
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(FileLinks, {
+      global: {
+        plugins: [...defaultPlugins(), store],
+        provide: {
+          incomingParentShare: {},
+          displayedItem: mockDeep<Resource>()
         }
       }
     })
   }
-
-  function getShallowWrapper(store) {
-    return shallowMount(FileLinks, {
-      localVue,
-      store: store,
-      provide: {
-        incomingParentShare: {},
-        displayedItem: {
-          value: null
-        }
-      },
-      stubs: defaultStubs,
-      mocks: {
-        $route: {
-          params: {}
-        },
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-generic'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        }
-      }
-    })
-  }
-
-  function getMountedWrapper(store) {
-    return mount(FileLinks, {
-      localVue,
-      store: store,
-      provide: {
-        incomingParentShare: {},
-        displayedItem: {
-          value: null
-        }
-      },
-      mocks: {
-        $route: {
-          params: {}
-        },
-        $router: {
-          currentRoute: createLocationSpaces('files-spaces-generic'),
-          resolve: (r) => {
-            return { href: r.name }
-          }
-        }
-      }
-    })
-  }
-})
+}

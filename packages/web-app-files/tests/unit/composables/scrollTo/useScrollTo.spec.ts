@@ -4,7 +4,7 @@ import { Resource } from 'web-client/src'
 import { eventBus } from 'web-pkg/src'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createComposableWrapper } from '../composables.setup'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useScrollTo', () => {
   it('should be valid', () => {
@@ -22,7 +22,7 @@ describe('useScrollTo', () => {
       const htmlPageObject = getHTMLPageObject()
       jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [] as any)
 
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
@@ -36,7 +36,7 @@ describe('useScrollTo', () => {
       jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
       window.innerHeight = 100
 
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
@@ -53,7 +53,7 @@ describe('useScrollTo', () => {
         .mockImplementation(() => [htmlPageObject] as any)
       window.innerHeight = 500
 
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const { scrollToResource } = useScrollTo()
           scrollToResource(mockDeep<Resource>())
@@ -67,7 +67,7 @@ describe('useScrollTo', () => {
     const resourceId = 'someFileId'
 
     it('does not scroll without the "scrollTo" param', () => {
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
@@ -82,7 +82,7 @@ describe('useScrollTo', () => {
       )
     })
     it('does not scroll when no resource found', () => {
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: 'someOtherFileId' })
           const { scrollToResourceFromRoute } = useScrollTo()
@@ -99,7 +99,7 @@ describe('useScrollTo', () => {
       )
     })
     it('scrolls to the resource when the "scrollTo" param is given and a resource is found', () => {
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const resource = mockDeep<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
@@ -119,7 +119,7 @@ describe('useScrollTo', () => {
       )
     })
     it('opens the sidebar when a resource is found and the "details" param is given', () => {
-      createComposableWrapper(
+      getComposableWrapper(
         () => {
           const busStub = jest.spyOn(eventBus, 'publish')
           const resource = mockDeep<Resource>({ id: resourceId })

@@ -33,6 +33,9 @@ const stripScssMarker = '/* STYLES STRIP IMPORTS MARKER */'
 // determine inputs
 const input = readdirSync('packages').reduce(
   (acc, i) => {
+    if (!i.startsWith('web-app')) {
+      return acc
+    }
     for (const extension of ['js', 'ts']) {
       const root = join('packages', i, 'src', `index.${extension}`)
       if (existsSync(root)) {

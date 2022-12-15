@@ -1,18 +1,19 @@
-import { mount } from '@vue/test-utils'
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { createStore } from 'vuex-extensions'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import Vuex from 'vuex'
 import { useDriveResolver } from 'web-pkg/src/composables'
 import { computed, ref } from 'vue'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import { locationPublicUpload } from 'web-app-files/src/router/public'
 import { PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 jest.mock('web-pkg/src/composables/driveResolver')
 
@@ -71,16 +72,16 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  const localVue = defaultLocalVue()
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(DriveResolver, {
-      localVue,
-      mocks: defaultMocks,
-      store,
-      stubs: defaultStubs
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultMocks,
+        stubs: defaultStubs
+      }
     })
   }
 }

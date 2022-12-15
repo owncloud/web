@@ -27,7 +27,7 @@ import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { loadPreview } from 'web-pkg/src/helpers'
 import debounce from 'lodash-es/debounce'
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useAccessToken, useCapabilityShareJailEnabled, useStore } from 'web-pkg/src/composables'
@@ -64,7 +64,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration', 'user']),
-    ...mapState('runtime/spaces', ['spaces']),
+    ...mapGetters('runtime/spaces', ['spaces']),
 
     attrs() {
       return this.resource.isFolder

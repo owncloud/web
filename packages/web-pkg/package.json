@@ -13,7 +13,6 @@
     "uuid": "^9.0.0",
     "vue-router": "3.6.5",
     "vuex": "^3.6.2",
-    "vuex-extensions": "^1.1.5",
     "web-client": "npm:@ownclouders/web-client",
     "web-pkg": "npm:@ownclouders/web-pkg"
   }
