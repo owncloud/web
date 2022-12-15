@@ -38,12 +38,13 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'OcAccordionItem',
   status: 'ready',
   release: '1.0.0',
@@ -122,5 +123,5 @@ export default {
       }
     }
   }
-}
+})
 </script>
