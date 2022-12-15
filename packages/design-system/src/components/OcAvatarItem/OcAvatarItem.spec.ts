@@ -1,10 +1,9 @@
 import OcAvatarItem from './OcAvatarItem.vue'
-import { mount } from '@vue/test-utils'
-
+import { mount } from 'web-test-helpers'
 describe('OcAvatarItem', () => {
   function getWrapperWithProps(props = {}) {
     return mount(OcAvatarItem, {
-      propsData: {
+      props: {
         ...props,
         name: 'test link'
       }

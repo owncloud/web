@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import Breadcrumb from './OcBreadcrumb.vue'
 
 const items = [
@@ -11,7 +11,7 @@ const items = [
 describe('OcBreadcrumb', () => {
   it('sets correct variation', () => {
     const wrapper = shallowMount(Breadcrumb, {
-      propsData: {
+      props: {
         variation: 'lead',
         items
       }
@@ -23,7 +23,7 @@ describe('OcBreadcrumb', () => {
   })
   it('displays all items', () => {
     const wrapper = shallowMount(Breadcrumb, {
-      propsData: {
+      props: {
         items
       }
     })
@@ -33,7 +33,7 @@ describe('OcBreadcrumb', () => {
   })
   it('displays context menu trigger when a slot is given', () => {
     const wrapper = shallowMount(Breadcrumb, {
-      propsData: {
+      props: {
         items
       },
       slots: {
@@ -45,7 +45,7 @@ describe('OcBreadcrumb', () => {
   })
   it('does not display context menu trigger when no slot given', () => {
     const wrapper = shallowMount(Breadcrumb, {
-      propsData: {
+      props: {
         items
       }
     })

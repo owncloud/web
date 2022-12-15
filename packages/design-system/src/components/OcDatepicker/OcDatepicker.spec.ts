@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Datepicker from './OcDatepicker.vue'
 
@@ -8,7 +8,7 @@ describe('OcDatePicker', () => {
   it('renders default scoped slot', () => {
     const wrapper = shallowMount(Datepicker, {
       slots: { default: slotDefault },
-      propsData: { value: null }
+      props: { value: null }
     })
 
     expect(wrapper.find('#default-slot').exists()).toBeTruthy()

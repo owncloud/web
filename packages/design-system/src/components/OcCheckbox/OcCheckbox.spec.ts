@@ -1,10 +1,10 @@
 import OcCheckbox from './OcCheckbox.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 describe('OcCheckbox', () => {
   function getWrapperWithProps(props) {
     return mount(OcCheckbox, {
-      propsData: {
+      props: {
         label: 'test label',
         ...props
       }

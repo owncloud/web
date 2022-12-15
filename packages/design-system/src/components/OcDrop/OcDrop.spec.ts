@@ -1,4 +1,4 @@
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount, mount } from 'web-test-helpers'
 import Drop from './OcDrop.vue'
 import { getSizeClass } from '../../utils/sizeClasses'
 
@@ -30,8 +30,8 @@ describe('OcDrop', () => {
 
     for (let i = 0; i < 5; i++) {
       const id = `custom-drop-id-${i}`
-      const wrapper = shallowMount(Drop, {
-        propsData: {
+      const wrapper = shallowMount(Drop as any, {
+        props: {
           dropId: id
         }
       })
