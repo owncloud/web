@@ -2,7 +2,7 @@
   <oc-table
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
-      { condensed: viewMode === ViewModeConstants.condensedTable }
+      { condensed: viewMode === ViewModeConstants.condensedTable.name }
     ]"
     :data="resources"
     :fields="fields"
@@ -326,7 +326,7 @@ export default defineComponent({
     },
     viewMode: {
       type: String,
-      default: ViewModeConstants.default
+      default: ViewModeConstants.default.name
     },
     /**
      * Enable hover effect

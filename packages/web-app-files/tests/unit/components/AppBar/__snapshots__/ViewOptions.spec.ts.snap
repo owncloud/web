@@ -2,14 +2,7 @@
 
 exports[`ViewOptions component sets the correct initial files page limit 1`] = `
 <div class="oc-flex oc-flex-middle">
-  <div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
-    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">
-      <oc-icon-stub name="menu-line-condensed" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
-    </oc-button-stub>
-    <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium">
-      <oc-icon-stub name="menu-line" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
-    </oc-button-stub>
-  </div>
+  <!---->
   <oc-button-stub type="button" size="medium" arialabel="Display customization options of the files list" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" id="files-view-options-btn" data-testid="files-view-options-btn" class="oc-my-s oc-p-xs">
     <oc-icon-stub name="settings-3" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
   </oc-button-stub>
@@ -26,5 +19,16 @@ exports[`ViewOptions component sets the correct initial files page limit 1`] = `
       </li>
     </oc-list-stub>
   </oc-drop-stub>
+</div>
+`;
+
+exports[`ViewOptions component shows a viewmode switcher if more than one viewModes are passed 1`] = `
+<div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
+  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium" label="Switch to condensed table view">
+    <oc-icon-stub name="menu-line-condensed" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </oc-button-stub>
+  <oc-button-stub type="button" size="medium" submit="button" variation="passive" appearance="outline" justifycontent="center" gapsize="medium" label="Switch to default table view">
+    <oc-icon-stub name="menu-line" filltype="none" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
+  </oc-button-stub>
 </div>
 `;

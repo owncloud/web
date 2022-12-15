@@ -8,6 +8,7 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { ViewModeConstants } from 'web-app-files/src/composables'
 
 jest.mock('web-pkg/src/composables/router')
 const selectors = {
@@ -33,9 +34,28 @@ describe('ViewOptions component', () => {
     wrapper.find(selectors.fileExtensionsSwitch).vm.$emit('change', false)
     expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
   })
+  it('initially does not show a viewmode switcher', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.find('[data-testid="viewmode-switch-buttons"]').exists()).toBeFalsy()
+  })
+  it('shows a viewmode switcher if more than one viewModes are passed', () => {
+    const { wrapper } = getWrapper(
+      {},
+      {
+        viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default]
+      }
+    )
+    const viewModeSwitchButtons = wrapper.find('[data-testid="viewmode-switch-buttons"]')
+    expect(viewModeSwitchButtons).toMatchSnapshot()
+  })
 })
 
-function getWrapper({ perPage = '100' } = {}) {
+function getWrapper(
+  { perPage = '100' } = {},
+  props: { [key: string]: any } = {
+    viewModes: []
+  }
+) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
@@ -45,6 +65,7 @@ function getWrapper({ perPage = '100' } = {}) {
     storeOptions,
     mocks,
     wrapper: shallowMount(ViewOptions, {
+      props: { ...props },
       global: {
         mocks,
         plugins: [...defaultPlugins(), store]

@@ -68,7 +68,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     fields
   })
 
-  const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.default)
+  const currentViewModeQuery = useRouteQuery('view-mode', ViewModeConstants.default.name)
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
   const viewMode = useViewMode(currentViewMode)
 

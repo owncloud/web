@@ -9,7 +9,7 @@ exports[`AppBar component renders breadcrumbs if given, by default without bread
       <oc-breadcrumb-stub items="[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -31,7 +31,7 @@ exports[`AppBar component renders breadcrumbs if given, with breadcrumbsContextA
       <oc-breadcrumb-stub items="[object Object],[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -53,7 +53,7 @@ exports[`AppBar component renders breadcrumbs if given, with content in the cont
       <oc-breadcrumb-stub items="[object Object],[object Object],[object Object]" variation="default" contextmenupadding="small" id="files-breadcrumb" data-testid="files-breadcrumbs" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -75,7 +75,7 @@ exports[`AppBar component renders bulkActions if enabled 1`] = `
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -98,7 +98,7 @@ exports[`AppBar component renders bulkActions not if 1 file selected 1`] = `
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -121,7 +121,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -143,7 +143,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -165,7 +165,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -188,7 +188,7 @@ exports[`AppBar component renders sharesNavigation if enabled 1`] = `
       <!---->
       <shares-navigation-stub></shares-navigation-stub>
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
@@ -251,8 +251,30 @@ exports[`AppBar component renders viewoptions and sidebartoggle only viewoptions
       <!---->
       <!---->
       <div class="oc-flex">
-        <view-options-stub></view-options-stub>
+        <view-options-stub viewmodes=""></view-options-stub>
         <!---->
+      </div>
+    </div>
+    <div class="files-app-bar-actions oc-mt-xs">
+      <div class="oc-flex-1 oc-flex oc-flex-start">
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AppBar component renders viewoptions and sidebartoggle passes viewModes array to ViewOptions if displayViewModeSwitch props is enabled 1`] = `
+<div id="files-app-bar" class="">
+  <oc-hidden-announcer-stub level="polite" announcement="No items selected."></oc-hidden-announcer-stub>
+  <div class="files-topbar oc-py-s">
+    <h1 class="oc-invisible-sr">ExampleTitle</h1>
+    <div class="oc-flex oc-flex-right">
+      <!---->
+      <!---->
+      <div class="oc-flex">
+        <view-options-stub viewmodes="[object Object],[object Object]"></view-options-stub>
+        <sidebar-toggle-stub></sidebar-toggle-stub>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">

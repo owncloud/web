@@ -1,17 +1,19 @@
 <template>
   <div class="oc-flex oc-flex-middle">
-    <div data-testid="viewmode-switch-buttons" class="oc-button-group oc-visible@s oc-mr-s">
+    <div
+      v-if="viewModes.length"
+      data-testid="viewmode-switch-buttons"
+      class="oc-button-group oc-visible@s oc-mr-s"
+    >
       <oc-button
-        :appearance="viewModeCurrent === ViewModeConstants.condensedTable ? 'filled' : 'outline'"
-        @click="setViewMode(ViewModeConstants.condensedTable)"
+        v-for="viewMode in viewModes"
+        :key="viewMode.name"
+        v-oc-tooltip="viewMode.label"
+        :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
+        :label="viewMode.label"
+        @click="setViewMode(viewMode)"
       >
-        <oc-icon name="menu-line-condensed" fill-type="none" size="small" />
-      </oc-button>
-      <oc-button
-        :appearance="viewModeCurrent === ViewModeConstants.default ? 'filled' : 'outline'"
-        @click="setViewMode(ViewModeConstants.default)"
-      >
-        <oc-icon name="menu-line" fill-type="none" size="small" />
+        <oc-icon :name="viewMode.icon.name" :fill-type="viewMode.icon.fillType" size="small" />
       </oc-button>
     </div>
     <oc-button
@@ -62,12 +64,20 @@
 </template>
 
 <script lang="ts">
+import { PropType } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { useRouteQueryPersisted } from 'web-pkg/src/composables'
+import { ViewMode } from 'web-pkg/src/ui/types'
 import { PaginationConstants, ViewModeConstants } from '../../composables'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  props: {
+    viewModes: {
+      type: Array as PropType<ViewMode[]>,
+      default: () => []
+    }
+  },
   setup() {
     const perPageQuery = useRouteQueryPersisted({
       name: PaginationConstants.perPageQueryName,
@@ -75,7 +85,7 @@ export default defineComponent({
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.default
+      defaultValue: ViewModeConstants.default.name
     })
 
     return {
@@ -113,7 +123,7 @@ export default defineComponent({
   methods: {
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
     setViewMode(mode) {
-      this.viewModeCurrent = mode
+      this.viewModeCurrent = mode.name
     }
   }
 })

@@ -3,9 +3,10 @@
     <keyboard-actions :paginated-resources="paginatedResources" :space="space" />
     <files-view-wrapper>
       <app-bar
-        :has-bulk-actions="true"
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
+        :display-view-mode-switch="true"
+        :has-bulk-actions="true"
         :show-actions-on-selection="true"
         :side-bar-open="sideBarOpen"
         :space="space"
