@@ -56,7 +56,7 @@ export default {
     dropId: {
       type: String,
       required: false,
-      default: uniqueId('oc-info-drop-')
+      default: () => uniqueId('oc-info-drop-')
     },
     /**
      * CSS selector for the element to be used as toggle. By default, the preceding element is used

@@ -1,16 +1,17 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Users from '../../../src/views/Users.vue'
-import Vuex from 'vuex'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
 import { Graph } from 'web-client/src'
 import { useLoadTasks } from '../../../src/composables/loadTasks/useLoadTasks'
 import { Task } from 'vue-concurrency'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  shallowMount
+} from 'web-test-helpers'
 
 const defaultGraphMock = () => {
   const defaultUser = {
@@ -252,51 +253,22 @@ describe('Users view', () => {
   })
 })
 
-function getMountedWrapper({ data = {}, mocks = {}, graph = defaultGraphMock() } = {}) {
-  const $clientService = mockDeep<ClientService>()
-  $clientService.graphAuthenticated.mockImplementation(() => graph)
+function getMountedWrapper({ data = {}, graph = defaultGraphMock() } = {}) {
+  const mocks = {
+    ...defaultComponentMocks()
+  }
+  mocks.$clientService.graphAuthenticated.mockImplementation(() => graph)
+
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    state: {
+      user: { id: '1', uuid: '1' }
+    }
+  }
+
+  const store = createStore(storeOptions)
 
   return shallowMount(Users, {
-    localVue,
-    store: new Vuex.Store({
-      state: {
-        user: { id: '1', uuid: '1' }
-      },
-      actions: {
-        showMessage: jest.fn()
-      },
-      getters: {
-        configuration: () => ({
-          server: 'https://example.com/'
-        })
-      },
-      modules: {
-        runtime: {
-          namespaced: true,
-          modules: {
-            auth: {
-              namespaced: true,
-              getters: {
-                accessToken: () => ''
-              }
-            },
-            spaces: {
-              namespaced: true,
-              mutations: {
-                UPDATE_SPACE_FIELD: jest.fn()
-              }
-            }
-          }
-        }
-      }
-    }),
-    mocks: {
-      $gettext: jest.fn(),
-      $ngettext: jest.fn(),
-      $gettextInterpolate: jest.fn(),
-      $clientService,
-      ...mocks
-    },
     data: () => {
       return {
         selectedUsers: [
@@ -308,18 +280,9 @@ function getMountedWrapper({ data = {}, mocks = {}, graph = defaultGraphMock() }
         ...data
       }
     },
-    stubs: {
-      'create-user-modal': true,
-      'delete-user-modal': true,
-      'app-loading-spinner': true,
-      'no-content-message': true,
-      'oc-breadcrumb': true,
-      'oc-button': true,
-      'oc-icon': true,
-      translate: true
-    },
-    directives: {
-      'oc-tooltip': jest.fn()
+    global: {
+      plugins: [...defaultPlugins(), store],
+      mocks
     }
   })
 }

@@ -1,5 +1,5 @@
 import OcAccordion from './OcAccordion.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 import OcAccordionItem from '../OcAccordionItem/OcAccordionItem.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
@@ -30,22 +30,6 @@ const selectors = {
 }
 
 describe('OcAccordion', () => {
-  /**
-   * @param {Object} props
-   * @param {string} slot
-   * @returns {Wrapper<Vue>}
-   */
-  function getWrapperWithSlotAndProps(props, slot = singleAccordionItemSlot) {
-    return mount(OcAccordion, {
-      slots: {
-        default: slot
-      },
-      propsData: {
-        ...props
-      },
-      stubs
-    })
-  }
   describe('when item title is clicked', () => {
     it('should be able to toggle expanded', async () => {
       const wrapper = await getWrapperWithSlotAndProps({ expandFirst: false })
@@ -110,3 +94,17 @@ describe('OcAccordion', () => {
     })
   })
 })
+
+function getWrapperWithSlotAndProps(props, slot = singleAccordionItemSlot) {
+  return mount(OcAccordion, {
+    slots: {
+      default: slot
+    },
+    props: {
+      ...props
+    },
+    global: {
+      stubs
+    }
+  })
+}

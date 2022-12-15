@@ -40,7 +40,7 @@ type CompatMountOptions = {
   slots?: any
 }
 
-export const mount = (component: ComponentType, options: CompatMountOptions) => {
+export const mount = (component: ComponentType, options?: CompatMountOptions) => {
   const localVue = createLocalVue()
 
   options?.global?.plugins?.filter(Boolean).forEach((plugin) => {
@@ -55,10 +55,6 @@ export const mount = (component: ComponentType, options: CompatMountOptions) => 
     localVue.component(name, component)
   }
 
-  for (const [name, component] of Object.entries(options?.global?.components || {})) {
-    localVue.component(name, component)
-  }
-
   return _mount(component, {
     localVue,
     ...(options?.shallow && { shouldProxy: options.shallow }),
@@ -66,13 +62,14 @@ export const mount = (component: ComponentType, options: CompatMountOptions) => 
     ...(options?.data && { data: options.data }),
     ...(options?.attachTo && { attachTo: options.attachTo }),
     ...(options?.slots && { slots: options.slots }),
+    ...(options?.global?.directives && { directives: options.global.directives }),
     ...(options?.global?.provide && { provide: options.global.provide }),
     ...(options?.global?.mocks && { mocks: options.global.mocks }),
     ...(options?.global?.stubs && { stubs: options.global.stubs })
   })
 }
 
-export const shallowMount = (component: ComponentType, options: CompatMountOptions) => {
+export const shallowMount = (component: ComponentType, options?: CompatMountOptions) => {
   options = options || {}
   options.shallow = true
 

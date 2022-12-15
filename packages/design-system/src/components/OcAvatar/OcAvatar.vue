@@ -14,24 +14,15 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import OcImg from '../OcImage/OcImage.vue'
-
-export const extractInitials = (userName) => {
-  return userName
-    .split(/[ -]/)
-    .map((part) => part.replace(/[^\p{L}\p{Nd}]/giu, ''))
-    .filter(Boolean)
-    .map((part) => part.charAt(0))
-    .slice(0, 3)
-    .join('')
-    .toUpperCase()
-}
+import { extractInitials } from './extractInitials'
+import { defineComponent } from 'vue'
 
 /**
  * Avatar is a thumbnail representing user or group
  */
-export default {
+export default defineComponent({
   name: 'OcAvatar',
   status: 'ready',
   release: '1.0.0',
@@ -143,7 +134,7 @@ export default {
       return colors[seed % colors.length]
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

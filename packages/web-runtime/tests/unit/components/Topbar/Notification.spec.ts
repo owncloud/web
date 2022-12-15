@@ -1,4 +1,3 @@
-import { config as testConfig } from '@vue/test-utils'
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
@@ -63,7 +62,6 @@ const testData = {
     ]
   }
 }
-testConfig.showDeprecationWarnings = false
 
 describe('Notification component', () => {
   const { selectors } = testData

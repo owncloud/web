@@ -71,7 +71,7 @@ export default {
     selectId: {
       type: String,
       required: false,
-      default: uniqueId('oc-page-size-')
+      default: () => uniqueId('oc-page-size-')
     }
   },
 

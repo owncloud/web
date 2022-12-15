@@ -15,16 +15,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import tippy, { hideAll } from 'tippy.js'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
 import uniqueId from '../../utils/uniqueId'
 import { getSizeClass } from '../../utils/sizeClasses'
-
+import { defineComponent } from 'vue'
 /**
  * Position any element in relation to another element.
  */
-export default {
+export default defineComponent({
   name: 'OcDrop',
   status: 'ready',
   release: '1.0.0',
@@ -57,8 +57,8 @@ export default {
     position: {
       type: String,
       default: 'bottom-start',
-      validator: (value) => {
-        return value.match(
+      validator: (value: string) => {
+        return !!value.match(
           /((top|right|bottom|left|auto)|(top|right|bottom|left|auto)-(start|end))/
         )
       }
@@ -71,8 +71,8 @@ export default {
     mode: {
       type: String,
       default: 'click',
-      validator: (value) => {
-        return value.match(/(click|hover|manual)/)
+      validator: (value: string) => {
+        return !!value.match(/(click|hover|manual)/)
       }
     },
     /**
@@ -106,8 +106,8 @@ export default {
       type: String,
       required: false,
       default: 'medium',
-      validator: (value) => {
-        return value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge|remove)/)
+      validator: (value: string) => {
+        return !!value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge|remove)/)
       }
     },
     /**
@@ -158,7 +158,7 @@ export default {
     if (!to || !content) {
       return
     }
-    const config = {
+    const config: any = {
       trigger: this.triggerMapping,
       placement: this.position,
       arrow: false,
@@ -213,7 +213,7 @@ export default {
       this.tippy.hide(duration)
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -115,6 +115,7 @@
     "vue-style-loader": "^4.1.2",
     "vue-styleguidist": "^4.44.2",
     "vue": "2.7.14",
+    "web-test-helpers": "workspace:*",
     "webfontloader": "^1.6.28",
     "webpack-bundle-analyzer": "^4.2.0",
     "webpack-merge-and-include-globally": "^2.1.24",

@@ -1,8 +1,6 @@
-import { createLocalVue, mount } from '@vue/test-utils'
 import { ref, nextTick } from 'vue'
 import { useIsVisible } from './index'
-
-const localVue = createLocalVue()
+import { mount } from 'web-test-helpers'
 
 const mockIntersectionObserver = () => {
   jest.useFakeTimers()
@@ -33,26 +31,21 @@ const mockIntersectionObserver = () => {
 }
 
 const createWrapper = (options = {}) =>
-  mount(
-    {
-      template: `
+  mount({
+    template: `
       <div>
       <div ref="target">{{ isVisible }}</div>
       </div>`,
-      setup: () => {
-        const target = ref()
-        const { isVisible } = useIsVisible({ ...options, target })
+    setup: () => {
+      const target = ref()
+      const { isVisible } = useIsVisible({ ...options, target })
 
-        return {
-          isVisible,
-          target
-        }
+      return {
+        isVisible,
+        target
       }
-    },
-    {
-      localVue
     }
-  )
+  })
 
 describe('useIsVisible', () => {
   const { enable: enableIntersectionObserver, disable: disableIntersectionObserver } =

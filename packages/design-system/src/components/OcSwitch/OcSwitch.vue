@@ -52,7 +52,7 @@ export default {
     labelId: {
       type: String,
       required: false,
-      default: uniqueId('oc-switch-label-')
+      default: () => uniqueId('oc-switch-label-')
     }
   },
 
