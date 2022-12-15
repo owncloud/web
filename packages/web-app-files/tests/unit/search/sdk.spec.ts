@@ -1,8 +1,8 @@
-import { createLocalVue } from '@vue/test-utils'
 import { SDKSearch } from '../../../src/search'
 import { clientService } from 'web-pkg/src/services'
-import Vuex from 'vuex'
+import { Store } from 'vuex'
 import VueRouter from 'vue-router'
+import { mockDeep } from 'jest-mock-extended'
 
 const searchMock = jest.fn()
 jest.spyOn(clientService, 'owncloudSdk', 'get').mockImplementation(
@@ -18,24 +18,19 @@ jest.mock('web-client/src/helpers', () => ({
   buildResource: (v) => v
 }))
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-const store = new Vuex.Store({
+const store = mockDeep<Store<any>>({
   getters: {
     user: () => ({ id: 1 }),
-    capabilities: jest.fn(() => ({
+    capabilities: {
       dav: {
         reports: ['search-files']
       }
-    }))
+    }
   }
 })
 
-const storeWithoutFileSearch = new Vuex.Store({
-  getters: {
-    capabilities: jest.fn(() => ({ dav: { reports: [] } }))
-  }
+const storeWithoutFileSearch = mockDeep<Store<any>>({
+  getters: { capabilities: { dav: { reports: [] } } }
 })
 
 describe('SDKProvider', () => {

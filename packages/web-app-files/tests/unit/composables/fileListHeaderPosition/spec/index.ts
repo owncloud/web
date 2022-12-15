@@ -1,13 +1,9 @@
-import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
-import Vue, { defineComponent } from 'vue'
-import Vuex from 'vuex'
+import { defineComponent } from 'vue'
 import { useFileListHeaderPosition } from 'web-app-files/src/composables'
 import { useStore } from 'web-pkg/src/composables'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-export const createWrapper = (): Wrapper<Vue> =>
+export const createWrapper = () =>
   mount(
     defineComponent({
       setup() {
@@ -18,8 +14,10 @@ export const createWrapper = (): Wrapper<Vue> =>
       template: `<div>{{ y }}</div>`
     }),
     {
-      localVue,
-      attachTo: document.body
+      attachTo: document.body,
+      global: {
+        plugins: [...defaultPlugins()]
+      }
     }
   )
 

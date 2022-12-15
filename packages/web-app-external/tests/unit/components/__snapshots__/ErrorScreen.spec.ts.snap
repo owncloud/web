@@ -2,7 +2,7 @@
 
 exports[`The external app error screen component displays an icon and a paragraph 1`] = `
 <div class="oc-text-center">
-  <ocicon-stub size="xxlarge" name="error-warning" fill-type="line"></ocicon-stub>
+  <ocicon-stub name="error-warning" filltype="line" accessiblelabel="" type="span" size="xxlarge" variation="passive" color=""></ocicon-stub>
   <p class="oc-text-xlarge">Error when loading the application</p>
 </div>
 `;

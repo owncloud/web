@@ -1,23 +1,16 @@
 import { useUpload } from 'web-runtime/src/composables/upload'
 import { defineComponent } from 'vue'
-import { mount } from '@vue/test-utils'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { createStore } from 'vuex-extensions'
-import Vuex from 'vuex'
 import { SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  defaultStoreMockOptions,
+  defaultComponentMocks
+} from 'web-test-helpers'
 
 describe('useUpload', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => undefined)
-  })
-
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should be valid', () => {
     expect(useUpload).toBeDefined()
   })
@@ -83,6 +76,7 @@ describe('useUpload', () => {
   })
 
   it('should contain failed folders in the result', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => undefined)
     const { mocks, wrapper } = createWrapper()
     mocks.$clientService.webdav.createFolder.mockRejectedValue(new Error())
 
@@ -134,8 +128,7 @@ const createWrapper = () => {
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  const localVue = defaultLocalVue()
-  const store = createStore(Vuex.Store, storeOptions)
+  const store = createStore(storeOptions)
 
   return {
     mocks,
@@ -149,9 +142,10 @@ const createWrapper = () => {
         template: `<div></div>`
       }),
       {
-        localVue,
-        store,
-        mocks
+        global: {
+          plugins: [...defaultPlugins(), store],
+          mocks
+        }
       }
     )
   }

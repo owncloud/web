@@ -1,18 +1,25 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
-import GetTextPlugin from 'vue-gettext'
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import { ClientService } from 'web-pkg/src/services'
-import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
-
 import InnerSideBar from 'web-pkg/src/components/sideBar/SideBar.vue'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
+import { Resource } from 'web-client/src/helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { Resource } from 'web-client'
-import { Location } from 'vue-router'
+import {
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  defaultStubs,
+  shallowMount
+} from 'web-test-helpers'
 
 jest.mock('web-pkg/src/observer')
+jest.mock('web-app-files/src/helpers/resources', () => {
+  const original = jest.requireActual('web-app-files/src/helpers/resources')
+  return {
+    ...original,
+    buildResource: jest.fn()
+  }
+})
 
 const selectors = {
   noSelectionInfoPanel: 'noselection-stub'
@@ -41,11 +48,7 @@ describe('SideBar', () => {
         ]
       ])('%s', async (name, { path, noSelectionExpected }) => {
         const item = mockDeep<Resource>({ path })
-        const wrapper = createWrapper({
-          item,
-          currentRoute: createLocationPublic('files-public-link')
-        })
-        await wrapper.vm.$nextTick()
+        const { wrapper } = createWrapper({ item })
         await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
       })
@@ -68,8 +71,7 @@ describe('SideBar', () => {
         ]
       ])('%s', async (name, { path, noSelectionExpected }) => {
         const item = mockDeep<Resource>({ path })
-        const wrapper = createWrapper({ item })
-        await wrapper.vm.$nextTick()
+        const { wrapper } = createWrapper({ item })
         await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
       })
@@ -77,74 +79,46 @@ describe('SideBar', () => {
   })
 })
 
-function createWrapper({
-  item,
-  currentRoute = createLocationSpaces('files-spaces-generic')
-}: {
-  item: Resource
-  currentRoute?: Location
-}) {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
-  localVue.use(GetTextPlugin, {
-    translations: 'does-not-matter.json',
-    silent: true
-  })
-  return shallowMount(SideBar, {
-    propsData: {
-      open: true
-    },
-    store: new Vuex.Store({
-      getters: {
-        user: function () {
-          return { id: 'marie' }
-        },
-        capabilities: () => ({
-          files_sharing: {
-            api_enabled: true,
-            public: { enabled: true }
-          }
-        })
+function createWrapper({ item = undefined } = {}) {
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      user: function () {
+        return { id: 'marie' }
       },
-      modules: {
-        apps: {
-          getters: {
-            fileSideBars: () => fileSideBars
-          }
+      capabilities: () => ({
+        files_sharing: {
+          api_enabled: true,
+          public: { enabled: true }
+        }
+      })
+    }
+  }
+  storeOptions.modules.apps.getters.fileSideBars.mockImplementation(() => fileSideBars)
+  storeOptions.modules.Files.state.highlightedFile = item
+  storeOptions.modules.Files.getters.highlightedFile.mockImplementation(
+    (state) => state.highlightedFile
+  )
+  const store = createStore(storeOptions)
+  return {
+    wrapper: shallowMount(SideBar, {
+      props: {
+        open: true
+      },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        stubs: {
+          ...defaultStubs,
+          SideBar: InnerSideBar
         },
-        Files: {
-          namespaced: true,
-          state: {
-            highlightedFile: item
-          },
-          getters: {
-            highlightedFile: (state) => state.highlightedFile,
-            selectedFiles: () => [],
-            sharesTree: () => ({}),
-            versions: () => ({})
-          }
+        directives: {
+          'click-outside': jest.fn()
+        },
+        mocks: {
+          ...defaultComponentMocks()
         }
       }
-    }),
-    localVue,
-    stubs: {
-      ...defaultStubs,
-      SideBar: InnerSideBar,
-      'oc-icon': true,
-      'oc-button': true
-    },
-    directives: {
-      'click-outside': jest.fn()
-    },
-    mocks: {
-      $router: {
-        currentRoute,
-        resolve: (r) => {
-          return { href: r.name }
-        },
-        afterEach: jest.fn()
-      },
-      $clientService: mockDeep<ClientService>()
-    }
-  })
+    })
+  }
 }

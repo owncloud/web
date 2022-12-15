@@ -1,17 +1,18 @@
-import { mount, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
-import { defaultStubs } from 'web-test-helpers/src/mocks/defaultStubs'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
-import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
-import { defaultLocalVue } from 'web-test-helpers/src/localVue/defaultLocalVue'
 import { v4 as uuidV4 } from 'uuid'
 import { Share, ShareTypes } from 'web-client/src/helpers/share'
-
-const localVue = defaultLocalVue()
+import {
+  createStore,
+  defaultPlugins,
+  mount,
+  shallowMount,
+  defaultStoreMockOptions,
+  defaultComponentMocks,
+  defaultStubs
+} from 'web-test-helpers'
 
 const getCollaborator = () => ({
   shareType: 0,
@@ -42,22 +43,22 @@ describe('FileShares', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the resource can be shared', () => {
       const resource = mockDeep<Resource>({ isReceivedShare: () => false, canShare: () => true })
-      const wrapper = getWrapper({ resource })
+      const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource can not be shared', () => {
       const resource = mockDeep<Resource>({ isReceivedShare: () => false, canShare: () => false })
-      const wrapper = getWrapper({ resource })
+      const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
     it('does render the form when the resource is a received share and re-sharing is enabled', () => {
       const resource = mockDeep<Resource>({ isReceivedShare: () => true, canShare: () => true })
-      const wrapper = getWrapper({ resource })
+      const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource is a received share and re-sharing is disabled', () => {
       const resource = mockDeep<Resource>({ isReceivedShare: () => true, canShare: () => true })
-      const wrapper = getWrapper({ resource, hasReSharing: false })
+      const { wrapper } = getWrapper({ resource, hasReSharing: false })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
   })
@@ -71,7 +72,7 @@ describe('FileShares', () => {
     ]
 
     it('renders sharedWithLabel and sharee list', () => {
-      const wrapper = getWrapper({ collaborators })
+      const { wrapper } = getWrapper({ collaborators })
       expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#files-collaborators-list li').length).toBe(collaborators.length)
       expect(wrapper).toMatchSnapshot()
@@ -80,7 +81,7 @@ describe('FileShares', () => {
       const spyOnCollaboratorDeleteTrigger = jest
         .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')
         .mockImplementation()
-      const wrapper = getWrapper({ collaborators })
+      const { wrapper } = getWrapper({ collaborators })
       wrapper.find('collaborator-list-item-stub').vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
@@ -88,7 +89,7 @@ describe('FileShares', () => {
     it('correctly passes the shared parent route to the collaborator list item', () => {
       const indirectCollaborator = { ...getCollaborator(), indirect: true }
       const sharesTree = { [indirectCollaborator.path]: {} }
-      const wrapper = getWrapper({ collaborators: [indirectCollaborator], sharesTree })
+      const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], sharesTree })
       expect(wrapper.find('collaborator-list-item-stub').props().sharedParentRoute).toBeDefined()
       expect(wrapper).toMatchSnapshot()
     })
@@ -104,12 +105,12 @@ describe('FileShares', () => {
           })
         ]
       }
-      const wrapper = getWrapper({ sharesTree, resource })
+      const { wrapper } = getWrapper({ sharesTree, resource })
       expect(wrapper.find('collaborator-list-item-stub').props().sharedParentRoute).toBeDefined()
     })
     it('toggles the share list', async () => {
       const showAllOnLoad = true
-      const wrapper = getWrapper({ mountType: mount, collaborators })
+      const { wrapper } = getWrapper({ mountType: mount, collaborators })
       expect(wrapper.vm.sharesListCollapsed).toBe(!showAllOnLoad)
       await wrapper.find('.toggle-shares-list-btn').trigger('click')
       expect(wrapper.vm.sharesListCollapsed).toBe(showAllOnLoad)
@@ -123,7 +124,7 @@ describe('FileShares', () => {
       const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: '2' } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
-      const wrapper = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
+      const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#space-collaborators-list li').length).toBe(spaceMembers.length)
       expect(wrapper).toMatchSnapshot()
@@ -134,14 +135,14 @@ describe('FileShares', () => {
       const spaceMembers = [{ collaborator: { name: `${user}-2` } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
-      const wrapper = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
+      const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeFalsy()
     })
   })
 
   describe('"$_ocCollaborators_deleteShare" method', () => {
     it('calls "deleteShare" when successful', async () => {
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
       const share = mockDeep<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
@@ -149,7 +150,7 @@ describe('FileShares', () => {
     })
     it('shows a message when an error occurs', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const wrapper = getWrapper()
+      const { wrapper } = getWrapper()
       jest.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
       const showMessageSpy = jest.spyOn(wrapper.vm, 'showMessage')
       const share = mockDeep<Share>()
@@ -157,7 +158,7 @@ describe('FileShares', () => {
       expect(showMessageSpy).toHaveBeenCalled()
     })
     it('removes file when the last share on the "Shared with others"-page has been removed', async () => {
-      const wrapper = getWrapper({
+      const { wrapper } = getWrapper({
         collaborators: [getCollaborator()],
         currentRouteName: 'files-shares-with-others'
       })
@@ -205,20 +206,23 @@ function getWrapper({
   storeOptions.modules.Files.getters.currentFileOutgoingCollaborators.mockImplementation(
     () => collaborators
   )
-  const store = new Vuex.Store(storeOptions)
-  return mountType(FileShares, {
-    localVue,
-    provide: {
-      incomingParentShare: {}
-    },
-    store,
-    stubs: {
-      ...defaultStubs,
-      'oc-button': false,
-      'invite-collaborator-form': true,
-      'collaborator-list-item': true
-    },
-    propsData: { space },
-    mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } })
-  })
+  const store = createStore(storeOptions)
+  return {
+    wrapper: mountType(FileShares, {
+      props: { space },
+      global: {
+        plugins: [...defaultPlugins(), store],
+        mocks: defaultComponentMocks({ currentRoute: { name: currentRouteName } }),
+        provide: {
+          incomingParentShare: {}
+        },
+        stubs: {
+          ...defaultStubs,
+          'oc-button': false,
+          'invite-collaborator-form': true,
+          'collaborator-list-item': true
+        }
+      }
+    })
+  }
 }
