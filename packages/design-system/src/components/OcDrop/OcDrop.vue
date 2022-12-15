@@ -18,6 +18,7 @@
 <script lang="ts">
 import tippy, { hideAll } from 'tippy.js'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
+import { AVAILABLE_SIZES } from '../../helpers/constants'
 import uniqueId from '../../utils/uniqueId'
 import { getSizeClass } from '../../utils/sizeClasses'
 import { defineComponent } from 'vue'
@@ -106,8 +107,8 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'medium',
-      validator: (value: string) => {
-        return !!value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge|remove)/)
+      validator: (value) => {
+        return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
     },
     /**

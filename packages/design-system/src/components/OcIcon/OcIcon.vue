@@ -20,9 +20,10 @@
 </template>
 
 <script>
-import uniqueId from '../../utils/uniqueId'
 import InlineSvg from 'vue-inline-svg'
+import { AVAILABLE_SIZES } from '../../helpers/constants'
 import { getSizeClass } from '../../utils/sizeClasses'
+import uniqueId from '../../utils/uniqueId'
 /**
  * Icons are used to visually communicate core parts of the product and
  * available actions. They can act as wayfinding tools to help users more
@@ -44,7 +45,9 @@ import { getSizeClass } from '../../utils/sizeClasses'
 InlineSvg.name = 'inline-svg'
 /*InlineSvg.methods.download = name => {
   return (promise => {
-    if (promise.isPending) return promise
+    if (promise.isPending) {
+      return promise
+    }
     let isPending = true
     let result = promise.then(
       v => {
@@ -122,7 +125,7 @@ export default {
       type: String,
       default: 'medium',
       validator: (value) => {
-        return value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge)/)
+        return AVAILABLE_SIZES.some((e) => e === value)
       }
     },
     /**
@@ -154,7 +157,9 @@ export default {
     nameWithFillType() {
       const path = 'icons/'
       const fillType = this.fillType.toLowerCase()
-      if (fillType === 'none') return `${path}${this.name}.svg`
+      if (fillType === 'none') {
+        return `${path}${this.name}.svg`
+      }
       return `${path}${this.name}-${fillType}.svg`
     }
   },
@@ -166,7 +171,9 @@ export default {
       return this.prefix(c)
     },
     prefix(string) {
-      if (string !== null) return `oc-icon-${string}`
+      if (string !== null) {
+        return `oc-icon-${string}`
+      }
     },
     transformSvgElement(svg) {
       if (this.accessibleLabel !== '') {
