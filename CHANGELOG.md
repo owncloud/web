@@ -10,12 +10,15 @@ Summary
 
 * Bugfix - Current year selection in the date picker: [#8058](https://github.com/owncloud/web/pull/8058)
 * Bugfix - Include spaces in the list info: [#7926](https://github.com/owncloud/web/pull/7926)
+* Bugfix - Left sidebar navigation item text flickers on transition: [#8080](https://github.com/owncloud/web/pull/8080)
 * Bugfix - Omit "page"-query in breadcrumb navigation: [#8061](https://github.com/owncloud/web/pull/8061)
 * Bugfix - "Paste"-action without write permissions: [#7925](https://github.com/owncloud/web/pull/7925)
 * Bugfix - Prevent deletion of own account: [#7958](https://github.com/owncloud/web/pull/7958)
+* Bugfix - Re-using space images: [#8083](https://github.com/owncloud/web/issues/8083)
 * Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
 * Bugfix - Reverting versions for read-only shares: [#8040](https://github.com/owncloud/web/pull/8040)
 * Bugfix - Search repeating no results message: [#8054](https://github.com/owncloud/web/issues/8054)
+* Bugfix - Space member disappearing: [#8081](https://github.com/owncloud/web/issues/8081)
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 * Bugfix - Text editor appearance: [#8026](https://github.com/owncloud/web/pull/8026)
 * Bugfix - UI fixes for sorting and quickactions: [#7966](https://github.com/owncloud/web/pull/7966)
@@ -51,6 +54,12 @@ Details
    https://github.com/owncloud/web/issues/7924
    https://github.com/owncloud/web/pull/7926
 
+* Bugfix - Left sidebar navigation item text flickers on transition: [#8080](https://github.com/owncloud/web/pull/8080)
+
+   We've fixed a bug that caused the left sidebar navigation items text to flicker in light mode.
+
+   https://github.com/owncloud/web/pull/8080
+
 * Bugfix - Omit "page"-query in breadcrumb navigation: [#8061](https://github.com/owncloud/web/pull/8061)
 
    We've omitted the "page"-query when navigating via breadcrumb. This solves an issue were the
@@ -74,6 +83,14 @@ Details
    https://github.com/owncloud/web/issues/7955
    https://github.com/owncloud/web/pull/7958
 
+* Bugfix - Re-using space images: [#8083](https://github.com/owncloud/web/issues/8083)
+
+   We've fixed a bug where re-using a previously used space image via "Set as space image" would
+   cause errors.
+
+   https://github.com/owncloud/web/issues/8083
+   https://github.com/owncloud/web/pull/8084
+
 * Bugfix - Resolving drives in search: [#8045](https://github.com/owncloud/web/pull/8045)
 
    We've fixed a bug where folder listing was not reloaded when being in a space/share root and
@@ -95,6 +112,13 @@ Details
 
    https://github.com/owncloud/web/issues/8054
    https://github.com/owncloud/web/pull/8062
+
+* Bugfix - Space member disappearing: [#8081](https://github.com/owncloud/web/issues/8081)
+
+   We've fixed a bug where adding links to a space would remove newly added members in the UI.
+
+   https://github.com/owncloud/web/issues/8081
+   https://github.com/owncloud/web/pull/8082
 
 * Bugfix - Space quota not displayed after creation: [#7969](https://github.com/owncloud/web/pull/7969)
 
