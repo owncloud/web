@@ -17,7 +17,12 @@ const tableFieldResource = {
   sortable: true,
   sortDir: 'asc'
 }
-const tableFields = [
+const tableFields: {
+  name: string
+  title: string
+  sortable?: boolean
+  sortDir?: string
+}[] = [
   {
     name: 'selected',
     title: 'Select'

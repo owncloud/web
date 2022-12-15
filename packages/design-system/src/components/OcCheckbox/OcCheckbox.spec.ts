@@ -57,17 +57,17 @@ describe('OcCheckbox', () => {
     it('should set check on input change', async () => {
       const wrapper = await getWrapperWithProps({})
       const checkbox = wrapper.find(checkboxSelector)
-      expect(checkbox.element.checked).toBeFalsy()
+      expect((checkbox.element as any).checked).toBeFalsy()
       await checkbox.setChecked()
       expect(wrapper.emitted('input')).toBeTruthy()
-      expect(checkbox.element.checked).toBeTruthy()
+      expect((checkbox.element as any).checked).toBeTruthy()
     })
   })
   describe('set outline', () => {
     it('should show outline', async () => {
       const wrapper = await getWrapperWithProps({ outline: true })
       const checkbox = wrapper.find(checkboxSelector)
-      expect(checkbox.element._prevClass).toContain('oc-checkbox-outline')
+      expect((checkbox.element as any)._prevClass).toContain('oc-checkbox-outline')
     })
   })
 })

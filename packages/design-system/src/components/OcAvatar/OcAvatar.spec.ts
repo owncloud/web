@@ -1,5 +1,6 @@
-import { mount } from '@vue/test-utils'
-import OcAvatar, { extractInitials } from './OcAvatar.vue'
+import { mount } from 'web-test-helpers'
+import OcAvatar from './OcAvatar.vue'
+import { extractInitials } from './extractInitials'
 
 describe('extractInitials', () => {
   describe('should allow alphanumeric characters', () => {
@@ -50,18 +51,11 @@ describe('OcAvatar', () => {
   const selectors = {
     initials: '.avatarInitials'
   }
-  function getWrapperWithProps(props) {
-    return mount(OcAvatar, {
-      propsData: {
-        ...props
-      }
-    })
-  }
   describe('prop value', () => {
     describe('when src is set', () => {
       let wrapper
       beforeEach(() => {
-        wrapper = getWrapperWithProps({
+        wrapper = getWrapper({
           src: 'http://some-image.jpg'
         })
       })
@@ -79,7 +73,7 @@ describe('OcAvatar', () => {
     })
     describe('when username is set', () => {
       it("should render user initials for username 'test user'", () => {
-        const wrapper = getWrapperWithProps({
+        const wrapper = getWrapper({
           userName: 'test user'
         })
         const userInitialElement = wrapper.find(selectors.initials)
@@ -90,7 +84,7 @@ describe('OcAvatar', () => {
     describe('when width is set', () => {
       let wrapper
       beforeEach(() => {
-        wrapper = getWrapperWithProps({
+        wrapper = getWrapper({
           width: 100
         })
       })
@@ -104,7 +98,7 @@ describe('OcAvatar', () => {
     })
     describe('accessibleLabel', () => {
       it('should not be set when value is empty string', () => {
-        const wrapper = getWrapperWithProps({
+        const wrapper = getWrapper({
           accessibleLabel: ''
         })
         expect(wrapper.attributes('aria-label')).toBeFalsy()
@@ -113,7 +107,7 @@ describe('OcAvatar', () => {
         expect(wrapper.attributes('focusable')).toBe('false')
       })
       it('should be set when value is not empty string', () => {
-        const wrapper = getWrapperWithProps({
+        const wrapper = getWrapper({
           accessibleLabel: 'test label'
         })
         expect(wrapper.attributes('aria-label')).toBe('test label')
@@ -124,3 +118,9 @@ describe('OcAvatar', () => {
     })
   })
 })
+
+function getWrapper(props) {
+  return mount(OcAvatar, {
+    props
+  })
+}

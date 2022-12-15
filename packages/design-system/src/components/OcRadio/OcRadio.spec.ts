@@ -77,7 +77,7 @@ describe('OcRadio', () => {
       const radioInput = wrapper.find(radioElementSelector)
       expect(wrapper.emitted('input')).toBeFalsy()
       await radioInput.setChecked()
-      expect(radioInput.element.selected).toBeTruthy()
+      expect((radioInput.element as any).selected).toBeTruthy()
       expect(wrapper.emitted('input')).toBeTruthy()
     })
     it('should not emit input event if disabled', async () => {
@@ -85,7 +85,7 @@ describe('OcRadio', () => {
       const radioInput = wrapper.find(radioElementSelector)
       expect(wrapper.emitted('input')).toBeFalsy()
       await radioInput.trigger('click')
-      expect(radioInput.element.checked).toBeFalsy()
+      expect((radioInput.element as any).checked).toBeFalsy()
       expect(wrapper.emitted('input')).toBeFalsy()
     })
   })

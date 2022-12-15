@@ -7,7 +7,7 @@ describe('OcRecipient', () => {
    * @param {Object} props
    * @returns {Wrapper<Vue>}
    */
-  function getWrapper(props, slot) {
+  function getWrapper(props = undefined, slot = undefined) {
     const slots = slot ? { append: slot } : {}
 
     return shallowMount(Recipient, {
@@ -53,6 +53,7 @@ describe('OcRecipient', () => {
       hasAvatar: false
     })
 
+    console.log(wrapper.html())
     const icon = wrapper.find('[data-testid="recipient-icon"]')
 
     expect(icon.exists()).toBeTruthy()

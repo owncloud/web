@@ -202,7 +202,7 @@ describe('OcSearchBar', () => {
         expect(wrapper.find(selectors.searchClearButton).exists()).toBeFalsy()
         const searchInput = wrapper.find(selectors.searchInput)
         await searchInput.setValue('a')
-        expect(searchInput.element.value).toBe('a')
+        expect((searchInput.element as HTMLInputElement).value).toBe('a')
         expect(wrapper.find(selectors.searchClearButton).exists()).toBeTruthy()
       })
     })

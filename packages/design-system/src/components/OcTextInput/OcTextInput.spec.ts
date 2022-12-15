@@ -207,7 +207,7 @@ describe('OcTextInput', () => {
       expect(wrapper.emitted().input[0][0]).toEqual(null)
       // value in DOM would be the empty string if two way binding was used
       // by just passing in the value it should remain unchanged
-      expect(input.element.value).toEqual('non-empty-value')
+      expect((input.element as HTMLInputElement).value).toEqual('non-empty-value')
       expect(document.activeElement.id).toBe(input.element.id)
     })
   })

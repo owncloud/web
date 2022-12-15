@@ -11,7 +11,7 @@ describe('OcAvatarCount', () => {
       }
     })
 
-    expect(wrapper.element.style.fontSize).toMatch('40px')
+    expect((wrapper.element as HTMLElement).style.fontSize).toMatch('40px')
     expect(wrapper).toMatchSnapshot()
   })
 })

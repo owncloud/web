@@ -112,15 +112,15 @@ describe('OcPagination', () => {
   it('builds correct prev and next links', () => {
     const localThis = {
       ...defaultProps,
-      bindPageLink: Pagination.methods.bindPageLink,
+      bindPageLink: (Pagination as any).methods.bindPageLink,
       $_currentPage: 3
     }
 
-    expect(Pagination.computed.previousPageLink.call(localThis)).toMatchObject({
+    expect((Pagination as any).computed.previousPageLink.call(localThis)).toMatchObject({
       name: 'files',
       query: { page: 2 }
     })
-    expect(Pagination.computed.nextPageLink.call(localThis)).toMatchObject({
+    expect((Pagination as any).computed.nextPageLink.call(localThis)).toMatchObject({
       name: 'files',
       query: { page: 4 }
     })

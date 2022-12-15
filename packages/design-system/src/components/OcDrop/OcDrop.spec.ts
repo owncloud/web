@@ -57,18 +57,18 @@ describe('OcDrop', () => {
       'auto-start',
       'auto-end'
     ].forEach((pos) => {
-      expect(Drop.props.position.validator(pos)).toBeTruthy()
+      expect((Drop as any).props.position.validator(pos)).toBeTruthy()
     })
 
-    expect(Drop.props.position.validator('unknown')).toBeFalsy()
+    expect((Drop as any).props.position.validator('unknown')).toBeFalsy()
   })
 
   it('handles mode prop', () => {
     ;['click', 'hover'].forEach((pos) => {
-      expect(Drop.props.mode.validator(pos)).toBeTruthy()
+      expect((Drop as any).props.mode.validator(pos)).toBeTruthy()
     })
 
-    expect(Drop.props.mode.validator('unknown')).toBeFalsy()
+    expect((Drop as any).props.mode.validator('unknown')).toBeFalsy()
   })
 
   it.each(['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'remove'])(

@@ -63,7 +63,7 @@ describe('OcAccordionItem', () => {
     // cannot test if parent emits or not from the child component
     // only checks if the toggle method is called or not
     it('when title button is clicked', async () => {
-      const toggleExpandedSpy = jest.spyOn(OcAccordionItem.methods, 'toggleExpanded')
+      const toggleExpandedSpy = jest.spyOn((OcAccordionItem as any).methods, 'toggleExpanded')
       const wrapper = getWrapper()
       const titleButton = wrapper.find('.oc-accordion-title oc-button-stub')
       await titleButton.vm.$emit('click')
@@ -72,7 +72,7 @@ describe('OcAccordionItem', () => {
   })
 })
 
-function getWrapper(props) {
+function getWrapper(props = {}) {
   return shallowMount(OcAccordionItem, {
     props: {
       title: 'Test title',
