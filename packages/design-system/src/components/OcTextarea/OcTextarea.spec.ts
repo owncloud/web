@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import OcTextarea from './OcTextarea.vue'
 
 const defaultProps = {
@@ -8,7 +8,7 @@ const defaultProps = {
 describe('OcTextarea', () => {
   function getShallowWrapper(props = {}) {
     return shallowMount(OcTextarea, {
-      propsData: {
+      props: {
         ...defaultProps,
         ...props
       }

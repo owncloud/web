@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Recipient from './OcRecipient.vue'
 
@@ -11,7 +11,7 @@ describe('OcRecipient', () => {
     const slots = slot ? { append: slot } : {}
 
     return shallowMount(Recipient, {
-      propsData: {
+      props: {
         recipient: {
           name: 'alice',
           avatar: 'avatar.jpg',
@@ -92,7 +92,7 @@ describe('OcRecipient', () => {
     ],
     ['icon label is empty', { name: 'Alice', icon: { name: 'Alice', label: '' } }]
   ])('throws an error if %s', (def, prop) => {
-    expect(() => shallowMount(Recipient, { propsData: { recipient: prop } })).toThrow(
+    expect(() => shallowMount(Recipient, { props: { recipient: prop } })).toThrow(
       `Recipient ${def}`
     )
   })

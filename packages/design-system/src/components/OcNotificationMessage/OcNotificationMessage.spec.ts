@@ -1,5 +1,5 @@
 import OcNotificationMessage from './OcNotificationMessage.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 jest.useFakeTimers()
 
 describe('OcNotificationMessage', () => {
@@ -88,7 +88,7 @@ describe('OcNotificationMessage', () => {
 
   function getWrapper(props = {}) {
     return shallowMount(OcNotificationMessage, {
-      propsData: {
+      props: {
         ...props,
         title: 'Test passed'
       }

@@ -1,4 +1,4 @@
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount, mount } from 'web-test-helpers'
 import OcTextInput from './OcTextInput.vue'
 
 const defaultProps = {
@@ -8,7 +8,7 @@ const defaultProps = {
 describe('OcTextInput', () => {
   function getShallowWrapper(props = {}) {
     return shallowMount(OcTextInput, {
-      propsData: {
+      props: {
         ...defaultProps,
         ...props
       }
@@ -190,7 +190,7 @@ describe('OcTextInput', () => {
 
     it('clears the content on click', async () => {
       const wrapper = getMountedWrapper({
-        propsData: {
+        props: {
           ...defaultProps,
           clearButtonEnabled: true,
           value: 'non-empty-value'

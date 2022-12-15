@@ -1,5 +1,5 @@
 import OcNotifications from './OcNotifications.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 describe('OcNotifications', () => {
   function getWrapper(options = {}) {
@@ -9,7 +9,7 @@ describe('OcNotifications', () => {
     it('should not allow values other than top-left, top-center, top-right', () => {
       expect(() => {
         getWrapper({
-          propsData: { position: 'not-valid' }
+          props: { position: 'not-valid' }
         })
       }).toThrow('[Vue warn]: Invalid prop: custom validator check failed for prop "position".')
     })
@@ -17,7 +17,7 @@ describe('OcNotifications', () => {
       'should set provided position as class for wrapper',
       (position) => {
         const wrapper = getWrapper({
-          propsData: { position: position }
+          props: { position: position }
         })
         expect(wrapper.attributes('class')).toContain(`oc-notification-${position}`)
       }
@@ -29,8 +29,10 @@ describe('OcNotifications', () => {
         default:
           "<oc-notification-message title='test notification title' message='Testing is good.'/>"
       },
-      stubs: {
-        OcNotificationMessage: true
+      global: {
+        stubs: {
+          OcNotificationMessage: true
+        }
       }
     })
     const slotEl = wrapper.find('ocnotificationmessage-stub')

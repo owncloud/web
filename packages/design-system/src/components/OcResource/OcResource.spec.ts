@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 import Resource from './OcResource.vue'
 import OcButton from '../OcButton/OcButton.vue'
@@ -31,7 +31,7 @@ const fileResourceWithoutParentFoldername = {
 describe('OcResource', () => {
   it("doesn't emit a click if the resource is a folder", () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: folderResource,
         targetRoute: {
           name: 'tests-route'
@@ -45,7 +45,7 @@ describe('OcResource', () => {
 
   it("doesn't emit a click if the resource is not clickable", () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: fileResource,
         isResourceClickable: false
       }
@@ -57,10 +57,12 @@ describe('OcResource', () => {
 
   it('emits a click', () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: fileResource
       },
-      stubs
+      global: {
+        stubs
+      }
     })
 
     wrapper.find('.oc-resource-name').trigger('click')
@@ -69,12 +71,14 @@ describe('OcResource', () => {
 
   it('parent folder component type is link if parent folder given', () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: fileResource,
         isPathDisplayed: true,
         parentFolderLink: {}
       },
-      stubs
+      global: {
+        stubs
+      }
     })
 
     expect(wrapper.find('.parent-folder').find('a').exists()).toBeTruthy()
@@ -83,11 +87,13 @@ describe('OcResource', () => {
 
   it('parent folder component type is span if parent folder not given', () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: fileResource,
         isPathDisplayed: true
       },
-      stubs
+      global: {
+        stubs
+      }
     })
 
     expect(wrapper.find('.parent-folder').find('a').exists()).toBeFalsy()
@@ -96,12 +102,14 @@ describe('OcResource', () => {
 
   it('displays parent folder name default if calculated name is empty', () => {
     const wrapper = mount(Resource, {
-      propsData: {
+      props: {
         resource: fileResourceWithoutParentFoldername,
         isPathDisplayed: true,
         parentFolderNameDefault: 'Example parent folder name'
       },
-      stubs
+      global: {
+        stubs
+      }
     })
 
     expect(wrapper).toMatchSnapshot()

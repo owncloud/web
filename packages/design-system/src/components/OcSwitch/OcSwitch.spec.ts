@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Switch from './OcSwitch.vue'
 
@@ -9,7 +9,7 @@ const defaultProps = {
 describe('OcSwitch', () => {
   it('can be toggled', async () => {
     const wrapper = shallowMount(Switch, {
-      propsData: defaultProps
+      props: defaultProps
     })
 
     await wrapper.find('[data-testid="oc-switch-btn"]').trigger('click')

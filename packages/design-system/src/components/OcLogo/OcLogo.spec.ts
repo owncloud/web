@@ -1,5 +1,5 @@
 import OcLogo from './OcLogo.vue'
-import { mount, shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from 'web-test-helpers'
 import OcImage from '../OcImage/OcImage.vue'
 
 describe('OcLogo', () => {
@@ -9,11 +9,13 @@ describe('OcLogo', () => {
   }
   function getWrapper(props = {}) {
     return shallowMount(OcLogo, {
-      propsData: {
+      props: {
         ...requiredProps,
         ...props
       },
-      stubs: { 'oc-img': true }
+      global: {
+        stubs: { 'oc-img': true }
+      }
     })
   }
   const wrapper = getWrapper()
@@ -31,7 +33,7 @@ describe('OcLogo', () => {
       components: { OcLogo },
       name: 'TestOcLogo'
     }
-    const wrapper = mount(component, { stubs: { 'oc-img': OcImage } })
+    const wrapper = mount(component, { global: { stubs: { 'oc-img': OcImage } } })
     expect(wrapper.attributes('class')).toContain('test-class')
   })
 })

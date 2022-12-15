@@ -1,10 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import Tag from './OcTag.vue'
 
 describe('OcTag', () => {
   it('uses correct component when type is specified', () => {
     const wrapper = shallowMount(Tag, {
-      propsData: {
+      props: {
         type: 'button'
       }
     })
@@ -15,7 +15,7 @@ describe('OcTag', () => {
 
   it('emits a click event', async () => {
     const wrapper = shallowMount(Tag, {
-      propsData: {
+      props: {
         type: 'a'
       }
     })

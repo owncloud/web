@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 import Table from './OcTable.vue'
 
 const ASC = 'ascending'
@@ -51,12 +51,14 @@ const data = [
 describe('OcTable.sort', () => {
   describe('aria-sort', () => {
     const wrapper = mount(Table, {
-      propsData: {
+      props: {
         fields: [...tableFields],
         data
       },
-      stubs: {
-        'oc-icon': true
+      global: {
+        stubs: {
+          'oc-icon': true
+        }
       }
     })
     const headers = wrapper.findAll('thead th')
@@ -118,14 +120,16 @@ describe('OcTable.sort', () => {
   describe('emits sort events', () => {
     it('toggles the sort direction when repeatedly clicking on the same column', async () => {
       const wrapper = mount(Table, {
-        propsData: {
+        props: {
           fields: tableFields,
           sortBy: tableFieldId.name,
           sortDir: tableFieldId.sortDir,
           data
         },
-        stubs: {
-          'oc-icon': true
+        global: {
+          stubs: {
+            'oc-icon': true
+          }
         }
       })
 
@@ -163,14 +167,16 @@ describe('OcTable.sort', () => {
       'sets the default sort direction from the field when %s',
       async (name, { sortByOld, sortDirOld, sortByNew, sortDirNew }) => {
         const wrapper = mount(Table, {
-          propsData: {
+          props: {
             fields: tableFields,
             data,
             sortBy: sortByOld,
             sortDir: sortDirOld
           },
-          stubs: {
-            'oc-icon': true
+          global: {
+            stubs: {
+              'oc-icon': true
+            }
           }
         })
 

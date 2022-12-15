@@ -1,10 +1,10 @@
 import OcLoader from './OcLoader.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 describe('OcLoader', () => {
   function getWrapper(props = {}) {
     return mount(OcLoader, {
-      propsData: props
+      props: props
     })
   }
   it('should set provided aria-label', () => {

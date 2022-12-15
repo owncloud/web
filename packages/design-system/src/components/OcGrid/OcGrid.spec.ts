@@ -1,10 +1,10 @@
 import OcGrid from './OcGrid.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 describe('OcGrid', () => {
   function getWrapper(props = {}) {
     return mount(OcGrid, {
-      propsData: props
+      props: props
     })
   }
   describe('gutter', () => {

@@ -1,10 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import Progress from './OcProgress.vue'
 
 describe('OcProgress', () => {
   it('sets correct classes', () => {
     const wrapper = shallowMount(Progress, {
-      propsData: {
+      props: {
         value: 3,
         max: 10,
         variation: 'warning',

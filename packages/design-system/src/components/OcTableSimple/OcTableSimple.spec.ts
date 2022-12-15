@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Table from './OcTableSimple.vue'
 
 describe('OcTableSimple', () => {
   it('adds hover', () => {
     const wrapper = shallowMount(Table, {
-      propsData: {
+      props: {
         hover: true
       }
     })

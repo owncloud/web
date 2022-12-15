@@ -1,10 +1,10 @@
 import OcImage from './OcImage.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 describe('OcImage', () => {
   function getWrapper(props = {}) {
     return mount(OcImage, {
-      propsData: {
+      props: {
         src: 'http://someimage.jpg',
         ...props
       }

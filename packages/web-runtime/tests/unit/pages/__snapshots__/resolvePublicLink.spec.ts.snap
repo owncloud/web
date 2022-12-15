@@ -6,9 +6,9 @@ exports[`resolvePublicLink theming options should display the configuration them
 </div>
 `;
 
-exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub id="oc-textinput-4" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
+exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should display the error message if "inputErrorMessage" is not empty 1`] = `<oc-text-input-stub id="oc-textinput-1" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
 
-exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub id="oc-textinput-4" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
+exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the password input should have a computed label 1`] = `<oc-text-input-stub id="oc-textinput-1" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>`;
 
 exports[`resolvePublicLink when the view is not loading anymore and when "passwordRequired" is set as true and the submit button should be set as disabled if "password" is empty 1`] = `
 <oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
@@ -24,7 +24,7 @@ exports[`resolvePublicLink when the view is not loading anymore and when "passwo
     </h2>
   </div>
   <div class="oc-card-body">
-    <oc-text-input-stub id="oc-textinput-4" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>
+    <oc-text-input-stub id="oc-textinput-1" type="password" value="" clearbuttonaccessiblelabel="" label="Enter password for public link" class="oc-mb-s"></oc-text-input-stub>
     <oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" class="oc-login-authorize-button">
       <translate-stub tag="span">Continue</translate-stub>
     </oc-button-stub>

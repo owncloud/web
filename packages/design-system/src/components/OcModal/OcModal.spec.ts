@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 import Modal from './OcModal.vue'
 
 const defaultProps = {
@@ -16,7 +16,7 @@ const inputProps = {
 describe('OcModal', () => {
   it('displays correct variation', () => {
     const wrapper = shallowMount(Modal, {
-      propsData: {
+      props: {
         ...defaultProps,
         variation: 'danger'
       }
@@ -27,7 +27,7 @@ describe('OcModal', () => {
 
   it('hides icon if not specified', () => {
     const wrapper = shallowMount(Modal, {
-      propsData: {
+      props: {
         ...defaultProps
       }
     })
@@ -38,7 +38,7 @@ describe('OcModal', () => {
 
   it('overrides props message with slot', () => {
     const wrapper = shallowMount(Modal, {
-      propsData: {
+      props: {
         ...defaultProps
       },
       slots: {
@@ -52,7 +52,7 @@ describe('OcModal', () => {
 
   it('matches snapshot', () => {
     const wrapper = shallowMount(Modal, {
-      propsData: {
+      props: {
         ...defaultProps,
         icon: 'info'
       }
@@ -63,7 +63,7 @@ describe('OcModal', () => {
 
   it('displays input', () => {
     const wrapper = shallowMount(Modal, {
-      propsData: inputProps
+      props: inputProps
     })
 
     expect(wrapper.findAll('.oc-modal-body-input').length).toBe(1)

@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Size from './OcResourceSize.vue'
 
 describe('OcResourceSize', () => {
   it('shows a question mark for non-numeric values', () => {
     const wrapper = shallowMount(Size, {
-      propsData: {
+      props: {
         size: 'asdf'
       }
     })
@@ -15,7 +15,7 @@ describe('OcResourceSize', () => {
 
   it("shows '--' for values smaller than 0", () => {
     const wrapper = shallowMount(Size, {
-      propsData: {
+      props: {
         size: -42
       }
     })
@@ -25,7 +25,7 @@ describe('OcResourceSize', () => {
 
   it('shows reasonable decimal places', async () => {
     const wrapper = shallowMount(Size, {
-      propsData: {
+      props: {
         size: 24064
       }
     })
@@ -39,7 +39,7 @@ describe('OcResourceSize', () => {
 
   it('converts strings to numbers', () => {
     const wrapper = shallowMount(Size, {
-      propsData: {
+      props: {
         size: '24064'
       }
     })

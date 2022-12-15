@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Name from './OcResourceName.vue'
 
@@ -10,7 +10,7 @@ const type = 'file'
 describe('OcResourceName', () => {
   it("doesn't add extension to hidden folder", () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath: '.hidden',
         name: '.hidden',
         extension: '',
@@ -25,7 +25,7 @@ describe('OcResourceName', () => {
 
   it('renders folder names with dots completely in the basename', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath: 'folder.with.dots',
         name: 'folder.with.dots',
         extension: '',
@@ -40,7 +40,7 @@ describe('OcResourceName', () => {
 
   it('has properties for resource path, name and type', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath,
         name,
         extension,
@@ -56,7 +56,7 @@ describe('OcResourceName', () => {
 
   it('truncates very long name per default', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath:
           'super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt',
         name: '.super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt',
@@ -70,7 +70,7 @@ describe('OcResourceName', () => {
 
   it('does not truncate a very long name when disabled', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath:
           'super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt',
         name: '.super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt',
@@ -85,7 +85,7 @@ describe('OcResourceName', () => {
 
   it('shows the name as HTML title if the path is not displayed', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath: 'folder',
         name: 'folder',
         extension: '',
@@ -99,7 +99,7 @@ describe('OcResourceName', () => {
 
   it('does not show the name as HTML title if the path is being displayed', () => {
     const wrapper = shallowMount(Name, {
-      propsData: {
+      props: {
         fullPath: 'folder',
         name: 'folder',
         extension: '',

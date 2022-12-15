@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount } from 'web-test-helpers'
 
 import Pagination from './OcPagination.vue'
 
@@ -15,12 +15,6 @@ const selectors = {
   listItemNext: '.oc-pagination-list-item-next',
   listItemEllipsis: '.oc-pagination-list-item-ellipsis',
   listItemLink: '.oc-pagination-list-item-link'
-}
-
-function getWrapper(props = {}) {
-  return shallowMount(Pagination, {
-    propsData: { ...defaultProps, ...props }
-  })
 }
 
 describe('OcPagination', () => {
@@ -126,3 +120,9 @@ describe('OcPagination', () => {
     })
   })
 })
+
+function getWrapper(props = {}) {
+  return shallowMount(Pagination, {
+    props: { ...defaultProps, ...props }
+  })
+}

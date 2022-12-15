@@ -1,5 +1,5 @@
 import StatusIndicators from './OcStatusIndicators.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 const fileResource = {
   name: 'forest.jpg',
@@ -20,7 +20,7 @@ describe('OcStatusIndicators', () => {
   it('does call indicator handler on click', () => {
     const spyHandler = jest.spyOn(indicator, 'handler')
     const wrapper = mount(StatusIndicators, {
-      propsData: {
+      props: {
         resource: fileResource,
         indicators: [indicator],
         target: 'test'
@@ -31,7 +31,7 @@ describe('OcStatusIndicators', () => {
   })
   it('does create indicator with id', () => {
     const wrapper = mount(StatusIndicators, {
-      propsData: {
+      props: {
         resource: fileResource,
         indicators: [indicator],
         target: 'test'

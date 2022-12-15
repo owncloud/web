@@ -1,17 +1,17 @@
 import OcSearchBar from './OcSearchBar.vue'
-import { mount, shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from 'web-test-helpers'
 
 describe('OcSearchBar', () => {
   function getWrapper(props = {}) {
     return shallowMount(OcSearchBar, {
-      propsData: {
+      props: {
         ...props,
         label: 'Test search label'
       }
     })
   }
   function getMountedWrapper() {
-    return mount(OcSearchBar, { propsData: { label: 'abc' } })
+    return mount(OcSearchBar, { props: { label: 'abc' } })
   }
   const selectors = {
     searchButton: '.oc-search-button',

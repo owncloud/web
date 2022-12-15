@@ -1,10 +1,10 @@
 import OcRadio from './OcRadio.vue'
-import { mount } from '@vue/test-utils'
+import { mount } from 'web-test-helpers'
 
 describe('OcRadio', () => {
   function getWrapper(props = {}) {
     return mount(OcRadio, {
-      propsData: {
+      props: {
         ...props,
         label: 'Test label'
       }
@@ -101,7 +101,9 @@ describe('OcRadio', () => {
     }
     const options = {
       data: () => ({ ...rawData }),
-      stubs: { OcRadio: OcRadio }
+      global: {
+        stubs: { OcRadio: OcRadio }
+      }
     }
     it('should set the provide option as input value', () => {
       const wrapper = mount(Component, options)
