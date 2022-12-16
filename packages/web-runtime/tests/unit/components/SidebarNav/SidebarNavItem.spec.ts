@@ -16,12 +16,12 @@ const propsData = {
 describe('OcSidebarNav', () => {
   it('renders navItem without toolTip if expanded', () => {
     const { wrapper } = getWrapper(false)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('renders navItem with toolTip if collapsed', () => {
     const { wrapper } = getWrapper(true)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

@@ -18,7 +18,7 @@ describe('SidebarToggle component', () => {
     (sideBarOpen) => {
       const { wrapper } = getWrapper({ sideBarOpen })
       expect(wrapper.find(selectors.toggleSidebarBtn).exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     }
   )
   it('publishes the toggle-event to the sidebar on click', async () => {

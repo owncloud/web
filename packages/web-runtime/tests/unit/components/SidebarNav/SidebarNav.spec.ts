@@ -20,19 +20,19 @@ describe('OcSidebarNav', () => {
   })
 
   it('renders navItems into a list', () => {
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('toggles into closed state upon button click', async () => {
     await wrapper.find('.toggle-sidebar-button').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('toggles back into open state upon button click', async () => {
     await wrapper.find('.toggle-sidebar-button').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

@@ -21,7 +21,7 @@ describe('ViewOptions component', () => {
     const perPage = '100'
     const { wrapper } = getWrapper({ perPage })
     expect(wrapper.find(selectors.pageSizeSelect).props().selected).toBe(perPage)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('toggles the setting to show/hide hidden files', () => {
     const { wrapper, storeOptions } = getWrapper()

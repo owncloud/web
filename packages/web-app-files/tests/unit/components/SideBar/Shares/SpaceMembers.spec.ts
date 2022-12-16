@@ -59,7 +59,7 @@ describe('SpaceMembers', () => {
       const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it.each([spaceRoleViewer.name, spaceRoleEditor.name])(
       'does not render the form when the current user is no manager of the space',
@@ -76,7 +76,7 @@ describe('SpaceMembers', () => {
       const user = mockDeep<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
       expect(wrapper.findAll('collaborator-list-item-stub').at(1).props().modifiable).toEqual(true)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it.each([spaceRoleViewer.name, spaceRoleEditor.name])(
       'can not edit when current user is not a manager of the space',
@@ -142,7 +142,7 @@ describe('SpaceMembers', () => {
       expect(wrapper.vm.isFilterOpen).toBeFalsy()
       await wrapper.find('.open-filter-btn').trigger('click')
       expect(wrapper.vm.isFilterOpen).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })
