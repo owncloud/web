@@ -17,7 +17,7 @@ describe('SpaceContextActions', () => {
   describe('action handlers', () => {
     it('renders actions that are always available: "Members", "Deleted files", "Details"', () => {
       const { wrapper } = getWrapper(buildSpace(spaceMock))
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

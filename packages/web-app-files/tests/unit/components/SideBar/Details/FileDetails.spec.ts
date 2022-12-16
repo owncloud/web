@@ -65,25 +65,25 @@ describe('Details SideBar Panel', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
         const { wrapper } = createWrapper(simpleOwnFolder)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with timestamp, size info, share info and share date', () => {
         const { wrapper } = createWrapper(sharedFolder)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with timestamp, size info, share info and share date running on eos', () => {
         const { wrapper } = createWrapper(sharedFolder, false, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info and no share info', () => {
         const { wrapper } = createWrapper(sharedFolder, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with owner, timestamp, size info and no share info running on eos', () => {
         const { wrapper } = createWrapper(sharedFolder, true, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
   })
@@ -91,15 +91,15 @@ describe('Details SideBar Panel', () => {
     describe('on a private page', () => {
       it('with timestamp, size info and (me) as owner', () => {
         const { wrapper } = createWrapper(simpleOwnFile)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with timestamp, size info, share info, share date and preview', () => {
         const { wrapper } = createWrapper(sharedFile)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with timestamp, size info, share info, share date and preview running on eos', () => {
         const { wrapper } = createWrapper(sharedFile, false, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
 
       it('updates when the shareTree updates', async () => {
@@ -110,7 +110,7 @@ describe('Details SideBar Panel', () => {
         }
 
         await wrapper.vm.$nextTick
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
 
         // ... and renders again when the relevant shares become available
         wrapper.vm.$store.state.Files.sharesTree = {
@@ -127,17 +127,17 @@ describe('Details SideBar Panel', () => {
           ]
         }
         await wrapper.vm.$nextTick
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('on a public page', () => {
       it('with owner, timestamp, size info, no share info and preview', () => {
         const { wrapper } = createWrapper(sharedFile, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('with owner, timestamp, size info, no share info and preview running on eos', () => {
         const { wrapper } = createWrapper(sharedFile, true, true)
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
   })

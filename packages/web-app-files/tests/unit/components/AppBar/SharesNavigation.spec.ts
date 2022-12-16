@@ -29,7 +29,7 @@ const routes = [
 describe('SharesNavigation component', () => {
   it('renders a shares navigation for both mobile and a desktop viewports', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

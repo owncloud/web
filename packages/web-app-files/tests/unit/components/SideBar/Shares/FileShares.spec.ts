@@ -75,7 +75,7 @@ describe('FileShares', () => {
       const { wrapper } = getWrapper({ collaborators })
       expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#files-collaborators-list li').length).toBe(collaborators.length)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('reacts on delete events', async () => {
       const spyOnCollaboratorDeleteTrigger = jest
@@ -91,7 +91,7 @@ describe('FileShares', () => {
       const sharesTree = { [indirectCollaborator.path]: {} }
       const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], sharesTree })
       expect(wrapper.find('collaborator-list-item-stub').props().sharedParentRoute).toBeDefined()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('lists indirect outgoing shares', () => {
       const parentPath = '/parent'
@@ -127,7 +127,7 @@ describe('FileShares', () => {
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#space-collaborators-list li').length).toBe(spaceMembers.length)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('does not load space members if a space is given but the current user not a member', () => {
       const user = { id: '1' }

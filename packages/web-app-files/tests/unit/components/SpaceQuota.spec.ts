@@ -5,7 +5,7 @@ describe('SpaceQuota component', () => {
   it('renders the space storage quota label', () => {
     const { wrapper } = getWrapper({ total: 10, used: 1, state: 'normal' })
     expect(wrapper.find('.space-quota').exists()).toBeTruthy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it.each([
     { state: 'normal', expectedVariation: 'primary' },

@@ -45,7 +45,7 @@ describe('account page', () => {
           })
           const editUrlButton = wrapper.find(selectors.editUrlButton)
           const editRouteButton = wrapper.find(selectors.editRouteButton)
-          expect(editUrlButton).toMatchSnapshot()
+          expect(editUrlButton.html()).toMatchSnapshot()
           expect(editRouteButton.exists()).toBeFalsy()
         })
         it('should not be displayed if running with ocis', () => {
@@ -65,7 +65,7 @@ describe('account page', () => {
             data: { loadingGroups: false }
           })
           const editRouteButton = wrapper.find(selectors.editRouteButton)
-          expect(editRouteButton).toMatchSnapshot()
+          expect(editRouteButton.html()).toMatchSnapshot()
         })
       })
     })
@@ -83,7 +83,7 @@ describe('account page', () => {
       })
 
       const accountPageInfo = wrapper.find(selectors.accountPageInfo)
-      expect(accountPageInfo).toMatchSnapshot()
+      expect(accountPageInfo.html()).toMatchSnapshot()
     })
 
     describe('group membership', () => {
@@ -97,7 +97,7 @@ describe('account page', () => {
         const { wrapper } = getWrapper({ user: { groups: ['one', 'two', 'three'] } })
 
         const groupNames = wrapper.find(selectors.groupNames)
-        expect(groupNames).toMatchSnapshot()
+        expect(groupNames.html()).toMatchSnapshot()
       })
     })
   })

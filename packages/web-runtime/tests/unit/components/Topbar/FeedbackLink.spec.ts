@@ -14,7 +14,7 @@ describe('FeedbackLink component', () => {
         }
       })
     ).toHaveNoViolations()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   describe('properties', () => {

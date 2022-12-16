@@ -90,7 +90,7 @@ describe('Collaborator ListItem component', () => {
         sharedParentRoute: { params: { driveAliasAndItem: '/folder' } }
       })
       expect(wrapper.find(selectors.shareInheritanceIndicators).exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('do not show when sharedParentRoute is not given', () => {
       const { wrapper } = createWrapper()
