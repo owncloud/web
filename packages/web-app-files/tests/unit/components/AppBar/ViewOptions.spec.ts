@@ -9,6 +9,7 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 import { ViewModeConstants } from 'web-app-files/src/composables'
+import { ViewMode } from 'web-pkg/src/ui/types'
 
 jest.mock('web-pkg/src/composables/router')
 const selectors = {
@@ -52,8 +53,8 @@ describe('ViewOptions component', () => {
 
 function getWrapper(
   { perPage = '100' } = {},
-  props: { [key: string]: any } = {
-    viewModes: []
+  props?: {
+    viewModes: ViewMode[]
   }
 ) {
   jest.mocked(useRouteQueryPersisted).mockImplementation(() => ref(perPage))

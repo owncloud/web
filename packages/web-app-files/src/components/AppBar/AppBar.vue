@@ -58,7 +58,7 @@ import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import { SpaceResource } from 'web-client/src/helpers'
 
-import { ViewModeConstants } from '../../composables'
+import { ViewModeConstants } from '../../composables/viewMode/constants'
 import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import MixinFileActions from '../../mixins/fileActions'
 import { isLocationTrashActive } from '../../router'

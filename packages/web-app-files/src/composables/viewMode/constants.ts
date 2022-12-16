@@ -1,7 +1,11 @@
-import { $gettext } from 'web-app-files/src/router/utils'
 import { ViewMode } from 'web-pkg/src/ui/types'
 
+function $gettext(msg: string): string {
+  return msg
+}
+
 export abstract class ViewModeConstants {
+  static readonly defaultModeName: string = 'resource-table'
   static readonly default: ViewMode = {
     name: 'resource-table',
     label: $gettext('Switch to default table view'),

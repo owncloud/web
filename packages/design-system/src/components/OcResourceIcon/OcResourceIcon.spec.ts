@@ -1,5 +1,4 @@
 import { shallowMount } from '@vue/test-utils'
-
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 import { OcResourceIcon } from '..'
 

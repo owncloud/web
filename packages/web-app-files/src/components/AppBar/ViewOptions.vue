@@ -8,9 +8,9 @@
       <oc-button
         v-for="viewMode in viewModes"
         :key="viewMode.name"
-        v-oc-tooltip="viewMode.label"
+        v-oc-tooltip="$gettext(viewMode.label)"
         :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
-        :label="viewMode.label"
+        :label="$gettext(viewMode.label)"
         @click="setViewMode(viewMode)"
       >
         <oc-icon :name="viewMode.icon.name" :fill-type="viewMode.icon.fillType" size="small" />
@@ -85,7 +85,7 @@ export default defineComponent({
     })
     const viewModeQuery = useRouteQueryPersisted({
       name: ViewModeConstants.queryName,
-      defaultValue: ViewModeConstants.default.name
+      defaultValue: ViewModeConstants.defaultModeName
     })
 
     return {
