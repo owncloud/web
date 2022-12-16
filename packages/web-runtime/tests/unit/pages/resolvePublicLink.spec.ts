@@ -55,7 +55,7 @@ describe('resolvePublicLink', () => {
     it('should display the error message if "errorMessage" is not empty', async () => {
       const { wrapper } = getWrapper({ errorMessage: 'some-error-message' })
       expect(wrapper.find(selectors.errorTitle).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
+      expect(wrapper.find(selectors.errorTitle).html()).toMatchSnapshot()
     })
 
     describe('and when "passwordRequired" is set as true', () => {
