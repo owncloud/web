@@ -21,14 +21,14 @@ describe('DetailsAndEdit component', () => {
   describe('if user can not edit', () => {
     it('does not render dropdown or edit button', () => {
       const { wrapper } = getShallowMountedWrapper(exampleLink)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 
   describe('if user can edit', () => {
     it('renders dropdown and edit button', () => {
       const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
 
     it.todo('test edit options, button clicks and event handling/propagation')

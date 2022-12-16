@@ -33,7 +33,7 @@ describe('RoleDropdown', () => {
             existingRole: undefined,
             resourceType: type
           })
-          expect(wrapper).toMatchSnapshot()
+          expect(wrapper.html()).toMatchSnapshot()
         }
       )
       it.each(['folder', 'file'])(
@@ -131,7 +131,7 @@ describe('RoleDropdown', () => {
             ]
           }
         })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('when an existing role is present', () => {
@@ -142,7 +142,7 @@ describe('RoleDropdown', () => {
             mountType: shallowMount,
             existingRole: PeopleShareRoles.list(type === 'folder')[0]
           })
-          expect(wrapper).toMatchSnapshot()
+          expect(wrapper.html()).toMatchSnapshot()
         }
       )
       it('does not render a button if only one role is available', () => {
@@ -159,7 +159,7 @@ describe('RoleDropdown', () => {
             ]
           }
         })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it.todo(
         'displays a dropdown with viewer, editor and custom permissions if no custom permissions had been selected'

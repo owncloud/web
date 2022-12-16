@@ -49,7 +49,7 @@ describe('Projects view', () => {
       await wrapper.vm.loadResourcesTask.last
       // "space" is undefined for "space-context-actions", seems to be a bug because it's definitely not
       // {{ space }} -> undefined, {{ space.id }} -> "1"
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
       expect(wrapper.findAll('.spaces-list-item').length).toEqual(spaces.length)

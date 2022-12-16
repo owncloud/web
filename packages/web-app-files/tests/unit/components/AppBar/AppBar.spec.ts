@@ -36,12 +36,12 @@ describe('AppBar component', () => {
   describe('renders', () => {
     it('by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle', () => {
       const { wrapper } = getShallowWrapper()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     describe('breadcrumbs', () => {
       it('if given, by default without breadcrumbsContextActionsItems', () => {
         const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: breadcrumbItems })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('if given, with breadcrumbsContextActionsItems if allowed on last breadcrumb item', () => {
         const { wrapper } = getShallowWrapper(
@@ -49,7 +49,7 @@ describe('AppBar component', () => {
           {},
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('if given, with content in the contextMenu slot', () => {
         const { wrapper } = getShallowWrapper(
@@ -57,33 +57,33 @@ describe('AppBar component', () => {
           { contextMenu: contextMenuSlot },
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('bulkActions', () => {
       it('if enabled', () => {
         const { wrapper } = getShallowWrapper(selectedFiles, {}, { hasBulkActions: true })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('not if 1 file selected', () => {
         const { wrapper } = getShallowWrapper([selectedFiles[0]], {}, { hasBulkActions: true })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('sharesNavigation', () => {
       it('if enabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasSharesNavigation: true })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('viewoptions and sidebartoggle', () => {
       it('only viewoptions if sidebartoggle is disabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasSidebarToggle: false })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('only sidebartoggle if viewoptions is disabled', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: false })
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
       it('neither if both are disabled', () => {
         const { wrapper } = getShallowWrapper(
@@ -91,16 +91,16 @@ describe('AppBar component', () => {
           {},
           { hasSidebarToggle: false, hasViewOptions: false }
         )
-        expect(wrapper).toMatchSnapshot()
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     it('if given, with content in the actions slot', () => {
       const { wrapper } = getShallowWrapper([], { actions: actionSlot })
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('if given, with content in the content slot', () => {
       const { wrapper } = getShallowWrapper([], { content: contentSlot })
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

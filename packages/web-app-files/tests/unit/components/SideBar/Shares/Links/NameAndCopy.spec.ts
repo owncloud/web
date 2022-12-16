@@ -13,7 +13,7 @@ describe('NameAndCopy', () => {
   jest.spyOn(console, 'warn').mockImplementation(undefined)
   it('should show link info component including a copy-to-clipboard button', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
     const windowSpy = jest.spyOn(window, 'prompt').mockImplementation()
@@ -23,7 +23,7 @@ describe('NameAndCopy', () => {
     expect(windowSpy).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
     expect(spyShowMessage).toHaveBeenCalledTimes(1)
     expect(windowSpy).toHaveBeenCalledTimes(1)
     expect(windowSpy).toHaveBeenCalledWith('Copy to clipboard: Ctrl+C, Enter', exampleLink.url)
@@ -31,7 +31,7 @@ describe('NameAndCopy', () => {
     jest.advanceTimersByTime(550)
 
     wrapper.vm.$nextTick(() => {
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })
