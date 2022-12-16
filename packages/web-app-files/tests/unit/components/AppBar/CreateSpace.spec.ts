@@ -18,7 +18,7 @@ describe('CreateSpace component', () => {
   it('should show the "New Space" button', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.find(selectors.newSpaceBtn).exists()).toBeTruthy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should show a modal when clicking the "New Space" button', async () => {
     const { wrapper, storeOptions } = getWrapper()

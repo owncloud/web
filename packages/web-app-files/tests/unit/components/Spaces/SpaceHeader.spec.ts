@@ -22,21 +22,21 @@ describe('SpaceHeader', () => {
   it('should add the "squashed"-class when the sidebar is opened', () => {
     const wrapper = getWrapper({ space: buildSpace({ id: 1 }), sideBarOpen: true })
     expect(wrapper.find('.space-header-squashed').exists()).toBeTruthy()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   describe('space image', () => {
     it('should show the default image if no other image is set', () => {
       const wrapper = getWrapper({ space: buildSpace({ id: 1 }) })
       expect(wrapper.find('.space-header-image-default').exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('should show the set image', () => {
       const spaceMock = { spaceImageData: { webDavUrl: '/' } }
       const wrapper = getWrapper({ space: { ...buildSpace({ id: 1 }), ...spaceMock } })
       expect(wrapper.find('.space-header-image-default').exists()).toBeFalsy()
       expect(wrapper.find('.space-header-image img').exists()).toBeTruthy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

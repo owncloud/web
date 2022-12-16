@@ -64,7 +64,7 @@ describe('The app provider extension', () => {
     )
     const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should show a meaningful message if an error occurs during loading', async () => {
     const makeRequest = jest.fn().mockResolvedValue({
@@ -75,7 +75,7 @@ describe('The app provider extension', () => {
     const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should fail for unauthenticated users', async () => {
     const makeRequest = jest.fn().mockResolvedValue({
@@ -86,7 +86,7 @@ describe('The app provider extension', () => {
     const { wrapper } = createShallowMountWrapper(makeRequest)
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should be able to load an iFrame via get', async () => {
     const makeRequest = jest.fn().mockResolvedValue({
@@ -99,7 +99,7 @@ describe('The app provider extension', () => {
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('should be able to load an iFrame via post', async () => {
     const makeRequest = jest.fn().mockResolvedValue({
@@ -111,7 +111,7 @@ describe('The app provider extension', () => {
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

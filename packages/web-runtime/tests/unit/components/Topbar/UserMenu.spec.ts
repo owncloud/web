@@ -26,19 +26,19 @@ describe('User Menu component', () => {
         { used: basicQuota, total: totalQuota, relative: basicRelativeQuota },
         noEmail
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when no quota and email is set', () => {
     it('the user menu does not contain a quota', () => {
       const wrapper = getMountedWrapper(null, email)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when no quota and no email is set', () => {
     it('the user menu does not contain a quota', () => {
       const wrapper = getMountedWrapper(null, noEmail)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when quota is below 80%', () => {
@@ -52,7 +52,7 @@ describe('User Menu component', () => {
         },
         email
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when quota is above 80% and below 90%', () => {
@@ -66,7 +66,7 @@ describe('User Menu component', () => {
         },
         email
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when quota is above 90%', () => {
@@ -80,7 +80,7 @@ describe('User Menu component', () => {
         },
         email
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when quota is unlimited', () => {
@@ -92,7 +92,7 @@ describe('User Menu component', () => {
         },
         email
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('when quota is not defined', () => {
@@ -106,7 +106,7 @@ describe('User Menu component', () => {
         },
         email
       )
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

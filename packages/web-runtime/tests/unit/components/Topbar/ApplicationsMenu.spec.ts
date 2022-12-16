@@ -20,7 +20,7 @@ const menuLinks = [
 describe('ApplicationsMenu component', () => {
   it('should render navigation with button and menu items in dropdown', () => {
     const { wrapper } = getWrapper(menuLinks)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

@@ -26,7 +26,7 @@ describe('resolvePublicLink', () => {
     it('should display the configuration theme general slogan as the login card footer', () => {
       const { wrapper } = getWrapper({ loading: true })
       const slogan = wrapper.find(selectors.cardFooter)
-      expect(slogan).toMatchSnapshot()
+      expect(slogan.html()).toMatchSnapshot()
     })
   })
 
@@ -36,7 +36,7 @@ describe('resolvePublicLink', () => {
       const loading = wrapper.find(selectors.cardBody)
 
       expect(wrapper.find(spinnerStub).exists()).toBeTruthy()
-      expect(loading).toMatchSnapshot()
+      expect(loading.html()).toMatchSnapshot()
     })
     it('should not display the error message', () => {
       expect(wrapper.find(selectors.errorTitle).exists()).toBeFalsy()
@@ -55,7 +55,7 @@ describe('resolvePublicLink', () => {
     it('should display the error message if "errorMessage" is not empty', async () => {
       const { wrapper } = getWrapper({ errorMessage: 'some-error-message' })
       expect(wrapper.find(selectors.errorTitle).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.errorTitle)).toMatchSnapshot()
+      expect(wrapper.find(selectors.errorTitle).html()).toMatchSnapshot()
     })
 
     describe('and when "passwordRequired" is set as true', () => {
@@ -67,13 +67,13 @@ describe('resolvePublicLink', () => {
       })
       it('should display the password required form', () => {
         expect(passwordRequiredForm.exists()).toBeTruthy()
-        expect(passwordRequiredForm).toMatchSnapshot()
+        expect(passwordRequiredForm.html()).toMatchSnapshot()
       })
       describe('and the password input', () => {
         it('should have a computed label', () => {
           const passwordInput = passwordRequiredForm.find(textInputStub)
 
-          expect(passwordInput).toMatchSnapshot()
+          expect(passwordInput.html()).toMatchSnapshot()
         })
         it('should not display the error message if "inputErrorMessage" is falsy', () => {
           const passwordInput = passwordRequiredForm.find(textInputStub)
@@ -83,7 +83,7 @@ describe('resolvePublicLink', () => {
         it('should display the error message if "inputErrorMessage" is not empty', async () => {
           const passwordInput = passwordRequiredForm.find(textInputStub)
 
-          expect(passwordInput).toMatchSnapshot()
+          expect(passwordInput.html()).toMatchSnapshot()
         })
       })
       describe('and the submit button', () => {
@@ -92,7 +92,7 @@ describe('resolvePublicLink', () => {
 
           const submitButton = wrapper.find(selectors.submitButton)
           expect(submitButton.exists()).toBeTruthy()
-          expect(submitButton).toMatchSnapshot()
+          expect(submitButton.html()).toMatchSnapshot()
         })
         it('should be set as enabled if "password" is not empty', async () => {
           const { wrapper } = getWrapper({ passwordRequired: true, password: 'some-value' })

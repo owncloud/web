@@ -39,7 +39,7 @@ describe('List component', () => {
   //       const noContentMessage = wrapper.find(selectors.noContentMessage)
   //
   //       expect(noContentMessage.exists()).toBeTruthy()
-  //       expect(wrapper).toMatchSnapshot()
+  //       expect(wrapper.html()).toMatchSnapshot()
   //     })
   //     it('should not show files table', () => {
   //       const filesTable = wrapper.find(selectors.filesTable)

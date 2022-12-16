@@ -33,7 +33,7 @@ describe('Top Bar component', () => {
   it('Displays applications menu', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html().indexOf('applications-menu-stub')).toBeGreaterThan(-1)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

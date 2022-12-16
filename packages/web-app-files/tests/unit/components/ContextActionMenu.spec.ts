@@ -7,7 +7,7 @@ describe('ContextActionMenu component', () => {
   it('renders the menu with actions', () => {
     const menuSections = [{ name: 'action 1' }, { name: 'action 2' }]
     const { wrapper } = getShallowWrapper(menuSections)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
     expect(wrapper.find('.oc-files-context-actions').exists()).toBeTruthy()
     expect(wrapper.findAll('.oc-files-context-actions').length).toEqual(menuSections.length)
   })

@@ -20,13 +20,13 @@ describe('InviteCollaborator RecipientContainer', () => {
     it.each(ShareTypes.authenticated)('different recipients for different shareTypes', (type) => {
       const recipient = getRecipient(type.key)
       const { wrapper } = getMountedWrapper(recipient)
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   it('displays an avatar image if capability is present', () => {
     const recipient = getRecipient()
     const { wrapper } = getMountedWrapper(recipient, true)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
   it('emits an event if deselect button is clicked', async () => {
     const recipient = getRecipient()

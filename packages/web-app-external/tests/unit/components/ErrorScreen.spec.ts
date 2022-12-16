@@ -14,6 +14,6 @@ describe('The external app error screen component', () => {
         plugins: [...defaultPlugins()]
       }
     })
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

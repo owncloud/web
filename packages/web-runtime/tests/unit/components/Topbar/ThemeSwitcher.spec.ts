@@ -38,14 +38,14 @@ describe('ThemeSwitcher component', () => {
     it('renders a button, initially in light mode per default', async () => {
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
 
     it('renders a button, initially in dark mode if user prefers dark color scheme', async () => {
       mockDarkModePreferred(true)
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
 
     it('toggles between themes upon click', async () => {
@@ -55,13 +55,13 @@ describe('ThemeSwitcher component', () => {
       await wrapper.find('.themeswitcher-btn').trigger('click')
       await wrapper.vm.$nextTick()
 
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
       expect(spyToggleTheme).toHaveBeenCalledTimes(1)
 
       await wrapper.find('.themeswitcher-btn').trigger('click')
       await wrapper.vm.$nextTick()
 
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
       expect(spyToggleTheme).toHaveBeenCalledTimes(2)
     })
   })
@@ -71,13 +71,13 @@ describe('ThemeSwitcher component', () => {
       window.localStorage.setItem('oc_currentThemeName', themeNameLight)
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('dark theme if dark theme is saved in localstorage', async () => {
       window.localStorage.setItem('oc_currentThemeName', themeNameDark)
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

@@ -63,7 +63,7 @@ describe('CreateAndUpload component', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.find(elSelector.uploadBtn).props().disabled).toBeFalsy()
       expect(wrapper.find(elSelector.newFolderBtn).props().disabled).toBeFalsy()
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
     it('should be disabled if file creation is not possible', () => {
       const currentFolder = mockDeep<Resource>({ canUpload: () => false })
@@ -84,7 +84,7 @@ describe('CreateAndUpload component', () => {
     })
     it('should show additional handlers', () => {
       const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
-      expect(wrapper).toMatchSnapshot()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
   describe('clipboard buttons', () => {

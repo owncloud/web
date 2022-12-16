@@ -11,6 +11,6 @@ describe('The external app loading screen component', () => {
         plugins: [...defaultPlugins()]
       }
     })
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

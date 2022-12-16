@@ -33,7 +33,7 @@ const spaceShare = {
 describe('Details SideBar Panel', () => {
   it('displays the details side panel', () => {
     const { wrapper } = createWrapper(spaceMock)
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 
