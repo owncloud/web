@@ -178,6 +178,13 @@ export default {
         // in case popup is blocked win will be null
         if (win) {
           win.focus()
+        } else {      
+            this.showMessage({
+              title: this.$gettext('Blocked pop-ups and redirects'),
+              timeout: 10,
+              status: 'warning',
+              desc: this.$gettext('Some features might not work correctly. Please enable pop-ups and redirects in Settings > Privacy & Security > Site Settings > Permissions')
+            })       
         }
         return
       }
@@ -321,7 +328,16 @@ export default {
       }
 
       // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-      window.open(this.$router.resolve(routeOpts).href, sameTab ? '_self' : '_blank')
+      const win =  window.open(this.$router.resolve(routeOpts).href, sameTab ? '_self' : '_blank')
+
+      if (!win) {   
+          this.showMessage({
+            title: this.$gettext('Blocked pop-ups and redirects'),
+            timeout: 10,
+            status: 'warning',
+            desc: this.$gettext('Some features might not work correctly. Please enable pop-ups and redirects in Settings > Privacy & Security > Site Settings > Permissions')
+          })       
+      }
     }
   }
 }
