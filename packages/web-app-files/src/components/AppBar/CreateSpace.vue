@@ -34,10 +34,19 @@ export default defineComponent({
     ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_RESOURCE_FIELD']),
 
     onNewProjectButtonClick() {
-      window.open(
+      const win =window.open(
         'https://cern.service-now.com/service-portal?id=sc_cat_item&name=request-storage-space&se=CERNBox-Service',
         '_blank'
       )
+
+      if (!win) {
+          this.showMessage({
+            title: this.$gettext('Blocked pop-ups and redirects'),
+            timeout: 10,
+            status: 'warning',
+            desc: this.$gettext('Some features might not work correctly. Please enable pop-ups and redirects in Settings > Privacy & Security > Site Settings > Permissions')
+          })
+        }
     },
     showCreateSpaceModal() {
       const modal = {
