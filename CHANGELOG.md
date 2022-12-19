@@ -171,10 +171,11 @@ Details
 * Enhancement - Add switch to enable condensed resource table: [#7976](https://github.com/owncloud/web/pull/7976)
 
    We've added a switch to have a more condensed resource table. The change gets saved to the route
-   and persisted across resource navigation.
+   and persisted across folder navigation in all files, spaces and favorites views.
 
    https://github.com/owncloud/web/issues/6380
    https://github.com/owncloud/web/pull/7976
+   https://github.com/owncloud/web/pull/8105
 
 * Enhancement - Conflict dialog UX: [#7983](https://github.com/owncloud/web/pull/7983)
 
