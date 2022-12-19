@@ -13,7 +13,7 @@ import { defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
-import { AVAILABLE_SIZES } from '../../helpers/constants'
+import { AVAILABLE_SIZES } from '../../helpers'
 import iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
 import iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
 

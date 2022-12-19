@@ -326,7 +326,7 @@ export default defineComponent({
     },
     viewMode: {
       type: String,
-      default: ViewModeConstants.default.name
+      default: ViewModeConstants.defaultModeName
     },
     /**
      * Enable hover effect

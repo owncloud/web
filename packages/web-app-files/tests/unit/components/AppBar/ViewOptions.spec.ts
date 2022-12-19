@@ -47,7 +47,7 @@ describe('ViewOptions component', () => {
       }
     )
     const viewModeSwitchButtons = wrapper.find('[data-testid="viewmode-switch-buttons"]')
-    expect(viewModeSwitchButtons).toMatchSnapshot()
+    expect(viewModeSwitchButtons.html()).toMatchSnapshot()
   })
 })
 
