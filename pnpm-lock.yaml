@@ -40,6 +40,7 @@ importers:
       autoprefixer: 10.4.13
       babel-core: 7.0.0-bridge.0
       babel-jest: 29.3.1
+      browserslist-to-esbuild: ^1.2.0
       browserslist-useragent-regexp: ^3.0.2
       caf: '*'
       commander: 8.3.0
@@ -126,6 +127,7 @@ importers:
       autoprefixer: 10.4.13_postcss@8.4.19
       babel-core: 7.0.0-bridge.0_@babel+core@7.20.5
       babel-jest: 29.3.1_@babel+core@7.20.5
+      browserslist-to-esbuild: 1.2.0
       browserslist-useragent-regexp: 3.0.2
       commander: 8.3.0
       core-js: 3.26.1
@@ -8069,6 +8071,13 @@ packages:
     resolution: {integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==}
     dependencies:
       pako: 1.0.11
+    dev: true
+
+  /browserslist-to-esbuild/1.2.0:
+    resolution: {integrity: sha512-ftrrbI/VHBgEnmnSyhkqvQVMp6jAKybfs0qMIlm7SLBrQTGMsdCIP4q3BoKeLsZTBQllIQtY9kbxgRYV2WU47g==}
+    engines: {node: '>=12'}
+    dependencies:
+      browserslist: 4.21.4
     dev: true
 
   /browserslist-useragent-regexp/3.0.2:
