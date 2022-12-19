@@ -251,6 +251,7 @@ importers:
       vue-select: ^3.12.0
       vue-style-loader: ^4.1.2
       vue-styleguidist: ^4.44.2
+      web-client: npm:@ownclouders/web-client
       web-test-helpers: workspace:*
       webfontloader: ^1.6.28
       webpack: ^4.41.6
@@ -259,6 +260,8 @@ importers:
       webpack-merge-and-include-globally: ^2.1.24
       webpack-node-externals: ^3.0.0
       yaml: ^2.0.0
+    dependencies:
+      web-client: link:../web-client
     devDependencies:
       '@adobe/leonardo-contrast-colors': 1.0.0-alpha.16_uknaqjiop66j4kgrr7nmysu5gi
       '@babel/core': 7.19.6
