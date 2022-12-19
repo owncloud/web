@@ -621,7 +621,9 @@ export default {
       a = a[prop];
       b = b[prop];
 
-      if (a == b) return 0;
+      if (a == b) {
+        return 0
+      };
       return (desc ? a > b : a < b) ? -1 : 1;
     });
   };

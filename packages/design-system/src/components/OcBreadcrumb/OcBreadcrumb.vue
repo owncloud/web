@@ -91,6 +91,8 @@
 </template>
 
 <script>
+import { AVAILABLE_SIZES } from '../../helpers/constants'
+
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -140,19 +142,21 @@ export default {
       required: false,
       default: 'medium',
       validator: (value) => {
-        return value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge|remove)/)
+        return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
       }
     }
   },
   computed: {
     dropdownItems() {
-      if (this.items.length <= 1 || !this.items) return false
-
+      if (this.items.length <= 1 || !this.items) {
+        return false
+      }
       return [...this.items].reverse().slice(1)
     },
     currentFolder() {
-      if (this.items.length === 0 || !this.items) return false
-
+      if (this.items.length === 0 || !this.items) {
+        return false
+      }
       return [...this.items].reverse()[0]
     },
     contextMenuLabel() {

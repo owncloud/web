@@ -1,0 +1,5 @@
+Enhancement: Make OcResourceIcon accept space resource
+
+We have modified the OcResourceIcon component to show the space icon if a space resource is passed.
+
+https://github.com/owncloud/web/pull/8105

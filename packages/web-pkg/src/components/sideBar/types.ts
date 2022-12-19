@@ -1,6 +1,5 @@
 import { Component } from 'vue'
-
-export type IconFillType = 'fill' | 'line' | 'none'
+import { IconFillType } from 'design-system/src/helpers'
 
 export interface Panel {
   app: string

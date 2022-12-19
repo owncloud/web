@@ -93,6 +93,14 @@ describe('AppBar component', () => {
         )
         expect(wrapper.html()).toMatchSnapshot()
       })
+      it('passes viewModes array to ViewOptions if displayViewModeSwitch props is enabled', () => {
+        const { wrapper } = getShallowWrapper(
+          [],
+          {},
+          { displayViewModeSwitch: true, hasViewOptions: true }
+        )
+        expect(wrapper).toMatchSnapshot()
+      })
     })
     it('if given, with content in the actions slot', () => {
       const { wrapper } = getShallowWrapper([], { actions: actionSlot })
@@ -110,6 +118,7 @@ function getShallowWrapper(
   slots = {},
   props: { [key: string]: any } = {
     breadcrumbs: [],
+    displayViewModeSwitch: false,
     hasBulkActions: false,
     hasSharesNavigation: false,
     hasSidebarToggle: true,

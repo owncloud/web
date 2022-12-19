@@ -44,8 +44,11 @@ export default {
       return Math.round((100 / this.max) * this.progress)
     },
     _label() {
-      if (this.max === 100) return this.progress + '%'
-      else return `${this.progress}/${this.max}`
+      if (this.max === 100) {
+        return this.progress + '%'
+      } else {
+        return `${this.progress}/${this.max}`
+      }
     }
   }
 }

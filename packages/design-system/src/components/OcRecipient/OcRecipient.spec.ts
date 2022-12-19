@@ -53,7 +53,6 @@ describe('OcRecipient', () => {
       hasAvatar: false
     })
 
-    console.log(wrapper.html())
     const icon = wrapper.find('[data-testid="recipient-icon"]')
 
     expect(icon.exists()).toBeTruthy()

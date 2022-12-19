@@ -28,7 +28,7 @@
         </oc-breadcrumb>
         <shares-navigation v-if="hasSharesNavigation" />
         <div v-if="hasViewOptions || hasSidebarToggle" class="oc-flex">
-          <view-options v-if="hasViewOptions" />
+          <view-options v-if="hasViewOptions" :view-modes="viewModes" />
           <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
         </div>
       </div>
@@ -52,21 +52,22 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapMutations } from 'vuex'
 import last from 'lodash-es/last'
+import { defineComponent, PropType } from 'vue'
+import { mapGetters, mapState, mapMutations } from 'vuex'
+import { Resource } from 'web-client'
+import { SpaceResource } from 'web-client/src/helpers'
 
+import { ViewModeConstants } from '../../composables/viewMode/constants'
+import { BreadcrumbItem } from '../../helpers/breadcrumbs'
 import MixinFileActions from '../../mixins/fileActions'
+import { isLocationTrashActive } from '../../router'
 
 import BatchActions from './SelectedResources/BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import ViewOptions from './ViewOptions.vue'
-import { defineComponent, PropType } from 'vue'
-import { Resource } from 'web-client'
-import { BreadcrumbItem } from '../../helpers/breadcrumbs'
-import { SpaceResource } from 'web-client/src/helpers'
-import { isLocationTrashActive } from 'web-app-files/src/router'
 
 export default defineComponent({
   components: {
@@ -85,6 +86,10 @@ export default defineComponent({
     breadcrumbsContextActionsItems: {
       type: Array as PropType<Resource[]>,
       default: () => []
+    },
+    displayViewModeSwitch: {
+      type: Boolean,
+      default: false
     },
     hasBulkActions: { type: Boolean, default: false },
     hasSharesNavigation: { type: Boolean, default: false },
@@ -132,6 +137,12 @@ export default defineComponent({
         this.selectedFiles.length
       )
       return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
+    },
+    viewModes() {
+      if (!this.displayViewModeSwitch) {
+        return []
+      }
+      return [ViewModeConstants.condensedTable, ViewModeConstants.default]
     }
   },
   mounted() {

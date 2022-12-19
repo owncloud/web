@@ -4,24 +4,27 @@
     :name="iconName"
     :color="iconColor"
     :size="size"
-    :class="[
-      'oc-resource-icon',
-      { 'oc-resource-icon-file': !isFolder, 'oc-resource-icon-folder': isFolder }
-    ]"
+    :class="['oc-resource-icon', iconTypeClass]"
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+import { Resource } from 'web-client'
+
 import OcIcon from '../OcIcon/OcIcon.vue'
-import iconNameMap from '../../helpers/resourceIconExtensionMapping'
-import iconColorMap from '../../helpers/resourceIconColorExtensionMapping'
+import { AVAILABLE_SIZES } from '../../helpers'
+import iconColorMap from '../../helpers/resourceIconColorExtensionMapping.json'
+import iconNameMap from '../../helpers/resourceIconExtensionMapping.json'
 
 const defaultFolderColor = 'var(--oc-color-icon-folder)'
 const defaultFolderIcon = 'resource-type-folder'
+const defaultSpaceColor = 'var(--oc-color-swatch-passive-default)'
+const defaultSpaceIcon = 'layout-grid'
 const defaultFallbackIconColor = 'var(--oc-color-text-default)'
 const defaultFallbackIcon = 'file'
 
-export default {
+export default defineComponent({
   name: 'OcResourceIcon',
   status: 'ready',
   release: '12.0.0',
@@ -31,7 +34,7 @@ export default {
      * The resource to be displayed
      */
     resource: {
-      type: Object,
+      type: Object as PropType<Resource>,
       required: true
     },
     /**
@@ -41,30 +44,55 @@ export default {
     size: {
       type: String,
       default: 'large',
-      validator: (value) => {
-        return value.match(/(xsmall|small|medium|large|xlarge|xxlarge|xxxlarge)/)
+      validator: (value: string): boolean => {
+        return AVAILABLE_SIZES.some((e) => e === value)
       }
     }
   },
   computed: {
     iconName() {
-      if (this.isFolder) return defaultFolderIcon
+      if (this.isSpace) {
+        return defaultSpaceIcon
+      }
+      if (this.isFolder) {
+        return defaultFolderIcon
+      }
       const icon = iconNameMap[this.extension]
       return `resource-type-${icon ? icon : defaultFallbackIcon}`
     },
     iconColor() {
-      if (this.isFolder) return defaultFolderColor
+      if (this.isSpace) {
+        return defaultSpaceColor
+      }
+      if (this.isFolder) {
+        return defaultFolderColor
+      }
       const color = iconColorMap[this.extension]
       return color ? color : defaultFallbackIconColor
     },
+    iconTypeClass() {
+      if (this.isSpace) {
+        return 'oc-resource-icon-space'
+      }
+      if (this.isFolder) {
+        return 'oc-resource-icon-folder'
+      }
+      return 'oc-resource-icon-file'
+    },
     isFolder() {
-      return this.resource.isFolder
+      // fallback is necessary since
+      // sometimes resources without a type
+      // but with `isFolder` are being passed
+      return this.resource.type === 'folder' || this.resource.isFolder
+    },
+    isSpace() {
+      return this.resource.type === 'space'
     },
     extension() {
       return this.resource.extension?.toLowerCase()
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
